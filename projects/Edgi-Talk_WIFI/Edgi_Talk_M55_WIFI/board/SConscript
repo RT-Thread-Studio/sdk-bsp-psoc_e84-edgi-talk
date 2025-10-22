@@ -21,10 +21,7 @@ for filename in os.listdir(startup_path_prefix):
     if index in filename:
         Tool_path = os.path.join(startup_path_prefix, filename)
 
-if rtconfig.PLATFORM in ["gcc"]:
-    src += [Tool_path + "/pdl/drivers/source/TOOLCHAIN_GCC_ARM/cy_syslib_ext.S"]
-elif rtconfig.PLATFORM in ["armclang"]:
-    src += [Tool_path + "/pdl/drivers/source/TOOLCHAIN_ARM/cy_syslib_ext.S"]
+
 
 CPPDEFINES = [
     "ENABLE_STEREO_INPUT_FEED",
@@ -48,7 +45,6 @@ CPPDEFINES = [
     "COMPONENT_MW_MTB_DEVICE_SUPPORT_PSE8XXGP",
     "COMPONENT_NON_SECURE_DEVICE",
     "COMPONENT_PSE84",
-
 
     "CORE_NAME_CM55_0=1",
 

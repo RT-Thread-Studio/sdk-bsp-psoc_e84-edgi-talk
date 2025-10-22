@@ -44,7 +44,7 @@ if PLATFORM == 'gcc':
     OBJCPY = PREFIX + 'objcopy'
 
     DEVICE = ' -mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 --specs=nano.specs -mfloat-abi=hard -ffunction-sections -fdata-sections -nostartfiles'
-    CFLAGS = DEVICE + ' -g -Wall -pipe -std=c++17'
+    CFLAGS = DEVICE + ' -g -Wall -pipe'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
     LFLAGS = DEVICE + ' -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,Reset_Handler -T board/linker_scripts/link.ld'
 
@@ -57,7 +57,8 @@ if PLATFORM == 'gcc':
     else:
         CFLAGS += ' -O2'
 
-    CXXFLAGS = CFLAGS 
+    # CXXFLAGS = CFLAGS 
+    CXXFLAGS = CFLAGS  + ' -std=c++17'
 
     POST_ACTION = OBJCPY + ' -O ihex $TARGET rtthread.hex\n' + SIZE + ' $TARGET \n'
 

@@ -61,7 +61,7 @@ if PLATFORM == 'gcc':
 
     CXXFLAGS = CFLAGS 
 
-    POST_ACTION = OBJCPY + ' -O ihex $TARGET Debug/rtthread.hex\n' + SIZE + ' $TARGET \n'
+    POST_ACTION = OBJCPY + ' -O ihex $TARGET rtthread.hex\n' + SIZE + ' $TARGET \n'
 
 elif PLATFORM == 'armclang':
     # toolchains

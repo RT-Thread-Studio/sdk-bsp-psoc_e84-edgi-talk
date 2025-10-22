@@ -12,11 +12,11 @@ LIBPATH = []
 if GetDepend(['BSP_USING_USB']):
     LIBS+= ['usbd']
     LIBPATH += [cwd + '/USBD/COMPONENT_USBD_BASE/COMPONENT_CAT1D/CONFIG_Release/COMPONENT_CM33/COMPONENT_SOFTFP/TOOLCHAIN_GCC_ARM']
-    src += [cwd + '/export/Config/usbd_config_io.c']
-    src += [cwd + '/export/Config/COMPONENT_CAT1D/usbd_config.c']
-    src += [cwd + '/OS/usbd_os_abs_rtos.c']
+    src += ['export/Config/usbd_config_io.c']
+    src += ['export/Config/COMPONENT_CAT1D/usbd_config.c']
+    src += ['OS/usbd_os_abs_rtos.c']
     path += [cwd + '/USBD']
     path += [cwd + '/USBD/COMPONENT_CAT1D']
     path += [cwd + '/USBD/COMPONENT_USBD_BASE/COMPONENT_CAT1D/CONFIG_Release']
-group = DefineGroup('Libraries', src, depend=[''],LIBS = LIBS, LIBPATH=LIBPATH, CPPPATH=path)
+group = DefineGroup('Libraries', src, depend=[''], LIBS = LIBS, LIBPATH=LIBPATH, CPPPATH=path)
 Return('group')

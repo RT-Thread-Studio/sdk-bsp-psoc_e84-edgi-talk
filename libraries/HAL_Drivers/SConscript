@@ -69,6 +69,7 @@ if GetDepend(['BSP_USING_TIM']):
 path =  [cwd]
 path += [cwd + '/config']
 
-group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path)
+group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path, LOCAL_CPPPATH = path)
 
 Return('group')
+

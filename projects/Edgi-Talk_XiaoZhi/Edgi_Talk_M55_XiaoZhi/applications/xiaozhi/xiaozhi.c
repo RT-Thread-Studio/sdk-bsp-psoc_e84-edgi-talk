@@ -8,7 +8,6 @@
 #include <rtdevice.h>
 #include <rtthread.h>
 #include <webclient.h>
-#include "board.h"
 
 #define DBG_TAG "xz.ws"
 #define DBG_LVL DBG_LOG

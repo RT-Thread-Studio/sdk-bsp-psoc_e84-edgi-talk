@@ -5,22 +5,19 @@ import platform
 import subprocess
 import uuid
 
-if os.getenv('RTT_ROOT'):
-    RTT_ROOT = os.getenv('RTT_ROOT')
+if os.path.exists('rt-thread'):
+    RTT_ROOT = os.path.normpath(os.getcwd() + '/rt-thread')
 else:
-    RTT_ROOT = os.path.normpath(os.getcwd() + '/../../..')
-
-# set RTT_ROOT
-if not os.getenv("RTT_ROOT"): 
-    RTT_ROOT="rt-thread"
+    RTT_ROOT = os.path.normpath(os.getcwd() + '../../../../rt-thread')
 
 sys.path = sys.path + [os.path.join(RTT_ROOT, 'tools')]
 try:
     from building import *
-except:
+except Exception as e:
+    print("Error message:", e)
     print('Cannot found RT-Thread root directory, please check RTT_ROOT')
     print(RTT_ROOT)
-    exit(-1)
+    sys.exit(-1)
 
 TARGET = 'rt-thread.' + rtconfig.TARGET_EXT
 
@@ -40,12 +37,30 @@ if rtconfig.PLATFORM in ['iccarm']:
 
 Export('RTT_ROOT')
 Export('rtconfig')
+Export('env')
+
+# Resolve shared BSP location so generated headers are visible to every module.
+if os.path.exists(os.path.join(os.getcwd(), "libs")):
+    libs_source = 'libs'
+else:
+    libs_source = '../libs'
+
+libs_root = os.path.abspath(os.path.join(os.getcwd(), libs_source))
+libs_bsp_dir = os.path.join(libs_root, 'TARGET_APP_KIT_PSE84_EVAL_EPC2')
+
+if os.path.isdir(libs_bsp_dir):
+    env.AppendUnique(CPPPATH=[
+        libs_bsp_dir,
+        os.path.join(libs_bsp_dir, 'config'),
+        os.path.join(libs_bsp_dir, 'config', 'GeneratedSource'),
+        os.path.join(libs_bsp_dir, 'bluetooth'),
+    ])
 
 SDK_ROOT = os.path.abspath('./')
 if os.path.exists(SDK_ROOT + '/libraries/components'):
     libraries_path_prefix = SDK_ROOT + '/libraries/components'
 else:
-    libraries_path_prefix = os.path.dirname(SDK_ROOT) + '/../libraries/components'
+    libraries_path_prefix = os.path.dirname(SDK_ROOT) + '/../../libraries/components'
 
 SDK_LIB = libraries_path_prefix
 Export('SDK_LIB')
@@ -85,34 +100,50 @@ def ourspawn(sh, escape, cmd, args, e):
         os.remove(filename)
     return rv
 
-# 解决env-scons不能链接长路径问题
 if platform.system() == 'Windows':
     env['SPAWN'] = ourspawn
 
-if os.path.exists(os.path.join(os.getcwd(), "libraries")):
-    objs.extend(SConscript(os.path.join('libraries', 'HAL_Drivers', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/Infineon_cmsis-latest', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/Infineon_core-lib-latest', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/mtb-device-support-pse8xxgp/hal', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/mtb-device-support-pse8xxgp/pdl', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/async-transfer', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/Infineon_retarget-io-latest', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/serial-memory', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('libraries/components/ASRC', '', 'SConscript')))
-    
+# Add project libs with VariantDir
+if os.path.exists(os.path.join(os.getcwd(), "libs")):
+    env.VariantDir('build/libs', 'libs', duplicate=0)
 else:
-    objs.extend(SConscript(os.path.join('../libraries', 'HAL_Drivers', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/Infineon_cmsis-latest', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/Infineon_core-lib-latest', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/mtb-device-support-pse8xxgp/hal', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/mtb-device-support-pse8xxgp/pdl', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/async-transfer', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/Infineon_retarget-io-latest', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/serial-memory', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components', '', 'SConscript')))
-    objs.extend(SConscript(os.path.join('../libraries/components/ASRC', '', 'SConscript')))
+    env.VariantDir('build/libs', '../libs', duplicate=0)
+    objs.extend(SConscript('../libs/SConscript', variant_dir='build/libs', duplicate=0))
+
+if os.path.exists(os.path.join(os.getcwd(), "libraries")):
+    # Set VariantDir for libraries
+    env.VariantDir('build/libraries/HAL_Drivers', 'libraries/HAL_Drivers', duplicate=0)
+    env.VariantDir('build/libraries/components', 'libraries/components', duplicate=0)
+    
+    objs.extend(SConscript('libraries/HAL_Drivers/SConscript', variant_dir='build/libraries/HAL_Drivers', duplicate=0))
+    objs.extend(SConscript('libraries/components/Infineon_cmsis-latest/SConscript', variant_dir='build/libraries/components/Infineon_cmsis-latest', duplicate=0))
+    objs.extend(SConscript('libraries/components/Infineon_core-lib-latest/SConscript', variant_dir='build/libraries/components/Infineon_core-lib-latest', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-device-support-pse8xxgp/hal/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/hal', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-device-support-pse8xxgp/pdl/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/pdl', duplicate=0))
+    objs.extend(SConscript('libraries/components/async-transfer/SConscript', variant_dir='build/libraries/components/async-transfer', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm', duplicate=0))
+    objs.extend(SConscript('libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
+    objs.extend(SConscript('libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
+    objs.extend(SConscript('libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
+    objs.extend(SConscript('libraries/components/emusb-device/SConscript', variant_dir='build/libraries/components/emusb-device', duplicate=0))
+    objs.extend(SConscript('libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
+else:
+    # Set VariantDir for external libraries
+    env.VariantDir('build/libraries/HAL_Drivers', '../../../libraries/HAL_Drivers', duplicate=0)
+    env.VariantDir('build/libraries/components', '../../../libraries/components', duplicate=0)
+    
+    objs.extend(SConscript('../../../libraries/HAL_Drivers/SConscript', variant_dir='build/libraries/HAL_Drivers', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/Infineon_cmsis-latest/SConscript', variant_dir='build/libraries/components/Infineon_cmsis-latest', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/Infineon_core-lib-latest/SConscript', variant_dir='build/libraries/components/Infineon_core-lib-latest', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-device-support-pse8xxgp/hal/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/hal', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-device-support-pse8xxgp/pdl/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/pdl', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/async-transfer/SConscript', variant_dir='build/libraries/components/async-transfer', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/emusb-device/SConscript', variant_dir='build/libraries/components/emusb-device', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
+
 # make a building
 DoBuilding(TARGET, objs)

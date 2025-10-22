@@ -1,0 +1,116 @@
+name: PSOC-Edge-Edgi-Talk
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  # Runs at 16:00 UTC (BeiJing 00:00) on the 1st of every month
+  schedule:
+    - cron:  '0 16 1 * *'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - docs/**
+      - '**/README.md'
+      # - '**/README_ZH.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - docs/**
+      - '**/README.md'
+      # - '**/README_ZH.md'
+
+env:
+  RTT_TOOL_CHAIN: "sourcery-arm"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: check-yaml-format
+    if: github.repository_owner == 'RT-Thread-Studio'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@master
+        with:
+          python-version: 3.8
+
+      - name: Check yaml
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          pip install rt-thread-studio
+          python -c "from rt_thread_studio import bsp_checker;bsp_path = '.';checker = bsp_checker.BspChecker(bsp_path);checker.check();"
+
+  compile:
+    needs: [check]
+    runs-on: ubuntu-latest
+    name: ${{ matrix.legs.RTT_BSP }}
+    strategy:
+      fail-fast: false
+      matrix:
+       legs:
+         - {RTT_BSP: "Edgi-Talk_ADC/Edgi_Talk_M33_ADC"}
+         - {RTT_BSP: "Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20"}
+         - {RTT_BSP: "Edgi-Talk_Audio/Edgi_Talk_M33_Audio"}
+         - {RTT_BSP: "Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED"}
+         - {RTT_BSP: "Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED"}
+         - {RTT_BSP: "Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark"}
+         - {RTT_BSP: "Edgi-Talk_emUSB-device_CDC_Echo/Edgi_Talk_M33_emUSB-device_CDC_Echo"}
+         - {RTT_BSP: "Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam"}
+         - {RTT_BSP: "Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq"}
+         - {RTT_BSP: "Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3"}
+         - {RTT_BSP: "Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL"}
+         - {RTT_BSP: "Edgi-Talk_M33_Template/Edgi_Talk_M33_Template"}
+         - {RTT_BSP: "Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD"}
+         - {RTT_BSP: "Edgi-Talk_RTC/Edgi_Talk_M33_RTC"}
+         - {RTT_BSP: "Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD"}
+         - {RTT_BSP: "Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer"}
+         - {RTT_BSP: "Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI"}
+         - {RTT_BSP: "Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi"}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@master
+        with:
+          python-version: 3.8
+
+      - name: Install Arm ToolChains
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          wget -c https://github.com/RT-Thread/toolchains-ci/releases/download/v1.10/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz
+          sudo tar -xf arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz -C /opt
+          /opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc --version
+          echo "RTT_EXEC_PATH=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_ENV
+
+      - name: Install Tools
+        if: ${{ success() }}
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get -qq install gcc-multilib libsdl2-dev scons
+          echo "RTT_ROOT=${{ github.workspace }}" >> $GITHUB_ENV
+          echo "RTT_CC=gcc" >> $GITHUB_ENV
+
+      - name: Check and Run mklinks.sh
+        if: ${{ success() }}
+        shell: bash
+        env:
+          RTT_BSP: ${{ matrix.legs.RTT_BSP }}
+        run: |
+          cd projects/$RTT_BSP
+          if [ -f mklinks.sh ]; then
+            chmod +x mklinks.sh
+            ./mklinks.sh
+          fi
+
+      - name: Compile ${{ matrix.legs.RTT_BSP }}
+        if: ${{ success() }}
+        shell: bash
+        env:
+          RTT_BSP: ${{ matrix.legs.RTT_BSP }}
+        run: |
+          cd projects
+          scons -C $RTT_BSP

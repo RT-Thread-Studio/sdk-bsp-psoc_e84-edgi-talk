@@ -13,16 +13,16 @@ if rtconfig.PLATFORM in ['iccarm']:
     Return('group')
 elif rtconfig.PLATFORM in ['gcc', 'armclang']:
 
-    src += [cwd + DIR + 'cybsp.c']
-    src += [cwd + DIR + 'system_cat1d.c']
-    src += Glob(cwd + DIR + 'config/GeneratedSource/*.c')
+    src += ['TARGET_APP_KIT_PSE84_EVAL_EPC2/cybsp.c']
+    src += ['TARGET_APP_KIT_PSE84_EVAL_EPC2/system_cat1d.c']
+    src += Glob('TARGET_APP_KIT_PSE84_EVAL_EPC2/config/GeneratedSource/*.c')
     
     if GetDepend(['KIT_PROCE84_EVK_M55']):
-            src += [cwd + DIR + 'COMPONENT_CM55/COMPONENT_NON_SECURE_DEVICE/ns_system_pse84.c']
-            src += [cwd + DIR + 'COMPONENT_CM55/COMPONENT_NON_SECURE_DEVICE/ns_start_pse84.c']
+            src += ['TARGET_APP_KIT_PSE84_EVAL_EPC2/COMPONENT_CM55/COMPONENT_NON_SECURE_DEVICE/ns_system_pse84.c']
+            src += ['TARGET_APP_KIT_PSE84_EVAL_EPC2/COMPONENT_CM55/COMPONENT_NON_SECURE_DEVICE/ns_start_pse84.c']
     if GetDepend(['KIT_PROCE84_EVK_M33']):
-            src += [cwd + DIR + 'COMPONENT_CM33/COMPONENT_NON_SECURE_DEVICE/ns_system_pse84.c']
-            src += [cwd + DIR + 'COMPONENT_CM33/COMPONENT_NON_SECURE_DEVICE/ns_start_pse84.c']
+            src += ['TARGET_APP_KIT_PSE84_EVAL_EPC2/COMPONENT_CM33/COMPONENT_NON_SECURE_DEVICE/ns_system_pse84.c']
+            src += ['TARGET_APP_KIT_PSE84_EVAL_EPC2/COMPONENT_CM33/COMPONENT_NON_SECURE_DEVICE/ns_start_pse84.c']
 
     CPPPATH = [ cwd + DIR,
                 cwd + DIR + 'config/GeneratedSource',
@@ -30,5 +30,6 @@ elif rtconfig.PLATFORM in ['gcc', 'armclang']:
                 cwd + DIR + 'bluetooth'
                 ]
         
-group = DefineGroup('libs', src, depend = [''], CPPPATH = CPPPATH)
+group = DefineGroup('libs', src, depend = [''], CPPPATH = CPPPATH, LOCAL_CPPPATH = CPPPATH)
 Return('group')
+

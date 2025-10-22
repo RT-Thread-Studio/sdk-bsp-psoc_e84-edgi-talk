@@ -21,8 +21,13 @@ src = Split('''
             drivers/source/cy_scb_common.c
             ''')
 
-path = [cwd + '/drivers/include',
-        cwd + '/drivers/third_party/ethernet/include']
+# Add toolchain-specific assembly files
+if rtconfig.PLATFORM in ['gcc']:
+    src += ['drivers/source/TOOLCHAIN_GCC_ARM/cy_syslib_ext.S']
+elif rtconfig.PLATFORM in ['armclang']:
+    src += ['drivers/source/TOOLCHAIN_ARM/cy_syslib_ext.S']
+
+path = [cwd + '/drivers/include', cwd + 'drivers/third_party/ethernet/include']
 
 if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
     src += ['drivers/source/cy_syspm_ppu.c']
@@ -138,3 +143,4 @@ if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
 
 group = DefineGroup('Libraries', src, depend=[''], CPPPATH=path, CPPDEFINES = CPPDEFINES)
 Return('group')
+
