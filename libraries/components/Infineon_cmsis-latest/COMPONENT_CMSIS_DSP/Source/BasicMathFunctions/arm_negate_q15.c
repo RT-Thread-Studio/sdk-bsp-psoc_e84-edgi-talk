@@ -42,7 +42,6 @@
   @param[in]     pSrc       points to the input vector.
   @param[out]    pDst       points to the output vector.
   @param[in]     blockSize  number of samples in each vector.
-  @return        none
 
   @par           Conditions for optimum performance
                    Input and output buffers should be aligned by 32-bit
@@ -54,7 +53,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_negate_q15(
+ARM_DSP_ATTRIBUTE void arm_negate_q15(
     const q15_t  * pSrc,
     q15_t  * pDst,
     uint32_t blockSize)
@@ -95,73 +94,73 @@ void arm_negate_q15(
 }
 
 #else
-void arm_negate_q15(
-    const q15_t * pSrc,
-    q15_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_negate_q15(
+  const q15_t * pSrc,
+        q15_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q15_t in;                                      /* Temporary input variable */
+        uint32_t blkCnt;                               /* Loop counter */
+        q15_t in;                                      /* Temporary input variable */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
 #if defined (ARM_MATH_DSP)
-    q31_t in1;                                    /* Temporary input variables */
+  q31_t in1;                                    /* Temporary input variables */
 #endif
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
 #if defined (ARM_MATH_DSP)
-        /* Negate and store result in destination buffer (2 samples at a time). */
-        in1 = read_q15x2_ia(&pSrc);
-        write_q15x2_ia(&pDst, __QSUB16(0, in1));
+    /* Negate and store result in destination buffer (2 samples at a time). */
+    in1 = read_q15x2_ia (&pSrc);
+    write_q15x2_ia (&pDst, __QSUB16(0, in1));
 
-        in1 = read_q15x2_ia(&pSrc);
-        write_q15x2_ia(&pDst, __QSUB16(0, in1));
+    in1 = read_q15x2_ia (&pSrc);
+    write_q15x2_ia (&pDst, __QSUB16(0, in1));
 #else
-        in = *pSrc++;
-        *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
+    in = *pSrc++;
+    *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
 
-        in = *pSrc++;
-        *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
+    in = *pSrc++;
+    *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
 
-        in = *pSrc++;
-        *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
+    in = *pSrc++;
+    *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
 
-        in = *pSrc++;
-        *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
+    in = *pSrc++;
+    *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
-        /* Negate and store result in destination buffer. */
-        in = *pSrc++;
-        *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
+    /* Negate and store result in destination buffer. */
+    in = *pSrc++;
+    *pDst++ = (in == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

@@ -43,30 +43,29 @@
   @param[in]     scale      scale factor to be applied
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
 
-void arm_scale_f64(
-    const float64_t *pSrc,
-    float64_t scale,
-    float64_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_scale_f64(
+  const float64_t *pSrc,
+        float64_t scale,
+        float64_t *pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+  uint32_t blkCnt;                               /* Loop counter */
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A * scale */
+  while (blkCnt > 0U)
+  {
+    /* C = A * scale */
 
-        /* Scale input and store result in destination buffer. */
-        *pDst++ = (*pSrc++) * scale;
+    /* Scale input and store result in destination buffer. */
+    *pDst++ = (*pSrc++) * scale;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 

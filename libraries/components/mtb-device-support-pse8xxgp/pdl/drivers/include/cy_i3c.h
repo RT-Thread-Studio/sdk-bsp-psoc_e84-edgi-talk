@@ -184,16 +184,6 @@
 * power mode transition function. Refer to \ref group_syspm driver for more
 * information about power mode transitions and callback registration.
 *
-* \section group_i3c_changelog Changelog
-*
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
 * \defgroup group_i3c_macros Macros
 * \defgroup group_i3c_enums Enumerated Types
 * \defgroup group_i3c_data_structures Data Structures
@@ -822,6 +812,8 @@ extern "C" {
 #define CY_IS_I3C_EXT_LCNT_VALID(cnt)                 ((cnt) <= 0xFFU)
 #define CY_IS_I3C_EXT_TERMINATION_LCNT_VALID(cnt)     ((cnt) <= 0xFU)
 
+#define CY_IS_I3C_I2C_ADDRESS_VALID(addr)             ((0x7FU > (addr)) && (0x00U < (addr)))
+
 #define CY_IS_I3C_STATIC_ADDRESS_VALID(addr)          ((addr) < 0x7FU)
 #define CY_IS_I3C_PID_VALID(pid)                      ((pid) <= 0xFFFFFFFFFFFFU)
 #define CY_IS_I3C_DCR_VALID(dcr)                      ((dcr) <= 0xFFU)
@@ -884,7 +876,7 @@ typedef enum
     CY_I3C_SUCCESS = 0U,
 
     /** One or more of input parameters are invalid */
-    CY_I3C_BAD_PARAM = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 1U),
+    CY_I3C_BAD_PARAM = (CY_I3C_ID| CY_PDL_STATUS_ERROR | 1U),
 
     /**
     * The controller is not ready to start a new transaction.
@@ -907,61 +899,61 @@ typedef enum
     /**
     * Unsupported CCC command
     */
-    CY_I3C_CONTROLLER_CCC_NOT_SUPPORTED = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 5U),
+    CY_I3C_CONTROLLER_CCC_NOT_SUPPORTED =(CY_I3C_ID | CY_PDL_STATUS_ERROR | 5U),
 
     /**
     * SDR Controller Error Code CE0 for Illegally formatted CCC Response
     */
-    CY_I3C_CONTROLLER_ERROR_CE0 = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 6U),
+    CY_I3C_CONTROLLER_ERROR_CE0 = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 6U ),
 
     /**
     * Error Type of the processed command received in Response Data Structure:
     * CRC Error
     */
-    CY_I3C_CONTROLLER_CRC_ERROR = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 7U),
+    CY_I3C_CONTROLLER_CRC_ERROR = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 7U ),
 
     /**
     * Error Type of the processed command received in Response Data Structure:
     * Parity Error
     */
-    CY_I3C_CONTROLLER_PARITY_ERROR = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 8U),
+    CY_I3C_CONTROLLER_PARITY_ERROR = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 8U ),
 
     /**
     * Error Type of the processed command received in Response Data Structure:
     * Frame Error
     */
-    CY_I3C_CONTROLLER_FRAME_ERROR = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 9U),
+    CY_I3C_CONTROLLER_FRAME_ERROR = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 9U ),
 
     /**
     * Error Type of the processed command received in Response Data Structure:
     * Broadcast Address NACK Error
     */
-    CY_I3C_CONTROLLER_BROADCAST_ADDR_NACK_ERROR = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 10U),
+    CY_I3C_CONTROLLER_BROADCAST_ADDR_NACK_ERROR = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 10U ),
 
     /**
     * Error Type of the processed command received in Response Data Structure:
     * Address NACK Error - Target NACKs for the dynamic address assignment during
     * ENTDAA process.
     */
-    CY_I3C_CONTROLLER_ADDR_NACK_ERROR = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 11U),
+    CY_I3C_CONTROLLER_ADDR_NACK_ERROR = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 11U ),
 
     /**
     * Error Type of the processed command received in Response Data Structure:
     * TX/RX Buffer Overflow Error - Only for HDR Transfers
     */
-    CY_I3C_CONTROLLER_BUFFER_OVERFLOW_ERROR = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 12U),
+    CY_I3C_CONTROLLER_BUFFER_OVERFLOW_ERROR = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 12U ),
 
     /**
     * Error Type of the processed command received in Response Data Structure:
     * Transfer Aborted Error
     */
-    CY_I3C_CONTROLLER_XFER_ABORTED_ERROR = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 13U),
+    CY_I3C_CONTROLLER_XFER_ABORTED_ERROR = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 13U ),
 
     /**
     * Error Type of the processed command received in Response Data Structure:
     * I2C Target Write Data NACK Error
     */
-    CY_I3C_CONTROLLER_I2C_TGT_WDATA_NACK_ERROR = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 14U),
+    CY_I3C_CONTROLLER_I2C_TGT_WDATA_NACK_ERROR = ( CY_I3C_ID | CY_PDL_STATUS_ERROR | 14U ),
 
     /** The controller NACKed the IBI */
     CY_I3C_CONTROLLER_IBI_NACK = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 15U),
@@ -976,7 +968,7 @@ typedef enum
     CY_I3C_CONTROLLER_HOTJOIN_IBI_ACK = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 18U),
 
     /** Free address unavailable */
-    CY_I3C_CONTROLLER_FREE_ADDR_UNAVIAL = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 19U),
+    CY_I3C_CONTROLLER_FREE_ADDR_UNAVAIL = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 19U),
 
     /** The device is not HDR capable */
     CY_I3C_NOT_HDR_CAP = (CY_I3C_ID | CY_PDL_STATUS_ERROR | 20U),
@@ -1049,7 +1041,7 @@ typedef enum
     CY_I3C_ADDR_SLOT_RSVD,              /**< Address is reserved */
     CY_I3C_ADDR_SLOT_I2C_DEV,           /**< Address is assigned to an I2C device */
     CY_I3C_ADDR_SLOT_I3C_DEV,           /**< Address is assigned to an I3C device */
-} cy_en_i3c_addr_slot_status_t;
+}cy_en_i3c_addr_slot_status_t;
 
 
 /** I3C IBI Types */
@@ -1067,7 +1059,7 @@ typedef enum
     CY_I3C_CONTROLLER_SDR_READ_TID   = 2U,    /**< TID for SDR Read Transfer */
     CY_I3C_CONTROLLER_HDR_WRITE_TID  = 3U,    /**< TID for HDR Write Transfer */
     CY_I3C_CONTROLLER_HDR_READ_TID   = 4U,    /**< TID for HDR Read Transfer */
-} cy_en_i3c_tid_t;
+}cy_en_i3c_tid_t;
 
 /** I3C Mode, SDR and HDR transfer speeds */
 typedef enum
@@ -1078,14 +1070,14 @@ typedef enum
     CY_I3C_SDR3     = 3U,         /**< I3C mode transfer speed - SDR3*/
     CY_I3C_SDR4     = 4U,         /**< I3C mode transfer speed - SDR4*/
     CY_I3C_HDR_DDR  = 6U,         /**< I3C mode transfer speed - HDR-DDR */
-} cy_en_i3c_data_speed_t;
+}cy_en_i3c_data_speed_t;
 
 /** I2C Mode, SDR transfer speeds */
 typedef enum
 {
     CY_I3C_FMP_I2C  = 0U,      /**< I2C mode transfer speed - Fast Mode Plus */
     CY_I3C_FM_I2C   = 1U,      /**< I2C mode transfer speed - Fast Mode */
-} cy_en_i2c_data_speed_t;
+}cy_en_i2c_data_speed_t;
 
 /** I3C buffer depths */
 typedef enum
@@ -1096,7 +1088,7 @@ typedef enum
     CY_I3C_16_WORD_DEPTH = 3U,    /**< Buffer depth of 16 words */
     CY_I3C_32_WORD_DEPTH = 4U,    /**< Buffer depth of 32 words */
     CY_I3C_64_WORD_DEPTH = 5U,    /**< Buffer depth of 64 words */
-} cy_en_i3c_buffer_depth_t;
+}cy_en_i3c_buffer_depth_t;
 
 /** I3C Target Reset */
 typedef enum
@@ -1104,7 +1096,7 @@ typedef enum
     CY_I3C_NO_RESET = 0U,            /**< No Reset on Target Reset Pattern */
     CY_I3C_PERIPHERAL_RESET = 1U,    /**< Reset the I3C Peripheral Only */
     CY_I3C_CHIP_RESET = 2U,          /**< Reset the Whole Target */
-} cy_en_i3c_target_reset_t;
+}cy_en_i3c_target_reset_t;
 
 
 /** I3C Activity states specified by ENTAS(x) CCC*/
@@ -1152,7 +1144,7 @@ typedef struct cy_stc_i3c_ibi
 
     /** IBI Mandatory Data Byte(MDB). To be sent after IBI */
     uint8_t mdb;
-} cy_stc_i3c_ibi_t;
+}cy_stc_i3c_ibi_t;
 
 /** I3C CCC response structure for Target mode*/
 typedef struct cy_stc_i3c_target_ccc_resp
@@ -1168,7 +1160,7 @@ typedef struct cy_stc_i3c_target_ccc_resp
 
     /** Transaction type receive response */
     bool rxRsp;
-} cy_stc_i3c_target_ccc_resp_t;
+}cy_stc_i3c_target_ccc_resp_t;
 
 /**
 * Provides the typedef for the callback function called in the
@@ -1215,7 +1207,7 @@ typedef struct cy_stc_i2c_device
 typedef struct cy_stc_i3c_device
 {
     /** 48 bit provisional ID of I3C device */
-    uint64_t provisonalID;
+    uint64_t provisionalID;
 
     /** Device Characteristic Register of I3C device */
     uint8_t dcr;
@@ -1272,7 +1264,7 @@ typedef struct cy_stc_i3c_device
     * false: No limitation on max data speed
     */
     bool speedLimit;
-} cy_stc_i3c_device_t;
+}cy_stc_i3c_device_t;
 
 /** A local list of devices on the bus */
 typedef struct cy_stc_i3c_controller_devlist
@@ -1286,7 +1278,7 @@ typedef struct cy_stc_i3c_controller_devlist
         cy_stc_i3c_device_t i3cDevice;
         cy_stc_i2c_device_t i2cDevice;
     };
-} cy_stc_i3c_controller_devlist_t;
+}cy_stc_i3c_controller_devlist_t;
 
 /** Device Characteristic Table structure */
 typedef struct cy_stc_i3c_dev_char
@@ -1295,14 +1287,14 @@ typedef struct cy_stc_i3c_dev_char
     uint32_t MSBProvisionalID; /**< The MSB 16-bit value of provisional ID */
     uint32_t DCR_BCR;          /**< DCR [7:0] and BCR [15:8] of the I3C device */
     uint32_t dynamicAddress;   /**< Dynamic address [7:0] of the I3C device */
-} cy_stc_i3c_dev_char_t;
+}cy_stc_i3c_dev_char_t;
 
 /** 64-bit CCC structure */
 typedef struct cy_stc_i3c_ccc
 {
     uint32_t cmdHigh;     /**< cmdHigh */
     uint32_t cmdLow;      /**< cmdLow */
-} cy_stc_i3c_ccc_t;
+}cy_stc_i3c_ccc_t;
 
 /** I3C bus configuration structure */
 typedef struct cy_stc_i3c_config
@@ -1494,7 +1486,7 @@ typedef struct cy_stc_i3c_ccc_cmd
 
     /** Destination address */
     uint8_t address;
-} cy_stc_i3c_ccc_cmd_t;
+}cy_stc_i3c_ccc_cmd_t;
 
 /** I3C Controller information */
 typedef struct cy_stc_i3c_controller
@@ -1516,7 +1508,7 @@ typedef struct cy_stc_i3c_controller
 
     /** Number of dynamically addressed devices */
     uint32_t dynAddrDevCount;
-} cy_stc_i3c_controller_t;
+}cy_stc_i3c_controller_t;
 
 /** I3C HDR command Structure */
 typedef struct cy_stc_i3c_hdr_cmd
@@ -1535,8 +1527,8 @@ typedef struct cy_stc_i3c_hdr_cmd
     {
         uint16_t *in;
         const uint16_t *out;
-    } data;
-} cy_stc_i3c_hdr_cmd_t;
+    }data;
+}cy_stc_i3c_hdr_cmd_t;
 
 
 /**
@@ -1660,9 +1652,9 @@ bool  Cy_I3C_IsController(I3C_CORE_Type const *base);
 cy_en_i3c_status_t Cy_I3C_Reset(I3C_CORE_Type *base, cy_stc_i3c_config_t const *config, cy_stc_i3c_context_t *context);
 cy_en_i3c_status_t Cy_I3C_SoftReset(I3C_CORE_Type const *base);
 cy_en_i3c_mode_t Cy_I3C_GetMode(I3C_CORE_Type const *base);
-void Cy_I3C_Interrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context);
+void Cy_I3C_Interrupt (I3C_CORE_Type *base, cy_stc_i3c_context_t *context);
 void Cy_I3C_RegisterEventCallback(I3C_CORE_Type const *base, cy_cb_i3c_handle_events_t callback, cy_stc_i3c_context_t *context);
-void Cy_I3C_RegisterIbiCallback(I3C_CORE_Type const *base, cy_cb_i3c_handle_ibi_t callback, cy_stc_i3c_context_t *context);
+void Cy_I3C_RegisterIbiCallback (I3C_CORE_Type const *base, cy_cb_i3c_handle_ibi_t callback, cy_stc_i3c_context_t *context);
 
 /** \} group_i3c_general_functions */
 
@@ -1686,7 +1678,7 @@ cy_en_i3c_status_t Cy_I3C_SendCCCCmd(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
 cy_en_i3c_status_t Cy_I3C_DisableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cDevice, cy_stc_i3c_context_t *context);
 cy_en_i3c_status_t Cy_I3C_EnableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cDevice, cy_stc_i3c_context_t *context);
 cy_en_i3c_status_t Cy_I3C_ControllerWrite(I3C_CORE_Type *base, cy_stc_i3c_controller_xfer_config_t *xferConfig, cy_stc_i3c_context_t *context);
-cy_en_i3c_status_t Cy_I3C_ControllerRead(I3C_CORE_Type *base, cy_stc_i3c_controller_xfer_config_t* xferConfig, cy_stc_i3c_context_t *context);
+cy_en_i3c_status_t Cy_I3C_ControllerRead (I3C_CORE_Type *base, cy_stc_i3c_controller_xfer_config_t* xferConfig, cy_stc_i3c_context_t *context);
 void Cy_I3C_ControllerAbortTransfer(I3C_CORE_Type *base, cy_stc_i3c_context_t *context);
 cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targetAddress, int8_t data, cy_stc_i3c_context_t *context);
 cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t targetAddress, uint8_t *data, cy_stc_i3c_context_t *context);
@@ -1714,14 +1706,14 @@ cy_en_i3c_status_t Cy_I3C_TargetGetDynamicAddress(I3C_CORE_Type const *base, uin
 uint32_t Cy_I3C_TargetGetMaxReadLength(I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context);
 uint32_t Cy_I3C_TargetGetMaxWriteLength(I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context);
 cy_en_i3c_status_t Cy_I3C_TargetGenerateIbi(I3C_CORE_Type *base, cy_stc_i3c_ibi_t *ibitype, cy_stc_i3c_context_t *context);
-void Cy_I3C_TargetConfigReadBuf(I3C_CORE_Type *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context);
-uint32_t Cy_I3C_TargetGetReadTransferCount(I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context);
+void Cy_I3C_TargetConfigReadBuf (I3C_CORE_Type *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context);
+uint32_t Cy_I3C_TargetGetReadTransferCount (I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context);
 void Cy_I3C_TargetConfigWriteBuf(I3C_CORE_Type const *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context);
-uint32_t Cy_I3C_TargetGetWriteTransferCount(I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context);
+uint32_t Cy_I3C_TargetGetWriteTransferCount (I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context);
 cy_en_i3c_status_t Cy_I3C_ConfigureVendorCCC0(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t* cccCmd, cy_stc_i3c_context_t *context);
 cy_en_i3c_status_t Cy_I3C_ConfigureVendorCCC1(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t* cccCmd, cy_stc_i3c_context_t *context);
 void Cy_I3C_RegisterCCCRespCallback(I3C_CORE_Type const *base, cy_cb_i3c_handle_ccc_response_t callback, cy_stc_i3c_context_t *context);
-cy_en_i3c_status_t Cy_I3C_TargetGetcccData(I3C_CORE_Type *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context);
+cy_en_i3c_status_t Cy_I3C_TargetGetCCCData(I3C_CORE_Type *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context);
 #endif
 
 /** \} group_i3c_target_functions */
@@ -1742,9 +1734,9 @@ cy_en_i3c_status_t Cy_I3C_DeliverControllership(I3C_CORE_Type *base, uint8_t Sec
 * \{
 */
 #if CY_IP_MXI3C_VERSION_MINOR == 1u || defined(CY_DOXYGEN)
-void Cy_I3C_TargetInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context);
+void Cy_I3C_TargetInterrupt (I3C_CORE_Type *base, cy_stc_i3c_context_t *context);
 #endif
-void Cy_I3C_ControllerInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context);
+void Cy_I3C_ControllerInterrupt (I3C_CORE_Type *base, cy_stc_i3c_context_t *context);
 /** \} group_i3c_interrupt_functions */
 
 /**
@@ -1758,8 +1750,6 @@ cy_en_syspm_status_t Cy_I3C_HibernateCallback(cy_stc_syspm_callback_params_t *ca
 /*******************************************************************************
 *                     In-line Function Implementation
 *******************************************************************************/
-
-/** \} group_i3c_target_functions */
 
 /**
 * \addtogroup group_i3c_secondary_controller_functions
@@ -1883,7 +1873,7 @@ __STATIC_INLINE uint8_t Cy_I3C_Target_getTIRRemainingDataLength(I3C_CORE_Type *b
     return (uint8_t)_FLD2VAL(I3C_CORE_TGT_IBI_RESP_TIR_RESP_DATA_LENGTH, base->TGT_IBI_RESP);
 }
 #endif
-/** \} group_i3c_target_functions */
+/** \} group_i3c_secondary_controller_functions */
 
 /**
 * \addtogroup group_i3c_general_functions
@@ -1907,7 +1897,7 @@ __STATIC_INLINE uint8_t Cy_I3C_Target_getTIRRemainingDataLength(I3C_CORE_Type *b
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_I3C_GetInterruptStatus(I3C_CORE_Type *base)
 {
-    return (I3C_CORE_INTR_STATUS(base) & CY_I3C_INTR_MASK);
+    return(I3C_CORE_INTR_STATUS(base) & CY_I3C_INTR_MASK);
 }
 
 /*******************************************************************************
@@ -1965,7 +1955,7 @@ __STATIC_INLINE void Cy_I3C_SetInterrupt(I3C_CORE_Type *base, uint32_t interrupt
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_I3C_GetInterruptMask(I3C_CORE_Type *base)
 {
-    return (I3C_CORE_INTR_SIGNAL_EN(base));
+    return(I3C_CORE_INTR_SIGNAL_EN(base));
 }
 
 /*******************************************************************************
@@ -2007,7 +1997,7 @@ __STATIC_INLINE void Cy_I3C_SetInterruptMask(I3C_CORE_Type *base, uint32_t inter
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_I3C_GetInterruptStatusMask(I3C_CORE_Type *base)
 {
-    return (I3C_CORE_INTR_STATUS_EN(base));
+    return(I3C_CORE_INTR_STATUS_EN(base));
 }
 
 /*******************************************************************************
@@ -2024,7 +2014,7 @@ __STATIC_INLINE uint32_t Cy_I3C_GetInterruptStatusMask(I3C_CORE_Type *base)
 * Enabled I3C interrupt sources.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_I3C_SetInterruptStatusMask(I3C_CORE_Type *base, uint32_t interruptMask)
+__STATIC_INLINE void Cy_I3C_SetInterruptStatusMask (I3C_CORE_Type *base, uint32_t interruptMask)
 {
     CY_ASSERT_L2(CY_I3C_INTR_VALID(interruptMask, CY_I3C_INTR_MASK));
     I3C_CORE_INTR_STATUS_EN(base) = interruptMask;
@@ -2156,13 +2146,13 @@ __STATIC_INLINE void Cy_I3C_ReadFromDevCharTable(I3C_CORE_Type *base, uint8_t in
     cy_stc_i3c_dev_char_t *ptr;
     volatile uint32_t dcr_bcr;
 
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast to cy_stc_i3c_dev_char_t.');
-    ptr = (cy_stc_i3c_dev_char_t *) & (I3C_CORE_DEV_CHAR_TABLE1_LOC1(base));
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast to cy_stc_i3c_dev_char_t.');
+    ptr = (cy_stc_i3c_dev_char_t *)&(I3C_CORE_DEV_CHAR_TABLE1_LOC1(base));
     ptr = ptr + index;
-    i3cDevice->provisonalID = ((uint64_t)(ptr->LSBProvisionalID));
-    i3cDevice->provisonalID |= ((uint64_t)(ptr->MSBProvisionalID) << 32UL);
+    i3cDevice->provisionalID = ((uint64_t)(ptr->LSBProvisionalID));
+    i3cDevice->provisionalID |= ((uint64_t)(ptr->MSBProvisionalID) << 32UL);
     dcr_bcr = ptr->DCR_BCR;
-    i3cDevice->dcr = (uint8_t)(I3C_CORE_DEV_CHAR_TABLE1_LOC3_DCR_Msk & (dcr_bcr));
+    i3cDevice->dcr =(uint8_t)(I3C_CORE_DEV_CHAR_TABLE1_LOC3_DCR_Msk & (dcr_bcr));
     i3cDevice->bcr = ((uint8_t)_FLD2VAL(I3C_CORE_DEV_CHAR_TABLE1_LOC3_BCR, (dcr_bcr)));
     volatile uint32_t dynamic_address = (ptr->dynamicAddress);
     i3cDevice->dynamicAddress = (uint8_t) dynamic_address;
@@ -2292,7 +2282,7 @@ __STATIC_INLINE uint32_t Cy_I3C_GetFreeEntriesInTxFifo(I3C_CORE_Type *base)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_I3C_GetFreeEntriesInRxFifo(I3C_CORE_Type *base)
 {
-    return ((CY_I3C_FIFO_SIZE / 4UL) - _FLD2VAL(I3C_CORE_DATA_BUFFER_STATUS_LEVEL_RX_BUF_BLR, I3C_CORE_DATA_BUFFER_STATUS_LEVEL(base)));
+    return ((CY_I3C_FIFO_SIZE/4UL) - _FLD2VAL(I3C_CORE_DATA_BUFFER_STATUS_LEVEL_RX_BUF_BLR, I3C_CORE_DATA_BUFFER_STATUS_LEVEL(base)));
 }
 
 /*******************************************************************************

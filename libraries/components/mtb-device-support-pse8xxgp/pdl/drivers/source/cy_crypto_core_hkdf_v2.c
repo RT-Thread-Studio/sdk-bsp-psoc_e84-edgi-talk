@@ -45,7 +45,7 @@ extern "C" {
 
 static uint32_t Cy_Crypto_Core_sha_hashSize(cy_en_crypto_sha_mode_t mode)
 {
-    uint32_t hashSize = 0UL;
+    uint32_t hashSize=0UL;
 
     switch (mode)
     {
@@ -116,12 +116,12 @@ static uint32_t Cy_Crypto_Core_sha_hashSize(cy_en_crypto_sha_mode_t mode)
 * \ref cy_en_crypto_status_t
 *
 *******************************************************************************/
-cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Extract(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t const *salt,
-        uint32_t saltLength,
-        uint8_t const  *ikm,
-        uint32_t ikmLength,
-        uint8_t *prk)
+cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Extract(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,         
+                                          uint8_t const *salt,
+                                          uint32_t saltLength,
+                                          uint8_t const  *ikm,
+                                          uint32_t ikmLength,
+                                          uint8_t *prk)
 {
     cy_en_crypto_status_t status = CY_CRYPTO_BAD_PARAMS;
     uint8_t nullSalt[CY_CRYPTO_SHA_MAX_HASH_SIZE] = {0u};
@@ -130,7 +130,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Extract(CRYPTO_Type *base, cy_en_cr
 
     /* Input parameters verification */
     if ((NULL == base) || (NULL == prk) || ((NULL == salt) && (0UL != saltLength))
-            || ((NULL == ikm) && (0UL != ikmLength)))
+        ||((NULL == ikm) && (0UL != ikmLength)))
     {
         return status;
     }
@@ -138,10 +138,10 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Extract(CRYPTO_Type *base, cy_en_cr
     saltptr = (uint8_t  *)salt;
     saltlen = saltLength;
 
-    if (NULL == salt)
+    if(NULL == salt)
     {
         saltlen = Cy_Crypto_Core_sha_hashSize(mode);
-        if (saltlen == 0UL)
+        if(saltlen == 0UL)
         {
             return status;
         }
@@ -187,32 +187,32 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Extract(CRYPTO_Type *base, cy_en_cr
 * \ref cy_en_crypto_status_t
 *
 *******************************************************************************/
-cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Expand(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t const *prk,
-        uint32_t prkLength,
-        uint8_t const *info,
-        uint32_t infoLength,
-        uint8_t *okm,
-        uint32_t okmLength)
+cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Expand(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,         
+                                          uint8_t const *prk,
+                                          uint32_t prkLength,
+                                          uint8_t const *info,
+                                          uint32_t infoLength,
+                                          uint8_t *okm,
+                                          uint32_t okmLength)
 {
     cy_en_crypto_status_t status = CY_CRYPTO_BAD_PARAMS;
     uint32_t  hashlen;
-    uint32_t  n, i;
-    uint8_t  counter = 0u;
-    uint32_t tLength = 0u;
-    uint32_t bytesCopy = 0u;
-    uint32_t offset = 0u;
-    uint8_t t_t[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_SHA_MAX_HASH_SIZE) + CY_CRYPTO_DCAHCE_PADDING_SIZE];
+    uint32_t  n,i;
+    uint8_t  counter=0u;
+    uint32_t tLength=0u;
+    uint32_t bytesCopy=0u;
+    uint32_t offset=0u;
+    uint8_t t_t[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_SHA_MAX_HASH_SIZE)+CY_CRYPTO_DCAHCE_PADDING_SIZE];
     uint8_t *t = (uint8_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(&t_t);
-    uint8_t hmacState_t[CY_CRYPTO_ALIGN_CACHE_LINE(sizeof(cy_stc_crypto_hmac_state_t)) + CY_CRYPTO_DCAHCE_PADDING_SIZE];
-    uint8_t hmacBuffer_t[CY_CRYPTO_ALIGN_CACHE_LINE(sizeof(cy_stc_crypto_v2_hmac_buffers_t)) + CY_CRYPTO_DCAHCE_PADDING_SIZE];
+    uint8_t hmacState_t[CY_CRYPTO_ALIGN_CACHE_LINE(sizeof(cy_stc_crypto_hmac_state_t))+CY_CRYPTO_DCAHCE_PADDING_SIZE];
+    uint8_t hmacBuffer_t[CY_CRYPTO_ALIGN_CACHE_LINE(sizeof(cy_stc_crypto_v2_hmac_buffers_t))+CY_CRYPTO_DCAHCE_PADDING_SIZE];
 
     cy_stc_crypto_v2_hmac_buffers_t *hmacBuffer = (cy_stc_crypto_v2_hmac_buffers_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(hmacBuffer_t);
     cy_stc_crypto_hmac_state_t *hmacState = (cy_stc_crypto_hmac_state_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(hmacState_t);
 
     /* Input parameters verification */
     if ((NULL == base) || ((NULL == prk) && (0UL != prkLength)) || ((NULL == info) && (0UL != infoLength))
-            || ((NULL == okm) && (0UL != okmLength)))
+        ||((NULL == okm) && (0UL != okmLength)))
     {
         return status;
     }
@@ -221,65 +221,65 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Expand(CRYPTO_Type *base, cy_en_cry
     Cy_Crypto_Core_V2_MemSet(base, (void*)hmacBuffer, 0x00U, (uint16_t)sizeof(cy_stc_crypto_v2_hmac_buffers_t));
 
     hashlen = Cy_Crypto_Core_sha_hashSize(mode);
-    if (hashlen == 0u)
+    if(hashlen == 0u)
     {
         return status;
     }
 
-    n = (okmLength + (hashlen - 1u)) / hashlen;
+    n = (okmLength + (hashlen - 1u))/ hashlen;
 
-    if (n > 255u)
+    if( n > 255u)
     {
         return CY_CRYPTO_BAD_PARAMS;
     }
 
-    for (i = 1u; i <= n; i++)
+    for(i=1u; i<=n; i++)
     {
         counter++;
 
         status = Cy_Crypto_Core_V2_Hmac_Init(base, hmacState, mode, hmacBuffer);
-        if (status != CY_CRYPTO_SUCCESS)
+        if(status != CY_CRYPTO_SUCCESS)
         {
             break;
         }
 
         status = Cy_Crypto_Core_V2_Hmac_Start(base, hmacState, prk, prkLength);
-        if (status != CY_CRYPTO_SUCCESS)
+        if(status != CY_CRYPTO_SUCCESS)
         {
             break;
         }
 
         status = Cy_Crypto_Core_V2_Hmac_Update(base, hmacState, t, tLength);
-        if (status != CY_CRYPTO_SUCCESS)
+        if(status != CY_CRYPTO_SUCCESS)
         {
             break;
         }
 
         status = Cy_Crypto_Core_V2_Hmac_Update(base, hmacState, info, infoLength);
-        if (status != CY_CRYPTO_SUCCESS)
+        if(status != CY_CRYPTO_SUCCESS)
         {
             break;
         }
 
         status = Cy_Crypto_Core_V2_Hmac_Update(base, hmacState, &counter, 1u);
-        if (status != CY_CRYPTO_SUCCESS)
+        if(status != CY_CRYPTO_SUCCESS)
         {
             break;
         }
 
         status =  Cy_Crypto_Core_V2_Hmac_Finish(base, hmacState, t);
-        if (status != CY_CRYPTO_SUCCESS)
+        if(status != CY_CRYPTO_SUCCESS)
         {
             break;
         }
 
         status =  Cy_Crypto_Core_V2_Hmac_Free(base, hmacState);
-        if (status != CY_CRYPTO_SUCCESS)
+        if(status != CY_CRYPTO_SUCCESS)
         {
             break;
-        }
+        } 
 
-        if (i != n)
+        if(i != n)
         {
             bytesCopy = hashlen;
         }
@@ -294,7 +294,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Expand(CRYPTO_Type *base, cy_en_cry
     }
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-    SCB_InvalidateDCache_by_Addr((volatile void *)okm, (int32_t)okmLength);
+        SCB_InvalidateDCache_by_Addr((volatile void *)okm,(int32_t)okmLength);
 #endif
     return status;
 }
@@ -341,30 +341,30 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Expand(CRYPTO_Type *base, cy_en_cry
 * \ref cy_en_crypto_status_t
 *
 *******************************************************************************/
-cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t const *salt,
-        uint32_t saltLength,
-        uint8_t const *ikm,
-        uint32_t ikmLength,
-        uint8_t const *info,
-        uint32_t infoLength,
-        uint8_t *okm,
-        uint32_t okmLength)
+cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,         
+                                          uint8_t const *salt,
+                                          uint32_t saltLength,
+                                          uint8_t const *ikm,
+                                          uint32_t ikmLength,
+                                          uint8_t const *info,
+                                          uint32_t infoLength,
+                                          uint8_t *okm,
+                                          uint32_t okmLength)
 {
     cy_en_crypto_status_t status = CY_CRYPTO_BAD_PARAMS;
-    uint8_t prk_t[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_SHA_MAX_HASH_SIZE) + CY_CRYPTO_DCAHCE_PADDING_SIZE] = {0u};
+    uint8_t prk_t[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_SHA_MAX_HASH_SIZE)+CY_CRYPTO_DCAHCE_PADDING_SIZE] = {0u};
     uint8_t *prk = (uint8_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(&prk_t);
 
     /* Input parameters verification */
     if ((NULL == base) || ((NULL == salt) && (0UL != saltLength))
-            || ((NULL == ikm) && (0UL != ikmLength)) || ((NULL == info) && (0UL != infoLength))
-            || ((NULL == okm) && (0UL != okmLength)))
+        ||((NULL == ikm) && (0UL != ikmLength)) || ((NULL == info) && (0UL != infoLength))
+        ||((NULL == okm) && (0UL != okmLength)))
     {
         return status;
     }
 
     status = Cy_Crypto_Core_V2_Hkdf_Extract(base, mode, salt, saltLength, ikm, ikmLength, prk);
-    if (status != CY_CRYPTO_SUCCESS)
+    if(status != CY_CRYPTO_SUCCESS)
     {
         return status;
     }
@@ -374,7 +374,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf(CRYPTO_Type *base, cy_en_crypto_sha
     Cy_Crypto_Core_V2_MemSet(base, prk, 0u, CY_CRYPTO_SHA_MAX_HASH_SIZE);
 
     return status;
-}
+}   
 
 #endif /* (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_HKDF_C) */
 

@@ -40,13 +40,13 @@ extern "C" {
 #if (CPUSS_CRYPTO_STR == 1)
 
 void Cy_Crypto_Core_V1_MemCpy(CRYPTO_Type *base,
-                              void *dst, void const *src, uint16_t size);
+                               void* dst, void const *src, uint16_t size);
 void Cy_Crypto_Core_V1_MemSet(CRYPTO_Type *base,
-                              void *dst, uint8_t data, uint16_t size);
+                               void* dst, uint8_t data, uint16_t size);
 uint32_t Cy_Crypto_Core_V1_MemCmp(CRYPTO_Type *base,
-                                  void const *src0, void const *src1, uint16_t size);
+                               void const *src0, void const *src1, uint16_t size);
 void Cy_Crypto_Core_V1_MemXor(CRYPTO_Type *base, void* dst,
-                              void const *src0, void const *src1, uint16_t size);
+                               void const *src0, void const *src1, uint16_t size);
 
 #endif /* #if (CPUSS_CRYPTO_STR == 1) */
 

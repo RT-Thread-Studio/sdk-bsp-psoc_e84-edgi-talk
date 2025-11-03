@@ -26,7 +26,7 @@
 
 #include "cy_rram.h"
 #ifdef WA__PM_0159902_6
-    #include "cy_ipc_drv.h"
+#include "cy_ipc_drv.h"
 #endif
 #if defined (CY_IP_MXS22RRAMC)
 #include "cy_ms_ctl.h"
@@ -56,16 +56,16 @@
 #define CY_RRAM_ECC_READ_BLOCK_ADDRESS_MISMATCH    RRAMC_RRAM_SFR_NVM_STATUS_ECCAMRD_Msk  /**< An address mismatch ECC failure was detected during the most recent memory read operation to a new block */
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 2, \
-                             'Value extracted from _VAL2FLD macro will not exceed enum range.')
+'Value extracted from _VAL2FLD macro will not exceed enum range.')
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 14.3', 12, \
-                             'Because the size of work, flash subsection is zero but will be true if devices have valid size.')
+'Because the size of work, flash subsection is zero but will be true if devices have valid size.')
 
 
 /* RRAM config structure */
 typedef struct
 {
-    RRAMC_Type *base;          /*!< The pointer to the RRAMC instance.*/
+    RRAMC_Type * base;         /*!< The pointer to the RRAMC instance.*/
     uint32_t addr;             /*!< Address of the RRAM subregion.*/
     uint32_t subRegionBase;    /*!< Base address of subregion.*/
     uint32_t subRegionSize;    /*!< Size of subregion.*/
@@ -103,7 +103,7 @@ __STATIC_INLINE bool Cy_RRAM_AcquirePCLock(RRAMC_Type * base)
     savedIntrStatus = Cy_SysLib_EnterCriticalSection();
 
 #ifdef WA__PM_0159902_6
-    if (CY_IPC_DRV_SUCCESS != Cy_IPC_Drv_LockAcquire(Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_RRAM_LOCK)))
+    if (CY_IPC_DRV_SUCCESS != Cy_IPC_Drv_LockAcquire (Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_RRAM_LOCK)))
     {
         /* Exit Critical section */
         Cy_SysLib_ExitCriticalSection(savedIntrStatus);
@@ -114,16 +114,16 @@ __STATIC_INLINE bool Cy_RRAM_AcquirePCLock(RRAMC_Type * base)
     RRAM_PC_MASK(base) |= _VAL2FLD(RRAMC_RRAMC_PC_MASK_PC_LOCK, CY_RRAM_PC_LOCK_ACQUIRE);
 
     /* Get the value of active PC */
-#if (CY_CPU_CORTEX_M0P)
+    #if (CY_CPU_CORTEX_M0P)
     activePC = ((uint32_t)_FLD2VAL(M0SECCPUSS_CM0_MS_PC_PC, M0SECCPUSS_CM0_MS_PC));
-#elif (CY_CPU_CORTEX_M33)
-    activePC = Cy_Ms_Ctl_GetActivePC(CPUSS_MS_ID_CM33_0);
-#else // CY_CPU_CORTEX_M55
-    activePC = Cy_Ms_Ctl_GetActivePCV1(CPUSS_MS_ID_CM55_MS_0);
-#endif
+    #elif (CY_CPU_CORTEX_M33)
+    activePC = Cy_Ms_Ctl_GetActivePC(CY_MS_CTL_ID_CM33_0);
+    #else // CY_CPU_CORTEX_M55
+    activePC = Cy_Ms_Ctl_GetActivePCV1(CY_MS_CTL_ID_CM55_MS_0);
+    #endif
 
-    if ((_FLD2VAL(RRAMC_RRAMC_PC_MASK_PC, RRAM_PC_MASK(base)) == activePC) && \
-            (_FLD2VAL(RRAMC_RRAMC_PC_MASK_PC_LOCK, RRAM_PC_MASK(base)) == CY_RRAM_PC_LOCK_ACQUIRE))
+    if((_FLD2VAL(RRAMC_RRAMC_PC_MASK_PC, RRAM_PC_MASK(base)) == activePC) && \
+                   (_FLD2VAL(RRAMC_RRAMC_PC_MASK_PC_LOCK, RRAM_PC_MASK(base)) == CY_RRAM_PC_LOCK_ACQUIRE))
     {
         status = true;
     }
@@ -146,7 +146,7 @@ __STATIC_INLINE void Cy_RRAM_ReleasePCLock(RRAMC_Type * base)
 {
     RRAM_PC_MASK(base) &= ~RRAMC_RRAMC_PC_MASK_PC_LOCK_Msk;
 #ifdef WA__PM_0159902_6
-    (void)Cy_IPC_Drv_LockRelease(Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_RRAM_LOCK), CY_IPC_NO_NOTIFICATION);
+    (void)Cy_IPC_Drv_LockRelease (Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_RRAM_LOCK), CY_IPC_NO_NOTIFICATION);
 #endif
 }
 
@@ -162,7 +162,7 @@ __STATIC_INLINE bool Cy_RRAM_IsPCLockAcquired(RRAMC_Type * base)
 {
 #ifdef WA__PM_0159902_6
     (void) base;
-    return (Cy_IPC_Drv_IsLockAcquired(Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_RRAM_LOCK)));
+    return (Cy_IPC_Drv_IsLockAcquired (Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_RRAM_LOCK)));
 #else
     return (_FLD2VAL(RRAMC_RRAMC_PC_MASK_PC_LOCK, RRAM_PC_MASK(base)) == CY_RRAM_PC_LOCK_ACQUIRE);
 #endif
@@ -248,16 +248,16 @@ __STATIC_INLINE bool CY_RRAM_ReadOperationECCStatus(RRAMC_Type * base, uint32_t 
 static cy_stc_rram_rgn_info_t Cy_RRAM_GetOTPSubRegionInfo(uint32_t addr)
 {
     uint32_t secureBitState = addr & CY_RRAM_S_OFFSET_MASK;
-    cy_stc_rram_rgn_info_t rgnInfo = {CY_RRAM_INVALID_ACCESS, 0UL};
+    cy_stc_rram_rgn_info_t rgnInfo= {CY_RRAM_INVALID_ACCESS, 0UL};
 
     addr &= ~CY_RRAM_S_OFFSET_MASK;
 
-    if ((addr >= CY_RRAM_GENERAL_OTP_MMIO_NS_START_ADDRESS) && (addr <= CY_RRAM_GENERAL_OTP_MMIO_NS_END_ADDRESS))
+    if((addr >= CY_RRAM_GENERAL_OTP_MMIO_NS_START_ADDRESS) && (addr <= CY_RRAM_GENERAL_OTP_MMIO_NS_END_ADDRESS))
     {
         addr = CY_RRAM_GENERAL_OTP_MMIO_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_GENERAL_OTP_SIZE;
     }
-    else if ((addr >= CY_RRAM_PROTECTED_OTP_PROTECTED_NS_START_ADDRESS) && (addr <= CY_RRAM_PROTECTED_OTP_PROTECTED_NS_END_ADDRESS))
+    else if((addr >= CY_RRAM_PROTECTED_OTP_PROTECTED_NS_START_ADDRESS) && (addr <= CY_RRAM_PROTECTED_OTP_PROTECTED_NS_END_ADDRESS))
     {
         addr = CY_RRAM_PROTECTED_OTP_PROTECTED_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_PROTECTED_OTP_SIZE;
@@ -288,40 +288,40 @@ static cy_stc_rram_rgn_info_t Cy_RRAM_GetNVMSubRegionInfo(uint32_t addr)
 
     addr &= ~CY_RRAM_S_OFFSET_MASK;
 
-    if ((addr >= CY_RRAM_MAIN_HOST_NS_START_ADDRESS) && (addr <= CY_RRAM_MAIN_HOST_NS_END_ADDRESS + CY_RRAM_PROTECTED_REGION_SIZE))
+    if((addr >= CY_RRAM_MAIN_HOST_NS_START_ADDRESS) && (addr <= CY_RRAM_MAIN_HOST_NS_END_ADDRESS + CY_RRAM_PROTECTED_REGION_SIZE))
     {
         addr = CY_RRAM_MAIN_HOST_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_MAIN_REGION_SIZE + CY_RRAM_PROTECTED_REGION_SIZE;
     }
-    else if ((addr >= CY_RRAM_WORK_HOST_NS_START_ADDRESS) && (addr <= CY_RRAM_WORK_HOST_NS_END_ADDRESS))
+    else if((addr >= CY_RRAM_WORK_HOST_NS_START_ADDRESS) && (addr <= CY_RRAM_WORK_HOST_NS_END_ADDRESS))
     {
         addr = CY_RRAM_WORK_HOST_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_WORK_REGION_SIZE;
     }
-    else if ((addr >= CY_RRAM_SFLASH_HOST_NS_START_ADDRESS) && (addr <= CY_RRAM_SFLASH_HOST_NS_END_ADDRESS))
+    else if((addr >= CY_RRAM_SFLASH_HOST_NS_START_ADDRESS) && (addr <= CY_RRAM_SFLASH_HOST_NS_END_ADDRESS))
     {
         addr = CY_RRAM_SFLASH_HOST_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_SFLASH_REGION_SIZE;
     }
-    else if ((addr >= CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS) && (addr <= CY_RRAM_PROTECTED_HOST_NS_END_ADDRESS))
+    else if((addr >= CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS) && (addr <= CY_RRAM_PROTECTED_HOST_NS_END_ADDRESS))
     {
         addr = CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_PROTECTED_REGION_SIZE;
     }
 #if (CY_CPU_CORTEX_M0P)
-    else if ((addr >= CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS) && (addr <= CY_RRAM_PROTECTED_PROTECTED_NS_END_ADDRESS))
+    else if((addr >= CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS) && (addr <= CY_RRAM_PROTECTED_PROTECTED_NS_END_ADDRESS))
     {
         addr = CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_PROTECTED_REGION_SIZE;
     }
 #endif
 #if (CY_CPU_CORTEX_M33)
-    else if ((addr >= CY_RRAM_MAIN_HOST_CBUS_NS_START_ADDRESS) && (addr <= CY_RRAM_MAIN_HOST_CBUS_NS_END_ADDRESS))
+    else if((addr >= CY_RRAM_MAIN_HOST_CBUS_NS_START_ADDRESS) && (addr <= CY_RRAM_MAIN_HOST_CBUS_NS_END_ADDRESS))
     {
         addr = CY_RRAM_MAIN_HOST_CBUS_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_MAIN_REGION_SIZE;
     }
-    else if ((addr >= CY_RRAM_PROTECTED_HOST_CBUS_NS_START_ADDRESS) && (addr <= CY_RRAM_PROTECTED_HOST_CBUS_NS_END_ADDRESS))
+    else if((addr >= CY_RRAM_PROTECTED_HOST_CBUS_NS_START_ADDRESS) && (addr <= CY_RRAM_PROTECTED_HOST_CBUS_NS_END_ADDRESS))
     {
         addr = CY_RRAM_PROTECTED_HOST_CBUS_NS_START_ADDRESS;
         rgnInfo.size = CY_RRAM_PROTECTED_REGION_SIZE;
@@ -350,31 +350,31 @@ static uint32_t Cy_RRAM_GetPhyBase(uint32_t addr)
     uint32_t physicalAddr = 0;
     addr &= ~CY_RRAM_S_OFFSET_MASK;
 
-    if (addr == CY_RRAM_MAIN_HOST_NS_START_ADDRESS)
+    if(addr == CY_RRAM_MAIN_HOST_NS_START_ADDRESS)
     {
-        physicalAddr = CY_RRAM_PHYSICAL_MAIN_BASE_ADDR;
+       physicalAddr= CY_RRAM_PHYSICAL_MAIN_BASE_ADDR;
     }
-    else if (addr == CY_RRAM_WORK_HOST_NS_START_ADDRESS)
+    else if(addr == CY_RRAM_WORK_HOST_NS_START_ADDRESS)
     {
-        physicalAddr = CY_RRAM_PHYSICAL_WORK_BASE_ADDR;
+        physicalAddr= CY_RRAM_PHYSICAL_WORK_BASE_ADDR;
     }
-    else if (addr == CY_RRAM_SFLASH_HOST_NS_START_ADDRESS)
+    else if(addr == CY_RRAM_SFLASH_HOST_NS_START_ADDRESS)
     {
-        physicalAddr = CY_RRAM_PHYSICAL_SFLASH_BASE_ADDR;
+        physicalAddr= CY_RRAM_PHYSICAL_SFLASH_BASE_ADDR;
     }
-    else if (addr == CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS)
+    else if(addr == CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS)
     {
-        physicalAddr = CY_RRAM_PHYSICAL_PROTECTED_BASE_ADDR;
+        physicalAddr= CY_RRAM_PHYSICAL_PROTECTED_BASE_ADDR;
     }
 #if (CY_CPU_CORTEX_M0P)
-    else if (addr == CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS)
+    else if(addr == CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS)
     {
-        physicalAddr = CY_RRAM_PHYSICAL_PROTECTED_BASE_ADDR;
+        physicalAddr= CY_RRAM_PHYSICAL_PROTECTED_BASE_ADDR;
     }
 #endif
-    else if (addr == CY_RRAM_GENERAL_OTP_MMIO_NS_START_ADDRESS)
+    else if(addr == CY_RRAM_GENERAL_OTP_MMIO_NS_START_ADDRESS)
     {
-        physicalAddr = CY_RRAM_PHYSICAL_GENERAL_OTP_BASE_ADDR;
+       physicalAddr= CY_RRAM_PHYSICAL_GENERAL_OTP_BASE_ADDR;
     }
     else
     {
@@ -398,10 +398,10 @@ static cy_en_rram_status_t Cy_RRAM_ReadBlock(cy_stc_rram_config_t * config, uint
     cy_en_rram_status_t status = CY_RRAM_ECC_FAIL;
     uint32_t timeout;
 
-    if (config->tearingSafe)
+    if(config->tearingSafe)
     {
         uint32_t phy_addr = Cy_RRAM_GetPhyBase(config->subRegionBase) +
-                            ((config->addr - config->subRegionBase) / CY_RRAM_BLOCK_SIZE_BYTES);
+                                ((config->addr - config->subRegionBase) / CY_RRAM_BLOCK_SIZE_BYTES);
 
         /* Set mode to idle to meet initialization condition. */
         Cy_RRAM_SetOperationMode(config->base, CY_RRAM_IDLE);
@@ -417,19 +417,19 @@ static cy_en_rram_status_t Cy_RRAM_ReadBlock(cy_stc_rram_config_t * config, uint
         /* Wait until internal read operation is completed. As per RRAM IP team,
         * there is no need for timeout as the state machine will definitely
         * return to non-busy state. As a safety measure this timeout is added */
-        while (Cy_RRAM_IsBusy(config->base) && (0UL != timeout))
+        while(Cy_RRAM_IsBusy(config->base) && (0UL != timeout))
         {
             timeout--;
             Cy_SysLib_DelayCycles(CY_RRAM_STATUS_CHECK_DELAY);
         }
 
-        if (timeout == 0UL)
+        if(timeout == 0UL)
         {
             return CY_RRAM_OPERATION_TIME_OUT_ERROR;
         }
 
         /* Validate ECC status */
-        if (!CY_RRAM_ReadOperationECCStatus(config->base, CY_RRAM_ECC_READ_BLOCK_MULTIPLE_BIT_FAIL))
+        if(!CY_RRAM_ReadOperationECCStatus(config->base, CY_RRAM_ECC_READ_BLOCK_MULTIPLE_BIT_FAIL))
         {
             /* Continue and read block, there is no uncorrectable ECC errors */
             status = CY_RRAM_SUCCESS;
@@ -444,7 +444,7 @@ static cy_en_rram_status_t Cy_RRAM_ReadBlock(cy_stc_rram_config_t * config, uint
         status = CY_RRAM_SUCCESS;
     }
 
-    if (status == CY_RRAM_SUCCESS)
+    if(status == CY_RRAM_SUCCESS)
     {
         for (uint32_t wordCount = 0UL; wordCount < CY_RRAM_BLOCK_SIZE_WORDS; wordCount++)
         {
@@ -473,7 +473,7 @@ static cy_en_rram_status_t Cy_RRAM_SubRegionReadData(cy_stc_rram_config_t * conf
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
     /* Validate the parameters */
-    if ((config->subRegionSize - (config->addr - config->subRegionBase)) < numBytes)
+    if((config->subRegionSize - (config->addr - config->subRegionBase)) < numBytes)
     {
         return status;
     }
@@ -514,7 +514,7 @@ static cy_en_rram_status_t Cy_RRAM_SubRegionReadData(cy_stc_rram_config_t * conf
     uint32_t blockCount = numBytes / CY_RRAM_BLOCK_SIZE_BYTES;
     while (blockCount > 0UL)
     {
-        if (CY_RRAM_SUCCESS != status)
+        if(CY_RRAM_SUCCESS != status)
         {
             break;
         }
@@ -574,13 +574,13 @@ static cy_en_rram_status_t Cy_RRAM_UpdateBlock(cy_stc_rram_config_t * config, co
     /* Wait until internal read operation is completed. As per RRAM IP team,
     * there is no need for timeout as the state machine will definitely
     * return to non-busy state. As a safety measure this timeout is added */
-    while (Cy_RRAM_IsBusy(config->base) && (0UL != timeout))
+    while(Cy_RRAM_IsBusy(config->base) && (0UL != timeout))
     {
         timeout--;
         Cy_SysLib_DelayCycles(CY_RRAM_STATUS_CHECK_DELAY);
     }
 
-    if (timeout == 0UL)
+    if(timeout == 0UL)
     {
         return CY_RRAM_OPERATION_TIME_OUT_ERROR;
     }
@@ -635,7 +635,7 @@ static cy_en_rram_status_t Cy_RRAM_UpdateBlock(cy_stc_rram_config_t * config, co
         return CY_RRAM_WRITE_OPERATION_ERROR;
     }
 
-    if (config->blockingWrite)
+    if(config->blockingWrite)
     {
         for (uint32_t trials = 0; trials < CY_RRAM_MAX_WRITE_TRIALS; trials++)
         {
@@ -652,32 +652,32 @@ static cy_en_rram_status_t Cy_RRAM_UpdateBlock(cy_stc_rram_config_t * config, co
             /* Check for the actual write completion. As per RRAM IP team,
             * there is no need for timeout as the state machine will definitely
             * return to non-busy state. As a safety measure this timeout is added */
-            while (Cy_RRAM_IsBusy(config->base) && (0UL != timeout))
+            while(Cy_RRAM_IsBusy(config->base) && (0UL != timeout))
             {
                 timeout--;
                 Cy_SysLib_DelayCycles(CY_RRAM_STATUS_CHECK_DELAY);
             }
 
-            if (timeout == 0UL)
+            if(timeout == 0UL)
             {
                 status = CY_RRAM_OPERATION_TIME_OUT_ERROR;
                 break;
             }
 
-            cy_en_rram_verr_status_t verrStatus = CY_RRAM_GetFailBitInfo(config->base);
+            cy_en_rram_verr_status_t verrStatus= CY_RRAM_GetFailBitInfo(config->base);
 
             /* if no error or single bit error then return success. After final trial if there is a two bit error then also return success */
-            if ((verrStatus == CY_RRAM_NO_ERROR) ||
-                    (verrStatus == CY_RRAM_SINGLE_BIT_ERROR) ||
-                    ((verrStatus == CY_RRAM_DOUBLE_BIT_ERROR) && (trials == (CY_RRAM_MAX_WRITE_TRIALS - 1UL))))
+            if((verrStatus == CY_RRAM_NO_ERROR) ||
+               (verrStatus == CY_RRAM_SINGLE_BIT_ERROR) ||
+               ((verrStatus == CY_RRAM_DOUBLE_BIT_ERROR) && (trials == (CY_RRAM_MAX_WRITE_TRIALS - 1UL))))
             {
                 status = CY_RRAM_SUCCESS;
                 break;
             }
             /* For any error other than two or three bit and ECC uncorrectable bit error, return failure */
-            else if ((verrStatus == CY_RRAM_ECC_ADDR_MISMATCH_ERROR) ||
-                     (verrStatus == CY_RRAM_CONFIG_ERROR) ||
-                     (verrStatus == CY_RRAM_ALGORITHM_ERROR))
+            else if((verrStatus == CY_RRAM_ECC_ADDR_MISMATCH_ERROR) ||
+                    (verrStatus == CY_RRAM_CONFIG_ERROR) ||
+                    (verrStatus == CY_RRAM_ALGORITHM_ERROR))
             {
                 status = CY_RRAM_VERR_BLOCK_FAIL_BITS;
                 break;
@@ -716,7 +716,7 @@ static cy_en_rram_status_t Cy_RRAM_SubRegionWriteData(cy_stc_rram_config_t * con
 {
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
-    if ((config->subRegionSize - (config->addr - config->subRegionBase)) < numBytes)
+    if((config->subRegionSize - (config->addr - config->subRegionBase)) < numBytes)
     {
         return status;
     }
@@ -764,7 +764,7 @@ static cy_en_rram_status_t Cy_RRAM_SubRegionWriteData(cy_stc_rram_config_t * con
     uint32_t blockCount = numBytes / CY_RRAM_BLOCK_SIZE_BYTES;
     for (uint32_t i = 0UL; i < blockCount; ++i)
     {
-        if (CY_RRAM_SUCCESS != status)
+        if(CY_RRAM_SUCCESS != status)
         {
             break;
         }
@@ -796,10 +796,10 @@ static cy_en_rram_status_t Cy_RRAM_SubRegionWriteData(cy_stc_rram_config_t * con
 *******************************************************************************/
 static bool Cy_RRAM_IsParamValid(RRAMC_Type *base, cy_stc_rram_rgn_info_t rgnInfo, uint32_t numBytes)
 {
-    if ((NULL != base) &&
-            (rgnInfo.base != CY_RRAM_INVALID_ACCESS) &&
-            (rgnInfo.size != CY_RRAM_INVALID_ACCESS) &&
-            (numBytes > 0UL) && (numBytes <= rgnInfo.size))
+    if((NULL != base) &&
+       (rgnInfo.base != CY_RRAM_INVALID_ACCESS) &&
+       (rgnInfo.size != CY_RRAM_INVALID_ACCESS) &&
+       (numBytes > 0UL) && (numBytes <= rgnInfo.size))
     {
         return true;
     }
@@ -822,14 +822,14 @@ cy_en_rram_status_t Cy_RRAM_OtpWriteByteArray(RRAMC_Type * base, uint32_t addr, 
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
     cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetOTPSubRegionInfo(addr);
 
-    if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+    if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
     {
         cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.size, true, false};
 
-        if (!Cy_RRAM_IsPCLockAcquired(base))
+        if(!Cy_RRAM_IsPCLockAcquired(base))
         {
             /* Acquire a PC to confirm the transaction is effective. */
-            if (Cy_RRAM_AcquirePCLock(base))
+            if(Cy_RRAM_AcquirePCLock(base))
             {
                 status = Cy_RRAM_SubRegionWriteData(&config, data, numBytes);
                 Cy_RRAM_ReleasePCLock(base);
@@ -862,7 +862,7 @@ cy_en_rram_status_t Cy_RRAM_OtpReadByteArray(RRAMC_Type * base, uint32_t addr, u
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
     cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetOTPSubRegionInfo(addr);
 
-    if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+    if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
     {
         cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.base, false, false};
         status = Cy_RRAM_SubRegionReadData(&config, data, numBytes);
@@ -913,9 +913,9 @@ cy_en_rram_status_t Cy_RRAM_OtpWriteBlock(RRAMC_Type * base, uint32_t addr, uint
 {
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
-    if ((addr % CY_RRAM_BLOCK_SIZE_BYTES == 0UL))
+    if((addr % CY_RRAM_BLOCK_SIZE_BYTES == 0UL))
     {
-        status =  Cy_RRAM_OtpWriteByteArray(base, addr, data, CY_RRAM_BLOCK_SIZE_BYTES);
+         status =  Cy_RRAM_OtpWriteByteArray(base, addr, data, CY_RRAM_BLOCK_SIZE_BYTES);
     }
 
     return status;
@@ -935,14 +935,14 @@ cy_en_rram_status_t Cy_RRAM_NvmWriteByteArray(RRAMC_Type * base, uint32_t addr, 
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
     cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetNVMSubRegionInfo(addr);
 
-    if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+    if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
     {
         cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.size, true, false};
 
-        if (!Cy_RRAM_IsPCLockAcquired(base))
+        if(!Cy_RRAM_IsPCLockAcquired(base))
         {
             /* Acquire a PC to confirm the transaction is effective. */
-            if (Cy_RRAM_AcquirePCLock(base))
+            if(Cy_RRAM_AcquirePCLock(base))
             {
                 status = Cy_RRAM_SubRegionWriteData(&config, data, numBytes);
                 Cy_RRAM_ReleasePCLock(base);
@@ -975,7 +975,7 @@ cy_en_rram_status_t Cy_RRAM_NvmReadByteArray(RRAMC_Type * base, uint32_t addr, u
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
     cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetNVMSubRegionInfo(addr);
 
-    if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+    if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
     {
         cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.size, false, false};
         status = Cy_RRAM_SubRegionReadData(&config, data, numBytes);
@@ -998,14 +998,14 @@ cy_en_rram_status_t Cy_RRAM_NonBlockingNvmWriteByteArray(RRAMC_Type * base, uint
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
     cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetNVMSubRegionInfo(addr);
 
-    if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+    if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
     {
         cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.size, false, false};
 
-        if (!Cy_RRAM_IsPCLockAcquired(base))
+        if(!Cy_RRAM_IsPCLockAcquired(base))
         {
             /* Acquire a PC to confirm the transaction is effective. */
-            if (Cy_RRAM_AcquirePCLock(base))
+            if(Cy_RRAM_AcquirePCLock(base))
             {
                 status = Cy_RRAM_SubRegionWriteData(&config, data, numBytes);
                 Cy_RRAM_ReleasePCLock(base);
@@ -1037,9 +1037,9 @@ cy_en_rram_status_t Cy_RRAM_NvmWriteBlock(RRAMC_Type * base, uint32_t addr, uint
 {
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
-    if ((addr % CY_RRAM_BLOCK_SIZE_BYTES == 0UL))
+    if((addr % CY_RRAM_BLOCK_SIZE_BYTES == 0UL))
     {
-        status =  Cy_RRAM_NvmWriteByteArray(base, addr, data, CY_RRAM_BLOCK_SIZE_BYTES);
+         status =  Cy_RRAM_NvmWriteByteArray(base, addr, data, CY_RRAM_BLOCK_SIZE_BYTES);
     }
 
     return status;
@@ -1058,11 +1058,11 @@ cy_en_rram_status_t Cy_RRAM_WriteByteArray(RRAMC_Type * base, uint32_t addr, con
 {
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
-    if (Cy_RRAM_GetNVMSubRegionInfo(addr).size != 0UL)
+    if(Cy_RRAM_GetNVMSubRegionInfo(addr).size != 0UL)
     {
         status = Cy_RRAM_NvmWriteByteArray(base, addr, data, numBytes);
     }
-    else if (Cy_RRAM_GetOTPSubRegionInfo(addr).size != 0UL)
+    else if(Cy_RRAM_GetOTPSubRegionInfo(addr).size != 0UL)
     {
         status = Cy_RRAM_OtpWriteByteArray(base, addr, data, numBytes);
     }
@@ -1087,18 +1087,18 @@ cy_en_rram_status_t Cy_RRAM_TSWriteByteArray(RRAMC_Type * base, uint32_t addr, c
 {
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
-    if (Cy_RRAM_GetNVMSubRegionInfo(addr).size != 0UL)
+    if(Cy_RRAM_GetNVMSubRegionInfo(addr).size != 0UL)
     {
         cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetNVMSubRegionInfo(addr);
 
-        if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+        if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
         {
             cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.size, true, true};
 
-            if (!Cy_RRAM_IsPCLockAcquired(base))
+            if(!Cy_RRAM_IsPCLockAcquired(base))
             {
                 /* Acquire a PC to confirm the transaction is effective. */
-                if (Cy_RRAM_AcquirePCLock(base))
+                if(Cy_RRAM_AcquirePCLock(base))
                 {
                     status = Cy_RRAM_SubRegionWriteData(&config, data, numBytes);
                     Cy_RRAM_ReleasePCLock(base);
@@ -1114,18 +1114,18 @@ cy_en_rram_status_t Cy_RRAM_TSWriteByteArray(RRAMC_Type * base, uint32_t addr, c
             }
         }
     }
-    else if (Cy_RRAM_GetOTPSubRegionInfo(addr).size != 0UL)
+    else if(Cy_RRAM_GetOTPSubRegionInfo(addr).size != 0UL)
     {
         cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetOTPSubRegionInfo(addr);
 
-        if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+        if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
         {
             cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.size, true, true};
 
-            if (!Cy_RRAM_IsPCLockAcquired(base))
+            if(!Cy_RRAM_IsPCLockAcquired(base))
             {
                 /* Acquire a PC to confirm the transaction is effective. */
-                if (Cy_RRAM_AcquirePCLock(base))
+                if(Cy_RRAM_AcquirePCLock(base))
                 {
                     status = Cy_RRAM_SubRegionWriteData(&config, data, numBytes);
                     Cy_RRAM_ReleasePCLock(base);
@@ -1161,11 +1161,11 @@ cy_en_rram_status_t Cy_RRAM_ReadByteArray(RRAMC_Type * base, uint32_t addr, uint
 {
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
-    if (Cy_RRAM_GetNVMSubRegionInfo(addr).size != 0UL)
+    if(Cy_RRAM_GetNVMSubRegionInfo(addr).size != 0UL)
     {
         status = Cy_RRAM_NvmReadByteArray(base, addr, data, numBytes);
     }
-    else if (Cy_RRAM_GetOTPSubRegionInfo(addr).size != 0UL)
+    else if(Cy_RRAM_GetOTPSubRegionInfo(addr).size != 0UL)
     {
         status = Cy_RRAM_OtpReadByteArray(base, addr, data, numBytes);
     }
@@ -1191,16 +1191,16 @@ cy_en_rram_status_t Cy_RRAM_TSReadByteArray(RRAMC_Type * base, uint32_t addr, ui
 {
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
-    if (Cy_RRAM_GetNVMSubRegionInfo(addr).size != 0UL)
+    if(Cy_RRAM_GetNVMSubRegionInfo(addr).size != 0UL)
     {
         cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetNVMSubRegionInfo(addr);
-        if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+        if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
         {
             cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.size, false, true};
-            if (!Cy_RRAM_IsPCLockAcquired(base))
+            if(!Cy_RRAM_IsPCLockAcquired(base))
             {
                 /* Acquire a PC to confirm the transaction is effective. */
-                if (Cy_RRAM_AcquirePCLock(base))
+                if(Cy_RRAM_AcquirePCLock(base))
                 {
                     status = Cy_RRAM_SubRegionReadData(&config, data, numBytes);
                     Cy_RRAM_ReleasePCLock(base);
@@ -1216,17 +1216,17 @@ cy_en_rram_status_t Cy_RRAM_TSReadByteArray(RRAMC_Type * base, uint32_t addr, ui
             }
         }
     }
-    else if (Cy_RRAM_GetOTPSubRegionInfo(addr).size != 0UL)
+    else if(Cy_RRAM_GetOTPSubRegionInfo(addr).size != 0UL)
     {
         cy_stc_rram_rgn_info_t rgnInfo = Cy_RRAM_GetOTPSubRegionInfo(addr);
 
-        if (Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
+        if(Cy_RRAM_IsParamValid(base, rgnInfo, numBytes) && NULL != data)
         {
             cy_stc_rram_config_t config = {base, addr, rgnInfo.base, rgnInfo.base, false, true};
-            if (!Cy_RRAM_IsPCLockAcquired(base))
+            if(!Cy_RRAM_IsPCLockAcquired(base))
             {
                 /* Acquire a PC to confirm the transaction is effective. */
-                if (Cy_RRAM_AcquirePCLock(base))
+                if(Cy_RRAM_AcquirePCLock(base))
                 {
                     status = Cy_RRAM_SubRegionReadData(&config, data, numBytes);
                     Cy_RRAM_ReleasePCLock(base);
@@ -1264,7 +1264,7 @@ cy_en_rram_status_t Cy_RRAM_Init(RRAMC_Type * base, cy_en_rram_vmode_t vmode, bo
     cy_en_rram_status_t status = CY_RRAM_SUCCESS;
     uint32_t timeout;
 
-    if (NULL == base)
+    if(NULL == base)
     {
         return CY_RRAM_BAD_PARAM;
     }
@@ -1290,13 +1290,13 @@ cy_en_rram_status_t Cy_RRAM_Init(RRAMC_Type * base, cy_en_rram_vmode_t vmode, bo
     /* Wait for the retrieve operation to finish. As per RRAM IP team,
     * there is no need for timeout as the state machine will definitely
     * return to non-busy state. As a safety measure this timeout is added */
-    while (Cy_RRAM_IsBusy(base) && (0UL != timeout))
+    while(Cy_RRAM_IsBusy(base) && (0UL != timeout))
     {
         timeout--;
         Cy_SysLib_DelayCycles(CY_RRAM_STATUS_CHECK_DELAY);
     }
 
-    if (timeout == 0UL)
+    if(timeout == 0UL)
     {
         return CY_RRAM_OPERATION_TIME_OUT_ERROR;
     }
@@ -1304,7 +1304,7 @@ cy_en_rram_status_t Cy_RRAM_Init(RRAMC_Type * base, cy_en_rram_vmode_t vmode, bo
 
     /* Up to triple-bit fails are corrected by HW
        below check is for uncorrectable failure or no configuration retrieved errors*/
-    if ((((uint32_t)CY_RRAM_GetFailBitInfo(base)) & errorMask) != ((uint32_t)CY_RRAM_NO_ERROR))
+    if((((uint32_t)CY_RRAM_GetFailBitInfo(base)) & errorMask) != ((uint32_t)CY_RRAM_NO_ERROR))
     {
         status =  CY_RRAM_INIT_FAIL;
     }
@@ -1330,10 +1330,10 @@ cy_en_rram_status_t Cy_RRAM_EnableWP(RRAMC_Type * base, uint32_t numSectors)
 
     CY_ASSERT_L2(CY_RRAM_SECTOR_COUNT_VALID(numSectors));
 
-    if (NULL != base && numSectors > 0UL && numSectors <= (CY_RRAM_NVM_SIZE_KB / CY_RRAM_SECTOR_SIZE_KB))
+    if(NULL != base && numSectors > 0UL && numSectors <= (CY_RRAM_NVM_SIZE_KB / CY_RRAM_SECTOR_SIZE_KB))
     {
         /* Check the status of write protection lock */
-        if (Cy_RRAM_GetWPLockState(base) == CY_RRAM_WP_UNLOCK)
+        if(Cy_RRAM_GetWPLockState(base) == CY_RRAM_WP_UNLOCK)
         {
 
             uint32_t temp = RRAM_NVM_CONF1(base) & ~RRAMC_RRAM_SFR_NVM_CONF1_SECPROT_Msk;
@@ -1365,13 +1365,13 @@ cy_en_rram_status_t Cy_RRAM_DisableWP(RRAMC_Type * base)
 {
     cy_en_rram_status_t status = CY_RRAM_WPLOCK_ENABLED;
 
-    if (NULL == base)
+    if(NULL == base)
     {
         return CY_RRAM_BAD_PARAM;
     }
 
     /* Check the status of write protection lock */
-    if (Cy_RRAM_GetWPLockState(base) == CY_RRAM_WP_UNLOCK)
+    if(Cy_RRAM_GetWPLockState(base) == CY_RRAM_WP_UNLOCK)
     {
         /* Disable write protection on all sectors by writing SECPROT to 0 */
         RRAM_NVM_CONF1(base) &= ~RRAMC_RRAM_SFR_NVM_CONF1_SECPROT_Msk;
@@ -1387,7 +1387,7 @@ cy_en_rram_status_t Cy_RRAM_DisableWP(RRAMC_Type * base)
 ****************************************************************************//**
 *
 * Sets the size of lockable region in PROTECTED_NVM region. If size is larger than
-* PROTECTERD_NVM, the entire PROTECTED_NVM is lockable. The lockable region can be configured
+* PROTECTED_NVM, the entire PROTECTED_NVM is lockable. The lockable region can be configured
 * only if the protected nvm lock state is unlocked. The configured region is protected only when the
 * protected nvm lock state is locked
 *
@@ -1396,13 +1396,13 @@ cy_en_rram_status_t Cy_RRAM_SetProtLockableRegion(RRAMC_Type * base, uint32_t re
 {
     cy_en_rram_status_t status = CY_RRAM_BAD_PARAM;
 
-    if (NULL != base && regionSize > 0UL && regionSize <= CY_RRAM_PROTECTED_LOCK_REGION_LIMIT)
+    if(NULL != base && regionSize > 0UL && regionSize <= CY_RRAM_PROTECTED_LOCK_REGION_LIMIT)
     {
-        if (Cy_RRAM_GetProtLockState(base) == CY_RRAM_PROTECTED_UNLOCK)
+        if(Cy_RRAM_GetProtLockState(base) == CY_RRAM_PROTECTED_UNLOCK)
         {
             /* Align regionSize to update valid data to register */
             RRAM_PROTECTED_LOCKABLE_LOCK(base) |=
-                (((regionSize - 1UL) << RRAMC_RRAMC_PROTECTED_LOCKABLE_LOCK_PARTITION_SIZE_1_Pos) | (regionSize - 1UL));
+              (((regionSize - 1UL) << RRAMC_RRAMC_PROTECTED_LOCKABLE_LOCK_PARTITION_SIZE_1_Pos) | (regionSize - 1UL));
             status = CY_RRAM_SUCCESS;
         }
         else

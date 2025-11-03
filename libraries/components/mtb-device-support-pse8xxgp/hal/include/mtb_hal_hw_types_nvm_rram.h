@@ -26,24 +26,24 @@
 #include "cy_pdl.h"
 
 #if defined(CY_IP_MXS22RRAMC)
-    #if !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM)
-        #define _MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM (1u)
-    #endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM)
+#if !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM)
+#define _MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM (1u)
+#endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM)
 
-    #if !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_OTP)
-        #define _MTB_HAL_DRIVER_AVAILABLE_NVM_OTP (1u)
-    #endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_OTP)
+#if !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_OTP)
+#define _MTB_HAL_DRIVER_AVAILABLE_NVM_OTP (1u)
+#endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_OTP)
 
-    /**
-    * \ingroup group_hal_availability
-    * \{
-    */
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
-    #if !defined(MTB_HAL_DRIVER_AVAILABLE_NVM)
-        /** Macro specifying whether the NVM driver is available for the current device */
-        #define MTB_HAL_DRIVER_AVAILABLE_NVM (1u)
-    #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_NVM)
+#if !defined(MTB_HAL_DRIVER_AVAILABLE_NVM)
+/** Macro specifying whether the NVM driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_NVM (1u)
+#endif // !defined(MTB_HAL_DRIVER_AVAILABLE_NVM)
 
-    /** \} group_hal_availability */
+/** \} group_hal_availability */
 
 #endif

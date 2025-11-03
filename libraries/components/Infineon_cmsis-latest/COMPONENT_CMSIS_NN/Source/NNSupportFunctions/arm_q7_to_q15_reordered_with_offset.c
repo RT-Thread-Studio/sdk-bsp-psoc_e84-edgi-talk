@@ -81,7 +81,7 @@ void arm_q7_to_q15_reordered_with_offset(const q7_t *src, q15_t *dst, uint32_t b
 
     while (block_cnt > 0u)
     {
-        *dst++ = (q15_t) * src++ + offset;
+        *dst++ = (q15_t)*src++ + offset;
 
         /* Decrement the loop counter */
         block_cnt--;

@@ -57,7 +57,7 @@ jobs:
          - {RTT_BSP: "Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED"}
          - {RTT_BSP: "Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED"}
          - {RTT_BSP: "Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark"}
-         - {RTT_BSP: "Edgi-Talk_emUSB-device_CDC_Echo/Edgi_Talk_M33_emUSB-device_CDC_Echo"}
+         - {RTT_BSP: "Edgi-Talk_CDC_Echo/Edgi_Talk_M33_CDC_Echo"}
          - {RTT_BSP: "Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam"}
          - {RTT_BSP: "Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq"}
          - {RTT_BSP: "Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3"}

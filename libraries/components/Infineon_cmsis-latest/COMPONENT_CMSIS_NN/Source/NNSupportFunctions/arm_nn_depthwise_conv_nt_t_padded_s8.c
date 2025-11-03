@@ -47,17 +47,17 @@
  */
 
 q7_t *arm_nn_depthwise_conv_nt_t_padded_s8(const q7_t *lhs,
-        const q7_t *rhs,
-        const int32_t input_offset,
-        const uint16_t num_ch,
-        const int32_t *out_shift,
-        const int32_t *out_mult,
-        const int32_t out_offset,
-        const int32_t activation_min,
-        const int32_t activation_max,
-        const uint16_t row_x_col,
-        const int32_t *const output_bias,
-        q7_t *out)
+                                           const q7_t *rhs,
+                                           const int32_t input_offset,
+                                           const uint16_t num_ch,
+                                           const int32_t *out_shift,
+                                           const int32_t *out_mult,
+                                           const int32_t out_offset,
+                                           const int32_t activation_min,
+                                           const int32_t activation_max,
+                                           const uint16_t row_x_col,
+                                           const int32_t *const output_bias,
+                                           q7_t *out)
 {
 #if defined(ARM_MATH_MVEI)
     int32_t loop_count = (num_ch + 3) / 4;
@@ -65,7 +65,7 @@ q7_t *arm_nn_depthwise_conv_nt_t_padded_s8(const q7_t *lhs,
     uint32_t num_ch_to_process = num_ch;
 
     for (int i_loop_cnt = 0, offset = 0; i_loop_cnt < loop_count;
-            num_ch_to_process -= 4, out += 4, offset += 4, i_loop_cnt++)
+         num_ch_to_process -= 4, out += 4, offset += 4, i_loop_cnt++)
     {
         int32x4_t out_0 = vldrwq_s32(bias);
         int32x4_t out_1 = out_0;

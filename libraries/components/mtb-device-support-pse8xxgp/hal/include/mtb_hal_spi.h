@@ -137,11 +137,11 @@ typedef enum
 {
     MTB_HAL_SPI_EVENT_NONE       = 0,                                  //!< No event
     MTB_HAL_SPI_IRQ_DATA_IN_FIFO = (MTB_HAL_MAP_SPI_IRQ_DATA_IN_FIFO), //!< All transfer data has
-    //!< been moved into data
-    //!< FIFO
+                                                                       //!< been moved into data
+                                                                       //!< FIFO
     MTB_HAL_SPI_IRQ_DONE         = (MTB_HAL_MAP_SPI_IRQ_DONE),         //!< Transfer complete.
     MTB_HAL_SPI_IRQ_ERROR        = (MTB_HAL_MAP_SPI_IRQ_ERROR)         //!< An error occurred while
-                                   //!< transferring data
+                                                                       //!< transferring data
 } mtb_hal_spi_event_t;
 
 /** Handler for SPI interrupts */
@@ -286,7 +286,7 @@ cy_rslt_t mtb_hal_spi_clear(mtb_hal_spi_t* obj);
  * @param[in] callback_arg Generic argument that will be provided to the callback when called
  */
 void mtb_hal_spi_register_callback(mtb_hal_spi_t* obj, mtb_hal_spi_event_callback_t callback,
-                                   void *callback_arg);
+                                   void* callback_arg);
 
 /** Configure SPI interrupt. This function is used for word-approach
  *
@@ -307,12 +307,25 @@ void mtb_hal_spi_enable_event(mtb_hal_spi_t* obj, mtb_hal_spi_event_t event, boo
  */
 cy_rslt_t mtb_hal_spi_process_interrupt(mtb_hal_spi_t* obj);
 
+/** Wait for controller send data to RX buffer and store them to the user-defined buffer.
+ * NOTE: If this function will returt on the timeout or all data was read or SS line is de-asserted.
+ *
+ * @param[in]     obj        The SPI object
+ * @param[in]     dst_buff   Pointer on memory to store the data from the target RX buffer.
+ * @param[in,out] size       [in] The number of bytes to read, [out] number actually read.
+ * @param[in]     timeout    Timeout in millisecond, set this value to 0 if you don't want to wait
+ * at all.
+ * @return  The status of the read request
+ * */
+cy_rslt_t mtb_hal_spi_target_read_transaction(mtb_hal_spi_t* obj, uint8_t* dst_buff, uint16_t* size,
+                                              uint32_t timeout);
+
 #if defined(__cplusplus)
 }
 #endif
 
 #ifdef MTB_HAL_SPI_IMPL_HEADER
-    #include MTB_HAL_SPI_IMPL_HEADER
+#include MTB_HAL_SPI_IMPL_HEADER
 #endif /* MTB_HAL_SPI_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_SPI)

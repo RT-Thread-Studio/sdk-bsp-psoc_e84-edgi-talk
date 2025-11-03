@@ -1,3 +1,4 @@
+
 /* ----------------------------------------------------------------------
  * Project:      CMSIS DSP Library
  * Title:        arm_biquad_cascade_df1_init_f32.c
@@ -43,7 +44,6 @@
   @param[in]     numStages   number of 2nd order stages in the filter.
   @param[in]     pCoeffs     points to the filter coefficients.
   @param[in]     pState      points to the state buffer.
-  @return        none
 
   @par           Coefficient and State Ordering
                    The coefficients are stored in the array <code>pCoeffs</code> in the following order:
@@ -65,7 +65,7 @@
                    The 4 state variables for stage 1 are first, then the 4 state variables for stage 2, and so on.
                    The state array has a total length of <code>4*numStages</code> values.
                    The state variables are updated after each block of data is processed; the coefficients are untouched.
-
+ 
   @par             For MVE code, an additional buffer of modified coefficients is required.
                    Its size is numStages and each element of this buffer has type arm_biquad_mod_coef_f32.
                    So, its total size is 32*numStages float32_t elements.
@@ -74,33 +74,32 @@
  */
 
 
-void arm_biquad_cascade_df1_init_f32(
-    arm_biquad_casd_df1_inst_f32 * S,
-    uint8_t numStages,
-    const float32_t *pCoeffs,
-    float32_t *pState)
+ARM_DSP_ATTRIBUTE void arm_biquad_cascade_df1_init_f32(
+        arm_biquad_casd_df1_inst_f32 * S,
+        uint8_t numStages,
+  const float32_t * pCoeffs,
+        float32_t * pState)
 {
-    /* Assign filter stages */
-    S->numStages = numStages;
+  /* Assign filter stages */
+  S->numStages = numStages;
 
-    /* Assign coefficient pointer */
-    S->pCoeffs = pCoeffs;
+  /* Assign coefficient pointer */
+  S->pCoeffs = pCoeffs;
 
-    /* Clear state buffer and size is always 4 * numStages */
-    memset(pState, 0, (4U * (uint32_t) numStages) * sizeof(float32_t));
+  /* Clear state buffer and size is always 4 * numStages */
+  memset(pState, 0, (4U * (uint32_t) numStages) * sizeof(float32_t));
 
-    /* Assign state pointer */
-    S->pState = pState;
+  /* Assign state pointer */
+  S->pState = pState;
 }
 
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 static void generateCoefsFastBiquadF32(float32_t b0, float32_t b1, float32_t b2, float32_t a1, float32_t a2,
-                                       arm_biquad_mod_coef_f32 * newCoef)
+                                arm_biquad_mod_coef_f32 * newCoef)
 {
-    float32_t coeffs[4][8] =
-    {
+    float32_t coeffs[4][8] = {
         {0, 0, 0, b0, b1, b2, a1, a2},
         {0, 0, b0, b1, b2, 0, a2, 0},
         {0, b0, b1, b2, 0, 0, 0, 0},
@@ -123,12 +122,12 @@ static void generateCoefsFastBiquadF32(float32_t b0, float32_t b1, float32_t b2,
     }
 }
 
-void arm_biquad_cascade_df1_mve_init_f32(
-    arm_biquad_casd_df1_inst_f32 * S,
-    uint8_t numStages,
-    const float32_t *pCoeffs,
-    arm_biquad_mod_coef_f32 * pCoeffsMod,
-    float32_t *pState)
+ARM_DSP_ATTRIBUTE void arm_biquad_cascade_df1_mve_init_f32(
+      arm_biquad_casd_df1_inst_f32 * S,
+      uint8_t numStages,
+      const float32_t * pCoeffs, 
+      arm_biquad_mod_coef_f32 * pCoeffsMod, 
+      float32_t * pState)
 {
     arm_biquad_cascade_df1_init_f32(S, numStages, (float32_t *)pCoeffsMod, pState);
 
@@ -140,7 +139,7 @@ void arm_biquad_cascade_df1_mve_init_f32(
         pCoeffsMod++;
     }
 }
-#endif
+#endif 
 
 /**
   @} end of BiquadCascadeDF1 group

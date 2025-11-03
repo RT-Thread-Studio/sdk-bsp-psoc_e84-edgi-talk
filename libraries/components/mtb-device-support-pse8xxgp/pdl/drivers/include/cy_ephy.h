@@ -51,31 +51,6 @@
 * \section group_ephy_MISRA MISRA-C Compliance
 * The EPHY driver does not have any specific deviation
 *
-* \section group_ephy_Changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.30</td>
-*     <td>Updated \ref Cy_EPHY_getLinkPartnerCapabilities function.  </td>
-*     <td>Bug fixes and code enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.20</td>
-*     <td>Changed naming conventions as per standard.</td>
-*     <td>Code Enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.10</td>
-*     <td>Updated \ref Cy_EPHY_Configure() function and Added new macros for BMSR register.</td>
-*     <td>Bug fixes and support enhancement for 1Gbps configuration.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_ephy_macros Macros
 * \defgroup group_ephy_functions Functions
 * \defgroup group_ephy_enums Enumerated Types
@@ -234,8 +209,7 @@ extern "C" {
 ******************************************************************************/
 
 /* PHY state machine states */
-typedef enum
-{
+typedef enum {
     CY_EPHY_DOWN,       /**< PHY device and driver are not ready for anything */
     CY_EPHY_READY,      /** < PHY is ready to send and receive packets, but the controller is not */
     CY_EPHY_UP,         /**< The PHY and attached device are ready to do work */

@@ -44,7 +44,7 @@ extern "C" {
 // _mtb_hal_comp_lpcomp_setup
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE cy_rslt_t _mtb_hal_comp_lpcomp_setup(mtb_hal_comp_t* obj,
-        const mtb_hal_comp_configurator_t *config)
+                                                     const mtb_hal_comp_configurator_t* config)
 {
     CY_ASSERT(obj != NULL);
     CY_ASSERT(config != NULL);

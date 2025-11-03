@@ -38,35 +38,34 @@
 /**
   * \brief SYSCPUSS registers (CPUSS)
   */
-typedef struct
-{
-    __IM uint32_t IDENTITY;                      /*!< 0x00000000 Identity */
-    __IM uint32_t RESERVED[3];
-    __IM uint32_t PRODUCT_ID;                    /*!< 0x00000010 Product identifier and version (same as CoreSight RomTables) */
-    __IM uint32_t RESERVED1[3];
-    __IM uint32_t DP_STATUS;                     /*!< 0x00000020 Debug port status */
-    __IM uint32_t RESERVED2[3];
-    __IOM uint32_t BUFF_CTL;                      /*!< 0x00000030 Buffer control */
-    __IM uint32_t RESERVED3[3];
-    __IOM uint32_t CAL_SUP_SET;                   /*!< 0x00000040 Calibration support set and read */
-    __IOM uint32_t CAL_SUP_CLR;                   /*!< 0x00000044 Calibration support clear and reset */
-    __IM uint32_t RESERVED4[2];
-    __IOM uint32_t INFRA_CTL;                     /*!< 0x00000050 Infrastructure Control */
-    __IM uint32_t RESERVED5[43];
-    __IOM uint32_t SYSTICK_S_CTL;                 /*!< 0x00000100 Secure SysTick timer control */
-    __IM uint32_t RESERVED6[7];
-    __IOM uint32_t SYSTICK_NS_CTL;                /*!< 0x00000120 Non Secure SysTick timer control */
-    __IM uint32_t RESERVED7[55];
-    __IOM uint32_t INTR_MSC;                      /*!< 0x00000200 Master security controller Interrupt */
-    __IM uint32_t RESERVED8;
-    __IOM uint32_t INTR_MASK_MSC;                 /*!< 0x00000208 Master security controller Interrupt mask */
-    __IM uint32_t INTR_MASKED_MSC;               /*!< 0x0000020C Master security controller Interrupt masked */
-    __IM uint32_t RESERVED9[892];
-    __IOM uint32_t AP_CTL;                        /*!< 0x00001000 Access port control */
-    __IM uint32_t RESERVED10[1024];
-    __IOM uint32_t PROTECTION;                    /*!< 0x00002004 Protection status */
-    __IM uint32_t RESERVED11[62];
-    __IOM uint32_t TRIM_ROM_CTL;                  /*!< 0x00002100 ROM trim control */
+typedef struct {
+   __IM uint32_t IDENTITY;                      /*!< 0x00000000 Identity */
+   __IM uint32_t RESERVED[3];
+   __IM uint32_t PRODUCT_ID;                    /*!< 0x00000010 Product identifier and version (same as CoreSight RomTables) */
+   __IM uint32_t RESERVED1[3];
+   __IM uint32_t DP_STATUS;                     /*!< 0x00000020 Debug port status */
+   __IM uint32_t RESERVED2[3];
+  __IOM uint32_t BUFF_CTL;                      /*!< 0x00000030 Buffer control */
+   __IM uint32_t RESERVED3[3];
+  __IOM uint32_t CAL_SUP_SET;                   /*!< 0x00000040 Calibration support set and read */
+  __IOM uint32_t CAL_SUP_CLR;                   /*!< 0x00000044 Calibration support clear and reset */
+   __IM uint32_t RESERVED4[2];
+  __IOM uint32_t INFRA_CTL;                     /*!< 0x00000050 Infrastructure Control */
+   __IM uint32_t RESERVED5[43];
+  __IOM uint32_t SYSTICK_S_CTL;                 /*!< 0x00000100 Secure SysTick timer control */
+   __IM uint32_t RESERVED6[7];
+  __IOM uint32_t SYSTICK_NS_CTL;                /*!< 0x00000120 Non Secure SysTick timer control */
+   __IM uint32_t RESERVED7[55];
+  __IOM uint32_t INTR_MSC;                      /*!< 0x00000200 Master security controller Interrupt */
+   __IM uint32_t RESERVED8;
+  __IOM uint32_t INTR_MASK_MSC;                 /*!< 0x00000208 Master security controller Interrupt mask */
+   __IM uint32_t INTR_MASKED_MSC;               /*!< 0x0000020C Master security controller Interrupt masked */
+   __IM uint32_t RESERVED9[892];
+  __IOM uint32_t AP_CTL;                        /*!< 0x00001000 Access port control */
+   __IM uint32_t RESERVED10[1024];
+  __IOM uint32_t PROTECTION;                    /*!< 0x00002004 Protection status */
+   __IM uint32_t RESERVED11[62];
+  __IOM uint32_t TRIM_ROM_CTL;                  /*!< 0x00002100 ROM trim control */
 } CPUSS_Type;                                   /*!< Size = 8452 (0x2104) */
 
 

@@ -43,15 +43,19 @@ extern "C" {
 #if (_MTB_HAL_DRIVER_AVAILABLE_NVM_FLASH)
 
 typedef cy_en_flashdrv_status_t (* _mtb_hal_flash_operation)(uint32_t rowAddr,
-        const uint32_t *data);
+                                                             const uint32_t* data);
 
 #if defined(CPUSS_FLASHC_ECT)
 #define _MTB_HAL_USES_ECT_FLASH (CPUSS_FLASHC_ECT == 1)
+#if defined(CY_IP_M4CPUSS) && (CY_IP_M4CPUSS_VERSION == 2)
+#include "mtb_hal_nvm_m4cpuss_ver2.h"
+#else
 #include "mtb_hal_nvm_m7cpuss_v1.h"
+#endif /* defined(CY_IP_M4CPUSS) && (CY_IP_M4CPUSS_VERSION == 2) */
 #else
 #define _MTB_HAL_USES_ECT_FLASH (0u)
 #include "mtb_hal_nvm_mxs40flashc_v1.h"
-#endif
+#endif /* defined(CPUSS_FLASHC_ECT) */
 
 #if (_MTB_HAL_USES_ECT_FLASH)
 #define _MTB_HAL_INTERNAL_FLASH_MEMORY_BLOCKS (4u)
@@ -118,7 +122,7 @@ typedef cy_en_flashdrv_status_t (* _mtb_hal_flash_operation)(uint32_t rowAddr,
  * @return the status of the HAL setup
  */
 __STATIC_INLINE cy_rslt_t mtb_hal_nvm_setup(mtb_hal_nvm_t* obj,
-        const mtb_hal_nvm_configurator_t *config)
+                                            const mtb_hal_nvm_configurator_t* config)
 {
     CY_UNUSED_PARAMETER(obj);
     CY_UNUSED_PARAMETER(config);
@@ -135,7 +139,7 @@ uint8_t _mtb_hal_flash_get_mem_region_count(void);
 //--------------------------------------------------------------------------------------------------
 // _mtb_hal_flash_get_mem_region
 //--------------------------------------------------------------------------------------------------
-const mtb_hal_nvm_region_info_t *_mtb_hal_flash_get_mem_region(void);
+const mtb_hal_nvm_region_info_t* _mtb_hal_flash_get_mem_region(void);
 
 
 #if defined(__cplusplus)

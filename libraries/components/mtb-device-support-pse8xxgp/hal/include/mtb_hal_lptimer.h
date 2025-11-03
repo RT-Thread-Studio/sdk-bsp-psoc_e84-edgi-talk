@@ -108,7 +108,7 @@ typedef enum
 
 /** Handler for LPTimer interrupts */
 typedef void (* mtb_hal_lptimer_event_callback_t)(void* callback_arg,
-        mtb_hal_lptimer_event_t event);
+                                                  mtb_hal_lptimer_event_t event);
 
 /**
  * Sets up a HAL instance to use the specified hardware resource. This hardware
@@ -121,7 +121,7 @@ typedef void (* mtb_hal_lptimer_event_callback_t)(void* callback_arg,
  * @return the status of the HAL setup
  */
 cy_rslt_t mtb_hal_lptimer_setup(mtb_hal_lptimer_t* obj,
-                                const mtb_hal_lptimer_configurator_t *config);
+                                const mtb_hal_lptimer_configurator_t* config);
 
 /** Update the match/compare value
  *
@@ -163,7 +163,7 @@ uint32_t mtb_hal_lptimer_read(const mtb_hal_lptimer_t* obj);
  */
 void mtb_hal_lptimer_register_callback(mtb_hal_lptimer_t* obj,
                                        mtb_hal_lptimer_event_callback_t callback,
-                                       void *callback_arg);
+                                       void* callback_arg);
 
 /** Configure and Enable/Disable the LPTimer events
  *

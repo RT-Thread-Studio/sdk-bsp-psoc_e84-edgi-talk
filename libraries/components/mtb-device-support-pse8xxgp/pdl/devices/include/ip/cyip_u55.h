@@ -45,192 +45,184 @@
 /**
   * \brief Page BASE (U55_BASE_1_0)
   */
-typedef struct
-{
-    __IM uint32_t ID;                            /*!< 0x00000000 ID Register */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 Register describes the current operating status of the NPU */
-    __IOM uint32_t CMD;                           /*!< 0x00000008 Command register, reads as last written command */
-    __IOM uint32_t RESET;                         /*!< 0x0000000C Request Reset and new security mode */
-    __IOM uint32_t QBASE0;                        /*!< 0x00000010 Base address of Command-queue bits [31 downto 0]. The address
+typedef struct {
+   __IM uint32_t ID;                            /*!< 0x00000000 ID Register */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 Register describes the current operating status of the NPU */
+  __IOM uint32_t CMD;                           /*!< 0x00000008 Command register, reads as last written command */
+  __IOM uint32_t RESET;                         /*!< 0x0000000C Request Reset and new security mode */
+  __IOM uint32_t QBASE0;                        /*!< 0x00000010 Base address of Command-queue bits [31 downto 0]. The address
                                                                 is 4-byte-aligned */
-    __IOM uint32_t QBASE1;                        /*!< 0x00000014 Address extension bits [47 downto 32] for queue base */
-    __IM uint32_t QREAD;                         /*!< 0x00000018 Read offset in the command stream in bytes. Multiples of 4 in
+  __IOM uint32_t QBASE1;                        /*!< 0x00000014 Address extension bits [47 downto 32] for queue base */
+   __IM uint32_t QREAD;                         /*!< 0x00000018 Read offset in the command stream in bytes. Multiples of 4 in
                                                                 the range 0-16 MB */
-    __IOM uint32_t QCONFIG;                       /*!< 0x0000001C AXI configuration for the command stream in the range 0-3. Same
+  __IOM uint32_t QCONFIG;                       /*!< 0x0000001C AXI configuration for the command stream in the range 0-3. Same
                                                                 encoding as for REGIONCFG */
-    __IOM uint32_t QSIZE;                         /*!< 0x00000020 Size of the command stream in bytes. Multiples of 4 in the
+  __IOM uint32_t QSIZE;                         /*!< 0x00000020 Size of the command stream in bytes. Multiples of 4 in the
                                                                 range 0-16 MB */
-    __IM uint32_t PROT;                          /*!< 0x00000024 Protection level configured for the NPU when acting as an AXI
+   __IM uint32_t PROT;                          /*!< 0x00000024 Protection level configured for the NPU when acting as an AXI
                                                                 master */
-    __IM uint32_t CONFIG;                        /*!< 0x00000028 RTL configuration */
-    __IOM uint32_t LOCK;                          /*!< 0x0000002C Lock register. This register is designed for driver use and
+   __IM uint32_t CONFIG;                        /*!< 0x00000028 RTL configuration */
+  __IOM uint32_t LOCK;                          /*!< 0x0000002C Lock register. This register is designed for driver use and
                                                                 does not affect NPU functionality */
-    __IM uint32_t RESERVED[3];
-    __IOM uint32_t REGIONCFG;                     /*!< 0x0000003C Base pointer configuration. Bits[2*k+1 downto 2*k] give the
+   __IM uint32_t RESERVED[3];
+  __IOM uint32_t REGIONCFG;                     /*!< 0x0000003C Base pointer configuration. Bits[2*k+1 downto 2*k] give the
                                                                 memory type for REGION[k] */
-    __IOM uint32_t AXI_LIMIT0;                    /*!< 0x00000040 AXI limits for port 0 counter 0 */
-    __IOM uint32_t AXI_LIMIT1;                    /*!< 0x00000044 AXI limits for port 0 counter 1 */
-    __IOM uint32_t AXI_LIMIT2;                    /*!< 0x00000048 AXI limits for port 1 counter 2 */
-    __IOM uint32_t AXI_LIMIT3;                    /*!< 0x0000004C AXI limits for port 1 counter 3 */
-    __IM uint32_t RESERVED1[12];
+  __IOM uint32_t AXI_LIMIT0;                    /*!< 0x00000040 AXI limits for port 0 counter 0 */
+  __IOM uint32_t AXI_LIMIT1;                    /*!< 0x00000044 AXI limits for port 0 counter 1 */
+  __IOM uint32_t AXI_LIMIT2;                    /*!< 0x00000048 AXI limits for port 1 counter 2 */
+  __IOM uint32_t AXI_LIMIT3;                    /*!< 0x0000004C AXI limits for port 1 counter 3 */
+   __IM uint32_t RESERVED1[12];
 } U55_BASE_1_0_Type;                            /*!< Size = 128 (0x80) */
 
 /**
   * \brief Page BASE_POINTERS (U55_BASE_POINTERS_1_0)
   */
-typedef struct
-{
-    __IOM uint32_t BASEP0;                        /*!< 0x00000000 Lower 32 bits of the base pointer for region index 0 */
-    __IOM uint32_t BASEP1;                        /*!< 0x00000004 Upper 32-bits of the base pointer for region index 0 */
-    __IOM uint32_t BASEP2;                        /*!< 0x00000008 Lower 32 bits of the base pointer for region index 1 */
-    __IOM uint32_t BASEP3;                        /*!< 0x0000000C Upper 32-bits of the base pointer for region index 1 */
-    __IOM uint32_t BASEP4;                        /*!< 0x00000010 Lower 32 bits of the base pointer for region index 2 */
-    __IOM uint32_t BASEP5;                        /*!< 0x00000014 Upper 32-bits of the base pointer for region index 2 */
-    __IOM uint32_t BASEP6;                        /*!< 0x00000018 Lower 32 bits of the base pointer for region index 3 */
-    __IOM uint32_t BASEP7;                        /*!< 0x0000001C Upper 32-bits of the base pointer for region index 3 */
-    __IOM uint32_t BASEP8;                        /*!< 0x00000020 Lower 32 bits of the base pointer for region index 4 */
-    __IOM uint32_t BASEP9;                        /*!< 0x00000024 Upper 32-bits of the base pointer for region index 4 */
-    __IOM uint32_t BASEP10;                       /*!< 0x00000028 Lower 32 bits of the base pointer for region index 5 */
-    __IOM uint32_t BASEP11;                       /*!< 0x0000002C Upper 32-bits of the base pointer for region index 5 */
-    __IOM uint32_t BASEP12;                       /*!< 0x00000030 Lower 32 bits of the base pointer for region index 6 */
-    __IOM uint32_t BASEP13;                       /*!< 0x00000034 Upper 32-bits of the base pointer for region index 6 */
-    __IOM uint32_t BASEP14;                       /*!< 0x00000038 Lower 32 bits of the base pointer for region index 7 */
-    __IOM uint32_t BASEP15;                       /*!< 0x0000003C Upper 32-bits of the base pointer for region index 7 */
+typedef struct {
+  __IOM uint32_t BASEP0;                        /*!< 0x00000000 Lower 32 bits of the base pointer for region index 0 */
+  __IOM uint32_t BASEP1;                        /*!< 0x00000004 Upper 32-bits of the base pointer for region index 0 */
+  __IOM uint32_t BASEP2;                        /*!< 0x00000008 Lower 32 bits of the base pointer for region index 1 */
+  __IOM uint32_t BASEP3;                        /*!< 0x0000000C Upper 32-bits of the base pointer for region index 1 */
+  __IOM uint32_t BASEP4;                        /*!< 0x00000010 Lower 32 bits of the base pointer for region index 2 */
+  __IOM uint32_t BASEP5;                        /*!< 0x00000014 Upper 32-bits of the base pointer for region index 2 */
+  __IOM uint32_t BASEP6;                        /*!< 0x00000018 Lower 32 bits of the base pointer for region index 3 */
+  __IOM uint32_t BASEP7;                        /*!< 0x0000001C Upper 32-bits of the base pointer for region index 3 */
+  __IOM uint32_t BASEP8;                        /*!< 0x00000020 Lower 32 bits of the base pointer for region index 4 */
+  __IOM uint32_t BASEP9;                        /*!< 0x00000024 Upper 32-bits of the base pointer for region index 4 */
+  __IOM uint32_t BASEP10;                       /*!< 0x00000028 Lower 32 bits of the base pointer for region index 5 */
+  __IOM uint32_t BASEP11;                       /*!< 0x0000002C Upper 32-bits of the base pointer for region index 5 */
+  __IOM uint32_t BASEP12;                       /*!< 0x00000030 Lower 32 bits of the base pointer for region index 6 */
+  __IOM uint32_t BASEP13;                       /*!< 0x00000034 Upper 32-bits of the base pointer for region index 6 */
+  __IOM uint32_t BASEP14;                       /*!< 0x00000038 Lower 32 bits of the base pointer for region index 7 */
+  __IOM uint32_t BASEP15;                       /*!< 0x0000003C Upper 32-bits of the base pointer for region index 7 */
 } U55_BASE_POINTERS_1_0_Type;                   /*!< Size = 64 (0x40) */
 
 /**
   * \brief Page PMU (U55_PAGE_PMU_1_0)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[32];
-    __IOM uint32_t PMCR;                          /*!< 0x00000080 PMU master control register */
-    __IOM uint32_t PMCNTENSET;                    /*!< 0x00000084 Count-enable set register */
-    __IOM uint32_t PMCNTENCLR;                    /*!< 0x00000088 Count-enable clear register */
-    __IOM uint32_t PMOVSSET;                      /*!< 0x0000008C Overflow-flag status set register */
-    __IOM uint32_t PMOVSCLR;                      /*!< 0x00000090 Overflow-flag status clear register */
-    __IOM uint32_t PMINTSET;                      /*!< 0x00000094 Interrupt-enable set register */
-    __IOM uint32_t PMINTCLR;                      /*!< 0x00000098 Interrupt-enable clear register */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t PMCCNTR_LO;                    /*!< 0x000000A0 Performance-monitor cycle count low register */
-    __IOM uint32_t PMCCNTR_HI;                    /*!< 0x000000A4 Performance-monitor cycle count high register */
-    __IOM uint32_t PMCCNTR_CFG;                   /*!< 0x000000A8 Set start/stop event on the cycle counter. */
-    __IOM uint32_t PMCAXI_CHAN;                   /*!< 0x000000AC Set which AXI channel monitor */
-    __IM uint32_t RESERVED2[84];
-    __OM uint32_t PMU_EVCNTR[4];                 /*!< 0x00000200 Performance monitor event counters */
-    __IM uint32_t RESERVED3[28];
-    __IOM uint32_t PMU_ENTYPER[4];                /*!< 0x00000280 Performance monitor event type control counters */
-    __IM uint32_t RESERVED4[92];
+typedef struct {
+   __IM uint32_t RESERVED[32];
+  __IOM uint32_t PMCR;                          /*!< 0x00000080 PMU master control register */
+  __IOM uint32_t PMCNTENSET;                    /*!< 0x00000084 Count-enable set register */
+  __IOM uint32_t PMCNTENCLR;                    /*!< 0x00000088 Count-enable clear register */
+  __IOM uint32_t PMOVSSET;                      /*!< 0x0000008C Overflow-flag status set register */
+  __IOM uint32_t PMOVSCLR;                      /*!< 0x00000090 Overflow-flag status clear register */
+  __IOM uint32_t PMINTSET;                      /*!< 0x00000094 Interrupt-enable set register */
+  __IOM uint32_t PMINTCLR;                      /*!< 0x00000098 Interrupt-enable clear register */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t PMCCNTR_LO;                    /*!< 0x000000A0 Performance-monitor cycle count low register */
+  __IOM uint32_t PMCCNTR_HI;                    /*!< 0x000000A4 Performance-monitor cycle count high register */
+  __IOM uint32_t PMCCNTR_CFG;                   /*!< 0x000000A8 Set start/stop event on the cycle counter. */
+  __IOM uint32_t PMCAXI_CHAN;                   /*!< 0x000000AC Set which AXI channel monitor */
+   __IM uint32_t RESERVED2[84];
+   __OM uint32_t PMU_EVCNTR[4];                 /*!< 0x00000200 Performance monitor event counters */
+   __IM uint32_t RESERVED3[28];
+  __IOM uint32_t PMU_ENTYPER[4];                /*!< 0x00000280 Performance monitor event type control counters */
+   __IM uint32_t RESERVED4[92];
 } U55_PAGE_PMU_1_0_Type;                        /*!< Size = 1024 (0x400) */
 
 /**
   * \brief Page ID and Component ID (U55_PAGE_ID_1_0)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[52];
-    __IM uint32_t PID4;                          /*!< 0x000000D0 Peripheral ID byte 4 (Arm = code 4) */
-    __IM uint32_t PID5;                          /*!< 0x000000D4 Peripheral ID byte 5. (reserved) */
-    __IM uint32_t PID6;                          /*!< 0x000000D8 Peripheral ID byte 6. (reserved) */
-    __IM uint32_t PID7;                          /*!< 0x000000DC Peripheral ID byte 7. (reserved) */
-    __IM uint32_t PID0;                          /*!< 0x000000E0 Peripheral ID byte 0. This is bits[7 downto 0] of the part
+typedef struct {
+   __IM uint32_t RESERVED[52];
+   __IM uint32_t PID4;                          /*!< 0x000000D0 Peripheral ID byte 4 (Arm = code 4) */
+   __IM uint32_t PID5;                          /*!< 0x000000D4 Peripheral ID byte 5. (reserved) */
+   __IM uint32_t PID6;                          /*!< 0x000000D8 Peripheral ID byte 6. (reserved) */
+   __IM uint32_t PID7;                          /*!< 0x000000DC Peripheral ID byte 7. (reserved) */
+   __IM uint32_t PID0;                          /*!< 0x000000E0 Peripheral ID byte 0. This is bits[7 downto 0] of the part
                                                                 number. */
-    __IM uint32_t PID1;                          /*!< 0x000000E4 Peripheral ID byte 1. This is bits[11 downto 8] of the part
+   __IM uint32_t PID1;                          /*!< 0x000000E4 Peripheral ID byte 1. This is bits[11 downto 8] of the part
                                                                 number in bits[3 downto 0], and bits[3 downto 0] of the Arm ID
                                                                 in bits[7 downto 4]. */
-    __IM uint32_t PID2;                          /*!< 0x000000E8 Peripheral ID byte 2. This is bits[6 downto 4] of the Arm ID in
+   __IM uint32_t PID2;                          /*!< 0x000000E8 Peripheral ID byte 2. This is bits[6 downto 4] of the Arm ID in
                                                                 bits[2 downto 0], and bit 3 indicates format B. */
-    __IM uint32_t PID3;                          /*!< 0x000000EC Peripheral ID byte 3 */
-    __IM uint32_t CID0;                          /*!< 0x000000F0 Component ID byte 0 */
-    __IM uint32_t CID1;                          /*!< 0x000000F4 Component ID byte 1 */
-    __IM uint32_t CID2;                          /*!< 0x000000F8 Component ID byte 2 */
-    __IM uint32_t CID3;                          /*!< 0x000000FC Component ID byte 3 */
+   __IM uint32_t PID3;                          /*!< 0x000000EC Peripheral ID byte 3 */
+   __IM uint32_t CID0;                          /*!< 0x000000F0 Component ID byte 0 */
+   __IM uint32_t CID1;                          /*!< 0x000000F4 Component ID byte 1 */
+   __IM uint32_t CID2;                          /*!< 0x000000F8 Component ID byte 2 */
+   __IM uint32_t CID3;                          /*!< 0x000000FC Component ID byte 3 */
 } U55_PAGE_ID_1_0_Type;                         /*!< Size = 256 (0x100) */
 
 /**
   * \brief System configuration settings (U55_MXU55_CTL_1_0)
   */
-typedef struct
-{
-    __IOM uint32_t ROT_INIT;                      /*!< 0x00000000 Initial settings */
-    __IOM uint32_t ACG_CTL;                       /*!< 0x00000004 ACG Configuration of ARMU55 Bridge */
-    __IM uint32_t RESERVED[1022];
+typedef struct {
+  __IOM uint32_t ROT_INIT;                      /*!< 0x00000000 Initial settings */
+  __IOM uint32_t ACG_CTL;                       /*!< 0x00000004 ACG Configuration of ARMU55 Bridge */
+   __IM uint32_t RESERVED[1022];
 } U55_MXU55_CTL_1_0_Type;                       /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Power Policy Unit Registers for System RAM (U55_MXU55_PPU)
   */
-typedef struct
-{
-    __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
-    __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
-    __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
-    __IM uint32_t RESERVED;
-    __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
-    __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
-    __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
-    __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
-    __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
-    __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
-    __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
-    __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
-    __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
-    __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
-    __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
-    __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
-    __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
-    __IM uint32_t RESERVED3[65];
-    __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
-    __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
-    __IM uint32_t RESERVED4[2];
-    __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
-    __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
-    __IM uint32_t RESERVED5[910];
-    __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
-    __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
-    __IM uint32_t RESERVED6[4];
-    __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
-    __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
-    __IM uint32_t PID4;                          /*!< 0x00000FD0 Implementation Defined Identification Register (PID4) */
-    __IM uint32_t RESERVED7[3];
-    __IM uint32_t PID0;                          /*!< 0x00000FE0 Implementation Defined Identification Register (PID0) */
-    __IM uint32_t PID1;                          /*!< 0x00000FE4 Implementation Defined Identification Register (PID1) */
-    __IM uint32_t PID2;                          /*!< 0x00000FE8 Implementation Defined Identification Register (PID2) */
-    __IM uint32_t PID3;                          /*!< 0x00000FEC Implementation Defined Identification Register (PID3) */
-    __IM uint32_t ID0;                           /*!< 0x00000FF0 Implementation Defined Identification Register (ID0) */
-    __IM uint32_t ID1;                           /*!< 0x00000FF4 Implementation Defined Identification Register (ID1) */
-    __IM uint32_t ID2;                           /*!< 0x00000FF8 Implementation Defined Identification Register (ID2) */
-    __IM uint32_t ID3;                           /*!< 0x00000FFC Implementation Defined Identification Register (ID3) */
+typedef struct {
+  __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
+  __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
+   __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
+   __IM uint32_t RESERVED;
+   __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
+   __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
+   __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
+  __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
+  __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
+  __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
+  __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
+  __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
+  __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
+  __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
+  __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
+  __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
+  __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
+   __IM uint32_t RESERVED3[65];
+  __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
+  __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
+   __IM uint32_t RESERVED4[2];
+   __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
+   __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
+   __IM uint32_t RESERVED5[910];
+   __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
+   __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
+   __IM uint32_t RESERVED6[4];
+   __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
+   __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
+   __IM uint32_t PID4;                          /*!< 0x00000FD0 Implementation Defined Identification Register (PID4) */
+   __IM uint32_t RESERVED7[3];
+   __IM uint32_t PID0;                          /*!< 0x00000FE0 Implementation Defined Identification Register (PID0) */
+   __IM uint32_t PID1;                          /*!< 0x00000FE4 Implementation Defined Identification Register (PID1) */
+   __IM uint32_t PID2;                          /*!< 0x00000FE8 Implementation Defined Identification Register (PID2) */
+   __IM uint32_t PID3;                          /*!< 0x00000FEC Implementation Defined Identification Register (PID3) */
+   __IM uint32_t ID0;                           /*!< 0x00000FF0 Implementation Defined Identification Register (ID0) */
+   __IM uint32_t ID1;                           /*!< 0x00000FF4 Implementation Defined Identification Register (ID1) */
+   __IM uint32_t ID2;                           /*!< 0x00000FF8 Implementation Defined Identification Register (ID2) */
+   __IM uint32_t ID3;                           /*!< 0x00000FFC Implementation Defined Identification Register (ID3) */
 } U55_MXU55_PPU_Type;                           /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Power Domain Controller (U55_PD)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
-    __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
-    __IM uint32_t RESERVED[6];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
+  __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
+   __IM uint32_t RESERVED[6];
 } U55_PD_Type;                                  /*!< Size = 32 (0x20) */
 
 /**
   * \brief Top level section for IP generation only, contains IP memory map (U55)
   */
-typedef struct
-{
-    U55_BASE_1_0_Type BASE_1_0;             /*!< 0x00000000 Page BASE */
-    U55_BASE_POINTERS_1_0_Type BASE_POINTERS_1_0; /*!< 0x00000080 Page BASE_POINTERS */
-    __IM uint32_t RESERVED[16];
-    U55_PAGE_PMU_1_0_Type PAGE_PMU_1_0;     /*!< 0x00000100 Page PMU */
-    __IM uint32_t RESERVED1[640];
-    U55_PAGE_ID_1_0_Type PAGE_ID_1_0;       /*!< 0x00000F00 Page ID and Component ID */
-    U55_MXU55_CTL_1_0_Type MXU55_CTL_1_0;   /*!< 0x00001000 System configuration settings */
-    U55_MXU55_PPU_Type MXU55_PPU;           /*!< 0x00002000 Power Policy Unit Registers for System RAM */
-    U55_PD_Type PD;                         /*!< 0x00003000 Power Domain Controller */
+typedef struct {
+        U55_BASE_1_0_Type BASE_1_0;             /*!< 0x00000000 Page BASE */
+        U55_BASE_POINTERS_1_0_Type BASE_POINTERS_1_0; /*!< 0x00000080 Page BASE_POINTERS */
+   __IM uint32_t RESERVED[16];
+        U55_PAGE_PMU_1_0_Type PAGE_PMU_1_0;     /*!< 0x00000100 Page PMU */
+   __IM uint32_t RESERVED1[640];
+        U55_PAGE_ID_1_0_Type PAGE_ID_1_0;       /*!< 0x00000F00 Page ID and Component ID */
+        U55_MXU55_CTL_1_0_Type MXU55_CTL_1_0;   /*!< 0x00001000 System configuration settings */
+        U55_MXU55_PPU_Type MXU55_PPU;           /*!< 0x00002000 Power Policy Unit Registers for System RAM */
+        U55_PD_Type PD;                         /*!< 0x00003000 Power Domain Controller */
 } U55_Type;                                     /*!< Size = 12320 (0x3020) */
 
 

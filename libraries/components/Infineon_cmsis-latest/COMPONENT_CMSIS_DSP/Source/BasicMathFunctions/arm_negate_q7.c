@@ -42,8 +42,7 @@
   @param[in]     pSrc       points to the input vector.
   @param[out]    pDst       points to the output vector.
   @param[in]     blockSize   number of samples in each vector.
-  @return        none
-
+  
   @par           Scaling and Overflow Behavior
                    The function uses saturating arithmetic.
                    The Q7 value -1 (0x80) is saturated to the maximum allowable positive value 0x7F.
@@ -52,7 +51,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_negate_q7(
+ARM_DSP_ATTRIBUTE void arm_negate_q7(
     const q7_t   * pSrc,
     q7_t   * pDst,
     uint32_t blockSize)
@@ -93,75 +92,75 @@ void arm_negate_q7(
 }
 
 #else
-void arm_negate_q7(
-    const q7_t * pSrc,
-    q7_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_negate_q7(
+  const q7_t * pSrc,
+        q7_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q7_t in;                                       /* Temporary input variable */
+        uint32_t blkCnt;                               /* Loop counter */
+        q7_t in;                                       /* Temporary input variable */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
 #if defined (ARM_MATH_DSP)
-    q31_t in1;                                    /* Temporary input variable */
+  q31_t in1;                                    /* Temporary input variable */
 #endif
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
 #if defined (ARM_MATH_DSP)
-        /* Negate and store result in destination buffer (4 samples at a time). */
-        in1 = read_q7x4_ia(&pSrc);
-        write_q7x4_ia(&pDst, __QSUB8(0, in1));
+    /* Negate and store result in destination buffer (4 samples at a time). */
+    in1 = read_q7x4_ia (&pSrc);
+    write_q7x4_ia (&pDst, __QSUB8(0, in1));
 #else
-        in = *pSrc++;
-        *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
+    in = *pSrc++;
+    *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
 
-        in = *pSrc++;
-        *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
+    in = *pSrc++;
+    *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
 
-        in = *pSrc++;
-        *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
+    in = *pSrc++;
+    *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
 
-        in = *pSrc++;
-        *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
+    in = *pSrc++;
+    *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
-        /* Negate and store result in destination buffer. */
-        in = *pSrc++;
+    /* Negate and store result in destination buffer. */
+    in = *pSrc++;
 
 #if defined (ARM_MATH_DSP)
-        *pDst++ = (q7_t) __QSUB8(0, in);
+    *pDst++ = (q7_t) __QSUB8(0, in);
 #else
-        *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
+    *pDst++ = (in == (q7_t) 0x80) ? (q7_t) 0x7f : -in;
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

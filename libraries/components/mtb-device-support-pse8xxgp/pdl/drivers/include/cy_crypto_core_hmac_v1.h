@@ -40,12 +40,12 @@ extern "C" {
 #if (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_HMAC_C)
 
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Hmac(CRYPTO_Type *base,
-        uint8_t *hmac,
-        uint8_t  const *message,
-        uint32_t messageSize,
-        uint8_t  const *key,
-        uint32_t keyLength,
-        cy_en_crypto_sha_mode_t mode);
+                                          uint8_t *hmac,
+                                          uint8_t  const *message,
+                                          uint32_t messageSize,
+                                          uint8_t  const *key,
+                                          uint32_t keyLength,
+                                          cy_en_crypto_sha_mode_t mode);
 
 
 #endif /* (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_HMAC_C) */

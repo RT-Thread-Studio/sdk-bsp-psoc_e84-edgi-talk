@@ -23,9 +23,9 @@
  * limitations under the License.
  */
 
-
-#ifndef _MATRIX_UTILS_H_
-#define _MATRIX_UTILS_H_
+ 
+#ifndef MATRIX_UTILS_H_
+#define MATRIX_UTILS_H_
 
 #include "arm_math_types.h"
 #include "arm_math_memory.h"
@@ -236,7 +236,7 @@ extern "C"
 
 #define SCALE_COL_F16(A,ROW,v,i)        \
   SCALE_COL_T(float16_t,(_Float16),A,ROW,v,i)
-
+  
 #endif /* defined(ARM_FLOAT16_SUPPORTED)*/
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)

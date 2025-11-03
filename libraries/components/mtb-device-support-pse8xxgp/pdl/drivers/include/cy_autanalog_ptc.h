@@ -396,7 +396,7 @@ typedef struct
 
     /**< Post-processing part of configuration for PTComp */
     uint8_t                             compPpCfgNum;   /**< The number of post-processing configurations */
-    cy_stc_autanalog_ptcomp_comp_pp_t *compPpCfgArr;    /**< The array of pointers to post-processing configurations */
+    cy_stc_autanalog_ptcomp_comp_pp_t * compPpCfgArr;   /**< The array of pointers to post-processing configurations */
 
 } cy_stc_autanalog_ptcomp_comp_sta_t;
 
@@ -421,11 +421,11 @@ typedef struct
 typedef struct
 {
     /* Static part of configuration */
-    cy_stc_autanalog_ptcomp_comp_sta_t *ptcompStaCfg;     /**< The pointer to a static part of the PTComp configuration */
+    cy_stc_autanalog_ptcomp_comp_sta_t * ptcompStaCfg;    /**< The pointer to a static part of the PTComp configuration */
 
     /* Dynamic part of configuration */
     uint8_t                              ptcompDynCfgNum; /**< The number of dynamic configurations used for the PTComp */
-    cy_stc_autanalog_ptcomp_comp_dyn_t *ptcompDynCfgArr; /**< The array of pointers to dynamic configurations used for
+    cy_stc_autanalog_ptcomp_comp_dyn_t * ptcompDynCfgArr; /**< The array of pointers to dynamic configurations used for
                                                                the PTComp */
 } cy_stc_autanalog_ptcomp_t;
 
@@ -498,7 +498,7 @@ typedef struct
 *
 *******************************************************************************/
 cy_en_autanalog_status_t Cy_AutAnalog_PTComp_LoadConfig(uint8_t ptcompIdx,
-        const cy_stc_autanalog_ptcomp_t *ptcompCfg);
+                                                        const cy_stc_autanalog_ptcomp_t * ptcompCfg);
 
 
 /*******************************************************************************
@@ -524,7 +524,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_PTComp_LoadConfig(uint8_t ptcompIdx,
 *
 *******************************************************************************/
 cy_en_autanalog_status_t Cy_AutAnalog_PTComp_LoadStaticConfig(uint8_t ptcompIdx,
-        const cy_stc_autanalog_ptcomp_comp_sta_t *ptcompStaCfg);
+                                                              const cy_stc_autanalog_ptcomp_comp_sta_t * ptcompStaCfg);
 
 
 /*******************************************************************************
@@ -550,7 +550,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_PTComp_LoadStaticConfig(uint8_t ptcompIdx,
 *
 *******************************************************************************/
 cy_en_autanalog_status_t Cy_AutAnalog_PTComp_LoadDynamicConfig(uint8_t ptcompIdx, uint8_t ptcompDynCfgNum,
-        const cy_stc_autanalog_ptcomp_comp_dyn_t *ptcompDynCfgArr);
+                                                               const cy_stc_autanalog_ptcomp_comp_dyn_t * ptcompDynCfgArr);
 
 /** \} group_autanalog_ptcomp_functions_init */
 
@@ -592,8 +592,6 @@ __STATIC_INLINE bool Cy_AutAnalog_PTComp_Read(uint8_t ptcompIdx, uint8_t compIdx
 
     return result;
 }
-
-/** \} */
 
 /** \} group_autanalog_ptcomp_functions */
 

@@ -50,10 +50,9 @@
   @brief         Nuttall3 window generating function (f64).
   @param[out]    pDst       points to the output generated window
   @param[in]     blockSize  number of samples in the window
-  @return        none
-
+ 
   @par Parameters of the window
-
+  
   | Parameter                             | Value              |
   | ------------------------------------: | -----------------: |
   | Peak sidelobe level                   |           46.7 dB  |
@@ -66,20 +65,20 @@
 
 
 
-void arm_nuttall3_f64(
-    float64_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_nuttall3_f64(
+        float64_t * pDst,
+        uint32_t blockSize)
 {
-    float64_t k = 2. / ((float64_t) blockSize);
-    float64_t w;
+   float64_t k = 2. / ((float64_t) blockSize);
+   float64_t w;
 
-    for (uint32_t i = 0; i < blockSize; i++)
-    {
-        w = PI_F64 * i * k;
-        w = 0.375 - 0.5 * cos(w) + 0.125 * cos(2 * w);
-
-        pDst[i] = w;
-    }
+   for(uint32_t i=0;i<blockSize;i++)
+   {
+     w = PI_F64 * i * k;
+     w = 0.375 - 0.5 * cos (w) + 0.125 * cos (2 * w);
+        
+     pDst[i] = w;
+   }
 }
 
 /**

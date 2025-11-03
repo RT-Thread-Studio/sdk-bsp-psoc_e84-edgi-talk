@@ -54,10 +54,9 @@
   @brief         Hft248d window generating function (f32).
   @param[out]    pDst       points to the output generated window
   @param[in]     blockSize  number of samples in the window
-  @return        none
-
+ 
   @par Parameters of the window
-
+  
   | Parameter                             | Value              |
   | ------------------------------------: | -----------------: |
   | Peak sidelobe level                   |          248.4 dB  |
@@ -72,10 +71,10 @@ Gerhard Heinzel.
 @par Original article:
 Spectrum and spectral density estimation by the Discrete Fourier
 transform (DFT), including a comprehensive list of window
-functions and some new
+functions and some new 
 flat-top windows.
 
-@par Authors:
+@par Authors: 
 G. Heinzel, A. Rudiger and R. Schilling,
 Max-Planck-Institut fur Gravitationsphysik
 (Albert-Einstein-Institut)
@@ -84,30 +83,30 @@ Teilinstitut Hannover
 
 
 
-void arm_hft248d_f32(
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_hft248d_f32(
+        float32_t * pDst,
+        uint32_t blockSize)
 {
-    float32_t k = 2.0f / ((float32_t) blockSize);
-    float32_t w;
+   float32_t k = 2.0f / ((float32_t) blockSize);
+   float32_t w;
 
-    for (uint32_t i = 0; i < blockSize; i++)
-    {
-        w = PI * (i * k);
+   for(uint32_t i=0;i<blockSize;i++)
+   {
+    w = PI * (i * k);
         w =
-            (1.0f -
-             1.985844164102f * cosf(w) +
-             1.791176438506f * cosf(2.f * w) -
-             1.282075284005f * cosf(3.f * w) +
-             0.667777530266f * cosf(4.f * w) -
-             0.240160796576f * cosf(5.f * w) +
-             0.056656381764f * cosf(6.f * w) -
-             0.008134974479f * cosf(7.f * w) +
-             0.000624544650f * cosf(8.f * w) -
-             0.000019808998f * cosf(9.f * w) +
-             0.000000132974f * cosf(10.f * w));
-        pDst[i] = w;
-    }
+    (1.0f -
+     1.985844164102f * cosf (w) +
+     1.791176438506f * cosf (2.f * w) -
+     1.282075284005f * cosf (3.f * w) +
+     0.667777530266f * cosf (4.f * w) -
+     0.240160796576f * cosf (5.f * w) +
+     0.056656381764f * cosf (6.f * w) -
+     0.008134974479f * cosf (7.f * w) +
+     0.000624544650f * cosf (8.f * w) -
+     0.000019808998f * cosf (9.f * w) +
+     0.000000132974f * cosf (10.f * w));
+     pDst[i] = w;
+   }
 }
 
 /**

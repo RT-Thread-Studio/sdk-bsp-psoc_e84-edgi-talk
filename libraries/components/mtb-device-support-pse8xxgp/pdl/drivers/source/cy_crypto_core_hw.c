@@ -42,12 +42,12 @@ extern "C" {
 #include <stdbool.h>
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 4, \
-                             'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
+'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 14.3', 2, \
-                             'Since value of CY_CRYPTO_V1 is decided by PDL device agnostic / hardware specific model, controlling expression will not have an invariant value.')
+'Since value of CY_CRYPTO_V1 is decided by PDL device agnostic / hardware specific model, controlling expression will not have an invariant value.')
 
 #if !defined(CY_CRYPTO_SERVICE_LIBRARY_LEVEL)
-#define CY_CRYPTO_SERVICE_LIBRARY_LEVEL CY_CRYPTO_FULL_LIBRARY
+    #define CY_CRYPTO_SERVICE_LIBRARY_LEVEL CY_CRYPTO_FULL_LIBRARY
 #endif
 
 #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
@@ -63,7 +63,7 @@ static uint32_t  cy_cryptoVuMemSize = 0u;
 /* This is set in Cy_Crypto_Core_Enable() to the device information relevant
  * for the current target.
  */
-const cy_stc_cryptoIP_t *cy_cryptoIP = NULL;
+const cy_stc_cryptoIP_t * cy_cryptoIP = NULL;
 
 /* Platform and peripheral crypto block configuration */
 const cy_stc_cryptoIP_t cy_cryptoIpBlockCfgPSoC6_01 =
@@ -124,6 +124,7 @@ const cy_stc_cryptoIP_t cy_cryptoIpBlockCfgPSoC6_02 =
 #define CY_CRYPTO_PWR_MODE_RETAINED          (2UL)
 #define CY_CRYPTO_PWR_MODE_ENABLED           (3UL)
 
+#if (CPUSS_CRYPTO_VU == 1u)
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_Vu_RunInstr
 *****************************************************************************//**
@@ -152,7 +153,7 @@ void Cy_Crypto_Core_Vu_RunInstr(CRYPTO_Type *base, bool blockingMode, uint32_t i
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)((instr << CY_CRYPTO_OPCODE_POS) | (params));
 
-    if ((blockingMode) || (isRelocated))
+    if ( (blockingMode) || (isRelocated) )
     {
         Cy_Crypto_Core_WaitForFifoAvailable(base);
         Cy_Crypto_Core_Vu_WaitForComplete(base);
@@ -226,7 +227,7 @@ void Cy_Crypto_Core_ClearVuRegisters(CRYPTO_Type *base)
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_SetVuMemoryAddress(CRYPTO_Type *base,
-        uint32_t const *vuMemoryAddr, uint32_t vuMemorySize)
+                                                        uint32_t const *vuMemoryAddr, uint32_t vuMemorySize)
 {
     cy_en_crypto_status_t resultVal = CY_CRYPTO_BAD_PARAMS;
     uint32_t *vuMemAddrRemap = (uint32_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(vuMemoryAddr);
@@ -239,11 +240,11 @@ cy_en_crypto_status_t Cy_Crypto_Core_SetVuMemoryAddress(CRYPTO_Type *base,
     if (cy_cryptoIP != NULL)
     {
 #endif
-        if (REG_CRYPTO_MEM_BUFF(base) == vuMemoryAddr)
+        if(REG_CRYPTO_MEM_BUFF(base) == vuMemoryAddr)
         {
             isVUInternalMem = true;
         }
-
+            
         if ((vuMemAddrIn == NULL) && (vuMemSize == 0uL))
         {
             vuMemAddrIn = REG_CRYPTO_MEM_BUFF(base);
@@ -272,65 +273,65 @@ cy_en_crypto_status_t Cy_Crypto_Core_SetVuMemoryAddress(CRYPTO_Type *base,
             */
             switch (vuMemSize)
             {
-            /* "0b0000000": 32 KB memory region (VU_CTL1.ADDR[14:8] ignored). */
-            case 32768uL:
-                memFrameMask = 0x0u;
-                break;
-            /* "0b1000000": 16 KB memory region (VU_CTL1.ADDR[13:8] ignored). */
-            case 16384uL:
-                memFrameMask = 0x40u;
-                break;
-            /* "0b1100000":  8 KB memory region (VU_CTL1.ADDR[12:8] ignored). */
-            case 8192uL:
-                memFrameMask = 0x60u;
-                break;
-            /* "0b1110000":  4 KB memory region (VU_CTL1.ADDR[11:8] ignored). */
-            case 4096uL:
-                memFrameMask = 0x70u;
-                break;
-            /* "0b1111000":  2 KB memory region (VU_CTL1.ADDR[10:8] ignored). */
-            case 2048uL:
-                memFrameMask = 0x78u;
-                break;
-            /* "0b1111100":  1 KB memory region (VU_CTL1.ADDR[9:8]  ignored). */
-            case 1024uL:
-                memFrameMask = 0x7Cu;
-                break;
-            /* "0b1111110": 512 B memory region (VU_CTL1.ADDR[8]    ignored). */
-            case 512uL:
-                memFrameMask = 0x7Eu;
-                break;
-            /* "0b1111111": 256 B memory region (default for HW). */
-            case 256uL:
-                memFrameMask = 0x7Fu;
-                break;
-            default:
-                /* Unknown mask */
-                break;
+                /* "0b0000000": 32 KB memory region (VU_CTL1.ADDR[14:8] ignored). */
+                case 32768uL:
+                    memFrameMask = 0x0u;
+                    break;
+                /* "0b1000000": 16 KB memory region (VU_CTL1.ADDR[13:8] ignored). */
+                case 16384uL:
+                    memFrameMask = 0x40u;
+                    break;
+                /* "0b1100000":  8 KB memory region (VU_CTL1.ADDR[12:8] ignored). */
+                case 8192uL:
+                    memFrameMask = 0x60u;
+                    break;
+                /* "0b1110000":  4 KB memory region (VU_CTL1.ADDR[11:8] ignored). */
+                case 4096uL:
+                    memFrameMask = 0x70u;
+                    break;
+                /* "0b1111000":  2 KB memory region (VU_CTL1.ADDR[10:8] ignored). */
+                case 2048uL:
+                    memFrameMask = 0x78u;
+                    break;
+                /* "0b1111100":  1 KB memory region (VU_CTL1.ADDR[9:8]  ignored). */
+                case 1024uL:
+                    memFrameMask = 0x7Cu;
+                    break;
+                /* "0b1111110": 512 B memory region (VU_CTL1.ADDR[8]    ignored). */
+                case 512uL:
+                    memFrameMask = 0x7Eu;
+                    break;
+                /* "0b1111111": 256 B memory region (default for HW). */
+                case 256uL:
+                    memFrameMask = 0x7Fu;
+                    break;
+                default:
+            /* Unknown mask */
+                    break;
             }
 
             if (memFrameMask != 0xFFFFFFFFuL)
             {
-#if !defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+                #if !defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
                 if (!(CY_CRYPTO_V1))
                 {
                     memAlignMask = vuMemSize - 1uL;
                 }
-#endif
+                #endif
 
                 /* Use the new address when it aligned to appropriate memory block size */
                 if (((uint32_t)vuMemAddrIn & (memAlignMask)) == 0uL)
                 {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+                    #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
                     if (!(CY_CRYPTO_V1))
                     {
                         REG_CRYPTO_VU_CTL2(base) = _VAL2FLD(CRYPTO_V2_VU_CTL2_MASK, memFrameMask);
                     }
-#endif
+                    #endif
 
                     /* For Internal memory VU operation, Crypto CTL register should always point to Non-secure memory address
                     for both Secure & Non-Secure execution */
-                    if (isVUInternalMem)
+                    if(isVUInternalMem)
                     {
                         REG_CRYPTO_VU_CTL1(base) = (uint32_t)REG_CRYPTO_MEM_BUFF((uint32_t *)CY_CRYPTO_VU_MEM_NS_ALIAS_ADDRESS(base));
                     }
@@ -372,18 +373,18 @@ uint32_t Cy_Crypto_Core_GetVuMemorySize(CRYPTO_Type *base)
     uint32_t memSize = CY_CRYPTO_MEM_BUFF_SIZE;
 
 #if !defined(CY_CRYPTO_CFG_HW_USE_MPN_SPECIFIC)
-    if ((cy_cryptoIP != NULL) && (cy_cryptoVuMemSize != 0uL))
+    if ( (cy_cryptoIP != NULL) && (cy_cryptoVuMemSize != 0uL))
     {
 #endif
         if (CY_CRYPTO_V1)
         {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
             memSize = cy_cryptoVuMemSize;
-#endif
+        #endif
         }
         else
         {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
             uint32_t memFrameMask = _FLD2VAL(CRYPTO_V2_VU_CTL2_MASK, REG_CRYPTO_VU_CTL2(base));
             /*
             Specifies the size of  the vector operand memory region.
@@ -399,35 +400,35 @@ uint32_t Cy_Crypto_Core_GetVuMemorySize(CRYPTO_Type *base)
             */
             switch (memFrameMask)
             {
-            case 0x0u:
-                memSize = 32768uL;
-                break;
-            case 0x40u:
-                memSize = 16384uL;
-                break;
-            case 0x60u:
-                memSize = 8192uL;
-                break;
-            case 0x70u:
-                memSize = 4096uL;
-                break;
-            case 0x78u:
-                memSize = 2048uL;
-                break;
-            case 0x7Cu:
-                memSize = 1024uL;
-                break;
-            case 0x7Eu:
-                memSize = 512uL;
-                break;
-            case 0x7Fu:
-                memSize = 256uL;
-                break;
-            default:
-                /* Unknown mask */
-                break;
+                case 0x0u:
+                    memSize = 32768uL;
+                    break;
+                case 0x40u:
+                    memSize = 16384uL;
+                    break;
+                case 0x60u:
+                    memSize = 8192uL;
+                    break;
+                case 0x70u:
+                    memSize = 4096uL;
+                    break;
+                case 0x78u:
+                    memSize = 2048uL;
+                    break;
+                case 0x7Cu:
+                    memSize = 1024uL;
+                    break;
+                case 0x7Eu:
+                    memSize = 512uL;
+                    break;
+                case 0x7Fu:
+                    memSize = 256uL;
+                    break;
+                default:
+            /* Unknown mask */
+                    break;
             }
-#endif
+        #endif
         }
 #if !defined(CY_CRYPTO_CFG_HW_USE_MPN_SPECIFIC)
     }
@@ -437,6 +438,7 @@ uint32_t Cy_Crypto_Core_GetVuMemorySize(CRYPTO_Type *base)
 
     return memSize;
 }
+#endif /* (CPUSS_CRYPTO_VU == 1u) */
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_Enable
@@ -456,9 +458,9 @@ uint32_t Cy_Crypto_Core_GetVuMemorySize(CRYPTO_Type *base)
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_Enable(CRYPTO_Type *base)
 {
-#if !defined(CY_CRYPTO_CFG_HW_USE_MPN_SPECIFIC)
+    #if !defined(CY_CRYPTO_CFG_HW_USE_MPN_SPECIFIC)
     Cy_Crypto_Core_HwInit();
-#endif
+    #endif
 
     /* Disable Crypto HW */
     REG_CRYPTO_CTL(base) &= ~(_VAL2FLD(CRYPTO_CTL_ENABLED,  1uL));
@@ -466,26 +468,27 @@ cy_en_crypto_status_t Cy_Crypto_Core_Enable(CRYPTO_Type *base)
     if (CY_CRYPTO_V1)
     {
         /* Enable Crypto HW */
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         REG_CRYPTO_CTL(base) = (uint32_t)(_VAL2FLD(CRYPTO_CTL_PWR_MODE, CY_CRYPTO_PWR_MODE_ENABLED) |
-                                          _VAL2FLD(CRYPTO_CTL_ENABLED,  1uL));
-#endif
+                               _VAL2FLD(CRYPTO_CTL_ENABLED,  1uL));
+        #endif
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         REG_CRYPTO_CTL(base) &= ~(_VAL2FLD(CRYPTO_V2_CTL_ENABLED,  1uL) | _VAL2FLD(CRYPTO_V2_CTL_ECC_EN, 1uL));
 
         REG_CRYPTO_INSTR_FF_CTL(base) = (uint32_t)(_VAL2FLD(CRYPTO_V2_INSTR_FF_CTL_BLOCK, 1u)
-                                        | _VAL2FLD(CRYPTO_V2_INSTR_FF_CTL_CLEAR, 0u)
-                                        | _VAL2FLD(CRYPTO_V2_INSTR_FF_CTL_EVENT_LEVEL, 1u));
+                                              | _VAL2FLD(CRYPTO_V2_INSTR_FF_CTL_CLEAR, 0u)
+                                              | _VAL2FLD(CRYPTO_V2_INSTR_FF_CTL_EVENT_LEVEL, 1u));
 
         REG_CRYPTO_CTL(base) |= _VAL2FLD(CRYPTO_V2_CTL_ENABLED,  1uL);
 
         REG_CRYPTO_RAM_PWR_CTL(base) = (uint32_t)(CY_CRYPTO_PWR_MODE_ENABLED);
-#endif
+        #endif
     }
 
+#if (CPUSS_CRYPTO_VU == 1u)
     /*
     Specifies if a conditional instruction is executed or not, when its condition
     code evaluates to false("0"):
@@ -505,7 +508,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_Enable(CRYPTO_Type *base)
 
     /* Clear whole register file */
     Cy_Crypto_Core_ClearVuRegisters(base);
-
+#endif /* (CPUSS_CRYPTO_VU == 1u) */
     return (CY_CRYPTO_SUCCESS);
 }
 
@@ -551,17 +554,17 @@ cy_en_crypto_status_t Cy_Crypto_Core_Disable(CRYPTO_Type *base)
     if (CY_CRYPTO_V1)
     {
         /* Disable Crypto HW */
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         REG_CRYPTO_CTL(base) = (uint32_t)(_VAL2FLD(CRYPTO_CTL_PWR_MODE, CY_CRYPTO_PWR_MODE_OFF) |
-                                          _VAL2FLD(CRYPTO_CTL_ENABLED, 0uL));
-#endif
+                               _VAL2FLD(CRYPTO_CTL_ENABLED, 0uL));
+        #endif
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         REG_CRYPTO_CTL(base) = (uint32_t)(_VAL2FLD(CRYPTO_V2_CTL_ENABLED,  0uL));
         REG_CRYPTO_RAM_PWR_CTL(base) = (uint32_t)(CY_CRYPTO_PWR_MODE_OFF);
-#endif
+        #endif
     }
 
     cy_cryptoVuMemSize = 0uL;
@@ -585,53 +588,70 @@ cy_en_crypto_status_t Cy_Crypto_Core_Disable(CRYPTO_Type *base)
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_Cleanup(CRYPTO_Type *base)
 {
+
+#if (CPUSS_CRYPTO_VU == 1u)
     uint16_t vu_mem_size = 0U;
     void *vu_mem_address = NULL;
     /* Clear whole register file */
     Cy_Crypto_Core_ClearVuRegisters(base);
+#endif /* (CPUSS_CRYPTO_VU == 1u) */
 
+#if (CPUSS_CRYPTO_PR == 1u)
     /* PRNG */
     REG_CRYPTO_PR_LFSR_CTL0(base) = 0u;
     REG_CRYPTO_PR_LFSR_CTL1(base) = 0u;
     REG_CRYPTO_PR_LFSR_CTL2(base) = 0u;
     REG_CRYPTO_PR_RESULT(base)    = 0u;
+#endif /* (CPUSS_CRYPTO_PR == 1u) */
 
+#if (CPUSS_CRYPTO_TR == 1u)
     /* TRNG */
     REG_CRYPTO_TR_CTL0(base)      = 0u;
     REG_CRYPTO_TR_CTL1(base)      = 0u;
     REG_CRYPTO_TR_RESULT(base)    = 0u;
+#endif /* (CPUSS_CRYPTO_TR == 1u) */
 
+#if (CPUSS_CRYPTO_CRC == 1u)
     /* CRC */
     REG_CRYPTO_CRC_POL_CTL(base)  = 0u;
     REG_CRYPTO_CRC_REM_CTL(base)  = 0u;
+#endif /* (CPUSS_CRYPTO_CRC == 1u) */
 
+#if (CPUSS_CRYPTO_AES == 1u)
     /* AES */
     REG_CRYPTO_AES_CTL(base)      = 0u;
+#endif /* (CPUSS_CRYPTO_AES == 1u) */
 
     if (CY_CRYPTO_V1)
     {
 #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+#if (CPUSS_CRYPTO_CRC == 1u)
         REG_CRYPTO_CRC_LFSR_CTL(base) = 0u;
+#endif
+#if (CPUSS_CRYPTO_SHA == 1u)
         REG_CRYPTO_SHA_CTL(base)  = 0u;
+#endif
 #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
 #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+#if (CPUSS_CRYPTO_TR == 1u)
         REG_CRYPTO_TR_CTL2(base)  = 0u;
         REG_CRYPTO_RESULT(base)   = 0u;
-
+#endif
         Cy_Crypto_Core_V2_FFStop(base, CY_CRYPTO_V2_RB_FF_LOAD0);
         Cy_Crypto_Core_V2_FFStop(base, CY_CRYPTO_V2_RB_FF_LOAD1);
         Cy_Crypto_Core_V2_FFStop(base, CY_CRYPTO_V2_RB_FF_STORE);
         Cy_Crypto_Core_V2_RBClear(base);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
-
+#if (CPUSS_CRYPTO_VU == 1u)
     vu_mem_address = Cy_Crypto_Core_GetVuMemoryAddress(base);
     vu_mem_size = (uint16_t)Cy_Crypto_Core_GetVuMemorySize(base);
 
     Cy_Crypto_Core_MemSet(base, vu_mem_address, 0u, vu_mem_size);
+#endif /* (CPUSS_CRYPTO_VU == 1u) */
 
     return (CY_CRYPTO_SUCCESS);
 }
@@ -662,20 +682,23 @@ cy_en_crypto_status_t Cy_Crypto_Core_Shutdown(CRYPTO_Type *base)
     REG_CRYPTO_CTL(base) = 0UL;
     REG_CRYPTO_INSTR_FF_CTL(base) = 0UL;
     REG_CRYPTO_INSTR_FF_WR(base) = 0UL;
-
+#if (CPUSS_CRYPTO_CRC == 1u)
     REG_CRYPTO_CRC_CTL(base) = 0UL;
     REG_CRYPTO_CRC_DATA_CTL(base) = 0UL;
     REG_CRYPTO_CRC_POL_CTL(base) = 0UL;
     REG_CRYPTO_CRC_REM_CTL(base) = 0UL;
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+    #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
     REG_CRYPTO_CRC_LFSR_CTL(base) = 0UL;
-#endif
+    #endif
+#endif /* (CPUSS_CRYPTO_CRC == 1u) */
 
+#if (CPUSS_CRYPTO_VU == 1u)
     REG_CRYPTO_VU_CTL0(base) = 0UL;
     REG_CRYPTO_VU_CTL1(base) = 0UL;
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+    #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
     REG_CRYPTO_VU_CTL2(base) = 0UL;
-#endif
+    #endif
+#endif /* (CPUSS_CRYPTO_VU == 1u) */
 
     REG_CRYPTO_INTR(base) = 0xFFFFFFFFUL; /* All bits are cleared by write to 1 */
 
@@ -720,7 +743,7 @@ void Cy_Crypto_Core_InvertEndianness(void *inArrPtr, uint32_t byteSize)
 
         j = 0;
         i = (int32_t)byteSize - 1;
-        while (i > limit)
+        while ( i > limit)
         {
             temp = tempPtr[j];
             tempPtr[j] = tempPtr[i];

@@ -13,41 +13,15 @@ This release of the PSOC™ Edge GNU make build recipe includes complete support
     * GCC
     * IAR
     * ARM Compiler 6
-    * LLVM Embedded Toolchain for Arm (Experimental)
+    * LLVM Embedded Toolchain for Arm
 
 ### What Changed?
-#### v2.2.0
-* Moved CFLAGS, CXXFLAGS, ASFLAGS, LDFLAGS variables to be added after default flags. In case of conflict, most toolchains select the last flags as the option. This allows those variables to overwrite the default flags.
-* Added support for GNU assembly syntax when using ARM toolchain.
-* Improved support for LLVM Embedded Toolchain for Arm.
+#### v2.3.1
+* Improved missing toolchains handling.
+* Improved FreeRTOS component flag handling for IAR toolchain.
 
-#### v2.1.0
-* Added ninja support. Ninja build will be enabled by default with ModusToolbox 3.4, and latest core-make. To disable ninja build set NINJA to empty-String. (For example: "make build NINJA=").
-
-#### v2.0.0
-* Experimental support for LLVM Embedded Toolchain for Arm
-* The feature of setting the default location of the ARM and IAR toolchains has been deprecated
-* Added support for Infineon EdgeProtectTool
-* Added a "last_config" build configuration directory that contains the hex file and elf file from last build
-* VS Code and Eclipse launch configurations now use "last_config" directory. Launch configurations no longer have to be re-generated when switching between "Debug" and "Release"
-
-#### v1.0.3
-* Optimization for speed changed to optimization for size for the IAR toolchain
-* DEVICE_MODE variable was deprecated and replaced by VCORE_ATTRS
-* Export interface version 3 support added
-* The feature of setting the default location of the ARM and IAR toolchains has been deprecated
-
-#### v1.0.2
-* Improved secure applications support
-* Minor bug fixes
-
-#### v1.0.1
-* External memory erase enabled
-* PROG_FILE variable support added
-* Minor bug fixes
-
-#### v1.0.0
-* Initial release
+#### v2.3.0
+* Initial release.
 
 ### Product/Asset Specific Instructions
 Builds require that the ModusToolbox™ tools be installed on your machine. This comes with the ModusToolbox™ install. On Windows machines, it is recommended that CLI builds be executed using the Cygwin.bat located in ModusToolBox/tools\_x.y/modus-shell install directory. This guarantees a consistent shell environment for your builds.
@@ -59,12 +33,13 @@ This version of the PSOC™ Edge build system was validated for compatibility wi
 
 | Software and Tools                        | Version |
 | :---                                      | :----:  |
-| ModusToolbox™ Software Environment        | 3.5     |
-| GCC Compiler                              | 11.3    |
-| IAR Compiler                              | 9.3     |
-| ARM Compiler                              | 6.16    |
+| ModusToolbox™ Software Environment        | 3.6     |
+| GCC Compiler                              | 14.2.1  |
+| LLVM Compiler                             | 19.1.5  |
+| IAR Compiler                              | 9.50.2  |
+| ARM Compiler                              | 6.22    |
 
-Minimum required ModusToolbox™ Software Environment: v3.4
+Minimum required ModusToolbox™ Software Environment: v3.6
 
 ### More information
 * [Infineon GitHub](https://github.com/Infineon)

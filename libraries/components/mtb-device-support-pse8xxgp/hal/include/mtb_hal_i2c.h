@@ -140,39 +140,59 @@ extern "C" {
    structure. */
 #define MTB_HAL_I2C_DEFAULT_ADDR_MASK (0xFE)
 
-/** I2C enum to enable/disable/report interrupt cause flags. */
+/** I2C enum to enable/disable/report event cause flags. */
 typedef enum
 {
-    /**< No event */
+    /** No event */
     MTB_HAL_I2C_EVENT_NONE               = 0,
-    /**< Indicates that the target was addressed and the controller wants to read data. */
+    /** Indicates that the target was addressed and the controller wants to read data. */
     MTB_HAL_I2C_TARGET_READ_EVENT         = (MTB_HAL_MAP_I2C_TARGET_READ_EVENT),
-    /**< Indicates that the target was addressed and the controller wants to write data. */
+    /** Indicates that the target was addressed and the controller wants to write data. */
     MTB_HAL_I2C_TARGET_WRITE_EVENT        = (MTB_HAL_MAP_I2C_TARGET_WRITE_EVENT),
-    /**< All target data from the configured Read buffer has been loaded into the TX FIFO. */
+    /** All target data from the configured Read buffer has been loaded into the TX FIFO. */
     MTB_HAL_I2C_TARGET_RD_IN_FIFO_EVENT   = (MTB_HAL_MAP_I2C_TARGET_RD_IN_FIFO_EVENT),
-    /**< The controller has read all data out of the configured Read buffer. */
+    /** The controller has read all data out of the configured Read buffer. */
     MTB_HAL_I2C_TARGET_RD_BUF_EMPTY_EVENT = (MTB_HAL_MAP_I2C_TARGET_RD_BUF_EMPTY_EVENT),
-    /**< Indicates the controller completed reading from the target (set by the controller NAK or
-       Stop) */
+    /** Indicates the controller completed reading from the target
+     * (set by the controller NAK or Stop) */
     MTB_HAL_I2C_TARGET_RD_CMPLT_EVENT     = (MTB_HAL_MAP_I2C_TARGET_RD_CMPLT_EVENT),
-    /**< Indicates the controller completed writing to the target (set by the controller Stop or
-       Restart)*/
+    /** Indicates the controller completed writing to the target
+     * (set by the controller Stop or Restart)*/
     MTB_HAL_I2C_TARGET_WR_CMPLT_EVENT     = (MTB_HAL_MAP_I2C_TARGET_WR_CMPLT_EVENT),
-    /**< Indicates the I2C hardware detected an error. */
+    /** Indicates the I2C target detected an error. */
     MTB_HAL_I2C_TARGET_ERR_EVENT          = (MTB_HAL_MAP_I2C_TARGET_ERR_EVENT),
-    /**< Indicates the I2C hardware has detected an error. */
-    MTB_HAL_I2C_CONTROLLER_ERR_EVENT      = (MTB_HAL_MAP_I2C_CONTROLLER_ERR_EVENT)
+    /** Indicates that the target received a restart bit */
+    MTB_HAL_I2C_TARGET_RESTART_EVENT      = (MTB_HAL_MAP_I2C_TARGET_RESTART_EVENT),
+    /** Indicates that the target received a stop bit */
+    MTB_HAL_I2C_TARGET_STOP_EVENT         = (MTB_HAL_MAP_I2C_TARGET_STOP_EVENT),
+    /** Indicates that the target detected an arbitration lost event */
+    MTB_HAL_I2C_TARGET_ARB_LOST_EVENT     = (MTB_HAL_MAP_I2C_TARGET_ARB_LOST_EVENT),
+    /** Indicates that the target detected a timeout from counter 0 */
+    MTB_HAL_I2C_TARGET_TIMEOUT0_EVENT     = (MTB_HAL_MAP_I2C_TARGET_TIMEOUT0_EVENT),
+    /** Indicates that the target detected a timeout from counter 1 */
+    MTB_HAL_I2C_TARGET_TIMEOUT1_EVENT     = (MTB_HAL_MAP_I2C_TARGET_TIMEOUT1_EVENT),
+    /** Indicates that the target detected a timeout from counter 2 */
+    MTB_HAL_I2C_TARGET_TIMEOUT2_EVENT     = (MTB_HAL_MAP_I2C_TARGET_TIMEOUT2_EVENT),
+    /** Indicates the I2C controller detected an error. */
+    MTB_HAL_I2C_CONTROLLER_ERR_EVENT      = (MTB_HAL_MAP_I2C_CONTROLLER_ERR_EVENT),
+    /** Indicates that the controller detected an arbitration lost event */
+    MTB_HAL_I2C_CONTROLLER_ARB_LOST_EVENT = (MTB_HAL_MAP_I2C_CONTROLLER_ARB_LOST_EVENT),
+    /** Indicates that the controller detected a timeout from counter 0 */
+    MTB_HAL_I2C_CONTROLLER_TIMEOUT0_EVENT = (MTB_HAL_MAP_I2C_CONTROLLER_TIMEOUT0_EVENT),
+    /** Indicates that the controller detected a timeout from counter 1 */
+    MTB_HAL_I2C_CONTROLLER_TIMEOUT1_EVENT = (MTB_HAL_MAP_I2C_CONTROLLER_TIMEOUT1_EVENT),
+    /** Indicates that the controller detected a timeout from counter 2 */
+    MTB_HAL_I2C_CONTROLLER_TIMEOUT2_EVENT = (MTB_HAL_MAP_I2C_CONTROLLER_TIMEOUT2_EVENT)
 } mtb_hal_i2c_event_t;
 
 /** I2C enum to enable/disable/report address interrupt cause flags. */
 typedef enum
 {
-    /**< No event */
+    /** No event */
     MTB_HAL_I2C_ADDR_EVENT_NONE    = 0,
-    /**< Indicates the target was addressed by the general call address. */
+    /** Indicates the target was addressed by the general call address. */
     MTB_HAL_I2C_GENERAL_CALL_EVENT = (MTB_HAL_MAP_I2C_GENERAL_CALL_EVENT),
-    /**< Indicates the target matching address received. */
+    /** Indicates the target matching address received. */
     MTB_HAL_I2C_ADDR_MATCH_EVENT   = (MTB_HAL_MAP_I2C_ADDR_IN_FIFO_EVENT)
 } mtb_hal_i2c_addr_event_t;
 
@@ -194,25 +214,28 @@ typedef enum
 typedef enum
 {
     MTB_HAL_I2C_OUTPUT_TRIGGER_RX_FIFO_LEVEL_REACHED, //!< Output the RX FIFO signal which is
-    //!< triggered when the receive FIFO has more
-    //!< entries than the configured level.
+                                                      //!< triggered when the receive FIFO has more
+                                                      //!< entries than the configured level.
     MTB_HAL_I2C_OUTPUT_TRIGGER_TX_FIFO_LEVEL_REACHED  //!< Output the TX FIFO signal which is
-    //!< triggered when the transmit FIFO has less
-    //!< entries than the configured level.
+                                                      //!< triggered when the transmit FIFO has less
+                                                      //!< entries than the configured level.
 } mtb_hal_i2c_output_t;
 
 /** Handler for I2C events */
 typedef void (* mtb_hal_i2c_event_callback_t)(void* callback_arg, mtb_hal_i2c_event_t event);
 /** Handler for I2C address events */
 typedef mtb_hal_i2c_command_rsp_t (* mtb_hal_i2c_address_callback_t)(void* callback_arg,
-        mtb_hal_i2c_addr_event_t event,
-        uint8_t address);
+                                                                     mtb_hal_i2c_addr_event_t event,
+                                                                     uint8_t address);
+/** Handler for I2C byte received events */
+typedef mtb_hal_i2c_command_rsp_t (* mtb_hal_i2c_byte_callback_t)(void* callback_arg,
+                                                                  uint8_t byte_received);
 
 /** @brief I2C configuration */
 typedef struct
 {
-    bool     is_target;                  /**<  Operates as a target when set to (<b>true</b>), else
-                                            as a controller (<b>false</b>) */
+    bool     is_target;                 /**<  Operates as a target when set to (<b>true</b>), else
+                                              as a controller (<b>false</b>). */
     uint16_t address;                   /**<  Address of this target resource (7-bit), should be set
                                               to 0 for controller */
     uint32_t frequency_hz;              /**<  Frequency that the I2C bus runs at (I2C data rate in
@@ -225,7 +248,7 @@ typedef struct
 } mtb_hal_i2c_cfg_t;
 
 /** Configure the I2C block.
- * NOTE: Controller/Target specific functions only work when the block is configured
+ * \note Controller/Target specific functions only work when the block is configured
  * to be in that mode.<br>
  * See \ref subsection_i2c_snippet_1
  *
@@ -287,7 +310,7 @@ cy_rslt_t mtb_hal_i2c_controller_read(mtb_hal_i2c_t* obj, uint16_t dev_addr, uin
  * @return The status of the target_config_read_buffer request
  */
 cy_rslt_t mtb_hal_i2c_target_config_read_buffer(mtb_hal_i2c_t* obj, const uint8_t* data,
-        uint16_t size);
+                                                uint16_t size);
 
 /**
  * The function configures the write buffer on an I2C Target. This is the buffer that stores data
@@ -319,13 +342,13 @@ cy_rslt_t mtb_hal_i2c_target_config_write_buffer(mtb_hal_i2c_t* obj, uint8_t* da
  *
  */
 void mtb_hal_i2c_register_callback(mtb_hal_i2c_t* obj, mtb_hal_i2c_event_callback_t callback,
-                                   void *callback_arg);
+                                   void* callback_arg);
 
 /** Register an I2C address callback handler<br>
  *
  * This function will be called when one of the events enabled by \ref
  * mtb_hal_i2c_enable_address_event occurs.
- * NOTE: This function will not have an effect if enable_address_callback parameter of
+ * \note This function will not have an effect if enable_address_callback parameter of
  * \ref mtb_hal_i2c_cfg_t structure was false when \ref mtb_hal_i2c_configure was called.
  *
  * See \ref subsection_i2c_snippet_2
@@ -336,8 +359,22 @@ void mtb_hal_i2c_register_callback(mtb_hal_i2c_t* obj, mtb_hal_i2c_event_callbac
  *
  */
 void mtb_hal_i2c_register_address_callback(mtb_hal_i2c_t* obj,
-        mtb_hal_i2c_address_callback_t callback,
-        void *callback_arg);
+                                           mtb_hal_i2c_address_callback_t callback,
+                                           void* callback_arg);
+
+/** Register an I2C byte received callback handler<br>
+ *
+ * This function will be called when a byte is received. Either an ACK or a
+ * NACK message will be sent depending on the returned value from the callback.
+ *
+ * @param[in] obj          The I2C object
+ * @param[in] callback     The callback handler which will be invoked when the event triggers
+ * @param[in] callback_arg Generic argument that will be provided to the callback when called
+ *
+ */
+void mtb_hal_i2c_register_byte_received_callback(mtb_hal_i2c_t* obj,
+                                                 mtb_hal_i2c_byte_callback_t callback,
+                                                 void* callback_arg);
 
 /** Configure and Enable or Disable I2C Interrupt.
  *
@@ -367,7 +404,7 @@ void mtb_hal_i2c_enable_address_event(mtb_hal_i2c_t* obj, mtb_hal_i2c_addr_event
                                       bool enable);
 
 /** Returns the number of bytes written by the I2C controller.
- * Calling the \ref mtb_hal_i2c_target_config_write_buffer API will clear the counter of bytes sent
+ * Calling the \ref mtb_hal_i2c_target_config_read_buffer API will clear the counter of bytes sent
  * by controller
  *
  * @param[in]  obj          The I2C object
@@ -376,7 +413,7 @@ void mtb_hal_i2c_enable_address_event(mtb_hal_i2c_t* obj, mtb_hal_i2c_addr_event
 uint32_t mtb_hal_i2c_target_readable(mtb_hal_i2c_t* obj);
 
 /** Returns the number of bytes can be read by the I2C controller.
- * Calling the \ref mtb_hal_i2c_target_config_read_buffer API will clear the counter of bytes read
+ * Calling the \ref mtb_hal_i2c_target_config_write_buffer API will clear the counter of bytes read
  * by controller
  *
  * @param[in]  obj          The I2C object
@@ -385,8 +422,9 @@ uint32_t mtb_hal_i2c_target_readable(mtb_hal_i2c_t* obj);
 uint32_t mtb_hal_i2c_target_writable(mtb_hal_i2c_t* obj);
 
 /** Wait for controller send data to RX buffer and store them to the user-defined buffer.
- * NOTE: If the read size requested is greater than the data available, the function only copies
- * the available data.
+ * \note If the read size requested is greater than the data available, the function only copies
+ * the available data. The given buffer in dst_buff should match the one configured in
+ * \ref mtb_hal_i2c_target_config_read_buffer to avoid additional copy operation.
  *
  * @param[in]     obj        The I2C object
  * @param[in]     dst_buff   Pointer on memory to store the data from the target RX buffer.
@@ -399,9 +437,9 @@ cy_rslt_t mtb_hal_i2c_target_read(mtb_hal_i2c_t* obj, uint8_t* dst_buff, uint16_
                                   uint32_t timeout);
 
 /** Write data from the user-defined buffer to I2C TX buffer.
- * NOTE: If the size of the data is greater than can fit the buffer, the function only copies data
- * that
- * can fit.  The buffer size can be configured with \ref mtb_hal_i2c_target_config_read_buffer
+ * \note If the size of the data is greater than can fit the buffer, the function only copies data
+ * that can fit. The given buffer in src_buff should match the one configured in
+ * \ref mtb_hal_i2c_target_config_write_buffer to avoid additional copy operation.
  *
  * @param[in]     obj        The I2C object
  * @param[in]     src_buff   Pointer on memory to copy the data to the target TX buffer.
@@ -420,7 +458,7 @@ cy_rslt_t mtb_hal_i2c_target_write(mtb_hal_i2c_t* obj, const uint8_t* src_buff, 
  *
  * @param[in]  obj                The I2C object
  *
- * @return The status of the target_abort_read request
+ * @return The status of the target abort read request
  */
 cy_rslt_t mtb_hal_i2c_target_abort_read(mtb_hal_i2c_t* obj);
 
@@ -444,7 +482,7 @@ cy_rslt_t mtb_hal_i2c_process_interrupt(mtb_hal_i2c_t* obj);
 #endif
 
 #ifdef MTB_HAL_I2C_IMPL_HEADER
-    #include MTB_HAL_I2C_IMPL_HEADER
+#include MTB_HAL_I2C_IMPL_HEADER
 #endif /* MTB_HAL_I2C_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_I2C)

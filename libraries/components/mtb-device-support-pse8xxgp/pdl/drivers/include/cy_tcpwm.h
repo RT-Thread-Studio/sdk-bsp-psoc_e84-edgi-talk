@@ -31,7 +31,6 @@
 * \defgroup group_tcpwm_pwm     PWM (TCPWM)
 * \defgroup group_tcpwm_quaddec Quadrature Decoder (TCPWM)
 * \defgroup group_tcpwm_shiftreg Shift Register (TCPWM)
-* \defgroup group_tcpwm_motif Motion Interface (TCPWM)
 * \} */
 
 /**
@@ -42,7 +41,7 @@
 * PWM, Quadrature Decoder, Shift Register and Motion Interface functionality using the TCPWM block.
 *
 * The functions and other declarations used in this driver are in cy_tcpwm_counter.h,
-* cy_tcpwm_pwm.h, cy_tcpwm_quaddec.h, cy_tcpwm_shiftreg.h, cy_tcpwm_motif.h respectively. Include cy_pdl.h
+* cy_tcpwm_pwm.h, cy_tcpwm_quaddec.h, cy_tcpwm_shiftreg.h respectively. Include cy_pdl.h
 * to get access to all functions and declarations in the PDL.
 *
 * Each TCPWM block is a collection of counters that can all be triggered
@@ -58,7 +57,6 @@
 * * PWM with dead time insertion (PWMDT)
 * * Pseudo random PWM (PWMPR)
 * * Shift Register
-* * Motion Interface (MOTIF)
 *
 * The TCPWM driver is structured to map these seven functional modes to four
 * high level operating modes:
@@ -66,7 +64,6 @@
 * * PWM (PWM, PWMDT, PWMPR)
 * * Quadrature Decoder
 * * Shift Register
-* * MOTIF
 *
 * A brief description on each of the operating modes:
 *
@@ -110,41 +107,10 @@
 * A shift register is also used in parallel-in to serial-out data conversion
 * and serial-in to parallel-out data conversion.
 *
-* \section group_tcpwm_version_information TCPWM Versions
-*
-* There are three versions of TCPWM driver
-*
-* \b TCPWM \b Version \b 3
-*
-* - The mxtcpwm.3.0 consists of up to 2048, 16-bit or 32-bit counters
-* - Counter groups up to 8*256
-* - Counter compare, period, line_sel and dead time registers are double buffered.
-* - Parallel data path support for CC0/CC1 register through dedicated data interface (only applicable to mxtcpwm 3.1, PSOC C3 do not support this)
-* - Glitch Filter with configurable depth supported on General-purpose triggers used by all counters and specific one-to-one triggers for each counter
-* - Shadow registers available for duty, period, dead time, signal and polarity
-* - Enhanced shadow update mechanism
-* - Independent control of clock pre-scalar and dead time
-* - Configurable PWM dithering on period as well as duty cycle
-* - Configurable option to continue / pause with the ability to enter passive state through kill polarity in debug mode
-* - Output state control for PWM signal during stop or kill operation synchronous to period match
-* - Independent line polarity setting for PWM signal during kill operation
-* - Support up to 4 Motion Interface (MOTIF)
-*     - Support interrupt output for each MOTIF
-*     - Hall interface for direct connection to Hall sensors
-*     - HW look-up table for advance motor control feedback loop operation
-*     - Synchronous modulation support for multiple counters
-* - Support HRPWM (High resolution PWM generation) feature in both 16-bit and 32-bit TCPWM counters (Only applicable to mxtcpwm 3.1, PSOC C3 only has 4 HRPWM blocks on the 32 bit PWMs.)
-*     - HRPWM enhancements are limited to PWM and PWM_DT mode only
-*     - HRPWM consists of an analog interpolator (also referred as delay element)
-*     - Analog interpolator consists of delay elements which uses the input clock to generate a set of delayed phases. These delayed phases are then used to delay the edges of the incoming PWM from tcpwm.
-*     - Analog interpolator is used to shift the edges of line_out and line_compl_out coming as output from the TCPWM to the analog interpolator.
-*     - The LSBs are used for fractional or micro ticks for delaying the line_out and line_compl_out outputs for  PERIOD/PERIOD_BUFF, CC0/CC0_BUFF, and CC1/CC1_BUFF and DT/DT_BUFF.
-*     - Number of LSB bits used for fractional control is control by the design time parameter, GRP_HRPWM_WIDTH.
-*     - The remaining bits given by [GRP_CNT_WIDTH-1:GRP_HRPWM_WIDTH] are used by the mxtcpwm counter.
+* \section group_tcpwm_version_information TCPWM Version
 *
 * \b TCPWM \b Version \b 2
 *
-* - Devices CY8C61x4 and CY8C62x4 use this version.
 * - Supports up to four counter groups (check TRM for actual number of groups supported)
 * - Each counter group consists of up to 256 counters (check TRM for actual number of counters supported)
 * - Each counter
@@ -182,172 +148,11 @@
 *     - When a Trigger Multiplexer block SW command is used, the TCPWM counters can be activated at the same time
 *
 * \image html tcpwm_v2_trigger_simultaneously.png
-*
-* \b TCPWM \b Version \b 1
-*
-* - Devices CY8C61x6, CY8C61x7, CY8C62x5, CY8C62x6, CY8C62x7, CY8C62x8, CY8C62xA, CY8C63x6, CY8C63x7, CYS0644xxZI-S2D44,
-* CYB0644xxZI-S4D44, CYB06447BZI-BLDX, CYB06447BZI-D54 and CYB06445LQI-S3D42 use this version.
-* - Supports up to 32 counters (check TRM for actual number of counters supported)
-* - Synchronized operation of multiple counters.
-* - 16 or 32 bit counter, compare/capture (CC) and period registers.
-* - CC and period registers are double buffered.
-* - Up, down and up/down counting modes.
-* - 14 trigger input signals and 2 constant input signals: '0' and '1', for a total of 16 hardware (HW) input signals
-* - Rising edge, falling edge, combined rising/falling edge detection or pass-through on all HW input signals to derive counter events.
-* - The start, reload, stop and capture events can be generated by software.
-* - Clock pre-scaling (1x, 2x, 4x ... 128x).
-* - Support Pseudo Random PWM
-* - 3 output trigger signals for each counter to indicate underflow, overflow and cc_match events.
-* - 2 PWM complementary output lines for each counter. Dead time insertion ([0, 255] counter cycles).
-* - Support one interrupt output for each counter.
-*
-* \image html tcpwm_v1_block_diagram.png
-*
-* - Many functions work with an individual counter. You can also manage multiple counters simultaneously for certain functions.
-* - These are listed in the \ref group_tcpwm_functions_common section of the TCPWM.
-* - You can enable, disable, or trigger (in various ways) multiple counters simultaneously.
-* - For these functions you provide a bit field representing each counter in the TCPWM you want to control.
-* - You can represent the bit field as an ORed mask of each counter, like ((1U << cntNumX) | (1U << cntNumX) | (1U << cntNumX)), where X is the counter number from 0 to 31.
-*
-* \note
-* * If none of the input terminals (start, reload(index)) are used, the
-* software event \ref Cy_TCPWM_TriggerStart or
-* \ref Cy_TCPWM_TriggerReloadOrIndex must be called to start the counting.
-* * If count input terminal is not used, the \ref CY_TCPWM_INPUT_LEVEL macro
-* should be set for the countInputMode parameter and the \ref CY_TCPWM_INPUT_1
-* macro should be set for the countInput parameter in the configuration
-* structure of the appropriate mode(Counter
-* \ref group_tcpwm_data_structures_counter, PWM
-* \ref group_tcpwm_data_structures_pwm, QuadDec
-* \ref group_tcpwm_data_structures_quaddec, or Shift Register
-* \ref group_tcpwm_data_structures_shiftreg).
-
 * \section group_tcpwm_more_information More Information
 *
 * For more information on the TCPWM peripheral, refer to the technical
 * reference manual (TRM).
-*
-* \section group_tcpwm_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td rowspan="2">1.80</td>
-*     <td>Newly added Motion Interface (MOTIF) functionality.</td>
-*     <td>Added the new Motion Interface for the PSOC C3 device.</td>
-*   </tr>
-*   <tr>
-*     <td>Updated the following APIs:
-*          - \ref Cy_TCPWM_PWM_Init
-*          - \ref Cy_TCPWM_PWM_GetStatus
-*          - \ref Cy_TCPWM_QuadDec_GetStatus
-*          - \ref Cy_TCPWM_Counter_GetStatus
-*
-*         Newly added APIs:
-*          - \ref Cy_TCPWM_SetDebugSuspend</td>
-*     <td>Bug fixing and HRPWM enhancements.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">1.70</td>
-*     <td> Newly added enum \ref cy_en_copy_swap_config_t.
-*        - Newly added API \ref Cy_TCPWM_Counter_SetDirection_Change_Mode and updated API \ref Cy_TCPWM_Block_EnableSwap.
-*     </td>
-*     <td> Supported Glitch filter with configurable depth, HW look-up table for advance motor control, bug fixes and enhancement in reload and swap functionality.</td>
-*   </tr>
-*   <tr>
-*     <td>Newly added APIs :
-*          - \ref Cy_TCPWM_PWM_SetDT, \ref Cy_TCPWM_PWM_Configure_LineSelect, \ref Cy_TCPWM_PWM_Configure_LineSelectBuff,
-*          - \ref Cy_TCPWM_PWM_EnableLineSelectSwap, \ref Cy_TCPWM_PWM_Set_KillLinePolarity, \ref Cy_TCPWM_PWM_PWMDeadTimeBuff
-*          - \ref Cy_TCPWM_PWM_PWMDeadTimeBuffN, \ref Cy_TCPWM_PWM_SetDTBuff. </td>
-*
-*         Updated the following APIs:
-*          - \ref Cy_TCPWM_PWM_Init
-*          - \ref Cy_TCPWM_PWM_Configure_Dithering
-*          - \ref Cy_TCPWM_PWM_GetStatus
-*          - \ref Cy_TCPWM_QuadDec_GetStatus
-*          - \ref Cy_TCPWM_Counter_GetStatus
-*
-*         Newly added and updated enums:
-*          - \ref cy_en_hrpwm_operating_frequency_t
-*          - \ref cy_en_kill_line_polarity_t
-*          - \ref cy_en_line_select_config_t
-*          - \ref cy_stc_tcpwm_pwm_config_t
-*     <td>Support for line select, HRPWM enhancements, enhancement in DT BUFF and SWAP ENABLE handling. </td>
-*   </tr>
-*   <tr>
-*     <td>1.60</td>
-*     <td>Newly Added \ref Cy_TCPWM_OutputTriggerSetup API and code enhancement. </td>
-*     <td>Glitch filter support added for TCPWM version 3 and above.</td>
-*   </tr>
-*   <tr>
-*     <td>1.50</td>
-*     <td>
-*         <ul>
-*         <li>Newly Added \ref cy_en_gf_depth_value_t, \ref cy_en_counter_direction_t , \ref cy_en_tcpwm_dithering_t and \ref cy_en_dithering_limiter_t enums.<br>
-*         <li> Newly Added \ref Cy_TCPWM_Block_EnableSwap , \ref Cy_TCPWM_InputTriggerSetupWithGF , \ref Cy_TCPWM_Counter_EnableSwap , \ref Cy_TCPWM_QuadDec_EnableSwap and \ref Cy_TCPWM_Shiftreg_EnableSwap APIs.<br>
-*         </ul>
-*     <td>
-*         <ul>
-*         <li>Support for IP version 3.0.<br>
-*         <li>Bug fixes.<br>
-*         <li>Documentation update.</td>
-*         </ul>
-*   <tr>
-*     <td>1.40</td>
-*     <td>Support for CAT1B and PSE8 devices is added. No changes in public APIs interface and behavior. </td>
-*     <td>New devices support added.</td>
-*   </tr>
-*   <tr>
-*     <td>1.30.1</td>
-*     <td>Updated documentation of PWM mode. </td>
-*     <td>Documentation enhancement. </td>
-*   </tr>
-*   <tr>
-*     <td>1.30</td>
-*     <td>Added new option to Swap Overflow/Underflow behavior in PWM Centre/Asymmetric Alignment modes.</td>
-*     <td>New feature.</td>
-*   </tr>
-*   <tr>
-*     <td>1.20</td>
-*     <td>Added new features: Shift Register, New QuadDec modes, Additional Compare/Capture Buffer.</td>
-*     <td>New silicon family support.</td>
-*   </tr>
-*   <tr>
-*     <td>1.10.2</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.10.1</td>
-*     <td>Added header guards CY_IP_MXTCPWM.</td>
-*     <td>To enable the PDL compilation with wounded out IP blocks.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">1.10</td>
-*     <td>Flattened the organization of the driver source code into the single
-*         source directory and the single include directory.
-*     </td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Added register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0.1</td>
-*     <td>Added a deviation to the MISRA Compliance section.
-*         Added function-level code snippets.</td>
-*     <td>Documentation update and clarification</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
 */
-
 /** \} group_tcpwm */
 
 /**
@@ -409,7 +214,7 @@ extern "C" {
 /** \cond INTERNAL */
 
 /* Macro to check if runtime check for CC1 presence is required */
-#define CY_TCPWM_CC1_RUNTIME_CHECK      (1UL)
+     #define CY_TCPWM_CC1_RUNTIME_CHECK      (1UL)
 
 /** \endcond INTERNAL */
 
@@ -437,7 +242,7 @@ extern "C" {
 #if (CY_IP_MXTCPWM_VERSION >= 2U) || defined(CY_DOXYGEN)
 
 #ifndef TCPWM_TR_ONE_CNT_NR
- #define CY_TCPWM_INPUT_TRIG_WITH_INST(n,m) (n + TCPWM ##m## _TR_ONE_CNT_NR + 2U) /**< Input is connected to the trigger input n - all purpose trigger,
+#define CY_TCPWM_INPUT_TRIG_WITH_INST(n,m) (n + TCPWM ##m## _TR_ONE_CNT_NR + 2U) /**< Input is connected to the trigger input n - all purpose trigger,
                                                                                   *   m is the TCPWM instance number.*/
 #else
 #define CY_TCPWM_INPUT_TRIG(n) (n + TCPWM_TR_ONE_CNT_NR + 2U) /**< Input is connected to the trigger input n - all purpose trigger */
@@ -472,7 +277,7 @@ extern "C" {
 /** Output trigger generates signal on overflow event */
 #define CY_TCPWM_CNT_TRIGGER_ON_OVERFLOW    (0U)
 /** Output trigger generates signal on underflow event */
-#define CY_TCPWM_CNT_TRIGGER_ON_UNDEFLOW    (1U)
+#define CY_TCPWM_CNT_TRIGGER_ON_UNDERFLOW    (1U)
 /** Output trigger generates signal on terminal count event */
 #define CY_TCPWM_CNT_TRIGGER_ON_TC          (2U)
 /** Output trigger generates signal on compare/capture 0 event */
@@ -559,7 +364,7 @@ extern "C" {
  * Enumerations
  ******************************************************************************/
 
-/**
+ /**
 * \addtogroup group_tcpwm_enums
 * \{
 */
@@ -622,10 +427,10 @@ __STATIC_INLINE void Cy_TCPWM_TriggerCaptureOrSwap_Single(TCPWM_Type *base, uint
 __STATIC_INLINE void Cy_TCPWM_TriggerCapture0(TCPWM_Type *base, uint32_t cntNum);
 #if (CY_IP_MXTCPWM_VERSION >= 2U) || defined(CY_DOXYGEN)
 __STATIC_INLINE void Cy_TCPWM_TriggerCapture1(TCPWM_Type *base, uint32_t cntNum);
-__STATIC_INLINE bool Cy_TCPWM_GetTrigPinLevel(TCPWM_Type const *base, uint32_t cntNum, cy_en_tcpwm_trigselect_t triggerSelect);
-__STATIC_INLINE void Cy_TCPWM_InputTriggerSetup(TCPWM_Type *base, uint32 cntNum, cy_en_tcpwm_trigselect_t triggerSelect, uint32_t edgeSelect, uint32_t triggerSignal);
-__STATIC_INLINE void Cy_TCPWM_OutputTriggerSetup(TCPWM_Type *base, uint32 cntNum, cy_en_tcpwm_output_trigselect_t trigger0event, cy_en_tcpwm_output_trigselect_t trigger1event);
-__STATIC_INLINE cy_en_tcpwm_status_t Cy_TCPWM_SetDebugFreeze(TCPWM_Type *base, uint32 cntNum, bool enable);
+__STATIC_INLINE bool Cy_TCPWM_GetTrigPinLevel (TCPWM_Type const *base, uint32_t cntNum, cy_en_tcpwm_trigselect_t triggerSelect);
+__STATIC_INLINE void Cy_TCPWM_InputTriggerSetup (TCPWM_Type *base, uint32 cntNum, cy_en_tcpwm_trigselect_t triggerSelect, uint32_t edgeSelect, uint32_t triggerSignal);
+__STATIC_INLINE void Cy_TCPWM_OutputTriggerSetup (TCPWM_Type *base, uint32 cntNum, cy_en_tcpwm_output_trigselect_t trigger0event, cy_en_tcpwm_output_trigselect_t trigger1event);
+__STATIC_INLINE cy_en_tcpwm_status_t Cy_TCPWM_SetDebugFreeze (TCPWM_Type *base, uint32 cntNum, bool enable);
 #endif
 
 /** \cond INTERNAL */
@@ -654,9 +459,9 @@ __STATIC_INLINE uint32_t Cy_TCPWM_Block_GetCC0Val(TCPWM_Type const  *base, uint3
     uint32_t result;
 
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
-    result = (TCPWM_CNT_CC(base, cntNum));
+        result = (TCPWM_CNT_CC(base, cntNum));
 #else
-    result = (TCPWM_GRP_CNT_CC0(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum));
+       result = (TCPWM_GRP_CNT_CC0(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum));
 #endif
     return result;
 }
@@ -665,9 +470,9 @@ __STATIC_INLINE uint32_t Cy_TCPWM_Block_GetCC0BufVal(TCPWM_Type const  *base, ui
     uint32_t result;
 
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
-    result = (TCPWM_CNT_CC_BUFF(base, cntNum));
+        result = (TCPWM_CNT_CC_BUFF(base, cntNum));
 #else
-    result = (TCPWM_GRP_CNT_CC0_BUFF(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum));
+        result = (TCPWM_GRP_CNT_CC0_BUFF(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum));
 #endif
 
     return result;
@@ -677,9 +482,9 @@ __STATIC_INLINE uint32_t Cy_TCPWM_Block_GetCounter(TCPWM_Type const  *base, uint
     uint32_t result;
 
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
-    result = TCPWM_CNT_COUNTER(base, cntNum);
+        result = TCPWM_CNT_COUNTER(base, cntNum);
 #else
-    result = TCPWM_GRP_CNT_COUNTER(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
+        result = TCPWM_GRP_CNT_COUNTER(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 #endif
 
     return result;
@@ -688,18 +493,18 @@ __STATIC_INLINE void Cy_TCPWM_Block_SetCounter(TCPWM_Type *base, uint32_t cntNum
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CNT_COUNTER(base, cntNum) = count;
+        TCPWM_CNT_COUNTER(base, cntNum) = count;
 #else
-    TCPWM_GRP_CNT_COUNTER(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = count;
+        TCPWM_GRP_CNT_COUNTER(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = count;
 #endif
 }
 __STATIC_INLINE void Cy_TCPWM_Block_SetPeriod(TCPWM_Type *base, uint32_t cntNum,  uint32_t period)
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CNT_PERIOD(base, cntNum) = period;
+        TCPWM_CNT_PERIOD(base, cntNum) = period;
 #else
-    TCPWM_GRP_CNT_PERIOD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = period;
+        TCPWM_GRP_CNT_PERIOD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = period;
 #endif
 }
 __STATIC_INLINE uint32_t Cy_TCPWM_Block_GetPeriod(TCPWM_Type const *base, uint32_t cntNum)
@@ -708,51 +513,51 @@ __STATIC_INLINE uint32_t Cy_TCPWM_Block_GetPeriod(TCPWM_Type const *base, uint32
 
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    result = TCPWM_CNT_PERIOD(base, cntNum);
+        result = TCPWM_CNT_PERIOD(base, cntNum);
 #else
-    result = TCPWM_GRP_CNT_PERIOD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
+        result = TCPWM_GRP_CNT_PERIOD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 #endif
     return result;
 }
 __STATIC_INLINE void Cy_TCPWM_Block_SetCC0BufVal(TCPWM_Type *base, uint32_t cntNum,  uint32_t compare1)
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
-    TCPWM_CNT_CC_BUFF(base, cntNum) = compare1;
+        TCPWM_CNT_CC_BUFF(base, cntNum) = compare1;
 #else
-    TCPWM_GRP_CNT_CC0_BUFF(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = compare1;
+        TCPWM_GRP_CNT_CC0_BUFF(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = compare1;
 #endif
 }
 __STATIC_INLINE void Cy_TCPWM_Block_SetCC0Val(TCPWM_Type *base, uint32_t cntNum,  uint32_t compare0)
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
-    TCPWM_CNT_CC(base, cntNum) = compare0;
+        TCPWM_CNT_CC(base, cntNum) = compare0;
 #else
-    TCPWM_GRP_CNT_CC0(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = compare0;
+        TCPWM_GRP_CNT_CC0(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = compare0;
 #endif
 }
 __STATIC_INLINE void Cy_TCPWM_Block_EnableCompare0Swap(TCPWM_Type *base, uint32_t cntNum,  bool enable)
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    if (enable)
-    {
-        TCPWM_CNT_CTRL(base, cntNum) |=  TCPWM_CNT_CTRL_AUTO_RELOAD_CC_Msk;
-    }
-    else
-    {
-        TCPWM_CNT_CTRL(base, cntNum) &= ~TCPWM_CNT_CTRL_AUTO_RELOAD_CC_Msk;
-    }
+        if (enable)
+        {
+            TCPWM_CNT_CTRL(base, cntNum) |=  TCPWM_CNT_CTRL_AUTO_RELOAD_CC_Msk;
+        }
+        else
+        {
+            TCPWM_CNT_CTRL(base, cntNum) &= ~TCPWM_CNT_CTRL_AUTO_RELOAD_CC_Msk;
+        }
 #else
-    if (enable)
-    {
-        TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) |=
-            TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Msk;
-    }
-    else
-    {
-        TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) &=
-            ~TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Msk;
-    }
+        if (enable)
+        {
+            TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) |=
+                                    TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Msk;
+        }
+        else
+        {
+            TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) &=
+                                    ~TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Msk;
+        }
 #endif
 }
 #if (CY_IP_MXTCPWM_VERSION >= 2U) || defined (CY_DOXYGEN)
@@ -765,12 +570,12 @@ __STATIC_INLINE void Cy_TCPWM_Block_EnableCompare1Swap(TCPWM_Type *base, uint32_
         if (enable)
         {
             TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) |=
-                TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC1_Msk;
+                                    TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC1_Msk;
         }
         else
         {
             TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) &=
-                ~TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC1_Msk;
+                                    ~TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC1_Msk;
         }
     }
 }
@@ -842,7 +647,7 @@ __STATIC_INLINE void Cy_TCPWM_Enable_Single(TCPWM_Type *base, uint32_t cntNum)
 #else
 
     TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) |=
-        _VAL2FLD(TCPWM_GRP_CNT_V2_CTRL_ENABLED, 1U);
+                _VAL2FLD(TCPWM_GRP_CNT_V2_CTRL_ENABLED, 1U);
 #endif
 }
 
@@ -862,10 +667,10 @@ __STATIC_INLINE void Cy_TCPWM_Enable_Single(TCPWM_Type *base, uint32_t cntNum)
 __STATIC_INLINE void Cy_TCPWM_Disable_Single(TCPWM_Type *base, uint32_t cntNum)
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
-    TCPWM_CTRL_CLR(base) = (1UL << cntNum);
+        TCPWM_CTRL_CLR(base) = (1UL << cntNum);
 #else
-    TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) &=
-        ~TCPWM_GRP_CNT_V2_CTRL_ENABLED_Msk;
+        TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) &=
+                ~TCPWM_GRP_CNT_V2_CTRL_ENABLED_Msk;
 #endif
 }
 
@@ -894,9 +699,9 @@ __STATIC_INLINE uint32_t Cy_TCPWM_GetInterruptStatus(TCPWM_Type const *base, uin
 
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    result = TCPWM_CNT_INTR(base, cntNum);
+        result = TCPWM_CNT_INTR(base, cntNum);
 #else
-    result = TCPWM_GRP_CNT_INTR(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
+        result = TCPWM_GRP_CNT_INTR(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 #endif
 
     return result;
@@ -926,11 +731,11 @@ __STATIC_INLINE void Cy_TCPWM_ClearInterrupt(TCPWM_Type *base, uint32_t cntNum, 
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CNT_INTR(base, cntNum) = source;
-    (void)TCPWM_CNT_INTR(base, cntNum);
+        TCPWM_CNT_INTR(base, cntNum) = source;
+        (void)TCPWM_CNT_INTR(base, cntNum);
 #else
-    TCPWM_GRP_CNT_INTR(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = source;
-    (void)TCPWM_GRP_CNT_INTR(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
+        TCPWM_GRP_CNT_INTR(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = source;
+        (void)TCPWM_GRP_CNT_INTR(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 #endif
 }
 
@@ -958,9 +763,9 @@ __STATIC_INLINE void Cy_TCPWM_SetInterrupt(TCPWM_Type *base, uint32_t cntNum,  u
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CNT_INTR_SET(base, cntNum) = source;
+        TCPWM_CNT_INTR_SET(base, cntNum) = source;
 #else
-    TCPWM_GRP_CNT_INTR_SET(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = source;
+        TCPWM_GRP_CNT_INTR_SET(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = source;
 #endif
 }
 
@@ -989,9 +794,9 @@ __STATIC_INLINE void Cy_TCPWM_SetInterruptMask(TCPWM_Type *base, uint32_t cntNum
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CNT_INTR_MASK(base, cntNum) = mask;
+        TCPWM_CNT_INTR_MASK(base, cntNum) = mask;
 #else
-    TCPWM_GRP_CNT_INTR_MASK(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = mask;
+        TCPWM_GRP_CNT_INTR_MASK(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = mask;
 #endif
 }
 
@@ -1021,9 +826,9 @@ __STATIC_INLINE uint32_t Cy_TCPWM_GetInterruptMask(TCPWM_Type const *base, uint3
 
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    mask = TCPWM_CNT_INTR_MASK(base, cntNum);
+        mask = TCPWM_CNT_INTR_MASK(base, cntNum);
 #else
-    mask = TCPWM_GRP_CNT_INTR_MASK(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
+        mask = TCPWM_GRP_CNT_INTR_MASK(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 #endif
 
     return mask;
@@ -1055,9 +860,9 @@ __STATIC_INLINE uint32_t Cy_TCPWM_GetInterruptStatusMasked(TCPWM_Type const *bas
 
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    status = TCPWM_CNT_INTR_MASKED(base, cntNum);
+        status = TCPWM_CNT_INTR_MASKED(base, cntNum);
 #else
-    status = TCPWM_GRP_CNT_INTR_MASKED(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
+        status = TCPWM_GRP_CNT_INTR_MASKED(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 #endif
 
     return status;
@@ -1084,10 +889,10 @@ __STATIC_INLINE void Cy_TCPWM_TriggerStart_Single(TCPWM_Type *base, uint32_t cnt
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CMD_START(base) = (1UL << cntNum);
+        TCPWM_CMD_START(base) = (1UL << cntNum);
 #else
-    TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
-        TCPWM_GRP_CNT_V2_TR_CMD_START_Msk;
+        TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
+                TCPWM_GRP_CNT_V2_TR_CMD_START_Msk;
 #endif
 }
 
@@ -1109,10 +914,10 @@ __STATIC_INLINE void Cy_TCPWM_TriggerReloadOrIndex_Single(TCPWM_Type *base, uint
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CMD_RELOAD(base) = (1UL << cntNum);
+        TCPWM_CMD_RELOAD(base) = (1UL << cntNum);
 #else
-    TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
-        TCPWM_GRP_CNT_V2_TR_CMD_RELOAD_Msk;
+        TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
+                TCPWM_GRP_CNT_V2_TR_CMD_RELOAD_Msk;
 #endif
 }
 
@@ -1140,10 +945,10 @@ __STATIC_INLINE void Cy_TCPWM_TriggerStopOrKill_Single(TCPWM_Type *base, uint32_
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CMD_STOP(base) = (1UL << cntNum);
+        TCPWM_CMD_STOP(base) = (1UL << cntNum);
 #else
-    TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
-        TCPWM_GRP_CNT_V2_TR_CMD_STOP_Msk;
+        TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
+                TCPWM_GRP_CNT_V2_TR_CMD_STOP_Msk;
 #endif
 }
 
@@ -1166,10 +971,10 @@ __STATIC_INLINE void Cy_TCPWM_TriggerCaptureOrSwap_Single(TCPWM_Type *base, uint
 {
 #if    (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CMD_CAPTURE(base) = (1UL << cntNum);
+        TCPWM_CMD_CAPTURE(base) = (1UL << cntNum);
 #else
-    TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
-        TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE0_Msk;
+        TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
+                TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE0_Msk;
 #endif
 }
 
@@ -1216,7 +1021,7 @@ __STATIC_INLINE void Cy_TCPWM_TriggerCapture1(TCPWM_Type *base, uint32_t cntNum)
 #endif
     {
         TCPWM_GRP_CNT_TR_CMD(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) =
-            TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE1_Msk;
+                                                TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE1_Msk;
     }
 #if (CY_TCPWM_CC1_RUNTIME_CHECK)
     else
@@ -1250,38 +1055,38 @@ __STATIC_INLINE void Cy_TCPWM_TriggerCapture1(TCPWM_Type *base, uint32_t cntNum)
 * \snippet tcpwm/pwm/snippet/main.c snippet_Cy_TCPWM_GetTrigPinLevel
 *
 *******************************************************************************/
-__STATIC_INLINE bool Cy_TCPWM_GetTrigPinLevel(TCPWM_Type const *base, uint32_t cntNum, cy_en_tcpwm_trigselect_t triggerSelect)
+__STATIC_INLINE bool Cy_TCPWM_GetTrigPinLevel (TCPWM_Type const *base, uint32_t cntNum, cy_en_tcpwm_trigselect_t triggerSelect)
 
 {
     uint32_t status = 0UL;
 
     status = TCPWM_GRP_CNT_STATUS(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 
-    switch (triggerSelect)
+    switch(triggerSelect)
     {
-    case CY_TCPWM_INPUT_TR_START:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_START, status);
-        break;
-    case CY_TCPWM_INPUT_TR_RELOAD_OR_INDEX:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_RELOAD, status);
-        break;
-    case CY_TCPWM_INPUT_TR_STOP_OR_KILL:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_RELOAD, status);
-        break;
-    case CY_TCPWM_INPUT_TR_COUNT:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_STOP, status);
-        break;
-    case CY_TCPWM_INPUT_TR_CAPTURE0:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE0, status);
-        break;
-    case CY_TCPWM_INPUT_TR_CAPTURE1:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE1, status);
-        break;
-    default:
-        /* Not a valid input trigger */
-        CY_ASSERT_L3(false);
-        break;
-    }
+        case CY_TCPWM_INPUT_TR_START:
+            status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_START, status);
+            break;
+        case CY_TCPWM_INPUT_TR_RELOAD_OR_INDEX:
+            status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_RELOAD, status);
+            break;
+        case CY_TCPWM_INPUT_TR_STOP_OR_KILL:
+            status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_RELOAD, status);
+            break;
+        case CY_TCPWM_INPUT_TR_COUNT:
+            status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_STOP, status);
+            break;
+        case CY_TCPWM_INPUT_TR_CAPTURE0:
+            status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE0, status);
+            break;
+        case CY_TCPWM_INPUT_TR_CAPTURE1:
+            status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE1, status);
+            break;
+        default:
+            /* Not a valid input trigger */
+            CY_ASSERT_L3(false);
+            break;
+   }
 
 
     return (status != 0UL);
@@ -1320,73 +1125,73 @@ __STATIC_INLINE bool Cy_TCPWM_GetTrigPinLevel(TCPWM_Type const *base, uint32_t c
 * \snippet tcpwm/pwm/snippet/main.c snippet_Cy_TCPWM_InputTriggerSetup
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_TCPWM_InputTriggerSetup(TCPWM_Type *base, uint32 cntNum, cy_en_tcpwm_trigselect_t triggerSelect, uint32_t edgeSelect, uint32_t triggerSignal)
+__STATIC_INLINE void Cy_TCPWM_InputTriggerSetup (TCPWM_Type *base, uint32 cntNum, cy_en_tcpwm_trigselect_t triggerSelect, uint32_t edgeSelect, uint32_t triggerSignal)
 {
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
 
-    switch (triggerSelect)
+    switch(triggerSelect)
     {
-    case CY_TCPWM_INPUT_TR_START:
-        /* Clear input trigger settings first */
-        TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL_Msk;
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE_Msk;
+        case CY_TCPWM_INPUT_TR_START:
+            /* Clear input trigger settings first */
+            TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL_Msk;
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE_Msk;
 
-        /* Write new settings */
-        TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL, triggerSignal);
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE, edgeSelect);
-        break;
-    case CY_TCPWM_INPUT_TR_RELOAD_OR_INDEX:
-        TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL_Msk;
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE_Msk;
+            /* Write new settings */
+            TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL, triggerSignal);
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE, edgeSelect);
+            break;
+        case CY_TCPWM_INPUT_TR_RELOAD_OR_INDEX:
+            TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL_Msk;
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE_Msk;
 
-        TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL, triggerSignal);
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE, edgeSelect);
-        break;
-    case CY_TCPWM_INPUT_TR_STOP_OR_KILL:
-        TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL_Msk;
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE_Msk;
+            TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL, triggerSignal);
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE, edgeSelect);
+            break;
+        case CY_TCPWM_INPUT_TR_STOP_OR_KILL:
+            TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL_Msk;
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE_Msk;
 
-        TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL, triggerSignal);
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE, edgeSelect);
-        break;
-    case CY_TCPWM_INPUT_TR_COUNT:
-        TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL_Msk;
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE_Msk;
+            TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL, triggerSignal);
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE, edgeSelect);
+            break;
+        case CY_TCPWM_INPUT_TR_COUNT:
+            TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL_Msk;
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE_Msk;
 
-        TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL, triggerSignal);
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE, edgeSelect);
-        break;
-    case CY_TCPWM_INPUT_TR_CAPTURE0:
-        TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL_Msk;
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Msk;
+            TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL, triggerSignal);
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE, edgeSelect);
+            break;
+        case CY_TCPWM_INPUT_TR_CAPTURE0:
+            TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL_Msk;
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Msk;
 
-        TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL, triggerSignal);
-        TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE, edgeSelect);
-        break;
-    case CY_TCPWM_INPUT_TR_CAPTURE1:
-#if (CY_TCPWM_CC1_RUNTIME_CHECK)
-        if (TCPWM_GRP_CC1(base, grp))
-#endif
-        {
-            TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL1_CAPTURE1_SEL_Msk;
-            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Msk;
+            TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL, triggerSignal);
+            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE, edgeSelect);
+            break;
+        case CY_TCPWM_INPUT_TR_CAPTURE1:
+        #if (CY_TCPWM_CC1_RUNTIME_CHECK)
+            if (TCPWM_GRP_CC1(base, grp))
+        #endif
+            {
+                TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_SEL1_CAPTURE1_SEL_Msk;
+                TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) &= ~TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Msk;
 
-            TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL1_CAPTURE1_SEL, triggerSignal);
-            TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE1_EDGE, edgeSelect);
-        }
-#if (CY_TCPWM_CC1_RUNTIME_CHECK)
-        else
-        {
-            /* Capture 1 - Not supported for the group */
+                TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL1_CAPTURE1_SEL, triggerSignal);
+                TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) |= _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE1_EDGE, edgeSelect);
+            }
+        #if (CY_TCPWM_CC1_RUNTIME_CHECK)
+            else
+            {
+                /* Capture 1 - Not supported for the group */
+                CY_ASSERT_L3(false);
+            }
+        #endif
+            break;
+        default:
+            /* Not a valid input trigger */
             CY_ASSERT_L3(false);
-        }
-#endif
-        break;
-    default:
-        /* Not a valid input trigger */
-        CY_ASSERT_L3(false);
-        break;
-    }
+            break;
+   }
 
 }
 
@@ -1411,13 +1216,13 @@ __STATIC_INLINE void Cy_TCPWM_InputTriggerSetup(TCPWM_Type *base, uint32 cntNum,
 *
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_TCPWM_OutputTriggerSetup(TCPWM_Type *base, uint32 cntNum, cy_en_tcpwm_output_trigselect_t trigger0event, cy_en_tcpwm_output_trigselect_t trigger1event)
+__STATIC_INLINE void Cy_TCPWM_OutputTriggerSetup (TCPWM_Type *base, uint32 cntNum, cy_en_tcpwm_output_trigselect_t trigger0event, cy_en_tcpwm_output_trigselect_t trigger1event)
 {
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
 
     TCPWM_GRP_CNT_TR_OUT_SEL(base, grp, cntNum) =
-        (_VAL2FLD(TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT0, trigger0event) |
-         _VAL2FLD(TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT1, trigger1event));
+                    (_VAL2FLD(TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT0, trigger0event) |
+                     _VAL2FLD(TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT1, trigger1event));
 
 }
 
@@ -1448,7 +1253,7 @@ __STATIC_INLINE void Cy_TCPWM_OutputTriggerSetup(TCPWM_Type *base, uint32 cntNum
 * \snippet tcpwm/counter/snippet/main.c snippet_Cy_TCPWM_SetDebugFreeze
 *
 *******************************************************************************/
-__STATIC_INLINE cy_en_tcpwm_status_t Cy_TCPWM_SetDebugFreeze(TCPWM_Type *base, uint32 cntNum, bool enable)
+__STATIC_INLINE cy_en_tcpwm_status_t Cy_TCPWM_SetDebugFreeze (TCPWM_Type *base, uint32 cntNum, bool enable)
 {
     CY_REG32_CLR_SET(TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum), TCPWM_GRP_CNT_V2_CTRL_DBG_FREEZE_EN, enable);
     return CY_TCPWM_SUCCESS;

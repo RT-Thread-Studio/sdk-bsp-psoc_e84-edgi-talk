@@ -177,7 +177,7 @@ uint32_t Cy_Crypto_Core_V1_MemCmp(CRYPTO_Type *base, void const *src0, void cons
         {
         }
 
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'This piece of code is written for CRYPTO_V1_Type and will not execute for CRYPTO_V2_Type');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','This piece of code is written for CRYPTO_V1_Type and will not execute for CRYPTO_V2_Type');
         memResult = (uint32_t)(REG_CRYPTO_STR_RESULT(base));
     }
 
@@ -209,7 +209,7 @@ uint32_t Cy_Crypto_Core_V1_MemCmp(CRYPTO_Type *base, void const *src0, void cons
 *
 *******************************************************************************/
 void Cy_Crypto_Core_V1_MemXor(CRYPTO_Type *base,
-                              void *dst, void const *src0, void const *src1, uint16_t size)
+                              void* dst, void const *src0, void const *src1, uint16_t size)
 {
     if (size != 0U)
     {

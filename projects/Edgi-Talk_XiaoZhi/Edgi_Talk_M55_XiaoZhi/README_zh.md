@@ -39,7 +39,7 @@ while (rt_wlan_connect("TEST", "88888888"));
   * **On standby**：待机中
   * **Listening**：监听中，可与设备对话
   * **Sleeping**：休眠状态
-* 按下顶部按键，可进入 **Listening** 状态进行语音交互。
+* **按住**顶部按键对话，可进入 **Listening** 状态进行语音交互。
 
 ![alt text](figures/3.png)
 ## 注意事项
@@ -90,4 +90,4 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 ```
 RT-Thread Settings --> 硬件 --> select SOC Multi Core Mode --> Enable CM55 Core
 ```
-
+![config](figures/config.png)

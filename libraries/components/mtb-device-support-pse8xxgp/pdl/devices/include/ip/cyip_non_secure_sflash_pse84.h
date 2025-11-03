@@ -38,20 +38,19 @@
 /**
   * \brief NVM non secure subregion (8kb) (NON_SECURE_SFLASH)
   */
-typedef struct
-{
-    __IOM uint8_t  DIE_ID[14];                    /*!< 0x00000000 PSC1 and above */
-    __IOM uint8_t  DEVICE_ID_TO[7];               /*!< 0x0000000E PSC1 and above */
-    __IOM uint8_t  DEVICE_ID_MPN[6];              /*!< 0x00000015 PSC1 and above */
-    __IOM uint8_t  L0_VERSION[20];                /*!< 0x0000001B PSC1 and above */
-    __IOM uint8_t  L1_VERSION[28];                /*!< 0x0000002F PSC1 and above */
-    __IOM uint8_t  DEVICE_RT_CFG_PUBLIC[28];      /*!< 0x0000004B PSC1 and above */
-    __IOM uint8_t  DEVICE_RT_CFG_PUBLIC_2[512];   /*!< 0x00000067 PSC1 and above */
-    __IOM uint8_t  IFX_DEVICE_CERT[612];          /*!< 0x00000267 PSC2 and above */
-    __IOM uint8_t  IFX_CHAIN_OF_TRUST[1280];      /*!< 0x000004CB PSC2 and above */
-    __IOM uint8_t  ALIAS_CERT[512];               /*!< 0x000009CB PSC2 and above */
-    __IOM uint8_t  OEM_CHAIN_OF_TRUST[5120];      /*!< 0x00000BCB PSC2 and above */
-    __IM uint8_t  RESERVED_NON_SEC_SFLASH_0[53]; /*!< 0x00001FCB NON_SECURE_SFLASH 0: region free bytes */
+typedef struct {
+  __IOM uint8_t  DIE_ID[14];                    /*!< 0x00000000 PSC1 and above */
+  __IOM uint8_t  DEVICE_ID_TO[7];               /*!< 0x0000000E PSC1 and above */
+  __IOM uint8_t  DEVICE_ID_MPN[6];              /*!< 0x00000015 PSC1 and above */
+  __IOM uint8_t  L0_VERSION[20];                /*!< 0x0000001B PSC1 and above */
+  __IOM uint8_t  L1_VERSION[28];                /*!< 0x0000002F PSC1 and above */
+  __IOM uint8_t  DEVICE_RT_CFG_PUBLIC[28];      /*!< 0x0000004B PSC1 and above */
+  __IOM uint8_t  DEVICE_RT_CFG_PUBLIC_2[512];   /*!< 0x00000067 PSC1 and above */
+  __IOM uint8_t  IFX_DEVICE_CERT[612];          /*!< 0x00000267 PSC2 and above */
+  __IOM uint8_t  IFX_CHAIN_OF_TRUST[1280];      /*!< 0x000004CB PSC2 and above */
+  __IOM uint8_t  ALIAS_CERT[512];               /*!< 0x000009CB PSC2 and above */
+  __IOM uint8_t  OEM_CHAIN_OF_TRUST[5120];      /*!< 0x00000BCB PSC2 and above */
+   __IM uint8_t  RESERVED_NON_SEC_SFLASH_0[53]; /*!< 0x00001FCB NON_SECURE_SFLASH 0: region free bytes */
 } NON_SECURE_SFLASH_Type;                       /*!< Size = 8192 (0x2000) */
 
 

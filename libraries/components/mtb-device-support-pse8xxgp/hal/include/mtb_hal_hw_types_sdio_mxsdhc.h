@@ -30,18 +30,18 @@
 
 #if defined(CY_IP_MXSDHC)
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_SDIO)
-    /** Macro specifying whether the SDIO driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_SDIO (1u)
+/** Macro specifying whether the SDIO driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_SDIO (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_SDIO)
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_SDIO_HOST)
-    /** Macro specifying whether the SDIO Host driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_SDIO_HOST (1u)
+/** Macro specifying whether the SDIO Host driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_SDIO_HOST (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_SDIO HOST)
 
 /** \} group_hal_availability */
@@ -58,7 +58,7 @@ typedef struct
 {
     _mtb_hal_sdxx_t                     sdxx; //!< Common data for mxsdhc IP
     _mtb_hal_event_callback_data_t      callback_data; //!< Information about registered callback,
-    //!< if any
+                                                       //!< if any
 
     mtb_hal_gpio_t                      pin_data0; //!< Pin connected to data bus bit 0
     mtb_hal_gpio_t                      pin_data1; //!< Pin connected to data bus bit 1
@@ -78,9 +78,9 @@ typedef struct
  */
 typedef struct
 {
-    SDHC_Type                              *base; //!< Base address for the sdhc block
-    const cy_stc_sd_host_init_config_t     *host_config; //!< PDL-level sd host config
-    const mtb_hal_clock_t                  *clock; //!< Default clock to use
+    SDHC_Type*                              base; //!< Base address for the sdhc block
+    const cy_stc_sd_host_init_config_t*     host_config; //!< PDL-level sd host config
+    const mtb_hal_clock_t*                  clock; //!< Default clock to use
     struct
     {
         mtb_hal_gpio_t                      clk; //!< SDIO clock pin

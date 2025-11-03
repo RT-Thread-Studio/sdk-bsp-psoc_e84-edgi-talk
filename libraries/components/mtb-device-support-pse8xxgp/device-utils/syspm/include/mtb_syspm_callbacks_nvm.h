@@ -37,7 +37,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
                              'Rule requires const attributes for inputs but signature for following APIs needs to match requested one in PDL');
 
 /**
- * \addtogroup group_nvm NVM Deep Sleep Callback
+ * \addtogroup mtb_syspm_group_nvm NVM Deep Sleep Callback
  * \{
  * Implementation of the NVM Deep Sleep callback
  */
@@ -65,7 +65,7 @@ typedef struct
  * @return Returns CY_SYSPM_SUCCESS if successful, an error code otherwise
  */
 cy_en_syspm_status_t mtb_syspm_nvm_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode);
 
 #if defined(__cplusplus)
@@ -74,5 +74,5 @@ cy_en_syspm_status_t mtb_syspm_nvm_deepsleep_callback(
 
 #include "mtb_syspm_callbacks_nvm_impl.h"
 
-/** \} group_nvm */
+/** \} mtb_syspm_group_nvm */
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.13');

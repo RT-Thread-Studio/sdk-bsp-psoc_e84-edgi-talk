@@ -25,7 +25,6 @@
 * limitations under the License.
 *******************************************************************************/
 
-
 #if !defined (CY_CRYPTO_COMMON_H)
 #define CY_CRYPTO_COMMON_H
 
@@ -36,6 +35,7 @@
 
 #include "cy_crypto_config.h"
 #include "cy_syslib.h"
+#include "cy_crypto_utils.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -96,35 +96,6 @@ extern "C" {
 #define CRYPTO_MEM_ALIGN_4  CY_ALIGN(4)
 #endif
 
-/* Enable SHA functionality */
-#if !defined(CPUSS_CRYPTO_SHA) && (defined(CPUSS_CRYPTO_SHA1) || defined(CPUSS_CRYPTO_SHA2))
-#define CPUSS_CRYPTO_SHA                (1)
-
-#if defined(CPUSS_CRYPTO_SHA2) && !defined(CPUSS_CRYPTO_SHA256)
-#define CPUSS_CRYPTO_SHA256             (1)
-#endif
-
-#if defined(CPUSS_CRYPTO_SHA2) && !defined(CPUSS_CRYPTO_SHA512)
-#define CPUSS_CRYPTO_SHA512             (1)
-#endif
-#endif
-
-#if !defined(CPUSS_CRYPTO_STR)
-#define CPUSS_CRYPTO_STR                (1)
-#endif
-
-#if !defined(CPUSS_CRYPTO_CHACHA) && defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
-#define CPUSS_CRYPTO_CHACHA (0)
-#endif
-
-#if !defined(CPUSS_CRYPTO_GCM) && defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
-#define CPUSS_CRYPTO_GCM (0)
-#endif
-
-#if !defined(CPUSS_CRYPTO_SHA3) && defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
-#define CPUSS_CRYPTO_SHA3 (0)
-#endif
-
 /** \cond INTERNAL */
 
 /* The width of the Crypto hardware registers values in bits. */
@@ -139,7 +110,7 @@ extern "C" {
 /** \endcond */
 
 /**
-* \addtogroup group_crypto_cli_srv_macros
+* \addtogroup group_crypto_macros
 * \{
 */
 
@@ -226,80 +197,80 @@ extern "C" {
 #define CY_CRYPTO_SHA512_PAD_SIZE           (112uL)
 
 #if defined(CY_CRYPTO_CFG_SHA2_512_ENABLED)
-/** Hash size for the SHA384 mode (in bytes) */
-#define CY_CRYPTO_SHA384_DIGEST_SIZE        (48u)
-/** Hash size for the SHA512 mode (in bytes) */
-#define CY_CRYPTO_SHA512_DIGEST_SIZE        (64u)
-/** Hash size for the SHA512_224 mode (in bytes) */
-#define CY_CRYPTO_SHA512_224_DIGEST_SIZE    (28u)
-/** Hash size for the SHA512_256 mode (in bytes) */
-#define CY_CRYPTO_SHA512_256_DIGEST_SIZE    (32u)
+    /** Hash size for the SHA384 mode (in bytes) */
+    #define CY_CRYPTO_SHA384_DIGEST_SIZE        (48u)
+    /** Hash size for the SHA512 mode (in bytes) */
+    #define CY_CRYPTO_SHA512_DIGEST_SIZE        (64u)
+    /** Hash size for the SHA512_224 mode (in bytes) */
+    #define CY_CRYPTO_SHA512_224_DIGEST_SIZE    (28u)
+    /** Hash size for the SHA512_256 mode (in bytes) */
+    #define CY_CRYPTO_SHA512_256_DIGEST_SIZE    (32u)
 
 /** \cond INTERNAL */
-/** Internal hash size for the SHA512_256 mode (in bytes) */
-#define CY_CRYPTO_SHA512_HASH_SIZE          (64u)
-/** Internal round mem size for the SHA512_256 mode (in bytes) */
-#define CY_CRYPTO_SHA512_ROUND_MEM_SIZE     (640uL)
+    /** Internal hash size for the SHA512_256 mode (in bytes) */
+    #define CY_CRYPTO_SHA512_HASH_SIZE          (64u)
+    /** Internal round mem size for the SHA512_256 mode (in bytes) */
+    #define CY_CRYPTO_SHA512_ROUND_MEM_SIZE     (640uL)
 /** \endcond */
 #endif
 #if defined(CY_CRYPTO_CFG_SHA2_256_ENABLED)
-/** Hash size for the SHA224 mode (in bytes) */
-#define CY_CRYPTO_SHA224_DIGEST_SIZE        (28u)
-/** Hash size for the SHA256 mode (in bytes) */
-#define CY_CRYPTO_SHA256_DIGEST_SIZE        (32u)
+    /** Hash size for the SHA224 mode (in bytes) */
+    #define CY_CRYPTO_SHA224_DIGEST_SIZE        (28u)
+    /** Hash size for the SHA256 mode (in bytes) */
+    #define CY_CRYPTO_SHA256_DIGEST_SIZE        (32u)
 
 /** \cond INTERNAL */
-/** Internal hash size for the SHA256 mode (in bytes) */
-#define CY_CRYPTO_SHA256_HASH_SIZE          (32u)
-/** Internal round mem size for the SHA256 mode (in bytes) */
-#define CY_CRYPTO_SHA256_ROUND_MEM_SIZE     (256uL)
+    /** Internal hash size for the SHA256 mode (in bytes) */
+    #define CY_CRYPTO_SHA256_HASH_SIZE          (32u)
+    /** Internal round mem size for the SHA256 mode (in bytes) */
+    #define CY_CRYPTO_SHA256_ROUND_MEM_SIZE     (256uL)
 /** \endcond */
 #endif
 #if defined(CY_CRYPTO_CFG_SHA1_ENABLED)
-/** Hash size for the SHA1 mode (in bytes)   */
-#define CY_CRYPTO_SHA1_DIGEST_SIZE          (20u)
-/** Block size for the SHA1 mode (in bytes)  */
-#define CY_CRYPTO_SHA1_BLOCK_SIZE           (64u)
+    /** Hash size for the SHA1 mode (in bytes)   */
+    #define CY_CRYPTO_SHA1_DIGEST_SIZE          (20u)
+    /** Block size for the SHA1 mode (in bytes)  */
+    #define CY_CRYPTO_SHA1_BLOCK_SIZE           (64u)
 
 /** \cond INTERNAL */
-/** Internal hash size for the SHA1 mode (in bytes) */
-#define CY_CRYPTO_SHA1_HASH_SIZE            (20u)
-/** Internal round mem size for the SHA1 mode (in bytes) */
-#define CY_CRYPTO_SHA1_ROUND_MEM_SIZE       (320uL)
+    /** Internal hash size for the SHA1 mode (in bytes) */
+    #define CY_CRYPTO_SHA1_HASH_SIZE            (20u)
+    /** Internal round mem size for the SHA1 mode (in bytes) */
+    #define CY_CRYPTO_SHA1_ROUND_MEM_SIZE       (320uL)
 /** \endcond */
 #endif
 
 /** \cond INTERNAL */
 #if defined(CY_CRYPTO_CFG_SHA3_ENABLED)
-#define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (CY_CRYPTO_SHA3_MAX_DIGEST_SIZE)
-#define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (CY_CRYPTO_SHA3_STATE_SIZE)
-#define CY_CRYPTO_SHA_MAX_HASH_SIZE         (CY_CRYPTO_SHA3_STATE_SIZE)
+    #define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (CY_CRYPTO_SHA3_MAX_DIGEST_SIZE)
+    #define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (CY_CRYPTO_SHA3_STATE_SIZE)
+    #define CY_CRYPTO_SHA_MAX_HASH_SIZE         (CY_CRYPTO_SHA3_STATE_SIZE)
 #elif defined(CY_CRYPTO_CFG_SHA2_512_ENABLED)
-#define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (CY_CRYPTO_SHA512_DIGEST_SIZE)
-#define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (CY_CRYPTO_SHA512_BLOCK_SIZE)
-#define CY_CRYPTO_SHA_MAX_HASH_SIZE         (CY_CRYPTO_SHA512_HASH_SIZE)
+    #define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (CY_CRYPTO_SHA512_DIGEST_SIZE)
+    #define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (CY_CRYPTO_SHA512_BLOCK_SIZE)
+    #define CY_CRYPTO_SHA_MAX_HASH_SIZE         (CY_CRYPTO_SHA512_HASH_SIZE)
 #elif defined(CY_CRYPTO_CFG_SHA2_256_ENABLED)
-#define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (CY_CRYPTO_SHA256_DIGEST_SIZE)
-#define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (CY_CRYPTO_SHA256_BLOCK_SIZE)
-#define CY_CRYPTO_SHA_MAX_HASH_SIZE         (CY_CRYPTO_SHA256_HASH_SIZE)
+    #define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (CY_CRYPTO_SHA256_DIGEST_SIZE)
+    #define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (CY_CRYPTO_SHA256_BLOCK_SIZE)
+    #define CY_CRYPTO_SHA_MAX_HASH_SIZE         (CY_CRYPTO_SHA256_HASH_SIZE)
 #elif defined(CY_CRYPTO_CFG_SHA1_ENABLED)
-#define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (CY_CRYPTO_SHA1_DIGEST_SIZE)
-#define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (CY_CRYPTO_SHA1_BLOCK_SIZE)
-#define CY_CRYPTO_SHA_MAX_HASH_SIZE         (CY_CRYPTO_SHA1_HASH_SIZE)
+    #define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (CY_CRYPTO_SHA1_DIGEST_SIZE)
+    #define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (CY_CRYPTO_SHA1_BLOCK_SIZE)
+    #define CY_CRYPTO_SHA_MAX_HASH_SIZE         (CY_CRYPTO_SHA1_HASH_SIZE)
 #else
-#define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (0u)
-#define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (0u)
-#define CY_CRYPTO_SHA_MAX_HASH_SIZE         (0u)
+    #define CY_CRYPTO_SHA_MAX_DIGEST_SIZE       (0u)
+    #define CY_CRYPTO_SHA_MAX_BLOCK_SIZE        (0u)
+    #define CY_CRYPTO_SHA_MAX_HASH_SIZE         (0u)
 #endif
 
 #if defined(CY_CRYPTO_CFG_SHA2_512_ENABLED)
-#define CY_CRYPTO_SHA_MAX_ROUND_MEM_SIZE    (CY_CRYPTO_SHA512_ROUND_MEM_SIZE)
+    #define CY_CRYPTO_SHA_MAX_ROUND_MEM_SIZE    (CY_CRYPTO_SHA512_ROUND_MEM_SIZE)
 #elif defined(CY_CRYPTO_CFG_SHA1_ENABLED)
-#define CY_CRYPTO_SHA_MAX_ROUND_MEM_SIZE    (CY_CRYPTO_SHA1_ROUND_MEM_SIZE)
+    #define CY_CRYPTO_SHA_MAX_ROUND_MEM_SIZE    (CY_CRYPTO_SHA1_ROUND_MEM_SIZE)
 #elif defined(CY_CRYPTO_CFG_SHA2_256_ENABLED)
-#define CY_CRYPTO_SHA_MAX_ROUND_MEM_SIZE    (CY_CRYPTO_SHA256_ROUND_MEM_SIZE)
+    #define CY_CRYPTO_SHA_MAX_ROUND_MEM_SIZE    (CY_CRYPTO_SHA256_ROUND_MEM_SIZE)
 #else
-#define CY_CRYPTO_SHA_MAX_ROUND_MEM_SIZE    (0u)
+    #define CY_CRYPTO_SHA_MAX_ROUND_MEM_SIZE    (0u)
 #endif
 /** \endcond */
 
@@ -319,6 +290,7 @@ extern "C" {
 /** Processed message size for the RSA 4096Bit mode (in bytes) */
 #define CY_CRYPTO_RSA4096_MESSAGE_SIZE      CY_CRYPTO_BYTE_SIZE_OF_BITS(4096u)
 /** \endcond */
+/** \} group_crypto_macros */
 
 /**
 * \addtogroup group_crypto_data_structures
@@ -340,7 +312,7 @@ extern "C" {
 *  - e - exponent part of the key.
 *
 * Other fields are accelerating coefficients and can be calculated by
-* \ref Cy_Crypto_Rsa_CalcCoefs.
+* Cy_Crypto_Rsa_CalcCoefs.
 *
 * \note The <b>modulus</b> and <b>exponent</b> values in the
 * \ref cy_stc_crypto_rsa_pub_key_t must also be in little-endian order.<br>
@@ -371,7 +343,7 @@ typedef struct
     /** The pointer to the (2^moduloLength mod modulo). Memory for it should
         be allocated by user with size moduloLength */
     uint8_t *rBarPtr;
-    /** \endcond */
+/** \endcond */
 } cy_stc_crypto_rsa_pub_key_t;
 
 /** \} group_crypto_data_structures */
@@ -381,12 +353,10 @@ typedef struct
 /** Crypto Driver PDL ID */
 #define CY_CRYPTO_ID                        CY_PDL_DRV_ID(0x0Cu)
 
-/** \} group_crypto_cli_srv_macros */
+/** \} group_crypto_macros */
 
-/**
-* \addtogroup group_crypto_config_structure
-* \{
-    The Crypto initialization configuration.
+/** \cond INTERNAL */
+/*  The Crypto initialization configuration.
 *   \note Should be the same for the Crypto Server and Crypto Client initialization.
 */
 
@@ -423,10 +393,10 @@ typedef struct
           to get data.
         - If this field is not NULL, server will call this interrupt handler.
           This interrupt handler must call the
-          \ref Cy_Crypto_Server_GetDataHandler to get data to process.
+          Cy_Crypto_Server_GetDataHandler to get data to process.
 
           Note: In the second case user should process data separately and
-          clear interrupt by calling \ref Cy_Crypto_Server_Process.
+          clear interrupt by calling Cy_Crypto_Server_Process.
           This model is used in the
           multitasking environment. */
     cy_israddress userGetDataHandler;
@@ -437,7 +407,7 @@ typedef struct
           for error processing.
         - If this field is not NULL - server will call this interrupt handler.
           This interrupt handler must call the
-          \ref Cy_Crypto_Server_ErrorHandler to clear the interrupt. */
+          Cy_Crypto_Server_ErrorHandler to clear the interrupt. */
     cy_israddress userErrorHandler;
 
     /** Specifies the prepared data notifier interrupt configuration. It used
@@ -449,14 +419,10 @@ typedef struct
     cy_stc_sysint_t cryptoErrorIntrConfig;
 
 } cy_stc_crypto_config_t;
+/** \endcond */
 
-/** \} group_crypto_config_structure */
 
-/**
-* \addtogroup group_crypto_cli_data_structures
-* \{
-*/
-
+/** \cond INTERNAL */
 /** Structure for storing a description of a Crypto hardware error  */
 typedef struct
 {
@@ -483,8 +449,7 @@ typedef struct
      */
     uint32_t errorStatus1;
 } cy_stc_crypto_hw_error_t;
-
-/** \} group_crypto_cli_data_structures */
+/** \endcond */
 
 
 /** The Crypto library functionality level. */
@@ -629,8 +594,7 @@ typedef enum cy_en_eddsa_sig_type_t
 
 #if (CPUSS_CRYPTO_VU == 1) && defined (CY_CRYPTO_CFG_ECP_C)
 /** List of supported elliptic curve IDs */
-typedef enum
-{
+typedef enum {
     CY_CRYPTO_ECC_ECP_NONE = 0,
 #if defined(CY_CRYPTO_CFG_ECP_DP_SECP192R1_ENABLED)
     CY_CRYPTO_ECC_ECP_SECP192R1,
@@ -804,7 +768,7 @@ typedef struct
 {
     /** \cond INTERNAL */
     /** Pointer to AES work buffers */
-    cy_stc_crypto_aes_buffers_t *buffers;
+     cy_stc_crypto_aes_buffers_t *buffers;
     /** AES key length */
     cy_en_crypto_aes_key_length_t keyLength;
     /** AES processed block index (for CMAC, SHA operations) */
@@ -816,7 +780,7 @@ typedef struct
     /** AES mode*/
     cy_en_crypto_dir_mode_t dirMode;
     /** align next member to cache line size */
-    CY_CRYPTO_DCAHCE_ALIGN_NEXT(22, 0)
+    CY_CRYPTO_DCAHCE_ALIGN_NEXT(22,0)
     /** \endcond */
 } cy_stc_crypto_aes_state_t;
 #endif /* (CPUSS_CRYPTO_AES == 1) && defined(CY_CRYPTO_CFG_AES_C) */
@@ -832,17 +796,17 @@ typedef struct
 */
 
 /* The structure to define used memory buffers */
-typedef struct
+ typedef struct
 {
     /** \cond INTERNAL */
     /** AES CBC MAC buffer */
-    cy_stc_crypto_aes_buffers_t aesCbcMacBuffer;
+     cy_stc_crypto_aes_buffers_t aesCbcMacBuffer;
     /** AES CTR buffer */
-    cy_stc_crypto_aes_buffers_t aesCtrBuffer;
+     cy_stc_crypto_aes_buffers_t aesCtrBuffer;
     /** Counter buffer */
-    uint8_t ctr[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
+     uint8_t ctr[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** Y buffer */
-    uint8_t y[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
+     uint8_t y[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** temp buffer */
     CRYPTO_MEM_ALIGN_4 uint8_t temp_buffer[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** \endcond */
@@ -895,31 +859,31 @@ typedef struct
 
 /* The structure to define used memory buffers */
 
-typedef struct
+ typedef struct
 {
     /** \cond INTERNAL */
     /** AES GCM Ghash buffer Block */
-    uint8_t  y[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
+     uint8_t  y[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** AES GCM temp buffer for AAD data */
-    uint8_t  temp[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
+     uint8_t  temp[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** AES GCM aes data buffer*/
-    uint8_t  aes_data[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
+     uint8_t  aes_data[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** AES ECB buffer */
     cy_stc_crypto_aes_buffers_t aes_buffer;
     /** AES GCM Hash Subkey */
-    uint8_t  h[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
+     uint8_t  h[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** AES GCM Initial Counter BLock*/
-    uint8_t  icb[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
+     uint8_t  icb[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** AES GCM Counter Block */
-    uint8_t  cb[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
+     uint8_t  cb[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_AES_BLOCK_SIZE)];
     /** \endcond */
 } cy_stc_crypto_aes_gcm_buffers_t;
 
-typedef struct cy_stc_crypto_aes_gcm_state
+ typedef struct cy_stc_crypto_aes_gcm_state
 {
     /** \cond INTERNAL */
     /**AES state*/
-    cy_stc_crypto_aes_state_t  aesState;
+     cy_stc_crypto_aes_state_t  aesState;
     /**Pointer to the AES buffer*/
     cy_stc_crypto_aes_buffers_t *aes_buffer;
     /** AES GCM hash key pointer */
@@ -955,7 +919,7 @@ typedef struct cy_stc_crypto_aes_gcm_state
 * ensure that the defined instance of this structure remains in scope
 * while the drive is in use.
 */
-typedef struct
+ typedef struct
 {
     /** \cond INTERNAL */
     uint32_t mode;
@@ -971,7 +935,7 @@ typedef struct
     uint32_t blockIdx;
     uint8_t  const *initialHash;
     /** align next member to cache line size */
-    CY_CRYPTO_DCAHCE_ALIGN_NEXT(52, 0)
+    CY_CRYPTO_DCAHCE_ALIGN_NEXT(52,0)
     /** \endcond */
 } cy_stc_crypto_sha_state_t;
 
@@ -986,7 +950,7 @@ typedef struct
 * ensure that the defined instance of this structure remains in scope
 * while the drive is in use.
 */
-typedef struct
+ typedef struct
 {
     /** \cond INTERNAL */
     /* Hash state*/
@@ -998,7 +962,7 @@ typedef struct
     /* Pointer to store the key */
     uint8_t *m0Key;
     /* Pointer to store the sha buffer */
-    void *sha_buffer;
+    void* sha_buffer;
     /** \endcond */
 } cy_stc_crypto_hmac_state_t;
 
@@ -1006,8 +970,7 @@ typedef struct
 
 #if (CPUSS_CRYPTO_VU == 1) && defined(CY_CRYPTO_CFG_ECP_C)
 /** A point on a ECC curve */
-typedef struct
-{
+typedef struct {
     /** \cond INTERNAL */
     /** The x co-ordinate */
     void *x;
@@ -1017,15 +980,13 @@ typedef struct
 } cy_stc_crypto_ecc_point;
 
 /** An ECC key type */
-typedef enum cy_en_crypto_ecc_key_type
-{
-    PK_PUBLIC     = 0u,
-    PK_PRIVATE    = 1u
+typedef enum cy_en_crypto_ecc_key_type {
+   PK_PUBLIC     = 0u,
+   PK_PRIVATE    = 1u
 } cy_en_crypto_ecc_key_type_t;
 
 /** An ECC key */
-typedef struct
-{
+typedef struct {
     /** \cond INTERNAL */
     /** Type of key, PK_PRIVATE or PK_PUBLIC */
     cy_en_crypto_ecc_key_type_t type;
@@ -1044,12 +1005,7 @@ typedef struct
 /*************************************************************
 *  Structures used for communication between Client and Server
 ***************************************************************/
-
-/**
-* \addtogroup group_crypto_srv_data_structures
-* \{
-*/
-
+/** \cond INTERNAL */
 /** The structure for storing the crypto server context.
 * All fields for the context structure are internal. Firmware never reads or
 * writes these values. Firmware allocates the structure and provides the
@@ -1078,13 +1034,9 @@ typedef struct
     cy_stc_crypto_hw_error_t hwErrorStatus;
     /** \endcond */
 } cy_stc_crypto_server_context_t;
+/** \endcond */
 
-/** \} group_crypto_srv_data_structures */
-
-/**
-* \addtogroup group_crypto_cli_data_structures
-* \{
-*/
+/** \cond INTERNAL */
 
 /** The structure for storing the crypto client context.
 * All fields for the context structure are internal. Firmware never reads or
@@ -1093,7 +1045,7 @@ typedef struct
 * ensure that the defined instance of this structure remains in scope
 * while the drive is in use.
 */
-typedef struct
+ typedef struct
 {
     /** \cond INTERNAL */
     /** Operation instruction code */
@@ -1245,22 +1197,30 @@ typedef enum
 /******************************************
  * Configuration structure
  ******************************************/
-/** \cond INTERNAL */
+/**
+* \addtogroup group_crypto_enums
+* \{
+*/
+
+/** Selection of the bitstream. */
 typedef enum
 {
-    /** "Selection of the bitstream: */
     CY_CRYPTO_TRMON_BS_DAS = 0, /**< "0": DAS bitstream. */
     CY_CRYPTO_TRMON_BS_RED,     /**< "1": RED bitstream. */
     CY_CRYPTO_TRMON_BS_TR,      /**< "2": TR bitstream.  */
     CY_CRYPTO_TRMON_BS_UNDEF    /**< "3": Undefined.     */
 } cy_en_crypto_trng_bs_sel_t;
-/** \endcond */
+/** \} group_crypto_enums */
+
+/**
+* \addtogroup group_crypto_data_structures
+* \{
+*/
 
 /** The structure for storing the TRNG configuration.
 */
 typedef struct
 {
-    /** \cond INTERNAL */
     /**
      * "Specifies the clock divider that is used to sample oscillator data.
      * This clock divider is wrt. "clk_sys".
@@ -1397,8 +1357,9 @@ typedef struct
      * ...
      * "65535": 65536 bits. */
     uint16_t monWindowSize;
-    /** \endcond */
 } cy_stc_crypto_trng_config_t;
+
+/** \} group_crypto_data_structures */
 
 /** The structure for storing the TRNG context.
 * All fields for the context structure are internal. Firmware never reads or
@@ -1466,7 +1427,7 @@ typedef struct
 typedef struct
 {
     /** \cond INTERNAL */
-    void    *data;                  /**<  Pointer to data source block */
+    void*    data;                  /**<  Pointer to data source block */
     uint32_t dataSize;              /**<  Operation data size */
     uint32_t *crc;                  /**<  Pointer to CRC destination variable */
     uint32_t polynomial;            /**<  Polynomial for CRC calculate */
@@ -1513,7 +1474,7 @@ typedef struct
 typedef struct
 {
     /** \cond INTERNAL */
-    /** Pointer to verification result /ref cy_en_crypto_rsa_ver_result_t */
+    /** Pointer to verification result cy_en_crypto_rsa_ver_result_t */
     cy_en_crypto_rsa_ver_result_t *verResult;
     /** SHA digest type, used with SHA calculation of the message */
     cy_en_crypto_sha_mode_t digestType;
@@ -1587,23 +1548,23 @@ typedef struct
 #define CHACHA_CONST_SIZE 16u
 /** \endcond */
 
-typedef struct
+ typedef struct
 {
     /** \cond INTERNAL */
     /** buffer to store the nonce*/
-    uint8_t nonce[CY_CRYPTO_ALIGN_CACHE_LINE(CHACHA_NONCE_SIZE)];
+     uint8_t nonce[CY_CRYPTO_ALIGN_CACHE_LINE(CHACHA_NONCE_SIZE)];
     /** To store the counter*/
-    uint32_t counter;
+     uint32_t counter;
     /** align next member to cache line size */
-    CY_CRYPTO_DCAHCE_ALIGN_NEXT(sizeof(uint32_t), 0)
+    CY_CRYPTO_DCAHCE_ALIGN_NEXT(sizeof(uint32_t),0)
     /** buffer to store the chacha key*/
     uint8_t key[CY_CRYPTO_ALIGN_CACHE_LINE(CHACHA_KEY_SIZE)];
     /** buffer to store the constant*/
-    uint32_t constant[CHACHA_CONST_SIZE / 4u];
+    uint32_t constant[CHACHA_CONST_SIZE/4u];
     /** \endcond */
-} cy_stc_crypto_v2_chacha_input_buffer;
+}cy_stc_crypto_v2_chacha_input_buffer;
 
-typedef struct
+ typedef struct
 {
     /** \cond INTERNAL */
     /** The pointer to store chacha state */
@@ -1612,7 +1573,7 @@ typedef struct
     uint8_t *key;
     /** To store the chacha key bytes used */
     uint8_t keyIndexUsed;
-    /** To store the rounds for the chacha operation*/
+     /** To store the rounds for the chacha operation*/
     uint8_t round;
 
 
@@ -1625,7 +1586,7 @@ typedef struct
 /** CCM tag verification status */
 typedef enum
 {
-    /** \cond INTERNAL */
+        /** \cond INTERNAL */
     CY_CRYPTO_CCM_TAG_VALID     = 0x05555555u,
     CY_CRYPTO_CCM_TAG_INVALID   = 0x0AAAAAAAu,
     /** \endcond */
@@ -1645,7 +1606,8 @@ typedef enum
 
 #endif
 
-/** \} group_crypto_cli_data_structures */
+/** \endcond */
+
 
 #if defined(__cplusplus)
 }

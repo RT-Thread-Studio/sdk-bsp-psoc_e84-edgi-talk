@@ -43,7 +43,6 @@
   @param[in]     pSrcB       points to the second input vector
   @param[in]     blockSize   number of samples in input vector
   @param[out]    pResult      mean square error
-  @return        none
  */
 
 #if !defined(ARM_MATH_AUTOVECTORIZE)
@@ -51,17 +50,17 @@
 #if defined(ARM_MATH_MVEF)
 #include "arm_helium_utils.h"
 
-void arm_mse_f32(
-    const float32_t *pSrcA,
-    const float32_t *pSrcB,
+ARM_DSP_ATTRIBUTE void arm_mse_f32(
+    const float32_t * pSrcA,
+    const float32_t * pSrcB,
     uint32_t    blockSize,
-    float32_t *pResult)
+    float32_t * pResult)
 
 {
     float32x4_t vecA, vecB;
     float32x4_t vecSum;
-    uint32_t blkCnt;
-    float32_t sum = 0.0f;
+    uint32_t blkCnt; 
+    float32_t sum = 0.0f;  
     vecSum = vdupq_n_f32(0.0f);
 
     /* Compute 4 outputs at a time */
@@ -70,7 +69,7 @@ void arm_mse_f32(
     {
         vecA = vld1q(pSrcA);
         pSrcA += 4;
-
+        
         vecB = vld1q(pSrcB);
         pSrcB += 4;
 
@@ -104,23 +103,23 @@ void arm_mse_f32(
 
 #endif
 
-#if defined(ARM_MATH_NEON)
-void arm_mse_f32(
-    const float32_t *pSrcA,
-    const float32_t *pSrcB,
+#if defined(ARM_MATH_NEON) 
+ARM_DSP_ATTRIBUTE void arm_mse_f32(
+    const float32_t * pSrcA,
+    const float32_t * pSrcB,
     uint32_t    blockSize,
-    float32_t *pResult)
+    float32_t * pResult)
 
 {
     float32x4_t vecA, vecB;
     float32x4_t vecSum;
-    uint32_t blkCnt;
+    uint32_t blkCnt; 
     float32_t inA, inB;
-    float32_t sum = 0.0f;
+    float32_t sum = 0.0f;  
     vecSum = vdupq_n_f32(0.0f);
 #if !defined(__aarch64__)
-    f32x2_t tmp = vdup_n_f32(0.0f);
-#endif
+    f32x2_t tmp = vdup_n_f32(0.0f); 
+#endif 
 
     /* Compute 4 outputs at a time */
     blkCnt = (blockSize) >> 2;
@@ -128,7 +127,7 @@ void arm_mse_f32(
     {
         vecA = vld1q_f32(pSrcA);
         pSrcA += 4;
-
+        
         vecB = vld1q_f32(pSrcB);
         pSrcB += 4;
 
@@ -147,21 +146,21 @@ void arm_mse_f32(
     tmp = vpadd_f32(vget_low_f32(vecSum), vget_high_f32(vecSum));
     sum = vget_lane_f32(tmp, 0) + vget_lane_f32(tmp, 1);
 
-#endif
+#endif 
 
     blkCnt = (blockSize) & 3;
     while (blkCnt > 0U)
     {
         /* Calculate dot product and store result in a temporary buffer. */
-        inA = *pSrcA++;
+        inA = *pSrcA++; 
         inB = *pSrcB++;
         inA = inA - inB;
         sum += inA * inA;
-
+    
         /* Decrement loop counter */
         blkCnt--;
     }
-
+    
     /* Store result in destination buffer */
     *pResult = sum / blockSize;
 
@@ -175,69 +174,69 @@ void arm_mse_f32(
 #if (!defined(ARM_MATH_MVEF) && !defined(ARM_MATH_NEON)) || defined(ARM_MATH_AUTOVECTORIZE)
 
 
-void arm_mse_f32(
-    const float32_t *pSrcA,
-    const float32_t *pSrcB,
+ARM_DSP_ATTRIBUTE void arm_mse_f32(
+    const float32_t * pSrcA,
+    const float32_t * pSrcB,
     uint32_t    blockSize,
-    float32_t *pResult)
+    float32_t * pResult)
 
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    float32_t inA, inB;
-    float32_t sum = 0.0f;                          /* Temporary return variable */
+  uint32_t blkCnt;                               /* Loop counter */
+  float32_t inA, inB;
+  float32_t sum = 0.0f;                          /* Temporary return variable */
 #if defined (ARM_MATH_LOOPUNROLL)
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = (blockSize) >> 2;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = (blockSize) >> 2;
 
-    /* First part of the processing with loop unrolling. Compute 4 outputs at a time.
-     ** a second loop below computes the remaining 1 to 3 samples. */
-    while (blkCnt > 0U)
-    {
+  /* First part of the processing with loop unrolling. Compute 4 outputs at a time.
+   ** a second loop below computes the remaining 1 to 3 samples. */
+  while (blkCnt > 0U)
+  {
 
-        inA = *pSrcA++;
-        inB = *pSrcB++;
-        inA = inA - inB;
-        sum += inA * inA;
+    inA = *pSrcA++; 
+    inB = *pSrcB++;
+    inA = inA - inB;
+    sum += inA * inA;
 
-        inA = *pSrcA++;
-        inB = *pSrcB++;
-        inA = inA - inB;
-        sum += inA * inA;
+    inA = *pSrcA++; 
+    inB = *pSrcB++;
+    inA = inA - inB;
+    sum += inA * inA;
 
-        inA = *pSrcA++;
-        inB = *pSrcB++;
-        inA = inA - inB;
-        sum += inA * inA;
+    inA = *pSrcA++; 
+    inB = *pSrcB++;
+    inA = inA - inB;
+    sum += inA * inA;
 
-        inA = *pSrcA++;
-        inB = *pSrcB++;
-        inA = inA - inB;
-        sum += inA * inA;
+    inA = *pSrcA++; 
+    inB = *pSrcB++;
+    inA = inA - inB;
+    sum += inA * inA;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = (blockSize) & 3;
+  
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = (blockSize) & 3;
 #else
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 #endif
-    while (blkCnt > 0U)
-    {
-        inA = *pSrcA++;
-        inB = *pSrcB++;
-        inA = inA - inB;
-        sum += inA * inA;
+  while (blkCnt > 0U)
+  {
+    inA = *pSrcA++; 
+    inB = *pSrcB++;
+    inA = inA - inB;
+    sum += inA * inA;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Store result in destination buffer */
-    *pResult = sum / blockSize;
+  /* Store result in destination buffer */
+  *pResult = sum / blockSize;
 }
 
 #endif /* end of test for vector instruction availability */

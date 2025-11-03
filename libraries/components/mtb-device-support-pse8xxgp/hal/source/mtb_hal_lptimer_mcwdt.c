@@ -71,14 +71,14 @@ cy_rslt_t mtb_hal_lptimer_process_interrupt(mtb_hal_lptimer_t* obj)
     }
     {
         if ((NULL != obj->callback_data.callback) &&
-                ((obj->isr_instruction & _MTB_HAL_LPTIMER_ISR_CALL_USER_CB_MASK) != 0))
+            ((obj->isr_instruction & _MTB_HAL_LPTIMER_ISR_CALL_USER_CB_MASK) != 0))
         {
             mtb_hal_lptimer_event_callback_t callback =
                 (mtb_hal_lptimer_event_callback_t)obj->callback_data.callback;
             callback(obj->callback_data.callback_arg, MTB_HAL_LPTIMER_COMPARE_MATCH);
         }
     }
-#if (_MTB_HAL_IRQ_MUXING)
+    #if (_MTB_HAL_IRQ_MUXING)
     /* Check if the event flag should have been cleared when inside a critical situation */
     if ((obj->isr_instruction & _MTB_HAL_LPTIMER_ISR_CRITICAL_SECTION_MASK) != 0)
     {
@@ -86,7 +86,7 @@ cy_rslt_t mtb_hal_lptimer_process_interrupt(mtb_hal_lptimer_t* obj)
         Cy_MCWDT_SetInterruptMask(obj->base, 0);
         obj->isr_instruction &= ~_MTB_HAL_LPTIMER_ISR_CRITICAL_SECTION_MASK;
     }
-#endif
+    #endif
     return CY_RSLT_SUCCESS;
 }
 

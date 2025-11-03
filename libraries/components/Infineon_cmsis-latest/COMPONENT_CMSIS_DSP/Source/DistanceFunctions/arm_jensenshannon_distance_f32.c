@@ -51,7 +51,7 @@ __STATIC_INLINE float32_t rel_entr(float32_t x, float32_t y)
 #include "arm_helium_utils.h"
 #include "arm_vec_math.h"
 
-float32_t arm_jensenshannon_distance_f32(const float32_t *pA, const float32_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_jensenshannon_distance_f32(const float32_t *pA,const float32_t *pB, uint32_t blockSize)
 {
     uint32_t        blkCnt;
     float32_t       tmp;
@@ -60,8 +60,7 @@ float32_t arm_jensenshannon_distance_f32(const float32_t *pA, const float32_t *p
     accumV = vdupq_n_f32(0.0f);
 
     blkCnt = blockSize >> 2;
-    while (blkCnt > 0U)
-    {
+    while (blkCnt > 0U) {
         a = vld1q(pA);
         b = vld1q(pB);
 
@@ -86,8 +85,7 @@ float32_t arm_jensenshannon_distance_f32(const float32_t *pA, const float32_t *p
      * (will be merged thru tail predication)
      */
     blkCnt = blockSize & 3;
-    if (blkCnt > 0U)
-    {
+    if (blkCnt > 0U) {
         mve_pred16_t    p0 = vctp32q(blkCnt);
 
         a = vldrwq_z_f32(pA, p0);
@@ -138,61 +136,61 @@ float32_t arm_jensenshannon_distance_f32(const float32_t *pA, const float32_t *p
  */
 
 
-float32_t arm_jensenshannon_distance_f32(const float32_t *pA, const float32_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_jensenshannon_distance_f32(const float32_t *pA,const float32_t *pB, uint32_t blockSize)
 {
-    float32_t accum, result, tmp, a, b;
+    float32_t accum, result, tmp,a,b;
     uint32_t blkCnt;
-    float32x4_t aV, bV, t, tmpV, accumV;
+    float32x4_t aV,bV,t, tmpV, accumV;
     float32x2_t accumV2;
 
-    accum = 0.0f;
+    accum = 0.0f; 
     accumV = vdupq_n_f32(0.0f);
 
     blkCnt = blockSize >> 2;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        aV = vld1q_f32(pA);
-        bV = vld1q_f32(pB);
-        t = vaddq_f32(aV, bV);
-        t = vmulq_n_f32(t, 0.5f);
+      aV = vld1q_f32(pA);
+      bV = vld1q_f32(pB);
+      t = vaddq_f32(aV,bV);
+      t = vmulq_n_f32(t, 0.5f);
 
-        tmpV = vmulq_f32(aV, vinvq_f32(t));
-        tmpV = vlogq_f32(tmpV);
-        accumV = vmlaq_f32(accumV, aV, tmpV);
-
-
-        tmpV = vmulq_f32(bV, vinvq_f32(t));
-        tmpV = vlogq_f32(tmpV);
-        accumV = vmlaq_f32(accumV, bV, tmpV);
-
-        pA += 4;
-        pB += 4;
+      tmpV = vmulq_f32(aV, vinvq_f32(t));
+      tmpV = vlogq_f32(tmpV);
+      accumV = vmlaq_f32(accumV, aV, tmpV);
 
 
-        blkCnt --;
+      tmpV = vmulq_f32(bV, vinvq_f32(t));
+      tmpV = vlogq_f32(tmpV);
+      accumV = vmlaq_f32(accumV, bV, tmpV);
+
+      pA += 4;
+      pB += 4;
+
+
+      blkCnt --;
     }
 
-    accumV2 = vpadd_f32(vget_low_f32(accumV), vget_high_f32(accumV));
+    accumV2 = vpadd_f32(vget_low_f32(accumV),vget_high_f32(accumV));
     accum = vget_lane_f32(accumV2, 0) + vget_lane_f32(accumV2, 1);
 
     blkCnt = blockSize & 3;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        a = *pA;
-        b = *pB;
-        tmp = (a + b) / 2.0f;
-        accum += rel_entr(a, tmp);
-        accum += rel_entr(b, tmp);
+      a = *pA;
+      b = *pB;
+      tmp = (a + b) / 2.0f;
+      accum += rel_entr(a, tmp);
+      accum += rel_entr(b, tmp);
 
-        pA++;
-        pB++;
+      pA++;
+      pB++;
 
-        blkCnt --;
+      blkCnt --;
     }
 
 
-    arm_sqrt_f32(accum / 2.0f, &result);
-    return (result);
+    arm_sqrt_f32(accum/2.0f, &result);
+    return(result);
 
 }
 
@@ -220,24 +218,24 @@ float32_t arm_jensenshannon_distance_f32(const float32_t *pA, const float32_t *p
  */
 
 
-float32_t arm_jensenshannon_distance_f32(const float32_t *pA, const float32_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_jensenshannon_distance_f32(const float32_t *pA,const float32_t *pB, uint32_t blockSize)
 {
-    float32_t left, right, sum, result, tmp;
+    float32_t left, right,sum, result, tmp;
     uint32_t i;
 
-    left = 0.0f;
+    left = 0.0f; 
     right = 0.0f;
-    for (i = 0; i < blockSize; i++)
+    for(i=0; i < blockSize; i++)
     {
-        tmp = (pA[i] + pB[i]) / 2.0f;
-        left  += rel_entr(pA[i], tmp);
-        right += rel_entr(pB[i], tmp);
+      tmp = (pA[i] + pB[i]) / 2.0f;
+      left  += rel_entr(pA[i], tmp);
+      right += rel_entr(pB[i], tmp);
     }
 
 
     sum = left + right;
-    arm_sqrt_f32(sum / 2.0f, &result);
-    return (result);
+    arm_sqrt_f32(sum/2.0f, &result);
+    return(result);
 
 }
 

@@ -50,7 +50,7 @@
 /**
   @brief         Householder transform of a half floating point vector.
   @param[in]     pSrc        points to the input vector.
-  @param[in]     threshold   norm2 threshold.
+  @param[in]     threshold   norm2 threshold.  
   @param[in]     blockSize   dimension of the vector space.
   @param[out]    pOut        points to the output vector.
   @return        beta        return the scaling factor beta
@@ -61,56 +61,56 @@
 
 
 
-float16_t arm_householder_f16(
-    const float16_t *pSrc,
+ARM_DSP_ATTRIBUTE float16_t arm_householder_f16(
+    const float16_t * pSrc,
     const float16_t threshold,
     uint32_t    blockSize,
-    float16_t *pOut
-)
+    float16_t * pOut
+    )
 
 {
-    uint32_t i;
-    float16_t epsilon;
-    float16_t x1norm2, alpha;
-    float16_t beta, tau, r;
+  uint32_t i;
+  float16_t epsilon;
+  float16_t x1norm2,alpha;
+  float16_t beta,tau,r;
 
-    epsilon = threshold;
+  epsilon = threshold;
 
-    alpha = pSrc[0];
+  alpha = pSrc[0];
 
-    for (i = 1; i < blockSize; i++)
+  for(i=1; i < blockSize; i++)
+  {
+    pOut[i] = pSrc[i];
+  }
+  pOut[0] = 1.0f16;
+
+  arm_dot_prod_f16(pSrc+1,pSrc+1,blockSize-1,&x1norm2);
+
+  if ((_Float16)x1norm2<=(_Float16)epsilon)
+  {
+     tau = 0.0f16;
+     memset(pOut,0,blockSize * sizeof(float16_t));
+  }
+  else
+  {
+    beta =  (_Float16)alpha * (_Float16)alpha + (_Float16)x1norm2;
+    (void)arm_sqrt_f16(beta,&beta);
+
+    if ((_Float16)alpha > 0.0f16)
     {
-        pOut[i] = pSrc[i];
+      beta = -(_Float16)beta;
     }
+
+    r = 1.0f16 / ((_Float16)alpha -(_Float16)beta);
+    arm_scale_f16(pOut,r,pOut,blockSize);
     pOut[0] = 1.0f16;
 
-    arm_dot_prod_f16(pSrc + 1, pSrc + 1, blockSize - 1, &x1norm2);
+    
+    tau = ((_Float16)beta - (_Float16)alpha) / (_Float16)beta;
 
-    if ((_Float16)x1norm2 <= (_Float16)epsilon)
-    {
-        tau = 0.0f16;
-        memset(pOut, 0, blockSize * sizeof(float16_t));
-    }
-    else
-    {
-        beta = (_Float16)alpha * (_Float16)alpha + (_Float16)x1norm2;
-        (void)arm_sqrt_f16(beta, &beta);
+  }
 
-        if ((_Float16)alpha > 0.0f16)
-        {
-            beta = -(_Float16)beta;
-        }
-
-        r = 1.0f16 / ((_Float16)alpha - (_Float16)beta);
-        arm_scale_f16(pOut, r, pOut, blockSize);
-        pOut[0] = 1.0f16;
-
-
-        tau = ((_Float16)beta - (_Float16)alpha) / (_Float16)beta;
-
-    }
-
-    return (tau);
+  return(tau);
 
 }
 

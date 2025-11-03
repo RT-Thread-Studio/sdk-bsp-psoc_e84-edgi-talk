@@ -52,75 +52,75 @@
 #include "arm_helium_utils.h"
 
 
-arm_status arm_mat_cmplx_trans_q31(const arm_matrix_instance_q31 * pSrc, arm_matrix_instance_q31 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_cmplx_trans_q31(const arm_matrix_instance_q31 * pSrc, arm_matrix_instance_q31 * pDst)
 {
     return arm_mat_cmplx_trans_32bit(pSrc->numRows, pSrc->numCols, (uint32_t *) pSrc->pData,
-                                     pDst->numRows, pDst->numCols, (uint32_t *) pDst->pData);
+                                   pDst->numRows, pDst->numCols, (uint32_t *) pDst->pData);
 }
 
 
 #else
-arm_status arm_mat_cmplx_trans_q31(
-    const arm_matrix_instance_q31 * pSrc,
-    arm_matrix_instance_q31 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_cmplx_trans_q31(
+  const arm_matrix_instance_q31 * pSrc,
+  arm_matrix_instance_q31 * pDst)
 {
-    q31_t *pIn = pSrc->pData;                      /* input data matrix pointer  */
-    q31_t *pOut = pDst->pData;                     /* output data matrix pointer  */
-    q31_t *px;                                     /* Temporary output data matrix pointer */
-    uint16_t nRows = pSrc->numRows;                /* number of nRows */
-    uint16_t nColumns = pSrc->numCols;             /* number of nColumns  */
-    uint16_t col, i = 0U, row = nRows;             /* loop counters */
-    arm_status status;                             /* status of matrix transpose */
+  q31_t *pIn = pSrc->pData;                      /* input data matrix pointer  */
+  q31_t *pOut = pDst->pData;                     /* output data matrix pointer  */
+  q31_t *px;                                     /* Temporary output data matrix pointer */
+  uint16_t nRows = pSrc->numRows;                /* number of nRows */
+  uint16_t nColumns = pSrc->numCols;             /* number of nColumns  */
+  uint16_t col, i = 0U, row = nRows;             /* loop counters */
+  arm_status status;                             /* status of matrix transpose */
 
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numCols) || (pSrc->numCols != pDst->numRows))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numCols) || (pSrc->numCols != pDst->numRows))
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 #endif /*    #ifdef ARM_MATH_MATRIX_CHECK    */
 
+  {
+    /* Matrix transpose by exchanging the rows with columns */
+    /* row loop     */
+    do
     {
-        /* Matrix transpose by exchanging the rows with columns */
-        /* row loop     */
-        do
-        {
-            /* The pointer px is set to starting address of the column being processed */
-            px = pOut + CMPLX_DIM * i;
+      /* The pointer px is set to starting address of the column being processed */
+      px = pOut + CMPLX_DIM * i;
 
-            /* Initialize column loop counter */
-            col = nColumns;
+      /* Initialize column loop counter */
+      col = nColumns;
 
-            while (col > 0U)
-            {
-                /* Read and store the input element in the destination */
-                px[0] = *pIn++; // real
-                px[1] = *pIn++; // imag
+      while (col > 0U)
+      {
+        /* Read and store the input element in the destination */
+        px[0] = *pIn++; // real
+        px[1] = *pIn++; // imag
 
-                /* Update the pointer px to point to the next row of the transposed matrix */
-                px += CMPLX_DIM * nRows;
+        /* Update the pointer px to point to the next row of the transposed matrix */
+        px += CMPLX_DIM * nRows;
 
-                /* Decrement the column loop counter */
-                col--;
-            }
+        /* Decrement the column loop counter */
+        col--;
+      }
 
-            i++;
+      i++;
 
-            /* Decrement the row loop counter */
-            row--;
+      /* Decrement the row loop counter */
+      row--;
 
-        }
-        while (row > 0U);            /* row loop end */
-
-        /* set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
     }
-    /* Return to application */
-    return (status);
+    while (row > 0U);            /* row loop end */
+
+    /* set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+  /* Return to application */
+  return (status);
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

@@ -29,17 +29,17 @@
     (defined(FLASHC_BASE) && (FLASHC_BASE > 0)) || \
     (defined(CPUSS_FLASHC_PRESENT) && (CPUSS_FLASHC_PRESENT) > 0))
 #if !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_FLASH)
-    #define _MTB_HAL_DRIVER_AVAILABLE_NVM_FLASH (1u)
+#define _MTB_HAL_DRIVER_AVAILABLE_NVM_FLASH (1u)
 #endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_NVM_FLASH)
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_NVM)
-    /** Macro specifying whether the NVM driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_NVM (1u)
+/** Macro specifying whether the NVM driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_NVM (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_NVM)
 
 /** \} group_hal_availability */

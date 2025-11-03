@@ -42,28 +42,27 @@
   @param[in]     value      input value to be filled
   @param[out]    pDst       points to output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
-void arm_fill_f64(
-    float64_t value,
-    float64_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_fill_f64(
+  float64_t value,
+  float64_t * pDst,
+  uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+  uint32_t blkCnt;                               /* Loop counter */
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
-    while (blkCnt > 0U)
-    {
-        /* C = value */
+  while (blkCnt > 0U)
+  {
+    /* C = value */
 
-        /* Fill value in destination buffer */
-        *pDst++ = value;
+    /* Fill value in destination buffer */
+    *pDst++ = value;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 }
 
 /**

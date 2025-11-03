@@ -38,13 +38,13 @@ extern "C" {
 #endif
 
 void Cy_Crypto_Core_V2_MemCpy(CRYPTO_Type *base,
-                              void *dst, void const *src, uint16_t size);
+                               void* dst, void const *src, uint16_t size);
 void Cy_Crypto_Core_V2_MemSet(CRYPTO_Type *base,
-                              void *dst, uint8_t data, uint16_t size);
+                               void* dst, uint8_t data, uint16_t size);
 uint32_t Cy_Crypto_Core_V2_MemCmp(CRYPTO_Type *base,
-                                  void const *src0, void const *src1, uint16_t size);
+                               void const *src0, void const *src1, uint16_t size);
 void Cy_Crypto_Core_V2_MemXor(CRYPTO_Type *base, void* dst,
-                              void const *src0, void const *src1, uint16_t size);
+                               void const *src0, void const *src1, uint16_t size);
 
 #if defined(__cplusplus)
 }

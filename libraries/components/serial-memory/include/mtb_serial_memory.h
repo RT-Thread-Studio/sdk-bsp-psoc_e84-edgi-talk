@@ -88,15 +88,15 @@
 #include "cy_pdl.h"
 #include "mtb_hal.h"
 #if defined(MTB_SERIAL_MEMORY_THREAD_SAFE)
-    #include <stdlib.h>
-    #include "cyabs_rtos.h"
+#include <stdlib.h>
+#include "cyabs_rtos.h"
 #endif /* #if defined(MTB_SERIAL_MEMORY_THREAD_SAFE) */
 
 #ifdef DOXYGEN
-    /** Enables thread-safety for use with multi-threaded RTOS environment. */
-    #define MTB_SERIAL_MEMORY_THREAD_SAFE
-    /** The MXSMIF IP is available. */
-    #define CY_IP_MXSMIF
+/** Enables thread-safety for use with multi-threaded RTOS environment. */
+#define MTB_SERIAL_MEMORY_THREAD_SAFE
+/** The MXSMIF IP is available. */
+#define CY_IP_MXSMIF
 #endif /* #ifdef DOXYGEN */
 
 #ifdef CY_IP_MXSMIF
@@ -104,6 +104,9 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
+
+/** The major version of the serial memory asset */
+#define MTB_SERIAL_MEMORY_VERSION_MAJOR               (3U)
 
 /** The function or operation is not supported on the target or the memory */
 #define MTB_RSLT_SERIAL_MEMORY_ERR_UNSUPPORTED \
@@ -148,19 +151,18 @@ typedef enum
  */
 typedef struct
 {
-    uint32_t smif_instance;
     uint32_t smif_active_slot;
-    SMIF_Type                          *base;
-    const mtb_hal_clock_t              *clock;
-    cy_stc_smif_context_t *context;
+    SMIF_Type*                          base;
+    const mtb_hal_clock_t*              clock;
     uint32_t configured_csel;
     uint32_t chip_select;
-    const cy_stc_smif_block_config_t *smif_block_config;
     uint32_t status_flags;
+    cy_stc_smif_mem_context_t* mem_context;
+    cy_stc_smif_mem_info_t* mem_info;
 
-#if defined(MTB_SERIAL_MEMORY_THREAD_SAFE)
+    #if defined(MTB_SERIAL_MEMORY_THREAD_SAFE)
     cy_mutex_t mutex;
-#endif /* #if defined(MTB_SERIAL_MEMORY_THREAD_SAFE) */
+    #endif /* #if defined(MTB_SERIAL_MEMORY_THREAD_SAFE) */
 } mtb_serial_memory_t;
 
 
@@ -175,23 +177,56 @@ typedef struct
  * because the mtb_serial_memory_setup() function might be executed from the
  * external memory itself, and resetting the memory controller could disrupt
  * the communication with the memory.
+ * This function initializes the slots of the memory device in the SMIF configuration. It's security
+ * aware and is a wrapper around Cy_SMIF_MemNumInit, and gather all information about the memory
+ * size, erase and program size to be used in subsequent serial memory calls.
+ * It can either be called in a secure partition or in the non-secure partition
+ * if the peripheral itself is not secured.
  *
  * \param obj Pointer to the mtb_serial_memory_t object to setup
  * \param smif_active_chip The slave select line to configure as active
  * \param base Pointer to the SMIf base address
  * \param clock Pointer to the clock object
- * \param context Pointer to the SMIF ip context structure
+ * \param mem_context Pointer to the SMIF Device internal context data
+ * \param mem_info Pointer to the SMIF memory info structure
  * \param block_config Pointer to the SMIF block configuration structure
  * \returns CY_RSLT_SUCCESS if the setup was successful, an error code
  *          otherwise.
  */
 cy_rslt_t mtb_serial_memory_setup(
-    mtb_serial_memory_t *obj,
+    mtb_serial_memory_t* obj,
     mtb_serial_memory_chip_select_t smif_active_chip,
     SMIF_Type* base,
-    const mtb_hal_clock_t *clock,
-    cy_stc_smif_context_t *context,
-    const cy_stc_smif_block_config_t *block_config);
+    const mtb_hal_clock_t* clock,
+    cy_stc_smif_mem_context_t* mem_context,
+    cy_stc_smif_mem_info_t* mem_info,
+    const cy_stc_smif_block_config_t* block_config);
+
+
+#if !defined(COMPONENT_SECURE_DEVICE)
+/**
+ * \brief Sets up the serial memory on non-secure world if the peripheral is secure
+ *
+ * \note This function is to be called from the non secure partition in trustzone
+ * devices (after the secure one has successfully called \ref mtb_serial_memory_setup )
+ * to set up the context and gather all information about the memory size,
+ * erase and program size to be used in subsequent serial memory calls.
+ *
+ * \param obj Pointer to the mtb_serial_memory_t object to setup
+ * \param smif_active_chip The slave select line to configure as active
+ * \param base Pointer to the SMIf base address
+ * \param mem_context Pointer to the SMIF Device internal context data
+ * \param mem_info Pointer to the SMIF memory info structure
+ * \returns CY_RSLT_SUCCESS if the setup was successful, an error code
+ *          otherwise.
+ */
+cy_rslt_t mtb_serial_memory_setup_nonsecure(
+    mtb_serial_memory_t* obj,
+    mtb_serial_memory_chip_select_t smif_active_chip,
+    SMIF_Type* base,
+    cy_stc_smif_mem_context_t* mem_context,
+    cy_stc_smif_mem_info_t* mem_info);
+#endif
 
 
 /**
@@ -227,7 +262,7 @@ size_t mtb_serial_memory_get_prog_size(mtb_serial_memory_t* obj, uint32_t addr);
  * \returns Starting address of the sector
  */
 __STATIC_INLINE uint32_t mtb_serial_memory_get_sector_start_address(mtb_serial_memory_t* obj,
-        uint32_t addr)
+                                                                    uint32_t addr)
 {
     return (addr & ~(mtb_serial_memory_get_erase_size(obj, addr) - 1U));
 }
@@ -247,7 +282,7 @@ __STATIC_INLINE uint32_t mtb_serial_memory_get_sector_start_address(mtb_serial_m
  * \returns CY_RSLT_SUCCESS if the read was successful, an error code otherwise.
  */
 cy_rslt_t mtb_serial_memory_read(mtb_serial_memory_t* obj, uint32_t addr, size_t length,
-                                 uint8_t *buf);
+                                 uint8_t* buf);
 
 /**
  * \brief Writes the data to the serial memory. The program area
@@ -265,7 +300,7 @@ cy_rslt_t mtb_serial_memory_read(mtb_serial_memory_t* obj, uint32_t addr, size_t
  *          otherwise.
  */
 cy_rslt_t mtb_serial_memory_write(mtb_serial_memory_t* obj, uint32_t addr, size_t length,
-                                  const uint8_t *buf);
+                                  const uint8_t* buf);
 
 /**
  * \brief Erases the serial memory, uses chip erase command when
@@ -304,7 +339,7 @@ cy_rslt_t mtb_serial_memory_enable_xip(mtb_serial_memory_t* obj, bool enable);
  * with \ref mtb_serial_memory_setup .
  */
 cy_rslt_t mtb_serial_memory_set_active_chip(mtb_serial_memory_t* obj,
-        mtb_serial_memory_chip_select_t chip_select);
+                                            mtb_serial_memory_chip_select_t chip_select);
 
 /**
  * \brief Returns the number of memory devices successfully initialized.

@@ -11,7 +11,6 @@
     "path": "prot_fw_policy_dlm.hex"
   },
   "allowed_lcs": [
-    "NORMAL_PROVISIONED",
-    "SECURE"
+    "NORMAL_PROVISIONED"
   ]
 }

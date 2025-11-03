@@ -38,9 +38,8 @@
 /**
   * \brief Cortex-M0+ Secured CPU subsystem (M0SECCPUSS_STATUS)
   */
-typedef struct
-{
-    __IM uint32_t VERSION;                       /*!< 0x00000000 IP Version */
+typedef struct {
+   __IM uint32_t VERSION;                       /*!< 0x00000000 IP Version */
 } M0SECCPUSS_STATUS_Type;                       /*!< Size = 4 (0x4) */
 
 

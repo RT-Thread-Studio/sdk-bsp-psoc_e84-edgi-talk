@@ -39,167 +39,165 @@
 /**
   * \brief registers in I3C IP core (I3C_CORE)
   */
-typedef struct
-{
-    __IOM uint32_t DEVICE_CTRL;                   /*!< 0x00000000 Device Control Register */
-    __IOM uint32_t DEVICE_ADDR;                   /*!< 0x00000004 Device Address Register */
-    __IM uint32_t RESERVED;
-    __OM uint32_t COMMAND_QUEUE_PORT;            /*!< 0x0000000C COMMAND_QUEUE_PORT */
-    __IM uint32_t RESPONSE_QUEUE_PORT;           /*!< 0x00000010 RESPONSE_QUEUE_PORT */
-    __IOM uint32_t TX_RX_DATA_PORT;               /*!< 0x00000014 Transmit/Receive Data Port Register */
-    __IM uint32_t IBI_QUEUE_DATA;                /*!< 0x00000018 In-Band Interrupt Queue Data Register */
-    __IOM uint32_t QUEUE_THLD_CTRL;               /*!< 0x0000001C Queue Threshold Control Register */
-    __IOM uint32_t DATA_BUFFER_THLD_CTRL;         /*!< 0x00000020 Data Buffer Threshold Control Register */
-    __IOM uint32_t IBI_QUEUE_CTRL;                /*!< 0x00000024 IBI Queue Control Register */
-    __IM uint32_t RESERVED1[3];
-    __IOM uint32_t RESET_CTRL;                    /*!< 0x00000034 Reset Control Register */
-    __IOM uint32_t TGT_EVENT_STATUS;              /*!< 0x00000038 Target Event Status Register */
-    __IOM uint32_t INTR_STATUS;                   /*!< 0x0000003C Reset Control Register */
-    __IOM uint32_t INTR_STATUS_EN;                /*!< 0x00000040 Interrupt Status Enable Register. */
-    __IOM uint32_t INTR_SIGNAL_EN;                /*!< 0x00000044 Interrupt Signal Enable Register */
-    __OM uint32_t INTR_FORCE;                    /*!< 0x00000048 Interrupt Force Enable Register */
-    __IM uint32_t QUEUE_STATUS_LEVEL;            /*!< 0x0000004C Queue Status Level Register. */
-    __IM uint32_t DATA_BUFFER_STATUS_LEVEL;      /*!< 0x00000050 Data Buffer Status Level Register. */
-    __IM uint32_t PRESENT_STATE;                 /*!< 0x00000054 Present State Register */
-    __IM uint32_t CCC_DEVICE_STATUS;             /*!< 0x00000058 Device Operating Status Register. */
-    __IM uint32_t DEVICE_ADDR_TABLE_POINTER;     /*!< 0x0000005C Pointer for Device Address Table */
-    __IOM uint32_t DEV_CHAR_TABLE_POINTER;        /*!< 0x00000060 Pointer for Device Characteristics Table */
-    __IM uint32_t RESERVED2[2];
-    __IM uint32_t VENDOR_SPECIFIC_REG_POINTER;   /*!< 0x0000006C Pointer for Vendor Specific Registers. */
-    __IOM uint32_t TGT_MIPI_ID_VALUE;             /*!< 0x00000070 I3C  MIPI Manufacturer ID Register */
-    __IOM uint32_t TGT_PID_VALUE;                 /*!< 0x00000074 I3C Normal Provisional ID Register */
-    __IOM uint32_t TGT_CHAR_CTRL;                 /*!< 0x00000078 I3C Target Characteristic Register. */
-    __IM uint32_t TGT_MAX_LEN;                   /*!< 0x0000007C I3C Max Write/Read Length Register. */
-    __IM uint32_t MAX_READ_TURNAROUND;           /*!< 0x00000080 MXDS Maximum Read Turnaround Time. */
-    __IOM uint32_t MAX_DATA_SPEED;                /*!< 0x00000084 Maximum Data Speed Register */
-    __IM uint32_t RESERVED3;
-    __IOM uint32_t TGT_INTR_REQ;                  /*!< 0x0000008C Target Interrupt Request Register */
-    __IM uint32_t RESERVED4;
-    __IOM uint32_t TGT_TIR_DATA;                  /*!< 0x00000094 Target Interrupt Request Data Register */
-    __IM uint32_t TGT_IBI_RESP;                  /*!< 0x00000098 Target IBI Response Register */
-    __IM uint32_t RESERVED5[5];
-    __IOM uint32_t DEVICE_CTRL_EXTENDED;          /*!< 0x000000B0 Device Control Extended Register */
-    __IOM uint32_t SCL_I3C_OD_TIMING;             /*!< 0x000000B4 SCL I3C Open Drain Timing Register */
-    __IOM uint32_t SCL_I3C_PP_TIMING;             /*!< 0x000000B8 SCL I3C Push Pull Timing Register */
-    __IOM uint32_t SCL_I2C_FM_TIMING;             /*!< 0x000000BC SCL I2C Fast Mode Timing Register */
-    __IOM uint32_t SCL_I2C_FMP_TIMING;            /*!< 0x000000C0 SCL I2C Fast Mode Plus Timing Register */
-    __IM uint32_t RESERVED6;
-    __IOM uint32_t SCL_EXT_LCNT_TIMING;           /*!< 0x000000C8 SCL Extended Low Count Timing Register. */
-    __IOM uint32_t SCL_EXT_TERMN_LCNT_TIMING;     /*!< 0x000000CC SCL Termination Bit Low Count Timing Register */
-    __IOM uint32_t SDA_HOLD_SWITCH_DLY_TIMING;    /*!< 0x000000D0 SDA Hold and Mode Switch Delay Timing Register */
-    __IOM uint32_t BUS_FREE_AVAIL_TIMING;         /*!< 0x000000D4 Bus Free and Available Timing Register */
-    __IOM uint32_t BUS_IDLE_TIMING;               /*!< 0x000000D8 Bus Idle Timing Register */
-    __IOM uint32_t SCL_LOW_CTR_EXT_TIMEOUT;       /*!< 0x000000DC SCL LOW Controller Timeout */
-    __IM uint32_t RESERVED7[3];
-    __IOM uint32_t RELEASE_SDA_TIMING;            /*!< 0x000000EC Release SDA count value. */
-    __IM uint32_t RESERVED8[16];
-    __OM uint32_t EXT_TX_DATA_PORT_0;            /*!< 0x00000130 DWC_mipi_i3c Directed read Vendor-specific CCC 0 TX Data Port
+typedef struct {
+  __IOM uint32_t DEVICE_CTRL;                   /*!< 0x00000000 Device Control Register */
+  __IOM uint32_t DEVICE_ADDR;                   /*!< 0x00000004 Device Address Register */
+   __IM uint32_t RESERVED;
+   __OM uint32_t COMMAND_QUEUE_PORT;            /*!< 0x0000000C COMMAND_QUEUE_PORT */
+   __IM uint32_t RESPONSE_QUEUE_PORT;           /*!< 0x00000010 RESPONSE_QUEUE_PORT */
+  __IOM uint32_t TX_RX_DATA_PORT;               /*!< 0x00000014 Transmit/Receive Data Port Register */
+   __IM uint32_t IBI_QUEUE_DATA;                /*!< 0x00000018 In-Band Interrupt Queue Data Register */
+  __IOM uint32_t QUEUE_THLD_CTRL;               /*!< 0x0000001C Queue Threshold Control Register */
+  __IOM uint32_t DATA_BUFFER_THLD_CTRL;         /*!< 0x00000020 Data Buffer Threshold Control Register */
+  __IOM uint32_t IBI_QUEUE_CTRL;                /*!< 0x00000024 IBI Queue Control Register */
+   __IM uint32_t RESERVED1[3];
+  __IOM uint32_t RESET_CTRL;                    /*!< 0x00000034 Reset Control Register */
+  __IOM uint32_t TGT_EVENT_STATUS;              /*!< 0x00000038 Target Event Status Register */
+  __IOM uint32_t INTR_STATUS;                   /*!< 0x0000003C Reset Control Register */
+  __IOM uint32_t INTR_STATUS_EN;                /*!< 0x00000040 Interrupt Status Enable Register. */
+  __IOM uint32_t INTR_SIGNAL_EN;                /*!< 0x00000044 Interrupt Signal Enable Register */
+   __OM uint32_t INTR_FORCE;                    /*!< 0x00000048 Interrupt Force Enable Register */
+   __IM uint32_t QUEUE_STATUS_LEVEL;            /*!< 0x0000004C Queue Status Level Register. */
+   __IM uint32_t DATA_BUFFER_STATUS_LEVEL;      /*!< 0x00000050 Data Buffer Status Level Register. */
+   __IM uint32_t PRESENT_STATE;                 /*!< 0x00000054 Present State Register */
+   __IM uint32_t CCC_DEVICE_STATUS;             /*!< 0x00000058 Device Operating Status Register. */
+   __IM uint32_t DEVICE_ADDR_TABLE_POINTER;     /*!< 0x0000005C Pointer for Device Address Table */
+  __IOM uint32_t DEV_CHAR_TABLE_POINTER;        /*!< 0x00000060 Pointer for Device Characteristics Table */
+   __IM uint32_t RESERVED2[2];
+   __IM uint32_t VENDOR_SPECIFIC_REG_POINTER;   /*!< 0x0000006C Pointer for Vendor Specific Registers. */
+  __IOM uint32_t TGT_MIPI_ID_VALUE;             /*!< 0x00000070 I3C  MIPI Manufacturer ID Register */
+  __IOM uint32_t TGT_PID_VALUE;                 /*!< 0x00000074 I3C Normal Provisional ID Register */
+  __IOM uint32_t TGT_CHAR_CTRL;                 /*!< 0x00000078 I3C Target Characteristic Register. */
+   __IM uint32_t TGT_MAX_LEN;                   /*!< 0x0000007C I3C Max Write/Read Length Register. */
+   __IM uint32_t MAX_READ_TURNAROUND;           /*!< 0x00000080 MXDS Maximum Read Turnaround Time. */
+  __IOM uint32_t MAX_DATA_SPEED;                /*!< 0x00000084 Maximum Data Speed Register */
+   __IM uint32_t RESERVED3;
+  __IOM uint32_t TGT_INTR_REQ;                  /*!< 0x0000008C Target Interrupt Request Register */
+   __IM uint32_t RESERVED4;
+  __IOM uint32_t TGT_TIR_DATA;                  /*!< 0x00000094 Target Interrupt Request Data Register */
+   __IM uint32_t TGT_IBI_RESP;                  /*!< 0x00000098 Target IBI Response Register */
+   __IM uint32_t RESERVED5[5];
+  __IOM uint32_t DEVICE_CTRL_EXTENDED;          /*!< 0x000000B0 Device Control Extended Register */
+  __IOM uint32_t SCL_I3C_OD_TIMING;             /*!< 0x000000B4 SCL I3C Open Drain Timing Register */
+  __IOM uint32_t SCL_I3C_PP_TIMING;             /*!< 0x000000B8 SCL I3C Push Pull Timing Register */
+  __IOM uint32_t SCL_I2C_FM_TIMING;             /*!< 0x000000BC SCL I2C Fast Mode Timing Register */
+  __IOM uint32_t SCL_I2C_FMP_TIMING;            /*!< 0x000000C0 SCL I2C Fast Mode Plus Timing Register */
+   __IM uint32_t RESERVED6;
+  __IOM uint32_t SCL_EXT_LCNT_TIMING;           /*!< 0x000000C8 SCL Extended Low Count Timing Register. */
+  __IOM uint32_t SCL_EXT_TERMN_LCNT_TIMING;     /*!< 0x000000CC SCL Termination Bit Low Count Timing Register */
+  __IOM uint32_t SDA_HOLD_SWITCH_DLY_TIMING;    /*!< 0x000000D0 SDA Hold and Mode Switch Delay Timing Register */
+  __IOM uint32_t BUS_FREE_AVAIL_TIMING;         /*!< 0x000000D4 Bus Free and Available Timing Register */
+  __IOM uint32_t BUS_IDLE_TIMING;               /*!< 0x000000D8 Bus Idle Timing Register */
+  __IOM uint32_t SCL_LOW_CTR_EXT_TIMEOUT;       /*!< 0x000000DC SCL LOW Controller Timeout */
+   __IM uint32_t RESERVED7[3];
+  __IOM uint32_t RELEASE_SDA_TIMING;            /*!< 0x000000EC Release SDA count value. */
+   __IM uint32_t RESERVED8[16];
+   __OM uint32_t EXT_TX_DATA_PORT_0;            /*!< 0x00000130 DWC_mipi_i3c Directed read Vendor-specific CCC 0 TX Data Port
                                                                 Register */
-    __OM uint32_t EXT_TX_DATA_PORT_1;            /*!< 0x00000134 DWC_mipi_i3c Directed read Vendor-specific CCC 1 TX Data Port
+   __OM uint32_t EXT_TX_DATA_PORT_1;            /*!< 0x00000134 DWC_mipi_i3c Directed read Vendor-specific CCC 1 TX Data Port
                                                                 Register */
-    __OM uint32_t EXT_TX_DATA_PORT_2;            /*!< 0x00000138 DWC_mipi_i3c Directed read Vendor-specific CCC 2 TX Data Port
+   __OM uint32_t EXT_TX_DATA_PORT_2;            /*!< 0x00000138 DWC_mipi_i3c Directed read Vendor-specific CCC 2 TX Data Port
                                                                 Register */
-    __OM uint32_t EXT_TX_DATA_PORT_3;            /*!< 0x0000013C DWC_mipi_i3c Directed read Vendor-specific CCC 3 TX Data Port
+   __OM uint32_t EXT_TX_DATA_PORT_3;            /*!< 0x0000013C DWC_mipi_i3c Directed read Vendor-specific CCC 3 TX Data Port
                                                                 Register */
-    __IM uint32_t RESERVED9[5];
-    __IM uint32_t EXT_0_1_DATA_BUF_STS_LEVEL;    /*!< 0x00000154 Vendor-specific CCC types 0 and 1 Data Buffer Status Level
+   __IM uint32_t RESERVED9[5];
+   __IM uint32_t EXT_0_1_DATA_BUF_STS_LEVEL;    /*!< 0x00000154 Vendor-specific CCC types 0 and 1 Data Buffer Status Level
                                                                 Register */
-    __IM uint32_t EXT_2_3_DATA_BUF_STS_LEVEL;    /*!< 0x00000158 Vendor-specific CCC types 2 and 3 Data Buffer Status Level
+   __IM uint32_t EXT_2_3_DATA_BUF_STS_LEVEL;    /*!< 0x00000158 Vendor-specific CCC types 2 and 3 Data Buffer Status Level
                                                                 Register */
-    __IM uint32_t RESERVED10[2];
-    __IOM uint32_t EXT_CMD_REG_0;                 /*!< 0x00000164 TID, CCC type value and Defining Byte of Vendor-specific CCC 0
+   __IM uint32_t RESERVED10[2];
+  __IOM uint32_t EXT_CMD_REG_0;                 /*!< 0x00000164 TID, CCC type value and Defining Byte of Vendor-specific CCC 0
                                                                 Register */
-    __IOM uint32_t EXT_CMD_REG_1;                 /*!< 0x00000168 TID, CCC type value and Defining Byte of Vendor-specific CCC 1
+  __IOM uint32_t EXT_CMD_REG_1;                 /*!< 0x00000168 TID, CCC type value and Defining Byte of Vendor-specific CCC 1
                                                                 Register */
-    __IOM uint32_t EXT_CMD_REG_2;                 /*!< 0x0000016C TID, CCC type value and Defining Byte of Vendor-specific CCC 2
+  __IOM uint32_t EXT_CMD_REG_2;                 /*!< 0x0000016C TID, CCC type value and Defining Byte of Vendor-specific CCC 2
                                                                 Register */
-    __IOM uint32_t EXT_CMD_REG_3;                 /*!< 0x00000170 TID, CCC type value and Defining Byte of Vendor-specific CCC 3
+  __IOM uint32_t EXT_CMD_REG_3;                 /*!< 0x00000170 TID, CCC type value and Defining Byte of Vendor-specific CCC 3
                                                                 Register */
-    __IM uint32_t RESERVED11[4];
-    __IOM uint32_t EXT_TX_QUEUE_RESET_CTRL;       /*!< 0x00000184 Individual Vendor CCC buffer reset. */
-    __IM uint32_t RESERVED12[30];
-    __IM uint32_t DEV_CHAR_TABLE1_LOC1;          /*!< 0x00000200 Device Characteristic Table Location-1 of Device1,
+   __IM uint32_t RESERVED11[4];
+  __IOM uint32_t EXT_TX_QUEUE_RESET_CTRL;       /*!< 0x00000184 Individual Vendor CCC buffer reset. */
+   __IM uint32_t RESERVED12[30];
+   __IM uint32_t DEV_CHAR_TABLE1_LOC1;          /*!< 0x00000200 Device Characteristic Table Location-1 of Device1,
                                                                 MSB_PROVISIONAL_ID */
-    __IM uint32_t DEV_CHAR_TABLE1_LOC2;          /*!< 0x00000204 Device Characteristic Table Location-2 of Device1,
+   __IM uint32_t DEV_CHAR_TABLE1_LOC2;          /*!< 0x00000204 Device Characteristic Table Location-2 of Device1,
                                                                 LSB_PROVISIONAL_ID */
-    __IM uint32_t DEV_CHAR_TABLE1_LOC3;          /*!< 0x00000208 Device Characteristic Table Location-3 of Device1, BCR, DCR */
-    __IM uint32_t DEV_CHAR_TABLE1_LOC4;          /*!< 0x0000020C Device Characteristic Table Location-4 of Device1,
+   __IM uint32_t DEV_CHAR_TABLE1_LOC3;          /*!< 0x00000208 Device Characteristic Table Location-3 of Device1, BCR, DCR */
+   __IM uint32_t DEV_CHAR_TABLE1_LOC4;          /*!< 0x0000020C Device Characteristic Table Location-4 of Device1,
                                                                 DEV_DYNAMIC_ADDR */
-    __IM uint32_t DEV_CHAR_TABLE2_LOC1;          /*!< 0x00000210 Device Characteristic Table Location-1 of Device2 */
-    __IM uint32_t DEV_CHAR_TABLE2_LOC2;          /*!< 0x00000214 Device Characteristic Table Location-2 of Device2 */
-    __IM uint32_t DEV_CHAR_TABLE2_LOC3;          /*!< 0x00000218 Device Characteristic Table Location-3 of Device2 */
-    __IM uint32_t DEV_CHAR_TABLE2_LOC4;          /*!< 0x0000021C Device Characteristic Table Location-4 of Device2 */
-    __IM uint32_t DEV_CHAR_TABLE3_LOC1;          /*!< 0x00000220 Device Characteristic Table Location-1 of Device3 */
-    __IM uint32_t DEV_CHAR_TABLE3_LOC2;          /*!< 0x00000224 Device Characteristic Table Location-2 of Device3 */
-    __IM uint32_t DEV_CHAR_TABLE3_LOC3;          /*!< 0x00000228 Device Characteristic Table Location-3 of Device3 */
-    __IM uint32_t DEV_CHAR_TABLE3_LOC4;          /*!< 0x0000022C Device Characteristic Table Location-4 of Device3 */
-    __IM uint32_t DEV_CHAR_TABLE4_LOC1;          /*!< 0x00000230 Device Characteristic Table Location-1 of Device4 */
-    __IM uint32_t DEV_CHAR_TABLE4_LOC2;          /*!< 0x00000234 Device Characteristic Table Location-2 of Device4 */
-    __IM uint32_t DEV_CHAR_TABLE4_LOC3;          /*!< 0x00000238 Device Characteristic Table Location-3 of Device4 */
-    __IM uint32_t DEV_CHAR_TABLE4_LOC4;          /*!< 0x0000023C Device Characteristic Table Location-4 of Device4 */
-    __IM uint32_t DEV_CHAR_TABLE5_LOC1;          /*!< 0x00000240 Device Characteristic Table Location-1 of Device5 */
-    __IM uint32_t DEV_CHAR_TABLE5_LOC2;          /*!< 0x00000244 Device Characteristic Table Location-4 of Device10 */
-    __IM uint32_t DEV_CHAR_TABLE5_LOC3;          /*!< 0x00000248 Device Characteristic Table Location-3 of Device5 */
-    __IM uint32_t DEV_CHAR_TABLE5_LOC4;          /*!< 0x0000024C Device Characteristic Table Location-4 of Device5 */
-    __IM uint32_t DEV_CHAR_TABLE6_LOC1;          /*!< 0x00000250 Device Characteristic Table Location-1 of Device6 */
-    __IM uint32_t DEV_CHAR_TABLE6_LOC2;          /*!< 0x00000254 Device Characteristic Table Location-2 of Device6 */
-    __IM uint32_t DEV_CHAR_TABLE6_LOC3;          /*!< 0x00000258 Device Characteristic Table Location-3 of Device6 */
-    __IM uint32_t DEV_CHAR_TABLE6_LOC4;          /*!< 0x0000025C Device Characteristic Table Location-4 of Device6 */
-    __IM uint32_t DEV_CHAR_TABLE7_LOC1;          /*!< 0x00000260 Device Address Table of Device3 */
-    __IM uint32_t DEV_CHAR_TABLE7_LOC2;          /*!< 0x00000264 Device Characteristic Table Location-2 of Device7 */
-    __IM uint32_t DEV_CHAR_TABLE7_LOC3;          /*!< 0x00000268 Device Characteristic Table Location-3 of Device7 */
-    __IM uint32_t DEV_CHAR_TABLE7_LOC4;          /*!< 0x0000026C Device Characteristic Table Location-4 of Device7 */
-    __IM uint32_t DEV_CHAR_TABLE8_LOC1;          /*!< 0x00000270 Device Characteristic Table Location-1 of Device8 */
-    __IM uint32_t DEV_CHAR_TABLE8_LOC2;          /*!< 0x00000274 Device Characteristic Table Location-2 of Device8 */
-    __IM uint32_t DEV_CHAR_TABLE8_LOC3;          /*!< 0x00000278 Device Characteristic Table Location-3 of Device8 */
-    __IM uint32_t DEV_CHAR_TABLE8_LOC4;          /*!< 0x0000027C Device Address Table of Device10 */
-    __IM uint32_t DEV_CHAR_TABLE9_LOC1;          /*!< 0x00000280 Device Characteristic Table Location-1 of Device9 */
-    __IM uint32_t DEV_CHAR_TABLE9_LOC2;          /*!< 0x00000284 Device Characteristic Table Location-2 of Device9 */
-    __IM uint32_t DEV_CHAR_TABLE9_LOC3;          /*!< 0x00000288 Device Characteristic Table Location-3 of Device9 */
-    __IM uint32_t DEV_CHAR_TABLE9_LOC4;          /*!< 0x0000028C Device Characteristic Table Location-4 of Device9 */
-    __IM uint32_t DEV_CHAR_TABLE10_LOC1;         /*!< 0x00000290 Device Characteristic Table Location-1 of Device10 */
-    __IM uint32_t DEV_CHAR_TABLE10_LOC2;         /*!< 0x00000294 Device Characteristic Table Location-2 of Device10 */
-    __IM uint32_t DEV_CHAR_TABLE10_LOC3;         /*!< 0x00000298 Device Characteristic Table Location-3 of Device10 */
-    __IM uint32_t DEV_CHAR_TABLE10_LOC4;         /*!< 0x0000029C Device Characteristic Table Location-4 of Device10 */
-    __IM uint32_t DEV_CHAR_TABLE11_LOC1;         /*!< 0x000002A0 Device Characteristic Table Location-1 of Device11 */
-    __IM uint32_t DEV_CHAR_TABLE11_LOC2;         /*!< 0x000002A4 0 */
-    __IM uint32_t DEV_CHAR_TABLE11_LOC3;         /*!< 0x000002A8 Device Characteristic Table Location-3 of Device11 */
-    __IM uint32_t DEV_CHAR_TABLE11_LOC4;         /*!< 0x000002AC Device Characteristic Table Location-4 of Device11 */
-    __IM uint32_t RESERVED13[4];
-    __IOM uint32_t DEV_ADDR_TABLE_LOC1;           /*!< 0x000002C0 Device Address Table of Device1 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC2;           /*!< 0x000002C4 Device Address Table of Device2 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC3;           /*!< 0x000002C8 Device Address Table of Device3 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC4;           /*!< 0x000002CC Device Address Table of Device4 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC5;           /*!< 0x000002D0 Device Address Table of Device5 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC6;           /*!< 0x000002D4 Device Address Table of Device6 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC7;           /*!< 0x000002D8 Device Address Table of Device7 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC8;           /*!< 0x000002DC Device Address Table of Device8 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC9;           /*!< 0x000002E0 Device Address Table of Device9 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC10;          /*!< 0x000002E4 Device Address Table of Device10 */
-    __IOM uint32_t DEV_ADDR_TABLE_LOC11;          /*!< 0x000002E8 Device Address Table of Device11 */
-    __IM uint32_t RESERVED14[5];
+   __IM uint32_t DEV_CHAR_TABLE2_LOC1;          /*!< 0x00000210 Device Characteristic Table Location-1 of Device2 */
+   __IM uint32_t DEV_CHAR_TABLE2_LOC2;          /*!< 0x00000214 Device Characteristic Table Location-2 of Device2 */
+   __IM uint32_t DEV_CHAR_TABLE2_LOC3;          /*!< 0x00000218 Device Characteristic Table Location-3 of Device2 */
+   __IM uint32_t DEV_CHAR_TABLE2_LOC4;          /*!< 0x0000021C Device Characteristic Table Location-4 of Device2 */
+   __IM uint32_t DEV_CHAR_TABLE3_LOC1;          /*!< 0x00000220 Device Characteristic Table Location-1 of Device3 */
+   __IM uint32_t DEV_CHAR_TABLE3_LOC2;          /*!< 0x00000224 Device Characteristic Table Location-2 of Device3 */
+   __IM uint32_t DEV_CHAR_TABLE3_LOC3;          /*!< 0x00000228 Device Characteristic Table Location-3 of Device3 */
+   __IM uint32_t DEV_CHAR_TABLE3_LOC4;          /*!< 0x0000022C Device Characteristic Table Location-4 of Device3 */
+   __IM uint32_t DEV_CHAR_TABLE4_LOC1;          /*!< 0x00000230 Device Characteristic Table Location-1 of Device4 */
+   __IM uint32_t DEV_CHAR_TABLE4_LOC2;          /*!< 0x00000234 Device Characteristic Table Location-2 of Device4 */
+   __IM uint32_t DEV_CHAR_TABLE4_LOC3;          /*!< 0x00000238 Device Characteristic Table Location-3 of Device4 */
+   __IM uint32_t DEV_CHAR_TABLE4_LOC4;          /*!< 0x0000023C Device Characteristic Table Location-4 of Device4 */
+   __IM uint32_t DEV_CHAR_TABLE5_LOC1;          /*!< 0x00000240 Device Characteristic Table Location-1 of Device5 */
+   __IM uint32_t DEV_CHAR_TABLE5_LOC2;          /*!< 0x00000244 Device Characteristic Table Location-4 of Device10 */
+   __IM uint32_t DEV_CHAR_TABLE5_LOC3;          /*!< 0x00000248 Device Characteristic Table Location-3 of Device5 */
+   __IM uint32_t DEV_CHAR_TABLE5_LOC4;          /*!< 0x0000024C Device Characteristic Table Location-4 of Device5 */
+   __IM uint32_t DEV_CHAR_TABLE6_LOC1;          /*!< 0x00000250 Device Characteristic Table Location-1 of Device6 */
+   __IM uint32_t DEV_CHAR_TABLE6_LOC2;          /*!< 0x00000254 Device Characteristic Table Location-2 of Device6 */
+   __IM uint32_t DEV_CHAR_TABLE6_LOC3;          /*!< 0x00000258 Device Characteristic Table Location-3 of Device6 */
+   __IM uint32_t DEV_CHAR_TABLE6_LOC4;          /*!< 0x0000025C Device Characteristic Table Location-4 of Device6 */
+   __IM uint32_t DEV_CHAR_TABLE7_LOC1;          /*!< 0x00000260 Device Address Table of Device3 */
+   __IM uint32_t DEV_CHAR_TABLE7_LOC2;          /*!< 0x00000264 Device Characteristic Table Location-2 of Device7 */
+   __IM uint32_t DEV_CHAR_TABLE7_LOC3;          /*!< 0x00000268 Device Characteristic Table Location-3 of Device7 */
+   __IM uint32_t DEV_CHAR_TABLE7_LOC4;          /*!< 0x0000026C Device Characteristic Table Location-4 of Device7 */
+   __IM uint32_t DEV_CHAR_TABLE8_LOC1;          /*!< 0x00000270 Device Characteristic Table Location-1 of Device8 */
+   __IM uint32_t DEV_CHAR_TABLE8_LOC2;          /*!< 0x00000274 Device Characteristic Table Location-2 of Device8 */
+   __IM uint32_t DEV_CHAR_TABLE8_LOC3;          /*!< 0x00000278 Device Characteristic Table Location-3 of Device8 */
+   __IM uint32_t DEV_CHAR_TABLE8_LOC4;          /*!< 0x0000027C Device Address Table of Device10 */
+   __IM uint32_t DEV_CHAR_TABLE9_LOC1;          /*!< 0x00000280 Device Characteristic Table Location-1 of Device9 */
+   __IM uint32_t DEV_CHAR_TABLE9_LOC2;          /*!< 0x00000284 Device Characteristic Table Location-2 of Device9 */
+   __IM uint32_t DEV_CHAR_TABLE9_LOC3;          /*!< 0x00000288 Device Characteristic Table Location-3 of Device9 */
+   __IM uint32_t DEV_CHAR_TABLE9_LOC4;          /*!< 0x0000028C Device Characteristic Table Location-4 of Device9 */
+   __IM uint32_t DEV_CHAR_TABLE10_LOC1;         /*!< 0x00000290 Device Characteristic Table Location-1 of Device10 */
+   __IM uint32_t DEV_CHAR_TABLE10_LOC2;         /*!< 0x00000294 Device Characteristic Table Location-2 of Device10 */
+   __IM uint32_t DEV_CHAR_TABLE10_LOC3;         /*!< 0x00000298 Device Characteristic Table Location-3 of Device10 */
+   __IM uint32_t DEV_CHAR_TABLE10_LOC4;         /*!< 0x0000029C Device Characteristic Table Location-4 of Device10 */
+   __IM uint32_t DEV_CHAR_TABLE11_LOC1;         /*!< 0x000002A0 Device Characteristic Table Location-1 of Device11 */
+   __IM uint32_t DEV_CHAR_TABLE11_LOC2;         /*!< 0x000002A4 0 */
+   __IM uint32_t DEV_CHAR_TABLE11_LOC3;         /*!< 0x000002A8 Device Characteristic Table Location-3 of Device11 */
+   __IM uint32_t DEV_CHAR_TABLE11_LOC4;         /*!< 0x000002AC Device Characteristic Table Location-4 of Device11 */
+   __IM uint32_t RESERVED13[4];
+  __IOM uint32_t DEV_ADDR_TABLE_LOC1;           /*!< 0x000002C0 Device Address Table of Device1 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC2;           /*!< 0x000002C4 Device Address Table of Device2 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC3;           /*!< 0x000002C8 Device Address Table of Device3 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC4;           /*!< 0x000002CC Device Address Table of Device4 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC5;           /*!< 0x000002D0 Device Address Table of Device5 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC6;           /*!< 0x000002D4 Device Address Table of Device6 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC7;           /*!< 0x000002D8 Device Address Table of Device7 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC8;           /*!< 0x000002DC Device Address Table of Device8 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC9;           /*!< 0x000002E0 Device Address Table of Device9 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC10;          /*!< 0x000002E4 Device Address Table of Device10 */
+  __IOM uint32_t DEV_ADDR_TABLE_LOC11;          /*!< 0x000002E8 Device Address Table of Device11 */
+   __IM uint32_t RESERVED14[5];
 } I3C_CORE_Type;                                /*!< Size = 768 (0x300) */
 
 /**
   * \brief I3C controller top (I3C)
   */
-typedef struct
-{
-    I3C_CORE_Type CORE;                     /*!< 0x00000000 registers in I3C IP core */
-    __IM uint32_t RESERVED[64];
-    __IOM uint32_t CTRL;                          /*!< 0x00000400 I3C Block Control */
-    __IM uint32_t RESERVED1[5];
-    __IM uint32_t TGT_STATUS;                    /*!< 0x00000418 This register provides additional status information when
+typedef struct {
+        I3C_CORE_Type CORE;                     /*!< 0x00000000 registers in I3C IP core */
+   __IM uint32_t RESERVED[64];
+  __IOM uint32_t CTRL;                          /*!< 0x00000400 I3C Block Control */
+   __IM uint32_t RESERVED1[5];
+   __IM uint32_t TGT_STATUS;                    /*!< 0x00000418 This register provides additional status information when
                                                                 functioning as a Target. */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t CCC_GETSTATUS;                 /*!< 0x00000424 This register provides additional information on GETSTATUS CCCs
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t CCC_GETSTATUS;                 /*!< 0x00000424 This register provides additional information on GETSTATUS CCCs
                                                                 received when functioning as a Target. */
-    __IM uint32_t RESERVED3;
-    __IOM uint32_t TIMING_CNT_CTRL;               /*!< 0x0000042C Controls the Counter used for timestamping I3C-relevant events,
+   __IM uint32_t RESERVED3;
+  __IOM uint32_t TIMING_CNT_CTRL;               /*!< 0x0000042C Controls the Counter used for timestamping I3C-relevant events,
                                                                 especially when communicating with Asynchronous Timing Control
                                                                 Mode 0 enabled. */
-    __IM uint32_t TIMING_CNT0;                   /*!< 0x00000430 Most Significant Bits of the Counter */
-    __IM uint32_t TIMING_CNT1;                   /*!< 0x00000434 Least Significant Bits of the Counter */
+   __IM uint32_t TIMING_CNT0;                   /*!< 0x00000430 Most Significant Bits of the Counter */
+   __IM uint32_t TIMING_CNT1;                   /*!< 0x00000434 Least Significant Bits of the Counter */
 } I3C_Type;                                     /*!< Size = 1080 (0x438) */
 
 

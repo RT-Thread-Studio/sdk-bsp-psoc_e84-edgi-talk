@@ -34,7 +34,7 @@ extern "C" {
 
 /* Static functions */
 static void HandleTransmit(CySCB_Type *base, cy_stc_scb_spi_context_t *context);
-static void HandleReceive(CySCB_Type *base, cy_stc_scb_spi_context_t *context);
+static void HandleReceive (CySCB_Type *base, cy_stc_scb_spi_context_t *context);
 static void DiscardArrayNoCheck(CySCB_Type const *base, uint32_t size);
 
 /*******************************************************************************
@@ -75,14 +75,14 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Init(CySCB_Type *base, cy_stc_scb_spi_config_t
 #if((defined CY_IP_MXSCB_VERSION && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
     uint32_t memWidth_type = CY_SCB_MEM_WIDTH_BYTE;
 #endif /* CY_IP_MXSCB_VERSION */
-    CY_ASSERT_L3(CY_SCB_SPI_IS_MODE_VALID(config->spiMode));
-    CY_ASSERT_L3(CY_SCB_SPI_IS_SUB_MODE_VALID(config->subMode));
+    CY_ASSERT_L3(CY_SCB_SPI_IS_MODE_VALID     (config->spiMode));
+    CY_ASSERT_L3(CY_SCB_SPI_IS_SUB_MODE_VALID (config->subMode));
     CY_ASSERT_L3(CY_SCB_SPI_IS_SCLK_MODE_VALID(config->sclkMode));
 
-    CY_ASSERT_L2(CY_SCB_SPI_IS_OVERSAMPLE_VALID(config->oversample, config->spiMode));
+    CY_ASSERT_L2(CY_SCB_SPI_IS_OVERSAMPLE_VALID (config->oversample, config->spiMode));
     CY_ASSERT_L2(CY_SCB_SPI_IS_SS_POLARITY_VALID(config->ssPolarity));
-    CY_ASSERT_L2(CY_SCB_SPI_IS_DATA_WIDTH_VALID(config->rxDataWidth));
-    CY_ASSERT_L2(CY_SCB_SPI_IS_DATA_WIDTH_VALID(config->txDataWidth));
+    CY_ASSERT_L2(CY_SCB_SPI_IS_DATA_WIDTH_VALID (config->rxDataWidth));
+    CY_ASSERT_L2(CY_SCB_SPI_IS_DATA_WIDTH_VALID (config->txDataWidth));
     CY_ASSERT_L2(CY_SCB_SPI_IS_BOTH_DATA_WIDTH_VALID(config->subMode, config->rxDataWidth, config->txDataWidth));
 
     CY_ASSERT_L2(CY_SCB_IS_INTR_VALID(config->rxFifoIntEnableMask, CY_SCB_SPI_RX_INTR_MASK));
@@ -93,11 +93,11 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Init(CySCB_Type *base, cy_stc_scb_spi_config_t
 #if((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
     uint32_t memWidth = config->rxDataWidth <= config->txDataWidth ? config->txDataWidth : config->rxDataWidth ;
 
-    if (memWidth <= CY_SCB_BYTE_WIDTH)
+    if(memWidth <= CY_SCB_BYTE_WIDTH)
     {
         memWidth_type = CY_SCB_MEM_WIDTH_BYTE;
     }
-    else if (memWidth <= CY_SCB_HALF_WORD_WIDTH)
+    else if(memWidth <= CY_SCB_HALF_WORD_WIDTH)
     {
         memWidth_type = CY_SCB_MEM_WIDTH_HALFWORD;
     }
@@ -109,29 +109,29 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Init(CySCB_Type *base, cy_stc_scb_spi_config_t
     bool byteMode = (config->rxDataWidth <= CY_SCB_BYTE_WIDTH) && (config->txDataWidth <= CY_SCB_BYTE_WIDTH);
 #endif /* CY_IP_MXSCB_VERSION */
     /* Configure an SPI interface */
-    SCB_CTRL(base) = _BOOL2FLD(SCB_CTRL_EC_AM_MODE, config->enableWakeFromSleep) |
-                     _VAL2FLD(SCB_CTRL_OVS, (config->oversample - 1UL))          |
-                     _VAL2FLD(SCB_CTRL_MODE, CY_SCB_CTRL_MODE_SPI);
+    SCB_CTRL(base) =_BOOL2FLD(SCB_CTRL_EC_AM_MODE, config->enableWakeFromSleep) |
+                 _VAL2FLD(SCB_CTRL_OVS, (config->oversample - 1UL))          |
+                 _VAL2FLD(SCB_CTRL_MODE, CY_SCB_CTRL_MODE_SPI);
 #if((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
     Cy_SCB_SetMemWidth(base, memWidth_type);
 #elif((defined (CY_IP_MXSCB_VERSION) && CY_IP_MXSCB_VERSION==1))
-    SCB_CTRL(base) |= _BOOL2FLD(SCB_CTRL_BYTE_MODE, byteMode);
+    SCB_CTRL(base) |=_BOOL2FLD(SCB_CTRL_BYTE_MODE, byteMode);
 #endif /* CY_IP_MXSCB_VERSION */
 
     /* Configure SCB_CTRL.BYTE_MODE then verify levels */
     CY_ASSERT_L2(CY_SCB_IS_TRIGGER_LEVEL_VALID(base, config->rxFifoTriggerLevel));
     CY_ASSERT_L2(CY_SCB_IS_TRIGGER_LEVEL_VALID(base, config->txFifoTriggerLevel));
 
-    SCB_SPI_CTRL(base) = _BOOL2FLD(SCB_SPI_CTRL_SSEL_CONTINUOUS, (!config->enableTransferSeperation)) |
-                         _BOOL2FLD(SCB_SPI_CTRL_SELECT_PRECEDE, (CY_SCB_SPI_TI_PRECEDES == config->subMode)) |
-                         _BOOL2FLD(SCB_SPI_CTRL_LATE_MISO_SAMPLE, config->enableMisoLateSample)       |
-                         _BOOL2FLD(SCB_SPI_CTRL_SCLK_CONTINUOUS,  config->enableFreeRunSclk)          |
-                         _BOOL2FLD(SCB_SPI_CTRL_MASTER_MODE, (CY_SCB_SPI_MASTER == config->spiMode)) |
-                         _VAL2FLD(CY_SCB_SPI_CTRL_CLK_MODE,      locSclkMode)                         |
-                         _VAL2FLD(CY_SCB_SPI_CTRL_SSEL_POLARITY, config->ssPolarity)                  |
-                         _VAL2FLD(SCB_SPI_CTRL_MODE, (uint32_t) config->subMode);
+    SCB_SPI_CTRL(base) = _BOOL2FLD(SCB_SPI_CTRL_SSEL_CONTINUOUS, (!config->enableTransferSeparation)) |
+                     _BOOL2FLD(SCB_SPI_CTRL_SELECT_PRECEDE,  (CY_SCB_SPI_TI_PRECEDES == config->subMode)) |
+                     _BOOL2FLD(SCB_SPI_CTRL_LATE_MISO_SAMPLE, config->enableMisoLateSample)       |
+                     _BOOL2FLD(SCB_SPI_CTRL_SCLK_CONTINUOUS,  config->enableFreeRunSclk)          |
+                     _BOOL2FLD(SCB_SPI_CTRL_MASTER_MODE,     (CY_SCB_SPI_MASTER == config->spiMode)) |
+                     _VAL2FLD(CY_SCB_SPI_CTRL_CLK_MODE,      locSclkMode)                         |
+                     _VAL2FLD(CY_SCB_SPI_CTRL_SSEL_POLARITY, config->ssPolarity)                  |
+                     _VAL2FLD(SCB_SPI_CTRL_MODE,  (uint32_t) config->subMode);
 #if((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
-    if (config->subMode == CY_SCB_SPI_MOTOROLA)
+    if(config->subMode == CY_SCB_SPI_MOTOROLA)
     {
         SCB_SPI_CTRL(base) &= ~SCB_SPI_CTRL_SSEL_SETUP_DEL_Msk;
         SCB_SPI_CTRL(base) |=  _VAL2FLD(SCB_SPI_CTRL_SSEL_SETUP_DEL, config->ssSetupDelay);
@@ -146,16 +146,16 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Init(CySCB_Type *base, cy_stc_scb_spi_config_t
 
     /* Configure the RX direction */
     SCB_RX_CTRL(base) = _BOOL2FLD(SCB_RX_CTRL_MSB_FIRST, config->enableMsbFirst) |
-                        _BOOL2FLD(SCB_RX_CTRL_MEDIAN, config->enableInputFilter) |
-                        _VAL2FLD(SCB_RX_CTRL_DATA_WIDTH, (config->rxDataWidth - 1UL));
+                    _BOOL2FLD(SCB_RX_CTRL_MEDIAN, config->enableInputFilter) |
+                    _VAL2FLD(SCB_RX_CTRL_DATA_WIDTH, (config->rxDataWidth - 1UL));
 
     SCB_RX_FIFO_CTRL(base) = _VAL2FLD(SCB_RX_FIFO_CTRL_TRIGGER_LEVEL, config->rxFifoTriggerLevel);
 
     /* Configure the TX direction */
     SCB_TX_CTRL(base) = _BOOL2FLD(SCB_TX_CTRL_MSB_FIRST, config->enableMsbFirst) |
-                        _VAL2FLD(SCB_TX_CTRL_DATA_WIDTH, (config->txDataWidth - 1UL));
+                    _VAL2FLD(SCB_TX_CTRL_DATA_WIDTH, (config->txDataWidth - 1UL));
 #if((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
-    if (config->subMode == CY_SCB_SPI_MOTOROLA)
+    if(config->subMode == CY_SCB_SPI_MOTOROLA)
     {
         /* Configure the TX direction */
         SCB_SPI_TX_CTRL(base) = _VAL2FLD(CY_SCB_SPI_TX_CTRL_SET_PARITY, (uint32_t) config->parity);
@@ -164,11 +164,11 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Init(CySCB_Type *base, cy_stc_scb_spi_config_t
 
     SCB_TX_FIFO_CTRL(base) = _VAL2FLD(SCB_TX_FIFO_CTRL_TRIGGER_LEVEL, config->txFifoTriggerLevel);
 #if((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
-    if (config->subMode == CY_SCB_SPI_MOTOROLA)
+    if(config->subMode == CY_SCB_SPI_MOTOROLA)
     {
         /* Configure the RX direction */
         SCB_SPI_RX_CTRL(base) = _BOOL2FLD(SCB_SPI_RX_CTRL_DROP_ON_PARITY_ERROR, config->dropOnParityError) |
-                                _VAL2FLD(CY_SCB_SPI_RX_CTRL_SET_PARITY, (uint32_t) config->parity);
+                             _VAL2FLD(CY_SCB_SPI_RX_CTRL_SET_PARITY, (uint32_t) config->parity);
     }
 #endif /* CY_IP_MXSCB_VERSION */
 
@@ -189,12 +189,12 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Init(CySCB_Type *base, cy_stc_scb_spi_config_t
 
         context->cbEvents = NULL;
 
-#if !defined(NDEBUG)
+    #if !defined(NDEBUG)
         /* Put an initialization key into the initKey variable to verify
         * context initialization in the transfer API.
         */
         context->initKey = CY_SCB_SPI_INIT_KEY;
-#endif /* !(NDEBUG) */
+    #endif /* !(NDEBUG) */
     }
 
     return CY_SCB_SPI_SUCCESS;
@@ -345,13 +345,6 @@ void Cy_SCB_SPI_Disable(CySCB_Type *base, cy_stc_scb_spi_context_t *context)
 * \return
 * \ref cy_en_syspm_status_t
 *
-* \note
-* Only applicable for <b>rev-08 of the CY8CKIT-062-BLE</b>.
-* For proper operation, when the SPI slave is configured to be a wakeup source
-* from Deep Sleep mode, this function must be copied and modified by the user.
-* The SPI clock disable code must be inserted in the \ref CY_SYSPM_BEFORE_TRANSITION
-* and clock enable code in the \ref CY_SYSPM_AFTER_TRANSITION mode processing.
-*
 *******************************************************************************/
 cy_en_syspm_status_t Cy_SCB_SPI_DeepSleepCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
 {
@@ -360,137 +353,137 @@ cy_en_syspm_status_t Cy_SCB_SPI_DeepSleepCallback(cy_stc_syspm_callback_params_t
 
     cy_en_syspm_status_t retStatus = CY_SYSPM_FAIL;
 
-    switch (mode)
+    switch(mode)
     {
-    case CY_SYSPM_CHECK_READY:
-    {
-        /* Check whether the High-level API is not busy executing the transfer
-        * operation.
-        */
-        if (0UL == (CY_SCB_SPI_TRANSFER_ACTIVE & Cy_SCB_SPI_GetTransferStatus(locBase, locContext)))
+        case CY_SYSPM_CHECK_READY:
         {
-            /* If the SPI bus is not busy, all data elements are transferred
-            * on the bus from the TX FIFO and shifter and the RX FIFOs are
-            * empty - the SPI is ready to enter Deep Sleep mode.
+            /* Check whether the High-level API is not busy executing the transfer
+            * operation.
             */
-            if (!Cy_SCB_SPI_IsBusBusy(locBase))
+            if (0UL == (CY_SCB_SPI_TRANSFER_ACTIVE & Cy_SCB_SPI_GetTransferStatus(locBase, locContext)))
             {
-                if (Cy_SCB_SPI_IsTxComplete(locBase))
+                /* If the SPI bus is not busy, all data elements are transferred
+                * on the bus from the TX FIFO and shifter and the RX FIFOs are
+                * empty - the SPI is ready to enter Deep Sleep mode.
+                */
+                if (!Cy_SCB_SPI_IsBusBusy(locBase))
                 {
-                    if (0UL == Cy_SCB_SPI_GetNumInRxFifo(locBase))
+                    if (Cy_SCB_SPI_IsTxComplete(locBase))
                     {
-                        if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+                        if (0UL == Cy_SCB_SPI_GetNumInRxFifo(locBase))
                         {
-                            /* The SCB is wakeup-capable: clear the SPI
-                            * wakeup interrupt source because it triggers
-                            * during Active mode communication and make
-                            * sure that a new transfer is not started after
-                            * clearing.
-                            */
-                            Cy_SCB_ClearSpiInterrupt(locBase, CY_SCB_SPI_INTR_WAKEUP);
-
-                            if (!Cy_SCB_SPI_IsBusBusy(locBase))
+                            if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
                             {
+                                /* The SCB is wakeup-capable: clear the SPI
+                                * wakeup interrupt source because it triggers
+                                * during Active mode communication and make
+                                * sure that a new transfer is not started after
+                                * clearing.
+                                */
+                                Cy_SCB_ClearSpiInterrupt(locBase, CY_SCB_SPI_INTR_WAKEUP);
+
+                                if (!Cy_SCB_SPI_IsBusBusy(locBase))
+                                {
+                                    retStatus = CY_SYSPM_SUCCESS;
+                                }
+                            }
+                            else
+                            {
+                                /* The SCB is NOT wakeup-capable: disable the
+                                * SPI. The master and slave stop driving the
+                                * bus until the SPI is enabled. This happens
+                                * when the device fails to enter Deep Sleep
+                                * mode or it is awakened from Deep Sleep mode.
+                                */
+                                Cy_SCB_SPI_Disable(locBase, locContext);
+
                                 retStatus = CY_SYSPM_SUCCESS;
                             }
-                        }
-                        else
-                        {
-                            /* The SCB is NOT wakeup-capable: disable the
-                            * SPI. The master and slave stop driving the
-                            * bus until the SPI is enabled. This happens
-                            * when the device fails to enter Deep Sleep
-                            * mode or it is awakened from Deep Sleep mode.
-                            */
-                            Cy_SCB_SPI_Disable(locBase, locContext);
-
-                            retStatus = CY_SYSPM_SUCCESS;
                         }
                     }
                 }
             }
         }
-    }
-    break;
-
-    case CY_SYSPM_CHECK_FAIL:
-    {
-        /* The other driver is not ready for Deep Sleep mode. Restore
-        * Active mode configuration.
-        */
-
-        if (!_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
-        {
-            /* The SCB is NOT wakeup-capable: enable the SPI to operate */
-            Cy_SCB_SPI_Enable(locBase);
-        }
-
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_BEFORE_TRANSITION:
-    {
-        /* This code executes inside the critical section and enabling the
-        * active interrupt source makes the interrupt pending in the NVIC.
-        * However, the interrupt processing is delayed until the code exits
-        * the critical section. The pending interrupt force WFI instruction
-        * does nothing and the device remains in Active mode.
-        */
-
-        if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
-        {
-            /* The SCB is wakeup-capable: enable the SPI wakeup interrupt
-            * source. If any transaction happens, the wakeup interrupt
-            * becomes pending and prevents entering Deep Sleep mode.
-            */
-            Cy_SCB_SetSpiInterruptMask(locBase, CY_SCB_I2C_INTR_WAKEUP);
-
-            /* Disable SCB clock */
-            SCB_I2C_CFG(locBase) &= (uint32_t) ~CY_SCB_I2C_CFG_CLK_ENABLE_Msk;
-
-            /* IMPORTANT (replace line above for the CY8CKIT-062 rev-08):
-            * for proper entering Deep Sleep mode the SPI clock must be disabled.
-            * This code must be inserted by the user because the driver
-            * does not have access to the clock.
-            */
-        }
-
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_AFTER_TRANSITION:
-    {
-        if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
-        {
-            /* Enable SCB clock */
-            SCB_I2C_CFG(locBase) |= CY_SCB_I2C_CFG_CLK_ENABLE_Msk;
-
-            /* IMPORTANT (replace line above for the CY8CKIT-062 rev-08):
-            * for proper exiting Deep Sleep mode, the SPI clock must be enabled.
-            * This code must be inserted by the user because the driver
-            * does not have access to the clock.
-            */
-
-            /* The SCB is wakeup-capable: disable the SPI wakeup interrupt
-            * source
-            */
-            Cy_SCB_SetSpiInterruptMask(locBase, CY_SCB_CLEAR_ALL_INTR_SRC);
-        }
-        else
-        {
-            /* The SCB is NOT wakeup-capable: enable the SPI to operate */
-            Cy_SCB_SPI_Enable(locBase);
-        }
-
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    default:
-        /* Unknown state */
         break;
+
+        case CY_SYSPM_CHECK_FAIL:
+        {
+            /* The other driver is not ready for Deep Sleep mode. Restore
+            * Active mode configuration.
+            */
+
+            if (!_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+            {
+                /* The SCB is NOT wakeup-capable: enable the SPI to operate */
+                Cy_SCB_SPI_Enable(locBase);
+            }
+
+            retStatus = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        case CY_SYSPM_BEFORE_TRANSITION:
+        {
+            /* This code executes inside the critical section and enabling the
+            * active interrupt source makes the interrupt pending in the NVIC.
+            * However, the interrupt processing is delayed until the code exits
+            * the critical section. The pending interrupt force WFI instruction
+            * does nothing and the device remains in Active mode.
+            */
+
+            if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+            {
+                /* The SCB is wakeup-capable: enable the SPI wakeup interrupt
+                * source. If any transaction happens, the wakeup interrupt
+                * becomes pending and prevents entering Deep Sleep mode.
+                */
+                Cy_SCB_SetSpiInterruptMask(locBase, CY_SCB_I2C_INTR_WAKEUP);
+
+                /* Disable SCB clock */
+                SCB_I2C_CFG(locBase) &= (uint32_t) ~CY_SCB_I2C_CFG_CLK_ENABLE_Msk;
+
+                /* IMPORTANT (replace line above for the CY8CKIT-062 rev-08):
+                * for proper entering Deep Sleep mode the SPI clock must be disabled.
+                * This code must be inserted by the user because the driver
+                * does not have access to the clock.
+                */
+            }
+
+            retStatus = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        case CY_SYSPM_AFTER_TRANSITION:
+        {
+            if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+            {
+                /* Enable SCB clock */
+                SCB_I2C_CFG(locBase) |= CY_SCB_I2C_CFG_CLK_ENABLE_Msk;
+
+                /* IMPORTANT (replace line above for the CY8CKIT-062 rev-08):
+                * for proper exiting Deep Sleep mode, the SPI clock must be enabled.
+                * This code must be inserted by the user because the driver
+                * does not have access to the clock.
+                */
+
+                /* The SCB is wakeup-capable: disable the SPI wakeup interrupt
+                * source
+                */
+                Cy_SCB_SetSpiInterruptMask(locBase, CY_SCB_CLEAR_ALL_INTR_SRC);
+            }
+            else
+            {
+                /* The SCB is NOT wakeup-capable: enable the SPI to operate */
+                Cy_SCB_SPI_Enable(locBase);
+            }
+
+            retStatus = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        default:
+            /* Unknown state */
+            break;
     }
 
     return (retStatus);
@@ -533,66 +526,66 @@ cy_en_syspm_status_t Cy_SCB_SPI_HibernateCallback(cy_stc_syspm_callback_params_t
 
     cy_en_syspm_status_t  retStatus = CY_SYSPM_FAIL;
 
-    switch (mode)
+    switch(mode)
     {
-    case CY_SYSPM_CHECK_READY:
-    {
-        /* Check whether the High-level API is not busy executing the transfer
-        * operation.
-        */
-        if (0UL == (CY_SCB_SPI_TRANSFER_ACTIVE & Cy_SCB_SPI_GetTransferStatus(locBase, locContext)))
+        case CY_SYSPM_CHECK_READY:
         {
-            /* If the SPI bus is not busy, all data elements are transferred
-            * on the bus from the TX FIFO and shifter and the RX FIFOs are
-            * empty - the SPI is ready to enter Hibernate mode.
+            /* Check whether the High-level API is not busy executing the transfer
+            * operation.
             */
-            if (!Cy_SCB_SPI_IsBusBusy(locBase))
+            if (0UL == (CY_SCB_SPI_TRANSFER_ACTIVE & Cy_SCB_SPI_GetTransferStatus(locBase, locContext)))
             {
-                if (Cy_SCB_SPI_IsTxComplete(locBase))
+                /* If the SPI bus is not busy, all data elements are transferred
+                * on the bus from the TX FIFO and shifter and the RX FIFOs are
+                * empty - the SPI is ready to enter Hibernate mode.
+                */
+                if (!Cy_SCB_SPI_IsBusBusy(locBase))
                 {
-                    if (0UL == Cy_SCB_SPI_GetNumInRxFifo(locBase))
+                    if (Cy_SCB_SPI_IsTxComplete(locBase))
                     {
-                        /* Disable the SPI. The master or slave stops
-                        * driving the bus until the SPI is enabled.
-                        * This happens if the device failed to enter
-                        * Hibernate mode.
-                        */
-                        Cy_SCB_SPI_Disable(locBase, locContext);
+                        if (0UL == Cy_SCB_SPI_GetNumInRxFifo(locBase))
+                        {
+                            /* Disable the SPI. The master or slave stops
+                            * driving the bus until the SPI is enabled.
+                            * This happens if the device failed to enter
+                            * Hibernate mode.
+                            */
+                            Cy_SCB_SPI_Disable(locBase, locContext);
 
-                        retStatus = CY_SYSPM_SUCCESS;
+                            retStatus = CY_SYSPM_SUCCESS;
+                        }
                     }
                 }
             }
         }
-    }
-    break;
-
-    case CY_SYSPM_CHECK_FAIL:
-    {
-        /* The other driver is not ready for Hibernate mode. Restore Active
-        * mode configuration.
-        */
-
-        /* Enable the SPI to operate */
-        Cy_SCB_SPI_Enable(locBase);
-
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_BEFORE_TRANSITION:
-    case CY_SYSPM_AFTER_TRANSITION:
-    {
-        /* The SCB is not capable of waking up from Hibernate mode:
-        * do nothing.
-        */
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    default:
-        /* Unknown state */
         break;
+
+        case CY_SYSPM_CHECK_FAIL:
+        {
+            /* The other driver is not ready for Hibernate mode. Restore Active
+            * mode configuration.
+            */
+
+            /* Enable the SPI to operate */
+            Cy_SCB_SPI_Enable(locBase);
+
+            retStatus = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        case CY_SYSPM_BEFORE_TRANSITION:
+        case CY_SYSPM_AFTER_TRANSITION:
+        {
+            /* The SCB is not capable of waking up from Hibernate mode:
+            * do nothing.
+            */
+            retStatus = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        default:
+            /* Unknown state */
+            break;
     }
 
     return (retStatus);
@@ -663,12 +656,12 @@ cy_en_syspm_status_t Cy_SCB_SPI_HibernateCallback(cy_stc_syspm_callback_params_t
 *
 *******************************************************************************/
 cy_en_scb_spi_status_t Cy_SCB_SPI_Transfer(CySCB_Type *base, void *txBuffer, void *rxBuffer, uint32_t size,
-        cy_stc_scb_spi_context_t *context)
+                                           cy_stc_scb_spi_context_t *context)
 {
     CY_ASSERT_L1(NULL != context);
-#if !defined(NDEBUG)
+    #if !defined(NDEBUG)
     CY_ASSERT_L1(CY_SCB_SPI_INIT_KEY == context->initKey);
-#endif
+    #endif
     CY_ASSERT_L1(CY_SCB_SPI_IS_BUFFER_VALID(txBuffer, rxBuffer, size));
 
     cy_en_scb_spi_status_t retStatus = CY_SCB_SPI_TRANSFER_BUSY;
@@ -795,18 +788,18 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Transfer(CySCB_Type *base, void *txBuffer, voi
 *
 *******************************************************************************/
 cy_en_scb_spi_status_t Cy_SCB_SPI_Transfer_Buffer(CySCB_Type *base, void *txBuffer, void *rxBuffer,
-        uint32_t txSize, uint32_t rxSize, uint32_t writeFill,
-        cy_stc_scb_spi_context_t *context)
+                                                               uint32_t txSize, uint32_t rxSize, uint32_t writeFill,
+                                                               cy_stc_scb_spi_context_t *context)
 {
-    if ((txSize == 0UL) && (rxSize == 0UL))
+    if((txSize == 0UL) && (rxSize == 0UL))
     {
         return CY_SCB_SPI_SUCCESS;
     }
 
     CY_ASSERT_L1(NULL != context);
-#if !defined(NDEBUG)
+    #if !defined(NDEBUG)
     CY_ASSERT_L1(CY_SCB_SPI_INIT_KEY == context->initKey);
-#endif
+    #endif
     CY_ASSERT_L1(CY_SCB_SPI_IS_TX_RX_BUFFER_VALID(txBuffer, rxBuffer, txSize, rxSize));
 
     cy_en_scb_spi_status_t retStatus = CY_SCB_SPI_TRANSFER_BUSY;
@@ -831,11 +824,11 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Transfer_Buffer(CySCB_Type *base, void *txBuff
 
         /* If number of data elements to receive are greater than to transmit, then fill end of tx array
         with user specified value. */
-        if (context->rxBufSize > context->txBufSize)
+        if(context->rxBufSize > context->txBufSize)
         {
             context->WriteFillSize = context->rxBufSize - context->txBufSize;
             context->DiscardRxSize = 0UL;
-            if (txSize == 0UL)
+            if(txSize == 0UL)
             {
                 txSize                 = context->WriteFillSize;
                 context->txBufSize     = context->WriteFillSize;
@@ -843,13 +836,13 @@ cy_en_scb_spi_status_t Cy_SCB_SPI_Transfer_Buffer(CySCB_Type *base, void *txBuff
                 context->txBuf         = NULL;
             }
         }
-        else if (context->txBufSize > context->rxBufSize)
+        else if(context->txBufSize > context->rxBufSize)
         {
             /* If number of data elements to transmit are greater than to receive, then discard those extra
                data elements. */
             context->WriteFillSize = 0UL;
             context->DiscardRxSize = context->txBufSize - context->rxBufSize;
-            if (rxSize == 0UL)
+            if(rxSize == 0UL)
             {
                 rxSize                 = context->DiscardRxSize;
                 context->rxBufSize     = context->DiscardRxSize;
@@ -958,7 +951,7 @@ void Cy_SCB_SPI_AbortTransfer(CySCB_Type *base, cy_stc_scb_spi_context_t *contex
 
 
 /*******************************************************************************
-* Function Name: Cy_SCB_SPI_GetNumTransfered
+* Function Name: Cy_SCB_SPI_GetNumTransferred
 ****************************************************************************//**
 *
 * Returns the number of data elements transferred since the last call to \ref
@@ -977,7 +970,7 @@ void Cy_SCB_SPI_AbortTransfer(CySCB_Type *base, cy_stc_scb_spi_context_t *contex
 * The number of data elements transferred.
 *
 *******************************************************************************/
-uint32_t Cy_SCB_SPI_GetNumTransfered(CySCB_Type const *base, cy_stc_scb_spi_context_t const *context)
+uint32_t Cy_SCB_SPI_GetNumTransferred(CySCB_Type const *base, cy_stc_scb_spi_context_t const *context)
 {
     /* Suppress a compiler warning about unused variables */
     (void) base;
@@ -1040,7 +1033,7 @@ uint32_t Cy_SCB_SPI_GetTransferStatus(CySCB_Type const *base, cy_stc_scb_spi_con
 *******************************************************************************/
 void Cy_SCB_SPI_Interrupt(CySCB_Type *base, cy_stc_scb_spi_context_t *context)
 {
-    bool locXferErr = false;
+     bool locXferErr = false;
 
     /* Wake up on the slave select condition */
     if (0UL != (CY_SCB_SPI_INTR_WAKEUP & Cy_SCB_GetSpiInterruptStatusMasked(base)))
@@ -1104,7 +1097,7 @@ void Cy_SCB_SPI_Interrupt(CySCB_Type *base, cy_stc_scb_spi_context_t *context)
     * and all data is read from the RX FIFO
     */
     if ((0UL != (context->status & CY_SCB_SPI_TRANSFER_ACTIVE)) &&
-            (0UL == context->rxBufSize) && (0UL == context->txBufSize))
+        (0UL == context->rxBufSize) && (0UL == context->txBufSize))
     {
         /* The transfer is complete */
         context->status &= (uint32_t) ~CY_SCB_SPI_TRANSFER_ACTIVE;
@@ -1174,7 +1167,7 @@ static void HandleReceive(CySCB_Type *base, cy_stc_scb_spi_context_t *context)
 
     if (0UL == context->rxBufSize)
     {
-        if (0UL == context->DiscardRxSize)
+        if(0UL == context->DiscardRxSize)
         {
             /* Disable the RX level interrupt */
             Cy_SCB_SetRxInterruptMask(base, (Cy_SCB_GetRxInterruptMask(base) & (uint32_t) ~CY_SCB_RX_INTR_LEVEL));
@@ -1193,7 +1186,7 @@ static void HandleReceive(CySCB_Type *base, cy_stc_scb_spi_context_t *context)
     else
     {
         uint32_t level = (_FLD2BOOL(SCB_SPI_CTRL_MASTER_MODE, SCB_SPI_CTRL(base))) ?
-                         Cy_SCB_GetFifoSize(base) : (Cy_SCB_GetFifoSize(base) / 2UL);
+                                    Cy_SCB_GetFifoSize(base) : (Cy_SCB_GetFifoSize(base) / 2UL);
 
         if (context->rxBufSize < level)
         {
@@ -1261,7 +1254,7 @@ static void HandleTransmit(CySCB_Type *base, cy_stc_scb_spi_context_t *context)
 
     if (0UL == context->txBufSize)
     {
-        if (0UL == context->WriteFillSize)
+        if(0UL == context->WriteFillSize)
         {
             /* Data is transferred into TX FIFO */
             context->status |= CY_SCB_SPI_TRANSFER_IN_FIFO;
@@ -1285,7 +1278,7 @@ static void HandleTransmit(CySCB_Type *base, cy_stc_scb_spi_context_t *context)
 
             Cy_SCB_WriteDefaultArrayNoCheck(base, context->writeFill, numToCopy);
 
-            uint32_t txFifoLevel = Cy_SCB_GetNumInTxFifo(base) + numToCopy;
+            uint32_t txFifoLevel = Cy_SCB_GetNumInTxFifo(base)+numToCopy;
 
             Cy_SCB_SetTxFifoLevel(base, ((txFifoLevel > fifoSize) ? ((fifoSize / 2UL) - 2UL) : ((txFifoLevel == 1UL) ? txFifoLevel : (txFifoLevel - 1UL))));
 

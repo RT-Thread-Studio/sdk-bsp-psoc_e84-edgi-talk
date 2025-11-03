@@ -47,15 +47,14 @@
   @param[in]     pSrc       points to the input vector
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    root mean square value returned here
-  @return        none
  */
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_rms_f16(
-    const float16_t *pSrc,
-    uint32_t blockSize,
-    float16_t *pResult)
+ARM_DSP_ATTRIBUTE void arm_rms_f16(
+  const float16_t * pSrc,
+  uint32_t blockSize,
+  float16_t * pResult)
 {
     float16_t pow = 0.0f;
 
@@ -66,65 +65,65 @@ void arm_rms_f16(
 }
 #else
 
-void arm_rms_f16(
-    const float16_t *pSrc,
-    uint32_t blockSize,
-    float16_t *pResult)
+ARM_DSP_ATTRIBUTE void arm_rms_f16(
+  const float16_t * pSrc,
+        uint32_t blockSize,
+        float16_t * pResult)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    _Float16 sum = 0.0f16;                          /* Temporary result storage */
-    _Float16 in;                                  /* Temporary variable to store input value */
+        uint32_t blkCnt;                               /* Loop counter */
+        _Float16 sum = 0.0f16;                          /* Temporary result storage */
+        _Float16 in;                                  /* Temporary variable to store input value */
 
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
+  while (blkCnt > 0U)
+  {
+    /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
 
-        in = *pSrc++;
-        /* Compute sum of squares and store result in a temporary variable, sum. */
-        sum += in * in;
+    in = *pSrc++;
+    /* Compute sum of squares and store result in a temporary variable, sum. */
+    sum += in * in;
 
-        in = *pSrc++;
-        sum += in * in;
+    in = *pSrc++;
+    sum += in * in;
 
-        in = *pSrc++;
-        sum += in * in;
+    in = *pSrc++;
+    sum += in * in;
 
-        in = *pSrc++;
-        sum += in * in;
+    in = *pSrc++;
+    sum += in * in;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
+  while (blkCnt > 0U)
+  {
+    /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
 
-        in = *pSrc++;
-        /* Compute sum of squares and store result in a temporary variable. */
-        sum += (in * in);
+    in = *pSrc++;
+    /* Compute sum of squares and store result in a temporary variable. */
+    sum += ( in * in);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Compute Rms and store result in destination */
-    arm_sqrt_f16((_Float16)sum / (_Float16) blockSize, pResult);
+  /* Compute Rms and store result in destination */
+  arm_sqrt_f16((_Float16)sum / (_Float16) blockSize, pResult);
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
 
@@ -132,5 +131,5 @@ void arm_rms_f16(
   @} end of RMS group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

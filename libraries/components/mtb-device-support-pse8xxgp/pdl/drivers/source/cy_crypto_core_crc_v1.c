@@ -43,7 +43,7 @@ extern "C" {
 #include "cy_syslib.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 3, \
-                             'This piece of code is written for CRYPTO_V1_Type and will not execute for CRYPTO_V2_Type')
+'This piece of code is written for CRYPTO_V1_Type and will not execute for CRYPTO_V2_Type')
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_V1_Crc_Init
@@ -74,19 +74,19 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 3, \
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc_Init(CRYPTO_Type *base,
-        uint32_t polynomial,
-        uint32_t dataReverse,
-        uint32_t dataXor,
-        uint32_t remReverse,
-        uint32_t remXor)
+                                        uint32_t polynomial,
+                                        uint32_t dataReverse,
+                                        uint32_t dataXor,
+                                        uint32_t remReverse,
+                                        uint32_t remXor)
 {
 
     /* Specifies the bit order in which a data Byte is processed
      * (reversal is performed after XORing):
      *                                       '0': Most significant bit (bit 1) first.
      *                                       '1': Least significant bit (bit 0) first. */
-    REG_CRYPTO_CRC_CTL(base) = (uint32_t)((_VAL2FLD(CRYPTO_CRC_CTL_DATA_REVERSE, dataReverse)) |
-                                          (_VAL2FLD(CRYPTO_CRC_CTL_REM_REVERSE,  remReverse)));
+    REG_CRYPTO_CRC_CTL(base) = (uint32_t)( (_VAL2FLD(CRYPTO_CRC_CTL_DATA_REVERSE, dataReverse)) |
+                                           (_VAL2FLD(CRYPTO_CRC_CTL_REM_REVERSE,  remReverse)) );
 
     /* Specifies a byte mask with which each data byte is XORed.
      * The XOR is performed before data reversal. */
@@ -129,36 +129,34 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc_Init(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc(CRYPTO_Type *base,
-        uint32_t *crc,
-        void const *data,
-        uint32_t  dataSize,
-        uint32_t  lfsrInitState)
+                                        uint32_t *crc,
+                                        void const *data,
+                                        uint32_t  dataSize,
+                                        uint32_t  lfsrInitState)
 {
     uint32_t *dataStart = (uint32_t *)data;
 
     /* A state of 32-bit Linear Feedback Shift Registers (LFSR) used to implement CRC. */
     REG_CRYPTO_CRC_LFSR_CTL(base) = (uint32_t)(_VAL2FLD(CRYPTO_CRC_LFSR_CTL_LFSR32, lfsrInitState));
 
-    do
-    {
+    do {
         uint32_t partSize = (dataSize <= 0xFFFFu) ? dataSize : 0xFFFFu;
 
         /* Fill the FIFO with the instruction parameters */
-        Cy_Crypto_SetReg2Instr(base, (uint32_t)dataStart, partSize);
+        Cy_Crypto_SetReg2Instr(base, (uint32_t)dataStart, partSize );
 
         /* Issue the CRC instruction */
         Cy_Crypto_Run2ParamInstr(base, CY_CRYPTO_V1_CRC_OPC, CY_CRYPTO_RSRC0_SHIFT, CY_CRYPTO_RSRC4_SHIFT);
 
         /* Wait until CRC instruction is complete */
-        while (0uL != _FLD2VAL(CRYPTO_STATUS_CRC_BUSY, REG_CRYPTO_STATUS(base)))
+        while(0uL != _FLD2VAL(CRYPTO_STATUS_CRC_BUSY, REG_CRYPTO_STATUS(base)))
         {
         }
 
         dataSize -= partSize;
         dataStart += partSize;
 
-    }
-    while (dataSize > 0u);
+    } while (dataSize > 0u);
 
     /* Copy the result from the CRC_REM_RESULT register */
     *crc = (uint32_t)_FLD2VAL(CRYPTO_CRC_REM_RESULT_REM, REG_CRYPTO_CRC_REM_RESULT(base));
@@ -201,13 +199,13 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc_CalcInit(CRYPTO_Type *base,
-        uint32_t width,
-        uint32_t polynomial,
-        uint32_t dataReverse,
-        uint32_t dataXor,
-        uint32_t remReverse,
-        uint32_t remXor,
-        uint32_t lfsrInitState)
+                                        uint32_t width,
+                                        uint32_t polynomial,
+                                        uint32_t dataReverse,
+                                        uint32_t dataXor,
+                                        uint32_t remReverse,
+                                        uint32_t remXor,
+                                        uint32_t lfsrInitState)
 {
     CY_ASSERT_L1((width >= 1U) && (width <= CY_CRYPTO_HW_REGS_WIDTH));
 
@@ -215,8 +213,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc_CalcInit(CRYPTO_Type *base,
      * (reversal is performed after XORing):
      *                                       '0': Most significant bit (bit 1) first.
      *                                       '1': Least significant bit (bit 0) first. */
-    REG_CRYPTO_CRC_CTL(base) = (uint32_t)((_VAL2FLD(CRYPTO_CRC_CTL_DATA_REVERSE, dataReverse)) |
-                                          (_VAL2FLD(CRYPTO_CRC_CTL_REM_REVERSE,  remReverse)));
+    REG_CRYPTO_CRC_CTL(base) = (uint32_t)( (_VAL2FLD(CRYPTO_CRC_CTL_DATA_REVERSE, dataReverse)) |
+                                           (_VAL2FLD(CRYPTO_CRC_CTL_REM_REVERSE,  remReverse)) );
 
     /* Specifies the byte mask with which each data byte is XORed.
      * The XOR is performed before data reversal. */
@@ -290,30 +288,28 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc_CalcStart(CRYPTO_Type *base, uint32_
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc_CalcPartial(CRYPTO_Type *base,
-        void const *data, uint32_t  dataSize)
+                                        void const *data, uint32_t  dataSize)
 {
     uint32_t *dataStart = (uint32_t *)data;
 
-    do
-    {
+    do {
         uint32_t partSize = (dataSize <= 0xFFFFu) ? dataSize : 0xFFFFu;
 
         /* Fills the FIFO with the instruction parameters. */
-        Cy_Crypto_SetReg2Instr(base, (uint32_t)dataStart, partSize);
+        Cy_Crypto_SetReg2Instr(base, (uint32_t)dataStart, partSize );
 
         /* Issues the CRC instruction. */
         Cy_Crypto_Run2ParamInstr(base, CY_CRYPTO_V1_CRC_OPC, CY_CRYPTO_RSRC0_SHIFT, CY_CRYPTO_RSRC4_SHIFT);
 
         /* Waits until the CRC instruction is complete. */
-        while (0uL != _FLD2VAL(CRYPTO_STATUS_CRC_BUSY, REG_CRYPTO_STATUS(base)))
+        while(0uL != _FLD2VAL(CRYPTO_STATUS_CRC_BUSY, REG_CRYPTO_STATUS(base)))
         {
         }
 
         dataSize -= partSize;
         dataStart += partSize;
 
-    }
-    while (dataSize > 0u);
+    } while (dataSize > 0u);
 
     return (CY_CRYPTO_SUCCESS);
 }
@@ -383,23 +379,23 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc_CalcFinish(CRYPTO_Type *base, uint32
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Crc_Calc(CRYPTO_Type *base,
-        uint32_t  width,
-        uint32_t *crc,
-        void      const *data,
-        uint32_t  dataSize)
+                                        uint32_t  width,
+                                        uint32_t *crc,
+                                        void      const *data,
+                                        uint32_t  dataSize)
 {
     CY_ASSERT_L1((width >= 1U) && (width <= CY_CRYPTO_HW_REGS_WIDTH));
 
     uint32_t calculatedCrc;
 
     /* Fills the FIFO with the instruction parameters. */
-    Cy_Crypto_SetReg2Instr(base, (uint32_t)data, dataSize);
+    Cy_Crypto_SetReg2Instr(base, (uint32_t)data, dataSize );
 
     /* Issues the CRC instruction. */
     Cy_Crypto_Run2ParamInstr(base, CY_CRYPTO_V1_CRC_OPC, CY_CRYPTO_RSRC0_SHIFT, CY_CRYPTO_RSRC4_SHIFT);
 
     /* Waits until the CRC instruction is complete. */
-    while (0uL != _FLD2VAL(CRYPTO_STATUS_CRC_BUSY, REG_CRYPTO_STATUS(base)))
+    while(0uL != _FLD2VAL(CRYPTO_STATUS_CRC_BUSY, REG_CRYPTO_STATUS(base)))
     {
     }
 

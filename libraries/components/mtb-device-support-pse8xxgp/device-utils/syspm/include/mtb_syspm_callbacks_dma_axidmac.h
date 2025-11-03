@@ -36,7 +36,7 @@ extern "C" {
 // _mtb_syspm_dma_dmac_is_active
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE  bool _mtb_syspm_dma_dmac_is_active(const cy_stc_syspm_callback_params_t* params,
-        uint32_t channelNum)
+                                                    uint32_t channelNum)
 {
     return ((Cy_AXIDMAC_GetActiveChannel((params->base)) &
              (uint32_t)((uint32_t)1u << channelNum)) > 0u);

@@ -307,10 +307,10 @@ arm_status arm_nn_vec_mat_mult_t_s8(const q7_t *lhs,
         }
         for (int32_t rhs_cols_idx = 0; rhs_cols_idx < rhs_cols; ++rhs_cols_idx)
         {
-            const q31_t rhs_value0 = (int8_t) * rhs_ptr_0;
-            const q31_t rhs_value1 = (int8_t) * rhs_ptr_1;
-            const q31_t rhs_value2 = (int8_t) * rhs_ptr_2;
-            const q31_t lhs_value = (int8_t) * lhs_ptr + lhs_offset;
+            const q31_t rhs_value0 = (int8_t)*rhs_ptr_0;
+            const q31_t rhs_value1 = (int8_t)*rhs_ptr_1;
+            const q31_t rhs_value2 = (int8_t)*rhs_ptr_2;
+            const q31_t lhs_value = (int8_t)*lhs_ptr + lhs_offset;
 
             res00 += lhs_value * rhs_value0;
             res01 += lhs_value * rhs_value1;

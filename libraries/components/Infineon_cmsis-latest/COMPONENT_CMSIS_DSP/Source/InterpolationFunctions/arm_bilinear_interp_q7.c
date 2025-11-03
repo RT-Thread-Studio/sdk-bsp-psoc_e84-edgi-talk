@@ -45,11 +45,11 @@
   * @param[in]     Y  interpolation coordinate in 12.20 format.
   * @return out interpolated value.
   */
-q7_t arm_bilinear_interp_q7(
-    arm_bilinear_interp_instance_q7 * S,
-    q31_t X,
-    q31_t Y)
-{
+  q7_t arm_bilinear_interp_q7(
+  arm_bilinear_interp_instance_q7 * S,
+  q31_t X,
+  q31_t Y)
+  {
     q63_t acc = 0;                               /* output */
     q31_t out;                                   /* Temporary output */
     q31_t xfract, yfract;                        /* X, Y fractional parts */
@@ -72,7 +72,7 @@ q7_t arm_bilinear_interp_q7(
     /* Returns zero output when values are outside table boundary */
     if (rI < 0 || rI > (S->numCols - 2) || cI < 0 || cI > (S->numRows - 2))
     {
-        return (0);
+      return (0);
     }
 
     /* 20 bits for the fractional part */
@@ -109,9 +109,9 @@ q7_t arm_bilinear_interp_q7(
 
     /* acc in 16.47 format and down shift by 40 to convert to 1.7 format */
     return ((q7_t)(acc >> 40));
-}
+  }
 
-/**
- * @} end of BilinearInterpolate group
- */
+  /**
+   * @} end of BilinearInterpolate group
+   */
 

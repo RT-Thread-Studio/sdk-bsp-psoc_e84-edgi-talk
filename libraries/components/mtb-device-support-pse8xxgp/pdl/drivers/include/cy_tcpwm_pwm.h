@@ -37,6 +37,7 @@ extern "C" {
 
 /**
 * \addtogroup group_tcpwm_pwm
+* \{
 * Driver API for PWM.
 *
 * The functions and other declarations used in this part of the driver are in cy_tcpwm_pwm.h.
@@ -108,14 +109,13 @@ extern "C" {
 * PWM has to be started
 *
 * \snippet tcpwm/pwm/snippet/main.c snippet_Cy_TCPWM_PWM_Start
-* \{
 */
 
 /**
 * \defgroup group_tcpwm_macros_pwm          Macros
 * \defgroup group_tcpwm_functions_pwm       Functions
 * \defgroup group_tcpwm_data_structures_pwm Data Structures
-* \} */
+*/
 
 /**
 * \addtogroup group_tcpwm_data_structures_pwm
@@ -180,7 +180,7 @@ typedef enum
 typedef struct cy_stc_tcpwm_pwm_config
 {
     uint32_t    pwmMode;            /**< Sets the PWM mode. See \ref group_tcpwm_pwm_modes */
-    /** Sets the clock prescaler inside the TCWPM block. See \ref group_tcpwm_pwm_clk_prescalers */
+    /** Sets the clock prescaler inside the TCPWM block. See \ref group_tcpwm_pwm_clk_prescalers */
     uint32_t    clockPrescaler;
     uint32_t    pwmAlignment;       /**< Sets the PWM alignment. See \ref group_tcpwm_pwm_alignment */
     uint32_t    deadTimeClocks;     /**< The number of dead time-clocks if PWM with dead time is chosen */
@@ -253,7 +253,7 @@ typedef struct cy_stc_tcpwm_pwm_config
     bool        pwm_tc_sync_kill_dt;    /**< PWM output get suppressed at next tc event after kill input is active. If deadtime is enabled, output get suppressed after the tc event + deadtime. */
     bool        pwm_sync_kill_dt;       /**< PWM output line_out get suppressed immediately whereas line_compl_out get suppressed after dead time when kill input is active. */
 #endif /* defined (CY_IP_MXS40TCPWM) || defined (CY_DOXYGEN) */
-} cy_stc_tcpwm_pwm_config_t;
+}cy_stc_tcpwm_pwm_config_t;
 /** \} group_tcpwm_data_structures_pwm */
 
 /**
@@ -481,23 +481,23 @@ __STATIC_INLINE void Cy_TCPWM_PWM_SetPeriod1(TCPWM_Type *base, uint32_t cntNum, 
 __STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetPeriod1(TCPWM_Type const *base, uint32_t cntNum);
 __STATIC_INLINE void Cy_TCPWM_PWM_EnablePeriodSwap(TCPWM_Type *base, uint32_t cntNum, bool enable);
 #if (CY_IP_MXTCPWM_VERSION >= 2U) || defined (CY_DOXYGEN)
-__STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetDtCounter(TCPWM_Type const *base, uint32_t cntNum);
-__STATIC_INLINE uint32_t Cy_TCPWM_PWM_LineOutStatus(TCPWM_Type const *base, uint32_t cntNum, uint32_t pwmOutSelect);
+__STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetDtCounter (TCPWM_Type const *base, uint32_t cntNum);
+__STATIC_INLINE uint32_t Cy_TCPWM_PWM_LineOutStatus (TCPWM_Type const *base, uint32_t cntNum, uint32_t pwmOutSelect);
 #endif
-__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTime(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
+__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTime (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
 #if (CY_IP_MXTCPWM_VERSION >= 2U) || defined (CY_DOXYGEN)
-__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeN(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
+__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeN (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
 __STATIC_INLINE void Cy_TCPWM_PWM_Configure_LineSelect(TCPWM_Type *base, uint32_t cntNum,  cy_en_line_select_config_t line_out_val, cy_en_line_select_config_t line_compl_value);
 __STATIC_INLINE void Cy_TCPWM_PWM_Configure_LineSelectBuff(TCPWM_Type *base, uint32_t cntNum,  cy_en_line_select_config_t line_out_val, cy_en_line_select_config_t line_compl_value);
 __STATIC_INLINE void Cy_TCPWM_PWM_EnableLineSelectSwap(TCPWM_Type *base, uint32_t cntNum,  bool enable);
-__STATIC_INLINE void Cy_TCPWM_PWM_SetDT(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
+__STATIC_INLINE void Cy_TCPWM_PWM_SetDT (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
 #endif
 #if defined (CY_IP_MXS40TCPWM) || defined (CY_DOXYGEN)
 __STATIC_INLINE void Cy_TCPWM_PWM_EnableSwap(TCPWM_Type *base, uint32_t cntNum,  bool enable);
 cy_en_tcpwm_status_t Cy_TCPWM_PWM_Configure_Dithering(TCPWM_Type *base, uint32_t cntNum, cy_en_tcpwm_dithering_t  mode, uint8_t period, uint8_t duty, cy_en_dithering_limiter_t limiter);
-__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuff(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
-__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuffN(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
-__STATIC_INLINE void Cy_TCPWM_PWM_SetDTBuff(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
+__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuff (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
+__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuffN (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
+__STATIC_INLINE void Cy_TCPWM_PWM_SetDTBuff (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime);
 #endif /* defined (CY_IP_MXS40TCPWM) || defined (CY_DOXYGEN) */
 /*******************************************************************************
 * Function Name: Cy_TCPWM_PWM_Enable
@@ -582,7 +582,7 @@ __STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetStatus(TCPWM_Type const *base, uint32_t
     /* Generates proper up counting status, does not generated by HW */
     status &= ~CY_TCPWM_PWM_STATUS_UP_COUNTING;
     status |= ((~status & CY_TCPWM_PWM_STATUS_DOWN_COUNTING & (status >> TCPWM_CNT_STATUS_RUNNING_Pos)) <<
-               CY_TCPWM_CNT_STATUS_UP_POS);
+                CY_TCPWM_CNT_STATUS_UP_POS);
 #else
     status = TCPWM_GRP_CNT_STATUS(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 
@@ -590,10 +590,10 @@ __STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetStatus(TCPWM_Type const *base, uint32_t
     uint32_t tempStatus = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_RUNNING, status);
     /* Generates proper up counting status. Is not generated by HW */
     tempStatus = (((~_FLD2VAL(TCPWM_GRP_CNT_STATUS_DOWN, status)) & tempStatus) << CY_TCPWM_CNT_STATUS_UP_POS) |
-                 (_FLD2VAL(TCPWM_GRP_CNT_STATUS_DOWN, status) & tempStatus);
+                  (_FLD2VAL(TCPWM_GRP_CNT_STATUS_DOWN, status) & tempStatus);
     tempStatus |= ((_FLD2VAL(TCPWM_GRP_CNT_STATUS_CC0_READ_MISS, status) << CY_TCPWM_CNT_STATUS_CC0_READ_MISS_POS) |
-                   (_FLD2VAL(TCPWM_GRP_CNT_STATUS_CC1_READ_MISS, status) << CY_TCPWM_CNT_STATUS_CC1_READ_MISS_POS) |
-                   (_FLD2VAL(TCPWM_GRP_CNT_STATUS_KILL_STATUS, status) << CY_TCPWM_CNT_STATUS_KILL_POS));
+                  (_FLD2VAL(TCPWM_GRP_CNT_STATUS_CC1_READ_MISS, status) << CY_TCPWM_CNT_STATUS_CC1_READ_MISS_POS) |
+                  (_FLD2VAL(TCPWM_GRP_CNT_STATUS_KILL_STATUS, status) << CY_TCPWM_CNT_STATUS_KILL_POS));
 
     /* For backward compatibility, we set TCPWM_CNT_STATUS_RUNNING_Pos with TCPWM_GRP_CNT_V2_STATUS_RUNNING */
     status = tempStatus | (_FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_RUNNING, status) << TCPWM_CNT_STATUS_RUNNING_Pos);
@@ -601,14 +601,14 @@ __STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetStatus(TCPWM_Type const *base, uint32_t
     /* Generates proper up counting status. Is not generated by HW */
     status &= ~CY_TCPWM_PWM_STATUS_UP_COUNTING;
     status |= ((~status & CY_TCPWM_PWM_STATUS_DOWN_COUNTING & (status >> TCPWM_GRP_CNT_V2_STATUS_RUNNING_Pos)) <<
-               CY_TCPWM_CNT_STATUS_UP_POS);
+            CY_TCPWM_CNT_STATUS_UP_POS);
     /* For backward compatibility, we set TCPWM_CNT_STATUS_RUNNING_Pos with TCPWM_GRP_CNT_V2_STATUS_RUNNING */
     status |= (_FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_RUNNING, status) << TCPWM_CNT_STATUS_RUNNING_Pos);
 #endif /* (CY_IP_MXTCPWM_VERSION >= 3U) */
 
 #endif
 
-    return (status);
+    return(status);
 }
 
 
@@ -827,7 +827,7 @@ __STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetCompare1BufVal(TCPWM_Type const *base, 
 *******************************************************************************/
 __STATIC_INLINE void Cy_TCPWM_PWM_EnableCompare0Swap(TCPWM_Type *base, uint32_t cntNum,  bool enable)
 {
-    Cy_TCPWM_Block_EnableCompare0Swap(base, cntNum, enable);
+     Cy_TCPWM_Block_EnableCompare0Swap(base, cntNum, enable);
 }
 
 #if (CY_IP_MXTCPWM_VERSION >= 2U) || defined (CY_DOXYGEN)
@@ -983,9 +983,9 @@ __STATIC_INLINE void Cy_TCPWM_PWM_SetPeriod1(TCPWM_Type *base, uint32_t cntNum, 
 {
 #if (CY_IP_MXTCPWM_VERSION == 1U)
 
-    TCPWM_CNT_PERIOD_BUFF(base, cntNum) = period1;
+        TCPWM_CNT_PERIOD_BUFF(base, cntNum) = period1;
 #else
-    TCPWM_GRP_CNT_PERIOD_BUFF(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = period1;
+        TCPWM_GRP_CNT_PERIOD_BUFF(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) = period1;
 #endif
 }
 
@@ -1015,9 +1015,9 @@ __STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetPeriod1(TCPWM_Type const *base, uint32_
 
 #if (CY_IP_MXTCPWM_VERSION == 1U)
 
-    result = TCPWM_CNT_PERIOD_BUFF(base, cntNum);
+        result = TCPWM_CNT_PERIOD_BUFF(base, cntNum);
 #else
-    result = TCPWM_GRP_CNT_PERIOD_BUFF(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
+        result = TCPWM_GRP_CNT_PERIOD_BUFF(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 #endif
 
     return result;
@@ -1052,25 +1052,25 @@ __STATIC_INLINE void Cy_TCPWM_PWM_EnablePeriodSwap(TCPWM_Type *base, uint32_t cn
 {
 #if (CY_IP_MXTCPWM_VERSION == 1U)
 
-    if (enable)
-    {
-        TCPWM_CNT_CTRL(base, cntNum) |=  TCPWM_CNT_CTRL_AUTO_RELOAD_PERIOD_Msk;
-    }
-    else
-    {
-        TCPWM_CNT_CTRL(base, cntNum) &= ~TCPWM_CNT_CTRL_AUTO_RELOAD_PERIOD_Msk;
-    }
+        if (enable)
+        {
+            TCPWM_CNT_CTRL(base, cntNum) |=  TCPWM_CNT_CTRL_AUTO_RELOAD_PERIOD_Msk;
+        }
+        else
+        {
+            TCPWM_CNT_CTRL(base, cntNum) &= ~TCPWM_CNT_CTRL_AUTO_RELOAD_PERIOD_Msk;
+        }
 #else
-    if (enable)
-    {
-        TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) |=
-            TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_PERIOD_Msk;
-    }
-    else
-    {
-        TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) &=
-            ~TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_PERIOD_Msk;
-    }
+        if (enable)
+        {
+            TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) |=
+                                     TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_PERIOD_Msk;
+        }
+        else
+        {
+            TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) &=
+                                    ~TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_PERIOD_Msk;
+        }
 #endif
 }
 
@@ -1096,7 +1096,7 @@ __STATIC_INLINE void Cy_TCPWM_PWM_EnablePeriodSwap(TCPWM_Type *base, uint32_t cn
 * \note supported only in TCPWM_ver2
 *
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetDtCounter(TCPWM_Type const *base, uint32_t cntNum)
+__STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetDtCounter (TCPWM_Type const *base, uint32_t cntNum)
 {
     uint32_t result = 0UL;
 
@@ -1130,25 +1130,25 @@ __STATIC_INLINE uint32_t Cy_TCPWM_PWM_GetDtCounter(TCPWM_Type const *base, uint3
 * \note supported only in TCPWM_ver2
 *
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_TCPWM_PWM_LineOutStatus(TCPWM_Type const *base, uint32_t cntNum, uint32_t pwmOutSelect)
+__STATIC_INLINE uint32_t Cy_TCPWM_PWM_LineOutStatus (TCPWM_Type const *base, uint32_t cntNum, uint32_t pwmOutSelect)
 {
     uint32_t status = 0UL;
 
 
     status = TCPWM_GRP_CNT_STATUS(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 
-    switch (pwmOutSelect)
-    {
-    case CY_TCPWM_PWM_LINE_PWM:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_LINE_OUT, status);
-        break;
-    case CY_TCPWM_PWM_LINE_PWM_INV:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_LINE_COMPL_OUT, status);
-        break;
-    default:
-        /* Not a Valid Line output */
-        CY_ASSERT_L3(false);
-        break;
+     switch(pwmOutSelect)
+     {
+         case CY_TCPWM_PWM_LINE_PWM:
+             status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_LINE_OUT, status);
+             break;
+         case CY_TCPWM_PWM_LINE_PWM_INV:
+             status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_LINE_COMPL_OUT, status);
+             break;
+         default:
+             /* Not a Valid Line output */
+             CY_ASSERT_L3(false);
+             break;
     }
 
     return status;
@@ -1174,25 +1174,25 @@ __STATIC_INLINE uint32_t Cy_TCPWM_PWM_LineOutStatus(TCPWM_Type const *base, uint
 * \snippet tcpwm/pwm/snippet/main.c snippet_Cy_TCPWM_PWM_PWMDeadTime
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTime(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
+__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTime (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
 {
     uint32_t result;
 
 #if (CY_IP_MXTCPWM_VERSION == 1U)
 
-    result = TCPWM_CNT_CTRL(base, cntNum);
-    result &= ~(TCPWM_CNT_CTRL_GENERIC_Msk);
+        result = TCPWM_CNT_CTRL(base, cntNum);
+        result &= ~(TCPWM_CNT_CTRL_GENERIC_Msk);
 
-    TCPWM_CNT_CTRL(base, cntNum) = result | _VAL2FLD(TCPWM_CNT_CTRL_GENERIC, deadTime);
+        TCPWM_CNT_CTRL(base, cntNum) = result | _VAL2FLD(TCPWM_CNT_CTRL_GENERIC, deadTime);
 #else
-    uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
+        uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
 
-    result = TCPWM_GRP_CNT_DT(base, grp, cntNum);
-    result &= ~(TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L_Msk | TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_H_Msk);
+        result = TCPWM_GRP_CNT_DT(base, grp, cntNum);
+        result &= ~(TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L_Msk | TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_H_Msk);
 
-    TCPWM_GRP_CNT_DT(base, grp, cntNum) = result |
-                                          _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L, (uint8_t)(deadTime)) |
-                                          _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_H, (uint8_t)(deadTime >> 8U));
+        TCPWM_GRP_CNT_DT(base, grp, cntNum) = result |
+                    _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L, (uint8_t)(deadTime)) |
+                    _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_H, (uint8_t)(deadTime >> 8U));
 #endif
 
 }
@@ -1217,7 +1217,7 @@ __STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTime(TCPWM_Type const *base, uint32_t c
 * \snippet tcpwm/pwm/snippet/main.c snippet_Cy_TCPWM_PWM_PWMDeadTime
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeN(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
+__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeN (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
 {
     uint32_t result;
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
@@ -1226,7 +1226,7 @@ __STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeN(TCPWM_Type const *base, uint32_t 
     result &= ~(TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT_Msk);
 
     TCPWM_GRP_CNT_DT(base, grp, cntNum) = result |
-                                          _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT, (uint16_t)(deadTime));
+            _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT, (uint16_t)(deadTime));
 
 }
 
@@ -1247,7 +1247,7 @@ __STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeN(TCPWM_Type const *base, uint32_t 
 *
 * \note 32 bit value with 0-15 bits to set Line out Dead Time value and 16-31 bits to set Line Compliment Out Dead Time Value.
 *******************************************************************************/
-__STATIC_INLINE void Cy_TCPWM_PWM_SetDT(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
+__STATIC_INLINE void Cy_TCPWM_PWM_SetDT (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
 {
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
     TCPWM_GRP_CNT_DT(base, grp, cntNum) = deadTime;
@@ -1276,14 +1276,14 @@ __STATIC_INLINE void Cy_TCPWM_PWM_Configure_LineSelect(TCPWM_Type *base, uint32_
 {
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
     TCPWM_GRP_CNT_LINE_SEL(base, grp, cntNum) = (_VAL2FLD(TCPWM_GRP_CNT_V2_LINE_SEL_OUT_SEL, line_out_val) |
-        _VAL2FLD(TCPWM_GRP_CNT_V2_LINE_SEL_COMPL_OUT_SEL, line_compl_value));
+                                                 _VAL2FLD(TCPWM_GRP_CNT_V2_LINE_SEL_COMPL_OUT_SEL, line_compl_value));
 }
 
 /*******************************************************************************
 * Function Name: Cy_TCPWM_PWM_Configure_LineSelectBuff
 ****************************************************************************//**
 *
-* Buffer for LINE SELCT. Can be exchanged with Line Select values on a terminal count event with an actively pending switch event.
+* Buffer for LINE SELECT. Can be exchanged with Line Select values on a terminal count event with an actively pending switch event.
 *
 * \param base
 * The pointer to a TCPWM instance.
@@ -1302,7 +1302,7 @@ __STATIC_INLINE void Cy_TCPWM_PWM_Configure_LineSelectBuff(TCPWM_Type *base, uin
 {
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
     TCPWM_GRP_CNT_LINE_SEL_BUFF(base, grp, cntNum) = (_VAL2FLD(TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_OUT_SEL, line_out_val) |
-        _VAL2FLD(TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_COMPL_OUT_SEL, line_compl_value));
+                                                 _VAL2FLD(TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_COMPL_OUT_SEL, line_compl_value));
 }
 
 /*******************************************************************************
@@ -1330,12 +1330,12 @@ __STATIC_INLINE void Cy_TCPWM_PWM_EnableLineSelectSwap(TCPWM_Type *base, uint32_
     if (enable)
     {
         TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) |=
-            TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_LINE_SEL_Msk;
+                                 TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_LINE_SEL_Msk;
     }
     else
     {
         TCPWM_GRP_CNT_CTRL(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum) &=
-            ~TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_LINE_SEL_Msk;
+                                ~TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_LINE_SEL_Msk;
     }
 }
 #endif
@@ -1412,15 +1412,15 @@ __STATIC_INLINE void Cy_TCPWM_PWM_Set_KillLinePolarity(TCPWM_Type *base, uint32_
 * \snippet tcpwm/pwm/snippet/main.c snippet_Cy_TCPWM_PWM_PWMDeadTime
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuff(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
+__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuff (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
 {
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
     uint32_t result = TCPWM_GRP_CNT_DT_BUFF(base, grp, cntNum);
     result &= ~(TCPWM_GRP_CNT_DT_BUFF_DT_LINE_OUT_L_Msk | TCPWM_GRP_CNT_DT_BUFF_DT_LINE_OUT_H_Msk);
 
     TCPWM_GRP_CNT_DT_BUFF(base, grp, cntNum) = result |
-        (_VAL2FLD(TCPWM_GRP_CNT_DT_BUFF_DT_LINE_OUT_L, (uint8_t)(deadTime)) |
-         _VAL2FLD(TCPWM_GRP_CNT_DT_BUFF_DT_LINE_OUT_H, (uint8_t)(deadTime >> 8)));
+                        (_VAL2FLD(TCPWM_GRP_CNT_DT_BUFF_DT_LINE_OUT_L, (uint8_t)(deadTime)) |
+                        _VAL2FLD(TCPWM_GRP_CNT_DT_BUFF_DT_LINE_OUT_H, (uint8_t)(deadTime >> 8)));
 
 }
 
@@ -1444,7 +1444,7 @@ __STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuff(TCPWM_Type const *base, uint32
 * \snippet tcpwm/pwm/snippet/main.c snippet_Cy_TCPWM_PWM_PWMDeadTime
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuffN(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
+__STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuffN (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
 {
     uint32_t result;
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
@@ -1453,7 +1453,7 @@ __STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuffN(TCPWM_Type const *base, uint3
     result &= ~(TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT_Msk);
 
     TCPWM_GRP_CNT_DT_BUFF(base, grp, cntNum) = result |
-        _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT, (uint16_t)(deadTime));
+            _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT, (uint16_t)(deadTime));
 
 }
 
@@ -1476,7 +1476,7 @@ __STATIC_INLINE void Cy_TCPWM_PWM_PWMDeadTimeBuffN(TCPWM_Type const *base, uint3
 *
 * \note 32 bit value with 0-15 bits to set Line out Dead Time value and 16-31 bits to set Line Compliment Out Dead Time Value.
 *******************************************************************************/
-__STATIC_INLINE void Cy_TCPWM_PWM_SetDTBuff(TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
+__STATIC_INLINE void Cy_TCPWM_PWM_SetDTBuff (TCPWM_Type const *base, uint32_t cntNum, uint32_t deadTime)
 {
     uint32_t grp = TCPWM_GRP_CNT_GET_GRP(cntNum);
     TCPWM_GRP_CNT_DT_BUFF(base, grp, cntNum) = deadTime;

@@ -39,68 +39,66 @@
 /**
   * \brief PDM RX structure (PDM_CH)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IM uint32_t RESERVED[3];
-    __IOM uint32_t IF_CTL;                        /*!< 0x00000010 Interface control */
-    __IOM uint32_t CIC_CTL;                       /*!< 0x00000014 CIC control */
-    __IOM uint32_t FIR0_CTL;                      /*!< 0x00000018 FIR 0 control */
-    __IOM uint32_t FIR1_CTL;                      /*!< 0x0000001C FIR 1 control */
-    __IOM uint32_t DC_BLOCK_CTL;                  /*!< 0x00000020 DC block control */
-    __IM uint32_t RESERVED1[23];
-    __IOM uint32_t RX_FIFO_CTL;                   /*!< 0x00000080 RX FIFO control */
-    __IM uint32_t RX_FIFO_STATUS;                /*!< 0x00000084 RX FIFO status */
-    __IM uint32_t RX_FIFO_RD;                    /*!< 0x00000088 RX FIFO read */
-    __IM uint32_t RX_FIFO_RD_SILENT;             /*!< 0x0000008C RX FIFO silent read */
-    __IM uint32_t RESERVED2[12];
-    __IOM uint32_t INTR_RX;                       /*!< 0x000000C0 Interrupt */
-    __IOM uint32_t INTR_RX_SET;                   /*!< 0x000000C4 Interrupt set */
-    __IOM uint32_t INTR_RX_MASK;                  /*!< 0x000000C8 Interrupt mask */
-    __IM uint32_t INTR_RX_MASKED;                /*!< 0x000000CC Interrupt masked */
-    __IM uint32_t RESERVED3[12];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+   __IM uint32_t RESERVED[3];
+  __IOM uint32_t IF_CTL;                        /*!< 0x00000010 Interface control */
+  __IOM uint32_t CIC_CTL;                       /*!< 0x00000014 CIC control */
+  __IOM uint32_t FIR0_CTL;                      /*!< 0x00000018 FIR 0 control */
+  __IOM uint32_t FIR1_CTL;                      /*!< 0x0000001C FIR 1 control */
+  __IOM uint32_t DC_BLOCK_CTL;                  /*!< 0x00000020 DC block control */
+   __IM uint32_t RESERVED1[23];
+  __IOM uint32_t RX_FIFO_CTL;                   /*!< 0x00000080 RX FIFO control */
+   __IM uint32_t RX_FIFO_STATUS;                /*!< 0x00000084 RX FIFO status */
+   __IM uint32_t RX_FIFO_RD;                    /*!< 0x00000088 RX FIFO read */
+   __IM uint32_t RX_FIFO_RD_SILENT;             /*!< 0x0000008C RX FIFO silent read */
+   __IM uint32_t RESERVED2[12];
+  __IOM uint32_t INTR_RX;                       /*!< 0x000000C0 Interrupt */
+  __IOM uint32_t INTR_RX_SET;                   /*!< 0x000000C4 Interrupt set */
+  __IOM uint32_t INTR_RX_MASK;                  /*!< 0x000000C8 Interrupt mask */
+   __IM uint32_t INTR_RX_MASKED;                /*!< 0x000000CC Interrupt masked */
+   __IM uint32_t RESERVED3[12];
 } PDM_CH_Type;                                  /*!< Size = 256 (0x100) */
 
 /**
   * \brief PDM (PDM)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IOM uint32_t CTL_CLR;                       /*!< 0x00000004 Control clear */
-    __IOM uint32_t CTL_SET;                       /*!< 0x00000008 Control set */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t CLOCK_CTL;                     /*!< 0x00000010 Clock control */
-    __IM uint32_t RESERVED1[3];
-    __IOM uint32_t ROUTE_CTL;                     /*!< 0x00000020 Route control */
-    __IM uint32_t RESERVED2[3];
-    __IOM uint32_t TEST_CTL;                      /*!< 0x00000030 Test control */
-    __IM uint32_t RESERVED3[51];
-    __IOM uint32_t FIR0_COEFF0;                   /*!< 0x00000100 FIR 0 coefficients 0 */
-    __IOM uint32_t FIR0_COEFF1;                   /*!< 0x00000104 FIR 0 coefficients 1 */
-    __IOM uint32_t FIR0_COEFF2;                   /*!< 0x00000108 FIR 0 coefficients 2 */
-    __IOM uint32_t FIR0_COEFF3;                   /*!< 0x0000010C FIR 0 coefficients 3 */
-    __IOM uint32_t FIR0_COEFF4;                   /*!< 0x00000110 FIR 0 coefficients 4 */
-    __IOM uint32_t FIR0_COEFF5;                   /*!< 0x00000114 FIR 0 coefficients 5 */
-    __IOM uint32_t FIR0_COEFF6;                   /*!< 0x00000118 FIR 0 coefficients 6 */
-    __IOM uint32_t FIR0_COEFF7;                   /*!< 0x0000011C FIR 0 coefficients 7 */
-    __IM uint32_t RESERVED4[8];
-    __IOM uint32_t FIR1_COEFF0;                   /*!< 0x00000140 FIR 1 coefficients 0 */
-    __IOM uint32_t FIR1_COEFF1;                   /*!< 0x00000144 FIR 1 coefficients 1 */
-    __IOM uint32_t FIR1_COEFF2;                   /*!< 0x00000148 FIR 1 coefficients 2 */
-    __IOM uint32_t FIR1_COEFF3;                   /*!< 0x0000014C FIR 1 coefficients 3 */
-    __IOM uint32_t FIR1_COEFF4;                   /*!< 0x00000150 FIR 1 coefficients 4 */
-    __IOM uint32_t FIR1_COEFF5;                   /*!< 0x00000154 FIR 1 coefficients 5 */
-    __IOM uint32_t FIR1_COEFF6;                   /*!< 0x00000158 FIR 1 coefficients 6 */
-    __IOM uint32_t FIR1_COEFF7;                   /*!< 0x0000015C FIR 1 coefficients 7 */
-    __IOM uint32_t FIR1_COEFF8;                   /*!< 0x00000160 FIR 1 coefficients 8 */
-    __IOM uint32_t FIR1_COEFF9;                   /*!< 0x00000164 FIR 1 coefficients 9 */
-    __IOM uint32_t FIR1_COEFF10;                  /*!< 0x00000168 FIR 1 coefficients 10 */
-    __IOM uint32_t FIR1_COEFF11;                  /*!< 0x0000016C FIR 1 coefficients 11 */
-    __IOM uint32_t FIR1_COEFF12;                  /*!< 0x00000170 FIR 1 coefficients 12 */
-    __IOM uint32_t FIR1_COEFF13;                  /*!< 0x00000174 FIR 1 coefficients 13 */
-    __IM uint32_t RESERVED5[8098];
-    PDM_CH_Type CH[8];                      /*!< 0x00008000 PDM RX structure */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+  __IOM uint32_t CTL_CLR;                       /*!< 0x00000004 Control clear */
+  __IOM uint32_t CTL_SET;                       /*!< 0x00000008 Control set */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t CLOCK_CTL;                     /*!< 0x00000010 Clock control */
+   __IM uint32_t RESERVED1[3];
+  __IOM uint32_t ROUTE_CTL;                     /*!< 0x00000020 Route control */
+   __IM uint32_t RESERVED2[3];
+  __IOM uint32_t TEST_CTL;                      /*!< 0x00000030 Test control */
+   __IM uint32_t RESERVED3[51];
+  __IOM uint32_t FIR0_COEFF0;                   /*!< 0x00000100 FIR 0 coefficients 0 */
+  __IOM uint32_t FIR0_COEFF1;                   /*!< 0x00000104 FIR 0 coefficients 1 */
+  __IOM uint32_t FIR0_COEFF2;                   /*!< 0x00000108 FIR 0 coefficients 2 */
+  __IOM uint32_t FIR0_COEFF3;                   /*!< 0x0000010C FIR 0 coefficients 3 */
+  __IOM uint32_t FIR0_COEFF4;                   /*!< 0x00000110 FIR 0 coefficients 4 */
+  __IOM uint32_t FIR0_COEFF5;                   /*!< 0x00000114 FIR 0 coefficients 5 */
+  __IOM uint32_t FIR0_COEFF6;                   /*!< 0x00000118 FIR 0 coefficients 6 */
+  __IOM uint32_t FIR0_COEFF7;                   /*!< 0x0000011C FIR 0 coefficients 7 */
+   __IM uint32_t RESERVED4[8];
+  __IOM uint32_t FIR1_COEFF0;                   /*!< 0x00000140 FIR 1 coefficients 0 */
+  __IOM uint32_t FIR1_COEFF1;                   /*!< 0x00000144 FIR 1 coefficients 1 */
+  __IOM uint32_t FIR1_COEFF2;                   /*!< 0x00000148 FIR 1 coefficients 2 */
+  __IOM uint32_t FIR1_COEFF3;                   /*!< 0x0000014C FIR 1 coefficients 3 */
+  __IOM uint32_t FIR1_COEFF4;                   /*!< 0x00000150 FIR 1 coefficients 4 */
+  __IOM uint32_t FIR1_COEFF5;                   /*!< 0x00000154 FIR 1 coefficients 5 */
+  __IOM uint32_t FIR1_COEFF6;                   /*!< 0x00000158 FIR 1 coefficients 6 */
+  __IOM uint32_t FIR1_COEFF7;                   /*!< 0x0000015C FIR 1 coefficients 7 */
+  __IOM uint32_t FIR1_COEFF8;                   /*!< 0x00000160 FIR 1 coefficients 8 */
+  __IOM uint32_t FIR1_COEFF9;                   /*!< 0x00000164 FIR 1 coefficients 9 */
+  __IOM uint32_t FIR1_COEFF10;                  /*!< 0x00000168 FIR 1 coefficients 10 */
+  __IOM uint32_t FIR1_COEFF11;                  /*!< 0x0000016C FIR 1 coefficients 11 */
+  __IOM uint32_t FIR1_COEFF12;                  /*!< 0x00000170 FIR 1 coefficients 12 */
+  __IOM uint32_t FIR1_COEFF13;                  /*!< 0x00000174 FIR 1 coefficients 13 */
+   __IM uint32_t RESERVED5[8098];
+        PDM_CH_Type CH[8];                      /*!< 0x00008000 PDM RX structure */
 } PDM_Type;                                     /*!< Size = 34816 (0x8800) */
 
 

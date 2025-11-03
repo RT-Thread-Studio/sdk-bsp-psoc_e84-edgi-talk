@@ -37,7 +37,7 @@ extern "C" {
 // _mtb_syspm_tcpwm_is_enabled
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE bool _mtb_syspm_tcpwm_is_enabled(const cy_stc_syspm_callback_params_t* params,
-        uint32_t channelNum)
+                                                 uint32_t channelNum)
 {
     if (_FLD2BOOL(TCPWM_GRP_CNT_V2_CTRL_ENABLED,
                   TCPWM_GRP_CNT_CTRL(params->base, TCPWM_GRP_CNT_GET_GRP(channelNum),

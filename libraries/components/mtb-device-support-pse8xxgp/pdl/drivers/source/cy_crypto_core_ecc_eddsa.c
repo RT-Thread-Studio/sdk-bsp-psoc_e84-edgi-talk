@@ -44,19 +44,19 @@ extern "C" {
 
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_ExpMod(CRYPTO_Type *base, uint32_t p_x, uint32_t p_y, uint32_t p_e, uint32_t bitsize);
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519Add(CRYPTO_Type *base, cy_stc_crypto_edw_dp_type *edwDp, uint32_t s_x,
-        uint32_t s_y, uint32_t s_z,
-        uint32_t t_x, uint32_t t_y,
-        uint32_t size);
+                                                uint32_t s_y, uint32_t s_z,
+                                                uint32_t t_x, uint32_t t_y,
+                                                uint32_t size);
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519Double(CRYPTO_Type *base, cy_stc_crypto_edw_dp_type *edwDp, uint32_t s_x,
-        uint32_t s_y, uint32_t s_z,
-        uint32_t size);
+                                                uint32_t s_y, uint32_t s_z,
+                                                uint32_t size);
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519InvTransform(CRYPTO_Type *base, uint32_t s_x, uint32_t s_y, uint32_t s_z, uint32_t size);
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMul(CRYPTO_Type *base, cy_stc_crypto_edw_dp_type *edwDp, uint32_t p_x, uint32_t p_y,
-        uint32_t p_d, uint32_t bitsize);
+                                                uint32_t p_d, uint32_t bitsize);
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMulAdd(CRYPTO_Type *base, cy_stc_crypto_edw_dp_type *edwDp,
-        uint32_t p_x, uint32_t p_y, uint32_t s,
-        uint32_t q_x, uint32_t q_y, uint32_t h,
-        uint32_t bitsize);
+                                                        uint32_t p_x, uint32_t p_y, uint32_t s,
+                                                        uint32_t q_x, uint32_t q_y, uint32_t h,
+                                                        uint32_t bitsize);
 
 
 #define CY_ED25519SIG_VERIFY_PASS (0xA1A1A1A1u)
@@ -91,9 +91,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMulAdd(CRYPTO_Type *base, cy_s
 * \return status code. See \ref cy_en_crypto_status_t.
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_EDDSA_Bar_MulRed(CRYPTO_Type *base,
-        uint32_t z,
-        uint32_t x,
-        uint32_t size)
+    uint32_t z,
+    uint32_t x,
+    uint32_t size)
 {
 
     uint32_t sh          = 0u;
@@ -105,51 +105,51 @@ cy_en_crypto_status_t Cy_Crypto_Core_EDDSA_Bar_MulRed(CRYPTO_Type *base,
     uint32_t my_z        = 7u;
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
-    CY_CRYPTO_VU_LD_REG(base, my_z, z);
-    CY_CRYPTO_VU_LD_REG(base, z_double, x);
+    CY_CRYPTO_VU_LD_REG (base, my_z, z);
+    CY_CRYPTO_VU_LD_REG (base, z_double, x);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t_double, (3u * size) + 7u);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t_double, (3u * size) + 7u);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t1, size + 4u);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t1, size+4u);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    CY_CRYPTO_VU_UMUL(base, t_double, z_double, VR_BARRETT);
-    CY_CRYPTO_VU_SET_REG(base, sh, 512u, 2u);
-    CY_CRYPTO_VU_LSR(base, t1, t_double, sh);
-    CY_CRYPTO_VU_UMUL(base, t_double, t1, VR_P);
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(t1));
+    CY_CRYPTO_VU_UMUL (base, t_double, z_double, VR_BARRETT);
+    CY_CRYPTO_VU_SET_REG (base, sh, 512u, 2u);
+    CY_CRYPTO_VU_LSR (base, t1, t_double, sh);
+    CY_CRYPTO_VU_UMUL (base, t_double, t1, VR_P);
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(t1));
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t1_plus2, size + 2u);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t1_plus2, size + 2u);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t2_plus2, size + 2u);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t2_plus2, size + 2u);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
-    CY_CRYPTO_VU_SUB(base, t2_plus2, z_double, t_double);
-    CY_CRYPTO_VU_SUB(base, t1_plus2, t2_plus2, VR_P);
-    CY_CRYPTO_VU_COND_SWAP_REG(base, CY_CRYPTO_VU_COND_CC, t1_plus2, t2_plus2);
-    CY_CRYPTO_VU_SUB(base, t2_plus2, t1_plus2, VR_P);
-    CY_CRYPTO_VU_COND_MOV(base, CY_CRYPTO_VU_COND_CC, my_z, t1_plus2);
-    CY_CRYPTO_VU_COND_MOV(base, CY_CRYPTO_VU_COND_CS, my_z, t2_plus2);
+    CY_CRYPTO_VU_SUB (base, t2_plus2, z_double, t_double);
+    CY_CRYPTO_VU_SUB (base, t1_plus2, t2_plus2, VR_P);
+    CY_CRYPTO_VU_COND_SWAP_REG (base, CY_CRYPTO_VU_COND_CC, t1_plus2, t2_plus2);
+    CY_CRYPTO_VU_SUB (base, t2_plus2, t1_plus2, VR_P);
+    CY_CRYPTO_VU_COND_MOV (base, CY_CRYPTO_VU_COND_CC, my_z, t1_plus2);
+    CY_CRYPTO_VU_COND_MOV (base, CY_CRYPTO_VU_COND_CS, my_z, t2_plus2);
 
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(t2_plus2) |
-                          CY_CRYPTO_VU_REG_BIT(t1_plus2) |
-                          CY_CRYPTO_VU_REG_BIT(t_double));
-    CY_CRYPTO_VU_POP_REG(base);
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(t2_plus2) |
+                                 CY_CRYPTO_VU_REG_BIT(t1_plus2) |
+                                 CY_CRYPTO_VU_REG_BIT(t_double));
+    CY_CRYPTO_VU_POP_REG (base);
 
     return CY_CRYPTO_SUCCESS;
 }
@@ -178,11 +178,11 @@ cy_en_crypto_status_t Cy_Crypto_Core_EDDSA_Bar_MulRed(CRYPTO_Type *base,
 *
 * \return status code. See \ref cy_en_crypto_status_t.
 *******************************************************************************/
-cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MulMod(CRYPTO_Type *base,
-        uint32_t z,
-        uint32_t a,
-        uint32_t b,
-        uint32_t size)
+cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MulMod( CRYPTO_Type *base,
+    uint32_t z,
+    uint32_t a,
+    uint32_t b,
+    uint32_t size)
 {
     uint32_t ab_double       = 0u;
     uint32_t my_z            = 1u;
@@ -190,28 +190,28 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MulMod(CRYPTO_Type *base,
     uint32_t my_b            = 3u;
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
     CY_CRYPTO_VU_LD_REG(base, my_z, z);
     CY_CRYPTO_VU_LD_REG(base, my_a, a);
     CY_CRYPTO_VU_LD_REG(base, my_b, b);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, ab_double, 2u * size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, ab_double, 2u * size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
-    CY_CRYPTO_VU_UMUL(base, ab_double, my_a, my_b);
+    CY_CRYPTO_VU_UMUL (base, ab_double, my_a, my_b);
 
     /* Barrett reduction */
     tmpResult = Cy_Crypto_Core_EDDSA_Bar_MulRed(base, my_z, ab_double, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(ab_double));
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(ab_double));
 
-    CY_CRYPTO_VU_POP_REG(base);
+    CY_CRYPTO_VU_POP_REG (base);
 
     return CY_CRYPTO_SUCCESS;
 }
@@ -236,31 +236,31 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MulMod(CRYPTO_Type *base,
 *
 * \return status code. See \ref cy_en_crypto_status_t.
 *******************************************************************************/
-cy_en_crypto_status_t Cy_Crypto_Core_ED25519_SquareMod(CRYPTO_Type *base,
-        uint32_t z,
-        uint32_t a,
-        uint32_t size)
+cy_en_crypto_status_t Cy_Crypto_Core_ED25519_SquareMod( CRYPTO_Type *base,
+    uint32_t z,
+    uint32_t a,
+    uint32_t size)
 {
-    return Cy_Crypto_Core_ED25519_MulMod(base, z, a, a, size);
+    return Cy_Crypto_Core_ED25519_MulMod( base, z, a, a, size);
 }
 
 #if defined(CY_CRYPTO_CFG_EDDSA_C)
-static void Cy_Crypto_Core_ED25519_dom2_ctx(CRYPTO_Type *base, cy_en_eddsa_sig_type_t sigType, const uint8_t *ctx,
-        uint32_t ctx_len, cy_stc_crypto_sha_state_t *shaState)
+static void Cy_Crypto_Core_ED25519_dom2_ctx( CRYPTO_Type *base, cy_en_eddsa_sig_type_t sigType, const uint8_t *ctx,
+                uint32_t ctx_len, cy_stc_crypto_sha_state_t *shaState )
 {
     uint8_t ct_init_string[] = "SigEd25519 no Ed25519 collisions";
     uint8_t ct_flag;
     uint8_t ct_ctx_len = (uint8_t)(ctx_len & 0xffu);
 
-    ct_flag = (sigType == CY_CRYPTO_EDDSA_CTX) ? (uint8_t)0 : (uint8_t)1;
+    ct_flag = (sigType == CY_CRYPTO_EDDSA_CTX)? (uint8_t)0: (uint8_t)1;
     /*Note: Can merge to one update call*/
     (void)Cy_Crypto_Core_Sha_Update(base, shaState, (uint8_t const*)ct_init_string, 32u);
     (void)Cy_Crypto_Core_Sha_Update(base, shaState, (uint8_t const*)&ct_flag, 1u);
     (void)Cy_Crypto_Core_Sha_Update(base, shaState, (uint8_t const*)&ct_ctx_len, 1u);
 
-    if (ctx != NULL && ctx_len > 0u)
+    if( ctx != NULL && ctx_len > 0u)
     {
-        (void)Cy_Crypto_Core_Sha_Update(base, shaState, ctx, ctx_len);
+        (void)Cy_Crypto_Core_Sha_Update(base, shaState, ctx, ctx_len );
 
     }
 }
@@ -305,14 +305,14 @@ static void Cy_Crypto_Core_ED25519_dom2_ctx(CRYPTO_Type *base, cy_en_eddsa_sig_t
 * \return status code. See \ref cy_en_crypto_status_t.
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519Add(CRYPTO_Type *base,
-        cy_stc_crypto_edw_dp_type *edwDp,
-        uint32_t s_x,
-        uint32_t s_y,
-        uint32_t s_z,
-        uint32_t t_x,
-        uint32_t t_y,
-        uint32_t size
-                                               )
+    cy_stc_crypto_edw_dp_type *edwDp,
+    uint32_t s_x,
+    uint32_t s_y,
+    uint32_t s_z,
+    uint32_t t_x,
+    uint32_t t_y,
+    uint32_t size
+)
 {
     uint32_t t1    = 1u;
     uint32_t b     = 0u;
@@ -331,7 +331,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519Add(CRYPTO_Type *base,
 
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
     CY_CRYPTO_VU_SAVE_REG(base, s_x, &r_s_x);
     CY_CRYPTO_VU_SAVE_REG(base, s_y, &r_s_y);
@@ -345,44 +345,44 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519Add(CRYPTO_Type *base,
     CY_CRYPTO_VU_RESTORE_REG(base, my_t_x, r_t_x);
     CY_CRYPTO_VU_RESTORE_REG(base, my_t_y, r_t_y);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t1, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t1, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, b, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, b, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, c, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, c, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, d, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, d, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, e, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, e, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, f, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, f, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, g, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, g, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
@@ -391,100 +391,100 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519Add(CRYPTO_Type *base,
     /* Z2 = 1 skip first step
     Note: Revisit if we randomize the base points*/
     /* B = A^2 */
-    tmpResult = Cy_Crypto_Core_ED25519_SquareMod(base, b, my_s_z, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_SquareMod( base, b, my_s_z, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* C = X1*X2 */
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, c, my_s_x, my_t_x, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, c, my_s_x, my_t_x, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* D = Y1*Y2 */
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, d, my_s_y, my_t_y, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, d, my_s_y, my_t_y, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* E = d*C*D */
-    Cy_Crypto_Core_Vu_SetMemValue(base, t1, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->d), size);
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, f, c, d, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    Cy_Crypto_Core_Vu_SetMemValue (base, t1, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->d), size);
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, f, c, d, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, e, f, t1, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, e, f, t1, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* F = B-E */
-    Cy_Crypto_Core_EC_SubMod(base, f, b, e);
+    Cy_Crypto_Core_EC_SubMod( base, f, b, e);
     /* G = B+E */
-    Cy_Crypto_Core_EC_AddMod(base, g, b, e);
+    Cy_Crypto_Core_EC_AddMod( base, g, b, e);
     /* X3 = A*F*((X1+Y1)*(X2+Y2)-C-D) */
     t2 = b;
-    Cy_Crypto_Core_EC_AddMod(base, t1, my_s_x, my_s_y);
-    Cy_Crypto_Core_EC_AddMod(base, t2, my_t_x, my_t_y);
+    Cy_Crypto_Core_EC_AddMod( base, t1, my_s_x, my_s_y);
+    Cy_Crypto_Core_EC_AddMod( base, t2, my_t_x, my_t_y);
 
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_x, t1, t2, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, my_s_x, t1, t2, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    Cy_Crypto_Core_EC_SubMod(base, my_s_x, my_s_x, c);
-    Cy_Crypto_Core_EC_SubMod(base, my_s_x, my_s_x, d);
+    Cy_Crypto_Core_EC_SubMod( base, my_s_x, my_s_x, c);
+    Cy_Crypto_Core_EC_SubMod( base, my_s_x, my_s_x, d);
 
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, t1, my_s_z, f, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, t1, my_s_z, f, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_x, my_s_x, t1, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, my_s_x, my_s_x, t1, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
     /* Y3 = A*G*(D-a*C) */
-    Cy_Crypto_Core_Vu_SetMemValue(base, t1, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->a), size);
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, t2, my_s_z, g, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    Cy_Crypto_Core_Vu_SetMemValue (base, t1, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->a), size);
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, t2, my_s_z, g, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, t1, t1, c, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, t1, t1, c, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    Cy_Crypto_Core_EC_SubMod(base, my_s_y, d, t1);
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_y, my_s_y, t2, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    Cy_Crypto_Core_EC_SubMod( base, my_s_y, d, t1);
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, my_s_y, my_s_y, t2, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
     /* Z3 = F*G */
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_z, f, g, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult =Cy_Crypto_Core_ED25519_MulMod( base, my_s_z, f, g, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(t1) | CY_CRYPTO_VU_REG_BIT(b) |
-                          CY_CRYPTO_VU_REG_BIT(c) | CY_CRYPTO_VU_REG_BIT(d)  |
-                          CY_CRYPTO_VU_REG_BIT(e) | CY_CRYPTO_VU_REG_BIT(f)  |
-                          CY_CRYPTO_VU_REG_BIT(g));
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(t1) | CY_CRYPTO_VU_REG_BIT(b) |
+                                 CY_CRYPTO_VU_REG_BIT(c) | CY_CRYPTO_VU_REG_BIT(d)  |
+                                 CY_CRYPTO_VU_REG_BIT(e) | CY_CRYPTO_VU_REG_BIT(f)  |
+                                 CY_CRYPTO_VU_REG_BIT(g));
 
-    CY_CRYPTO_VU_POP_REG(base);
+    CY_CRYPTO_VU_POP_REG (base);
 
     return CY_CRYPTO_SUCCESS;
 }
@@ -525,12 +525,12 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519Add(CRYPTO_Type *base,
 * \return status code. See \ref cy_en_crypto_status_t.
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519Double(CRYPTO_Type *base,
-        cy_stc_crypto_edw_dp_type *edwDp,
-        uint32_t s_x,
-        uint32_t s_y,
-        uint32_t s_z,
-        uint32_t size
-                                                  )
+    cy_stc_crypto_edw_dp_type *edwDp,
+    uint32_t s_x,
+    uint32_t s_y,
+    uint32_t s_z,
+    uint32_t size
+)
 /* 3M + 4S */
 {
     uint32_t b      = 1u;
@@ -544,111 +544,111 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519Double(CRYPTO_Type *base,
     uint32_t my_s_z = 9u;
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
     CY_CRYPTO_VU_LD_REG(base, my_s_x, s_x);
     CY_CRYPTO_VU_LD_REG(base, my_s_y, s_y);
     CY_CRYPTO_VU_LD_REG(base, my_s_z, s_z);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, b, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, b, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, c, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, c, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, d, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, d, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, e, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, e, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, f, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, f, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
-    Cy_Crypto_Core_Vu_SetMemValue(base, f, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->a), size);
+    Cy_Crypto_Core_Vu_SetMemValue (base, f, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->a), size);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, j, size + 1u);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, j, size+1u);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
     /* B = (X1 + Y1)^2 */
-    Cy_Crypto_Core_EC_AddMod(base, b, my_s_x, my_s_y);
-    tmpResult = Cy_Crypto_Core_ED25519_SquareMod(base, b, b, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    Cy_Crypto_Core_EC_AddMod( base, b, my_s_x, my_s_y);
+    tmpResult = Cy_Crypto_Core_ED25519_SquareMod( base, b, b, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* C = X1^2 */
-    tmpResult = Cy_Crypto_Core_ED25519_SquareMod(base, c, my_s_x, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_SquareMod( base, c, my_s_x, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* D = Y1^2 */
-    tmpResult = Cy_Crypto_Core_ED25519_SquareMod(base, d, my_s_y, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_SquareMod( base, d, my_s_y, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* E = eddp->a*C */
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, e, f, c, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, e, f, c, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* F = E+D */
-    Cy_Crypto_Core_EC_AddMod(base, f, e, d);
+    Cy_Crypto_Core_EC_AddMod( base, f, e, d);
     /* J = F - 2*(Z1^2) */
-    tmpResult = Cy_Crypto_Core_ED25519_SquareMod(base, j, my_s_z, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_SquareMod( base, j, my_s_z, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /*2*(Z1^2) mod p*/
-    Cy_Crypto_Core_EC_AddMod(base, j, j, j);
-    Cy_Crypto_Core_EC_SubMod(base, j, f, j);
+    Cy_Crypto_Core_EC_AddMod( base, j, j, j);
+    Cy_Crypto_Core_EC_SubMod (base, j, f, j);
     /* X3 = (B-C-D)*J */
-    Cy_Crypto_Core_EC_SubMod(base, b, b, c);
-    Cy_Crypto_Core_EC_SubMod(base, b, b, d);
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_x, b, j, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    Cy_Crypto_Core_EC_SubMod (base, b, b, c);
+    Cy_Crypto_Core_EC_SubMod (base, b, b, d);
+    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, my_s_x, b, j, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* Y3 = F*(E-D) */
-    Cy_Crypto_Core_EC_SubMod(base, e, e, d);
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_y, f, e, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    Cy_Crypto_Core_EC_SubMod (base, e, e, d);
+    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, my_s_y, f, e, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* Z3 = F*J */
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_z, f, j, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, my_s_z, f, j, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(b) | CY_CRYPTO_VU_REG_BIT(c) |
-                          CY_CRYPTO_VU_REG_BIT(d) | CY_CRYPTO_VU_REG_BIT(e) |
-                          CY_CRYPTO_VU_REG_BIT(f) | CY_CRYPTO_VU_REG_BIT(j));
-    CY_CRYPTO_VU_POP_REG(base);
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(b) | CY_CRYPTO_VU_REG_BIT(c) |
+                                 CY_CRYPTO_VU_REG_BIT(d) | CY_CRYPTO_VU_REG_BIT(e) |
+                                 CY_CRYPTO_VU_REG_BIT(f) | CY_CRYPTO_VU_REG_BIT(j) );
+    CY_CRYPTO_VU_POP_REG (base);
 
     return CY_CRYPTO_SUCCESS;
 }
@@ -688,7 +688,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519InvTransform(CRYPTO_Type *base, uint
     uint32_t r_s_x, r_s_y, r_s_z;
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
     CY_CRYPTO_VU_SAVE_REG(base, s_x, &r_s_x);
     CY_CRYPTO_VU_SAVE_REG(base, s_y, &r_s_y);
@@ -698,41 +698,41 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519InvTransform(CRYPTO_Type *base, uint
     CY_CRYPTO_VU_RESTORE_REG(base, my_s_y, r_s_y);
     CY_CRYPTO_VU_RESTORE_REG(base, my_s_z, r_s_z);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t1, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t1, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t2, size);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t2, size);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    CY_CRYPTO_VU_SET_TO_ONE(base, t1);                                  /* t1 = 1 */
+    CY_CRYPTO_VU_SET_TO_ONE (base, t1);                                 /* t1 = 1 */
 
-    tmpResult = Cy_Crypto_Core_EC_DivMod(base, t2, t1, my_s_z, size);   /* t2 = 1/Z */
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_EC_DivMod( base, t2, t1, my_s_z, size);  /* t2 = 1/Z */
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_x, my_s_x, t2, size);   /* my_s_x = X/Z */
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, my_s_x, my_s_x, t2, size);  /* my_s_x = X/Z */
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, my_s_y, my_s_y, t2, size);   /* t3 = Y/Z */
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, my_s_y, my_s_y, t2, size);  /* t3 = Y/Z */
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(t1) | CY_CRYPTO_VU_REG_BIT(t2));
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(t1) | CY_CRYPTO_VU_REG_BIT(t2));
 
-    CY_CRYPTO_VU_POP_REG(base);
+    CY_CRYPTO_VU_POP_REG (base);
 
     return CY_CRYPTO_SUCCESS;
 }
@@ -772,9 +772,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519InvTransform(CRYPTO_Type *base, uint
 * \return status code. See \ref cy_en_crypto_status_t.
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMulAdd(CRYPTO_Type *base, cy_stc_crypto_edw_dp_type *edwDp,
-        uint32_t p_x, uint32_t p_y, uint32_t s,
-        uint32_t q_x, uint32_t q_y, uint32_t h,
-        uint32_t bitsize)
+                                                        uint32_t p_x, uint32_t p_y, uint32_t s,
+                                                        uint32_t q_x, uint32_t q_y, uint32_t h,
+                                                        uint32_t bitsize)
 {
     /* Note: Pre conditions 0 < (px,py)(qx,qy) < N-1 */
     /* Do not use all arg REG (5,7,8,9,11,12), also on V1 reg2 is modified by mem ops */
@@ -782,44 +782,44 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMulAdd(CRYPTO_Type *base, cy_s
     uint32_t my_s    = 3u;
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
     CY_CRYPTO_VU_LD_REG(base, my_s, s);
 
     /* load prime defining the curve as well as the barrett coefficient. */
     /* VR_P and VR_BARRETT_U are "globally" defined in cy_crypto_core_ecc.h */
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_P, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_P, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
-    Cy_Crypto_Core_Vu_SetMemValue(base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->prime), bitsize);
+    Cy_Crypto_Core_Vu_SetMemValue (base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->prime), bitsize);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_BARRETT, edwDp->barret_psize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_BARRETT, edwDp->barret_psize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
-    Cy_Crypto_Core_Vu_SetMemValue(base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_p), edwDp->barret_psize);
+    Cy_Crypto_Core_Vu_SetMemValue (base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_p), edwDp->barret_psize);
 
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_z, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_z, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* init point->z to 1. */
-    CY_CRYPTO_VU_SET_TO_ONE(base, p_z);
+    CY_CRYPTO_VU_SET_TO_ONE (base, p_z);
 
     /*sB = point_mul(s, G)*/
     tmpResult = Cy_Crypto_Core_ED25519_PointMul(base, edwDp, p_x, p_y, my_s, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /*hA = point_mul(h, A)*/
     tmpResult = Cy_Crypto_Core_ED25519_PointMul(base, edwDp, q_x, q_y, h, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
@@ -828,22 +828,22 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMulAdd(CRYPTO_Type *base, cy_s
        We perform fast single-signature verification by computing R = [s]B + [-k]A'. compressing 'R' and comparing with Sig[R] without
        decompressing it.
     */
-    tmpResult = Cy_Crypto_Core_ED25519Add(base, edwDp, p_x, p_y, p_z, q_x, q_y, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = Cy_Crypto_Core_ED25519Add (base, edwDp, p_x, p_y, p_z, q_x, q_y, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* Inverse transform */
     Cy_Crypto_Core_Vu_WaitForComplete(base);
     tmpResult = Cy_Crypto_Core_ED25519InvTransform(base, p_x, p_y, p_z, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
     Cy_Crypto_Core_Vu_WaitForComplete(base);
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(p_z) | CY_CRYPTO_VU_REG_BIT(VR_P) | CY_CRYPTO_VU_REG_BIT(VR_BARRETT));
-    CY_CRYPTO_VU_POP_REG(base);
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(p_z)|CY_CRYPTO_VU_REG_BIT(VR_P)|CY_CRYPTO_VU_REG_BIT(VR_BARRETT));
+    CY_CRYPTO_VU_POP_REG (base);
 
     return tmpResult;
 }
@@ -893,7 +893,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMul(CRYPTO_Type *base, cy_stc_
 
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
     CY_CRYPTO_VU_SAVE_REG(base, p_x, &r_p_x);
     CY_CRYPTO_VU_SAVE_REG(base, p_y, &r_p_y);
@@ -903,69 +903,69 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMul(CRYPTO_Type *base, cy_stc_
     CY_CRYPTO_VU_RESTORE_REG(base, my_s_y, r_p_y);
     CY_CRYPTO_VU_RESTORE_REG(base, my_d, r_p_d);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, clr, bitsize + 1u);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, clr, bitsize+1u);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, my_s_z, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, my_s_z, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, my_t_x, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, my_t_x, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, my_t_y, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, my_t_y, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
     /* load prime defining the curve as well as the barrett coefficient. */
     /* VR_P and VR_BARRETT_U are "globally" defined in cy_crypto_core_ecc.h */
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_P, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_P, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
-    Cy_Crypto_Core_Vu_SetMemValue(base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->prime), bitsize);
+    Cy_Crypto_Core_Vu_SetMemValue (base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->prime), bitsize);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_BARRETT, edwDp->barret_psize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_BARRETT, edwDp->barret_psize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
-    Cy_Crypto_Core_Vu_SetMemValue(base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_p), edwDp->barret_psize);
+    Cy_Crypto_Core_Vu_SetMemValue (base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_p), edwDp->barret_psize);
 
 
-    CY_CRYPTO_VU_MOV(base, my_t_x, my_s_x);
-    CY_CRYPTO_VU_MOV(base, my_t_y, my_s_y);
+    CY_CRYPTO_VU_MOV (base, my_t_x, my_s_x);
+    CY_CRYPTO_VU_MOV (base, my_t_y, my_s_y);
 
     /* init point->z to 1. */
-    CY_CRYPTO_VU_SET_TO_ONE(base, my_s_z);
+    CY_CRYPTO_VU_SET_TO_ONE (base, my_s_z);
 
     /* EC scalar multiplication (irregular) operation. */
-    CY_CRYPTO_VU_SET_TO_ZERO(base, clr);
-    CY_CRYPTO_VU_CLSAME(base, t, my_d, clr);
+    CY_CRYPTO_VU_SET_TO_ZERO (base, clr);
+    CY_CRYPTO_VU_CLSAME (base, t, my_d, clr);
 
     /* This is needed, otherwise clsame is wrong */
     Cy_Crypto_Core_Vu_WaitForComplete(base);
 
-    clsame = Cy_Crypto_Core_Vu_RegDataPtrRead(base, t);
+    clsame = Cy_Crypto_Core_Vu_RegDataPtrRead (base, t);
 
-    CY_CRYPTO_VU_LSL(base, my_d, my_d, t);   /* Get rid of leading '0's */
-    CY_CRYPTO_VU_LSL1(base, my_d, my_d);     /* Get rid of leading '1' */
+    CY_CRYPTO_VU_LSL  (base, my_d, my_d, t); /* Get rid of leading '0's */
+    CY_CRYPTO_VU_LSL1 (base, my_d, my_d);    /* Get rid of leading '1' */
 
     /* Binary left-to-right algorithm
     * Perform point addition and point doubling to implement scalar multiplication
@@ -974,7 +974,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMul(CRYPTO_Type *base, cy_stc_
     * Carry set if current bit is equal to 1 (hence, perform point addition - point
     * doubling is always performed)
     */
-    if (bitsize >= clsame)
+    if( bitsize >= clsame)
     {
         loop = (uint32_t)(bitsize - clsame);
     }
@@ -988,23 +988,23 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMul(CRYPTO_Type *base, cy_stc_
         /* Carry set if current bit is equal to 1 (hence, perform point addition - point
         * doubling is always performed)
         */
-        CY_CRYPTO_VU_LSL1(base, my_d, my_d);
+        CY_CRYPTO_VU_LSL1 (base, my_d, my_d);
         status = Cy_Crypto_Core_Vu_StatusRead(base);
 
         carry = status & CY_CRYPTO_VU_STATUS_CARRY_BIT;
 
-        tmpResult = Cy_Crypto_Core_ED25519Double(base, edwDp, my_s_x, my_s_y, my_s_z, bitsize);
+        tmpResult = Cy_Crypto_Core_ED25519Double (base, edwDp, my_s_x, my_s_y, my_s_z, bitsize);
 
-        if (CY_CRYPTO_SUCCESS != tmpResult)
+        if(CY_CRYPTO_SUCCESS != tmpResult)
         {
             return tmpResult;
         }
 
         if (carry != 0u)
         {
-            tmpResult = Cy_Crypto_Core_ED25519Add(base, edwDp, my_s_x, my_s_y, my_s_z, my_t_x, my_t_y, bitsize);
+            tmpResult = Cy_Crypto_Core_ED25519Add (base, edwDp, my_s_x, my_s_y, my_s_z, my_t_x, my_t_y, bitsize);
 
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
@@ -1013,19 +1013,19 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMul(CRYPTO_Type *base, cy_stc_
     Cy_Crypto_Core_Vu_WaitForComplete(base);
     /* Inverse transform */
     tmpResult = Cy_Crypto_Core_ED25519InvTransform(base, my_s_x, my_s_y, my_s_z, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
     Cy_Crypto_Core_Vu_WaitForComplete(base);
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(my_s_z) | CY_CRYPTO_VU_REG_BIT(my_t_x) |
-                          CY_CRYPTO_VU_REG_BIT(my_t_y) | CY_CRYPTO_VU_REG_BIT(t) |
-                          CY_CRYPTO_VU_REG_BIT(VR_P)   | CY_CRYPTO_VU_REG_BIT(VR_BARRETT) |
-                          CY_CRYPTO_VU_REG_BIT(clr));
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(my_s_z) | CY_CRYPTO_VU_REG_BIT(my_t_x) |
+                                 CY_CRYPTO_VU_REG_BIT(my_t_y) | CY_CRYPTO_VU_REG_BIT(t) |
+                                 CY_CRYPTO_VU_REG_BIT(VR_P)   | CY_CRYPTO_VU_REG_BIT(VR_BARRETT) |
+                                 CY_CRYPTO_VU_REG_BIT(clr) );
 
 
-    CY_CRYPTO_VU_POP_REG(base);
+    CY_CRYPTO_VU_POP_REG (base);
 
     return tmpResult;
 }
@@ -1063,19 +1063,19 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMul(CRYPTO_Type *base, cy_stc_
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMultiplication(CRYPTO_Type *base,
-        cy_en_crypto_ecc_curve_id_t curveID,
-        const uint8_t *ecpGX,
-        const uint8_t *ecpGY,
-        const uint8_t *ecpD,
-        uint8_t *ecpQX,
-        uint8_t *ecpQY)
+    cy_en_crypto_ecc_curve_id_t curveID,
+    const uint8_t *ecpGX,
+    const uint8_t *ecpGY,
+    const uint8_t *ecpD,
+    uint8_t *ecpQX,
+    uint8_t *ecpQY)
 {
     cy_stc_crypto_edw_dp_type edw_Dp;
     cy_stc_crypto_edw_dp_type *edwDp = &edw_Dp;
 
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
-    if (CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, curveID))
+    if(CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, curveID))
     {
         uint32_t bitsize;
 
@@ -1097,46 +1097,46 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMultiplication(CRYPTO_Type *ba
             ecpQYRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(ecpQY);
 
             /* Public parameters and characteristics of elliptic curve */
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_D, bitsize + 1u);       /* Scalar factor */
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_D, bitsize+1u);        /* Scalar factor */
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_S_X, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_S_X, bitsize);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_S_Y, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_S_Y, bitsize);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
-            Cy_Crypto_Core_Vu_SetMemValue(base, VR_S_X, ecpGXRemap, bitsize);
-            Cy_Crypto_Core_Vu_SetMemValue(base, VR_S_Y, ecpGYRemap, bitsize);
-            Cy_Crypto_Core_Vu_SetMemValue(base, VR_D, ecpDRemap, bitsize + 1u);
+            Cy_Crypto_Core_Vu_SetMemValue (base, VR_S_X, ecpGXRemap, bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, VR_S_Y, ecpGYRemap, bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, VR_D, ecpDRemap, bitsize+1u);
 
             /* ECC calculation: d * G mod p */
             tmpResult = Cy_Crypto_Core_ED25519_PointMul(base, edwDp, VR_S_X, VR_S_Y, VR_D, bitsize);
 
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
             /* Get result P = (X,Y) = d.G from Ed25519 scalar multiplication */
-            Cy_Crypto_Core_Vu_GetMemValue(base, ecpQXRemap, VR_S_X, bitsize);
-            Cy_Crypto_Core_Vu_GetMemValue(base, ecpQYRemap, VR_S_Y, bitsize);
+            Cy_Crypto_Core_Vu_GetMemValue (base, ecpQXRemap, VR_S_X, bitsize);
+            Cy_Crypto_Core_Vu_GetMemValue (base, ecpQYRemap, VR_S_Y, bitsize);
 
             Cy_Crypto_Core_Vu_WaitForComplete(base);
             /* Free memory */
-            CY_CRYPTO_VU_FREE_MEM(base,
-                                  CY_CRYPTO_VU_REG_BIT(VR_S_Y) |
-                                  CY_CRYPTO_VU_REG_BIT(VR_S_X) |
-                                  CY_CRYPTO_VU_REG_BIT(VR_D));
+            CY_CRYPTO_VU_FREE_MEM (base,
+                                    CY_CRYPTO_VU_REG_BIT(VR_S_Y) |
+                                    CY_CRYPTO_VU_REG_BIT(VR_S_X) |
+                                    CY_CRYPTO_VU_REG_BIT(VR_D));
 
             tmpResult = CY_CRYPTO_SUCCESS;
         }
@@ -1185,10 +1185,10 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
     uint8_t *publicKeyYRemap;
     uint8_t *digest;
 
-    if (CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, curveID))
+    if(CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, curveID))
     {
         if ((privateKey != NULL) && (publicKey != NULL) &&
-                (publicKey->pubkey.x != NULL) && (publicKey->pubkey.y != NULL))
+            (publicKey->pubkey.x != NULL) && (publicKey->pubkey.y != NULL))
         {
 #if (CY_IP_MXCRYPTO_VERSION == 1u)
             cy_stc_crypto_v1_sha512_buffers_t shaBuffers_t;
@@ -1207,7 +1207,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
             /* Flush the cache */
-            SCB_CleanDCache_by_Addr((volatile void *)privateKey, (int32_t)CY_CRYPTO_BYTE_SIZE_OF_BITS(bitsize));
+            SCB_CleanDCache_by_Addr((volatile void *)privateKey,(int32_t)CY_CRYPTO_BYTE_SIZE_OF_BITS(bitsize));
 #endif
             privateKeyRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(privateKey);
             publicKeyXRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(publicKey->pubkey.x);
@@ -1222,7 +1222,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
             if (CY_CRYPTO_SUCCESS == tmpResult)
             {
                 tmpResult = Cy_Crypto_Core_Sha_Start(base, shaHashState);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
@@ -1233,30 +1233,30 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
             }
 
             tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_x, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
             tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_y, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_sha, (CY_CRYPTO_SHA512_HASH_SIZE * 8u));
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_sha, (CY_CRYPTO_SHA512_HASH_SIZE*8u));
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
             digest = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, p_sha);
             /*Base Point, G = (p_x, p_y) */
-            Cy_Crypto_Core_Vu_SetMemValue(base, p_x, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gx), bitsize);
-            Cy_Crypto_Core_Vu_SetMemValue(base, p_y, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gy), bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, p_x, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gx), bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, p_y, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gy), bitsize);
 
             /* Load private key */
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_d, bitsize + 1u);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_d, bitsize+1u);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
@@ -1264,11 +1264,11 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
             /*step1: Compute secret scalar 's' and prefix*/
             /*SHA expects big-endian input*/
             tmpResult = Cy_Crypto_Core_Sha_Update(base, shaHashState, (uint8_t const*)privateKeyRemap, bytesize);
-            if (CY_CRYPTO_SUCCESS == tmpResult)
+            if(CY_CRYPTO_SUCCESS == tmpResult)
             {
                 tmpResult = Cy_Crypto_Core_Sha_Finish(base, shaHashState, digest);
             }
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
@@ -1280,12 +1280,12 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
             digest[31] |= (uint8_t)0x40;
 
             /*s = digest[0-31] prefix = digest[32-63]*/
-            Cy_Crypto_Core_Vu_SetMemValue(base, p_d, (uint8_t *)&digest[0], bitsize + 1u);
+            Cy_Crypto_Core_Vu_SetMemValue(base, p_d, (uint8_t *)&digest[0], bitsize+1u);
             /* make the public key
              * ED25519 scalar point multiplication - X,Y-only co-Z arithmetic
              */
             tmpResult = Cy_Crypto_Core_ED25519_PointMul(base, edwDp, p_x, p_y, p_d, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
@@ -1301,7 +1301,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
 
             Cy_Crypto_Core_Vu_WaitForComplete(base);
             CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(p_x) | CY_CRYPTO_VU_REG_BIT(p_y) |
-                                  CY_CRYPTO_VU_REG_BIT(p_sha) | CY_CRYPTO_VU_REG_BIT(p_d));
+                                        CY_CRYPTO_VU_REG_BIT(p_sha) | CY_CRYPTO_VU_REG_BIT(p_d));
             /* free sha context*/
             (void)Cy_Crypto_Core_Sha_Free(base, shaHashState);
             tmpResult = CY_CRYPTO_SUCCESS;
@@ -1350,9 +1350,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8_t *hash, uint32_t hashlen, uint8_t *sig,
-        const cy_stc_crypto_ecc_key *key, cy_en_eddsa_sig_type_t sigType, const uint8_t *sigctx, uint32_t sigctx_len)
+        const cy_stc_crypto_ecc_key *key, cy_en_eddsa_sig_type_t sigType,const uint8_t *sigctx, uint32_t sigctx_len)
 {
-    cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
+     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
     uint8_t *sigPtrRemap;
     uint8_t *hashPtrRemap;
@@ -1363,7 +1363,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
     cy_stc_crypto_edw_dp_type *edwDp = &edwDp_t;
 
     /* input param validation */
-    if (hash == NULL && 0u != hashlen)
+    if ( hash == NULL && 0u != hashlen )
     {
         return CY_CRYPTO_BAD_PARAMS;
     }
@@ -1373,11 +1373,11 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
     have context) and has to match octet by octet for verification to be
     successful.
     */
-    if (sigType != CY_CRYPTO_EDDSA_PURE)
+    if(sigType != CY_CRYPTO_EDDSA_PURE)
     {
-        if (sigType == CY_CRYPTO_EDDSA_CTX)
+        if(sigType == CY_CRYPTO_EDDSA_CTX)
         {
-            if (sigctx == NULL  || sigctx_len == 0u || sigctx_len > 255u)
+            if( sigctx == NULL  || sigctx_len == 0u || sigctx_len > 255u)
             {
                 return CY_CRYPTO_BAD_PARAMS;
             }
@@ -1399,7 +1399,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
         sigPtrRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(sig);
         keyKRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(key->k);
 
-        if (CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, key->curveID))
+        if(CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, key->curveID))
         {
 #if (CY_IP_MXCRYPTO_VERSION == 1u)
             cy_stc_crypto_v1_sha512_buffers_t shaBuffers_t;
@@ -1417,7 +1417,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
             /* Flush the cache */
-            SCB_CleanDCache_by_Addr((volatile void *)hash, (int32_t)hashlen);
+            SCB_CleanDCache_by_Addr((volatile void *)hash,(int32_t)hashlen);
             SCB_CleanDCache_by_Addr((volatile void *)key->k, (int32_t)bytesize);
             /* sigctx is managed by the SHA functions */
 #endif
@@ -1448,73 +1448,73 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
                 uint8_t *pr = (uint8_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(pr_t);
 
                 /*Curve Order*/
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_P, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_P, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->order), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->order), bitsize);
                 /* Barret coef for Order*/
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_BARRETT, edwDp->barret_osize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_BARRETT, edwDp->barret_osize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_o), edwDp->barret_osize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_o), edwDp->barret_osize);
                 /* Gx co-ordinate */
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_S_X, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_S_X, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_S_X, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gx), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_S_X, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gx), bitsize);
                 /* Gy co-ordinate */
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_S_Y, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_S_Y, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_S_Y, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gy), bitsize + 1u);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_S_Y, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gy), bitsize+1u);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_r, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_r, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
                 Cy_Crypto_Core_MemSet(base, (void*)Cy_Crypto_Core_Vu_RegMemPointer(base, p_r), (uint8_t)0, (uint16_t)bytesize);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_s, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_s, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_sha, (CY_CRYPTO_SHA512_HASH_SIZE * 8u));
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_sha, (CY_CRYPTO_SHA512_HASH_SIZE*8u));
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
                 digest = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, p_sha);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_temp, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+               tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_temp, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_x, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_x, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_x, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gx), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_x, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gx), bitsize);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_y, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_y, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_y, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gy), bitsize + 1u);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_y, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gy), bitsize+1u);
 
                 mallocMask = CY_CRYPTO_VU_REG_BIT(VR_P)   | CY_CRYPTO_VU_REG_BIT(VR_BARRETT) |
                              CY_CRYPTO_VU_REG_BIT(VR_S_X) | CY_CRYPTO_VU_REG_BIT(VR_S_Y) |
@@ -1525,11 +1525,11 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
                 /*step1: Compute secret scalar 's' and prefix*/
                 /*SHA expects big-endian*/
                 tmpResult = Cy_Crypto_Core_Sha_Update(base, shaHashState, (uint8_t const*)keyKRemap, bytesize);
-                if (CY_CRYPTO_SUCCESS == tmpResult)
+                if(CY_CRYPTO_SUCCESS == tmpResult)
                 {
                     tmpResult = Cy_Crypto_Core_Sha_Finish(base, shaHashState, digest);
                 }
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
@@ -1543,14 +1543,14 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
                 scalar = &digest[0];
                 prefix = &digest[32];
                 /* Note: Point mul does in-place use for p_s which clears it, REG use needs to be re-looked to optimize*/
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_s, (uint8_t const*)scalar, ((CY_CRYPTO_SHA512_HASH_SIZE * 8u) >> 1u));
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_s, (uint8_t const*)scalar, ((CY_CRYPTO_SHA512_HASH_SIZE*8u) >> 1u));
                 /* generate pubKey A = [s]B */
                 tmpResult =  Cy_Crypto_Core_ED25519_PointMul(base, edwDp, VR_S_X, VR_S_Y, p_s, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_s, (uint8_t const*)scalar, ((CY_CRYPTO_SHA512_HASH_SIZE * 8u) >> 1u));
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_s, (uint8_t const*)scalar, ((CY_CRYPTO_SHA512_HASH_SIZE*8u) >> 1u));
 
                 pubkey_x = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, VR_S_X);
                 pubkey_y = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, VR_S_Y);
@@ -1558,9 +1558,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
                 /* step2: 'r' computation */
                 (void)Cy_Crypto_Core_Sha_Start(base, shaHashState);
                 /* EDDSA sig mode as per 5.1 RFC 8032 */
-                if (sigType != CY_CRYPTO_EDDSA_PURE)
+                if(sigType != CY_CRYPTO_EDDSA_PURE)
                 {
-                    Cy_Crypto_Core_ED25519_dom2_ctx(base, sigType, sigctx, sigctx_len, shaHashState);
+                    Cy_Crypto_Core_ED25519_dom2_ctx( base, sigType, sigctx, sigctx_len, shaHashState);
                 }
 
                 /*update prefix and input hash */
@@ -1569,45 +1569,45 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
                 (void)Cy_Crypto_Core_Sha_Finish(base, shaHashState, digest);
 
                 /* Mod reduction modulo n (order of the base point in VR_P and barret_o in VR_BARRET) */
-                if (CY_CRYPTO_SUCCESS != Cy_Crypto_Core_EDDSA_Bar_MulRed(base, p_r, p_sha, bitsize))
+                if ( CY_CRYPTO_SUCCESS != Cy_Crypto_Core_EDDSA_Bar_MulRed(base, p_r, p_sha, bitsize) )
                 {
                     return CY_CRYPTO_BAD_PARAMS;
                 }
                 /* Note: Point mul does in-place use for p_r which clears it, REG use needs to be re-looked to optimize*/
-                Cy_Crypto_Core_Vu_GetMemValue(base, (uint8_t*)pr, p_r, bitsize);
+                Cy_Crypto_Core_Vu_GetMemValue (base, (uint8_t*)pr, p_r, bitsize);
                 /* Step 3 */
                 tmpResult = Cy_Crypto_Core_ED25519_PointMul(base, edwDp, p_x, p_y, p_r, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_r, (uint8_t const*)pr, ((CY_CRYPTO_SHA512_HASH_SIZE * 8u) >> 1u));
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_r, (uint8_t const*)pr, ((CY_CRYPTO_SHA512_HASH_SIZE*8u) >> 1u));
 
                 /*Note: key encode/decode can be a separate function helps verify */
                 /* encode point: From RFC 5.1.2, we shall copy LSB of x to the MSB of y */
                 /* Test p_x for odd */
                 r_x = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, p_x);
                 r_y = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, p_y);
-                if ((bool)(((uint8_t *)r_x)[0] & (uint8_t)0x01))
+                if((bool)(((uint8_t*)r_x)[0] & (uint8_t)0x01))
                 {
                     ((uint8_t*)r_y)[31] = ((uint8_t*)r_y)[31] | (uint8_t)0x80;
                 }
 
                 /* Copy r to sig result */
-                Cy_Crypto_Core_Vu_GetMemValue(base, &sigPtrRemap[0], p_y, bitsize);
+                Cy_Crypto_Core_Vu_GetMemValue (base, &sigPtrRemap[0], p_y, bitsize);
 
                 /* Step4: 's' computation */
                 (void)Cy_Crypto_Core_Sha_Start(base, shaHashState);
                 /* EDDSA sig mode as per 5.1 RFC 8032 */
-                if (sigType != CY_CRYPTO_EDDSA_PURE)
+                if(sigType != CY_CRYPTO_EDDSA_PURE)
                 {
-                    Cy_Crypto_Core_ED25519_dom2_ctx(base, sigType, sigctx, sigctx_len, shaHashState);
+                    Cy_Crypto_Core_ED25519_dom2_ctx( base, sigType, sigctx, sigctx_len, shaHashState);
                 }
 
                 (void)Cy_Crypto_Core_Sha_Update(base, shaHashState, (uint8_t const*)r_y, bytesize);
                 /*Note: key encode/decode can be a separate function */
                 /* encode point: From RFC 5.1.2, we shall copy LSB of x to the MSB of y */
-                if ((bool)(((uint8_t *)pubkey_x)[0] & (uint8_t)0x01))
+                if((bool)(((uint8_t*)pubkey_x)[0] & (uint8_t)0x01))
                 {
                     ((uint8_t*)pubkey_y)[31] = ((uint8_t*)pubkey_y)[31] | (uint8_t)0x80;
                 }
@@ -1618,7 +1618,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
 
                 /* step5 */
                 /* Mod reduction modulo n (order of the base point in VR_P and barret_o in VR_BARRET) */
-                if (CY_CRYPTO_SUCCESS != Cy_Crypto_Core_EDDSA_Bar_MulRed(base, p_temp, p_sha, bitsize))
+                if ( CY_CRYPTO_SUCCESS != Cy_Crypto_Core_EDDSA_Bar_MulRed(base, p_temp, p_sha, bitsize) )
                 {
                     return CY_CRYPTO_BAD_PARAMS;
                 }
@@ -1627,7 +1627,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
                 CY_CRYPTO_VU_ADD(base, p_sha, p_sha, p_r);
 
                 /* Mod reduction modulo n (order of the base point in VR_P and barret_o in VR_BARRET) */
-                if (CY_CRYPTO_SUCCESS != Cy_Crypto_Core_EDDSA_Bar_MulRed(base, p_s, p_sha, bitsize))
+                if ( CY_CRYPTO_SUCCESS != Cy_Crypto_Core_EDDSA_Bar_MulRed(base, p_s, p_sha, bitsize))
                 {
                     return CY_CRYPTO_HW_ERROR;
                 }
@@ -1636,7 +1636,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
                 if (!Cy_Crypto_Core_Vu_IsRegZero(base, p_s))
                 {
                     /* S is not zero!!! */
-                    Cy_Crypto_Core_Vu_GetMemValue(base, &sigPtrRemap[bytesize], p_s, bitsize);
+                    Cy_Crypto_Core_Vu_GetMemValue (base, &sigPtrRemap[bytesize], p_s, bitsize);
                 }
                 else
                 {
@@ -1648,8 +1648,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
                 CY_CRYPTO_VU_FREE_MEM(base, mallocMask);
                 (void)Cy_Crypto_Core_Sha_Free(base, shaHashState);
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to int32_t.');
-                SCB_InvalidateDCache_by_Addr(sig, (int32_t)(bytesize * 2U));
+                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to int32_t.');
+                SCB_InvalidateDCache_by_Addr(sig, (int32_t)(bytesize*2U));
 #endif
             }
         }
@@ -1683,8 +1683,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base, const uint8
 * \return status code. See \ref cy_en_crypto_status_t.
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_ExpMod(CRYPTO_Type *base, uint32_t p_x,
-        uint32_t p_y, uint32_t p_e,
-        uint32_t bitsize)
+                                                    uint32_t p_y, uint32_t p_e,
+                                                    uint32_t bitsize)
 {
     uint32_t i;
     uint32_t status;
@@ -1701,7 +1701,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_ExpMod(CRYPTO_Type *base, uint32_t 
 
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
     CY_CRYPTO_VU_SAVE_REG(base, p_x, &r_p_x);
     CY_CRYPTO_VU_SAVE_REG(base, p_y, &r_p_y);
@@ -1711,28 +1711,28 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_ExpMod(CRYPTO_Type *base, uint32_t 
     CY_CRYPTO_VU_RESTORE_REG(base, my_s_y, r_p_y);
     CY_CRYPTO_VU_RESTORE_REG(base, my_e, r_p_e);
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, clr, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, clr, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
-    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, t, bitsize);
-    if (CY_CRYPTO_SUCCESS != tmpResult)
+    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, t, bitsize);
+    if(CY_CRYPTO_SUCCESS != tmpResult)
     {
         return tmpResult;
     }
 
     /* normalize exp */
-    CY_CRYPTO_VU_MOV(base, my_s_x, my_s_y);
-    CY_CRYPTO_VU_SET_TO_ZERO(base, clr);
-    CY_CRYPTO_VU_CLSAME(base, t, my_e, clr);
+    CY_CRYPTO_VU_MOV (base, my_s_x, my_s_y);
+    CY_CRYPTO_VU_SET_TO_ZERO (base, clr);
+    CY_CRYPTO_VU_CLSAME (base, t, my_e, clr);
     /* This is needed, otherwise clsame is wrong */
     Cy_Crypto_Core_Vu_WaitForComplete(base);
-    clsame = Cy_Crypto_Core_Vu_RegDataPtrRead(base, t);
+    clsame = Cy_Crypto_Core_Vu_RegDataPtrRead (base, t);
 
-    CY_CRYPTO_VU_LSL(base, my_e, my_e, t);   /* Get rid of leading '0's */
-    CY_CRYPTO_VU_LSL1(base, my_e, my_e);     /* Get rid of leading '1' */
+    CY_CRYPTO_VU_LSL  (base, my_e, my_e, t); /* Get rid of leading '0's */
+    CY_CRYPTO_VU_LSL1 (base, my_e, my_e);    /* Get rid of leading '1' */
 
     /* Binary left-to-right algorithm
     * Perform mul and squaring to implement exponential mod multiplication
@@ -1740,7 +1740,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_ExpMod(CRYPTO_Type *base, uint32_t 
     * and perform mul when the bit is set. Carry set if current bit is equal to 1
     * (hence perform mul, squaring is always performed)
     */
-    if (bitsize >= clsame)
+    if( bitsize >= clsame)
     {
         loop = (uint32_t)(bitsize - clsame - 1u);
     }
@@ -1754,28 +1754,28 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_ExpMod(CRYPTO_Type *base, uint32_t 
         /* Carry set if current bit is equal to 1 (hence, perform multiply,
         * squaring is always performed)
         */
-        CY_CRYPTO_VU_LSL1(base, my_e, my_e);
+        CY_CRYPTO_VU_LSL1 (base, my_e, my_e);
         status = Cy_Crypto_Core_Vu_StatusRead(base);
 
         carry = status & CY_CRYPTO_VU_STATUS_CARRY_BIT;
 
-        tmpResult = Cy_Crypto_Core_ED25519_SquareMod(base, my_s_x, my_s_x, bitsize);
+        tmpResult = Cy_Crypto_Core_ED25519_SquareMod( base, my_s_x, my_s_x, bitsize);
 
-        if (CY_CRYPTO_SUCCESS != tmpResult)
+        if(CY_CRYPTO_SUCCESS != tmpResult)
         {
             return tmpResult;
         }
 
         if (carry != 0u)
         {
-            (void)Cy_Crypto_Core_ED25519_MulMod(base, my_s_x, my_s_x, my_s_y, bitsize);
+            (void)Cy_Crypto_Core_ED25519_MulMod (base, my_s_x, my_s_x, my_s_y, bitsize);
         }
     }
 
     Cy_Crypto_Core_Vu_WaitForComplete(base);
     /* free memory */
-    CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(t) | CY_CRYPTO_VU_REG_BIT(clr));
-    CY_CRYPTO_VU_POP_REG(base);
+    CY_CRYPTO_VU_FREE_MEM (base, CY_CRYPTO_VU_REG_BIT(t) | CY_CRYPTO_VU_REG_BIT(clr));
+    CY_CRYPTO_VU_POP_REG (base);
 
     return tmpResult;
 }
@@ -1836,9 +1836,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointDecode(CRYPTO_Type *base,
         0x0B, 0xDF, 0xC1, 0x4F, 0x80, 0x24, 0x83, 0x2B
     };
 
-    CY_CRYPTO_VU_PUSH_REG(base);
+    CY_CRYPTO_VU_PUSH_REG (base);
 
-    if (CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, curveID))
+    if(CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, curveID))
     {
         if ((publicKey != NULL) && (pubKey_x != NULL) && (pubKey_y != NULL))
         {
@@ -1847,7 +1847,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointDecode(CRYPTO_Type *base,
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
             /* Flush the cache */
-            SCB_CleanDCache_by_Addr((volatile void *)publicKey, (int32_t)CY_CRYPTO_BYTE_SIZE_OF_BITS(bitsize));
+            SCB_CleanDCache_by_Addr((volatile void *)publicKey,(int32_t)CY_CRYPTO_BYTE_SIZE_OF_BITS(bitsize));
 #endif
             publicKeyRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(publicKey);
             publicKeyXRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(pubKey_x);
@@ -1860,61 +1860,61 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointDecode(CRYPTO_Type *base,
             uint32_t p_uv = 5u;      /* (u*v) RFC 8032 sec 5.1.3 */
 
             tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_x, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
             tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_y, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
             tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_a, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
-            Cy_Crypto_Core_Vu_SetMemValue(base, p_a, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->a), bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, p_a, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->a), bitsize);
 
             tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_d, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
-            Cy_Crypto_Core_Vu_SetMemValue(base, p_d, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->d), bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, p_d, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->d), bitsize);
 
             tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_uv, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
             /* load prime defining the curve as well as the barrett coefficient. */
             /* VR_P and VR_BARRETT_U are "globally" defined in cy_crypto_core_ecc.h */
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_P, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_P, bitsize);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
-            Cy_Crypto_Core_Vu_SetMemValue(base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->prime), bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->prime), bitsize);
 
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_BARRETT, edwDp->barret_psize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_BARRETT, edwDp->barret_psize);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
-            Cy_Crypto_Core_Vu_SetMemValue(base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_p), edwDp->barret_psize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_p), edwDp->barret_psize);
 
             /* Recover x_0 and generate p_y*/
             Cy_Crypto_Core_MemCpy(base, (void*)publicKeyYRemap, (void const *)publicKeyRemap, (uint16_t)bytesize);
 
-            x_0 = publicKeyYRemap[31] >> (uint8_t)0x07;
-            publicKeyYRemap[31] &= (uint8_t)0x7F;
+            x_0 = pubKey_y[31] >> (uint8_t)0x07;
+            pubKey_y[31] &= (uint8_t)0x7F;
 
             /* If the resulting y >= grp->P, decoding fails. */
-            Cy_Crypto_Core_Vu_SetMemValue(base, p_y, (uint8_t const *)publicKeyYRemap, bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, p_y, (uint8_t const *)publicKeyYRemap, bitsize);
             if (!Cy_Crypto_Core_Vu_IsRegLess(base, p_y, VR_P))
             {
                 /* p_y is not less than P!!! */
@@ -1930,48 +1930,48 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointDecode(CRYPTO_Type *base,
             if (CY_CRYPTO_SUCCESS == tmpResult)
             {
                 /*y^2*/
-                tmpResult = Cy_Crypto_Core_ED25519_SquareMod(base, p_y, p_y, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = Cy_Crypto_Core_ED25519_SquareMod( base, p_y, p_y, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
                 /* dy^2*/
-                tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, p_d, p_d, p_y, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, p_d, p_d, p_y, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
                 /* v = (dy^2 - a) */
-                Cy_Crypto_Core_EC_SubMod(base, p_d, p_d, p_a);
+                Cy_Crypto_Core_EC_SubMod (base, p_d, p_d, p_a);
                 /* u = y^2 - 1 */
                 CY_CRYPTO_VU_SET_TO_ONE(base, p_x);
                 CY_CRYPTO_VU_SUB(base, p_y, p_y, p_x);
                 /* compute u*((uv)^((p-5)/8)) mod p */
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_x, (uint8_t const *)ed25519_pb8_exp, bitsize);
-                tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, p_a, p_d, p_y, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_x, (uint8_t const *)ed25519_pb8_exp, bitsize);
+                tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, p_a, p_d, p_y, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                tmpResult = Cy_Crypto_Core_ED25519_ExpMod(base, p_uv, p_a, p_x, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = Cy_Crypto_Core_ED25519_ExpMod( base, p_uv, p_a, p_x, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, p_uv, p_uv, p_y, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, p_uv, p_uv, p_y, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
                 /* If v * x^2 = u (mod p), x is a square root. */
-                tmpResult = Cy_Crypto_Core_ED25519_SquareMod(base, p_x, p_uv, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = Cy_Crypto_Core_ED25519_SquareMod( base, p_x, p_uv, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, p_x, p_x, p_d, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, p_x, p_x, p_d, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
@@ -1985,9 +1985,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointDecode(CRYPTO_Type *base,
                         return CY_CRYPTO_BAD_PARAMS;
                     }
                     /* x *= 2^((p-1)/4) */
-                    Cy_Crypto_Core_Vu_SetMemValue(base, p_y, (uint8_t const *)ed25519_sqrt_m1, bitsize);
-                    tmpResult = Cy_Crypto_Core_ED25519_MulMod(base, p_x, p_uv, p_y, bitsize);
-                    if (CY_CRYPTO_SUCCESS != tmpResult)
+                    Cy_Crypto_Core_Vu_SetMemValue (base, p_y, (uint8_t const *)ed25519_sqrt_m1, bitsize);
+                    tmpResult = Cy_Crypto_Core_ED25519_MulMod( base, p_x, p_uv, p_y, bitsize);
+                    if(CY_CRYPTO_SUCCESS != tmpResult)
                     {
                         return tmpResult;
                     }
@@ -2005,23 +2005,23 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointDecode(CRYPTO_Type *base,
                 {
                     uint8_t *x = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, p_x);
 
-                    if ((x[0] & 0x1u) != x_0)
+                    if( (x[0] & 0x1u) != x_0)
                     {
                         Cy_Crypto_Core_EC_SubMod(base, p_x, VR_P, p_x);
                     }
                 }
 
-                Cy_Crypto_Core_Vu_GetMemValue(base, publicKeyXRemap, p_x, bitsize);
+                Cy_Crypto_Core_Vu_GetMemValue (base, publicKeyXRemap, p_x, bitsize);
             }
 
             Cy_Crypto_Core_Vu_WaitForComplete(base);
 
             CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(p_x) | CY_CRYPTO_VU_REG_BIT(p_y) |
-                                  CY_CRYPTO_VU_REG_BIT(p_a) | CY_CRYPTO_VU_REG_BIT(p_d) |
-                                  CY_CRYPTO_VU_REG_BIT(VR_P) | CY_CRYPTO_VU_REG_BIT(p_uv) |
-                                  CY_CRYPTO_VU_REG_BIT(VR_BARRETT));
+                                        CY_CRYPTO_VU_REG_BIT(p_a) | CY_CRYPTO_VU_REG_BIT(p_d) |
+                                        CY_CRYPTO_VU_REG_BIT(VR_P)| CY_CRYPTO_VU_REG_BIT(p_uv)|
+                                        CY_CRYPTO_VU_REG_BIT(VR_BARRETT));
 
-            CY_CRYPTO_VU_POP_REG(base);
+            CY_CRYPTO_VU_POP_REG (base);
         }
     }
     return (tmpResult);
@@ -2066,9 +2066,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointDecode(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *sig, const uint8_t *hash, uint32_t hashlen,
-        const cy_stc_crypto_ecc_key *key, uint32_t *stat, cy_en_eddsa_sig_type_t sigType, const uint8_t *sigctx, uint32_t sigctx_len)
+        const cy_stc_crypto_ecc_key *key, uint32_t *stat, cy_en_eddsa_sig_type_t sigType,const uint8_t *sigctx, uint32_t sigctx_len)
 {
-    cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
+     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
     uint8_t *sigPtrRemap;
     uint8_t *hashPtrRemap;
@@ -2085,9 +2085,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
     have context) and has to match octet by octet for verification to be
     successful.
     */
-    if (sigType == CY_CRYPTO_EDDSA_CTX)
+    if(sigType == CY_CRYPTO_EDDSA_CTX)
     {
-        if (sigctx == NULL  || sigctx_len == 0u || sigctx_len > 255u)
+        if( sigctx == NULL  || sigctx_len == 0u || sigctx_len > 255u)
         {
             return CY_CRYPTO_BAD_PARAMS;
         }
@@ -2109,7 +2109,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
         pubKeyXRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(key->pubkey.x);
         pubKeyYRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(key->pubkey.y);
 
-        if (CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, key->curveID))
+        if(CY_CRYPTO_SUCCESS == Cy_Crypto_Core_EDW_GetCurveParams(edwDp, key->curveID))
         {
 #if (CY_IP_MXCRYPTO_VERSION == 1u)
             cy_stc_crypto_v1_sha512_buffers_t shaBuffers_t;
@@ -2149,27 +2149,27 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
 
                 sig_r = &sigPtrRemap[0];
                 sig_s = &sigPtrRemap[bytesize];
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_r, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_r, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_r, (uint8_t const *)sig_r,  bitsize + 1u);
+                Cy_Crypto_Core_Vu_SetMemValue(base, p_r, (uint8_t const *)sig_r,  bitsize+1u);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_s, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_s, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_s, (uint8_t const *)sig_s,  bitsize + 1u);
+                Cy_Crypto_Core_Vu_SetMemValue(base, p_s, (uint8_t const *)sig_s,  bitsize+1u);
 
                 /*Curve Order*/
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_P, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_P, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->order), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->order), bitsize);
 
                 /* Check R and S range */
                 if (Cy_Crypto_Core_Vu_IsRegZero(base, p_r))
@@ -2184,53 +2184,53 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
                 }
 
                 /* Barret coef for Order*/
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_BARRETT, edwDp->barret_osize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_BARRETT, edwDp->barret_osize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_o), edwDp->barret_osize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->barrett_o), edwDp->barret_osize);
                 /* Gx co-ordinate */
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_S_X, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_S_X, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_S_X, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gx), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_S_X, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gx), bitsize);
                 /* Gy co-ordinate */
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_S_Y, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_S_Y, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_S_Y, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gy), bitsize + 1u);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_S_Y, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(edwDp->Gy), bitsize+1u);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_sha, (CY_CRYPTO_SHA512_HASH_SIZE * 8u));
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_sha, (CY_CRYPTO_SHA512_HASH_SIZE*8u));
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
                 digest = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, p_sha);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_temp, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+               tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_temp, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_x, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_x, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_x, (uint8_t const *)pubKeyXRemap, bitsize + 1u);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_x, (uint8_t const *)pubKeyXRemap, bitsize+1u);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_y, bitsize + 1u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_y, bitsize+1u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_y, (uint8_t const *)pubKeyYRemap, bitsize + 1u);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_y, (uint8_t const *)pubKeyYRemap, bitsize+1u);
 
                 mallocMask = CY_CRYPTO_VU_REG_BIT(VR_P)   | CY_CRYPTO_VU_REG_BIT(VR_BARRETT) |
                              CY_CRYPTO_VU_REG_BIT(VR_S_X) | CY_CRYPTO_VU_REG_BIT(VR_S_Y) |
@@ -2240,9 +2240,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
 
                 /* step1 */
                 /*SHA expects big-endian*/
-                if (sigType != CY_CRYPTO_EDDSA_PURE)
+                if(sigType != CY_CRYPTO_EDDSA_PURE)
                 {
-                    Cy_Crypto_Core_ED25519_dom2_ctx(base, sigType, sigctx, sigctx_len, shaHashState);
+                    Cy_Crypto_Core_ED25519_dom2_ctx( base, sigType, sigctx, sigctx_len, shaHashState);
                 }
 
                 /* step2: h = sha512(Rs + public + msg) mod N */
@@ -2251,7 +2251,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
                 pubkey_x = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, p_x);
                 pubkey_y = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, p_y);
 
-                if ((bool)(((uint8_t *)pubkey_x)[0] & (uint8_t)0x01))
+                if((bool)(((uint8_t*)pubkey_x)[0] & (uint8_t)0x01))
                 {
                     ((uint8_t*)pubkey_y)[31] |= (uint8_t)0x80;
                 }
@@ -2259,17 +2259,17 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
                 (void)Cy_Crypto_Core_Sha_Update(base, shaHashState, (uint8_t const*)pubkey_y, bytesize);
                 /* For EDDSA_PREHASH, buf should contain the SHA512 hash. It contains the whole message otherwise */
                 tmpResult = Cy_Crypto_Core_Sha_Update(base, shaHashState, (uint8_t const*)hashPtrRemap, hashlen);
-                if (CY_CRYPTO_SUCCESS == tmpResult)
+                if(CY_CRYPTO_SUCCESS == tmpResult)
                 {
                     tmpResult = Cy_Crypto_Core_Sha_Finish(base, shaHashState, digest);
-                    if (CY_CRYPTO_SUCCESS != tmpResult)
+                    if(CY_CRYPTO_SUCCESS != tmpResult)
                     {
                         return tmpResult;
                     }
                 }
 
                 /* Mod reduction modulo n (order of the base point in VR_P and barret_o in VR_BARRET) */
-                if (CY_CRYPTO_SUCCESS != Cy_Crypto_Core_EDDSA_Bar_MulRed(base, p_temp, p_sha, bitsize))
+                if ( CY_CRYPTO_SUCCESS != Cy_Crypto_Core_EDDSA_Bar_MulRed(base, p_temp, p_sha, bitsize) )
                 {
                     return CY_CRYPTO_BAD_PARAMS;
                 }
@@ -2277,10 +2277,10 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
                 /* We perform fast single-signature verification by compressing sB-hA and comparing with r without decompressing it */
                 ((uint8_t*)pubkey_y)[31] &= (uint8_t)0x7F;
 
-                CY_CRYPTO_VU_SUB(base, p_temp, VR_P, p_temp);
+                CY_CRYPTO_VU_SUB (base, p_temp, VR_P, p_temp);
                 /* R = sG + hA */
                 tmpResult =  Cy_Crypto_Core_ED25519_PointMulAdd(base, edwDp, VR_S_X, VR_S_Y, p_s, p_x, p_y, p_temp, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
@@ -2288,7 +2288,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base, uint8_t *
                 /* Compress R (we re-use pubkey_x & y)*/
                 pubkey_x = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, VR_S_X);
                 pubkey_y = (uint8_t *)Cy_Crypto_Core_Vu_RegMemPointer(base, VR_S_Y);
-                if ((bool)(((uint8_t *)pubkey_x)[0] & (uint8_t)0x01))
+                if((bool)(((uint8_t*)pubkey_x)[0] & (uint8_t)0x01))
                 {
                     ((uint8_t*)pubkey_y)[31] |= (uint8_t)0x80;
                 }

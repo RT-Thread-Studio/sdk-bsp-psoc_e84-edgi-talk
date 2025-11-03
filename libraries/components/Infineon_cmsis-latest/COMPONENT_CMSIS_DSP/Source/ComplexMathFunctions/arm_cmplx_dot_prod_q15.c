@@ -44,7 +44,6 @@
   @param[in]     numSamples  number of samples in each vector
   @param[out]    realResult  real part of the result returned here
   @param[out]    imagResult  imaginary part of the result returned her
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function is implemented using an internal 64-bit accumulator.
@@ -55,12 +54,12 @@
  */
 
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_cmplx_dot_prod_q15(
-    const q15_t * pSrcA,
-    const q15_t * pSrcB,
-    uint32_t numSamples,
-    q31_t * realResult,
-    q31_t * imagResult)
+ARM_DSP_ATTRIBUTE void arm_cmplx_dot_prod_q15(
+  const q15_t * pSrcA,
+  const q15_t * pSrcB,
+        uint32_t numSamples,
+        q31_t * realResult,
+        q31_t * imagResult)
 {
     int32_t         blkCnt;
     q63_t           accReal = 0LL;
@@ -70,16 +69,14 @@ void arm_cmplx_dot_prod_q15(
 
     blkCnt = (numSamples >> 3);
     blkCnt -= 1;
-    if (blkCnt > 0)
-    {
+    if (blkCnt > 0) {
         /* should give more freedom to generate stall free code */
         vecSrcA = vld1q(pSrcA);
         vecSrcB = vld1q(pSrcB);
         pSrcA += 8;
         pSrcB += 8;
 
-        while (blkCnt > 0)
-        {
+        while (blkCnt > 0) {
 
             accReal = vmlsldavaq(accReal, vecSrcA, vecSrcB);
             vecSrcC = vld1q(pSrcA);
@@ -119,8 +116,7 @@ void arm_cmplx_dot_prod_q15(
          * tail
          */
         blkCnt = CMPLX_DIM * (numSamples & 7);
-        do
-        {
+        do {
             mve_pred16_t    p = vctp16q(blkCnt);
 
             pSrcA += 8;
@@ -135,12 +131,9 @@ void arm_cmplx_dot_prod_q15(
             blkCnt -= 8;
         }
         while ((int32_t) blkCnt > 0);
-    }
-    else
-    {
+    } else {
         blkCnt = numSamples * CMPLX_DIM;
-        while (blkCnt > 0)
-        {
+        while (blkCnt > 0) {
             mve_pred16_t    p = vctp16q(blkCnt);
 
             vecSrcA = vldrhq_z_s16(pSrcA, p);
@@ -162,98 +155,98 @@ void arm_cmplx_dot_prod_q15(
     *imagResult = asrl(accImag, (14 - 8));
 }
 #else
-void arm_cmplx_dot_prod_q15(
-    const q15_t * pSrcA,
-    const q15_t * pSrcB,
-    uint32_t numSamples,
-    q31_t * realResult,
-    q31_t * imagResult)
+ARM_DSP_ATTRIBUTE void arm_cmplx_dot_prod_q15(
+  const q15_t * pSrcA,
+  const q15_t * pSrcB,
+        uint32_t numSamples,
+        q31_t * realResult,
+        q31_t * imagResult)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q63_t real_sum = 0, imag_sum = 0;              /* Temporary result variables */
-    q15_t a0, b0, c0, d0;
+        uint32_t blkCnt;                               /* Loop counter */
+        q63_t real_sum = 0, imag_sum = 0;              /* Temporary result variables */
+        q15_t a0,b0,c0,d0;
 
 #if defined (ARM_MATH_LOOPUNROLL)
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+  while (blkCnt > 0U)
+  {
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += (q31_t)a0 * c0;
-        imag_sum += (q31_t)a0 * d0;
-        real_sum -= (q31_t)b0 * d0;
-        imag_sum += (q31_t)b0 * c0;
+    real_sum += (q31_t)a0 * c0;
+    imag_sum += (q31_t)a0 * d0;
+    real_sum -= (q31_t)b0 * d0;
+    imag_sum += (q31_t)b0 * c0;
 
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += (q31_t)a0 * c0;
-        imag_sum += (q31_t)a0 * d0;
-        real_sum -= (q31_t)b0 * d0;
-        imag_sum += (q31_t)b0 * c0;
+    real_sum += (q31_t)a0 * c0;
+    imag_sum += (q31_t)a0 * d0;
+    real_sum -= (q31_t)b0 * d0;
+    imag_sum += (q31_t)b0 * c0;
 
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += (q31_t)a0 * c0;
-        imag_sum += (q31_t)a0 * d0;
-        real_sum -= (q31_t)b0 * d0;
-        imag_sum += (q31_t)b0 * c0;
+    real_sum += (q31_t)a0 * c0;
+    imag_sum += (q31_t)a0 * d0;
+    real_sum -= (q31_t)b0 * d0;
+    imag_sum += (q31_t)b0 * c0;
 
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += (q31_t)a0 * c0;
-        imag_sum += (q31_t)a0 * d0;
-        real_sum -= (q31_t)b0 * d0;
-        imag_sum += (q31_t)b0 * c0;
+    real_sum += (q31_t)a0 * c0;
+    imag_sum += (q31_t)a0 * d0;
+    real_sum -= (q31_t)b0 * d0;
+    imag_sum += (q31_t)b0 * c0;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = numSamples % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = numSamples % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+  while (blkCnt > 0U)
+  {
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += (q31_t)a0 * c0;
-        imag_sum += (q31_t)a0 * d0;
-        real_sum -= (q31_t)b0 * d0;
-        imag_sum += (q31_t)b0 * c0;
+    real_sum += (q31_t)a0 * c0;
+    imag_sum += (q31_t)a0 * d0;
+    real_sum -= (q31_t)b0 * d0;
+    imag_sum += (q31_t)b0 * c0;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Store real and imaginary result in 8.24 format  */
-    /* Convert real data in 34.30 to 8.24 by 6 right shifts */
-    *realResult = (q31_t)(real_sum >> 6);
-    /* Convert imaginary data in 34.30 to 8.24 by 6 right shifts */
-    *imagResult = (q31_t)(imag_sum >> 6);
+  /* Store real and imaginary result in 8.24 format  */
+  /* Convert real data in 34.30 to 8.24 by 6 right shifts */
+  *realResult = (q31_t) (real_sum >> 6);
+  /* Convert imaginary data in 34.30 to 8.24 by 6 right shifts */
+  *imagResult = (q31_t) (imag_sum >> 6);
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

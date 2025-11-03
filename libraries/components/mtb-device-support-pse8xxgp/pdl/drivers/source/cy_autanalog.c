@@ -61,70 +61,70 @@
 /* Validation macros for State Transition Table registers of SAR */
 #define AUTANALOG_STT_SAR_STATE(value)                               ((value) <= ACTRLR_TTCFG_TT_CFG3_SAR_ENTRY_ADDR_Msk)
 #if !defined (CY_AUTANALOG_TRIMM_DISABLE)
-    /* Trimming block die temp */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP                      (1UL)
-    /* Trimming block CTB0 */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_10X_RMP                  (11UL)
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_1X_RMP                   (18UL)
-    /* Trimming block CTB1 */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_10X_RMP                  (25UL)
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_1X_RMP                   (32UL)
-    /* Trimming block CTB0, OA0 */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_OA0_10X                  (5UL)
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_OA0_1X                   (8UL)
-    /* Trimming block CTB0, OA1 */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_OA1_10X                  (8UL)
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_OA1_1X                   (15UL)
-    /* Trimming block CTB1, OA0 */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_OA0_10X                  (19UL)
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_OA0_1X                   (22UL)
-    /* Trimming block CTB1, OA1 */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_OA1_10X                  (22UL)
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_OA1_1X                   (29UL)
-    /* Trimming block PTC */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_PTC                           (33UL)
-    /* Trimming block DAC0 */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_DAC0                          (35UL)
-    /* Trimming block DAC1 */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_DAC1                          (45UL)
-    /* Trimming block ADC, HS */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_ADC_HS_CALCTRL                (55UL)
-    /* Trimming block ADC, LP */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_ADC_LP_CALCTRL                (68UL)
-    /* Trimming block ADC */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_ADC                           (72UL)
-    /* Trimming block INFRA, LPOSC */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_LPOSC                         (79UL)
-    /* Trimming block INFRA, AREF */
-    #define AUTANALOG_RRAM_TRIMM_START_IDX_AREF                          (80UL)
+/* Trimming block die temp */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP                      (1UL)
+/* Trimming block CTB0 */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_10X_RMP                  (11UL)
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_1X_RMP                   (18UL)
+/* Trimming block CTB1 */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_10X_RMP                  (25UL)
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_1X_RMP                   (32UL)
+/* Trimming block CTB0, OA0 */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_OA0_10X                  (5UL)
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_OA0_1X                   (8UL)
+/* Trimming block CTB0, OA1 */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_OA1_10X                  (8UL)
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB0_OA1_1X                   (15UL)
+/* Trimming block CTB1, OA0 */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_OA0_10X                  (19UL)
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_OA0_1X                   (22UL)
+/* Trimming block CTB1, OA1 */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_OA1_10X                  (22UL)
+#define AUTANALOG_RRAM_TRIMM_START_IDX_CTB1_OA1_1X                   (29UL)
+/* Trimming block PTC */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_PTC                           (33UL)
+/* Trimming block DAC0 */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_DAC0                          (35UL)
+/* Trimming block DAC1 */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_DAC1                          (45UL)
+/* Trimming block ADC, HS */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_ADC_HS_CALCTRL                (55UL)
+/* Trimming block ADC, LP */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_ADC_LP_CALCTRL                (68UL)
+/* Trimming block ADC */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_ADC                           (72UL)
+/* Trimming block INFRA, LPOSC */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_LPOSC                         (79UL)
+/* Trimming block INFRA, AREF */
+#define AUTANALOG_RRAM_TRIMM_START_IDX_AREF                          (80UL)
 #endif
 
 /* Forward declarations */
 #if !defined (CY_AUTANALOG_TRIMM_DISABLE)
-    static cy_en_autanalog_status_t Analog_LoadTrimmValues(const cy_stc_autanalog_cfg_t * analogCfg);
+static cy_en_autanalog_status_t Analog_LoadTrimmValues(const cy_stc_autanalog_cfg_t * analogCfg);
 #endif
 static void Analog_UpdateTimerTable_AC(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
 #if !defined (CY_AUTANALOG_PRB_DISABLE)
-    static void Analog_UpdateTimerTable_PRB(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
+static void Analog_UpdateTimerTable_PRB(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
 #endif
 #if defined (CY_IP_MXS22LPPASS_CTB) && !defined (CY_AUTANALOG_CTB_DISABLE)
-    static void Analog_UpdateTimerTable_CTB(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
+static void Analog_UpdateTimerTable_CTB(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
 #endif
 #if defined (CY_IP_MXS22LPPASS_PTC) && !defined (CY_AUTANALOG_PTC_DISABLE)
-    static void Analog_UpdateTimerTable_PTC(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
+static void Analog_UpdateTimerTable_PTC(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
 #endif
 #if defined (CY_IP_MXS22LPPASS_DAC) && !defined (CY_AUTANALOG_DAC_DISABLE)
-    static void Analog_UpdateTimerTable_DAC(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
+static void Analog_UpdateTimerTable_DAC(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
 #endif
 #if defined (CY_IP_MXS22LPPASS_SAR) && !defined (CY_AUTANALOG_SAR_DISABLE)
-    static void Analog_UpdateTimerTable_SAR(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
+static void Analog_UpdateTimerTable_SAR(uint8_t stateIdx, const cy_stc_autanalog_stt_t * stateTransitionTable, uint8_t targetState);
 #endif
 
 
 #if !((CY_IP_MXS22LPPASS_VERSION == 1UL) && (CY_IP_MXS22LPPASS_VERSION_MINOR == 0UL))
-    void Cy_AutAnalog_AdvPowerControl(bool sleepModeAC, bool lpOscDutyCycle, bool sarLpCorePowerCycle)
+void Cy_AutAnalog_AdvPowerControl(bool sleepModeAC, bool lpOscDutyCycle, bool sarLpCorePowerCycle)
 #else
-    void Cy_AutAnalog_AdvPowerControl(bool sleepModeAC, bool lpOscDutyCycle)
+void Cy_AutAnalog_AdvPowerControl(bool sleepModeAC, bool lpOscDutyCycle)
 #endif
 {
     /* Update AC CFG register */
@@ -156,7 +156,7 @@ void Cy_AutAnalog_Clear(void)
 
 uint32_t Cy_AutAnalog_Init(const cy_stc_autanalog_t * cfgAndStates)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that type conversion from enum to uint32_t does not have any negative drawbacks');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that type conversion from enum to uint32_t does not have any negative drawbacks');
     uint32_t retVal = CY_AUTANALOG_BAD_PARAM;
 
     if (NULL != cfgAndStates)
@@ -164,11 +164,11 @@ uint32_t Cy_AutAnalog_Init(const cy_stc_autanalog_t * cfgAndStates)
         /* Loads static and dynamic pairs of the configuration into the MMIO */
         retVal = Cy_AutAnalog_LoadConfig(cfgAndStates->configuration);
 
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.4', 'Review shows that comparison of enum with uint32_t does not have any negative drawbacks');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.4','Review shows that comparison of enum with uint32_t does not have any negative drawbacks');
         if (CY_AUTANALOG_SUCCESS == retVal)
         {
             /* Loads the entire content of the State Transition Table into the MMIO */
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that assignment of enum to uint32_t does not have any negative drawbacks');
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that assignment of enum to uint32_t does not have any negative drawbacks');
             retVal = Cy_AutAnalog_LoadStateTransitionTable(cfgAndStates->numSttEntries, cfgAndStates->stateTransitionTable);
         }
     }
@@ -202,12 +202,12 @@ void Cy_AutAnalog_Enable(void)
 
 uint32_t Cy_AutAnalog_LoadConfig(const cy_stc_autanalog_cfg_t * analogCfg)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that type conversion from enum to uint32_t does not have any negative drawbacks');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that type conversion from enum to uint32_t does not have any negative drawbacks');
     uint32_t retVal = CY_AUTANALOG_BAD_PARAM;
 
     if (NULL != analogCfg)
     {
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that type conversion from enum to uint32_t does not have any negative drawbacks');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that type conversion from enum to uint32_t does not have any negative drawbacks');
         retVal = CY_AUTANALOG_ENABLE_ERR;
 
         uint8_t cfgIdx;
@@ -223,7 +223,7 @@ uint32_t Cy_AutAnalog_LoadConfig(const cy_stc_autanalog_cfg_t * analogCfg)
         regVal = _FLD2VAL(ACTRLR_PWR_STATUS_SW_OK, AUTANALOG_AC_PWR_STATUS(ACTRLR_BASE));
         if (regVal != 0U)
         {
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that type conversion from enum to uint32_t does not have any negative drawbacks');
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that type conversion from enum to uint32_t does not have any negative drawbacks');
             retVal = CY_AUTANALOG_SUCCESS;
 
             /* Delay for startup of IZTAT current reference, 200uS maximum */
@@ -266,16 +266,16 @@ uint32_t Cy_AutAnalog_LoadConfig(const cy_stc_autanalog_cfg_t * analogCfg)
             for (cfgIdx = 0U; cfgIdx < PASS_NR_CTBLS; cfgIdx++)
             {
 #ifndef CTBL0_BASE
-                if (0U == cfgIdx)
-                {
-                    continue;
-                }
+                   if (0U == cfgIdx)
+                   {
+                       continue;
+                   }
 #endif
 #ifndef CTBL1_BASE
-                if (1U == cfgIdx)
-                {
-                    continue;
-                }
+                   if (1U == cfgIdx)
+                   {
+                       continue;
+                   }
 #endif
                 if (NULL != analogCfg->ctb[cfgIdx])
                 {
@@ -543,10 +543,10 @@ static cy_en_autanalog_status_t Analog_LoadTrimmValues(const cy_stc_autanalog_cf
             uint8_t idx;
 
             /* Die temperature */
-            cyAutanalogTempMultiplierHS = trimmData[AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP];
-            cyAutanalogTempOffsetHS     = trimmData[AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP + 1U];
-            cyAutanalogTempMultiplierLP = trimmData[AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP + 2U];
-            cyAutanalogTempOffsetLP     = trimmData[AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP + 3U];
+            Cy_AutAnalog_SAR_LoadDieTempTrimmCoeff(trimmData[AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP],
+                                                   trimmData[AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP + 1U],
+                                                   trimmData[AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP + 2U],
+                                                   trimmData[AUTANALOG_RRAM_TRIMM_START_IDX_DIE_TEMP + 3U]);
 
 #if defined (CY_IP_MXS22LPPASS_CTB) && !defined (CY_AUTANALOG_CTB_DISABLE)
             /* Check CTB configuration */
@@ -558,7 +558,7 @@ static cy_en_autanalog_status_t Analog_LoadTrimmValues(const cy_stc_autanalog_cf
 #endif
 
 #if !((CY_IP_MXS22LPPASS_VERSION == 1UL) && (CY_IP_MXS22LPPASS_VERSION_MINOR == 0UL))
-            /* Defines position and size of trim data in RRAM based on OpAmps power mode */
+/* Defines position and size of trim data in RRAM based on OpAmps power mode */
 #define CTB_OA_PWR_HIGH_Pos              0UL
 #define CTB_OA_PWR_HIGH_Msk              0xFFUL
 #define CTB_OA_PWR_ULTRA_HIGH_Pos        8UL
@@ -866,81 +866,81 @@ static void Analog_UpdateTimerTable_AC(uint8_t stateIdx, const cy_stc_autanalog_
         CY_ASSERT_L3(AUTANALOG_STT_AC_CFG0_DOUT(stateTransitionTable[stateIdx].ac->gpioOut));
 
         regVal =
-            _BOOL2FLD(ACTRLR_TTCFG_TT_CFG0_DOUT_UNLOCK, stateTransitionTable[stateIdx].ac->unlockGpioOut) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_DOUT, stateTransitionTable[stateIdx].ac->gpioOut) |
-            _BOOL2FLD(ACTRLR_TTCFG_TT_CFG0_MODE, stateTransitionTable[stateIdx].ac->lpMode) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_MODE_UNLOCK, stateTransitionTable[stateIdx].ac->unlock);
+                _BOOL2FLD(ACTRLR_TTCFG_TT_CFG0_DOUT_UNLOCK, stateTransitionTable[stateIdx].ac->unlockGpioOut) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_DOUT, stateTransitionTable[stateIdx].ac->gpioOut) |
+                _BOOL2FLD(ACTRLR_TTCFG_TT_CFG0_MODE, stateTransitionTable[stateIdx].ac->lpMode) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_MODE_UNLOCK, stateTransitionTable[stateIdx].ac->unlock);
 
 #if !defined (CY_AUTANALOG_PRB_DISABLE)
-        if (NULL != stateTransitionTable[stateIdx].prb)
-        {
-            regVal |= _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_PRB_UNLOCK, stateTransitionTable[stateIdx].prb->unlock);
-        }
+                if (NULL != stateTransitionTable[stateIdx].prb)
+                {
+                    regVal |= _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_PRB_UNLOCK, stateTransitionTable[stateIdx].prb->unlock);
+                }
 #endif
 
 #if defined (CY_IP_MXS22LPPASS_CTB) && !defined (CY_AUTANALOG_CTB_DISABLE)
-        for (uint8_t devIdx = 0U; devIdx < PASS_NR_CTBLS; devIdx++)
-        {
+                for (uint8_t devIdx = 0U; devIdx < PASS_NR_CTBLS; devIdx++)
+                {
 #ifndef CTBL0_BASE
-            if (0U == devIdx)
-            {
-                continue;
-            }
+                    if (0U == devIdx)
+                    {
+                        continue;
+                    }
 #endif
 #ifndef CTBL1_BASE
-            if (1U == devIdx)
-            {
-                continue;
-            }
+                    if (1U == devIdx)
+                    {
+                        continue;
+                    }
 #endif
-            if (NULL != stateTransitionTable[stateIdx].ctb[devIdx])
-            {
-                regVal |= (0U == devIdx) ?
-                          _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_CTBL0_UNLOCK, stateTransitionTable[stateIdx].ctb[devIdx]->unlock) :
-                          _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_CTBL1_UNLOCK, stateTransitionTable[stateIdx].ctb[devIdx]->unlock);
-            }
-        }
+                    if (NULL != stateTransitionTable[stateIdx].ctb[devIdx])
+                    {
+                        regVal |= (0U == devIdx) ?
+                       _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_CTBL0_UNLOCK, stateTransitionTable[stateIdx].ctb[devIdx]->unlock) :
+                       _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_CTBL1_UNLOCK, stateTransitionTable[stateIdx].ctb[devIdx]->unlock);
+                    }
+                }
 #endif
 
 #if defined (CY_IP_MXS22LPPASS_PTC) && !defined (CY_AUTANALOG_PTC_DISABLE)
 #if defined(PTC_BASE)
-        if (NULL != stateTransitionTable[stateIdx].ptcomp[0U])
-        {
-            regVal |= _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_PTC_UNLOCK, stateTransitionTable[stateIdx].ptcomp[0U]->unlock);
-        }
+                if (NULL != stateTransitionTable[stateIdx].ptcomp[0U])
+                {
+                    regVal |= _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_PTC_UNLOCK, stateTransitionTable[stateIdx].ptcomp[0U]->unlock);
+                }
 #endif
 #endif
 
 #if defined (CY_IP_MXS22LPPASS_DAC) && !defined (CY_AUTANALOG_DAC_DISABLE)
-        for (uint8_t devIdx = 0U; devIdx < PASS_NR_DACS; devIdx++)
-        {
+                for (uint8_t devIdx = 0U; devIdx < PASS_NR_DACS; devIdx++)
+                {
 #ifndef DAC0_BASE
-            if (0U == devIdx)
-            {
-                continue;
-            }
+                    if (0U == devIdx)
+                    {
+                        continue;
+                    }
 #endif
 #ifndef DAC1_BASE
-            if (1U == devIdx)
-            {
-                continue;
-            }
+                    if (1U == devIdx)
+                    {
+                        continue;
+                    }
 #endif
-            if (NULL != stateTransitionTable[stateIdx].dac[devIdx])
-            {
-                regVal |= (0U == devIdx) ?
-                          _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_DAC0_UNLOCK, stateTransitionTable[stateIdx].dac[devIdx]->unlock) :
-                          _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_DAC1_UNLOCK, stateTransitionTable[stateIdx].dac[devIdx]->unlock);
-            }
-        }
+                    if (NULL != stateTransitionTable[stateIdx].dac[devIdx])
+                    {
+                        regVal |= (0U == devIdx) ?
+                       _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_DAC0_UNLOCK, stateTransitionTable[stateIdx].dac[devIdx]->unlock) :
+                       _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_DAC1_UNLOCK, stateTransitionTable[stateIdx].dac[devIdx]->unlock);
+                    }
+                }
 #endif
 
 #if defined (CY_IP_MXS22LPPASS_SAR) && !defined (CY_AUTANALOG_SAR_DISABLE)
 #if defined(SAR_BASE)
-        if (NULL != stateTransitionTable[stateIdx].sar[0U])
-        {
-            regVal |= _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_SAR_UNLOCK, stateTransitionTable[stateIdx].sar[0U]->unlock);
-        }
+                if (NULL != stateTransitionTable[stateIdx].sar[0U])
+                {
+                    regVal |= _VAL2FLD(ACTRLR_TTCFG_TT_CFG0_SAR_UNLOCK, stateTransitionTable[stateIdx].sar[0U]->unlock);
+                }
 #endif
 #endif
 
@@ -953,11 +953,11 @@ static void Analog_UpdateTimerTable_AC(uint8_t stateIdx, const cy_stc_autanalog_
         CY_ASSERT_L3(AUTANALOG_STT_AC_CFG1_BR_ADDR(stateTransitionTable[stateIdx].ac->branchState));
 
         regVal =
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_CNT, stateTransitionTable[stateIdx].ac->count) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_ACTION, stateTransitionTable[stateIdx].ac->action) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_COND, stateTransitionTable[stateIdx].ac->condition) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_BR_ADDR, stateTransitionTable[stateIdx].ac->branchState) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_INTR_SET, stateTransitionTable[stateIdx].ac->trigInt);
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_CNT, stateTransitionTable[stateIdx].ac->count) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_ACTION, stateTransitionTable[stateIdx].ac->action) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_COND, stateTransitionTable[stateIdx].ac->condition) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_BR_ADDR, stateTransitionTable[stateIdx].ac->branchState) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG1_INTR_SET, stateTransitionTable[stateIdx].ac->trigInt);
 
         AUTANALOG_AC_TT_CFG1(ACTRLR_BASE, targetState) = regVal;
     }
@@ -990,10 +990,10 @@ static void Analog_UpdateTimerTable_PRB(uint8_t stateIdx, const cy_stc_autanalog
         CY_ASSERT_L3(AUTANALOG_PRB_VREF_CTRL_VAL(stateTransitionTable[stateIdx].prb->prbVref1Tap));
 
         regVal =
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG4_PRB_VREF0_FW_MODE, stateTransitionTable[stateIdx].prb->prbVref0Fw) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG4_PRB_VREF0_VAL, stateTransitionTable[stateIdx].prb->prbVref0Tap) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG4_PRB_VREF1_FW_MODE, stateTransitionTable[stateIdx].prb->prbVref1Fw) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG4_PRB_VREF1_VAL, stateTransitionTable[stateIdx].prb->prbVref1Tap);
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG4_PRB_VREF0_FW_MODE, stateTransitionTable[stateIdx].prb->prbVref0Fw) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG4_PRB_VREF0_VAL, stateTransitionTable[stateIdx].prb->prbVref0Tap) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG4_PRB_VREF1_FW_MODE, stateTransitionTable[stateIdx].prb->prbVref1Fw) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG4_PRB_VREF1_VAL, stateTransitionTable[stateIdx].prb->prbVref1Tap);
 
         AUTANALOG_AC_TT_CFG4(ACTRLR_BASE, targetState) = regVal;
     }
@@ -1066,20 +1066,20 @@ static void Analog_UpdateTimerTable_CTB(uint8_t stateIdx, const cy_stc_autanalog
             }
 
             regVal = (0U == devIdx) ?
-                     /* CTB0 */
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA0_EN, stateTransitionTable[stateIdx].ctb[devIdx]->enableOpamp0) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA0_CFG, stateTransitionTable[stateIdx].ctb[devIdx]->cfgOpamp0) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA0_GAIN, stateTransitionTable[stateIdx].ctb[devIdx]->gainOpamp0) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA1_EN, stateTransitionTable[stateIdx].ctb[devIdx]->enableOpamp1) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA1_CFG, stateTransitionTable[stateIdx].ctb[devIdx]->cfgOpamp1) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA1_GAIN, stateTransitionTable[stateIdx].ctb[devIdx]->gainOpamp1) :
-                     /* CTB1 */
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA0_EN, stateTransitionTable[stateIdx].ctb[devIdx]->enableOpamp0) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA0_CFG, stateTransitionTable[stateIdx].ctb[devIdx]->cfgOpamp0) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA0_GAIN, stateTransitionTable[stateIdx].ctb[devIdx]->gainOpamp0) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA1_EN, stateTransitionTable[stateIdx].ctb[devIdx]->enableOpamp1) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA1_CFG, stateTransitionTable[stateIdx].ctb[devIdx]->cfgOpamp1) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA1_GAIN, stateTransitionTable[stateIdx].ctb[devIdx]->gainOpamp1);
+                    /* CTB0 */
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA0_EN, stateTransitionTable[stateIdx].ctb[devIdx]->enableOpamp0) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA0_CFG, stateTransitionTable[stateIdx].ctb[devIdx]->cfgOpamp0) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA0_GAIN, stateTransitionTable[stateIdx].ctb[devIdx]->gainOpamp0) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA1_EN, stateTransitionTable[stateIdx].ctb[devIdx]->enableOpamp1) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA1_CFG, stateTransitionTable[stateIdx].ctb[devIdx]->cfgOpamp1) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL0_OA1_GAIN, stateTransitionTable[stateIdx].ctb[devIdx]->gainOpamp1):
+                    /* CTB1 */
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA0_EN, stateTransitionTable[stateIdx].ctb[devIdx]->enableOpamp0) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA0_CFG, stateTransitionTable[stateIdx].ctb[devIdx]->cfgOpamp0) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA0_GAIN, stateTransitionTable[stateIdx].ctb[devIdx]->gainOpamp0) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA1_EN, stateTransitionTable[stateIdx].ctb[devIdx]->enableOpamp1) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA1_CFG, stateTransitionTable[stateIdx].ctb[devIdx]->cfgOpamp1) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG2_CTBL1_OA1_GAIN, stateTransitionTable[stateIdx].ctb[devIdx]->gainOpamp1);
 
             AUTANALOG_AC_TT_CFG2(ACTRLR_BASE, targetState) |= regVal;
         }
@@ -1127,12 +1127,12 @@ static void Analog_UpdateTimerTable_PTC(uint8_t stateIdx, const cy_stc_autanalog
         CY_ASSERT_L3(AUTANALOG_STT_PTCOMP_CFG(stateTransitionTable[stateIdx].ptcomp[0U]->dynCfgIdxComp1));
 
         regVal =
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_PTC_CMP0_EN, stateTransitionTable[stateIdx].ptcomp[0U]->enableComp0) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_PTC_CMP0_CFG, stateTransitionTable[stateIdx].ptcomp[0U]->dynCfgIdxComp0) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_PTC_CMP1_EN, stateTransitionTable[stateIdx].ptcomp[0U]->enableComp1) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_PTC_CMP1_CFG, stateTransitionTable[stateIdx].ptcomp[0U]->dynCfgIdxComp1);
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_PTC_CMP0_EN, stateTransitionTable[stateIdx].ptcomp[0U]->enableComp0) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_PTC_CMP0_CFG, stateTransitionTable[stateIdx].ptcomp[0U]->dynCfgIdxComp0) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_PTC_CMP1_EN, stateTransitionTable[stateIdx].ptcomp[0U]->enableComp1) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_PTC_CMP1_CFG, stateTransitionTable[stateIdx].ptcomp[0U]->dynCfgIdxComp1);
 
-        AUTANALOG_AC_TT_CFG3(ACTRLR_BASE, targetState) |= regVal;
+         AUTANALOG_AC_TT_CFG3(ACTRLR_BASE, targetState) |= regVal;
     }
 #else
     (void) stateIdx;
@@ -1210,27 +1210,27 @@ static void Analog_UpdateTimerTable_DAC(uint8_t stateIdx, const cy_stc_autanalog
             if (stateTransitionTable[stateIdx].dac[devIdx]->direction != CY_AUTANALOG_DAC_DIRECTION_DISABLED)
             {
                 direction = (0U == devIdx) ?
-                            /* DAC0 */
-                            (stateTransitionTable[stateIdx].dac[devIdx]->direction == CY_AUTANALOG_DAC_DIRECTION_FORWARD ?
-                             ACTRLR_TTCFG_TT_CFG3_DAC0_INC_Msk :
-                             ACTRLR_TTCFG_TT_CFG3_DAC0_DEC_Msk) :
-                            /* DAC1 */
-                            (stateTransitionTable[stateIdx].dac[devIdx]->direction == CY_AUTANALOG_DAC_DIRECTION_FORWARD ?
-                             ACTRLR_TTCFG_TT_CFG3_DAC1_INC_Msk :
-                             ACTRLR_TTCFG_TT_CFG3_DAC1_DEC_Msk);
+                        /* DAC0 */
+                        (stateTransitionTable[stateIdx].dac[devIdx]->direction == CY_AUTANALOG_DAC_DIRECTION_FORWARD ?
+                            ACTRLR_TTCFG_TT_CFG3_DAC0_INC_Msk:
+                            ACTRLR_TTCFG_TT_CFG3_DAC0_DEC_Msk):
+                        /* DAC1 */
+                        (stateTransitionTable[stateIdx].dac[devIdx]->direction == CY_AUTANALOG_DAC_DIRECTION_FORWARD ?
+                            ACTRLR_TTCFG_TT_CFG3_DAC1_INC_Msk:
+                            ACTRLR_TTCFG_TT_CFG3_DAC1_DEC_Msk);
             }
 
             regVal = (0U == devIdx) ?
-                     /* DAC0 */
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC0_EN, stateTransitionTable[stateIdx].dac[devIdx]->enable) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC0_CHANNEL, stateTransitionTable[stateIdx].dac[devIdx]->channel) |
-                     direction |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC0_TR, stateTransitionTable[stateIdx].dac[devIdx]->trigger) :
-                     /* DAC1 */
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC1_EN, stateTransitionTable[stateIdx].dac[devIdx]->enable) |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC1_CHANNEL, stateTransitionTable[stateIdx].dac[devIdx]->channel) |
-                     direction |
-                     _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC1_TR, stateTransitionTable[stateIdx].dac[devIdx]->trigger);
+                    /* DAC0 */
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC0_EN, stateTransitionTable[stateIdx].dac[devIdx]->enable) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC0_CHANNEL, stateTransitionTable[stateIdx].dac[devIdx]->channel) |
+                    direction |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC0_TR, stateTransitionTable[stateIdx].dac[devIdx]->trigger):
+                    /* DAC1 */
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC1_EN, stateTransitionTable[stateIdx].dac[devIdx]->enable) |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC1_CHANNEL, stateTransitionTable[stateIdx].dac[devIdx]->channel) |
+                    direction |
+                    _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_DAC1_TR, stateTransitionTable[stateIdx].dac[devIdx]->trigger);
 
             AUTANALOG_AC_TT_CFG3(ACTRLR_BASE, targetState) |= regVal;
         }
@@ -1277,9 +1277,9 @@ static void Analog_UpdateTimerTable_SAR(uint8_t stateIdx, const cy_stc_autanalog
         CY_ASSERT_L3(AUTANALOG_STT_SAR_STATE(stateTransitionTable[stateIdx].sar[0U]->entryState));
 
         regVal =
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_SAR_ENTRY_ADDR, stateTransitionTable[stateIdx].sar[0U]->entryState) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_SAR_TR, stateTransitionTable[stateIdx].sar[0U]->trigger) |
-            _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_SAR_EN, stateTransitionTable[stateIdx].sar[0U]->enable);
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_SAR_ENTRY_ADDR, stateTransitionTable[stateIdx].sar[0U]->entryState) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_SAR_TR, stateTransitionTable[stateIdx].sar[0U]->trigger) |
+                _VAL2FLD(ACTRLR_TTCFG_TT_CFG3_SAR_EN, stateTransitionTable[stateIdx].sar[0U]->enable);
 
         AUTANALOG_AC_TT_CFG3(ACTRLR_BASE, targetState) |= regVal;
     }

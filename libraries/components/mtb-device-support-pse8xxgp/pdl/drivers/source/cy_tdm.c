@@ -21,15 +21,15 @@
 
 #if defined(__cplusplus)
 extern "C" {
-
+    
 #endif /* __cplusplus */
 
 
-cy_en_tdm_status_t Cy_AudioTDM_TX_Init(TDM_TX_STRUCT_Type * base, cy_stc_tdm_config_tx_t const * config);
-void Cy_AudioTDM_TX_DeInit(TDM_TX_STRUCT_Type * base);
+cy_en_tdm_status_t Cy_AudioTDM_TX_Init( TDM_TX_STRUCT_Type * base, cy_stc_tdm_config_tx_t const * config);
+void Cy_AudioTDM_TX_DeInit( TDM_TX_STRUCT_Type * base);
 
-cy_en_tdm_status_t Cy_AudioTDM_RX_Init(TDM_RX_STRUCT_Type * base, cy_stc_tdm_config_rx_t const * config);
-void Cy_AudioTDM_RX_DeInit(TDM_RX_STRUCT_Type * base);
+cy_en_tdm_status_t Cy_AudioTDM_RX_Init( TDM_RX_STRUCT_Type * base, cy_stc_tdm_config_rx_t const * config);
+void Cy_AudioTDM_RX_DeInit( TDM_RX_STRUCT_Type * base);
 
 /**
 * \addtogroup group_tdm_functions
@@ -55,24 +55,24 @@ void Cy_AudioTDM_RX_DeInit(TDM_RX_STRUCT_Type * base);
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_Init
 *
 *******************************************************************************/
-cy_en_tdm_status_t Cy_AudioTDM_Init(TDM_STRUCT_Type * base, cy_stc_tdm_config_t const * config)
+cy_en_tdm_status_t Cy_AudioTDM_Init( TDM_STRUCT_Type * base, cy_stc_tdm_config_t const * config)
 {
     cy_en_tdm_status_t ret = CY_TDM_BAD_PARAM;
-
-    if ((NULL != base) && (NULL != config))
+    
+    if((NULL != base) && (NULL != config))
     {
-        if (config->tx_config->enable)
-        {
-            ret = Cy_AudioTDM_TX_Init(&(base->TDM_TX_STRUCT), (config->tx_config));
-            if (ret == CY_TDM_BAD_PARAM)
-            {
-                return (ret);
-            }
-        }
-        if (config->rx_config->enable)
-        {
-            ret = Cy_AudioTDM_RX_Init(&(base->TDM_RX_STRUCT), (config->rx_config));
-        }
+       if(config->tx_config->enable)
+       {
+           ret = Cy_AudioTDM_TX_Init(&(base->TDM_TX_STRUCT),(config->tx_config));
+           if(ret == CY_TDM_BAD_PARAM)
+           {
+               return(ret);
+           }
+       }
+       if(config->rx_config->enable)
+       {
+            ret = Cy_AudioTDM_RX_Init(&(base->TDM_RX_STRUCT),(config->rx_config));
+       }
     }
     return (ret);
 }
@@ -98,10 +98,10 @@ cy_en_tdm_status_t Cy_AudioTDM_Init(TDM_STRUCT_Type * base, cy_stc_tdm_config_t 
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_Init
 *
 ****************************************************************************/
-cy_en_tdm_status_t Cy_AudioTDM_TX_Init(TDM_TX_STRUCT_Type * base, cy_stc_tdm_config_tx_t const * config)
+cy_en_tdm_status_t Cy_AudioTDM_TX_Init( TDM_TX_STRUCT_Type * base, cy_stc_tdm_config_tx_t const * config)
 {
     cy_en_tdm_status_t          ret     = CY_TDM_SUCCESS;
-    uint16_t clockDiv = config->clkDiv - 1U;
+    uint16_t clockDiv = config->clkDiv -1U;
     uint8_t channelNum = config->channelNum - 1U;
     uint8_t channelSIZE = config->channelSize - 1U;
     CY_ASSERT_L2(base);
@@ -112,12 +112,12 @@ cy_en_tdm_status_t Cy_AudioTDM_TX_Init(TDM_TX_STRUCT_Type * base, cy_stc_tdm_con
     CY_ASSERT_L2(CY_I2S_TDM_IS_INPUT_SIGNAL_MODE_VALID(config->signalInput));
 
     /* Channel Default */
-    if ((bool)(TDM_STRUCT_TX_CTL(base) & TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_CTL_ENABLED_Msk))
+    if((bool)(TDM_STRUCT_TX_CTL(base) & TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_CTL_ENABLED_Msk))
     {
         ret = CY_TDM_BAD_PARAM;
-        return (ret);
+        return(ret);
     }
-
+        
     /* The TX interface setting */
     TDM_STRUCT_TX_IF_CTL(base) =
         _VAL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_IF_CTL_CLOCK_DIV,         clockDiv)               |
@@ -129,28 +129,28 @@ cy_en_tdm_status_t Cy_AudioTDM_TX_Init(TDM_TX_STRUCT_Type * base, cy_stc_tdm_con
         _VAL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_IF_CTL_CH_SIZE,         channelSIZE)              |
         _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_IF_CTL_I2S_MODE,         config->i2sMode);
 
-    if (!((bool)(config->masterMode)))
+    if(!((bool)(config->masterMode)))
     {
         TDM_STRUCT_TX_ROUTE_CTL(base) = _VAL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_ROUTE_CTL_MODE, config->signalInput);
     }
 
     /* Chanel Enable */
     TDM_STRUCT_TX_CH_CTL(base) = config->chEn;
-    /* The FIFO setting */
-    TDM_STRUCT_TX_FIFO_CTL(base) = _VAL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_TRIGGER_LEVEL, config->fifoTriggerLevel);
-    /* The TC Interface setting */
+    /* The FIFO setting */           
+    TDM_STRUCT_TX_FIFO_CTL(base) = _VAL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_TRIGGER_LEVEL,config->fifoTriggerLevel);
+    /* The TC Interface setting */      
     TDM_STRUCT_TX_CTL(base) =
         _VAL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_CTL_WORD_SIZE,    config->wordSize) |
         _VAL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_CTL_FORMAT,     config->format)     |
         _VAL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_CTL_MS, config->masterMode);
-
+ 
     return (ret);
 }
 
 /**************************************************************************/
 /* Function Name: Cy_AudioTDM_RX_Init                                     */
 /**************************************************************************/
-cy_en_tdm_status_t Cy_AudioTDM_RX_Init(TDM_RX_STRUCT_Type * base, cy_stc_tdm_config_rx_t const * config)
+cy_en_tdm_status_t Cy_AudioTDM_RX_Init( TDM_RX_STRUCT_Type * base, cy_stc_tdm_config_rx_t const * config)
 {
     cy_en_tdm_status_t ret = CY_TDM_SUCCESS;
     uint16_t clockDiv   = config->clkDiv - 1U;
@@ -162,7 +162,7 @@ cy_en_tdm_status_t Cy_AudioTDM_RX_Init(TDM_RX_STRUCT_Type * base, cy_stc_tdm_con
     CY_ASSERT_L2(CY_TDM_IS_CHANNELS_VALID(channelNum));
     CY_ASSERT_L2(CY_TDM_IS_CHANNEL_SIZE_VALID(channelSIZE));
     CY_ASSERT_L2(CY_I2S_TDM_IS_INPUT_SIGNAL_MODE_VALID(config->signalInput));
-
+    
     /* The RX interface setting */
     TDM_STRUCT_RX_IF_CTL(base) =
         _VAL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_IF_CTL_CLOCK_DIV,         clockDiv)             |
@@ -175,16 +175,16 @@ cy_en_tdm_status_t Cy_AudioTDM_RX_Init(TDM_RX_STRUCT_Type * base, cy_stc_tdm_con
         _VAL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_IF_CTL_CH_SIZE,         channelSIZE)            |
         _BOOL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_IF_CTL_I2S_MODE,         config->i2sMode);
 
-    if (!((bool)(config->masterMode)))
+    if(!((bool)(config->masterMode)))
     {
         TDM_STRUCT_RX_ROUTE_CTL(base) = _VAL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_ROUTE_CTL_MODE, config->signalInput);
     }
 
     /* Chanel Enable */
     TDM_STRUCT_RX_CH_CTL(base) = config->chEn;
-    /* The FIFO setting */
-    TDM_STRUCT_RX_FIFO_CTL(base) = _VAL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_TRIGGER_LEVEL, config->fifoTriggerLevel);
-    /* The TC Interface setting */
+    /* The FIFO setting */           
+    TDM_STRUCT_RX_FIFO_CTL(base) = _VAL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_TRIGGER_LEVEL,config->fifoTriggerLevel);
+    /* The TC Interface setting */      
     TDM_STRUCT_RX_CTL(base) =
         _VAL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_CTL_WORD_SIZE,            config->wordSize)   |
         _VAL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_CTL_WORD_SIGN_EXTEND,    config->signExtend) |
@@ -210,7 +210,7 @@ cy_en_tdm_status_t Cy_AudioTDM_RX_Init(TDM_RX_STRUCT_Type * base, cy_stc_tdm_con
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_DeInit
 *******************************************************************************/
-void Cy_AudioTDM_DeInit(TDM_STRUCT_Type * base)
+void Cy_AudioTDM_DeInit( TDM_STRUCT_Type * base)
 {
     Cy_AudioTDM_TX_DeInit(&(base->TDM_TX_STRUCT));
     Cy_AudioTDM_RX_DeInit(&(base->TDM_RX_STRUCT));
@@ -221,7 +221,7 @@ void Cy_AudioTDM_DeInit(TDM_STRUCT_Type * base)
 /**************************************************************************/
 /* Function Name: Cy_AudioTDM_TX_DeInit                                   */
 /**************************************************************************/
-void Cy_AudioTDM_TX_DeInit(TDM_TX_STRUCT_Type * base)
+void Cy_AudioTDM_TX_DeInit( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_INTR_TX_MASK(base)    = 0UL;
     TDM_STRUCT_TX_FIFO_CTL(base)        = 0UL;
@@ -232,7 +232,7 @@ void Cy_AudioTDM_TX_DeInit(TDM_TX_STRUCT_Type * base)
 /**************************************************************************/
 /* Function Name: Cy_AudioTDM_RX_DeInit                                   */
 /**************************************************************************/
-void Cy_AudioTDM_RX_DeInit(TDM_RX_STRUCT_Type * base)
+void Cy_AudioTDM_RX_DeInit( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_INTR_RX_MASK(base)    = 0UL;
     TDM_STRUCT_RX_FIFO_CTL(base)        = 0UL;

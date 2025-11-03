@@ -43,29 +43,29 @@ extern "C" {
 
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Extract(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t  const *salt,
-        uint32_t saltLength,
-        uint8_t  const *ikm,
-        uint32_t ikmLength,
-        uint8_t *prk);
+                                          uint8_t  const *salt,
+                                          uint32_t saltLength,
+                                          uint8_t  const *ikm,
+                                          uint32_t ikmLength,
+                                          uint8_t *prk);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf_Expand(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t  const *prk,
-        uint32_t prkLength,
-        uint8_t  const *info,
-        uint32_t infoLength,
-        uint8_t *okm,
-        uint32_t okmLength);
+                                          uint8_t  const *prk,
+                                          uint32_t prkLength,
+                                          uint8_t  const *info,
+                                          uint32_t infoLength,
+                                          uint8_t *okm,
+                                          uint32_t okmLength);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hkdf(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t  const *salt,
-        uint32_t saltLength,
-        uint8_t  const *ikm,
-        uint32_t ikmLength,
-        uint8_t  const *info,
-        uint32_t infoLength,
-        uint8_t *okm,
-        uint32_t okmLength);
+                                          uint8_t  const *salt,
+                                          uint32_t saltLength,
+                                          uint8_t  const *ikm,
+                                          uint32_t ikmLength,
+                                          uint8_t  const *info,
+                                          uint32_t infoLength,
+                                          uint8_t *okm,
+                                          uint32_t okmLength);
 
 #endif /* (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_HKDF_C) */
 

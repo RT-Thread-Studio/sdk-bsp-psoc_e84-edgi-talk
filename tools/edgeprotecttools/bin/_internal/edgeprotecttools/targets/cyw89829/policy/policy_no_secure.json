@@ -120,6 +120,10 @@
                 "description": "Addressing Mode",
                 "applicable_conf": "3-byte or 4-byte",
                 "value": "3-byte"
+            },
+            "encryption": {
+                "description": "Enables SMIF encryption",
+                "value": false
             }
         },
         "flow_control":
@@ -132,6 +136,16 @@
             "program_oem_assets": {
                 "description": "Programs OEM assets (smif_config and debug) and makes them immutable (this can be done only once)",
                 "value": true
+            }
+        }
+    },
+    "pre_build":
+    {
+        "keys":
+        {
+            "encrypt_key": {
+                "description": "Path to the AES-128 key for image encryption in external memory",
+                "value": "../keys/encrypt_key.bin"
             }
         }
     }

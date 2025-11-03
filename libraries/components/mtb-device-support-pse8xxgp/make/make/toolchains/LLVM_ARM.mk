@@ -2,7 +2,7 @@
 # \file LLVM_ARM.mk
 #
 # \brief
-# LLVM Embedded Toolchain for Arm toolchain configuration (experimental)
+# LLVM Embedded Toolchain for Arm toolchain configuration
 #
 ################################################################################
 # \copyright
@@ -49,11 +49,12 @@ ifneq ($(_MTB_TOOLCHAIN_LLVM_ARM__USER_2_DIR),)
 MTB_TOOLCHAIN_LLVM_ARM__BASE_DIR:=$(call mtb_core__escaped_path,$(CY_COMPILER_LLVM_ARM_DIR))
 endif
 
+check_toolchain_install:
 ifeq ($(MTB_TOOLCHAIN_LLVM_ARM__BASE_DIR),)
-$(info CY_TOOL_llvm_arm_BASE_ABS=$(CY_TOOL_llvm_arm_BASE_ABS) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_TOOL_llvm_arm_BASE_ABS))),exists,absent)])
-$(info CY_COMPILER_PATH=$(CY_COMPILER_PATH) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_COMPILER_PATH))),exists,absent)])
-$(info CY_COMPILER_LLVM_ARM_DIR=$(CY_COMPILER_LLVM_ARM_DIR) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_COMPILER_LLVM_ARM_DIR))),exists,absent)])
-#$(error Unable to find LLVM_ARM base directory.)
+	$(info CY_TOOL_llvm_arm_BASE_ABS=$(CY_TOOL_llvm_arm_BASE_ABS) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_TOOL_llvm_arm_BASE_ABS))),exists,absent)])
+	$(info CY_COMPILER_PATH=$(CY_COMPILER_PATH) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_COMPILER_PATH))),exists,absent)])
+	$(info CY_COMPILER_LLVM_ARM_DIR=$(CY_COMPILER_LLVM_ARM_DIR) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_COMPILER_LLVM_ARM_DIR))),exists,absent)])
+	$(error Error: Cannot find LLVM_ARM toolchain. Go to https://github.com/ARM-software/LLVM-embedded-toolchain-for-Arm/ to download and install it. Create an environment variable CY_COMPILER_LLVM_ARM_DIR to specify the path to the installation directory)
 endif
 
 # Elf to bin conversion tool
@@ -72,8 +73,9 @@ mtb_toolchain_LLVM_ARM__elf2bin=$(MTB_TOOLCHAIN_LLVM_ARM__ELF2BIN) -O binary $1 
 # The base path to the LLVM cross compilation executables
 ifeq ($(TOOLCHAIN),LLVM_ARM)
 CY_CROSSPATH:=$(MTB_TOOLCHAIN_LLVM_ARM__BASE_DIR)
-$(info Processing using the experimental support of LLVM Embedded Toolchain for Arm, which is available here:\
-	https://github.com/ARM-software/LLVM-embedded-toolchain-for-Arm)
+$(info NOTE: LLVM Embedded Toolchain for ARM may not completely support the FPU mode that you have selected. For more information refer to the\
+	"ModusToolbox LLVM embedded toolchain for ARM device support" KBA article available at\
+    https://community.infineon.com/t5/Knowledge-Base-Articles/ModusToolbox-LLVM-embedded-toolchain-for-ARM-device-support/ta-p/984171)
 endif
 
 # Build tools
@@ -219,7 +221,7 @@ else
 _MTB_TOOLCHAIN_LLVM_ARM__MVE_FLAGS=+nomve.fp
 endif
 endif
-else 
+else
 ifeq ($(filter $(MTB_RECIPE__CORE_NAME)_FPU_PRESENT,$(DEVICE_$(DEVICE)_FEATURES)),)
 $(info INFO: MVE_SELECT=MVE-F is set but FPU is not available on $(MTB_RECIPE__CORE) core. Valid options for $(MTB_RECIPE__CORE) core are MVE_SELECT=MVE-I or MVE_SELECT=NO_MVE.)
 else ifeq ($(VFP_SELECT),softfloat)

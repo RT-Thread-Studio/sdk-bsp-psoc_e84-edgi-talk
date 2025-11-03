@@ -22,17 +22,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 *
-*
-* \section group_nnlite_changelog Changelog
-*
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-
 *******************************************************************************/
 
 /*****************************************************************************/
@@ -109,15 +98,18 @@ extern "C" {
 #define NNLITE_INTR_ENABLE_MASK                 (MXNNLITE_1_0_INTR_MASKED_INTR_MASKED_DONE_Msk | \
                                                  MXNNLITE_1_0_INTR_MASKED_INTR_MASKED_SATURATION_Msk | \
                                                  NNLITE_INTR_ERRORS_MASK)
+/** Interrupt mask for all interrupts */
+#define NNLITE_INTR_MASK                        NNLITE_INTR_ENABLE_MASK
+
 #else
-/** Read Error Interrupt */
+ /** Read Error Interrupt */
 #define NNLITE_INTR_READ_ERRORS_MASK           (MXNNLITE_2_0_INTR_MASKED_INTR_MASKED_MEM_ERR_SPARSITY_Msk | \
                                                  MXNNLITE_2_0_INTR_MASKED_INTR_MASKED_MEM_ERR_ACTIVATIONSTREAMER_Msk | \
                                                  MXNNLITE_2_0_INTR_MASKED_INTR_MASKED_MEM_ERR_WEIGHTSTREAMER_Msk | \
                                                  MXNNLITE_2_0_INTR_MASKED_INTR_MASKED_MEM_ERR_BIASSTREAMER_Msk)
-/** Write Error Interrupt */
+ /** Write Error Interrupt */
 #define NNLITE_INTR_WRITE_ERRORS_MASK           (MXNNLITE_2_0_INTR_MASKED_INTR_MASKED_MEM_ERR_OUTPUTSTREAMER_Msk)
-/** Error Interrupt */
+ /** Error Interrupt */
 #define NNLITE_INTR_ERRORS_MASK               (NNLITE_INTR_WRITE_ERRORS_MASK|NNLITE_INTR_READ_ERRORS_MASK)
 /** Saturation Interrupt */
 #define NNLITE_SATURATION_MASK                (MXNNLITE_2_0_INTR_INTR_ACCUMULATION_SATURATION_Msk| \
@@ -139,6 +131,11 @@ extern "C" {
  *
 */
 #define NNLITE_INTR_ENABLE_MASK    (MXNNLITE_2_0_INTR_MASKED_INTR_MASKED_DONE_Msk | NNLITE_INTR_ERRORS_MASK)
+
+/** Interrupt mask for all interrupts */
+#define NNLITE_INTR_MASK           (MXNNLITE_2_0_INTR_MASKED_INTR_MASKED_DONE_Msk | NNLITE_INTR_ERRORS_MASK | NNLITE_SATURATION_MASK)
+
+
 /** Fractional bits produced by tanh  interpolation */
 #define NNLITE_TANH_FRAC_BITS 24u
 /** Fractional bits produced by sigmoid interpolation */
@@ -166,22 +163,22 @@ typedef enum
     CY_NNLITE_OP_QUEUED = 1U, /** Operation is Pending state */
 
     CY_NNLITE_MEM_ERR_SPARSITY = (CY_NNLITE_ID | CY_PDL_STATUS_ERROR |
-                                  MXNNLITE_1_0_INTR_INTR_MEM_ERR_SPARSITY_Msk), /**< Mem fetch Error for Sparsity */
+                                            MXNNLITE_1_0_INTR_INTR_MEM_ERR_SPARSITY_Msk), /**< Mem fetch Error for Sparsity */
 
     CY_NNLITE_MEM_ERR_ACTIVATION_STREAMER = (CY_NNLITE_ID | CY_PDL_STATUS_ERROR |
                                             MXNNLITE_1_0_INTR_INTR_MEM_ERR_ACTIVATIONSTREAMER_Msk),  /**< Mem fetch Error for Activation pointer */
 
     CY_NNLITE_MEM_ERR_WEIGHT_STREAMER = (CY_NNLITE_ID | CY_PDL_STATUS_ERROR |
-                                         MXNNLITE_1_0_INTR_INTR_MEM_ERR_WEIGHTSTREAMER_Msk), /**< Mem fetch Error for Weight pointer */
+                                            MXNNLITE_1_0_INTR_INTR_MEM_ERR_WEIGHTSTREAMER_Msk), /**< Mem fetch Error for Weight pointer */
 
     CY_NNLITE_MEM_ERR_BIAS_STREAMER = (CY_NNLITE_ID | CY_PDL_STATUS_ERROR |
-                                       MXNNLITE_1_0_INTR_INTR_MEM_ERR_BIASSTREAMER_Msk), /**< Mem fetch Error for Bias pointer */
+                                            MXNNLITE_1_0_INTR_INTR_MEM_ERR_BIASSTREAMER_Msk), /**< Mem fetch Error for Bias pointer */
 
     CY_NNLITE_MEM_ERR_OUTPUT_STREAMER = (CY_NNLITE_ID | CY_PDL_STATUS_ERROR |
-                                         MXNNLITE_1_0_INTR_INTR_MEM_ERR_OUTPUTSTREAMER_Msk),/**< Mem Error for Output pointer */
+                                            MXNNLITE_1_0_INTR_INTR_MEM_ERR_OUTPUTSTREAMER_Msk),/**< Mem Error for Output pointer */
 
     CY_NNLITE_SATURATION = (CY_NNLITE_ID | CY_PDL_STATUS_ERROR |
-                            MXNNLITE_1_0_INTR_INTR_SATURATION_Msk), /**< Saturation in output */
+                                            MXNNLITE_1_0_INTR_INTR_SATURATION_Msk), /**< Saturation in output */
 
     CY_NNLITE_BAD_PARAM = (CY_NNLITE_ID | CY_PDL_STATUS_ERROR | 0x41U),  /**< function call with invalid parameter*/
 
@@ -243,18 +240,18 @@ typedef enum
 /** NNLite nn layer type*/
 typedef enum
 {
-    CY_NNLITE_FC_LAYER = 0U, /**< NN FC or Dense Layer */
-    CY_NNLITE_CONV_LAYER = 1U, /**< NN Convolution Layer */
-    CY_NNLITE_LAST_LAYER_CODE = 1u
+  CY_NNLITE_FC_LAYER = 0U, /**< NN FC or Dense Layer */
+  CY_NNLITE_CONV_LAYER = 1U, /**< NN Convolution Layer */
+  CY_NNLITE_LAST_LAYER_CODE = 1u
 } cy_en_nnlite_layer_t;
 
 
 /** Out Activation type, includes some implement via PDL */
 typedef enum
 {
-    CY_NNLITE_ACTIVATION_NONE = 0U, /**< Activation type none */
-    CY_NNLITE_ACTIVATION_RELU = 1U, /**< Activation type RELU */
-    CY_NNLITE_ACTIVATION_LEAKY_RELU = 2U, /**< Activation type leaky RELU */
+  CY_NNLITE_ACTIVATION_NONE = 0U, /**< Activation type none */
+  CY_NNLITE_ACTIVATION_RELU = 1U, /**< Activation type RELU */
+  CY_NNLITE_ACTIVATION_LEAKY_RELU = 2U, /**< Activation type leaky RELU */
 } cy_en_nnlite_fused_activation_t;
 #else
 /** Out Activation type, includes some implement via PDL
@@ -263,12 +260,12 @@ typedef enum
 */
 typedef enum
 {
-    CY_NNLITE_ACTIVATION_NONE = 0U,         /**< No function applied    - Only re-scaling */
-    CY_NNLITE_ACTIVATION_SIGMOID = 1U,      /**< Sigmoid: sigma(2x)    - Q1.25 result from Q8.16 / Q8.8 input */
-    CY_NNLITE_ACTIVATION_TANH = 2U,         /**< Tanh: tanh(x)          - Q1.24 from Q8.8 / Q16.8 input */
-    CY_NNLITE_ACTIVATION_PWL = 3U,          /**< No function applied    - Output re-scaling left / right 0 differently (used for leaky RELU) */
-    CY_NNLITE_ACTIVATION_RECIP_POW2 = 4U,   /**< 2^-x                   - positive Q31 from  non-negative Q3.8 / Q3.16 input (saturating) */
-    CY_NNLITE_ACTIVATION_RECIPROCAL = 5U,   /**< 1/x                    - 32-bit IEEE754 float from positive Qx.31 input */
+  CY_NNLITE_ACTIVATION_NONE = 0U,         /**< No function applied    - Only re-scaling */
+  CY_NNLITE_ACTIVATION_SIGMOID = 1U,      /**< Sigmoid: sigma(2x)    - Q1.25 result from Q8.16 / Q8.8 input */
+  CY_NNLITE_ACTIVATION_TANH = 2U,         /**< Tanh: tanh(x)          - Q1.24 from Q8.8 / Q16.8 input */
+  CY_NNLITE_ACTIVATION_PWL = 3U,          /**< No function applied    - Output re-scaling left / right 0 differently (used for leaky RELU) */
+  CY_NNLITE_ACTIVATION_RECIP_POW2 = 4U,   /**< 2^-x                   - positive Q31 from  non-negative Q3.8 / Q3.16 input (saturating) */
+  CY_NNLITE_ACTIVATION_RECIPROCAL = 5U,   /**< 1/x                    - 32-bit IEEE754 float from positive Qx.31 input */
 
 } cy_en_nnlite_fused_activation_t;
 #endif
@@ -276,94 +273,94 @@ typedef enum
 /** Activation size */
 typedef enum
 {
-    CY_NNLITE_ACTIVATION_8BIT = 0U, /**< 8 bits Activation  */
-    CY_NNLITE_ACTIVATION_16BIT = 1U, /**< 16 bits Activation */
+  CY_NNLITE_ACTIVATION_8BIT = 0U, /**< 8 bits Activation  */
+  CY_NNLITE_ACTIVATION_16BIT = 1U, /**< 16 bits Activation */
 } cy_en_nnlite_activation_size_t;
 
 /** Output size */
 typedef enum
 {
-    CY_NNLITE_OUTPUT_8BIT = 0U, /**< 8 bit Output words */
-    CY_NNLITE_OUTPUT_16BIT = 1U, /**< 16 bits Output words */
-    CY_NNLITE_OUTPUT_32BIT = 2U /**< 32 bits Output words */
+  CY_NNLITE_OUTPUT_8BIT = 0U, /**< 8 bit Output words */
+  CY_NNLITE_OUTPUT_16BIT = 1U, /**< 16 bits Output words */
+  CY_NNLITE_OUTPUT_32BIT = 2U /**< 32 bits Output words */
 } cy_en_nnlite_output_size_t;
 
 
 /** Input re-scaling mode */
 typedef enum
 {
-    CY_NNLITE_RESCALE_NONE = 0U, /**< No re-scaling */
-    CY_NNLITE_RESCALE_WGT = 1U,  /**< Rescale Weights */
-    CY_NNLITE_RESCALE_ACT = 2U   /**< Rescale Activations */
+  CY_NNLITE_RESCALE_NONE = 0U, /**< No re-scaling */
+  CY_NNLITE_RESCALE_WGT = 1U,  /**< Rescale Weights */
+  CY_NNLITE_RESCALE_ACT = 2U   /**< Rescale Activations */
 } cy_en_nnlite_input_rescaling_t;
 
 /** Output re-scaling mode */
 typedef enum
 {
 
-    CY_NNLITE_OUTSCALE_NONE = 0U,        /**< No re-scaling (hard-wired 1.0 scale factor) */
-    CY_NNLITE_OUTSCALE_PER_TENSOR = 1U,  /**< Per-tensor re-scaling      */
-    CY_NNLITE_OUTSCALE_PER_AXIS = 2,     /**< Per-filter re-scaling       */
-    CY_NNLITE_OUTSCALE_PER_ROW = 3,     /**< Per output row re-scaling   */
+  CY_NNLITE_OUTSCALE_NONE = 0U,        /**< No re-scaling (hard-wired 1.0 scale factor) */
+  CY_NNLITE_OUTSCALE_PER_TENSOR = 1U,  /**< Per-tensor re-scaling      */
+  CY_NNLITE_OUTSCALE_PER_AXIS = 2,     /**< Per-filter re-scaling       */
+  CY_NNLITE_OUTSCALE_PER_ROW = 3,     /**< Per output row re-scaling   */
 } cy_en_nnlite_output_rescaling_t;
 
 
 /** NNLite nn operation type*/
 typedef enum
 {
-    CY_NNLITE_NOOP_ACT = 0U, /**< Pass-through act stream (inputs left shifted 16) */
-    CY_NNLITE_MUL = 1U, /**< NN Convolution Layer, pointwise mul */
-    CY_NNLITE_ADD = 2U, /**< NN Pointwise addition (inputs left shifted 16) */
-    CY_NNLITE_SUB_LR = 3U, /**< NN Pointwise subtraction activation/rhs - weights/lhs (inputs left shifted 16) */
-    CY_NNLITE_SUB_RL = 4U, /**< NN Pointwise subtraction weights/lhs - activation/rhs (left shifted 16) */
-    CY_NNLITE_SUM_ACT = 5U, /** NN Summation act stream */
-    CY_NNLITE_MIN_ACT = 6U, /** Max of act stream */
-    CY_NNLITE_MAX_ACT = 7U, /** Max of act stream */
-    CY_NNLITE_SUM_ACT32 = 8U /** NN Summation act stream, shift inputs to treat as single 32-bit value*/
+  CY_NNLITE_NOOP_ACT = 0U, /**< Pass-through act stream (inputs left shifted 16) */
+  CY_NNLITE_MUL = 1U, /**< NN Convolution Layer, pointwise mul */
+  CY_NNLITE_ADD = 2U, /**< NN Pointwise addition (inputs left shifted 16) */
+  CY_NNLITE_SUB_LR = 3U, /**< NN Pointwise subtraction activation/rhs - weights/lhs (inputs left shifted 16) */
+  CY_NNLITE_SUB_RL = 4U, /**< NN Pointwise subtraction weights/lhs - activation/rhs (left shifted 16) */
+  CY_NNLITE_SUM_ACT = 5U, /** NN Summation act stream */
+  CY_NNLITE_MIN_ACT = 6U, /** Max of act stream */
+  CY_NNLITE_MAX_ACT = 7U, /** Max of act stream */
+  CY_NNLITE_SUM_ACT32 = 8U /** NN Summation act stream, shift inputs to treat as single 32-bit value*/
 } cy_en_nnlite_op_t;
 
 
 /** NNLite nn operating mode type*/
 typedef enum
 {
-    CY_NNLITE_DWACT_WGT = 0U,   /**< "Depthwise"-striped channel activation + weights */
-    CY_NNLITE_ACT_WGT = 1U,     /**< Channel-minor activation + weights */
-    CY_NNLITE_DWACT_ONLY = 2U,  /**< "Depthwise"-striped channel activation only */
-    CY_NNLITE_ACT_ONLY = 3U,  /**<  Channel-minor activation only */
+  CY_NNLITE_DWACT_WGT = 0U,   /**< "Depthwise"-striped channel activation + weights */
+  CY_NNLITE_ACT_WGT = 1U,     /**< Channel-minor activation + weights */
+  CY_NNLITE_DWACT_ONLY = 2U,  /**< "Depthwise"-striped channel activation only */
+  CY_NNLITE_ACT_ONLY = 3U,  /**<  Channel-minor activation only */
 } cy_en_nnlite_mode_t;
 
 /** NNLite length of weight prefetch */
 typedef enum
 {
-    CY_NNLITE_PREFETCH_WORD_1x128  = 0U,  /**< prefetch 1x128 weights */
-    CY_NNLITE_PREFETCH_WORD_2x128  = 1U,  /**< prefetch 2x128 weights */
-    CY_NNLITE_PREFETCH_WORD_3x128  = 2U,  /**< prefetch 3x128 weights */
-    CY_NNLITE_PREFETCH_WORD_4x128  = 3U,  /**< prefetch 4x128 weights, default value */
+  CY_NNLITE_PREFETCH_WORD_1x128  = 0U,  /**< prefetch 1x128 weights */
+  CY_NNLITE_PREFETCH_WORD_2x128  = 1U,  /**< prefetch 2x128 weights */
+  CY_NNLITE_PREFETCH_WORD_3x128  = 2U,  /**< prefetch 3x128 weights */
+  CY_NNLITE_PREFETCH_WORD_4x128  = 3U,  /**< prefetch 4x128 weights, default value */
 } cy_en_nnlite_prefetch_length_t;
 
 
 /** Streamer id's */
 typedef enum
 {
-    CY_NNLITE_ACTIVATION_STREAMER = 0U, /**< Activation Streamer ID */
-    CY_NNLITE_WEIGHT_STREAMER = 1U, /**< Weight Streamer ID */
-    CY_NNLITE_BIAS_STREAMER = 2U, /**< Bias Streamer ID */
-    CY_NNLITE_OUT_STREAMER = 3U, /**< Output Streamer ID */
+  CY_NNLITE_ACTIVATION_STREAMER = 0U, /**< Activation Streamer ID */
+  CY_NNLITE_WEIGHT_STREAMER = 1U, /**< Weight Streamer ID */
+  CY_NNLITE_BIAS_STREAMER = 2U, /**< Bias Streamer ID */
+  CY_NNLITE_OUT_STREAMER = 3U, /**< Output Streamer ID */
 #if CY_IP_MXNNLITE_VERSION==2
-    CY_NNLITE_SCALE_STREAMER = 4U,  /**< Scale-factors (per-axis/per-row) */
-    CY_NNLITE_WEIGHT_COUNT_STREAMER = 5U, /**<  Non-zero weight count for sparse weights */
-    CY_NNLITE_SPARSITY_MAP_STREAMER = 6U, /**<  Sparsity map for sparse weights */
+  CY_NNLITE_SCALE_STREAMER = 4U,  /**< Scale-factors (per-axis/per-row) */
+  CY_NNLITE_WEIGHT_COUNT_STREAMER = 5U, /**<  Non-zero weight count for sparse weights */
+  CY_NNLITE_SPARSITY_MAP_STREAMER = 6U, /**<  Sparsity map for sparse weights */
 #endif
 } cy_en_nnlite_streamer_id_t;
 
 /** NNLite PDL Driver State Machine*/
 typedef enum
 {
-    CY_NNLITE_DEINIT = 0U, /**< Deinitialized State */
-    CY_NNLITE_INIT = 1U, /**< Init State */
-    CY_NNLITE_CONFIG_STATE = 2U, /**< Configuration State */
-    CY_NNLITE_OP_STARTED = 3U, /**< NN layer Operation Started */
-    CY_NNLITE_OP_DONE = 4U, /**< Last NN operation completed */
+  CY_NNLITE_DEINIT = 0U, /**< Deinitialized State */
+  CY_NNLITE_INIT = 1U, /**< Init State */
+  CY_NNLITE_CONFIG_STATE = 2U, /**< Configuration State */
+  CY_NNLITE_OP_STARTED = 3U, /**< NN layer Operation Started */
+  CY_NNLITE_OP_DONE = 4U, /**< Last NN operation completed */
 } cy_en_nnlite_state_t;
 
 /** \} group_nnlite_enums */
@@ -379,9 +376,9 @@ typedef enum
  *****************************************************************************/
 typedef struct cy_nnlite_context
 {
-    volatile cy_en_nnlite_state_t nnliteState; /**< Current state of nnlite driver */
-    volatile cy_en_nnlite_status_t opStatus; /**< Status of last operation */
-    volatile uint32_t opIntrStatus; /**< Raw nnlite interrupt status of last operation */
+  volatile cy_en_nnlite_state_t nnliteState; /**< Current state of nnlite driver */
+  volatile cy_en_nnlite_status_t opStatus; /**< Status of last operation */
+  volatile uint32_t opIntrStatus; /**< Raw nnlite interrupt status of last operation */
 } cy_nnlite_context_t;
 
 /**
@@ -411,13 +408,13 @@ typedef uint32_t cy_nnlite_clipping_t;
  *****************************************************************************/
 typedef struct cy_nnlite_clipping_s
 {
-    int16_t min; /**< minimum value (signed) to clip in out streamer*/
-    int16_t max; /**< maximum value (signed) to clip in out streamer */
+  int16_t min; /**< minimum value (signed) to clip in out streamer*/
+  int16_t max; /**< maximum value (signed) to clip in out streamer */
 } cy_nnlite_clipping_t;
 
 #endif
 
-/** \} group_nnlite_data_structures */
+ /** \} group_nnlite_data_structures */
 
 /*******************************************************************************
 *                           Function Prototypes
@@ -460,7 +457,7 @@ Cy_NNLite_Init(NNLITE_Type *nnlite, cy_nnlite_context_t *context);
  **
  *****************************************************************************/
 cy_en_nnlite_status_t Cy_NNLite_DeInit(NNLITE_Type *nnlite,
-                                       cy_nnlite_context_t *context);
+                                        cy_nnlite_context_t *context);
 
 /**
  *****************************************************************************
@@ -491,7 +488,7 @@ cy_en_nnlite_status_t Cy_NNLite_Start(NNLITE_Type *nnlite,
  **
  *****************************************************************************/
 cy_en_nnlite_status_t Cy_NNLite_Stop(NNLITE_Type *nnlite,
-                                     cy_nnlite_context_t *context);
+                                      cy_nnlite_context_t *context);
 
 #if CY_IP_MXNNLITE_VERSION==1
 /**
@@ -504,8 +501,8 @@ cy_en_nnlite_status_t Cy_NNLite_Stop(NNLITE_Type *nnlite,
  *****************************************************************************/
 static inline uint32_t Cy_NNLite_SparsityMapSize(uint32_t num_weights)
 {
-    /* Start is byte aligned */
-    return (num_weights + 7u) / 8u;
+  /* Start is byte aligned */
+  return (num_weights + 7u ) / 8u;
 }
 
 
@@ -528,7 +525,7 @@ static inline uint32_t Cy_NNLite_SparsityMapSize(uint32_t num_weights)
  *****************************************************************************/
 cy_en_nnlite_status_t
 Cy_NNLite_ParseSparsity(NNLITE_Type *nnlite, const void *sparsitybaseAddr,
-                        uint32_t activationRepeats, uint32_t sparseBitMapLen, cy_nnlite_sparsity_cfg_t *sparCfg);
+    uint32_t activationRepeats, uint32_t sparseBitMapLen, cy_nnlite_sparsity_cfg_t *sparCfg);
 
 /**
  *****************************************************************************
@@ -646,15 +643,15 @@ Cy_NNLite_SparsityEnable(NNLITE_Type *nnlite, bool sparsityEn);
 
 cy_en_nnlite_status_t
 Cy_NNLite_ActivationStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *context,
-                                uint32_t filterWidth, uint32_t filterHeight,
-                                uint32_t activationRepeats, uint32_t inputWidth,
-                                uint32_t inputHeight, uint32_t inputChannel,
+                        uint32_t filterWidth, uint32_t filterHeight,
+                        uint32_t activationRepeats, uint32_t inputWidth,
+                        uint32_t inputHeight, uint32_t inputChannel,
 #if CY_IP_MXNNLITE_VERSION==1
-                                uint32_t startCol, uint32_t startRow,
+                        uint32_t startCol, uint32_t startRow,
 #endif
-                                int16_t padVal, uint8_t padWidth,
-                                uint8_t padHeight, uint8_t strideCol,
-                                uint8_t strideRow, int32_t inputOffset);
+                        int16_t padVal, uint8_t padWidth,
+                        uint8_t padHeight, uint8_t strideCol,
+                        uint8_t strideRow, int32_t inputOffset);
 
 /**
  *****************************************************************************
@@ -674,7 +671,7 @@ Cy_NNLite_ActivationStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *contex
  *****************************************************************************/
 cy_en_nnlite_status_t
 Cy_NNLite_WeightStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *context,
-                            uint32_t weightPerNeuron, int32_t filterOffset);
+                          uint32_t weightPerNeuron, int32_t filterOffset);
 
 #if CY_IP_MXNNLITE_VERSION !=1
 
@@ -704,9 +701,9 @@ Cy_NNLite_WeightStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *context,
 
 cy_en_nnlite_status_t
 Cy_NNLite_OutputStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *context,
-                            cy_nnlite_clipping_t clipping, int32_t outputOffset,
-                            uint32_t outputWidth, uint32_t outputHeight,
-                            uint32_t outputChannels);
+                        cy_nnlite_clipping_t clipping, int32_t outputOffset,
+                        uint32_t outputWidth, uint32_t outputHeight,
+                        uint32_t outputChannels);
 
 
 #else
@@ -737,9 +734,9 @@ Cy_NNLite_OutputStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *context,
 
 cy_en_nnlite_status_t
 Cy_NNLite_OutputStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *context,
-                            cy_nnlite_clipping_t clipping, int32_t outputOffset,
-                            uint32_t outputWidth, uint32_t outputHeight,
-                            float outputScalingFactor);
+                        cy_nnlite_clipping_t clipping, int32_t outputOffset,
+                        uint32_t outputWidth, uint32_t outputHeight,
+                        float outputScalingFactor);
 /**
  *****************************************************************************
  ** \brief nnlite bias streamer enable
@@ -770,7 +767,7 @@ Cy_NNLite_BiasStreamerEnable(NNLITE_Type *nnlite, bool biasEn);
  *****************************************************************************/
 cy_en_nnlite_status_t
 Cy_NNLite_StreamerBaseAddrSet(NNLITE_Type *nnlite,
-                              cy_en_nnlite_streamer_id_t strmId, const void *baseAddr);
+                        cy_en_nnlite_streamer_id_t strmId, const void *baseAddr);
 
 
 #if CY_IP_MXNNLITE_VERSION==1
@@ -795,11 +792,11 @@ Cy_NNLite_StreamerBaseAddrSet(NNLITE_Type *nnlite,
 cy_en_nnlite_status_t
 Cy_NNLite_ActivationTypeCtrl(NNLITE_Type *nnlite,
 
-                             cy_en_nnlite_layer_t nnLayer,
-                             bool actEn,
-                             cy_en_nnlite_activation_size_t actDataSize
+                        cy_en_nnlite_layer_t nnLayer,
+                        bool actEn,
+                        cy_en_nnlite_activation_size_t actDataSize
 
-                            );
+);
 
 #else
 
@@ -826,43 +823,43 @@ Cy_NNLite_ActivationTypeCtrl(NNLITE_Type *nnlite,
  *****************************************************************************/
 static inline cy_en_nnlite_status_t
 Cy_NNLite_PipelineConfig(NNLITE_Type *nnlite,
-                         cy_en_nnlite_op_t opType,
-                         cy_en_nnlite_mode_t fetchMode,
-                         bool repeatWeights,
-                         bool biasEn,
-                         bool sparsityEn,
-                         cy_en_nnlite_output_rescaling_t outputRescaling,
-                         cy_en_nnlite_input_rescaling_t inputRescaling,
-                         cy_en_nnlite_fused_activation_t actType,
-                         cy_en_nnlite_activation_size_t inputSize,
-                         cy_en_nnlite_activation_size_t weightSize,
-                         cy_en_nnlite_output_size_t outputSize
-                        )
+                        cy_en_nnlite_op_t opType,
+                        cy_en_nnlite_mode_t fetchMode,
+                        bool repeatWeights,
+                        bool biasEn,
+                        bool sparsityEn,
+                        cy_en_nnlite_output_rescaling_t outputRescaling,
+                        cy_en_nnlite_input_rescaling_t inputRescaling,
+                        cy_en_nnlite_fused_activation_t actType,
+                        cy_en_nnlite_activation_size_t inputSize,
+                        cy_en_nnlite_activation_size_t weightSize,
+                        cy_en_nnlite_output_size_t outputSize
+)
 {
-    cy_en_nnlite_status_t status;
-    if ((NULL == nnlite))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        nnlite->NNLAYER_CTL =
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_OPTYPE, opType) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_FETCH_MODE, fetchMode) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_REPEAT_WEIGHTS, repeatWeights) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_BIAS_EN, biasEn) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_SPARSE_EN, sparsityEn) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_SCALEFACTOR_CTL, outputRescaling) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_INPUT_RESCALE, inputRescaling) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_ACTTYPE, actType) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_INPUT_SIZE_CTL, inputSize) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_WEIGHT_SIZE_CTL, weightSize) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_OUTPUT_SIZE_CTL, outputSize) |
-            _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_WPREFETCH_LEN, CY_NNLITE_PREFETCH_WORD_4x128);
-        status = CY_NNLITE_SUCCESS;
-    }
+  cy_en_nnlite_status_t status;
+  if ((NULL == nnlite) )
+  {
+    status = CY_NNLITE_BAD_PARAM;
+  }
+  else
+  {
+    nnlite->NNLAYER_CTL =
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_OPTYPE, opType) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_FETCH_MODE, fetchMode) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_REPEAT_WEIGHTS, repeatWeights) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_BIAS_EN, biasEn) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_SPARSE_EN, sparsityEn) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_SCALEFACTOR_CTL, outputRescaling) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_INPUT_RESCALE, inputRescaling) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_ACTTYPE, actType) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_INPUT_SIZE_CTL, inputSize) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_WEIGHT_SIZE_CTL, weightSize) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_OUTPUT_SIZE_CTL, outputSize) |
+      _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_WPREFETCH_LEN, CY_NNLITE_PREFETCH_WORD_4x128);
+    status = CY_NNLITE_SUCCESS;
+  }
 
-    return status;
+  return status;
 
 }
 
@@ -901,7 +898,7 @@ Cy_NNLite_SetInterpolationLUTAddr(NNLITE_Type *nnlite, bool lut);
  *****************************************************************************/
 cy_en_nnlite_status_t
 Cy_NNLite_SetInterpolationParam(NNLITE_Type *nnlite,
-                                uint16_t slope, uint16_t intercept);
+                                        uint16_t slope, uint16_t intercept);
 
 #else
 
@@ -964,9 +961,9 @@ Cy_NNLite_SetInterpolationParam(NNLITE_Type *nnlite,
 
 cy_en_nnlite_status_t
 Cy_NNLite_FFTCfg(NNLITE_Type *nnlite,
-                 cy_nnlite_context_t *context,
-                 void *ppBuf0, void *ppBuf1,
-                 unsigned int fftStages);
+                cy_nnlite_context_t *context,
+                void *ppBuf0, void *ppBuf1,
+                unsigned int fftStages);
 
 #endif
 /**
@@ -982,7 +979,7 @@ Cy_NNLite_FFTCfg(NNLITE_Type *nnlite,
  **
  *****************************************************************************/
 cy_en_nnlite_status_t Cy_NNLite_SetInterruptMask(NNLITE_Type *nnlite,
-        uint32_t intrMask);
+                                                    uint32_t intrMask);
 /**
  *****************************************************************************
  ** \brief  nnlite set datawire trigger control, trigger datawire for next layer
@@ -996,7 +993,7 @@ cy_en_nnlite_status_t Cy_NNLite_SetInterruptMask(NNLITE_Type *nnlite,
  **
  *****************************************************************************/
 cy_en_nnlite_status_t Cy_NNLite_DatawireTriggerEnable(NNLITE_Type *nnlite,
-        bool trigEn);
+                                                          bool trigEn);
 
 /**
  *****************************************************************************
@@ -1023,7 +1020,7 @@ cy_en_nnlite_status_t Cy_NNLite_GetOperationStatus(NNLITE_Type *nnlite, uint32_t
  **
  *****************************************************************************/
 cy_en_nnlite_status_t Cy_NNLite_GetInterruptStatus(NNLITE_Type *nnlite,
-        uint32_t *intrStatus);
+                                                      uint32_t *intrStatus);
 
 /**
  *****************************************************************************
@@ -1052,8 +1049,8 @@ cy_en_nnlite_status_t Cy_NNLite_GetInterruptMask(NNLITE_Type *nnlite, uint32_t *
  **
  *****************************************************************************/
 cy_en_nnlite_status_t Cy_NNLite_GetDriverState(NNLITE_Type *nnlite,
-        cy_nnlite_context_t *context,
-        cy_en_nnlite_state_t *nnliteState);
+                                     cy_nnlite_context_t *context,
+                                     cy_en_nnlite_state_t *nnliteState);
 
 /**
  *****************************************************************************
@@ -1067,7 +1064,7 @@ cy_en_nnlite_status_t Cy_NNLite_GetDriverState(NNLITE_Type *nnlite,
  **
  *****************************************************************************/
 cy_en_nnlite_status_t Cy_NNLite_InterruptClear(NNLITE_Type *nnlite,
-        uint32_t intrMask);
+                                                uint32_t intrMask);
 
 /**
  *****************************************************************************
@@ -1079,7 +1076,7 @@ cy_en_nnlite_status_t Cy_NNLite_InterruptClear(NNLITE_Type *nnlite,
  **
  *****************************************************************************/
 void Cy_NNLite_InterruptHandler(NNLITE_Type *nnlite,
-                                cy_nnlite_context_t *context);
+                                  cy_nnlite_context_t *context);
 
 /**
  *****************************************************************************

@@ -31,9 +31,9 @@
 #include "math.h"
 
 #ifdef RTOS
-    #include "viv_dc_os.h"
+#include "viv_dc_os.h"
 #else
-    #include "viv_dc_platform.h"
+#include "viv_dc_platform.h"
 #endif
 
 /* Stretch factor.
@@ -41,7 +41,7 @@
 gctUINT32 get_stretch_factor(
     gctUINT32 src_size,
     gctUINT32 dest_size
-)
+    )
 {
     gctUINT32 stretch_factor = 0;
 
@@ -56,7 +56,7 @@ gctUINT32 get_stretch_factor(
 gctFLOAT sinc_filter(
     gctFLOAT x,
     gctINT32 radius
-)
+    )
 {
     gctFLOAT pit, pitd, f1, f2, result;
     gctFLOAT f_radius = vivMATH_Int2Float(radius);
@@ -90,7 +90,7 @@ viv_status_type calculate_sync_table(
     gctUINT32 src_size,
     gctUINT32 dst_size,
     gcsFILTER_BLIT_ARRAY_PTR kernel_info
-)
+    )
 {
     do
     {
@@ -110,7 +110,7 @@ viv_status_type calculate_sync_table(
 
         /* Same kernel size and ratio as before? */
         if ((kernel_info->kernelSize  == kernel_size) &&
-                (kernel_info->scaleFactor == kernel_size))
+            (kernel_info->scaleFactor == kernel_size))
         {
             break;
         }
@@ -119,7 +119,7 @@ viv_status_type calculate_sync_table(
         if (kernel_info->kernelStates == vivNULL)
         {
             /* Allocate the array. */
-            pointer = viv_os_mem_alloc(gcvKERNELSTATES);
+           pointer = viv_os_mem_alloc(gcvKERNELSTATES);
 
             kernel_info->kernelStates = pointer;
         }
@@ -138,11 +138,11 @@ viv_status_type calculate_sync_table(
         }
 
         /* Calculate the kernel half. */
-        kernel_half = (gctINT)(kernel_info->kernelSize >> 1);
+        kernel_half = (gctINT) (kernel_info->kernelSize >> 1);
 
         /* Calculate the subpixel step. */
         f_subpixel_step = vivMATH_Divide(1.0f,
-                                         vivMATH_Int2Float(gcvSUBPIXELCOUNT));
+                                       vivMATH_Int2Float(gcvSUBPIXELCOUNT));
 
         /* Init the subpixel offset. */
         f_subpixel_offset = 0.5f;
@@ -151,7 +151,7 @@ viv_status_type calculate_sync_table(
         padding = (gcvMAXKERNELSIZE - kernel_info->kernelSize) / 2;
 
         /* Set initial kernel array pointer. */
-        kernel_array = (gctUINT16_PTR)(kernel_info->kernelStates + 1);
+        kernel_array = (gctUINT16_PTR) (kernel_info->kernelStates + 1);
 
         /* Loop through each subpixel. */
         for (subpixel_pos = 0; subpixel_pos < gcvSUBPIXELLOADCOUNT; subpixel_pos++)
@@ -225,7 +225,7 @@ viv_status_type calculate_sync_table(
                 else
                 {
                     kernel_array[kernel_pos] = (gctINT16)
-                                               vivMATH_Multiply(fWeight, 16384.0f);
+                        vivMATH_Multiply(fWeight, 16384.0f);
                 }
 
                 weightSum += kernel_array[kernel_pos];
@@ -271,11 +271,11 @@ gctINT viv_generate_factor(
     gctUINT32  src_height,
     gctUINT32  dst_width,
     gctUINT32  dst_height
-)
+    )
 {
     gctUINT32 factor_x, factor_y;
 
-    if ((scale_factorx == vivNULL) || (scale_factory == vivNULL))
+    if((scale_factorx == vivNULL) || (scale_factory == vivNULL))
     {
         viv_print("[viv_generate_factor] Invalid Argument: Null Pointer!\n");
         return vivSTATUS_INVALID_ARGUMENTS;

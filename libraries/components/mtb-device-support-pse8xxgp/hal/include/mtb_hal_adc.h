@@ -102,7 +102,7 @@ extern "C" {
  * @return the status of the HAL setup
  */
 cy_rslt_t mtb_hal_adc_setup(mtb_hal_adc_t* obj, const mtb_hal_adc_configurator_t* config,
-                            mtb_hal_clock_t *clk, mtb_hal_adc_channel_t **channels);
+                            mtb_hal_clock_t* clk, mtb_hal_adc_channel_t** channels);
 
 /** Read the value from the ADC pin, represented as an unsigned 16bit value
  *  where 0x0000 represents the minimum value in the ADC's range, and 0xFFFF
@@ -155,7 +155,7 @@ cy_rslt_t mtb_hal_adc_read_latest(const mtb_hal_adc_channel_t* obj, int32_t* res
  * @return The status of the read operation
  */
 cy_rslt_t mtb_hal_adc_read_multiple(mtb_hal_adc_channel_t** channels, uint32_t num_channels,
-                                    int32_t *result);
+                                    int32_t* result);
 
 /** Triggers start of conversion for all enabled channels.
  *
@@ -171,7 +171,7 @@ cy_rslt_t mtb_hal_adc_start_convert(mtb_hal_adc_t* obj);
 #endif
 
 #ifdef MTB_HAL_ADC_IMPL_HEADER
-    #include MTB_HAL_ADC_IMPL_HEADER
+#include MTB_HAL_ADC_IMPL_HEADER
 #endif /* MTB_HAL_ADC_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_ADC)

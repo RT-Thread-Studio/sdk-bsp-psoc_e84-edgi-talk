@@ -34,34 +34,34 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 // mtb_syspm_nvm_deepsleep_callback
 //--------------------------------------------------------------------------------------------------
 cy_en_syspm_status_t mtb_syspm_nvm_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode)
 {
     bool allow = false;
-    mtb_syspm_nvm_deepsleep_context_t *context =
+    mtb_syspm_nvm_deepsleep_context_t* context =
         (mtb_syspm_nvm_deepsleep_context_t*)(params->context);
 
     switch (mode)
     {
-    case CY_SYSPM_CHECK_READY:
-        allow = _mtb_syspm_nvm_check_ready(context->nvm_type, params->base);
-        break;
+        case CY_SYSPM_CHECK_READY:
+            allow = _mtb_syspm_nvm_check_ready(context->nvm_type, params->base);
+            break;
 
-    case CY_SYSPM_BEFORE_TRANSITION:
-        allow = _mtb_syspm_nvm_before_transition(context->nvm_type, params->base);
-        break;
+        case CY_SYSPM_BEFORE_TRANSITION:
+            allow = _mtb_syspm_nvm_before_transition(context->nvm_type, params->base);
+            break;
 
-    case CY_SYSPM_AFTER_TRANSITION:
-        allow = _mtb_syspm_nvm_after_transition(context->nvm_type, params->base);
-        break;
+        case CY_SYSPM_AFTER_TRANSITION:
+            allow = _mtb_syspm_nvm_after_transition(context->nvm_type, params->base);
+            break;
 
-    case CY_SYSPM_CHECK_FAIL:
-        allow = _mtb_syspm_nvm_check_fail(context->nvm_type, params->base);
-        break;
+        case CY_SYSPM_CHECK_FAIL:
+            allow = _mtb_syspm_nvm_check_fail(context->nvm_type, params->base);
+            break;
 
-    default:
-        CY_ASSERT(false);
-        break;
+        default:
+            CY_ASSERT(false);
+            break;
     }
 
     if (allow)

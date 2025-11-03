@@ -440,6 +440,12 @@ Functions</h2></td></tr>
 <tr class="memitem:gad37e797170b10f40773f95fbd5232f90"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="group__crypto__algs.html#ga44b92bc47c4eeabb05adc1b273f7dc5f">ifx_se_algorithm_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__crypto__algs.html#gad37e797170b10f40773f95fbd5232f90">ifx_se_get_key_algorithm</a> (const <a class="el" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> *attributes)</td></tr>
 <tr class="memdesc:gad37e797170b10f40773f95fbd5232f90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets key algorithm from key attributes structure.  <a href="group__crypto__algs.html#gad37e797170b10f40773f95fbd5232f90">More...</a><br /></td></tr>
 <tr class="separator:gad37e797170b10f40773f95fbd5232f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac7625d3911528f21b8b9cce1f2ec71d3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__crypto__algs.html#gac7625d3911528f21b8b9cce1f2ec71d3">ifx_se_set_key_enrollment_algorithm</a> (<a class="el" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> *attributes, <a class="el" href="group__crypto__algs.html#ga44b92bc47c4eeabb05adc1b273f7dc5f">ifx_se_algorithm_t</a> alg2)</td></tr>
+<tr class="memdesc:gac7625d3911528f21b8b9cce1f2ec71d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets enrollment key algorithm in key attributes structure.  <a href="group__crypto__algs.html#gac7625d3911528f21b8b9cce1f2ec71d3">More...</a><br /></td></tr>
+<tr class="separator:gac7625d3911528f21b8b9cce1f2ec71d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga18a1757e3ff0ebc5e0ed69f31c59dd8f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="group__crypto__algs.html#ga44b92bc47c4eeabb05adc1b273f7dc5f">ifx_se_algorithm_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__crypto__algs.html#ga18a1757e3ff0ebc5e0ed69f31c59dd8f">ifx_se_get_key_enrollment_algorithm</a> (const <a class="el" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> *attributes)</td></tr>
+<tr class="memdesc:ga18a1757e3ff0ebc5e0ed69f31c59dd8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets enrollment key algorithm from key attributes structure.  <a href="group__crypto__algs.html#ga18a1757e3ff0ebc5e0ed69f31c59dd8f">More...</a><br /></td></tr>
+<tr class="separator:ga18a1757e3ff0ebc5e0ed69f31c59dd8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="gaae438812a7f8b0ae0bac88618e89f0be" name="gaae438812a7f8b0ae0bac88618e89f0be"></a>
@@ -764,9 +770,9 @@ Functions</h2></td></tr>
 <li><a class="el" href="group__crypto__algs.html#gab2094275c1c29ed54b33e88db81c26be" title="ECDSA signature with hashing.">IFX_SE_ALG_ECDSA</a>, <a class="el" href="group__crypto__algs.html#ga00d9b4bc62c67f59f03115ce4c47caa4" title="Deterministic ECDSA signature with hashing.">IFX_SE_ALG_DETERMINISTIC_ECDSA</a>. Then you may create and use a key as follows:</li>
 <li>Set the key usage field using <a class="el" href="group__crypto__algs.html#gafcec303a6dcef8ab4ac65a0589059060" title="In a hash-and-sign algorithm policy, allow any hash algorithm.">IFX_SE_ALG_ANY_HASH</a>, for example: <div class="fragment"><div class="line"><a class="code hl_function" href="group__key__policy.html#ga014b0b9497d9644e95cd23177ba24f90">ifx_se_set_key_usage_flags</a>(&amp;attributes, <a class="code hl_define" href="group__key__policy.html#ga7a2f42a21b65a0108b3f92832b41ad8d">IFX_SE_KEY_USAGE_SIGN_HASH</a>);</div>
 <div class="line"><a class="code hl_function" href="group__crypto__algs.html#ga155086173391bf986ae11a1c5470c524">ifx_se_set_key_algorithm</a>(&amp;attributes, IFX_SE_xxx_SIGNATURE(<a class="code hl_define" href="group__crypto__algs.html#gafcec303a6dcef8ab4ac65a0589059060">IFX_SE_ALG_ANY_HASH</a>));</div>
-<div class="ttc" id="agroup__crypto__algs_html_ga155086173391bf986ae11a1c5470c524"><div class="ttname"><a href="group__crypto__algs.html#ga155086173391bf986ae11a1c5470c524">ifx_se_set_key_algorithm</a></div><div class="ttdeci">static void ifx_se_set_key_algorithm(ifx_se_key_attributes_t *attributes, ifx_se_algorithm_t alg)</div><div class="ttdoc">Sets key algorithm in key attributes structure.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_struct.h:377</div></div>
+<div class="ttc" id="agroup__crypto__algs_html_ga155086173391bf986ae11a1c5470c524"><div class="ttname"><a href="group__crypto__algs.html#ga155086173391bf986ae11a1c5470c524">ifx_se_set_key_algorithm</a></div><div class="ttdeci">static void ifx_se_set_key_algorithm(ifx_se_key_attributes_t *attributes, ifx_se_algorithm_t alg)</div><div class="ttdoc">Sets key algorithm in key attributes structure.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_struct.h:382</div></div>
 <div class="ttc" id="agroup__crypto__algs_html_gafcec303a6dcef8ab4ac65a0589059060"><div class="ttname"><a href="group__crypto__algs.html#gafcec303a6dcef8ab4ac65a0589059060">IFX_SE_ALG_ANY_HASH</a></div><div class="ttdeci">#define IFX_SE_ALG_ANY_HASH</div><div class="ttdoc">In a hash-and-sign algorithm policy, allow any hash algorithm.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_values.h:963</div></div>
-<div class="ttc" id="agroup__key__policy_html_ga014b0b9497d9644e95cd23177ba24f90"><div class="ttname"><a href="group__key__policy.html#ga014b0b9497d9644e95cd23177ba24f90">ifx_se_set_key_usage_flags</a></div><div class="ttdeci">static void ifx_se_set_key_usage_flags(ifx_se_key_attributes_t *attributes, ifx_se_key_usage_t usage_flags)</div><div class="ttdoc">Sets key usage flags in key attributes structure.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_struct.h:348</div></div>
+<div class="ttc" id="agroup__key__policy_html_ga014b0b9497d9644e95cd23177ba24f90"><div class="ttname"><a href="group__key__policy.html#ga014b0b9497d9644e95cd23177ba24f90">ifx_se_set_key_usage_flags</a></div><div class="ttdeci">static void ifx_se_set_key_usage_flags(ifx_se_key_attributes_t *attributes, ifx_se_key_usage_t usage_flags)</div><div class="ttdoc">Sets key usage flags in key attributes structure.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_struct.h:353</div></div>
 <div class="ttc" id="agroup__key__policy_html_ga7a2f42a21b65a0108b3f92832b41ad8d"><div class="ttname"><a href="group__key__policy.html#ga7a2f42a21b65a0108b3f92832b41ad8d">IFX_SE_KEY_USAGE_SIGN_HASH</a></div><div class="ttdeci">#define IFX_SE_KEY_USAGE_SIGN_HASH</div><div class="ttdoc">Whether the key may be used to sign a message.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_values.h:2560</div></div>
 </div><!-- fragment --></li>
 <li>Import or generate key material.</li>
@@ -2898,6 +2904,87 @@ This macro may return either 0 or 1 if <code>alg</code> is not a supported algor
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Key algorithm </dd></dl>
+
+</div>
+</div>
+<a id="gac7625d3911528f21b8b9cce1f2ec71d3" name="gac7625d3911528f21b8b9cce1f2ec71d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac7625d3911528f21b8b9cce1f2ec71d3">&#9670;&nbsp;</a></span>ifx_se_set_key_enrollment_algorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void ifx_se_set_key_enrollment_algorithm </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> *&#160;</td>
+          <td class="paramname"><em>attributes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__crypto__algs.html#ga44b92bc47c4eeabb05adc1b273f7dc5f">ifx_se_algorithm_t</a>&#160;</td>
+          <td class="paramname"><em>alg2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets enrollment key algorithm in key attributes structure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">attributes</td><td>Key attributes structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alg2</td><td>A second algorithm that the key may be used for, in addition to the algorithm set with <a class="el" href="group__crypto__algs.html#ga155086173391bf986ae11a1c5470c524" title="Sets key algorithm in key attributes structure.">ifx_se_set_key_algorithm()</a>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Warning</dt><dd>Setting an enrollment algorithm is not recommended, because using the same key with different algorithms can allow some attacks based on arithmetic relations between different computations made with the same key, or can escalate harmless side channels into exploitable ones. Use this function only if it is necessary to support a protocol for which it has been verified that the usage of the key with multiple algorithms is safe. </dd></dl>
+
+</div>
+</div>
+<a id="ga18a1757e3ff0ebc5e0ed69f31c59dd8f" name="ga18a1757e3ff0ebc5e0ed69f31c59dd8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga18a1757e3ff0ebc5e0ed69f31c59dd8f">&#9670;&nbsp;</a></span>ifx_se_get_key_enrollment_algorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="group__crypto__algs.html#ga44b92bc47c4eeabb05adc1b273f7dc5f">ifx_se_algorithm_t</a> ifx_se_get_key_enrollment_algorithm </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> *&#160;</td>
+          <td class="paramname"><em>attributes</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets enrollment key algorithm from key attributes structure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">attributes</td><td>Key attributes structure </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The enrollment algorithm stored in the attribute structure </dd></dl>
 
 </div>
 </div>

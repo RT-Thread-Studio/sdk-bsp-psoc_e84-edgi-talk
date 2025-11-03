@@ -47,45 +47,45 @@ extern "C" {
 #include "cy_crypto_core_hw.h"
 
 typedef cy_en_crypto_status_t (*cy_crypto_aes_init_func_t)(CRYPTO_Type *base,
-        uint8_t const *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        cy_stc_crypto_aes_state_t *aesState,
-        cy_stc_crypto_aes_buffers_t *aesBuffers);
+                                                 uint8_t const *key,
+                                                 cy_en_crypto_aes_key_length_t keyLength,
+                                                 cy_stc_crypto_aes_state_t *aesState,
+                                                 cy_stc_crypto_aes_buffers_t *aesBuffers);
 
 typedef cy_en_crypto_status_t (*cy_crypto_aes_ecb_func_t)(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState);
+                                                cy_en_crypto_dir_mode_t dirMode,
+                                                uint8_t *dst,
+                                                uint8_t const *src,
+                                                cy_stc_crypto_aes_state_t *aesState);
 #if defined(CY_CRYPTO_CFG_CIPHER_MODE_CBC)
 typedef cy_en_crypto_status_t (*cy_crypto_aes_cbc_func_t)(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint8_t *ivPtr,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState);
+                                                cy_en_crypto_dir_mode_t dirMode,
+                                                uint32_t srcSize,
+                                                uint8_t *ivPtr,
+                                                uint8_t *dst,
+                                                uint8_t const *src,
+                                                cy_stc_crypto_aes_state_t *aesState);
 #endif /* defined(CY_CRYPTO_CFG_CIPHER_MODE_CBC) */
 
 #if defined(CY_CRYPTO_CFG_CIPHER_MODE_CFB)
 typedef cy_en_crypto_status_t (*cy_crypto_aes_cfb_func_t)(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint8_t *ivPtr,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState);
+                                                cy_en_crypto_dir_mode_t dirMode,
+                                                uint32_t srcSize,
+                                                uint8_t *ivPtr,
+                                                uint8_t *dst,
+                                                uint8_t const *src,
+                                                cy_stc_crypto_aes_state_t *aesState);
 #endif /* defined(CY_CRYPTO_CFG_CIPHER_MODE_CFB) */
 
 #if defined(CY_CRYPTO_CFG_CIPHER_MODE_CTR)
 typedef cy_en_crypto_status_t (*cy_crypto_aes_ctr_func_t)(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint32_t *srcOffset,
-        uint8_t *ivPtr,
-        uint8_t *streamBlock,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState);
+                                                uint32_t srcSize,
+                                                uint32_t *srcOffset,
+                                                uint8_t *ivPtr,
+                                                uint8_t *streamBlock,
+                                                uint8_t *dst,
+                                                uint8_t const *src,
+                                                cy_stc_crypto_aes_state_t *aesState);
 #endif /* defined(CY_CRYPTO_CFG_CIPHER_MODE_CTR) */
 
 /**
@@ -122,28 +122,28 @@ typedef cy_en_crypto_status_t (*cy_crypto_aes_ctr_func_t)(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Init(CRYPTO_Type *base,
-        uint8_t const *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        cy_stc_crypto_aes_state_t *aesState)
+                                                 uint8_t const *key,
+                                                 cy_en_crypto_aes_key_length_t keyLength,
+                                                 cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE) || defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+    #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE) || defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
     cy_stc_crypto_aes_buffers_t *aesBuffers = (cy_stc_crypto_aes_buffers_t *)((void *)Cy_Crypto_Core_GetVuMemoryAddress(base));
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Aes_Init(base, key, keyLength, aesState, aesBuffers);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Init(base, key, keyLength, aesState, aesBuffers);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) || defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+    #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) || defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
 
     return tmpResult;
 }
@@ -177,24 +177,24 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Init(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_InitContext(CRYPTO_Type *base,
-        uint8_t const *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        cy_stc_crypto_aes_state_t *aesState,
-        cy_stc_crypto_aes_buffers_t *aesBuffers)
+                                                 uint8_t const *key,
+                                                 cy_en_crypto_aes_key_length_t keyLength,
+                                                 cy_stc_crypto_aes_state_t *aesState,
+                                                 cy_stc_crypto_aes_buffers_t *aesBuffers)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Aes_Init(base, key, keyLength, aesState, aesBuffers);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Init(base, key, keyLength, aesState, aesBuffers);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -221,21 +221,21 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_InitContext(CRYPTO_Type
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Free(CRYPTO_Type *base,
-        cy_stc_crypto_aes_state_t *aesState)
+                                                 cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Aes_Free(base, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Free(base, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -273,24 +273,24 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Free(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ecb(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                                cy_en_crypto_dir_mode_t dirMode,
+                                                uint8_t *dst,
+                                                uint8_t const *src,
+                                                cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Aes_Ecb(base, dirMode, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ecb(base, dirMode, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -320,8 +320,8 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ecb(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ecb_Setup(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            cy_en_crypto_dir_mode_t dirMode,
+                                            cy_stc_crypto_aes_state_t *aesState)
 
 
 {
@@ -329,19 +329,19 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ecb_Setup(CRYPTO_Type *
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)dirMode;
         (void)aesState;
 
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ecb_Setup(base, dirMode, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -376,30 +376,30 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ecb_Setup(CRYPTO_Type *
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ecb_Update(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            uint32_t srcSize,
+                                            uint8_t *dst,
+                                            uint8_t const *src,
+                                            cy_stc_crypto_aes_state_t *aesState)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)srcSize;
         (void)dst;
         (void)src;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ecb_Update(base, srcSize, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -430,17 +430,17 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ecb_Finish(CRYPTO_Type 
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ecb_Finish(base, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -483,26 +483,26 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ecb_Finish(CRYPTO_Type 
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cbc(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint8_t *ivPtr,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                                cy_en_crypto_dir_mode_t dirMode,
+                                                uint32_t srcSize,
+                                                uint8_t *ivPtr,
+                                                uint8_t *dst,
+                                                uint8_t const *src,
+                                                cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Aes_Cbc(base, dirMode, srcSize, ivPtr, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cbc(base, dirMode, srcSize, ivPtr, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -533,26 +533,26 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cbc(CRYPTO_Type *base,
 *******************************************************************************/
 
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cbc_Setup(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            cy_en_crypto_dir_mode_t dirMode,
+                                            cy_stc_crypto_aes_state_t *aesState)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)dirMode;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cbc_Setup(base, dirMode, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -584,25 +584,25 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cbc_Setup(CRYPTO_Type *
 *******************************************************************************/
 
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cbc_Set_IV(CRYPTO_Type *base,
-        uint8_t const * iv,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            uint8_t const * iv,
+                                            cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)iv;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cbc_Set_IV(base, iv, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -637,29 +637,29 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cbc_Set_IV(CRYPTO_Type 
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cbc_Update(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            uint32_t srcSize,
+                                            uint8_t *dst,
+                                            uint8_t const *src,
+                                            cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)srcSize;
         (void)dst;
         (void)src;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cbc_Update(base, srcSize, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -690,17 +690,17 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cbc_Finish(CRYPTO_Type 
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cbc_Finish(base, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -731,17 +731,17 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_CbcMac_Setup(CRYPTO_Typ
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_CbcMac_Setup(base, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -774,27 +774,27 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_CbcMac_Setup(CRYPTO_Typ
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_CbcMac_Update(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            uint32_t srcSize,
+                                            uint8_t const *src,
+                                            cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)srcSize;
         (void)src;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_CbcMac_Update(base, srcSize, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -830,18 +830,18 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_CbcMac_Finish(CRYPTO_Ty
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)mac;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_CbcMac_Finish(base, mac, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -886,26 +886,26 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_CbcMac_Finish(CRYPTO_Ty
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint8_t *ivPtr,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                                cy_en_crypto_dir_mode_t dirMode,
+                                                uint32_t srcSize,
+                                                uint8_t *ivPtr,
+                                                uint8_t *dst,
+                                                uint8_t const *src,
+                                                cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Aes_Cfb(base, dirMode, srcSize, ivPtr, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cfb(base, dirMode, srcSize, ivPtr, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -935,25 +935,25 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb_Setup(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            cy_en_crypto_dir_mode_t dirMode,
+                                            cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)dirMode;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cfb_Setup(base, dirMode, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -983,26 +983,26 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb_Setup(CRYPTO_Type *
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb_Set_IV(CRYPTO_Type *base,
-        uint8_t const * iv,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            uint8_t const * iv,
+                                            cy_stc_crypto_aes_state_t *aesState)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)iv;
-        (void)aesState;
+        (void)aesState;        
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cfb_Set_IV(base, iv, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1040,30 +1040,30 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb_Set_IV(CRYPTO_Type 
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb_Update(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                             uint32_t srcSize,
+                                             uint8_t *dst,
+                                             uint8_t const *src,
+                                             cy_stc_crypto_aes_state_t *aesState)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)srcSize;
         (void)dst;
         (void)src;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cfb_Update(base, srcSize, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1096,17 +1096,17 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb_Finish(CRYPTO_Type 
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Cfb_Finish(base, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1154,27 +1154,27 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Cfb_Finish(CRYPTO_Type 
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint32_t *srcOffset,
-        uint8_t *ivPtr,
-        uint8_t *streamBlock,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                                uint32_t srcSize,
+                                                uint32_t *srcOffset,
+                                                uint8_t *ivPtr,
+                                                uint8_t *streamBlock,
+                                                uint8_t *dst,
+                                                uint8_t const *src,
+                                                cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Aes_Ctr(base, srcSize, srcOffset, ivPtr, streamBlock, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ctr(base, srcSize, srcOffset, ivPtr, streamBlock, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1201,29 +1201,29 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr_Setup(CRYPTO_Type *base,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            cy_stc_crypto_aes_state_t *aesState)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ctr_Setup(base, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
 
-}
+}  
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_Aes_Ctr_Set_IV
@@ -1246,30 +1246,30 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr_Setup(CRYPTO_Type *
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr_Set_IV(CRYPTO_Type *base,
-        const uint8_t *iv,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            const uint8_t *iv,
+                                            cy_stc_crypto_aes_state_t *aesState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)iv;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ctr_Set_IV(base, iv, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
 
-}
+}  
 
 
 
@@ -1301,35 +1301,35 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr_Set_IV(CRYPTO_Type 
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr_Update(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            uint32_t srcSize,
+                                            uint8_t *dst,
+                                            uint8_t const *src,
+                                            cy_stc_crypto_aes_state_t *aesState)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)srcSize;
         (void)dst;
         (void)src;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ctr_Update(base, srcSize, dst, src, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
 
-}
+}  
 
 
 
@@ -1358,22 +1358,22 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr_Finish(CRYPTO_Type 
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aesState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ctr_Finish(base, aesState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
 
-}
+}  
 
 #endif /* defined(CY_CRYPTO_CFG_CIPHER_MODE_CTR) */
 
@@ -1402,22 +1402,22 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ctr_Finish(CRYPTO_Type 
 * \snippet crypto/snippet/main.c snippet_Cy_Crypto_Core_Aes_GCM_init_update_finish_free
 *******************************************************************************/
 
-__STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Init(CRYPTO_Type *base, cy_stc_crypto_aes_gcm_buffers_t *aesGCMBuffers,
-        cy_stc_crypto_aes_gcm_state_t *aesGCMctx)
+__STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Init(CRYPTO_Type *base,cy_stc_crypto_aes_gcm_buffers_t *aesGCMBuffers,
+                                                      cy_stc_crypto_aes_gcm_state_t* aesGCMctx)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_Init(base, aesGCMBuffers, aesGCMctx);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1453,21 +1453,21 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Init(CRYPTO_Type *b
 *******************************************************************************/
 
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_SetKey(CRYPTO_Type *base, uint8_t const *aesKey, cy_en_crypto_aes_key_length_t keyLength,
-        cy_stc_crypto_aes_gcm_state_t *aesGCMctx)
+                                                      cy_stc_crypto_aes_gcm_state_t* aesGCMctx)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_SetKey(base, aesKey, keyLength, aesGCMctx);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1485,7 +1485,7 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_SetKey(CRYPTO_Type 
 * The pointer to the CRYPTO instance.
 *
 * \param mode
-* \ref cy_en_crypto_dir_mode_t
+* \ref cy_en_crypto_dir_mode_t 
 *
 * \param iv
 * The pointer to the Initialization vector.
@@ -1505,22 +1505,22 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_SetKey(CRYPTO_Type 
 *******************************************************************************/
 
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Start(CRYPTO_Type *base, cy_en_crypto_dir_mode_t mode,
-        uint8_t const *iv, uint32_t ivSize,
-        cy_stc_crypto_aes_gcm_state_t *aesGCMctx)
+                                                      uint8_t const *iv, uint32_t ivSize,
+                                                      cy_stc_crypto_aes_gcm_state_t* aesGCMctx)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_Start(base, mode, iv, ivSize, aesGCMctx);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1556,23 +1556,23 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Start(CRYPTO_Type *
 *******************************************************************************/
 
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_AAD_Update(CRYPTO_Type *base, uint8_t *aad,
-        uint32_t aadSize,
-        cy_stc_crypto_aes_gcm_state_t *aesGCMctx)
+                                                                        uint32_t aadSize,
+                                                                        cy_stc_crypto_aes_gcm_state_t* aesGCMctx)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_AAD_Update(base, aad, aadSize, aesGCMctx);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1610,23 +1610,23 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_AAD_Update(CRYPTO_T
 * \snippet crypto/snippet/main.c snippet_Cy_Crypto_Core_Aes_GCM_init_update_finish_free
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Update(CRYPTO_Type *base,  const uint8_t *input,
-        uint32_t inputSize,  uint8_t *output,
-        cy_stc_crypto_aes_gcm_state_t *aesGCMctx)
+                                                       uint32_t inputSize,  uint8_t *output,
+                                                       cy_stc_crypto_aes_gcm_state_t* aesGCMctx)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_Update(base, input, inputSize, output, aesGCMctx);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1662,8 +1662,8 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Update(CRYPTO_Type 
 * \snippet crypto/snippet/main.c snippet_Cy_Crypto_Core_Aes_GCM_init_update_finish_free
 *******************************************************************************/
 
-__STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Finish(CRYPTO_Type *base,  uint8_t *p_tag,
-        uint32_t tagSize, cy_stc_crypto_aes_gcm_state_t *aesGCMctx)
+__STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Finish(CRYPTO_Type *base,  uint8_t *p_tag, 
+                                                              uint32_t tagSize, cy_stc_crypto_aes_gcm_state_t* aesGCMctx)
 
 
 {
@@ -1671,15 +1671,15 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Finish(CRYPTO_Type 
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_Finish(base, p_tag, tagSize, aesGCMctx);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1715,15 +1715,15 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Free(CRYPTO_Type *b
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_Free(base, aesGCMctx);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1779,25 +1779,25 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Free(CRYPTO_Type *b
 * \snippet crypto/snippet/main.c snippet_Cy_Crypto_Core_Aes_GCM_Encrypt_Tag
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Encrypt_Tag(CRYPTO_Type *base, uint8_t const *aesKey, cy_en_crypto_aes_key_length_t keyLength,
-        uint8_t const *iv, uint32_t ivSize, uint8_t *aad,   uint32_t aadSize,
-        const uint8_t *input,   uint32_t inputSize,  uint8_t *output, uint8_t *tag, uint32_t tagSize)
+                                                            uint8_t const *iv, uint32_t ivSize, uint8_t *aad,   uint32_t aadSize, 
+                                                            const uint8_t *input,   uint32_t inputSize,  uint8_t *output, uint8_t *tag, uint32_t tagSize)
 
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_Encrypt_Tag(base, aesKey, keyLength,
-                    iv, ivSize, aad, aadSize,
-                    input, inputSize, output, tag, tagSize);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+                                                          iv, ivSize, aad, aadSize, 
+                                                          input, inputSize, output, tag, tagSize);
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1856,25 +1856,25 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Encrypt_Tag(CRYPTO_
 * \snippet crypto/snippet/main.c snippet_Cy_Crypto_Core_Aes_GCM_Decrypt_Tag
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Decrypt_Tag(CRYPTO_Type *base, uint8_t const *aesKey, cy_en_crypto_aes_key_length_t keyLength,
-        uint8_t const *iv, uint32_t ivSize, uint8_t *aad,   uint32_t aadSize,
-        const uint8_t *input,   uint32_t inputSize, uint8_t *tag, uint32_t tagSize, uint8_t *output,
-        cy_en_crypto_aesgcm_tag_verify_result_t *isVerified)
+                                                            uint8_t const *iv, uint32_t ivSize, uint8_t *aad,   uint32_t aadSize, 
+                                                            const uint8_t *input,   uint32_t inputSize, uint8_t *tag, uint32_t tagSize, uint8_t *output,
+                                                            cy_en_crypto_aesgcm_tag_verify_result_t * isVerified)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_GCM_Decrypt_Tag(base, aesKey, keyLength,
-                    iv, ivSize, aad, aadSize,
-                    input, inputSize, tag, tagSize, output, isVerified);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+                                                            iv, ivSize, aad, aadSize, 
+                                                            input, inputSize, tag, tagSize, output, isVerified);
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -1906,28 +1906,28 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_GCM_Decrypt_Tag(CRYPTO_
 *******************************************************************************/
 
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Init(CRYPTO_Type *base,
-        cy_stc_crypto_aes_ccm_buffers_t *aesCcmBuffer, cy_stc_crypto_aes_ccm_state_t *aesCcmState)
+                                            cy_stc_crypto_aes_ccm_buffers_t * aesCcmBuffer, cy_stc_crypto_aes_ccm_state_t *aesCcmState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aesCcmBuffer;
         (void)aesCcmState;
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Init(base, aesCcmBuffer, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
-}
+}   
 
 
 /*******************************************************************************
@@ -1954,31 +1954,31 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Init(CRYPTO_Type *b
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_SetKey(CRYPTO_Type *base,
-        uint8_t const *key, cy_en_crypto_aes_key_length_t keyLength,
-        cy_stc_crypto_aes_ccm_state_t *aesCcmState)
+                                            uint8_t const *key, cy_en_crypto_aes_key_length_t keyLength,
+                                            cy_stc_crypto_aes_ccm_state_t *aesCcmState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)key;
         (void)keyLength;
-        (void)aesCcmState;
+        (void)aesCcmState;        
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_SetKey(base, key, keyLength, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
 
-}
+}                                            
 
 
 
@@ -2010,31 +2010,31 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_SetKey(CRYPTO_Type 
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Set_Length(CRYPTO_Type *base,
-        uint32_t aadSize,  uint32_t textSize, uint32_t tagLength,
-        cy_stc_crypto_aes_ccm_state_t *aesCcmState)
+                                            uint32_t aadSize,  uint32_t textSize, uint32_t tagLength,
+                                            cy_stc_crypto_aes_ccm_state_t *aesCcmState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aadSize;
         (void)textSize;
         (void)tagLength;
-        (void)aesCcmState;
+        (void)aesCcmState;          
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Set_Length(base, aadSize, textSize, tagLength, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
-}
+}   
 
 
 
@@ -2067,33 +2067,33 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Set_Length(CRYPTO_T
 *******************************************************************************/
 
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Start(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t ivSize, uint8_t const * iv,
-        cy_stc_crypto_aes_ccm_state_t *aesCcmState)
+                                            cy_en_crypto_dir_mode_t dirMode,    
+                                             uint32_t ivSize, uint8_t const * iv,
+                                            cy_stc_crypto_aes_ccm_state_t *aesCcmState)
 {
 
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)dirMode;
         (void)ivSize;
         (void)iv;
-        (void)aesCcmState;
+        (void)aesCcmState;          
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Start(base, dirMode, ivSize, iv, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
-}
+}   
 
 
 /*******************************************************************************
@@ -2120,27 +2120,27 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Start(CRYPTO_Type *
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Update_Aad(CRYPTO_Type *base,
-        uint32_t aadSize,
-        uint8_t const *aad,
-        cy_stc_crypto_aes_ccm_state_t *aesCcmState)
+                                            uint32_t aadSize,
+                                            uint8_t const *aad,
+                                            cy_stc_crypto_aes_ccm_state_t *aesCcmState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)aadSize;
         (void)aad;
-        (void)aesCcmState;
+        (void)aesCcmState;           
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Update_Aad(base, aadSize, aad, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -2175,33 +2175,33 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Update_Aad(CRYPTO_T
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Update(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_ccm_state_t *aesCcmState)
+                                            uint32_t srcSize,
+                                            uint8_t *dst,
+                                            uint8_t const *src,
+                                            cy_stc_crypto_aes_ccm_state_t *aesCcmState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)srcSize;
         (void)dst;
         (void)src;
-        (void)aesCcmState;
+        (void)aesCcmState;              
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Update(base, srcSize, dst, src, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
-}
+}   
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_Aes_Ccm_Finish
@@ -2229,18 +2229,18 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Finish(CRYPTO_Type 
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)tag;
-        (void)aesCcmState;
+        (void)aesCcmState;          
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Finish(base, tag, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -2296,18 +2296,18 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Finish(CRYPTO_Type 
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Encrypt_Tag(CRYPTO_Type *base,
-        uint32_t ivSize, uint8_t const * iv,
-        uint32_t aadSize, uint8_t const *aad,
-        uint32_t srcSize, uint8_t *cipherTxt, uint8_t const *plainTxt,
-        uint32_t tagSize, uint8_t *tag,
-        cy_stc_crypto_aes_ccm_state_t *aesCcmState)
+                                            uint32_t ivSize, uint8_t const * iv,
+                                            uint32_t aadSize, uint8_t const *aad,
+                                            uint32_t srcSize, uint8_t *cipherTxt, uint8_t const *plainTxt,
+                                            uint32_t tagSize, uint8_t *tag,
+                                            cy_stc_crypto_aes_ccm_state_t *aesCcmState)
 {
 
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)ivSize;
         (void)iv;
@@ -2318,19 +2318,19 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Encrypt_Tag(CRYPTO_
         (void)plainTxt;
         (void)tagSize;
         (void)tag;
-        (void)aesCcmState;
+        (void)aesCcmState;          
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Encrypt_Tag(base, ivSize, iv, aadSize, aad, srcSize, cipherTxt, plainTxt, tagSize, tag, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
-}
+}   
 
 
 /*******************************************************************************
@@ -2382,17 +2382,17 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Encrypt_Tag(CRYPTO_
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Decrypt(CRYPTO_Type *base,
-        uint32_t ivSize, uint8_t const * iv,
-        uint32_t aadSize, uint8_t const *aad,
-        uint32_t srcSize, uint8_t *plainTxt, uint8_t const *cipherTxt,
-        uint32_t tagSize, uint8_t const *tag, cy_en_crypto_aesccm_tag_verify_result_t *isValid,
-        cy_stc_crypto_aes_ccm_state_t *aesCcmState)
+                                            uint32_t ivSize, uint8_t const * iv,
+                                            uint32_t aadSize, uint8_t const *aad,
+                                            uint32_t srcSize, uint8_t *plainTxt, uint8_t const *cipherTxt,
+                                            uint32_t tagSize, uint8_t const *tag, cy_en_crypto_aesccm_tag_verify_result_t *isValid,
+                                            cy_stc_crypto_aes_ccm_state_t *aesCcmState)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
         (void)ivSize;
         (void)iv;
@@ -2404,20 +2404,20 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Decrypt(CRYPTO_Type
         (void)tagSize;
         (void)tag;
         (void)isValid;
-        (void)aesCcmState;
+        (void)aesCcmState;          
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Decrypt(base, ivSize, iv, aadSize, aad, srcSize, plainTxt, cipherTxt, tagSize, tag, isValid, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
 
-}
+}   
 
 
 /*******************************************************************************
@@ -2444,17 +2444,17 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Aes_Ccm_Free(CRYPTO_Type *b
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         (void)base;
-        (void)aesCcmState;
+        (void)aesCcmState;         
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Aes_Ccm_Free(base, aesCcmState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;

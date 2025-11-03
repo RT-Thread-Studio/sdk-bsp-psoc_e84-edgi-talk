@@ -51,22 +51,22 @@ void Cy_Crypto_Core_EC_NistP_SetRedAlg(cy_en_crypto_ecc_red_mul_algs_t alg);
 * \{
 */
 cy_en_crypto_status_t Cy_Crypto_Core_EC_NistP_PointMultiplication(CRYPTO_Type *base,
-        cy_en_crypto_ecc_curve_id_t curveID,
-        const uint8_t *ecpGX,
-        const uint8_t *ecpGY,
-        const uint8_t *ecpD,
-        uint8_t *ecpQX,
-        uint8_t *ecpQY);
+    cy_en_crypto_ecc_curve_id_t curveID,
+    const uint8_t *ecpGX,
+    const uint8_t *ecpGY,
+    const uint8_t *ecpD,
+    uint8_t *ecpQX,
+    uint8_t *ecpQY);
 /** \} group_crypto_lld_asymmetric_functions */
 
-cy_en_crypto_status_t Cy_Crypto_Core_EC_MulMod(CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b, uint32_t size);
-cy_en_crypto_status_t Cy_Crypto_Core_EC_DivMod(CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b, uint32_t size);
-cy_en_crypto_status_t Cy_Crypto_Core_EC_SquareMod(CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t size);
+cy_en_crypto_status_t Cy_Crypto_Core_EC_MulMod( CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b, uint32_t size);
+cy_en_crypto_status_t Cy_Crypto_Core_EC_DivMod( CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b, uint32_t size);
+cy_en_crypto_status_t Cy_Crypto_Core_EC_SquareMod( CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t size);
 cy_en_crypto_status_t Cy_Crypto_Core_EC_Bar_MulRed(CRYPTO_Type *base, uint32_t z, uint32_t x, uint32_t size);
 
-void Cy_Crypto_Core_EC_AddMod(CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b);
-void Cy_Crypto_Core_EC_SubMod(CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b);
-void Cy_Crypto_Core_EC_HalfMod(CRYPTO_Type *base, uint32_t z, uint32_t a);
+void Cy_Crypto_Core_EC_AddMod( CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b);
+void Cy_Crypto_Core_EC_SubMod( CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b);
+void Cy_Crypto_Core_EC_HalfMod( CRYPTO_Type *base, uint32_t z, uint32_t a);
 
 cy_en_crypto_status_t Cy_Crypto_Core_JacobianEcAdd(CRYPTO_Type *base, uint32_t s_x, uint32_t s_y, uint32_t s_z, uint32_t t_x, uint32_t t_y, uint32_t size);
 cy_en_crypto_status_t Cy_Crypto_Core_JacobianEcDouble(CRYPTO_Type *base, uint32_t s_x, uint32_t s_y, uint32_t s_z, uint32_t size);
@@ -79,8 +79,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_EC_NistP_PointMul(CRYPTO_Type *base, uint32
 
 #if defined(CY_CRYPTO_CFG_EDDSA_C) || defined(CY_CRYPTO_CFG_EC25519_C)
 cy_en_crypto_status_t Cy_Crypto_Core_EDDSA_Bar_MulRed(CRYPTO_Type *base, uint32_t z, uint32_t x, uint32_t size);
-cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MulMod(CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b, uint32_t size);
-cy_en_crypto_status_t Cy_Crypto_Core_ED25519_SquareMod(CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t size);
+cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MulMod( CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t b, uint32_t size);
+cy_en_crypto_status_t Cy_Crypto_Core_ED25519_SquareMod( CRYPTO_Type *base, uint32_t z, uint32_t a, uint32_t size);
 #endif /* #if defined(CY_CRYPTO_CFG_EDDSA_C) || defined(CY_CRYPTO_CFG_EC25519_C) */
 
 #endif /* #if (CPUSS_CRYPTO_VU == 1) */

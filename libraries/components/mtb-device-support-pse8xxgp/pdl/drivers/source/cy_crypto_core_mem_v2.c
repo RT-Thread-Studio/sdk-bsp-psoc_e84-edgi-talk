@@ -41,7 +41,7 @@ extern "C" {
 #include "cy_syslib.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 2, \
-                             'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
+'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_V2_MemCpy
@@ -75,17 +75,17 @@ void Cy_Crypto_Core_V2_MemCpy(CRYPTO_Type *base, void* dst, void const *src, uin
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
         /* Flush the cache */
-        if (((uint32_t)src & 0x1FU) == 0u)
+        if(((uint32_t)src & 0x1FU) == 0u)
         {
 
-            SCB_CleanDCache_by_Addr((volatile void *)src, (int32_t)size);
+            SCB_CleanDCache_by_Addr((volatile void *)src,(int32_t)size);
 
         }
 
-        if (((uint32_t)dst & 0x1FU) == 0u)
+        if(((uint32_t)dst & 0x1FU) == 0u)
         {
 
-            SCB_InvalidateDCache_by_Addr((volatile void *)dst, (int32_t)size);
+            SCB_InvalidateDCache_by_Addr((volatile void *)dst,(int32_t)size);
 
         }
 
@@ -95,7 +95,7 @@ void Cy_Crypto_Core_V2_MemCpy(CRYPTO_Type *base, void* dst, void const *src, uin
         srcRemap = (void *)CY_REMAP_ADDRESS_FOR_CRYPTO(src);
 
         Cy_Crypto_Core_V2_FFContinue(base, CY_CRYPTO_V2_RB_FF_LOAD0, (const uint8_t*)srcRemap, (uint32_t)size);
-        Cy_Crypto_Core_V2_FFStart(base, CY_CRYPTO_V2_RB_FF_STORE, (const uint8_t*)dstRemap, (uint32_t)size);
+        Cy_Crypto_Core_V2_FFStart   (base, CY_CRYPTO_V2_RB_FF_STORE, (const uint8_t*)dstRemap, (uint32_t)size);
 
         while (size >= CY_CRYPTO_V2_DATA_FIFODEPTH)
         {
@@ -144,10 +144,10 @@ void Cy_Crypto_Core_V2_MemSet(CRYPTO_Type *base, void* dst, uint8_t data, uint16
         dstRemap = CY_REMAP_ADDRESS_FOR_CRYPTO(dst);
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-        if (((uint32_t)dst & 0x1FU) == 0u)
+        if(((uint32_t)dst & 0x1FU) == 0u)
         {
 
-            SCB_InvalidateDCache_by_Addr((volatile void *)dst, (int32_t)size);
+            SCB_InvalidateDCache_by_Addr((volatile void *)dst,(int32_t)size);
 
         }
 
@@ -208,20 +208,20 @@ uint32_t Cy_Crypto_Core_V2_MemCmp(CRYPTO_Type *base, void const *src0, void cons
     {
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-        /* Flush the cache */
-        if (((uint32_t)src0 & 0x1FU) == 0u)
-        {
+    /* Flush the cache */
+    if(((uint32_t)src0 & 0x1FU) == 0u)
+    {
 
-            SCB_CleanDCache_by_Addr((volatile void *)src0, (int32_t)size);
+        SCB_CleanDCache_by_Addr((volatile void *)src0,(int32_t)size);
 
-        }
+    }
 
-        if (((uint32_t)src1 & 0x1FU) == 0u)
-        {
+    if(((uint32_t)src1 & 0x1FU) == 0u)
+    {
 
-            SCB_CleanDCache_by_Addr((volatile void *)src1, (int32_t)size);
+        SCB_CleanDCache_by_Addr((volatile void *)src1,(int32_t)size);
 
-        }
+    }
 
 #endif
 
@@ -282,7 +282,7 @@ uint32_t Cy_Crypto_Core_V2_MemCmp(CRYPTO_Type *base, void const *src0, void cons
 *
 *******************************************************************************/
 void Cy_Crypto_Core_V2_MemXor(CRYPTO_Type *base,
-                              void *dst, void const *src0, void const *src1, uint16_t size)
+                               void* dst, void const *src0, void const *src1, uint16_t size)
 {
     void *src0Remap;
     void *src1Remap;
@@ -293,19 +293,19 @@ void Cy_Crypto_Core_V2_MemXor(CRYPTO_Type *base,
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
         /* Flush the cache */
-        if (((uint32_t)src0 & 0x1FU) == 0u)
+        if(((uint32_t)src0 & 0x1FU) == 0u)
         {
-            SCB_CleanDCache_by_Addr((volatile void *)src0, (int32_t)size);
+            SCB_CleanDCache_by_Addr((volatile void *)src0,(int32_t)size);
         }
 
-        if (((uint32_t)src1 & 0x1FU) == 0u)
+        if(((uint32_t)src1 & 0x1FU) == 0u)
         {
-            SCB_CleanDCache_by_Addr((volatile void *)src1, (int32_t)size);
+            SCB_CleanDCache_by_Addr((volatile void *)src1,(int32_t)size);
         }
 
-        if (((uint32_t)dst & 0x1FU) == 0u)
+        if(((uint32_t)dst & 0x1FU) == 0u)
         {
-            SCB_InvalidateDCache_by_Addr((volatile void *)dst, (int32_t)size);
+            SCB_InvalidateDCache_by_Addr((volatile void *)dst,(int32_t)size);
         }
 
 
@@ -317,12 +317,12 @@ void Cy_Crypto_Core_V2_MemXor(CRYPTO_Type *base,
 
         Cy_Crypto_Core_V2_FFContinue(base, CY_CRYPTO_V2_RB_FF_LOAD0, (const uint8_t*)src0Remap, (uint32_t)size);
         Cy_Crypto_Core_V2_FFContinue(base, CY_CRYPTO_V2_RB_FF_LOAD1, (const uint8_t*)src1Remap, (uint32_t)size);
-        Cy_Crypto_Core_V2_FFStart(base, CY_CRYPTO_V2_RB_FF_STORE, dstRemap, (uint32_t)size);
+        Cy_Crypto_Core_V2_FFStart   (base, CY_CRYPTO_V2_RB_FF_STORE, dstRemap, (uint32_t)size);
 
         while (size >= CY_CRYPTO_V2_DATA_FIFODEPTH)
         {
             Cy_Crypto_Core_V2_BlockXor(base, CY_CRYPTO_V2_RB_FF_STORE, CY_CRYPTO_V2_RB_FF_LOAD0,
-                                       CY_CRYPTO_V2_RB_FF_LOAD1, CY_CRYPTO_V2_DATA_FIFODEPTH);
+                                             CY_CRYPTO_V2_RB_FF_LOAD1, CY_CRYPTO_V2_DATA_FIFODEPTH);
 
             size -= CY_CRYPTO_V2_DATA_FIFODEPTH;
         }
@@ -330,7 +330,7 @@ void Cy_Crypto_Core_V2_MemXor(CRYPTO_Type *base,
         if (size != 0u)
         {
             Cy_Crypto_Core_V2_BlockXor(base, CY_CRYPTO_V2_RB_FF_STORE, CY_CRYPTO_V2_RB_FF_LOAD0,
-                                       CY_CRYPTO_V2_RB_FF_LOAD1, (uint32_t)size);
+                                             CY_CRYPTO_V2_RB_FF_LOAD1, (uint32_t)size);
         }
 
         Cy_Crypto_Core_V2_Sync(base);

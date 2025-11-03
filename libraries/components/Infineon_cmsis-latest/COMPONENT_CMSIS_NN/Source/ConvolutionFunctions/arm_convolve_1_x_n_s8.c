@@ -110,27 +110,27 @@ arm_status arm_convolve_1_x_n_s8(const cmsis_nn_context *ctx,
                 (void)arm_nn_mat_mul_core_1x_s8((ker_end_idx[0] - ker_begin_idx[0]) * input_ch,
                                                 input_data + input_begin_idx[0] * input_ch,
                                                 filter_data + (input_ch * kernel_x * i_out_ch) +
-                                                (ker_begin_idx[0] * input_ch),
+                                                    (ker_begin_idx[0] * input_ch),
                                                 &sum_row[0],
                                                 &acc[0]);
                 (void)arm_nn_mat_mul_core_1x_s8((ker_end_idx[1] - ker_begin_idx[1]) * input_ch,
                                                 input_data + input_begin_idx[1] * input_ch,
                                                 filter_data + (input_ch * kernel_x * i_out_ch) +
-                                                (ker_begin_idx[1] * input_ch),
+                                                    (ker_begin_idx[1] * input_ch),
                                                 &sum_row[1],
                                                 &acc[1]);
 
                 (void)arm_nn_mat_mul_core_1x_s8((ker_end_idx[2] - ker_begin_idx[2]) * input_ch,
                                                 input_data + input_begin_idx[2] * input_ch,
                                                 filter_data + (input_ch * kernel_x * i_out_ch) +
-                                                (ker_begin_idx[2] * input_ch),
+                                                    (ker_begin_idx[2] * input_ch),
                                                 &sum_row[2],
                                                 &acc[2]);
 
                 (void)arm_nn_mat_mul_core_1x_s8((ker_end_idx[3] - ker_begin_idx[3]) * input_ch,
                                                 input_data + input_begin_idx[3] * input_ch,
                                                 filter_data + (input_ch * kernel_x * i_out_ch) +
-                                                (ker_begin_idx[3] * input_ch),
+                                                    (ker_begin_idx[3] * input_ch),
                                                 &sum_row[3],
                                                 &acc[3]);
 

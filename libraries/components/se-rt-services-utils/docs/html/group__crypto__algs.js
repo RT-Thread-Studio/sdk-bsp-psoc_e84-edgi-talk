@@ -106,5 +106,7 @@ var group__crypto__algs =
     [ "IFX_SE_ALG_AEAD_EQUAL", "group__crypto__algs.html#gab36a27c43a4b17227dbe38c1d2efe314", null ],
     [ "ifx_se_algorithm_t", "group__crypto__algs.html#ga44b92bc47c4eeabb05adc1b273f7dc5f", null ],
     [ "ifx_se_set_key_algorithm", "group__crypto__algs.html#ga155086173391bf986ae11a1c5470c524", null ],
-    [ "ifx_se_get_key_algorithm", "group__crypto__algs.html#gad37e797170b10f40773f95fbd5232f90", null ]
+    [ "ifx_se_get_key_algorithm", "group__crypto__algs.html#gad37e797170b10f40773f95fbd5232f90", null ],
+    [ "ifx_se_set_key_enrollment_algorithm", "group__crypto__algs.html#gac7625d3911528f21b8b9cce1f2ec71d3", null ],
+    [ "ifx_se_get_key_enrollment_algorithm", "group__crypto__algs.html#ga18a1757e3ff0ebc5e0ed69f31c59dd8f", null ]
 ];

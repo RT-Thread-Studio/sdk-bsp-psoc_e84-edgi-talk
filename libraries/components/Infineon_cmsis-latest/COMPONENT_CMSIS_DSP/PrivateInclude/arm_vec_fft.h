@@ -22,8 +22,8 @@
  * limitations under the License.
  */
 
-#ifndef _ARM_VEC_FFT_H_
-#define _ARM_VEC_FFT_H_
+#ifndef ARM_VEC_FFT_H_
+#define ARM_VEC_FFT_H_
 
 #include "arm_math.h"
 #include "arm_helium_utils.h"
@@ -56,9 +56,9 @@ extern "C"
 */
 
 __STATIC_INLINE void arm_bitreversal_32_inpl_mve(
-    uint32_t *pSrc,
-    const uint16_t  bitRevLen,
-    const uint16_t *pBitRevTab)
+        uint32_t *pSrc,
+  const uint16_t  bitRevLen,
+  const uint16_t *pBitRevTab)
 
 {
     uint64_t       *src = (uint64_t *) pSrc;
@@ -78,8 +78,7 @@ __STATIC_INLINE void arm_bitreversal_32_inpl_mve(
 
 
     blkCnt = bitRevLen / 8;
-    while (blkCnt > 0)
-    {
+    while (blkCnt > 0) {
         bitRevTabOff = vldrhq_u32(pBitRevTab);
         pBitRevTab += 4;
 
@@ -113,8 +112,7 @@ __STATIC_INLINE void arm_bitreversal_32_inpl_mve(
         blkCnt--;
     }
 
-    if (bitRevLen & 7)
-    {
+    if (bitRevLen & 7) {
         /* FFT size = 16 */
         inLow = vldrdq_gather_offset_u64(src, bitRevOff0Low);
         inHigh = vldrdq_gather_offset_u64(src, bitRevOff0High);
@@ -135,9 +133,9 @@ __STATIC_INLINE void arm_bitreversal_32_inpl_mve(
 */
 
 __STATIC_INLINE void arm_bitreversal_16_inpl_mve(
-    uint16_t *pSrc,
-    const uint16_t bitRevLen,
-    const uint16_t *pBitRevTab)
+        uint16_t *pSrc,
+  const uint16_t bitRevLen,
+  const uint16_t *pBitRevTab)
 
 {
     uint32_t       *src = (uint32_t *) pSrc;
@@ -158,8 +156,7 @@ __STATIC_INLINE void arm_bitreversal_16_inpl_mve(
     bitRevOff0High = vshrq_n_u16((uint16x8_t)bitRevOff0High, 3);
 
     blkCnt = (bitRevLen / 16);
-    while (blkCnt > 0)
-    {
+    while (blkCnt > 0) {
         bitRevTabOff = vldrhq_u16(pBitRevTab);
         pBitRevTab += 8;
 
@@ -194,16 +191,13 @@ __STATIC_INLINE void arm_bitreversal_16_inpl_mve(
 
     /* tail handling */
     blkCnt = bitRevLen & 0xf;
-    if (blkCnt == 8)
-    {
+    if (blkCnt == 8) {
         inLow = vldrwq_gather_shifted_offset_u32(src, bitRevOff0Low);
         inHigh = vldrwq_gather_shifted_offset_u32(src, bitRevOff0High);
 
         vstrwq_scatter_shifted_offset_u32(src, bitRevOff0Low, inHigh);
         vstrwq_scatter_shifted_offset_u32(src, bitRevOff0High, inLow);
-    }
-    else if (blkCnt == 12)
-    {
+    } else if (blkCnt == 12) {
         /* FFT 16 special case */
         mve_pred16_t    p = vctp16q(4);
 
@@ -244,10 +238,8 @@ __STATIC_INLINE void arm_bitreversal_32_outpl_mve(void *pDst, void *pSrc, uint32
     /* fwd indexes */
     idxOffs0 = vdupq_n_u32(0);
     idxOffs1 = vdupq_n_u32(0);
-    idxOffs0[0] = 0;
-    idxOffs0[2] = 4;
-    idxOffs1[0] = 8;
-    idxOffs1[2] = 12;
+    idxOffs0[0] = 0;    idxOffs0[2] = 4;
+    idxOffs1[0] = 8;    idxOffs1[2] = 12;
 
     bitRevPos = (31 - __CLZ(fftLen)) + 5;
     blkCnt = fftLen >> 2;
@@ -256,8 +248,7 @@ __STATIC_INLINE void arm_bitreversal_32_outpl_mve(void *pDst, void *pSrc, uint32
     /* bit-reverse fwd indexes */
     bitRevOffs0 = vbrsrq(idxOffs0, bitRevPos);
     bitRevOffs1 = vbrsrq(idxOffs1, bitRevPos);
-    while (blkCnt > 0)
-    {
+    while (blkCnt > 0) {
         uint64x2_t      vecIn;
 
         vecIn = vldrdq_gather_offset_u64(pSrc, (uint64x2_t) bitRevOffs0);
@@ -303,8 +294,7 @@ __STATIC_INLINE void arm_bitreversal_16_outpl_mve(void *pDst, void *pSrc, uint32
     /* bit-reverse fwd indexes */
     bitRevOffs0 = vbrsrq(idxOffs0, bitRevPos);
     bitRevOffs1 = vbrsrq(idxOffs1, bitRevPos);
-    while (blkCnt > 0)
-    {
+    while (blkCnt > 0) {
         uint32x4_t      vecIn;
 
         vecIn = vldrwq_gather_offset_s32(pSrc, bitRevOffs0);

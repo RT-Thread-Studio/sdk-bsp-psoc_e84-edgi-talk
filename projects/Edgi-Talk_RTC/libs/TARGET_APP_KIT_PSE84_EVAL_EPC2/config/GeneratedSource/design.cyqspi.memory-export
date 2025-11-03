@@ -9,7 +9,7 @@
         <Capability>Nonvolatile</Capability>
       </Capabilities>
     </ExternalMemory>
-    <ExternalMemory memoryId="SMIF1MEM2" displayName="Serial Memory Interface block 1, memory 2 (S70KS1283)" description="S70KS1283 128-Mb (16-MB) 1.8-V self-refresh DRAM" size="0x4000000" eraseSize="16777216" reservationId="XIP_PORT1" offset="0x00000000">
+    <ExternalMemory memoryId="SMIF1MEM2" displayName="Serial Memory Interface block 1, memory 2 (S70KS1283)" description="S70KS1283 128-Mb (16-MB) 1.8-V self-refresh DRAM for up to 200 MHz clock frequency" size="0x1000000" eraseSize="16777216" reservationId="XIP_PORT1" offset="0x00000000">
       <Capabilities>
         <Capability>Executable</Capability>
         <Capability>Readable</Capability>

@@ -85,6 +85,7 @@ recipe_vscode_common_text_replacement_data_file:
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__PROBE_INTERFACE&&=$(_MTB_RECIPE__PROBE_INTERFACE))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__VSCODE_OPENOCD_PROBE_SERIAL_CMD&&=$(_MTB_RECIPE__OPENOCD_PROBE_SERIAL))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__PROBE_SERIAL&&=$(MTB_PROBE_SERIAL))
+	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__OPENOCD_BOARD&&=$(_MTB_RECIPE__OPENOCD_BOARD))
 
 recipe_vscode_common_metadata_file:
 	$(call mtb__file_write,$(_MTB_RECIPE__IDE_VSCODE_COMMON_META_DATA_FILE),)
@@ -118,12 +119,8 @@ _MTB_RECIPE__ECLIPSE_PRJ_PROG_FILE:=$${cy_prj_path}/$(_MTB_RECIPE__IDE_BUILD_PAT
 _MTB_RECIPE__ECLIPSE_APP_PROG_FILE:=$${cy_prj_path}/../$(_MTB_RECIPE__IDE_COMBINED_HEX_RELATIVE)
 
 # JLink path
-ifneq (,$(MTB_JLINK_DIR))
 ifneq (,$(MTB_CORE__JLINK_GDB_EXE))
 _MTB_RECIPE__ECLIPSE_JLINK_EXE:=$(MTB_CORE__JLINK_GDB_EXE)
-else
-_MTB_RECIPE__ECLIPSE_JLINK_EXE:=$${jlink_path}/$${jlink_gdbserver}
-endif
 else
 _MTB_RECIPE__ECLIPSE_JLINK_EXE:=$${jlink_path}/$${jlink_gdbserver}
 endif
@@ -179,6 +176,7 @@ recipe_eclipse_common_text_replacement_data_file:
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__PROG_TARGET&&=$(_MTB_RECIPE__PROG_TARGET))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__BUILD_NUM_PROCESSOR&&=$(_MTB_CORE___VSCODE_BUILD_NUM_PROCESSOR))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__ECLIPSE_OPENOCD_PROBE_SERIAL_CMD&&=$(if $(_MTB_RECIPE__OPENOCD_PROBE_SERIAL),-c &quot;$(_MTB_RECIPE__OPENOCD_PROBE_SERIAL)&quot;&#13;&#10;,))
+	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__OPENOCD_BOARD&&=$(if $(_MTB_RECIPE__OPENOCD_BOARD),-c &quot;$(_MTB_RECIPE__OPENOCD_BOARD)&quot;&#13;&#10;,))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__PROBE_INTERFACE&&=$(_MTB_RECIPE__PROBE_INTERFACE))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_COMMON_TEXT_DATA_FILE),&&_MTB_RECIPE__PROBE_SERIAL&&=$(MTB_PROBE_SERIAL))
 

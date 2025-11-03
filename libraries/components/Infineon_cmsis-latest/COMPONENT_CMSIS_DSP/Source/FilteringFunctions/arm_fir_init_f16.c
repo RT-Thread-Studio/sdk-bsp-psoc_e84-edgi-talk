@@ -46,7 +46,6 @@
   @param[in]     pCoeffs    points to the filter coefficients buffer
   @param[in]     pState     points to the state buffer
   @param[in]     blockSize  number of samples processed per call
-  @return        none
 
   @par           Details
                    <code>pCoeffs</code> points to the array of filter coefficients stored in time reversed order:
@@ -58,7 +57,7 @@
                    <code>pState</code> is of length <code>numTaps+blockSize-1</code> samples (except for Helium - see below), where <code>blockSize</code> is the number of input samples processed by each call to <code>arm_fir_f16()</code>.
   @par          Initialization of Helium version
                  For Helium version the array of coefficients must be a multiple of 4 (4a) even if less
-                 then 4a coefficients are defined in the FIR. The additional coefficients
+                 then 4a coefficients are defined in the FIR. The additional coefficients 
                  (4a - numTaps) must be set to 0.
                  numTaps is still set to its right value in the init function. It means that
                  the implementation may require to read more coefficients due to the vectorization and
@@ -74,28 +73,28 @@
 
  */
 
-void arm_fir_init_f16(
-    arm_fir_instance_f16 * S,
-    uint16_t numTaps,
-    const float16_t *pCoeffs,
-    float16_t *pState,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_fir_init_f16(
+        arm_fir_instance_f16 * S,
+        uint16_t numTaps,
+  const float16_t * pCoeffs,
+        float16_t * pState,
+        uint32_t blockSize)
 {
-    /* Assign filter taps */
-    S->numTaps = numTaps;
+  /* Assign filter taps */
+  S->numTaps = numTaps;
 
-    /* Assign coefficient pointer */
-    S->pCoeffs = pCoeffs;
+  /* Assign coefficient pointer */
+  S->pCoeffs = pCoeffs;
 
-    /* Clear state buffer. The size is always (blockSize + numTaps - 1) */
+  /* Clear state buffer. The size is always (blockSize + numTaps - 1) */
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
-    memset(pState, 0, (numTaps + (blockSize - 1U) + ROUND_UP(blockSize, 8)) * sizeof(float16_t));
+  memset(pState, 0, (numTaps + (blockSize - 1U) + ARM_ROUND_UP(blockSize, 8)) * sizeof(float16_t));
 #else
-    memset(pState, 0, (numTaps + (blockSize - 1U)) * sizeof(float16_t));
-#endif
+  memset(pState, 0, (numTaps + (blockSize - 1U)) * sizeof(float16_t));
+#endif 
 
-    /* Assign state pointer */
-    S->pState = pState;
+  /* Assign state pointer */
+  S->pState = pState;
 }
 
 /**

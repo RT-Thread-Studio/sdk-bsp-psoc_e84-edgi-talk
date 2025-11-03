@@ -30,14 +30,14 @@
 /* Older IP versions don't define SCB_UART; it is always present */
 #if (defined(CY_IP_MXSCB) || defined(CY_IP_MXS22SCB)) && (!defined(SCB_UART) || (SCB_UART))
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_UART)
-    /** Macro specifying whether the UART driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_UART (1u)
+/** Macro specifying whether the UART driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_UART (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_UART)
 
 /** \} group_hal_availability */
@@ -62,7 +62,7 @@
  */
 typedef struct
 {
-    GPIO_PRT_Type  *port;       /**< Port base address */
+    GPIO_PRT_Type*  port;       /**< Port base address */
     uint8_t         pinNum;     /**< Pin number */
 } _mtb_hal_uart_pin_t;
 
@@ -75,21 +75,21 @@ typedef struct
  */
 typedef struct
 {
-    CySCB_Type                         *base; //!< Base address for the SCB
-    cy_stc_scb_uart_context_t          *context; //!< PDL context
-    const mtb_hal_clock_t              *clock; //!< Clock interface
+    CySCB_Type*                         base; //!< Base address for the SCB
+    cy_stc_scb_uart_context_t*          context; //!< PDL context
+    const mtb_hal_clock_t*              clock; //!< Clock interface
     _mtb_hal_event_callback_data_t      callback_data; //!< User-registered callback
     uint32_t                            irq_cause; //!< User-enabled events
     _mtb_hal_uart_pin_t                 tx_pin; //!< TX pin info
-#if defined(COMPONENT_MW_ASYNC_TRANSFER)
+    #if defined(COMPONENT_MW_ASYNC_TRANSFER)
     bool                                rts_enable; //!< Is the RTS pin connected to the SCB
     _mtb_hal_uart_pin_t                 rts_pin; //!< RTS pin info (if used)
     /** Function pointer to call during process_interrupts for handling async transfers */
     async_transfer_handler_t            async_handler;
-    mtb_async_transfer_context_t       *async_ctx; //!< Context for async-transfer
+    mtb_async_transfer_context_t*       async_ctx; //!< Context for async-transfer
     mtb_async_transfer_event_callback_t async_event_callback; //!< Callback registerd with
-    //!< async-transfer
-#endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
+                                                              //!< async-transfer
+    #endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
 } mtb_hal_uart_t;
 
 
@@ -103,16 +103,16 @@ typedef struct
  */
 typedef struct
 {
-    CySCB_Type                             *base; //!< Base address for the SCB
-    const mtb_hal_clock_t                  *clock; //!< Default clock object
+    CySCB_Type*                             base; //!< Base address for the SCB
+    const mtb_hal_clock_t*                  clock; //!< Default clock object
     uint8_t                                 tx_port; //!< TX Pin port number
     uint8_t                                 tx_pin; //!< TX Pin number
-#if defined(COMPONENT_MW_ASYNC_TRANSFER)
+    #if defined(COMPONENT_MW_ASYNC_TRANSFER)
     /** Set if the Flow control is enabled and RTS is connected to a pin */
     bool                                    rts_enable;
     uint8_t                                 rts_port; //!< RTS Pin port number (if specified)
     uint8_t                                 rts_pin; //!< RTS Pin number (if specified)
-#endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
+    #endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
 } mtb_hal_uart_configurator_t;
 
 #endif // defined(CY_IP_MXSCB) || defined(CY_IP_MXS22SCB)

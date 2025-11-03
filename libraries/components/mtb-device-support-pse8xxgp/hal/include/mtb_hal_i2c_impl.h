@@ -49,7 +49,7 @@ extern "C" {
  * @return the status of the HAL setup
  */
 cy_rslt_t mtb_hal_i2c_setup(mtb_hal_i2c_t* obj, const mtb_hal_i2c_configurator_t* config,
-                            cy_stc_scb_i2c_context_t *context, mtb_hal_clock_t *clock);
+                            cy_stc_scb_i2c_context_t* context, mtb_hal_clock_t* clock);
 
 #if defined(__cplusplus)
 }

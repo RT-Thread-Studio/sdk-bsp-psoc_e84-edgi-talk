@@ -40,14 +40,14 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 20.5', 1, \
-                             'Since CY_CRYPTO_V1 is decided by PDL device agnostic / hardware specific model, use of #undef will not make it ambiguous that which macros exist at a particular point within a translation unit.')
+'Since CY_CRYPTO_V1 is decided by PDL device agnostic / hardware specific model, use of #undef will not make it ambiguous that which macros exist at a particular point within a translation unit.')
 
 #if (CY_IP_MXCRYPTO_VERSION == 1u)
 #include "ip/cyip_crypto.h"
 #endif
 
 #if (CY_IP_MXCRYPTO_VERSION == 2u)
-#if defined (CY_DEVICE_CAT1D)
+#if (CY_IP_MXCRYPTO_VERSION_MINOR == 1u)
 #include "ip/cyip_crypto_v2_1.h"
 #else
 #include "ip/cyip_crypto_v2.h"
@@ -584,7 +584,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 20.5', 1, \
 
 
 /* For Internal memory VU operation, Crypto CTL register should always point to Non-secure memory address
-for both Secure & Non-Secure execution */
+for both Secure & Non-Secure execution */        
 #if defined(SECURE_ALIAS_OFFSET)
 #define SECURE_ALIAS_OFFSET_POS 28UL
 #define CY_CRYPTO_VU_MEM_ALIAS_ADDRESS(base)             (uint32_t)(((uint32_t)(REG_CRYPTO_VU_CTL1(base))) | ((uint32_t)((CRYPTO_V2_CTL_NS_Pos) & ~_FLD2VAL(CRYPTO_V2_CTL_NS, REG_CRYPTO_CTL(base))) << SECURE_ALIAS_OFFSET_POS))
@@ -769,7 +769,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_GetLibInfo(cy_en_crypto_lib_info_t *libInfo
 
 cy_en_crypto_status_t Cy_Crypto_Core_SetVuMemoryAddress(CRYPTO_Type *base, uint32_t const *vuMemoryAddr, uint32_t vuMemorySize);
 
-__STATIC_INLINE uint32_t *Cy_Crypto_Core_GetVuMemoryAddress(CRYPTO_Type *base);
+__STATIC_INLINE uint32_t * Cy_Crypto_Core_GetVuMemoryAddress(CRYPTO_Type *base);
 
 uint32_t Cy_Crypto_Core_GetVuMemorySize(CRYPTO_Type *base);
 
@@ -848,7 +848,7 @@ __STATIC_INLINE uint8_t Cy_Crypto_Core_GetFIFODepth(CRYPTO_Type *base)
 *******************************************************************************/
 __STATIC_INLINE uint8_t Cy_Crypto_Core_GetFIFOUsed(CRYPTO_Type *base)
 {
-    return ((uint8_t)_FLD2VAL(CRYPTO_INSTR_FF_STATUS_USED, REG_CRYPTO_INSTR_FF_STATUS(base)));
+    return((uint8_t)_FLD2VAL(CRYPTO_INSTR_FF_STATUS_USED, REG_CRYPTO_INSTR_FF_STATUS(base)));
 }
 
 /*******************************************************************************
@@ -867,7 +867,7 @@ __STATIC_INLINE uint8_t Cy_Crypto_Core_GetFIFOUsed(CRYPTO_Type *base)
 *******************************************************************************/
 __STATIC_INLINE void Cy_Crypto_Core_WaitForInstrFifoAvailable(CRYPTO_Type *base, uint32_t instr)
 {
-    while ((uint32_t)(_FLD2VAL(CRYPTO_INSTR_FF_STATUS_USED, REG_CRYPTO_INSTR_FF_STATUS(base))) >= (CY_CRYPTO_INSTR_FIFODEPTH - instr))
+    while((uint32_t)(_FLD2VAL(CRYPTO_INSTR_FF_STATUS_USED, REG_CRYPTO_INSTR_FF_STATUS(base))) >= (CY_CRYPTO_INSTR_FIFODEPTH - instr))
     {
     }
 }
@@ -887,7 +887,7 @@ __STATIC_INLINE void Cy_Crypto_Core_WaitForInstrFifoAvailable(CRYPTO_Type *base,
 *******************************************************************************/
 __STATIC_INLINE void Cy_Crypto_Core_WaitForFifoAvailable(CRYPTO_Type *base)
 {
-    while ((_FLD2VAL(CRYPTO_INSTR_FF_STATUS_EVENT, REG_CRYPTO_INSTR_FF_STATUS(base))) == 0u)
+    while((_FLD2VAL(CRYPTO_INSTR_FF_STATUS_EVENT, REG_CRYPTO_INSTR_FF_STATUS(base))) == 0u)
     {
     }
 }
@@ -904,7 +904,7 @@ __STATIC_INLINE void Cy_Crypto_Core_WaitForFifoAvailable(CRYPTO_Type *base)
 *******************************************************************************/
 __STATIC_INLINE void Cy_Crypto_Core_WaitForReady(CRYPTO_Type *base)
 {
-    while (REG_CRYPTO_STATUS(base) != 0u)
+    while(REG_CRYPTO_STATUS(base) != 0u)
     {
     }
 }
@@ -924,19 +924,19 @@ __STATIC_INLINE void Cy_Crypto_Core_Vu_WaitForComplete(CRYPTO_Type *base)
     /* Wait until the VU instruction is complete */
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         while (0uL != _FLD2VAL(CRYPTO_STATUS_VU_BUSY, REG_CRYPTO_STATUS(base)))
         {
         }
-#endif
+        #endif
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         while (0uL != REG_CRYPTO_STATUS(base))
         {
         }
-#endif
+        #endif
     }
 }
 
@@ -1063,13 +1063,13 @@ __STATIC_INLINE void  Cy_Crypto_Core_ClearInterrupt(CRYPTO_Type *base, uint32_t 
 * Current Crypto MEM_BUFF location address or NULL if Crypto IP is not enabled.
 *
 *******************************************************************************/
-__STATIC_INLINE uint32_t *Cy_Crypto_Core_GetVuMemoryAddress(CRYPTO_Type *base)
+__STATIC_INLINE uint32_t * Cy_Crypto_Core_GetVuMemoryAddress(CRYPTO_Type *base)
 {
-#if !defined(CY_CRYPTO_CFG_HW_USE_MPN_SPECIFIC)
+    #if !defined(CY_CRYPTO_CFG_HW_USE_MPN_SPECIFIC)
     return (cy_cryptoIP != NULL) ? (uint32_t *)CY_CRYPTO_VU_MEM_ALIAS_ADDRESS(base) : (uint32_t *)NULL;
-#else
+    #else
     return (uint32_t *)CY_CRYPTO_VU_MEM_ALIAS_ADDRESS(base);
-#endif
+    #endif
 }
 
 /** \} group_crypto_lld_hw_functions */

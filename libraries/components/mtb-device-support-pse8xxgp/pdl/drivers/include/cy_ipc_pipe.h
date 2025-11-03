@@ -209,7 +209,7 @@ typedef struct
     cy_israddress userPipeIsrHandler;
 } cy_stc_ipc_pipe_config_t;
 
-/** \} goup_ipc_pipe_data_structures */
+/** \} group_ipc_pipe_data_structures */
 
 /**
 * \addtogroup group_ipc_pipe_macros
@@ -231,17 +231,17 @@ typedef struct
 /** Return constants for IPC pipe functions. */
 typedef enum
 {
-    CY_IPC_PIPE_SUCCESS            = (uint32_t)(0x00u),                     /**<  Pipe API return for no error */
-    CY_IPC_PIPE_ERROR_NO_IPC       = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 1UL), /**<  Pipe API return for no valid IPC channel */
-    CY_IPC_PIPE_ERROR_NO_INTR      = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 2UL), /**<  Pipe API return for no valid interrupt */
-    CY_IPC_PIPE_ERROR_BAD_PRIORITY = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 3UL), /**<  Pipe API return for bad priority parameter */
-    CY_IPC_PIPE_ERROR_BAD_HANDLE   = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 4UL), /**<  Pipe API return for bad pipe handle */
-    CY_IPC_PIPE_ERROR_BAD_ID       = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 5UL), /**<  Pipe API return for bad pipe ID */
-    CY_IPC_PIPE_ERROR_DIR_ERROR    = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 6UL), /**<  Pipe API return for invalid direction (Not used at this time) */
-    CY_IPC_PIPE_ERROR_SEND_BUSY    = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 7UL), /**<  Pipe API return for pipe is currently busy */
-    CY_IPC_PIPE_ERROR_NO_MESSAGE   = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 8UL), /**<  Pipe API return for no message indicated   */
-    CY_IPC_PIPE_ERROR_BAD_CPU      = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 9UL), /**<  Pipe API return for invalid CPU value      */
-    CY_IPC_PIPE_ERROR_BAD_CLIENT   = (uint32_t)(CY_IPC_PIPE_ID_ERROR | 10UL) /**< Pipe API return for client out of range    */
+    CY_IPC_PIPE_SUCCESS            =(uint32_t)(0x00u),                      /**<  Pipe API return for no error */
+    CY_IPC_PIPE_ERROR_NO_IPC       =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 1UL), /**<  Pipe API return for no valid IPC channel */
+    CY_IPC_PIPE_ERROR_NO_INTR      =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 2UL), /**<  Pipe API return for no valid interrupt */
+    CY_IPC_PIPE_ERROR_BAD_PRIORITY =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 3UL), /**<  Pipe API return for bad priority parameter */
+    CY_IPC_PIPE_ERROR_BAD_HANDLE   =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 4UL), /**<  Pipe API return for bad pipe handle */
+    CY_IPC_PIPE_ERROR_BAD_ID       =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 5UL), /**<  Pipe API return for bad pipe ID */
+    CY_IPC_PIPE_ERROR_DIR_ERROR    =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 6UL), /**<  Pipe API return for invalid direction (Not used at this time) */
+    CY_IPC_PIPE_ERROR_SEND_BUSY    =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 7UL), /**<  Pipe API return for pipe is currently busy */
+    CY_IPC_PIPE_ERROR_NO_MESSAGE   =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 8UL), /**<  Pipe API return for no message indicated   */
+    CY_IPC_PIPE_ERROR_BAD_CPU      =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 9UL), /**<  Pipe API return for invalid CPU value      */
+    CY_IPC_PIPE_ERROR_BAD_CLIENT   =(uint32_t)(CY_IPC_PIPE_ID_ERROR | 10UL) /**< Pipe API return for client out of range    */
 } cy_en_ipc_pipe_status_t;
 
 /** \} group_ipc_pipe_enums */
@@ -296,12 +296,12 @@ void Cy_IPC_Pipe_EndpointInit(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr_t 
                               uint32_t cbCnt, uint32_t epConfig, cy_stc_sysint_t const *epInterrupt);
 #if (CY_IPC_INSTANCES > 1U) || defined (CY_DOXYGEN)
 void Cy_IPC_Pipe_EndpointInitExt(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr_t cbArray,
-                                 uint32_t cbCnt, cy_stc_ipc_pipe_ep_config_mask_t *epConfig, cy_stc_sysint_t const *epInterrupt);
+                              uint32_t cbCnt, cy_stc_ipc_pipe_ep_config_mask_t *epConfig, cy_stc_sysint_t const *epInterrupt);
 #endif /* CY_IPC_INSTANCES */
 cy_en_ipc_pipe_status_t  Cy_IPC_Pipe_SendMessage(uint32_t toAddr, uint32_t fromAddr, void *msgPtr,
-        cy_ipc_pipe_relcallback_ptr_t callBackPtr);
+                              cy_ipc_pipe_relcallback_ptr_t callBackPtr);
 cy_en_ipc_pipe_status_t  Cy_IPC_Pipe_RegisterCallback(uint32_t epAddr,
-        cy_ipc_pipe_callback_ptr_t callBackPtr,  uint32_t clientId);
+                              cy_ipc_pipe_callback_ptr_t callBackPtr,  uint32_t clientId);
 void                     Cy_IPC_Pipe_ExecuteCallback(uint32_t epAddr);
 void                     Cy_IPC_Pipe_RegisterCallbackRel(uint32_t epAddr, cy_ipc_pipe_relcallback_ptr_t callBackPtr);
 void                     Cy_IPC_Pipe_Config(cy_stc_ipc_pipe_ep_t * theEpArray);

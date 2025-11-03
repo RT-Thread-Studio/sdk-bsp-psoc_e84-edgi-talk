@@ -38,50 +38,49 @@
 /**
   * \brief MXNNLITE_2_0
   */
-typedef struct
-{
-    __IM uint32_t RESERVED;
-    __IOM uint32_t WEIGHTSTREAMERBASEADDR;        /*!< 0x00000004  */
-    __IOM uint32_t WEIGHTSTREAMEROFFSET;          /*!< 0x00000008  */
-    __IOM uint32_t WEIGHTSTREAMERKERNELCHANNELTIMESHEIGHTTIMESWIDTH; /*!< 0x0000000C  */
-    __IOM uint32_t ACTIVATIONSTREAMERCHANNEL;     /*!< 0x00000010  */
-    __IOM uint32_t ACTIVATIONSTREAMERBASEADDR;    /*!< 0x00000014  */
-    __IOM uint32_t ACTIVATIONSTREAMEROFFSET;      /*!< 0x00000018  */
-    __IOM uint32_t ACTIVATIONSTREAMERKERNELCHANNELTIMESWIDTH; /*!< 0x0000001C  */
-    __IOM uint32_t ACTIVATIONSTREAMERKERNELHEIGHT; /*!< 0x00000020  */
-    __IOM uint32_t ACTIVATIONSTREAMERREPEATS;     /*!< 0x00000024  */
-    __IOM uint32_t ACTIVATIONSTREAMERSTARTCOL;    /*!< 0x00000028  */
-    __IOM uint32_t ACTIVATIONSTREAMERSTARTROW;    /*!< 0x0000002C  */
-    __IOM uint32_t ACTIVATIONSTREAMERCHANNELTIMESWIDTH; /*!< 0x00000030  */
-    __IOM uint32_t ACTIVATIONSTREAMERHEIGHT;      /*!< 0x00000034  */
-    __IOM uint32_t ACTIVATIONSTREAMERPADDING;     /*!< 0x00000038  */
-    __IOM uint32_t ACTIVATIONSTREAMERSPARSITYMAPBASEADDR; /*!< 0x0000003C  */
-    __IOM uint32_t OUTSTREAMERBASEADDR;           /*!< 0x00000040  */
-    __IOM uint32_t OUTSTREAMEROUTPUTOFFSET;       /*!< 0x00000044  */
-    __IOM uint32_t OUTSTREAMERCLIPPING;           /*!< 0x00000048  */
-    __IOM uint32_t INTERPOLATIONLUTDATA0;         /*!< 0x0000004C  */
-    __IOM uint32_t INTERPOLATIONLUTDATA1;         /*!< 0x00000050  */
-    __IOM uint32_t BIASBASEADDR;                  /*!< 0x00000054  */
-    __IOM uint32_t SCALINGFACTORBASEADDR;         /*!< 0x00000058  */
-    __IOM uint32_t NONZEROWEIGHTSPOINTER;         /*!< 0x0000005C Memory address, which stores the number of the non-zero weights */
-    __IOM uint32_t INPUTRESCALINGFACTOR;          /*!< 0x00000060 Floating point value (IEEE-754 single precision) which scales
+typedef struct {
+   __IM uint32_t RESERVED;
+  __IOM uint32_t WEIGHTSTREAMERBASEADDR;        /*!< 0x00000004  */
+  __IOM uint32_t WEIGHTSTREAMEROFFSET;          /*!< 0x00000008  */
+  __IOM uint32_t WEIGHTSTREAMERKERNELCHANNELTIMESHEIGHTTIMESWIDTH; /*!< 0x0000000C  */
+  __IOM uint32_t ACTIVATIONSTREAMERCHANNEL;     /*!< 0x00000010  */
+  __IOM uint32_t ACTIVATIONSTREAMERBASEADDR;    /*!< 0x00000014  */
+  __IOM uint32_t ACTIVATIONSTREAMEROFFSET;      /*!< 0x00000018  */
+  __IOM uint32_t ACTIVATIONSTREAMERKERNELCHANNELTIMESWIDTH; /*!< 0x0000001C  */
+  __IOM uint32_t ACTIVATIONSTREAMERKERNELHEIGHT; /*!< 0x00000020  */
+  __IOM uint32_t ACTIVATIONSTREAMERREPEATS;     /*!< 0x00000024  */
+  __IOM uint32_t ACTIVATIONSTREAMERSTARTCOL;    /*!< 0x00000028  */
+  __IOM uint32_t ACTIVATIONSTREAMERSTARTROW;    /*!< 0x0000002C  */
+  __IOM uint32_t ACTIVATIONSTREAMERCHANNELTIMESWIDTH; /*!< 0x00000030  */
+  __IOM uint32_t ACTIVATIONSTREAMERHEIGHT;      /*!< 0x00000034  */
+  __IOM uint32_t ACTIVATIONSTREAMERPADDING;     /*!< 0x00000038  */
+  __IOM uint32_t ACTIVATIONSTREAMERSPARSITYMAPBASEADDR; /*!< 0x0000003C  */
+  __IOM uint32_t OUTSTREAMERBASEADDR;           /*!< 0x00000040  */
+  __IOM uint32_t OUTSTREAMEROUTPUTOFFSET;       /*!< 0x00000044  */
+  __IOM uint32_t OUTSTREAMERCLIPPING;           /*!< 0x00000048  */
+  __IOM uint32_t INTERPOLATIONLUTDATA0;         /*!< 0x0000004C  */
+  __IOM uint32_t INTERPOLATIONLUTDATA1;         /*!< 0x00000050  */
+  __IOM uint32_t BIASBASEADDR;                  /*!< 0x00000054  */
+  __IOM uint32_t SCALINGFACTORBASEADDR;         /*!< 0x00000058  */
+  __IOM uint32_t NONZEROWEIGHTSPOINTER;         /*!< 0x0000005C Memory address, which stores the number of the non-zero weights */
+  __IOM uint32_t INPUTRESCALINGFACTOR;          /*!< 0x00000060 Floating point value (IEEE-754 single precision) which scales
                                                                 the activation/weight input */
-    __IOM uint32_t OUTPUTCHANNELS;                /*!< 0x00000064 Unsigned number of output channels for depthwise operations */
-    __IOM uint32_t OUTPUTWIDTH;                   /*!< 0x00000068 Output width for one layer */
-    __IOM uint32_t OUTPUTHEIGHT;                  /*!< 0x0000006C Output height for one layer */
-    __IOM uint32_t STRIDE;                        /*!< 0x00000070 Stride control register */
-    __IOM uint32_t NNLAYER_CTL;                   /*!< 0x00000074 Configure layer pattern, activation functions, activation size,
+  __IOM uint32_t OUTPUTCHANNELS;                /*!< 0x00000064 Unsigned number of output channels for depthwise operations */
+  __IOM uint32_t OUTPUTWIDTH;                   /*!< 0x00000068 Output width for one layer */
+  __IOM uint32_t OUTPUTHEIGHT;                  /*!< 0x0000006C Output height for one layer */
+  __IOM uint32_t STRIDE;                        /*!< 0x00000070 Stride control register */
+  __IOM uint32_t NNLAYER_CTL;                   /*!< 0x00000074 Configure layer pattern, activation functions, activation size,
                                                                 and weight size (only for DSP algorithms) */
-    __IOM uint32_t INTR;                          /*!< 0x00000078 Interrupt cause and clear register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x0000007C Interrupt mask register. A co-located interrupt cause bit will
+  __IOM uint32_t INTR;                          /*!< 0x00000078 Interrupt cause and clear register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x0000007C Interrupt mask register. A co-located interrupt cause bit will
                                                                 only cause an interrupt when its mask bit is 1 */
-    __IOM uint32_t TRIG_MASK;                     /*!< 0x00000080 Trigger mask register. Calculation done for one layer triggers
+  __IOM uint32_t TRIG_MASK;                     /*!< 0x00000080 Trigger mask register. Calculation done for one layer triggers
                                                                 DataWire when its mask bit is 1 */
-    __IOM uint32_t CMD;                           /*!< 0x00000084 Command register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000088 Set INTR_XXX register by software for debug purpose */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000008C Virtual register for generating the interrupt signal to MCU. It
+  __IOM uint32_t CMD;                           /*!< 0x00000084 Command register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000088 Set INTR_XXX register by software for debug purpose */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000008C Virtual register for generating the interrupt signal to MCU. It
                                                                 is the logical AND of the INTR_XXX and INTR_MASK_XXX register */
-    __IM uint32_t STATUS;                        /*!< 0x00000090 Status register */
+   __IM uint32_t STATUS;                        /*!< 0x00000090 Status register */
 } MXNNLITE_2_0_Type;                            /*!< Size = 148 (0x94) */
 
 

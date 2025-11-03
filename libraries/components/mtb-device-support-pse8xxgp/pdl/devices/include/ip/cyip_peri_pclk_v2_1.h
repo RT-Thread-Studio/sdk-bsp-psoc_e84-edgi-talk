@@ -39,24 +39,22 @@
 /**
   * \brief PERI clock domains (PERI_PCLK_GR)
   */
-typedef struct
-{
-    __IOM uint32_t DIV_CMD;                       /*!< 0x00000000 Divider command */
-    __IM uint32_t RESERVED[767];
-    __IOM uint32_t CLOCK_CTL[256];                /*!< 0x00000C00 Clock control */
-    __IOM uint32_t DIV_8_CTL[256];                /*!< 0x00001000 Divider control (for 8.0 divider) */
-    __IOM uint32_t DIV_16_CTL[256];               /*!< 0x00001400 Divider control (for 16.0 divider) */
-    __IOM uint32_t DIV_16_5_CTL[256];             /*!< 0x00001800 Divider control (for 16.5 divider) */
-    __IOM uint32_t DIV_24_5_CTL[255];             /*!< 0x00001C00 Divider control (for 24.5 divider) */
-    __IM uint32_t RESERVED1;
+typedef struct {
+  __IOM uint32_t DIV_CMD;                       /*!< 0x00000000 Divider command */
+   __IM uint32_t RESERVED[767];
+  __IOM uint32_t CLOCK_CTL[256];                /*!< 0x00000C00 Clock control */
+  __IOM uint32_t DIV_8_CTL[256];                /*!< 0x00001000 Divider control (for 8.0 divider) */
+  __IOM uint32_t DIV_16_CTL[256];               /*!< 0x00001400 Divider control (for 16.0 divider) */
+  __IOM uint32_t DIV_16_5_CTL[256];             /*!< 0x00001800 Divider control (for 16.5 divider) */
+  __IOM uint32_t DIV_24_5_CTL[255];             /*!< 0x00001C00 Divider control (for 24.5 divider) */
+   __IM uint32_t RESERVED1;
 } PERI_PCLK_GR_Type;                            /*!< Size = 8192 (0x2000) */
 
 /**
   * \brief Peripheral PCLK groups (PERI_PCLK)
   */
-typedef struct
-{
-    PERI_PCLK_GR_Type GR[16];               /*!< 0x00000000 PERI clock domains */
+typedef struct {
+        PERI_PCLK_GR_Type GR[16];               /*!< 0x00000000 PERI clock domains */
 } PERI_PCLK_Type;                               /*!< Size = 131072 (0x20000) */
 
 

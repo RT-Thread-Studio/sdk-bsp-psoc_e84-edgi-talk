@@ -38,24 +38,23 @@
 /**
   * \brief Ethernet Interface (ETH)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 EMAC Control Register */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 EMAC Status Register */
-    __IM uint32_t RESERVED[1022];
-    __IOM uint32_t NETWORK_CONTROL;               /*!< 0x00001000 The network control register contains general MAC control
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 EMAC Control Register */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 EMAC Status Register */
+   __IM uint32_t RESERVED[1022];
+  __IOM uint32_t NETWORK_CONTROL;               /*!< 0x00001000 The network control register contains general MAC control
                                                                 functions for both receiver and transmitter. */
-    __IOM uint32_t NETWORK_CONFIG;                /*!< 0x00001004 The network configuration register contains functions for
+  __IOM uint32_t NETWORK_CONFIG;                /*!< 0x00001004 The network configuration register contains functions for
                                                                 setting the mode of operation for the Gigabit Ethernet MAC. */
-    __IM uint32_t NETWORK_STATUS;                /*!< 0x00001008 The network status register returns status information with
+   __IM uint32_t NETWORK_STATUS;                /*!< 0x00001008 The network status register returns status information with
                                                                 respect to the PHY management interface. */
-    __IM uint32_t USER_IO_REGISTER;              /*!< 0x0000100C Not presents. Access to the register will return AHB error. */
-    __IOM uint32_t DMA_CONFIG;                    /*!< 0x00001010 DMA Configuration Register */
-    __IOM uint32_t TRANSMIT_STATUS;               /*!< 0x00001014 This register, when read, provides details of the status of a
+   __IM uint32_t USER_IO_REGISTER;              /*!< 0x0000100C Not presents. Access to the register will return AHB error. */
+  __IOM uint32_t DMA_CONFIG;                    /*!< 0x00001010 DMA Configuration Register */
+  __IOM uint32_t TRANSMIT_STATUS;               /*!< 0x00001014 This register, when read, provides details of the status of a
                                                                 transmit. Once read, individual bits may be cleared by writing 1
                                                                 to them. It is not possible to set a bit to 1 by writing to the
                                                                 register. */
-    __IOM uint32_t RECEIVE_Q_PTR;                 /*!< 0x00001018 This register holds the start address of the receive buffer
+  __IOM uint32_t RECEIVE_Q_PTR;                 /*!< 0x00001018 This register holds the start address of the receive buffer
                                                                 queue (receive buffers descriptor list). The receive buffer
                                                                 queue base address must be initialized before receive is enabled
                                                                 through bit 2 of the network control register. Once reception is
@@ -72,7 +71,7 @@ typedef struct
                                                                 64bit, the receive descriptors should be aligned at 64-bit
                                                                 boundaries and each pair of 32-bit descriptors is written to
                                                                 using a single 64bit AXI access. */
-    __IOM uint32_t TRANSMIT_Q_PTR;                /*!< 0x0000101C This register holds the start address of the transmit buffer
+  __IOM uint32_t TRANSMIT_Q_PTR;                /*!< 0x0000101C This register holds the start address of the transmit buffer
                                                                 queue (transmit buffers descriptor list). The transmit buffer
                                                                 queue base address register must be initialized before transmit
                                                                 is started through bit 9 of the network control register. Once
@@ -91,11 +90,11 @@ typedef struct
                                                                 datapath is configured as 64bit, the transmit descriptors should
                                                                 be aligned at 64-bit boundaries and each pair of 32-bit
                                                                 descriptors is read from memory using a single AXI access. */
-    __IOM uint32_t RECEIVE_STATUS;                /*!< 0x00001020 This register, when read provides details of the status of a
+  __IOM uint32_t RECEIVE_STATUS;                /*!< 0x00001020 This register, when read provides details of the status of a
                                                                 receive. Once read, individual bits may be cleared by writing 1
                                                                 to them. It is not possible to set a bit to 1 by writing to the
                                                                 register. */
-    __IOM uint32_t INT_STATUS;                    /*!< 0x00001024 If not configured for priority queueing, the GEM generates a
+  __IOM uint32_t INT_STATUS;                    /*!< 0x00001024 If not configured for priority queueing, the GEM generates a
                                                                 single interrupt. This register indicates the source of this
                                                                 interrupt. The corresponding bit in the mask register must be
                                                                 clear for a bit to be set. If any bit is set in this register
@@ -106,13 +105,13 @@ typedef struct
                                                                 `gem_irq_read_clear define will instead require a one to be
                                                                 written to the appropriate bit in order to clear it. In this
                                                                 mode reading has no affect on the status of the bit. */
-    __OM uint32_t INT_ENABLE;                    /*!< 0x00001028 At reset all interrupts are disabled. Writing a one to the
+   __OM uint32_t INT_ENABLE;                    /*!< 0x00001028 At reset all interrupts are disabled. Writing a one to the
                                                                 relevant bit location enables the required interrupt. This
                                                                 register is write only and when read will return zero. */
-    __IOM uint32_t INT_DISABLE;                   /*!< 0x0000102C Writing a 1 to the relevant bit location disables that
+  __IOM uint32_t INT_DISABLE;                   /*!< 0x0000102C Writing a 1 to the relevant bit location disables that
                                                                 particular interrupt. This register is write only and when read
                                                                 will return zero. */
-    __IM uint32_t INT_MASK;                      /*!< 0x00001030 The interrupt mask register is a read only register indicating
+   __IM uint32_t INT_MASK;                      /*!< 0x00001030 The interrupt mask register is a read only register indicating
                                                                 which interrupts are masked. All bits are set at reset and can
                                                                 be reset individually by writing to the interrupt enable
                                                                 register or set individually by writing to the interrupt disable
@@ -122,7 +121,7 @@ typedef struct
                                                                 a write-only function to this register that allows the bits in
                                                                 the interrupt status register to be set or cleared, regardless
                                                                 of the state of the mask register. */
-    __IOM uint32_t PHY_MANAGEMENT;                /*!< 0x00001034 The PHY maintenance register is implemented as a shift
+  __IOM uint32_t PHY_MANAGEMENT;                /*!< 0x00001034 The PHY maintenance register is implemented as a shift
                                                                 register. Writing to the register starts a shift operation which
                                                                 is signalled as complete when bit-2 is set in the network status
                                                                 register. It takes about 2000 pclk cycles to complete, when MDC
@@ -142,22 +141,22 @@ typedef struct
                                                                 read clause 45 PHYs, bit 30 should be written with a 0 rather
                                                                 than a 1. For a description of MDC generation, see Network
                                                                 Configuration Register. */
-    __IM uint32_t PAUSE_TIME;                    /*!< 0x00001038 Received Pause Quantum Register */
-    __IOM uint32_t TX_PAUSE_QUANTUM;              /*!< 0x0000103C Transmit Pause Quantum Register */
-    __IOM uint32_t PBUF_TXCUTTHRU;                /*!< 0x00001040 Partial store and forward is only applicable when using the DMA
+   __IM uint32_t PAUSE_TIME;                    /*!< 0x00001038 Received Pause Quantum Register */
+  __IOM uint32_t TX_PAUSE_QUANTUM;              /*!< 0x0000103C Transmit Pause Quantum Register */
+  __IOM uint32_t PBUF_TXCUTTHRU;                /*!< 0x00001040 Partial store and forward is only applicable when using the DMA
                                                                 configured in SRAM based packet buffer mode. It is also not
                                                                 available when using multi buffer frames. TX Partial Store and
                                                                 Forward */
-    __IOM uint32_t PBUF_RXCUTTHRU;                /*!< 0x00001044 RX Partial Store and Forward */
-    __IOM uint32_t JUMBO_MAX_LENGTH;              /*!< 0x00001048 Maximum Jumbo Frame Size. */
-    __IM uint32_t EXTERNAL_FIFO_INTERFACE;       /*!< 0x0000104C Not presents. */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t AXI_MAX_PIPELINE;              /*!< 0x00001054 Used to set the maximum amount of outstanding transactions on
+  __IOM uint32_t PBUF_RXCUTTHRU;                /*!< 0x00001044 RX Partial Store and Forward */
+  __IOM uint32_t JUMBO_MAX_LENGTH;              /*!< 0x00001048 Maximum Jumbo Frame Size. */
+   __IM uint32_t EXTERNAL_FIFO_INTERFACE;       /*!< 0x0000104C Not presents. */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t AXI_MAX_PIPELINE;              /*!< 0x00001054 Used to set the maximum amount of outstanding transactions on
                                                                 the AXI bus between AR / R channels and AW / W channels. Cannot
                                                                 be more than the depth of the configured AXI pipeline FIFO
                                                                 (defined in verilog defs.v) */
-    __IM uint32_t RSC_CONTROL;                   /*!< 0x00001058 Not presents. Access to the register will return AHB error. */
-    __IOM uint32_t INT_MODERATION;                /*!< 0x0000105C Used to moderate the number of transmit and receive complete
+   __IM uint32_t RSC_CONTROL;                   /*!< 0x00001058 Not presents. Access to the register will return AHB error. */
+  __IOM uint32_t INT_MODERATION;                /*!< 0x0000105C Used to moderate the number of transmit and receive complete
                                                                 interrupts issued. With interrupt moderation enabled receive and
                                                                 transmit interrupts are not generated immediately a frame is
                                                                 transmitted or received. Instead when a receive or transmit
@@ -171,177 +170,177 @@ typedef struct
                                                                 tbi (bit 11), gigabit bit (10) and speed (bit 0) bits in the
                                                                 network configuration register and counting tx_clk cycles. Bit 0
                                                                 needs to be set to 1 for 100M operation. */
-    __IOM uint32_t SYS_WAKE_TIME;                 /*!< 0x00001060 Used to pause transmission after deassertion of tx_lpi_en. Each
+  __IOM uint32_t SYS_WAKE_TIME;                 /*!< 0x00001060 Used to pause transmission after deassertion of tx_lpi_en. Each
                                                                 unit in this register corresponds to 64ns in gigabit mode, 320ns
                                                                 in 100M mode and 3200ns at 10M. After tx_lpi_en is deasserted
                                                                 transmission will pause for the set time. */
-    __IM uint32_t RESERVED2[7];
-    __IOM uint32_t HASH_BOTTOM;                   /*!< 0x00001080 The unicast hash enable and the multicast hash enable bits in
+   __IM uint32_t RESERVED2[7];
+  __IOM uint32_t HASH_BOTTOM;                   /*!< 0x00001080 The unicast hash enable and the multicast hash enable bits in
                                                                 the network configuration register enable the reception of hash
                                                                 matched frames. Hash Register Bottom (31 to 0 bits) */
-    __IOM uint32_t HASH_TOP;                      /*!< 0x00001084 Hash Register Top (63 to 32 bits) */
-    __IOM uint32_t SPEC_ADD1_BOTTOM;              /*!< 0x00001088 The addresses stored in the specific address registers are
+  __IOM uint32_t HASH_TOP;                      /*!< 0x00001084 Hash Register Top (63 to 32 bits) */
+  __IOM uint32_t SPEC_ADD1_BOTTOM;              /*!< 0x00001088 The addresses stored in the specific address registers are
                                                                 deactivated at reset or when their corresponding specific
                                                                 address register bottom is written. They are activated when
                                                                 specific address register top is written. */
-    __IOM uint32_t SPEC_ADD1_TOP;                 /*!< 0x0000108C Specific Address Top */
-    __IOM uint32_t SPEC_ADD2_BOTTOM;              /*!< 0x00001090 The addresses stored in the specific address registers are
+  __IOM uint32_t SPEC_ADD1_TOP;                 /*!< 0x0000108C Specific Address Top */
+  __IOM uint32_t SPEC_ADD2_BOTTOM;              /*!< 0x00001090 The addresses stored in the specific address registers are
                                                                 deactivated at reset or when their corresponding specific
                                                                 address register bottom is written. They are activated when
                                                                 specific address register top is written. */
-    __IOM uint32_t SPEC_ADD2_TOP;                 /*!< 0x00001094 Specific Address Top */
-    __IOM uint32_t SPEC_ADD3_BOTTOM;              /*!< 0x00001098 The addresses stored in the specific address registers are
+  __IOM uint32_t SPEC_ADD2_TOP;                 /*!< 0x00001094 Specific Address Top */
+  __IOM uint32_t SPEC_ADD3_BOTTOM;              /*!< 0x00001098 The addresses stored in the specific address registers are
                                                                 deactivated at reset or when their corresponding specific
                                                                 address register bottom is written. They are activated when
                                                                 specific address register top is written. */
-    __IOM uint32_t SPEC_ADD3_TOP;                 /*!< 0x0000109C Specific Address Top */
-    __IOM uint32_t SPEC_ADD4_BOTTOM;              /*!< 0x000010A0 The addresses stored in the specific address registers are
+  __IOM uint32_t SPEC_ADD3_TOP;                 /*!< 0x0000109C Specific Address Top */
+  __IOM uint32_t SPEC_ADD4_BOTTOM;              /*!< 0x000010A0 The addresses stored in the specific address registers are
                                                                 deactivated at reset or when their corresponding specific
                                                                 address register bottom is written. They are activated when
                                                                 specific address register top is written. */
-    __IOM uint32_t SPEC_ADD4_TOP;                 /*!< 0x000010A4 Specific Address Top */
-    __IOM uint32_t SPEC_TYPE1;                    /*!< 0x000010A8 Type ID Match 1 */
-    __IOM uint32_t SPEC_TYPE2;                    /*!< 0x000010AC Type ID Match 2 */
-    __IOM uint32_t SPEC_TYPE3;                    /*!< 0x000010B0 Type ID Match 3 */
-    __IOM uint32_t SPEC_TYPE4;                    /*!< 0x000010B4 Type ID Match 4 */
-    __IOM uint32_t WOL_REGISTER;                  /*!< 0x000010B8 Wake on LAN Register. Presents in design, but feature is not
+  __IOM uint32_t SPEC_ADD4_TOP;                 /*!< 0x000010A4 Specific Address Top */
+  __IOM uint32_t SPEC_TYPE1;                    /*!< 0x000010A8 Type ID Match 1 */
+  __IOM uint32_t SPEC_TYPE2;                    /*!< 0x000010AC Type ID Match 2 */
+  __IOM uint32_t SPEC_TYPE3;                    /*!< 0x000010B0 Type ID Match 3 */
+  __IOM uint32_t SPEC_TYPE4;                    /*!< 0x000010B4 Type ID Match 4 */
+  __IOM uint32_t WOL_REGISTER;                  /*!< 0x000010B8 Wake on LAN Register. Presents in design, but feature is not
                                                                 supported. */
-    __IOM uint32_t STRETCH_RATIO;                 /*!< 0x000010BC IPG stretch register */
-    __IOM uint32_t STACKED_VLAN;                  /*!< 0x000010C0 Stacked VLAN Register */
-    __IOM uint32_t TX_PFC_PAUSE;                  /*!< 0x000010C4 Transmit PFC Pause Register */
-    __IOM uint32_t MASK_ADD1_BOTTOM;              /*!< 0x000010C8 Specific Address Mask 1 Bottom (31 to 0 bits) */
-    __IOM uint32_t MASK_ADD1_TOP;                 /*!< 0x000010CC Specific Address Mask 1 Top (47 to 32 bits) */
-    __IOM uint32_t DMA_ADDR_OR_MASK;              /*!< 0x000010D0 Receive DMA Data Buffer Address Mask */
-    __IOM uint32_t RX_PTP_UNICAST;                /*!< 0x000010D4 PTP RX unicast IP destination address */
-    __IOM uint32_t TX_PTP_UNICAST;                /*!< 0x000010D8 PTP TX unicast IP destination address */
-    __IOM uint32_t TSU_NSEC_CMP;                  /*!< 0x000010DC TSU timer comparison value nanoseconds */
-    __IOM uint32_t TSU_SEC_CMP;                   /*!< 0x000010E0 TSU timer comparison value seconds (31 to 0 bits) */
-    __IOM uint32_t TSU_MSB_SEC_CMP;               /*!< 0x000010E4 TSU timer comparison value seconds (47 to 32 bits) */
-    __IM uint32_t TSU_PTP_TX_MSB_SEC;            /*!< 0x000010E8 PTP Event Frame Transmitted Seconds Register (47 to 32 bits) */
-    __IM uint32_t TSU_PTP_RX_MSB_SEC;            /*!< 0x000010EC PTP Event Frame Received Seconds Register (47 to 32 bits) */
-    __IM uint32_t TSU_PEER_TX_MSB_SEC;           /*!< 0x000010F0 PTP Peer Event Frame Transmitted Seconds Register (47 to 32
+  __IOM uint32_t STRETCH_RATIO;                 /*!< 0x000010BC IPG stretch register */
+  __IOM uint32_t STACKED_VLAN;                  /*!< 0x000010C0 Stacked VLAN Register */
+  __IOM uint32_t TX_PFC_PAUSE;                  /*!< 0x000010C4 Transmit PFC Pause Register */
+  __IOM uint32_t MASK_ADD1_BOTTOM;              /*!< 0x000010C8 Specific Address Mask 1 Bottom (31 to 0 bits) */
+  __IOM uint32_t MASK_ADD1_TOP;                 /*!< 0x000010CC Specific Address Mask 1 Top (47 to 32 bits) */
+  __IOM uint32_t DMA_ADDR_OR_MASK;              /*!< 0x000010D0 Receive DMA Data Buffer Address Mask */
+  __IOM uint32_t RX_PTP_UNICAST;                /*!< 0x000010D4 PTP RX unicast IP destination address */
+  __IOM uint32_t TX_PTP_UNICAST;                /*!< 0x000010D8 PTP TX unicast IP destination address */
+  __IOM uint32_t TSU_NSEC_CMP;                  /*!< 0x000010DC TSU timer comparison value nanoseconds */
+  __IOM uint32_t TSU_SEC_CMP;                   /*!< 0x000010E0 TSU timer comparison value seconds (31 to 0 bits) */
+  __IOM uint32_t TSU_MSB_SEC_CMP;               /*!< 0x000010E4 TSU timer comparison value seconds (47 to 32 bits) */
+   __IM uint32_t TSU_PTP_TX_MSB_SEC;            /*!< 0x000010E8 PTP Event Frame Transmitted Seconds Register (47 to 32 bits) */
+   __IM uint32_t TSU_PTP_RX_MSB_SEC;            /*!< 0x000010EC PTP Event Frame Received Seconds Register (47 to 32 bits) */
+   __IM uint32_t TSU_PEER_TX_MSB_SEC;           /*!< 0x000010F0 PTP Peer Event Frame Transmitted Seconds Register (47 to 32
                                                                 bits) */
-    __IM uint32_t TSU_PEER_RX_MSB_SEC;           /*!< 0x000010F4 PTP Peer Event Frame Received Seconds Register (47 to 32 bits) */
-    __IOM uint32_t DPRAM_FILL_DBG;                /*!< 0x000010F8 The fill levels for the TX & RX packet buffers can be read
+   __IM uint32_t TSU_PEER_RX_MSB_SEC;           /*!< 0x000010F4 PTP Peer Event Frame Received Seconds Register (47 to 32 bits) */
+  __IOM uint32_t DPRAM_FILL_DBG;                /*!< 0x000010F8 The fill levels for the TX & RX packet buffers can be read
                                                                 using this register, including the fill level for each queue in
                                                                 the TX direction. */
-    __IM uint32_t REVISION_REG;                  /*!< 0x000010FC This register indicates a Cadence module identification number
+   __IM uint32_t REVISION_REG;                  /*!< 0x000010FC This register indicates a Cadence module identification number
                                                                 and module revision. The value of this register is read only as
                                                                 defined by `gem_revision_reg_value */
-    __IM uint32_t OCTETS_TXED_BOTTOM;            /*!< 0x00001100 Octets Transmitted lower bits (31 to 0 bits) */
-    __IM uint32_t OCTETS_TXED_TOP;               /*!< 0x00001104 Octets Transmitted higher bits (47 to 32 bits) */
-    __IM uint32_t FRAMES_TXED_OK;                /*!< 0x00001108 Frames Transmitted */
-    __IM uint32_t BROADCAST_TXED;                /*!< 0x0000110C Broadcast Frames Transmitted */
-    __IM uint32_t MULTICAST_TXED;                /*!< 0x00001110 Multicast Frames Transmitted */
-    __IM uint32_t PAUSE_FRAMES_TXED;             /*!< 0x00001114 Pause Frames Transmitted */
-    __IM uint32_t FRAMES_TXED_64;                /*!< 0x00001118 64 Byte Frames Transmitted */
-    __IM uint32_t FRAMES_TXED_65;                /*!< 0x0000111C 65 to 127 Byte Frames Transmitted */
-    __IM uint32_t FRAMES_TXED_128;               /*!< 0x00001120 128 to 255 Byte Frames Transmitted */
-    __IM uint32_t FRAMES_TXED_256;               /*!< 0x00001124 256 to 511 Byte Frames Transmitted */
-    __IM uint32_t FRAMES_TXED_512;               /*!< 0x00001128 512 to 1023 Byte Frames Transmitted */
-    __IM uint32_t FRAMES_TXED_1024;              /*!< 0x0000112C 1024 to 1518 Byte Frames Transmitted */
-    __IM uint32_t FRAMES_TXED_1519;              /*!< 0x00001130 Greater Than 1518 Byte Frames Transmitted */
-    __IM uint32_t TX_UNDERRUNS;                  /*!< 0x00001134 Transmit Under Runs */
-    __IM uint32_t SINGLE_COLLISIONS;             /*!< 0x00001138 Single Collision Frames. Presents in design but not support. */
-    __IM uint32_t MULTIPLE_COLLISIONS;           /*!< 0x0000113C Multiple Collision Frames. Presents in design but not support. */
-    __IM uint32_t EXCESSIVE_COLLISIONS;          /*!< 0x00001140 Excessive Collisions.  Presents in design but not support. */
-    __IM uint32_t LATE_COLLISIONS;               /*!< 0x00001144 Late Collisions.  Presents in design but not support. */
-    __IM uint32_t DEFERRED_FRAMES;               /*!< 0x00001148 Deferred Transmission Frames. Presents in design but not
+   __IM uint32_t OCTETS_TXED_BOTTOM;            /*!< 0x00001100 Octets Transmitted lower bits (31 to 0 bits) */
+   __IM uint32_t OCTETS_TXED_TOP;               /*!< 0x00001104 Octets Transmitted higher bits (47 to 32 bits) */
+   __IM uint32_t FRAMES_TXED_OK;                /*!< 0x00001108 Frames Transmitted */
+   __IM uint32_t BROADCAST_TXED;                /*!< 0x0000110C Broadcast Frames Transmitted */
+   __IM uint32_t MULTICAST_TXED;                /*!< 0x00001110 Multicast Frames Transmitted */
+   __IM uint32_t PAUSE_FRAMES_TXED;             /*!< 0x00001114 Pause Frames Transmitted */
+   __IM uint32_t FRAMES_TXED_64;                /*!< 0x00001118 64 Byte Frames Transmitted */
+   __IM uint32_t FRAMES_TXED_65;                /*!< 0x0000111C 65 to 127 Byte Frames Transmitted */
+   __IM uint32_t FRAMES_TXED_128;               /*!< 0x00001120 128 to 255 Byte Frames Transmitted */
+   __IM uint32_t FRAMES_TXED_256;               /*!< 0x00001124 256 to 511 Byte Frames Transmitted */
+   __IM uint32_t FRAMES_TXED_512;               /*!< 0x00001128 512 to 1023 Byte Frames Transmitted */
+   __IM uint32_t FRAMES_TXED_1024;              /*!< 0x0000112C 1024 to 1518 Byte Frames Transmitted */
+   __IM uint32_t FRAMES_TXED_1519;              /*!< 0x00001130 Greater Than 1518 Byte Frames Transmitted */
+   __IM uint32_t TX_UNDERRUNS;                  /*!< 0x00001134 Transmit Under Runs */
+   __IM uint32_t SINGLE_COLLISIONS;             /*!< 0x00001138 Single Collision Frames. Presents in design but not support. */
+   __IM uint32_t MULTIPLE_COLLISIONS;           /*!< 0x0000113C Multiple Collision Frames. Presents in design but not support. */
+   __IM uint32_t EXCESSIVE_COLLISIONS;          /*!< 0x00001140 Excessive Collisions.  Presents in design but not support. */
+   __IM uint32_t LATE_COLLISIONS;               /*!< 0x00001144 Late Collisions.  Presents in design but not support. */
+   __IM uint32_t DEFERRED_FRAMES;               /*!< 0x00001148 Deferred Transmission Frames. Presents in design but not
                                                                 support. */
-    __IM uint32_t CRS_ERRORS;                    /*!< 0x0000114C Carrier Sense Errors.  Presents in design but not support. */
-    __IM uint32_t OCTETS_RXED_BOTTOM;            /*!< 0x00001150 Octets Received (31 to 0 bits) */
-    __IM uint32_t OCTETS_RXED_TOP;               /*!< 0x00001154 Octets Received (47 to 32 bits) */
-    __IM uint32_t FRAMES_RXED_OK;                /*!< 0x00001158 Frames Received */
-    __IM uint32_t BROADCAST_RXED;                /*!< 0x0000115C Broadcast Frames Received */
-    __IM uint32_t MULTICAST_RXED;                /*!< 0x00001160 Multicast Frames Received */
-    __IM uint32_t PAUSE_FRAMES_RXED;             /*!< 0x00001164 Pause Frames Received */
-    __IM uint32_t FRAMES_RXED_64;                /*!< 0x00001168 64 Byte Frames Received */
-    __IM uint32_t FRAMES_RXED_65;                /*!< 0x0000116C 65 to 127 Byte Frames Received */
-    __IM uint32_t FRAMES_RXED_128;               /*!< 0x00001170 128 to 255 Byte Frames Received */
-    __IM uint32_t FRAMES_RXED_256;               /*!< 0x00001174 256 to 511 Byte Frames Received */
-    __IM uint32_t FRAMES_RXED_512;               /*!< 0x00001178 512 to 1023 Byte Frames Received */
-    __IM uint32_t FRAMES_RXED_1024;              /*!< 0x0000117C 1024 to 1518 Byte Frames Received */
-    __IM uint32_t FRAMES_RXED_1519;              /*!< 0x00001180 1519 to maximum Byte Frames Received */
-    __IM uint32_t UNDERSIZE_FRAMES;              /*!< 0x00001184 Undersized Frames Received */
-    __IM uint32_t EXCESSIVE_RX_LENGTH;           /*!< 0x00001188 Oversize Frames Received */
-    __IM uint32_t RX_JABBERS;                    /*!< 0x0000118C Jabbers Received */
-    __IM uint32_t FCS_ERRORS;                    /*!< 0x00001190 Frame Check Sequence Errors */
-    __IM uint32_t RX_LENGTH_ERRORS;              /*!< 0x00001194 Length Field Frame Errors */
-    __IM uint32_t RX_SYMBOL_ERRORS;              /*!< 0x00001198 Receive Symbol Errors */
-    __IM uint32_t ALIGNMENT_ERRORS;              /*!< 0x0000119C Alignment Errors */
-    __IM uint32_t RX_RESOURCE_ERRORS;            /*!< 0x000011A0 Receive Resource Errors */
-    __IM uint32_t RX_OVERRUNS;                   /*!< 0x000011A4 Receive Overruns */
-    __IM uint32_t RX_IP_CK_ERRORS;               /*!< 0x000011A8 IP Header Checksum Errors */
-    __IM uint32_t RX_TCP_CK_ERRORS;              /*!< 0x000011AC TCP Checksum Errors */
-    __IM uint32_t RX_UDP_CK_ERRORS;              /*!< 0x000011B0 UDP Checksum Errors */
-    __IM uint32_t AUTO_FLUSHED_PKTS;             /*!< 0x000011B4 Receive DMA Flushed Packets */
-    __IM uint32_t RESERVED3;
-    __IOM uint32_t TSU_TIMER_INCR_SUB_NSEC;       /*!< 0x000011BC 1588 Timer Increment Register sub nsec */
-    __IOM uint32_t TSU_TIMER_MSB_SEC;             /*!< 0x000011C0 1588 Timer Seconds Register (47 to 32 bits) */
-    __IM uint32_t TSU_STROBE_MSB_SEC;            /*!< 0x000011C4 1588 Timer Sync Strobe Seconds Register (47 to 32 bits) */
-    __IM uint32_t TSU_STROBE_SEC;                /*!< 0x000011C8 1588 Timer Sync Strobe Seconds Register (31 to 0 bits) */
-    __IM uint32_t TSU_STROBE_NSEC;               /*!< 0x000011CC 1588 Timer Sync Strobe Nanoseconds Register */
-    __IOM uint32_t TSU_TIMER_SEC;                 /*!< 0x000011D0 1588 Timer Seconds Register (31 to 0 bits) */
-    __IOM uint32_t TSU_TIMER_NSEC;                /*!< 0x000011D4 1588 Timer Nanoseconds Register */
-    __OM uint32_t TSU_TIMER_ADJUST;              /*!< 0x000011D8 This register is used to adjust the value of the timer in the
+   __IM uint32_t CRS_ERRORS;                    /*!< 0x0000114C Carrier Sense Errors.  Presents in design but not support. */
+   __IM uint32_t OCTETS_RXED_BOTTOM;            /*!< 0x00001150 Octets Received (31 to 0 bits) */
+   __IM uint32_t OCTETS_RXED_TOP;               /*!< 0x00001154 Octets Received (47 to 32 bits) */
+   __IM uint32_t FRAMES_RXED_OK;                /*!< 0x00001158 Frames Received */
+   __IM uint32_t BROADCAST_RXED;                /*!< 0x0000115C Broadcast Frames Received */
+   __IM uint32_t MULTICAST_RXED;                /*!< 0x00001160 Multicast Frames Received */
+   __IM uint32_t PAUSE_FRAMES_RXED;             /*!< 0x00001164 Pause Frames Received */
+   __IM uint32_t FRAMES_RXED_64;                /*!< 0x00001168 64 Byte Frames Received */
+   __IM uint32_t FRAMES_RXED_65;                /*!< 0x0000116C 65 to 127 Byte Frames Received */
+   __IM uint32_t FRAMES_RXED_128;               /*!< 0x00001170 128 to 255 Byte Frames Received */
+   __IM uint32_t FRAMES_RXED_256;               /*!< 0x00001174 256 to 511 Byte Frames Received */
+   __IM uint32_t FRAMES_RXED_512;               /*!< 0x00001178 512 to 1023 Byte Frames Received */
+   __IM uint32_t FRAMES_RXED_1024;              /*!< 0x0000117C 1024 to 1518 Byte Frames Received */
+   __IM uint32_t FRAMES_RXED_1519;              /*!< 0x00001180 1519 to maximum Byte Frames Received */
+   __IM uint32_t UNDERSIZE_FRAMES;              /*!< 0x00001184 Undersized Frames Received */
+   __IM uint32_t EXCESSIVE_RX_LENGTH;           /*!< 0x00001188 Oversize Frames Received */
+   __IM uint32_t RX_JABBERS;                    /*!< 0x0000118C Jabbers Received */
+   __IM uint32_t FCS_ERRORS;                    /*!< 0x00001190 Frame Check Sequence Errors */
+   __IM uint32_t RX_LENGTH_ERRORS;              /*!< 0x00001194 Length Field Frame Errors */
+   __IM uint32_t RX_SYMBOL_ERRORS;              /*!< 0x00001198 Receive Symbol Errors */
+   __IM uint32_t ALIGNMENT_ERRORS;              /*!< 0x0000119C Alignment Errors */
+   __IM uint32_t RX_RESOURCE_ERRORS;            /*!< 0x000011A0 Receive Resource Errors */
+   __IM uint32_t RX_OVERRUNS;                   /*!< 0x000011A4 Receive Overruns */
+   __IM uint32_t RX_IP_CK_ERRORS;               /*!< 0x000011A8 IP Header Checksum Errors */
+   __IM uint32_t RX_TCP_CK_ERRORS;              /*!< 0x000011AC TCP Checksum Errors */
+   __IM uint32_t RX_UDP_CK_ERRORS;              /*!< 0x000011B0 UDP Checksum Errors */
+   __IM uint32_t AUTO_FLUSHED_PKTS;             /*!< 0x000011B4 Receive DMA Flushed Packets */
+   __IM uint32_t RESERVED3;
+  __IOM uint32_t TSU_TIMER_INCR_SUB_NSEC;       /*!< 0x000011BC 1588 Timer Increment Register sub nsec */
+  __IOM uint32_t TSU_TIMER_MSB_SEC;             /*!< 0x000011C0 1588 Timer Seconds Register (47 to 32 bits) */
+   __IM uint32_t TSU_STROBE_MSB_SEC;            /*!< 0x000011C4 1588 Timer Sync Strobe Seconds Register (47 to 32 bits) */
+   __IM uint32_t TSU_STROBE_SEC;                /*!< 0x000011C8 1588 Timer Sync Strobe Seconds Register (31 to 0 bits) */
+   __IM uint32_t TSU_STROBE_NSEC;               /*!< 0x000011CC 1588 Timer Sync Strobe Nanoseconds Register */
+  __IOM uint32_t TSU_TIMER_SEC;                 /*!< 0x000011D0 1588 Timer Seconds Register (31 to 0 bits) */
+  __IOM uint32_t TSU_TIMER_NSEC;                /*!< 0x000011D4 1588 Timer Nanoseconds Register */
+   __OM uint32_t TSU_TIMER_ADJUST;              /*!< 0x000011D8 This register is used to adjust the value of the timer in the
                                                                 TSU. It allows an integral number of nanoseconds to be added or
                                                                 subtracted from the timer in a one-off operation. This register
                                                                 returns all zeroes when read. */
-    __IOM uint32_t TSU_TIMER_INCR;                /*!< 0x000011DC 1588 Timer Increment Register */
-    __IM uint32_t TSU_PTP_TX_SEC;                /*!< 0x000011E0 PTP Event Frame Transmitted Seconds Register (31 to 0 bits) */
-    __IM uint32_t TSU_PTP_TX_NSEC;               /*!< 0x000011E4 PTP Event Frame Transmitted Nanoseconds Register */
-    __IM uint32_t TSU_PTP_RX_SEC;                /*!< 0x000011E8 PTP Event Frame Received Seconds Register (31 to 0 bits) */
-    __IM uint32_t TSU_PTP_RX_NSEC;               /*!< 0x000011EC PTP Event Frame Received Nanoseconds Register */
-    __IM uint32_t TSU_PEER_TX_SEC;               /*!< 0x000011F0 PTP Peer Event Frame Transmitted Seconds Register (31 to 0
+  __IOM uint32_t TSU_TIMER_INCR;                /*!< 0x000011DC 1588 Timer Increment Register */
+   __IM uint32_t TSU_PTP_TX_SEC;                /*!< 0x000011E0 PTP Event Frame Transmitted Seconds Register (31 to 0 bits) */
+   __IM uint32_t TSU_PTP_TX_NSEC;               /*!< 0x000011E4 PTP Event Frame Transmitted Nanoseconds Register */
+   __IM uint32_t TSU_PTP_RX_SEC;                /*!< 0x000011E8 PTP Event Frame Received Seconds Register (31 to 0 bits) */
+   __IM uint32_t TSU_PTP_RX_NSEC;               /*!< 0x000011EC PTP Event Frame Received Nanoseconds Register */
+   __IM uint32_t TSU_PEER_TX_SEC;               /*!< 0x000011F0 PTP Peer Event Frame Transmitted Seconds Register (31 to 0
                                                                 bits) */
-    __IM uint32_t TSU_PEER_TX_NSEC;              /*!< 0x000011F4 PTP Peer Event Frame Transmitted Nanoseconds Register */
-    __IM uint32_t TSU_PEER_RX_SEC;               /*!< 0x000011F8 PTP Peer Event Frame Received Seconds Register (31 to 0 bits) */
-    __IM uint32_t TSU_PEER_RX_NSEC;              /*!< 0x000011FC PTP Peer Event Frame Received Nanoseconds Register */
-    __IM uint32_t PCS_CONTROL;                   /*!< 0x00001200 Not presents. Access to the register returns AHB error. */
-    __IM uint32_t PCS_STATUS;                    /*!< 0x00001204 Not presents. Access to the register returns AHB error. */
-    __IM uint32_t RESERVED4[2];
-    __IM uint32_t PCS_AN_ADV;                    /*!< 0x00001210 Not presents. Access to the register returns AHB error. */
-    __IM uint32_t PCS_AN_LP_BASE;                /*!< 0x00001214 Not presents. Access to the register returns AHB error. */
-    __IM uint32_t PCS_AN_EXP;                    /*!< 0x00001218 Not presents. Access to the register returns AHB error. */
-    __IM uint32_t PCS_AN_NP_TX;                  /*!< 0x0000121C Not presents. Access to the register returns AHB error. */
-    __IM uint32_t PCS_AN_LP_NP;                  /*!< 0x00001220 Not presents. Access to the register returns AHB error. */
-    __IM uint32_t RESERVED5[6];
-    __IM uint32_t PCS_AN_EXT_STATUS;             /*!< 0x0000123C Not presents. Access to the register returns AHB error. */
-    __IM uint32_t RESERVED6[8];
-    __IOM uint32_t TX_PAUSE_QUANTUM1;             /*!< 0x00001260 Transmit Pause Quantum Register 1 */
-    __IOM uint32_t TX_PAUSE_QUANTUM2;             /*!< 0x00001264 Transmit Pause Quantum Register 2 */
-    __IOM uint32_t TX_PAUSE_QUANTUM3;             /*!< 0x00001268 Transmit Pause Quantum Register 3 */
-    __IM uint32_t RESERVED7;
-    __IM uint32_t RX_LPI;                        /*!< 0x00001270 Received LPI transitions */
-    __IM uint32_t RX_LPI_TIME;                   /*!< 0x00001274 Received LPI time */
-    __IM uint32_t TX_LPI;                        /*!< 0x00001278 Transmit LPI transitions */
-    __IM uint32_t TX_LPI_TIME;                   /*!< 0x0000127C Transmit LPI time */
-    __IM uint32_t DESIGNCFG_DEBUG1;              /*!< 0x00001280 Design Configuration Register 1 */
-    __IM uint32_t DESIGNCFG_DEBUG2;              /*!< 0x00001284 Design Configuration Register 2 */
-    __IM uint32_t DESIGNCFG_DEBUG3;              /*!< 0x00001288 Design Configuration Register 3 */
-    __IM uint32_t DESIGNCFG_DEBUG4;              /*!< 0x0000128C Design Configuration Register 4 */
-    __IM uint32_t DESIGNCFG_DEBUG5;              /*!< 0x00001290 Design Configuration Register 5 */
-    __IM uint32_t DESIGNCFG_DEBUG6;              /*!< 0x00001294 Design Configuration Register 6 */
-    __IM uint32_t DESIGNCFG_DEBUG7;              /*!< 0x00001298 Design Configuration Register 7 */
-    __IM uint32_t DESIGNCFG_DEBUG8;              /*!< 0x0000129C Design Configuration Register 8 */
-    __IM uint32_t DESIGNCFG_DEBUG9;              /*!< 0x000012A0 Design Configuration Register 9 */
-    __IM uint32_t DESIGNCFG_DEBUG10;             /*!< 0x000012A4 Design Configuration Register 10 */
-    __IM uint32_t RESERVED8[22];
-    __IM uint32_t SPEC_ADD5_BOTTOM;              /*!< 0x00001300 Specific address registers 5 ~ 36 doesn't present. Access to
+   __IM uint32_t TSU_PEER_TX_NSEC;              /*!< 0x000011F4 PTP Peer Event Frame Transmitted Nanoseconds Register */
+   __IM uint32_t TSU_PEER_RX_SEC;               /*!< 0x000011F8 PTP Peer Event Frame Received Seconds Register (31 to 0 bits) */
+   __IM uint32_t TSU_PEER_RX_NSEC;              /*!< 0x000011FC PTP Peer Event Frame Received Nanoseconds Register */
+   __IM uint32_t PCS_CONTROL;                   /*!< 0x00001200 Not presents. Access to the register returns AHB error. */
+   __IM uint32_t PCS_STATUS;                    /*!< 0x00001204 Not presents. Access to the register returns AHB error. */
+   __IM uint32_t RESERVED4[2];
+   __IM uint32_t PCS_AN_ADV;                    /*!< 0x00001210 Not presents. Access to the register returns AHB error. */
+   __IM uint32_t PCS_AN_LP_BASE;                /*!< 0x00001214 Not presents. Access to the register returns AHB error. */
+   __IM uint32_t PCS_AN_EXP;                    /*!< 0x00001218 Not presents. Access to the register returns AHB error. */
+   __IM uint32_t PCS_AN_NP_TX;                  /*!< 0x0000121C Not presents. Access to the register returns AHB error. */
+   __IM uint32_t PCS_AN_LP_NP;                  /*!< 0x00001220 Not presents. Access to the register returns AHB error. */
+   __IM uint32_t RESERVED5[6];
+   __IM uint32_t PCS_AN_EXT_STATUS;             /*!< 0x0000123C Not presents. Access to the register returns AHB error. */
+   __IM uint32_t RESERVED6[8];
+  __IOM uint32_t TX_PAUSE_QUANTUM1;             /*!< 0x00001260 Transmit Pause Quantum Register 1 */
+  __IOM uint32_t TX_PAUSE_QUANTUM2;             /*!< 0x00001264 Transmit Pause Quantum Register 2 */
+  __IOM uint32_t TX_PAUSE_QUANTUM3;             /*!< 0x00001268 Transmit Pause Quantum Register 3 */
+   __IM uint32_t RESERVED7;
+   __IM uint32_t RX_LPI;                        /*!< 0x00001270 Received LPI transitions */
+   __IM uint32_t RX_LPI_TIME;                   /*!< 0x00001274 Received LPI time */
+   __IM uint32_t TX_LPI;                        /*!< 0x00001278 Transmit LPI transitions */
+   __IM uint32_t TX_LPI_TIME;                   /*!< 0x0000127C Transmit LPI time */
+   __IM uint32_t DESIGNCFG_DEBUG1;              /*!< 0x00001280 Design Configuration Register 1 */
+   __IM uint32_t DESIGNCFG_DEBUG2;              /*!< 0x00001284 Design Configuration Register 2 */
+   __IM uint32_t DESIGNCFG_DEBUG3;              /*!< 0x00001288 Design Configuration Register 3 */
+   __IM uint32_t DESIGNCFG_DEBUG4;              /*!< 0x0000128C Design Configuration Register 4 */
+   __IM uint32_t DESIGNCFG_DEBUG5;              /*!< 0x00001290 Design Configuration Register 5 */
+   __IM uint32_t DESIGNCFG_DEBUG6;              /*!< 0x00001294 Design Configuration Register 6 */
+   __IM uint32_t DESIGNCFG_DEBUG7;              /*!< 0x00001298 Design Configuration Register 7 */
+   __IM uint32_t DESIGNCFG_DEBUG8;              /*!< 0x0000129C Design Configuration Register 8 */
+   __IM uint32_t DESIGNCFG_DEBUG9;              /*!< 0x000012A0 Design Configuration Register 9 */
+   __IM uint32_t DESIGNCFG_DEBUG10;             /*!< 0x000012A4 Design Configuration Register 10 */
+   __IM uint32_t RESERVED8[22];
+   __IM uint32_t SPEC_ADD5_BOTTOM;              /*!< 0x00001300 Specific address registers 5 ~ 36 doesn't present. Access to
                                                                 the register returns AHB error. */
-    __IM uint32_t SPEC_ADD5_TOP;                 /*!< 0x00001304 Specific address registers 5 ~ 36 doesn't present. Access to
+   __IM uint32_t SPEC_ADD5_TOP;                 /*!< 0x00001304 Specific address registers 5 ~ 36 doesn't present. Access to
                                                                 the register returns AHB error. */
-    __IM uint32_t RESERVED9[60];
-    __IM uint32_t SPEC_ADD36_BOTTOM;             /*!< 0x000013F8 Not presents. */
-    __IM uint32_t SPEC_ADD36_TOP;                /*!< 0x000013FC Not presents. */
-    __IM uint32_t INT_Q1_STATUS;                 /*!< 0x00001400 Priority queue Interrupt Status Register */
-    __IM uint32_t INT_Q2_STATUS;                 /*!< 0x00001404 Priority queue Interrupt Status Register */
-    __IM uint32_t INT_Q3_STATUS;                 /*!< 0x00001408 int_q3_status to int_q15_status doesn't present. Access to the
+   __IM uint32_t RESERVED9[60];
+   __IM uint32_t SPEC_ADD36_BOTTOM;             /*!< 0x000013F8 Not presents. */
+   __IM uint32_t SPEC_ADD36_TOP;                /*!< 0x000013FC Not presents. */
+   __IM uint32_t INT_Q1_STATUS;                 /*!< 0x00001400 Priority queue Interrupt Status Register */
+   __IM uint32_t INT_Q2_STATUS;                 /*!< 0x00001404 Priority queue Interrupt Status Register */
+   __IM uint32_t INT_Q3_STATUS;                 /*!< 0x00001408 int_q3_status to int_q15_status doesn't present. Access to the
                                                                 register returns AHB error. */
-    __IM uint32_t RESERVED10[11];
-    __IM uint32_t INT_Q15_STATUS;                /*!< 0x00001438 Not presents. */
-    __IM uint32_t RESERVED11;
-    __IOM uint32_t TRANSMIT_Q1_PTR;               /*!< 0x00001440 This register holds the start address of the transmit buffer
+   __IM uint32_t RESERVED10[11];
+   __IM uint32_t INT_Q15_STATUS;                /*!< 0x00001438 Not presents. */
+   __IM uint32_t RESERVED11;
+  __IOM uint32_t TRANSMIT_Q1_PTR;               /*!< 0x00001440 This register holds the start address of the transmit buffer
                                                                 queue (transmit buffers descriptor list). The transmit buffer
                                                                 queue base address register must be initialized before transmit
                                                                 is started through bit 9 of the network control register. Once
@@ -360,7 +359,7 @@ typedef struct
                                                                 datapath is configured as 64bit , the transmit descriptors
                                                                 should be aligned at 64-bit boundaries and each pair of 32-bit
                                                                 descriptors is read from memory using a single AXI access. */
-    __IOM uint32_t TRANSMIT_Q2_PTR;               /*!< 0x00001444 This register holds the start address of the transmit buffer
+  __IOM uint32_t TRANSMIT_Q2_PTR;               /*!< 0x00001444 This register holds the start address of the transmit buffer
                                                                 queue (transmit buffers descriptor list). The transmit buffer
                                                                 queue base address register must be initialized before transmit
                                                                 is started through bit 9 of the network control register. Once
@@ -379,12 +378,12 @@ typedef struct
                                                                 datapath is configured as 64bit , the transmit descriptors
                                                                 should be aligned at 64-bit boundaries and each pair of 32-bit
                                                                 descriptors is read from memory using a single AXI access. */
-    __IM uint32_t TRANSMIT_Q3_PTR;               /*!< 0x00001448 transmit_q3_ptr to transmit_q15_ptr doesn't present. Access to
+   __IM uint32_t TRANSMIT_Q3_PTR;               /*!< 0x00001448 transmit_q3_ptr to transmit_q15_ptr doesn't present. Access to
                                                                 the register returns AHB error. */
-    __IM uint32_t RESERVED12[11];
-    __IM uint32_t TRANSMIT_Q15_PTR;              /*!< 0x00001478 Not presents. */
-    __IM uint32_t RESERVED13;
-    __IOM uint32_t RECEIVE_Q1_PTR;                /*!< 0x00001480 This register holds the start address of the transmit buffer
+   __IM uint32_t RESERVED12[11];
+   __IM uint32_t TRANSMIT_Q15_PTR;              /*!< 0x00001478 Not presents. */
+   __IM uint32_t RESERVED13;
+  __IOM uint32_t RECEIVE_Q1_PTR;                /*!< 0x00001480 This register holds the start address of the transmit buffer
                                                                 queue (transmit buffers descriptor list). The transmit buffer
                                                                 queue base address register must be initialized before transmit
                                                                 is started through bit 9 of the network control register. Once
@@ -403,7 +402,7 @@ typedef struct
                                                                 datapath is configured as 64bit , the transmit descriptors
                                                                 should be aligned at 64-bit boundaries and each pair of 32-bit
                                                                 descriptors is read from memory using a single AXI access. */
-    __IOM uint32_t RECEIVE_Q2_PTR;                /*!< 0x00001484 This register holds the start address of the transmit buffer
+  __IOM uint32_t RECEIVE_Q2_PTR;                /*!< 0x00001484 This register holds the start address of the transmit buffer
                                                                 queue (transmit buffers descriptor list). The transmit buffer
                                                                 queue base address register must be initialized before transmit
                                                                 is started through bit 9 of the network control register. Once
@@ -422,17 +421,17 @@ typedef struct
                                                                 datapath is configured as 64bit , the transmit descriptors
                                                                 should be aligned at 64-bit boundaries and each pair of 32-bit
                                                                 descriptors is read from memory using a single AXI access. */
-    __IM uint32_t RECEIVE_Q3_PTR;                /*!< 0x00001488 Not presents. Start address register doesn't present for queue3
+   __IM uint32_t RECEIVE_Q3_PTR;                /*!< 0x00001488 Not presents. Start address register doesn't present for queue3
                                                                 ~ queue7. */
-    __IM uint32_t RESERVED14[3];
-    __IM uint32_t RECEIVE_Q7_PTR;                /*!< 0x00001498 Not presents. */
-    __IM uint32_t RESERVED15;
-    __IOM uint32_t DMA_RXBUF_SIZE_Q1;             /*!< 0x000014A0 Receive Buffer queue 1 Size */
-    __IOM uint32_t DMA_RXBUF_SIZE_Q2;             /*!< 0x000014A4 Receive Buffer queue 2 Size */
-    __IM uint32_t DMA_RXBUF_SIZE_Q3;             /*!< 0x000014A8 dma_rxbuf_size_q3 to dma_rxbuf_size_q7 doesn't present. */
-    __IM uint32_t RESERVED16[3];
-    __IM uint32_t DMA_RXBUF_SIZE_Q7;             /*!< 0x000014B8 Not presents. */
-    __IOM uint32_t CBS_CONTROL;                   /*!< 0x000014BC The IdleSlope value is defined as the rate of change of credit
+   __IM uint32_t RESERVED14[3];
+   __IM uint32_t RECEIVE_Q7_PTR;                /*!< 0x00001498 Not presents. */
+   __IM uint32_t RESERVED15;
+  __IOM uint32_t DMA_RXBUF_SIZE_Q1;             /*!< 0x000014A0 Receive Buffer queue 1 Size */
+  __IOM uint32_t DMA_RXBUF_SIZE_Q2;             /*!< 0x000014A4 Receive Buffer queue 2 Size */
+   __IM uint32_t DMA_RXBUF_SIZE_Q3;             /*!< 0x000014A8 dma_rxbuf_size_q3 to dma_rxbuf_size_q7 doesn't present. */
+   __IM uint32_t RESERVED16[3];
+   __IM uint32_t DMA_RXBUF_SIZE_Q7;             /*!< 0x000014B8 Not presents. */
+  __IOM uint32_t CBS_CONTROL;                   /*!< 0x000014BC The IdleSlope value is defined as the rate of change of credit
                                                                 when a packet is waiting to be sent. This must not exceed the
                                                                 portTransmitRate which is dependent on the speed of operation,
                                                                 eg, portTranmsitRate. 1Gb/s = 32'h07735940 (125 Mbytes/s),
@@ -454,23 +453,23 @@ typedef struct
                                                                 be recalibrated based on the variance between the measured and
                                                                 expected rate, and in this case very accurate transmission rates
                                                                 can be achieved. */
-    __IOM uint32_t CBS_IDLESLOPE_Q_A;             /*!< 0x000014C0 queue A is the highest priority queue. This would be queue 8 in
+  __IOM uint32_t CBS_IDLESLOPE_Q_A;             /*!< 0x000014C0 queue A is the highest priority queue. This would be queue 8 in
                                                                 an 8 queue configuration. */
-    __IOM uint32_t CBS_IDLESLOPE_Q_B;             /*!< 0x000014C4 queue B is the 2nd highest priority queue. This would be queue
+  __IOM uint32_t CBS_IDLESLOPE_Q_B;             /*!< 0x000014C4 queue B is the 2nd highest priority queue. This would be queue
                                                                 7 in an 8 queue configuration. */
-    __IOM uint32_t UPPER_TX_Q_BASE_ADDR;          /*!< 0x000014C8 Upper 32 bits of transmit buffer descriptor queue base address. */
-    __IOM uint32_t TX_BD_CONTROL;                 /*!< 0x000014CC TX BD control register */
-    __IOM uint32_t RX_BD_CONTROL;                 /*!< 0x000014D0 RX BD control register */
-    __IOM uint32_t UPPER_RX_Q_BASE_ADDR;          /*!< 0x000014D4 Upper 32 bits of receive buffer descriptor queue base address. */
-    __IM uint32_t RESERVED17[2];
-    __IOM uint32_t HIDDEN_REG0;                   /*!< 0x000014E0 Hidden register */
-    __IOM uint32_t HIDDEN_REG1;                   /*!< 0x000014E4 Hidden register */
-    __IOM uint32_t HIDDEN_REG2;                   /*!< 0x000014E8 Hidden register */
-    __IOM uint32_t HIDDEN_REG3;                   /*!< 0x000014EC Hidden register */
-    __IM uint32_t RESERVED18[2];
-    __IOM uint32_t HIDDEN_REG4;                   /*!< 0x000014F8 Hidden register */
-    __IOM uint32_t HIDDEN_REG5;                   /*!< 0x000014FC Hidden register */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_0;   /*!< 0x00001500 Screening type 1 registers are used to allocate up to 16
+  __IOM uint32_t UPPER_TX_Q_BASE_ADDR;          /*!< 0x000014C8 Upper 32 bits of transmit buffer descriptor queue base address. */
+  __IOM uint32_t TX_BD_CONTROL;                 /*!< 0x000014CC TX BD control register */
+  __IOM uint32_t RX_BD_CONTROL;                 /*!< 0x000014D0 RX BD control register */
+  __IOM uint32_t UPPER_RX_Q_BASE_ADDR;          /*!< 0x000014D4 Upper 32 bits of receive buffer descriptor queue base address. */
+   __IM uint32_t RESERVED17[2];
+  __IOM uint32_t HIDDEN_REG0;                   /*!< 0x000014E0 Hidden register */
+  __IOM uint32_t HIDDEN_REG1;                   /*!< 0x000014E4 Hidden register */
+  __IOM uint32_t HIDDEN_REG2;                   /*!< 0x000014E8 Hidden register */
+  __IOM uint32_t HIDDEN_REG3;                   /*!< 0x000014EC Hidden register */
+   __IM uint32_t RESERVED18[2];
+  __IOM uint32_t HIDDEN_REG4;                   /*!< 0x000014F8 Hidden register */
+  __IOM uint32_t HIDDEN_REG5;                   /*!< 0x000014FC Hidden register */
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_0;   /*!< 0x00001500 Screening type 1 registers are used to allocate up to 16
                                                                 priority queues to received frames based on certain IP or UDP
                                                                 fields of incoming frames. Firstly, when DS/TC match enable is
                                                                 set (bit 28), the DS (Differentiated Services) field of the
@@ -484,85 +483,85 @@ typedef struct
                                                                 screening registers is configured in the gem defines file. Up to
                                                                 16 type 1 screening registers have been allocated APB address
                                                                 space between 0x500 and 0x53C. */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_1;   /*!< 0x00001504 screening type 1 register 1, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_1;   /*!< 0x00001504 screening type 1 register 1, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_2;   /*!< 0x00001508 screening type 1 register 2, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_2;   /*!< 0x00001508 screening type 1 register 2, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_3;   /*!< 0x0000150C screening type 1 register 3, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_3;   /*!< 0x0000150C screening type 1 register 3, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_4;   /*!< 0x00001510 screening type 1 register 4, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_4;   /*!< 0x00001510 screening type 1 register 4, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_5;   /*!< 0x00001514 screening type 1 register 5, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_5;   /*!< 0x00001514 screening type 1 register 5, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_6;   /*!< 0x00001518 screening type 1 register 6, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_6;   /*!< 0x00001518 screening type 1 register 6, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_7;   /*!< 0x0000151C screening type 1 register 7, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_7;   /*!< 0x0000151C screening type 1 register 7, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_8;   /*!< 0x00001520 screening type 1 register 8, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_8;   /*!< 0x00001520 screening type 1 register 8, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_9;   /*!< 0x00001524 screening type 1 register 9, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_9;   /*!< 0x00001524 screening type 1 register 9, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_10;  /*!< 0x00001528 screening type 1 register 10, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_10;  /*!< 0x00001528 screening type 1 register 10, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_11;  /*!< 0x0000152C screening type 1 register 11, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_11;  /*!< 0x0000152C screening type 1 register 11, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_12;  /*!< 0x00001530 screening type 1 register 12, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_12;  /*!< 0x00001530 screening type 1 register 12, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_13;  /*!< 0x00001534 screening type 1 register 13, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_13;  /*!< 0x00001534 screening type 1 register 13, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_14;  /*!< 0x00001538 screening type 1 register 14, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_14;  /*!< 0x00001538 screening type 1 register 14, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_1_REGISTER_15;  /*!< 0x0000153C screening type 1 register 15, same as
+  __IOM uint32_t SCREENING_TYPE_1_REGISTER_15;  /*!< 0x0000153C screening type 1 register 15, same as
                                                                 screening_type_1_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_0;   /*!< 0x00001540 Screener Type 2 match registers operate independently of
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_0;   /*!< 0x00001540 Screener Type 2 match registers operate independently of
                                                                 screener type 1 registers and offer additional match
                                                                 capabilities, extending the capabilities into vendor specific
                                                                 protocols. */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_1;   /*!< 0x00001544 screening type 2 register 1, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_1;   /*!< 0x00001544 screening type 2 register 1, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_2;   /*!< 0x00001548 screening type 2 register 2, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_2;   /*!< 0x00001548 screening type 2 register 2, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_3;   /*!< 0x0000154C screening type 2 register 3, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_3;   /*!< 0x0000154C screening type 2 register 3, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_4;   /*!< 0x00001550 screening type 2 register 4, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_4;   /*!< 0x00001550 screening type 2 register 4, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_5;   /*!< 0x00001554 screening type 2 register 5, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_5;   /*!< 0x00001554 screening type 2 register 5, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_6;   /*!< 0x00001558 screening type 2 register 6, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_6;   /*!< 0x00001558 screening type 2 register 6, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_7;   /*!< 0x0000155C screening type 2 register 7, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_7;   /*!< 0x0000155C screening type 2 register 7, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_8;   /*!< 0x00001560 screening type 2 register 8, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_8;   /*!< 0x00001560 screening type 2 register 8, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_9;   /*!< 0x00001564 screening type 2 register 9, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_9;   /*!< 0x00001564 screening type 2 register 9, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_10;  /*!< 0x00001568 screening type 2 register 10, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_10;  /*!< 0x00001568 screening type 2 register 10, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_11;  /*!< 0x0000156C screening type 2 register 11, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_11;  /*!< 0x0000156C screening type 2 register 11, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_12;  /*!< 0x00001570 screening type 2 register 12, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_12;  /*!< 0x00001570 screening type 2 register 12, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_13;  /*!< 0x00001574 screening type 2 register 13, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_13;  /*!< 0x00001574 screening type 2 register 13, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_14;  /*!< 0x00001578 screening type 2 register 14, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_14;  /*!< 0x00001578 screening type 2 register 14, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t SCREENING_TYPE_2_REGISTER_15;  /*!< 0x0000157C screening type 2 register 15, same as
+  __IOM uint32_t SCREENING_TYPE_2_REGISTER_15;  /*!< 0x0000157C screening type 2 register 15, same as
                                                                 screening_type_2_register_0 */
-    __IOM uint32_t TX_SCHED_CTRL;                 /*!< 0x00001580 This register controls the transmit scheduling algorithm the
+  __IOM uint32_t TX_SCHED_CTRL;                 /*!< 0x00001580 This register controls the transmit scheduling algorithm the
                                                                 user can select for each active transmit queue. By default all
                                                                 queues are initialized to fixed priority, with the top indexed
                                                                 queue having overall priority */
-    __IM uint32_t RESERVED19[3];
-    __IOM uint32_t BW_RATE_LIMIT_Q0TO3;           /*!< 0x00001590 This register holds the DWRR weighting value or the ETS
+   __IM uint32_t RESERVED19[3];
+  __IOM uint32_t BW_RATE_LIMIT_Q0TO3;           /*!< 0x00001590 This register holds the DWRR weighting value or the ETS
                                                                 bandwidth percentage value used by the transmit scheduler for
                                                                 queues 0 to 3. */
-    __IOM uint32_t BW_RATE_LIMIT_Q4TO7;           /*!< 0x00001594 Not presents. EMAC has only 3 queues. Access to the register
+  __IOM uint32_t BW_RATE_LIMIT_Q4TO7;           /*!< 0x00001594 Not presents. EMAC has only 3 queues. Access to the register
                                                                 returns AHB error. */
-    __IM uint32_t BW_RATE_LIMIT_Q8TO11;          /*!< 0x00001598 Not presents. EMAC has only 3 queues. Access to the register
+   __IM uint32_t BW_RATE_LIMIT_Q8TO11;          /*!< 0x00001598 Not presents. EMAC has only 3 queues. Access to the register
                                                                 returns AHB error. */
-    __IM uint32_t BW_RATE_LIMIT_Q12TO15;         /*!< 0x0000159C Not presents. EMAC has only 3 queues. Access to the register
+   __IM uint32_t BW_RATE_LIMIT_Q12TO15;         /*!< 0x0000159C Not presents. EMAC has only 3 queues. Access to the register
                                                                 returns AHB error. */
-    __IOM uint32_t TX_Q_SEG_ALLOC_Q0TO7;          /*!< 0x000015A0 This register allows the user to distribute the Transmit SRAM
+  __IOM uint32_t TX_Q_SEG_ALLOC_Q0TO7;          /*!< 0x000015A0 This register allows the user to distribute the Transmit SRAM
                                                                 used by the DMA across the priority queues, for queues 0 to 7.
                                                                 The SRAM itself is split into a number of evenly sized segments
                                                                 (this is defined in the verilog configuration defs file - for
@@ -573,39 +572,39 @@ typedef struct
                                                                 allocated to the queue. A value of 1 would mean 2 segments, a
                                                                 value of 2 means 4 segments and so on. The reset values of these
                                                                 registers are defined in the configuration defs file. */
-    __IM uint32_t TX_Q_SEG_ALLOC_Q8TO15;         /*!< 0x000015A4 Not presents.  Access to the register returns AHB error. */
-    __IM uint32_t RESERVED20[6];
-    __IM uint32_t RECEIVE_Q8_PTR;                /*!< 0x000015C0 receive_q8_ptr to receive_q15_ptr doesn't present. Access to
+   __IM uint32_t TX_Q_SEG_ALLOC_Q8TO15;         /*!< 0x000015A4 Not presents.  Access to the register returns AHB error. */
+   __IM uint32_t RESERVED20[6];
+   __IM uint32_t RECEIVE_Q8_PTR;                /*!< 0x000015C0 receive_q8_ptr to receive_q15_ptr doesn't present. Access to
                                                                 the register returns AHB error. */
-    __IM uint32_t RESERVED21[6];
-    __IM uint32_t RECEIVE_Q15_PTR;               /*!< 0x000015DC Not presents. */
-    __IM uint32_t DMA_RXBUF_SIZE_Q8;             /*!< 0x000015E0 dma_rxbuf_size_q8 to dma_rxbuf_size_q15 doesn't present. Access
+   __IM uint32_t RESERVED21[6];
+   __IM uint32_t RECEIVE_Q15_PTR;               /*!< 0x000015DC Not presents. */
+   __IM uint32_t DMA_RXBUF_SIZE_Q8;             /*!< 0x000015E0 dma_rxbuf_size_q8 to dma_rxbuf_size_q15 doesn't present. Access
                                                                 to the register returns AHB error. */
-    __IM uint32_t RESERVED22[6];
-    __IM uint32_t DMA_RXBUF_SIZE_Q15;            /*!< 0x000015FC Not presents. */
-    __OM uint32_t INT_Q1_ENABLE;                 /*!< 0x00001600 At reset all interrupts are disabled. Writing a one to the
+   __IM uint32_t RESERVED22[6];
+   __IM uint32_t DMA_RXBUF_SIZE_Q15;            /*!< 0x000015FC Not presents. */
+   __OM uint32_t INT_Q1_ENABLE;                 /*!< 0x00001600 At reset all interrupts are disabled. Writing a one to the
                                                                 relevant bit location enables the required interrupt. This
                                                                 register is write only and when read will return zero. */
-    __OM uint32_t INT_Q2_ENABLE;                 /*!< 0x00001604 At reset all interrupts are disabled. Writing a one to the
+   __OM uint32_t INT_Q2_ENABLE;                 /*!< 0x00001604 At reset all interrupts are disabled. Writing a one to the
                                                                 relevant bit location enables the required interrupt. This
                                                                 register is write only and when read will return zero. */
-    __IM uint32_t INT_Q3_ENABLE;                 /*!< 0x00001608 int_q3_enable to int_q7_enable doesn't present. Access to the
+   __IM uint32_t INT_Q3_ENABLE;                 /*!< 0x00001608 int_q3_enable to int_q7_enable doesn't present. Access to the
                                                                 register returns AHB error. */
-    __IM uint32_t RESERVED23[3];
-    __IM uint32_t INT_Q7_ENABLE;                 /*!< 0x00001618 Not presents. */
-    __IM uint32_t RESERVED24;
-    __OM uint32_t INT_Q1_DISABLE;                /*!< 0x00001620 Writing a 1 to the relevant bit location disables that
+   __IM uint32_t RESERVED23[3];
+   __IM uint32_t INT_Q7_ENABLE;                 /*!< 0x00001618 Not presents. */
+   __IM uint32_t RESERVED24;
+   __OM uint32_t INT_Q1_DISABLE;                /*!< 0x00001620 Writing a 1 to the relevant bit location disables that
                                                                 particular interrupt. This register is write only and when read
                                                                 will return zero. */
-    __OM uint32_t INT_Q2_DISABLE;                /*!< 0x00001624 Writing a 1 to the relevant bit location disables that
+   __OM uint32_t INT_Q2_DISABLE;                /*!< 0x00001624 Writing a 1 to the relevant bit location disables that
                                                                 particular interrupt. This register is write only and when read
                                                                 will return zero. */
-    __IM uint32_t INT_Q3_DISABLE;                /*!< 0x00001628 int_q3_disable to int_q7_disable doesn't present. Access to the
+   __IM uint32_t INT_Q3_DISABLE;                /*!< 0x00001628 int_q3_disable to int_q7_disable doesn't present. Access to the
                                                                 register returns AHB error. */
-    __IM uint32_t RESERVED25[3];
-    __IM uint32_t INT_Q7_DISABLE;                /*!< 0x00001638 Not presents. */
-    __IM uint32_t RESERVED26;
-    __IM uint32_t INT_Q1_MASK;                   /*!< 0x00001640 The interrupt mask register is a read only register indicating
+   __IM uint32_t RESERVED25[3];
+   __IM uint32_t INT_Q7_DISABLE;                /*!< 0x00001638 Not presents. */
+   __IM uint32_t RESERVED26;
+   __IM uint32_t INT_Q1_MASK;                   /*!< 0x00001640 The interrupt mask register is a read only register indicating
                                                                 which interrupts are masked. All bits are set at reset and can
                                                                 be reset individually by writing to the interrupt enable
                                                                 register or set individually by writing to the interrupt disable
@@ -615,7 +614,7 @@ typedef struct
                                                                 a write-only function to this register that allows the bits in
                                                                 the interrupt status register to be set or cleared, regardless
                                                                 of the state of the mask register. */
-    __IM uint32_t INT_Q2_MASK;                   /*!< 0x00001644 The interrupt mask register is a read only register indicating
+   __IM uint32_t INT_Q2_MASK;                   /*!< 0x00001644 The interrupt mask register is a read only register indicating
                                                                 which interrupts are masked. All bits are set at reset and can
                                                                 be reset individually by writing to the interrupt enable
                                                                 register or set individually by writing to the interrupt disable
@@ -625,33 +624,33 @@ typedef struct
                                                                 a write-only function to this register that allows the bits in
                                                                 the interrupt status register to be set or cleared, regardless
                                                                 of the state of the mask register. */
-    __IM uint32_t INT_Q3_MASK;                   /*!< 0x00001648 int_q3_mask to int_q7_mask doesn't present. Access to the
+   __IM uint32_t INT_Q3_MASK;                   /*!< 0x00001648 int_q3_mask to int_q7_mask doesn't present. Access to the
                                                                 register returns AHB error. */
-    __IM uint32_t RESERVED27[3];
-    __IM uint32_t INT_Q7_MASK;                   /*!< 0x00001658 Not presents. */
-    __IM uint32_t RESERVED28;
-    __IM uint32_t INT_Q8_ENABLE;                 /*!< 0x00001660 int_q8_enable to int_q15_enable doesn't present. Access to the
+   __IM uint32_t RESERVED27[3];
+   __IM uint32_t INT_Q7_MASK;                   /*!< 0x00001658 Not presents. */
+   __IM uint32_t RESERVED28;
+   __IM uint32_t INT_Q8_ENABLE;                 /*!< 0x00001660 int_q8_enable to int_q15_enable doesn't present. Access to the
                                                                 register returns AHB error. */
-    __IM uint32_t RESERVED29[6];
-    __IM uint32_t INT_Q15_ENABLE;                /*!< 0x0000167C Not presents. */
-    __IM uint32_t INT_Q8_DISABLE;                /*!< 0x00001680 int_q8_disable to int_q15_disable doesn't present. Access to
+   __IM uint32_t RESERVED29[6];
+   __IM uint32_t INT_Q15_ENABLE;                /*!< 0x0000167C Not presents. */
+   __IM uint32_t INT_Q8_DISABLE;                /*!< 0x00001680 int_q8_disable to int_q15_disable doesn't present. Access to
                                                                 the register returns AHB error. */
-    __IM uint32_t RESERVED30[6];
-    __IM uint32_t INT_Q15_DISABLE;               /*!< 0x0000169C Not presents. */
-    __IM uint32_t INT_Q8_MASK;                   /*!< 0x000016A0 int_q8_mask to int_q15_mask doesn't present. Access to the
+   __IM uint32_t RESERVED30[6];
+   __IM uint32_t INT_Q15_DISABLE;               /*!< 0x0000169C Not presents. */
+   __IM uint32_t INT_Q8_MASK;                   /*!< 0x000016A0 int_q8_mask to int_q15_mask doesn't present. Access to the
                                                                 register returns AHB error. */
-    __IM uint32_t RESERVED31[6];
-    __IM uint32_t INT_Q15_MASK;                  /*!< 0x000016BC Not presents. */
-    __IM uint32_t RESERVED32[8];
-    __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_0; /*!< 0x000016E0 Ethertype Register */
-    __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_1; /*!< 0x000016E4 Ethertype Register */
-    __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_2; /*!< 0x000016E8 Ethertype Register */
-    __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_3; /*!< 0x000016EC Ethertype Register */
-    __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_4; /*!< 0x000016F0 Ethertype Register */
-    __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_5; /*!< 0x000016F4 Ethertype Register */
-    __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_6; /*!< 0x000016F8 Ethertype Register */
-    __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_7; /*!< 0x000016FC Ethertype Register */
-    __IOM uint32_t TYPE2_COMPARE_0_WORD_0;        /*!< 0x00001700 'Compare A, B and C fields of the screener type 2 match
+   __IM uint32_t RESERVED31[6];
+   __IM uint32_t INT_Q15_MASK;                  /*!< 0x000016BC Not presents. */
+   __IM uint32_t RESERVED32[8];
+  __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_0; /*!< 0x000016E0 Ethertype Register */
+  __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_1; /*!< 0x000016E4 Ethertype Register */
+  __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_2; /*!< 0x000016E8 Ethertype Register */
+  __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_3; /*!< 0x000016EC Ethertype Register */
+  __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_4; /*!< 0x000016F0 Ethertype Register */
+  __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_5; /*!< 0x000016F4 Ethertype Register */
+  __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_6; /*!< 0x000016F8 Ethertype Register */
+  __IOM uint32_t SCREENING_TYPE_2_ETHERTYPE_REG_7; /*!< 0x000016FC Ethertype Register */
+  __IOM uint32_t TYPE2_COMPARE_0_WORD_0;        /*!< 0x00001700 'Compare A, B and C fields of the screener type 2 match
                                                                 register are pointers to a pool of up to 32 compare registers.
                                                                 If enabled the compare is true if the data at the OFFSET into
                                                                 the frame, ANDed with the MASK Value if the mask is enabled, is
@@ -678,69 +677,69 @@ typedef struct
                                                                 higher than the watermark value it's not possible to identify
                                                                 the priority queue before the frame is sent to the AMBA
                                                                 interface, and an incorrect priority queue may be used. ' */
-    __IOM uint32_t TYPE2_COMPARE_0_WORD_1;        /*!< 0x00001704 'Type2 Compare Word 1' */
-    __IOM uint32_t TYPE2_COMPARE_1_WORD_0;        /*!< 0x00001708 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_1_WORD_1;        /*!< 0x0000170C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_2_WORD_0;        /*!< 0x00001710 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_2_WORD_1;        /*!< 0x00001714 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_3_WORD_0;        /*!< 0x00001718 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_3_WORD_1;        /*!< 0x0000171C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_4_WORD_0;        /*!< 0x00001720 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_4_WORD_1;        /*!< 0x00001724 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_5_WORD_0;        /*!< 0x00001728 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_5_WORD_1;        /*!< 0x0000172C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_6_WORD_0;        /*!< 0x00001730 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_6_WORD_1;        /*!< 0x00001734 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_7_WORD_0;        /*!< 0x00001738 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_7_WORD_1;        /*!< 0x0000173C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_8_WORD_0;        /*!< 0x00001740 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_8_WORD_1;        /*!< 0x00001744 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_9_WORD_0;        /*!< 0x00001748 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_9_WORD_1;        /*!< 0x0000174C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_10_WORD_0;       /*!< 0x00001750 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_10_WORD_1;       /*!< 0x00001754 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_11_WORD_0;       /*!< 0x00001758 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_11_WORD_1;       /*!< 0x0000175C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_12_WORD_0;       /*!< 0x00001760 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_12_WORD_1;       /*!< 0x00001764 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_13_WORD_0;       /*!< 0x00001768 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_13_WORD_1;       /*!< 0x0000176C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_14_WORD_0;       /*!< 0x00001770 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_14_WORD_1;       /*!< 0x00001774 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_15_WORD_0;       /*!< 0x00001778 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_15_WORD_1;       /*!< 0x0000177C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_16_WORD_0;       /*!< 0x00001780 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_16_WORD_1;       /*!< 0x00001784 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_17_WORD_0;       /*!< 0x00001788 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_17_WORD_1;       /*!< 0x0000178C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_18_WORD_0;       /*!< 0x00001790 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_18_WORD_1;       /*!< 0x00001794 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_19_WORD_0;       /*!< 0x00001798 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_19_WORD_1;       /*!< 0x0000179C same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_20_WORD_0;       /*!< 0x000017A0 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_20_WORD_1;       /*!< 0x000017A4 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_21_WORD_0;       /*!< 0x000017A8 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_21_WORD_1;       /*!< 0x000017AC same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_22_WORD_0;       /*!< 0x000017B0 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_22_WORD_1;       /*!< 0x000017B4 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_23_WORD_0;       /*!< 0x000017B8 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_23_WORD_1;       /*!< 0x000017BC same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_24_WORD_0;       /*!< 0x000017C0 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_24_WORD_1;       /*!< 0x000017C4 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_25_WORD_0;       /*!< 0x000017C8 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_25_WORD_1;       /*!< 0x000017CC same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_26_WORD_0;       /*!< 0x000017D0 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_26_WORD_1;       /*!< 0x000017D4 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_27_WORD_0;       /*!< 0x000017D8 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_27_WORD_1;       /*!< 0x000017DC same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_28_WORD_0;       /*!< 0x000017E0 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_28_WORD_1;       /*!< 0x000017E4 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_29_WORD_0;       /*!< 0x000017E8 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_29_WORD_1;       /*!< 0x000017EC same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_30_WORD_0;       /*!< 0x000017F0 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_30_WORD_1;       /*!< 0x000017F4 same as type2_compare_0_word_1 */
-    __IOM uint32_t TYPE2_COMPARE_31_WORD_0;       /*!< 0x000017F8 same as type2_compare_0_word_0 */
-    __IOM uint32_t TYPE2_COMPARE_31_WORD_1;       /*!< 0x000017FC same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_0_WORD_1;        /*!< 0x00001704 'Type2 Compare Word 1' */
+  __IOM uint32_t TYPE2_COMPARE_1_WORD_0;        /*!< 0x00001708 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_1_WORD_1;        /*!< 0x0000170C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_2_WORD_0;        /*!< 0x00001710 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_2_WORD_1;        /*!< 0x00001714 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_3_WORD_0;        /*!< 0x00001718 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_3_WORD_1;        /*!< 0x0000171C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_4_WORD_0;        /*!< 0x00001720 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_4_WORD_1;        /*!< 0x00001724 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_5_WORD_0;        /*!< 0x00001728 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_5_WORD_1;        /*!< 0x0000172C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_6_WORD_0;        /*!< 0x00001730 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_6_WORD_1;        /*!< 0x00001734 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_7_WORD_0;        /*!< 0x00001738 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_7_WORD_1;        /*!< 0x0000173C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_8_WORD_0;        /*!< 0x00001740 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_8_WORD_1;        /*!< 0x00001744 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_9_WORD_0;        /*!< 0x00001748 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_9_WORD_1;        /*!< 0x0000174C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_10_WORD_0;       /*!< 0x00001750 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_10_WORD_1;       /*!< 0x00001754 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_11_WORD_0;       /*!< 0x00001758 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_11_WORD_1;       /*!< 0x0000175C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_12_WORD_0;       /*!< 0x00001760 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_12_WORD_1;       /*!< 0x00001764 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_13_WORD_0;       /*!< 0x00001768 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_13_WORD_1;       /*!< 0x0000176C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_14_WORD_0;       /*!< 0x00001770 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_14_WORD_1;       /*!< 0x00001774 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_15_WORD_0;       /*!< 0x00001778 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_15_WORD_1;       /*!< 0x0000177C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_16_WORD_0;       /*!< 0x00001780 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_16_WORD_1;       /*!< 0x00001784 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_17_WORD_0;       /*!< 0x00001788 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_17_WORD_1;       /*!< 0x0000178C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_18_WORD_0;       /*!< 0x00001790 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_18_WORD_1;       /*!< 0x00001794 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_19_WORD_0;       /*!< 0x00001798 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_19_WORD_1;       /*!< 0x0000179C same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_20_WORD_0;       /*!< 0x000017A0 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_20_WORD_1;       /*!< 0x000017A4 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_21_WORD_0;       /*!< 0x000017A8 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_21_WORD_1;       /*!< 0x000017AC same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_22_WORD_0;       /*!< 0x000017B0 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_22_WORD_1;       /*!< 0x000017B4 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_23_WORD_0;       /*!< 0x000017B8 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_23_WORD_1;       /*!< 0x000017BC same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_24_WORD_0;       /*!< 0x000017C0 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_24_WORD_1;       /*!< 0x000017C4 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_25_WORD_0;       /*!< 0x000017C8 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_25_WORD_1;       /*!< 0x000017CC same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_26_WORD_0;       /*!< 0x000017D0 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_26_WORD_1;       /*!< 0x000017D4 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_27_WORD_0;       /*!< 0x000017D8 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_27_WORD_1;       /*!< 0x000017DC same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_28_WORD_0;       /*!< 0x000017E0 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_28_WORD_1;       /*!< 0x000017E4 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_29_WORD_0;       /*!< 0x000017E8 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_29_WORD_1;       /*!< 0x000017EC same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_30_WORD_0;       /*!< 0x000017F0 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_30_WORD_1;       /*!< 0x000017F4 same as type2_compare_0_word_1 */
+  __IOM uint32_t TYPE2_COMPARE_31_WORD_0;       /*!< 0x000017F8 same as type2_compare_0_word_0 */
+  __IOM uint32_t TYPE2_COMPARE_31_WORD_1;       /*!< 0x000017FC same as type2_compare_0_word_1 */
 } ETH_Type;                                     /*!< Size = 6144 (0x1800) */
 
 

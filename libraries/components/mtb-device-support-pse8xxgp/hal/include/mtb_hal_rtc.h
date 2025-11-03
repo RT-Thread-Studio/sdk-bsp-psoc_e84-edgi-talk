@@ -116,7 +116,7 @@ cy_rslt_t mtb_hal_rtc_write(mtb_hal_rtc_t* obj, const struct tm* time);
 #endif
 
 #ifdef MTB_HAL_RTC_IMPL_HEADER
-    #include MTB_HAL_RTC_IMPL_HEADER
+#include MTB_HAL_RTC_IMPL_HEADER
 #endif /* MTB_HAL_RTC_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_RTC)

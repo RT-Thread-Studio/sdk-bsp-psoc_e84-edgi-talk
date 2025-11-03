@@ -47,22 +47,22 @@
  * @return distance
  *
  */
-float64_t arm_euclidean_distance_f64(const float64_t *pA, const float64_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float64_t arm_euclidean_distance_f64(const float64_t *pA,const float64_t *pB, uint32_t blockSize)
 {
-    float64_t accum = 0., tmp;
+    float64_t accum=0.,tmp;
     uint32_t blkCnt;
 #if defined(ARM_MATH_NEON) && defined(__aarch64__)
-    float64x2_t accumV, tmpV, pAV, pBV;
+    float64x2_t accumV,tmpV , pAV ,pBV;
     accumV = vdupq_n_f64(0.0);
     blkCnt = blockSize >> 1U;
-    while (blkCnt > 0U)
+    while(blkCnt > 0U)
     {
         pAV = vld1q_f64(pA);
         pBV = vld1q_f64(pB);
         tmpV = vsubq_f64(pAV, pBV);
         accumV = vmlaq_f64(accumV, tmpV, tmpV);
-        pA += 2;
-        pB += 2;
+        pA+=2;
+        pB+=2;
         blkCnt--;
     }
     accum = vaddvq_f64(accumV);
@@ -70,14 +70,14 @@ float64_t arm_euclidean_distance_f64(const float64_t *pA, const float64_t *pB, u
 #else
     blkCnt = blockSize;
 #endif
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
         tmp = *pA++ - *pB++;
-        accum += SQ(tmp);
+        accum += ARM_SQ(tmp);
         blkCnt --;
     }
     tmp = sqrt(accum);
-    return (tmp);
+    return(tmp);
 }
 
 /**

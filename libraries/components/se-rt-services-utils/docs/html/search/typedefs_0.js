@@ -18,7 +18,8 @@ var searchData=
   ['ifx_5fse_5fkey_5flocation_5ft_15',['ifx_se_key_location_t',['../group__key__lifetimes.html#gaeb78d7d3f983b920281b1adb05b1be4a',1,'ifx_se_psacrypto_types.h']]],
   ['ifx_5fse_5fkey_5fowner_5fid_5ft_16',['ifx_se_key_owner_id_t',['../group__key__attributes.html#ga39512c11b5b7f5ed09a4db25878d6625',1,'ifx_se_psacrypto_types.h']]],
   ['ifx_5fse_5fkey_5fpersistence_5ft_17',['ifx_se_key_persistence_t',['../group__key__lifetimes.html#ga57c42870fa1f26a844d7c35981826e07',1,'ifx_se_psacrypto_types.h']]],
-  ['ifx_5fse_5fkey_5ftype_5ft_18',['ifx_se_key_type_t',['../group__crypto__types.html#ga562d12a9de8d6a287d98020515c6d438',1,'ifx_se_psacrypto_types.h']]],
-  ['ifx_5fse_5fkey_5fusage_5ft_19',['ifx_se_key_usage_t',['../group__key__policy.html#ga941e9bad26f411ac76714eaaa0ecbe61',1,'ifx_se_psacrypto_types.h']]],
-  ['ifx_5fse_5fmac_5foperation_5ft_20',['ifx_se_mac_operation_t',['../group__mac__operations.html#ga0fca29663c7b5af50d64ec5dbb7208bb',1,'ifx_se_psacrypto_types.h']]]
+  ['ifx_5fse_5fkey_5fpolicy_5ft_18',['ifx_se_key_policy_t',['../group__key__policy.html#gacc66ae69390a8149c644d256d1187341',1,'ifx_se_psacrypto_struct.h']]],
+  ['ifx_5fse_5fkey_5ftype_5ft_19',['ifx_se_key_type_t',['../group__crypto__types.html#ga562d12a9de8d6a287d98020515c6d438',1,'ifx_se_psacrypto_types.h']]],
+  ['ifx_5fse_5fkey_5fusage_5ft_20',['ifx_se_key_usage_t',['../group__key__policy.html#ga941e9bad26f411ac76714eaaa0ecbe61',1,'ifx_se_psacrypto_types.h']]],
+  ['ifx_5fse_5fmac_5foperation_5ft_21',['ifx_se_mac_operation_t',['../group__mac__operations.html#ga0fca29663c7b5af50d64ec5dbb7208bb',1,'ifx_se_psacrypto_types.h']]]
 ];

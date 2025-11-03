@@ -18,11 +18,9 @@ from .debug_cert import DebugCertificateMXS40Sv2
 from .dependency_validator_mxs40sv2 import DependencyValidatorMXS40Sv2
 from .image_signing import SignToolMXS40Sv2
 from .key_source_mxs40sv2 import KeySourceMXS40Sv2
-from .key_validator_mxs40sv2 import KeyValidatorMXS40sv2
 from .policy_validator_mxs40sv2 import PolicyValidatorMXS40Sv2
 from .provisioning import ProvisioningMXS40Sv2, RamAppLoaderMXS40Sv2
 from .project_init_mxs40sv2 import ProjectInitializerMXS40Sv2
 from .silicon_data_reader_mxs40sv2 import SiliconDataReaderMXS40Sv2
 from .version_provider_mxs40sv2 import VersionProviderMXS40Sv2
 from .integrity_exam_mxs40sv2 import IntegrityExamMXS40Sv2
-from .cert_mxs40sv2 import CertificateStrategyMXS40Sv2

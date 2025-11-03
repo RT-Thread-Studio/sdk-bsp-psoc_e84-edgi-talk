@@ -29,19 +29,22 @@ class ChipLoad:
         self.tool = tool
         self.target = target
         self.app = app
+        self.apps_dir = self.target.project_initializer.apps_dir
 
     def load(self):
         """Loads applications"""
         logger.info("Image programming '%s'", self.app.dlm_path)
-        status = ProvisioningStatus.FAIL
-        btp_config = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..', 'packets', 'apps', 'minidriver',
-            'patch_test.btp'))
-        if self.tool.program(filename=self.app.dlm_path,
-                             address=self.app.image_address,
-                             btp_config=btp_config):
-            status = ProvisioningStatus.OK
-        return status
+        btp = os.path.join(self.apps_dir, 'minidriver', 'patch_test.btp')
+        status = self.tool.program(self.app.dlm_path,
+                                   address=self.app.image_address, btp=btp)
+        return ProvisioningStatus.OK if status else ProvisioningStatus.FAIL
+
+    def erase(self):
+        """Erases the device"""
+        logger.info('Erasing device...')
+        config = os.path.join(self.apps_dir, 'erase_minidriver', 'erase.hex')
+        btp = os.path.join(self.apps_dir, 'erase_minidriver', 'erase.btp')
+        return self.tool.erase(config=config, btp=btp)
 
     def reset(self):
         """ Not implemented for chip_loader """

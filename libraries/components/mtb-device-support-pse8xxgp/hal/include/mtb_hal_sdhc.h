@@ -164,7 +164,7 @@ typedef enum
     MTB_HAL_SDHC_RESPONSE_LEN_136     = 1U,       //!< Response Length 136.
     MTB_HAL_SDHC_RESPONSE_LEN_48      = 2U,       //!< Response Length 48.
     MTB_HAL_SDHC_RESPONSE_LEN_48B     = 3U        //!< Response Length 48. Check Busy
-                                        //!< after response.
+                                                  //!< after response.
 } mtb_hal_sdhc_cmd_response_type_t;
 
 /** SDHC auto command enable selection. */
@@ -279,7 +279,7 @@ typedef struct
 {
     //! The pointer to data for send/receive. Data will be transfered using DMA, which will be
     //! configured automaticaly by SDHC HAL driver.
-    uint32_t                       *data_ptr;
+    uint32_t*                       data_ptr;
     //! The size of the data block
     uint32_t                        block_size;
     //! The number of blocks with size block_size to send. Selects which auto commands are used if
@@ -307,7 +307,7 @@ typedef struct
     mtb_hal_sdhc_cmd_type_t           command_type;
     //! Data transfer configuration, defined in \ref mtb_hal_sdhc_data_config_t. Should be NULL if
     //! data transfer is not expected for provided command.
-    mtb_hal_sdhc_data_config_t *data_config;
+    mtb_hal_sdhc_data_config_t* data_config;
 } mtb_hal_sdhc_cmd_config_t;
 
 /*******************************************************************************
@@ -326,8 +326,8 @@ typedef struct
  * @return the status of the HAL setup
  */
 cy_rslt_t mtb_hal_sdhc_setup(mtb_hal_sdhc_t* obj, const mtb_hal_sdhc_configurator_t* config,
-                             const mtb_hal_clock_t *clock,
-                             cy_stc_sd_host_context_t *sdhc_host_context);
+                             const mtb_hal_clock_t* clock,
+                             cy_stc_sd_host_context_t* sdhc_host_context);
 
 /** Erases a block of data over the SDHC peripheral
  *
@@ -357,7 +357,7 @@ cy_rslt_t mtb_hal_sdhc_erase(mtb_hal_sdhc_t* obj, uint32_t start_addr, size_t le
  * @return The status of the read_async request
  */
 cy_rslt_t mtb_hal_sdhc_read_async(mtb_hal_sdhc_t* obj, uint32_t address, uint8_t* data,
-                                  size_t *length);
+                                  size_t* length);
 
 /** Start asynchronous SDHC write
  *
@@ -373,7 +373,7 @@ cy_rslt_t mtb_hal_sdhc_read_async(mtb_hal_sdhc_t* obj, uint32_t address, uint8_t
  * @return The status of the write_async request
  */
 cy_rslt_t mtb_hal_sdhc_write_async(mtb_hal_sdhc_t* obj, uint32_t address, const uint8_t* data,
-                                   size_t *length);
+                                   size_t* length);
 
 /** Checks if SD card is inserted
  *
@@ -438,7 +438,7 @@ uint32_t mtb_hal_sdhc_get_frequency(mtb_hal_sdhc_t* obj);
  * @return The status of the operation
  */
 cy_rslt_t mtb_hal_sdhc_set_data_read_timeout(mtb_hal_sdhc_t* obj, uint32_t timeout,
-        bool auto_reconfigure);
+                                             bool auto_reconfigure);
 
 /**  Initializes the SD block and DMA for a data transfer. It does not start a transfer.
  * \ref mtb_hal_sdhc_send_cmd needs to be called after this function in order to start
@@ -449,7 +449,7 @@ cy_rslt_t mtb_hal_sdhc_set_data_read_timeout(mtb_hal_sdhc_t* obj, uint32_t timeo
  * @return The status of the operation
  */
 cy_rslt_t mtb_hal_sdhc_config_data_transfer(mtb_hal_sdhc_t* obj,
-        mtb_hal_sdhc_data_config_t *data_config);
+                                            mtb_hal_sdhc_data_config_t* data_config);
 
 /** Sends a command to the card and wait until it is sent. If the command assumes data transfer via
  *  data lines,
@@ -574,7 +574,7 @@ cy_rslt_t mtb_hal_sdhc_process_interrupt(mtb_hal_sdhc_t* obj);
 #endif
 
 #ifdef MTB_HAL_SDHC_IMPL_HEADER
-    #include MTB_HAL_SDHC_IMPL_HEADER
+#include MTB_HAL_SDHC_IMPL_HEADER
 #endif /* MTB_HAL_SDHC_IMPL_HEADER */
 
 #endif //defined(MTB_HAL_DRIVER_AVAILABLE_SDHC)

@@ -27,20 +27,20 @@
 #include "mtb_hal_hw_types_clock.h"
 
 #if defined(CY_IP_MXS22LPPASS_SAR)
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_ADC)
-    /** Macro specifying whether the ADC driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_ADC (1u)
+/** Macro specifying whether the ADC driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_ADC (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_ADC)
 
 /** \} group_hal_availability */
 
 #if !defined(_MTB_HAL_DRIVER_AVAILABLE_ADC_SAR)
-    #define _MTB_HAL_DRIVER_AVAILABLE_ADC_SAR (1u)
+#define _MTB_HAL_DRIVER_AVAILABLE_ADC_SAR (1u)
 #endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_ADC_SAR)
 
 
@@ -55,13 +55,13 @@
  */
 typedef struct
 {
-    struct _mtb_hal_adc_channel_s      *channel_config[CY_SAR_MAX_NUM_CHANNELS];
+    struct _mtb_hal_adc_channel_s*      channel_config[CY_SAR_MAX_NUM_CHANNELS];
     /* Intentionally no base pointer, unnecessary for this IP */
     uint32_t                            enabled_channels;
     uint32_t                            enabled_diff;
     uint32_t                            enabled_signed;
     bool                                enabled_continuous;
-    const mtb_hal_clock_t              *clock;
+    const mtb_hal_clock_t*              clock;
     uint8_t                             adc_index;
 } mtb_hal_adc_t;
 
@@ -77,8 +77,8 @@ typedef struct
 typedef struct
 {
     /* Intentionally no base pointer, unnecessary for this IP */
-    cy_stc_autanalog_sar_t             *config;
-    const mtb_hal_clock_t              *clock;
+    cy_stc_autanalog_sar_t*             config;
+    const mtb_hal_clock_t*              clock;
     uint8_t                             num_channels;
     uint8_t                             adc_index;
 } mtb_hal_adc_configurator_t;
@@ -93,7 +93,7 @@ typedef struct
 typedef struct _mtb_hal_adc_channel_s   /* Struct given an explicit name to make the forward
                                            declaration above work */
 {
-    mtb_hal_adc_t                      *adc;
+    mtb_hal_adc_t*                      adc;
     uint8_t                             channel_idx;
     uint8_t                             channel_msk;
 } mtb_hal_adc_channel_t;

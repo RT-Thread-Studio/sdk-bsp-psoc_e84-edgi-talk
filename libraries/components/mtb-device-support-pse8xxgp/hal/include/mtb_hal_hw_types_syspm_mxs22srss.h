@@ -28,13 +28,13 @@
 
 #if defined(CY_IP_MXS22SRSS)
 
-    #define MTB_HAL_MAP_SYSPM_CB_DEEPSLEEP_RAM  CY_SYSPM_DEEPSLEEP_RAM
-    #define MTB_HAL_MAP_SYSPM_CB_NORMAL         CY_SYSPM_LP
-    #define MTB_HAL_MAP_SYSPM_CB_LOW            CY_SYSPM_ULP
-    #define MTB_HAL_MAP_SYSPM_CB_HIGH           CY_SYSPM_HP
+#define MTB_HAL_MAP_SYSPM_CB_DEEPSLEEP_RAM  CY_SYSPM_DEEPSLEEP_RAM
+#define MTB_HAL_MAP_SYSPM_CB_NORMAL         CY_SYSPM_LP
+#define MTB_HAL_MAP_SYSPM_CB_LOW            CY_SYSPM_ULP
+#define MTB_HAL_MAP_SYSPM_CB_HIGH           CY_SYSPM_HP
 
-    // The following value does not apply to this IP, give them
-    // placeholder values to satisfy the interface
-    #define MTB_HAL_MAP_SYSPM_AFTER_DS_WFI_TRANSITION  (5u)
+// The following value does not apply to this IP, give them
+// placeholder values to satisfy the interface
+#define MTB_HAL_MAP_SYSPM_AFTER_DS_WFI_TRANSITION  (5u)
 
 #endif // if defined(CY_IP_MXS22SRSS)

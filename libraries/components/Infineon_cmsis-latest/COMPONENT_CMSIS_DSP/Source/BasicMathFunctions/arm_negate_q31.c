@@ -42,7 +42,6 @@
   @param[in]     pSrc       points to the input vector.
   @param[out]    pDst       points to the output vector.
   @param[in]     blockSize   number of samples in each vector.
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function uses saturating arithmetic.
@@ -53,7 +52,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_negate_q31(
+ARM_DSP_ATTRIBUTE void arm_negate_q31(
     const q31_t * pSrc,
     q31_t * pDst,
     uint32_t blockSize)
@@ -94,81 +93,81 @@ void arm_negate_q31(
 }
 
 #else
-void arm_negate_q31(
-    const q31_t * pSrc,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_negate_q31(
+  const q31_t * pSrc,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q31_t in;                                      /* Temporary input variable */
+        uint32_t blkCnt;                               /* Loop counter */
+        q31_t in;                                      /* Temporary input variable */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
-        /* Negate and store result in destination buffer. */
-        in = *pSrc++;
+    /* Negate and store result in destination buffer. */
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = __QSUB(0, in);
+    *pDst++ = __QSUB(0, in);
 #else
-        *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
+    *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
 #endif
 
-        in = *pSrc++;
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = __QSUB(0, in);
+    *pDst++ = __QSUB(0, in);
 #else
-        *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
+    *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
 #endif
 
-        in = *pSrc++;
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = __QSUB(0, in);
+    *pDst++ = __QSUB(0, in);
 #else
-        *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
+    *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
 #endif
 
-        in = *pSrc++;
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = __QSUB(0, in);
+    *pDst++ = __QSUB(0, in);
 #else
-        *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
+    *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
-        /* Negate and store result in destination buffer. */
-        in = *pSrc++;
+    /* Negate and store result in destination buffer. */
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = __QSUB(0, in);
+    *pDst++ = __QSUB(0, in);
 #else
-        *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
+    *pDst++ = (in == INT32_MIN) ? INT32_MAX : -in;
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

@@ -27,14 +27,14 @@
 
 #if defined(CY_IP_MXS22SRSS) || defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS)
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_CLOCK)
-    /** Macro specifying whether the Clock driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_CLOCK (1u)
+/** Macro specifying whether the Clock driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_CLOCK (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_CLOCK)
 
 /** \} group_hal_availability */
@@ -58,8 +58,8 @@ typedef struct
 typedef uint32_t (* mtb_hal_clock_get_frequency_hz_t)(const void* clock_ref);
 /** Set the clock frequency */
 typedef cy_rslt_t (* mtb_hal_clock_set_frequency_hz_t)(const void* clock_ref,
-        uint32_t desired_frequency_hz,
-        uint32_t tolerance_ppm);
+                                                       uint32_t desired_frequency_hz,
+                                                       uint32_t tolerance_ppm);
 /** Enable or Disable the clock */
 typedef cy_rslt_t (* mtb_hal_clock_set_enabled_t)(const void* clock_ref, bool enabled);
 
@@ -80,9 +80,9 @@ typedef struct
 {
     /** Pointer that is passed to all interface functions. In a typical case, this points to
      * an instance of either mtb_hal_peri_div_t or mtb_hal_hf_clock_t */
-    const void                          *clock_ref;
+    const void*                          clock_ref;
     /** Struct of interface functions that should be used with this clock */
-    const mtb_hal_clock_interface_t     *interface;
+    const mtb_hal_clock_interface_t*     interface;
 } mtb_hal_clock_t;
 
 #endif // defined(CY_IP_MXS22SRSS) || defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS)

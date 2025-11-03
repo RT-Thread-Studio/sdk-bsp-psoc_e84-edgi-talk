@@ -29,14 +29,14 @@
 
 #if defined(CY_IP_MXSDHC)
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_SDHC)
-    /** Macro specifying whether the SDHC driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_SDHC (1u)
+/** Macro specifying whether the SDHC driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_SDHC (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_SDHC)
 
 /** \} group_hal_availability */
@@ -52,19 +52,19 @@
 typedef struct
 {
     _mtb_hal_sdxx_t                     sdxx; //!< Common data for mxsdhc IP
-    cy_stc_sd_host_sd_card_config_t    *card_config; //!< PDL-level card config
+    cy_stc_sd_host_sd_card_config_t*    card_config; //!< PDL-level card config
     uint8_t                             bus_width; //!< Width configured for the sdhc bus
     uint8_t                             data_timeout_tout; //!< TOUT setting of SDHC block
     bool                                data_timeout_auto_reconfig; //!< Automatically reconfigure
-    //!< data timeout
+                                                                    //!< data timeout
     /* Desired by user data timeout in card clocks */
     uint32_t                            data_timeout_card_clocks_user; //!< Timeout provided by the
-    //!< user
+                                                                       //!< user
     mtb_hal_gpio_t                      pin_data[8]; //!< Pins used for the data bus
     bool                                low_voltage_io_desired; //!< Is card configured for low
-    //!< voltage
+                                                                //!< voltage
     uint16_t                            emmc_generic_cmd6_time_ms; //!< Maximum timeout for CMD6
-    //!< (swwitch command)
+                                                                   //!< (swwitch command)
 } mtb_hal_sdhc_t;
 
 /**
@@ -77,10 +77,10 @@ typedef struct
  */
 typedef struct
 {
-    SDHC_Type                              *base; //!< Base address for the sdhc block
-    const cy_stc_sd_host_init_config_t     *host_config; //!< PDL-level sd host config
-    cy_stc_sd_host_sd_card_config_t        *card_config; //!< PDL-level sd host config
-    const mtb_hal_clock_t                  *clock; //!< Default clock to use
+    SDHC_Type*                              base; //!< Base address for the sdhc block
+    const cy_stc_sd_host_init_config_t*     host_config; //!< PDL-level sd host config
+    cy_stc_sd_host_sd_card_config_t*        card_config; //!< PDL-level sd host config
+    const mtb_hal_clock_t*                  clock; //!< Default clock to use
     struct
     {
         mtb_hal_gpio_t                      clk; //!< SDHC clock pin

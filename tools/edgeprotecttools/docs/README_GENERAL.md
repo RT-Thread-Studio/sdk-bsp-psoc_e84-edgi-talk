@@ -14,13 +14,18 @@
 - [Image verification](#image-verification)
 - [Merging hex images](#Merging-hex-images)
 - [Merging bin images](#Merging-bin-images)
+- [Hex relocation](#hex-relocation)
 - [Create multi-image packets](#create-multi-image-packets)
+- [Create COSE_Sign1 message](#create-cose_sign1-message)
+- [Create COSE_Sign message](#create-cose_sign-message)
 - [Splitting images](#splitting-images)
 - [Extracting data](#extracting-data)
 - [Hash files](#hash-files)
 - [Create X.509 certificate](#create-x509-certificate)
 - [Verify X.509 certificate](#verify-x509-certificate)
 - [Serial interface configuration](#serial-interface-configuration)
+- [Supported devices](#supported-devices)
+- [Package version](#package-version)
 - [HSM](#hsm)
 - [AES encryption](#aes-encryption)
 
@@ -42,12 +47,13 @@ Creates an asymmetric or a symmetric key.
 ### Parameters
 | Name         | Optional/Required | Description                                                                                                                                                                                                                                                                                                                 |
 |--------------|:-----------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| --key-type   |     required      | A key type. One of the following: ECDSA-P256, ECDSA-P384, ECDSA-P521, RSA2048, RSA3072, RSA4096, AES128, AES256.                                                                                                                                                                                                            |
+| --key-type   |     required      | A key type. One of the following: `ECDSA-P256`, `ECDSA-P384`, `ECDSA-P521`, `X25519`, `RSA2048`, `RSA3072`, `RSA4096`, `AES128`, `AES256`.                                                                                                                                                                                  |
 | -o, --output |     required      | Private and public key paths or a single key path. For the asymmetric specify two paths separated by space `[private] [public]`. For the symmetric key specify one key path `[key]`.                                                                                                                                        |
 | --template   |     optional      | A JSON file or binary file containing key public numbers. The template is typically located in the _keys_ or _packets_ directory of the project.  This option is useful for converting key public numbers exported from an HSM to a standard key file format. Note that the binary file is compatible only with ECDSA keys. |
 | --format     |     optional      | A key format. One of the following: PEM, DER, JWK. The default value is "PEM".                                                                                                                                                                                                                                              |
 | --kid        |     optional      | Key ID. Applicable to JWK only.                                                                                                                                                                                                                                                                                             |
 | --byteorder  |     optional      | Input data byte order used to create EC private key from bytes. Available values: `big`, `little`. Default: `big`                                                                                                                                                                                                           |
+| --password   |     optional      | A secret code used to encrypt and protect a private key.                                                                                                                                                                                                                                                                    |
 ### Usage example
 ```bash
 # Create ECDSA-P256 key pair in PEM format
@@ -65,7 +71,19 @@ $ edgeprotecttools create-key --key-type ECDSA-P256 --template keys/ec_key_tmpl.
 # Create ECDSA-P256 key from the binary file containing public numbers
 $ edgeprotecttools create-key --key-type ECDSA-P256 --template ec_public_numbers.bin -o public.pem
 ```
-
+## Create LMS key
+Creates an Leighton-Micali Signature (LMS) key.
+### Command: `create-key-lms`
+### Parameters
+| Name          | Optional/Required | Description                                                                                                                                                                                                                    |
+|---------------|:-----------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --lms-type    |     required      | A key lms type. One of the following: `LMS-SHA256-M24-H5`, `LMS-SHA256-M24-H10`, `LMS-SHA256-M24-H15`, `LMS-SHA256-M32-H5`, `LMS-SHA256-M32-H10`, `LMS-SHA256-M32-H15`.                                                        |
+| --lmots-type  |     required      | A key lmots type. One of the following: `LMOTS-SHA256-N24-W1`, `LMOTS-SHA256-N24-W2`, `LMOTS-SHA256-N24-W4`, `LMOTS-SHA256-N24-W8`, `LMOTS-SHA256-N32-W1`, `LMOTS-SHA256-N32-W2`,`LMOTS-SHA256-N32-W4`, `LMOTS-SHA256-N32-W8`. |
+| --o, --output |     required      | Private and public key paths, separated by space `[private] [public]`.                                                                                                                                                         |
+## Usage example
+```bash
+$ edgeprotecttools create-key-lms --lms-type lms-sha256-m32-h5 --lmots-type lmots-sha256-n32-W8 private.prv public.pub
+```
 
 ## Convert key
 Converts an asymmetric key to a different encoding or/and format.
@@ -140,38 +158,40 @@ $ edgeprotecttools export-public-key --format PEM -k private_key.pem -o public_k
 Signs a user application with a key. Optionally encrypts the signed application.
 ### Command: `sign-image`
 ### Parameters
-| Name                   | Optional/Required | Description                                                                                                                                                                                                                                                                                       |
-|------------------------|:-----------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -i, --image            |     required      | The user application file (bin or hex).                                                                                                                                                                                                                                                           |
-| -o, --output           |     required      | The signed image output file (bin or hex).                                                                                                                                                                                                                                                        |
-| --key, --key-path      |     required      | The path to the key used to sign the image.                                                                                                                                                                                                                                                       |
-| -R, --erased-val       |     optional      | The value, which is read back from erased flash - "0" or "0xff". The default value is "0".                                                                                                                                                                                                        |
-| -H, --header-size      |     optional      | Sets the image header size. The default value is 0x400. The header will be padded to the specified size.                                                                                                                                                                                          |
-| -S, --slot-size        |     optional      | Sets the maximum slot size. The default value is 0x20000.                                                                                                                                                                                                                                         |
-| --min-erase-size       |     optional      | Sets minimum erase size. The default 0x8000.                                                                                                                                                                                                                                                      |
-| --image-version        |     optional      | Sets the image version in the image header. The format is `<major>.<minor>.<revision>.<build>`.                                                                                                                                                                                                   |
-| -s, --security-counter |     optional      | Specify the value of security counter. Use the `auto` keyword to automatically generate it from the image version.                                                                                                                                                                                |
-| --align                |     optional      | Sets the flash alignment - 1, 2, 4, or 8. The default value is 8.                                                                                                                                                                                                                                 |
-| --public-key-format    |     optional      | The public key format - full key or hash of the key. Applicable one of the following values: "hash", or "full". The default value is "hash".                                                                                                                                                      |
-| --pubkey-encoding      |     optional      | The public key encoding - "der" or "raw". The default value is "der".                                                                                                                                                                                                                             |
-| --signature-encoding   |     optional      | The signature encoding - ASN.1 or raw data. Applicable one of the following values: "asn1", or "raw". The default value is "asn1".                                                                                                                                                                |
-| --pad                  |     optional      | Adds padding to the image trailer. Pads the image from the end of the TLV area up to the slot size. _boot_magic_ is always at the very end after the padding.                                                                                                                                     |
-| --confirm              |     optional      | Adds image OK status to the trailer. Pads the image from the end of the TLV area up to the slot size and sets the image OK byte to 0x01 (the eighth byte from the end). The padding is required for this feature and is always applied. _boot_magic_ is always at the very end after the padding. |
-| --overwrite-only       |     optional      | Use overwrite mode instead of swap.                                                                                                                                                                                                                                                               |
-| --boot-record          |     optional      | Creates CBOR-encoded boot record TLV. Represents the role of the software component (e.g. CoFM for coprocessor firmware). Used for measured boot and data sharing. Maximum length is 12 characters.                                                                                               |
-| --hex-addr             |     optional      | Adjusts the address in the hex output file.                                                                                                                                                                                                                                                       |
-| -L, --load-addr        |     optional      | Load address for image when it should run from RAM.                                                                                                                                                                                                                                               |
-| -F, --rom-fixed        |     optional      | Set flash address the image is built for.                                                                                                                                                                                                                                                         |
-| -M, --max-sectors      |     optional      | When padding allow for this amount of sectors. The default value is 128.                                                                                                                                                                                                                          |
-| --save-enctlv          |     optional      | When upgrading, save encrypted key TLVs instead of plain keys. Enable when BOOT_SWAP_SAVE_ENCTLV config option was set.                                                                                                                                                                           |
-| -d, --dependencies     |     optional      | Adds dependence on another image. The format: `(<image_ID>,<image_version>), ...`.                                                                                                                                                                                                                |
-| --encrypt              |     optional      | The path to the public key used to encrypt the image.                                                                                                                                                                                                                                             |
-| --protected-tlv        |     optional      | The custom TLV to be placed into a protected area (the signed part). Add the "0x" prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string. Specify the option multiple times to add multiple TLVs. The format is `[tag] [value]`.                      |
-| --tlv                  |     optional      | The custom TLV to be placed into a non-protected area. Add the "0x" prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string. Specify the option multiple times to add multiple TLVs. The format is `[tag] [value]`.                                    |
-| --remove-tlv           |     optional      | Removes TLV with the specified ID.                                                                                                                                                                                                                                                                |
-| --enckey               |     optional      | Encryption key.                                                                                                                                                                                                                                                                                   |
-| --encrypt_addr         |     optional      | Starting address for data encryption.                                                                                                                                                                                                                                                             |
-| --nonce_output         |     optional      | The path where to save the nonce.                                                                                                                                                                                                                                                                 |
+| Name                   | Optional/Required | Description                                                                                                                                                                                                                                                                                                        |
+|------------------------|:-----------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -i, --image            |     required      | The user application file (bin or hex).                                                                                                                                                                                                                                                                            |
+| -o, --output           |     required      | The signed image output file (bin or hex).                                                                                                                                                                                                                                                                         |
+| --key, --key-path      |     required      | The path to the key used to sign the image.                                                                                                                                                                                                                                                                        |
+| -R, --erased-val       |     optional      | The value, which is read back from erased flash - `0` or `0xff`. The default value is `0`.                                                                                                                                                                                                                         |
+| -H, --header-size      |     optional      | Sets the image header size. The default value is 0x400. The header will be padded to the specified size.                                                                                                                                                                                                           |
+| -S, --slot-size        |     optional      | Sets the maximum slot size. The default value is 0x20000.                                                                                                                                                                                                                                                          |
+| --min-erase-size       |     optional      | Sets minimum erase size. The default 0x8000.                                                                                                                                                                                                                                                                       |
+| --image-version        |     optional      | Sets the image version in the image header. The format is `<major>.<minor>.<revision>.<build>`.                                                                                                                                                                                                                    |
+| -s, --security-counter |     optional      | Specify the value of security counter. Use the `auto` keyword to automatically generate it from the image version.                                                                                                                                                                                                 |
+| --align                |     optional      | Sets the flash alignment - 1, 2, 4, or 8. The default value is 8.                                                                                                                                                                                                                                                  |
+| --public-key-format    |     optional      | The public key format - full key or hash of the key. Applicable one of the following values: `hash`, or `full`. The default value is `hash`.                                                                                                                                                                       |
+| --pubkey-encoding      |     optional      | The public key encoding - `der` or `raw`. The default value is `der`.                                                                                                                                                                                                                                              |
+| --signature-encoding   |     optional      | The signature encoding - ASN.1 or raw data. Applicable one of the following values: `asn1`, or `raw`. The default value is `asn1`.                                                                                                                                                                                 |
+| --pad                  |     optional      | Adds padding to the image trailer. Pads the image from the end of the TLV area up to the slot size. _boot_magic_ is always at the very end after the padding.                                                                                                                                                      |
+| --confirm              |     optional      | Adds image OK status to the trailer. Pads the image from the end of the TLV area up to the slot size and sets the image OK byte to 0x01 (the eighth byte from the end). The padding is required for this feature and is always applied. _boot_magic_ is always at the very end after the padding.                  |
+| --overwrite-only       |     optional      | Use overwrite mode instead of swap.                                                                                                                                                                                                                                                                                |
+| --boot-record          |     optional      | Creates CBOR-encoded boot record TLV. Represents the role of the software component (e.g. CoFM for coprocessor firmware). Used for measured boot and data sharing. Maximum length is 12 characters.                                                                                                                |
+| --hex-addr             |     optional      | Adjusts the address in the hex output file.                                                                                                                                                                                                                                                                        |
+| -L, --load-addr        |     optional      | Load address for image when it should run from RAM.                                                                                                                                                                                                                                                                |
+| -F, --rom-fixed        |     optional      | Set flash address the image is built for.                                                                                                                                                                                                                                                                          |
+| -M, --max-sectors      |     optional      | When padding allow for this amount of sectors. The default value is 128.                                                                                                                                                                                                                                           |
+| --save-enctlv          |     optional      | When upgrading, save encrypted key TLVs instead of plain keys. Enable when BOOT_SWAP_SAVE_ENCTLV config option was set.                                                                                                                                                                                            |
+| -d, --dependencies     |     optional      | Adds dependence on another image. The format: `(<image_ID>,<image_version>), ...`.                                                                                                                                                                                                                                 |
+| --encrypt              |     optional      | The path to the public key used to encrypt the image.                                                                                                                                                                                                                                                              |
+| --protected-tlv        |     optional      | The custom TLV to be placed into a protected area (the signed part). Add the "0x" prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string. Specify the option multiple times to add multiple TLVs. The format is `[tag] [value]`.                                       |
+| --tlv                  |     optional      | The custom TLV to be placed into a non-protected area. Add the "0x" prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string. Specify the option multiple times to add multiple TLVs. The format is `[tag] [value]`.                                                     |
+| --remove-tlv           |     optional      | Removes TLV with the specified ID.                                                                                                                                                                                                                                                                                 |
+| --enckey               |     optional      | An encryption key for securing images.                                                                                                                                                                                                                                                                             |
+| --enckey-role          |     optional      | An encryption key role. Specifies what the key is used for: <br/>* Image Encryption: Encrypts images for decryption in the XIP mode.<br/>* Key Wrapping: Acts as a Key Encryption Key (KEK) for AES Key Wrapping (AES-KW), ensuring secure key management. <br/>Available values: `XIP`, `AES-KW`. Default: `XIP`. |
+| --encrypt-addr         |     optional      | Starting address for data encryption.                                                                                                                                                                                                                                                                              |
+| --nonce-output         |     optional      | The path where to save the nonce.                                                                                                                                                                                                                                                                                  |
+| --kdf                  |     optional      | Key derivation function name. Default: `HKDF`. Available values: `HKDF`, `KBKDFCMAC`.                                                                                                                                                                                                                              |
 ### Usage example
 ```bash
 # Sign binary and save to a binary
@@ -189,38 +209,41 @@ $ edgeprotecttools sign-image -i image.bin --key private.pem --public-key-format
 Adds MCUboot metadata to a firmware image ([mcuboot header](https://github.com/mcu-tools/mcuboot/blob/master/docs/design.md#image-format)), but does not sign the image. Usually, this command is useful for signing images with a Hardware Security Module.
 ### Command: `image-metadata`
 ### Parameters
-| Name                   | Optional/Required | Description                                                                                                                                                                                                                                                                  |
-|------------------------|:-----------------:|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -i, --image            |     required      | The user application file (bin or hex).                                                                                                                                                                                                                                      |
-| -o, --output           |     required      | The image with metadata output file (bin).                                                                                                                                                                                                                                   |
-| --decrypted            |     optional      | The path where to save decrypted image payload (bin). Specify this option if the image is encrypted and provide the decrypted image to HSM because the signature is calculated on the unsigned data.                                                                         |
-| -R, --erased-val       |     optional      | The value, which is read back from erased flash - "0" or "0xff". The default value is "0".                                                                                                                                                                                   |
-| -H, --header-size      |     optional      | Sets the image header size. The default value is 0x400. The header will be padded to the specified size.                                                                                                                                                                     |
-| -S, --slot-size        |     optional      | Sets the maximum slot size. The default value is 0x20000.                                                                                                                                                                                                                    |
-| --min-erase-size       |     optional      | Sets minimum erase size. The default 0x8000.                                                                                                                                                                                                                                 |
-| --image-version        |     optional      | Sets the image version in the image header. The format is `<major>.<minor>.<revision>.<build>`.                                                                                                                                                                              |
-| -s, --security-counter |     optional      | Specify the value of security counter. Use the `auto` keyword to automatically generate it from the image version.                                                                                                                                                           |
-| --align                |     optional      | Sets the flash alignment - 1, 2, 4, or 8. The default value is 8.                                                                                                                                                                                                            |
-| --pubkey               |     optional      | The public key to be added to the image.                                                                                                                                                                                                                                     |
-| --public-key-format    |     optional      | The public key format - full key or hash of the key. Applicable one of the following values: "hash", or "full". The default value is "hash".                                                                                                                                 |
-| --pubkey-encoding      |     optional      | The public key encoding - "der" or "raw". The default value is "der".                                                                                                                                                                                                        |
-| --pad                  |     optional      | Adds padding to the image trailer.                                                                                                                                                                                                                                           |
-| --confirm              |     optional      | Adds image OK status to the trailer.                                                                                                                                                                                                                                         |
-| --overwrite-only       |     optional      | Use overwrite mode instead of swap.                                                                                                                                                                                                                                          |
-| --boot-record          |     optional      | Creates CBOR-encoded boot record TLV. Represents the role of the software component (e.g. CoFM for coprocessor firmware). Maximum length is 12 characters.                                                                                                                   |
-| --hex-addr             |     optional      | Adjusts the address in the hex output file.                                                                                                                                                                                                                                  |
-| -L, --load-addr        |     optional      | Load address for image when it should run from RAM.                                                                                                                                                                                                                          |
-| -F, --rom-fixed        |     optional      | Set flash address the image is built for.                                                                                                                                                                                                                                    |
-| -M, --max-sectors      |     optional      | When padding allow for this amount of sectors. The default value is 128.                                                                                                                                                                                                     |
-| --save-enctlv          |     optional      | When upgrading, save encrypted key TLVs instead of plain keys. Enable when BOOT_SWAP_SAVE_ENCTLV config option was set.                                                                                                                                                      |
-| -d, --dependencies     |     optional      | Adds dependence on another image. The format: `(<image_ID>,<image_version>), ...`.                                                                                                                                                                                           |
-| --encrypt              |     optional      | The path to the public key used to encrypt the image.                                                                                                                                                                                                                        |
-| --protected-tlv        |     optional      | The custom TLV to be placed into a protected area (the signed part). Add the "0x" prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string. Specify the option multiple times to add multiple TLVs. The format is `[tag] [value]`. |
-| --tlv                  |     optional      | The custom TLV to be placed into a non-protected area. Add the "0x" prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string. Specify the option multiple times to add multiple TLVs. The format is `[tag] [value]`.               |
-| --remove-tlv           |     optional      | Removes TLV with the specified ID.                                                                                                                                                                                                                                           |
-| --enckey               |     optional      | Encryption key.                                                                                                                                                                                                                                                              |
-| --encrypt_addr         |     optional      | Starting address for data encryption.                                                                                                                                                                                                                                        |
-| --nonce_output         |     optional      | The path where to save the nonce.                                                                                                                                                                                                                                            |
+| Name                   | Optional/Required | Description                                                                                                                                                                                                                                                                                                        |
+|------------------------|:-----------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -i, --image            |     required      | The user application file (bin or hex).                                                                                                                                                                                                                                                                            |
+| -o, --output           |     required      | The image with metadata output file (bin).                                                                                                                                                                                                                                                                         |
+| --decrypted            |     optional      | The path where to save decrypted image payload (bin). Specify this option if the image is encrypted and provide the decrypted image to HSM because the signature is calculated on the unsigned data.                                                                                                               |
+| -R, --erased-val       |     optional      | The value, which is read back from erased flash - `0` or `0xff`. The default value is `0`.                                                                                                                                                                                                                         |
+| -H, --header-size      |     optional      | Sets the image header size. The default value is 0x400. The header will be padded to the specified size.                                                                                                                                                                                                           |
+| -S, --slot-size        |     optional      | Sets the maximum slot size. The default value is 0x20000.                                                                                                                                                                                                                                                          |
+| --min-erase-size       |     optional      | Sets minimum erase size. The default 0x8000.                                                                                                                                                                                                                                                                       |
+| --image-version        |     optional      | Sets the image version in the image header. The format is `<major>.<minor>.<revision>.<build>`.                                                                                                                                                                                                                    |
+| -s, --security-counter |     optional      | Specify the value of security counter. Use the `auto` keyword to automatically generate it from the image version.                                                                                                                                                                                                 |
+| --align                |     optional      | Sets the flash alignment - 1, 2, 4, or 8. The default value is 8.                                                                                                                                                                                                                                                  |
+| --pubkey               |     optional      | The public key to be added to the image.                                                                                                                                                                                                                                                                           |
+| --public-key-format    |     optional      | The public key format - full key or hash of the key. Applicable one of the following values: `hash`, or `full`. The default value is `hash`.                                                                                                                                                                       |
+| --pubkey-encoding      |     optional      | The public key encoding - `der` or `raw`. The default value is `der`.                                                                                                                                                                                                                                              |
+| --pad                  |     optional      | Adds padding to the image trailer.                                                                                                                                                                                                                                                                                 |
+| --confirm              |     optional      | Adds image OK status to the trailer.                                                                                                                                                                                                                                                                               |
+| --overwrite-only       |     optional      | Use overwrite mode instead of swap.                                                                                                                                                                                                                                                                                |
+| --boot-record          |     optional      | Creates CBOR-encoded boot record TLV. Represents the role of the software component (e.g. CoFM for coprocessor firmware). Maximum length is 12 characters.                                                                                                                                                         |
+| --hex-addr             |     optional      | Adjusts the address in the hex output file.                                                                                                                                                                                                                                                                        |
+| -L, --load-addr        |     optional      | Load address for image when it should run from RAM.                                                                                                                                                                                                                                                                |
+| -F, --rom-fixed        |     optional      | Set flash address the image is built for.                                                                                                                                                                                                                                                                          |
+| -M, --max-sectors      |     optional      | When padding allow for this amount of sectors. The default value is 128.                                                                                                                                                                                                                                           |
+| --save-enctlv          |     optional      | When upgrading, save encrypted key TLVs instead of plain keys. Enable when BOOT_SWAP_SAVE_ENCTLV config option was set.                                                                                                                                                                                            |
+| -d, --dependencies     |     optional      | Adds dependence on another image. The format: `(<image_ID>,<image_version>), ...`.                                                                                                                                                                                                                                 |
+| --encrypt              |     optional      | The path to the public key used to encrypt the image.                                                                                                                                                                                                                                                              |
+| --protected-tlv        |     optional      | The custom TLV to be placed into a protected area (the signed part). Add the "0x" prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string. Specify the option multiple times to add multiple TLVs. The format is `[tag] [value]`.                                       |
+| --tlv                  |     optional      | The custom TLV to be placed into a non-protected area. Add the "0x" prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string. Specify the option multiple times to add multiple TLVs. The format is `[tag] [value]`.                                                     |
+| --remove-tlv           |     optional      | Removes TLV with the specified ID.                                                                                                                                                                                                                                                                                 |
+| --enckey               |     optional      | Encryption key.                                                                                                                                                                                                                                                                                                    |
+| --enckey-role          |     optional      | An encryption key role. Specifies what the key is used for: <br/>* Image Encryption: Encrypts images for decryption in the XIP mode.<br/>* Key Wrapping: Acts as a Key Encryption Key (KEK) for AES Key Wrapping (AES-KW), ensuring secure key management. <br/>Available values: `XIP`, `AES-KW`. Default: `XIP`. |
+| --encrypt_addr         |     optional      | Starting address for data encryption.                                                                                                                                                                                                                                                                              |
+| --nonce_output         |     optional      | The path where to save the nonce.                                                                                                                                                                                                                                                                                  |
+| --kdf                  |     optional      | Key derivation function name. Default: `HKDF`. Available values: `HKDF`, `KBKDFCMAC`.                                                                                                                                                                                                                              |
+
 ### Usage example
 ```bash
 # Add MCUboot metadata with custom TLVs
@@ -258,12 +281,12 @@ $ edgeprotecttools extract-payload --image image_meta.bin --output image_payload
 Adds a previously generated signature to an existing image of the MCUboot format.
 ### Command: `add-signature`
 ### Parameters
-| Name            | Optional/Required | Description                                                                               |
-|-----------------|:-----------------:|-------------------------------------------------------------------------------------------|
-| --image         |     required      | The binary image with MCUboot metadata.                                                   |
-| -s, --signature |     required      | The binary file containing a digital signature.                                           |
-| --alg           |     required      | The signature algorithm. One of the following values: "ECDSA-P256", "RSA2048", "RSA4096". |
-| -o, --output    |     required      | The binary file where to save the signed image.                                           |
+| Name            | Optional/Required | Description                                                                                                           |
+|-----------------|:-----------------:|-----------------------------------------------------------------------------------------------------------------------|
+| --image         |     required      | The binary image with MCUboot metadata.                                                                               |
+| -s, --signature |     required      | The binary file containing a digital signature.                                                                       |
+| --alg           |     required      | The signature algorithm. One of the following values: `ECDSA-P256`, `ECDSA-P384`, `ECDSA-P521`, `RSA2048`, `RSA4096`. |
+| -o, --output    |     required      | The binary file where to save the signed image.                                                                       |
 ### Usage example
 ```bash
 $ edgeprotecttools add-signature --image image_meta.bin --signature signature.bin --output image_signed.bin
@@ -383,6 +406,22 @@ Merges two or more different bin files into one.
 $ edgeprotecttools merge-bin --image image1.bin --image image2.bin --image image3.bin --output merged.bin
 ```
 
+
+## Hex relocation
+Relocates regions in the hex file to new address spaces. Relocates regions in the hex file to new address spaces. All segments within the specified region (from `start` to `start` + `size`) will be relocated to the new address (`dest`).
+### Command: `hex-relocate`
+### Parameters
+| Name         |  Optional/Required  | Description                                                                                                                                           |
+|--------------|:-------------------:|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -i, --input  |      required       | Input hex file containing the segment(s) to relocate.                                                                                                 |
+| --region     |      required       | Regions to relocate. Provide `start`, `size`, `dest` as hex values (e.g. --region 0x08000000 0x04000000 0x60000000). Can be specified multiple times. |
+| -o, --output |      required       | The path to the output file.                                                                                                                          |
+### Usage example
+```bash
+$ edgeprotecttools hex-relocate --input image.hex --region 0x08000000 0x04000000 0x60000000 --region 0x10000000 0x00002000 0x70000000 --output relocated_image.hex
+```
+
+
 ## Create multi-image packets
 Create multi-image COSE packet from provided hex image.
 ### Command: `multi-image-cbor`
@@ -393,12 +432,66 @@ Create multi-image COSE packet from provided hex image.
 | -o, --output      |     required      | Output path.                                                                                                                                                                 |
 | --segment         |     optional      | Custom segments to specify segmentation of the file. Specify the option multiple times to add more segments. The format is `[address] [size]`. Minimum number of options: 2. |
 | --key, --key-path |     optional      | Private key path to sign message.                                                                                                                                            |
-| --algorithm       |     optional      | Signature algorithm. Available values: `ES256`, `ES384`, `RS256`, `RS384`.                                                                                                   |
+| --algorithm       |     optional      | Signature algorithm. Available values: `ES256`, `ES384`, `ES512`, `RS256`, `RS384`.                                                                                          |
 | --signature       |     optional      | Signature path to add to the message.                                                                                                                                        |
 | --erased-val      |     optional      | Value to fill the spaces between the segments. Default: `0`.                                                                                                                 |
 ### Usage example
 ```bash
 $ edgeprotecttools multi-image-cbor -i image.hex -o multi_image.bin --segment 0x10000000 256 --segment 0x13400000 128 --key ec256.pem
+```
+
+
+## Create COSE_Sign1 message
+Creates a COSE_Sign1 message.
+### Command: `cose-sign1`
+### Parameters
+| Name              | Optional/Required | Description                                                                                                                              |
+|-------------------|:-----------------:|------------------------------------------------------------------------------------------------------------------------------------------|
+| -i, --input-path  |     required      | Path to the data to be signed.                                                                                                           |
+| --key, --key-path |     optional      | Private key path to sign message. Not required when signing with HSM.                                                                    |
+| --kid             |     optional      | Key ID.                                                                                                                                  |
+| --signature       |     optional      | Signature path to add to the message. Used to sign the message with HSM.                                                                 |
+| --algorithm       |     optional      | Signature algorithm. Available values: `ES256`, `ES384`, `ES512`, `RS256`, `RS384`. Default: `ES256`. Used to sign the message with HSM. |
+| -o, --output      |     required      | Output path.                                                                                                                             |
+### Usage example
+```bash
+# Create COSE_Sign1 message signed with a private key stored in a file
+$ edgeprotecttools cose-sign1 -i data.bin -o output.bin --key private_ec256.pem
+
+# Create COSE_Sign1 payload to be signed with a private key stored in HSM
+$ edgeprotecttools cose-sign1 -i data.bin -o payload.bin --algorithm ES256
+
+# Create COSE_Sign1 message signed with a signature returned by HSM
+$ edgeprotecttools cose-sign1 -i payload.bin -o output.bin --signature signature.bin
+```
+
+
+## Create COSE_Sign message
+Creates a COSE_Sign message.
+### Command: `cose-sign`
+### Parameters
+| Name             | Optional/Required | Description                                                                                                                                        |
+|------------------|:-----------------:|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| -i, --input-path |     required      | Path to the data to be signed.                                                                                                                     |
+| --key-0          |     optional      | Primary private key path to sign message. Not required when signing with HSM.                                                                      |
+| --key-1          |     optional      | Secondary private key path to sign message. Not required when signing with HSM.                                                                    |
+| --kid-0          |     optional      | Primary key ID.                                                                                                                                    |
+| --kid-1          |     optional      | Secondary key ID.                                                                                                                                  |
+| --signature-0    |     optional      | Primary signature path to add to the message. Used to sign the message with HSM.                                                                   |
+| --signature-1    |     optional      | Secondary signature path to add to the message. Used to sign the message with HSM.                                                                 |
+| --algorithm-0    |     optional      | Primary signature algorithm. Available values: `ES256`, `ES384`, `ES512`, `RS256`, `RS384`. Default: `ES256`. Used to sign the message with HSM.   |
+| --algorithm-1    |     optional      | Secondary signature algorithm. Available values: `ES256`, `ES384`, `ES512`, `RS256`, `RS384`. Default: `ES256`. Used to sign the message with HSM. |
+| -o, --output     |     required      | Output path.                                                                                                                                       |
+### Usage example
+```bash
+# Create COSE_Sign message signed with a two private keys stored in files
+$ edgeprotecttools cose-sign -i data.bin -o output.bin --key-0 private_ec256_0.pem --key-1 private_ec256_1.pem
+
+# Create COSE_Sign payload to be signed with a private key stored in HSM
+$ edgeprotecttools cose-sign -i data.bin -o payload.bin --algorithm-0 ES256 --algorithm-1 ES256
+
+# Create COSE_Sign message signed with a signature returned by HSM
+$ edgeprotecttools cose-sign -i payload.bin -o output.bin --signature-0 signature_0.bin --signature-1 signature_1.bin
 ```
 
 
@@ -575,6 +668,26 @@ $ edgeprotecttools serial-config --protocol uart --hwid COM3 --i2c-address 12 --
 # SPI configuration
 $ edgeprotecttools serial-config --protocol uart --hwid COM3 --spi-clockspeed 1 --spi-mode 00
 ```
+
+
+## Supported devices
+Shows a list of supported devices.
+### Command: `device-list`
+### Usage example
+```bash
+$ edgeprotecttools device-list
+```
+
+
+## Package version
+Shows the version of the package.
+### Command: `version`
+### Usage example
+```bash
+$ edgeprotecttools version
+```
+
+
 
 # HSM
 ## Signing application with HSM

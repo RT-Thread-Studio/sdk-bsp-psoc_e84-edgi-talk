@@ -52,7 +52,7 @@ extern "C" {
 *******************************************************************************/
 /** Setup the configuration in the DMA Object */
 __STATIC_INLINE void _mtb_hal_dma_dmac_config_setup(mtb_hal_dma_t* obj,
-        const mtb_hal_dma_configurator_t *config)
+                                                    const mtb_hal_dma_configurator_t* config)
 {
     obj->dma_type = config->dma_type;
     obj->channel = config->channel;
@@ -66,9 +66,9 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_dma_dmac_supported(const mtb_hal_dma_configur
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
     cy_en_dmac_descriptor_type_t descr_type = Cy_DMAC_Descriptor_GetDescriptorType(
-            config->dmac_descriptor);
+        config->dmac_descriptor);
     cy_en_dmac_trigger_type_t intr_type = Cy_DMAC_Descriptor_GetInterruptType(
-            config->dmac_descriptor);
+        config->dmac_descriptor);
     //Only 1-D transfer and 2-D transfer is supported
     if ((CY_DMAC_1D_TRANSFER != descr_type) && (CY_DMAC_2D_TRANSFER != descr_type))
     {
@@ -85,7 +85,7 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_dma_dmac_supported(const mtb_hal_dma_configur
 
 /** Set the source address */
 __STATIC_INLINE void _mtb_hal_dma_dmac_descriptor_set_src_addr(mtb_hal_dma_t* obj,
-        uint32_t src_addr)
+                                                               uint32_t src_addr)
 {
     Cy_DMAC_Descriptor_SetSrcAddress(obj->descriptor.dmac, (void*)src_addr);
 }
@@ -93,7 +93,7 @@ __STATIC_INLINE void _mtb_hal_dma_dmac_descriptor_set_src_addr(mtb_hal_dma_t* ob
 
 /** Set the destination address */
 __STATIC_INLINE void _mtb_hal_dma_dmac_descriptor_set_dst_addr(mtb_hal_dma_t* obj,
-        uint32_t dst_addr)
+                                                               uint32_t dst_addr)
 {
     Cy_DMAC_Descriptor_SetDstAddress(obj->descriptor.dmac, (void*)dst_addr);
 }
@@ -101,11 +101,11 @@ __STATIC_INLINE void _mtb_hal_dma_dmac_descriptor_set_dst_addr(mtb_hal_dma_t* ob
 
 /** Set the transfer length */
 __STATIC_INLINE cy_rslt_t _mtb_hal_dma_dmac_descriptor_set_length(mtb_hal_dma_t* obj,
-        uint32_t length)
+                                                                  uint32_t length)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
     cy_en_dmac_descriptor_type_t descr_type = Cy_DMAC_Descriptor_GetDescriptorType(
-            obj->descriptor.dmac);
+        obj->descriptor.dmac);
     if (CY_DMAC_2D_TRANSFER == descr_type)
     {
         //This is based on the assumption that user/app does not want to change the burst size.
@@ -117,7 +117,7 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_dma_dmac_descriptor_set_length(mtb_hal_dma_t*
         }
         else
         {
-            Cy_DMAC_Descriptor_SetYloopDataCount(obj->descriptor.dmac, length / xloop_count);
+            Cy_DMAC_Descriptor_SetYloopDataCount(obj->descriptor.dmac, length/xloop_count);
         }
     }
     else if (CY_DMAC_1D_TRANSFER == descr_type)
@@ -145,7 +145,7 @@ __STATIC_INLINE uint32_t _mtb_hal_dma_dmac_get_expected_bursts(mtb_hal_dma_t* ob
 {
     uint32_t expected_bursts = 1;
     cy_en_dmac_trigger_type_t intr_type = Cy_DMAC_Descriptor_GetInterruptType(
-            obj->descriptor.dmac);
+        obj->descriptor.dmac);
     if (CY_DMAC_DESCR == intr_type)
     {
         expected_bursts = 1;

@@ -89,9 +89,12 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="textblock"><p ><a class="anchor" id="md_output_bsps_TARGET_KIT_PSE84_EVAL_EPC2_README"></a> </p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Overview</h1>
+<p >The PSOC™ Edge E84 Evaluation Kit (KIT_PSE84_EVAL) is based on the PSOC™ Edge family of devices. It enables the evaluation and development of applications for the PSOC™ Edge E84 EPC2 MCU.</p>
 <p >To use code from the BSP, simply include a reference to <code>cybsp.h</code>.</p>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Features</h1>
+<p >This evaluation kit carries a PSOC™ E84 EPC2 MCU (PSE846GPS2DBZC4A) on a SODIMM based detachable SOM board connected to the base-board. The MCU SOM also has 128 Mb QSPI flash, 1 Gb Octal flash, 128 Mb Octal RAM, PSOC™ 4000T as CAPSENSE™ co-processor and on-board AIROC™ Wi-Fi &amp; Bluetooth® combo (CYW55513IUBG).</p>
+<p >The base-board has M.2 interface connectors for interfacing external radio modules based on AIROC™ Wi-Fi &amp; Bluetooth® combos and external memory interfaces. The base-board features an on-board programmer/debugger(KitProg3), ETM/JTAG/SWD debug headers, custom display capacitive touch panel connector, R-Pi compatible MIPI-DSI and MIPI-DSI custom display, Analog and PDM microphones, Headphone connector, Speaker, USB Host Type-A and USB device Type-C connectors, RJ45 Ethernet connector, M.2 (B-key) memory interface and M.2 (E-key) radio interface, Infineon’s Shield2Go interface, Mikroelektronika's mikroBUS compatible headers, 6-Axis IMU sensor, 3-axis Magnetometer, microSD cardholder, CAPSENSE™ buttons and slider, user LEDs and user buttons. The MCU power domain supports following operating voltages - 2.7 V, 3.3 V, 4.2 V and the peripheral power domain supports operating voltages - 1.8 V and 3.3 V.</p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 BSP Configuration</h1>
 <p >The BSP has a few hooks that allow its behavior to be configured. Some of these items are enabled by default while others must be explicitly enabled. Items enabled by default are specified in the KIT_PSE84_EVAL_EPC2.mk file. The items that are enabled can be changed by creating a custom BSP or by editing the application makefile.</p>
@@ -104,35 +107,35 @@ BSP Configuration</h1>
 Clock Configuration</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Clock   </th><th class="markdownTableHeadNone">Source   </th><th class="markdownTableHeadNone">Output Frequency    </th></tr>
+<th class="markdownTableHeadCenter">Clock   </th><th class="markdownTableHeadCenter">Source   </th><th class="markdownTableHeadCenter">Output Frequency    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">CLK_HF0   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">200 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF0   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">200 MHz    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">CLK_HF1   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">399 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF1   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">400 MHz    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">CLK_HF2   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">200 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF2   </td><td class="markdownTableBodyCenter">CLK_PATH2   </td><td class="markdownTableBodyCenter">300 MHz    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">CLK_HF3   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">200 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF3   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">200 MHz    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">CLK_HF4   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">399 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF4   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">400 MHz    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">CLK_HF5   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">200 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF5   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">200 MHz    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">CLK_HF6   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">200 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF6   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">200 MHz    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">CLK_HF7   </td><td class="markdownTableBodyNone">CLK_PATH1   </td><td class="markdownTableBodyNone">49 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF7   </td><td class="markdownTableBodyCenter">CLK_PATH1   </td><td class="markdownTableBodyCenter">49 MHz    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">CLK_HF8   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">50 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF8   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">50 MHz    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">CLK_HF9   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">80 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF9   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">80 MHz    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">CLK_HF10   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">100 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF10   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">100 MHz    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">CLK_HF11   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">200 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF11   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">200 MHz    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">CLK_HF12   </td><td class="markdownTableBodyNone">CLK_PATH4   </td><td class="markdownTableBodyNone">24 MHz    </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF12   </td><td class="markdownTableBodyCenter">CLK_PATH4   </td><td class="markdownTableBodyCenter">24 MHz    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">CLK_HF13   </td><td class="markdownTableBodyNone">CLK_PATH0   </td><td class="markdownTableBodyNone">100 MHz   </td></tr>
+<td class="markdownTableBodyCenter">CLK_HF13   </td><td class="markdownTableBodyCenter">CLK_PATH0   </td><td class="markdownTableBodyCenter">100 MHz   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md5"></a>
 Power Configuration</h2>
@@ -144,10 +147,81 @@ Power Configuration</h2>
 </ul>
 <p >See the <a href="md_bsp_settings.html">BSP Setttings</a> for additional board specific configuration settings.</p>
 <h1><a class="anchor" id="autotoc_md6"></a>
+Default linker scripts</h1>
+<p >The default linker scripts define a lot of different regions so this document is intended to explain their purposes. The analysis will be done per memory area.</p>
+<h2><a class="anchor" id="autotoc_md7"></a>
+ITCM</h2>
+<ul>
+<li>m55_code: this is the main code region for the cm55 core code</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md8"></a>
+DTCM</h2>
+<ul>
+<li>m55_data: this is the main data region for the cm55 core data</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md9"></a>
+RRAM</h2>
+<ul>
+<li>A reserved region that should never be removed as it is used for boot firmware, and write-protected</li>
+<li>user_programmable, a region for the cm33 secure core to store persistent data</li>
+<li>user_nvm, a region for storage of non-volatile data from non-secure cores</li>
+<li>A reserved region that should not be used or removed, reserved for boot firmware</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md10"></a>
+SRAM</h2>
+<ul>
+<li>m33s_shared, a region for the cm33_s core to place data that need to be shared with the cm33_ns</li>
+<li>m33s_code, the main region for code for the cm33_s core that gets copied over from the from the non-volatile memory (m33s_nvm) at boot</li>
+<li>m33s_data the main data region for the cm33_s core, initialized data gets copied over from the non-volatile memory (m33s_nvm) at boot, non initialized data gets zeroed</li>
+<li>m33_code, the main region for code for the cm33_ns core that gets copied over from the External Flash at boot</li>
+<li>m33_data the main data region set aside for the cm33_ns core, initialized data gets copied over from the non-volatile memory (m33_nvm) at boot, non initialized data gets zeroed</li>
+<li>m33s_allocatable_shared, this region is where the cm33_s core can allocate data that can be accessed by all cores. It has to be uninitialized</li>
+<li>m33_allocatable_shared, this region is where the cm33 core can allocate data that can be accessed by all cores. It has to be uninitialized</li>
+<li>m55_allocatable_shared, this region is where the cm55 core can allocate data that can be accessed by all cores. It has to be uninitialized</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md11"></a>
+SoCMem</h2>
+<ul>
+<li>m55_code_secondary: this is an additional code region for the cm55 core, it’s slightly less performing than the ITCM</li>
+<li>m55_data_secondary: this is an additional data region for the cm55 core, it’s slightly less performing than the DTCM</li>
+<li>m33_m55_shared: this is a data region created to share data between the non secure cores (cm33_ns and cm55)</li>
+<li>gfx_mem: this is a data region for graphics purposes, it is shared between the non secure cores (cm33_ns and cm55)</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md12"></a>
+External Flash (Serial Memory Interface block 0 memory 1)</h2>
+<ul>
+<li>m33s_nvm: this is the region where all code and data gets placed at programming time for the cm33s core and then gets copied over onto the RAM locations for the areas that are specified. It also include the non-secure callable (NSC) region.</li>
+<li>m33s_trailer: cm33_s trailer</li>
+<li>m33_nvm: this is the region where all code and data gets places at programming time for the cm33_ns core and then gets copied over onto the RAM locations for the areas that are specified</li>
+<li>m33_trailer: cm33_ns trailer</li>
+<li>m55_nvm: this is the region where all code and data gets places at programming time for the cm55 core and then gets copied over onto the RAM locations for the areas that are specified</li>
+<li>m55_trailer: cm55 trailer</li>
+</ul>
+<p >The memory configurator allows to move, rename, resize, erase regions as needed.</p>
+<h1><a class="anchor" id="autotoc_md13"></a>
+Memory Configurator Outputs</h1>
+<p >The output of the memory configurator are files that can be found in <code>your_project%/bsps/TARGET_board_name%/config/GeneratedSource</code>. These files are:</p><ul>
+<li><code>cymem_CM33_S_0.h</code>, <code>cymem_CM33_0.h</code>, <code>cymem_CM55_0.h</code>: these three files generate defines for all defined regions in the memory configurator for start, size and offset for the regions that are applicable to that core.</li>
+<li><code>cymem_armlink_CM33_S_0.sct</code>, <code>cymem_armlink_CM33_0.sct</code>, <code>cymem_armlink_CM55_0.sct</code>: these three files contain all the defines for the regions in the memory configurator but have the Scatterfile extension to be easily picked up and integrated in the linker scripts for the ARM toolchain</li>
+<li><code>cymem_gnu_CM33_S_0.ld</code>, <code>cymem_gnu_CM33_0.ld</code>, <code>cymem_gnu_CM55_0.ld</code>: these three files contain all the defines for the regions in the memory configurator but have the ld extension to be easily picked up and integrated in the linker scripts for the GCC_ARM and LLVM_ARM toolchain</li>
+<li><code>cymem_gnu_regions_CM33_S_0.ld</code>, <code>cymem_gnu_regions_CM33_0.ld</code>, <code>cymem_gnu_regions_CM55_0.ld</code>: these three files contain all the MEMORY regions information as needed by the GCC_ARM and LLVM_ARM linkers to partition the memory correctly.</li>
+<li><code>cymem_ilinkarm_CM33_S_0.ld</code>, <code>cymem_ilinkarm_CM33_0.ld</code>, <code>cymem_ilinkarm_CM55_0.ld</code>: these three files contain all the defines for the regions in the memory onfigurator but have the icf extension to be easily picked up and integrated in the linker scripts for the IAR toolchain.</li>
+<li><code>cymem_ilinkarm_regions_CM33_S_0.ld</code>, <code>cymem_ilinkarm_regions_CM33_0.ld</code>, <code>cymem_ilinkarm_regions_CM55_0.ld</code> : these three files contain all the memory regions information as needed by the IAR linkers to partition the memory correctly.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md14"></a>
+Note on memory aliases</h1>
+<p >It is important to also note that all memory regions can have up to 4 different valid addresses, that differ in access type. For example, the same external flash (SMIF_Port0) address can be accessed using:</p><ul>
+<li>0x08000000 if using non secure access over CBUS</li>
+<li>0x60000000 if using non secure access over SBUS</li>
+<li>0x18000000 if using secure access over CBUS</li>
+<li>0x70000000 if using secure access over SBUS</li>
+</ul>
+<p >The distinction between secure and non-secure access is relatively simple, but understanding CBUS and SBUS requires more attention. CBUS provides faster, higher-performance access to memory regions, but it supports only read operations. As a result, CBUS is typically used for code execution at runtime. In contrast, SBUS offers both read and write capabilities, though with lower performance. SBUS is necessary when writing data to memory, such as during device programming.</p>
+<h1><a class="anchor" id="autotoc_md15"></a>
 API Reference Manual</h1>
 <p >The KIT_PSE84_EVAL_EPC2 Board Support Package provides a set of APIs to configure, initialize and use the board resources.</p>
 <p >See the <a href="modules.html">BSP API Reference Manual</a> for the complete list of the provided interfaces.</p>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<h1><a class="anchor" id="autotoc_md16"></a>
 More information</h1>
 <ul>
 <li><a href="modules.html">KIT_PSE84_EVAL_EPC2 BSP API Reference Manual</a></li>
@@ -157,7 +231,7 @@ More information</h1>
 <li><a href="https://www.cypress.com/products/modustoolbox-software-environment">ModusToolbox™</a></li>
 </ul>
 <hr  />
-<p> © Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation, 2019-2024. </p>
+<p> © Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation, 2019-2025. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->

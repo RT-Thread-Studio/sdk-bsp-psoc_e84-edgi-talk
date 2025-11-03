@@ -207,12 +207,14 @@ Functions</h2></td></tr>
 <td class="fieldname">
 key_id</td>
 <td class="fielddoc">
+<p >Key ID in persistent key storage </p>
 </td></tr>
 <tr><td class="fieldtype">
 <a id="a64a53438f20e2b9425d535321d74837f" name="a64a53438f20e2b9425d535321d74837f"></a><a class="el" href="group__key__attributes.html#ga39512c11b5b7f5ed09a4db25878d6625">ifx_se_key_owner_id_t</a></td>
 <td class="fieldname">
 owner</td>
 <td class="fielddoc">
+<p >Encoded owner of a key with this ID </p>
 </td></tr>
 </table>
 
@@ -310,7 +312,11 @@ owner</td>
 </div><div class="memdoc">
 
 <p>The type of the of keys identifier transfer data. </p>
-<p >This is an implementation-defined <code>struct</code>. Applications should not make any assumptions about the content of this structure except as directed by the documentation of a specific implementation. </p>
+<p >This is an implementation-defined <code>struct</code>. Applications should not make any assumptions about the content of this structure except as directed by the documentation of a specific implementation.</p>
+<p >Members:</p><ul>
+<li><a class="el" href="group__fih.html#structifx__se__fih__uint" title="All ints are replaced with two int - the normal one and a backup which is XORed with the mask.">ifx_se_fih_uint</a> <b>key_id</b> - ID of a key</li>
+<li><a class="el" href="group__fih.html#structifx__se__fih__uint" title="All ints are replaced with two int - the normal one and a backup which is XORed with the mask.">ifx_se_fih_uint</a> <b>owner</b> - Key owner </li>
+</ul>
 
 </div>
 </div>
@@ -327,6 +333,14 @@ owner</td>
 </div><div class="memdoc">
 
 <p>The type of a structure containing key attributes. </p>
+<p >Members:</p>
+<ul>
+<li><a class="el" href="group__crypto__types.html#ga562d12a9de8d6a287d98020515c6d438" title="Encoding of a key type.">ifx_se_key_type_t</a> <b>type</b> - Defines key type</li>
+<li><a class="el" href="group__crypto__types.html#ga2578ba88ecc7fed08eb0fd6387e57086" title="The type used internally for key sizes.">ifx_se_key_bits_t</a> <b>bits</b> - Defines size of a key in bits</li>
+<li><a class="el" href="group__key__lifetimes.html#gab2ba41e1dc979c397a9065ed09abf702" title="Encoding of key lifetimes.">ifx_se_key_lifetime_t</a> <b>lifetime</b> - Defines type of storage (persistent or volatile storage)</li>
+<li><a class="el" href="group__key__policy.html#gacc66ae69390a8149c644d256d1187341" title="Holds key usage allowance and specific algorithms.">ifx_se_key_policy_t</a> <b>policy</b> - Defines usage policy (algorithms, etc)</li>
+<li><a class="el" href="group__key__attributes.html#structifx__se__svc__key__id__t" title="Encoding of key identifiers as seen inside the PSA Crypto implementation.">ifx_se_svc_key_id_t</a> <b>id</b> - Defined ID for persistent keys</li>
+</ul>
 <p >This is an opaque structure that can represent the metadata of a key object. Metadata that can be stored in attributes includes:</p><ul>
 <li>The location of the key in storage, indicated by its key identifier and its lifetime.</li>
 <li>The key's policy, comprising usage flags and a specification of the permitted algorithm(s).</li>
@@ -346,16 +360,16 @@ owner</td>
 <p >Before calling any function on a key attribute structure, the application must initialize it by any of the following means:</p><ul>
 <li>Set the structure to all-bits-zero, for example: <div class="fragment"><div class="line"><a class="code hl_typedef" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> attributes;</div>
 <div class="line">memset(&amp;attributes, 0, <span class="keyword">sizeof</span>(attributes));</div>
-<div class="ttc" id="agroup__key__attributes_html_gad1ded78e935cd08ba08a5a27c003d7b3"><div class="ttname"><a href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a></div><div class="ttdeci">struct ifx_se_key_attributes_s ifx_se_key_attributes_t</div><div class="ttdoc">The type of a structure containing key attributes.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_types.h:453</div></div>
+<div class="ttc" id="agroup__key__attributes_html_gad1ded78e935cd08ba08a5a27c003d7b3"><div class="ttname"><a href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a></div><div class="ttdeci">struct ifx_se_key_attributes_s ifx_se_key_attributes_t</div><div class="ttdoc">The type of a structure containing key attributes.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_types.h:465</div></div>
 </div><!-- fragment --></li>
 <li>Initialize the structure to logical zero values, for example: <div class="fragment"><div class="line"><a class="code hl_typedef" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> attributes = {0};</div>
 </div><!-- fragment --></li>
 <li>Initialize the structure to the initializer <a class="el" href="group__key__attributes.html#ga5ad00c2092aaa27fc2a8fee1dedfadbc" title="The initial value of the key attributes.">IFX_SE_KEY_ATTRIBUTES_INIT</a>, for example: <div class="fragment"><div class="line"><a class="code hl_typedef" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> attributes = <a class="code hl_define" href="group__key__attributes.html#ga5ad00c2092aaa27fc2a8fee1dedfadbc">IFX_SE_KEY_ATTRIBUTES_INIT</a>;</div>
-<div class="ttc" id="agroup__key__attributes_html_ga5ad00c2092aaa27fc2a8fee1dedfadbc"><div class="ttname"><a href="group__key__attributes.html#ga5ad00c2092aaa27fc2a8fee1dedfadbc">IFX_SE_KEY_ATTRIBUTES_INIT</a></div><div class="ttdeci">#define IFX_SE_KEY_ATTRIBUTES_INIT</div><div class="ttdoc">The initial value of the key attributes.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_struct.h:234</div></div>
+<div class="ttc" id="agroup__key__attributes_html_ga5ad00c2092aaa27fc2a8fee1dedfadbc"><div class="ttname"><a href="group__key__attributes.html#ga5ad00c2092aaa27fc2a8fee1dedfadbc">IFX_SE_KEY_ATTRIBUTES_INIT</a></div><div class="ttdeci">#define IFX_SE_KEY_ATTRIBUTES_INIT</div><div class="ttdoc">The initial value of the key attributes.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_struct.h:239</div></div>
 </div><!-- fragment --></li>
 <li>Assign the result of the function <a class="el" href="group__key__attributes.html#ga455051be47c72aa853eae152f3e6585a" title="Sets key attributes structure with initial value.">ifx_se_key_attributes_init()</a> to the structure, for example: <div class="fragment"><div class="line"><a class="code hl_typedef" href="group__key__attributes.html#gad1ded78e935cd08ba08a5a27c003d7b3">ifx_se_key_attributes_t</a> attributes;</div>
 <div class="line">attributes = <a class="code hl_function" href="group__key__attributes.html#ga455051be47c72aa853eae152f3e6585a">ifx_se_key_attributes_init</a>();</div>
-<div class="ttc" id="agroup__key__attributes_html_ga455051be47c72aa853eae152f3e6585a"><div class="ttname"><a href="group__key__attributes.html#ga455051be47c72aa853eae152f3e6585a">ifx_se_key_attributes_init</a></div><div class="ttdeci">static struct ifx_se_key_attributes_s ifx_se_key_attributes_init(void)</div><div class="ttdoc">Sets key attributes structure with initial value.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_struct.h:243</div></div>
+<div class="ttc" id="agroup__key__attributes_html_ga455051be47c72aa853eae152f3e6585a"><div class="ttname"><a href="group__key__attributes.html#ga455051be47c72aa853eae152f3e6585a">ifx_se_key_attributes_init</a></div><div class="ttdeci">static struct ifx_se_key_attributes_s ifx_se_key_attributes_init(void)</div><div class="ttdoc">Sets key attributes structure with initial value.</div><div class="ttdef"><b>Definition:</b> ifx_se_psacrypto_struct.h:248</div></div>
 </div><!-- fragment --></li>
 </ul>
 <p >A freshly initialized attribute structure contains the following values:</p>

@@ -72,7 +72,7 @@
 
 #include "arm_helium_utils.h"
 
-float16_t arm_braycurtis_distance_f16(const float16_t *pA, const float16_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float16_t arm_braycurtis_distance_f16(const float16_t *pA,const float16_t *pB, uint32_t blockSize)
 {
     _Float16        accumDiff = 0.0f, accumSum = 0.0f;
     uint32_t        blkCnt;
@@ -83,8 +83,7 @@ float16_t arm_braycurtis_distance_f16(const float16_t *pA, const float16_t *pB, 
     accumSumV = vdupq_n_f16(0.0f);
 
     blkCnt = blockSize >> 3;
-    while (blkCnt > 0)
-    {
+    while (blkCnt > 0) {
         a = vld1q(pA);
         b = vld1q(pB);
 
@@ -101,8 +100,7 @@ float16_t arm_braycurtis_distance_f16(const float16_t *pA, const float16_t *pB, 
     }
 
     blkCnt = blockSize & 7;
-    if (blkCnt > 0U)
-    {
+    if (blkCnt > 0U) {
         mve_pred16_t    p0 = vctp16q(blkCnt);
 
         a = vldrhq_z_f16(pA, p0);
@@ -127,25 +125,25 @@ float16_t arm_braycurtis_distance_f16(const float16_t *pA, const float16_t *pB, 
 }
 #else
 
-float16_t arm_braycurtis_distance_f16(const float16_t *pA, const float16_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float16_t arm_braycurtis_distance_f16(const float16_t *pA,const float16_t *pB, uint32_t blockSize)
 {
-    _Float16 accumDiff = 0.0f16, accumSum = 0.0f16, tmpA, tmpB;
+   _Float16 accumDiff=0.0f16, accumSum=0.0f16, tmpA, tmpB;
 
-    while (blockSize > 0)
-    {
-        tmpA = *pA++;
-        tmpB = *pB++;
-        accumDiff += (_Float16)fabsf((float32_t)((_Float16)tmpA - (_Float16)tmpB));
-        accumSum += (_Float16)fabsf((float32_t)((_Float16)tmpA + (_Float16)tmpB));
-        blockSize --;
-    }
-    /*
+   while(blockSize > 0)
+   {
+      tmpA = *pA++;
+      tmpB = *pB++;
+      accumDiff += (_Float16)fabsf((float32_t)((_Float16)tmpA - (_Float16)tmpB));
+      accumSum += (_Float16)fabsf((float32_t)((_Float16)tmpA + (_Float16)tmpB));
+      blockSize --;
+   }
+   /*
 
-    It is assumed that accumSum is not zero. Since it is the sum of several absolute
-    values it would imply that all of them are zero. It is very unlikely for long vectors.
+   It is assumed that accumSum is not zero. Since it is the sum of several absolute
+   values it would imply that all of them are zero. It is very unlikely for long vectors.
 
-    */
-    return (accumDiff / accumSum);
+   */
+   return(accumDiff / accumSum);
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
 
@@ -156,5 +154,5 @@ float16_t arm_braycurtis_distance_f16(const float16_t *pA, const float16_t *pB, 
 
 
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

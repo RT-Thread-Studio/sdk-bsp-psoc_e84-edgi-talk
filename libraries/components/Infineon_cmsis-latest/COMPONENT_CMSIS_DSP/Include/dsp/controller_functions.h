@@ -23,9 +23,9 @@
  * limitations under the License.
  */
 
-
-#ifndef _CONTROLLER_FUNCTIONS_H_
-#define _CONTROLLER_FUNCTIONS_H_
+ 
+#ifndef CONTROLLER_FUNCTIONS_H_
+#define CONTROLLER_FUNCTIONS_H_
 
 #include "arm_math_types.h"
 #include "arm_math_memory.h"
@@ -38,15 +38,15 @@ extern "C"
 {
 #endif
 
-/**
- * @brief Macros required for SINE and COSINE Controller functions
- */
+  /**
+   * @brief Macros required for SINE and COSINE Controller functions
+   */
 
 #define CONTROLLER_Q31_SHIFT  (32 - 9)
-/* 1.31(q31) Fixed value of 2/360 */
-/* -1 to +1 is divided into 360 values so total spacing is (2/360) */
+  /* 1.31(q31) Fixed value of 2/360 */
+  /* -1 to +1 is divided into 360 values so total spacing is (2/360) */
 #define INPUT_SPACING         0xB60B61
-
+  
 /**
  * @defgroup groupController Controller Functions
  */
@@ -80,35 +80,35 @@ extern "C"
    -# Fetch the value corresponding to \c index from cosine table to \c y0 and also value from \c index+1 to \c y1.
    -# Cosine value is computed as <code> *pcosVal = y0 + (fract * (y1 - y0))</code>.
  */
-
+ 
 /**
    * @brief  Floating-point sin_cos function.
    * @param[in]  theta   input value in degrees
    * @param[out] pSinVal  points to the processed sine output.
    * @param[out] pCosVal  points to the processed cos output.
    */
-void arm_sin_cos_f32(
-    float32_t theta,
-    float32_t *pSinVal,
-    float32_t *pCosVal);
+  void arm_sin_cos_f32(
+        float32_t theta,
+        float32_t * pSinVal,
+        float32_t * pCosVal);
 
 
-/**
- * @brief  Q31 sin_cos function.
- * @param[in]  theta    scaled input value in degrees
- * @param[out] pSinVal  points to the processed sine output.
- * @param[out] pCosVal  points to the processed cosine output.
- */
-void arm_sin_cos_q31(
-    q31_t theta,
-    q31_t * pSinVal,
-    q31_t * pCosVal);
+  /**
+   * @brief  Q31 sin_cos function.
+   * @param[in]  theta    scaled input value in degrees
+   * @param[out] pSinVal  points to the processed sine output.
+   * @param[out] pCosVal  points to the processed cosine output.
+   */
+  void arm_sin_cos_q31(
+        q31_t theta,
+        q31_t * pSinVal,
+        q31_t * pCosVal);
 
 
 /**
   @ingroup groupController
  */
-
+  
 /**
    * @defgroup PID PID Motor Control
    *
@@ -168,131 +168,131 @@ void arm_sin_cos_q31(
    */
 
 
-/**
- * @ingroup PID
- * @brief Instance structure for the Q15 PID Control.
- */
-typedef struct
-{
-    q15_t A0;           /**< The derived gain, A0 = Kp + Ki + Kd . */
+  /**
+   * @ingroup PID
+   * @brief Instance structure for the Q15 PID Control.
+   */
+  typedef struct
+  {
+          q15_t A0;           /**< The derived gain, A0 = Kp + Ki + Kd . */
 #if !defined (ARM_MATH_DSP)
-    q15_t A1;           /**< The derived gain A1 = -Kp - 2Kd */
-    q15_t A2;           /**< The derived gain A1 = Kd. */
+          q15_t A1;           /**< The derived gain A1 = -Kp - 2Kd */
+          q15_t A2;           /**< The derived gain A1 = Kd. */
 #else
-    q31_t A1;           /**< The derived gain A1 = -Kp - 2Kd | Kd.*/
+          q31_t A1;           /**< The derived gain A1 = -Kp - 2Kd | Kd.*/
 #endif
-    q15_t state[3];     /**< The state array of length 3. */
-    q15_t Kp;           /**< The proportional gain. */
-    q15_t Ki;           /**< The integral gain. */
-    q15_t Kd;           /**< The derivative gain. */
-} arm_pid_instance_q15;
+          q15_t state[3];     /**< The state array of length 3. */
+          q15_t Kp;           /**< The proportional gain. */
+          q15_t Ki;           /**< The integral gain. */
+          q15_t Kd;           /**< The derivative gain. */
+  } arm_pid_instance_q15;
 
-/**
- * @ingroup PID
- * @brief Instance structure for the Q31 PID Control.
- */
-typedef struct
-{
-    q31_t A0;            /**< The derived gain, A0 = Kp + Ki + Kd . */
-    q31_t A1;            /**< The derived gain, A1 = -Kp - 2Kd. */
-    q31_t A2;            /**< The derived gain, A2 = Kd . */
-    q31_t state[3];      /**< The state array of length 3. */
-    q31_t Kp;            /**< The proportional gain. */
-    q31_t Ki;            /**< The integral gain. */
-    q31_t Kd;            /**< The derivative gain. */
-} arm_pid_instance_q31;
+  /**
+   * @ingroup PID
+   * @brief Instance structure for the Q31 PID Control.
+   */
+  typedef struct
+  {
+          q31_t A0;            /**< The derived gain, A0 = Kp + Ki + Kd . */
+          q31_t A1;            /**< The derived gain, A1 = -Kp - 2Kd. */
+          q31_t A2;            /**< The derived gain, A2 = Kd . */
+          q31_t state[3];      /**< The state array of length 3. */
+          q31_t Kp;            /**< The proportional gain. */
+          q31_t Ki;            /**< The integral gain. */
+          q31_t Kd;            /**< The derivative gain. */
+  } arm_pid_instance_q31;
 
-/**
- * @ingroup PID
- * @brief Instance structure for the floating-point PID Control.
- */
-typedef struct
-{
-    float32_t A0;          /**< The derived gain, A0 = Kp + Ki + Kd . */
-    float32_t A1;          /**< The derived gain, A1 = -Kp - 2Kd. */
-    float32_t A2;          /**< The derived gain, A2 = Kd . */
-    float32_t state[3];    /**< The state array of length 3. */
-    float32_t Kp;          /**< The proportional gain. */
-    float32_t Ki;          /**< The integral gain. */
-    float32_t Kd;          /**< The derivative gain. */
-} arm_pid_instance_f32;
-
-
-
-/**
- * @brief  Initialization function for the floating-point PID Control.
- * @param[in,out] S               points to an instance of the PID structure.
- * @param[in]     resetStateFlag  flag to reset the state. 0 = no change in state 1 = reset the state.
- */
-void arm_pid_init_f32(
-    arm_pid_instance_f32 * S,
-    int32_t resetStateFlag);
-
-
-/**
- * @brief  Reset function for the floating-point PID Control.
- * @param[in,out] S  is an instance of the floating-point PID Control structure
- */
-void arm_pid_reset_f32(
-    arm_pid_instance_f32 * S);
-
-
-/**
- * @brief  Initialization function for the Q31 PID Control.
- * @param[in,out] S               points to an instance of the Q15 PID structure.
- * @param[in]     resetStateFlag  flag to reset the state. 0 = no change in state 1 = reset the state.
- */
-void arm_pid_init_q31(
-    arm_pid_instance_q31 * S,
-    int32_t resetStateFlag);
-
-
-/**
- * @brief  Reset function for the Q31 PID Control.
- * @param[in,out] S   points to an instance of the Q31 PID Control structure
- */
-
-void arm_pid_reset_q31(
-    arm_pid_instance_q31 * S);
-
-
-/**
- * @brief  Initialization function for the Q15 PID Control.
- * @param[in,out] S               points to an instance of the Q15 PID structure.
- * @param[in]     resetStateFlag  flag to reset the state. 0 = no change in state 1 = reset the state.
- */
-void arm_pid_init_q15(
-    arm_pid_instance_q15 * S,
-    int32_t resetStateFlag);
-
-
-/**
- * @brief  Reset function for the Q15 PID Control.
- * @param[in,out] S  points to an instance of the q15 PID Control structure
- */
-void arm_pid_reset_q15(
-    arm_pid_instance_q15 * S);
+  /**
+   * @ingroup PID
+   * @brief Instance structure for the floating-point PID Control.
+   */
+  typedef struct
+  {
+          float32_t A0;          /**< The derived gain, A0 = Kp + Ki + Kd . */
+          float32_t A1;          /**< The derived gain, A1 = -Kp - 2Kd. */
+          float32_t A2;          /**< The derived gain, A2 = Kd . */
+          float32_t state[3];    /**< The state array of length 3. */
+          float32_t Kp;          /**< The proportional gain. */
+          float32_t Ki;          /**< The integral gain. */
+          float32_t Kd;          /**< The derivative gain. */
+  } arm_pid_instance_f32;
 
 
 
+  /**
+   * @brief  Initialization function for the floating-point PID Control.
+   * @param[in,out] S               points to an instance of the PID structure.
+   * @param[in]     resetStateFlag  flag to reset the state. 0 = no change in state 1 = reset the state.
+   */
+  void arm_pid_init_f32(
+        arm_pid_instance_f32 * S,
+        int32_t resetStateFlag);
 
 
-/**
- * @ingroup PID
- * @brief         Process function for the floating-point PID Control.
- * @param[in,out] S   is an instance of the floating-point PID Control structure
- * @param[in]     in  input sample to process
- * @return        processed output sample.
- */
-__STATIC_FORCEINLINE float32_t arm_pid_f32(
-    arm_pid_instance_f32 * S,
-    float32_t in)
-{
+  /**
+   * @brief  Reset function for the floating-point PID Control.
+   * @param[in,out] S  is an instance of the floating-point PID Control structure
+   */
+  void arm_pid_reset_f32(
+        arm_pid_instance_f32 * S);
+
+
+  /**
+   * @brief  Initialization function for the Q31 PID Control.
+   * @param[in,out] S               points to an instance of the Q15 PID structure.
+   * @param[in]     resetStateFlag  flag to reset the state. 0 = no change in state 1 = reset the state.
+   */
+  void arm_pid_init_q31(
+        arm_pid_instance_q31 * S,
+        int32_t resetStateFlag);
+
+
+  /**
+   * @brief  Reset function for the Q31 PID Control.
+   * @param[in,out] S   points to an instance of the Q31 PID Control structure
+   */
+
+  void arm_pid_reset_q31(
+        arm_pid_instance_q31 * S);
+
+
+  /**
+   * @brief  Initialization function for the Q15 PID Control.
+   * @param[in,out] S               points to an instance of the Q15 PID structure.
+   * @param[in]     resetStateFlag  flag to reset the state. 0 = no change in state 1 = reset the state.
+   */
+  void arm_pid_init_q15(
+        arm_pid_instance_q15 * S,
+        int32_t resetStateFlag);
+
+
+  /**
+   * @brief  Reset function for the Q15 PID Control.
+   * @param[in,out] S  points to an instance of the q15 PID Control structure
+   */
+  void arm_pid_reset_q15(
+        arm_pid_instance_q15 * S);
+
+
+
+
+
+  /**
+   * @ingroup PID
+   * @brief         Process function for the floating-point PID Control.
+   * @param[in,out] S   is an instance of the floating-point PID Control structure
+   * @param[in]     in  input sample to process
+   * @return        processed output sample.
+   */
+  __STATIC_FORCEINLINE float32_t arm_pid_f32(
+  arm_pid_instance_f32 * S,
+  float32_t in)
+  {
     float32_t out;
 
     /* y[n] = y[n-1] + A0 * x[n] + A1 * x[n-1] + A2 * x[n-2]  */
     out = (S->A0 * in) +
-          (S->A1 * S->state[0]) + (S->A2 * S->state[1]) + (S->state[2]);
+      (S->A1 * S->state[0]) + (S->A2 * S->state[1]) + (S->state[2]);
 
     /* Update state */
     S->state[1] = S->state[0];
@@ -302,7 +302,7 @@ __STATIC_FORCEINLINE float32_t arm_pid_f32(
     /* return to application */
     return (out);
 
-}
+  }
 
 /**
   @ingroup PID
@@ -319,9 +319,9 @@ __STATIC_FORCEINLINE float32_t arm_pid_f32(
          After all multiply-accumulates are performed, the 2.62 accumulator is truncated to 1.32 format and then saturated to 1.31 format.
  */
 __STATIC_FORCEINLINE q31_t arm_pid_q31(
-    arm_pid_instance_q31 * S,
-    q31_t in)
-{
+  arm_pid_instance_q31 * S,
+  q31_t in)
+  {
     q63_t acc;
     q31_t out;
 
@@ -335,7 +335,7 @@ __STATIC_FORCEINLINE q31_t arm_pid_q31(
     acc += (q63_t) S->A2 * S->state[1];
 
     /* convert output to 1.31 format to add y[n-1] */
-    out = (q31_t)(acc >> 31U);
+    out = (q31_t) (acc >> 31U);
 
     /* out += y[n-1] */
     out += S->state[2];
@@ -347,7 +347,7 @@ __STATIC_FORCEINLINE q31_t arm_pid_q31(
 
     /* return to application */
     return (out);
-}
+  }
 
 
 /**
@@ -366,9 +366,9 @@ __STATIC_FORCEINLINE q31_t arm_pid_q31(
          Lastly, the accumulator is saturated to yield a result in 1.15 format.
  */
 __STATIC_FORCEINLINE q15_t arm_pid_q15(
-    arm_pid_instance_q15 * S,
-    q15_t in)
-{
+  arm_pid_instance_q15 * S,
+  q15_t in)
+  {
     q63_t acc;
     q15_t out;
 
@@ -379,7 +379,7 @@ __STATIC_FORCEINLINE q15_t arm_pid_q15(
     acc = (q31_t) __SMUAD((uint32_t)S->A0, (uint32_t)in);
 
     /* acc += A1 * x[n-1] + A2 * x[n-2]  */
-    acc = (q63_t)__SMLALD((uint32_t)S->A1, (uint32_t)read_q15x2(S->state), (uint64_t)acc);
+    acc = (q63_t)__SMLALD((uint32_t)S->A1, (uint32_t)read_q15x2 (S->state), (uint64_t)acc);
 #else
     /* acc = A0 * x[n]  */
     acc = ((q31_t) S->A0) * in;
@@ -393,7 +393,7 @@ __STATIC_FORCEINLINE q15_t arm_pid_q15(
     acc += (q31_t) S->state[2] << 15;
 
     /* saturate the output */
-    out = (q15_t)(__SSAT((q31_t)(acc >> 15), 16));
+    out = (q15_t) (__SSAT((q31_t)(acc >> 15), 16));
 
     /* Update state */
     S->state[1] = S->state[0];
@@ -402,68 +402,67 @@ __STATIC_FORCEINLINE q15_t arm_pid_q15(
 
     /* return to application */
     return (out);
-}
+  }
 
 
 
-/**
- * @ingroup groupController
- */
+  /**
+   * @ingroup groupController
+   */
 
-/**
- * @defgroup park Vector Park Transform
- *
- * Forward Park transform converts the input two-coordinate vector to flux and torque components.
- * The Park transform can be used to realize the transformation of the <code>Ialpha</code> and the <code>Ibeta</code> currents
- * from the stationary to the moving reference frame and control the spatial relationship between
- * the stator vector current and rotor flux vector.
- * If we consider the d axis aligned with the rotor flux, the diagram below shows the
- * current vector and the relationship from the two reference frames:
- * \image html park.gif "Stator current space vector and its component in (a,b) and in the d,q rotating reference frame"
- *
- * The function operates on a single sample of data and each call to the function returns the processed output.
- * The library provides separate functions for Q31 and floating-point data types.
- * \par Algorithm
- * \image html parkFormula.gif
- * where <code>Ialpha</code> and <code>Ibeta</code> are the stator vector components,
- * <code>pId</code> and <code>pIq</code> are rotor vector components and <code>cosVal</code> and <code>sinVal</code> are the
- * cosine and sine values of theta (rotor flux position).
- * \par Fixed-Point Behavior
- * Care must be taken when using the Q31 version of the Park transform.
- * In particular, the overflow and saturation behavior of the accumulator used must be considered.
- * Refer to the function specific documentation below for usage guidelines.
- */
+  /**
+   * @defgroup park Vector Park Transform
+   *
+   * Forward Park transform converts the input two-coordinate vector to flux and torque components.
+   * The Park transform can be used to realize the transformation of the <code>Ialpha</code> and the <code>Ibeta</code> currents
+   * from the stationary to the moving reference frame and control the spatial relationship between
+   * the stator vector current and rotor flux vector.
+   * If we consider the d axis aligned with the rotor flux, the diagram below shows the
+   * current vector and the relationship from the two reference frames:
+   * \image html park.gif "Stator current space vector and its component in (a,b) and in the d,q rotating reference frame"
+   *
+   * The function operates on a single sample of data and each call to the function returns the processed output.
+   * The library provides separate functions for Q31 and floating-point data types.
+   * \par Algorithm
+   * \image html parkFormula.gif
+   * where <code>Ialpha</code> and <code>Ibeta</code> are the stator vector components,
+   * <code>pId</code> and <code>pIq</code> are rotor vector components and <code>cosVal</code> and <code>sinVal</code> are the
+   * cosine and sine values of theta (rotor flux position).
+   * \par Fixed-Point Behavior
+   * Care must be taken when using the Q31 version of the Park transform.
+   * In particular, the overflow and saturation behavior of the accumulator used must be considered.
+   * Refer to the function specific documentation below for usage guidelines.
+   */
 
+ 
 
-
-/**
- * @ingroup park
- * @brief Floating-point Park transform
- * @param[in]  Ialpha  input two-phase vector coordinate alpha
- * @param[in]  Ibeta   input two-phase vector coordinate beta
- * @param[out] pId     points to output   rotor reference frame d
- * @param[out] pIq     points to output   rotor reference frame q
- * @param[in]  sinVal  sine value of rotation angle theta
- * @param[in]  cosVal  cosine value of rotation angle theta
- * @return     none
- *
- * The function implements the forward Park transform.
- *
- */
-__STATIC_FORCEINLINE void arm_park_f32(
-    float32_t Ialpha,
-    float32_t Ibeta,
-    float32_t *pId,
-    float32_t *pIq,
-    float32_t sinVal,
-    float32_t cosVal)
-{
+  /**
+   * @ingroup park
+   * @brief Floating-point Park transform
+   * @param[in]  Ialpha  input two-phase vector coordinate alpha
+   * @param[in]  Ibeta   input two-phase vector coordinate beta
+   * @param[out] pId     points to output   rotor reference frame d
+   * @param[out] pIq     points to output   rotor reference frame q
+   * @param[in]  sinVal  sine value of rotation angle theta
+   * @param[in]  cosVal  cosine value of rotation angle theta
+   *
+   * The function implements the forward Park transform.
+   *
+   */
+  __STATIC_FORCEINLINE void arm_park_f32(
+  float32_t Ialpha,
+  float32_t Ibeta,
+  float32_t * pId,
+  float32_t * pIq,
+  float32_t sinVal,
+  float32_t cosVal)
+  {
     /* Calculate pId using the equation, pId = Ialpha * cosVal + Ibeta * sinVal */
     *pId = Ialpha * cosVal + Ibeta * sinVal;
 
     /* Calculate pIq using the equation, pIq = - Ialpha * sinVal + Ibeta * cosVal */
     *pIq = -Ialpha * sinVal + Ibeta * cosVal;
-}
+  }
 
 
 /**
@@ -475,7 +474,6 @@ __STATIC_FORCEINLINE void arm_park_f32(
   @param[out] pIq     points to output rotor reference frame q
   @param[in]  sinVal  sine value of rotation angle theta
   @param[in]  cosVal  cosine value of rotation angle theta
-  @return     none
 
   \par Scaling and Overflow Behavior
          The function is implemented using an internal 32-bit accumulator.
@@ -483,86 +481,85 @@ __STATIC_FORCEINLINE void arm_park_f32(
          There is saturation on the addition and subtraction, hence there is no risk of overflow.
  */
 __STATIC_FORCEINLINE void arm_park_q31(
-    q31_t Ialpha,
-    q31_t Ibeta,
-    q31_t * pId,
-    q31_t * pIq,
-    q31_t sinVal,
-    q31_t cosVal)
-{
+  q31_t Ialpha,
+  q31_t Ibeta,
+  q31_t * pId,
+  q31_t * pIq,
+  q31_t sinVal,
+  q31_t cosVal)
+  {
     q31_t product1, product2;                    /* Temporary variables used to store intermediate results */
     q31_t product3, product4;                    /* Temporary variables used to store intermediate results */
 
     /* Intermediate product is calculated by (Ialpha * cosVal) */
-    product1 = (q31_t)(((q63_t)(Ialpha) * (cosVal)) >> 31);
+    product1 = (q31_t) (((q63_t) (Ialpha) * (cosVal)) >> 31);
 
     /* Intermediate product is calculated by (Ibeta * sinVal) */
-    product2 = (q31_t)(((q63_t)(Ibeta) * (sinVal)) >> 31);
+    product2 = (q31_t) (((q63_t) (Ibeta) * (sinVal)) >> 31);
 
 
     /* Intermediate product is calculated by (Ialpha * sinVal) */
-    product3 = (q31_t)(((q63_t)(Ialpha) * (sinVal)) >> 31);
+    product3 = (q31_t) (((q63_t) (Ialpha) * (sinVal)) >> 31);
 
     /* Intermediate product is calculated by (Ibeta * cosVal) */
-    product4 = (q31_t)(((q63_t)(Ibeta) * (cosVal)) >> 31);
+    product4 = (q31_t) (((q63_t) (Ibeta) * (cosVal)) >> 31);
 
     /* Calculate pId by adding the two intermediate products 1 and 2 */
     *pId = __QADD(product1, product2);
 
     /* Calculate pIq by subtracting the two intermediate products 3 from 4 */
     *pIq = __QSUB(product4, product3);
-}
+  }
 
 
 
-/**
- * @ingroup groupController
- */
+  /**
+   * @ingroup groupController
+   */
 
-/**
- * @defgroup inv_park Vector Inverse Park transform
- * Inverse Park transform converts the input flux and torque components to two-coordinate vector.
- *
- * The function operates on a single sample of data and each call to the function returns the processed output.
- * The library provides separate functions for Q31 and floating-point data types.
- * \par Algorithm
- * \image html parkInvFormula.gif
- * where <code>pIalpha</code> and <code>pIbeta</code> are the stator vector components,
- * <code>Id</code> and <code>Iq</code> are rotor vector components and <code>cosVal</code> and <code>sinVal</code> are the
- * cosine and sine values of theta (rotor flux position).
- * \par Fixed-Point Behavior
- * Care must be taken when using the Q31 version of the Park transform.
- * In particular, the overflow and saturation behavior of the accumulator used must be considered.
- * Refer to the function specific documentation below for usage guidelines.
- */
+  /**
+   * @defgroup inv_park Vector Inverse Park transform
+   * Inverse Park transform converts the input flux and torque components to two-coordinate vector.
+   *
+   * The function operates on a single sample of data and each call to the function returns the processed output.
+   * The library provides separate functions for Q31 and floating-point data types.
+   * \par Algorithm
+   * \image html parkInvFormula.gif
+   * where <code>pIalpha</code> and <code>pIbeta</code> are the stator vector components,
+   * <code>Id</code> and <code>Iq</code> are rotor vector components and <code>cosVal</code> and <code>sinVal</code> are the
+   * cosine and sine values of theta (rotor flux position).
+   * \par Fixed-Point Behavior
+   * Care must be taken when using the Q31 version of the Park transform.
+   * In particular, the overflow and saturation behavior of the accumulator used must be considered.
+   * Refer to the function specific documentation below for usage guidelines.
+   */
 
+  
 
-
-/**
-* @ingroup inv_park
-* @brief  Floating-point Inverse Park transform
-* @param[in]  Id       input coordinate of rotor reference frame d
-* @param[in]  Iq       input coordinate of rotor reference frame q
-* @param[out] pIalpha  points to output two-phase orthogonal vector axis alpha
-* @param[out] pIbeta   points to output two-phase orthogonal vector axis beta
-* @param[in]  sinVal   sine value of rotation angle theta
-* @param[in]  cosVal   cosine value of rotation angle theta
-* @return     none
-*/
-__STATIC_FORCEINLINE void arm_inv_park_f32(
-    float32_t Id,
-    float32_t Iq,
-    float32_t *pIalpha,
-    float32_t *pIbeta,
-    float32_t sinVal,
-    float32_t cosVal)
-{
+   /**
+   * @ingroup inv_park
+   * @brief  Floating-point Inverse Park transform
+   * @param[in]  Id       input coordinate of rotor reference frame d
+   * @param[in]  Iq       input coordinate of rotor reference frame q
+   * @param[out] pIalpha  points to output two-phase orthogonal vector axis alpha
+   * @param[out] pIbeta   points to output two-phase orthogonal vector axis beta
+   * @param[in]  sinVal   sine value of rotation angle theta
+   * @param[in]  cosVal   cosine value of rotation angle theta
+   */
+  __STATIC_FORCEINLINE void arm_inv_park_f32(
+  float32_t Id,
+  float32_t Iq,
+  float32_t * pIalpha,
+  float32_t * pIbeta,
+  float32_t sinVal,
+  float32_t cosVal)
+  {
     /* Calculate pIalpha using the equation, pIalpha = Id * cosVal - Iq * sinVal */
     *pIalpha = Id * cosVal - Iq * sinVal;
 
     /* Calculate pIbeta using the equation, pIbeta = Id * sinVal + Iq * cosVal */
     *pIbeta = Id * sinVal + Iq * cosVal;
-}
+  }
 
 
 /**
@@ -574,7 +571,6 @@ __STATIC_FORCEINLINE void arm_inv_park_f32(
   @param[out] pIbeta   points to output two-phase orthogonal vector axis beta
   @param[in]  sinVal   sine value of rotation angle theta
   @param[in]  cosVal   cosine value of rotation angle theta
-  @return     none
 
   @par Scaling and Overflow Behavior
          The function is implemented using an internal 32-bit accumulator.
@@ -582,86 +578,85 @@ __STATIC_FORCEINLINE void arm_inv_park_f32(
          There is saturation on the addition, hence there is no risk of overflow.
  */
 __STATIC_FORCEINLINE void arm_inv_park_q31(
-    q31_t Id,
-    q31_t Iq,
-    q31_t * pIalpha,
-    q31_t * pIbeta,
-    q31_t sinVal,
-    q31_t cosVal)
-{
+  q31_t Id,
+  q31_t Iq,
+  q31_t * pIalpha,
+  q31_t * pIbeta,
+  q31_t sinVal,
+  q31_t cosVal)
+  {
     q31_t product1, product2;                    /* Temporary variables used to store intermediate results */
     q31_t product3, product4;                    /* Temporary variables used to store intermediate results */
 
     /* Intermediate product is calculated by (Id * cosVal) */
-    product1 = (q31_t)(((q63_t)(Id) * (cosVal)) >> 31);
+    product1 = (q31_t) (((q63_t) (Id) * (cosVal)) >> 31);
 
     /* Intermediate product is calculated by (Iq * sinVal) */
-    product2 = (q31_t)(((q63_t)(Iq) * (sinVal)) >> 31);
+    product2 = (q31_t) (((q63_t) (Iq) * (sinVal)) >> 31);
 
 
     /* Intermediate product is calculated by (Id * sinVal) */
-    product3 = (q31_t)(((q63_t)(Id) * (sinVal)) >> 31);
+    product3 = (q31_t) (((q63_t) (Id) * (sinVal)) >> 31);
 
     /* Intermediate product is calculated by (Iq * cosVal) */
-    product4 = (q31_t)(((q63_t)(Iq) * (cosVal)) >> 31);
+    product4 = (q31_t) (((q63_t) (Iq) * (cosVal)) >> 31);
 
     /* Calculate pIalpha by using the two intermediate products 1 and 2 */
     *pIalpha = __QSUB(product1, product2);
 
     /* Calculate pIbeta by using the two intermediate products 3 and 4 */
     *pIbeta = __QADD(product4, product3);
-}
+  }
 
 
 /**
    * @ingroup groupController
    */
 
-/**
- * @defgroup clarke Vector Clarke Transform
- * Forward Clarke transform converts the instantaneous stator phases into a two-coordinate time invariant vector.
- * Generally the Clarke transform uses three-phase currents <code>Ia, Ib and Ic</code> to calculate currents
- * in the two-phase orthogonal stator axis <code>Ialpha</code> and <code>Ibeta</code>.
- * When <code>Ialpha</code> is superposed with <code>Ia</code> as shown in the figure below
- * \image html clarke.gif Stator current space vector and its components in (a,b).
- * and <code>Ia + Ib + Ic = 0</code>, in this condition <code>Ialpha</code> and <code>Ibeta</code>
- * can be calculated using only <code>Ia</code> and <code>Ib</code>.
- *
- * The function operates on a single sample of data and each call to the function returns the processed output.
- * The library provides separate functions for Q31 and floating-point data types.
- * \par Algorithm
- * \image html clarkeFormula.gif
- * where <code>Ia</code> and <code>Ib</code> are the instantaneous stator phases and
- * <code>pIalpha</code> and <code>pIbeta</code> are the two coordinates of time invariant vector.
- * \par Fixed-Point Behavior
- * Care must be taken when using the Q31 version of the Clarke transform.
- * In particular, the overflow and saturation behavior of the accumulator used must be considered.
- * Refer to the function specific documentation below for usage guidelines.
- */
+  /**
+   * @defgroup clarke Vector Clarke Transform
+   * Forward Clarke transform converts the instantaneous stator phases into a two-coordinate time invariant vector.
+   * Generally the Clarke transform uses three-phase currents <code>Ia, Ib and Ic</code> to calculate currents
+   * in the two-phase orthogonal stator axis <code>Ialpha</code> and <code>Ibeta</code>.
+   * When <code>Ialpha</code> is superposed with <code>Ia</code> as shown in the figure below
+   * \image html clarke.gif Stator current space vector and its components in (a,b).
+   * and <code>Ia + Ib + Ic = 0</code>, in this condition <code>Ialpha</code> and <code>Ibeta</code>
+   * can be calculated using only <code>Ia</code> and <code>Ib</code>.
+   *
+   * The function operates on a single sample of data and each call to the function returns the processed output.
+   * The library provides separate functions for Q31 and floating-point data types.
+   * \par Algorithm
+   * \image html clarkeFormula.gif
+   * where <code>Ia</code> and <code>Ib</code> are the instantaneous stator phases and
+   * <code>pIalpha</code> and <code>pIbeta</code> are the two coordinates of time invariant vector.
+   * \par Fixed-Point Behavior
+   * Care must be taken when using the Q31 version of the Clarke transform.
+   * In particular, the overflow and saturation behavior of the accumulator used must be considered.
+   * Refer to the function specific documentation below for usage guidelines.
+   */
 
 
-/**
- *
- * @ingroup clarke
- * @brief  Floating-point Clarke transform
- * @param[in]  Ia       input three-phase coordinate <code>a</code>
- * @param[in]  Ib       input three-phase coordinate <code>b</code>
- * @param[out] pIalpha  points to output two-phase orthogonal vector axis alpha
- * @param[out] pIbeta   points to output two-phase orthogonal vector axis beta
- * @return        none
- */
-__STATIC_FORCEINLINE void arm_clarke_f32(
-    float32_t Ia,
-    float32_t Ib,
-    float32_t *pIalpha,
-    float32_t *pIbeta)
-{
+  /**
+   *
+   * @ingroup clarke
+   * @brief  Floating-point Clarke transform
+   * @param[in]  Ia       input three-phase coordinate <code>a</code>
+   * @param[in]  Ib       input three-phase coordinate <code>b</code>
+   * @param[out] pIalpha  points to output two-phase orthogonal vector axis alpha
+   * @param[out] pIbeta   points to output two-phase orthogonal vector axis beta
+   */
+  __STATIC_FORCEINLINE void arm_clarke_f32(
+  float32_t Ia,
+  float32_t Ib,
+  float32_t * pIalpha,
+  float32_t * pIbeta)
+  {
     /* Calculate pIalpha using the equation, pIalpha = Ia */
     *pIalpha = Ia;
 
     /* Calculate pIbeta using the equation, pIbeta = (1/sqrt(3)) * Ia + (2/sqrt(3)) * Ib */
     *pIbeta = (0.57735026919f * Ia + 1.15470053838f * Ib);
-}
+  }
 
 
 /**
@@ -671,7 +666,6 @@ __STATIC_FORCEINLINE void arm_clarke_f32(
   @param[in]  Ib       input three-phase coordinate <code>b</code>
   @param[out] pIalpha  points to output two-phase orthogonal vector axis alpha
   @param[out] pIbeta   points to output two-phase orthogonal vector axis beta
-  @return     none
 
   \par Scaling and Overflow Behavior
          The function is implemented using an internal 32-bit accumulator.
@@ -679,71 +673,70 @@ __STATIC_FORCEINLINE void arm_clarke_f32(
          There is saturation on the addition, hence there is no risk of overflow.
  */
 __STATIC_FORCEINLINE void arm_clarke_q31(
-    q31_t Ia,
-    q31_t Ib,
-    q31_t * pIalpha,
-    q31_t * pIbeta)
-{
+  q31_t Ia,
+  q31_t Ib,
+  q31_t * pIalpha,
+  q31_t * pIbeta)
+  {
     q31_t product1, product2;                    /* Temporary variables used to store intermediate results */
 
     /* Calculating pIalpha from Ia by equation pIalpha = Ia */
     *pIalpha = Ia;
 
     /* Intermediate product is calculated by (1/(sqrt(3)) * Ia) */
-    product1 = (q31_t)(((q63_t) Ia * 0x24F34E8B) >> 30);
+    product1 = (q31_t) (((q63_t) Ia * 0x24F34E8B) >> 30);
 
     /* Intermediate product is calculated by (2/sqrt(3) * Ib) */
-    product2 = (q31_t)(((q63_t) Ib * 0x49E69D16) >> 30);
+    product2 = (q31_t) (((q63_t) Ib * 0x49E69D16) >> 30);
 
     /* pIbeta is calculated by adding the intermediate products */
     *pIbeta = __QADD(product1, product2);
-}
+  }
 
 
 
-/**
- * @ingroup groupController
- */
+  /**
+   * @ingroup groupController
+   */
 
-/**
- * @defgroup inv_clarke Vector Inverse Clarke Transform
- * Inverse Clarke transform converts the two-coordinate time invariant vector into instantaneous stator phases.
- *
- * The function operates on a single sample of data and each call to the function returns the processed output.
- * The library provides separate functions for Q31 and floating-point data types.
- * \par Algorithm
- * \image html clarkeInvFormula.gif
- * where <code>pIa</code> and <code>pIb</code> are the instantaneous stator phases and
- * <code>Ialpha</code> and <code>Ibeta</code> are the two coordinates of time invariant vector.
- * \par Fixed-Point Behavior
- * Care must be taken when using the Q31 version of the Clarke transform.
- * In particular, the overflow and saturation behavior of the accumulator used must be considered.
- * Refer to the function specific documentation below for usage guidelines.
- */
+  /**
+   * @defgroup inv_clarke Vector Inverse Clarke Transform
+   * Inverse Clarke transform converts the two-coordinate time invariant vector into instantaneous stator phases.
+   *
+   * The function operates on a single sample of data and each call to the function returns the processed output.
+   * The library provides separate functions for Q31 and floating-point data types.
+   * \par Algorithm
+   * \image html clarkeInvFormula.gif
+   * where <code>pIa</code> and <code>pIb</code> are the instantaneous stator phases and
+   * <code>Ialpha</code> and <code>Ibeta</code> are the two coordinates of time invariant vector.
+   * \par Fixed-Point Behavior
+   * Care must be taken when using the Q31 version of the Clarke transform.
+   * In particular, the overflow and saturation behavior of the accumulator used must be considered.
+   * Refer to the function specific documentation below for usage guidelines.
+   */
 
+ 
 
-
-/**
-* @ingroup inv_clarke
-* @brief  Floating-point Inverse Clarke transform
-* @param[in]  Ialpha  input two-phase orthogonal vector axis alpha
-* @param[in]  Ibeta   input two-phase orthogonal vector axis beta
-* @param[out] pIa     points to output three-phase coordinate <code>a</code>
-* @param[out] pIb     points to output three-phase coordinate <code>b</code>
-* @return     none
-*/
-__STATIC_FORCEINLINE void arm_inv_clarke_f32(
-    float32_t Ialpha,
-    float32_t Ibeta,
-    float32_t *pIa,
-    float32_t *pIb)
-{
+   /**
+   * @ingroup inv_clarke
+   * @brief  Floating-point Inverse Clarke transform
+   * @param[in]  Ialpha  input two-phase orthogonal vector axis alpha
+   * @param[in]  Ibeta   input two-phase orthogonal vector axis beta
+   * @param[out] pIa     points to output three-phase coordinate <code>a</code>
+   * @param[out] pIb     points to output three-phase coordinate <code>b</code>
+   */
+  __STATIC_FORCEINLINE void arm_inv_clarke_f32(
+  float32_t Ialpha,
+  float32_t Ibeta,
+  float32_t * pIa,
+  float32_t * pIb)
+  {
     /* Calculating pIa from Ialpha by equation pIa = Ialpha */
     *pIa = Ialpha;
 
     /* Calculating pIb from Ialpha and Ibeta by equation pIb = -(1/2) * Ialpha + (sqrt(3)/2) * Ibeta */
     *pIb = -0.5f * Ialpha + 0.8660254039f * Ibeta;
-}
+  }
 
 
 /**
@@ -753,7 +746,6 @@ __STATIC_FORCEINLINE void arm_inv_clarke_f32(
   @param[in]  Ibeta   input two-phase orthogonal vector axis beta
   @param[out] pIa     points to output three-phase coordinate <code>a</code>
   @param[out] pIb     points to output three-phase coordinate <code>b</code>
-  @return     none
 
   \par Scaling and Overflow Behavior
          The function is implemented using an internal 32-bit accumulator.
@@ -761,31 +753,31 @@ __STATIC_FORCEINLINE void arm_inv_clarke_f32(
          There is saturation on the subtraction, hence there is no risk of overflow.
  */
 __STATIC_FORCEINLINE void arm_inv_clarke_q31(
-    q31_t Ialpha,
-    q31_t Ibeta,
-    q31_t * pIa,
-    q31_t * pIb)
-{
+  q31_t Ialpha,
+  q31_t Ibeta,
+  q31_t * pIa,
+  q31_t * pIb)
+  {
     q31_t product1, product2;                    /* Temporary variables used to store intermediate results */
 
     /* Calculating pIa from Ialpha by equation pIa = Ialpha */
     *pIa = Ialpha;
 
     /* Intermediate product is calculated by (1/(2*sqrt(3)) * Ia) */
-    product1 = (q31_t)(((q63_t)(Ialpha) * (0x40000000)) >> 31);
+    product1 = (q31_t) (((q63_t) (Ialpha) * (0x40000000)) >> 31);
 
     /* Intermediate product is calculated by (1/sqrt(3) * pIb) */
-    product2 = (q31_t)(((q63_t)(Ibeta) * (0x6ED9EBA1)) >> 31);
+    product2 = (q31_t) (((q63_t) (Ibeta) * (0x6ED9EBA1)) >> 31);
 
     /* pIb is calculated by subtracting the products */
     *pIb = __QSUB(product2, product1);
-}
+  }
 
 
 
 
 
-
+  
 #ifdef   __cplusplus
 }
 #endif

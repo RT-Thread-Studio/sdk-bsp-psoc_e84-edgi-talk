@@ -63,31 +63,31 @@ typedef struct
 
 /* The function prototypes */
 void Cy_Crypto_Core_V1_Cmac_Init(cy_stc_crypto_v1_cmac_state_t *cmacState,
-                                 uint32_t *temp,
-                                 uint32_t *block,
-                                 uint32_t *k);
+                              uint32_t *temp,
+                              uint32_t *block,
+                              uint32_t *k);
 
 void Cy_Crypto_Core_V1_Cmac_Start(CRYPTO_Type *base,
-                                  cy_stc_crypto_aes_state_t  *aesState,
-                                  cy_stc_crypto_v1_cmac_state_t *cmacState);
+                                cy_stc_crypto_aes_state_t  *aesState,
+                                cy_stc_crypto_v1_cmac_state_t *cmacState);
 
 void Cy_Crypto_Core_V1_Cmac_Update(CRYPTO_Type *base, cy_stc_crypto_aes_state_t  *aesState,
-                                   cy_stc_crypto_v1_cmac_state_t *cmacState,
-                                   uint8_t  const *message,
-                                   uint32_t messageSize);
+                                cy_stc_crypto_v1_cmac_state_t *cmacState,
+                                uint8_t  const *message,
+                                uint32_t messageSize);
 
 void Cy_Crypto_Core_V1_Cmac_Finish(CRYPTO_Type *base,
-                                   cy_stc_crypto_aes_state_t  *aesState,
-                                   cy_stc_crypto_v1_cmac_state_t *cmacState,
-                                   uint8_t *cmac);
+                                cy_stc_crypto_aes_state_t  *aesState,
+                                cy_stc_crypto_v1_cmac_state_t *cmacState,
+                                uint8_t* cmac);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Cmac(CRYPTO_Type *base,
-        uint8_t  const *message,
-        uint32_t messageSize,
-        uint8_t  const *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        uint8_t *cmac,
-        cy_stc_crypto_aes_state_t *aesState);
+                                          uint8_t  const *message,
+                                          uint32_t messageSize,
+                                          uint8_t  const *key,
+                                          cy_en_crypto_aes_key_length_t keyLength,
+                                          uint8_t *cmac,
+                                          cy_stc_crypto_aes_state_t *aesState);
 
 /** \endcond */
 

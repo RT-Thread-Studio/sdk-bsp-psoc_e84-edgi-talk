@@ -1,13 +1,13 @@
 /***************************************************************************//**
 * \file ifx_se_syscall.c
-* \version 1.1.0
+* \version 1.2.0
 *
 * \brief
 * This is the source code file for syscall caller function.
 *
 ********************************************************************************
 * \copyright
-* Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+* Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
 * All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying

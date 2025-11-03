@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>(core-lib)</title>
+<title>Core Library</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><a href="http://www.cypress.com/"><img alt="Logo" src="logo.png"/></a></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">(core-lib)</div>
+   <div id="projectname">Core Library</div>
   </td>
  </tr>
  </tbody>
@@ -109,13 +109,13 @@ $(document).ready(function(){initNavTree('group__group__result.html',''); initRe
 <div class="ttc" id="agroup__group__result_html_ga5a7fc037210b7ff81c65160e11823443"><div class="ttname"><a href="group__group__result.html#ga5a7fc037210b7ff81c65160e11823443">CY_RSLT_GET_CODE</a></div><div class="ttdeci">#define CY_RSLT_GET_CODE(x)</div><div class="ttdoc">Get the value of the result code field.</div><div class="ttdef"><b>Definition:</b> cy_result.h:134</div></div>
 <div class="ttc" id="agroup__group__result_html_ga9ae9b152a38632a9e0f8620845c6cea9"><div class="ttname"><a href="group__group__result.html#ga9ae9b152a38632a9e0f8620845c6cea9">CY_RSLT_GET_TYPE</a></div><div class="ttdeci">#define CY_RSLT_GET_TYPE(x)</div><div class="ttdoc">Get the value of the result type field.</div><div class="ttdef"><b>Definition:</b> cy_result.h:124</div></div>
 <div class="ttc" id="agroup__group__result_html_gab959fc67da8489c03d3ab631442393b4"><div class="ttname"><a href="group__group__result.html#gab959fc67da8489c03d3ab631442393b4">CY_RSLT_GET_MODULE</a></div><div class="ttdeci">#define CY_RSLT_GET_MODULE(x)</div><div class="ttdoc">Get the value of the module identifier field.</div><div class="ttdef"><b>Definition:</b> cy_result.h:129</div></div>
-<div class="ttc" id="agroup__group__result_html_gaca79700fcc701534ce61778a9bcf57d1"><div class="ttname"><a href="group__group__result.html#gaca79700fcc701534ce61778a9bcf57d1">cy_rslt_t</a></div><div class="ttdeci">uint32_t cy_rslt_t</div><div class="ttdoc">Provides the result of an operation as a structured bitfield.</div><div class="ttdef"><b>Definition:</b> cy_result.h:479</div></div>
+<div class="ttc" id="agroup__group__result_html_gaca79700fcc701534ce61778a9bcf57d1"><div class="ttname"><a href="group__group__result.html#gaca79700fcc701534ce61778a9bcf57d1">cy_rslt_t</a></div><div class="ttdeci">uint32_t cy_rslt_t</div><div class="ttdoc">Provides the result of an operation as a structured bitfield.</div><div class="ttdef"><b>Definition:</b> cy_result.h:485</div></div>
 </div><!-- fragment --><p >Using <a class="el" href="group__group__result.html#unioncy__rslt__decode__t">cy_rslt_decode_t</a> to decode: </p><div class="fragment"><div class="line"><a class="code hl_union" href="group__group__result.html#unioncy__rslt__decode__t">cy_rslt_decode_t</a> result;</div>
 <div class="line">result.<a class="code hl_variable" href="group__group__result.html#aa46cfbec8a99e1c9bce73b87f1f988c9">raw</a> = cy_hal_do_operation(arg);</div>
 <div class="line"> </div>
 <div class="line">printf(<span class="stringliteral">&quot;type=%d, module=%d, code=%d\n&quot;</span>, result.type, result.module, result.code);</div>
-<div class="ttc" id="agroup__group__result_html_aa46cfbec8a99e1c9bce73b87f1f988c9"><div class="ttname"><a href="group__group__result.html#aa46cfbec8a99e1c9bce73b87f1f988c9">cy_rslt_decode_t::raw</a></div><div class="ttdeci">cy_rslt_t raw</div><div class="ttdoc">The raw uint32/cy_rslt_t value.</div><div class="ttdef"><b>Definition:</b> cy_result.h:495</div></div>
-<div class="ttc" id="agroup__group__result_html_unioncy__rslt__decode__t"><div class="ttname"><a href="group__group__result.html#unioncy__rslt__decode__t">cy_rslt_decode_t</a></div><div class="ttdoc">Provides the result of an operation as a structured bitfield.</div><div class="ttdef"><b>Definition:</b> cy_result.h:494</div></div>
+<div class="ttc" id="agroup__group__result_html_aa46cfbec8a99e1c9bce73b87f1f988c9"><div class="ttname"><a href="group__group__result.html#aa46cfbec8a99e1c9bce73b87f1f988c9">cy_rslt_decode_t::raw</a></div><div class="ttdeci">cy_rslt_t raw</div><div class="ttdoc">The raw uint32/cy_rslt_t value.</div><div class="ttdef"><b>Definition:</b> cy_result.h:501</div></div>
+<div class="ttc" id="agroup__group__result_html_unioncy__rslt__decode__t"><div class="ttname"><a href="group__group__result.html#unioncy__rslt__decode__t">cy_rslt_decode_t</a></div><div class="ttdoc">Provides the result of an operation as a structured bitfield.</div><div class="ttdef"><b>Definition:</b> cy_result.h:500</div></div>
 </div><!-- fragment --> <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Data Structures</h2></td></tr>
@@ -268,6 +268,8 @@ Typedefs</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a1b8a6dcc775844139fa2bf0b47999e8e">CY_RSLT_MODULE_DRIVER_CAN2B</a> = 0x0051
 , <br />
+&#160;&#160;<a class="el" href="group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a0be0a3224c3a676d0244de7d8c794b3b">CY_RSLT_MODULE_DRIVER_ISOUART</a> = 0x0052
+, <br />
 &#160;&#160;<a class="el" href="group__group__result.html#gga9008565cba0207520330a1cb8509a8d0ac3fe5c1390bd3da0a397af4f1fac8a96">CY_RSLT_MODULE_DRIVER_KEYSCAN</a> = 0x0072
 , <br />
 &#160;&#160;<a class="el" href="group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a8108e24a01c2130c03f018293573b30f">CY_RSLT_MODULE_DRIVER_PDM_PCM2</a> = 0x0073
@@ -393,6 +395,10 @@ Typedefs</h2></td></tr>
 &#160;&#160;<a class="el" href="group__group__result.html#gga9008565cba0207520330a1cb8509a8d0ae720c840296c9a7bf97e721ef7c13f69">CY_RSLT_MODULE_MIDDLEWARE_IPC</a> = 0x0257
 , <br />
 &#160;&#160;<a class="el" href="group__group__result.html#gga9008565cba0207520330a1cb8509a8d0abc2a0632ca12e2ebd82d3b0a4326a451">CY_RSLT_MODULE_MIDDLEWARE_AFX</a> = 0x0258
+, <br />
+&#160;&#160;<a class="el" href="group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a5d8e414ca6181903c3211561c9516585">CY_RSLT_MODULE_MIDDLEWARE_SRF</a> = 0x0259
+, <br />
+&#160;&#160;<a class="el" href="group__group__result.html#gga9008565cba0207520330a1cb8509a8d0ac80960b324e25a6f6eb31515ba5eca78">CY_RSLT_MODULE_MIDDLEWARE_PMBUS</a> = 0x025a
 <br />
  }</td></tr>
 <tr class="memdesc:ga9008565cba0207520330a1cb8509a8d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define codes to identify the module from which an error originated.  <a href="group__group__result.html#ga9008565cba0207520330a1cb8509a8d0">More...</a><br /></td></tr>
@@ -933,6 +939,9 @@ The 14bit module id. </td></tr>
 <tr><td class="fieldname"><a id="gga9008565cba0207520330a1cb8509a8d0a1b8a6dcc775844139fa2bf0b47999e8e" name="gga9008565cba0207520330a1cb8509a8d0a1b8a6dcc775844139fa2bf0b47999e8e"></a>CY_RSLT_MODULE_DRIVER_CAN2B&#160;</td><td class="fielddoc"><p >Module identifier for the CAN2.0B driver. </p>
 <p >Asset(s): (mtb-pdl-cat2) </p>
 </td></tr>
+<tr><td class="fieldname"><a id="gga9008565cba0207520330a1cb8509a8d0a0be0a3224c3a676d0244de7d8c794b3b" name="gga9008565cba0207520330a1cb8509a8d0a0be0a3224c3a676d0244de7d8c794b3b"></a>CY_RSLT_MODULE_DRIVER_ISOUART&#160;</td><td class="fielddoc"><p >Module identifier for the ISOUART driver. </p>
+<p >Asset(s): (mtb-pdl-cat2) </p>
+</td></tr>
 <tr><td class="fieldname"><a id="gga9008565cba0207520330a1cb8509a8d0ac3fe5c1390bd3da0a397af4f1fac8a96" name="gga9008565cba0207520330a1cb8509a8d0ac3fe5c1390bd3da0a397af4f1fac8a96"></a>CY_RSLT_MODULE_DRIVER_KEYSCAN&#160;</td><td class="fielddoc"><p >Module identifier for the Key Scan driver. </p>
 <p >Asset(s): (mtb-pdl-cat1) </p>
 </td></tr>
@@ -1121,6 +1130,12 @@ The 14bit module id. </td></tr>
 <tr><td class="fieldname"><a id="gga9008565cba0207520330a1cb8509a8d0abc2a0632ca12e2ebd82d3b0a4326a451" name="gga9008565cba0207520330a1cb8509a8d0abc2a0632ca12e2ebd82d3b0a4326a451"></a>CY_RSLT_MODULE_MIDDLEWARE_AFX&#160;</td><td class="fielddoc"><p >Module identifier for the MTB AFX Library. </p>
 <p >Asset(s): (afx) </p>
 </td></tr>
+<tr><td class="fieldname"><a id="gga9008565cba0207520330a1cb8509a8d0a5d8e414ca6181903c3211561c9516585" name="gga9008565cba0207520330a1cb8509a8d0a5d8e414ca6181903c3211561c9516585"></a>CY_RSLT_MODULE_MIDDLEWARE_SRF&#160;</td><td class="fielddoc"><p >Module identifier for the MTB Secure Request Framework. </p>
+<p >Asset(s): (mtb-srf) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga9008565cba0207520330a1cb8509a8d0ac80960b324e25a6f6eb31515ba5eca78" name="gga9008565cba0207520330a1cb8509a8d0ac80960b324e25a6f6eb31515ba5eca78"></a>CY_RSLT_MODULE_MIDDLEWARE_PMBUS&#160;</td><td class="fielddoc"><p >Module identifier for the MTB PMBus Middleware Library. </p>
+<p >Asset(s): (mtb-pmbus) </p>
+</td></tr>
 </table>
 
 </div>
@@ -1131,7 +1146,7 @@ The 14bit module id. </td></tr>
 <div id="nav-path" class="navpath">
     <ul>
         <li class="footer">
-            Generated for <b>(core-lib)</b> by <b>Cypress Semiconductor Corporation</b>.
+            Generated for <b>Core Library</b> by <b>Cypress Semiconductor Corporation</b>.
             All rights reserved.
         </li>
     </ul>

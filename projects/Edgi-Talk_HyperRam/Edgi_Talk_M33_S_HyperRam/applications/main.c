@@ -1,21 +1,24 @@
 #include "cy_pdl.h"
 #include "cybsp.h"
-#include "security_config.h"
 #include "retarget_io_init.h"
-#include "mtb_hal.h"
 #include "cycfg_qspi_memslot.h"
 #include "mtb_serial_memory.h"
 
-static mtb_serial_memory_t    serial_memory_obj;
-static cy_stc_smif_context_t  smif_context;
-static mtb_hal_gpio_t p8_7_obj;
 
+/*****************************************************************************
+* Macros
+******************************************************************************/
+#define CM33_NS_APP_BOOT_ADDR      (CYMEM_CM33_0_m33_nvm_START + \
+                                       CYBSP_MCUBOOT_HEADER_SIZE) 
 #define CACHE_ENABLE                    (0U)
 #define ADDRESS_SIZE_IN_BYTES           (4U)
-#define NUM_BYTES_PER_LINE              (16U)
+#define SMIF_MMIO_ADDRESS_OFFSET        (0U)
+#define SMIF_1_PSRAM_SECURE_ADDRESS     (0x74000000U)
 #define SMIF_INIT_TIMEOUT_USEC          (10000U)
-#define SMIF_1_PSRAM_ADDRESS            (0x64000000U)
 
+static mtb_serial_memory_t serial_memory_obj;
+static cy_stc_smif_mem_context_t smif_mem_context;
+static cy_stc_smif_mem_info_t smif_mem_info;
 static void check_status(char *message, uint32_t status)
 {
     if (status)
@@ -37,8 +40,8 @@ static void smif_ospi_psram_init(void)
 
     /* Initialize SMIF-1 Peripheral. */
     result = Cy_SMIF_Init((CYBSP_SMIF_CORE_1_PSRAM_hal_config.base),
-                          (CYBSP_SMIF_CORE_1_PSRAM_hal_config.config),
-                          SMIF_INIT_TIMEOUT_USEC, &smif_context);
+                           (CYBSP_SMIF_CORE_1_PSRAM_hal_config.config),
+                           SMIF_INIT_TIMEOUT_USEC, &smif_mem_context.smif_context);
 
     check_status("Cy_SMIF_Init failed", result);
 
@@ -48,14 +51,16 @@ static void smif_ospi_psram_init(void)
                           smif1BlockConfig.memConfig[0]->dataSelect);
 
     /* Enable the SMIF_CORE_1 block. */
-    Cy_SMIF_Enable(CYBSP_SMIF_CORE_1_PSRAM_hal_config.base, &smif_context);
+    Cy_SMIF_Enable(CYBSP_SMIF_CORE_1_PSRAM_hal_config.base, &smif_mem_context.smif_context);
 
-    /* Set-up serial memory for SMIF_CORE_1. */
+    /* Set-up serial memory. */
     result = mtb_serial_memory_setup(&serial_memory_obj,
-                                     MTB_SERIAL_MEMORY_CHIP_SELECT_2,
-                                     CYBSP_SMIF_CORE_1_PSRAM_HW,
-                                     &CYBSP_SMIF_CORE_1_PSRAM_hal_clock,
-                                     &smif_context, &smif1BlockConfig);
+                                MTB_SERIAL_MEMORY_CHIP_SELECT_2,
+                                CYBSP_SMIF_CORE_1_PSRAM_hal_config.base,
+                                CYBSP_SMIF_CORE_1_PSRAM_hal_config.clock,
+                                &smif_mem_context,
+                                &smif_mem_info,
+                                &smif1BlockConfig);
 
     check_status("serial memory setup failed", result);
 }
@@ -63,23 +68,8 @@ static void smif_ospi_psram_init(void)
 int main(void)
 {
     uint32_t ns_stack;
-    funcptr_void NonSecure_ResetHandler;
+    cy_cmse_funcptr NonSecure_ResetHandler;
     cy_rslt_t result;
-
-    if (CY_SYSLIB_RESET_HIB_WAKEUP ==
-            (Cy_SysLib_GetResetReason() & CY_SYSLIB_RESET_HIB_WAKEUP))
-    {
-        Cy_SysPm_IoUnfreeze();
-    }
-
-    /* TrustZone setup */
-    TZ_SAU_Setup();
-
-#if defined (__FPU_USED) && (__FPU_USED == 1U) && \
-      defined (TZ_FPU_NS_USAGE) && (TZ_FPU_NS_USAGE == 1U)
-    /*FPU initialization*/
-    initFPU();
-#endif
 
     /* Set up internal routing, pins, and clock-to-peripheral connections */
     result = cybsp_init();
@@ -89,29 +79,25 @@ int main(void)
     {
         CY_ASSERT(0);
     }
+
     /* Enable global interrupts */
     __enable_irq();
 
-    Cy_SysPm_SetHibernateWakeupSource((uint32_t)CY_SYSPM_HIBERNATE_PIN1_LOW);
-
-    /*Enables the PD1 Power Domain*/
-    Cy_System_EnablePD1();
-
-    /*
+    /* 
     * Initialize the clock for the APP_MMIO_TCM (512K) peripheral group.
-    * This sets up the necessary clock and peripheral routing to ensure
+    * This sets up the necessary clock and peripheral routing to ensure 
     * the APP_MMIO_TCM can be correctly accessed and utilized.
     */
     Cy_SysClk_PeriGroupSlaveInit(
-        CY_MMIO_CM55_TCM_512K_PERI_NR,
-        CY_MMIO_CM55_TCM_512K_GROUP_NR,
-        CY_MMIO_CM55_TCM_512K_SLAVE_NR,
+        CY_MMIO_CM55_TCM_512K_PERI_NR, 
+        CY_MMIO_CM55_TCM_512K_GROUP_NR, 
+        CY_MMIO_CM55_TCM_512K_SLAVE_NR, 
         CY_MMIO_CM55_TCM_512K_CLK_HF_NR
     );
 
-    /*
+    /* 
     * Initialize the clock for the SMIF0 peripheral group.
-    * This sets up the necessary clock and peripheral routing to ensure
+    * This sets up the necessary clock and peripheral routing to ensure 
     * the SMIF0 can be correctly accessed and utilized.
     */
     Cy_SysClk_PeriGroupSlaveInit(
@@ -121,26 +107,18 @@ int main(void)
         CY_MMIO_SMIF0_CLK_HF_NR
     );
 
-    /* Enable SOCMEM */
-    Cy_SysEnableSOCMEM(true);
+    /* Initialize SMIF in QSPI mode */
+    if (CY_RSLT_SUCCESS != result)
+    {
+        CY_ASSERT(0);
+    }
 
-    /* Configure semaphore */
-    config_sema();
-
-    /* Configure MPC for NS */
-    config_mpc();
-
-    ns_stack = (uint32_t)(*((uint32_t*)CM33_NS_SP_STORE));
-    __TZ_set_MSP_NS(ns_stack);
-
-    NonSecure_ResetHandler = (funcptr_void)(*((uint32_t*)CM33_NS_RESET_HANDLER_STORE));
-
-    /* Clear SYSCPU and APPCPU power domain dependency set by boot code */
-    cy_pd_pdcm_clear_dependency(CY_PD_PDCM_APPCPU, CY_PD_PDCM_SYSCPU);
-
-    mtb_hal_gpio_setup(&p8_7_obj, 8, 7);
-    mtb_hal_gpio_configure(&p8_7_obj, MTB_HAL_GPIO_DIR_OUTPUT, MTB_HAL_GPIO_DRIVE_STRONG);
-    mtb_hal_gpio_write(&p8_7_obj, 1);
+    /* Memory protection initialization */
+    result = Cy_MPC_Init();
+    if (CY_RSLT_SUCCESS != result)
+    {
+        CY_ASSERT(0);
+    }
 
     init_retarget_io();
 
@@ -156,8 +134,8 @@ int main(void)
     cy_stc_smif_cache_region_t cache_region_0 =
     {
         .enabled = true,
-        .start_address = SMIF_1_PSRAM_ADDRESS,
-        .end_address = SMIF_1_PSRAM_ADDRESS + CY_XIP_PORT1_SIZE,
+        .start_address = SMIF_1_PSRAM_SECURE_ADDRESS,
+        .end_address = SMIF_1_PSRAM_SECURE_ADDRESS + CY_XIP_PORT1_SIZE,
         .cache_attributes = CY_SMIF_CACHEABLE_WB_RWA
     };
 
@@ -193,11 +171,27 @@ int main(void)
     printf("****************** "
            "PSOC Edge MCU: CM33 Secure Mode Exit"
            "****************** \r\n\n");
-    /* Configure PPC for NS */
-    config_ppc();
 
-    Cy_SysLib_Delay(100u);
-    /* Start non-secure application */
+    while (cy_retarget_io_is_tx_active());
+
+    /* Peripheral protection initialization (PPC0) */
+    result = Cy_PPC0_Init();
+    if (CY_RSLT_SUCCESS != result)
+    {
+        handle_error();
+    }
+
+    /* Peripheral protection initialization (PPC1) */
+    result = Cy_PPC1_Init();
+    if (CY_RSLT_SUCCESS != result)
+    {
+        handle_error();
+    }
+
+    ns_stack = (uint32_t)(*((uint32_t*)CM33_NS_APP_BOOT_ADDR));
+    __TZ_set_MSP_NS(ns_stack);
+    
+    NonSecure_ResetHandler = (cy_cmse_funcptr)(*((uint32_t*)(CM33_NS_APP_BOOT_ADDR + 4)));    /* Start non-secure application */
     NonSecure_ResetHandler();
 
     for (;;)

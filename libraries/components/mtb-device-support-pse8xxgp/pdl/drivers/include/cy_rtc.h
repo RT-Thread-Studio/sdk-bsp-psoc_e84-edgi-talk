@@ -68,7 +68,7 @@
 *
 * <b> Clock Source </b>
 *
-* The Backup domain can be driven by:
+* Depending on the available clocks the backup domain can be driven by:
 * * Watch-crystal oscillator (WCO). This is a high-accuracy oscillator that is
 * suitable for RTC applications and requires a 32.768 kHz external crystal
 * populated on the application board. The WCO can be supplied by Backup domain
@@ -101,6 +101,8 @@
 * source can be used if the external 32.768 kHz WCO is absent from the board.
 * For more details, refer to the Cy_RTC_SelectFrequencyPrescaler() function
 * description.
+*
+*
 *
 * The WCO is the recommended clock source for the RTC, if it is present
 * in design. For setting the Backup domain clock source, refer to the
@@ -217,126 +219,24 @@
 * Refer to \ref group_syspm driver for more
 * information about low-power mode transitions.
 *
+* \section group_rtc_section_secure_aware Secure Aware RTC
+* Some RTC APIs are marked as Secure Aware.  This means that if the RTC is marked
+* as a secure resource in the Peripheral Protection Controller (PPC) and these
+* APIs are called from a non-secure CPU state, the PDL will submit a request to the
+* Secure Request Framework (SRF) middleware to transition to a secure CPU state to
+* perform the operation.  From the application's perspective, the API will behave
+* the same whether it is called from a secure or non-secure CPU state albeit slower.
+*
+* This functionality is automatically enabled on devices with ARM TrustZone processors.
+* To disable, set the DEFINE+=CY_PDL_ENABLE_SECURE_AWARE_RTC=0 in the application
+* Makefile.
+*
+* For more information on Secure Aware PDL behavior, see \ref group_pdl_srf_general.
+*
 * \section group_rtc_section_more_information More Information
 *
 * For more information on the RTC peripheral, refer to the technical reference
 * manual (TRM).
-*
-* \section group_rtc_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>2.100</td>
-*     <td>Minor update in API \ref Cy_RTC_GetInterruptStatus.</td>
-*     <td>Code enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>2.90</td>
-*     <td>Updated API \ref Cy_RTC_GetInterruptStatus.</td>
-*     <td>Code enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>2.80</td>
-*     <td>Added support for TRAVEO&trade; II Body Entry devices.<br>
-*          Pre-processor check for MXS40SRSS version now groups ver. 2 with ver. 3. Previously ver. 2 was grouped with ver. 1.</td>
-*          Cleaned up redundant and overlapping conditions in pre-processor directives.</td>
-*     <td>Code enhancement and support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>2.70</td>
-*     <td>Enhanced API's : Cy_RTC_SetDateAndTime(), Cy_RTC_SetDateAndTimeDirect(), Cy_RTC_SetAlarmDateAndTime(), Cy_RTC_SetAlarmDateAndTimeDirect().</td>
-*     <td>Minor Enhancements to the Driver.</td>
-*   </tr>
-*   <tr>
-*     <td>2.60</td>
-*     <td>Additional devices support.<br>Newly added API's Cy_RTC_WriteEnable() to Set/Clear writeable option for RTC user registers,
-*         Cy_RTC_EnableDstTime() to set the DST time and configure the ALARM2 interrupt register
-*         with the appropriate DST time, Cy_RTC_DstInterrupt() to handle the DST event.
-*         <br>Added a delay in Cy_RTC_SyncFromRtc() to check the RTC busy status.</td>
-*     <td>Support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>2.50</td>
-*     <td>Removed the calls that convert among BCD and Binary.</td>
-*     <td>RTC encoding changed from BCD to Binary.</td>
-*   </tr>
-*   <tr>
-*     <td>2.40</td>
-*     <td>Fixed/Documented MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>2.30.1</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>2.30</td>
-*     <td>
-*          * Corrected the Cy_RTC_GetDstStatus() and Cy_RTC_SetNextDstTime()
-*            documentation.
-*          * Fixed the Cy_RTC_GetDstStatus() behaviour in the 'an hour before/after the DST stop event' period.
-*     </td>
-*     <td>
-*          * Collateral Review: user experience enhancement.
-*          * Bug fix.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.20.1</td>
-*     <td>Modified header guard CY_IP_MXS40SRSS_RTC.</td>
-*     <td>To enable the PDL compilation with wounded out IP blocks.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="3">2.20</td>
-*     <td>Flattened the organization of the driver source code into the single
-*         source directory and the single include directory.
-*     </td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Added register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>Documentation update.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>2.10</td>
-*     <td>
-*          * Corrected Cy_RTC_SetDateAndTimeDirect(), Cy_RTC_SetNextDstTime()
-*            function.
-*          * Corrected internal macro.
-*          * Documentation updates.
-*     </td>
-*     <td>
-*          * Incorrect behavior of \ref Cy_RTC_SetDateAndTimeDirect() and
-*            \ref Cy_RTC_SetNextDstTime() work in debug mode.
-*          * Debug assert correction in \ref Cy_RTC_ConvertDayOfWeek,
-*            \ref Cy_RTC_IsLeapYear, \ref Cy_RTC_DaysInMonth.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.0</td>
-*     <td>
-*         Enhancement and defect fixes:
-*          * Added input parameter(s) validation to all public functions.
-*          * Removed "Cy_RTC_" prefixes from the internal functions names.
-*          * Renamed the elements in the cy_stc_rtc_alarm structure.
-*          * Changed the type of elements with limited set of values, from
-*            uint32_t to enumeration.
-*     </td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
 *
 * \defgroup group_rtc_macros Macros
 * \defgroup group_rtc_functions Functions
@@ -364,6 +264,9 @@
 #include <stdbool.h>
 #include "cy_syslib.h"
 #include "cy_syspm.h"
+
+#include "cy_pdl_srf.h"
+#include "cy_pdl_srf_common.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -402,7 +305,7 @@ extern "C" {
 
 /** RTC status enumeration */
 typedef enum
-{
+ {
     CY_RTC_SUCCESS       = 0x00U,    /**< Successful */
     CY_RTC_BAD_PARAM     = CY_RTC_ID | CY_PDL_STATUS_ERROR | 0x01U,    /**< One or more invalid parameters */
     CY_RTC_TIMEOUT       = CY_RTC_ID | CY_PDL_STATUS_ERROR | 0x02U,    /**< Time-out occurs */
@@ -466,11 +369,12 @@ typedef enum
 **/
 typedef enum
 {
-    CY_RTC_CLK_SELECT_WCO               =        0U, /**< Select WCO as input to RTC */
-    CY_RTC_CLK_SELECT_ALTBAK            =        1U, /**< Select ALTBAK as input to RTC */
-    CY_RTC_CLK_SELECT_ILO               =        2U, /**< Select ILO as input to RTC */
-    CY_RTC_CLK_SELECT_LPECO_PRESCALER   =        3U, /**< Select LPECO_PRESCALER as input to RTC */
-    CY_RTC_CLK_SELECT_PILO              =        4U, /**< Select PILO as input to RTC */
+    CY_RTC_CLK_SELECT_WCO,              /**< Select WCO as input to RTC */
+    CY_RTC_CLK_SELECT_ALTBAK,           /**< Select ALTBAK as input to RTC */
+#if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION >= 2)) || defined (CY_IP_MXS22SRSS)
+    CY_RTC_CLK_SELECT_ILO,              /**< Select ILO as input to RTC */
+    CY_RTC_CLK_SELECT_PILO              /**< Select PILO as input to RTC */
+#endif /* CY_IP_MXS28SRSS, CY_IP_MXS40SSRSS, (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION >= 3), CY_IP_MXS22SRSS */
 } cy_en_rtc_clk_select_sources_t;
 
 /** Enumeration to select the sign of calibration for RTC */
@@ -576,7 +480,7 @@ typedef struct cy_stc_rtc_alarm
 */
 typedef struct
 {
-    cy_en_rtc_dst_format_t format;   /**< DST format. See /ref cy_en_rtc_dst_format_t.
+    cy_en_rtc_dst_format_t format;   /**< DST format. See \ref cy_en_rtc_dst_format_t .
                                           Based on this value other structure elements
                                           should be filled or could be ignored */
     uint32_t hour;                   /**< Should be filled for both format types.
@@ -603,6 +507,15 @@ typedef struct
     cy_stc_rtc_dst_format_t stopDst;     /**< DST stop time structure */
 } cy_stc_rtc_dst_t;
 
+/** \cond INTERNAL */
+#if defined(CY_PDL_RTC_ENABLE_SRF_INTEG)
+/** This is only used by secure-aware. The structure contains Hour format configuration parameters */
+typedef struct {
+    cy_en_rtc_hours_format_t hrs_format;
+} cy_pdl_rtc_srf_get_hr_format_out_t;
+#endif
+/** \endcode */
+
 /** \} group_rtc_data_structures */
 
 
@@ -623,7 +536,7 @@ cy_en_rtc_status_t Cy_RTC_Init(cy_stc_rtc_config_t const *config);
 cy_en_rtc_status_t Cy_RTC_SetDateAndTime(cy_stc_rtc_config_t const *dateTime);
 void   Cy_RTC_GetDateAndTime(cy_stc_rtc_config_t *dateTime);
 cy_en_rtc_status_t Cy_RTC_SetDateAndTimeDirect(uint32_t sec, uint32_t min, uint32_t hour,
-        uint32_t date, uint32_t month, uint32_t year);
+                                               uint32_t date, uint32_t month, uint32_t year);
 cy_en_rtc_status_t Cy_RTC_SetHoursFormat(cy_en_rtc_hours_format_t hoursFormat);
 #if defined (CY_IP_MXS40SRSS_RTC) || defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS)
 void Cy_RTC_SelectFrequencyPrescaler(cy_en_rtc_clock_freq_t clkSel);
@@ -641,7 +554,7 @@ cy_en_rtc_status_t Cy_RTC_CalibrationControlDisable(void);
 cy_en_rtc_status_t Cy_RTC_SetAlarmDateAndTime(cy_stc_rtc_alarm_t const *alarmDateTime, cy_en_rtc_alarm_t alarmIndex);
 void   Cy_RTC_GetAlarmDateAndTime(cy_stc_rtc_alarm_t *alarmDateTime, cy_en_rtc_alarm_t alarmIndex);
 cy_en_rtc_status_t Cy_RTC_SetAlarmDateAndTimeDirect(uint32_t sec, uint32_t min, uint32_t hour,
-        uint32_t date, uint32_t month, cy_en_rtc_alarm_t alarmIndex);
+                                                    uint32_t date, uint32_t month, cy_en_rtc_alarm_t alarmIndex);
 /** \} group_rtc_alarm_functions */
 
 /**
@@ -674,8 +587,8 @@ void Cy_RTC_SetInterruptMask(uint32_t interruptMask);
 * \addtogroup group_rtc_low_power_functions
 * \{
 */
-cy_en_syspm_status_t Cy_RTC_DeepSleepCallback(const cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode);
-cy_en_syspm_status_t Cy_RTC_HibernateCallback(const cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode);
+cy_en_syspm_status_t Cy_RTC_DeepSleepCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode);
+cy_en_syspm_status_t Cy_RTC_HibernateCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode);
 /** \} group_rtc_low_power_functions */
 
 /**
@@ -828,7 +741,7 @@ __STATIC_INLINE void Cy_RTC_SyncToRtcAhbAlarm(uint32_t alarmTimeBcd, uint32_t al
 #define CY_RTC_NUM_OF_INTR                           (3U)
 
 /** Number of RTC interrupts  */
-#define CY_RTC_TRYES_TO_SETUP_DST                    (24U)
+#define CY_RTC_TRIES_TO_SETUP_DST                    (24U)
 
 /** RTC AM/PM bit for 12H hour mode */
 #define CY_RTC_12HRS_PM_BIT                          (0x10UL)
@@ -846,7 +759,7 @@ __STATIC_INLINE void Cy_RTC_SyncToRtcAhbAlarm(uint32_t alarmTimeBcd, uint32_t al
 #define CY_RTC_BCD_DOZED_DEGREE                      (10UL)
 
 /** Internal define of hundred degree for BCD values converting */
-#define CY_RTC_BCD_HUNDRED_DEGRE                     (100UL)
+#define CY_RTC_BCD_HUNDRED_DEGREE                    (100UL)
 
 /** Definition of forty two AHB clocks in microseconds */
 #define CY_RTC_DELAY_WHILE_READING_US               ((42000000UL / cy_AhbFreqHz) + 1UL)
@@ -978,6 +891,10 @@ extern uint8_t const cy_RTC_daysInMonthTbl[CY_RTC_MONTHS_PER_YEAR];
 * \note In this algorithm January and February are counted as months 13 and 14
 * of the previous year.
 *
+* \note For devices with ARM TrustZone enabled, this API is safe to call from both
+* the secure and non-secure CPU state.  See \ref group_rtc_section_secure_aware for
+* further details.
+*
 * \param day
 * The day of the month, Valid range 1..31.
 *
@@ -1012,7 +929,7 @@ __STATIC_INLINE uint32_t Cy_RTC_ConvertDayOfWeek(uint32_t day, uint32_t month, u
 
     /* Calculates Day of Week using Zeller's congruence algorithms */
     retVal =
-        (day + (((month + 1UL) * 26UL) / 10UL) + year + (year / 4UL) + (6UL * (year / 100UL)) + (year / 400UL)) % 7UL;
+    (day + (((month + 1UL) * 26UL) / 10UL) + year + (year / 4UL) + (6UL * (year / 100UL)) + (year / 400UL)) % 7UL;
 
     /* Makes correction for Saturday. Saturday number should be 7 instead of 0*/
     if (0u == retVal)
@@ -1020,7 +937,7 @@ __STATIC_INLINE uint32_t Cy_RTC_ConvertDayOfWeek(uint32_t day, uint32_t month, u
         retVal = CY_RTC_SATURDAY;
     }
 
-    return (retVal);
+    return(retVal);
 }
 
 
@@ -1036,6 +953,10 @@ __STATIC_INLINE uint32_t Cy_RTC_ConvertDayOfWeek(uint32_t day, uint32_t month, u
 * function call. Leap year is identified as a year that is a multiple of 4
 * or 400 but not 100.
 *
+* \note For devices with ARM TrustZone enabled, this API is safe to call from both
+* the secure and non-secure CPU state.  See \ref group_rtc_section_secure_aware for
+* further details.
+*
 * \param year
 * The year to be checked. Valid range non-zero value.
 *
@@ -1048,7 +969,7 @@ __STATIC_INLINE bool Cy_RTC_IsLeapYear(uint32_t year)
 {
     CY_ASSERT_L2(CY_RTC_IS_YEAR_LONG_VALID(year));
 
-    return (((0U == (year % 4UL)) && (0U != (year % 100UL))) || (0U == (year % 400UL)));
+    return(((0U == (year % 4UL)) && (0U != (year % 100UL))) || (0U == (year % 400UL)));
 }
 
 
@@ -1056,11 +977,15 @@ __STATIC_INLINE bool Cy_RTC_IsLeapYear(uint32_t year)
 * Function Name: Cy_RTC_DaysInMonth
 ****************************************************************************//**
 *
-*  Returns a number of days in a month passed through the parameters. This API
-*  is for checking an invalid value input for days.
+*  Returns the number of days in the specified month and year. This API  is for
+*  checking an invalid value input for days.
 *  RTC HW block does not provide a validation checker against time/date values,
 *  the valid range of days in Month should be checked before SetDateAndTime()
 *  function call.
+*
+* \note For devices with ARM TrustZone enabled, this API is safe to call from both
+* the secure and non-secure CPU state.  See \ref group_rtc_section_secure_aware for
+* further details.
 *
 * \param month
 * The month of the year, see \ref group_rtc_month.
@@ -1069,26 +994,29 @@ __STATIC_INLINE bool Cy_RTC_IsLeapYear(uint32_t year)
 * A year value. Valid range non-zero value.
 *
 * \return
-* A number of days in a month in the year passed through the parameters.
+* The number of days in the specified month and year or zero in case an invalid
+* month parameter is passed.
 *
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_RTC_DaysInMonth(uint32_t month, uint32_t year)
 {
-    uint32_t retVal;
+    uint32_t retVal = 0;
 
-    CY_ASSERT_L2(CY_RTC_IS_MONTH_VALID(month));
     CY_ASSERT_L2(CY_RTC_IS_YEAR_LONG_VALID(year));
 
-    retVal = cy_RTC_daysInMonthTbl[month - 1UL];
-
-    if (CY_RTC_FEBRUARY == month)
+    if(CY_RTC_IS_MONTH_VALID(month))
     {
-        if (Cy_RTC_IsLeapYear(year))
+        retVal = cy_RTC_daysInMonthTbl[month - 1UL];
+
+        if (CY_RTC_FEBRUARY == month)
         {
-            retVal++;
+            if (Cy_RTC_IsLeapYear(year))
+            {
+                retVal++;
+            }
         }
     }
-    return (retVal);
+    return(retVal);
 }
 
 
@@ -1116,7 +1044,7 @@ __STATIC_INLINE void Cy_RTC_SyncFromRtc(void)
     /* RTC Write is possible only in the condition that CY_RTC_BUSY bit = 0
     *  or RTC Write bit is not set.
     */
-    while ((Cy_RTC_GetSyncStatus() == CY_RTC_BUSY) && (rtcAccessRetry != 0U))
+    while((Cy_RTC_GetSyncStatus() == CY_RTC_BUSY) && (rtcAccessRetry != 0U))
     {
         rtcAccessRetry--;
         Cy_SysLib_DelayUs(CY_RTC_BUSY_RETRY_DELAY_US);
@@ -1170,13 +1098,13 @@ __STATIC_INLINE cy_en_rtc_status_t Cy_RTC_WriteEnable(cy_en_rtc_write_status_t w
         /* RTC Write bit set is possible only in condition that CY_RTC_BUSY bit = 0
         * or RTC Read bit is not set
         */
-        while ((Cy_RTC_GetSyncStatus() == CY_RTC_BUSY) && (rtcAccessRetry != 0U))
+        while((Cy_RTC_GetSyncStatus() == CY_RTC_BUSY) && (rtcAccessRetry != 0U))
         {
             rtcAccessRetry--;
             Cy_SysLib_DelayUs(CY_RTC_BUSY_RETRY_DELAY_US);
         }
 
-        if ((rtcAccessRetry != 0U) && (!_FLD2BOOL(BACKUP_RTC_RW_READ, BACKUP_RTC_RW)))
+        if((rtcAccessRetry != 0U) && (!_FLD2BOOL(BACKUP_RTC_RW_READ, BACKUP_RTC_RW)))
         {
             BACKUP_RTC_RW |= BACKUP_RTC_RW_WRITE_Msk;
             retVal = CY_RTC_SUCCESS;
@@ -1190,7 +1118,7 @@ __STATIC_INLINE cy_en_rtc_status_t Cy_RTC_WriteEnable(cy_en_rtc_write_status_t w
         retVal = CY_RTC_SUCCESS;
     }
 
-    return (retVal);
+    return(retVal);
 }
 
 
@@ -1210,7 +1138,7 @@ __STATIC_INLINE cy_en_rtc_status_t Cy_RTC_WriteEnable(cy_en_rtc_write_status_t w
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_RTC_GetSyncStatus(void)
 {
-    return ((_FLD2BOOL(BACKUP_STATUS_RTC_BUSY, BACKUP_STATUS)) ? CY_RTC_BUSY : CY_RTC_AVAILABLE);
+    return((_FLD2BOOL(BACKUP_STATUS_RTC_BUSY, BACKUP_STATUS)) ? CY_RTC_BUSY : CY_RTC_AVAILABLE);
 }
 
 
@@ -1224,15 +1152,60 @@ __STATIC_INLINE uint32_t Cy_RTC_GetSyncStatus(void)
 * Before getting the RTC current hours format, the Cy_RTC_SyncFromRtc() function
 * should be called.
 *
+* \note This API is Secure Aware. On devices with ARM TrustZone enabled, it is safe
+* to call on a Secure hardware resource from a Non-Secure CPU state.
+* The involved PPC region is PROT_PERI0_RTC_BACKUP.
+* See \ref group_rtc_section_secure_aware for further details.
+*
 * \return
 * The current RTC hours format. See \ref cy_en_rtc_hours_format_t.
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_rtc_hours_format_t Cy_RTC_GetHoursFormat(void)
 {
-    return ((_FLD2BOOL(BACKUP_RTC_TIME_CTRL_12HR, BACKUP_RTC_TIME)) ? CY_RTC_12_HOURS : CY_RTC_24_HOURS);
-}
+#if !defined(COMPONENT_SECURE_DEVICE) && defined(CY_PDL_RTC_ENABLE_SRF_INTEG)
+    mtb_srf_invec_ns_t* inVec = NULL;
+    mtb_srf_outvec_ns_t* outVec = NULL;
+    mtb_srf_output_ns_t* output = NULL;
+    cy_pdl_rtc_srf_get_hr_format_out_t output_args;
+    output_args.hrs_format = CY_RTC_24_HOURS; /* Default, equivalent to 0x0 */
 
+    cy_rslt_t result = mtb_srf_pool_allocate(&cy_pdl_srf_default_pool, &inVec, &outVec, CY_PDL_RTC_SRF_POOL_TIMEOUT);
+    CY_ASSERT_L2(result == CY_RSLT_SUCCESS);
+
+    cy_pdl_invoke_srf_args invoke_args =
+    {
+        .inVec = inVec,
+        .outVec = outVec,
+        .output_ptr = &output,
+        .op_id = CY_PDL_RTC_OP_GET_HR_FORMAT,
+        .submodule_id = CY_PDL_SECURE_SUBMODULE_RTC,
+        .base = NULL,
+        .sub_block = 0UL,
+        .input_base = NULL,
+        .input_len = 0UL,
+        .output_base = (uint8_t*)&output_args,
+        .output_len = sizeof(output_args),
+        .invec_bases = NULL,
+        .invec_sizes = 0UL,
+        .outvec_bases = NULL,
+        .outvec_sizes = 0UL
+    };
+    result = _Cy_PDL_Invoke_SRF(&invoke_args);
+    CY_ASSERT_L2(result == CY_RSLT_SUCCESS);
+
+    /* Output values are passed in by value. Make a copy before freeing the ioVec */
+    memcpy(&output_args, (cy_en_rtc_hours_format_t*)(&(output->output_values[0])), sizeof(output_args));
+
+    result = mtb_srf_pool_free(&cy_pdl_srf_default_pool, inVec, outVec);
+    CY_ASSERT_L2(result == CY_RSLT_SUCCESS);
+    CY_UNUSED_PARAMETER(result);
+
+    return output_args.hrs_format;
+#else
+    return((_FLD2BOOL(BACKUP_RTC_TIME_CTRL_12HR, BACKUP_RTC_TIME)) ? CY_RTC_12_HOURS : CY_RTC_24_HOURS);
+#endif
+}
 
 /*******************************************************************************
 * Function Name: Cy_RTC_IsExternalResetOccurred
@@ -1251,8 +1224,8 @@ __STATIC_INLINE cy_en_rtc_hours_format_t Cy_RTC_GetHoursFormat(void)
 *******************************************************************************/
 __STATIC_INLINE bool Cy_RTC_IsExternalResetOccurred(void)
 {
-    return (0u == Cy_SysLib_GetResetReason());
-}
+     return(0u == Cy_SysLib_GetResetReason());
+ }
 
 
 /*******************************************************************************
@@ -1376,7 +1349,7 @@ __STATIC_INLINE void Cy_RTC_SyncToRtcAhbAlarm(uint32_t alarmTimeBcd, uint32_t al
 /*******************************************************************************
 *      Internal Functions
 *******************************************************************************/
-
+ 
 #if defined(__cplusplus)
 }
 #endif

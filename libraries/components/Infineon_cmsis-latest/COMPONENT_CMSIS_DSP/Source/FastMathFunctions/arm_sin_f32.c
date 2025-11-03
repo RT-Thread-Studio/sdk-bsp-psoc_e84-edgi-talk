@@ -68,54 +68,53 @@
   @return        sin(x)
  */
 
-float32_t arm_sin_f32(
-    float32_t x)
+ARM_DSP_ATTRIBUTE float32_t arm_sin_f32(
+  float32_t x)
 {
-    float32_t sinVal, fract, in;                   /* Temporary input, output variables */
-    uint16_t index;                                /* Index variable */
-    float32_t a, b;                                /* Two nearest output values */
-    int32_t n;
-    float32_t findex;
+  float32_t sinVal, fract, in;                   /* Temporary input, output variables */
+  uint16_t index;                                /* Index variable */
+  float32_t a, b;                                /* Two nearest output values */
+  int32_t n;
+  float32_t findex;
 
-    /* input x is in radians */
-    /* Scale input to [0 1] range from [0 2*PI] , divide input by 2*pi */
-    in = x * 0.159154943092f;
+  /* input x is in radians */
+  /* Scale input to [0 1] range from [0 2*PI] , divide input by 2*pi */
+  in = x * 0.159154943092f;
 
-    /* Calculation of floor value of input */
-    n = (int32_t) in;
+  /* Calculation of floor value of input */
+  n = (int32_t) in;
 
-    /* Make negative values towards -infinity */
-    if (in < 0.0f)
-    {
-        n--;
-    }
+  /* Make negative values towards -infinity */
+  if (in < 0.0f)
+  {
+    n--;
+  }
 
-    /* Map input value to [0 1] */
-    in = in - (float32_t) n;
+  /* Map input value to [0 1] */
+  in = in - (float32_t) n;
 
-    /* Calculation of index of the table */
-    findex = (float32_t)FAST_MATH_TABLE_SIZE * in;
-    index = (uint16_t)findex;
+  /* Calculation of index of the table */
+  findex = (float32_t)FAST_MATH_TABLE_SIZE * in;
+  index = (uint16_t)findex;
 
-    /* when "in" is exactly 1, we need to rotate the index down to 0 */
-    if (index >= FAST_MATH_TABLE_SIZE)
-    {
-        index = 0;
-        findex -= (float32_t)FAST_MATH_TABLE_SIZE;
-    }
+  /* when "in" is exactly 1, we need to rotate the index down to 0 */
+  if (index >= FAST_MATH_TABLE_SIZE) {
+    index = 0;
+    findex -= (float32_t)FAST_MATH_TABLE_SIZE;
+  }
 
-    /* fractional value calculation */
-    fract = findex - (float32_t) index;
+  /* fractional value calculation */
+  fract = findex - (float32_t) index;
 
-    /* Read two nearest values of input value from the sin table */
-    a = sinTable_f32[index];
-    b = sinTable_f32[index + 1];
+  /* Read two nearest values of input value from the sin table */
+  a = sinTable_f32[index];
+  b = sinTable_f32[index+1];
 
-    /* Linear interpolation process */
-    sinVal = (1.0f - fract) * a + fract * b;
+  /* Linear interpolation process */
+  sinVal = (1.0f - fract) * a + fract * b;
 
-    /* Return output value */
-    return (sinVal);
+  /* Return output value */
+  return (sinVal);
 }
 
 /**

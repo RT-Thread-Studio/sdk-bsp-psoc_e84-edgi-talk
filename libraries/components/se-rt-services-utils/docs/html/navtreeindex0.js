@@ -26,6 +26,7 @@ var NAVTREEINDEX0 =
 "group__builtin__keys.html#ga3d98f32200768ec83eb4428de898e01c":[6,2,9,4,6],
 "group__builtin__keys.html#ga5303ac30a5bf724f2a3cb57ca15e56cb":[6,2,9,4,2],
 "group__builtin__keys.html#ga5b886dd85ee085176d0e34f132c00b72":[6,2,9,4,9],
+"group__builtin__keys.html#ga60711dbbbf0411ab337790b7a10a722a":[6,2,9,4,13],
 "group__builtin__keys.html#ga6ac3866e631744431e63e435636abe27":[6,2,9,4,10],
 "group__builtin__keys.html#ga7aef195a4bc6e02e045c25dadc5605f1":[6,2,9,4,1],
 "group__builtin__keys.html#gaaa16ab5e72a762be14457a8a93921444":[6,2,9,4,3],
@@ -124,6 +125,7 @@ var NAVTREEINDEX0 =
 "group__crypto__algs.html#ga14193e748272b357afe84b12b95de5a6":[6,2,9,1,2],
 "group__crypto__algs.html#ga149870e20cfc64da06f701121aa4e89c":[6,2,9,1,31],
 "group__crypto__algs.html#ga155086173391bf986ae11a1c5470c524":[6,2,9,1,105],
+"group__crypto__algs.html#ga18a1757e3ff0ebc5e0ed69f31c59dd8f":[6,2,9,1,108],
 "group__crypto__algs.html#ga1d77a0ca25050701211528ccbc9db3df":[6,2,9,1,86],
 "group__crypto__algs.html#ga1dde749b95e65473efcd9f7d3ba8e390":[6,2,9,1,77],
 "group__crypto__algs.html#ga22c304fe927a659b7aa24c89b25de7f7":[6,2,9,1,58],
@@ -195,6 +197,7 @@ var NAVTREEINDEX0 =
 "group__crypto__algs.html#gabe6472bc75430bac20971aee6db06342":[6,2,9,1,16],
 "group__crypto__algs.html#gac159b2a4e681630ed2d864efdfc67e9e":[6,2,9,1,99],
 "group__crypto__algs.html#gac256dce0d3899e92b63ce276499c8055":[6,2,9,1,48],
+"group__crypto__algs.html#gac7625d3911528f21b8b9cce1f2ec71d3":[6,2,9,1,107],
 "group__crypto__algs.html#gac76df8ec85ff2413e103ae3dab475ea3":[6,2,9,1,44],
 "group__crypto__algs.html#gac9220f7a3751ad078f957ec8f1f80b53":[6,2,9,1,84],
 "group__crypto__algs.html#gad2180b8e6448f4b12f28b9a066ab21c3":[6,2,9,1,5],
@@ -246,8 +249,5 @@ var NAVTREEINDEX0 =
 "group__crypto__types.html#ga5fa33b7f1f4836aae298084436bafaa9":[6,2,9,0,23],
 "group__crypto__types.html#ga5fd36fb39629d7cef8d96c108c3211a8":[6,2,9,0,21],
 "group__crypto__types.html#ga650a6f4b2d282b7fc02c3d7417e47af2":[6,2,9,0,30],
-"group__crypto__types.html#ga653c5c1655e7384f587730ef8a34717b":[6,2,9,0,38],
-"group__crypto__types.html#ga65880407522cd23a3398423fc81c46d2":[6,2,9,0,12],
-"group__crypto__types.html#ga666a9c5f33dc3223aa48bea5a038c61b":[6,2,9,0,19],
-"group__crypto__types.html#ga687fd8ad8eb5eb3adfc6999f5cd2406d":[6,2,9,0,18]
+"group__crypto__types.html#ga653c5c1655e7384f587730ef8a34717b":[6,2,9,0,38]
 };

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from .targets import (
-    is_mxs40v1, is_mxs40sv2, is_mxs22, is_traveo_t2g, is_cyw559xx)
+    is_mxs40v1, is_mxs40sv2, is_mxs22, is_traveo_t2g, is_cyw559xx, is_psb3xxx)
 from .api_common import CommonAPI
 
 
@@ -50,6 +50,9 @@ class ProvisioningPackage:
                 elif is_mxs40sv2(target):
                     from .api_mxs40sv2 import Mxs40sv2API
                     api_class = Mxs40sv2API
+                elif is_psb3xxx(target):
+                    from .api_psb3xxx import PSB3xxxAPI
+                    api_class = PSB3xxxAPI
                 elif is_mxs22(target):
                     from .api_mxs22 import Mxs22API
                     api_class = Mxs22API

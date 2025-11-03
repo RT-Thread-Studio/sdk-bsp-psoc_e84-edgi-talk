@@ -13,124 +13,112 @@
 
 #ifdef BSP_USING_RTC
 
-//#define DRV_DEBUG
-#define LOG_TAG                         "drv.rtc"
+#define LOG_TAG "drv.rtc"
 #include <drv_log.h>
 
 static rt_rtc_dev_t ifx32_rtc_dev;
 
 static int get_day_of_week(int day, int month, int year)
 {
-    int ret;
-    int k = 0;
-    int j = 0;
-
-    if (month < CY_RTC_MARCH)
+    if (month < 3)
     {
-        month += CY_RTC_MONTHS_PER_YEAR;
-        year--;
+        month += 12;
+        year -= 1;
     }
 
-    k = (year % 100);
-    j = (year / 100);
-    ret = (day + (13 * (month + 1) / 5) + k + (k / 4) + (j / 4) + (5 * j)) % 7;
-    ret = ((ret + 6) % 7);
+    int k = year % 100;
+    int j = year / 100;
 
-    return ret;
+    int ret = (day + (13 * (month + 1)) / 5 + k + (k / 4) + (j / 4) + (5 * j)) % 7;
+    ret = (ret + 6) % 7;
+
+    return ret + 1;
 }
 
-static rt_err_t set_rtc_time_stamp(time_t time_stamp)
+static rt_err_t set_rtc_time_stamp(time_t timestamp)
 {
     struct tm tm = {0};
-    cy_stc_rtc_config_t new_time = {0};
+    gmtime_r(&timestamp, &tm);
 
-    gmtime_r(&time_stamp, &tm);
-
-    if (tm.tm_year < 100)
+    int full_year = tm.tm_year + 1900;
+    if (full_year < 2000 || full_year > 2099)
     {
+        LOG_E("RTC year out of range: %d", full_year);
         return -RT_ERROR;
     }
 
-    new_time.sec     = tm.tm_sec;
-    new_time.min     = tm.tm_min;
-    new_time.hour    = tm.tm_hour;
-    new_time.date    = tm.tm_mday;
-    new_time.month   = tm.tm_mon;
-    new_time.year    = tm.tm_year - 100;
-    new_time.dayOfWeek    = get_day_of_week(tm.tm_mday, tm.tm_mon, tm.tm_year);
+    cy_stc_rtc_config_t new_time;
+    memset(&new_time, 0, sizeof(new_time));
 
-    Cy_RTC_SetDateAndTime(&new_time);
+    new_time.sec      = tm.tm_sec;
+    new_time.min      = tm.tm_min;
+    new_time.hour     = tm.tm_hour;
+    new_time.date     = tm.tm_mday;
+    new_time.month    = tm.tm_mon + 1;
+    new_time.year     = full_year - 2000;
+    new_time.dayOfWeek = get_day_of_week(tm.tm_mday, tm.tm_mon + 1, full_year);
 
-    LOG_D("set rtc time.");
+    new_time.hrFormat = CY_RTC_24_HOURS;
+    new_time.amPm     = CY_RTC_AM;
 
-    return RT_EOK;
+    LOG_D("SET RTC %04d-%02d-%02d %02d:%02d:%02d (W=%d)",
+          full_year, new_time.month, new_time.date,
+          new_time.hour, new_time.min, new_time.sec,
+          new_time.dayOfWeek);
+
+    cy_en_rtc_status_t status = Cy_RTC_SetDateAndTime(&new_time);
+    return (status == CY_RTC_SUCCESS) ? RT_EOK : -RT_ERROR;
 }
 
 static rt_err_t ifx_rtc_get_timeval(struct timeval *tv)
 {
+    cy_stc_rtc_config_t dt;
+    Cy_RTC_GetDateAndTime(&dt);
+
     struct tm tm_new = {0};
-    cy_stc_rtc_config_t date_time = {0};
-
-    Cy_RTC_GetDateAndTime(&date_time);
-
-    tm_new.tm_sec  = date_time.sec;
-    tm_new.tm_min  = date_time.min;
-    tm_new.tm_hour = date_time.hour;
-    tm_new.tm_mday = date_time.date;
-    tm_new.tm_mon  = date_time.month;
-    tm_new.tm_year = date_time.year + 100;
+    tm_new.tm_sec  = dt.sec;
+    tm_new.tm_min  = dt.min;
+    tm_new.tm_hour = dt.hour;
+    tm_new.tm_mday = dt.date;
+    tm_new.tm_mon  = dt.month - 1;
+    tm_new.tm_year = dt.year + 100;
 
     tv->tv_sec = timegm(&tm_new);
+    tv->tv_usec = 0;
+
+    LOG_D("GET RTC %04d-%02d-%02d %02d:%02d:%02d",
+          tm_new.tm_year + 1900, tm_new.tm_mon + 1, tm_new.tm_mday,
+          tm_new.tm_hour, tm_new.tm_min, tm_new.tm_sec);
 
     return RT_EOK;
-}
-
-static rt_err_t _rtc_init(void)
-{
-
-    /* Variable used to store return status of RTC API */
-    cy_en_rtc_status_t rtc_status;
-    uint32_t rtc_access_retry = 500;
-
-    /* RTC block doesn't allow to access, when synchronizing the user registers
-    * and the internal actual RTC registers. It will return RTC_BUSY value, if
-    * it is not available to update the configuration values. Needs to retry,
-    * if it doesn't return CY_RTC_SUCCESS. */
-
-    do
-    {
-        rtc_status = Cy_RTC_Init(&CYBSP_RTC_config);
-        rtc_access_retry--;
-        rt_thread_mdelay(5);
-    }
-    while ((rtc_status != CY_RTC_SUCCESS) && (rtc_access_retry != 0));
-
-    return rtc_status;
 }
 
 static rt_err_t _rtc_get_secs(time_t *sec)
 {
     struct timeval tv;
-
     ifx_rtc_get_timeval(&tv);
-    *(time_t *)sec = tv.tv_sec;
-    LOG_D("RTC: get rtc_time %d", *sec);
-
+    *sec = tv.tv_sec;
     return RT_EOK;
 }
 
 static rt_err_t _rtc_set_secs(time_t *sec)
 {
-    rt_err_t result = RT_EOK;
+    return set_rtc_time_stamp(*sec);
+}
 
-    if (set_rtc_time_stamp(*sec))
+static rt_err_t _rtc_init(void)
+{
+    cy_en_rtc_status_t status;
+    uint32_t retry = 500;
+
+    do
     {
-        result = -RT_ERROR;
+        status = Cy_RTC_Init(&CYBSP_RTC_config);
+        rt_thread_mdelay(5);
     }
+    while (status != CY_RTC_SUCCESS && retry--);
 
-    LOG_D("RTC: set rtc_time %d", *sec);
-
-    return result;
+    return (status == CY_RTC_SUCCESS) ? RT_EOK : -RT_ERROR;
 }
 
 static const struct rt_rtc_ops _rtc_ops =
@@ -144,29 +132,19 @@ static const struct rt_rtc_ops _rtc_ops =
     RT_NULL,
 };
 
-/**
- * @brief    RTC initialization function.
- *
- * @return   RT_EOK indicates successful initialization, other value indicates failed;
- */
 static int rt_hw_rtc_init(void)
 {
-    rt_err_t result = RT_EOK;
-
     ifx32_rtc_dev.ops = &_rtc_ops;
 
     if (rt_hw_rtc_register(&ifx32_rtc_dev, "rtc", RT_DEVICE_FLAG_RDWR, RT_NULL) != RT_EOK)
     {
-        LOG_E("rtc init failed");
-        result = -RT_ERROR;
-    }
-    else
-    {
-        LOG_D("rtc init success");
+        LOG_E("RTC register failed");
+        return -RT_ERROR;
     }
 
-    return result;
+    LOG_D("RTC init success");
+    return RT_EOK;
 }
-
 INIT_DEVICE_EXPORT(rt_hw_rtc_init);
+
 #endif

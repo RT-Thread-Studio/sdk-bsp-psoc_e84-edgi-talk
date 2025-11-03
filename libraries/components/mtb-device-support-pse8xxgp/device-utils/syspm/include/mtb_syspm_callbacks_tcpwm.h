@@ -50,7 +50,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
                              'Rule requires const attributes for inputs but signature for following APIs needs to match requested one in PDL');
 
 /**
- * \addtogroup group_tcpwm TCPWM Deep Sleep Callback
+ * \addtogroup mtb_syspm_group_tcpwm TCPWM Deep Sleep Callback
  * \{
  * Implementation of the TCPWM Deep Sleep callback
  */
@@ -58,11 +58,16 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 /**Context Reference Structure for TCPWM peripheral in case of DeepSleep */
 typedef struct
 {
-    uint32_t                channelNum;     /**< Number of the tcpwm channel */
-    bool                    preSleepState;  /**< State of the channel pre-sleep */
+    uint32_t                channelNum;      /**< Number of the tcpwm channel */
+    bool                    preSleepState;   /**< Enable State of the channel pre-sleep */
+    bool                    preSleepRunning; /**< Running State of the channel pre-sleep */
 } mtb_syspm_tcpwm_deepsleep_context_t;
 
 /** Deepsleep callback for TCPWM IP
+ *
+ * \note DeepSleep entry is not prevented if the TCPWM is running. If it is required to prevent
+ * DeepSleep entry when the TCPWM is running, the application should register its own callback
+ * or lock DeepSleep.
  *
  * @param[in] params    The param structure for the callback for which the context element should be
  * of type \ref mtb_syspm_tcpwm_deepsleep_context_t
@@ -70,12 +75,12 @@ typedef struct
  * @return Returns CY_SYSPM_SUCCESS if successful, an error code otherwise
  */
 cy_en_syspm_status_t mtb_syspm_tcpwm_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode);
 
 #if defined(__cplusplus)
 }
 #endif
 
-/** \} group_tcpwm */
+/** \} mtb_syspm_group_tcpwm */
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.13');

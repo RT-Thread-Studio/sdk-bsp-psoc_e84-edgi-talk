@@ -39,28 +39,26 @@
 /**
   * \brief Programmable IO port registers (SMARTIO_PRT)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control register */
-    __IM uint32_t RESERVED[3];
-    __IOM uint32_t SYNC_CTL;                      /*!< 0x00000010 Synchronization control register */
-    __IM uint32_t RESERVED1[3];
-    __IOM uint32_t LUT_SEL[8];                    /*!< 0x00000020 LUT component input selection */
-    __IOM uint32_t LUT_CTL[8];                    /*!< 0x00000040 LUT component control register */
-    __IM uint32_t RESERVED2[24];
-    __IOM uint32_t DU_SEL;                        /*!< 0x000000C0 Data unit component input selection */
-    __IOM uint32_t DU_CTL;                        /*!< 0x000000C4 Data unit component control register */
-    __IM uint32_t RESERVED3[10];
-    __IOM uint32_t DATA;                          /*!< 0x000000F0 Data register */
-    __IM uint32_t RESERVED4[3];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control register */
+   __IM uint32_t RESERVED[3];
+  __IOM uint32_t SYNC_CTL;                      /*!< 0x00000010 Synchronization control register */
+   __IM uint32_t RESERVED1[3];
+  __IOM uint32_t LUT_SEL[8];                    /*!< 0x00000020 LUT component input selection */
+  __IOM uint32_t LUT_CTL[8];                    /*!< 0x00000040 LUT component control register */
+   __IM uint32_t RESERVED2[24];
+  __IOM uint32_t DU_SEL;                        /*!< 0x000000C0 Data unit component input selection */
+  __IOM uint32_t DU_CTL;                        /*!< 0x000000C4 Data unit component control register */
+   __IM uint32_t RESERVED3[10];
+  __IOM uint32_t DATA;                          /*!< 0x000000F0 Data register */
+   __IM uint32_t RESERVED4[3];
 } SMARTIO_PRT_Type;                             /*!< Size = 256 (0x100) */
 
 /**
   * \brief Programmable IO configuration (SMARTIO)
   */
-typedef struct
-{
-    SMARTIO_PRT_Type PRT[128];              /*!< 0x00000000 Programmable IO port registers */
+typedef struct {
+        SMARTIO_PRT_Type PRT[128];              /*!< 0x00000000 Programmable IO port registers */
 } SMARTIO_Type;                                 /*!< Size = 32768 (0x8000) */
 
 

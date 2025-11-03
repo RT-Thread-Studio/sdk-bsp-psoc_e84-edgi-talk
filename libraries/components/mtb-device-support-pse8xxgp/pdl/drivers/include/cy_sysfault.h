@@ -81,31 +81,6 @@
 * For more information on the System Fault, refer to the technical reference
 * manual (TRM).
 *
-* \section group_sysfault_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.30</td>
-*     <td>Added enum \ref en_sysfault_source_t and new macros.</td>
-*     <td>Support added for PSE84 and enabled sysfault compilation for PSoC C3.</td>
-*   </tr>
-*   <tr>
-*     <td>1.20</td>
-*     <td>Updated \ref Cy_SysFault_GetErrorSource API and added new macro</td>
-*     <td>MISRA 10.8 fix and code enhancement</td>
-*   </tr>
-*    <tr>
-*     <td>1.10</td>
-*     <td>Updated macro related to driver enablement for XMC7/T2G devices without any functional impact</td>
-*     <td>Code Enhancement</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_sysfault_macros Macros
 * \defgroup group_sysfault_enums Enums
 * \defgroup group_sysfault_data_structures Data Structures
@@ -202,9 +177,9 @@ typedef enum
 typedef enum
 {
     CY_SYSFAULT_DATA0 = 0UL, /**< Used to get the Fault data for DATA0 register */
-    CY_SYSFAULT_DATA1 =  1UL, /**< Used to get the Fault data for DATA1 register */
+    CY_SYSFAULT_DATA1=  1UL, /**< Used to get the Fault data for DATA1 register */
     CY_SYSFAULT_DATA2 = 2UL, /**< Used to get the Fault data for DATA2 register */
-    CY_SYSFAULT_DATA3 =  3UL, /**< Used to get the Fault data for DATA3 register */
+    CY_SYSFAULT_DATA3=  3UL, /**< Used to get the Fault data for DATA3 register */
 } cy_en_SysFault_Data_t;
 
 /** \cond INTERNAL */
@@ -217,8 +192,7 @@ typedef enum
 * SysFault sources.
 */
 typedef enum
-{
-    PERI_0_PERI_MS0_PPC_VIO         = 0x0000u, /**< PERI0 master interface PPC violation */
+{   PERI_0_PERI_MS0_PPC_VIO         = 0x0000u, /**< PERI0 master interface PPC violation */
     PERI_0_PERI_MS1_PPC_VIO         = 0x0001u, /**< PERI0 master interface PPC violation */
     PERI_0_PERI_PPC_PC_MASK_VIO     = 0x0002u, /**< PERI0 peripheral PPC PC mask violation */
     PERI_0_PERI_GP1_TIMEOUT_VIO     = 0x0003u, /**< PERI0 peripheral group 1 AHB timeout */
@@ -288,8 +262,7 @@ typedef enum
 /**
 * Configuration structure for a Fault control register.
 */
-typedef struct
-{
+typedef struct {
     bool       TriggerEnable;    /**< Enables the trigger output when it is True */
     bool       OutputEnable;    /**< Enables the output signal when it is True */
     bool       ResetEnable;     /**< Enables the Reset request  when it is True */

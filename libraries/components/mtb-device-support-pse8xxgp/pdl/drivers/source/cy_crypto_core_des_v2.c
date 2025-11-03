@@ -54,9 +54,9 @@ typedef enum
 } cy_en_crypto_des_mode_t;
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 9.3', 2, \
-                             'Partial initialization is intentional')
+    'Partial initialization is intentional')
 /* Table with DES weak keys */
-CY_ALIGN(4)
+CY_ALIGN(CY_CRYPTO_ALIGN_CACHE_LINE(4))
 static uint8_t const cy_desWeakKeys[CY_CRYPTO_DES_WEAK_KEY_COUNT][CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_DES_KEY_BYTE_LENGTH)] =
 {
     { 0x01u, 0x01u, 0x01u, 0x01u, 0x01u, 0x01u, 0x01u, 0x01u },
@@ -111,17 +111,17 @@ CY_MISRA_BLOCK_END('MISRA C-2012 Rule 9.3')
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Des(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t const *key,
-        uint8_t *dst,
-        uint8_t const *src)
+                                        cy_en_crypto_dir_mode_t dirMode,
+                                        uint8_t const *key,
+                                        uint8_t *dst,
+                                        uint8_t const *src)
 {
     uint32_t i;
     cy_en_crypto_status_t status = CY_CRYPTO_SUCCESS;
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
     /* Flush the cache */
-    SCB_CleanDCache_by_Addr((volatile void *)key, (int32_t)CY_CRYPTO_DES_KEY_BYTE_LENGTH);
-    SCB_CleanDCache_by_Addr((volatile void *)src, (int32_t)CY_CRYPTO_DES_KEY_BYTE_LENGTH);
+    SCB_CleanDCache_by_Addr((volatile void *)key,(int32_t)CY_CRYPTO_DES_KEY_BYTE_LENGTH);
+    SCB_CleanDCache_by_Addr((volatile void *)src,(int32_t)CY_CRYPTO_DES_KEY_BYTE_LENGTH);
 #endif
     uint8_t *keyRemap;
     uint8_t *dstRemap;
@@ -191,18 +191,18 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Des(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Tdes(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t const *key,
-        uint8_t *dst,
-        uint8_t const *src)
+                                        cy_en_crypto_dir_mode_t dirMode,
+                                        uint8_t const *key,
+                                        uint8_t *dst,
+                                        uint8_t const *src)
 {
     uint32_t i;
     cy_en_crypto_status_t status = CY_CRYPTO_SUCCESS;
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-    /* Flush the cache */
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to int32_t.');
-    SCB_CleanDCache_by_Addr((volatile void *)key, (int32_t)(CY_CRYPTO_DES_KEY_BYTE_LENGTH * 3U));
-    SCB_CleanDCache_by_Addr((volatile void *)src, (int32_t)CY_CRYPTO_DES_KEY_BYTE_LENGTH);
+        /* Flush the cache */
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to int32_t.');
+        SCB_CleanDCache_by_Addr((volatile void *)key,(int32_t)(CY_CRYPTO_DES_KEY_BYTE_LENGTH * 3U));
+        SCB_CleanDCache_by_Addr((volatile void *)src,(int32_t)CY_CRYPTO_DES_KEY_BYTE_LENGTH);
 #endif
     uint8_t *keyRemap;
     uint8_t *dstRemap;
@@ -215,7 +215,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Tdes(CRYPTO_Type *base,
     /* Check weak keys */
     for (i = 0U; i < CY_CRYPTO_DES_WEAK_KEY_COUNT; i++)
     {
-        for (uint32_t keynum = 0U; keynum < (CY_CRYPTO_TDES_KEY_SIZE / CY_CRYPTO_DES_KEY_SIZE); keynum++)
+        for (uint32_t keynum=0U; keynum < (CY_CRYPTO_TDES_KEY_SIZE / CY_CRYPTO_DES_KEY_SIZE); keynum++)
         {
             if (Cy_Crypto_Core_V2_MemCmp(base, &(keyRemap[keynum * CY_CRYPTO_DES_KEY_BYTE_LENGTH]), (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(cy_desWeakKeys[i]), CY_CRYPTO_DES_KEY_BYTE_LENGTH) == 0U)
             {
@@ -231,11 +231,11 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Tdes(CRYPTO_Type *base,
 
     /* Load keys */
     Cy_Crypto_Core_V2_FFContinue(base, CY_CRYPTO_V2_RB_FF_LOAD0, keyRemap, CY_CRYPTO_DES_KEY_BYTE_LENGTH * 3U);
-    Cy_Crypto_Core_V2_BlockMov(base, CY_CRYPTO_V2_RB_KEY0, CY_CRYPTO_V2_RB_FF_LOAD0, CY_CRYPTO_DES_KEY_BYTE_LENGTH * 2U);
-    Cy_Crypto_Core_V2_BlockMov(base, CY_CRYPTO_V2_RB_KEY1, CY_CRYPTO_V2_RB_FF_LOAD0, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
+    Cy_Crypto_Core_V2_BlockMov  (base, CY_CRYPTO_V2_RB_KEY0, CY_CRYPTO_V2_RB_FF_LOAD0, CY_CRYPTO_DES_KEY_BYTE_LENGTH * 2U);
+    Cy_Crypto_Core_V2_BlockMov  (base, CY_CRYPTO_V2_RB_KEY1, CY_CRYPTO_V2_RB_FF_LOAD0, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
 
     Cy_Crypto_Core_V2_FFContinue(base, CY_CRYPTO_V2_RB_FF_LOAD0, srcRemap, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
-    Cy_Crypto_Core_V2_FFStart(base, CY_CRYPTO_V2_RB_FF_STORE, dstRemap, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
+    Cy_Crypto_Core_V2_FFStart   (base, CY_CRYPTO_V2_RB_FF_STORE, dstRemap, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
 
     Cy_Crypto_Core_V2_BlockMov(base, CY_CRYPTO_V2_RB_BLOCK0, CY_CRYPTO_V2_RB_FF_LOAD0, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
     Cy_Crypto_Core_V2_Run(base, (uint32_t)((dirMode == CY_CRYPTO_ENCRYPT) ? (CY_CRYPTO_V2_TDES_OPC) : (CY_CRYPTO_V2_TDES_INV_OPC)));

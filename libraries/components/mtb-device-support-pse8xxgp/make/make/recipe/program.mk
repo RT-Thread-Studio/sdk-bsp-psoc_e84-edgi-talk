@@ -32,12 +32,13 @@ include $(MTB_TOOLS__RECIPE_DIR)/make/recipe/program_common.mk
 
 _MTB_RECIPE__OPENOCD_DEBUG_PREFIX=$(_MTB_RECIPE__OPENOCD_CHIP_NAME).cm33 configure -rtos auto -rtos-wipe-on-reset-halt 1; gdb_breakpoint_override hard;
 
-ifeq ($(TOOLCHAIN),A_Clang)
-_MTB_RECIPE__OPENOCD_PROGRAM_IMG=$(MTB_RECIPE__LAST_CONFIG_DIR)/$(APPNAME).bin $(TOOLCHAIN_VECT_BASE_CM33)
-else
 _MTB_RECIPE__OPENOCD_SYMBOL_IMG=$(_MTB_RECIPE__LAST_CONFIG_TARG_FILE)
 _MTB_RECIPE__OPENOCD_PROGRAM_IMG=$(_MTB_RECIPE__LAST_CONFIG_PROG_FILE)
 
+# Use combiner-signer hex file if specified
+_MTB_RECIPE__COMBINE_SIGN_IDX=$(lastword $(MTB_COMBINE_SIGN_$(notdir $(realpath $(MTB_TOOLS__PRJ_DIR)))_HEX_FILES))
+ifneq ($(MTB_COMBINE_SIGN_$(_MTB_RECIPE__COMBINE_SIGN_IDX)_HEX_PATH),)
+_MTB_RECIPE__OPENOCD_PROGRAM_IMG=$(MTB_COMBINE_SIGN_$(_MTB_RECIPE__COMBINE_SIGN_IDX)_HEX_PATH)
 endif
 
 # Multi-core application programming: always use combined HEX image
@@ -85,9 +86,9 @@ _MTB_RECIPE__OPENOCD_PREPARE_APP=init; reset init; load_image $(_MTB_RECIPE__OPE
 _MTB_RECIPE__OPENOCD_DEBUG=$(_MTB_RECIPE__OPENOCD_DEBUG_PREFIX) $(_MTB_RECIPE__OPENOCD_PREPARE_APP)
 _MTB_RECIPE__OPENOCD_PROGRAM=$(_MTB_RECIPE__OPENOCD_PREPARE_APP); reg sp [mrw $(_MTB_RECIPE__APP_SP)]; reg pc [mrw $(_MTB_RECIPE__APP_PC)]; reg xPSR 0x01000000; resume; exit;
 else # default case for Virgin Si
-_MTB_RECIPE__OPENOCD_ERASE=init; reset init; erase_all; exit;
+_MTB_RECIPE__OPENOCD_ERASE=init; reset init; $(_MTB_RECIPE__OPENOCD_PROBE_FREQUENCY)erase_all; exit;
 _MTB_RECIPE__OPENOCD_DEBUG=$(_MTB_RECIPE__OPENOCD_DEBUG_PREFIX) init; reset init;
-_MTB_RECIPE__OPENOCD_PROGRAM=program $(_MTB_RECIPE__OPENOCD_PROGRAM_IMG) verify reset exit;
+_MTB_RECIPE__OPENOCD_PROGRAM=init; reset init; $(_MTB_RECIPE__OPENOCD_PROBE_FREQUENCY)flash write_image erase $(_MTB_RECIPE__OPENOCD_PROGRAM_IMG); verify_image $(_MTB_RECIPE__OPENOCD_PROGRAM_IMG); reset run; shutdown;
 endif #($(BITFILE_PROVISIONED),true)
 
 ifeq ($(APPTYPE),ram)

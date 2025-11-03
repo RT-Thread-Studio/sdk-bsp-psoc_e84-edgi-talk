@@ -56,7 +56,7 @@ typedef struct
     cy_stc_syspm_callback_params_t cb_params;
     /* Actually a mtb_hal_syspm_callback_state_t, store as uint to avoid circular includes */
     uint32_t                       state;
-    void                          *user_arg;
+    void*                          user_arg;
 } mtb_hal_syspm_callback_data_t;
 
 

@@ -52,52 +52,52 @@
   to the saturated negative or positive value.
  */
 
-arm_status arm_divide_q31(q31_t numerator,
-                          q31_t denominator,
-                          q31_t *quotient,
-                          int16_t *shift)
+ARM_DSP_ATTRIBUTE arm_status arm_divide_q31(q31_t numerator,
+  q31_t denominator,
+  q31_t *quotient,
+  int16_t *shift)
 {
-    int16_t sign = 0;
-    q63_t temp;
-    int16_t shiftForNormalizing;
+  int16_t sign=0;
+  q63_t temp;
+  int16_t shiftForNormalizing;
 
-    *shift = 0;
+  *shift = 0;
 
-    sign = (numerator >> 31) ^ (denominator >> 31);
+  sign = (numerator<0) ^ (denominator<0);
 
-    if (denominator == 0)
-    {
-        if (sign)
-        {
-            *quotient = 0x80000000;
-        }
-        else
-        {
-            *quotient = 0x7FFFFFFF;
-        }
-        return (ARM_MATH_NANINF);
-    }
+  if (denominator == 0)
+  {
+     if (sign)
+     {
+        *quotient = 0x80000000;
+     }
+     else
+     {
+        *quotient = 0x7FFFFFFF;
+     }
+     return(ARM_MATH_NANINF);
+  }
 
-    arm_abs_q31(&numerator, &numerator, 1);
-    arm_abs_q31(&denominator, &denominator, 1);
+  arm_abs_q31(&numerator,&numerator,1);
+  arm_abs_q31(&denominator,&denominator,1);
 
-    temp = ((q63_t)numerator << 31) / ((q63_t)denominator);
+  temp = ((q63_t)numerator << 31) / ((q63_t)denominator);
 
-    shiftForNormalizing = 32 - __CLZ(temp >> 31);
-    if (shiftForNormalizing > 0)
-    {
-        *shift = shiftForNormalizing;
-        temp = temp >> shiftForNormalizing;
-    }
+  shiftForNormalizing= 32 - __CLZ(temp >> 31);
+  if (shiftForNormalizing > 0)
+  {
+     *shift = shiftForNormalizing;
+     temp = temp >> shiftForNormalizing;
+  }
 
-    if (sign)
-    {
-        temp = -temp;
-    }
+  if (sign)
+  {
+    temp = -temp;
+  }
 
-    *quotient = (q31_t)temp;
+  *quotient=(q31_t)temp;
 
-    return (ARM_MATH_SUCCESS);
+  return(ARM_MATH_SUCCESS);
 }
 
 /**

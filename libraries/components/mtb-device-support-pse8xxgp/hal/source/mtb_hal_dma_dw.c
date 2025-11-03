@@ -40,9 +40,9 @@ static cy_rslt_t _mtb_hal_dma_dw_supported(const mtb_hal_dma_configurator_t* con
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
     cy_en_dma_descriptor_type_t descr_type = Cy_DMA_Descriptor_GetDescriptorType(
-            config->dw_descriptor);
+        config->dw_descriptor);
     cy_en_dma_trigger_type_t intr_type = Cy_DMA_Descriptor_GetInterruptType(
-            config->dw_descriptor);
+        config->dw_descriptor);
     //Only 1-D transfer and 2-D transfer is supported
     if ((CY_DMA_1D_TRANSFER != descr_type) && (CY_DMA_2D_TRANSFER != descr_type))
     {
@@ -62,7 +62,7 @@ static uint32_t _mtb_hal_dma_dw_get_expected_bursts(mtb_hal_dma_t* obj)
 {
     uint32_t expected_bursts = 1;
     cy_en_dma_trigger_type_t intr_type = Cy_DMA_Descriptor_GetInterruptType(
-            obj->descriptor.dw);
+        obj->descriptor.dw);
     if (CY_DMA_DESCR == intr_type)
     {
         expected_bursts = 1;
@@ -77,7 +77,7 @@ static uint32_t _mtb_hal_dma_dw_get_expected_bursts(mtb_hal_dma_t* obj)
 
 /** Convert PDL interrupt cause to hal dma event */
 __STATIC_INLINE mtb_hal_dma_event_t _mtb_hal_dma_dw_convert_interrupt_cause(mtb_hal_dma_t* obj,
-        cy_en_dma_intr_cause_t cause)
+                                                                            cy_en_dma_intr_cause_t cause)
 {
     static const mtb_hal_dma_event_t hal[] =
     {
@@ -93,8 +93,8 @@ __STATIC_INLINE mtb_hal_dma_event_t _mtb_hal_dma_dw_convert_interrupt_cause(mtb_
     };
 
     mtb_hal_dma_event_t hal_rslt = MTB_HAL_DMA_NO_INTR;
-    CY_ASSERT(cause < sizeof(hal) / sizeof(mtb_hal_dma_event_t));
-    if (cause < sizeof(hal) / sizeof(mtb_hal_dma_event_t))
+    CY_ASSERT(cause < sizeof(hal)/sizeof(mtb_hal_dma_event_t));
+    if (cause < sizeof(hal)/sizeof(mtb_hal_dma_event_t))
     {
         hal_rslt = hal[cause];
     }
@@ -130,8 +130,8 @@ static void _mtb_hal_dma_dw_irq_handler(mtb_hal_dma_t* obj)
     if ((obj->callback_data.callback != NULL) && events_to_callback)
     {
         ((mtb_hal_dma_event_callback_t)obj->callback_data.callback)(obj->callback_data.callback_arg,
-                (mtb_hal_dma_event_t)
-                events_to_callback);
+                                                                    (mtb_hal_dma_event_t)
+                                                                    events_to_callback);
     }
 }
 
@@ -142,15 +142,15 @@ static void _mtb_hal_dma_dw_irq_handler(mtb_hal_dma_t* obj)
 cy_rslt_t _mtb_hal_dma_dw_setup(mtb_hal_dma_t* obj, const mtb_hal_dma_configurator_t* config)
 {
     cy_rslt_t result;
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((NULL != obj) || (NULL != config->dw_base) ||
                           (NULL != config->dw_descriptor)), MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER);
-#else
+    #else
     if ((NULL == obj) || (NULL == config->dw_base) || (NULL == config->dw_descriptor))
     {
         return MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER;
     }
-#endif
+    #endif
     result = _mtb_hal_dma_dw_supported(config);
     if (CY_RSLT_SUCCESS == result)
     {
@@ -159,9 +159,9 @@ cy_rslt_t _mtb_hal_dma_dw_setup(mtb_hal_dma_t* obj, const mtb_hal_dma_configurat
         obj->base.dw_base = (DW_Type*)config->dw_base;
         obj->descriptor.dw = config->dw_descriptor;
         obj->expected_bursts = _mtb_hal_dma_dw_get_expected_bursts(obj);
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+        #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
         SCB_CleanDCache_by_Addr((void*)obj->descriptor.dw, sizeof(*obj->descriptor.dw));
-#endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
+        #endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
     }
     return result;
 }
@@ -172,20 +172,20 @@ cy_rslt_t _mtb_hal_dma_dw_setup(mtb_hal_dma_t* obj, const mtb_hal_dma_configurat
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t _mtb_hal_dma_dw_set_src_addr(mtb_hal_dma_t* obj, uint32_t src_addr)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((NULL != obj) || (NULL != obj->descriptor.dw)),
                          MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER);
-#else
+    #else
     if ((NULL == obj) || (NULL == obj->descriptor.dw))
     {
         return MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER;
     }
-#endif
+    #endif
     Cy_DMA_Descriptor_SetSrcAddress(obj->descriptor.dw, (void*)src_addr);
 
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+    #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     SCB_CleanDCache_by_Addr((void*)obj->descriptor.dw, sizeof(*obj->descriptor.dw));
-#endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
+    #endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
     return CY_RSLT_SUCCESS;
 }
 
@@ -195,20 +195,20 @@ cy_rslt_t _mtb_hal_dma_dw_set_src_addr(mtb_hal_dma_t* obj, uint32_t src_addr)
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t _mtb_hal_dma_dw_set_dst_addr(mtb_hal_dma_t* obj, uint32_t dst_addr)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((NULL != obj) || (NULL != obj->descriptor.dw)),
                          MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER);
-#else
+    #else
     if ((NULL == obj) || (NULL == obj->descriptor.dw))
     {
         return MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER;
     }
-#endif
+    #endif
     Cy_DMA_Descriptor_SetDstAddress(obj->descriptor.dw, (void*)dst_addr);
 
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+    #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     SCB_CleanDCache_by_Addr((void*)obj->descriptor.dw, sizeof(*obj->descriptor.dw));
-#endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
+    #endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
     return CY_RSLT_SUCCESS;
 }
 
@@ -221,15 +221,15 @@ cy_rslt_t _mtb_hal_dma_dw_set_length(mtb_hal_dma_t* obj, uint32_t length)
 {
     cy_en_dma_descriptor_type_t descr_type;
     cy_rslt_t                   result = CY_RSLT_SUCCESS;
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((NULL != obj) || (NULL != obj->base.dw_base)),
                          MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER);
-#else
+    #else
     if ((NULL == obj) || (NULL == obj->base.dw_base))
     {
         return MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER;
     }
-#endif // if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // if defined(MTB_HAL_DISABLE_ERR_CHECK)
     descr_type = Cy_DMA_Descriptor_GetDescriptorType(obj->descriptor.dw);
     if (CY_DMA_2D_TRANSFER == descr_type)
     {
@@ -242,7 +242,7 @@ cy_rslt_t _mtb_hal_dma_dw_set_length(mtb_hal_dma_t* obj, uint32_t length)
         }
         else
         {
-            Cy_DMA_Descriptor_SetYloopDataCount(obj->descriptor.dw, length / xloop_count);
+            Cy_DMA_Descriptor_SetYloopDataCount(obj->descriptor.dw, length/xloop_count);
         }
     }
     else if (CY_DMA_1D_TRANSFER == descr_type)
@@ -264,9 +264,9 @@ cy_rslt_t _mtb_hal_dma_dw_set_length(mtb_hal_dma_t* obj, uint32_t length)
     if (CY_RSLT_SUCCESS == result)
     {
         obj->expected_bursts = _mtb_hal_dma_dw_get_expected_bursts(obj);
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+        #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
         SCB_CleanDCache_by_Addr((void*)obj->descriptor.dw, sizeof(*obj->descriptor.dw));
-#endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
+        #endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
     }
     return result;
 }
@@ -277,15 +277,15 @@ cy_rslt_t _mtb_hal_dma_dw_set_length(mtb_hal_dma_t* obj, uint32_t length)
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t _mtb_hal_dma_dw_enable(mtb_hal_dma_t* obj)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((NULL != obj) || (NULL != obj->base.dw_base)),
                          MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER);
-#else
+    #else
     if ((NULL == obj) || (NULL == obj->base.dw_base))
     {
         return MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER;
     }
-#endif
+    #endif
     /* Enable the DMA channel */
     Cy_DMA_Channel_Enable(obj->base.dw_base, obj->channel);
     return CY_RSLT_SUCCESS;
@@ -297,15 +297,15 @@ cy_rslt_t _mtb_hal_dma_dw_enable(mtb_hal_dma_t* obj)
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t _mtb_hal_dma_dw_disable(mtb_hal_dma_t* obj)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((NULL != obj) || (NULL != obj->base.dw_base)),
                          MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER);
-#else
+    #else
     if ((NULL == obj) || (NULL == obj->base.dw_base))
     {
         return MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER;
     }
-#endif
+    #endif
     /* Disable the DMA channel */
     Cy_DMA_Channel_Disable(obj->base.dw_base, obj->channel);
     return CY_RSLT_SUCCESS;
@@ -330,15 +330,15 @@ bool _mtb_hal_dma_dw_is_busy(mtb_hal_dma_t* obj)
 /* Starts the DMA transfer on the specified channel */
 cy_rslt_t _mtb_hal_dma_dw_start_transfer(mtb_hal_dma_t* obj)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((NULL != obj) || (NULL != obj->base.dw_base)),
                          MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER);
-#else
+    #else
     if ((NULL == obj) || (NULL == obj->base.dw_base))
     {
         return MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER;
     }
-#endif
+    #endif
     /* Return warning if channel is busy */
     if (_mtb_hal_dma_dw_is_busy(obj))
     {
@@ -385,15 +385,15 @@ uint32_t _mtb_hal_dma_dw_get_max_elements_per_burst(mtb_hal_dma_t* obj)
 /** Process interrupts related to the DMA.*/
 cy_rslt_t _mtb_hal_dma_dw_process_interrupt(mtb_hal_dma_t* obj)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((NULL != obj) || (NULL != obj->base.dw_base)),
                          MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER);
-#else
+    #else
     if ((NULL == obj) || (NULL == obj->base.dw_base))
     {
         return MTB_HAL_DMA_RSLT_ERR_INVALID_PARAMETER;
     }
-#endif
+    #endif
     _mtb_hal_dma_dw_irq_handler(obj);
     return CY_RSLT_SUCCESS;
 }

@@ -1,4 +1,0 @@
-name: cyapp_se_rts_update
-description: The application updates SE RT SERVICES in NORMAL_PROVISIONED and SECURE LCS. Only applicable for CAT4 devices.
-type: Firmware application
-version: 1.1.0.3619

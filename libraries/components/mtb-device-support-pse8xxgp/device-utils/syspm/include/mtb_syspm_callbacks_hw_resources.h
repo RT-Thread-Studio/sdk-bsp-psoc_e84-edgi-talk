@@ -25,7 +25,7 @@
 *******************************************************************************/
 
 /**
- * \addtogroup group_syspm_availability SYSPM Callbacks Availability
+ * \addtogroup mtb_syspm_group_syspm_availability SYSPM Callbacks Availability
  * \{
  * This section documents the macros that can be used to check if a specific callback is available
  * for the current device. This includes macros for all IP that exist for any device, even
@@ -221,4 +221,4 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
-/** \} group_syspm_availability */
+/** \} mtb_syspm_group_syspm_availability */

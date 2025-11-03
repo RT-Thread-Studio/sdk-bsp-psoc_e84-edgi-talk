@@ -132,6 +132,9 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:gacc66ae69390a8149c644d256d1187341"><td class="memItemLeft" align="right" valign="top">typedef struct ifx_se_key_policy_s&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__key__policy.html#gacc66ae69390a8149c644d256d1187341">ifx_se_key_policy_t</a></td></tr>
+<tr class="memdesc:gacc66ae69390a8149c644d256d1187341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds key usage allowance and specific algorithms.  <a href="group__key__policy.html#gacc66ae69390a8149c644d256d1187341">More...</a><br /></td></tr>
+<tr class="separator:gacc66ae69390a8149c644d256d1187341"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga941e9bad26f411ac76714eaaa0ecbe61"><td class="memItemLeft" align="right" valign="top"><a id="ga941e9bad26f411ac76714eaaa0ecbe61" name="ga941e9bad26f411ac76714eaaa0ecbe61"></a>
 typedef uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>ifx_se_key_usage_t</b></td></tr>
 <tr class="memdesc:ga941e9bad26f411ac76714eaaa0ecbe61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Encoding of permitted usage on a key. <br /></td></tr>
@@ -328,6 +331,28 @@ Functions</h2></td></tr>
 <p >This flag allows the key to be used:</p>
 <p >This flag allows the key to be used in a key derivation operation, if otherwise permitted by by the key's type and policy.</p>
 <p >If this flag is present on all keys used in calls to <a class="el" href="group__key__derivation.html#gaa70ea4b4e0435634b8c6df52aaab0f64" title="Provide an input for key derivation in the form of a key.">ifx_se_key_derivation_input_key()</a> for a key derivation operation, then it permits calling ifx_se_key_derivation_verify_bytes() or ifx_se_key_derivation_verify_key() at the end of the operation. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="gacc66ae69390a8149c644d256d1187341" name="gacc66ae69390a8149c644d256d1187341"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacc66ae69390a8149c644d256d1187341">&#9670;&nbsp;</a></span>ifx_se_key_policy_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct ifx_se_key_policy_s <a class="el" href="group__key__policy.html#gacc66ae69390a8149c644d256d1187341">ifx_se_key_policy_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Holds key usage allowance and specific algorithms. </p>
+<p >Members:</p><ul>
+<li><a class="el" href="group__key__policy.html#ga941e9bad26f411ac76714eaaa0ecbe61" title="Encoding of permitted usage on a key.">ifx_se_key_usage_t</a> <b>usage</b> - Encoded permitted usage of a key</li>
+<li><a class="el" href="group__crypto__algs.html#ga44b92bc47c4eeabb05adc1b273f7dc5f" title="Encoding of a cryptographic algorithm.">ifx_se_algorithm_t</a> <b>alg</b> - Allowed main algorithm</li>
+<li><a class="el" href="group__crypto__algs.html#ga44b92bc47c4eeabb05adc1b273f7dc5f" title="Encoding of a cryptographic algorithm.">ifx_se_algorithm_t</a> <b>alg2</b> - Allowed secondary algorithm </li>
+</ul>
 
 </div>
 </div>

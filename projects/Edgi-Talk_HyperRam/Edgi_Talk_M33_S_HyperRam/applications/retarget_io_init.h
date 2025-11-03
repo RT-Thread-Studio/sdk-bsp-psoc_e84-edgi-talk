@@ -1,7 +1,7 @@
 /*******************************************************************************
  * File Name:   retarget_io_init.h
  *
- * Description:  This file is the public interface of retarget_io_init.c and
+ * Description:  This file is the public interface of retarget_io_init.c and 
  *               contains the necessary UART configuration parameters.
  *
  * Related Document: See README.md
@@ -69,7 +69,7 @@
 void init_retarget_io(void);
 
 /*******************************************************************************
-* Function Name: handle_app_error
+* Function Name: handle_error
 ********************************************************************************
 * Summary:
 * User defined error handling function
@@ -81,7 +81,7 @@ void init_retarget_io(void);
 *  void
 *
 *******************************************************************************/
-__STATIC_INLINE void handle_app_error(void)
+__STATIC_INLINE void handle_error(void)
 {
     /* Disable all interrupts. */
     __disable_irq();
@@ -89,7 +89,7 @@ __STATIC_INLINE void handle_app_error(void)
     CY_ASSERT(0);
 
     /* Infinite loop */
-    while (true);
+    while(true);
 }
 
 #endif /* _RETARGET_IO_INIT_H_ */

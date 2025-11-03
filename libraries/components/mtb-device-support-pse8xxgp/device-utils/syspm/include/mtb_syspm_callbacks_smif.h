@@ -34,7 +34,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
                              'Rule requires const attributes for inputs but signature for following APIs needs to match requested one in PDL');
 
 /**
- * \addtogroup group_smif SMIF Deep Sleep Callback
+ * \addtogroup mtb_syspm_group_smif SMIF Deep Sleep Callback
  * \{
  * Implementation of the SMIF Deep Sleep callback
  */
@@ -42,7 +42,10 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 /**Context Reference Structure for SMIF peripheral in case of DeepSleep */
 typedef struct
 {
-    cy_stc_smif_context_t      *smif_context; /**< Context of the SMIF IP */
+    cy_stc_smif_context_t*      smif_context; /**< Context of the SMIF IP */
+    uint32_t                    smif_crypto_input1; /**< Content of SMIF_CRYPTO_INPUT1 register */
+    uint32_t                    smif_crypto_input2; /**< Content of SMIF_CRYPTO_INPUT2 register */
+    uint32_t                    smif_crypto_input3; /**< Content of SMIF_CRYPTO_INPUT3 register */
 } mtb_syspm_smif_deepsleep_context_t;
 
 /** Deepsleep callback for SMIF IP
@@ -56,11 +59,11 @@ typedef struct
  * as high as possible to reenable the correct access to extenral memory.
  */
 cy_en_syspm_status_t mtb_syspm_smif_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode);
 #if defined(__cplusplus)
 }
 #endif
 
-/** \} group_smif */
+/** \} mtb_syspm_group_smif */
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.13');

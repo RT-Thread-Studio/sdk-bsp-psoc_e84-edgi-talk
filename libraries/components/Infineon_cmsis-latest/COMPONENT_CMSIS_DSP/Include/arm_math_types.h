@@ -23,9 +23,21 @@
  * limitations under the License.
  */
 
-#ifndef _ARM_MATH_TYPES_H_
+#ifndef ARM_MATH_TYPES_H_
 
-#define _ARM_MATH_TYPES_H_
+#define ARM_MATH_TYPES_H_
+
+#if defined(ARM_DSP_CUSTOM_CONFIG)
+#include "arm_dsp_config.h"
+#endif
+
+#ifndef ARM_DSP_ATTRIBUTE 
+#define ARM_DSP_ATTRIBUTE 
+#endif
+
+#ifndef ARM_DSP_TABLE_ATTRIBUTE 
+#define ARM_DSP_TABLE_ATTRIBUTE 
+#endif
 
 #ifdef   __cplusplus
 extern "C"
@@ -38,13 +50,21 @@ extern "C"
 #elif defined ( __ARMCC_VERSION ) && ( __ARMCC_VERSION >= 6010050 )
 
 #elif defined ( __APPLE_CC__ )
-#pragma GCC diagnostic ignored "-Wold-style-cast"
+  #pragma GCC diagnostic ignored "-Wold-style-cast"
+
+#elif defined(__clang__)
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wsign-conversion"
+  #pragma GCC diagnostic ignored "-Wconversion"
+  #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 #elif defined ( __GNUC__ )
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wconversion"
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wsign-conversion"
+  #pragma GCC diagnostic ignored "-Wconversion"
+  #pragma GCC diagnostic ignored "-Wunused-parameter"
+  // Disable some code having issue with GCC
+  #define ARM_DSP_BUILT_WITH_GCC 
 
 #elif defined ( __ICCARM__ )
 
@@ -57,12 +77,12 @@ extern "C"
 #elif defined ( _MSC_VER )
 
 #else
-#error Unknown compiler
+  #error Unknown compiler
 #endif
 
 
 /* Included for instrinsics definitions */
-#if defined (_MSC_VER )
+#if defined (_MSC_VER ) 
 #include <stdint.h>
 #define __STATIC_FORCEINLINE static __forceinline
 #define __STATIC_INLINE static __inline
@@ -71,13 +91,13 @@ extern "C"
 #elif defined ( __APPLE_CC__ )
 #include <stdint.h>
 #define  __ALIGNED(x) __attribute__((aligned(x)))
-#define __STATIC_FORCEINLINE static inline __attribute__((always_inline))
+#define __STATIC_FORCEINLINE static inline __attribute__((always_inline)) 
 #define __STATIC_INLINE static inline
 #define __WEAK
 #elif defined (__GNUC_PYTHON__)
 #include <stdint.h>
 #define  __ALIGNED(x) __attribute__((aligned(x)))
-#define __STATIC_FORCEINLINE static inline __attribute__((always_inline))
+#define __STATIC_FORCEINLINE static inline __attribute__((always_inline)) 
 #define __STATIC_INLINE static inline
 #define __WEAK
 #else
@@ -93,20 +113,20 @@ extern "C"
 
 /* evaluate ARM DSP feature */
 #if (defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1))
-#define ARM_MATH_DSP                   1
+  #define ARM_MATH_DSP                   1
 #endif
 
 #if defined(ARM_MATH_NEON)
-#if defined(_MSC_VER) && defined(_M_ARM64EC)
-#include <arm64_neon.h>
-#else
-#include <arm_neon.h>
-#endif
-#if defined(__ARM_FEATURE_FP16_VECTOR_ARITHMETIC) && __ARM_FEATURE_FP16_VECTOR_ARITHMETIC
-#if !defined(ARM_MATH_NEON_FLOAT16)
-#define ARM_MATH_NEON_FLOAT16
-#endif
-#endif
+  #if defined(_MSC_VER) && defined(_M_ARM64EC)
+    #include <arm64_neon.h>
+  #else
+    #include <arm_neon.h>
+  #endif
+  #if defined(__ARM_FEATURE_FP16_VECTOR_ARITHMETIC) && __ARM_FEATURE_FP16_VECTOR_ARITHMETIC
+    #if !defined(ARM_MATH_NEON_FLOAT16)
+      #define ARM_MATH_NEON_FLOAT16
+    #endif
+  #endif
 #endif
 
 #if !defined(ARM_MATH_AUTOVECTORIZE)
@@ -114,129 +134,129 @@ extern "C"
 
 #if defined(__ARM_FEATURE_MVE)
 #if __ARM_FEATURE_MVE
-#if !defined(ARM_MATH_MVEI)
-#define ARM_MATH_MVEI
-#endif
-#endif
-
-#if (__ARM_FEATURE_MVE & 2)
-#if !defined(ARM_MATH_MVEF)
-#define ARM_MATH_MVEF
-#endif
-#if !defined(ARM_MATH_MVE_FLOAT16)
-#define ARM_MATH_MVE_FLOAT16
-#endif
+  #if !defined(ARM_MATH_MVEI)
+    #define ARM_MATH_MVEI
+  #endif
 #endif
 
-#endif /*defined(__ARM_FEATURE_MVE)*/
-#endif /*!defined(ARM_MATH_AUTOVECTORIZE)*/
+#if defined(__ARM_FEATURE_MVE) && (__ARM_FEATURE_MVE & 2)
+  #if !defined(ARM_MATH_MVEF)
+    #define ARM_MATH_MVEF
+  #endif
+  #if !defined(ARM_MATH_MVE_FLOAT16)
+       #define ARM_MATH_MVE_FLOAT16
+  #endif
+#endif
+
+#endif /* defined (__ARM_FEATURE_MVE) */
+#endif /* !defined (ARM_MATH_AUTOVECTORIZE) */
 
 
 #if defined (ARM_MATH_HELIUM)
-#if !defined(ARM_MATH_MVEF)
-#define ARM_MATH_MVEF
-#endif
+  #if !defined(ARM_MATH_MVEF)
+    #define ARM_MATH_MVEF
+  #endif
 
-#if !defined(ARM_MATH_MVEI)
-#define ARM_MATH_MVEI
-#endif
+  #if !defined(ARM_MATH_MVEI)
+    #define ARM_MATH_MVEI
+  #endif
 
-#if !defined(ARM_MATH_MVE_FLOAT16)
-#define ARM_MATH_MVE_FLOAT16
-#endif
+  #if !defined(ARM_MATH_MVE_FLOAT16)
+       #define ARM_MATH_MVE_FLOAT16
+  #endif
 #endif
 
 
 
 #if   defined ( __CC_ARM )
-/* Enter low optimization region - place directly above function definition */
-#if defined( __ARM_ARCH_7EM__ )
-#define LOW_OPTIMIZATION_ENTER \
+  /* Enter low optimization region - place directly above function definition */
+  #if defined( __ARM_ARCH_7EM__ )
+    #define LOW_OPTIMIZATION_ENTER \
        _Pragma ("push")         \
        _Pragma ("O1")
-#else
-#define LOW_OPTIMIZATION_ENTER
-#endif
+  #else
+    #define LOW_OPTIMIZATION_ENTER
+  #endif
 
-/* Exit low optimization region - place directly after end of function definition */
-#if defined ( __ARM_ARCH_7EM__ )
-#define LOW_OPTIMIZATION_EXIT \
+  /* Exit low optimization region - place directly after end of function definition */
+  #if defined ( __ARM_ARCH_7EM__ )
+    #define LOW_OPTIMIZATION_EXIT \
        _Pragma ("pop")
-#else
-#define LOW_OPTIMIZATION_EXIT
-#endif
+  #else
+    #define LOW_OPTIMIZATION_EXIT
+  #endif
 
-/* Enter low optimization region - place directly above function definition */
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
+  /* Enter low optimization region - place directly above function definition */
+  #define IAR_ONLY_LOW_OPTIMIZATION_ENTER
 
-/* Exit low optimization region - place directly after end of function definition */
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+  /* Exit low optimization region - place directly after end of function definition */
+  #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
 
 #elif defined (__ARMCC_VERSION ) && ( __ARMCC_VERSION >= 6010050 )
-#define LOW_OPTIMIZATION_ENTER
-#define LOW_OPTIMIZATION_EXIT
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
-
+  #define LOW_OPTIMIZATION_ENTER
+  #define LOW_OPTIMIZATION_EXIT
+  #define IAR_ONLY_LOW_OPTIMIZATION_ENTER
+  #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+  
 #elif defined ( __APPLE_CC__ )
-#define LOW_OPTIMIZATION_ENTER
-#define LOW_OPTIMIZATION_EXIT
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+  #define LOW_OPTIMIZATION_ENTER
+  #define LOW_OPTIMIZATION_EXIT
+  #define IAR_ONLY_LOW_OPTIMIZATION_ENTER
+  #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
 
 #elif defined ( __GNUC__ )
-#define LOW_OPTIMIZATION_ENTER \
+  #define LOW_OPTIMIZATION_ENTER \
        __attribute__(( optimize("-O1") ))
-#define LOW_OPTIMIZATION_EXIT
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+  #define LOW_OPTIMIZATION_EXIT
+  #define IAR_ONLY_LOW_OPTIMIZATION_ENTER
+  #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
 
 #elif defined ( __ICCARM__ )
-/* Enter low optimization region - place directly above function definition */
-#if defined ( __ARM_ARCH_7EM__ )
-#define LOW_OPTIMIZATION_ENTER \
+  /* Enter low optimization region - place directly above function definition */
+  #if defined ( __ARM_ARCH_7EM__ )
+    #define LOW_OPTIMIZATION_ENTER \
        _Pragma ("optimize=low")
-#else
-#define LOW_OPTIMIZATION_ENTER
-#endif
+  #else
+    #define LOW_OPTIMIZATION_ENTER
+  #endif
 
-/* Exit low optimization region - place directly after end of function definition */
-#define LOW_OPTIMIZATION_EXIT
+  /* Exit low optimization region - place directly after end of function definition */
+  #define LOW_OPTIMIZATION_EXIT
 
-/* Enter low optimization region - place directly above function definition */
-#if defined ( __ARM_ARCH_7EM__ )
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER \
+  /* Enter low optimization region - place directly above function definition */
+  #if defined ( __ARM_ARCH_7EM__ )
+    #define IAR_ONLY_LOW_OPTIMIZATION_ENTER \
        _Pragma ("optimize=low")
-#else
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
-#endif
+  #else
+    #define IAR_ONLY_LOW_OPTIMIZATION_ENTER
+  #endif
 
-/* Exit low optimization region - place directly after end of function definition */
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+  /* Exit low optimization region - place directly after end of function definition */
+  #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
 
 #elif defined ( __TI_ARM__ )
-#define LOW_OPTIMIZATION_ENTER
-#define LOW_OPTIMIZATION_EXIT
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+  #define LOW_OPTIMIZATION_ENTER
+  #define LOW_OPTIMIZATION_EXIT
+  #define IAR_ONLY_LOW_OPTIMIZATION_ENTER
+  #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
 
 #elif defined ( __CSMC__ )
-#define LOW_OPTIMIZATION_ENTER
-#define LOW_OPTIMIZATION_EXIT
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+  #define LOW_OPTIMIZATION_ENTER
+  #define LOW_OPTIMIZATION_EXIT
+  #define IAR_ONLY_LOW_OPTIMIZATION_ENTER
+  #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
 
 #elif defined ( __TASKING__ )
-#define LOW_OPTIMIZATION_ENTER
-#define LOW_OPTIMIZATION_EXIT
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
-
+  #define LOW_OPTIMIZATION_ENTER
+  #define LOW_OPTIMIZATION_EXIT
+  #define IAR_ONLY_LOW_OPTIMIZATION_ENTER
+  #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+       
 #elif defined ( _MSC_VER ) || defined(__GNUC_PYTHON__)
-#define LOW_OPTIMIZATION_ENTER
-#define LOW_OPTIMIZATION_EXIT
-#define IAR_ONLY_LOW_OPTIMIZATION_ENTER
-#define IAR_ONLY_LOW_OPTIMIZATION_EXIT
+      #define LOW_OPTIMIZATION_ENTER
+      #define LOW_OPTIMIZATION_EXIT
+      #define IAR_ONLY_LOW_OPTIMIZATION_ENTER 
+      #define IAR_ONLY_LOW_OPTIMIZATION_EXIT
 #endif
 
 
@@ -262,7 +282,7 @@ extern "C"
 #elif defined ( _MSC_VER )
 
 #else
-#error Unknown compiler
+  #error Unknown compiler
 #endif
 
 #ifdef   __cplusplus
@@ -270,11 +290,11 @@ extern "C"
 #endif
 
 #if defined(__ARM_FEATURE_MVE) && __ARM_FEATURE_MVE
-    #include <arm_mve.h>
+#include <arm_mve.h>
 #endif
 
 #if defined(ARM_DSP_CONFIG_TABLES)
-    #error("-DARM_DSP_CONFIG_TABLES no more supported. Use the new initialization functions to let the linker optimize the code size.")
+#error("-DARM_DSP_CONFIG_TABLES no more supported. Use the new initialization functions to let the linker optimize the code size.")
 #endif
 
 #ifdef   __cplusplus
@@ -283,283 +303,303 @@ extern "C"
 #endif
 
 /**
-  * @brief 8-bit fractional data type in 1.7 format.
-  */
-typedef int8_t q7_t;
+ * @defgroup genericTypes Generic Types
+ * @{
+*/
 
-/**
- * @brief 16-bit fractional data type in 1.15 format.
- */
-typedef int16_t q15_t;
+ /**
+   * @brief 8-bit fractional data type in 1.7 format.
+   */
+  typedef int8_t q7_t;
 
-/**
- * @brief 32-bit fractional data type in 1.31 format.
- */
-typedef int32_t q31_t;
+  /**
+   * @brief 16-bit fractional data type in 1.15 format.
+   */
+  typedef int16_t q15_t;
 
-/**
- * @brief 64-bit fractional data type in 1.63 format.
- */
-typedef int64_t q63_t;
+  /**
+   * @brief 32-bit fractional data type in 1.31 format.
+   */
+  typedef int32_t q31_t;
 
-/**
- * @brief 32-bit floating-point type definition.
- */
+  /**
+   * @brief 64-bit fractional data type in 1.63 format.
+   */
+  typedef int64_t q63_t;
+
+  /**
+   * @brief 32-bit floating-point type definition.
+   */
 #if !defined(__ICCARM__) || !(__ARM_FEATURE_MVE & 2)
-typedef float float32_t;
+  typedef float float32_t;
 #endif
 
-/**
- * @brief 64-bit floating-point type definition.
- */
-typedef double float64_t;
+  /**
+   * @brief 64-bit floating-point type definition.
+   */
+  typedef double float64_t;
 
-/**
- * @brief vector types
- */
+  /**
+   * @brief vector types
+   */
 #if defined(ARM_MATH_NEON) || (defined (ARM_MATH_MVEI)  && !defined(ARM_MATH_AUTOVECTORIZE))
-/**
- * @brief 64-bit fractional 128-bit vector data type in 1.63 format
- */
-typedef int64x2_t q63x2_t;
 
-/**
- * @brief 32-bit fractional 128-bit vector data type in 1.31 format.
- */
-typedef int32x4_t q31x4_t;
+  /**
+   * @brief 64-bit fractional 128-bit vector data type in 1.63 format
+   */
+  typedef int64x2_t q63x2_t;
 
-/**
- * @brief 16-bit fractional 128-bit vector data type with 16-bit alignment in 1.15 format.
- */
-typedef __ALIGNED(2) int16x8_t q15x8_t;
+  /**
+   * @brief 32-bit fractional 128-bit vector data type in 1.31 format.
+   */
+  typedef int32x4_t q31x4_t;
 
-/**
-  * @brief 8-bit fractional 128-bit vector data type with 8-bit alignment in 1.7 format.
-  */
-typedef __ALIGNED(1) int8x16_t q7x16_t;
+  /**
+   * @brief 16-bit fractional 128-bit vector data type with 16-bit alignment in 1.15 format.
+   */
+  typedef __ALIGNED(2) int16x8_t q15x8_t;
 
-/**
-* @brief 32-bit fractional 128-bit vector pair data type in 1.31 format.
-*/
-typedef int32x4x2_t q31x4x2_t;
+ /**
+   * @brief 8-bit fractional 128-bit vector data type with 8-bit alignment in 1.7 format.
+   */
+  typedef __ALIGNED(1) int8x16_t q7x16_t;
 
-/**
- * @brief 32-bit fractional 128-bit vector quadruplet data type in 1.31 format.
- */
-typedef int32x4x4_t q31x4x4_t;
+    /**
+   * @brief 32-bit fractional 128-bit vector pair data type in 1.31 format.
+   */
+  typedef int32x4x2_t q31x4x2_t;
 
-/**
- * @brief 16-bit fractional 128-bit vector pair data type in 1.15 format.
- */
-typedef int16x8x2_t q15x8x2_t;
+  /**
+   * @brief 32-bit fractional 128-bit vector quadruplet data type in 1.31 format.
+   */
+  typedef int32x4x4_t q31x4x4_t;
 
-/**
- * @brief 16-bit fractional 128-bit vector quadruplet data type in 1.15 format.
- */
-typedef int16x8x4_t q15x8x4_t;
+  /**
+   * @brief 16-bit fractional 128-bit vector pair data type in 1.15 format.
+   */
+  typedef int16x8x2_t q15x8x2_t;
 
-/**
- * @brief 8-bit fractional 128-bit vector pair data type in 1.7 format.
- */
-typedef int8x16x2_t q7x16x2_t;
+  /**
+   * @brief 16-bit fractional 128-bit vector quadruplet data type in 1.15 format.
+   */
+  typedef int16x8x4_t q15x8x4_t;
 
-/**
- * @brief 8-bit fractional 128-bit vector quadruplet data type in 1.7 format.
- */
-typedef int8x16x4_t q7x16x4_t;
+  /**
+   * @brief 8-bit fractional 128-bit vector pair data type in 1.7 format.
+   */
+  typedef int8x16x2_t q7x16x2_t;
 
-/**
- * @brief 32-bit fractional data type in 9.23 format.
- */
-typedef int32_t q23_t;
+  /**
+   * @brief 8-bit fractional 128-bit vector quadruplet data type in 1.7 format.
+   */
+   typedef int8x16x4_t q7x16x4_t;
 
-/**
- * @brief 32-bit fractional 128-bit vector data type in 9.23 format.
- */
-typedef int32x4_t q23x4_t;
+  /**
+   * @brief 32-bit fractional data type in 9.23 format.
+   */
+  typedef int32_t q23_t;
 
-/**
- * @brief 64-bit status 128-bit vector data type.
- */
-typedef int64x2_t status64x2_t;
+  /**
+   * @brief 32-bit fractional 128-bit vector data type in 9.23 format.
+   */
+  typedef int32x4_t q23x4_t;
 
-/**
- * @brief 32-bit status 128-bit vector data type.
- */
-typedef int32x4_t status32x4_t;
+  /**
+   * @brief 64-bit status 128-bit vector data type.
+   */
+  typedef int64x2_t status64x2_t;
 
-/**
- * @brief 16-bit status 128-bit vector data type.
- */
-typedef int16x8_t status16x8_t;
+  /**
+   * @brief 32-bit status 128-bit vector data type.
+   */
+  typedef int32x4_t status32x4_t;
 
-/**
- * @brief 8-bit status 128-bit vector data type.
- */
-typedef int8x16_t status8x16_t;
+  /**
+   * @brief 16-bit status 128-bit vector data type.
+   */
+  typedef int16x8_t status16x8_t;
+
+  /**
+   * @brief 8-bit status 128-bit vector data type.
+   */
+  typedef int8x16_t status8x16_t;
 
 
 #endif
 
 #if defined(ARM_MATH_NEON) || (defined(ARM_MATH_MVEF)  && !defined(ARM_MATH_AUTOVECTORIZE)) /* floating point vector*/
-/**
- * @brief 32-bit floating-point 128-bit vector type
- */
-typedef float32x4_t f32x4_t;
 
-/**
- * @brief 32-bit floating-point 128-bit vector pair data type
- */
-typedef float32x4x2_t f32x4x2_t;
+  /**
+   * @brief 32-bit floating-point 128-bit vector type
+   */
+  typedef float32x4_t f32x4_t;
 
-/**
- * @brief 32-bit floating-point 128-bit vector quadruplet data type
- */
-typedef float32x4x4_t f32x4x4_t;
+  /**
+   * @brief 32-bit floating-point 128-bit vector pair data type
+   */
+  typedef float32x4x2_t f32x4x2_t;
 
-/**
- * @brief 32-bit ubiquitous 128-bit vector data type
- */
-typedef union _any32x4_t
-{
-    float32x4_t     f;
-    int32x4_t       i;
-} any32x4_t;
+  /**
+   * @brief 32-bit floating-point 128-bit vector quadruplet data type
+   */
+  typedef float32x4x4_t f32x4x4_t;
+
+  /**
+   * @brief 32-bit ubiquitous 128-bit vector data type
+   */
+  typedef union _any32x4_t
+  {
+      float32x4_t     f;
+      int32x4_t       i;
+  } any32x4_t;
 
 #endif
 
 #if defined(ARM_MATH_NEON)
-/**
- * @brief 32-bit fractional 64-bit vector data type in 1.31 format.
- */
-typedef int32x2_t  q31x2_t;
+  /**
+   * @brief 32-bit fractional 64-bit vector data type in 1.31 format.
+   */
+  typedef int32x2_t  q31x2_t;
 
-/**
- * @brief 16-bit fractional 64-bit vector data type in 1.15 format.
- */
-typedef  __ALIGNED(2) int16x4_t q15x4_t;
+  /**
+   * @brief 16-bit fractional 64-bit vector data type in 1.15 format.
+   */
+  typedef  __ALIGNED(2) int16x4_t q15x4_t;
 
-/**
- * @brief 8-bit fractional 64-bit vector data type in 1.7 format.
- */
-typedef  __ALIGNED(1) int8x8_t q7x8_t;
+  /**
+   * @brief 8-bit fractional 64-bit vector data type in 1.7 format.
+   */
+  typedef  __ALIGNED(1) int8x8_t q7x8_t;
 
-/**
- * @brief 32-bit float 64-bit vector data type.
- */
-typedef float32x2_t  f32x2_t;
+  /**
+   * @brief 32-bit float 64-bit vector data type.
+   */
+  typedef float32x2_t  f32x2_t;
 
-/**
- * @brief 32-bit floating-point 128-bit vector triplet data type
- */
-typedef float32x4x3_t f32x4x3_t;
+  /**
+   * @brief 32-bit floating-point 128-bit vector triplet data type
+   */
+  typedef float32x4x3_t f32x4x3_t;
 
+  /**
+   * @brief 32-bit fractional 128-bit vector triplet data type in 1.31 format
+   */
+  typedef int32x4x3_t q31x4x3_t;
 
-/**
- * @brief 32-bit fractional 128-bit vector triplet data type in 1.31 format
- */
-typedef int32x4x3_t q31x4x3_t;
+  /**
+   * @brief 16-bit fractional 128-bit vector triplet data type in 1.15 format
+   */
+  typedef int16x8x3_t q15x8x3_t;
 
-/**
- * @brief 16-bit fractional 128-bit vector triplet data type in 1.15 format
- */
-typedef int16x8x3_t q15x8x3_t;
+  /**
+   * @brief 8-bit fractional 128-bit vector triplet data type in 1.7 format
+   */
+  typedef int8x16x3_t q7x16x3_t;
 
-/**
- * @brief 8-bit fractional 128-bit vector triplet data type in 1.7 format
- */
-typedef int8x16x3_t q7x16x3_t;
+  /**
+   * @brief 32-bit floating-point 64-bit vector pair data type
+   */
+  typedef float32x2x2_t f32x2x2_t;
 
-/**
- * @brief 32-bit floating-point 64-bit vector pair data type
- */
-typedef float32x2x2_t f32x2x2_t;
+  /**
+   * @brief 32-bit floating-point 64-bit vector triplet data type
+   */
+  typedef float32x2x3_t f32x2x3_t;
 
-/**
- * @brief 32-bit floating-point 64-bit vector triplet data type
- */
-typedef float32x2x3_t f32x2x3_t;
+  /**
+   * @brief 32-bit floating-point 64-bit vector quadruplet data type
+   */
+  typedef float32x2x4_t f32x2x4_t;
 
-/**
- * @brief 32-bit floating-point 64-bit vector quadruplet data type
- */
-typedef float32x2x4_t f32x2x4_t;
+  /**
+   * @brief 32-bit fractional 64-bit vector pair data type in 1.31 format
+   */
+  typedef int32x2x2_t q31x2x2_t;
 
+  /**
+   * @brief 32-bit fractional 64-bit vector triplet data type in 1.31 format
+   */
+  typedef int32x2x3_t q31x2x3_t;
 
-/**
- * @brief 32-bit fractional 64-bit vector pair data type in 1.31 format
- */
-typedef int32x2x2_t q31x2x2_t;
+  /**
+   * @brief 32-bit fractional 64-bit vector quadruplet data type in 1.31 format
+   */
+  typedef int32x4x3_t q31x2x4_t;
 
-/**
- * @brief 32-bit fractional 64-bit vector triplet data type in 1.31 format
- */
-typedef int32x2x3_t q31x2x3_t;
+  /**
+   * @brief 16-bit fractional 64-bit vector pair data type in 1.15 format
+   */
+  typedef int16x4x2_t q15x4x2_t;
 
-/**
- * @brief 32-bit fractional 64-bit vector quadruplet data type in 1.31 format
- */
-typedef int32x4x3_t q31x2x4_t;
+  /**
+   * @brief 16-bit fractional 64-bit vector triplet data type in 1.15 format
+   */
+  typedef int16x4x2_t q15x4x3_t;
 
-/**
- * @brief 16-bit fractional 64-bit vector pair data type in 1.15 format
- */
-typedef int16x4x2_t q15x4x2_t;
+  /**
+   * @brief 16-bit fractional 64-bit vector quadruplet data type in 1.15 format
+   */
+  typedef int16x4x3_t q15x4x4_t;
 
-/**
- * @brief 16-bit fractional 64-bit vector triplet data type in 1.15 format
- */
-typedef int16x4x2_t q15x4x3_t;
+  /**
+   * @brief 8-bit fractional 64-bit vector pair data type in 1.7 format
+   */
+  typedef int8x8x2_t q7x8x2_t;
 
-/**
- * @brief 16-bit fractional 64-bit vector quadruplet data type in 1.15 format
- */
-typedef int16x4x3_t q15x4x4_t;
+  /**
+   * @brief 8-bit fractional 64-bit vector triplet data type in 1.7 format
+   */
+  typedef int8x8x3_t q7x8x3_t;
 
-/**
- * @brief 8-bit fractional 64-bit vector pair data type in 1.7 format
- */
-typedef int8x8x2_t q7x8x2_t;
+  /**
+   * @brief 8-bit fractional 64-bit vector quadruplet data type in 1.7 format
+   */
+  typedef int8x8x4_t q7x8x4_t;
 
-/**
- * @brief 8-bit fractional 64-bit vector triplet data type in 1.7 format
- */
-typedef int8x8x3_t q7x8x3_t;
+  /**
+   * @brief 32-bit ubiquitous 64-bit vector data type
+   */
+  typedef union _any32x2_t
+  {
+      float32x2_t     f;
+      int32x2_t       i;
+  } any32x2_t;
 
-/**
- * @brief 8-bit fractional 64-bit vector quadruplet data type in 1.7 format
- */
-typedef int8x8x4_t q7x8x4_t;
+  /**
+   * @brief 32-bit status 64-bit vector data type.
+   */
+  typedef int32x4_t status32x2_t;
 
-/**
- * @brief 32-bit ubiquitous 64-bit vector data type
- */
-typedef union _any32x2_t
-{
-    float32x2_t     f;
-    int32x2_t       i;
-} any32x2_t;
+  /**
+   * @brief 16-bit status 64-bit vector data type.
+   */
+  typedef int16x8_t status16x4_t;
 
-
-/**
- * @brief 32-bit status 64-bit vector data type.
- */
-typedef int32x4_t status32x2_t;
-
-/**
- * @brief 16-bit status 64-bit vector data type.
- */
-typedef int16x8_t status16x4_t;
-
-/**
- * @brief 8-bit status 64-bit vector data type.
- */
-typedef int8x16_t status8x8_t;
+  /**
+   * @brief 8-bit status 64-bit vector data type.
+   */
+  typedef int8x16_t status8x8_t;
 
 #endif
 
+  /**
+   * @brief Error status returned by some functions in the library.
+   */
+  typedef enum
+  {
+    ARM_MATH_SUCCESS                 =  0,        /**< No error */
+    ARM_MATH_ARGUMENT_ERROR          = -1,        /**< One or more arguments are incorrect */
+    ARM_MATH_LENGTH_ERROR            = -2,        /**< Length of data buffer is incorrect */
+    ARM_MATH_SIZE_MISMATCH           = -3,        /**< Size of matrices is not compatible with the operation */
+    ARM_MATH_NANINF                  = -4,        /**< Not-a-number (NaN) or infinity is generated */
+    ARM_MATH_SINGULAR                = -5,        /**< Input matrix is singular and cannot be inverted */
+    ARM_MATH_TEST_FAILURE            = -6,        /**< Test Failed */
+    ARM_MATH_DECOMPOSITION_FAILURE   = -7         /**< Decomposition Failed */
+  } arm_status;
 
-
+/**
+ * @} // endgroup generic
+*/
 
 
 #define F64_MAX   ((float64_t)DBL_MAX)
@@ -595,25 +635,8 @@ typedef int8x16_t status8x8_t;
 #define Q15_ABSMIN   ((q15_t)0)
 #define Q7_ABSMIN    ((q7_t)0)
 
-/* Dimension C vector space */
-#define CMPLX_DIM 2
-
-/**
- * @brief Error status returned by some functions in the library.
- */
-
-typedef enum
-{
-    ARM_MATH_SUCCESS                 =  0,        /**< No error */
-    ARM_MATH_ARGUMENT_ERROR          = -1,        /**< One or more arguments are incorrect */
-    ARM_MATH_LENGTH_ERROR            = -2,        /**< Length of data buffer is incorrect */
-    ARM_MATH_SIZE_MISMATCH           = -3,        /**< Size of matrices is not compatible with the operation */
-    ARM_MATH_NANINF                  = -4,        /**< Not-a-number (NaN) or infinity is generated */
-    ARM_MATH_SINGULAR                = -5,        /**< Input matrix is singular and cannot be inverted */
-    ARM_MATH_TEST_FAILURE            = -6,        /**< Test Failed */
-    ARM_MATH_DECOMPOSITION_FAILURE   = -7         /**< Decomposition Failed */
-} arm_status;
-
+  /* Dimension C vector space */
+  #define CMPLX_DIM 2
 
 #ifdef   __cplusplus
 }

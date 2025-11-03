@@ -31,7 +31,7 @@
 #include "arm_nnfunctions.h"
 #include "arm_nnsupportfunctions.h"
 #if defined(ARM_MATH_MVEI)
-    #include "arm_helium_utils.h"
+#include "arm_helium_utils.h"
 #endif
 
 #if defined(ARM_MATH_MVEI)

@@ -120,7 +120,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:gaf3d754a1b8ff3bc246690da6948dbed1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disables Clock Supervisor Fault and SE RT Services except Disable and Enable syscalls.  <a href="group__platform__power.html#gaf3d754a1b8ff3bc246690da6948dbed1">More...</a><br /></td></tr>
 <tr class="separator:gaf3d754a1b8ff3bc246690da6948dbed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad44ca40a50427c6d684c51ba61c252ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__fih.html#structifx__se__fih__uint">ifx_se_status_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__power.html#gad44ca40a50427c6d684c51ba61c252ee">ifx_se_enable</a> (void *ctx)</td></tr>
-<tr class="memdesc:gad44ca40a50427c6d684c51ba61c252ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates clock and power configuration, configures and enables Clock Supervisor then enables SE RT Services.  <a href="group__platform__power.html#gad44ca40a50427c6d684c51ba61c252ee">More...</a><br /></td></tr>
+<tr class="memdesc:gad44ca40a50427c6d684c51ba61c252ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates clock and power configuration, measures actual device temperature (only on EPC4 device when temperature measurement during boot is out of valid range), configures and enables Clock Supervisor then enables SE RT Services.  <a href="group__platform__power.html#gad44ca40a50427c6d684c51ba61c252ee">More...</a><br /></td></tr>
 <tr class="separator:gad44ca40a50427c6d684c51ba61c252ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga71937e82950f617cc1e880afd10a6c23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__fih.html#structifx__se__fih__uint">ifx_se_status_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__power.html#ga71937e82950f617cc1e880afd10a6c23">ifx_se_set_lpm</a> (<a class="el" href="group__platform__power.html#ga795c93f658b5573e171a136230787824">ifx_se_en_power_mode_t</a> mode, void *ctx)</td></tr>
 <tr class="memdesc:ga71937e82950f617cc1e880afd10a6c23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets power mode which SE RT Services will use during wait for event state.  <a href="group__platform__power.html#ga71937e82950f617cc1e880afd10a6c23">More...</a><br /></td></tr>
@@ -225,7 +225,7 @@ Temperature measured during boot. </td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Validates clock and power configuration, configures and enables Clock Supervisor then enables SE RT Services. </p>
+<p>Validates clock and power configuration, measures actual device temperature (only on EPC4 device when temperature measurement during boot is out of valid range), configures and enables Clock Supervisor then enables SE RT Services. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
@@ -236,7 +236,9 @@ Temperature measured during boot. </td></tr>
 <dd>
 <a class="el" href="group__syscall__errors.html#ga669a6be72e572b3707e544a13f9abddc">IFX_SE_SYSCALL_RRAM_CLK_ERROR</a> when RRAM clock (HFCLK0) not corresponding to selected RRAM power mode (LP/ULP) </dd>
 <dd>
-<a class="el" href="group__syscall__errors.html#ga42b33efb6cabd4ee2a4df8373985a210">IFX_SE_SYSCALL_INVALID_CLOCK</a> when CPU clock (HFCLK0) frequency not in the supported range (3,6MHz - 210MHz) </dd></dl>
+<a class="el" href="group__syscall__errors.html#ga42b33efb6cabd4ee2a4df8373985a210">IFX_SE_SYSCALL_INVALID_CLOCK</a> when CPU clock (HFCLK0) frequency not in the supported range (3,6MHz - 210MHz) </dd>
+<dd>
+<a class="el" href="group__syscall__errors.html#gac057a36af6f35d34fb61e70f83c00cc9">IFX_SE_SYSCALL_INVALID_TEMPERATURE</a> when measured temperature is not in supported range (-40C - +125C) </dd></dl>
 
 </div>
 </div>

@@ -17,6 +17,7 @@ limitations under the License.
 import logging
 
 from .app_loading_flow_cyw559xx import AppLoadingFlowCYW559xx
+from .chip_loader import ChipLoad
 from ....core.target_director import Target
 from ....core.enums import ProvisioningStatus
 from ....core.strategy_context import ProvisioningStrategy
@@ -47,7 +48,11 @@ class ProvisioningCYW559xx(ProvisioningStrategy):
         if not config and not flow_name:
             flow_name = target.policy_parser.policy_type()
 
-        status = self._provision(tool, target, flow_name, config=config)
+        if tool.is_dm_mode():
+            status = self._provision(tool, target, flow_name, config=config)
+        else:
+            logger.error('Failed to check device state')
+            status = ProvisioningStatus.FAIL
 
         if status == ProvisioningStatus.OK:
             ProvisioningCYW559xx.framed_text('PROVISIONING PASSED')
@@ -62,8 +67,14 @@ class ProvisioningCYW559xx(ProvisioningStrategy):
                      **kwargs) -> ProvisioningStatus:
         """ N/A for cyw559xx """
 
-    def erase_flash(self, tool, target):
-        """ N/A for cyw559xx """
+    def erase_flash(self, tool, target) -> bool:
+        """Chip erase
+        :param tool: Programming tool used for communication
+        :param target: The target object
+        :return: The status of the operation
+        """
+        loader = ChipLoad(tool, target, None)
+        return loader.erase()
 
     def transit_to_rma(self, tool, target, cert, **kwargs):
         """ N/A for cyw559xx """

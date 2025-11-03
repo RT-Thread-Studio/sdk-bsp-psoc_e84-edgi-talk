@@ -27,7 +27,6 @@
 * \addtogroup group_tdm
 * \{
 * \note IP Supported: TDM
-* \note Device Categories: CAT1B. Please refer <a href="usergroup1.html">Device Catalog</a>.
 * Configures audio TDM/I2S.
 *
 * The functions and other declarations used in this driver are in cy_tdm.h.
@@ -133,18 +132,6 @@
 *   </tr>
 * </table>
 *
-* \section group_tdm_changelog Changelog
-*
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
-
 * \defgroup group_tdm_i2s_macros_interrupt_masks Interrupt Masks
 * \defgroup group_tdm_data_structures Data Structures
 * \defgroup group_tdm_enums Enumerated Types
@@ -170,10 +157,10 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 14.3', 14, \
-                             'Checked manually, passed true or false in _BOOL2FLD for appropriate functionality.')
+'Checked manually, passed true or false in _BOOL2FLD for appropriate functionality.')
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.1', 14, \
-                             'Checked manually, passed true or false in _BOOL2FLD for appropriate functionality.')
+'Checked manually, passed true or false in _BOOL2FLD for appropriate functionality.')
 
 /******************************************************************************
  * Macro definitions                                                          *
@@ -338,7 +325,7 @@ typedef struct
                                                               '1': TX slave signaling inputs driven by RX Slave:
                                                               '2': TX slave signaling inputs driven by RX Master: */
     bool                        i2sMode;              /**<  IF set to 1 the IP is configured for I2S mode else for TDM mode    */
-} cy_stc_tdm_config_tx_t;
+}cy_stc_tdm_config_tx_t;
 
 /** cy_stc_tdm_config_rx_t */
 typedef struct
@@ -357,7 +344,7 @@ typedef struct
                                                           *   "true": Sample PCM bit value on falling edge or rising edge of receiver "rx_sck_in" (half a cycle delay).
                                                           *   Master configuration: "false": Sample PCM bit value on rising edge or falling edge of receiver "rx_sck_out".
                                                           *   "true": Sample PCM bit value on falling edge or rising edge of receiver "rx_sck_out" (half a cycle delay). */
-    /**<  RISING = 0  FALLING = 1 */
+                                                        /**<  RISING = 0  FALLING = 1 */
     cy_en_tdm_fsyncformat_t     fsyncFormat;          /**<  Channel synchronization pulse format \ref cy_en_tdm_fsyncformat_t */
     uint8_t                     channelNum;           /**<  Number of channels in the frame:
                                                             1 to 32 channels supported. In I2S mode number of channels should be 2. */
@@ -374,9 +361,9 @@ typedef struct
 /** cy_stc_tdm_config_t */
 typedef struct
 {
-    cy_stc_tdm_config_tx_t *tx_config;                    /**< TDM Initialization configuration for TX. */
-    cy_stc_tdm_config_rx_t *rx_config;                    /**< TDM Initialization configuration for RX. */
-} cy_stc_tdm_config_t;
+    cy_stc_tdm_config_tx_t* tx_config;                    /**< TDM Initialization configuration for TX. */
+    cy_stc_tdm_config_rx_t* rx_config;                    /**< TDM Initialization configuration for RX. */
+}cy_stc_tdm_config_t;
 
 /** \} group_tdm_data_structures */
 
@@ -456,60 +443,60 @@ typedef struct
 /*                      Global initialization functions                        */
 /*******************************************************************************/
 
-cy_en_tdm_status_t Cy_AudioTDM_Init(TDM_STRUCT_Type * base, cy_stc_tdm_config_t const * config);
-void Cy_AudioTDM_DeInit(TDM_STRUCT_Type * base);
+cy_en_tdm_status_t Cy_AudioTDM_Init( TDM_STRUCT_Type * base, cy_stc_tdm_config_t const * config);
+void Cy_AudioTDM_DeInit( TDM_STRUCT_Type * base);
 
 
 /*****************************************************************************/
 /*                      Audio TDM Control and Status                         */
 /*****************************************************************************/
 
-__STATIC_INLINE void        Cy_AudioTDM_EnableTx(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_DisableTx(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_EnableRx(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_DisableRx(TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_EnableTx( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_DisableTx( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_EnableRx( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_DisableRx( TDM_RX_STRUCT_Type * base);
 
-__STATIC_INLINE void        Cy_AudioTDM_WriteTxData(TDM_TX_STRUCT_Type * base, uint32_t data);
-__STATIC_INLINE void        Cy_AudioTDM_FreezeTxFifo(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_UnfreezeTxFifo(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_MuteTxFifo(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_ActivateTx(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_DeActivateTx(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_ReplayTxFifo(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE uint8_t     Cy_AudioTDM_GetNumInTxFifo(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE uint8_t     Cy_AudioTDM_GetTxReadPointer(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE uint8_t     Cy_AudioTDM_GetTxWritePointer(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_EnableTxTestMode(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_DisableTxTestMode(TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_WriteTxData( TDM_TX_STRUCT_Type * base, uint32_t data);
+__STATIC_INLINE void        Cy_AudioTDM_FreezeTxFifo( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_UnfreezeTxFifo( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_MuteTxFifo( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_ActivateTx( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_DeActivateTx( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_ReplayTxFifo( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE uint8_t     Cy_AudioTDM_GetNumInTxFifo( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE uint8_t     Cy_AudioTDM_GetTxReadPointer( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE uint8_t     Cy_AudioTDM_GetTxWritePointer( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_EnableTxTestMode( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_DisableTxTestMode( TDM_TX_STRUCT_Type * base);
 
-__STATIC_INLINE uint32_t    Cy_AudioTDM_ReadRxData(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_FreezeRxFifo(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_UnfreezeRxFifo(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_ActivateRx(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_DeActivateRx(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE uint32_t    Cy_AudioTDM_ReadSilentRXFifo(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE uint8_t     Cy_AudioTDM_GetNumInRxFifo(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE uint8_t     Cy_AudioTDM_GetRxReadPointer(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE uint8_t     Cy_AudioTDM_GetRxWritePointer(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_EnableRxTestMode(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_DisableRxTestMode(TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE uint32_t    Cy_AudioTDM_ReadRxData( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_FreezeRxFifo( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_UnfreezeRxFifo( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_ActivateRx( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_DeActivateRx( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE uint32_t    Cy_AudioTDM_ReadSilentRXFifo( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE uint8_t     Cy_AudioTDM_GetNumInRxFifo( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE uint8_t     Cy_AudioTDM_GetRxReadPointer( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE uint8_t     Cy_AudioTDM_GetRxWritePointer( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_EnableRxTestMode( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_DisableRxTestMode( TDM_RX_STRUCT_Type * base);
 
 
-__STATIC_INLINE void        Cy_AudioTDM_ClearTxInterrupt(TDM_TX_STRUCT_Type * base, uint32_t interrupt);
-__STATIC_INLINE void        Cy_AudioTDM_SetTxInterrupt(TDM_TX_STRUCT_Type * base, uint32_t interrupt);
-__STATIC_INLINE uint32_t    Cy_AudioTDM_GetTxInterruptMask(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_SetTxInterruptMask(TDM_TX_STRUCT_Type * base, uint32_t interrupt);
-__STATIC_INLINE uint32_t    Cy_AudioTDM_GetTxInterruptStatusMasked(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_SetTxTriggerInterruptMask(TDM_TX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_ClearTxTriggerInterruptMask(TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_ClearTxInterrupt( TDM_TX_STRUCT_Type * base, uint32_t interrupt);
+__STATIC_INLINE void        Cy_AudioTDM_SetTxInterrupt( TDM_TX_STRUCT_Type * base, uint32_t interrupt);
+__STATIC_INLINE uint32_t    Cy_AudioTDM_GetTxInterruptMask( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_SetTxInterruptMask( TDM_TX_STRUCT_Type * base, uint32_t interrupt);
+__STATIC_INLINE uint32_t    Cy_AudioTDM_GetTxInterruptStatusMasked( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_SetTxTriggerInterruptMask( TDM_TX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_ClearTxTriggerInterruptMask( TDM_TX_STRUCT_Type * base);
 
-__STATIC_INLINE void        Cy_AudioTDM_ClearRxInterrupt(TDM_RX_STRUCT_Type * base, uint32_t interrupt);
-__STATIC_INLINE void        Cy_AudioTDM_SetRxInterrupt(TDM_RX_STRUCT_Type * base, uint32_t interrupt);
-__STATIC_INLINE uint32_t    Cy_AudioTDM_GetRxInterruptMask(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_SetRxInterruptMask(TDM_RX_STRUCT_Type * base, uint32_t interrupt);
-__STATIC_INLINE uint32_t    Cy_AudioTDM_GetRxInterruptStatusMasked(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_SetRxTriggerInterruptMask(TDM_RX_STRUCT_Type * base);
-__STATIC_INLINE void        Cy_AudioTDM_ClearRxTriggerInterruptMask(TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_ClearRxInterrupt( TDM_RX_STRUCT_Type * base, uint32_t interrupt);
+__STATIC_INLINE void        Cy_AudioTDM_SetRxInterrupt( TDM_RX_STRUCT_Type * base, uint32_t interrupt);
+__STATIC_INLINE uint32_t    Cy_AudioTDM_GetRxInterruptMask( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_SetRxInterruptMask( TDM_RX_STRUCT_Type * base, uint32_t interrupt);
+__STATIC_INLINE uint32_t    Cy_AudioTDM_GetRxInterruptStatusMasked( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_SetRxTriggerInterruptMask( TDM_RX_STRUCT_Type * base);
+__STATIC_INLINE void        Cy_AudioTDM_ClearRxTriggerInterruptMask( TDM_RX_STRUCT_Type * base);
 
 
 /** \cond INTERNAL */
@@ -593,7 +580,7 @@ __STATIC_INLINE void        Cy_AudioTDM_ClearRxTriggerInterruptMask(TDM_RX_STRUC
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_EnableTx
 *******************************************************************************/
 
-__STATIC_INLINE void Cy_AudioTDM_EnableTx(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_EnableTx( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_CTL(base) |= TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_CTL_ENABLED_Msk;
 }
@@ -612,7 +599,7 @@ __STATIC_INLINE void Cy_AudioTDM_EnableTx(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_DisableTx
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_DisableTx(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_DisableTx( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_CTL(base) &= (uint32_t) ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_CTL_ENABLED_Msk;
 }
@@ -632,7 +619,7 @@ __STATIC_INLINE void Cy_AudioTDM_DisableTx(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_EnableRx
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_EnableRx(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_EnableRx( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_CTL(base) |= TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_CTL_ENABLED_Msk;
 }
@@ -652,7 +639,7 @@ __STATIC_INLINE void Cy_AudioTDM_EnableRx(TDM_RX_STRUCT_Type * base)
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_DisableRx
 *******************************************************************************/
 
-__STATIC_INLINE void Cy_AudioTDM_DisableRx(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_DisableRx( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_CTL(base) &= (uint32_t) ~TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_CTL_ENABLED_Msk;
 }
@@ -671,7 +658,7 @@ __STATIC_INLINE void Cy_AudioTDM_DisableRx(TDM_RX_STRUCT_Type * base)
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_WriteTxData
 *******************************************************************************/
 
-__STATIC_INLINE void Cy_AudioTDM_WriteTxData(TDM_TX_STRUCT_Type * base, uint32_t data)
+__STATIC_INLINE void Cy_AudioTDM_WriteTxData( TDM_TX_STRUCT_Type * base, uint32_t data)
 {
     TDM_STRUCT_TX_FIFO_WR(base) = data;
 }
@@ -689,12 +676,12 @@ __STATIC_INLINE void Cy_AudioTDM_WriteTxData(TDM_TX_STRUCT_Type * base, uint32_t
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_FreezeTxFifo
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_FreezeTxFifo(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_FreezeTxFifo( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_FREEZE_Msk;
     TDM_STRUCT_TX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_REPLAY_Msk;
     TDM_STRUCT_TX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_FREEZE, 1U) |
-                                    _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_REPLAY, 0U);
+                           _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_REPLAY, 0U);
 }
 
 /*******************************************************************************
@@ -709,7 +696,7 @@ __STATIC_INLINE void Cy_AudioTDM_FreezeTxFifo(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_UnFreezeTxFifo
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_UnfreezeTxFifo(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_UnfreezeTxFifo( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_FREEZE_Msk;
     TDM_STRUCT_TX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_FREEZE, 0U);
@@ -727,7 +714,7 @@ __STATIC_INLINE void Cy_AudioTDM_UnfreezeTxFifo(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_MuteTxFifo
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_MuteTxFifo(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_MuteTxFifo( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_MUTE_Msk;
     TDM_STRUCT_TX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_MUTE, 1U);
@@ -745,7 +732,7 @@ __STATIC_INLINE void Cy_AudioTDM_MuteTxFifo(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_ActivateTx
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_ActivateTx(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_ActivateTx( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_ACTIVE_Msk;
     TDM_STRUCT_TX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_ACTIVE, 1U);
@@ -763,7 +750,7 @@ __STATIC_INLINE void Cy_AudioTDM_ActivateTx(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_DeActivateTx
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_DeActivateTx(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_DeActivateTx( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_ACTIVE_Msk;
     TDM_STRUCT_TX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_ACTIVE, 0U);
@@ -779,12 +766,12 @@ __STATIC_INLINE void Cy_AudioTDM_DeActivateTx(TDM_TX_STRUCT_Type * base)
 *
 *******************************************************************************/
 //data replay
-__STATIC_INLINE void Cy_AudioTDM_ReplayTxFifo(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_ReplayTxFifo( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_FREEZE_Msk;
     TDM_STRUCT_TX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_REPLAY_Msk;
     TDM_STRUCT_TX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_FREEZE, 1U) |
-                                    _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_REPLAY, 1U);
+                           _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_REPLAY, 1U);
 }
 /***************************************************************************/
 /* Function Name: Cy_AudioTDM_GetNumInTxFifo                               */
@@ -801,7 +788,7 @@ __STATIC_INLINE void Cy_AudioTDM_ReplayTxFifo(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_GetNumInTxFifo
 *******************************************************************************/
-__STATIC_INLINE uint8_t Cy_AudioTDM_GetNumInTxFifo(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE uint8_t Cy_AudioTDM_GetNumInTxFifo( TDM_TX_STRUCT_Type * base)
 {
     return ((uint8_t)(TDM_STRUCT_TX_FIFO_STATUS(base) & TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_STATUS_USED_Msk));
 }
@@ -819,7 +806,7 @@ __STATIC_INLINE uint8_t Cy_AudioTDM_GetNumInTxFifo(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_GetTxReadPointer
 *******************************************************************************/
-__STATIC_INLINE uint8_t Cy_AudioTDM_GetTxReadPointer(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE uint8_t Cy_AudioTDM_GetTxReadPointer( TDM_TX_STRUCT_Type * base)
 {
     uint32_t reg_value;
     reg_value = (TDM_STRUCT_TX_FIFO_STATUS(base) & TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_STATUS_RD_PTR_Msk);
@@ -839,7 +826,7 @@ __STATIC_INLINE uint8_t Cy_AudioTDM_GetTxReadPointer(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_GetTxWritePointer
 *******************************************************************************/
-__STATIC_INLINE uint8_t Cy_AudioTDM_GetTxWritePointer(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE uint8_t Cy_AudioTDM_GetTxWritePointer( TDM_TX_STRUCT_Type * base)
 {
     uint32_t reg_value;
     reg_value = (TDM_STRUCT_TX_FIFO_STATUS(base) & TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_STATUS_WR_PTR_Msk);
@@ -855,7 +842,7 @@ __STATIC_INLINE uint8_t Cy_AudioTDM_GetTxWritePointer(TDM_TX_STRUCT_Type * base)
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_EnableTxTestMode(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_EnableTxTestMode( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_TEST_CTL(base) |= TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_TEST_CTL_ENABLED_Msk;
 }
@@ -869,7 +856,7 @@ __STATIC_INLINE void Cy_AudioTDM_EnableTxTestMode(TDM_TX_STRUCT_Type * base)
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_DisableTxTestMode(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_DisableTxTestMode( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_TEST_CTL(base) &= (uint32_t) ~TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_TEST_CTL_ENABLED_Msk;
 }
@@ -887,7 +874,7 @@ __STATIC_INLINE void Cy_AudioTDM_DisableTxTestMode(TDM_TX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_ReadRxData
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_AudioTDM_ReadRxData(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE uint32_t Cy_AudioTDM_ReadRxData( TDM_RX_STRUCT_Type * base)
 {
     return (TDM_STRUCT_RX_FIFO_RD(base));
 }
@@ -905,7 +892,7 @@ __STATIC_INLINE uint32_t Cy_AudioTDM_ReadRxData(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_FreezeRxFifo
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_FreezeRxFifo(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_FreezeRxFifo( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_FREEZE_Msk;
     TDM_STRUCT_RX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_FREEZE, 1U);
@@ -922,7 +909,7 @@ __STATIC_INLINE void Cy_AudioTDM_FreezeRxFifo(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_UnfreezeRxFifo
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_UnfreezeRxFifo(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_UnfreezeRxFifo( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_FREEZE_Msk;
     TDM_STRUCT_RX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_FREEZE, 0U);
@@ -940,7 +927,7 @@ __STATIC_INLINE void Cy_AudioTDM_UnfreezeRxFifo(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_ActivateRx
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_ActivateRx(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_ActivateRx( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_FIFO_CTL(base) |= TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_ACTIVE_Msk;
 }
@@ -957,7 +944,7 @@ __STATIC_INLINE void Cy_AudioTDM_ActivateRx(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_DeActivateRx
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_DeActivateRx(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_DeActivateRx( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_FIFO_CTL(base) &= ~TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_ACTIVE_Msk;
     TDM_STRUCT_RX_FIFO_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_ACTIVE, 0U);
@@ -974,7 +961,7 @@ __STATIC_INLINE void Cy_AudioTDM_DeActivateRx(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_ReadSilentRXFifo
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_AudioTDM_ReadSilentRXFifo(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE uint32_t Cy_AudioTDM_ReadSilentRXFifo( TDM_RX_STRUCT_Type * base)
 {
     return (TDM_STRUCT_RX_FIFO_RD_SILENT(base));
 }
@@ -991,7 +978,7 @@ __STATIC_INLINE uint32_t Cy_AudioTDM_ReadSilentRXFifo(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_GetNumInRxFifo
 *******************************************************************************/
-__STATIC_INLINE uint8_t Cy_AudioTDM_GetNumInRxFifo(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE uint8_t Cy_AudioTDM_GetNumInRxFifo( TDM_RX_STRUCT_Type * base)
 {
     return ((uint8_t)(TDM_STRUCT_RX_FIFO_STATUS(base) & TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_STATUS_USED_Msk));
 }
@@ -1011,7 +998,7 @@ __STATIC_INLINE uint8_t Cy_AudioTDM_GetNumInRxFifo(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_GetRxReadPointer
 *******************************************************************************/
-__STATIC_INLINE uint8_t Cy_AudioTDM_GetRxReadPointer(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE uint8_t Cy_AudioTDM_GetRxReadPointer( TDM_RX_STRUCT_Type * base)
 {
     uint32_t reg_value;
     reg_value = (TDM_STRUCT_RX_FIFO_STATUS(base) & TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_STATUS_RD_PTR_Msk);
@@ -1033,7 +1020,7 @@ __STATIC_INLINE uint8_t Cy_AudioTDM_GetRxReadPointer(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_GetRxWritePointer
 *******************************************************************************/
-__STATIC_INLINE uint8_t Cy_AudioTDM_GetRxWritePointer(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE uint8_t Cy_AudioTDM_GetRxWritePointer( TDM_RX_STRUCT_Type * base)
 {
     uint32_t reg_value;
     reg_value = (TDM_STRUCT_RX_FIFO_STATUS(base) & TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_STATUS_WR_PTR_Msk);
@@ -1050,7 +1037,7 @@ __STATIC_INLINE uint8_t Cy_AudioTDM_GetRxWritePointer(TDM_RX_STRUCT_Type * base)
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_EnableRxTestMode(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_EnableRxTestMode( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_TEST_CTL(base) |= TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_TEST_CTL_ENABLED_Msk;
 }
@@ -1064,7 +1051,7 @@ __STATIC_INLINE void Cy_AudioTDM_EnableRxTestMode(TDM_RX_STRUCT_Type * base)
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_DisableRxTestMode(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_DisableRxTestMode( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_TEST_CTL(base) &= ~TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_TEST_CTL_ENABLED_Msk;
     TDM_STRUCT_RX_TEST_CTL(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_TEST_CTL_ENABLED, 0U);
@@ -1082,7 +1069,7 @@ __STATIC_INLINE void Cy_AudioTDM_DisableRxTestMode(TDM_RX_STRUCT_Type * base)
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_ClearTxInterrupt
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_ClearTxInterrupt(TDM_TX_STRUCT_Type * base, uint32_t interrupt)
+__STATIC_INLINE void Cy_AudioTDM_ClearTxInterrupt( TDM_TX_STRUCT_Type * base, uint32_t interrupt)
 {
     CY_ASSERT_L2(CY_I2S_TDM_INTR_TX_MASK_VALID(interrupt));
 
@@ -1103,7 +1090,7 @@ __STATIC_INLINE void Cy_AudioTDM_ClearTxInterrupt(TDM_TX_STRUCT_Type * base, uin
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_SetTxInterrupt
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_SetTxInterrupt(TDM_TX_STRUCT_Type * base, uint32_t interrupt)
+__STATIC_INLINE void Cy_AudioTDM_SetTxInterrupt( TDM_TX_STRUCT_Type * base, uint32_t interrupt)
 {
     CY_ASSERT_L2(CY_I2S_TDM_INTR_TX_MASK_VALID(interrupt));
 
@@ -1121,7 +1108,7 @@ __STATIC_INLINE void Cy_AudioTDM_SetTxInterrupt(TDM_TX_STRUCT_Type * base, uint3
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_GetTxInterruptMask
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_AudioTDM_GetTxInterruptMask(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE uint32_t Cy_AudioTDM_GetTxInterruptMask( TDM_TX_STRUCT_Type * base)
 {
     return (TDM_STRUCT_TX_INTR_TX_MASK(base));
 }
@@ -1138,7 +1125,7 @@ __STATIC_INLINE uint32_t Cy_AudioTDM_GetTxInterruptMask(TDM_TX_STRUCT_Type * bas
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_SetTxInterruptMask
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_SetTxInterruptMask(TDM_TX_STRUCT_Type * base, uint32_t interrupt)
+__STATIC_INLINE void Cy_AudioTDM_SetTxInterruptMask( TDM_TX_STRUCT_Type * base, uint32_t interrupt)
 {
     CY_ASSERT_L2(CY_I2S_TDM_INTR_TX_MASK_VALID(interrupt));
 
@@ -1154,7 +1141,7 @@ __STATIC_INLINE void Cy_AudioTDM_SetTxInterruptMask(TDM_TX_STRUCT_Type * base, u
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_AudioTDM_GetTxInterruptStatusMasked(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE uint32_t Cy_AudioTDM_GetTxInterruptStatusMasked( TDM_TX_STRUCT_Type * base)
 {
     return (TDM_STRUCT_TX_INTR_TX_MASKED(base));
 }
@@ -1168,7 +1155,7 @@ __STATIC_INLINE uint32_t Cy_AudioTDM_GetTxInterruptStatusMasked(TDM_TX_STRUCT_Ty
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_SetTxTriggerInterruptMask(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_SetTxTriggerInterruptMask( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_INTR_TX_MASK(base) |= TDM_TDM_STRUCT_TDM_TX_STRUCT_INTR_TX_MASK_FIFO_TRIGGER_Msk;
 }
@@ -1182,7 +1169,7 @@ __STATIC_INLINE void Cy_AudioTDM_SetTxTriggerInterruptMask(TDM_TX_STRUCT_Type * 
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_ClearTxTriggerInterruptMask(TDM_TX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_ClearTxTriggerInterruptMask( TDM_TX_STRUCT_Type * base)
 {
     TDM_STRUCT_TX_INTR_TX_MASK(base) &= ~TDM_TDM_STRUCT_TDM_TX_STRUCT_INTR_TX_MASK_FIFO_TRIGGER_Msk;
     TDM_STRUCT_TX_INTR_TX_MASK(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_TX_STRUCT_INTR_TX_MASK_FIFO_TRIGGER, 0U);
@@ -1199,7 +1186,7 @@ __STATIC_INLINE void Cy_AudioTDM_ClearTxTriggerInterruptMask(TDM_TX_STRUCT_Type 
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_ClearRxInterrupt
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_ClearRxInterrupt(TDM_RX_STRUCT_Type * base, uint32_t interrupt)
+__STATIC_INLINE void Cy_AudioTDM_ClearRxInterrupt( TDM_RX_STRUCT_Type * base, uint32_t interrupt)
 {
     CY_ASSERT_L2(CY_I2S_TDM_INTR_RX_MASK_VALID(interrupt));
 
@@ -1221,7 +1208,7 @@ __STATIC_INLINE void Cy_AudioTDM_ClearRxInterrupt(TDM_RX_STRUCT_Type * base, uin
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_SetRxInterrupt
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_SetRxInterrupt(TDM_RX_STRUCT_Type * base, uint32_t interrupt)
+__STATIC_INLINE void Cy_AudioTDM_SetRxInterrupt( TDM_RX_STRUCT_Type * base, uint32_t interrupt)
 {
     CY_ASSERT_L2(CY_I2S_TDM_INTR_RX_MASK_VALID(interrupt));
 
@@ -1239,7 +1226,7 @@ __STATIC_INLINE void Cy_AudioTDM_SetRxInterrupt(TDM_RX_STRUCT_Type * base, uint3
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_GetRxInterruptMask
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_AudioTDM_GetRxInterruptMask(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE uint32_t Cy_AudioTDM_GetRxInterruptMask( TDM_RX_STRUCT_Type * base)
 {
     return (TDM_STRUCT_RX_INTR_RX_MASK(base));
 }
@@ -1255,7 +1242,7 @@ __STATIC_INLINE uint32_t Cy_AudioTDM_GetRxInterruptMask(TDM_RX_STRUCT_Type * bas
 * \funcusage
 * \snippet tdm/snippet/main.c snippet_Cy_AudioTDM_SetRxInterruptMask
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_SetRxInterruptMask(TDM_RX_STRUCT_Type * base, uint32_t interrupt)
+__STATIC_INLINE void Cy_AudioTDM_SetRxInterruptMask( TDM_RX_STRUCT_Type * base, uint32_t interrupt)
 {
     CY_ASSERT_L2(CY_I2S_TDM_INTR_RX_MASK_VALID(interrupt));
 
@@ -1273,7 +1260,7 @@ __STATIC_INLINE void Cy_AudioTDM_SetRxInterruptMask(TDM_RX_STRUCT_Type * base, u
 * \return The interrupt bit mask(s).
 *
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_AudioTDM_GetRxInterruptStatusMasked(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE uint32_t Cy_AudioTDM_GetRxInterruptStatusMasked( TDM_RX_STRUCT_Type * base)
 {
     return (TDM_STRUCT_RX_INTR_RX_MASKED(base));
 }
@@ -1286,7 +1273,7 @@ __STATIC_INLINE uint32_t Cy_AudioTDM_GetRxInterruptStatusMasked(TDM_RX_STRUCT_Ty
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_SetRxTriggerInterruptMask(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_SetRxTriggerInterruptMask( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_INTR_RX_MASK(base) |= TDM_TDM_STRUCT_TDM_RX_STRUCT_INTR_RX_MASK_FIFO_TRIGGER_Msk;
 }
@@ -1300,7 +1287,7 @@ __STATIC_INLINE void Cy_AudioTDM_SetRxTriggerInterruptMask(TDM_RX_STRUCT_Type * 
 * \param base The pointer to the I2S/TDM instance address.
 *
 *******************************************************************************/
-__STATIC_INLINE void Cy_AudioTDM_ClearRxTriggerInterruptMask(TDM_RX_STRUCT_Type * base)
+__STATIC_INLINE void Cy_AudioTDM_ClearRxTriggerInterruptMask( TDM_RX_STRUCT_Type * base)
 {
     TDM_STRUCT_RX_INTR_RX_MASK(base) &= ~TDM_TDM_STRUCT_TDM_RX_STRUCT_INTR_RX_MASK_FIFO_TRIGGER_Msk;
     TDM_STRUCT_RX_INTR_RX_MASK(base) |= _BOOL2FLD(TDM_TDM_STRUCT_TDM_RX_STRUCT_INTR_RX_MASK_FIFO_TRIGGER, 0U);

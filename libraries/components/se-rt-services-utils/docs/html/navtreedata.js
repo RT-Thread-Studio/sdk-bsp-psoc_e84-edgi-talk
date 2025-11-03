@@ -49,8 +49,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "group__aead__operations.html",
-"group__crypto__types.html#ga6cc6c55ce4243de92db0171ddcaa1e0e",
-"group__psacrypto__error.html#ga24e6279e65ec7dd4224cf9741265bf06"
+"group__crypto__types.html#ga65880407522cd23a3398423fc81c46d2",
+"group__psacrypto.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

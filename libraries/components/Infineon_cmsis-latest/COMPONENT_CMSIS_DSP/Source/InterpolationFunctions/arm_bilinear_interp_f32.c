@@ -85,24 +85,24 @@
    */
 
 
-/**
- * @addtogroup BilinearInterpolate
- * @{
- */
+  /**
+   * @addtogroup BilinearInterpolate
+   * @{
+   */
 
 
-/**
-* @brief  Floating-point bilinear interpolation.
-* @param[in,out] S  points to an instance of the interpolation structure.
-* @param[in]     X  interpolation coordinate.
-* @param[in]     Y  interpolation coordinate.
-* @return out interpolated value.
-*/
-float32_t arm_bilinear_interp_f32(
-    const arm_bilinear_interp_instance_f32 * S,
-    float32_t X,
-    float32_t Y)
-{
+  /**
+  * @brief  Floating-point bilinear interpolation.
+  * @param[in,out] S  points to an instance of the interpolation structure.
+  * @param[in]     X  interpolation coordinate.
+  * @param[in]     Y  interpolation coordinate.
+  * @return out interpolated value.
+  */
+  float32_t arm_bilinear_interp_f32(
+  const arm_bilinear_interp_instance_f32 * S,
+  float32_t X,
+  float32_t Y)
+  {
     float32_t out;
     float32_t f00, f01, f10, f11;
     const float32_t *pData = S->pData;
@@ -117,11 +117,11 @@ float32_t arm_bilinear_interp_f32(
     /* Returns zero output when values are outside table boundary */
     if (xIndex < 0 || xIndex > (S->numCols - 2) || yIndex < 0 || yIndex > (S->numRows - 2))
     {
-        return (0);
+      return (0);
     }
 
     /* Calculation of index for two nearest points in X-direction */
-    index = (xIndex) + (yIndex) * S->numCols;
+    index = (xIndex ) + (yIndex ) * S->numCols;
 
 
     /* Read two nearest points in X-direction */
@@ -129,7 +129,7 @@ float32_t arm_bilinear_interp_f32(
     f01 = pData[index + 1];
 
     /* Calculation of index for two nearest points in Y-direction */
-    index = (xIndex) + (yIndex + 1) * S->numCols;
+    index = (xIndex ) + (yIndex+1) * S->numCols;
 
 
     /* Read two nearest points in Y-direction */
@@ -153,9 +153,9 @@ float32_t arm_bilinear_interp_f32(
 
     /* return to application */
     return (out);
-}
+  }
 
-/**
- * @} end of BilinearInterpolate group
- */
+  /**
+   * @} end of BilinearInterpolate group
+   */
 

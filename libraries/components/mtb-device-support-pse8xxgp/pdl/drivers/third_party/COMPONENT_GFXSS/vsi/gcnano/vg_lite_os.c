@@ -29,7 +29,7 @@
 #if !_BAREMETAL
 #include "FreeRTOS.h"
 
-void *vg_lite_os_malloc(uint32_t size)
+void* vg_lite_os_malloc(uint32_t size)
 {
     return pvPortMalloc(size);
 }
@@ -41,7 +41,7 @@ void vg_lite_os_free(void *memory)
 
 #else
 
-void *vg_lite_os_malloc(uint32_t size)
+void* vg_lite_os_malloc(uint32_t size)
 {
     return malloc(size);
 }

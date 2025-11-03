@@ -51,12 +51,12 @@
  * please change to the appropriate value according to the env
  */
 #define MEM_BASE 0x00000000
-//#define MEM_SIZE 0x00000000
+#define MEM_SIZE 0x00000000
 
 #define ALLOC_RESERVED_MEM_IN_KERNEL 1
 
 #ifndef _BAREMETAL
-    #define _BAREMETAL 1
+#define _BAREMETAL 1
 #endif
 
 #endif

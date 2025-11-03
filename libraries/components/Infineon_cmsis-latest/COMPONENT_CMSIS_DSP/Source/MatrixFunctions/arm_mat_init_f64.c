@@ -34,7 +34,7 @@
 
 /**
   @defgroup MatrixInit Matrix Initialization
-
+ 
   Initializes the underlying matrix data structure.
   The functions set the <code>numRows</code>,
   <code>numCols</code>, and <code>pData</code> fields
@@ -52,21 +52,20 @@
   @param[in]     nRows     number of rows in the matrix
   @param[in]     nColumns  number of columns in the matrix
   @param[in]     pData     points to the matrix data array
-  @return        none
  */
 
-void arm_mat_init_f64(
+ARM_DSP_ATTRIBUTE void arm_mat_init_f64(
     arm_matrix_instance_f64 * S,
     uint16_t nRows,
     uint16_t nColumns,
-    float64_t *pData)
+    float64_t * pData)
 {
     /* Assign Number of Rows */
     S->numRows = nRows;
-
+    
     /* Assign Number of Columns */
     S->numCols = nColumns;
-
+    
     /* Assign Data pointer */
     S->pData = pData;
 }

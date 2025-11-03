@@ -210,44 +210,6 @@
 * For more information on the CAN FD peripheral, refer to the technical
 * reference manual (TRM).
 *
-* \section group_canfd_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.40</td>
-*     <td>Updated APIs \ref Cy_CANFD_Init , \ref Cy_CANFD_CalcRxBufAdrs, \ref Cy_CANFD_CalcRxFifoAdrs, \ref Cy_CANFD_XidFilterSetup. </td>
-*     <td>Bug Fixes.</td>
-*   </tr>
-*   <tr>
-*     <td>1.30</td>
-*     <td>Updated \ref Cy_CANFD_Init() and \ref Cy_CANFD_DeInit() functions. Added volatile qualifier to prevent loop optimization.</td>
-*     <td>Code Enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.20</td>
-*     <td>Added const modifier to the functions parameters where needed.
-*         Improved error handling in \ref Cy_CANFD_Init() and
-*         \ref Cy_CANFD_IrqHandler().
-*     </td>
-*     <td>Source code cleanup.</td>
-*   </tr>
-*   <tr>
-*     <td>1.10</td>
-*     <td>Updated \ref Cy_CANFD_Init() functions.</td>
-*     <td>Allow initing CANFD with 0 number of SID/XID filters.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0.1</td>
-*     <td>Updated description of the \ref Cy_CANFD_Init() and \ref Cy_CANFD_DeInit() functions.</td>
-*     <td>Documentation update and clarification.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_canfd_macros Macros
 * \{
     \defgroup group_canfd_rx_interrupt_masks RX Interrupt masks
@@ -505,21 +467,21 @@ typedef enum
 /** ID Filter element configuration type */
 typedef enum
 {
-    CY_CANFD_ID_FILTER_ELEMNT_CONFIG_DISABLE_FILETER_ELEMENT   = 0x00u, /**< Disable filter element */
-    CY_CANFD_ID_FILTER_ELEMNT_CONFIG_STORE_RXFIFO0             = 0x01u, /**< Store in Rx FIFO 0, if filter matches */
-    CY_CANFD_ID_FILTER_ELEMNT_CONFIG_STORE_RXFIFO1             = 0x02u, /**< Store in Rx FIFO 1, if filter matches */
-    CY_CANFD_ID_FILTER_ELEMNT_CONFIG_REJECT_ID                 = 0x03u, /**< Reject ID if filter matches */
-    CY_CANFD_ID_FILTER_ELEMNT_CONFIG_SET_PRIORIY               = 0x04u, /**< Set priority if filter matches */
-    CY_CANFD_ID_FILTER_ELEMNT_CONFIG_SET_PIORITY_STORE_RXFIFO0 = 0x05u, /**< Set priority and store in FIFO 0,
+    CY_CANFD_ID_FILTER_ELEMENT_CONFIG_DISABLE_FILTER_ELEMENT   = 0x00u, /**< Disable filter element */
+    CY_CANFD_ID_FILTER_ELEMENT_CONFIG_STORE_RXFIFO0             = 0x01u, /**< Store in Rx FIFO 0, if filter matches */
+    CY_CANFD_ID_FILTER_ELEMENT_CONFIG_STORE_RXFIFO1             = 0x02u, /**< Store in Rx FIFO 1, if filter matches */
+    CY_CANFD_ID_FILTER_ELEMENT_CONFIG_REJECT_ID                 = 0x03u, /**< Reject ID if filter matches */
+    CY_CANFD_ID_FILTER_ELEMENT_CONFIG_SET_PRIORITY               = 0x04u, /**< Set priority if filter matches */
+    CY_CANFD_ID_FILTER_ELEMENT_CONFIG_SET_PRIORITY_STORE_RXFIFO0 = 0x05u, /**< Set priority and store in FIFO 0,
                                                                          * if filter matches
                                                                          */
-    CY_CANFD_ID_FILTER_ELEMNT_CONFIG_SET_PIORITY_STORE_RXFIFO1 = 0x06u, /**< Set priority and store in FIFO 1,
+    CY_CANFD_ID_FILTER_ELEMENT_CONFIG_SET_PRIORITY_STORE_RXFIFO1 = 0x06u, /**< Set priority and store in FIFO 1,
                                                                          * if filter matches
                                                                          */
-    CY_CANFD_ID_FILTER_ELEMNT_CONFIG_STORE_RXBUFF_OR_DEBUGMSG  = 0x07u  /**< Store into Rx Buffer or as debug message,
+    CY_CANFD_ID_FILTER_ELEMENT_CONFIG_STORE_RXBUFF_OR_DEBUGMSG  = 0x07u  /**< Store into Rx Buffer or as debug message,
                                                                          * configuration of SFT[1:0] ignored
                                                                          */
-} cy_en_canfd_id_filter_element_config_t;
+}cy_en_canfd_id_filter_element_config_t;
 
 /** Standard ID filter type */
 typedef enum
@@ -527,7 +489,7 @@ typedef enum
     CY_CANFD_STD_ID_FILTER_TYPE_RANGE          = 0x00u, /**< The Range filter from SFID1 to SFID2 (SFID2 = SFID1) */
     CY_CANFD_STD_ID_FILTER_TYPE_DUAL           = 0x01u, /**< The Dual ID filter for SFID1 or SFID2 */
     CY_CANFD_STD_ID_FILTER_TYPE_CLASSIC        = 0x02u  /**< The Classic filter: SFID1 = filter, SFID2 = mask */
-} cy_en_canfd_std_id_filter_type_t;
+}cy_en_canfd_std_id_filter_type_t;
 
 /** Extended ID filter type */
 typedef enum
@@ -538,42 +500,42 @@ typedef enum
     CY_CANFD_EXT_ID_FILTER_TYPE_RANGE          = 0x03u  /**< The range filter from EFID1 to EFID2 (EFID2 = EFID1),
                                                          * XIDAM mask not applied
                                                          */
-} cy_en_canfd_ext_id_filter_type_t;
+}cy_en_canfd_ext_id_filter_type_t;
 
 /** Type for indication of the received frame (Remote Transmission Request) */
 typedef enum
 {
     CY_CANFD_RTR_DATA_FRAME                 = 0x00u, /**< The received frame is a data frame */
     CY_CANFD_RTR_REMOTE_FRAME               = 0x01u  /**< The received frame is a remote frame */
-} cy_en_canfd_rtr_t;
+}cy_en_canfd_rtr_t;
 
 /** Extended Identifier type (whether the received frame has a standard or extended identifier) */
 typedef enum
 {
     CY_CANFD_XTD_STANDARD_ID                = 0x00u, /**< The 11-bit standard identifier */
     CY_CANFD_XTD_EXTENDED_ID                = 0x01u  /**< The 29-bit extended identifier */
-} cy_en_canfd_xtd_t;
+}cy_en_canfd_xtd_t;
 
 /** Error State Indicator type */
 typedef enum
 {
     CY_CANFD_ESI_ERROR_ACTIVE               = 0x00u, /**< The transmitting node is error active */
     CY_CANFD_ESI_ERROR_PASSIVE              = 0x01u  /**< The transmitting node is error passive */
-} cy_en_canfd_esi_t;
+}cy_en_canfd_esi_t;
 
 /** FD Format type */
 typedef enum
 {
     CY_CANFD_FDF_STANDARD_FRAME             = 0x00u, /**< The standard frame format */
     CY_CANFD_FDF_CAN_FD_FRAME               = 0x01u  /**< The CAN FD frame format (new DLC-coding and CRC) */
-} cy_en_canfd_fdf_t;
+}cy_en_canfd_fdf_t;
 
 /** Accepted Non-matching Frame type */
 typedef enum
 {
     CY_CANFD_ANMF_MATCH_FILTER              = 0x00u, /**< The received frame matching filter index FIDX */
     CY_CANFD_ANMF_NOT_MATCH_FILTER          = 0x01u  /**< The received frame did not match any Rx filter element */
-} cy_en_canfd_anmf_t;
+}cy_en_canfd_anmf_t;
 
 /** Standard Filter Element Configuration type */
 typedef enum
@@ -588,7 +550,7 @@ typedef enum
     CY_CANFD_SFEC_STORE_RX_BUFFER           = 0x07u  /**< Store into Rx Buffer or as debug message,
                                                       * configuration of SFT[1:0] ignored
                                                       */
-} cy_en_canfd_sfec_t;
+}cy_en_canfd_sfec_t;
 
 /** Standard Filter Type */
 typedef enum
@@ -597,7 +559,7 @@ typedef enum
     CY_CANFD_SFT_DUAL_ID                    = 0x01u, /**< The Dual ID filter for SFID1 or SFID2 */
     CY_CANFD_SFT_CLASSIC_FILTER             = 0x02u, /**< The Classic filter: SFID1 = filter, SFID2 = mask */
     CY_CANFD_SFT_DISABLED                   = 0x03u  /**< The Filter element disabled */
-} cy_en_canfd_sft_t;
+}cy_en_canfd_sft_t;
 
 /** Extended Filter Element Configuration type */
 typedef enum
@@ -612,7 +574,7 @@ typedef enum
     CY_CANFD_EFEC_STORE_RX_BUFFER           = 0x07u  /**< Store into Rx Buffer or as debug message,
                                                       * configuration of EFT[1:0] ignored
                                                       */
-} cy_en_canfd_efec_t;
+}cy_en_canfd_efec_t;
 
 /** Extended Filter Type */
 typedef enum
@@ -621,7 +583,7 @@ typedef enum
     CY_CANFD_EFT_DUAL_ID                    = 0x01u, /**< The Dual ID filter for EFID1 or EFID2 */
     CY_CANFD_EFT_CLASSIC_FILTER             = 0x02u, /**< The Classic filter: EFID1 = filter, EFID2 = mask */
     CY_CANFD_EFT_RANGE_EFID1_EFID2_NO_MSK   = 0x03u  /**< The range filter from EFID1 to EFID2 (EFID2 >= EFID1), XIDAM mask not applied */
-} cy_en_canfd_eft_t;
+}cy_en_canfd_eft_t;
 
 /** Test Mode Type */
 typedef enum
@@ -630,7 +592,7 @@ typedef enum
     CY_CANFD_TEST_MODE_BUS_MONITORING       = 0x01u, /**< The Bus Monitoring Mode */
     CY_CANFD_TEST_MODE_EXTERNAL_LOOP_BACK   = 0x02u, /**< The External Loop Back Mode */
     CY_CANFD_TEST_MODE_INTERNAL_LOOP_BACK   = 0x03u  /**< The Internal Loop Back Mode */
-} cy_stc_canfd_test_mode_t;
+}cy_stc_canfd_test_mode_t;
 
 /** Last Error Code and Data Phase Last Error Code Type. \n
 *   Used with Cy_CANFD_GetLastError() for LEC and DLEC fields of the
@@ -661,7 +623,7 @@ typedef enum
                                        * last CPU read access to the Protocol
                                        * Status Register
                                        */
-} cy_en_canfd_LEC_t;
+}cy_en_canfd_LEC_t;
 
 /** Bus Activity State field of the PSR
 *   Used with Cy_CANFD_GetLastError() for ACT field of the
@@ -672,7 +634,7 @@ typedef enum
     CY_CANFD_PSR_ACT_IDLE = 0x01u, /**< The node is neither receiver nor transmitter */
     CY_CANFD_PSR_ACT_RX   = 0x02u, /**< The node is operating as receiver */
     CY_CANFD_PSR_ACT_TX   = 0x03u  /**< The node is operating as transmitter */
-} cy_en_canfd_PSR_ACT_t;
+}cy_en_canfd_PSR_ACT_t;
 
 /** \} group_canfd_enums */
 
@@ -919,10 +881,10 @@ typedef struct
 /** Global filter configuration */
 typedef struct
 {
-    cy_en_accept_non_matching_frames_t nonMatchingFramesStandard;  /**< Non matching frames standard */
-    cy_en_accept_non_matching_frames_t nonMatchingFramesExtended;  /**< Non matching frames extended */
-    bool                               rejectRemoteFramesStandard; /**< Reject remote frames standard */
-    bool                               rejectRemoteFramesExtended; /**< Reject remote frames extended */
+  cy_en_accept_non_matching_frames_t nonMatchingFramesStandard;  /**< Non matching frames standard */
+  cy_en_accept_non_matching_frames_t nonMatchingFramesExtended;  /**< Non matching frames extended */
+  bool                               rejectRemoteFramesStandard; /**< Reject remote frames standard */
+  bool                               rejectRemoteFramesExtended; /**< Reject remote frames extended */
 } cy_stc_canfd_global_filter_config_t;
 
 /** Rx FIFO configuration */
@@ -935,7 +897,7 @@ typedef struct
                                                      * FIFO Top Pointer Logic is enabled.
                                                      */
     bool                    topPointerLogicEnabled; /**< Top pointer logic enabled */
-} cy_en_canfd_fifo_config_t;
+}cy_en_canfd_fifo_config_t;
 
 /**
 * Message transmission complete callback function (cy_canfd_tx_msg_func_ptr_t).
@@ -944,7 +906,7 @@ typedef struct
 * \ref CY_CANFD_TRANSMISSION_COMPLETE
 * interrupt event
 */
-typedef void (*cy_canfd_tx_msg_func_ptr_t)(void);
+typedef void (*cy_canfd_tx_msg_func_ptr_t)( void );
 
 /**
 * The message reception callback function for message received in the dedicated
@@ -964,9 +926,9 @@ typedef void (*cy_canfd_tx_msg_func_ptr_t)(void);
 * interrupt events.
 */
 typedef void (*cy_canfd_rx_msg_func_ptr_t)(bool rxFIFOMsg,
-        uint8_t msgBufOrRxFIFONum,
-        cy_stc_canfd_rx_buffer_t *basemsg
-                                          );
+                                           uint8_t msgBufOrRxFIFONum,
+                                           cy_stc_canfd_rx_buffer_t* basemsg
+                                           );
 
 /**
 * The error callback function (cy_canfd_error_func_ptr_t).
@@ -1086,26 +1048,26 @@ void Cy_CANFD_XidFiltersSetup(CANFD_Type const *base, uint32_t chan,
                               const cy_stc_canfd_extid_filter_config_t *filterConfig,
                               cy_stc_canfd_context_t const *context);
 cy_en_canfd_status_t Cy_CANFD_TxBufferConfig(CANFD_Type const *base, uint32_t chan,
-        const cy_stc_canfd_tx_buffer_t *txBuffer,
-        uint8_t index,
-        cy_stc_canfd_context_t const *context);
+                                             const cy_stc_canfd_tx_buffer_t *txBuffer,
+                                             uint8_t index,
+                                             cy_stc_canfd_context_t const *context);
 uint32_t Cy_CANFD_CalcRxBufAdrs(CANFD_Type const *base, uint32_t chan,
-                                uint32_t index,
-                                cy_stc_canfd_context_t const *context);
+                                        uint32_t index,
+                                        cy_stc_canfd_context_t const *context);
 uint32_t Cy_CANFD_CalcRxFifoAdrs(CANFD_Type const *base, uint32_t chan,
-                                 uint32_t fifoNumber,
-                                 uint32_t index,
-                                 cy_stc_canfd_context_t const *context);
+                                         uint32_t fifoNumber,
+                                         uint32_t index,
+                                         cy_stc_canfd_context_t const *context);
 cy_en_canfd_status_t Cy_CANFD_GetRxBuffer(CANFD_Type const *base, uint32_t chan,
-        const uint32_t bufferAddress,
-        cy_stc_canfd_rx_buffer_t const *rxBuffer);
+                                          const uint32_t bufferAddress,
+                                          cy_stc_canfd_rx_buffer_t const *rxBuffer);
 cy_en_canfd_status_t Cy_CANFD_GetFIFOTop(CANFD_Type const *base, uint32_t chan,
-        const uint8_t FIFONumber,
-        cy_stc_canfd_rx_buffer_t const *rxBuffer);
+                                          const uint8_t FIFONumber,
+                                          cy_stc_canfd_rx_buffer_t const *rxBuffer);
 cy_en_canfd_status_t Cy_CANFD_ExtractMsgFromRXBuffer(CANFD_Type *base, uint32_t chan, bool rxFIFOMsg,
-        uint8_t msgBufOrRxFIFONum,
-        cy_stc_canfd_rx_buffer_t const *rxBuffer,
-        cy_stc_canfd_context_t const *context);
+                                                     uint8_t msgBufOrRxFIFONum,
+                                                     cy_stc_canfd_rx_buffer_t const *rxBuffer,
+                                                     cy_stc_canfd_context_t const *context);
 void Cy_CANFD_AckRxBuf(CANFD_Type *base, uint32_t chan, uint32_t bufNum);
 void Cy_CANFD_AckRxFifo(CANFD_Type *base, uint32_t chan, uint32_t FIFOnumber);
 __STATIC_INLINE cy_en_canfd_status_t Cy_CANFD_ConfigChangesEnable(CANFD_Type *base, uint32_t chan);
@@ -1128,11 +1090,11 @@ cy_en_canfd_status_t Cy_CANFD_Init(CANFD_Type *base, uint32_t chan,
                                    cy_stc_canfd_context_t *context);
 cy_en_canfd_status_t Cy_CANFD_DeInit(CANFD_Type *base, uint32_t chan, cy_stc_canfd_context_t *context);
 cy_en_canfd_status_t Cy_CANFD_TransmitTxBuffer(CANFD_Type *base, uint32_t chan,
-        uint8_t index);
+                                                         uint8_t index);
 cy_en_canfd_status_t Cy_CANFD_UpdateAndTransmitMsgBuffer(CANFD_Type *base, uint32_t chan,
-        const cy_stc_canfd_tx_buffer_t *txBuffer,
-        uint8_t index,
-        cy_stc_canfd_context_t const *context);
+                                                         const cy_stc_canfd_tx_buffer_t *txBuffer,
+                                                         uint8_t index,
+                                                         cy_stc_canfd_context_t const *context);
 
 cy_en_canfd_tx_buffer_status_t Cy_CANFD_GetTxBufferStatus(CANFD_Type const *base, uint32_t chan, uint8_t index);
 
@@ -1151,7 +1113,7 @@ __STATIC_INLINE void Cy_CANFD_SetInterruptMask(CANFD_Type *base, uint32_t chan, 
 __STATIC_INLINE uint32_t Cy_CANFD_GetInterruptLine(CANFD_Type const *base, uint32_t chan);
 __STATIC_INLINE void Cy_CANFD_SetInterruptLine(CANFD_Type *base, uint32_t chan, uint32_t interruptLineMask);
 __STATIC_INLINE bool Cy_CANFD_IsInterruptLineEnabled(CANFD_Type const *base, uint32_t chan,
-        uint32_t interruptLineMask);
+                                                     uint32_t interruptLineMask);
 __STATIC_INLINE void Cy_CANFD_EnableInterruptLine(CANFD_Type *base, uint32_t chan, uint32_t interruptLineMask);
 
 /** \} group_canfd_functions */
@@ -1186,8 +1148,8 @@ __STATIC_INLINE void Cy_CANFD_Enable(CANFD_Type *base, uint32_t channelMask)
 
     /* Clock Start Request for the channels */
     CANFD_CTL(base) = _CLR_SET_FLD32U(CANFD_CTL(base),
-                                      CANFD_CTL_STOP_REQ,
-                                      ~channelMask);
+                                     CANFD_CTL_STOP_REQ,
+                                     ~channelMask);
 }
 
 
@@ -1221,12 +1183,12 @@ __STATIC_INLINE cy_en_canfd_status_t Cy_CANFD_Disable(CANFD_Type *base, uint32_t
 
     /* Clock Stop Request for the channels */
     CANFD_CTL(base) = _CLR_SET_FLD32U(CANFD_CTL(base),
-                                      CANFD_CTL_STOP_REQ,
-                                      channelMask);
+                                     CANFD_CTL_STOP_REQ,
+                                     channelMask);
 
     /* Wait for Clock Stop Acknowledge for the channel */
     while ((retry > 0UL) &&
-            !(channelMask == (channelMask & CANFD_STATUS(base))))
+           !(channelMask == (channelMask & CANFD_STATUS(base))))
     {
         Cy_SysLib_DelayUs(CY_CANFD_STOP_TIMEOUT_US);
         retry--;
@@ -1300,8 +1262,8 @@ __STATIC_INLINE cy_en_canfd_status_t Cy_CANFD_DisableMRAM(CANFD_Type *base)
 
     /* MRAM power down */
     CANFD_CTL(base) = _CLR_SET_FLD32U(CANFD_CTL(base),
-                                      CANFD_CTL_MRAM_OFF,
-                                      1UL);
+                                     CANFD_CTL_MRAM_OFF,
+                                     1UL);
 
     return ret;
 }
@@ -1344,9 +1306,9 @@ __STATIC_INLINE void Cy_CANFD_SetBitrate(CANFD_Type *base, uint32_t chan, const 
         CY_ASSERT_L2(CY_CANFD_IS_NOM_SYNC_JUMP_WIDTH_VALID(bitrate->syncJumpWidth));
 
         CANFD_NBTP(base, chan) = _VAL2FLD(CANFD_CH_M_TTCAN_NBTP_NTSEG2, bitrate->timeSegment2) |
-                                 _VAL2FLD(CANFD_CH_M_TTCAN_NBTP_NTSEG1, bitrate->timeSegment1) |
-                                 _VAL2FLD(CANFD_CH_M_TTCAN_NBTP_NBRP, bitrate->prescaler)      |
-                                 _VAL2FLD(CANFD_CH_M_TTCAN_NBTP_NSJW, bitrate->syncJumpWidth);
+                           _VAL2FLD(CANFD_CH_M_TTCAN_NBTP_NTSEG1, bitrate->timeSegment1) |
+                           _VAL2FLD(CANFD_CH_M_TTCAN_NBTP_NBRP, bitrate->prescaler)      |
+                           _VAL2FLD(CANFD_CH_M_TTCAN_NBTP_NSJW, bitrate->syncJumpWidth);
     }
 }
 
@@ -1391,10 +1353,10 @@ __STATIC_INLINE void Cy_CANFD_SetFastBitrate(CANFD_Type *base, uint32_t chan, co
 
         regValue = CANFD_DBTP(base, chan);  /* Get Data Bit Timing and Prescaler Register */
 
-        regValue &= ~(CANFD_CH_M_TTCAN_DBTP_DTSEG2_Msk |
-                      CANFD_CH_M_TTCAN_DBTP_DTSEG1_Msk |
-                      CANFD_CH_M_TTCAN_DBTP_DBRP_Msk   |
-                      CANFD_CH_M_TTCAN_DBTP_DSJW_Msk);
+        regValue &= ~ (CANFD_CH_M_TTCAN_DBTP_DTSEG2_Msk |
+                       CANFD_CH_M_TTCAN_DBTP_DTSEG1_Msk |
+                       CANFD_CH_M_TTCAN_DBTP_DBRP_Msk   |
+                       CANFD_CH_M_TTCAN_DBTP_DSJW_Msk);
 
         regValue |= _VAL2FLD(CANFD_CH_M_TTCAN_DBTP_DTSEG2, fastBitrate->timeSegment2) |
                     _VAL2FLD(CANFD_CH_M_TTCAN_DBTP_DTSEG1, fastBitrate->timeSegment1) |
@@ -1521,26 +1483,26 @@ __STATIC_INLINE void Cy_CANFD_TestModeConfig(CANFD_Type *base, uint32_t chan, cy
 {
     switch (testMode)
     {
-    case CY_CANFD_TEST_MODE_DISABLE:
-        CANFD_CCCR(base, chan) &= (uint32_t) ~(CANFD_CH_M_TTCAN_CCCR_TEST_Msk | /* Disable Test Mode */
-                                               CANFD_CH_M_TTCAN_CCCR_MON__Msk);  /* Disable Bus Monitoring Mode */
-        CANFD_TEST(base, chan) &= (uint32_t) ~CANFD_CH_M_TTCAN_TEST_LBCK_Msk;   /* Disable Loop Back Mode */
-        break;
-    case CY_CANFD_TEST_MODE_BUS_MONITORING:
-        CANFD_CCCR(base, chan) |= (CANFD_CH_M_TTCAN_CCCR_MON__Msk);  /* Enable Bus Monitoring Mode */
-        break;
-    case CY_CANFD_TEST_MODE_EXTERNAL_LOOP_BACK:
-        CANFD_CCCR(base, chan) |= CANFD_CH_M_TTCAN_CCCR_TEST_Msk;  /* Enable Test Mode */
-        CANFD_TEST(base, chan) |= CANFD_CH_M_TTCAN_TEST_LBCK_Msk;  /* Enable Loop Back Mode */
-        break;
-    case CY_CANFD_TEST_MODE_INTERNAL_LOOP_BACK:
-        CANFD_CCCR(base, chan) |= (CANFD_CH_M_TTCAN_CCCR_TEST_Msk |  /* Enable Test Mode */
-                                   CANFD_CH_M_TTCAN_CCCR_MON__Msk);  /* Enable Bus Monitoring Mode */
-        CANFD_TEST(base, chan) |= CANFD_CH_M_TTCAN_TEST_LBCK_Msk;  /* Enable Loop Back Mode */
-        break;
-    default:
-        /* Unsupported test mode */
-        break;
+        case CY_CANFD_TEST_MODE_DISABLE:
+            CANFD_CCCR(base, chan) &= (uint32_t) ~(CANFD_CH_M_TTCAN_CCCR_TEST_Msk | /* Disable Test Mode */
+                                            CANFD_CH_M_TTCAN_CCCR_MON__Msk);  /* Disable Bus Monitoring Mode */
+            CANFD_TEST(base, chan) &= (uint32_t) ~CANFD_CH_M_TTCAN_TEST_LBCK_Msk;   /* Disable Loop Back Mode */
+            break;
+        case CY_CANFD_TEST_MODE_BUS_MONITORING:
+            CANFD_CCCR(base, chan) |= (CANFD_CH_M_TTCAN_CCCR_MON__Msk);  /* Enable Bus Monitoring Mode */
+            break;
+        case CY_CANFD_TEST_MODE_EXTERNAL_LOOP_BACK:
+            CANFD_CCCR(base, chan) |= CANFD_CH_M_TTCAN_CCCR_TEST_Msk;  /* Enable Test Mode */
+            CANFD_TEST(base, chan) |= CANFD_CH_M_TTCAN_TEST_LBCK_Msk;  /* Enable Loop Back Mode */
+            break;
+        case CY_CANFD_TEST_MODE_INTERNAL_LOOP_BACK:
+            CANFD_CCCR(base, chan) |= (CANFD_CH_M_TTCAN_CCCR_TEST_Msk |  /* Enable Test Mode */
+                                 CANFD_CH_M_TTCAN_CCCR_MON__Msk);  /* Enable Bus Monitoring Mode */
+            CANFD_TEST(base, chan) |= CANFD_CH_M_TTCAN_TEST_LBCK_Msk;  /* Enable Loop Back Mode */
+            break;
+        default:
+            /* Unsupported test mode */
+            break;
     }
 }
 
@@ -1571,12 +1533,12 @@ __STATIC_INLINE void Cy_CANFD_SetTDC(CANFD_Type *base, uint32_t chan,
 
         /* Transceiver Delay Compensation is enabled or disabled */
         CANFD_DBTP(base, chan) = _CLR_SET_FLD32U(CANFD_DBTP(base, chan),
-                                 CANFD_CH_M_TTCAN_DBTP_TDC,
-                                 ((tdcConfig->tdcEnabled) ? 1UL : 0UL));
+                                         CANFD_CH_M_TTCAN_DBTP_TDC,
+                                         ((tdcConfig->tdcEnabled) ? 1UL : 0UL));
 
         /* Transmitter Delay Compensation Offset and Filter Window Length */
         CANFD_TDCR(base, chan) = _VAL2FLD(CANFD_CH_M_TTCAN_TDCR_TDCO, tdcConfig->tdcOffset) |
-                                 _VAL2FLD(CANFD_CH_M_TTCAN_TDCR_TDCF, tdcConfig->tdcFilterWindow);
+                           _VAL2FLD(CANFD_CH_M_TTCAN_TDCR_TDCF, tdcConfig->tdcFilterWindow);
     }
 }
 
@@ -1787,7 +1749,7 @@ __STATIC_INLINE void Cy_CANFD_SetInterruptLine(CANFD_Type *base, uint32_t chan, 
 *
 *******************************************************************************/
 __STATIC_INLINE bool Cy_CANFD_IsInterruptLineEnabled(CANFD_Type const *base, uint32_t chan,
-        uint32_t interruptLineMask)
+                                                     uint32_t interruptLineMask)
 {
     return (interruptLineMask == (CANFD_ILE(base, chan) & interruptLineMask));
 }

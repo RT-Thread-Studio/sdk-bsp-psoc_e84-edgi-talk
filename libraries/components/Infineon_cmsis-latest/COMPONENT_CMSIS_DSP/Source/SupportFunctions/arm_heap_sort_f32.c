@@ -34,24 +34,24 @@
 static void arm_heapify(float32_t * pSrc, uint32_t n, uint32_t i, uint8_t dir)
 {
     /* Put all the elements of pSrc in heap order */
-    uint32_t k = i; // Initialize largest/smallest as root
-    uint32_t l = 2 * i + 1; // left = 2*i + 1
-    uint32_t r = 2 * i + 2; // right = 2*i + 2
+    uint32_t k = i; // Initialize largest/smallest as root 
+    uint32_t l = 2*i + 1; // left = 2*i + 1 
+    uint32_t r = 2*i + 2; // right = 2*i + 2 
     float32_t temp;
 
-    if (l < n && dir == (pSrc[l] > pSrc[k]))
-        k = l;
+    if (l < n && dir==(pSrc[l] > pSrc[k]) )
+        k = l; 
 
-    if (r < n && dir == (pSrc[r] > pSrc[k]))
-        k = r;
+    if (r < n && dir==(pSrc[r] > pSrc[k]) )
+        k = r; 
 
-    if (k != i)
-    {
-        temp = pSrc[i];
-        pSrc[i] = pSrc[k];
-        pSrc[k] = temp;
+    if (k != i) 
+    { 
+	temp = pSrc[i];
+	pSrc[i]=pSrc[k];
+	pSrc[k]=temp;
 
-        arm_heapify(pSrc, n, k, dir);
+        arm_heapify(pSrc, n, k, dir); 
     }
 }
 
@@ -73,45 +73,45 @@ static void arm_heapify(float32_t * pSrc, uint32_t n, uint32_t i, uint8_t dir)
    *
    * @par        Algorithm
    *               The heap sort algorithm is a comparison algorithm that
-   *               divides the input array into a sorted and an unsorted region,
-   *               and shrinks the unsorted region by extracting the largest
-   *               element and moving it to the sorted region. A heap data
+   *               divides the input array into a sorted and an unsorted region, 
+   *               and shrinks the unsorted region by extracting the largest 
+   *               element and moving it to the sorted region. A heap data 
    *               structure is used to find the maximum.
    *
    * @par          It's an in-place algorithm. In order to obtain an out-of-place
    *               function, a memcpy of the source vector is performed.
    */
-void arm_heap_sort_f32(
-    const arm_sort_instance_f32 * S,
-    float32_t *pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_heap_sort_f32(
+  const arm_sort_instance_f32 * S, 
+        float32_t * pSrc, 
+        float32_t * pDst, 
+        uint32_t blockSize)
 {
-    float32_t *pA;
+    float32_t * pA;
     int32_t i;
     float32_t temp;
 
-    if (pSrc != pDst) // out-of-place
-    {
-        memcpy(pDst, pSrc, blockSize * sizeof(float32_t));
+    if(pSrc != pDst) // out-of-place
+    {   
+        memcpy(pDst, pSrc, blockSize*sizeof(float32_t) );
         pA = pDst;
     }
     else
         pA = pSrc;
 
     // Build the heap array so that the largest value is the root
-    for (i = blockSize / 2 - 1; i >= 0; i--)
-        arm_heapify(pA, blockSize, i, S->dir);
+    for (i = blockSize/2 - 1; i >= 0; i--) 
+        arm_heapify(pA, blockSize, i, S->dir); 
 
     for (i = blockSize - 1; i >= 0; i--)
     {
         // Swap
-        temp = pA[i];
-        pA[i] = pA[0];
+	temp = pA[i];
+	pA[i] = pA[0];
         pA[0] = temp;
 
         // Restore heap order
-        arm_heapify(pA, i, 0, S->dir);
+	arm_heapify(pA, i, 0, S->dir);
     }
 }
 /**

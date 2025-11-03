@@ -114,8 +114,8 @@ enum ethosu_error_codes ethosu_dev_soft_reset(struct ethosu_device *dev);
  * \return                     \ref ethosu_error_codes
  */
 enum ethosu_error_codes ethosu_dev_set_clock_and_power(struct ethosu_device *dev,
-        enum ethosu_clock_q_request clock_q,
-        enum ethosu_power_q_request power_q);
+                                                       enum ethosu_clock_q_request clock_q,
+                                                       enum ethosu_power_q_request power_q);
 
 /**
  * Verifies that optimizer parameters from model are compatible with the hardware

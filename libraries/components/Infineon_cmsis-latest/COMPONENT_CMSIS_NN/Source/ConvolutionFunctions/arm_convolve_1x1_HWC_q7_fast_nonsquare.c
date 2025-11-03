@@ -79,25 +79,25 @@
  */
 
 arm_status arm_convolve_1x1_HWC_q7_fast_nonsquare(const q7_t *Im_in,
-        const uint16_t dim_im_in_x,
-        const uint16_t dim_im_in_y,
-        const uint16_t ch_im_in,
-        const q7_t *wt,
-        const uint16_t ch_im_out,
-        const uint16_t dim_kernel_x,
-        const uint16_t dim_kernel_y,
-        const uint16_t padding_x,
-        const uint16_t padding_y,
-        const uint16_t stride_x,
-        const uint16_t stride_y,
-        const q7_t *bias,
-        const uint16_t bias_shift,
-        const uint16_t out_shift,
-        q7_t *Im_out,
-        const uint16_t dim_im_out_x,
-        const uint16_t dim_im_out_y,
-        q15_t *bufferA,
-        q7_t *bufferB)
+                                                  const uint16_t dim_im_in_x,
+                                                  const uint16_t dim_im_in_y,
+                                                  const uint16_t ch_im_in,
+                                                  const q7_t *wt,
+                                                  const uint16_t ch_im_out,
+                                                  const uint16_t dim_kernel_x,
+                                                  const uint16_t dim_kernel_y,
+                                                  const uint16_t padding_x,
+                                                  const uint16_t padding_y,
+                                                  const uint16_t stride_x,
+                                                  const uint16_t stride_y,
+                                                  const q7_t *bias,
+                                                  const uint16_t bias_shift,
+                                                  const uint16_t out_shift,
+                                                  q7_t *Im_out,
+                                                  const uint16_t dim_im_out_x,
+                                                  const uint16_t dim_im_out_y,
+                                                  q15_t *bufferA,
+                                                  q7_t *bufferB)
 {
     (void)bufferB;
 #if defined(ARM_MATH_DSP)
@@ -115,7 +115,7 @@ arm_status arm_convolve_1x1_HWC_q7_fast_nonsquare(const q7_t *Im_in,
     q7_t *pOut = Im_out;
 
     if (ch_im_in % 4 != 0 || ch_im_out % 2 != 0 || dim_kernel_x != 1 || dim_kernel_y != 1 || padding_x != 0 ||
-            padding_y != 0 || stride_x != 1 || stride_y != 1)
+        padding_y != 0 || stride_x != 1 || stride_y != 1)
     {
         /* check if the input dimension meets the constraints */
         return ARM_MATH_SIZE_MISMATCH;
@@ -133,7 +133,7 @@ arm_status arm_convolve_1x1_HWC_q7_fast_nonsquare(const q7_t *Im_in,
             if (pBuffer == bufferA + 2 * ch_im_in * dim_kernel_x * dim_kernel_y)
             {
                 pOut = arm_nn_mat_mult_kernel_q7_q15_reordered(
-                           wt, bufferA, ch_im_out, ch_im_in, bias_shift, out_shift, bias, pOut);
+                    wt, bufferA, ch_im_out, ch_im_in, bias_shift, out_shift, bias, pOut);
                 /* counter reset */
                 pBuffer = bufferA;
             }
@@ -188,7 +188,7 @@ arm_status arm_convolve_1x1_HWC_q7_fast_nonsquare(const q7_t *Im_in,
     int in_row, in_col;
 
     if (ch_im_in % 4 != 0 || ch_im_out % 2 != 0 || dim_kernel_x != 1 || dim_kernel_y != 1 || padding_x != 0 ||
-            padding_y != 0 || stride_x != 1 || stride_y != 1)
+        padding_y != 0 || stride_x != 1 || stride_y != 1)
     {
         /* check if the input dimension meets the constraints */
         return ARM_MATH_SIZE_MISMATCH;
@@ -213,8 +213,8 @@ arm_status arm_convolve_1x1_HWC_q7_fast_nonsquare(const q7_t *Im_in,
                             for (l = 0; l < ch_im_in; l++)
                             {
                                 conv_out += Im_in[(in_row * dim_im_in_x + in_col) * ch_im_in + l] *
-                                            wt[i * ch_im_in * dim_kernel_y * dim_kernel_x + (m * dim_kernel_y + n) * ch_im_in +
-                                               l];
+                                    wt[i * ch_im_in * dim_kernel_y * dim_kernel_x + (m * dim_kernel_y + n) * ch_im_in +
+                                       l];
                             }
                         }
                     }

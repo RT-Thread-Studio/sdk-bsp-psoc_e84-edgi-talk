@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ns_5fpriv_5fattribute_0',['ns_priv_attribute',['../group__platform__ppc.html#a10e2f765081a451fc4e15c1ab673c8be',1,'ifx_se_ppc_config_t']]]
+  ['mpc_5fconfig_0',['mpc_config',['../group__platform__mpc.html#a7c8eb9cdd786984c4a3c9361a0f37a7e',1,'ifx_se_mpc_rot_cfg_crc_t']]]
 ];

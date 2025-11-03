@@ -267,11 +267,11 @@ arm_status arm_fully_connected_q7_opt(const q7_t *pV,
                      "subs %[colCnt], #1\n"
                      "bne COL_LOOP_%=\n"
                      : [ sum ] "+r"(sum),
-                     [ sum2 ] "+r"(sum2),
-                     [ sum3 ] "+r"(sum3),
-                     [ sum4 ] "+r"(sum4),
-                     [ pB ] "+r"(pB),
-                     [ pA ] "+r"(pA)
+                       [ sum2 ] "+r"(sum2),
+                       [ sum3 ] "+r"(sum3),
+                       [ sum4 ] "+r"(sum4),
+                       [ pB ] "+r"(pB),
+                       [ pA ] "+r"(pA)
                      : [ colCnt ] "r"(colCnt)
                      : "r0", "r1", "r2", "r3", "r4");
 #else
@@ -305,11 +305,11 @@ arm_status arm_fully_connected_q7_opt(const q7_t *pV,
                      "subs %[colCnt], #1\n"
                      "bne COL_LOOP_%=\n"
                      : [ sum ] "+r"(sum),
-                     [ sum2 ] "+r"(sum2),
-                     [ sum3 ] "+r"(sum3),
-                     [ sum4 ] "+r"(sum4),
-                     [ pB ] "+r"(pB),
-                     [ pA ] "+r"(pA)
+                       [ sum2 ] "+r"(sum2),
+                       [ sum3 ] "+r"(sum3),
+                       [ sum4 ] "+r"(sum4),
+                       [ pB ] "+r"(pB),
+                       [ pA ] "+r"(pA)
                      : [ colCnt ] "r"(colCnt)
                      : "r0", "r1", "r2", "r3", "r4");
 #endif /* ARM_MATH_BIG_ENDIAN */

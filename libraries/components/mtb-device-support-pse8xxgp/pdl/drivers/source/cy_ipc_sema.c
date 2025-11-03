@@ -35,8 +35,18 @@
 /* Defines a mask to Check if semaphore count is a multiple of 32 */
 #define CY_IPC_SEMA_PER_WORD_MASK    (CY_IPC_SEMA_PER_WORD - 1UL)
 
-/* Pointer to IPC structure used for semaphores */
-static IPC_STRUCT_Type *cy_semaIpcStruct;
+/* Pointer to IPC channel structure used for semaphores. */
+static IPC_STRUCT_Type* cy_semaIpcStruct;
+#if defined(CY_PDL_TZ_ENABLED)
+/* In the secure world, we can't safely indirect through a pointer read from an
+ * IPC channel. So we store an entire copy of the semaphore data struct, and
+ * only use the IPC channel struct pointer for lock/release/notify operations */
+#if (CY_IPC_DRV_CACHE_PRESENT)
+static cy_stc_ipc_sema_t       cy_semaStruct CY_ALIGN(__SCB_DCACHE_LINE_SIZE);
+#else
+static cy_stc_ipc_sema_t       cy_semaStruct;
+#endif
+#endif
 
 
 /*******************************************************************************
@@ -48,15 +58,28 @@ static IPC_STRUCT_Type *cy_semaIpcStruct;
 * of semaphores will be the size of the array * 32. The total semaphores count
 * will always be a multiple of 32.
 *
+* Either this function or \ref Cy_IPC_Sema_InitExt must be called from each core
+* that will use IPC semaphores.
+*
 * \note In a multi-CPU system this init function should be called with all
 * initialized parameters on one CPU only to provide a pointer to SRAM that can
 * be shared between all the CPUs in the system that will use semaphores.
 * On other CPUs user must specify the IPC semaphores channel and pass 0 / NULL
 * to count and memPtr parameters correspondingly.
 *
+* If semaphores will be used from within a secure processing environment, the secure
+* processing environment must call either this function or \ref Cy_IPC_Sema_InitExt
+* with non-0 / NULL arguments, and it must do so before launching any other processing
+* environment.
+*
 * On cores that support DCache, user needs to make sure that the memPtr pointer passed
 * to the Cy_IPC_Sema_Init function points to 32 byte aligned array of words that contain
 * the semaphore data. User can use CY_ALIGN(32) macro for 32 byte alignment.
+*
+* If semaphores will be used from within a secure processing environment, the
+* secure processing environment must \ref Cy_IPC_Sema_InitExt with non-0 / NULL arguments.
+* This must be done even if this function or \ref Cy_IPC_Sema_InitExt was previously
+* called from another (non-secure) processing environment.
 *
 * \param ipcChannel
 * The IPC channel number used for semaphores
@@ -65,7 +88,8 @@ static IPC_STRUCT_Type *cy_semaIpcStruct;
 *  The maximum number of semaphores to be supported (multiple of 32).
 *
 * \param memPtr
-*  This points to the array of (count/32) words that contain the semaphore data.
+*  This points to the array of (count/32) words that contain the semaphore data. This must be located
+*  in memory which is accessible to all processing environments which will interact with semaphores
 *
 * \return Status of the operation
 *    \retval CY_IPC_SEMA_SUCCESS: Successfully initialized
@@ -89,28 +113,30 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Init(uint32_t ipcChannel,
 #endif
     cy_en_ipcsema_status_t retStatus = CY_IPC_SEMA_BAD_PARAM;
 
-    if ((NULL == memPtr) && (0u == count))
+    /* Secure device cannot trust a pointer from the NS world. It must always use its own */
+    #if !defined(CY_PDL_TZ_ENABLED)
+    if( (NULL == memPtr) && (0u == count))
     {
         cy_semaIpcStruct = Cy_IPC_Drv_GetIpcBaseAddress(ipcChannel);
 
         retStatus = CY_IPC_SEMA_SUCCESS;
     }
-
+    else
+    #endif
     /* Check for non Null pointers and count value */
-    else if ((NULL != memPtr) && (0u != count))
+    if ((NULL != memPtr) && (0u != count))
     {
         cy_semaData.maxSema  = count;
         cy_semaData.arrayPtr = memPtr;
 
         retStatus = Cy_IPC_Sema_InitExt(ipcChannel, &cy_semaData);
     }
-
     else
     {
         retStatus = CY_IPC_SEMA_BAD_PARAM;
     }
 
-    return (retStatus);
+    return(retStatus);
 }
 
 
@@ -122,17 +148,26 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Init(uint32_t ipcChannel,
 * of semaphores will be the size of the array * 32. The total semaphores count
 * will always be a multiple of 32.
 *
+* Either this function or \ref Cy_IPC_Sema_Init must be called from each core
+* that will use IPC semaphores.
+*
 * \note In a multi-CPU system this init function should be called with all
 * initialized parameters on one CPU only to provide a pointer to SRAM that can
 * be shared between all the CPUs in the system that will use semaphores.
 * On other CPUs user must specify the IPC semaphores channel and pass 0 / NULL
 * to count and memPtr parameters correspondingly.
 *
+* If semaphores will be used from within a secure processing environment, the
+* secure processing environment must this function with non-0 / NULL arguments.
+* This must be done even if this function or \ref Cy_IPC_Sema_Init was previously
+* called from another (non-secure) processing environment.
+*
 * \param ipcChannel
 * The IPC channel number used for semaphores
 *
 * \param ipcSema
-*  This is configuration structure of the IPC semaphore.
+*  This is configuration structure of the IPC semaphore. This struct must be located in memory
+*  which is accessible to all processing environments which will interact with semaphores.
 *  See \ref cy_stc_ipc_sema_t.
 *
 * \return Status of the operation
@@ -145,25 +180,24 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Init(uint32_t ipcChannel,
 cy_en_ipcsema_status_t Cy_IPC_Sema_InitExt(uint32_t ipcChannel, cy_stc_ipc_sema_t *ipcSema)
 {
     cy_en_ipcsema_status_t retStatus = CY_IPC_SEMA_BAD_PARAM;
-
     if (ipcChannel >= CY_IPC_CHANNELS)
     {
         retStatus = CY_IPC_SEMA_BAD_PARAM;
     }
     else
     {
-        if (NULL != ipcSema)
+        if(NULL != ipcSema)
         {
 #if (CY_IPC_DRV_CACHE_PRESENT)
             SCB_CleanDCache_by_Addr((uint32_t*)&ipcSema->maxSema, (int32_t)sizeof(ipcSema->maxSema));
 #endif /* (CY_IPC_DRV_CACHE_PRESENT) */
             /* Check if semaphore count is a multiple of 32 */
-            if (0UL == (ipcSema->maxSema & CY_IPC_SEMA_PER_WORD_MASK))
+            if( 0UL == (ipcSema->maxSema & CY_IPC_SEMA_PER_WORD_MASK))
             {
                 cy_semaIpcStruct = Cy_IPC_Drv_GetIpcBaseAddress(ipcChannel);
 
                 /* Initialize all semaphores to released */
-                for (uint32_t index = 0; index < (uint32_t)(ipcSema->maxSema / CY_IPC_SEMA_PER_WORD); index++)
+                for (uint32_t index=0; index<(uint32_t)(ipcSema->maxSema / CY_IPC_SEMA_PER_WORD); index++)
                 {
                     ipcSema->arrayPtr[index] = 0UL;
                 }
@@ -174,12 +208,12 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_InitExt(uint32_t ipcChannel, cy_stc_ipc_sema_
 
                 /* Make sure semaphores start out released.  */
                 /* Ignore the return value since it is OK if it was already released. */
-                (void) Cy_IPC_Drv_LockRelease(cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION);
+                (void) Cy_IPC_Drv_LockRelease (cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION);
 
-                /* Set the IPC Data with the pointer to the array. */
-                if (CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_SendMsgPtr(cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION, ipcSema))
+                 /* Set the IPC Data with the pointer to the array. */
+                if( CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_SendMsgPtr (cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION, ipcSema))
                 {
-                    if (CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockRelease(cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION))
+                    if(CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockRelease (cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION))
                     {
                         retStatus = CY_IPC_SEMA_SUCCESS;
                     }
@@ -206,8 +240,56 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_InitExt(uint32_t ipcChannel, cy_stc_ipc_sema_
         }
     }
 
-    return (retStatus);
+    #if defined(CY_PDL_TZ_ENABLED)
+    /* Cache the trustworthy values for usage in subsequent function calls. */
+    if (CY_IPC_SEMA_SUCCESS == retStatus)
+    {
+        memcpy(&cy_semaStruct, ipcSema, sizeof(cy_semaStruct));
+    }
+    else
+    {
+        memset(&cy_semaStruct, 0u, sizeof(cy_semaStruct));
+    }
+    #endif
+
+    return(retStatus);
 }
+
+/** \cond INTERNAL
+  * Internal helper: gets the raw number and array pointer to use for a given semaphore
+  */
+static inline cy_en_ipcsema_status_t _Cy_IPC_Sema_GetChannelAndStruct(uint32_t userSemaNum, uint32_t *rawSemaNum, cy_stc_ipc_sema_t** semaStruct)
+{
+    /* check cy_semaIpcStruct != NULL */
+    if (cy_semaIpcStruct == NULL)
+    {
+        return CY_IPC_SEMA_NOT_ACQUIRED;
+    }
+
+    if (NULL != rawSemaNum)
+    {
+        /* Get pointer to structure */
+        #if defined(CY_IPC_SECURE_SEMA_DEVICE)
+            *rawSemaNum = CY_IPC_SEMA_GET_NUM(userSemaNum);
+        #else
+            *rawSemaNum = userSemaNum;
+        #endif
+    }
+
+    #if defined(CY_PDL_TZ_ENABLED) /* We need to use the trustworthy pointers we cached locally */
+        *semaStruct = &cy_semaStruct;
+    #else
+        *semaStruct = (cy_stc_ipc_sema_t *)(GET_NSALIAS_ADDRESS(Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct)));
+    #endif
+
+    if (NULL == *semaStruct)
+    {
+        return CY_IPC_SEMA_NOT_ACQUIRED;
+    }
+
+    return CY_IPC_SEMA_SUCCESS;
+}
+/** \endcond */
 
 
 /*******************************************************************************
@@ -257,29 +339,17 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Set(uint32_t semaNumber, bool preemptable)
     uint32_t semaMask;
     uint32_t interruptState = 0UL;
 
-    cy_stc_ipc_sema_t      *semaStruct;
-    cy_en_ipcsema_status_t  retStatus = CY_IPC_SEMA_LOCKED;
+    cy_stc_ipc_sema_t *semaStruct = NULL;
     uint32_t *ptrArray;
-    uint32_t semaNum;
+    uint32_t semaNum = 0u;
 
-    /** check cy_semaIpcStruct != NULL */
-    if (cy_semaIpcStruct == NULL)
+    cy_en_ipcsema_status_t retStatus = _Cy_IPC_Sema_GetChannelAndStruct(semaNumber, &semaNum, &semaStruct);
+    if (CY_IPC_SEMA_SUCCESS != retStatus)
     {
-        return CY_IPC_SEMA_NOT_ACQUIRED;
+        return retStatus;
     }
 
-
-    /* Get pointer to structure */
-#if defined(CY_IPC_SECURE_SEMA_DEVICE)
-    semaNum = CY_IPC_SEMA_GET_NUM(semaNumber);
-    semaStruct = (cy_stc_ipc_sema_t *)(GET_ALIAS_ADDRESS(Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct)));
-#elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
-    semaNum = semaNumber;
-    semaStruct = (cy_stc_ipc_sema_t *)(GET_ALIAS_ADDRESS(Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct)));
-#else
-    semaNum = semaNumber;
-    semaStruct = (cy_stc_ipc_sema_t *)Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct);
-#endif
+    retStatus = CY_IPC_SEMA_LOCKED; /* Assume locked until we determine otherwise */
 
 #if (CY_IPC_DRV_CACHE_PRESENT)
     SCB_InvalidateDCache_by_Addr((uint32_t*)&semaStruct->maxSema, (int32_t)sizeof(semaStruct->maxSema));
@@ -288,14 +358,18 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Set(uint32_t semaNumber, bool preemptable)
     if (semaNum < semaStruct->maxSema)
     {
         semaIndex = semaNum / CY_IPC_SEMA_PER_WORD;
-        semaMask = (uint32_t)(1UL << (semaNum - (semaIndex * CY_IPC_SEMA_PER_WORD)));
-#if defined(CY_IPC_SECURE_SEMA_DEVICE)
-        ptrArray = CY_IPC_SEMA_IS_SEC(semaNumber) ? semaStruct->arrayPtr_sec : (uint32_t*)GET_ALIAS_ADDRESS(semaStruct->arrayPtr);
-#elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
-        ptrArray = (uint32_t*)GET_ALIAS_ADDRESS(semaStruct->arrayPtr);
-#else
+        semaMask = (uint32_t)(1UL << (semaNum - (semaIndex * CY_IPC_SEMA_PER_WORD) ));
+    #if defined(CY_IPC_SECURE_SEMA_DEVICE)
+        ptrArray = CY_IPC_SEMA_IS_SEC(semaNumber) ? semaStruct->arrayPtr_sec : (uint32_t*)GET_NSALIAS_ADDRESS(semaStruct->arrayPtr);
+    #elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
+        ptrArray = (uint32_t*)GET_NSALIAS_ADDRESS(semaStruct->arrayPtr);
+    #else
         ptrArray = semaStruct->arrayPtr;
-#endif
+    #endif
+        if (NULL == ptrArray)
+        {
+            return CY_IPC_SEMA_BAD_PARAM;
+        }
         if (!preemptable)
         {
             interruptState = Cy_SysLib_EnterCriticalSection();
@@ -303,13 +377,13 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Set(uint32_t semaNumber, bool preemptable)
 
         /* Check to make sure the IPC channel is released
            If so, check if specific channel can be locked. */
-        if (CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire(cy_semaIpcStruct))
+        if(CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire (cy_semaIpcStruct))
         {
 #if (CY_IPC_DRV_CACHE_PRESENT)
             SCB_InvalidateDCache_by_Addr((uint32_t*)ptrArray, (int32_t)sizeof(*ptrArray));
 #endif /* (CY_IPC_DRV_CACHE_PRESENT) */
 
-            if ((ptrArray[semaIndex] & semaMask) == 0UL)
+            if((ptrArray[semaIndex] & semaMask) == 0UL)
             {
                 ptrArray[semaIndex] |= semaMask;
 #if (CY_IPC_DRV_CACHE_PRESENT)
@@ -323,7 +397,7 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Set(uint32_t semaNumber, bool preemptable)
             }
 
             /* Release, but do not trigger a release event */
-            (void) Cy_IPC_Drv_LockRelease(cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION);
+            (void) Cy_IPC_Drv_LockRelease (cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION);
         }
 
         if (!preemptable)
@@ -336,7 +410,7 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Set(uint32_t semaNumber, bool preemptable)
         retStatus = CY_IPC_SEMA_OUT_OF_RANGE;
     }
 
-    return (retStatus);
+    return(retStatus);
 }
 
 
@@ -384,29 +458,17 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Clear(uint32_t semaNumber, bool preemptable)
     uint32_t semaMask;
     uint32_t interruptState = 0UL;
 
-    cy_stc_ipc_sema_t      *semaStruct;
-    cy_en_ipcsema_status_t  retStatus = CY_IPC_SEMA_LOCKED;
+    cy_stc_ipc_sema_t *semaStruct = NULL;
     uint32_t *ptrArray;
-    uint32_t semaNum;
+    uint32_t semaNum = 0u;
 
-    /** check cy_semaIpcStruct != NULL */
-    if (cy_semaIpcStruct == NULL)
+    cy_en_ipcsema_status_t retStatus = _Cy_IPC_Sema_GetChannelAndStruct(semaNumber, &semaNum, &semaStruct);
+    if (CY_IPC_SEMA_SUCCESS != retStatus)
     {
-        return CY_IPC_SEMA_NOT_ACQUIRED;
+        return retStatus;
     }
 
-
-    /* Get pointer to structure */
-#if defined(CY_IPC_SECURE_SEMA_DEVICE)
-    semaNum = CY_IPC_SEMA_GET_NUM(semaNumber);
-    semaStruct = (cy_stc_ipc_sema_t *)(GET_ALIAS_ADDRESS(Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct)));
-#elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
-    semaNum = semaNumber;
-    semaStruct = (cy_stc_ipc_sema_t *)(GET_ALIAS_ADDRESS(Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct)));
-#else
-    semaNum = semaNumber;
-    semaStruct = (cy_stc_ipc_sema_t *)Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct);
-#endif
+    retStatus = CY_IPC_SEMA_LOCKED; /* Assume locked until we determine otherwise */
 
 #if (CY_IPC_DRV_CACHE_PRESENT)
     SCB_InvalidateDCache_by_Addr((uint32_t*)&semaStruct->maxSema, (int32_t)sizeof(semaStruct->maxSema));
@@ -415,15 +477,20 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Clear(uint32_t semaNumber, bool preemptable)
     if (semaNum < semaStruct->maxSema)
     {
         semaIndex = semaNum / CY_IPC_SEMA_PER_WORD;
-        semaMask = (uint32_t)(1UL << (semaNum - (semaIndex * CY_IPC_SEMA_PER_WORD)));
-#if defined(CY_IPC_SECURE_SEMA_DEVICE)
-        ptrArray = CY_IPC_SEMA_IS_SEC(semaNumber) ? semaStruct->arrayPtr_sec : (uint32_t*)GET_ALIAS_ADDRESS(semaStruct->arrayPtr);
-#elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
-        ptrArray = (uint32_t*)GET_ALIAS_ADDRESS(semaStruct->arrayPtr);
-#else
-        ptrArray = semaStruct->arrayPtr;
-#endif
+        semaMask = (uint32_t)(1UL << (semaNum - (semaIndex * CY_IPC_SEMA_PER_WORD) ));
 
+    #if defined(CY_IPC_SECURE_SEMA_DEVICE)
+        ptrArray = CY_IPC_SEMA_IS_SEC(semaNumber) ? semaStruct->arrayPtr_sec : (uint32_t*)GET_NSALIAS_ADDRESS(semaStruct->arrayPtr);
+    #elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
+        ptrArray = (uint32_t*)GET_NSALIAS_ADDRESS(semaStruct->arrayPtr);
+    #else
+        ptrArray = semaStruct->arrayPtr;
+    #endif
+
+        if (NULL == ptrArray)
+        {
+            return CY_IPC_SEMA_BAD_PARAM;
+        }
         if (!preemptable)
         {
             interruptState = Cy_SysLib_EnterCriticalSection();
@@ -431,12 +498,12 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Clear(uint32_t semaNumber, bool preemptable)
 
         /* Check to make sure the IPC channel is released
            If so, check if specific channel can be locked. */
-        if (CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire(cy_semaIpcStruct))
+        if(CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire (cy_semaIpcStruct))
         {
 #if (CY_IPC_DRV_CACHE_PRESENT)
             SCB_InvalidateDCache_by_Addr((uint32_t*)ptrArray, (int32_t)sizeof(*ptrArray));
 #endif /* (CY_IPC_DRV_CACHE_PRESENT) */
-            if ((ptrArray[semaIndex] & semaMask) != 0UL)
+            if((ptrArray[semaIndex] & semaMask) != 0UL)
             {
                 ptrArray[semaIndex] &= ~semaMask;
 #if (CY_IPC_DRV_CACHE_PRESENT)
@@ -450,7 +517,7 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Clear(uint32_t semaNumber, bool preemptable)
             }
 
             /* Release, but do not trigger a release event */
-            (void) Cy_IPC_Drv_LockRelease(cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION);
+            (void) Cy_IPC_Drv_LockRelease (cy_semaIpcStruct, CY_IPC_NO_NOTIFICATION);
         }
 
         if (!preemptable)
@@ -462,7 +529,7 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Clear(uint32_t semaNumber, bool preemptable)
     {
         retStatus = CY_IPC_SEMA_OUT_OF_RANGE;
     }
-    return (retStatus);
+    return(retStatus);
 }
 
 
@@ -490,31 +557,19 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Clear(uint32_t semaNumber, bool preemptable)
 *******************************************************************************/
 cy_en_ipcsema_status_t Cy_IPC_Sema_Status(uint32_t semaNumber)
 {
-    cy_en_ipcsema_status_t   retStatus;
     uint32_t semaIndex;
     uint32_t semaMask;
-    cy_stc_ipc_sema_t      *semaStruct;
+    cy_stc_ipc_sema_t *semaStruct = NULL;
     uint32_t *ptrArray;
-    uint32_t semaNum;
+    uint32_t semaNum = 0u;
 
-    /** check cy_semaIpcStruct != NULL */
-    if (cy_semaIpcStruct == NULL)
+    cy_en_ipcsema_status_t retStatus = _Cy_IPC_Sema_GetChannelAndStruct(semaNumber, &semaNum, &semaStruct);
+    if (CY_IPC_SEMA_SUCCESS != retStatus)
     {
-        return CY_IPC_SEMA_NOT_ACQUIRED;
+        return retStatus;
     }
 
-
-    /* Get pointer to structure */
-#if defined(CY_IPC_SECURE_SEMA_DEVICE)
-    semaNum = CY_IPC_SEMA_GET_NUM(semaNumber);
-    semaStruct = (cy_stc_ipc_sema_t *)(GET_ALIAS_ADDRESS(Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct)));
-#elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
-    semaNum = semaNumber;
-    semaStruct = (cy_stc_ipc_sema_t *)(GET_ALIAS_ADDRESS(Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct)));
-#else
-    semaNum = semaNumber;
-    semaStruct = (cy_stc_ipc_sema_t *)Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct);
-#endif
+    retStatus = CY_IPC_SEMA_LOCKED; /* Assume locked until we determine otherwise */
 
 #if (CY_IPC_DRV_CACHE_PRESENT)
     SCB_InvalidateDCache_by_Addr((uint32_t*)&semaStruct->maxSema, (int32_t)sizeof(semaStruct->maxSema));
@@ -524,20 +579,24 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Status(uint32_t semaNumber)
     {
         /* Get the index into the semaphore array and calculate the mask */
         semaIndex = semaNum / CY_IPC_SEMA_PER_WORD;
-        semaMask = (uint32_t)(1UL << (semaNum - (semaIndex * CY_IPC_SEMA_PER_WORD)));
-#if defined(CY_IPC_SECURE_SEMA_DEVICE)
-        ptrArray = CY_IPC_SEMA_IS_SEC(semaNumber) ? semaStruct->arrayPtr_sec : (uint32_t*)GET_ALIAS_ADDRESS(semaStruct->arrayPtr);
-#elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
-        ptrArray = (uint32_t*)GET_ALIAS_ADDRESS(semaStruct->arrayPtr);
-#else
+        semaMask = (uint32_t)(1UL << (semaNum - (semaIndex * CY_IPC_SEMA_PER_WORD) ));
+    #if defined(CY_IPC_SECURE_SEMA_DEVICE)
+        ptrArray = CY_IPC_SEMA_IS_SEC(semaNumber) ? semaStruct->arrayPtr_sec : (uint32_t*)GET_NSALIAS_ADDRESS(semaStruct->arrayPtr);
+    #elif defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
+        ptrArray = (uint32_t*)GET_NSALIAS_ADDRESS(semaStruct->arrayPtr);
+    #else
         ptrArray = semaStruct->arrayPtr;
-#endif
+    #endif
+        if (NULL == ptrArray)
+        {
+            return CY_IPC_SEMA_BAD_PARAM;
+        }
 
 #if (CY_IPC_DRV_CACHE_PRESENT)
         SCB_InvalidateDCache_by_Addr((uint32_t*)ptrArray, (int32_t)sizeof(*ptrArray));
 #endif /* (CY_IPC_DRV_CACHE_PRESENT) */
 
-        if ((ptrArray[semaIndex] & semaMask) != 0UL)
+        if((ptrArray[semaIndex] & semaMask) != 0UL)
         {
             retStatus =  CY_IPC_SEMA_STATUS_LOCKED;
         }
@@ -550,7 +609,7 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Status(uint32_t semaNumber)
     {
         retStatus = CY_IPC_SEMA_OUT_OF_RANGE;
     }
-    return (retStatus);
+    return(retStatus);
 }
 
 
@@ -569,14 +628,14 @@ cy_en_ipcsema_status_t Cy_IPC_Sema_Status(uint32_t semaNumber)
 *******************************************************************************/
 uint32_t Cy_IPC_Sema_GetMaxSems(void)
 {
-    cy_stc_ipc_sema_t      *semaStruct;
+    cy_stc_ipc_sema_t      *semaStruct = NULL;
+    cy_en_ipcsema_status_t  retStatus  = _Cy_IPC_Sema_GetChannelAndStruct(0u, NULL, &semaStruct);
+    if (CY_IPC_SEMA_SUCCESS != retStatus)
+    {
+        CY_ASSERT(false);
+        return 0u;
+    }
 
-    /* Get pointer to structure */
-#if defined(__SAUREGION_PRESENT) && (__SAUREGION_PRESENT==1)
-    semaStruct = (cy_stc_ipc_sema_t *)(GET_ALIAS_ADDRESS(Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct)));
-#else
-    semaStruct = (cy_stc_ipc_sema_t *)Cy_IPC_Drv_ReadDataValue(cy_semaIpcStruct);
-#endif
 #if (CY_IPC_DRV_CACHE_PRESENT)
     SCB_InvalidateDCache_by_Addr((uint32_t*)&semaStruct->maxSema, (int32_t)sizeof(semaStruct->maxSema));
 #endif /* (CY_IPC_DRV_CACHE_PRESENT) */

@@ -30,11 +30,10 @@
 
 #include "viv_dc_type.h"
 #if !_BAREMETAL
-    #include "FreeRTOS.h"
-    #include "task.h"
+#include "FreeRTOS.h"
+#include "task.h"
 #endif
-typedef struct _viv_dc_os
-{
+typedef struct _viv_dc_os {
     gctUINT irq;
     gctSIZE_T reg_phys_addr;
 } viv_dc_os;
@@ -44,170 +43,170 @@ typedef struct _viv_dc_os
 /***********************************/
 gctINT viv_dc_device_init(
     gctVOID
-);
+    );
 
 gctVOID viv_dc_device_deinit(
     gctVOID
-);
+    );
 
 gctINT viv_dc_device_call(
     gctPOINTER args
-);
+    );
 
 gctINT viv_dc_platform_init(
     gctPOINTER args
-);
+    );
 
 gctVOID viv_dc_platform_deinit(
     gctPOINTER args
-);
+    );
 
 vivSTATUS viv_os_devmem_open(
     gctVOID
-);
+    );
 
 vivSTATUS viv_os_devmem_close(
     gctVOID
-);
+    );
 
 vivSTATUS viv_os_get_dev_mem(
     gctUINT32 size,
     gctUINT32 *physical,
     gctPOINTER *logical
-);
+    );
 
 vivSTATUS viv_os_free_dev_mem(
     gctVOID
-);
+    );
 
 gctPOINTER viv_os_mem_alloc(
     gctSIZE_T size
-);
+    );
 
 gctVOID viv_os_mem_free(
     gctPOINTER addr
-);
+    );
 
 gctPOINTER viv_os_memset(
     viv_dc_os *os,
     gctPOINTER addr,
     gctINT value,
     gctSIZE_T num
-);
+    );
 
 gctPOINTER viv_os_memcpy(
     gctPOINTER dst,
     gctPOINTER src,
     gctSIZE_T num
-);
+    );
 
 gctINT viv_os_memcmp(
     gctCHAR *s1,
     gctCHAR *s2,
     gctSIZE_T n
-);
+    );
 
 gctPOINTER dc_os_memcpy(
     gctPOINTER dst,
     gctPOINTER src,
     gctSIZE_T num
-);
+    );
 
 gctPOINTER viv_os_file_open(
     gctCHAR* path,
     gctINT type
-);
+    );
 
 gctINT viv_os_file_close(
     gctPOINTER p
-);
+    );
 
 gctSIZE_T viv_os_file_read(
     gctPOINTER ptr,
     gctSIZE_T size,
     gctPOINTER p
-);
+    );
 
 gctUINT16 viv_os_file_read_word(
     gctPOINTER p
-);
+    );
 
 gctUINT8 viv_os_file_read_byte(
     gctPOINTER p
-);
+    );
 
 gctUINT32 viv_os_file_read_dword(
     gctPOINTER p
-);
+    );
 
 gctINT viv_os_file_read_long(
     gctPOINTER p
-);
+    );
 
 gctINT viv_os_file_write(
     gctPOINTER ptr,
     gctSIZE_T size,
     gctPOINTER p
-);
+    );
 
 gctINT dc_os_file_write_word(
     gctPOINTER p,
     gctUINT16 w
-);
+    );
 
 gctINT dc_os_file_write_dword(
     gctPOINTER p,
     gctUINT32 dw
-);
+    );
 
 gctINT dc_os_file_write_long(
     gctPOINTER p,
     gctINT l)
-;
+    ;
 
 gctINT viv_os_file_seek(
     gctPOINTER p,
     gctSIZE_T offset,
     gctBOOL end
-);
+    );
 
 gctUINT dc_os_file_tell(
     gctPOINTER p
-);
+    );
 
 gctUINT8_PTR viv_os_fgets(
     gctPOINTER Buffer,
     gctUINT32 BufferLen,
     gctPOINTER File
-);
+    );
 
 gctINT viv_os_fputs(
     gctPOINTER line,
     gctPOINTER file
-);
+    );
 
 gctINT viv_os_feof(
     gctPOINTER file
-);
+    );
 
 gctVOID viv_os_print(
     gctCHAR *message,
     ...
-);
+    );
 
 gctVOID viv_os_sprint(
     gctCHAR *str,
     gctCHAR *message,
     ...
-);
+    );
 gctVOID viv_os_fprint(
     gctPOINTER fp,
     gctCHAR *message,
     ...
-);
+    );
 gctVOID viv_os_sleep(
     gctUINT32 Delay
-);
+    );
 
 gctPOINTER
 viv_os_create_window(
@@ -216,7 +215,7 @@ viv_os_create_window(
     gctUINT32 Width,
     gctUINT32 Height,
     gctPOINTER * Window
-);
+    );
 
 vivSTATUS
 viv_os_window_draw_image(
@@ -229,34 +228,34 @@ viv_os_window_draw_image(
     gctINT Height,
     gctINT BitsPerPixel,
     gctPOINTER Bits
-);
+    );
 
 gctUINT viv_os_read_reg(
     viv_dc_os *os,
     gctUINT addr
-);
+    );
 
 gctVOID viv_os_write_reg(
     viv_dc_os *os,
     gctUINT addr,
     gctUINT data
-);
+    );
 
 gctUINT viv_os_get_page_count(
     gctUINT size,
     gctUINT offset
-);
+    );
 
 vivSTATUS viv_os_alloc_memory(
     viv_dc_os *os,
     gctUINT bytes,
     gctPOINTER *memory
-);
+    );
 
 vivSTATUS viv_os_free_memory(
     viv_dc_os *os,
     gctPOINTER memory
-);
+    );
 
 vivSTATUS viv_os_alloc_buffer(
     viv_dc_os *os,
@@ -265,11 +264,11 @@ vivSTATUS viv_os_alloc_buffer(
     gctPOINTER *Logical,
     gctADDRESS *Physical,
     viv_pool_type *Pool
-);
+    );
 
 vivSTATUS viv_os_free_buffer(
     viv_dc_os *os,
     gctPOINTER Handle
-);
+    );
 
 #endif

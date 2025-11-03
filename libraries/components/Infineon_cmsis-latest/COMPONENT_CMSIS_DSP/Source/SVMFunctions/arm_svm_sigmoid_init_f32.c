@@ -61,29 +61,28 @@
  * @param[in]    classes                Array of 2 classes ID
  * @param[in]    coef0                  coeff0 (scikit-learn terminology)
  * @param[in]    gamma                  gamma (scikit-learn terminology)
- * @return none.
  *
  */
 
-void arm_svm_sigmoid_init_f32(arm_svm_sigmoid_instance_f32 *S,
-                              uint32_t nbOfSupportVectors,
-                              uint32_t vectorDimension,
-                              float32_t intercept,
-                              const float32_t *dualCoefficients,
-                              const float32_t *supportVectors,
-                              const int32_t *classes,
-                              float32_t coef0,
-                              float32_t gamma
-                             )
+ARM_DSP_ATTRIBUTE void arm_svm_sigmoid_init_f32(arm_svm_sigmoid_instance_f32 *S, 
+  uint32_t nbOfSupportVectors,
+  uint32_t vectorDimension,
+  float32_t intercept,
+  const float32_t *dualCoefficients,
+  const float32_t *supportVectors,
+  const int32_t *classes,
+  float32_t coef0,
+  float32_t gamma
+  )
 {
-    S->nbOfSupportVectors = nbOfSupportVectors;
-    S->vectorDimension = vectorDimension;
-    S->intercept = intercept;
-    S->dualCoefficients = dualCoefficients;
-    S->supportVectors = supportVectors;
-    S->classes = classes;
-    S->coef0 = coef0;
-    S->gamma = gamma;
+   S->nbOfSupportVectors = nbOfSupportVectors;
+   S->vectorDimension = vectorDimension;
+   S->intercept = intercept;
+   S->dualCoefficients = dualCoefficients;
+   S->supportVectors = supportVectors;
+   S->classes = classes;
+   S->coef0 = coef0;
+   S->gamma = gamma;
 }
 
 

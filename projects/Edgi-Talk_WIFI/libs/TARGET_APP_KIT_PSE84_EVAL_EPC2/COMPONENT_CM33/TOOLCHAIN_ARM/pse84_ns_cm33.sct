@@ -10,14 +10,15 @@
 * input files should be mapped into the output file, and to control the memory
 * layout of the output file.
 *
-* \note The entry point location starts at 0x14000000. The valid
-* application image should be placed there.
 *
-* \note The linker files included with the PDL template projects must be generic
-* and handle all common use cases. Your project may not use every section
-* defined in the linker files. In that case you may see warnings during the
-* build process. In your project, you can simply comment out or remove the
-* relevant code in the linker file.
+* \note The linker files included with the PDL template projects must be
+* generic and handle all common use cases. Your project may not use every
+* section defined in the linker files. In that case you may see the warnings
+* during the build process: L6314W (no section matches pattern) and/or L6329W
+* (pattern only matches removed unused sections). In your project, you can
+* suppress the warning by passing the "--diag_suppress=L6314W,L6329W" option to
+* the linker, simply comment out or remove the relevant code in the linker
+* file.
 *
 ********************************************************************************
 * \copyright
@@ -42,7 +43,7 @@
 #include "../../config/GeneratedSource/cymem_armlink_CM33_0.sct"
 
 /* Define the stack size for the application */
-/* To set stack size in application add makefile ldflags: --predefine="-DAPP_MSP_STACK_SIZE=0x2000" */
+/* To set stack size in application add makefile ldflags: --predefine="-DAPP_MSP_STACK_SIZE=<CUSTOM_VALUE>" */
 #ifdef APP_MSP_STACK_SIZE
 #define __STACK_SIZE    APP_MSP_STACK_SIZE
 #else
@@ -52,56 +53,54 @@
 /* User Stack & Heap boundary definition */
 /* Place the top of the stack at the end of the m33_data */
 #define __STACK_TOP    (CYMEM_CM33_0_m33_data_START + CYMEM_CM33_0_m33_data_SIZE)
-/* Position the beginning of the heap right after the noinit ER, ensuring an 8-byte alignment */
+/* Position the beginning of the heap right after the noinit execution region, ensuring an 8-byte alignment */
 #define __HEAP_BASE    AlignExpr(ImageLimit(noinit), 8)
 /* The heap extends to the stack */
 #define __HEAP_SIZE    (__STACK_TOP - __STACK_SIZE - __HEAP_BASE)
 
 /* Device definitions */
-#define VECTORS_ALIGNMENT 1024
+#define VECTORS_ALIGNMENT 0x400
 
-/* The size of the MCU boot header area at the start of FLASH */
+/* The size of the MCU boot header area at the start of main code region */
 #define MCUBOOT_HEADER_SIZE  0x400
 
-/* The start address and size of shared memory sub-block in shared memory region for the current core
- * The approach is to have an equal sub-block for each core to avoid shared objects to be overlapped.
- * Default configuration: A sub-block for CM33_NS shared data will be 2nd.
- */
-#define CORE_SYSTEM_SHARED_MEM_SIZE    (CYMEM_CM33_0_m33_m55_system_shared_SIZE / 3)
-#define CORE_SYSTEM_SHARED_MEM_START   (CYMEM_CM33_0_m33_m55_system_shared_START + CORE_SYSTEM_SHARED_MEM_SIZE)
-
 /* Serial Memory Interface block #0 memory #1, 16 MB */
-LR_XIP_PORT0 (CYMEM_CM33_0_m33_nvm_C_START + MCUBOOT_HEADER_SIZE) (CYMEM_CM33_0_m33_nvm_SIZE - MCUBOOT_HEADER_SIZE)
+/* Start address is offset by MCUBOOT_HEADER_SIZE to let the area free for the MCU boot header */
+LR_XIP_PORT0 (CYMEM_CM33_0_m33_nvm_sel_START + MCUBOOT_HEADER_SIZE) (CYMEM_CM33_0_m33_nvm_SIZE - MCUBOOT_HEADER_SIZE)
 {
   /* The execution region is designated for the main non-secure (NS) application code for the Cortex-M33 */
-  app_code_main (CYMEM_CM33_0_m33_nvm_C_START + MCUBOOT_HEADER_SIZE) ALIGN VECTORS_ALIGNMENT (CYMEM_CM33_0_m33_nvm_SIZE - MCUBOOT_HEADER_SIZE)
+  /* Performance-sensitive or critical functions that need to be executed in sram are manually excluded */
+  app_code_main (CYMEM_CM33_0_m33_nvm_sel_START + MCUBOOT_HEADER_SIZE) ALIGN VECTORS_ALIGNMENT (CYMEM_CM33_0_m33_nvm_SIZE - MCUBOOT_HEADER_SIZE)
   {
     *.* (RESET, +First)
     *(InRoot$$Sections)
     .ANY (+RO)
     .ANY (+XO)
-    EXCLUDE(*cy_smif.*, *cy_syslib.*, *cy_syslib_ext.*, *cy_smif_memslot.*, *cy_smif_sfdp.*, *cy_smif_hb_flash.*, *cyhal_qspi.*, *mtb_hal_memoryspi.*, *mtb_serial_memory.*, *freertos/Source*.*, *clib-support*.*, *abstraction-rtos*.*, */cmsis*.*)
+    EXCLUDE(*cy_smif.*, *cy_syslib.*, *cy_syslib_ext.*, *cy_smif_memnum.*, *cy_smif_memslot.*, *cy_smif_sfdp.*, *cy_smif_hb_flash.*, *mtb_hal_memoryspi.*, *mtb_serial_memory.*, *freertos/Source*.*, *cy_clib_support*.*, *cy_mutex_pool*.*, *cy_time.*, *cyabs_*.*, *cy_worker_thread.*, *cmsis*.*)
   }
 
   /* The execution region for performance-sensitive or critical functions that need to be executed in SRAM */
   app_code_ram CYMEM_CM33_0_m33_code_START CYMEM_CM33_0_m33_code_SIZE
   {
-    *(.cy_sram1_code)
+    *(.cy_sram_code)
     *(.cy_ramfunc)
     *(.text.cy_os_common)
     cy_syslib.* (+RO)
     cy_syslib_ext.* (+RO)
     cy_smif.* (+RO)
     cy_smif_hb_flash.* (+RO)
+    cy_smif_memnum.* (+RO)
     cy_smif_memslot.* (+RO)
     cy_smif_sfdp.* (+RO)
-    cyhal_qspi.* (+RO)
     mtb_hal_memoryspi.* (+RO)
     mtb_serial_memory.* (+RO)
     *freertos/Source*.* (+RO)
-    *clib-support*.* (+RO)
-    *abstraction-rtos*.* (+RO)
-    */cmsis*.* (+RO)
+    *cy_clib_support*.* (+RO)
+    *cy_mutex_pool*.* (+RO)
+    *cy_time.* (+RO)
+    *cyabs_*.* (+RO)
+    *cy_worker_thread.* (+RO)
+    *cmsis*.* (+RO)
   }
 
 
@@ -117,16 +116,21 @@ LR_XIP_PORT0 (CYMEM_CM33_0_m33_nvm_C_START + MCUBOOT_HEADER_SIZE) (CYMEM_CM33_0_
     .ANY (+RW +ZI)
   }
 
-  /* A region for shared RAM memory */
-  cy_sharedmem CORE_SYSTEM_SHARED_MEM_START ALIGN 32 CORE_SYSTEM_SHARED_MEM_SIZE
+  /* A region for shared RAM memory where only the Cortex-M33 can allocate data but all cores can access  */
+  cy_sharedmem CYMEM_CM33_0_m33_allocatable_shared_START OVERLAY CYMEM_CM33_0_m33_allocatable_shared_SIZE
   {
     *(.cy_sharedmem)
   }
 
   /* A region for shared SOC memory */
-  cy_shared_socmem CYMEM_CM33_0_m33_m55_shared_START CYMEM_CM33_0_m33_m55_shared_SIZE
+  cy_shared_socmem CYMEM_CM33_0_m33_m55_shared_START OVERLAY CYMEM_CM33_0_m33_m55_shared_SIZE
   {
     *(.cy_shared_socmem)
+  }
+
+  /* A reserved region for the trail space for the signature used by the bootloader - do not place any code here */
+  cy_trailer (CYMEM_CM33_0_m33_trailer_sel_START) EMPTY CYMEM_CM33_0_m33_trailer_SIZE
+  {
   }
 
 }
@@ -171,4 +175,3 @@ LR_SOCMEM CYMEM_CM33_0_gfx_mem_START CYMEM_CM33_0_gfx_mem_SIZE
     *(.cy_gpu_buf)
   }
 }
-

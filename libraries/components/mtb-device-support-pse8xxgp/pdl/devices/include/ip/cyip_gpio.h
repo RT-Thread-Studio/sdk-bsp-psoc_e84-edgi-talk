@@ -39,58 +39,56 @@
 /**
   * \brief GPIO port registers (GPIO_PRT)
   */
-typedef struct
-{
-    __IOM uint32_t OUT;                           /*!< 0x00000000 Port output data register */
-    __IOM uint32_t OUT_CLR;                       /*!< 0x00000004 Port output data clear register */
-    __IOM uint32_t OUT_SET;                       /*!< 0x00000008 Port output data set register */
-    __IOM uint32_t OUT_INV;                       /*!< 0x0000000C Port output data invert register */
-    __IM uint32_t IN;                            /*!< 0x00000010 Port input state register */
-    __IOM uint32_t INTR;                          /*!< 0x00000014 Port interrupt status register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Port interrupt mask register */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Port interrupt masked status register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000020 Port interrupt set register */
-    __IM uint32_t RESERVED[7];
-    __IOM uint32_t INTR_CFG;                      /*!< 0x00000040 Port interrupt configuration register */
-    __IOM uint32_t CFG;                           /*!< 0x00000044 Port configuration register */
-    __IOM uint32_t CFG_IN;                        /*!< 0x00000048 Port input buffer configuration register */
-    __IOM uint32_t CFG_OUT;                       /*!< 0x0000004C Port output buffer configuration register */
-    __IOM uint32_t CFG_SIO;                       /*!< 0x00000050 Port SIO configuration register */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t CFG_IN_AUTOLVL;                /*!< 0x00000058 Port input buffer AUTOLVL configuration register for S40E GPIO */
-    __IM uint32_t RESERVED2;
-    __IOM uint32_t CFG_OUT2;                      /*!< 0x00000060 Port output buffer configuration register 2 */
-    __IOM uint32_t CFG_SLEW_EXT;                  /*!< 0x00000064 Port output buffer slew extension configuration register */
-    __IOM uint32_t CFG_DRIVE_EXT0;                /*!< 0x00000068 Port output buffer drive sel extension configuration register */
-    __IOM uint32_t CFG_DRIVE_EXT1;                /*!< 0x0000006C Port output buffer drive sel extension configuration register */
-    __IOM uint32_t CFG_OUT3;                      /*!< 0x00000070 Port output buffer configuration register 3 */
-    __IOM uint32_t CFG_RES;                       /*!< 0x00000074 Port resistor configuration register 3 */
-    __IOM uint32_t MSC_ANA;                       /*!< 0x00000078 Port MSCv3 AMUX enable */
-    __IM uint32_t RESERVED3;
+typedef struct {
+  __IOM uint32_t OUT;                           /*!< 0x00000000 Port output data register */
+  __IOM uint32_t OUT_CLR;                       /*!< 0x00000004 Port output data clear register */
+  __IOM uint32_t OUT_SET;                       /*!< 0x00000008 Port output data set register */
+  __IOM uint32_t OUT_INV;                       /*!< 0x0000000C Port output data invert register */
+   __IM uint32_t IN;                            /*!< 0x00000010 Port input state register */
+  __IOM uint32_t INTR;                          /*!< 0x00000014 Port interrupt status register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Port interrupt mask register */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Port interrupt masked status register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000020 Port interrupt set register */
+   __IM uint32_t RESERVED[7];
+  __IOM uint32_t INTR_CFG;                      /*!< 0x00000040 Port interrupt configuration register */
+  __IOM uint32_t CFG;                           /*!< 0x00000044 Port configuration register */
+  __IOM uint32_t CFG_IN;                        /*!< 0x00000048 Port input buffer configuration register */
+  __IOM uint32_t CFG_OUT;                       /*!< 0x0000004C Port output buffer configuration register */
+  __IOM uint32_t CFG_SIO;                       /*!< 0x00000050 Port SIO configuration register */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t CFG_IN_AUTOLVL;                /*!< 0x00000058 Port input buffer AUTOLVL configuration register for S40E GPIO */
+   __IM uint32_t RESERVED2;
+  __IOM uint32_t CFG_OUT2;                      /*!< 0x00000060 Port output buffer configuration register 2 */
+  __IOM uint32_t CFG_SLEW_EXT;                  /*!< 0x00000064 Port output buffer slew extension configuration register */
+  __IOM uint32_t CFG_DRIVE_EXT0;                /*!< 0x00000068 Port output buffer drive sel extension configuration register */
+  __IOM uint32_t CFG_DRIVE_EXT1;                /*!< 0x0000006C Port output buffer drive sel extension configuration register */
+  __IOM uint32_t CFG_OUT3;                      /*!< 0x00000070 Port output buffer configuration register 3 */
+  __IOM uint32_t CFG_RES;                       /*!< 0x00000074 Port resistor configuration register 3 */
+  __IOM uint32_t MSC_ANA;                       /*!< 0x00000078 Port MSCv3 AMUX enable */
+   __IM uint32_t RESERVED3;
 } GPIO_PRT_Type;                                /*!< Size = 128 (0x80) */
 
 /**
   * \brief IO port control/configuration (GPIO)
   */
-typedef struct
-{
-    GPIO_PRT_Type PRT[128];                 /*!< 0x00000000 GPIO port registers */
-    __IM uint32_t RESERVED[3072];
-    __IM uint32_t SEC_INTR_CAUSE0;               /*!< 0x00007000 Secure Interrupt port cause register 0 */
-    __IM uint32_t SEC_INTR_CAUSE1;               /*!< 0x00007004 Secure Interrupt port cause register 1 */
-    __IM uint32_t SEC_INTR_CAUSE2;               /*!< 0x00007008 Secure Interrupt port cause register 2 */
-    __IM uint32_t SEC_INTR_CAUSE3;               /*!< 0x0000700C Secure Interrupt port cause register 3 */
-    __IM uint32_t RESERVED1[1020];
-    __IM uint32_t INTR_CAUSE0;                   /*!< 0x00008000 Interrupt port cause register 0 */
-    __IM uint32_t INTR_CAUSE1;                   /*!< 0x00008004 Interrupt port cause register 1 */
-    __IM uint32_t INTR_CAUSE2;                   /*!< 0x00008008 Interrupt port cause register 2 */
-    __IM uint32_t INTR_CAUSE3;                   /*!< 0x0000800C Interrupt port cause register 3 */
-    __IM uint32_t VDD_ACTIVE;                    /*!< 0x00008010 Extern power supply detection register */
-    __IOM uint32_t VDD_INTR;                      /*!< 0x00008014 Supply detection interrupt register */
-    __IOM uint32_t VDD_INTR_MASK;                 /*!< 0x00008018 Supply detection interrupt mask register */
-    __IM uint32_t VDD_INTR_MASKED;               /*!< 0x0000801C Supply detection interrupt masked register */
-    __IOM uint32_t VDD_INTR_SET;                  /*!< 0x00008020 Supply detection interrupt set register */
-    __IOM uint32_t VDD_MODE_SEL;                  /*!< 0x00008024 Supply mode select for 3.3V domains */
+typedef struct {
+        GPIO_PRT_Type PRT[128];                 /*!< 0x00000000 GPIO port registers */
+   __IM uint32_t RESERVED[3072];
+   __IM uint32_t SEC_INTR_CAUSE0;               /*!< 0x00007000 Secure Interrupt port cause register 0 */
+   __IM uint32_t SEC_INTR_CAUSE1;               /*!< 0x00007004 Secure Interrupt port cause register 1 */
+   __IM uint32_t SEC_INTR_CAUSE2;               /*!< 0x00007008 Secure Interrupt port cause register 2 */
+   __IM uint32_t SEC_INTR_CAUSE3;               /*!< 0x0000700C Secure Interrupt port cause register 3 */
+   __IM uint32_t RESERVED1[1020];
+   __IM uint32_t INTR_CAUSE0;                   /*!< 0x00008000 Interrupt port cause register 0 */
+   __IM uint32_t INTR_CAUSE1;                   /*!< 0x00008004 Interrupt port cause register 1 */
+   __IM uint32_t INTR_CAUSE2;                   /*!< 0x00008008 Interrupt port cause register 2 */
+   __IM uint32_t INTR_CAUSE3;                   /*!< 0x0000800C Interrupt port cause register 3 */
+   __IM uint32_t VDD_ACTIVE;                    /*!< 0x00008010 Extern power supply detection register */
+  __IOM uint32_t VDD_INTR;                      /*!< 0x00008014 Supply detection interrupt register */
+  __IOM uint32_t VDD_INTR_MASK;                 /*!< 0x00008018 Supply detection interrupt mask register */
+   __IM uint32_t VDD_INTR_MASKED;               /*!< 0x0000801C Supply detection interrupt masked register */
+  __IOM uint32_t VDD_INTR_SET;                  /*!< 0x00008020 Supply detection interrupt set register */
+  __IOM uint32_t VDD_MODE_SEL;                  /*!< 0x00008024 Supply mode select for 3.3V domains */
 } GPIO_Type;                                    /*!< Size = 32808 (0x8028) */
 
 

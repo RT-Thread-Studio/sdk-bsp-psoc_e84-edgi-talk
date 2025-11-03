@@ -43,34 +43,13 @@
 
 /** Default system core frequency in Hz */
 #ifdef PSE84_PSVP
-    #define CY_CLK_SYSTEM_FREQ_HZ_DEFAULT       (12000000UL)
+#define CY_CLK_SYSTEM_FREQ_HZ_DEFAULT       (12000000UL)
 #else
-    #define CY_CLK_SYSTEM_FREQ_HZ_DEFAULT       (50000000UL)
+#define CY_CLK_SYSTEM_FREQ_HZ_DEFAULT       (50000000UL)
 #endif
 
-/**
-* Holds the (Cortex-M33) system core clock,
-* which is the system clock frequency supplied to the SysTick timer and the
-* processor core clock.
-* This variable implements CMSIS Core global variable.
-* Refer to the [CMSIS documentation]
-* (http://www.keil.com/pack/doc/CMSIS/Core/html/group__system__init__gr.html "System and Clock Configuration")
-* for more details.
-* This variable can be used by debuggers to query the frequency
-* of the debug timer or to configure the trace clock speed.
-*
-* \attention Compilers must be configured to avoid removing this variable in case
-* the application program is not using it. Debugging systems require the variable
-* to be physically present in memory so that it can be examined to configure the debugger. */
 uint32_t SystemCoreClock = CY_CLK_SYSTEM_FREQ_HZ_DEFAULT;
 
-/** Holds the HFClk0 clock frequency. Updated by \ref SystemCoreClockUpdate(). */
-uint32_t cy_Hfclk0FreqHz  = CY_CLK_HFCLK0_FREQ_HZ_DEFAULT;
-
-/** Holds the PeriClk clock frequency. Updated by \ref SystemCoreClockUpdate(). */
-uint32_t cy_PeriClkFreqHz = CY_CLK_PERICLK_FREQ_HZ_DEFAULT;
-
-/** Holds the AHB frequency. Updated by \ref SystemCoreClockUpdate(). */
 uint32_t cy_AhbFreqHz = CY_CLK_SYSTEM_FREQ_HZ_DEFAULT;
 
 /*******************************************************************************
@@ -89,7 +68,7 @@ uint32_t cy_delayFreqKhz  = (CY_CLK_SYSTEM_FREQ_HZ_DEFAULT + CY_DELAY_1K_MINUS_1
                             CY_DELAY_1K_THRESHOLD;
 
 uint32_t cy_delayFreqMhz  = (uint8_t)((CY_CLK_SYSTEM_FREQ_HZ_DEFAULT + CY_DELAY_1M_MINUS_1_THRESHOLD) /
-                                      CY_DELAY_1M_THRESHOLD);
+                            CY_DELAY_1M_THRESHOLD);
 
 #define CY_ROOT_PATH_SRC_IMO                (0UL)
 #define CY_ROOT_PATH_SRC_EXT                (1UL)
@@ -112,61 +91,11 @@ uint32_t cy_delayFreqMhz  = (uint8_t)((CY_CLK_SYSTEM_FREQ_HZ_DEFAULT + CY_DELAY_
 #define SCB_CPACR_CP10_CP11_ENABLE      (0xFUL << 20U)
 
 
-#if defined(CY_DEVICE_FORCE_IP_ENABLE_IN_STARTUP)
-static void SystemInit_Enable_Clocks(void)
-{
-    /* For enabling SYS_MMIO_3, we need CLK_HF11 to be enabled first */
-    (void)Cy_SysClk_ClkHfSetSource(11U, CY_SYSCLK_CLKHF_IN_CLKPATH0);  /* Suppress a compiler warning about unused return value */
-    (void)Cy_SysClk_ClkHfSetDivider(11U, CY_SYSCLK_CLKHF_NO_DIVIDE); /* Suppress a compiler warning about unused return value */
-    (void)Cy_SysClk_ClkHfEnable(11U);         /* Suppress a compiler warning about unused return value */
-
-    /* enable HF3 and HF4 for SMIF */
-    (void)Cy_SysClk_ClkHfSetSource(3U, CY_SYSCLK_CLKHF_IN_CLKPATH0);  /* Suppress a compiler warning about unused return value */
-    (void)Cy_SysClk_ClkHfSetDivider(3U, CY_SYSCLK_CLKHF_NO_DIVIDE); /* Suppress a compiler warning about unused return value */
-    (void)Cy_SysClk_ClkHfEnable(3U);         /* Suppress a compiler warning about unused return value */
-
-    (void)Cy_SysClk_ClkHfSetSource(4U, CY_SYSCLK_CLKHF_IN_CLKPATH0);  /* Suppress a compiler warning about unused return value */
-    (void)Cy_SysClk_ClkHfSetDivider(4U, CY_SYSCLK_CLKHF_NO_DIVIDE); /* Suppress a compiler warning about unused return value */
-    (void)Cy_SysClk_ClkHfEnable(4U);         /* Suppress a compiler warning about unused return value */
-}
-
-static void SystemInit_Enable_Peri(void)
-{
-    /* Release reset for all groups IP except group 0 */
-    (void)Cy_SysClk_PeriGroupSetSlaveCtl((uint32_t)PERI_0_GROUP_1, CY_SYSCLK_PERI_GROUP_SL_CTL2, 0x0U); /* Suppress a compiler warning about unused return value */
-    (void)Cy_SysClk_PeriGroupSetSlaveCtl((uint32_t)PERI_0_GROUP_2, CY_SYSCLK_PERI_GROUP_SL_CTL2, 0x0U); /* Suppress a compiler warning about unused return value */
-
-    /* release reset of nnlite */
-    (void)Cy_SysClk_PeriGroupSetSlaveCtl((uint32_t)PERI_0_GROUP_4, CY_SYSCLK_PERI_GROUP_SL_CTL2, 0x0U); /* Suppress a compiler warning about unused return value */
-
-    (void)Cy_SysClk_PeriGroupSetSlaveCtl((uint32_t)PERI_0_GROUP_1, CY_SYSCLK_PERI_GROUP_SL_CTL, 0xFFFFFFFFU); /* Suppress a compiler warning about unused return value */
-    (void)Cy_SysClk_PeriGroupSetSlaveCtl((uint32_t)PERI_0_GROUP_2, CY_SYSCLK_PERI_GROUP_SL_CTL, 0xFFFFFFFFU); /* Suppress a compiler warning about unused return value */
-
-    /* enable nnlite */
-    (void)Cy_SysClk_PeriGroupSetSlaveCtl((uint32_t)PERI_0_GROUP_4, CY_SYSCLK_PERI_GROUP_SL_CTL, 0x1U); /* Suppress a compiler warning about unused return value */
-
-    (void)Cy_SysClk_PeriGroupSetSlaveCtl((uint32_t)PERI_0_GROUP_3, CY_SYSCLK_PERI_GROUP_SL_CTL, 0xFFFFFFFFU); /* Suppress a compiler warning about unused return value */
-}
-#endif
-
 /*******************************************************************************
 * Function Name: SystemInit
-****************************************************************************//**
-* \cond
-* Initializes the system:
-* - Restores FLL registers to the default state for single core devices.
-* - Unlocks and disables WDT.
-* - Calls the Cy_SystemInit() function.
-* - Calls \ref SystemCoreClockUpdate().
-* \endcond
 *******************************************************************************/
 void SystemInit(void)
 {
-#if defined(CY_DEVICE_FORCE_IP_ENABLE_IN_STARTUP)
-    SystemInit_Enable_Clocks();
-    SystemInit_Enable_Peri();
-#endif /* CY_DEVICE_FORCE_IP_ENABLE_IN_STARTUP */
-
     Cy_SystemInit();
     /* Enable Event from CM55 */
     MXCM33->CM33_EVENT_CTL = CM55_0_CPU_EVENT;
@@ -174,30 +103,18 @@ void SystemInit(void)
 
 /*******************************************************************************
 * Function Name: Cy_SystemInit
-****************************************************************************//**
-*
-* The function is called during device startup.
-*
 *******************************************************************************/
 __WEAK void Cy_SystemInit(void)
 {
-    /* Empty weak function.
-    */
+     /* Empty weak function.
+     */
     __NOP(); /* No operation */
 }
 
 /*******************************************************************************
 * Function Name: SystemCoreClockUpdate
-****************************************************************************//**
-*
-* Gets core clock frequency and updates \ref SystemCoreClock, \ref
-* cy_Hfclk0FreqHz, and \ref cy_PeriClkFreqHz.
-*
-* Updates global variables used by the \ref Cy_SysLib_Delay(), \ref
-* Cy_SysLib_DelayUs(), and \ref Cy_SysLib_DelayCycles().
-*
 *******************************************************************************/
-void SystemCoreClockUpdate(void)
+void SystemCoreClockUpdate (void)
 {
     uint32_t pathFreqHz;
     uint32_t clkHfPath;
@@ -208,15 +125,6 @@ void SystemCoreClockUpdate(void)
     pathFreqHz = Cy_SysClk_ClkHfGetFrequency(clkHfPath);
 
     SystemCoreClock = pathFreqHz;
-
-    cy_Hfclk0FreqHz = SystemCoreClock;
-
-    /* Get frequency for the high-frequency clock # 2 , which is used for PERI PCLK*/
-    clkHfPath = CY_SYSCLK_CLK_PERI_HF_PATH_NUM;
-
-    pathFreqHz = Cy_SysClk_ClkHfGetFrequency(clkHfPath);
-
-    cy_PeriClkFreqHz = pathFreqHz;
 
     /* Sets clock frequency for Delay API */
     cy_delayFreqHz = SystemCoreClock;

@@ -73,55 +73,55 @@
 
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
-
+ 
   @par
-                This function should be used only if you don't know the FFT sizes that
-                you'll need at build time. The use of this function will prevent the
-                linker from removing the FFT tables that are not needed and the library
+                This function should be used only if you don't know the FFT sizes that 
+                you'll need at build time. The use of this function will prevent the 
+                linker from removing the FFT tables that are not needed and the library 
                 code size will be bigger than needed.
 
   @par
-                If you use CMSIS-DSP as a static library, and if you know the MFCC sizes
+                If you use CMSIS-DSP as a static library, and if you know the MFCC sizes 
                 that you need at build time, then it is better to use the initialization
                 functions defined for each MFCC size.
 
  */
 
-arm_status arm_mfcc_init_f32(
-    arm_mfcc_instance_f32 * S,
-    uint32_t fftLen,
-    uint32_t nbMelFilters,
-    uint32_t nbDctOutputs,
-    const float32_t *dctCoefs,
-    const uint32_t *filterPos,
-    const uint32_t *filterLengths,
-    const float32_t *filterCoefs,
-    const float32_t *windowCoefs
-)
+ARM_DSP_ATTRIBUTE arm_status arm_mfcc_init_f32(
+  arm_mfcc_instance_f32 * S,
+  uint32_t fftLen,
+  uint32_t nbMelFilters,
+  uint32_t nbDctOutputs,
+  const float32_t *dctCoefs,
+  const uint32_t *filterPos,
+  const uint32_t *filterLengths,
+  const float32_t *filterCoefs,
+  const float32_t *windowCoefs
+  )
 {
-    arm_status status;
+ arm_status status;
 
-    S->fftLen = fftLen;
-    S->nbMelFilters = nbMelFilters;
-    S->nbDctOutputs = nbDctOutputs;
-    S->dctCoefs = dctCoefs;
-    S->filterPos = filterPos;
-    S->filterLengths = filterLengths;
-    S->filterCoefs = filterCoefs;
-    S->windowCoefs = windowCoefs;
+ S->fftLen=fftLen;
+ S->nbMelFilters=nbMelFilters;
+ S->nbDctOutputs=nbDctOutputs;
+ S->dctCoefs=dctCoefs;
+ S->filterPos=filterPos;
+ S->filterLengths=filterLengths;
+ S->filterCoefs=filterCoefs;
+ S->windowCoefs=windowCoefs;
 
-#if defined(ARM_MFCC_CFFT_BASED)
-    status = arm_cfft_init_f32(&(S->cfft), fftLen);
-#else
-    status = arm_rfft_fast_init_f32(&(S->rfft), fftLen);
-#endif
-
-    return (status);
+ #if defined(ARM_MFCC_CFFT_BASED)
+ status=arm_cfft_init_f32(&(S->cfft),fftLen);
+ #else
+ status=arm_rfft_fast_init_f32(&(S->rfft),fftLen);
+ #endif
+ 
+ return(status);
 }
 
 #if defined(ARM_MFCC_CFFT_BASED)
 #define MFCC_INIT_F32(LEN)                    \
-arm_status arm_mfcc_init_##LEN##_f32(         \
+ARM_DSP_ATTRIBUTE arm_status arm_mfcc_init_##LEN##_f32(         \
   arm_mfcc_instance_f32 * S,                  \
   uint32_t nbMelFilters,                      \
   uint32_t nbDctOutputs,                      \
@@ -149,7 +149,7 @@ arm_status arm_mfcc_init_##LEN##_f32(         \
 }
 #else
 #define MFCC_INIT_F32(LEN)                         \
-arm_status arm_mfcc_init_##LEN##_f32(              \
+ARM_DSP_ATTRIBUTE arm_status arm_mfcc_init_##LEN##_f32(              \
   arm_mfcc_instance_f32 * S,                       \
   uint32_t nbMelFilters,                           \
   uint32_t nbDctOutputs,                           \
@@ -204,7 +204,7 @@ arm_status arm_mfcc_init_##LEN##_f32(              \
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
  */
-MFCC_INIT_F32(32);
+MFCC_INIT_F32(32)
 
 /**
   @brief         Initialization of the MFCC F32 instance structure for 64 samples MFCC
@@ -233,7 +233,7 @@ MFCC_INIT_F32(32);
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
  */
-MFCC_INIT_F32(64);
+MFCC_INIT_F32(64)
 
 /**
   @brief         Initialization of the MFCC F32 instance structure for 128 samples MFCC
@@ -262,7 +262,7 @@ MFCC_INIT_F32(64);
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
  */
-MFCC_INIT_F32(128);
+MFCC_INIT_F32(128)
 
 /**
   @brief         Initialization of the MFCC F32 instance structure for 256 samples MFCC
@@ -291,7 +291,7 @@ MFCC_INIT_F32(128);
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
  */
-MFCC_INIT_F32(256);
+MFCC_INIT_F32(256)
 
 /**
   @brief         Initialization of the MFCC F32 instance structure for 512 samples MFCC
@@ -320,7 +320,7 @@ MFCC_INIT_F32(256);
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
  */
-MFCC_INIT_F32(512);
+MFCC_INIT_F32(512)
 
 /**
   @brief         Initialization of the MFCC F32 instance structure for 1024 samples MFCC
@@ -349,7 +349,7 @@ MFCC_INIT_F32(512);
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
  */
-MFCC_INIT_F32(1024);
+MFCC_INIT_F32(1024)
 
 /**
   @brief         Initialization of the MFCC F32 instance structure for 2048 samples MFCC
@@ -378,7 +378,7 @@ MFCC_INIT_F32(1024);
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
  */
-MFCC_INIT_F32(2048);
+MFCC_INIT_F32(2048)
 
 /**
   @brief         Initialization of the MFCC F32 instance structure for 4096 samples MFCC
@@ -407,7 +407,7 @@ MFCC_INIT_F32(2048);
                    The folder Scripts is containing a Python script which can be used
                    to generate the filter, dct and window arrays.
  */
-MFCC_INIT_F32(4096);
+MFCC_INIT_F32(4096)
 
 /**
   @} end of MFCCF32 group

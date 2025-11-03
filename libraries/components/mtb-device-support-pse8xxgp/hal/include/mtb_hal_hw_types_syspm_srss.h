@@ -27,31 +27,31 @@
 
 #if defined(CY_IP_MXS22SRSS) || defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS)
 
-    /**
-    * \ingroup group_hal_availability
-    * \{
-    */
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
-    #if !defined(MTB_HAL_DRIVER_AVAILABLE_SYSPM)
-        /** Macro specifying whether the SysPm driver is available for the current device */
-        #define MTB_HAL_DRIVER_AVAILABLE_SYSPM (1u)
-    #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_SYSPM)
+#if !defined(MTB_HAL_DRIVER_AVAILABLE_SYSPM)
+/** Macro specifying whether the SysPm driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_SYSPM (1u)
+#endif // !defined(MTB_HAL_DRIVER_AVAILABLE_SYSPM)
 
-    /** \} group_hal_availability */
+/** \} group_hal_availability */
 
 
-    /** \cond INTERNAL
-    * The corresponding enum members are already documented in the public API header
-    */
-    #define MTB_HAL_MAP_SYSPM_CHECK_READY              CY_SYSPM_CHECK_READY
-    #define MTB_HAL_MAP_SYSPM_CHECK_FAIL               CY_SYSPM_CHECK_FAIL
-    #define MTB_HAL_MAP_SYSPM_BEFORE_TRANSITION        CY_SYSPM_BEFORE_TRANSITION
-    #define MTB_HAL_MAP_SYSPM_AFTER_TRANSITION         CY_SYSPM_AFTER_TRANSITION
+/** \cond INTERNAL
+ * The corresponding enum members are already documented in the public API header
+ */
+#define MTB_HAL_MAP_SYSPM_CHECK_READY              CY_SYSPM_CHECK_READY
+#define MTB_HAL_MAP_SYSPM_CHECK_FAIL               CY_SYSPM_CHECK_FAIL
+#define MTB_HAL_MAP_SYSPM_BEFORE_TRANSITION        CY_SYSPM_BEFORE_TRANSITION
+#define MTB_HAL_MAP_SYSPM_AFTER_TRANSITION         CY_SYSPM_AFTER_TRANSITION
 
-    #define MTB_HAL_MAP_SYSPM_CB_SLEEP          CY_SYSPM_SLEEP
-    #define MTB_HAL_MAP_SYSPM_CB_DEEPSLEEP      CY_SYSPM_DEEPSLEEP
+#define MTB_HAL_MAP_SYSPM_CB_SLEEP          CY_SYSPM_SLEEP
+#define MTB_HAL_MAP_SYSPM_CB_DEEPSLEEP      CY_SYSPM_DEEPSLEEP
 
-    #define MTB_HAL_MAP_SYSPM_CB_HIBERNATE      CY_SYSPM_HIBERNATE
+#define MTB_HAL_MAP_SYSPM_CB_HIBERNATE      CY_SYSPM_HIBERNATE
 
-    /** \endcond */
+/** \endcond */
 #endif // defined(CY_IP_MXS22SRSS) || defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS)

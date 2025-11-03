@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 File        : usbd_config_io.c
@@ -94,22 +94,22 @@ Purpose     : Sample implementation of log and warn function
 #endif /* #if defined (USBD_USE_PDL) && (USBD_USE_PDL == 1U) */
 
 #if (USBD_DISABLE_STANDARD_OUTPUT == 0U)
-    /* Select one of the standard output methods */
+/* Select one of the standard output methods */
 
-    /* Retarget-io middleware: https://github.com/Infineon/retarget-io */
-    #ifndef   USE_RETARGET_IO
-        #define USE_RETARGET_IO                     (1U)
-    #endif
+/* Retarget-io middleware: https://github.com/Infineon/retarget-io */
+#ifndef   USE_RETARGET_IO
+    #define USE_RETARGET_IO                     (1U)
+#endif
 
-    /* SEGGER's Real Time Terminal: https://www.segger.com/jlink-real-time-terminal.html */
-    #ifndef   USE_RTT
-        #define USE_RTT                             (0U)
-    #endif
+/* SEGGER's Real Time Terminal: https://www.segger.com/jlink-real-time-terminal.html */
+#ifndef   USE_RTT
+    #define USE_RTT                             (0U)
+#endif
 
-    /* The Debug Communication Channel (DCC): https://wiki.segger.com/DCC */
-    #ifndef   USE_DCC
-        #define USE_DCC                             (0U)
-    #endif
+/* The Debug Communication Channel (DCC): https://wiki.segger.com/DCC */
+#ifndef   USE_DCC
+    #define USE_DCC                             (0U)
+#endif
 
 #endif /* #if (USBD_DISABLE_STANDARD_OUTPUT == 0U) */
 
@@ -119,23 +119,23 @@ Purpose     : Sample implementation of log and warn function
 
 #if defined(COMPONENT_RTOS_AWARE)
 
-    #ifndef   SHOW_TASK
-        #define SHOW_TASK                           (1U)
+#ifndef   SHOW_TASK
+    #define SHOW_TASK                           (1U)
 
-        #include "cyabs_rtos.h"
+    #include "cyabs_rtos.h"
 
-        /* For __get_IPSR() */
-        #if defined (COMPONENT_CAT3)
-            #include <cmsis_compiler.h>
-        #else
-            #include "cy_pdl.h"
-        #endif /* #ifdef COMPONENT_CAT3 */
-    #endif
+    /* For __get_IPSR() */
+    #if defined (COMPONENT_CAT3)
+        #include <cmsis_compiler.h>
+    #else
+        #include "cy_pdl.h"
+     #endif /* #ifdef COMPONENT_CAT3 */
+#endif
 
 #else /* Non RTOS environment */
 
-    /* SHOW_TASK is not supported in the Non RTOS environment */
-    #define SHOW_TASK                               (0U)
+/* SHOW_TASK is not supported in the Non RTOS environment */
+#define SHOW_TASK                               (0U)
 
 #endif /* #if defined(COMPONENT_RTOS_AWARE) */
 
@@ -163,8 +163,7 @@ Purpose     : Sample implementation of log and warn function
 *  Parameters
 *    s - Pointer to a string.
 */
-static void _puts(const char * s)
-{
+static void _puts(const char * s) {
 #if (USBD_DISABLE_STANDARD_OUTPUT == 1U)
     /* Add the custom output method */
     (void) s;
@@ -197,7 +196,7 @@ static void _puts(const char * s)
         JLINKDCC_SendChar(c);
     }
 #else /* Unspecified debug output method */
-#warning Unspecified debug output method. Select one of the available or set \
+    #warning Unspecified debug output method. Select one of the available or set \
              USBD_DISABLE_STANDARD_OUTPUT=1 in the defines variable \
              of the application project Makefile
 #endif /* #if (USE_RETARGET_IO == 1U) */
@@ -220,8 +219,7 @@ static void _puts(const char * s)
 *    s - Pointer to a string, same as the s parameter.
 */
 #if SHOW_TIME
-static char *_WriteUnsigned(char * s, U32 v, int NumDigits)
-{
+static char * _WriteUnsigned(char * s, U32 v, int NumDigits) {
     unsigned   Base;
     unsigned   Div;
     U32        Digit;
@@ -242,8 +240,7 @@ static char *_WriteUnsigned(char * s, U32 v, int NumDigits)
         v  -= Div * Digit;
         *s++ = (char)('0' + Div);
         Digit /= Base;
-    }
-    while (Digit);
+    } while (Digit);
     *s = 0;
     return s;
 }
@@ -258,12 +255,11 @@ static char *_WriteUnsigned(char * s, U32 v, int NumDigits)
 *    the function was executed.
 *
 */
-static void _ShowStamp(void)
-{
+static void _ShowStamp(void) {
 #if SHOW_TIME
     I32    Time;
     char   ac[20];
-    char *sBuffer = &ac[0];
+    char * sBuffer = &ac[0];
     Time           = USB_OS_GetTickCnt();
     sBuffer        = _WriteUnsigned(sBuffer, Time / 1000, 0);
     *sBuffer++     = ':';
@@ -274,37 +270,37 @@ static void _ShowStamp(void)
 #endif
 
 #if SHOW_TASK
+{
+    const char * s = NULL;
+    if (__get_IPSR() == 0U)
     {
-        const char *s = NULL;
-        if (__get_IPSR() == 0U)
+        cy_rslt_t result;
+        cy_thread_t current_thread_handle;
+        result = cy_rtos_thread_get_handle(&current_thread_handle);
+        if (CY_RSLT_SUCCESS == result)
         {
-            cy_rslt_t result;
-            cy_thread_t current_thread_handle;
-            result = cy_rtos_thread_get_handle(&current_thread_handle);
-            if (CY_RSLT_SUCCESS == result)
-            {
-                result = cy_rtos_thread_get_name(&current_thread_handle, &s);
-                if (CY_RSLT_SUCCESS != result)
-                {
-                    s = "ERROR: Unknown task name";
-                }
-            }
-            else
+            result = cy_rtos_thread_get_name(&current_thread_handle, &s);
+            if (CY_RSLT_SUCCESS != result)
             {
                 s = "ERROR: Unknown task name";
             }
         }
         else
         {
-            s = "Interrupt";
-        }
-
-        if (s)
-        {
-            _puts(s);
-            _puts(" - ");
+            s = "ERROR: Unknown task name";
         }
     }
+    else
+    {
+        s = "Interrupt";
+    }
+
+    if (s)
+    {
+        _puts(s);
+        _puts(" - ");
+    }
+}
 #endif
 }
 
@@ -326,8 +322,7 @@ static void _ShowStamp(void)
 *    break-point at the beginning of this routine or simply stop the
 *    program after a failure.
 */
-void USB_OS_Panic(const char * pErrMsg)
-{
+void USB_OS_Panic(const char * pErrMsg) {
     USB_LOG((USB_MTYPE_INFO, "PANIC: %s", pErrMsg));
     USB_OS_IncDI();
     while (pErrMsg);
@@ -344,8 +339,7 @@ void USB_OS_Panic(const char * pErrMsg)
 *  Parameters
 *    s - Pointer to a string holding the log message.
 */
-void USB_X_Log(const char * s)
-{
+void USB_X_Log(const char * s) {
     USB_OS_IncDI();
     _ShowStamp();
     _puts(s);
@@ -364,8 +358,7 @@ void USB_X_Log(const char * s)
 *  Parameters
 *    s - Pointer to a string holding the warning message.
 */
-void USB_X_Warn(const char * s)
-{
+void USB_X_Warn(const char * s) {
     USB_OS_IncDI();
     _ShowStamp();
     _puts("*** Warning *** ");

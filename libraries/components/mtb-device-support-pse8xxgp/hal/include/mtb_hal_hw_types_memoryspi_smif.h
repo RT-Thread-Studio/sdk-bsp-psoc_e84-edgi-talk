@@ -27,14 +27,14 @@
 
 #if defined(CY_IP_MXSMIF)
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_MEMORYSPI)
-    /** Macro specifying whether the MemorySPI driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_MEMORYSPI (1u)
+/** Macro specifying whether the MemorySPI driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_MEMORYSPI (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_MEMORYSPI)
 
 /** \} group_hal_availability */
@@ -49,14 +49,14 @@
  */
 typedef struct
 {
-    SMIF_Type                          *base; //!< Base address for the SMIF
+    SMIF_Type*                          base; //!< Base address for the SMIF
     cy_en_smif_slave_select_t           chip_select; //!< Active chip select */
     uint32_t                            configured_csel; //!< All configured chip selects */
     uint32_t                            instNumber; //!< SMIF instance number
-    cy_stc_smif_context_t              *context;    //!< SMIF context for PDL use
+    cy_stc_smif_context_t*              context;    //!< SMIF context for PDL use
     uint32_t                            enabled_events; //!< Events enabled by the user
     _mtb_hal_event_callback_data_t      callback_data;  //!< Registered callback, if any
-    const mtb_hal_clock_t              *clock;          //!< Associated clock instance
+    const mtb_hal_clock_t*              clock;          //!< Associated clock instance
 } mtb_hal_memoryspi_t;
 
 /**
@@ -69,11 +69,11 @@ typedef struct
  */
 typedef struct
 {
-    SMIF_Type                              *base; //!< Base address for the SMIF
-    const cy_stc_smif_config_t             *config; //!< PDL-level SMIF configuration
+    SMIF_Type*                              base; //!< Base address for the SMIF
+    const cy_stc_smif_config_t*             config; //!< PDL-level SMIF configuration
     uint32_t                                instNumber; //!< SMIF instance number
     cy_stc_smif_context_t                   context; //!< SMIF context for PDL use
-    const mtb_hal_clock_t                  *clock;   //!< Default clock to use
+    const mtb_hal_clock_t*                  clock;   //!< Default clock to use
     bool                                    csel[4]; //!< Used stus of each chip select
     /** Bit representation of currently not supported interrupts:
         Bit 5 : Memory Mode Alignment Error

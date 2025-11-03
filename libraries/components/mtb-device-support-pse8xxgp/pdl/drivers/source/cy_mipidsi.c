@@ -226,36 +226,61 @@ extern "C" {
 #define MIPI_DPHY_MAX_RETRIES        100U
 #define MIPI_DPHY_STATUS_DATA_LINES  0x120UL
 #define MIPI_DPHY_STATUS_DATA_LINE0  0x20UL
+#define dphy2txtester_DIG_RDWR_TX_LANE1_SLEWRATE_0 0x70b
 
 /*******************************************************************************
 *                             Function Prototypes
 *******************************************************************************/
 void pll_reprogramming(cy_stc_mipidsi_config_t const *config);
 void dphy_reg_write(uint16_t address, uint8_t data);
+uint8_t dphy_reg_read(uint16_t address);
 
 void dphy_reg_write(uint16_t address, uint8_t data)
 {
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1, PHY_TESTEN | 0x00UL);  //need to set msb of address in register 0x00
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0, PHY_TESTCLK);
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0, PHY_UNTESTCLR);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1 , PHY_TESTEN | 0x00UL); //need to set msb of address in register 0x00
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_TESTCLK);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_UNTESTCLR);
 
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1, ((uint32_t)address >> 8UL));     //msb of address
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0, PHY_TESTCLK);
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0, PHY_UNTESTCLR);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1 , ((uint32_t)address >> 8UL));    //msb of address
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_TESTCLK);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_UNTESTCLR);
 
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1, PHY_TESTEN | (address & 0xFFUL));  //address of register
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0, PHY_TESTCLK);
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0, PHY_UNTESTCLR);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1 , PHY_TESTEN | (address & 0xFFUL)); //address of register
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_TESTCLK);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_UNTESTCLR);
 
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1, data);                 //data
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0, PHY_TESTCLK);
-    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0, PHY_UNTESTCLR);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1 , data);                //data
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_TESTCLK);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_UNTESTCLR);
 }
 
+uint8_t dphy_reg_read(uint16_t address)
+{
+    uint32_t tmp = 0;
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1 , PHY_TESTEN | 0x00UL);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_TESTCLK);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_UNTESTCLR);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1 , ((uint32_t)address >> 8UL));
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_TESTCLK);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_UNTESTCLR);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1 , PHY_TESTEN|(address & 0xFFUL));
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_TESTCLK);
+    CY_SET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL0 , PHY_UNTESTCLR);
+
+    tmp = CY_GET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_TST_CTRL1);
+    return (uint8_t)((tmp & 0x0000FF00UL) >> 8UL);
+}
 void pll_reprogramming(cy_stc_mipidsi_config_t const *config)
 {
     /* Round off to multiple of 50 Mbps */
     uint32_t bandwidth = (((config->per_lane_mbps + 25UL) / 50UL) * 50UL);
+
+    /* Bypass Slew Rate Calibration for Lane 1 if number of lanes used is only 1*/
+    if(config->num_of_lanes == 1U)
+    {
+        uint8_t rdVal = dphy_reg_read(dphy2txtester_DIG_RDWR_TX_LANE1_SLEWRATE_0);
+        dphy_reg_write(dphy2txtester_DIG_RDWR_TX_LANE1_SLEWRATE_0, rdVal | 0xEU); //sr_finished_ovr_en = BIT 3, sr_finished_ovr = BIT 2, srcal_en_ovr_en = BIT 1
+    }
 
     /* Fixed settings for any bandwidth */
     dphy_reg_write(0x0001, 0x20); // DPHY reg 0x1, hsfreqrange_ovr_en_rw = 1'b1
@@ -263,129 +288,174 @@ void pll_reprogramming(cy_stc_mipidsi_config_t const *config)
     dphy_reg_write(0x0162, 0x08); // DPHY reg 0x162: pll_int_cntrl_rw=6'b000010, pll_gmp_cntrl_rw=2'b00
     dphy_reg_write(0x016E, 0x0A); // DPHY reg 0x16e: pll_prop_cntrl_wr[5:0]=6'b001010
 
+    if (bandwidth < 450U)
+    { 
+        dphy_reg_write(0x01AC, 0x10); // For frequencies below 450Mbps clkdiv_clk_en must be enabled.
+    }
+    /* Added M/N factor for PLL reprogramming, M - 0x179, N - 0x178
+    * where N - Input Frequency Division Ration , M = Feedback Multiplication Ratio
+    * Some bandwidth are not supported with M/N calculation, use the closest value lower to the needed bandwidth.
+    * For M calculation, some values more than 255 can have a carry forward to register 0x17A
+    */
     switch (bandwidth)
     {
-    case 100U:
-        dphy_reg_write(0x0002, 0x20); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0100000 (100Mbps)
-        dphy_reg_write(0x017B, 0xFC); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3E, pll_m_ovr_en_rw=1
-        break;
-    case 150U:
-        dphy_reg_write(0x0002, 0x31); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0110001 (150Mbps)
-        dphy_reg_write(0x017B, 0xF1); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x38, pll_m_ovr_en_rw=1
-        break;
-    case 200U:
-        dphy_reg_write(0x0002, 0x03); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0000011 (200Mbps)
-        dphy_reg_write(0x017B, 0xDD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x2E, pll_m_ovr_en_rw=1
-        break;
-    case 250U:
-        dphy_reg_write(0x0002, 0x33); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0110011 (250Mbps)
-        dphy_reg_write(0x017B, 0xD1); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x28, pll_m_ovr_en_rw=1
-        break;
-    case 300U:
-        dphy_reg_write(0x0002, 0x14); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0010100 (300Mbps)
-        dphy_reg_write(0x017B, 0xD1); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x28, pll_m_ovr_en_rw=1
-        break;
-    case 350U:
-        dphy_reg_write(0x0002, 0x35); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0110101 (350Mbps)
-        dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
-        break;
-    case 400U:
-        dphy_reg_write(0x0002, 0x05); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0000101 (400Mbps)
-        dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
-        break;
-    case 450U:
-        dphy_reg_write(0x0002, 0x16); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0010110 (450Mbps)
-        dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
-        break;
-    case 500U:
-        dphy_reg_write(0x0002, 0x26); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0100110 (500Mbps)
-        dphy_reg_write(0x017B, 0xB1); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x18, pll_m_ovr_en_rw=1
-        break;
-    case 550U:
-        dphy_reg_write(0x0002, 0x37); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0110111 (550Mbps)
-        dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
-        break;
-    case 600U:
-        dphy_reg_write(0x0002, 0x07); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0000111 (600Mbps)
-        dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
-        break;
-    case 650U:
-        dphy_reg_write(0x0002, 0x18); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0011000 (650Mbps)
-        dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
-        break;
-    case 700U:
-        dphy_reg_write(0x0002, 0x28); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101000 (700Mbps)
-        dphy_reg_write(0x017B, 0x9D); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0xE, pll_m_ovr_en_rw=1
-        break;
-    case 750U:
-        dphy_reg_write(0x0002, 0x39); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0111001 (750Mbps)
-        dphy_reg_write(0x017B, 0x9D); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0xE, pll_m_ovr_en_rw=1
-        break;
-    case 800U:
-        dphy_reg_write(0x0002, 0x09); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0001001 (800Mbps)
-        dphy_reg_write(0x017B, 0x9D); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0xE, pll_m_ovr_en_rw=1
-        break;
-    case 850U:
-        dphy_reg_write(0x0002, 0x19); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0011001 (850Mbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 900U:
-        dphy_reg_write(0x0002, 0x29); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101001 (900Mbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 950U:
-        dphy_reg_write(0x0002, 0x3A); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0111010 (950Mbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 1000U:
-        dphy_reg_write(0x0002, 0x0A); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0001010 (1Gbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 1050U:
-        dphy_reg_write(0x0002, 0x1A); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0011010 (1.05Gbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 1100U:
-        dphy_reg_write(0x0002, 0x2A); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101010 (1.1Gbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 1150U:
-        dphy_reg_write(0x0002, 0x3B); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0111011 (1.15Gbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 1200U:
-        dphy_reg_write(0x0002, 0x0B); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0001011 (1.2Gbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 1250U:
-        dphy_reg_write(0x0002, 0x1B); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0011011 (1.25Gbps)
-        dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
-        break;
-    case 1300U:
-        dphy_reg_write(0x0002, 0x2B); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101011 (1.3Gbps)
-        dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
-        break;
-    case 1350U:
-        dphy_reg_write(0x0002, 0x3C); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0111100 (1.35Gbps)
-        dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
-        break;
-    case 1400U:
-        dphy_reg_write(0x0002, 0x0C); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0001100 (1.4Gbps)
-        dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
-        break;
-    case 1450U:
-        dphy_reg_write(0x0002, 0x1C); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0011100 (1.45Gbps)
-        dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
-        break;
+        case 100U:
+            dphy_reg_write(0x0178, 0x90); // N
+            dphy_reg_write(0x0179, 0x30); // M
+            dphy_reg_write(0x0002, 0x20); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0100000 (100Mbps)
+            dphy_reg_write(0x017B, 0xFC); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3E, pll_m_ovr_en_rw=1
+            break;
+        case 150U:
+            dphy_reg_write(0x0178, 0x90); // N
+            dphy_reg_write(0x0179, 0x49); // M
+            dphy_reg_write(0x0002, 0x31); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0110001 (150Mbps)
+            dphy_reg_write(0x017B, 0xF1); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x38, pll_m_ovr_en_rw=1
+            break;
+        case 200U:
+            dphy_reg_write(0x0178, 0xab); // N
+            dphy_reg_write(0x0179, 0X62); // M
+            dphy_reg_write(0x0002, 0x03); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0000011 (200Mbps)
+            dphy_reg_write(0x017B, 0xDD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x2E, pll_m_ovr_en_rw=1
+            break;
+        case 250U:
+            dphy_reg_write(0x0178, 0xA8); // N
+            dphy_reg_write(0x0179, 0x7B); // M
+            dphy_reg_write(0x0002, 0x33); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0110011 (250Mbps)
+            dphy_reg_write(0x017B, 0xD1); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x28, pll_m_ovr_en_rw=1
+            break;
+        case 300U:
+            dphy_reg_write(0x0178, 0xAB); // N
+            dphy_reg_write(0x0179, 0x94); // M
+            dphy_reg_write(0x0002, 0x14); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0010100 (300Mbps)
+            dphy_reg_write(0x017B, 0xD1); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x28, pll_m_ovr_en_rw=1
+            break;
+        case 350U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0xAD); // M
+            dphy_reg_write(0x0002, 0x35); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0110101 (350Mbps)
+            dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
+            break;
+        case 400U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0xC6); // M
+            dphy_reg_write(0x0002, 0x05); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0000101 (400Mbps)
+            dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
+            break;
+        case 450U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0xDF); // M
+            dphy_reg_write(0x0002, 0x16); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0010110 (450Mbps)
+            dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
+            break;
+        case 500U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0xF8); // M
+            dphy_reg_write(0x0002, 0x26); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0100110 (500Mbps)
+            dphy_reg_write(0x017B, 0xB1); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x18, pll_m_ovr_en_rw=1
+            break;
+        case 550U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0x11); // M
+            dphy_reg_write(0x017A, 0x01); // Carry forward from M
+            dphy_reg_write(0x0002, 0x37); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0110111 (550Mbps)
+            dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
+            break;
+        case 600U:
+        case 650U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0x2A); // M
+            dphy_reg_write(0x017A, 0x01); // Carry forward from M 
+            dphy_reg_write(0x0002, 0x07); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0000111 (600Mbps)
+            dphy_reg_write(0x017B, 0xBD); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x1E, pll_m_ovr_en_rw=1
+            break;
+        case 700U:
+            dphy_reg_write(0x0179, 0xAD); // M
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0002, 0x28); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101000 (700Mbps)
+            dphy_reg_write(0x017B, 0x9D); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0xE, pll_m_ovr_en_rw=1
+            break;
+        case 750U:
+            dphy_reg_write(0x0179, 0x7B); // M
+            dphy_reg_write(0x0178, 0xB8); // N
+            dphy_reg_write(0x0002, 0x39); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0111001 (750Mbps)
+            dphy_reg_write(0x017B, 0x9D); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0xE, pll_m_ovr_en_rw=1
+            break;
+        case 800U:
+        case 850U:
+            dphy_reg_write(0x0179, 0xC6); // M
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0002, 0x09); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0001001 (800Mbps)
+            dphy_reg_write(0x017B, 0x9D); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0xE, pll_m_ovr_en_rw=1
+            break;
+        case 900U:
+        case 950U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0x11); // M
+            dphy_reg_write(0x017A, 0x01); // Carry forward from M 
+            dphy_reg_write(0x0002, 0x29); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101001 (900Mbps)
+            dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
+            break;
+        case 1000U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0xF8); // M
+            dphy_reg_write(0x0002, 0x0A); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0001010 (1Gbps)
+            dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
+            break;
+        case 1050U:
+            dphy_reg_write(0x0178, 0xB8); // N
+            dphy_reg_write(0x0179, 0xAD); // M
+            dphy_reg_write(0x0002, 0x1A); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0011010 (1.05Gbps)
+            dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
+            break;
+        case 1100U:
+        case 1150U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0x11); // M
+            dphy_reg_write(0x017A, 0x01); // Carry forward from M 
+            dphy_reg_write(0x0002, 0x2A); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101010 (1.1Gbps)
+            dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
+            break;
+        case 1200U:
+        case 1250U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0x2A); // M
+            dphy_reg_write(0x017A, 0x01); // Carry forward from M 
+            dphy_reg_write(0x0002, 0x0B); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0001011 (1.2Gbps)
+            dphy_reg_write(0x017B, 0x91); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x8, pll_m_ovr_en_rw=1
+            break;
+     case 1300U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0x43); // M
+            dphy_reg_write(0x017A, 0x01); // Carry forward from M 
+            dphy_reg_write(0x0002, 0x2B); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101011 (1.3Gbps)
+            dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
+            break;
+        case 1350U:
+            dphy_reg_write(0x0178, 0xB8); // N
+            dphy_reg_write(0x0179, 0xDF); // M
+            dphy_reg_write(0x0002, 0x3C); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0111100 (1.35Gbps)
+            dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
+            break;
+        case 1400U:
+        case 1450U:
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0x5C); // M
+            dphy_reg_write(0x017A, 0x01); // Carry forward from M 
+            dphy_reg_write(0x0002, 0x0C); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0001100 (1.4Gbps)
+            dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
+            break;
     default:
-        dphy_reg_write(0x0002, 0x2C); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101100 (1.5Gbps)
-        dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
-        break;
+            dphy_reg_write(0x0178, 0xD8); // N
+            dphy_reg_write(0x0179, 0x75); // M
+            dphy_reg_write(0x017A, 0x01); // Carry forward from M 
+            dphy_reg_write(0x0002, 0x2C); // DPHY reg 0x2, hsfreqrange_ovr_rw    = 7'b0101100 (1.5Gbps)
+            dphy_reg_write(0x017B, 0x87); // DPHY reg 0x17b: pll_vco_cntrl_ovr_en_rw=1, pll_vco_cntrl_ovr_rw=0x3, pll_m_ovr_en_rw=1
+            break;
     }
 }
 
 static void cy_mipi_dsi_wr_tx_header(GFXSS_MIPIDSI_Type *mipi_dsi,
-                                     uint8_t di, uint8_t data0, uint8_t data1)
+            uint8_t di, uint8_t data0, uint8_t data1)
 {
     uint32_t reg;
 
@@ -395,50 +465,41 @@ static void cy_mipi_dsi_wr_tx_header(GFXSS_MIPIDSI_Type *mipi_dsi,
 }
 
 static void cy_mipi_dsi_wr_tx_data(GFXSS_MIPIDSI_Type *mipi_dsi,
-                                   uint32_t tx_data)
+                uint32_t tx_data)
 {
     mipi_dsi->DWCMIPIDSI.GEN_PLD_DATA = tx_data;
 }
 
 static void cy_mipi_dsi_long_data_wr(GFXSS_MIPIDSI_Type *mipi_dsi,
-                                     const uint8_t *data0, uint32_t data_size)
+            const uint8_t *data0, uint32_t data_size)
 {
     uint32_t word_cnt = 0, payload = 0, no_of_words = 0, data_cnt = 0;
 
     no_of_words = data_size / 4U;
     /* in case that data count is more then 4 */
-    for (word_cnt = 0; word_cnt < no_of_words; word_cnt++)
-    {
-        data_cnt = word_cnt * 4U;
+    for (word_cnt = 0; word_cnt < no_of_words; word_cnt++) {
+        data_cnt = word_cnt*4U;
         payload = (uint32_t)data0[data_cnt] |
-                  (uint32_t)data0[data_cnt + 1U] << 8 |
-                  (uint32_t)data0[data_cnt + 2U] << 16 |
-                  (uint32_t)data0[data_cnt + 3U] << 24;
+            (uint32_t)data0[data_cnt + 1U] << 8 |
+            (uint32_t)data0[data_cnt + 2U] << 16 |
+            (uint32_t)data0[data_cnt + 3U] << 24;
 
         cy_mipi_dsi_wr_tx_data(mipi_dsi, payload);
     }
 
     data_cnt = no_of_words * 4U;
 
-    if ((data_size - data_cnt) < 4U)
-    {
-        if ((data_size - data_cnt) == 3U)
-        {
+    if ((data_size - data_cnt) < 4U) {
+        if ((data_size - data_cnt) == 3U) {
             payload = (uint32_t)data0[data_cnt] |
-                      (uint32_t)data0[data_cnt + 1U] << 8 |
-                      (uint32_t)data0[data_cnt + 2U] << 16;
-        }
-        else if ((data_size - data_cnt) == 2U)
-        {
+                (uint32_t)data0[data_cnt + 1U] << 8 |
+                (uint32_t)data0[data_cnt + 2U] << 16;
+        } else if ((data_size - data_cnt) == 2U) {
             payload = (uint32_t)data0[data_cnt] |
-                      (uint32_t)data0[data_cnt + 1U] << 8;
-        }
-        else if ((data_size - data_cnt) == 1U)
-        {
+                (uint32_t)data0[data_cnt + 1U] << 8;
+        } else if ((data_size - data_cnt) == 1U) {
             payload = (uint32_t)data0[data_cnt];
-        }
-        else
-        {
+        }else{
             return; //nothing to write
         }
 
@@ -447,7 +508,7 @@ static void cy_mipi_dsi_long_data_wr(GFXSS_MIPIDSI_Type *mipi_dsi,
 }
 
 static cy_en_mipidsi_status_t cy_mipi_dsi_pkt_write(GFXSS_MIPIDSI_Type *mipi_dsi,
-        uint8_t data_type, const uint8_t *buf, uint32_t len)
+               uint8_t data_type, const uint8_t *buf, uint32_t len)
 {
     cy_en_mipidsi_status_t ret = CY_MIPIDSI_SUCCESS;
     const uint8_t *data = buf;
@@ -470,13 +531,13 @@ static cy_en_mipidsi_status_t cy_mipi_dsi_pkt_write(GFXSS_MIPIDSI_Type *mipi_dsi
         {
             /* handle generic long write command */
             /* Wait for FIFO to be Empty */
-            while (((mipi_dsi->DWCMIPIDSI.CMD_PKT_STATUS & GFXSS_MIPIDSI_DWCMIPIDSI_CMD_PKT_STATUS_CMD_PKT_STATUS_GEN_BUFF_PLD_EMPTY_Msk) == 0UL) ||
-                    ((mipi_dsi->DWCMIPIDSI.CMD_PKT_STATUS & GFXSS_MIPIDSI_DWCMIPIDSI_CMD_PKT_STATUS_CMD_PKT_STATUS_GEN_PLD_W_EMPTY_Msk) == 0UL)) {}
+            while(((mipi_dsi->DWCMIPIDSI.CMD_PKT_STATUS & GFXSS_MIPIDSI_DWCMIPIDSI_CMD_PKT_STATUS_CMD_PKT_STATUS_GEN_BUFF_PLD_EMPTY_Msk) == 0UL)||
+                 ((mipi_dsi->DWCMIPIDSI.CMD_PKT_STATUS & GFXSS_MIPIDSI_DWCMIPIDSI_CMD_PKT_STATUS_CMD_PKT_STATUS_GEN_PLD_W_EMPTY_Msk ) == 0UL)){}
 
             cy_mipi_dsi_long_data_wr(mipi_dsi, data, len);
 
             cy_mipi_dsi_wr_tx_header(mipi_dsi, data_type, (uint8_t)len & 0xFFU,
-                                     (uint8_t)((len & 0xFF00U) >> 8));
+                                               (uint8_t)((len & 0xFF00U) >> 8));
         }
     }
 
@@ -484,7 +545,7 @@ static cy_en_mipidsi_status_t cy_mipi_dsi_pkt_write(GFXSS_MIPIDSI_Type *mipi_dsi
 }
 
 __STATIC_INLINE cy_en_mipidsi_status_t cy_mipi_dsi_dcs_cmd(GFXSS_MIPIDSI_Type *mipi_dsi,
-        cy_en_mipidsi_dcs_cmd_type_t cmd, const uint32_t *param, int len)
+                cy_en_mipidsi_dcs_cmd_type_t cmd, const uint32_t *param, int len)
 {
     cy_en_mipidsi_status_t err = CY_MIPIDSI_SUCCESS;
     uint8_t buf[2];
@@ -493,8 +554,7 @@ __STATIC_INLINE cy_en_mipidsi_status_t cy_mipi_dsi_dcs_cmd(GFXSS_MIPIDSI_Type *m
     (void)param;
     (void)len;
 
-    switch (cmd)
-    {
+    switch (cmd) {
     case MIPI_DCS_EXIT_SLEEP_MODE:
     case MIPI_DCS_ENTER_SLEEP_MODE:
     case MIPI_DCS_SET_DISPLAY_ON:
@@ -502,7 +562,7 @@ __STATIC_INLINE cy_en_mipidsi_status_t cy_mipi_dsi_dcs_cmd(GFXSS_MIPIDSI_Type *m
     case MIPI_DCS_SOFT_RESET:
         buf[0] = (uint8_t)cmd;
         err = cy_mipi_dsi_pkt_write(mipi_dsi,
-                                    (uint8_t)MIPI_DSI_DCS_SHORT_WRITE, buf, 1UL);
+                (uint8_t)MIPI_DSI_DCS_SHORT_WRITE, buf, 1UL);
         break;
 
     default:
@@ -522,12 +582,11 @@ static void cy_mipi_dsi_clear_err(GFXSS_MIPIDSI_Type *mipi_dsi)
 }
 
 static void cy_mipi_dsi_dpi_config(GFXSS_MIPIDSI_Type *mipi_dsi,
-                                   cy_stc_mipidsi_config_t const *config)
+                                            cy_stc_mipidsi_config_t const *config)
 {
     uint32_t val = 0, color = 0;
 
-    switch (config->dpi_fmt)
-    {
+    switch (config->dpi_fmt) {
     case CY_MIPIDSI_FMT_RGB888:
         color = DPI_COLOR_CODING_24BIT;
         break;
@@ -545,12 +604,10 @@ static void cy_mipi_dsi_dpi_config(GFXSS_MIPIDSI_Type *mipi_dsi,
         break;
     }
 
-    if ((bool)(config->display_params->polarity_flags & DISPLAY_PARAMS_FLAG_NVSYNC))
-    {
+    if ((bool)(config->display_params->polarity_flags & DISPLAY_PARAMS_FLAG_NVSYNC)){
         val |= VSYNC_ACTIVE_LOW;
     }
-    if ((bool)(config->display_params->polarity_flags & DISPLAY_PARAMS_FLAG_NHSYNC))
-    {
+    if ((bool)(config->display_params->polarity_flags & DISPLAY_PARAMS_FLAG_NHSYNC)){
         val |= HSYNC_ACTIVE_LOW;
     }
 
@@ -568,9 +625,9 @@ static void cy_mipi_dsi_packet_handler_config(GFXSS_MIPIDSI_Type *mipi_dsi)
 }
 
 static void cy_mipi_dsi_video_packet_config(GFXSS_MIPIDSI_Type *mipi_dsi,
-        cy_stc_mipidsi_config_t const *config)
+                        cy_stc_mipidsi_config_t const *config)
 {
-    mipi_dsi->DWCMIPIDSI.VID_PKT_SIZE = VID_PKT_SIZE(config->display_params->hdisplay);
+     mipi_dsi->DWCMIPIDSI.VID_PKT_SIZE = VID_PKT_SIZE(config->display_params->hdisplay);
 }
 
 static void cy_mipi_dsi_command_mode_config(GFXSS_MIPIDSI_Type *mipi_dsi)
@@ -581,23 +638,22 @@ static void cy_mipi_dsi_command_mode_config(GFXSS_MIPIDSI_Type *mipi_dsi)
 }
 
 /* Get lane byte clock cycles. */
-static uint32_t cy_mipi_dsi_get_hcomponent_lbcc(cy_stc_mipidsi_config_t const *config,
-        uint32_t hcomponent)
+static uint32_t cy_mipi_dsi_get_hcomponent_lbcc(            cy_stc_mipidsi_config_t const *config,
+                                                             uint32_t hcomponent)
 {
     uint32_t frac, lbcc;
     lbcc = hcomponent * config->per_lane_mbps * 1000UL / 8UL;
 
     frac = lbcc % config->display_params->pixel_clock;
     lbcc = lbcc / config->display_params->pixel_clock;
-    if ((bool)frac)
-    {
+    if ((bool)frac){
         lbcc++;
     }
     return lbcc;
 }
 
 static void cy_mipi_dsi_line_timer_config(GFXSS_MIPIDSI_Type *mipi_dsi,
-        cy_stc_mipidsi_config_t const *config)
+                      cy_stc_mipidsi_config_t const *config)
 {
     uint32_t htotal, lbcc;
 
@@ -615,7 +671,7 @@ static void cy_mipi_dsi_line_timer_config(GFXSS_MIPIDSI_Type *mipi_dsi,
 }
 
 static void cy_mipi_dsi_vertical_timing_config(GFXSS_MIPIDSI_Type *mipi_dsi,
-        cy_stc_mipidsi_config_t const *config)
+                    cy_stc_mipidsi_config_t const *config)
 {
 
     if (mipi_dsi != NULL && config != NULL)
@@ -659,8 +715,7 @@ static void cy_mipi_dsi_dphy_enable(GFXSS_MIPIDSI_Type *mipi_dsi)
     mipi_dsi->DWCMIPIDSI.PHY_RSTZ = PHY_ENABLECLK | PHY_UNSHUTDOWNZ;
     mipi_dsi->DWCMIPIDSI.PHY_RSTZ = PHY_ENABLECLK | PHY_UNRSTZ | PHY_UNSHUTDOWNZ;
 
-    while ((CY_GET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_STATUS) & (PHY_LOCK)) != (PHY_LOCK))
-    {
+    while((CY_GET_REG32(&GFXSS->GFXSS_MIPIDSI.DWCMIPIDSI.PHY_STATUS) & (PHY_LOCK)) != (PHY_LOCK)){
         Cy_SysLib_DelayUs(10);
     }
 }
@@ -679,7 +734,7 @@ static void cy_mipi_dsi_init(GFXSS_MIPIDSI_Type *base, cy_stc_mipidsi_config_t c
 
 
     /* RESET MIPI DSI IP Block */
-    base->DWCMIPIDSI.PWR_UP = ~_VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ, 1);
+    base->DWCMIPIDSI.PWR_UP = ~_VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ , 1);
 
     /* Configure Clock */
     base->DWCMIPIDSI.CLKMGR_CFG = TO_CLK_DIVISION(10UL) | TX_ESC_CLK_DIVISION(esc_clk_division);
@@ -693,9 +748,9 @@ static void cy_mipi_dsi_video_mode_config(GFXSS_MIPIDSI_Type *base, cy_stc_mipid
 static void cy_mipi_dsi_set_mode(GFXSS_MIPIDSI_Type *base, cy_stc_mipidsi_config_t const *config)
 {
     /* RESET MIPI DSI IP Block */
-    base->DWCMIPIDSI.PWR_UP &= ~_VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ, 1);
+    base->DWCMIPIDSI.PWR_UP &= ~_VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ , 1);
 
-    if (config->dsi_mode == DSI_VIDEO_MODE)
+    if(config->dsi_mode == DSI_VIDEO_MODE)
     {
         base->DWCMIPIDSI.MODE_CFG = ENABLE_VIDEO_MODE;
     }
@@ -706,7 +761,7 @@ static void cy_mipi_dsi_set_mode(GFXSS_MIPIDSI_Type *base, cy_stc_mipidsi_config
 
     base->DWCMIPIDSI.LPCLK_CTRL = PHY_TXREQUESTCLKHS ;
     /* powerup MIPI DSI IP Block */
-    base->DWCMIPIDSI.PWR_UP |= _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ, 1);
+    base->DWCMIPIDSI.PWR_UP |= _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ , 1);
 }
 
 cy_en_mipidsi_status_t Cy_MIPIDSI_Init(GFXSS_MIPIDSI_Type *base, cy_stc_mipidsi_config_t const *config, cy_stc_mipidsi_context_t *context)
@@ -872,12 +927,9 @@ cy_en_mipidsi_status_t Cy_MIPIDSI_ExitSleep(GFXSS_MIPIDSI_Type *base)
     CY_ASSERT_L1(NULL != base);
 
     cy_en_mipidsi_status_t result =  cy_mipi_dsi_dcs_cmd(base, MIPI_DCS_EXIT_SLEEP_MODE, NULL, 0);
-    if (result == CY_MIPIDSI_SUCCESS)
-    {
+    if (result == CY_MIPIDSI_SUCCESS){
         //do nothing
-    }
-    else
-    {
+    }else{
         //do nothing
     }
     return result;
@@ -917,22 +969,21 @@ cy_en_mipidsi_status_t Cy_MIPIDSI_EnterULPM(GFXSS_MIPIDSI_Type *base)
                                      _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PHY_ULPS_CTRL_PHY_ULPS_CTRL_PHY_TXREQULPSLAN, 1);
     Cy_SysLib_Delay(1);
     /*  Verify that all the data lanes has entered in ULPM using PHY_STATUS register. */
-    if (no_of_lanes == N_LANES(2UL)) //Two lanes configured
+    if(no_of_lanes == N_LANES(2UL))  //Two lanes configured
     {
         if ((base->DWCMIPIDSI.PHY_STATUS & MIPI_DPHY_STATUS_DATA_LINES) == 0x0U)
         {
             status = CY_MIPIDSI_SUCCESS;
         }
     }
-    else                           //one lane configured
-    {
+    else{                          //one lane configured
         if ((base->DWCMIPIDSI.PHY_STATUS & MIPI_DPHY_STATUS_DATA_LINE0) == 0x0U)
         {
             status = CY_MIPIDSI_SUCCESS;
         }
     }
 
-    base->DWCMIPIDSI.PWR_UP &=  ~_VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ, 1);
+    base->DWCMIPIDSI.PWR_UP &=  ~_VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ , 1);
 
     return status;
 }
@@ -941,7 +992,7 @@ cy_en_mipidsi_status_t Cy_MIPIDSI_ExitULPM(GFXSS_MIPIDSI_Type *base)
     cy_en_mipidsi_status_t status = CY_MIPIDSI_TIMEOUT;
     uint32_t no_of_lanes = _FLD2VAL(GFXSS_MIPIDSI_DWCMIPIDSI_PHY_IF_CFG_PHY_IF_CFG_N_LANES, base->DWCMIPIDSI.PHY_IF_CFG);
 
-    base->DWCMIPIDSI.PWR_UP |= _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ, 1);
+    base->DWCMIPIDSI.PWR_UP |= _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ , 1);
 
     /* Exit ULPM Data and Clock lines */
     base->DWCMIPIDSI.PHY_ULPS_CTRL = _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PHY_ULPS_CTRL_PHY_ULPS_CTRL_PHY_TXEXITULPSLAN, 1) |
@@ -949,15 +1000,14 @@ cy_en_mipidsi_status_t Cy_MIPIDSI_ExitULPM(GFXSS_MIPIDSI_Type *base)
 
     Cy_SysLib_Delay(1);
     /*  Verify that all the data lanes has exited in ULPM using PHY_STATUS register. */
-    if (no_of_lanes == N_LANES(2UL)) //Two lanes configured
+    if(no_of_lanes == N_LANES(2UL))  //Two lanes configured
     {
         if ((base->DWCMIPIDSI.PHY_STATUS & MIPI_DPHY_STATUS_DATA_LINES) == MIPI_DPHY_STATUS_DATA_LINES)
         {
             status = CY_MIPIDSI_SUCCESS;
         }
     }
-    else                          //one lane configured
-    {
+    else{                         //one lane configured
         if ((base->DWCMIPIDSI.PHY_STATUS & MIPI_DPHY_STATUS_DATA_LINE0) == MIPI_DPHY_STATUS_DATA_LINE0)
         {
             status = CY_MIPIDSI_SUCCESS;
@@ -975,22 +1025,21 @@ cy_en_mipidsi_status_t Cy_MIPIDSI_EnterULPM_Data(GFXSS_MIPIDSI_Type *base)
     base->DWCMIPIDSI.PHY_ULPS_CTRL = _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PHY_ULPS_CTRL_PHY_ULPS_CTRL_PHY_TXREQULPSLAN, 1);
     Cy_SysLib_Delay(1);
     /*  Verify that all the data lanes has entered in ULPM using PHY_STATUS register. */
-    if (no_of_lanes == N_LANES(2UL)) //Two lanes configured
+    if(no_of_lanes == N_LANES(2UL))  //Two lanes configured
     {
         if ((base->DWCMIPIDSI.PHY_STATUS & MIPI_DPHY_STATUS_DATA_LINES) == 0x0U)
         {
             status = CY_MIPIDSI_SUCCESS;
         }
     }
-    else                          //one lane configured
-    {
+    else{                         //one lane configured
         if ((base->DWCMIPIDSI.PHY_STATUS & MIPI_DPHY_STATUS_DATA_LINE0) == 0x0U)
         {
             status = CY_MIPIDSI_SUCCESS;
         }
     }
 
-    base->DWCMIPIDSI.PWR_UP &=  ~_VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ, 1);
+    base->DWCMIPIDSI.PWR_UP &=  ~_VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ , 1);
 
     return status;
 
@@ -1000,21 +1049,20 @@ cy_en_mipidsi_status_t Cy_MIPIDSI_ExitULPM_Data(GFXSS_MIPIDSI_Type *base)
     cy_en_mipidsi_status_t status = CY_MIPIDSI_TIMEOUT;
     uint32_t no_of_lanes = (uint8_t)_FLD2VAL(GFXSS_MIPIDSI_DWCMIPIDSI_PHY_IF_CFG_PHY_IF_CFG_N_LANES, base->DWCMIPIDSI.PHY_IF_CFG);
 
-    base->DWCMIPIDSI.PWR_UP |= _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ, 1);
+    base->DWCMIPIDSI.PWR_UP |= _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PWR_UP_PWR_UP_SHUTDOWNZ , 1);
 
     /* Assert the Exit ULPM bits by setting PHY_ULPS_CTRL[3:0] = 0x8 */
     base->DWCMIPIDSI.PHY_ULPS_CTRL = _VAL2FLD(GFXSS_MIPIDSI_DWCMIPIDSI_PHY_ULPS_CTRL_PHY_ULPS_CTRL_PHY_TXEXITULPSLAN, 1);;
     Cy_SysLib_Delay(1);
     /*  Verify that all the data lanes has exited in ULPM using PHY_STATUS register. */
-    if (no_of_lanes == N_LANES(2UL)) //Two lanes configured
+    if(no_of_lanes == N_LANES(2UL))  //Two lanes configured
     {
         if ((base->DWCMIPIDSI.PHY_STATUS & MIPI_DPHY_STATUS_DATA_LINES) == MIPI_DPHY_STATUS_DATA_LINES)
         {
             status = CY_MIPIDSI_SUCCESS;
         }
     }
-    else                           //one lane configured
-    {
+    else{                          //one lane configured
         if ((base->DWCMIPIDSI.PHY_STATUS & MIPI_DPHY_STATUS_DATA_LINE0) == MIPI_DPHY_STATUS_DATA_LINE0)
         {
             status = CY_MIPIDSI_SUCCESS;
@@ -1022,6 +1070,26 @@ cy_en_mipidsi_status_t Cy_MIPIDSI_ExitULPM_Data(GFXSS_MIPIDSI_Type *base)
     }
 
     return status;
+}
+
+cy_en_mipidsi_status_t Cy_MIPIDSI_CMD_MODE_DCS_SetLowPower(GFXSS_MIPIDSI_Type *base, bool enable)
+{
+    if(enable)
+    {
+        base->DWCMIPIDSI.CMD_MODE_CFG |= GFXSS_MIPIDSI_DWCMIPIDSI_CMD_MODE_CFG_CMD_MODE_CFG_DCS_SW_0P_TX_Msk
+                                      |  GFXSS_MIPIDSI_DWCMIPIDSI_CMD_MODE_CFG_CMD_MODE_CFG_DCS_SW_1P_TX_Msk
+                                      |  GFXSS_MIPIDSI_DWCMIPIDSI_CMD_MODE_CFG_CMD_MODE_CFG_DCS_SR_0P_TX_Msk
+                                      |  GFXSS_MIPIDSI_DWCMIPIDSI_CMD_MODE_CFG_CMD_MODE_CFG_DCS_LW_TX_Msk;
+    }
+    else
+    {
+        base->DWCMIPIDSI.CMD_MODE_CFG &= ~(GFXSS_MIPIDSI_DWCMIPIDSI_CMD_MODE_CFG_CMD_MODE_CFG_DCS_SW_0P_TX_Msk
+                                      |  GFXSS_MIPIDSI_DWCMIPIDSI_CMD_MODE_CFG_CMD_MODE_CFG_DCS_SW_1P_TX_Msk
+                                      |  GFXSS_MIPIDSI_DWCMIPIDSI_CMD_MODE_CFG_CMD_MODE_CFG_DCS_SR_0P_TX_Msk
+                                      |  GFXSS_MIPIDSI_DWCMIPIDSI_CMD_MODE_CFG_CMD_MODE_CFG_DCS_LW_TX_Msk);
+    }
+    
+    return CY_MIPIDSI_SUCCESS;
 }
 
 #if defined(__cplusplus)

@@ -122,13 +122,13 @@ typedef struct
     mtb_hal_nvm_type_t  nvm_type;              //!< NVM type.
     uint32_t            start_address;         //!< Base address of the distinct NVM region.
     uint32_t            offset;                //!< Offset to the address in the distinct NVM
-    //!< region.
+                                               //!< region.
     uint32_t            size;                  //!< Size of the distinct NVM region.
     uint32_t            sector_size;           //!< Sector size of the distinct NVM region.
     uint32_t            block_size;            //!< Block size (programming granularity) of the
-    //!< distinct NVM region.
+                                               //!< distinct NVM region.
     bool                is_erase_required;     //!< true = erase required before program, false =
-    //!< erase not required before program.
+                                               //!< erase not required before program.
     uint8_t             erase_value;           //!< NVM erase value (if applicable).
 } mtb_hal_nvm_region_info_t;
 
@@ -136,7 +136,7 @@ typedef struct
 typedef struct
 {
     uint8_t region_count;                     //!< The number of distinct NVM regions.
-    const mtb_hal_nvm_region_info_t *regions;   //!< Array of the distinct NVM regions.
+    const mtb_hal_nvm_region_info_t* regions;   //!< Array of the distinct NVM regions.
 } mtb_hal_nvm_info_t;
 
 
@@ -229,15 +229,15 @@ cy_rslt_t mtb_hal_nvm_program(mtb_hal_nvm_t* obj, uint32_t address, const uint32
  * @param[in] length The legnth to block
  * @return pointer, mtb_hal_nvm_region_info_t, to nvm region
  */
-const mtb_hal_nvm_region_info_t *mtb_hal_nvm_get_region_for_address(mtb_hal_nvm_t* obj,
-        uint32_t addr, uint32_t length);
+const mtb_hal_nvm_region_info_t* mtb_hal_nvm_get_region_for_address(mtb_hal_nvm_t* obj,
+                                                                    uint32_t addr, uint32_t length);
 
 #if defined(__cplusplus)
 }
 #endif
 
 #ifdef MTB_HAL_NVM_IMPL_HEADER
-    #include MTB_HAL_NVM_IMPL_HEADER
+#include MTB_HAL_NVM_IMPL_HEADER
 #endif /* MTB_HAL_NVM_IMPL_HEADER */
 
 #endif //defined(MTB_HAL_DRIVER_AVAILABLE_NVM)

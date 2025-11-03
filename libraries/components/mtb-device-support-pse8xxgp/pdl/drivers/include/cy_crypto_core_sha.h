@@ -44,10 +44,10 @@ extern "C" {
 #include "cy_crypto_core_sha_v2.h"
 
 typedef cy_en_crypto_status_t (*cy_crypto_sha_func_t)(CRYPTO_Type *base,
-        uint8_t const *message,
-        uint32_t  messageSize,
-        uint8_t *digest,
-        cy_en_crypto_sha_mode_t mode);
+                                         uint8_t const *message,
+                                         uint32_t  messageSize,
+                                         uint8_t *digest,
+                                         cy_en_crypto_sha_mode_t mode);
 
 /**
 * \addtogroup group_crypto_lld_sha_functions
@@ -83,24 +83,24 @@ typedef cy_en_crypto_status_t (*cy_crypto_sha_func_t)(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha(CRYPTO_Type *base,
-        uint8_t const *message,
-        uint32_t messageSize,
-        uint8_t *digest,
-        cy_en_crypto_sha_mode_t mode)
+                                uint8_t const *message,
+                                uint32_t messageSize,
+                                uint8_t *digest,
+                                cy_en_crypto_sha_mode_t mode)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if ((bool)CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Sha(base, message, messageSize, digest, mode);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Sha(base, message, messageSize, digest, mode);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -131,23 +131,23 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha_Init(CRYPTO_Type *base,
-        cy_stc_crypto_sha_state_t *shaHashState,
-        cy_en_crypto_sha_mode_t mode,
-        void *shaBuffers)
+                             cy_stc_crypto_sha_state_t *shaHashState,
+                             cy_en_crypto_sha_mode_t mode,
+                             void *shaBuffers)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if ((bool)CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Sha_Init(base, shaHashState, mode, shaBuffers);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Sha_Init(base, shaHashState, mode, shaBuffers);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -175,15 +175,15 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha_Start(CRYPTO_Type *base
 
     if ((bool)CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Sha_Start(base, hashState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Sha_Start(base, hashState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -218,23 +218,23 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha_Start(CRYPTO_Type *base
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha_Update(CRYPTO_Type *base,
-        cy_stc_crypto_sha_state_t *hashState,
-        uint8_t const *message,
-        uint32_t  messageSize)
+                               cy_stc_crypto_sha_state_t *hashState,
+                               uint8_t const *message,
+                               uint32_t  messageSize)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if ((bool)CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Sha_Update(base, hashState, message, messageSize);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Sha_Update(base, hashState, message, messageSize);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -261,22 +261,22 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha_Update(CRYPTO_Type *bas
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha_Finish(CRYPTO_Type *base,
-        cy_stc_crypto_sha_state_t *hashState,
-        uint8_t *digest)
+                               cy_stc_crypto_sha_state_t *hashState,
+                               uint8_t *digest)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if ((bool)CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Sha_Finish(base, hashState, digest);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Sha_Finish(base, hashState, digest);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -304,15 +304,15 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Sha_Free(CRYPTO_Type *base,
 
     if ((bool)CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Sha_Free(base, hashState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Sha_Free(base, hashState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;

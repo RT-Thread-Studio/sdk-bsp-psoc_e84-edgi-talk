@@ -120,7 +120,7 @@ cy_rslt_t mtb_hal_comp_set_ref(mtb_hal_comp_t* obj, uint16_t ref_mv);
 #endif
 
 #ifdef MTB_HAL_COMP_IMPL_HEADER
-    #include MTB_HAL_COMP_IMPL_HEADER
+#include MTB_HAL_COMP_IMPL_HEADER
 #endif /* MTB_HAL_COMP_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_COMP)

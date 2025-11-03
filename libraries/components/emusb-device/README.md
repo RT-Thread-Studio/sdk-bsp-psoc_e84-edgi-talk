@@ -2,7 +2,7 @@
 
 ## Overview
 
-[<b>emUSB-Device</b>](https://www.segger.com/products/connectivity/emusb-device/) enables easy integration of USB functionality into an embedded system. Multiple standard classes are provided that allow embedded systems to behave as standard USB devices and communicate with any host like Windows, Linux and Mac systems. Infineon has licensed emUSB-Device from SEGGER and offers it for free to its customers. This middleware library provides emUSB-Device in the form of pre-build libraries.
+[emUSB-Device](https://www.segger.com/products/connectivity/emusb-device/) enables easy integration of USB functionality into an embedded system. Multiple standard classes are provided that allow embedded systems to behave as standard USB devices and communicate with any host like Windows, Linux and Mac systems. Infineon has licensed emUSB-Device from SEGGER and offers it for free to its customers. This middleware library provides emUSB-Device in the form of pre-build libraries.
 
 ### Features:
 

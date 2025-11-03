@@ -108,7 +108,7 @@ arm_status arm_depthwise_conv_s8_opt(const cmsis_nn_context *ctx,
                 {
                     if (i_ker_y < 0 || i_ker_y >= input_y || i_ker_x < 0 || i_ker_x >= input_x)
                     {
-                        arm_memset_q7(lhs_buffer, (int8_t) - input_offset, (uint32_t)input_ch);
+                        arm_memset_q7(lhs_buffer, (int8_t)-input_offset, (uint32_t)input_ch);
                         padded = 1;
                     }
                     else
@@ -141,17 +141,17 @@ arm_status arm_depthwise_conv_s8_opt(const cmsis_nn_context *ctx,
                 else
                 {
                     out = arm_nn_depthwise_conv_nt_t_padded_s8(lhs_buffer,
-                          kernel,
-                          input_offset,
-                          input_ch,
-                          output_shift,
-                          output_mult,
-                          output_offset,
-                          output_activation_min,
-                          output_activation_max,
-                          kernel_size,
-                          bias,
-                          out);
+                                                               kernel,
+                                                               input_offset,
+                                                               input_ch,
+                                                               output_shift,
+                                                               output_mult,
+                                                               output_offset,
+                                                               output_activation_min,
+                                                               output_activation_max,
+                                                               kernel_size,
+                                                               bias,
+                                                               out);
                     padded = 0;
                 }
                 buffer_count = 0;

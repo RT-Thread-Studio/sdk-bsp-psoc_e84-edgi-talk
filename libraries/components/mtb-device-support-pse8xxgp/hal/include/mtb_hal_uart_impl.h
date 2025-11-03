@@ -30,13 +30,13 @@
 #include "mtb_hal_uart.h"
 #include "mtb_hal_system.h"
 #if (defined(CY_IP_MXSCB) && (CY_IP_MXSCB_VERSION == 1))
-    #include "mtb_hal_uart_mxscb_v1.h"
+#include "mtb_hal_uart_mxscb_v1.h"
 #elif (defined(CY_IP_MXSCB) && (CY_IP_MXSCB_VERSION >= 2))
-    #include "mtb_hal_uart_common.h"
+#include "mtb_hal_uart_common.h"
 #elif (defined(CY_IP_MXS22SCB) && (CY_IP_MXS22SCB_VERSION == 1))
-    #include "mtb_hal_uart_common.h"
+#include "mtb_hal_uart_common.h"
 #else
-    #error "Unhandled version"
+#error "Unhandled version"
 #endif
 
 #if defined(__cplusplus)
@@ -66,13 +66,13 @@ extern "C" {
  * @return The status of the init request
  */
 cy_rslt_t mtb_hal_uart_setup(mtb_hal_uart_t* obj, const mtb_hal_uart_configurator_t* config,
-                             cy_stc_scb_uart_context_t *context, const mtb_hal_clock_t *clock);
+                             cy_stc_scb_uart_context_t* context, const mtb_hal_clock_t* clock);
 
 //--------------------------------------------------------------------------------------------------
 // mtb_hal_uart_get_internal
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE cy_rslt_t mtb_hal_uart_get_internal(mtb_hal_uart_t* obj, uint8_t* value,
-        uint32_t timeout)
+                                                    uint32_t timeout)
 {
     uint32_t read_value = Cy_SCB_UART_Get(obj->base);
     uint32_t timeoutTicks = timeout;

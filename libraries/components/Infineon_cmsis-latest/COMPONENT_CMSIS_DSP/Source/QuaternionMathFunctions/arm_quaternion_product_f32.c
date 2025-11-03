@@ -60,17 +60,16 @@
   @param[in]     qb                  second array of quaternions
   @param[out]    qr                   elementwise product of quaternions
   @param[in]     nbQuaternions       number of quaternions in the array
-  @return        none
  */
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
-void arm_quaternion_product_f32(const float32_t *qa,
-                                const float32_t *qb,
-                                float32_t *qr,
-                                uint32_t nbQuaternions)
+ARM_DSP_ATTRIBUTE void arm_quaternion_product_f32(const float32_t *qa, 
+    const float32_t *qb, 
+    float32_t *qr,
+    uint32_t nbQuaternions)
 {
     static uint32_t patternA[4] = { 0, 1, 0, 1 };
     static uint32_t patternB[4] = { 3, 2, 3, 2 };
@@ -127,20 +126,20 @@ void arm_quaternion_product_f32(const float32_t *qa,
 
 #else
 
-void arm_quaternion_product_f32(const float32_t *qa,
-                                const float32_t *qb,
-                                float32_t *qr,
-                                uint32_t nbQuaternions)
+ARM_DSP_ATTRIBUTE void arm_quaternion_product_f32(const float32_t *qa, 
+    const float32_t *qb, 
+    float32_t *qr,
+    uint32_t nbQuaternions)
 {
-    uint32_t i;
-    for (i = 0; i < nbQuaternions; i++)
-    {
-        arm_quaternion_product_single_f32(qa, qb, qr);
+   uint32_t i;
+   for(i=0; i < nbQuaternions; i++)
+   {
+     arm_quaternion_product_single_f32(qa, qb, qr);
 
-        qa += 4;
-        qb += 4;
-        qr += 4;
-    }
+     qa += 4;
+     qb += 4;
+     qr += 4;
+   }
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
 

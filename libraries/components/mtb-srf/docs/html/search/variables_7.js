@@ -1,0 +1,11 @@
+var searchData=
+[
+  ['mailbox_0',['mailbox',['../group__group__mtb__srf__ipc__structures.html#a522a8f0240d83b922c5d77403e97df0e',1,'mtb_srf_ipc_relay_context_cfg_t']]],
+  ['mailbox_5fdata_1',['mailbox_data',['../group__group__mtb__srf__ipc__structures.html#ad5cc48a714829157570998af2fc8360c',1,'mtb_srf_ipc_relay_init_cfg_t']]],
+  ['mailbox_5fhandle_2',['mailbox_handle',['../group__group__mtb__srf__ipc__structures.html#a22000a242838418dd93d60c8a1134797',1,'mtb_srf_ipc_relay_context_s::mailbox_handle()'],['../group__group__mtb__srf__ipc__structures.html#a22d5831799a97fe1ed804f20f4309912',1,'mtb_srf_ipc_client_context_s::mailbox_handle()'],['../group__group__mtb__srf__ipc__structures.html#aec82300c988a55e9f157913bb7f5b96e',1,'mtb_srf_ipc_client_context_cfg_t::mailbox_handle()'],['../group__group__mtb__srf__ipc__structures.html#a7534aa660425b8e3c1e2aea8a089f5de',1,'mtb_srf_ipc_client_init_cfg_t::mailbox_handle()'],['../group__group__mtb__srf__ipc__structures.html#aa3385f4b561511d60caaaabae0657b93',1,'mtb_srf_ipc_relay_init_cfg_t::mailbox_handle()']]],
+  ['max_3',['max',['../group__group__mtb__srf__ipc__structures.html#ab85070039bdad7e4c02cb9d883679542',1,'mtb_srf_ipc_ringbuf_t']]],
+  ['mbox_5fidx_4',['mbox_idx',['../group__group__mtb__srf__ipc__structures.html#ab89e2937f47f55811558a8e3c77ff782',1,'mtb_srf_ipc_client_init_cfg_t::mbox_idx()'],['../group__group__mtb__srf__ipc__structures.html#a8f5c6ca07221a359452d9723439e2fe2',1,'mtb_srf_ipc_relay_init_cfg_t::mbox_idx()']]],
+  ['mbox_5fread_5fsema_5fidx_5',['mbox_read_sema_idx',['../group__group__mtb__srf__ipc__structures.html#a7cd0c30a572b378a2e393e35a2bc973a',1,'mtb_srf_ipc_relay_init_cfg_t']]],
+  ['mbox_5fwrite_5fsema_5fidx_6',['mbox_write_sema_idx',['../group__group__mtb__srf__ipc__structures.html#ae9a0cb15ec2356d26f3a398824c75467',1,'mtb_srf_ipc_relay_init_cfg_t']]],
+  ['module_5fid_7',['module_id',['../group__group__mtb__srf.html#aed9ed18ec69f8d2d4f345f1cebfb22cf',1,'mtb_srf_op_s_t::module_id()'],['../group__group__mtb__srf.html#af264a9772e72c929128aa0cee248db05',1,'mtb_srf_module_s_t::module_id()'],['../group__group__mtb__srf__structures.html#a9169b0562b030274202ea9916cc08d12',1,'mtb_srf_request_ns_t::module_id()']]]
+];

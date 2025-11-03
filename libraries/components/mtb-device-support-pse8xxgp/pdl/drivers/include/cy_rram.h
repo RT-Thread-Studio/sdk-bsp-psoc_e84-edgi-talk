@@ -50,21 +50,6 @@
 * \section group_rram_more_information More Information
 *
 * Refer to the technical reference manual (TRM) and the device datasheet.
-
-* \section group_rram_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.10</td>
-*     <td>Fixed hard fault when trying read while TS writing</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
 *
 * \defgroup group_rram_macros Macros
 * \defgroup group_rram_enums Enums
@@ -89,7 +74,7 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 6, \
-                             'Value extracted from _VAL2FLD macro will not exceed enum range.')
+'Value extracted from _VAL2FLD macro will not exceed enum range.')
 
 /*******************************************************************************
 *       Function Constants
@@ -113,18 +98,20 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 6, \
 
 /* The base address and size related macros will be generated during header generation process.*/
 #ifdef CY_DEVICE_IFX_SECURITY_EPC2
-#define CY_RRAM_MAIN_N                          (0x35UL)
+#define CY_RRAM_RECLAIM_PROTECTED_NVM (0x15UL)
 #else
-#define CY_RRAM_MAIN_N                          (0x20UL)
+#define CY_RRAM_RECLAIM_PROTECTED_NVM (0x0UL)
 #endif /* CY_DEVICE_IFX_SECURITY_EPC2 */
+#define CY_RRAM_REGION_SIZE_UNIT                (8192UL)
+#define CY_RRAM_RECLAIM_SIZE                    (CY_RRAM_RECLAIM_PROTECTED_NVM * CY_RRAM_REGION_SIZE_UNIT)
+#define CY_RRAM_MAIN_N                          ((CPUSS_RRAMC_MAIN_N) + CY_RRAM_RECLAIM_PROTECTED_NVM)
+#define CY_RRAM_PROTECTED_X                     ((CPUSS_RRAMC_PROTECTED_X) - CY_RRAM_RECLAIM_PROTECTED_NVM)
 #define CY_RRAM_WORK_Z                          (0x0UL)
 #define CY_RRAM_FLASH_Y                         (0x0UL)
-#define CY_RRAM_PROTECTED_X                     (0x20UL)
 #define CY_RRAM_PC_LOCK_ACQUIRE                 (0x0FUL)
 #define CY_RRAM_BLOCK_SIZE_BYTES                (0x10UL)
 #define CY_RRAM_BLOCK_SIZE_WORDS                (0x04UL)
 #define CY_RRAM_S_OFFSET_MASK                   (0x10000000UL)
-#define CY_RRAM_REGION_SIZE_UNIT                (8192UL)
 #define CY_RRAM_MAIN_REGION_SIZE                (CY_RRAM_MAIN_N * CY_RRAM_REGION_SIZE_UNIT)
 #define CY_RRAM_WORK_REGION_SIZE                (CY_RRAM_WORK_Z * CY_RRAM_REGION_SIZE_UNIT)
 #define CY_RRAM_SFLASH_REGION_SIZE              (CY_RRAM_FLASH_Y * CY_RRAM_REGION_SIZE_UNIT)
@@ -144,10 +131,10 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 6, \
 #define CY_RRAM_WORK_HOST_S_START_ADDRESS             (0x13000000UL)
 #define CY_RRAM_SFLASH_HOST_NS_START_ADDRESS          (0x03600000UL)
 #define CY_RRAM_SFLASH_HOST_S_START_ADDRESS           (0x13600000UL)
-#define CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS       (0x03C00000UL)
-#define CY_RRAM_PROTECTED_HOST_S_START_ADDRESS        (0x13C00000UL)
-#define CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS  (0x03800000UL)
-#define CY_RRAM_PROTECTED_PROTECTED_S_START_ADDRESS   (0x13800000UL)
+#define CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS       (0x03C00000UL + CY_RRAM_RECLAIM_SIZE)
+#define CY_RRAM_PROTECTED_HOST_S_START_ADDRESS        (0x13C00000UL + CY_RRAM_RECLAIM_SIZE)
+#define CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS  (0x03800000UL + CY_RRAM_RECLAIM_SIZE)
+#define CY_RRAM_PROTECTED_PROTECTED_S_START_ADDRESS   (0x13800000UL + CY_RRAM_RECLAIM_SIZE)
 /* Remove once CDT_005546-83 is fixed */
 #define CY_RRAM_CONFIG_SPACE_SIZE                      (0x2048UL)
 #define CY_RRAM_CONFIG_PROTECTED_NS_START_ADDRESS      (0x40108800UL)
@@ -160,7 +147,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 6, \
 #define CY_RRAM_MAIN_HOST_NS_START_ADDRESS            (0x02000000UL)
 #define CY_RRAM_WORK_HOST_NS_START_ADDRESS            (0x03000000UL)
 #define CY_RRAM_SFLASH_HOST_NS_START_ADDRESS          (0x03600000UL)
-#define CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS       (0x03C00000UL)
+#define CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS       (0x03C00000UL + CY_RRAM_RECLAIM_SIZE)
 #else
 #define CY_RRAM_MAIN_HOST_NS_START_ADDRESS            (0x22000000UL)
 #define CY_RRAM_MAIN_HOST_S_START_ADDRESS             (0x32000000UL)
@@ -170,12 +157,12 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 6, \
 #define CY_RRAM_WORK_HOST_S_START_ADDRESS             (0x13000000UL)
 #define CY_RRAM_SFLASH_HOST_NS_START_ADDRESS          (0x03600000UL)
 #define CY_RRAM_SFLASH_HOST_S_START_ADDRESS           (0x13600000UL)
-#define CY_RRAM_PROTECTED_HOST_CBUS_NS_START_ADDRESS  (0x03C00000UL)
-#define CY_RRAM_PROTECTED_HOST_CBUS_S_START_ADDRESS   (0x13C00000UL)
-#define CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS       (0x23C00000UL)
-#define CY_RRAM_PROTECTED_HOST_S_START_ADDRESS        (0x33C00000UL)
-#define CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS  (0x03800000UL)
-#define CY_RRAM_PROTECTED_PROTECTED_S_START_ADDRESS   (0x13800000UL)
+#define CY_RRAM_PROTECTED_HOST_CBUS_NS_START_ADDRESS  (0x03C00000UL + CY_RRAM_RECLAIM_SIZE)
+#define CY_RRAM_PROTECTED_HOST_CBUS_S_START_ADDRESS   (0x13C00000UL + CY_RRAM_RECLAIM_SIZE)
+#define CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS       (0x23C00000UL + CY_RRAM_RECLAIM_SIZE)
+#define CY_RRAM_PROTECTED_HOST_S_START_ADDRESS        (0x33C00000UL + CY_RRAM_RECLAIM_SIZE)
+#define CY_RRAM_PROTECTED_PROTECTED_NS_START_ADDRESS  (0x03800000UL + CY_RRAM_RECLAIM_SIZE)
+#define CY_RRAM_PROTECTED_PROTECTED_S_START_ADDRESS   (0x13800000UL + CY_RRAM_RECLAIM_SIZE)
 #endif
 
 /* Base address for OTP region */
@@ -334,7 +321,7 @@ typedef enum
     CY_RRAM_OTP_TAGBIT_VIOLATION                = 0x01UL,  /**< OTP Tag bit violation during write */
     CY_RRAM_POSTREAD_CHK_TAGBIT_VIOLATION       = 0x02UL,  /**< Post-read check Tag bit violation during read */
     CY_RRAM_POSTREAD_CHK_ADDR_FAULT_ALRM        = 0x03UL,  /**< Post-read check address fault alarm */
-    CY_RRAM_AHB_ERROR                           = 0x04UL,  /**< RARM IP AHB bus error */
+    CY_RRAM_AHB_ERROR                           = 0x04UL,  /**< RRAM IP AHB bus error */
     CY_RRAM_M0SEC_WRITE_ERROR                   = 0x05UL,  /**< Incomplete write or 8/16 write on the protected interface */
     CY_RRAM_WRITE_ADDR_MISMATCH                 = 0x06UL,  /**< Indirect sequence where AHB write address mismatch with SFR NVM_ADDR */
     CY_RRAM_PROTECTED_PRGM_ERROR                = 0x07UL,  /**< Programming PROTECTED_NVM lockable subsection */
@@ -1039,7 +1026,7 @@ cy_en_rram_status_t Cy_RRAM_DisableWP(RRAMC_Type * base);
 ****************************************************************************//**
 *
 * \brief
-* Enables the write protection lock by setting WPCLK to 1.
+* Enables the write protection lock by setting WPLCK to 1.
 * Once locked, the lock state cannot be changed till next reset.
 *
 * \param base
@@ -1053,7 +1040,7 @@ __STATIC_INLINE void Cy_RRAM_SetWPLock(RRAMC_Type * base)
 {
     CY_ASSERT_L1(NULL != base);
 
-    /* Enable write protection lock by setting WPCLK to 1 */
+    /* Enable write protection lock by setting WPLCK to 1 */
     RRAM_NVM_CONF1(base) |= RRAMC_RRAM_SFR_NVM_CONF1_WPLCK_Msk;
 }
 
@@ -1192,7 +1179,7 @@ __STATIC_INLINE cy_en_rram_temperature_t Cy_RRAM_GetTemperature(RRAMC_Type * bas
 *
 * \brief
 * Sets the size of lockable region in PROTECTED_NVM region. If size is larger than
-* PROTECTERD_NVM, the entire PROTECTED_NVM is lockable. The lockable region can be configured
+* PROTECTED_NVM, the entire PROTECTED_NVM is lockable. The lockable region can be configured
 * only if the protected nvm lock state is unlocked. The configured region is protected only when the
 * protected nvm lock state is locked
 *
@@ -1380,7 +1367,7 @@ __STATIC_INLINE void Cy_RRAM_SetUDSConfig(RRAMC_Type * base, bool config)
 {
     CY_ASSERT_L1(NULL != base);
 
-    if (config)
+    if(config)
     {
         RRAM_UDS_CTL(base) |= RRAMC_RRAMC_UDS_CTL_CONFIG_Msk;
     }
@@ -1413,7 +1400,7 @@ __STATIC_INLINE void Cy_RRAM_ForceRelPCLock(RRAMC_Type * base)
 
 /** \} group_rram_functions */
 
-CY_MISRA_BLOCK_END('MISRA C-2012 Rule 10.8')
+    CY_MISRA_BLOCK_END('MISRA C-2012 Rule 10.8')
 
 #if defined(__cplusplus)
 }

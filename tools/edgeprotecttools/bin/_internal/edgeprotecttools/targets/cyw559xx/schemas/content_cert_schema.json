@@ -137,9 +137,6 @@
     "certificate",
     "cert_keypair",
     "nv_counter",
-    "load_verify_scheme",
-    "encrypted",
-    "crypto_type",
     "image_table"
   ]
 }

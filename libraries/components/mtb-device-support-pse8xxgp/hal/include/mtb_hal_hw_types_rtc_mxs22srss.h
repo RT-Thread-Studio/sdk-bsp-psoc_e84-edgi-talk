@@ -27,16 +27,16 @@
 
 #if defined(CY_IP_MXS22SRSS) && ((SRSS_RTC_PRESENT) > 0) && \
     (((SRSS_NUM_HIBDATA) > 0) || ((CY_SRSS_BACKUP_NUM_BREG) > 0))
-    /**
-    * \ingroup group_hal_availability
-    * \{
-    */
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
-    #if !defined(MTB_HAL_DRIVER_AVAILABLE_RTC)
-        /** Macro specifying whether the RTC driver is available for the current device */
-        #define MTB_HAL_DRIVER_AVAILABLE_RTC (1u)
-    #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_RTC)
+#if !defined(MTB_HAL_DRIVER_AVAILABLE_RTC)
+/** Macro specifying whether the RTC driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_RTC (1u)
+#endif // !defined(MTB_HAL_DRIVER_AVAILABLE_RTC)
 
-    /** \} group_hal_availability */
+/** \} group_hal_availability */
 
 #endif

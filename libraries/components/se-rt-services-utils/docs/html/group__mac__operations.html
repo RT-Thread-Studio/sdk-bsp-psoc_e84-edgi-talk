@@ -359,8 +359,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active MAC operation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the message fragment to add to the MAC calculation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the message fragment to add to the MAC calculation (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -431,9 +431,9 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active MAC operation. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">mac</td><td>Buffer where the MAC value is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mac_size</td><td>Size of the <code>mac</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">mac_length</td><td>On success, the number of bytes that make up the MAC value. This is always <a class="el" href="group__constants__sizes.html#ga367279ec4469f4d87c604f82bdd1ef3b" title="The size of the output of ifx_se_mac_sign_finish(), in bytes.">IFX_SE_MAC_LENGTH</a>(<code>key_type</code>, <code>key_bits</code>, <code>alg</code>) where <code>key_type</code> and <code>key_bits</code> are the type and bit-size respectively of the key and <code>alg</code> is the MAC algorithm that is calculated. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">mac</td><td>Buffer where the MAC value is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mac_size</td><td>Size of the <code>mac</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">mac_length</td><td>On success, the number of bytes that make up the MAC value (encoded pointer to size_t variable). This is always <a class="el" href="group__constants__sizes.html#ga367279ec4469f4d87c604f82bdd1ef3b" title="The size of the output of ifx_se_mac_sign_finish(), in bytes.">IFX_SE_MAC_LENGTH</a>(<code>key_type</code>, <code>key_bits</code>, <code>alg</code>) where <code>key_type</code> and <code>key_bits</code> are the type and bit-size respectively of the key and <code>alg</code> is the MAC algorithm that is calculated. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -499,8 +499,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active MAC operation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mac</td><td>Buffer containing the expected MAC value. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mac_length</td><td>Size of the <code>mac</code> buffer in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mac</td><td>Buffer containing the expected MAC value (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mac_length</td><td>Size of the <code>mac</code> buffer in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -638,11 +638,11 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to use for the operation. It must allow the usage IFX_SE_KEY_USAGE_SIGN_MESSAGE. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">alg</td><td>The MAC algorithm to compute (<code>IFX_SE_ALG_XXX</code> value such that <a class="el" href="group__crypto__algs.html#ga6ecacfd1287129299bf280d0d30e7194" title="Whether the specified algorithm is a MAC algorithm.">IFX_SE_ALG_IS_MAC</a>(<code>alg</code>) is true). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the input message. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">mac</td><td>Buffer where the MAC value is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mac_size</td><td>Size of the <code>mac</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">mac_length</td><td>On success, the number of bytes that make up the MAC value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the input message (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">mac</td><td>Buffer where the MAC value is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mac_size</td><td>Size of the <code>mac</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">mac_length</td><td>On success, the number of bytes that make up the MAC value (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -727,10 +727,10 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to use for the operation. It must allow the usage IFX_SE_KEY_USAGE_VERIFY_MESSAGE. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">alg</td><td>The MAC algorithm to compute (<code>IFX_SE_ALG_XXX</code> value such that <a class="el" href="group__crypto__algs.html#ga6ecacfd1287129299bf280d0d30e7194" title="Whether the specified algorithm is a MAC algorithm.">IFX_SE_ALG_IS_MAC</a>(<code>alg</code>) is true). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the input message. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">mac</td><td>Buffer containing the expected MAC value. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mac_length</td><td>Size of the <code>mac</code> buffer in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the input message (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mac</td><td>Buffer containing the expected MAC value (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mac_length</td><td>Size of the <code>mac</code> buffer in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>

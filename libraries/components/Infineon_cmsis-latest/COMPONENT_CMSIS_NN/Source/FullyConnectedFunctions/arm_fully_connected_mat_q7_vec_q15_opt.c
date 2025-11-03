@@ -114,14 +114,14 @@
  */
 
 arm_status arm_fully_connected_mat_q7_vec_q15_opt(const q15_t *pV,
-        const q7_t *pM,
-        const uint16_t dim_vec,
-        const uint16_t num_of_rows,
-        const uint16_t bias_shift,
-        const uint16_t out_shift,
-        const q7_t *bias,
-        q15_t *pOut,
-        q15_t *vec_buffer)
+                                                  const q7_t *pM,
+                                                  const uint16_t dim_vec,
+                                                  const uint16_t num_of_rows,
+                                                  const uint16_t bias_shift,
+                                                  const uint16_t out_shift,
+                                                  const q7_t *bias,
+                                                  q15_t *pOut,
+                                                  q15_t *vec_buffer)
 {
 
     (void)vec_buffer;
@@ -221,11 +221,11 @@ arm_status arm_fully_connected_mat_q7_vec_q15_opt(const q15_t *pV,
                      "subs %[colCnt], #1\n"
                      "bne COL_LOOP_%=\n"
                      : [ sum ] "+r"(sum),
-                     [ sum2 ] "+r"(sum2),
-                     [ sum3 ] "+r"(sum3),
-                     [ sum4 ] "+r"(sum4),
-                     [ pB ] "+r"(pB),
-                     [ pA ] "+r"(pA)
+                       [ sum2 ] "+r"(sum2),
+                       [ sum3 ] "+r"(sum3),
+                       [ sum4 ] "+r"(sum4),
+                       [ pB ] "+r"(pB),
+                       [ pA ] "+r"(pA)
                      : [ colCnt ] "r"(colCnt)
                      : "r0", "r1", "r2", "r3", "r4");
 #else
@@ -246,11 +246,11 @@ arm_status arm_fully_connected_mat_q7_vec_q15_opt(const q15_t *pV,
                      "subs %[colCnt], #1\n"
                      "bne COL_LOOP_%=\n"
                      : [ sum ] "+r"(sum),
-                     [ sum2 ] "+r"(sum2),
-                     [ sum3 ] "+r"(sum3),
-                     [ sum4 ] "+r"(sum4),
-                     [ pB ] "+r"(pB),
-                     [ pA ] "+r"(pA)
+                       [ sum2 ] "+r"(sum2),
+                       [ sum3 ] "+r"(sum3),
+                       [ sum4 ] "+r"(sum4),
+                       [ pB ] "+r"(pB),
+                       [ pA ] "+r"(pA)
                      : [ colCnt ] "r"(colCnt)
                      : "r0", "r1", "r2", "r3", "r4");
 #endif /* ARM_MATH_BIG_ENDIAN */

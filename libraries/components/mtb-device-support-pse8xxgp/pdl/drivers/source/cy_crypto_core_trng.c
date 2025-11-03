@@ -78,7 +78,7 @@ const cy_stc_crypto_trng_config_t cy_trngDefaultConfig =
 *******************************************************************************/
 void Cy_Crypto_Core_Trng_Init(CRYPTO_Type *base, cy_stc_crypto_trng_config_t *config)
 {
-    if (NULL != base)
+    if(NULL != base)
     {
         if (NULL == config)
         {
@@ -99,25 +99,25 @@ void Cy_Crypto_Core_Trng_Init(CRYPTO_Type *base, cy_stc_crypto_trng_config_t *co
         REG_CRYPTO_TR_FIRO_CTL(base) = config->firo31Poly;
 
         REG_CRYPTO_TR_CTL0(base) = (uint32_t)(_VAL2FLD(CRYPTO_TR_CTL0_SAMPLE_CLOCK_DIV, config->sampleClockDiv)
-                                              | _VAL2FLD(CRYPTO_TR_CTL0_RED_CLOCK_DIV, config->reducedClockDiv)
-                                              | _VAL2FLD(CRYPTO_TR_CTL0_INIT_DELAY, config->initDelay)
-                                              | _VAL2FLD(CRYPTO_TR_CTL0_VON_NEUMANN_CORR, config->vnCorrectorEnable)
-                                              | _VAL2FLD(CRYPTO_TR_CTL0_STOP_ON_AP_DETECT, config->stopOnAPDetect)
-                                              | _VAL2FLD(CRYPTO_TR_CTL0_STOP_ON_RC_DETECT, config->stopOnRCDetect));
+                                            | _VAL2FLD(CRYPTO_TR_CTL0_RED_CLOCK_DIV, config->reducedClockDiv)
+                                            | _VAL2FLD(CRYPTO_TR_CTL0_INIT_DELAY, config->initDelay)
+                                            | _VAL2FLD(CRYPTO_TR_CTL0_VON_NEUMANN_CORR, config->vnCorrectorEnable)
+                                            | _VAL2FLD(CRYPTO_TR_CTL0_STOP_ON_AP_DETECT, config->stopOnAPDetect)
+                                            | _VAL2FLD(CRYPTO_TR_CTL0_STOP_ON_RC_DETECT, config->stopOnRCDetect));
 
         REG_CRYPTO_TR_CTL1(base) = (uint32_t)(_VAL2FLD(CRYPTO_TR_CTL1_RO11_EN, config->ro11Enable)
-                                              | _VAL2FLD(CRYPTO_TR_CTL1_RO15_EN, config->ro15Enable)
-                                              | _VAL2FLD(CRYPTO_TR_CTL1_GARO15_EN, config->garo15Enable)
-                                              | _VAL2FLD(CRYPTO_TR_CTL1_GARO31_EN, config->garo31Enable)
-                                              | _VAL2FLD(CRYPTO_TR_CTL1_FIRO15_EN, config->firo15Enable)
-                                              | _VAL2FLD(CRYPTO_TR_CTL1_FIRO31_EN, config->firo31Enable));
+                                            | _VAL2FLD(CRYPTO_TR_CTL1_RO15_EN, config->ro15Enable)
+                                            | _VAL2FLD(CRYPTO_TR_CTL1_GARO15_EN, config->garo15Enable)
+                                            | _VAL2FLD(CRYPTO_TR_CTL1_GARO31_EN, config->garo31Enable)
+                                            | _VAL2FLD(CRYPTO_TR_CTL1_FIRO15_EN, config->firo15Enable)
+                                            | _VAL2FLD(CRYPTO_TR_CTL1_FIRO31_EN, config->firo31Enable));
 
         REG_CRYPTO_TR_MON_CTL(base) = (uint32_t)_VAL2FLD(CRYPTO_TR_MON_CTL_BITSTREAM_SEL, config->monBitStreamSelect);
 
         REG_CRYPTO_TR_MON_RC_CTL(base) = (uint32_t)_VAL2FLD(CRYPTO_TR_MON_RC_CTL_CUTOFF_COUNT8, config->monCutoffCount8);
 
         REG_CRYPTO_TR_MON_AP_CTL(base) = (uint32_t)(_VAL2FLD(CRYPTO_TR_MON_AP_CTL_CUTOFF_COUNT16, config->monCutoffCount16)
-                                         | _VAL2FLD(CRYPTO_TR_MON_AP_CTL_WINDOW_SIZE, config->monWindowSize));
+                                                  | _VAL2FLD(CRYPTO_TR_MON_AP_CTL_WINDOW_SIZE, config->monWindowSize));
     }
 }
 
@@ -136,10 +136,10 @@ void Cy_Crypto_Core_Trng_DeInit(CRYPTO_Type *base)
     REG_CRYPTO_TR_CTL0(base) = (uint32_t)_VAL2FLD(CRYPTO_TR_CTL0_INIT_DELAY, 3U);
     REG_CRYPTO_TR_CTL1(base) = 0UL;
 
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+    #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
     REG_CRYPTO_TR_CTL2(base) = 0UL;
     REG_CRYPTO_TR_CMD(base) = 0UL;
-#endif
+    #endif
 
     REG_CRYPTO_TR_GARO_CTL(base) = 0UL;
     REG_CRYPTO_TR_FIRO_CTL(base) = 0UL;
@@ -189,17 +189,17 @@ cy_en_crypto_status_t Cy_Crypto_Core_Trng_Start(CRYPTO_Type *base, uint32_t data
                     status = CY_CRYPTO_SUCCESS;
                     if (CY_CRYPTO_V1)
                     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+                        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
                         Cy_Crypto_SetReg1Instr(base, dataSize);
                         Cy_Crypto_Run1ParamInstr(base, CY_CRYPTO_V1_TRNG_OPC, CY_CRYPTO_RSRC0_SHIFT);
-#endif
+                        #endif
                     }
                     else
                     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+                        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
                         REG_CRYPTO_TR_CTL2(base) = dataSize;
                         REG_CRYPTO_TR_CMD(base) = 1UL;
-#endif
+                        #endif
                     }
                 }
             }
@@ -281,10 +281,10 @@ cy_en_crypto_status_t Cy_Crypto_Core_Trng_ReadData(CRYPTO_Type *base, uint32_t *
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_Trng(CRYPTO_Type *base,
-        uint32_t  GAROPol,
-        uint32_t  FIROPol,
-        uint32_t  max,
-        uint32_t *randomNum)
+                                             uint32_t  GAROPol,
+                                             uint32_t  FIROPol,
+                                             uint32_t  max,
+                                             uint32_t *randomNum)
 {
     cy_en_crypto_status_t status;
 

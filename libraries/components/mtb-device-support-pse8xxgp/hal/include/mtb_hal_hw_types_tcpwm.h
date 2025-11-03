@@ -36,17 +36,17 @@
  */
 typedef struct
 {
-#ifdef CY_IP_MXTCPWM
-    TCPWM_Type                         *base;         //!< The base address pointer of the TCPWM
-    //!< resource
+    #ifdef CY_IP_MXTCPWM
+    TCPWM_Type*                         base;         //!< The base address pointer of the TCPWM
+                                                      //!< resource
     uint32_t                            group;        //!< The associated group number
     uint32_t                            cntnum;       //!< The associated counter number
-    TCPWM_GRP_CNT_Type                *grp_cnt_base;  //!< The base address of the group counter
+    TCPWM_GRP_CNT_Type*                grp_cnt_base;  //!< The base address of the group counter
     uint32_t                            max_count;    //!< The max count for the counter
-    const mtb_hal_clock_t              *clock;        //!< The associated clock resource pointer
+    const mtb_hal_clock_t*              clock;        //!< The associated clock resource pointer
     uint32_t                            clock_hz;     //!< The associated clock frequency
-#else // ifdef CY_IP_MXTCPWM
-    void *empty;
-#endif // ifdef CY_IP_MXTCPWM
+    #else // ifdef CY_IP_MXTCPWM
+    void* empty;
+    #endif // ifdef CY_IP_MXTCPWM
 } mtb_hal_tcpwm_t;
 #endif // if defined(CY_IP_MXTCPWM)

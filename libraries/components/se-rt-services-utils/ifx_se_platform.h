@@ -1,13 +1,13 @@
 /***************************************************************************//**
 * \file ifx_se_platform.h
-* \version 1.1.0
+* \version 1.2.0
 *
 * \brief
 * This is the header file for utility syscall functions.
 *
 ********************************************************************************
 * \copyright
-* Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+* Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
 * All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
@@ -51,8 +51,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 #if defined(CY_IP_MXS22WIFI1X1AX20TBSS) && defined(CY_IP_MXS22BTSS)
-/* Syscall handler is placed at fixed address in S RT Services code */
-#define IFX_SE_SYSCALL_HANDLER_ADDR         0x120143a5u
+    /* Syscall handler is placed at fixed address in S RT Services code */
+    #define IFX_SE_SYSCALL_HANDLER_ADDR         0x120143a5u
 #endif /* defined(CY_IP_MXS22WIFI1X1AX20TBSS) && defined(CY_IP_MXS22BTSS) */
 
 /* Public APIs */
@@ -160,8 +160,10 @@ ifx_se_status_t ifx_se_disable(void *ctx);
  * Function Name: ifx_se_enable
  ***************************************************************************//**
  *
- * Validates clock and power configuration,
- * configures and enables Clock Supervisor then enables SE RT Services.
+ * Validates clock and power configuration, measures actual device temperature
+ * (only on EPC4 device when temperature measurement during boot is out of
+ * valid range), configures and enables Clock Supervisor
+ * then enables SE RT Services.
  *
  *
  * \param[in] ctx   The pointer to the SE syscall context that contain
@@ -172,13 +174,14 @@ ifx_se_status_t ifx_se_disable(void *ctx);
  *            not corresponding to selected RRAM power mode (LP/ULP)
  * \return    \ref IFX_SE_SYSCALL_INVALID_CLOCK when CPU clock (HFCLK0)
  *            frequency not in the supported range (3,6MHz - 210MHz)
+ * \return    \ref IFX_SE_SYSCALL_INVALID_TEMPERATURE when measured temperature
+ *            is not in supported range (-40C - +125C)
  *
  ******************************************************************************/
 ifx_se_status_t ifx_se_enable(void *ctx);
 
 /** SE power mode */
-typedef enum
-{
+typedef enum {
     IFX_SE_PM_DEEP_SLEEP = 0,           /**< DeepSleep mode */
     IFX_SE_PM_DEEP_SLEEP_RAM = 1,       /**< DeepSleep RAM mode (obsoleted) */
     IFX_SE_PM_SHUT_OFF = 2,             /**< Shut off mode */
@@ -236,7 +239,7 @@ ifx_se_status_t ifx_se_get_info(ifx_se_rt_info_t *output, size_t output_size, vo
 /** \} */
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 3.1', 2, \
-                             'The character sequence "//" is a part of http URL.')
+    'The character sequence "//" is a part of http URL.')
 
 /** \addtogroup platform_attestation
  * \{
@@ -401,16 +404,16 @@ ifx_se_status_t ifx_se_lock_shared_data(void *ctx);
  *
  ******************************************************************************/
 ifx_se_status_t ifx_se_initial_attest_get_token(const ifx_se_fih_ptr_t challenge,
-        ifx_se_fih_t challenge_size,
-        ifx_se_fih_t client_id,
-        const ifx_se_fih_ptr_t verify_svc,
-        ifx_se_fih_t verify_svc_size,
-        const ifx_se_fih_ptr_t hardware_ver,
-        ifx_se_fih_t hardware_ver_size,
-        ifx_se_fih_ptr_t token_data,
-        ifx_se_fih_t token_size,
-        ifx_se_fih_ptr_t token_length,
-        void *ctx);
+                                                ifx_se_fih_t challenge_size,
+                                                ifx_se_fih_t client_id,
+                                                const ifx_se_fih_ptr_t verify_svc,
+                                                ifx_se_fih_t verify_svc_size,
+                                                const ifx_se_fih_ptr_t hardware_ver,
+                                                ifx_se_fih_t hardware_ver_size,
+                                                ifx_se_fih_ptr_t token_data,
+                                                ifx_se_fih_t token_size,
+                                                ifx_se_fih_ptr_t token_length,
+                                                void *ctx);
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 3.1')
 
 /*******************************************************************************
@@ -431,8 +434,8 @@ CY_MISRA_BLOCK_END('MISRA C-2012 Rule 3.1')
  *
  ******************************************************************************/
 ifx_se_status_t ifx_se_initial_attest_get_token_size(ifx_se_fih_t challenge_size,
-        ifx_se_fih_ptr_t token_size,
-        void *ctx);
+                                                     ifx_se_fih_ptr_t token_size,
+                                                     void *ctx);
 /** \} */
 
 /** \addtogroup platform_mpc
@@ -560,8 +563,7 @@ typedef enum
 } ifx_se_ppc_secpriv_attribute_t;
 
 /** PPC configuration structure */
-typedef struct
-{
+typedef struct {
     uint32_t start_region;                             /**< Starting peripheral region ID */
     uint32_t end_region;                               /**< Ending peripheral region ID. To apply policy to a single peripheral region, assign the same value to start_region and endRegion */
     ifx_se_ppc_sec_attribute_t sec_attribute;          /**< Security attribute */
@@ -591,60 +593,6 @@ ifx_se_status_t ifx_se_ppc_config(const ifx_se_ppc_config_t *ppc_config, void *c
 
 /** \} */
 
-/** \addtogroup platform_wifi
- * \{
- */
-
-/*******************************************************************************
- * Function Name: ifx_se_enable_wifi
- ***************************************************************************//**
- *
- * Performs HASH validation for RRAM WiFiSS FW Image and if success starts this
- * image on WiFiSS. The image address is provided as an input parameter.
- *
- * It also makes sure that CPUSS APP(s) cannot access the WiFiSS and its SRAM
- * contents when Wi-Fi is functional.
- *
- * \param[in] *image_addr   The image address. The length of the image is
- *                          located in the first 4 bytes in the image.
- * \param[in] ctx           The pointer to the SE syscall context that contain
- *                          a special syscall data (IPC release callback etc).
- *
- * \return    \ref IFX_SE_SUCCESS for success or error code
- *
- ******************************************************************************/
-ifx_se_status_t ifx_se_enable_wifi(const uint8_t *image_addr, void *ctx);
-
-/*******************************************************************************
- * Function Name: ifx_se_disable_wifi
- ***************************************************************************//**
- *
- * Disables WiFiSS and switch its power off.
- *
- * \param[in] ctx           The pointer to the SE syscall context that contain
- *                          a special syscall data (IPC release callback etc).
- *
- * \return    \ref IFX_SE_SUCCESS for success or error code
- *
- ******************************************************************************/
-ifx_se_status_t ifx_se_disable_wifi(void *ctx);
-
-/*******************************************************************************
- * Function Name: ifx_se_enable_wifi_sram_access
- ***************************************************************************//**
- *
- * Enables only Wi-Fi SS SRAM for staging of RAM_APPs and allows CPUSS access
- *  to this memory.
- *
- * \param[in] ctx           The pointer to the SE syscall context that contain
- *                          a special syscall data (IPC release callback etc).
- *
- * \return    \ref IFX_SE_SUCCESS for success or error code
- *
- ******************************************************************************/
-ifx_se_status_t ifx_se_enable_wifi_sram_access(void *ctx);
-
-/** \} */
 
 #ifdef __cplusplus
 }

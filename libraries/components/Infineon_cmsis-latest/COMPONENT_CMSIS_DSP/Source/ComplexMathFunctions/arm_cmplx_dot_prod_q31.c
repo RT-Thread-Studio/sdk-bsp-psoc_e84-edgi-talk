@@ -44,7 +44,6 @@
   @param[in]     numSamples  number of samples in each vector
   @param[out]    realResult  real part of the result returned here
   @param[out]    imagResult  imaginary part of the result returned here
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function is implemented using an internal 64-bit accumulator.
@@ -57,12 +56,12 @@
 
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_cmplx_dot_prod_q31(
-    const q31_t * pSrcA,
-    const q31_t * pSrcB,
-    uint32_t numSamples,
-    q63_t * realResult,
-    q63_t * imagResult)
+ARM_DSP_ATTRIBUTE void arm_cmplx_dot_prod_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        uint32_t numSamples,
+        q63_t * realResult,
+        q63_t * imagResult)
 {
     int32_t         blkCnt;
     q63_t           accReal = 0LL;
@@ -72,16 +71,14 @@ void arm_cmplx_dot_prod_q31(
 
     blkCnt = numSamples >> 2;
     blkCnt -= 1;
-    if (blkCnt > 0)
-    {
+    if (blkCnt > 0) {
         /* should give more freedom to generate stall free code */
         vecSrcA = vld1q(pSrcA);
         vecSrcB = vld1q(pSrcB);
         pSrcA += 4;
         pSrcB += 4;
 
-        while (blkCnt > 0)
-        {
+        while (blkCnt > 0) {
 
             accReal = vrmlsldavhaq(accReal, vecSrcA, vecSrcB);
             vecSrcC = vld1q(pSrcA);
@@ -121,8 +118,7 @@ void arm_cmplx_dot_prod_q31(
          * tail
          */
         blkCnt = CMPLX_DIM * (numSamples & 3);
-        do
-        {
+        do {
             mve_pred16_t    p = vctp32q(blkCnt);
 
             pSrcA += 4;
@@ -137,12 +133,9 @@ void arm_cmplx_dot_prod_q31(
             blkCnt -= 4;
         }
         while ((int32_t) blkCnt > 0);
-    }
-    else
-    {
+    } else {
         blkCnt = numSamples * CMPLX_DIM;
-        while (blkCnt > 0)
-        {
+        while (blkCnt > 0) {
             mve_pred16_t    p = vctp32q(blkCnt);
 
             vecSrcA = vldrwq_z_s32(pSrcA, p);
@@ -166,97 +159,97 @@ void arm_cmplx_dot_prod_q31(
 }
 
 #else
-void arm_cmplx_dot_prod_q31(
-    const q31_t * pSrcA,
-    const q31_t * pSrcB,
-    uint32_t numSamples,
-    q63_t * realResult,
-    q63_t * imagResult)
+ARM_DSP_ATTRIBUTE void arm_cmplx_dot_prod_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        uint32_t numSamples,
+        q63_t * realResult,
+        q63_t * imagResult)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q63_t real_sum = 0, imag_sum = 0;              /* Temporary result variables */
-    q31_t a0, b0, c0, d0;
+        uint32_t blkCnt;                               /* Loop counter */
+        q63_t real_sum = 0, imag_sum = 0;              /* Temporary result variables */
+        q31_t a0,b0,c0,d0;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+  while (blkCnt > 0U)
+  {
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += ((q63_t)a0 * c0) >> 14;
-        imag_sum += ((q63_t)a0 * d0) >> 14;
-        real_sum -= ((q63_t)b0 * d0) >> 14;
-        imag_sum += ((q63_t)b0 * c0) >> 14;
+    real_sum += ((q63_t)a0 * c0) >> 14;
+    imag_sum += ((q63_t)a0 * d0) >> 14;
+    real_sum -= ((q63_t)b0 * d0) >> 14;
+    imag_sum += ((q63_t)b0 * c0) >> 14;
 
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += ((q63_t)a0 * c0) >> 14;
-        imag_sum += ((q63_t)a0 * d0) >> 14;
-        real_sum -= ((q63_t)b0 * d0) >> 14;
-        imag_sum += ((q63_t)b0 * c0) >> 14;
+    real_sum += ((q63_t)a0 * c0) >> 14;
+    imag_sum += ((q63_t)a0 * d0) >> 14;
+    real_sum -= ((q63_t)b0 * d0) >> 14;
+    imag_sum += ((q63_t)b0 * c0) >> 14;
 
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += ((q63_t)a0 * c0) >> 14;
-        imag_sum += ((q63_t)a0 * d0) >> 14;
-        real_sum -= ((q63_t)b0 * d0) >> 14;
-        imag_sum += ((q63_t)b0 * c0) >> 14;
+    real_sum += ((q63_t)a0 * c0) >> 14;
+    imag_sum += ((q63_t)a0 * d0) >> 14;
+    real_sum -= ((q63_t)b0 * d0) >> 14;
+    imag_sum += ((q63_t)b0 * c0) >> 14;
 
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += ((q63_t)a0 * c0) >> 14;
-        imag_sum += ((q63_t)a0 * d0) >> 14;
-        real_sum -= ((q63_t)b0 * d0) >> 14;
-        imag_sum += ((q63_t)b0 * c0) >> 14;
+    real_sum += ((q63_t)a0 * c0) >> 14;
+    imag_sum += ((q63_t)a0 * d0) >> 14;
+    real_sum -= ((q63_t)b0 * d0) >> 14;
+    imag_sum += ((q63_t)b0 * c0) >> 14;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = numSamples % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = numSamples % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        a0 = *pSrcA++;
-        b0 = *pSrcA++;
-        c0 = *pSrcB++;
-        d0 = *pSrcB++;
+  while (blkCnt > 0U)
+  {
+    a0 = *pSrcA++;
+    b0 = *pSrcA++;
+    c0 = *pSrcB++;
+    d0 = *pSrcB++;
 
-        real_sum += ((q63_t)a0 * c0) >> 14;
-        imag_sum += ((q63_t)a0 * d0) >> 14;
-        real_sum -= ((q63_t)b0 * d0) >> 14;
-        imag_sum += ((q63_t)b0 * c0) >> 14;
+    real_sum += ((q63_t)a0 * c0) >> 14;
+    imag_sum += ((q63_t)a0 * d0) >> 14;
+    real_sum -= ((q63_t)b0 * d0) >> 14;
+    imag_sum += ((q63_t)b0 * c0) >> 14;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Store real and imaginary result in 16.48 format  */
-    *realResult = real_sum;
-    *imagResult = imag_sum;
+  /* Store real and imaginary result in 16.48 format  */
+  *realResult = real_sum;
+  *imagResult = imag_sum;
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

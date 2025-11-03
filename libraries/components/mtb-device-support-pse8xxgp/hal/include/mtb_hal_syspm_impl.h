@@ -43,14 +43,18 @@ extern "C" {
 #error "Unhandled SRSS version"
 #endif
 
+#if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0)
+
 cy_rslt_t _mtb_hal_syspm_tickless_sleep_deepsleep(mtb_hal_lptimer_t* obj, uint32_t desired_ms,
-        uint32_t *actual_ms, bool deep_sleep);
+                                                  uint32_t* actual_ms, bool deep_sleep);
 
 #define mtb_hal_syspm_tickless_deepsleep(obj, desired_ms, actual_ms) \
     _mtb_hal_syspm_tickless_sleep_deepsleep(obj, desired_ms, actual_ms, true)
 
 #define mtb_hal_syspm_tickless_sleep(obj, desired_ms, actual_ms) \
     _mtb_hal_syspm_tickless_sleep_deepsleep(obj, desired_ms, actual_ms, false)
+
+#endif /* (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0) */
 
 #define mtb_hal_syspm_sleep() Cy_SysPm_CpuEnterSleep(CY_SYSPM_WAIT_FOR_INTERRUPT)
 

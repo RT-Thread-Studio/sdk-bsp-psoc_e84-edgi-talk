@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <View xmlns="http://cypress.com/xsd/cystudioview_v1">
+  <Parameters>
+    <Param name="PERFORM_CODEGEN_IN_EVAL_ORDER" value="" />
+  </Parameters>
   <ExposedParameterKeys>
-    <!--Used by the expression system function getDeviceAttr. See CONFIGURAT-9253.-->
     <ExposedParamKey id="CPU_MAX_MHZ" param_name="Speed_MHz" />
     <ExposedParamKey id="POWER_MODES" param_name="Power_Modes" />
     <ExposedParamKey id="SAR_SAMPLE_RATE" param_name="SAR12Sample_ksps" />
@@ -10,22 +12,26 @@
   </ExposedParameterKeys>
   <Connectivity location="connectivity" />
   <Wounding location="chipresourcewoundings.xml" />
-  <!-- %1$d is for the port number which should always be 0 so we can use it instead of a zero because using %2 without %1 will get the wrong result. -->
   <PinResourceType value="ioss[%1$d].pin[%2$d]" />
-  <!--There are no TriggerGroup type="MUX" in triggers.cydata so TrigMuxConnectTemplate is not used.-->
   <TrigMuxConnectTemplate value="/* NOT USED */" />
-  <!--There are no TriggerGroup type="ONE_TO_ONE" in triggers.cydata so TrigMuxSelectTemplate is not used.-->
   <TrigMuxSelectTemplate value="/* NOT USED */" />
   <Profiles>
-    <Profile purpose="MEMORY" displayName="Memory" fileName="memory" evalPriority="8" displayPriority="5" description="Memory configuration" resources="(vres\[\d+\]\.(reserved_memory_region|memory|security)\[\d+\].*)" />
-    <Profile purpose="MEMORY" displayName="Memory" fileName="memory" evalPriority="9" displayPriority="5" description="Memory configuration" resources="(m33syscpuss\[\d+\]\.cm33.*)|(m55appcpuss\[\d+\]\.cm55.*)|(.*\.mpc\[\d+\])" />
-    <Profile displayName="Solutions" fileName="solutions" evalPriority="7" displayPriority="1" description="Solution configuration" resources="vres\[\d+\].*" />
-    <Profile displayName="Connectivity" fileName="connectivity_wifi" evalPriority="1" displayPriority="4" description="Connectivity Wi-Fi configuration" resources="wifi(\[\d+\])?\..+" />
-    <Profile displayName="Connectivity" fileName="connectivity_bt" evalPriority="1" displayPriority="4" description="Connectivity BT configuration" resources="bt(\[\d+\])?\..+" />
-    <Profile displayName="Connectivity" fileName="connectivity_coex" evalPriority="1" displayPriority="4" description="Connectivity Coex configuration" resources="coex(\[\d+\])?\..+" />
-    <Profile displayName="Pins" diagramType="PACKAGE" fileName="pins" evalPriority="6" displayPriority="2" description="Pin configuration" resources=".*" />
-    <!--This won't match any HW locations because it is after the catchall (.*). This is on purpose and needed to specify code gen order for routing.-->
-    <Profile purpose="ROUTING" displayName="" fileName="routing" evalPriority="4" displayPriority="3" description="Establishes all necessary connections between hardware elements." resources="NONE" >
+    <Profile displayName="Software" fileName="software" description="Software configuration" evalPriority="0" displayPriority="10" resources="features\[\d+\].*" />
+    <Profile purpose="MEMORY" displayName="Memory" fileName="memory" description="Memory configuration" evalPriority="1" displayPriority="8" resources="vres\[\d+\]\.memory_region_data\[\d+\].*" />
+    <Profile diagramType="CLOCKS" displayName="Clocks" fileName="clocks" description="Clock configuration" evalPriority="2" displayPriority="6" resources="srss\[\d+\]\.(clock|rtc)\[\d+\].*|wco\[\d+\].*|exco\[\d+\].*|(cpuss|m33syscpuss|m55appcpuss|m0seccpuss)\[\d+\]\.systick.*" />
+    <Profile diagramType="CLOCKS" displayName="Clocks" fileName="peripheral_clocks" description="Peripheral clock divider configuration" evalPriority="3" displayPriority="6" resources="peri\[\d+\].+" />
+    <Profile displayName="System" fileName="system" description="System configuration" evalPriority="4" displayPriority="7" resources="power\[\d+\].*|srss\[\d+\]\.(power|pd|eeprom)\[\d+\].*|(cpuss|m33syscpuss)\[\d+\]\.dap\[\d+\].*|debug600\[\d+\].*" />
+    <Profile displayName="System" fileName="system" description="System configuration" evalPriority="9" displayPriority="7" resources="vres\[\d+\]\.(security|protection)\[\d+\].*" />
+    <Profile displayName="System" fileName="system" description="System configuration" evalPriority="13" displayPriority="7" resources=".*\.(cm33|cm55|sau|mpu_s|mpu_ns)\[\d+\]|.*\.mpc\[\d+\]|peri\[\d+\]" />
+    <Profile displayName="DMA" fileName="dmas" description="DMA configuration" evalPriority="5" displayPriority="9" resources=".*(dw|dmac|axidmac|axi_dmac|mxdw|mxahbdmac)\d?\[\d+\].*" />
+    <Profile diagramType="PACKAGE" displayName="Pins" fileName="pins" description="Pin configuration" evalPriority="8" displayPriority="4" resources="(ioss|iocl)\[\d+\].*" />
+    <Profile displayName="Connectivity" fileName="connectivity_wifi" description="Connectivity Wi-Fi configuration" evalPriority="11" displayPriority="5" resources="wifi(\[\d+\]).*" />
+    <Profile displayName="Connectivity" fileName="connectivity_bt" description="Connectivity BT configuration" evalPriority="11" displayPriority="5" resources="bt(\[\d+\]).*" />
+    <Profile displayName="Connectivity" fileName="connectivity_coex" description="Connectivity Coex configuration" evalPriority="11" displayPriority="5" resources="coex(\[\d+\]).*" />
+    <Profile purpose="MEMORY" displayName="Memory" fileName="memory" description="Memory configuration" evalPriority="12" displayPriority="8" resources="vres\[\d+\]\.(reserved_memory_region|memory)\[\d+\].*" />
+    <Profile displayName="Solutions" fileName="solutions" description="Solution configuration" evalPriority="10" displayPriority="1" resources="vres\[\d+\].*" />
+    <Profile displayName="Peripherals" fileName="peripherals" description="Peripheral Hardware Block configuration" evalPriority="7" displayPriority="2" resources=".*" />
+    <Profile purpose="ROUTING" diagramType="ANALOG" displayName="Analog-Routing" fileName="routing" description="Establishes all necessary connections between hardware elements." evalPriority="6" displayPriority="3" resources="NONE">
       <Includes />
     </Profile>
   </Profiles>

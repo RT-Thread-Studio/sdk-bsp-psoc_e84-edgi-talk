@@ -220,6 +220,8 @@
 /* Micrium: Micrium software products porting for RT-Thread */
 
 /* end of Micrium: Micrium software products porting for RT-Thread */
+#define PKG_USING_FREERTOS_WRAPPER
+#define PKG_USING_FREERTOS_WRAPPER_LATEST_VERSION
 /* end of system packages */
 
 /* peripheral libraries and drivers */
@@ -261,6 +263,10 @@
 /* GD32 Drivers */
 
 /* end of GD32 Drivers */
+
+/* HPMicro SDK */
+
+/* end of HPMicro SDK */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -270,8 +276,6 @@
 /* touch drivers */
 
 /* end of touch drivers */
-#define PKG_USING_I2C_TOOLS
-#define PKG_USING_I2C_TOOLS_LATEST_VERSION
 /* end of peripheral libraries and drivers */
 
 /* AI packages */
@@ -369,7 +373,6 @@
 
 /* Board extended module Drivers */
 
-/* end of Board extended module Drivers */
 /* end of Hardware Drivers Config */
 
 #endif

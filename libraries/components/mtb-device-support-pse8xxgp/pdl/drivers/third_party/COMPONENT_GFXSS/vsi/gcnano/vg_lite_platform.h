@@ -72,20 +72,18 @@ extern "C" {
 #define VG_SYSTEM_RESERVE_COUNT 1
 
 /* Implementation of list. ****************************************/
-typedef struct list_head
-{
+typedef struct list_head {
     struct list_head *next;
     struct list_head *prev;
-} list_head_t;
+}list_head_t;
 
-typedef struct heap_node
-{
+typedef struct heap_node {
     list_head_t list;
     uint32_t offset;
     unsigned long size;
     int32_t status;
     vg_lite_vidmem_pool_t pool;
-} heap_node_t;
+}heap_node_t;
 
 typedef struct vg_module_parameters
 {
@@ -93,7 +91,7 @@ typedef struct vg_module_parameters
     uint32_t        register_mem_base;
     uint32_t        gpu_mem_base[VG_SYSTEM_RESERVE_COUNT];
 
-    volatile void *contiguous_mem_base[VG_SYSTEM_RESERVE_COUNT];
+    volatile void * contiguous_mem_base[VG_SYSTEM_RESERVE_COUNT];
     uint32_t        contiguous_mem_size[VG_SYSTEM_RESERVE_COUNT];
 }
 vg_module_parameters_t;

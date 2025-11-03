@@ -54,382 +54,365 @@
 /**
   * \brief 'Remap regions' which define how XIP accesses can be remapped into SMIF physical spaces (SMIF_SMIF_BRIDGE_SMIF_REMAP_REGION)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control bits for remap region */
-    __IM uint32_t RESERVED[3];
-    __IOM uint32_t ADDR;                          /*!< 0x00000010 Base address of remap region */
-    __IOM uint32_t MASK;                          /*!< 0x00000014 Mask value to be paired with ADDR */
-    __IOM uint32_t SMIF0_REMAP;                   /*!< 0x00000018 Base address for remaps into SMIF0 physical memory space */
-    __IOM uint32_t SMIF1_REMAP;                   /*!< 0x0000001C Base address for remaps into SMIF1 physical memory space */
-    __IM uint32_t RESERVED1[56];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control bits for remap region */
+   __IM uint32_t RESERVED[3];
+  __IOM uint32_t ADDR;                          /*!< 0x00000010 Base address of remap region */
+  __IOM uint32_t MASK;                          /*!< 0x00000014 Mask value to be paired with ADDR */
+  __IOM uint32_t SMIF0_REMAP;                   /*!< 0x00000018 Base address for remaps into SMIF0 physical memory space */
+  __IOM uint32_t SMIF1_REMAP;                   /*!< 0x0000001C Base address for remaps into SMIF1 physical memory space */
+   __IM uint32_t RESERVED1[56];
 } SMIF_SMIF_BRIDGE_SMIF_REMAP_REGION_Type;      /*!< Size = 256 (0x100) */
 
 /**
   * \brief AXI/AHB interleaving and FOTA bridge (SMIF_SMIF_BRIDGE)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Global control registers for the bridge */
-    __IM uint32_t RESERVED[1023];
-    SMIF_SMIF_BRIDGE_SMIF_REMAP_REGION_Type SMIF_REMAP_REGION[8]; /*!< 0x00001000 'Remap regions' which define how XIP accesses can be remapped
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Global control registers for the bridge */
+   __IM uint32_t RESERVED[1023];
+        SMIF_SMIF_BRIDGE_SMIF_REMAP_REGION_Type SMIF_REMAP_REGION[8]; /*!< 0x00001000 'Remap regions' which define how XIP accesses can be remapped
                                                                 into SMIF physical spaces */
-    __IM uint32_t RESERVED1[14848];
+   __IM uint32_t RESERVED1[14848];
 } SMIF_SMIF_BRIDGE_Type;                        /*!< Size = 65536 (0x10000) */
 
 /**
   * \brief Cryptography registers (one set for each key) (SMIF_CORE_SMIF_CRYPTO)
   */
-typedef struct
-{
-    __IOM uint32_t CRYPTO_CMD;                    /*!< 0x00000000 Cryptography command */
-    __IOM uint32_t CRYPTO_ADDR;                   /*!< 0x00000004 Cryptography base address */
-    __IOM uint32_t CRYPTO_MASK;                   /*!< 0x00000008 Cryptography mask */
-    __IOM uint32_t CRYPTO_SUBREGION;              /*!< 0x0000000C Cryptography subregion disable */
-    __IM uint32_t RESERVED[4];
-    __IOM uint32_t CRYPTO_INPUT0;                 /*!< 0x00000020 Cryptography input 0 */
-    __IOM uint32_t CRYPTO_INPUT1;                 /*!< 0x00000024 Cryptography input 1 */
-    __IOM uint32_t CRYPTO_INPUT2;                 /*!< 0x00000028 Cryptography input 2 */
-    __IOM uint32_t CRYPTO_INPUT3;                 /*!< 0x0000002C Cryptography input 3 */
-    __IM uint32_t RESERVED1[4];
-    __OM uint32_t CRYPTO_KEY0;                   /*!< 0x00000040 Cryptography key 0 */
-    __OM uint32_t CRYPTO_KEY1;                   /*!< 0x00000044 Cryptography key 1 */
-    __OM uint32_t CRYPTO_KEY2;                   /*!< 0x00000048 Cryptography key 2 */
-    __OM uint32_t CRYPTO_KEY3;                   /*!< 0x0000004C Cryptography key 3 */
-    __IM uint32_t RESERVED2[4];
-    __IOM uint32_t CRYPTO_OUTPUT0;                /*!< 0x00000060 Cryptography output 0 */
-    __IOM uint32_t CRYPTO_OUTPUT1;                /*!< 0x00000064 Cryptography output 1 */
-    __IOM uint32_t CRYPTO_OUTPUT2;                /*!< 0x00000068 Cryptography output 2 */
-    __IOM uint32_t CRYPTO_OUTPUT3;                /*!< 0x0000006C Cryptography output 3 */
-    __IM uint32_t RESERVED3[4];
+typedef struct {
+  __IOM uint32_t CRYPTO_CMD;                    /*!< 0x00000000 Cryptography command */
+  __IOM uint32_t CRYPTO_ADDR;                   /*!< 0x00000004 Cryptography base address */
+  __IOM uint32_t CRYPTO_MASK;                   /*!< 0x00000008 Cryptography mask */
+  __IOM uint32_t CRYPTO_SUBREGION;              /*!< 0x0000000C Cryptography subregion disable */
+   __IM uint32_t RESERVED[4];
+  __IOM uint32_t CRYPTO_INPUT0;                 /*!< 0x00000020 Cryptography input 0 */
+  __IOM uint32_t CRYPTO_INPUT1;                 /*!< 0x00000024 Cryptography input 1 */
+  __IOM uint32_t CRYPTO_INPUT2;                 /*!< 0x00000028 Cryptography input 2 */
+  __IOM uint32_t CRYPTO_INPUT3;                 /*!< 0x0000002C Cryptography input 3 */
+   __IM uint32_t RESERVED1[4];
+   __OM uint32_t CRYPTO_KEY0;                   /*!< 0x00000040 Cryptography key 0 */
+   __OM uint32_t CRYPTO_KEY1;                   /*!< 0x00000044 Cryptography key 1 */
+   __OM uint32_t CRYPTO_KEY2;                   /*!< 0x00000048 Cryptography key 2 */
+   __OM uint32_t CRYPTO_KEY3;                   /*!< 0x0000004C Cryptography key 3 */
+   __IM uint32_t RESERVED2[4];
+  __IOM uint32_t CRYPTO_OUTPUT0;                /*!< 0x00000060 Cryptography output 0 */
+  __IOM uint32_t CRYPTO_OUTPUT1;                /*!< 0x00000064 Cryptography output 1 */
+  __IOM uint32_t CRYPTO_OUTPUT2;                /*!< 0x00000068 Cryptography output 2 */
+  __IOM uint32_t CRYPTO_OUTPUT3;                /*!< 0x0000006C Cryptography output 3 */
+   __IM uint32_t RESERVED3[4];
 } SMIF_CORE_SMIF_CRYPTO_Type;                   /*!< Size = 128 (0x80) */
 
 /**
   * \brief Device (only used for XIP acceses) (SMIF_CORE_DEVICE)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t ADDR;                          /*!< 0x00000008 Device region base address */
-    __IOM uint32_t MASK;                          /*!< 0x0000000C Device region mask */
-    __IM uint32_t RESERVED1[4];
-    __IOM uint32_t ADDR_CTL;                      /*!< 0x00000020 Address control */
-    __IM uint32_t RESERVED2;
-    __IOM uint32_t RX_CAPTURE_CONFIG;             /*!< 0x00000028 RX capture configuration */
-    __IM uint32_t RESERVED3;
-    __IM uint32_t RD_STATUS;                     /*!< 0x00000030 Read status */
-    __IM uint32_t RESERVED4[3];
-    __IOM uint32_t RD_CMD_CTL;                    /*!< 0x00000040 Read command control */
-    __IOM uint32_t RD_ADDR_CTL;                   /*!< 0x00000044 Read address control */
-    __IOM uint32_t RD_MODE_CTL;                   /*!< 0x00000048 Read mode control */
-    __IOM uint32_t RD_DUMMY_CTL;                  /*!< 0x0000004C Read dummy control */
-    __IOM uint32_t RD_DATA_CTL;                   /*!< 0x00000050 Read data control */
-    __IOM uint32_t RD_CRC_CTL;                    /*!< 0x00000054 Read Bus CRC control */
-    __IOM uint32_t RD_BOUND_CTL;                  /*!< 0x00000058 Read boundary control */
-    __IM uint32_t RESERVED5;
-    __IOM uint32_t WR_CMD_CTL;                    /*!< 0x00000060 Write command control */
-    __IOM uint32_t WR_ADDR_CTL;                   /*!< 0x00000064 Write address control */
-    __IOM uint32_t WR_MODE_CTL;                   /*!< 0x00000068 Write mode control */
-    __IOM uint32_t WR_DUMMY_CTL;                  /*!< 0x0000006C Write dummy control */
-    __IOM uint32_t WR_DATA_CTL;                   /*!< 0x00000070 Write data control */
-    __IOM uint32_t WR_CRC_CTL;                    /*!< 0x00000074 Write Bus CRC control */
-    __IOM uint32_t HB_FW_DEL_TAP_SEL_0;           /*!< 0x00000078 HB FW Calibration Delay Tap Select 0 */
-    __IOM uint32_t HB_FW_DEL_TAP_SEL_1;           /*!< 0x0000007C HB FW Calibration Delay Tap Select 1 */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t ADDR;                          /*!< 0x00000008 Device region base address */
+  __IOM uint32_t MASK;                          /*!< 0x0000000C Device region mask */
+   __IM uint32_t RESERVED1[4];
+  __IOM uint32_t ADDR_CTL;                      /*!< 0x00000020 Address control */
+   __IM uint32_t RESERVED2;
+  __IOM uint32_t RX_CAPTURE_CONFIG;             /*!< 0x00000028 RX capture configuration */
+   __IM uint32_t RESERVED3;
+   __IM uint32_t RD_STATUS;                     /*!< 0x00000030 Read status */
+   __IM uint32_t RESERVED4[3];
+  __IOM uint32_t RD_CMD_CTL;                    /*!< 0x00000040 Read command control */
+  __IOM uint32_t RD_ADDR_CTL;                   /*!< 0x00000044 Read address control */
+  __IOM uint32_t RD_MODE_CTL;                   /*!< 0x00000048 Read mode control */
+  __IOM uint32_t RD_DUMMY_CTL;                  /*!< 0x0000004C Read dummy control */
+  __IOM uint32_t RD_DATA_CTL;                   /*!< 0x00000050 Read data control */
+  __IOM uint32_t RD_CRC_CTL;                    /*!< 0x00000054 Read Bus CRC control */
+  __IOM uint32_t RD_BOUND_CTL;                  /*!< 0x00000058 Read boundary control */
+   __IM uint32_t RESERVED5;
+  __IOM uint32_t WR_CMD_CTL;                    /*!< 0x00000060 Write command control */
+  __IOM uint32_t WR_ADDR_CTL;                   /*!< 0x00000064 Write address control */
+  __IOM uint32_t WR_MODE_CTL;                   /*!< 0x00000068 Write mode control */
+  __IOM uint32_t WR_DUMMY_CTL;                  /*!< 0x0000006C Write dummy control */
+  __IOM uint32_t WR_DATA_CTL;                   /*!< 0x00000070 Write data control */
+  __IOM uint32_t WR_CRC_CTL;                    /*!< 0x00000074 Write Bus CRC control */
+  __IOM uint32_t HB_FW_DEL_TAP_SEL_0;           /*!< 0x00000078 HB FW Calibration Delay Tap Select 0 */
+  __IOM uint32_t HB_FW_DEL_TAP_SEL_1;           /*!< 0x0000007C HB FW Calibration Delay Tap Select 1 */
 } SMIF_CORE_DEVICE_Type;                        /*!< Size = 128 (0x80) */
 
 /**
   * \brief MPC Memory Protection Controller registers (SMIF_CORE_SLOW_AHB_MPC)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
                                                                 the security owner PC. The error response configuration is
                                                                 located in CFG.RESPONSE, only one such configuration exists
                                                                 applying to all protection contexts in the system. */
-    __IM uint32_t RESERVED[63];
-    __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
+   __IM uint32_t RESERVED[63];
+  __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
                                                                 (Separate CTRL for each PC depends on access_pc) */
-    __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
-    __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
-    __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
+   __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
+   __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
+  __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
                                                                 for each PC depending on access_pc) */
-    __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
-    __IM uint32_t RESERVED1[59];
-    __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
-    __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
-    __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
-    __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
+  __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
+   __IM uint32_t RESERVED1[59];
+  __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
+   __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
+  __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
+  __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
                                                                 ROT_BLK_LUT */
-    __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
-    __IM uint32_t RESERVED3[889];
+  __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
+   __IM uint32_t RESERVED3[889];
 } SMIF_CORE_SLOW_AHB_MPC_Type;                  /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Serial Memory Interface (SMIF_CORE_SLOW_AHB)
   */
-typedef struct
-{
-    SMIF_CORE_SLOW_AHB_MPC_Type MPC[1];     /*!< 0x00000000 MPC Memory Protection Controller registers */
+typedef struct {
+        SMIF_CORE_SLOW_AHB_MPC_Type MPC[1];     /*!< 0x00000000 MPC Memory Protection Controller registers */
 } SMIF_CORE_SLOW_AHB_Type;                      /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief MPC Memory Protection Controller registers (SMIF_CORE_FAST_AHB_MPC)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
                                                                 the security owner PC. The error response configuration is
                                                                 located in CFG.RESPONSE, only one such configuration exists
                                                                 applying to all protection contexts in the system. */
-    __IM uint32_t RESERVED[63];
-    __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
+   __IM uint32_t RESERVED[63];
+  __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
                                                                 (Separate CTRL for each PC depends on access_pc) */
-    __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
-    __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
-    __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
+   __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
+   __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
+  __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
                                                                 for each PC depending on access_pc) */
-    __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
-    __IM uint32_t RESERVED1[59];
-    __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
-    __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
-    __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
-    __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
+  __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
+   __IM uint32_t RESERVED1[59];
+  __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
+   __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
+  __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
+  __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
                                                                 ROT_BLK_LUT */
-    __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
-    __IM uint32_t RESERVED3[889];
+  __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
+   __IM uint32_t RESERVED3[889];
 } SMIF_CORE_FAST_AHB_MPC_Type;                  /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Serial Memory Interface (SMIF_CORE_FAST_AHB)
   */
-typedef struct
-{
-    SMIF_CORE_FAST_AHB_MPC_Type MPC[1];     /*!< 0x00000000 MPC Memory Protection Controller registers */
+typedef struct {
+        SMIF_CORE_FAST_AHB_MPC_Type MPC[1];     /*!< 0x00000000 MPC Memory Protection Controller registers */
 } SMIF_CORE_FAST_AHB_Type;                      /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief MPC Memory Protection Controller registers (SMIF_CORE_AXI_MPC)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
                                                                 the security owner PC. The error response configuration is
                                                                 located in CFG.RESPONSE, only one such configuration exists
                                                                 applying to all protection contexts in the system. */
-    __IM uint32_t RESERVED[63];
-    __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
+   __IM uint32_t RESERVED[63];
+  __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
                                                                 (Separate CTRL for each PC depends on access_pc) */
-    __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
-    __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
-    __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
+   __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
+   __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
+  __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
                                                                 for each PC depending on access_pc) */
-    __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
-    __IM uint32_t RESERVED1[59];
-    __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
-    __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
-    __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
-    __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
+  __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
+   __IM uint32_t RESERVED1[59];
+  __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
+   __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
+  __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
+  __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
                                                                 ROT_BLK_LUT */
-    __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
-    __IM uint32_t RESERVED3[889];
+  __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
+   __IM uint32_t RESERVED3[889];
 } SMIF_CORE_AXI_MPC_Type;                       /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Serial Memory Interface (SMIF_CORE_AXI)
   */
-typedef struct
-{
-    SMIF_CORE_AXI_MPC_Type MPC[1];          /*!< 0x00000000 MPC Memory Protection Controller registers */
+typedef struct {
+        SMIF_CORE_AXI_MPC_Type MPC[1];          /*!< 0x00000000 MPC Memory Protection Controller registers */
 } SMIF_CORE_AXI_Type;                           /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief HSIOM port registers (SMIF_CORE_SMIF_HSIOM_SMIF_PRT)
   */
-typedef struct
-{
-    __IOM uint32_t PORT_SEL0;                     /*!< 0x00000000 Port selection 0 */
-    __IOM uint32_t PORT_SEL1;                     /*!< 0x00000004 Port selection 1 */
-    __IM uint32_t RESERVED[2];
+typedef struct {
+  __IOM uint32_t PORT_SEL0;                     /*!< 0x00000000 Port selection 0 */
+  __IOM uint32_t PORT_SEL1;                     /*!< 0x00000004 Port selection 1 */
+   __IM uint32_t RESERVED[2];
 } SMIF_CORE_SMIF_HSIOM_SMIF_PRT_Type;           /*!< Size = 16 (0x10) */
 
 /**
   * \brief HSIOM secure attribute port registers (SMIF_CORE_SMIF_HSIOM_SMIF_SECURE_PRT)
   */
-typedef struct
-{
-    __IOM uint32_t NONSECURE_MASK;                /*!< 0x00000000 Non-Secure Mask */
-    __IM uint32_t RESERVED[3];
+typedef struct {
+  __IOM uint32_t NONSECURE_MASK;                /*!< 0x00000000 Non-Secure Mask */
+   __IM uint32_t RESERVED[3];
 } SMIF_CORE_SMIF_HSIOM_SMIF_SECURE_PRT_Type;    /*!< Size = 16 (0x10) */
 
 /**
   * \brief IO Matrix (IOM) (SMIF_CORE_SMIF_HSIOM)
   */
-typedef struct
-{
-    SMIF_CORE_SMIF_HSIOM_SMIF_PRT_Type SMIF_PRT[3]; /*!< 0x00000000 HSIOM port registers */
-    __IM uint32_t RESERVED[1012];
-    SMIF_CORE_SMIF_HSIOM_SMIF_SECURE_PRT_Type SMIF_SECURE_PRT[3]; /*!< 0x00001000 HSIOM secure attribute port registers */
-    __IM uint32_t RESERVED1[1012];
-    __IOM uint32_t AMUX_SPLIT_CTL[64];            /*!< 0x00002000 AMUX splitter cell control */
-    __IM uint32_t RESERVED2[64];
-    __IOM uint32_t MONITOR_CTL_0;                 /*!< 0x00002200 Power/Ground Monitor cell control 0 */
-    __IOM uint32_t MONITOR_CTL_1;                 /*!< 0x00002204 Power/Ground Monitor cell control 1 */
-    __IOM uint32_t MONITOR_CTL_2;                 /*!< 0x00002208 Power/Ground Monitor cell control 2 */
-    __IOM uint32_t MONITOR_CTL_3;                 /*!< 0x0000220C Power/Ground Monitor cell control 3 */
-    __IM uint32_t RESERVED3[1916];
+typedef struct {
+        SMIF_CORE_SMIF_HSIOM_SMIF_PRT_Type SMIF_PRT[3]; /*!< 0x00000000 HSIOM port registers */
+   __IM uint32_t RESERVED[1012];
+        SMIF_CORE_SMIF_HSIOM_SMIF_SECURE_PRT_Type SMIF_SECURE_PRT[3]; /*!< 0x00001000 HSIOM secure attribute port registers */
+   __IM uint32_t RESERVED1[1012];
+  __IOM uint32_t AMUX_SPLIT_CTL[64];            /*!< 0x00002000 AMUX splitter cell control */
+   __IM uint32_t RESERVED2[64];
+  __IOM uint32_t MONITOR_CTL_0;                 /*!< 0x00002200 Power/Ground Monitor cell control 0 */
+  __IOM uint32_t MONITOR_CTL_1;                 /*!< 0x00002204 Power/Ground Monitor cell control 1 */
+  __IOM uint32_t MONITOR_CTL_2;                 /*!< 0x00002208 Power/Ground Monitor cell control 2 */
+  __IOM uint32_t MONITOR_CTL_3;                 /*!< 0x0000220C Power/Ground Monitor cell control 3 */
+   __IM uint32_t RESERVED3[1916];
 } SMIF_CORE_SMIF_HSIOM_Type;                    /*!< Size = 16384 (0x4000) */
 
 /**
   * \brief GPIO port registers (SMIF_CORE_SMIF_GPIO_SMIF_PRT)
   */
-typedef struct
-{
-    __IOM uint32_t OUT;                           /*!< 0x00000000 Port output data register */
-    __IOM uint32_t OUT_CLR;                       /*!< 0x00000004 Port output data clear register */
-    __IOM uint32_t OUT_SET;                       /*!< 0x00000008 Port output data set register */
-    __IOM uint32_t OUT_INV;                       /*!< 0x0000000C Port output data invert register */
-    __IM uint32_t IN;                            /*!< 0x00000010 Port input state register */
-    __IOM uint32_t INTR;                          /*!< 0x00000014 Port interrupt status register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Port interrupt mask register */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Port interrupt masked status register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000020 Port interrupt set register */
-    __IM uint32_t RESERVED[7];
-    __IOM uint32_t INTR_CFG;                      /*!< 0x00000040 Port interrupt configuration register */
-    __IOM uint32_t CFG;                           /*!< 0x00000044 Port configuration register */
-    __IOM uint32_t CFG_IN;                        /*!< 0x00000048 Port input buffer configuration register */
-    __IOM uint32_t CFG_OUT;                       /*!< 0x0000004C Port output buffer configuration register */
-    __IOM uint32_t CFG_SIO;                       /*!< 0x00000050 Port SIO configuration register */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t CFG_IN_AUTOLVL;                /*!< 0x00000058 Port input buffer AUTOLVL configuration register for S40E GPIO */
-    __IM uint32_t RESERVED2;
-    __IOM uint32_t CFG_OUT2;                      /*!< 0x00000060 Port output buffer configuration register 2 */
-    __IOM uint32_t CFG_SLEW_EXT;                  /*!< 0x00000064 Port output buffer slew extension configuration register */
-    __IOM uint32_t CFG_DRIVE_EXT0;                /*!< 0x00000068 Port output buffer drive sel extension configuration register */
-    __IOM uint32_t CFG_DRIVE_EXT1;                /*!< 0x0000006C Port output buffer drive sel extension configuration register */
-    __IOM uint32_t CFG_OUT3;                      /*!< 0x00000070 Port output buffer configuration register 3 */
-    __IOM uint32_t CFG_RES;                       /*!< 0x00000074 Port resistor configuration register 3 */
-    __IOM uint32_t MSC_ANA;                       /*!< 0x00000078 Port MSCv3 AMUX enable */
-    __IM uint32_t RESERVED3;
+typedef struct {
+  __IOM uint32_t OUT;                           /*!< 0x00000000 Port output data register */
+  __IOM uint32_t OUT_CLR;                       /*!< 0x00000004 Port output data clear register */
+  __IOM uint32_t OUT_SET;                       /*!< 0x00000008 Port output data set register */
+  __IOM uint32_t OUT_INV;                       /*!< 0x0000000C Port output data invert register */
+   __IM uint32_t IN;                            /*!< 0x00000010 Port input state register */
+  __IOM uint32_t INTR;                          /*!< 0x00000014 Port interrupt status register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Port interrupt mask register */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Port interrupt masked status register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000020 Port interrupt set register */
+   __IM uint32_t RESERVED[7];
+  __IOM uint32_t INTR_CFG;                      /*!< 0x00000040 Port interrupt configuration register */
+  __IOM uint32_t CFG;                           /*!< 0x00000044 Port configuration register */
+  __IOM uint32_t CFG_IN;                        /*!< 0x00000048 Port input buffer configuration register */
+  __IOM uint32_t CFG_OUT;                       /*!< 0x0000004C Port output buffer configuration register */
+  __IOM uint32_t CFG_SIO;                       /*!< 0x00000050 Port SIO configuration register */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t CFG_IN_AUTOLVL;                /*!< 0x00000058 Port input buffer AUTOLVL configuration register for S40E GPIO */
+   __IM uint32_t RESERVED2;
+  __IOM uint32_t CFG_OUT2;                      /*!< 0x00000060 Port output buffer configuration register 2 */
+  __IOM uint32_t CFG_SLEW_EXT;                  /*!< 0x00000064 Port output buffer slew extension configuration register */
+  __IOM uint32_t CFG_DRIVE_EXT0;                /*!< 0x00000068 Port output buffer drive sel extension configuration register */
+  __IOM uint32_t CFG_DRIVE_EXT1;                /*!< 0x0000006C Port output buffer drive sel extension configuration register */
+  __IOM uint32_t CFG_OUT3;                      /*!< 0x00000070 Port output buffer configuration register 3 */
+  __IOM uint32_t CFG_RES;                       /*!< 0x00000074 Port resistor configuration register 3 */
+  __IOM uint32_t MSC_ANA;                       /*!< 0x00000078 Port MSCv3 AMUX enable */
+   __IM uint32_t RESERVED3;
 } SMIF_CORE_SMIF_GPIO_SMIF_PRT_Type;            /*!< Size = 128 (0x80) */
 
 /**
   * \brief IO port control/configuration (SMIF_CORE_SMIF_GPIO)
   */
-typedef struct
-{
-    SMIF_CORE_SMIF_GPIO_SMIF_PRT_Type SMIF_PRT[3]; /*!< 0x00000000 GPIO port registers */
-    __IM uint32_t RESERVED[7072];
-    __IM uint32_t SEC_INTR_CAUSE0;               /*!< 0x00007000 Secure Interrupt port cause register 0 */
-    __IM uint32_t SEC_INTR_CAUSE1;               /*!< 0x00007004 Secure Interrupt port cause register 1 */
-    __IM uint32_t SEC_INTR_CAUSE2;               /*!< 0x00007008 Secure Interrupt port cause register 2 */
-    __IM uint32_t SEC_INTR_CAUSE3;               /*!< 0x0000700C Secure Interrupt port cause register 3 */
-    __IM uint32_t RESERVED1[1020];
-    __IM uint32_t INTR_CAUSE0;                   /*!< 0x00008000 Interrupt port cause register 0 */
-    __IM uint32_t INTR_CAUSE1;                   /*!< 0x00008004 Interrupt port cause register 1 */
-    __IM uint32_t INTR_CAUSE2;                   /*!< 0x00008008 Interrupt port cause register 2 */
-    __IM uint32_t INTR_CAUSE3;                   /*!< 0x0000800C Interrupt port cause register 3 */
-    __IM uint32_t VDD_ACTIVE;                    /*!< 0x00008010 Extern power supply detection register */
-    __IOM uint32_t VDD_INTR;                      /*!< 0x00008014 Supply detection interrupt register */
-    __IOM uint32_t VDD_INTR_MASK;                 /*!< 0x00008018 Supply detection interrupt mask register */
-    __IM uint32_t VDD_INTR_MASKED;               /*!< 0x0000801C Supply detection interrupt masked register */
-    __IOM uint32_t VDD_INTR_SET;                  /*!< 0x00008020 Supply detection interrupt set register */
-    __IM uint32_t VDD_PWRSW_STATUS;              /*!< 0x00008024 Power switch status */
-    __IM uint32_t RESERVED2[54];
-    __IOM uint32_t VDD_PWRSW_CTL;                 /*!< 0x00008100 Power Switch control */
-    __IM uint32_t RESERVED3[8127];
+typedef struct {
+        SMIF_CORE_SMIF_GPIO_SMIF_PRT_Type SMIF_PRT[3]; /*!< 0x00000000 GPIO port registers */
+   __IM uint32_t RESERVED[7072];
+   __IM uint32_t SEC_INTR_CAUSE0;               /*!< 0x00007000 Secure Interrupt port cause register 0 */
+   __IM uint32_t SEC_INTR_CAUSE1;               /*!< 0x00007004 Secure Interrupt port cause register 1 */
+   __IM uint32_t SEC_INTR_CAUSE2;               /*!< 0x00007008 Secure Interrupt port cause register 2 */
+   __IM uint32_t SEC_INTR_CAUSE3;               /*!< 0x0000700C Secure Interrupt port cause register 3 */
+   __IM uint32_t RESERVED1[1020];
+   __IM uint32_t INTR_CAUSE0;                   /*!< 0x00008000 Interrupt port cause register 0 */
+   __IM uint32_t INTR_CAUSE1;                   /*!< 0x00008004 Interrupt port cause register 1 */
+   __IM uint32_t INTR_CAUSE2;                   /*!< 0x00008008 Interrupt port cause register 2 */
+   __IM uint32_t INTR_CAUSE3;                   /*!< 0x0000800C Interrupt port cause register 3 */
+   __IM uint32_t VDD_ACTIVE;                    /*!< 0x00008010 Extern power supply detection register */
+  __IOM uint32_t VDD_INTR;                      /*!< 0x00008014 Supply detection interrupt register */
+  __IOM uint32_t VDD_INTR_MASK;                 /*!< 0x00008018 Supply detection interrupt mask register */
+   __IM uint32_t VDD_INTR_MASKED;               /*!< 0x0000801C Supply detection interrupt masked register */
+  __IOM uint32_t VDD_INTR_SET;                  /*!< 0x00008020 Supply detection interrupt set register */
+   __IM uint32_t VDD_PWRSW_STATUS;              /*!< 0x00008024 Power switch status */
+   __IM uint32_t RESERVED2[54];
+  __IOM uint32_t VDD_PWRSW_CTL;                 /*!< 0x00008100 Power Switch control */
+   __IM uint32_t RESERVED3[8127];
 } SMIF_CORE_SMIF_GPIO_Type;                     /*!< Size = 65536 (0x10000) */
 
 /**
   * \brief Serial Memory Interface (SMIF_CORE)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 Status */
-    __IOM uint32_t CTL2;                          /*!< 0x00000008 Control 2 */
-    __IM uint32_t RESERVED;
-    __IM uint32_t DLP_DELAY_TAP_SEL0;            /*!< 0x00000010 DLP Delay Tap Select Register 0 */
-    __IM uint32_t DLP_DELAY_TAP_SEL1;            /*!< 0x00000014 DLP Delay Tap Select Register 1 */
-    __IOM uint32_t DLP_CTL;                       /*!< 0x00000018 DLP Control Register */
-    __IM uint32_t RESERVED1;
-    __IM uint32_t DLP_STATUS0;                   /*!< 0x00000020 DLP Status Register 0 */
-    __IM uint32_t DLP_STATUS1;                   /*!< 0x00000024 DLP Status Register 1 */
-    __IM uint32_t RESERVED2[7];
-    __IM uint32_t TX_CMD_FIFO_STATUS;            /*!< 0x00000044 Transmitter command FIFO status */
-    __IM uint32_t TX_CMD_MMIO_FIFO_STATUS;       /*!< 0x00000048 Transmitter command MMIO FIFO status */
-    __IM uint32_t RESERVED3;
-    __OM uint32_t TX_CMD_MMIO_FIFO_WR;           /*!< 0x00000050 Transmitter command MMIO FIFO write */
-    __IM uint32_t RESERVED4[11];
-    __IOM uint32_t TX_DATA_MMIO_FIFO_CTL;         /*!< 0x00000080 Transmitter data MMIO FIFO control */
-    __IM uint32_t TX_DATA_FIFO_STATUS;           /*!< 0x00000084 Transmitter data FIFO status */
-    __IM uint32_t TX_DATA_MMIO_FIFO_STATUS;      /*!< 0x00000088 Transmitter data MMIO FIFO status */
-    __IM uint32_t RESERVED5;
-    __OM uint32_t TX_DATA_MMIO_FIFO_WR1;         /*!< 0x00000090 Transmitter data MMIO FIFO write */
-    __OM uint32_t TX_DATA_MMIO_FIFO_WR2;         /*!< 0x00000094 Transmitter data MMIO FIFO write */
-    __OM uint32_t TX_DATA_MMIO_FIFO_WR4;         /*!< 0x00000098 Transmitter data MMIO FIFO write */
-    __OM uint32_t TX_DATA_MMIO_FIFO_WR1ODD;      /*!< 0x0000009C Transmitter data MMIO FIFO write */
-    __IM uint32_t RESERVED6[8];
-    __IOM uint32_t RX_DATA_MMIO_FIFO_CTL;         /*!< 0x000000C0 Receiver data MMIO FIFO control */
-    __IM uint32_t RX_DATA_MMIO_FIFO_STATUS;      /*!< 0x000000C4 Receiver data MMIO FIFO status */
-    __IM uint32_t RX_DATA_FIFO_STATUS;           /*!< 0x000000C8 Receiver data FIFO status */
-    __IM uint32_t RESERVED7;
-    __IM uint32_t RX_DATA_MMIO_FIFO_RD1;         /*!< 0x000000D0 Receiver data MMIO FIFO read */
-    __IM uint32_t RX_DATA_MMIO_FIFO_RD2;         /*!< 0x000000D4 Receiver data MMIO FIFO read */
-    __IM uint32_t RX_DATA_MMIO_FIFO_RD4;         /*!< 0x000000D8 Receiver data MMIO FIFO read */
-    __IM uint32_t RESERVED8;
-    __IM uint32_t RX_DATA_MMIO_FIFO_RD1_SILENT;  /*!< 0x000000E0 Receiver data MMIO FIFO silent read */
-    __IM uint32_t RESERVED9[7];
-    __IOM uint32_t SLOW_CA_CTL;                   /*!< 0x00000100 Slow cache control */
-    __IM uint32_t RESERVED10;
-    __IOM uint32_t SLOW_CA_CMD;                   /*!< 0x00000108 Slow cache command */
-    __IM uint32_t RESERVED11[29];
-    __IOM uint32_t FAST_CA_CTL;                   /*!< 0x00000180 Fast cache control */
-    __IM uint32_t RESERVED12;
-    __IOM uint32_t FAST_CA_CMD;                   /*!< 0x00000188 Fast cache command */
-    __IM uint32_t RESERVED13[29];
-    SMIF_CORE_SMIF_CRYPTO_Type SMIF_CRYPTO_BLOCK[4]; /*!< 0x00000200 Cryptography registers (one set for each key) */
-    __IM uint32_t RESERVED14[128];
-    __IOM uint32_t CRC_CMD;                       /*!< 0x00000600 CRC Command */
-    __IM uint32_t RESERVED15[7];
-    __IOM uint32_t CRC_INPUT0;                    /*!< 0x00000620 CRC input 0 */
-    __IOM uint32_t CRC_INPUT1;                    /*!< 0x00000624 CRC input 1 */
-    __IM uint32_t RESERVED16[6];
-    __IM uint32_t CRC_OUTPUT;                    /*!< 0x00000640 CRC output */
-    __IM uint32_t RESERVED17[95];
-    __IOM uint32_t INTR;                          /*!< 0x000007C0 Interrupt register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x000007C4 Interrupt set register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x000007C8 Interrupt mask register */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x000007CC Interrupt masked register */
-    __IM uint32_t RESERVED18[2];
-    __IOM uint32_t DLL_IDAC;                      /*!< 0x000007D8 DLL IDAC ( when DLL runs in open loop, selects the delay of the
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 Status */
+  __IOM uint32_t CTL2;                          /*!< 0x00000008 Control 2 */
+   __IM uint32_t RESERVED;
+   __IM uint32_t DLP_DELAY_TAP_SEL0;            /*!< 0x00000010 DLP Delay Tap Select Register 0 */
+   __IM uint32_t DLP_DELAY_TAP_SEL1;            /*!< 0x00000014 DLP Delay Tap Select Register 1 */
+  __IOM uint32_t DLP_CTL;                       /*!< 0x00000018 DLP Control Register */
+   __IM uint32_t RESERVED1;
+   __IM uint32_t DLP_STATUS0;                   /*!< 0x00000020 DLP Status Register 0 */
+   __IM uint32_t DLP_STATUS1;                   /*!< 0x00000024 DLP Status Register 1 */
+   __IM uint32_t RESERVED2[7];
+   __IM uint32_t TX_CMD_FIFO_STATUS;            /*!< 0x00000044 Transmitter command FIFO status */
+   __IM uint32_t TX_CMD_MMIO_FIFO_STATUS;       /*!< 0x00000048 Transmitter command MMIO FIFO status */
+   __IM uint32_t RESERVED3;
+   __OM uint32_t TX_CMD_MMIO_FIFO_WR;           /*!< 0x00000050 Transmitter command MMIO FIFO write */
+   __IM uint32_t RESERVED4[11];
+  __IOM uint32_t TX_DATA_MMIO_FIFO_CTL;         /*!< 0x00000080 Transmitter data MMIO FIFO control */
+   __IM uint32_t TX_DATA_FIFO_STATUS;           /*!< 0x00000084 Transmitter data FIFO status */
+   __IM uint32_t TX_DATA_MMIO_FIFO_STATUS;      /*!< 0x00000088 Transmitter data MMIO FIFO status */
+   __IM uint32_t RESERVED5;
+   __OM uint32_t TX_DATA_MMIO_FIFO_WR1;         /*!< 0x00000090 Transmitter data MMIO FIFO write */
+   __OM uint32_t TX_DATA_MMIO_FIFO_WR2;         /*!< 0x00000094 Transmitter data MMIO FIFO write */
+   __OM uint32_t TX_DATA_MMIO_FIFO_WR4;         /*!< 0x00000098 Transmitter data MMIO FIFO write */
+   __OM uint32_t TX_DATA_MMIO_FIFO_WR1ODD;      /*!< 0x0000009C Transmitter data MMIO FIFO write */
+   __IM uint32_t RESERVED6[8];
+  __IOM uint32_t RX_DATA_MMIO_FIFO_CTL;         /*!< 0x000000C0 Receiver data MMIO FIFO control */
+   __IM uint32_t RX_DATA_MMIO_FIFO_STATUS;      /*!< 0x000000C4 Receiver data MMIO FIFO status */
+   __IM uint32_t RX_DATA_FIFO_STATUS;           /*!< 0x000000C8 Receiver data FIFO status */
+   __IM uint32_t RESERVED7;
+   __IM uint32_t RX_DATA_MMIO_FIFO_RD1;         /*!< 0x000000D0 Receiver data MMIO FIFO read */
+   __IM uint32_t RX_DATA_MMIO_FIFO_RD2;         /*!< 0x000000D4 Receiver data MMIO FIFO read */
+   __IM uint32_t RX_DATA_MMIO_FIFO_RD4;         /*!< 0x000000D8 Receiver data MMIO FIFO read */
+   __IM uint32_t RESERVED8;
+   __IM uint32_t RX_DATA_MMIO_FIFO_RD1_SILENT;  /*!< 0x000000E0 Receiver data MMIO FIFO silent read */
+   __IM uint32_t RESERVED9[7];
+  __IOM uint32_t SLOW_CA_CTL;                   /*!< 0x00000100 Slow cache control */
+   __IM uint32_t RESERVED10;
+  __IOM uint32_t SLOW_CA_CMD;                   /*!< 0x00000108 Slow cache command */
+   __IM uint32_t RESERVED11[29];
+  __IOM uint32_t FAST_CA_CTL;                   /*!< 0x00000180 Fast cache control */
+   __IM uint32_t RESERVED12;
+  __IOM uint32_t FAST_CA_CMD;                   /*!< 0x00000188 Fast cache command */
+   __IM uint32_t RESERVED13[29];
+        SMIF_CORE_SMIF_CRYPTO_Type SMIF_CRYPTO_BLOCK[4]; /*!< 0x00000200 Cryptography registers (one set for each key) */
+   __IM uint32_t RESERVED14[128];
+  __IOM uint32_t CRC_CMD;                       /*!< 0x00000600 CRC Command */
+   __IM uint32_t RESERVED15[7];
+  __IOM uint32_t CRC_INPUT0;                    /*!< 0x00000620 CRC input 0 */
+  __IOM uint32_t CRC_INPUT1;                    /*!< 0x00000624 CRC input 1 */
+   __IM uint32_t RESERVED16[6];
+   __IM uint32_t CRC_OUTPUT;                    /*!< 0x00000640 CRC output */
+   __IM uint32_t RESERVED17[95];
+  __IOM uint32_t INTR;                          /*!< 0x000007C0 Interrupt register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x000007C4 Interrupt set register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x000007C8 Interrupt mask register */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x000007CC Interrupt masked register */
+   __IM uint32_t RESERVED18[2];
+  __IOM uint32_t DLL_IDAC;                      /*!< 0x000007D8 DLL IDAC ( when DLL runs in open loop, selects the delay of the
                                                                 delay line) */
-    __IOM uint32_t DLL_IVR;                       /*!< 0x000007DC DLL IVR (Contol Output Voltage of internal Voltage Regulator ) */
-    __IM uint32_t RESERVED19[8];
-    SMIF_CORE_DEVICE_Type DEVICE[4];        /*!< 0x00000800 Device (only used for XIP acceses) */
-    __IM uint32_t RESERVED20[384];
-    SMIF_CORE_SLOW_AHB_Type SLOW_AHB;       /*!< 0x00001000 Serial Memory Interface */
-    SMIF_CORE_FAST_AHB_Type FAST_AHB;       /*!< 0x00002000 Serial Memory Interface */
-    SMIF_CORE_AXI_Type AXI;                 /*!< 0x00003000 Serial Memory Interface */
-    SMIF_CORE_SMIF_HSIOM_Type SMIF_HSIOM;   /*!< 0x00004000 IO Matrix (IOM) */
-    __IM uint32_t RESERVED21[8192];
-    SMIF_CORE_SMIF_GPIO_Type SMIF_GPIO;     /*!< 0x00010000 IO port control/configuration */
+  __IOM uint32_t DLL_IVR;                       /*!< 0x000007DC DLL IVR (Contol Output Voltage of internal Voltage Regulator ) */
+   __IM uint32_t RESERVED19[8];
+        SMIF_CORE_DEVICE_Type DEVICE[4];        /*!< 0x00000800 Device (only used for XIP acceses) */
+   __IM uint32_t RESERVED20[384];
+        SMIF_CORE_SLOW_AHB_Type SLOW_AHB;       /*!< 0x00001000 Serial Memory Interface */
+        SMIF_CORE_FAST_AHB_Type FAST_AHB;       /*!< 0x00002000 Serial Memory Interface */
+        SMIF_CORE_AXI_Type AXI;                 /*!< 0x00003000 Serial Memory Interface */
+        SMIF_CORE_SMIF_HSIOM_Type SMIF_HSIOM;   /*!< 0x00004000 IO Matrix (IOM) */
+   __IM uint32_t RESERVED21[8192];
+        SMIF_CORE_SMIF_GPIO_Type SMIF_GPIO;     /*!< 0x00010000 IO port control/configuration */
 } SMIF_CORE_Type;                               /*!< Size = 131072 (0x20000) */
 
 /**
   * \brief SMIF subsystem (bridge + 2 core SMIFs, OR no bridge and 1 core SMIF) (SMIF_STRUCT)
   */
-typedef struct
-{
-    SMIF_SMIF_BRIDGE_Type SMIF_BRIDGE;      /*!< 0x00000000 AXI/AHB interleaving and FOTA bridge */
-    __IM uint32_t RESERVED[16384];
-    SMIF_CORE_Type CORE[2];                 /*!< 0x00020000 Serial Memory Interface */
+typedef struct {
+        SMIF_SMIF_BRIDGE_Type SMIF_BRIDGE;      /*!< 0x00000000 AXI/AHB interleaving and FOTA bridge */
+   __IM uint32_t RESERVED[16384];
+        SMIF_CORE_Type CORE[2];                 /*!< 0x00020000 Serial Memory Interface */
 } SMIF_STRUCT_Type;                             /*!< Size = 393216 (0x60000) */
 
 

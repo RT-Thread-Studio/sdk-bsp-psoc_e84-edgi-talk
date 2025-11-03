@@ -39,7 +39,7 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 14.3', 2, \
-                             'Since value of CY_CRYPTO_V1 is decided by PDL device agnostic / hardware specific model, controlling expression will not have an invariant value.')
+'Since value of CY_CRYPTO_V1 is decided by PDL device agnostic / hardware specific model, controlling expression will not have an invariant value.')
 
 #if (CPUSS_CRYPTO_TR == 1) && defined(CY_CRYPTO_CFG_TRNG_C)
 
@@ -48,10 +48,10 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 14.3', 2, \
 #include "cy_crypto_core_trng_config.h"
 
 typedef cy_en_crypto_status_t (*cy_crypto_trng_func_t)(CRYPTO_Type *base,
-        uint32_t  GAROPol,
-        uint32_t  FIROPol,
-        uint32_t  max,
-        uint32_t *randomNum);
+                                             uint32_t  GAROPol,
+                                             uint32_t  FIROPol,
+                                             uint32_t  max,
+                                             uint32_t *randomNum);
 
 /**
 * \addtogroup group_crypto_lld_rng_functions
@@ -159,10 +159,10 @@ cy_en_crypto_status_t Cy_Crypto_Core_Trng_ReadData(CRYPTO_Type *base, uint32_t *
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_Trng(CRYPTO_Type *base,
-        uint32_t  GAROPol,
-        uint32_t  FIROPol,
-        uint32_t  max,
-        uint32_t *randomNum);
+                                             uint32_t  GAROPol,
+                                             uint32_t  FIROPol,
+                                             uint32_t  max,
+                                             uint32_t *randomNum);
 
 
 /*******************************************************************************
@@ -185,8 +185,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_Trng(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Trng_Ext(CRYPTO_Type *base,
-        uint32_t  max,
-        uint32_t *randomNum)
+                                             uint32_t  max,
+                                             uint32_t *randomNum)
 {
     return Cy_Crypto_Core_Trng(base, CY_CRYPTO_DEF_TR_GARO, CY_CRYPTO_DEF_TR_FIRO, max, randomNum);
 }
@@ -241,7 +241,7 @@ __STATIC_INLINE bool Cy_Crypto_Core_Trng_IsInitialized(CRYPTO_Type *base);
 
 __STATIC_INLINE uint8_t Cy_Crypto_Core_Trng_GetRoStatus(CRYPTO_Type *base, cy_en_crypto_trng_ro_sel_t roSelector);
 __STATIC_INLINE void Cy_Crypto_Core_Trng_SetRoStatus(CRYPTO_Type *base,
-        cy_en_crypto_trng_ro_sel_t roSelector, uint8_t roStatus);
+                                                     cy_en_crypto_trng_ro_sel_t roSelector, uint8_t roStatus);
 __STATIC_INLINE bool Cy_Crypto_Core_Trng_IsRoEnabled(CRYPTO_Type *base, cy_en_crypto_trng_ro_sel_t roSelector);
 __STATIC_INLINE bool Cy_Crypto_Core_Trng_AnyRoEnabled(CRYPTO_Type *base);
 
@@ -306,15 +306,15 @@ __STATIC_INLINE bool Cy_Crypto_Core_Trng_IsReady(CRYPTO_Type *base)
     /* Check for TRNG instruction is complete */
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         status = (0uL == (REG_CRYPTO_STATUS(base) & CRYPTO_STATUS_TR_BUSY_Msk));
-#endif
+        #endif
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         status = (0uL == _FLD2VAL(CRYPTO_V2_STATUS_BUSY, REG_CRYPTO_STATUS(base)));
-#endif
+        #endif
     }
 
     return status;
@@ -382,8 +382,8 @@ __STATIC_INLINE void Cy_Crypto_Core_Trng_WaitForComplete(CRYPTO_Type *base)
     do
     {
         status = Cy_Crypto_Core_GetInterruptStatus(base) & (CRYPTO_INTR_TR_DATA_AVAILABLE_Msk  |
-                 CRYPTO_INTR_TR_AP_DETECT_ERROR_Msk |
-                 CRYPTO_INTR_TR_RC_DETECT_ERROR_Msk);
+                                                            CRYPTO_INTR_TR_AP_DETECT_ERROR_Msk |
+                                                            CRYPTO_INTR_TR_RC_DETECT_ERROR_Msk);
     }
     while (status == 0U);
 }
@@ -403,19 +403,19 @@ __STATIC_INLINE void Cy_Crypto_Core_Trng_WaitForReady(CRYPTO_Type *base)
     /* Wait until the TRNG instruction is complete */
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         while (0uL != (REG_CRYPTO_STATUS(base) & CRYPTO_STATUS_TR_BUSY_Msk))
         {
         }
-#endif
+        #endif
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         while (0uL != REG_CRYPTO_STATUS(base))
         {
         }
-#endif
+        #endif
     }
 }
 
@@ -437,7 +437,7 @@ __STATIC_INLINE void Cy_Crypto_Core_Trng_WaitForReady(CRYPTO_Type *base)
 *******************************************************************************/
 __STATIC_INLINE uint8_t Cy_Crypto_Core_Trng_GetRoStatus(CRYPTO_Type *base, cy_en_crypto_trng_ro_sel_t roSelector)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to wider 32bit.');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to wider 32bit.');
     return (REG_CRYPTO_TR_CTL1(base) & (uint32_t)(1U << ((uint32_t)roSelector))) != 0U ? 1U : 0U;
 }
 
@@ -458,9 +458,9 @@ __STATIC_INLINE uint8_t Cy_Crypto_Core_Trng_GetRoStatus(CRYPTO_Type *base, cy_en
 *
 *******************************************************************************/
 __STATIC_INLINE void Cy_Crypto_Core_Trng_SetRoStatus(CRYPTO_Type *base,
-        cy_en_crypto_trng_ro_sel_t roSelector, uint8_t roStatus)
+                                                        cy_en_crypto_trng_ro_sel_t roSelector, uint8_t roStatus)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.6', 'enum cy_en_crypto_trng_ro_sel_t to uint32_t conversion intentional.');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.6','enum cy_en_crypto_trng_ro_sel_t to uint32_t conversion intentional.');
     uint32_t roMask = 1U << (uint32_t)roSelector;
     uint32_t roData = (REG_CRYPTO_TR_CTL1(base) & ~roMask) | (((uint32_t)roStatus != 0U) ? roMask : 0U);
     REG_CRYPTO_TR_CTL1(base) = roData;
@@ -637,7 +637,7 @@ __STATIC_INLINE uint8_t Cy_Crypto_Core_Trng_MonGetHealthStatus(CRYPTO_Type *base
 {
     return (uint8_t)((REG_CRYPTO_INTR(base) \
                       & (CRYPTO_INTR_TR_AP_DETECT_ERROR_Msk | CRYPTO_INTR_TR_RC_DETECT_ERROR_Msk)) \
-                     >> CRYPTO_INTR_TR_AP_DETECT_ERROR_Pos);
+                      >> CRYPTO_INTR_TR_AP_DETECT_ERROR_Pos);
 }
 
 /*******************************************************************************
@@ -763,7 +763,7 @@ __STATIC_INLINE uint8_t Cy_Crypto_Core_Trng_MonGetApCurrentBit(CRYPTO_Type *base
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Trng_MonSetBSSelector(CRYPTO_Type *base,
-        cy_en_crypto_trng_bs_sel_t bitStreamSelector)
+                                                                           cy_en_crypto_trng_bs_sel_t bitStreamSelector)
 {
     cy_en_crypto_status_t status = CY_CRYPTO_SUCCESS;
 
@@ -789,7 +789,7 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Trng_MonSetBSSelector(CRYPT
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_trng_bs_sel_t Cy_Crypto_Core_Trng_MonGetBSSelector(CRYPTO_Type *base)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_crypto_trng_bs_sel_t enum.');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_crypto_trng_bs_sel_t enum.');
     return ((cy_en_crypto_trng_bs_sel_t)_FLD2VAL(CRYPTO_TR_MON_CTL_BITSTREAM_SEL, REG_CRYPTO_TR_MON_CTL(base)));
 }
 

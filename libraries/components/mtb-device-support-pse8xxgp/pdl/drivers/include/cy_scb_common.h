@@ -50,277 +50,7 @@
 ********************************************************************************
 * For more information on the SCB peripheral, refer to the technical reference
 * manual (TRM).
-*
-*******************************************************************************
-* \section group_scb_common_changelog Changelog
-*******************************************************************************
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>3.30</td>
-*     <td>Updated internal macro to enable UART Half Duplex APIs only on supported devices.</td>
-*     <td>Code enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">3.20</td>
-*     <td>Added APIs \ref Cy_SCB_UART_EnableSingleWireHalfDuplex, \ref Cy_SCB_UART_DisableSingleWireHalfDuplex.
-*       - Updated struct \ref cy_stc_scb_uart_config_t.
-*     </td>
-*     <td>UART half duplex mode implementation. Bug fixes.</td>
-*   </tr>
-*   <tr>
-*     <td>Added API \ref Cy_SCB_SPI_Transfer_Buffer and new macros.
-*       - Updated struct \ref cy_stc_scb_spi_context_t.</td>
-*     <td>Added support for SPI transfer with different length and bug fixes for buffer transfer with different sizes.</td>
-*   </tr>
-*   <tr>
-*     <td>3.10.1</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>3.10</td>
-*     <td>Fixed MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">3.0</td>
-*     <td>Updated \ref Cy_SCB_SPI_Init and other internal data handling functions to handle wide range of data widths.</td>
-*     <td>Defect fixing.</td>
-*   </tr>
-*   <tr>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.90</td>
-*     <td>A new API, \ref Cy_SCB_SetEzI2CMode, has been added to help set the hardware EZ mode for the I2C protocol.</td>
-*     <td>The HW EZ Mode for the I2C protocol can be enabled or disabled.</td>
-*   </tr>
-*   <tr>
-*     <td>Newly added APIs \ref Cy_SCB_I2C_SetStretchThreshold to set the stretch threshold value,
-*         \ref Cy_SCB_I2C_GetStretchCount to get the stretch count,
-*         \ref Cy_SCB_I2C_IsStretchDetected to detect if I2C SCL is stretched,
-*         \ref Cy_SCB_I2C_IsSyncDetected to check if synchronization is detected on I2C SCL.
-*         \ref Cy_SCB_I2C_IsStretching to check if DUT is stretching the I2C SCL.</td>
-*     <td>New device support.</td>
-*   </tr>
-*   <tr>
-*     <td>2.80</td>
-*     <td>Updated the behaviour of \ref Cy_SCB_UART_SetEnableMsbFirst and \ref Cy_SCB_UART_GetEnableMsbFirst functions.
-*         Now the value of enableMsbFirst is being set and fetched correctly.
-*     <td>Defect fixing.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.70</td>
-*     <td>Newly added API's for runtime parameter set/get functionality which include
-*         \ref Cy_SCB_UART_SetOverSample to set oversample bits of UART,
-*         \ref Cy_SCB_UART_GetOverSample to add return value of oversample,
-*         \ref Cy_SCB_UART_GetDataWidth to get data width,
-*         \ref Cy_SCB_UART_SetDataWidth to set data width,
-*         \ref Cy_SCB_UART_GetParity to get parity,
-*         \ref Cy_SCB_UART_SetParity to set parity,
-*         \ref Cy_SCB_UART_GetStopBits to get stop bits,
-*         \ref Cy_SCB_UART_SetStopBits to set stop bits,
-*         \ref Cy_SCB_UART_GetDropOnParityError to get drop on parity error,
-*         \ref Cy_SCB_UART_SetDropOnParityError to set drop on parity error,
-*         \ref Cy_SCB_UART_GetEnableMsbFirst to get enable MSB first and
-*         \ref Cy_SCB_UART_SetEnableMsbFirst to set enable MSB first.</td>
-*     <td>Runtime Parameter update.</td>
-*   </tr>
-*   <tr>
-*     <td>Newly added API's which include
-*         \ref Cy_SCB_Get_RxDataWidth to return the RX data width,
-*         \ref Cy_SCB_Get_TxDataWidth to return the TX data width,
-*         \ref Cy_SCB_SetMemWidth to set the RX and TX FIFOs byte mode/halfword/word mode.
-*         Updated Structures \ref cy_stc_scb_uart_config_t, \ref cy_en_scb_spi_parity_t, \ref cy_stc_scb_spi_config_t.</td>
-*     <td>New device support.</td>
-*   </tr>
-*   <tr>
-*     <td  rowspan="2">2.60</td>
-*     <td>Fixed the \ref Cy_SCB_UART_GetNumInRingBuffer function to
-*         return correct number of the elements in ring buffer.</td>
-*     <td> \ref Cy_SCB_UART_GetNumInRingBuffer function works incorrectly, when
-*         write pointer of the ring buffer is behind the read pointer.</td>
-*   </tr>
-*   <tr>
-*     <td>Fixed/Documented MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>2.50</td>
-*     <td>Fixed the \ref Cy_SCB_SPI_SetActiveSlaveSelectPolarity function to
-*         properly configure the polarity of the slave select line.</td>
-*     <td> \ref Cy_SCB_SPI_SetActiveSlaveSelectPolarity function works incorrectly.</td>
-*   </tr>
-*   <tr>
-*     <td>2.40.2</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.40</td>
-*     <td>Update level selection logic of RX FIFO trigger in the Cy_SCB_UART_Receive().</td>
-*     <td>Fix possible stuck if the RTS level is less than the RX FIFO level.</td>
-*   </tr>
-*   <tr>
-*     <td>Exclude self-test assertion macros under release build profile.</td>
-*     <td>Avoid dependency on CY_ASSERT macro implementation.</td>
-*   </tr>
-*   <tr>
-*     <td>2.30.1</td>
-*     <td>Added header guards CY_IP_MXSCB.</td>
-*     <td>To enable the PDL compilation with wounded out IP blocks.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="5">2.30</td>
-*     <td>Fixed MISRA violation.</td>
-*     <td>MISRA compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>Changed values CY_SCB_SPI_CPHA0_CPOL1 and CY_SCB_SPI_CPHA1_CPOL0 in enum \ref cy_en_scb_spi_sclk_mode_t.</td>
-*     <td>The incorrect values in \ref cy_en_scb_spi_sclk_mode_t caused incorrect initialization of the combination of
-*         phases and polarity: "CHPA = 0, CPOL = 1" and "CHPA = 1, CPOL = 0".
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>Added new CY_SCB_UART_RECEIVE_NOT_EMTPY and CY_SCB_UART_TRANSMIT_EMTPY callback events \ref group_scb_uart_macros_callback_events.</td>
-*     <td>Extended the driver callback events to support the MBED-OS.</td>
-*   </tr>
-*   <tr>
-*     <td>Merged SCB changelogs for each mode into one changelog.</td>
-*     <td>Changelog optimization.</td>
-*   </tr>
-*   <tr>
-*     <td>Merged SCB MISRA-C Compliance sections for each mode into one section.</td>
-*     <td>To optimize the SCB MISRA-C Compliance sections.</td>
-*   </tr>
-*   <tr>
-*     <td> 2.20.1</td>
-*     <td>Documentation of the MISRA rule violation.</td>
-*     <td>MISRA compliance.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="4">2.20</td>
-*     <td>Flattened the organization of the driver source code into the single
-*         source directory and the single include directory.
-*     </td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Added register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>Added the enableDigitalFilter, highPhaseDutyCycle and lowPhaseDutyCycle
-*         fields to the \ref cy_stc_scb_i2c_config_t configuration structure.
-*     </td>
-*     <td>Added the I2C master data rate configuration using the configuration structure.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>Fixed the \ref Cy_SCB_I2C_SetDataRate function to properly configure data rates
-*         greater than 400 kbps in Master and Master-Slave modes. \n
-*         Added verification that clk_scb is within the valid range for the desired data rate.
-*     </td>
-*     <td>The analog filter was enabled for all data rates in Master and Master-Slave modes.
-*         This prevents reaching the maximum supported data rate of 1000 kbps which requires a digital filter.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td rowspan="4"> 2.10</td>
-*     <td>Fixed the ReStart condition generation sequence for a write
-*         transaction in the \ref Cy_SCB_I2C_MasterWrite function.</td>
-*     <td>The driver can notify about a zero length write transaction completion
-*         before the address byte is sent if the \ref Cy_SCB_I2C_MasterWrite
-*         function execution was interrupted between setting the restart
-*         generation command and writing the address byte into the TX FIFO.</td>
-*   </tr>
-*   <tr>
-*     <td>Added the slave- and master-specific interrupt functions:
-*         \ref Cy_SCB_I2C_SlaveInterrupt and \ref Cy_SCB_I2C_MasterInterrupt.
-*     </td>
-*     <td>Improved the interrupt configuration options for the I2C slave and
-*         master mode configurations.</td>
-*   </tr>
-*   <tr>
-*     <td>Updated the Start condition generation sequence in the \ref
-*         Cy_SCB_I2C_MasterWrite and \ref Cy_SCB_I2C_MasterRead.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>Updated the ReStart condition generation sequence for a write
-*         transaction in the \ref Cy_SCB_I2C_MasterSendReStart function.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td rowspan="9"> 2.0</td>
-*     <td>Added parameters validation for public API.
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>Fixed functions which return interrupt status to return only defined
-*         set of interrupt statuses.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>Added missing "cy_cb_" to the callback function type names.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>Replaced variables that have limited range of values with enumerated
-*         types.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>Added function \ref Cy_SCB_UART_SendBreakBlocking for break condition
-*         generation.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>Fixed low power callbacks \ref Cy_SCB_UART_DeepSleepCallback and
-*         \ref Cy_SCB_UART_HibernateCallback to prevent the device from entering
-*         low power mode when RX FIFO is not empty.</td>
-*     <td>The callbacks allowed entering device into low power mode when RX FIFO
-*         had data.</td>
-*   </tr>
-*   <tr>
-*     <td>Fixed SPI callback notification when error event occurred.</td>
-*     <td>The SPI callback passed incorrect event value if error event occurred.</td>
-*   </tr>
-*   <tr>
-*     <td>Fixed the \ref Cy_SCB_I2C_MasterSendReStart function to properly
-*         generate the ReStart condition when the previous transaction was
-*         a write.</td>
-*     <td>The master interpreted the address byte written into the TX FIFO as a
-*         data byte and continued a write transaction. The ReStart condition was
-*         generated after the master completed transferring the data byte.
-*         The SCL line was stretched by the master waiting for the address byte
-*         to be written into the TX FIFO after the ReStart condition generation.
-*         The following timeout detection released the bus from the master
-*         control.</td>
-*   </tr>
-*   <tr>
-*     <td>Fixed the slave operation after the address byte was NACKed by the
-*         firmware.</td>
-*     <td>The observed slave operation failure depends on whether Level 2 assert
-*         is enabled or not. Enabled: the device stuck in the fault handler due
-*         to the assert assignment in the \ref Cy_SCB_I2C_Interrupt. Disabled:
-*         the slave sets the transaction completion status and notifies on the
-*         transaction completion event after the address was NACKed. The failure
-*         is observed only when the slave is configured to accept an address in
-*         the RX FIFO.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version.</td>
-*     <td></td>
-*   </tr>
-* </table>
 */
-
 /** \} group_scb */
 /**
 * \addtogroup group_scb_common
@@ -377,62 +107,62 @@ extern "C" {
 * \addtogroup group_scb_common_functions
 * \{
 */
-__STATIC_FORCEINLINE uint32_t Cy_SCB_ReadRxFifo(CySCB_Type const *base);
+__STATIC_FORCEINLINE uint32_t Cy_SCB_ReadRxFifo    (CySCB_Type const *base);
 __STATIC_INLINE void     Cy_SCB_SetRxFifoLevel(CySCB_Type *base, uint32_t level);
 __STATIC_INLINE uint32_t Cy_SCB_GetNumInRxFifo(CySCB_Type const *base);
-__STATIC_INLINE uint32_t Cy_SCB_GetRxSrValid(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_ClearRxFifo(CySCB_Type *base);
+__STATIC_INLINE uint32_t Cy_SCB_GetRxSrValid  (CySCB_Type const *base);
+__STATIC_INLINE void     Cy_SCB_ClearRxFifo   (CySCB_Type *base);
 
-__STATIC_FORCEINLINE void     Cy_SCB_WriteTxFifo(CySCB_Type *base, uint32_t data);
+__STATIC_FORCEINLINE void     Cy_SCB_WriteTxFifo   (CySCB_Type *base, uint32_t data);
 __STATIC_INLINE void     Cy_SCB_SetTxFifoLevel(CySCB_Type *base, uint32_t level);
 __STATIC_INLINE uint32_t Cy_SCB_GetNumInTxFifo(CySCB_Type const *base);
-__STATIC_INLINE uint32_t Cy_SCB_GetTxSrValid(CySCB_Type const *base);
-__STATIC_INLINE bool     Cy_SCB_IsTxComplete(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_ClearTxFifo(CySCB_Type *base);
+__STATIC_INLINE uint32_t Cy_SCB_GetTxSrValid  (CySCB_Type const *base);
+__STATIC_INLINE bool     Cy_SCB_IsTxComplete  (CySCB_Type const *base);
+__STATIC_INLINE void     Cy_SCB_ClearTxFifo   (CySCB_Type *base);
 
 __STATIC_INLINE void     Cy_SCB_SetByteMode(CySCB_Type *base, bool byteMode);
 
 __STATIC_INLINE uint32_t Cy_SCB_GetInterruptCause(CySCB_Type const *base);
 
 __STATIC_INLINE uint32_t Cy_SCB_GetRxInterruptStatus(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_SetRxInterruptMask(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE uint32_t Cy_SCB_GetRxInterruptMask(CySCB_Type const *base);
+__STATIC_INLINE void     Cy_SCB_SetRxInterruptMask  (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE uint32_t Cy_SCB_GetRxInterruptMask  (CySCB_Type const *base);
 __STATIC_INLINE uint32_t Cy_SCB_GetRxInterruptStatusMasked(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_ClearRxInterrupt(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE void     Cy_SCB_SetRxInterrupt(CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_ClearRxInterrupt    (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_SetRxInterrupt      (CySCB_Type *base, uint32_t interruptMask);
 
 __STATIC_INLINE uint32_t Cy_SCB_GetTxInterruptStatus(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_SetTxInterruptMask(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE uint32_t Cy_SCB_GetTxInterruptMask(CySCB_Type const *base);
+__STATIC_INLINE void     Cy_SCB_SetTxInterruptMask  (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE uint32_t Cy_SCB_GetTxInterruptMask  (CySCB_Type const *base);
 __STATIC_INLINE uint32_t Cy_SCB_GetTxInterruptStatusMasked(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_ClearTxInterrupt(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE void     Cy_SCB_SetTxInterrupt(CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_ClearTxInterrupt    (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_SetTxInterrupt      (CySCB_Type *base, uint32_t interruptMask);
 
 __STATIC_INLINE uint32_t Cy_SCB_GetMasterInterruptStatus(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_SetMasterInterruptMask(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE uint32_t Cy_SCB_GetMasterInterruptMask(CySCB_Type const *base);
+__STATIC_INLINE void     Cy_SCB_SetMasterInterruptMask  (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE uint32_t Cy_SCB_GetMasterInterruptMask  (CySCB_Type const *base);
 __STATIC_INLINE uint32_t Cy_SCB_GetMasterInterruptStatusMasked(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_ClearMasterInterrupt(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE void     Cy_SCB_SetMasterInterrupt(CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_ClearMasterInterrupt    (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_SetMasterInterrupt      (CySCB_Type *base, uint32_t interruptMask);
 
 __STATIC_INLINE uint32_t Cy_SCB_GetSlaveInterruptStatus(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_SetSlaveInterruptMask(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE uint32_t Cy_SCB_GetSlaveInterruptMask(CySCB_Type const *base);
+__STATIC_INLINE void     Cy_SCB_SetSlaveInterruptMask  (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE uint32_t Cy_SCB_GetSlaveInterruptMask  (CySCB_Type const *base);
 __STATIC_INLINE uint32_t Cy_SCB_GetSlaveInterruptStatusMasked(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_ClearSlaveInterrupt(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE void     Cy_SCB_SetSlaveInterrupt(CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_ClearSlaveInterrupt    (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_SetSlaveInterrupt      (CySCB_Type *base, uint32_t interruptMask);
 
 __STATIC_INLINE uint32_t Cy_SCB_GetI2CInterruptStatus(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_SetI2CInterruptMask(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE uint32_t Cy_SCB_GetI2CInterruptMask(CySCB_Type const *base);
+__STATIC_INLINE void     Cy_SCB_SetI2CInterruptMask  (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE uint32_t Cy_SCB_GetI2CInterruptMask  (CySCB_Type const *base);
 __STATIC_INLINE uint32_t Cy_SCB_GetI2CInterruptStatusMasked(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_ClearI2CInterrupt(CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_ClearI2CInterrupt    (CySCB_Type *base, uint32_t interruptMask);
 
 __STATIC_INLINE uint32_t Cy_SCB_GetSpiInterruptStatus(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_SetSpiInterruptMask(CySCB_Type *base, uint32_t interruptMask);
-__STATIC_INLINE uint32_t Cy_SCB_GetSpiInterruptMask(CySCB_Type const *base);
+__STATIC_INLINE void     Cy_SCB_SetSpiInterruptMask  (CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE uint32_t Cy_SCB_GetSpiInterruptMask  (CySCB_Type const *base);
 __STATIC_INLINE uint32_t Cy_SCB_GetSpiInterruptStatusMasked(CySCB_Type const *base);
-__STATIC_INLINE void     Cy_SCB_ClearSpiInterrupt(CySCB_Type *base, uint32_t interruptMask);
+__STATIC_INLINE void     Cy_SCB_ClearSpiInterrupt    (CySCB_Type *base, uint32_t interruptMask);
 
 
 /*******************************************************************************
@@ -440,22 +170,22 @@ __STATIC_INLINE void     Cy_SCB_ClearSpiInterrupt(CySCB_Type *base, uint32_t int
 *******************************************************************************/
 
 /** \cond INTERNAL */
-void     Cy_SCB_ReadArrayNoCheck(CySCB_Type const *base, void *buffer, uint32_t size);
-uint32_t Cy_SCB_ReadArray(CySCB_Type const *base, void *buffer, uint32_t size);
-void     Cy_SCB_ReadArrayBlocking(CySCB_Type const *base, void *buffer, uint32_t size);
-uint32_t Cy_SCB_Write(CySCB_Type *base, uint32_t data);
-void     Cy_SCB_WriteArrayNoCheck(CySCB_Type *base, void *buffer, uint32_t size);
-uint32_t Cy_SCB_WriteArray(CySCB_Type *base, void *buffer, uint32_t size);
+void     Cy_SCB_ReadArrayNoCheck  (CySCB_Type const *base, void *buffer, uint32_t size);
+uint32_t Cy_SCB_ReadArray         (CySCB_Type const *base, void *buffer, uint32_t size);
+void     Cy_SCB_ReadArrayBlocking (CySCB_Type const *base, void *buffer, uint32_t size);
+uint32_t Cy_SCB_Write             (CySCB_Type *base, uint32_t data);
+void     Cy_SCB_WriteArrayNoCheck (CySCB_Type *base, void *buffer, uint32_t size);
+uint32_t Cy_SCB_WriteArray        (CySCB_Type *base, void *buffer, uint32_t size);
 void     Cy_SCB_WriteArrayBlocking(CySCB_Type *base, void *buffer, uint32_t size);
-void     Cy_SCB_WriteString(CySCB_Type *base, char_t const string[]);
+void     Cy_SCB_WriteString       (CySCB_Type *base, char_t const string[]);
 void     Cy_SCB_WriteDefaultArrayNoCheck(CySCB_Type *base, uint32_t txData, uint32_t size);
-uint32_t Cy_SCB_WriteDefaultArray(CySCB_Type *base, uint32_t txData, uint32_t size);
+uint32_t Cy_SCB_WriteDefaultArray (CySCB_Type *base, uint32_t txData, uint32_t size);
 
-__STATIC_INLINE uint32_t Cy_SCB_GetFifoSize(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_GetFifoSize (CySCB_Type const *base);
 __STATIC_INLINE void     Cy_SCB_FwBlockReset(CySCB_Type *base);
 __STATIC_INLINE bool     Cy_SCB_IsRxDataWidthByte(CySCB_Type const *base);
 __STATIC_INLINE bool     Cy_SCB_IsTxDataWidthByte(CySCB_Type const *base);
-__STATIC_INLINE uint32_t Cy_SCB_GetRxFifoLevel(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_GetRxFifoLevel   (CySCB_Type const *base);
 #if((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
 __STATIC_INLINE uint32_t Cy_SCB_Get_RxDataWidth(CySCB_Type const *base);
 __STATIC_INLINE uint32_t Cy_SCB_Get_TxDataWidth(CySCB_Type const *base);
@@ -791,9 +521,9 @@ __STATIC_INLINE uint32_t Cy_SCB_Get_TxDataWidth(CySCB_Type const *base);
 /* UART half-duplex mode*/
 #if  ((defined(CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION > 4)) || \
     ((defined(CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION == 4)) && (defined(CY_IP_MXSCB_VERSION_MINOR) && (CY_IP_MXSCB_VERSION_MINOR >= 2))))
-#define CY_SCB_UART_RX_HALF_DUPLEX_SUPPORTED    (1u)
+    #define CY_SCB_UART_RX_HALF_DUPLEX_SUPPORTED    (1u)
 #else
-#define CY_SCB_UART_RX_HALF_DUPLEX_SUPPORTED    (0u)
+    #define CY_SCB_UART_RX_HALF_DUPLEX_SUPPORTED    (0u)
 #endif
 
 /* Max number of bits for byte mode */
@@ -1068,7 +798,7 @@ __STATIC_INLINE uint32_t Cy_SCB_GetTxSrValid(CySCB_Type const *base)
 *******************************************************************************/
 __STATIC_INLINE bool Cy_SCB_IsTxComplete(CySCB_Type const *base)
 {
-    return (0UL == (Cy_SCB_GetNumInTxFifo(base) + Cy_SCB_GetTxSrValid(base)));
+     return (0UL == (Cy_SCB_GetNumInTxFifo(base) + Cy_SCB_GetTxSrValid(base)));
 }
 
 
@@ -1083,7 +813,7 @@ __STATIC_INLINE bool Cy_SCB_IsTxComplete(CySCB_Type const *base)
 *
 * \note
 * The TX FIFO clear operation also clears the shift register. Thus the shifter
-* could be cleared in the middle of a data element transfer. Thia results in
+* could be cleared in the middle of a data element transfer. This results in
 * "ones" being sent on the bus for the remainder of the transfer.
 *
 *******************************************************************************/
@@ -1156,11 +886,11 @@ __STATIC_INLINE void Cy_SCB_SetByteMode(CySCB_Type *base, bool byteMode)
 *******************************************************************************/
 __STATIC_INLINE void Cy_SCB_SetMemWidth(CySCB_Type *base, uint32_t MemWidthMode)
 {
-    CY_ASSERT_L2(CY_SCB_IS_MEMWIDTH_VALID(MemWidthMode));
+        CY_ASSERT_L2(CY_SCB_IS_MEMWIDTH_VALID(MemWidthMode));
 
-    SCB_CTRL(base) &= ~SCB_CTRL_MEM_WIDTH_Msk;
+        SCB_CTRL(base) &= ~SCB_CTRL_MEM_WIDTH_Msk;
 
-    SCB_CTRL(base) |=  _VAL2FLD(SCB_CTRL_MEM_WIDTH, MemWidthMode);
+        SCB_CTRL(base) |=  _VAL2FLD(SCB_CTRL_MEM_WIDTH, MemWidthMode);
 }
 #endif /* CY_IP_MXSCB_VERSION */
 
@@ -2079,7 +1809,7 @@ __STATIC_INLINE bool Cy_SCB_IsTxDataWidthByte(CySCB_Type const *base)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_SCB_Get_TxDataWidth(CySCB_Type const *base)
 {
-    return (_FLD2VAL(SCB_TX_CTRL_DATA_WIDTH, SCB_TX_CTRL(base)) + 1UL);
+        return (_FLD2VAL(SCB_TX_CTRL_DATA_WIDTH, SCB_TX_CTRL(base)) + 1UL);
 }
 #endif /* CY_IP_MXSCB_VERSION */
 

@@ -14,8 +14,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from ..pse84_b0 import PSE8xS2Builder
+from .project_init_pse8xs4 import ProjectInitPse8xs4
+from ..pse8xs2 import PSE8xS2Builder
 
 
 class PSE8xS4Builder(PSE8xS2Builder):
     """ PSoC Edge E8x S4 target builder """
+
+    def get_project_initializer(self):
+        return ProjectInitPse8xs4

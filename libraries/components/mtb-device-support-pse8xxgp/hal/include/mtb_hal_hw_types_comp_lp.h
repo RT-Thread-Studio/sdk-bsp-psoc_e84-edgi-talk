@@ -29,13 +29,13 @@
     defined (CY_IP_MXS40LPCOMP_INSTANCES) || \
     defined (CY_IP_MXS22LPCOMP_INSTANCES)
 
-    #if !defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
-        #define _MTB_HAL_DRIVER_AVAILABLE_COMP_LP (1u)
-    #endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
+#if !defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
+#define _MTB_HAL_DRIVER_AVAILABLE_COMP_LP (1u)
+#endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
 
 
-    typedef LPCOMP_Type            _mtb_hal_lpcomp_base_t;
-    typedef cy_en_lpcomp_channel_t _mtb_hal_lpcomp_channel_t;
-    typedef cy_stc_lpcomp_config_t _mtb_hal_lpcomp_pdl_config_t;
+typedef LPCOMP_Type            _mtb_hal_lpcomp_base_t;
+typedef cy_en_lpcomp_channel_t _mtb_hal_lpcomp_channel_t;
+typedef cy_stc_lpcomp_config_t _mtb_hal_lpcomp_pdl_config_t;
 
 #endif

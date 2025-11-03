@@ -40,27 +40,27 @@ extern "C" {
 #if (CPUSS_CRYPTO_CRC == 1) && defined(CY_CRYPTO_CFG_CRC_C)
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_Init(CRYPTO_Type *base,
-        uint32_t polynomial,
-        uint32_t dataReverse,
-        uint32_t dataXor,
-        uint32_t remReverse,
-        uint32_t remXor);
+                                        uint32_t polynomial,
+                                        uint32_t dataReverse,
+                                        uint32_t dataXor,
+                                        uint32_t remReverse,
+                                        uint32_t remXor);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc(CRYPTO_Type *base,
-        uint32_t *crc,
-        void      const *data,
-        uint32_t  dataSize,
-        uint32_t  lfsrInitState);
+                                        uint32_t *crc,
+                                        void      const *data,
+                                        uint32_t  dataSize,
+                                        uint32_t  lfsrInitState);
 
 /* The new partial calculation interface. */
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcInit(CRYPTO_Type *base,
-        uint32_t width,
-        uint32_t polynomial,
-        uint32_t dataReverse,
-        uint32_t dataXor,
-        uint32_t remReverse,
-        uint32_t remXor,
-        uint32_t lfsrInitState);
+                                        uint32_t width,
+                                        uint32_t polynomial,
+                                        uint32_t dataReverse,
+                                        uint32_t dataXor,
+                                        uint32_t remReverse,
+                                        uint32_t remXor,
+                                        uint32_t lfsrInitState);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcStart(CRYPTO_Type *base, uint32_t width, uint32_t  lfsrInitState);
 
@@ -69,10 +69,10 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcPartial(CRYPTO_Type *base, void 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcFinish(CRYPTO_Type *base, uint32_t width, uint32_t *crc);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_Calc(CRYPTO_Type *base,
-        uint32_t  width,
-        uint32_t *crc,
-        void      const *data,
-        uint32_t  dataSize);
+                                        uint32_t  width,
+                                        uint32_t *crc,
+                                        void      const *data,
+                                        uint32_t  dataSize);
 
 #endif /* (CPUSS_CRYPTO_CRC == 1) && defined(CY_CRYPTO_CFG_CRC_C) */
 

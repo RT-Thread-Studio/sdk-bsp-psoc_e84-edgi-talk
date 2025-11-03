@@ -33,17 +33,18 @@
 #include "cy_utils.h"
 
 #if (defined(CY_IP_M0S8IOSS) && (CY_IP_M0S8IOSS_VERSION == 1))
-    #include "mtb_hal_gpio_m0s8ioss_v1.h"
+#include "mtb_hal_gpio_m0s8ioss_v1.h"
 #elif (defined(CY_IP_MXS22IOSS) && (CY_IP_MXS22IOSS_VERSION == 1))
-    #include "mtb_hal_gpio_common.h"
+#include "mtb_hal_gpio_common.h"
 #elif (defined(CY_IP_IOCL) && (CY_IP_IOCL_VERSION == 1))
-    #include "mtb_hal_gpio_common.h"
-#elif (defined(CY_IP_MXS40IOSS) && (CY_IP_MXS40IOSS_VERSION == 3 || CY_IP_MXS40IOSS_VERSION == 5))
-    #include "mtb_hal_gpio_common.h"
+#include "mtb_hal_gpio_common.h"
+#elif (defined(CY_IP_MXS40IOSS) && (CY_IP_MXS40IOSS_VERSION == 2 || CY_IP_MXS40IOSS_VERSION == 3 || \
+                                    CY_IP_MXS40IOSS_VERSION == 5))
+#include "mtb_hal_gpio_common.h"
 #elif (defined(CY_IP_MXS40SIOSS) && (CY_IP_MXS40SIOSS_VERSION == 1))
-    #include "mtb_hal_gpio_common.h"
-#else
-    #error "Unhandled version"
+#include "mtb_hal_gpio_common.h"
+#else // if (defined(CY_IP_M0S8IOSS) && (CY_IP_M0S8IOSS_VERSION == 1))
+#error "Unhandled version"
 #endif // if (defined(CY_IP_M0S8IOSS) && (CY_IP_M0S8IOSS_VERSION == 1))
 
 #if defined(CY_IP_MXS40IOSS) || defined(CY_IP_M0S8IOSS) || defined(CY_IP_MXS40SIOSS) || \
@@ -99,7 +100,7 @@ __STATIC_INLINE void mtb_hal_gpio_toggle_internal(mtb_hal_gpio_t* obj)
 // mtb_hal_gpio_port_setup_internal
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE void mtb_hal_gpio_port_setup_internal(mtb_hal_gpio_port_t* port,
-        uint32_t port_number)
+                                                      uint32_t port_number)
 {
     *port = Cy_GPIO_PortToAddr(port_number);
 }
@@ -113,7 +114,7 @@ __STATIC_INLINE void mtb_hal_gpio_port_setup_internal(mtb_hal_gpio_port_t* port,
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE void mtb_hal_gpio_port_set_internal(mtb_hal_gpio_port_t* port, uint32_t pin_mask)
 {
-#if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
+    #if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
     bool secPort;
     secPort = CY_PRA_IS_PORT_SECURE(*port);
     if (secPort)
@@ -124,9 +125,9 @@ __STATIC_INLINE void mtb_hal_gpio_port_set_internal(mtb_hal_gpio_port_t* port, u
     {
         GPIO_PRT_OUT_SET(*port) = pin_mask;
     }
-#else // if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
+    #else // if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
     GPIO_PRT_OUT_SET(*port) = pin_mask;
-#endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) */
+    #endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) */
 }
 
 
@@ -137,7 +138,7 @@ __STATIC_INLINE void mtb_hal_gpio_port_set_internal(mtb_hal_gpio_port_t* port, u
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE void mtb_hal_gpio_port_clear_internal(mtb_hal_gpio_port_t* port, uint32_t pin_mask)
 {
-#if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
+    #if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
     bool secPort;
     secPort = CY_PRA_IS_PORT_SECURE(*port);
     if (secPort)
@@ -148,9 +149,9 @@ __STATIC_INLINE void mtb_hal_gpio_port_clear_internal(mtb_hal_gpio_port_t* port,
     {
         GPIO_PRT_OUT_CLR(*port) = pin_mask;
     }
-#else // if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
+    #else // if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
     GPIO_PRT_OUT_CLR(*port) = pin_mask;
-#endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) */
+    #endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) */
 }
 
 
@@ -161,7 +162,7 @@ __STATIC_INLINE void mtb_hal_gpio_port_clear_internal(mtb_hal_gpio_port_t* port,
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE void mtb_hal_gpio_port_toggle_internal(mtb_hal_gpio_port_t* port, uint32_t pin_mask)
 {
-#if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
+    #if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
     bool secPort;
     secPort = CY_PRA_IS_PORT_SECURE(*port);
     if (secPort)
@@ -172,9 +173,9 @@ __STATIC_INLINE void mtb_hal_gpio_port_toggle_internal(mtb_hal_gpio_port_t* port
     {
         GPIO_PRT_OUT_INV(*port) = pin_mask;
     }
-#else // if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
+    #else // if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
     GPIO_PRT_OUT_INV(*port) = pin_mask;
-#endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) */
+    #endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) */
 }
 
 
@@ -185,9 +186,9 @@ __STATIC_INLINE void mtb_hal_gpio_port_toggle_internal(mtb_hal_gpio_port_t* port
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE void mtb_hal_gpio_port_write_internal(mtb_hal_gpio_port_t* port, uint32_t value)
 {
-#if defined(CY_IP_M0S8IOSS)
+    #if defined(CY_IP_M0S8IOSS)
     GPIO_PRT_DR(*port) = value;
-#elif (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
+    #elif (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE)
     bool secPort;
     secPort = CY_PRA_IS_PORT_SECURE(*port);
     if (secPort)
@@ -198,9 +199,9 @@ __STATIC_INLINE void mtb_hal_gpio_port_write_internal(mtb_hal_gpio_port_t* port,
     {
         GPIO_PRT_OUT(*port) = value;
     }
-#else // defined(CY_IP_M0S8IOSS)
+    #else // defined(CY_IP_M0S8IOSS)
     GPIO_PRT_OUT(*port) = value;
-#endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) */
+    #endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) */
 }
 
 
@@ -211,7 +212,7 @@ __STATIC_INLINE void mtb_hal_gpio_port_write_internal(mtb_hal_gpio_port_t* port,
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE void mtb_hal_gpio_port_read_internal(mtb_hal_gpio_port_t* port, uint32_t* value)
 {
-#if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) && defined(CY_DEVICE_PSOC6ABLE2)
+    #if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) && defined(CY_DEVICE_PSOC6ABLE2)
     bool secPort;
     secPort = CY_PRA_IS_PORT_SECURE(*port);
     if (secPort)
@@ -222,9 +223,9 @@ __STATIC_INLINE void mtb_hal_gpio_port_read_internal(mtb_hal_gpio_port_t* port, 
     {
         *value = GPIO_PRT_IN(*port);
     }
-#else // if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) && defined(CY_DEVICE_PSOC6ABLE2)
+    #else // if (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) && defined(CY_DEVICE_PSOC6ABLE2)
     *value = GPIO_PRT_IN(*port);
-#endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) && defined(CY_DEVICE_PSOC6ABLE2) */
+    #endif /* (CY_CPU_CORTEX_M4) && defined(CY_DEVICE_SECURE) && defined(CY_DEVICE_PSOC6ABLE2) */
     *value &= ((1UL << CY_GPIO_PINS_MAX) - 1UL);
 }
 

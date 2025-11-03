@@ -47,23 +47,22 @@
                    - \ref ARM_MATH_ARGUMENT_ERROR : an error is detected
  */
 
-arm_status arm_rfft_fast_init_32_f32(arm_rfft_fast_instance_f32 * S)
-{
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_32_f32( arm_rfft_fast_instance_f32 * S ) {
 
-    arm_status status;
+  arm_status status;
 
-    if (!S) return ARM_MATH_ARGUMENT_ERROR;
+  if( !S ) return ARM_MATH_ARGUMENT_ERROR;
 
-    status = arm_cfft_init_16_f32(&(S->Sint));
-    if (status != ARM_MATH_SUCCESS)
-    {
-        return (status);
-    }
+  status=arm_cfft_init_16_f32(&(S->Sint));
+  if (status != ARM_MATH_SUCCESS)
+  {
+    return(status);
+  }
 
-    S->fftLenRFFT = 32U;
-    S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_32;
+  S->fftLenRFFT = 32U;
+  S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_32;
 
-    return ARM_MATH_SUCCESS;
+  return ARM_MATH_SUCCESS;
 }
 
 /**
@@ -74,23 +73,22 @@ arm_status arm_rfft_fast_init_32_f32(arm_rfft_fast_instance_f32 * S)
                    - \ref ARM_MATH_ARGUMENT_ERROR : an error is detected
  */
 
-arm_status arm_rfft_fast_init_64_f32(arm_rfft_fast_instance_f32 * S)
-{
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_64_f32( arm_rfft_fast_instance_f32 * S ) {
 
-    arm_status status;
+  arm_status status;
 
-    if (!S) return ARM_MATH_ARGUMENT_ERROR;
+  if( !S ) return ARM_MATH_ARGUMENT_ERROR;
 
-    status = arm_cfft_init_32_f32(&(S->Sint));
-    if (status != ARM_MATH_SUCCESS)
-    {
-        return (status);
-    }
-    S->fftLenRFFT = 64U;
+  status=arm_cfft_init_32_f32(&(S->Sint));
+  if (status != ARM_MATH_SUCCESS)
+  {
+    return(status);
+  }
+  S->fftLenRFFT = 64U;
 
-    S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_64;
+  S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_64;
 
-    return ARM_MATH_SUCCESS;
+  return ARM_MATH_SUCCESS;
 }
 
 /**
@@ -101,23 +99,22 @@ arm_status arm_rfft_fast_init_64_f32(arm_rfft_fast_instance_f32 * S)
                    - \ref ARM_MATH_ARGUMENT_ERROR : an error is detected
  */
 
-arm_status arm_rfft_fast_init_128_f32(arm_rfft_fast_instance_f32 * S)
-{
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_128_f32( arm_rfft_fast_instance_f32 * S ) {
 
-    arm_status status;
+  arm_status status;
 
-    if (!S) return ARM_MATH_ARGUMENT_ERROR;
+  if( !S ) return ARM_MATH_ARGUMENT_ERROR;
 
-    status = arm_cfft_init_64_f32(&(S->Sint));
-    if (status != ARM_MATH_SUCCESS)
-    {
-        return (status);
-    }
-    S->fftLenRFFT = 128;
+  status=arm_cfft_init_64_f32(&(S->Sint));
+  if (status != ARM_MATH_SUCCESS)
+  {
+    return(status);
+  }
+  S->fftLenRFFT = 128;
 
-    S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_128;
+  S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_128;
 
-    return ARM_MATH_SUCCESS;
+  return ARM_MATH_SUCCESS;
 }
 
 /**
@@ -128,23 +125,22 @@ arm_status arm_rfft_fast_init_128_f32(arm_rfft_fast_instance_f32 * S)
                    - \ref ARM_MATH_ARGUMENT_ERROR : an error is detected
 */
 
-arm_status arm_rfft_fast_init_256_f32(arm_rfft_fast_instance_f32 * S)
-{
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_256_f32( arm_rfft_fast_instance_f32 * S ) {
 
-    arm_status status;
+  arm_status status;
 
-    if (!S) return ARM_MATH_ARGUMENT_ERROR;
+  if( !S ) return ARM_MATH_ARGUMENT_ERROR;
 
-    status = arm_cfft_init_128_f32(&(S->Sint));
-    if (status != ARM_MATH_SUCCESS)
-    {
-        return (status);
-    }
-    S->fftLenRFFT = 256U;
+  status=arm_cfft_init_128_f32(&(S->Sint));
+  if (status != ARM_MATH_SUCCESS)
+  {
+    return(status);
+  }
+  S->fftLenRFFT = 256U;
 
-    S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_256;
+  S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_256;
 
-    return ARM_MATH_SUCCESS;
+  return ARM_MATH_SUCCESS;
 }
 
 /**
@@ -155,23 +151,22 @@ arm_status arm_rfft_fast_init_256_f32(arm_rfft_fast_instance_f32 * S)
                    - \ref ARM_MATH_ARGUMENT_ERROR : an error is detected
  */
 
-arm_status arm_rfft_fast_init_512_f32(arm_rfft_fast_instance_f32 * S)
-{
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_512_f32( arm_rfft_fast_instance_f32 * S ) {
 
-    arm_status status;
+  arm_status status;
 
-    if (!S) return ARM_MATH_ARGUMENT_ERROR;
+  if( !S ) return ARM_MATH_ARGUMENT_ERROR;
 
-    status = arm_cfft_init_256_f32(&(S->Sint));
-    if (status != ARM_MATH_SUCCESS)
-    {
-        return (status);
-    }
-    S->fftLenRFFT = 512U;
+  status=arm_cfft_init_256_f32(&(S->Sint));
+  if (status != ARM_MATH_SUCCESS)
+  {
+    return(status);
+  }
+  S->fftLenRFFT = 512U;
 
-    S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_512;
+  S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_512;
 
-    return ARM_MATH_SUCCESS;
+  return ARM_MATH_SUCCESS;
 }
 
 /**
@@ -182,23 +177,22 @@ arm_status arm_rfft_fast_init_512_f32(arm_rfft_fast_instance_f32 * S)
                    - \ref ARM_MATH_ARGUMENT_ERROR : an error is detected
  */
 
-arm_status arm_rfft_fast_init_1024_f32(arm_rfft_fast_instance_f32 * S)
-{
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_1024_f32( arm_rfft_fast_instance_f32 * S ) {
 
-    arm_status status;
+  arm_status status;
 
-    if (!S) return ARM_MATH_ARGUMENT_ERROR;
+  if( !S ) return ARM_MATH_ARGUMENT_ERROR;
 
-    status = arm_cfft_init_512_f32(&(S->Sint));
-    if (status != ARM_MATH_SUCCESS)
-    {
-        return (status);
-    }
-    S->fftLenRFFT = 1024U;
+  status=arm_cfft_init_512_f32(&(S->Sint));
+  if (status != ARM_MATH_SUCCESS)
+  {
+    return(status);
+  }
+  S->fftLenRFFT = 1024U;
 
-    S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_1024;
+  S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_1024;
 
-    return ARM_MATH_SUCCESS;
+  return ARM_MATH_SUCCESS;
 }
 
 /**
@@ -208,23 +202,22 @@ arm_status arm_rfft_fast_init_1024_f32(arm_rfft_fast_instance_f32 * S)
                    - \ref ARM_MATH_SUCCESS        : Operation successful
                    - \ref ARM_MATH_ARGUMENT_ERROR : an error is detected
  */
-arm_status arm_rfft_fast_init_2048_f32(arm_rfft_fast_instance_f32 * S)
-{
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_2048_f32( arm_rfft_fast_instance_f32 * S ) {
 
-    arm_status status;
+  arm_status status;
 
-    if (!S) return ARM_MATH_ARGUMENT_ERROR;
+  if( !S ) return ARM_MATH_ARGUMENT_ERROR;
 
-    status = arm_cfft_init_1024_f32(&(S->Sint));
-    if (status != ARM_MATH_SUCCESS)
-    {
-        return (status);
-    }
-    S->fftLenRFFT = 2048U;
+  status=arm_cfft_init_1024_f32(&(S->Sint));
+  if (status != ARM_MATH_SUCCESS)
+  {
+    return(status);
+  }
+  S->fftLenRFFT = 2048U;
 
-    S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_2048;
+  S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_2048;
 
-    return ARM_MATH_SUCCESS;
+  return ARM_MATH_SUCCESS;
 }
 
 /**
@@ -235,23 +228,22 @@ arm_status arm_rfft_fast_init_2048_f32(arm_rfft_fast_instance_f32 * S)
                    - \ref ARM_MATH_ARGUMENT_ERROR : an error is detected
  */
 
-arm_status arm_rfft_fast_init_4096_f32(arm_rfft_fast_instance_f32 * S)
-{
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_4096_f32( arm_rfft_fast_instance_f32 * S ) {
 
-    arm_status status;
+  arm_status status;
 
-    if (!S) return ARM_MATH_ARGUMENT_ERROR;
+  if( !S ) return ARM_MATH_ARGUMENT_ERROR;
 
-    status = arm_cfft_init_2048_f32(&(S->Sint));
-    if (status != ARM_MATH_SUCCESS)
-    {
-        return (status);
-    }
-    S->fftLenRFFT = 4096U;
+  status=arm_cfft_init_2048_f32(&(S->Sint));
+  if (status != ARM_MATH_SUCCESS)
+  {
+    return(status);
+  }
+  S->fftLenRFFT = 4096U;
 
-    S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_4096;
+  S->pTwiddleRFFT    = (float32_t *) twiddleCoef_rfft_4096;
 
-    return ARM_MATH_SUCCESS;
+  return ARM_MATH_SUCCESS;
 }
 
 /**
@@ -265,61 +257,62 @@ arm_status arm_rfft_fast_init_4096_f32(arm_rfft_fast_instance_f32 * S)
   @par           Description
                    The parameter <code>fftLen</code> specifies the length of RFFT/CIFFT process.
                    Supported FFT Lengths are 32, 64, 128, 256, 512, 1024, 2048, 4096.
-  @par
-                   This Function also initializes Twiddle factor table pointer and Bit reversal table pointer.
 
   @par
-                This function should be used only if you don't know the FFT sizes that
-                you'll need at build time. The use of this function will prevent the
-                linker from removing the FFT tables that are not needed and the library
-                code size will be bigger than needed.
+                 This Function also initializes Twiddle factor table pointer and Bit reversal table pointer.
 
   @par
-                If you use CMSIS-DSP as a static library, and if you know the FFT sizes
-                that you need at build time, then it is better to use the initialization
-                functions defined for each FFT size.
+                 This function should be used only if you don't know the FFT sizes that 
+                 you'll need at build time. The use of this function will prevent the 
+                 linker from removing the FFT tables that are not needed and the library 
+                 code size will be bigger than needed.
+
+  @par
+                 If you use CMSIS-DSP as a static library, and if you know the FFT sizes 
+                 that you need at build time, then it is better to use the initialization
+                 functions defined for each FFT size.
 
  */
 
-arm_status arm_rfft_fast_init_f32(
-    arm_rfft_fast_instance_f32 * S,
-    uint16_t fftLen)
+ARM_DSP_ATTRIBUTE arm_status arm_rfft_fast_init_f32(
+  arm_rfft_fast_instance_f32 * S,
+  uint16_t fftLen)
 {
-    arm_status status;
+  arm_status status;
 
 
-    switch (fftLen)
-    {
-    case 4096U:
-        status = arm_rfft_fast_init_4096_f32(S);
-        break;
-    case 2048U:
-        status = arm_rfft_fast_init_2048_f32(S);
-        break;
-    case 1024U:
-        status = arm_rfft_fast_init_1024_f32(S);
-        break;
-    case 512U:
-        status = arm_rfft_fast_init_512_f32(S);
-        break;
-    case 256U:
-        status = arm_rfft_fast_init_256_f32(S);
-        break;
-    case 128U:
-        status = arm_rfft_fast_init_128_f32(S);
-        break;
-    case 64U:
-        status = arm_rfft_fast_init_64_f32(S);
-        break;
-    case 32U:
-        status = arm_rfft_fast_init_32_f32(S);
-        break;
-    default:
-        return (ARM_MATH_ARGUMENT_ERROR);
-        break;
-    }
+  switch (fftLen)
+  {
+  case 4096U:
+    status = arm_rfft_fast_init_4096_f32(S);
+    break;
+  case 2048U:
+    status = arm_rfft_fast_init_2048_f32(S);
+    break;
+  case 1024U:
+    status = arm_rfft_fast_init_1024_f32(S);
+    break;
+  case 512U:
+    status = arm_rfft_fast_init_512_f32(S);
+    break;
+  case 256U:
+    status = arm_rfft_fast_init_256_f32(S);
+    break;
+  case 128U:
+    status = arm_rfft_fast_init_128_f32(S);
+    break;
+  case 64U:
+    status = arm_rfft_fast_init_64_f32(S);
+    break;
+  case 32U:
+    status = arm_rfft_fast_init_32_f32(S);
+    break;
+  default:
+    return(ARM_MATH_ARGUMENT_ERROR);
+    break;
+  }
 
-    return (status);
+  return(status);
 
 }
 

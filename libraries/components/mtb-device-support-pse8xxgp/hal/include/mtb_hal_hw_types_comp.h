@@ -43,10 +43,10 @@ extern "C" {
     defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG) || \
     defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_COMP)
 /** Macro specifying whether the Comp driver is available for the current device */
@@ -84,19 +84,19 @@ typedef struct
     mtb_hal_comp_type_t comp_type;
     union
     {
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
+        #if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
         struct
         {
-            _mtb_hal_lpcomp_base_t   *base_lpcomp;
+            _mtb_hal_lpcomp_base_t*   base_lpcomp;
             _mtb_hal_lpcomp_channel_t channel_lpcomp;
         };
-#endif
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
+        #endif
+        #if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
         _mtb_hal_csg_slice_t      slice_csg;
-#endif
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
-        _mtb_hal_dcsg_base_t     *base_dcsg_slice;
-#endif
+        #endif
+        #if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
+        _mtb_hal_dcsg_base_t*     base_dcsg_slice;
+        #endif
     };
 
 } mtb_hal_comp_t;
@@ -115,22 +115,22 @@ typedef struct
     uint8_t             channel_num;
     union
     {
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
+        #if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
         /* No base address required for HPPASS */
-        const _mtb_hal_csg_pdl_config_t *hppass_config;       /* Contains SAR instance within it */
-#endif
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
-        const _mtb_hal_lpcomp_pdl_config_t *lpcomp;
-#endif
+        const _mtb_hal_csg_pdl_config_t* hppass_config;       /* Contains SAR instance within it */
+        #endif
+        #if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
+        const _mtb_hal_lpcomp_pdl_config_t* lpcomp;
+        #endif
     };
     union
     {
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
-        _mtb_hal_dcsg_base_t *dcsg_base;
-#endif
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
-        _mtb_hal_lpcomp_base_t *lpcomp_base;
-#endif
+        #if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
+        _mtb_hal_dcsg_base_t* dcsg_base;
+        #endif
+        #if defined(_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
+        _mtb_hal_lpcomp_base_t* lpcomp_base;
+        #endif
     };
 } mtb_hal_comp_configurator_t;
 

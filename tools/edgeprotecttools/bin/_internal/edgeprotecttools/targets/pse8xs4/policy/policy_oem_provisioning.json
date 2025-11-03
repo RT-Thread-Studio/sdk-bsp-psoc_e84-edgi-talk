@@ -114,7 +114,7 @@
         },
         "alg": {
           "description": "Key algorithm",
-          "applicable_conf": "ECDSA, RSA, AES-CTR, AES-CBC, AES-ECB, NONE",
+          "applicable_conf": "ECDSA, RSA, AES-CTR, AES-CBC, AES-ECB, ECDH, HKDF_ALG_SHA_256, IFX_SE_ALG_KDF_AES_CMAC, NONE",
           "value": null
         },
         "use": {
@@ -146,10 +146,6 @@
     "listen_window": {
       "description": "Defines listen window timeout in ms",
       "value": 100
-    },
-    "eco": {
-      "description": "ECO frequency value in Hz",
-      "value": 17203200
     },
     "enable_alt_serial": {
       "description": "Disable/Enable Alternate serial interface by setting the value to false/true",

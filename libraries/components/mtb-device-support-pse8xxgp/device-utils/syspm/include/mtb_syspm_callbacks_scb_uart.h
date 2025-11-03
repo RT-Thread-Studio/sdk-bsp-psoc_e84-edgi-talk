@@ -29,7 +29,7 @@
 #include "mtb_syspm_callbacks_hw_resources.h"
 
 #if defined(COMPONENT_MW_ASYNC_TRANSFER)
-    #include "mtb_async_transfer.h"
+#include "mtb_async_transfer.h"
 #endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
 
 #if defined(__cplusplus)
@@ -40,7 +40,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
                              'Rule requires const attributes for inputs but signature for following APIs needs to match requested one in PDL');
 
 /**
- * \addtogroup group_uart SCB UART Deep Sleep Callback
+ * \addtogroup mtb_syspm_group_uart SCB UART Deep Sleep Callback
  * \{
  * Implementation of the SCB UART Deep Sleep callback
  */
@@ -49,7 +49,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 /** This is the pin structure that stores the info about the pin configurations */
 typedef struct
 {
-    GPIO_PRT_Type  *port;       /**< Port base address */
+    GPIO_PRT_Type*  port;       /**< Port base address */
     uint32_t        pinNum;     /**< Pin number */
     en_hsiom_sel_t  hsiom;      /**< HSIOM setting*/
 } mtb_syspm_callbacks_uart_pins;
@@ -59,11 +59,11 @@ typedef struct
 {
     mtb_syspm_callbacks_uart_pins   tx_pin;         /**< TX pin info */
     mtb_syspm_callbacks_uart_pins   rts_pin;        /**< RTS pin info */
-    cy_stc_scb_uart_context_t      *uart_context;   /**< Pointer to UART context structure */
-#if defined(COMPONENT_MW_ASYNC_TRANSFER)
-    mtb_async_transfer_context_t   *async_context;  /**< Pointer to async context structure if
+    cy_stc_scb_uart_context_t*      uart_context;   /**< Pointer to UART context structure */
+    #if defined(COMPONENT_MW_ASYNC_TRANSFER)
+    mtb_async_transfer_context_t*   async_context;  /**< Pointer to async context structure if
                                                        available*/
-#endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
+    #endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
 } mtb_syspm_uart_deepsleep_context_t;
 
 /** Deepsleep callback for SCB UART IP
@@ -74,7 +74,7 @@ typedef struct
  * @return Returns CY_SYSPM_SUCCESS if successful, an error code otherwise
  */
 cy_en_syspm_status_t mtb_syspm_scb_uart_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode);
 
 
@@ -82,5 +82,5 @@ cy_en_syspm_status_t mtb_syspm_scb_uart_deepsleep_callback(
 }
 #endif
 
-/** \} group_uart */
+/** \} mtb_syspm_group_uart */
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.13');

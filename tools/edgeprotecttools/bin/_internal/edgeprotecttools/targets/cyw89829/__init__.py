@@ -14,12 +14,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from .target_builder import CYW89829Builder
+from .target_builder import CYW89829B1Builder
 
 target_map = {
     'cyw89829': {
         'default': {
-            'class': CYW89829Builder,
+            'class': CYW89829B1Builder,
+            'family': 'AIROC™ Bluetooth LE Family',
+            'display_name': 'CYW89829',
+            'type': 'family',
+            'platform': 'mxs40sv2'
+        },
+        'b1': {
+            'class': CYW89829B1Builder,
             'family': 'AIROC™ Bluetooth LE Family',
             'display_name': 'CYW89829',
             'type': 'family',

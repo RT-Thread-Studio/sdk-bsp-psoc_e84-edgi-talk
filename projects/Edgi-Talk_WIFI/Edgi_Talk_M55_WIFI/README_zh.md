@@ -102,4 +102,4 @@ iperf -c <电脑的IP>
 ```
 RT-Thread Settings --> 硬件 --> select SOC Multi Core Mode --> Enable CM55 Core
 ```
-
+![config](figures/config.png)

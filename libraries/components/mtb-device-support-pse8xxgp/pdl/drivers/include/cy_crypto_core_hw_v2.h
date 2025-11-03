@@ -38,7 +38,7 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 3, \
-                             'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
+'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
 
 /*
  Register buffer block identifiers:
@@ -153,10 +153,10 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_Sync(CRYPTO_Type *base)
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_FFStart(CRYPTO_Type *base,
-        uint32_t ff_idx, const uint8_t *p_mem, uint32_t size)
+                                            uint32_t ff_idx, const uint8_t* p_mem, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 3u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 3u))
     {
     }
 
@@ -167,10 +167,10 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_FFStart(CRYPTO_Type *base,
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_FFContinue(CRYPTO_Type *base,
-        uint32_t ff_idx, const uint8_t *p_mem, uint32_t size)
+                                               uint32_t ff_idx, const uint8_t* p_mem, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 3u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 3u))
     {
     }
 
@@ -186,90 +186,90 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_FFContinue(CRYPTO_Type *base,
 __STATIC_INLINE void Cy_Crypto_Core_V2_FFStop(CRYPTO_Type *base, uint32_t ff_idx)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_FF_STOP_OPC << CY_CRYPTO_OPCODE_POS) |
-                                   (ff_idx << CY_CRYPTO_RSRC0_SHIFT));
+                                              (ff_idx << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_BlockMov(CRYPTO_Type *base,
-        uint32_t dst_idx, uint32_t src_idx, uint32_t size)
+                                            uint32_t dst_idx, uint32_t src_idx, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_BLOCK_MOV_OPC << CY_CRYPTO_OPCODE_POS)
-                                   | (size    << CY_CRYPTO_RSRC16_SHIFT)
-                                   | (dst_idx << CY_CRYPTO_RSRC12_SHIFT)
-                                   | (src_idx << CY_CRYPTO_RSRC0_SHIFT));
+                                        | (size    << CY_CRYPTO_RSRC16_SHIFT)
+                                        | (dst_idx << CY_CRYPTO_RSRC12_SHIFT)
+                                        | (src_idx << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_BlockMov_Reflect(CRYPTO_Type *base,
-        uint32_t dst_idx, uint32_t src_idx, uint32_t size)
+                                            uint32_t dst_idx, uint32_t src_idx, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_BLOCK_MOV_OPC << CY_CRYPTO_OPCODE_POS)
-                                   | (1UL     << CY_CRYPTO_RSRC23_SHIFT)
-                                   | (size    << CY_CRYPTO_RSRC16_SHIFT)
-                                   | (dst_idx << CY_CRYPTO_RSRC12_SHIFT)
-                                   | (src_idx << CY_CRYPTO_RSRC0_SHIFT));
+                                        | (1UL     << CY_CRYPTO_RSRC23_SHIFT)
+                                        | (size    << CY_CRYPTO_RSRC16_SHIFT)
+                                        | (dst_idx << CY_CRYPTO_RSRC12_SHIFT)
+                                        | (src_idx << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_BlockSet(CRYPTO_Type *base,
-        uint32_t dst_idx, uint8_t data, uint32_t size)
+                                            uint32_t dst_idx, uint8_t data, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_BLOCK_SET_OPC << CY_CRYPTO_OPCODE_POS)
-                                   | (size << CY_CRYPTO_RSRC16_SHIFT)
-                                   | (dst_idx << CY_CRYPTO_RSRC12_SHIFT)
-                                   | ((uint32_t)(data) << CY_CRYPTO_RSRC0_SHIFT));
+                                        | (size << CY_CRYPTO_RSRC16_SHIFT)
+                                        | (dst_idx << CY_CRYPTO_RSRC12_SHIFT)
+                                        | ((uint32_t)(data) << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_BlockCmp(CRYPTO_Type *base,
-        uint32_t src0_idx, uint32_t src1_idx, uint32_t size)
+                                            uint32_t src0_idx, uint32_t src1_idx, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_BLOCK_CMP_OPC << CY_CRYPTO_OPCODE_POS)
-                                   | (size     << CY_CRYPTO_RSRC16_SHIFT)
-                                   | (src1_idx << CY_CRYPTO_RSRC4_SHIFT)
-                                   | (src0_idx << CY_CRYPTO_RSRC0_SHIFT));
+                                         | (size     << CY_CRYPTO_RSRC16_SHIFT)
+                                         | (src1_idx << CY_CRYPTO_RSRC4_SHIFT)
+                                         | (src0_idx << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_BlockXor(CRYPTO_Type *base,
-        uint32_t dst_idx, uint32_t src0_idx, uint32_t src1_idx, uint32_t size)
+                                            uint32_t dst_idx, uint32_t src0_idx, uint32_t src1_idx, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_BLOCK_XOR_OPC << CY_CRYPTO_OPCODE_POS)
-                                   | (size     << CY_CRYPTO_RSRC16_SHIFT)
-                                   | (dst_idx  << CY_CRYPTO_RSRC12_SHIFT)
-                                   | (src1_idx << CY_CRYPTO_RSRC4_SHIFT)
-                                   | (src0_idx << CY_CRYPTO_RSRC0_SHIFT));
+                                         | (size     << CY_CRYPTO_RSRC16_SHIFT)
+                                         | (dst_idx  << CY_CRYPTO_RSRC12_SHIFT)
+                                         | (src1_idx << CY_CRYPTO_RSRC4_SHIFT)
+                                         | (src0_idx << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_BlockGcm(CRYPTO_Type *base)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
@@ -279,7 +279,7 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_BlockGcm(CRYPTO_Type *base)
 __STATIC_INLINE void Cy_Crypto_Core_V2_Run(CRYPTO_Type *base, uint32_t opc)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
@@ -289,7 +289,7 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_Run(CRYPTO_Type *base, uint32_t opc)
 __STATIC_INLINE void Cy_Crypto_Core_V2_RBClear(CRYPTO_Type *base)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
@@ -299,7 +299,7 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_RBClear(CRYPTO_Type *base)
 __STATIC_INLINE void Cy_Crypto_Core_V2_RBSwap(CRYPTO_Type *base)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
@@ -309,43 +309,42 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_RBSwap(CRYPTO_Type *base)
 __STATIC_INLINE void Cy_Crypto_Core_V2_RBXor(CRYPTO_Type *base, uint32_t offset, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_RB_XOR_OPC << CY_CRYPTO_OPCODE_POS) |
-                                   (offset << CY_CRYPTO_RSRC8_SHIFT) |
-                                   (size   << CY_CRYPTO_RSRC0_SHIFT));
+                                             (offset << CY_CRYPTO_RSRC8_SHIFT) |
+                                             (size   << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_RBStore(CRYPTO_Type *base, uint32_t offset, uint32_t size)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_RB_STORE_OPC << CY_CRYPTO_OPCODE_POS) |
-                                   (offset << CY_CRYPTO_RSRC8_SHIFT) |
-                                   (size   << CY_CRYPTO_RSRC0_SHIFT));
-}
+                                             (offset << CY_CRYPTO_RSRC8_SHIFT) |
+                                             (size   << CY_CRYPTO_RSRC0_SHIFT));}
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_RBSetByte(CRYPTO_Type *base, uint32_t offset, uint8_t  byte)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_RB_BYTE_SET_OPC << CY_CRYPTO_OPCODE_POS) |
-                                   (offset << CY_CRYPTO_RSRC8_SHIFT) |
-                                   ((uint32_t)(byte) << CY_CRYPTO_RSRC0_SHIFT));
+                                             (offset << CY_CRYPTO_RSRC8_SHIFT) |
+                                             ((uint32_t)(byte) << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 __STATIC_INLINE void Cy_Crypto_Core_V2_RunAes(CRYPTO_Type *base)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
@@ -355,7 +354,7 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_RunAes(CRYPTO_Type *base)
 __STATIC_INLINE void Cy_Crypto_Core_V2_RunAesInv(CRYPTO_Type *base)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
@@ -365,12 +364,12 @@ __STATIC_INLINE void Cy_Crypto_Core_V2_RunAesInv(CRYPTO_Type *base)
 __STATIC_INLINE void Cy_Crypto_Core_V2_RunChacha(CRYPTO_Type *base, uint8_t roundNum)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
     REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V2_CHACHA_OPC << CY_CRYPTO_OPCODE_POS) |
-                                   ((uint32_t)(roundNum) << CY_CRYPTO_RSRC0_SHIFT));
+                                              ((uint32_t)(roundNum) << CY_CRYPTO_RSRC0_SHIFT));
 }
 
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 11.3')

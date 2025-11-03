@@ -56,7 +56,7 @@ extern "C" {
 void Cy_Crypto_SetReg1Instr(CRYPTO_Type *base, uint32_t data0)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 1u))
     {
     }
 
@@ -87,7 +87,7 @@ void Cy_Crypto_SetReg1Instr(CRYPTO_Type *base, uint32_t data0)
 void Cy_Crypto_SetReg2Instr(CRYPTO_Type *base, uint32_t data0, uint32_t data1)
 {
     /* Check whether FIFO has enough space for 2 instructions */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 2u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 2u))
     {
     }
 
@@ -124,14 +124,14 @@ void Cy_Crypto_SetReg2Instr(CRYPTO_Type *base, uint32_t data0, uint32_t data1)
 void Cy_Crypto_SetReg3Instr(CRYPTO_Type *base, uint32_t data0, uint32_t data1, uint32_t data2)
 {
     /* Check whether FIFO has enough space for 3 instructions */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 3u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 3u))
     {
     }
 
-    REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)(((uint32_t)CY_CRYPTO_V1_SET_REG3_OPC << CY_CRYPTO_OPCODE_POS) |
+    REG_CRYPTO_INSTR_FF_WR(base) = (uint32_t)( ((uint32_t)CY_CRYPTO_V1_SET_REG3_OPC << CY_CRYPTO_OPCODE_POS) |
                                    ((uint32_t)CY_CRYPTO_REGFILE_R2 << CY_CRYPTO_RSRC8_SHIFT) |
                                    ((uint32_t)CY_CRYPTO_REGFILE_R1 << CY_CRYPTO_RSRC4_SHIFT) |
-                                   (uint32_t)CY_CRYPTO_REGFILE_R0);
+                                   (uint32_t)CY_CRYPTO_REGFILE_R0 );
 
     REG_CRYPTO_INSTR_FF_WR(base) = data0;
     REG_CRYPTO_INSTR_FF_WR(base) = data1;
@@ -167,7 +167,7 @@ void Cy_Crypto_SetReg3Instr(CRYPTO_Type *base, uint32_t data0, uint32_t data1, u
 void Cy_Crypto_SetReg4Instr(CRYPTO_Type *base, uint32_t data0, uint32_t data1, uint32_t data2, uint32_t data3)
 {
     /* Check whether FIFO has enough space for 4 instructions */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 4u))
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= (CY_CRYPTO_INSTR_FIFODEPTH - 4u))
     {
     }
 
@@ -199,7 +199,7 @@ void Cy_Crypto_SetReg4Instr(CRYPTO_Type *base, uint32_t data0, uint32_t data1, u
 void Cy_Crypto_Run0ParamInstr(CRYPTO_Type *base, uint8_t instr)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
     {
     }
 
@@ -226,7 +226,7 @@ void Cy_Crypto_Run0ParamInstr(CRYPTO_Type *base, uint8_t instr)
 void Cy_Crypto_Run1ParamInstr(CRYPTO_Type *base, uint8_t instr, uint32_t rdst0Shift)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
     {
     }
 
@@ -256,12 +256,12 @@ void Cy_Crypto_Run1ParamInstr(CRYPTO_Type *base, uint8_t instr, uint32_t rdst0Sh
 *
 *******************************************************************************/
 void Cy_Crypto_Run2ParamInstr(CRYPTO_Type *base,
-                              uint8_t instr,
-                              uint32_t rdst0Shift,
-                              uint32_t rdst1Shift)
+                           uint8_t instr,
+                           uint32_t rdst0Shift,
+                           uint32_t rdst1Shift)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
     {
     }
 
@@ -296,13 +296,13 @@ void Cy_Crypto_Run2ParamInstr(CRYPTO_Type *base,
 *
 *******************************************************************************/
 void Cy_Crypto_Run3ParamInstr(CRYPTO_Type *base,
-                              uint8_t instr,
-                              uint8_t rdst0Shift,
-                              uint8_t rdst1Shift,
-                              uint8_t rdst2Shift)
+                           uint8_t instr,
+                           uint8_t rdst0Shift,
+                           uint8_t rdst1Shift,
+                           uint8_t rdst2Shift)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
     {
     }
 
@@ -342,14 +342,14 @@ void Cy_Crypto_Run3ParamInstr(CRYPTO_Type *base,
 *
 *******************************************************************************/
 void Cy_Crypto_Run4ParamInstr(CRYPTO_Type *base,
-                              uint8_t instr,
-                              uint32_t rdst0Shift,
-                              uint32_t rdst1Shift,
-                              uint32_t rdst2Shift,
-                              uint32_t rdst3Shift)
+                           uint8_t instr,
+                           uint32_t rdst0Shift,
+                           uint32_t rdst1Shift,
+                           uint32_t rdst2Shift,
+                           uint32_t rdst3Shift)
 {
     /* Check whether FIFO has enough space for 1 instruction */
-    while (Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
+    while(Cy_Crypto_Core_GetFIFOUsed(base) >= CY_CRYPTO_INSTR_FIFODEPTH)
     {
     }
 

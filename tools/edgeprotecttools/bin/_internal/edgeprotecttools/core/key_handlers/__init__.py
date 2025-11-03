@@ -85,6 +85,25 @@ def load_key(key_path, password=None):
     return key
 
 
+def load_enckey(key) -> bytes:
+    """Loads encryption key from a file or a hex string"""
+    def _is_hex_string(value, lengths=None) -> bool:
+        """Validate hex string"""
+        if not (all(c.lower() in '0123456789abcdef' for c in value)
+                and len(value) % 2 == 0):
+            return False
+        if lengths is not None and len(value) // 2 not in lengths:
+            raise ValueError(
+                f"Invalid key length. Expected: {', '.join(lengths)}")
+        return True
+
+    if _is_hex_string(key, lengths=[16, 32]):
+        return bytes.fromhex(key)
+    else:
+        with open(key, 'rb') as f:
+            return f.read()
+
+
 def jwk_to_pem(jwk_file, private_key=True):
     """Converts JWK file content to PEM format string"""
     pem = PemKey(jwk_file)

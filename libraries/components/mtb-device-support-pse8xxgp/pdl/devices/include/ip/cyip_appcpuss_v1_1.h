@@ -38,33 +38,32 @@
 /**
   * \brief APPCPUSS registers (APPCPUSS)
   */
-typedef struct
-{
-    __IM uint32_t IDENTITY;                      /*!< 0x00000000 Identity */
-    __IM uint32_t RESERVED[3];
-    __IM uint32_t PRODUCT_ID;                    /*!< 0x00000010 Product identifier and version (same as CoreSight RomTables) */
-    __IM uint32_t RESERVED1[3];
-    __IM uint32_t DP_STATUS;                     /*!< 0x00000020 Debug port status */
-    __IM uint32_t RESERVED2[3];
-    __IOM uint32_t BUFF_CTL;                      /*!< 0x00000030 Buffer control */
-    __IM uint32_t RESERVED3[7];
-    __IOM uint32_t INFRA_CTL;                     /*!< 0x00000050 Infrastructure Control */
-    __IM uint32_t RESERVED4[43];
-    __IOM uint32_t SYSTICK_S_CTL;                 /*!< 0x00000100 Secure SysTick timer control */
-    __IM uint32_t RESERVED5[7];
-    __IOM uint32_t SYSTICK_NS_CTL;                /*!< 0x00000120 Non Secure SysTick timer control */
-    __IM uint32_t RESERVED6[55];
-    __IOM uint32_t INTR_MSC;                      /*!< 0x00000200 Master security controller Interrupt */
-    __IM uint32_t RESERVED7;
-    __IOM uint32_t INTR_MASK_MSC;                 /*!< 0x00000208 Master security controller Interrupt mask */
-    __IM uint32_t INTR_MASKED_MSC;               /*!< 0x0000020C Master security controller Interrupt masked */
-    __IM uint32_t RESERVED8[60];
-    __IOM uint32_t INTR_AHB2AXI;                  /*!< 0x00000300 AHB to AXI Bridge Interrupt */
-    __IOM uint32_t INTR_SET_AHB2AXI;              /*!< 0x00000304 AHB to AXI Bridge Interrupt set */
-    __IOM uint32_t INTR_MASK_AHB2AXI;             /*!< 0x00000308 AHB to AXI Bridge Interrupt mask */
-    __IM uint32_t INTR_MASKED_AHB2AXI;           /*!< 0x0000030C AHB to AXI Bridge Interrupt masked */
-    __IM uint32_t RESERVED9[828];
-    __IOM uint32_t AP_CTL;                        /*!< 0x00001000 Access port control */
+typedef struct {
+   __IM uint32_t IDENTITY;                      /*!< 0x00000000 Identity */
+   __IM uint32_t RESERVED[3];
+   __IM uint32_t PRODUCT_ID;                    /*!< 0x00000010 Product identifier and version (same as CoreSight RomTables) */
+   __IM uint32_t RESERVED1[3];
+   __IM uint32_t DP_STATUS;                     /*!< 0x00000020 Debug port status */
+   __IM uint32_t RESERVED2[3];
+  __IOM uint32_t BUFF_CTL;                      /*!< 0x00000030 Buffer control */
+   __IM uint32_t RESERVED3[7];
+  __IOM uint32_t INFRA_CTL;                     /*!< 0x00000050 Infrastructure Control */
+   __IM uint32_t RESERVED4[43];
+  __IOM uint32_t SYSTICK_S_CTL;                 /*!< 0x00000100 Secure SysTick timer control */
+   __IM uint32_t RESERVED5[7];
+  __IOM uint32_t SYSTICK_NS_CTL;                /*!< 0x00000120 Non Secure SysTick timer control */
+   __IM uint32_t RESERVED6[55];
+  __IOM uint32_t INTR_MSC;                      /*!< 0x00000200 Master security controller Interrupt */
+   __IM uint32_t RESERVED7;
+  __IOM uint32_t INTR_MASK_MSC;                 /*!< 0x00000208 Master security controller Interrupt mask */
+   __IM uint32_t INTR_MASKED_MSC;               /*!< 0x0000020C Master security controller Interrupt masked */
+   __IM uint32_t RESERVED8[60];
+  __IOM uint32_t INTR_AHB2AXI;                  /*!< 0x00000300 AHB to AXI Bridge Interrupt */
+  __IOM uint32_t INTR_SET_AHB2AXI;              /*!< 0x00000304 AHB to AXI Bridge Interrupt set */
+  __IOM uint32_t INTR_MASK_AHB2AXI;             /*!< 0x00000308 AHB to AXI Bridge Interrupt mask */
+   __IM uint32_t INTR_MASKED_AHB2AXI;           /*!< 0x0000030C AHB to AXI Bridge Interrupt masked */
+   __IM uint32_t RESERVED9[828];
+  __IOM uint32_t AP_CTL;                        /*!< 0x00001000 Access port control */
 } APPCPUSS_Type;                                /*!< Size = 4100 (0x1004) */
 
 

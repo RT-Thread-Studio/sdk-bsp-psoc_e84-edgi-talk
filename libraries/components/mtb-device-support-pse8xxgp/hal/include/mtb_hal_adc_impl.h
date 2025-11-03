@@ -31,17 +31,17 @@
 
 //! IP-specific implementation header for ADC
 #if defined(CY_IP_MXS40PASS_SAR_INSTANCES)
-    #include  "mtb_hal_adc_mxs40pass.h"
+#include  "mtb_hal_adc_mxs40pass.h"
 #elif defined(CY_IP_MXS40EPASS_ESAR_INSTANCES)
-    #include  "mtb_hal_adc_mxs40epass_v1.h"
+#include  "mtb_hal_adc_mxs40epass_v1.h"
 #elif defined(CY_IP_M0S8PASS4A_SAR_INSTANCES)
-    #include  "mtb_hal_adc_m0s8pass4a.h"
+#include  "mtb_hal_adc_m0s8pass4a.h"
 #elif defined(CY_IP_MXS22LPPASS_SAR_INSTANCES)
-    #include  "mtb_hal_adc_mxs22lppass_v1.h"
+#include  "mtb_hal_adc_mxs22lppass_v1.h"
 #elif defined(CY_IP_MXS40PPSS_INSTANCES)
-    #include  "mtb_hal_adc_mxs40ppss_v1.h"
+#include  "mtb_hal_adc_mxs40ppss_v1.h"
 #elif defined(CY_IP_MXS40MCPASS_INSTANCES)
-    #include  "mtb_hal_adc_mxs40mcpass_v1.h"
+#include  "mtb_hal_adc_mxs40mcpass_v1.h"
 #endif // if defined(CY_IP_MXS40PASS_SAR_INSTANCES)
 
 #if defined(__cplusplus)

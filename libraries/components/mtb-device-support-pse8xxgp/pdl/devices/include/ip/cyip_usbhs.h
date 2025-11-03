@@ -40,29 +40,28 @@
 /**
   * \brief Internal register map (USBHS_DWC_OTG_INTREG)
   */
-typedef struct
-{
-    __IOM uint32_t GOTGCTL;                       /*!< 0x00000000 The OTG Control and Status register controls the behavior and
+typedef struct {
+  __IOM uint32_t GOTGCTL;                       /*!< 0x00000000 The OTG Control and Status register controls the behavior and
                                                                 reflects the status of the OTG function of the controller. */
-    __IOM uint32_t GOTGINT;                       /*!< 0x00000004 The application reads this register whenever there is an OTG
+  __IOM uint32_t GOTGINT;                       /*!< 0x00000004 The application reads this register whenever there is an OTG
                                                                 interrupt and clears the bits in this register to clear the OTG
                                                                 interrupt. */
-    __IOM uint32_t GAHBCFG;                       /*!< 0x00000008 This register can be used to configure the core after power-on
+  __IOM uint32_t GAHBCFG;                       /*!< 0x00000008 This register can be used to configure the core after power-on
                                                                 or a change in mode. This register mainly contains AHB
                                                                 system-related configuration parameters. Do not change this
                                                                 register after the initial programming. The application must
                                                                 program this register before starting any transactions on either
                                                                 the AHB or the USB. */
-    __IOM uint32_t GUSBCFG;                       /*!< 0x0000000C This register can be used to configure the core after power-on
+  __IOM uint32_t GUSBCFG;                       /*!< 0x0000000C This register can be used to configure the core after power-on
                                                                 or when changing to Host mode or Device mode. It contains USB
                                                                 and USB-PHY related configuration parameters. The application
                                                                 must program this register before starting any transactions on
                                                                 either the AHB or the USB. If you are using the HSIC interface,
                                                                 HSIC PHY must be in reset while programming this register. Do
                                                                 not make changes to this register after the initial programming. */
-    __IOM uint32_t GRSTCTL;                       /*!< 0x00000010 The application uses this register to reset various hardware
+  __IOM uint32_t GRSTCTL;                       /*!< 0x00000010 The application uses this register to reset various hardware
                                                                 features inside the controller. */
-    __IOM uint32_t GINTSTS;                       /*!< 0x00000014 This register interrupts the application for system-level
+  __IOM uint32_t GINTSTS;                       /*!< 0x00000014 This register interrupts the application for system-level
                                                                 events in the current mode (Device mode or Host mode). Some of
                                                                 the bits in this register are valid only in Host mode, while
                                                                 others are valid in Device mode only. This register also
@@ -78,13 +77,13 @@ typedef struct
                                                                 IDDIG_FILTER is disabled, read only after PHY clock is stable. -
                                                                 If IDDIG_FILTER is enabled, read only after the filter timer
                                                                 expires. */
-    __IOM uint32_t GINTMSK;                       /*!< 0x00000018 This register works with the Interrupt Register (GINTSTS) to
+  __IOM uint32_t GINTMSK;                       /*!< 0x00000018 This register works with the Interrupt Register (GINTSTS) to
                                                                 interrupt the application. When an interrupt bit is masked, the
                                                                 interrupt associated with that bit is not generated. However,
                                                                 the GINTSTS register bit corresponding to that interrupt is
                                                                 still set. Note: The fields of this register change depending on
                                                                 host or device mode. */
-    __IM uint32_t GRXSTSR;                       /*!< 0x0000001C A read to the Receive Status Debug Read register returns the
+   __IM uint32_t GRXSTSR;                       /*!< 0x0000001C A read to the Receive Status Debug Read register returns the
                                                                 contents of the top of the Receive FIFO. The receive status
                                                                 contents must be interpreted differently in Host and Device
                                                                 modes. The core ignores the receive status read when the receive
@@ -93,7 +92,7 @@ typedef struct
                                                                 a host or a device. - Do not read this register's reset value
                                                                 before configuring the core because the read value is 'X' in the
                                                                 simulation. */
-    __IM uint32_t GRXSTSP;                       /*!< 0x00000020 A read to the Receive Status Read and Pop register returns the
+   __IM uint32_t GRXSTSP;                       /*!< 0x00000020 A read to the Receive Status Read and Pop register returns the
                                                                 contents of the top of the Receive FIFO and additionally pops
                                                                 the top data entry out of the RxFIFO. The receive status
                                                                 contents must be interpreted differently in Host and Device
@@ -105,19 +104,19 @@ typedef struct
                                                                 based on whether the core is functioning as a host or a device.
                                                                 - Do not read this register's reset value before configuring the
                                                                 core because the read value is 'X' in the simulation. */
-    __IOM uint32_t GRXFSIZ;                       /*!< 0x00000024 The application can program the RAM size that must be allocated
+  __IOM uint32_t GRXFSIZ;                       /*!< 0x00000024 The application can program the RAM size that must be allocated
                                                                 to the RxFIFO. */
-    __IOM uint32_t GNPTXFSIZ;                     /*!< 0x00000028 The application can program the RAM size and the memory start
+  __IOM uint32_t GNPTXFSIZ;                     /*!< 0x00000028 The application can program the RAM size and the memory start
                                                                 address for the Non-periodic TxFIFO Note: The fields of this
                                                                 register change depending on host or device mode. */
-    __IM uint32_t GNPTXSTS;                      /*!< 0x0000002C In Device mode, this register is valid only in Shared FIFO
+   __IM uint32_t GNPTXSTS;                      /*!< 0x0000002C In Device mode, this register is valid only in Shared FIFO
                                                                 operation. This read-only register contains the free space
                                                                 information for the Non-periodic TxFIFO and the Non-periodic
                                                                 Transmit Request Queue. */
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t GGPIO;                         /*!< 0x00000038 The application can use this register for general purpose
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t GGPIO;                         /*!< 0x00000038 The application can use this register for general purpose
                                                                 input/output ports or for debugging. */
-    __IOM uint32_t GUID;                          /*!< 0x0000003C This is a read/write register containing the User ID. It is
+  __IOM uint32_t GUID;                          /*!< 0x0000003C This is a read/write register containing the User ID. It is
                                                                 implemented only if Remove Optional Features? was deselected
                                                                 during coreConsultant configuration (parameter
                                                                 OTG_RM_OPT_FEATURES = 0). The power-on value for this register
@@ -127,29 +126,29 @@ typedef struct
                                                                 following ways: - To store the version or revision of your
                                                                 system - To store hardware configurations that are outside the
                                                                 DWC_otg core - As a scratch register */
-    __IM uint32_t GSNPSID;                       /*!< 0x00000040 This read-only register contains the release number of the core
+   __IM uint32_t GSNPSID;                       /*!< 0x00000040 This read-only register contains the release number of the core
                                                                 being used. */
-    __IM uint32_t GHWCFG1;                       /*!< 0x00000044 This register contains the logical endpoint direction(s)
+   __IM uint32_t GHWCFG1;                       /*!< 0x00000044 This register contains the logical endpoint direction(s)
                                                                 selected using coreConsultant. */
-    __IM uint32_t GHWCFG2;                       /*!< 0x00000048 This register contains configuration options selected using
+   __IM uint32_t GHWCFG2;                       /*!< 0x00000048 This register contains configuration options selected using
                                                                 coreConsultant. */
-    __IM uint32_t GHWCFG3;                       /*!< 0x0000004C This register contains configuration options selected using
+   __IM uint32_t GHWCFG3;                       /*!< 0x0000004C This register contains configuration options selected using
                                                                 coreConsultant. */
-    __IM uint32_t GHWCFG4;                       /*!< 0x00000050 This register contains configuration options selected using
+   __IM uint32_t GHWCFG4;                       /*!< 0x00000050 This register contains configuration options selected using
                                                                 coreConsultant. Note: Bit [31] is available only when
                                                                 Scatter/Gather DMA mode is enabled. When Scatter/Gather DMA mode
                                                                 is disabled, this field is reserved. */
-    __IOM uint32_t GLPMCFG;                       /*!< 0x00000054 Register to control the LPM functionality of the controller. */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t GDFIFOCFG;                     /*!< 0x0000005C Register to configure the DFIFOs for the controller. */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t GINTMSK2;                      /*!< 0x00000068 This register works with the Interrupt Register (GINTSTS2) to
+  __IOM uint32_t GLPMCFG;                       /*!< 0x00000054 Register to control the LPM functionality of the controller. */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t GDFIFOCFG;                     /*!< 0x0000005C Register to configure the DFIFOs for the controller. */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t GINTMSK2;                      /*!< 0x00000068 This register works with the Interrupt Register (GINTSTS2) to
                                                                 interrupt the application. When an interrupt bit is masked, the
                                                                 interrupt associated with that bit is not generated. However,
                                                                 the GINTSTS2 register bit corresponding to that interrupt is
                                                                 still set. Note: The fields of this register change depending on
                                                                 host or device mode. */
-    __IOM uint32_t GINTSTS2;                      /*!< 0x0000006C This register interrupts the application for system-level
+  __IOM uint32_t GINTSTS2;                      /*!< 0x0000006C This register interrupts the application for system-level
                                                                 events in the current mode (Device mode or Host mode). Some of
                                                                 the bits in this register are valid only in Host mode, while
                                                                 others are valid in Device mode only. This register also
@@ -158,83 +157,83 @@ typedef struct
                                                                 application must clear the GINTSTS2 register at initialization
                                                                 before unmasking the interrupt bit to avoid any interrupts
                                                                 generated prior to initialization. */
-    __IM uint32_t RESERVED3[36];
-    __IOM uint32_t HPTXFSIZ;                      /*!< 0x00000100 This register holds the size and the memory start address of
+   __IM uint32_t RESERVED3[36];
+  __IOM uint32_t HPTXFSIZ;                      /*!< 0x00000100 This register holds the size and the memory start address of
                                                                 the Periodic TxFIFO. Note: Read the reset value of this register
                                                                 only after the following conditions: - If IDDIG_FILTER is
                                                                 disabled, read only after PHY clock is stable. - If IDDIG_FILTER
                                                                 is enabled, read only after the filter timer expires. */
-    __IOM uint32_t DIEPTXF1;                      /*!< 0x00000104 This register is valid only in dedicated FIFO mode
+  __IOM uint32_t DIEPTXF1;                      /*!< 0x00000104 This register is valid only in dedicated FIFO mode
                                                                 (OTG_EN_DED_TX_FIFO=1). It holds the size and memory start
                                                                 address of IN endpoint TxFIFOs implemented in Device mode. Each
                                                                 FIFO holds the data for one IN endpoint. This register is
                                                                 repeated for instantiated IN endpoint FIFOs 1 to 15. For IN
                                                                 endpoint FIFO 0, use GNPTXFSIZ register for programming the size
                                                                 and memory start address. */
-    __IOM uint32_t DIEPTXF2;                      /*!< 0x00000108 This register is valid only in dedicated FIFO mode
+  __IOM uint32_t DIEPTXF2;                      /*!< 0x00000108 This register is valid only in dedicated FIFO mode
                                                                 (OTG_EN_DED_TX_FIFO=1). It holds the size and memory start
                                                                 address of IN endpoint TxFIFOs implemented in Device mode. Each
                                                                 FIFO holds the data for one IN endpoint. This register is
                                                                 repeated for instantiated IN endpoint FIFOs 1 to 15. For IN
                                                                 endpoint FIFO 0, use GNPTXFSIZ register for programming the size
                                                                 and memory start address. */
-    __IOM uint32_t DIEPTXF3;                      /*!< 0x0000010C This register is valid only in dedicated FIFO mode
+  __IOM uint32_t DIEPTXF3;                      /*!< 0x0000010C This register is valid only in dedicated FIFO mode
                                                                 (OTG_EN_DED_TX_FIFO=1). It holds the size and memory start
                                                                 address of IN endpoint TxFIFOs implemented in Device mode. Each
                                                                 FIFO holds the data for one IN endpoint. This register is
                                                                 repeated for instantiated IN endpoint FIFOs 1 to 15. For IN
                                                                 endpoint FIFO 0, use GNPTXFSIZ register for programming the size
                                                                 and memory start address. */
-    __IOM uint32_t DIEPTXF4;                      /*!< 0x00000110 This register is valid only in dedicated FIFO mode
+  __IOM uint32_t DIEPTXF4;                      /*!< 0x00000110 This register is valid only in dedicated FIFO mode
                                                                 (OTG_EN_DED_TX_FIFO=1). It holds the size and memory start
                                                                 address of IN endpoint TxFIFOs implemented in Device mode. Each
                                                                 FIFO holds the data for one IN endpoint. This register is
                                                                 repeated for instantiated IN endpoint FIFOs 1 to 15. For IN
                                                                 endpoint FIFO 0, use GNPTXFSIZ register for programming the size
                                                                 and memory start address. */
-    __IOM uint32_t DIEPTXF5;                      /*!< 0x00000114 This register is valid only in dedicated FIFO mode
+  __IOM uint32_t DIEPTXF5;                      /*!< 0x00000114 This register is valid only in dedicated FIFO mode
                                                                 (OTG_EN_DED_TX_FIFO=1). It holds the size and memory start
                                                                 address of IN endpoint TxFIFOs implemented in Device mode. Each
                                                                 FIFO holds the data for one IN endpoint. This register is
                                                                 repeated for instantiated IN endpoint FIFOs 1 to 15. For IN
                                                                 endpoint FIFO 0, use GNPTXFSIZ register for programming the size
                                                                 and memory start address. */
-    __IOM uint32_t DIEPTXF6;                      /*!< 0x00000118 This register is valid only in dedicated FIFO mode
+  __IOM uint32_t DIEPTXF6;                      /*!< 0x00000118 This register is valid only in dedicated FIFO mode
                                                                 (OTG_EN_DED_TX_FIFO=1). It holds the size and memory start
                                                                 address of IN endpoint TxFIFOs implemented in Device mode. Each
                                                                 FIFO holds the data for one IN endpoint. This register is
                                                                 repeated for instantiated IN endpoint FIFOs 1 to 15. For IN
                                                                 endpoint FIFO 0, use GNPTXFSIZ register for programming the size
                                                                 and memory start address. */
-    __IOM uint32_t DIEPTXF7;                      /*!< 0x0000011C This register is valid only in dedicated FIFO mode
+  __IOM uint32_t DIEPTXF7;                      /*!< 0x0000011C This register is valid only in dedicated FIFO mode
                                                                 (OTG_EN_DED_TX_FIFO=1). It holds the size and memory start
                                                                 address of IN endpoint TxFIFOs implemented in Device mode. Each
                                                                 FIFO holds the data for one IN endpoint. This register is
                                                                 repeated for instantiated IN endpoint FIFOs 1 to 15. For IN
                                                                 endpoint FIFO 0, use GNPTXFSIZ register for programming the size
                                                                 and memory start address. */
-    __IOM uint32_t DIEPTXF8;                      /*!< 0x00000120 This register is valid only in dedicated FIFO mode
+  __IOM uint32_t DIEPTXF8;                      /*!< 0x00000120 This register is valid only in dedicated FIFO mode
                                                                 (OTG_EN_DED_TX_FIFO=1). It holds the size and memory start
                                                                 address of IN endpoint TxFIFOs implemented in Device mode. Each
                                                                 FIFO holds the data for one IN endpoint. This register is
                                                                 repeated for instantiated IN endpoint FIFOs 1 to 15. For IN
                                                                 endpoint FIFO 0, use GNPTXFSIZ register for programming the size
                                                                 and memory start address. */
-    __IM uint32_t RESERVED4[183];
-    __IOM uint32_t HCFG;                          /*!< 0x00000400 This register is used to configure the controller in Host mode. */
-    __IOM uint32_t HFIR;                          /*!< 0x00000404 This register is used to control the interval between two
+   __IM uint32_t RESERVED4[183];
+  __IOM uint32_t HCFG;                          /*!< 0x00000400 This register is used to configure the controller in Host mode. */
+  __IOM uint32_t HFIR;                          /*!< 0x00000404 This register is used to control the interval between two
                                                                 consecutive SOFs. */
-    __IM uint32_t HFNUM;                         /*!< 0x00000408 This register indicates the current frame number. It also
+   __IM uint32_t HFNUM;                         /*!< 0x00000408 This register indicates the current frame number. It also
                                                                 indicates the time remaining (in terms of the number of PHY
                                                                 clocks) in the current (micro)frame. Note: Read the reset value
                                                                 of this register only after the following conditions: - If
                                                                 IDDIG_FILTER is disabled, read only when the PHY clock is
                                                                 stable. - If IDDIG_FILTER is enabled, read only after the filter
                                                                 timer expires. */
-    __IM uint32_t RESERVED5;
-    __IM uint32_t HPTXSTS;                       /*!< 0x00000410 This register contains information about the Periodic Transmit
+   __IM uint32_t RESERVED5;
+   __IM uint32_t HPTXSTS;                       /*!< 0x00000410 This register contains information about the Periodic Transmit
                                                                 Queue in the Host controller. */
-    __IM uint32_t HAINT;                         /*!< 0x00000414 When a significant event occurs on a channel, the Host All
+   __IM uint32_t HAINT;                         /*!< 0x00000414 When a significant event occurs on a channel, the Host All
                                                                 Channels Interrupt register interrupts the application using the
                                                                 Host Channels Interrupt bit of the Core Interrupt register
                                                                 (GINTSTS.HChInt). This is shown in the 'Interrupt Hierarchy'
@@ -242,15 +241,15 @@ typedef struct
                                                                 up to a maximum of 16 bits. Bits in this register are set and
                                                                 cleared when the application sets and clears bits in the
                                                                 corresponding Host Channel-n Interrupt register. */
-    __IOM uint32_t HAINTMSK;                      /*!< 0x00000418 The Host All Channel Interrupt Mask register works with the
+  __IOM uint32_t HAINTMSK;                      /*!< 0x00000418 The Host All Channel Interrupt Mask register works with the
                                                                 Host All Channel Interrupt register to interrupt the application
                                                                 when an event occurs on a channel. There is one interrupt mask
                                                                 bit per channel, up to a maximum of 16 bits. */
-    __IOM uint32_t HFLBADDR;                      /*!< 0x0000041C This register is present only in case of Scatter/Gather DMA. It
+  __IOM uint32_t HFLBADDR;                      /*!< 0x0000041C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented as flops. This register holds the starting
                                                                 address of the Frame list information. */
-    __IM uint32_t RESERVED6[8];
-    __IOM uint32_t HPRT;                          /*!< 0x00000440 This register is available only in Host mode. Currently, the
+   __IM uint32_t RESERVED6[8];
+  __IOM uint32_t HPRT;                          /*!< 0x00000440 This register is available only in Host mode. Currently, the
                                                                 OTG Host supports only one port. A single register holds USB
                                                                 port-related information such as USB reset, enable, suspend,
                                                                 resume, connect status, and test mode for each port. It is shown
@@ -261,11 +260,11 @@ typedef struct
                                                                 application must read this register and clear the bit that
                                                                 caused the interrupt. For the R_SS_WC bits, the application must
                                                                 write a 1 to the bit to clear the interrupt. */
-    __IM uint32_t RESERVED7[47];
-    __IOM uint32_t HCCHAR0;                       /*!< 0x00000500 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT0;                       /*!< 0x00000504 This register contains the Split characteristics of the Host
+   __IM uint32_t RESERVED7[47];
+  __IOM uint32_t HCCHAR0;                       /*!< 0x00000500 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT0;                       /*!< 0x00000504 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT0;                        /*!< 0x00000508 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT0;                        /*!< 0x00000508 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -275,20 +274,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK0;                     /*!< 0x0000050C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK0;                     /*!< 0x0000050C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ0;                       /*!< 0x00000510 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA0;                        /*!< 0x00000514 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ0;                       /*!< 0x00000510 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA0;                        /*!< 0x00000514 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED8;
-    __IM uint32_t HCDMAB0;                       /*!< 0x0000051C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED8;
+   __IM uint32_t HCDMAB0;                       /*!< 0x0000051C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR1;                       /*!< 0x00000520 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT1;                       /*!< 0x00000524 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR1;                       /*!< 0x00000520 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT1;                       /*!< 0x00000524 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT1;                        /*!< 0x00000528 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT1;                        /*!< 0x00000528 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -298,20 +297,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK1;                     /*!< 0x0000052C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK1;                     /*!< 0x0000052C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ1;                       /*!< 0x00000530 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA1;                        /*!< 0x00000534 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ1;                       /*!< 0x00000530 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA1;                        /*!< 0x00000534 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED9;
-    __IM uint32_t HCDMAB1;                       /*!< 0x0000053C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED9;
+   __IM uint32_t HCDMAB1;                       /*!< 0x0000053C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR2;                       /*!< 0x00000540 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT2;                       /*!< 0x00000544 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR2;                       /*!< 0x00000540 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT2;                       /*!< 0x00000544 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT2;                        /*!< 0x00000548 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT2;                        /*!< 0x00000548 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -321,20 +320,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK2;                     /*!< 0x0000054C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK2;                     /*!< 0x0000054C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ2;                       /*!< 0x00000550 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA2;                        /*!< 0x00000554 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ2;                       /*!< 0x00000550 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA2;                        /*!< 0x00000554 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED10;
-    __IM uint32_t HCDMAB2;                       /*!< 0x0000055C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED10;
+   __IM uint32_t HCDMAB2;                       /*!< 0x0000055C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR3;                       /*!< 0x00000560 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT3;                       /*!< 0x00000564 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR3;                       /*!< 0x00000560 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT3;                       /*!< 0x00000564 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT3;                        /*!< 0x00000568 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT3;                        /*!< 0x00000568 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -344,20 +343,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK3;                     /*!< 0x0000056C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK3;                     /*!< 0x0000056C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ3;                       /*!< 0x00000570 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA3;                        /*!< 0x00000574 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ3;                       /*!< 0x00000570 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA3;                        /*!< 0x00000574 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED11;
-    __IM uint32_t HCDMAB3;                       /*!< 0x0000057C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED11;
+   __IM uint32_t HCDMAB3;                       /*!< 0x0000057C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR4;                       /*!< 0x00000580 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT4;                       /*!< 0x00000584 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR4;                       /*!< 0x00000580 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT4;                       /*!< 0x00000584 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT4;                        /*!< 0x00000588 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT4;                        /*!< 0x00000588 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -367,20 +366,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK4;                     /*!< 0x0000058C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK4;                     /*!< 0x0000058C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ4;                       /*!< 0x00000590 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA4;                        /*!< 0x00000594 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ4;                       /*!< 0x00000590 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA4;                        /*!< 0x00000594 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED12;
-    __IM uint32_t HCDMAB4;                       /*!< 0x0000059C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED12;
+   __IM uint32_t HCDMAB4;                       /*!< 0x0000059C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR5;                       /*!< 0x000005A0 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT5;                       /*!< 0x000005A4 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR5;                       /*!< 0x000005A0 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT5;                       /*!< 0x000005A4 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT5;                        /*!< 0x000005A8 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT5;                        /*!< 0x000005A8 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -390,20 +389,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK5;                     /*!< 0x000005AC This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK5;                     /*!< 0x000005AC This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ5;                       /*!< 0x000005B0 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA5;                        /*!< 0x000005B4 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ5;                       /*!< 0x000005B0 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA5;                        /*!< 0x000005B4 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED13;
-    __IM uint32_t HCDMAB5;                       /*!< 0x000005BC This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED13;
+   __IM uint32_t HCDMAB5;                       /*!< 0x000005BC This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR6;                       /*!< 0x000005C0 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT6;                       /*!< 0x000005C4 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR6;                       /*!< 0x000005C0 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT6;                       /*!< 0x000005C4 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT6;                        /*!< 0x000005C8 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT6;                        /*!< 0x000005C8 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -413,20 +412,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK6;                     /*!< 0x000005CC This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK6;                     /*!< 0x000005CC This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ6;                       /*!< 0x000005D0 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA6;                        /*!< 0x000005D4 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ6;                       /*!< 0x000005D0 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA6;                        /*!< 0x000005D4 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED14;
-    __IM uint32_t HCDMAB6;                       /*!< 0x000005DC This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED14;
+   __IM uint32_t HCDMAB6;                       /*!< 0x000005DC This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR7;                       /*!< 0x000005E0 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT7;                       /*!< 0x000005E4 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR7;                       /*!< 0x000005E0 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT7;                       /*!< 0x000005E4 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT7;                        /*!< 0x000005E8 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT7;                        /*!< 0x000005E8 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -436,20 +435,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK7;                     /*!< 0x000005EC This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK7;                     /*!< 0x000005EC This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ7;                       /*!< 0x000005F0 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA7;                        /*!< 0x000005F4 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ7;                       /*!< 0x000005F0 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA7;                        /*!< 0x000005F4 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED15;
-    __IM uint32_t HCDMAB7;                       /*!< 0x000005FC This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED15;
+   __IM uint32_t HCDMAB7;                       /*!< 0x000005FC This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR8;                       /*!< 0x00000600 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT8;                       /*!< 0x00000604 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR8;                       /*!< 0x00000600 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT8;                       /*!< 0x00000604 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT8;                        /*!< 0x00000608 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT8;                        /*!< 0x00000608 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -459,20 +458,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK8;                     /*!< 0x0000060C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK8;                     /*!< 0x0000060C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ8;                       /*!< 0x00000610 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA8;                        /*!< 0x00000614 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ8;                       /*!< 0x00000610 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA8;                        /*!< 0x00000614 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED16;
-    __IM uint32_t HCDMAB8;                       /*!< 0x0000061C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED16;
+   __IM uint32_t HCDMAB8;                       /*!< 0x0000061C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR9;                       /*!< 0x00000620 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT9;                       /*!< 0x00000624 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR9;                       /*!< 0x00000620 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT9;                       /*!< 0x00000624 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT9;                        /*!< 0x00000628 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT9;                        /*!< 0x00000628 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -482,20 +481,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK9;                     /*!< 0x0000062C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK9;                     /*!< 0x0000062C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ9;                       /*!< 0x00000630 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA9;                        /*!< 0x00000634 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ9;                       /*!< 0x00000630 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA9;                        /*!< 0x00000634 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED17;
-    __IM uint32_t HCDMAB9;                       /*!< 0x0000063C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED17;
+   __IM uint32_t HCDMAB9;                       /*!< 0x0000063C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR10;                      /*!< 0x00000640 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT10;                      /*!< 0x00000644 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR10;                      /*!< 0x00000640 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT10;                      /*!< 0x00000644 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT10;                       /*!< 0x00000648 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT10;                       /*!< 0x00000648 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -505,20 +504,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK10;                    /*!< 0x0000064C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK10;                    /*!< 0x0000064C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ10;                      /*!< 0x00000650 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA10;                       /*!< 0x00000654 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ10;                      /*!< 0x00000650 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA10;                       /*!< 0x00000654 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED18;
-    __IM uint32_t HCDMAB10;                      /*!< 0x0000065C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED18;
+   __IM uint32_t HCDMAB10;                      /*!< 0x0000065C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR11;                      /*!< 0x00000660 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT11;                      /*!< 0x00000664 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR11;                      /*!< 0x00000660 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT11;                      /*!< 0x00000664 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT11;                       /*!< 0x00000668 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT11;                       /*!< 0x00000668 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -528,20 +527,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK11;                    /*!< 0x0000066C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK11;                    /*!< 0x0000066C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ11;                      /*!< 0x00000670 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA11;                       /*!< 0x00000674 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ11;                      /*!< 0x00000670 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA11;                       /*!< 0x00000674 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED19;
-    __IM uint32_t HCDMAB11;                      /*!< 0x0000067C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED19;
+   __IM uint32_t HCDMAB11;                      /*!< 0x0000067C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR12;                      /*!< 0x00000680 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT12;                      /*!< 0x00000684 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR12;                      /*!< 0x00000680 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT12;                      /*!< 0x00000684 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT12;                       /*!< 0x00000688 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT12;                       /*!< 0x00000688 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -551,20 +550,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK12;                    /*!< 0x0000068C This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK12;                    /*!< 0x0000068C This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ12;                      /*!< 0x00000690 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA12;                       /*!< 0x00000694 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ12;                      /*!< 0x00000690 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA12;                       /*!< 0x00000694 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED20;
-    __IM uint32_t HCDMAB12;                      /*!< 0x0000069C This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED20;
+   __IM uint32_t HCDMAB12;                      /*!< 0x0000069C This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR13;                      /*!< 0x000006A0 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT13;                      /*!< 0x000006A4 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR13;                      /*!< 0x000006A0 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT13;                      /*!< 0x000006A4 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT13;                       /*!< 0x000006A8 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT13;                       /*!< 0x000006A8 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -574,20 +573,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK13;                    /*!< 0x000006AC This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK13;                    /*!< 0x000006AC This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ13;                      /*!< 0x000006B0 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA13;                       /*!< 0x000006B4 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ13;                      /*!< 0x000006B0 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA13;                       /*!< 0x000006B4 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED21;
-    __IM uint32_t HCDMAB13;                      /*!< 0x000006BC This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED21;
+   __IM uint32_t HCDMAB13;                      /*!< 0x000006BC This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR14;                      /*!< 0x000006C0 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT14;                      /*!< 0x000006C4 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR14;                      /*!< 0x000006C0 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT14;                      /*!< 0x000006C4 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT14;                       /*!< 0x000006C8 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT14;                       /*!< 0x000006C8 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -597,20 +596,20 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK14;                    /*!< 0x000006CC This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK14;                    /*!< 0x000006CC This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ14;                      /*!< 0x000006D0 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA14;                       /*!< 0x000006D4 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ14;                      /*!< 0x000006D0 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA14;                       /*!< 0x000006D4 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED22;
-    __IM uint32_t HCDMAB14;                      /*!< 0x000006DC This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED22;
+   __IM uint32_t HCDMAB14;                      /*!< 0x000006DC This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IOM uint32_t HCCHAR15;                      /*!< 0x000006E0 This register contains the characteristics of the Host Channel. */
-    __IOM uint32_t HCSPLT15;                      /*!< 0x000006E4 This register contains the Split characteristics of the Host
+  __IOM uint32_t HCCHAR15;                      /*!< 0x000006E0 This register contains the characteristics of the Host Channel. */
+  __IOM uint32_t HCSPLT15;                      /*!< 0x000006E4 This register contains the Split characteristics of the Host
                                                                 Channel. */
-    __IOM uint32_t HCINT15;                       /*!< 0x000006E8 This register indicates the status of a channel with respect to
+  __IOM uint32_t HCINT15;                       /*!< 0x000006E8 This register indicates the status of a channel with respect to
                                                                 USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the Host Channels Interrupt bit of the Core
@@ -620,39 +619,39 @@ typedef struct
                                                                 number for the Host Channel-n Interrupt register. The
                                                                 application must clear the appropriate bit in this register to
                                                                 clear the corresponding bits in the HAINT and GINTSTS registers. */
-    __IOM uint32_t HCINTMSK15;                    /*!< 0x000006EC This register reflects the mask for each channel status
+  __IOM uint32_t HCINTMSK15;                    /*!< 0x000006EC This register reflects the mask for each channel status
                                                                 described in the previous section. */
-    __IOM uint32_t HCTSIZ15;                      /*!< 0x000006F0 This register reflects the transfer size for the Host Channel. */
-    __IOM uint32_t HCDMA15;                       /*!< 0x000006F4 This register is used by the OTG host in the internal DMA mode
+  __IOM uint32_t HCTSIZ15;                      /*!< 0x000006F0 This register reflects the transfer size for the Host Channel. */
+  __IOM uint32_t HCDMA15;                       /*!< 0x000006F4 This register is used by the OTG host in the internal DMA mode
                                                                 to maintain the current buffer pointer for IN/OUT transactions.
                                                                 The starting DMA address must be DWORD-aligned. */
-    __IM uint32_t RESERVED23;
-    __IM uint32_t HCDMAB15;                      /*!< 0x000006FC This register is present only in case of Scatter/Gather DMA. It
+   __IM uint32_t RESERVED23;
+   __IM uint32_t HCDMAB15;                      /*!< 0x000006FC This register is present only in case of Scatter/Gather DMA. It
                                                                 is implemented in RAM instead of flop-based implementation. This
                                                                 register holds the current buffer address. */
-    __IM uint32_t RESERVED24[64];
-    __IOM uint32_t DCFG;                          /*!< 0x00000800 This register configures the core in Device mode after power-on
+   __IM uint32_t RESERVED24[64];
+  __IOM uint32_t DCFG;                          /*!< 0x00000800 This register configures the core in Device mode after power-on
                                                                 or after certain control commands or enumeration. Do not make
                                                                 changes to this register after initial programming. */
-    __IOM uint32_t DCTL;                          /*!< 0x00000804 This register is used to control the characteristics of the
+  __IOM uint32_t DCTL;                          /*!< 0x00000804 This register is used to control the characteristics of the
                                                                 Device controller. */
-    __IM uint32_t DSTS;                          /*!< 0x00000808 This register indicates the status of the core with respect to
+   __IM uint32_t DSTS;                          /*!< 0x00000808 This register indicates the status of the core with respect to
                                                                 USB-related events. It must be read on interrupts from Device
                                                                 All Interrupts (DAINT) register. */
-    __IM uint32_t RESERVED25;
-    __IOM uint32_t DIEPMSK;                       /*!< 0x00000810 This register works with each of the Device IN Endpoint
+   __IM uint32_t RESERVED25;
+  __IOM uint32_t DIEPMSK;                       /*!< 0x00000810 This register works with each of the Device IN Endpoint
                                                                 Interrupt (DIEPINTn) registers for all endpoints to generate an
                                                                 interrupt per IN endpoint. The IN endpoint interrupt for a
                                                                 specific status in the DIEPINTn register can be masked by
                                                                 writing to the corresponding bit in this register. Status bits
                                                                 are masked by default. */
-    __IOM uint32_t DOEPMSK;                       /*!< 0x00000814 This register works with each of the Device OUT Endpoint
+  __IOM uint32_t DOEPMSK;                       /*!< 0x00000814 This register works with each of the Device OUT Endpoint
                                                                 Interrupt (DOEPINTn) registers for all endpoints to generate an
                                                                 interrupt per OUT endpoint. The OUT endpoint interrupt for a
                                                                 specific status in the DOEPINTn register can be masked by
                                                                 writing into the corresponding bit in this register. Status bits
                                                                 are masked by default. */
-    __IM uint32_t DAINT;                         /*!< 0x00000818 When a significant event occurs on an endpoint, a Device All
+   __IM uint32_t DAINT;                         /*!< 0x00000818 When a significant event occurs on an endpoint, a Device All
                                                                 Endpoints Interrupt register interrupts the application using
                                                                 the Device OUT Endpoints Interrupt bit or Device IN Endpoints
                                                                 Interrupt bit of the Core Interrupt register (GINTSTS.OEPInt or
@@ -663,25 +662,25 @@ typedef struct
                                                                 bits are used. Bits in this register are set and cleared when
                                                                 the application sets and clears bits in the corresponding Device
                                                                 Endpoint-n Interrupt register (DIEPINTn/DOEPINTn). */
-    __IOM uint32_t DAINTMSK;                      /*!< 0x0000081C The Device Endpoint Interrupt Mask register works with the
+  __IOM uint32_t DAINTMSK;                      /*!< 0x0000081C The Device Endpoint Interrupt Mask register works with the
                                                                 Device Endpoint Interrupt register to interrupt the application
                                                                 when an event occurs on a device endpoint. However, the Device
                                                                 All Endpoints Interrupt (DAINT) register bit corresponding to
                                                                 that interrupt is still set. */
-    __IM uint32_t RESERVED26[2];
-    __IOM uint32_t DVBUSDIS;                      /*!< 0x00000828 This register specifies the VBUS discharge time after VBUS
+   __IM uint32_t RESERVED26[2];
+  __IOM uint32_t DVBUSDIS;                      /*!< 0x00000828 This register specifies the VBUS discharge time after VBUS
                                                                 pulsing during SRP. */
-    __IOM uint32_t DVBUSPULSE;                    /*!< 0x0000082C This register contains the VBUS pulsing time during SRP. */
-    __IOM uint32_t DTHRCTL;                       /*!< 0x00000830 This register contains the Receive and Transmit Threshold
+  __IOM uint32_t DVBUSPULSE;                    /*!< 0x0000082C This register contains the VBUS pulsing time during SRP. */
+  __IOM uint32_t DTHRCTL;                       /*!< 0x00000830 This register contains the Receive and Transmit Threshold
                                                                 characteristics of the Device controller. */
-    __IOM uint32_t DIEPEMPMSK;                    /*!< 0x00000834 This register is valid only in Dedicated FIFO operation
+  __IOM uint32_t DIEPEMPMSK;                    /*!< 0x00000834 This register is valid only in Dedicated FIFO operation
                                                                 (OTG_EN_DED_TX_FIFO = 1). This register is used to control the
                                                                 IN endpoint FIFO empty interrupt generation (DIEPINTn.TxfEmp). */
-    __IM uint32_t RESERVED27[50];
-    __IOM uint32_t DIEPCTL0;                      /*!< 0x00000900 This register is used to control the characteristics of the IN
+   __IM uint32_t RESERVED27[50];
+  __IOM uint32_t DIEPCTL0;                      /*!< 0x00000900 This register is used to control the characteristics of the IN
                                                                 Endpoint 0 of the Device controller. */
-    __IM uint32_t RESERVED28;
-    __IOM uint32_t DIEPINT0;                      /*!< 0x00000908 This register indicates the status of an endpoint with respect
+   __IM uint32_t RESERVED28;
+  __IOM uint32_t DIEPINT0;                      /*!< 0x00000908 This register indicates the status of an endpoint with respect
                                                                 to USB- and AHB-related events. It is shown in the 'Interrupt
                                                                 Hierarchy' figure in the databook. The application must read
                                                                 this register when the OUT Endpoints Interrupt bit or IN
@@ -693,8 +692,8 @@ typedef struct
                                                                 The application must clear the appropriate bit in this register
                                                                 to clear the corresponding bits in the DAINT and GINTSTS
                                                                 registers */
-    __IM uint32_t RESERVED29;
-    __IOM uint32_t DIEPTSIZ0;                     /*!< 0x00000910 The application must modify this register before enabling
+   __IM uint32_t RESERVED29;
+  __IOM uint32_t DIEPTSIZ0;                     /*!< 0x00000910 The application must modify this register before enabling
                                                                 endpoint 0. Once endpoint 0 is enabled using Endpoint Enable bit
                                                                 of the Device Control Endpoint 0 Control registers
                                                                 (DIEPCTL0.EPEna/DOEPCTL0.EPEna), the core modifies this
@@ -704,363 +703,361 @@ typedef struct
                                                                 enabled, this register must not be programmed by the
                                                                 application. If the application reads this register when
                                                                 Scatter/Gather DMA mode is enabled, the core returns all zeros. */
-    __IOM uint32_t DIEPDMA0;                      /*!< 0x00000914 This register contains the DMA Address for the IN Endpoint 0 of
+  __IOM uint32_t DIEPDMA0;                      /*!< 0x00000914 This register contains the DMA Address for the IN Endpoint 0 of
                                                                 the Device controller. */
-    __IM uint32_t DTXFSTS0;                      /*!< 0x00000918 This register contains information about the IN Endpoint
+   __IM uint32_t DTXFSTS0;                      /*!< 0x00000918 This register contains information about the IN Endpoint
                                                                 Transmit FIFO of the Device controller. */
-    __IM uint32_t DIEPDMAB0;                     /*!< 0x0000091C This register contains the DMA Buffer Address for the IN
+   __IM uint32_t DIEPDMAB0;                     /*!< 0x0000091C This register contains the DMA Buffer Address for the IN
                                                                 Endpoint 0 of the Device controller. */
-    __IOM uint32_t DIEPCTL1;                      /*!< 0x00000920 This register is used to control the characteristics of
+  __IOM uint32_t DIEPCTL1;                      /*!< 0x00000920 This register is used to control the characteristics of
                                                                 Endpoint 1. Note: This register exists for an endpoint i if the
                                                                 OTG_EP_DIR_i parameter is 0 or 1 for that endpoint. */
-    __IM uint32_t RESERVED30;
-    __IOM uint32_t DIEPINT1;                      /*!< 0x00000928 This register contains the interrupts for the IN Endpoint 1 of
+   __IM uint32_t RESERVED30;
+  __IOM uint32_t DIEPINT1;                      /*!< 0x00000928 This register contains the interrupts for the IN Endpoint 1 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t RESERVED31;
-    __IOM uint32_t DIEPTSIZ1;                     /*!< 0x00000930 This register reflects the Transfer Size of the IN Endpoint 1
+   __IM uint32_t RESERVED31;
+  __IOM uint32_t DIEPTSIZ1;                     /*!< 0x00000930 This register reflects the Transfer Size of the IN Endpoint 1
                                                                 of the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IOM uint32_t DIEPDMA1;                      /*!< 0x00000934 This register contains the DMA Address for the IN Endpoint 1 of
+  __IOM uint32_t DIEPDMA1;                      /*!< 0x00000934 This register contains the DMA Address for the IN Endpoint 1 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t DTXFSTS1;                      /*!< 0x00000938 This register reflects the status of the IN Endpoint Transmit
+   __IM uint32_t DTXFSTS1;                      /*!< 0x00000938 This register reflects the status of the IN Endpoint Transmit
                                                                 FIFO Status Register 1 of the Device controller. Note: This
                                                                 register exists for an endpoint i if the OTG_EP_DIR_i parameter
                                                                 is 0 or 1 for that endpoint. */
-    __IM uint32_t DIEPDMAB1;                     /*!< 0x0000093C This register contains the DMA Buffer Address of the IN
+   __IM uint32_t DIEPDMAB1;                     /*!< 0x0000093C This register contains the DMA Buffer Address of the IN
                                                                 Endpoint 1 of the Device controller. Note: This register exists
                                                                 for an endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for
                                                                 that endpoint. */
-    __IOM uint32_t DIEPCTL2;                      /*!< 0x00000940 This register is used to control the characteristics of
+  __IOM uint32_t DIEPCTL2;                      /*!< 0x00000940 This register is used to control the characteristics of
                                                                 Endpoint 2. Note: This register exists for an endpoint i if the
                                                                 OTG_EP_DIR_i parameter is 0 or 1 for that endpoint. */
-    __IM uint32_t RESERVED32;
-    __IOM uint32_t DIEPINT2;                      /*!< 0x00000948 This register contains the interrupts for the IN Endpoint 2 of
+   __IM uint32_t RESERVED32;
+  __IOM uint32_t DIEPINT2;                      /*!< 0x00000948 This register contains the interrupts for the IN Endpoint 2 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t RESERVED33;
-    __IOM uint32_t DIEPTSIZ2;                     /*!< 0x00000950 This register reflects the Transfer Size of the IN Endpoint 2
+   __IM uint32_t RESERVED33;
+  __IOM uint32_t DIEPTSIZ2;                     /*!< 0x00000950 This register reflects the Transfer Size of the IN Endpoint 2
                                                                 of the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IOM uint32_t DIEPDMA2;                      /*!< 0x00000954 This register contains the DMA Address for the IN Endpoint 2 of
+  __IOM uint32_t DIEPDMA2;                      /*!< 0x00000954 This register contains the DMA Address for the IN Endpoint 2 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t DTXFSTS2;                      /*!< 0x00000958 This register reflects the status of the IN Endpoint Transmit
+   __IM uint32_t DTXFSTS2;                      /*!< 0x00000958 This register reflects the status of the IN Endpoint Transmit
                                                                 FIFO Status Register 2 of the Device controller. Note: This
                                                                 register exists for an endpoint i if the OTG_EP_DIR_i parameter
                                                                 is 0 or 1 for that endpoint. */
-    __IM uint32_t DIEPDMAB2;                     /*!< 0x0000095C This register contains the DMA Buffer Address of the IN
+   __IM uint32_t DIEPDMAB2;                     /*!< 0x0000095C This register contains the DMA Buffer Address of the IN
                                                                 Endpoint 2 of the Device controller. Note: This register exists
                                                                 for an endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for
                                                                 that endpoint. */
-    __IOM uint32_t DIEPCTL3;                      /*!< 0x00000960 This register is used to control the characteristics of
+  __IOM uint32_t DIEPCTL3;                      /*!< 0x00000960 This register is used to control the characteristics of
                                                                 Endpoint 3. Note: This register exists for an endpoint i if the
                                                                 OTG_EP_DIR_i parameter is 0 or 1 for that endpoint. */
-    __IM uint32_t RESERVED34;
-    __IOM uint32_t DIEPINT3;                      /*!< 0x00000968 This register contains the interrupts for the IN Endpoint 3 of
+   __IM uint32_t RESERVED34;
+  __IOM uint32_t DIEPINT3;                      /*!< 0x00000968 This register contains the interrupts for the IN Endpoint 3 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t RESERVED35;
-    __IOM uint32_t DIEPTSIZ3;                     /*!< 0x00000970 This register reflects the Transfer Size of the IN Endpoint 3
+   __IM uint32_t RESERVED35;
+  __IOM uint32_t DIEPTSIZ3;                     /*!< 0x00000970 This register reflects the Transfer Size of the IN Endpoint 3
                                                                 of the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IOM uint32_t DIEPDMA3;                      /*!< 0x00000974 This register contains the DMA Address for the IN Endpoint 3 of
+  __IOM uint32_t DIEPDMA3;                      /*!< 0x00000974 This register contains the DMA Address for the IN Endpoint 3 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t DTXFSTS3;                      /*!< 0x00000978 This register reflects the status of the IN Endpoint Transmit
+   __IM uint32_t DTXFSTS3;                      /*!< 0x00000978 This register reflects the status of the IN Endpoint Transmit
                                                                 FIFO Status Register 3 of the Device controller. Note: This
                                                                 register exists for an endpoint i if the OTG_EP_DIR_i parameter
                                                                 is 0 or 1 for that endpoint. */
-    __IM uint32_t DIEPDMAB3;                     /*!< 0x0000097C This register contains the DMA Buffer Address of the IN
+   __IM uint32_t DIEPDMAB3;                     /*!< 0x0000097C This register contains the DMA Buffer Address of the IN
                                                                 Endpoint 3 of the Device controller. Note: This register exists
                                                                 for an endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for
                                                                 that endpoint. */
-    __IOM uint32_t DIEPCTL4;                      /*!< 0x00000980 This register is used to control the characteristics of
+  __IOM uint32_t DIEPCTL4;                      /*!< 0x00000980 This register is used to control the characteristics of
                                                                 Endpoint 4. Note: This register exists for an endpoint i if the
                                                                 OTG_EP_DIR_i parameter is 0 or 1 for that endpoint. */
-    __IM uint32_t RESERVED36;
-    __IOM uint32_t DIEPINT4;                      /*!< 0x00000988 This register contains the interrupts for the IN Endpoint 4 of
+   __IM uint32_t RESERVED36;
+  __IOM uint32_t DIEPINT4;                      /*!< 0x00000988 This register contains the interrupts for the IN Endpoint 4 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t RESERVED37;
-    __IOM uint32_t DIEPTSIZ4;                     /*!< 0x00000990 This register reflects the Transfer Size of the IN Endpoint 4
+   __IM uint32_t RESERVED37;
+  __IOM uint32_t DIEPTSIZ4;                     /*!< 0x00000990 This register reflects the Transfer Size of the IN Endpoint 4
                                                                 of the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IOM uint32_t DIEPDMA4;                      /*!< 0x00000994 This register contains the DMA Address for the IN Endpoint 4 of
+  __IOM uint32_t DIEPDMA4;                      /*!< 0x00000994 This register contains the DMA Address for the IN Endpoint 4 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t DTXFSTS4;                      /*!< 0x00000998 This register reflects the status of the IN Endpoint Transmit
+   __IM uint32_t DTXFSTS4;                      /*!< 0x00000998 This register reflects the status of the IN Endpoint Transmit
                                                                 FIFO Status Register 4 of the Device controller. Note: This
                                                                 register exists for an endpoint i if the OTG_EP_DIR_i parameter
                                                                 is 0 or 1 for that endpoint. */
-    __IM uint32_t DIEPDMAB4;                     /*!< 0x0000099C This register contains the DMA Buffer Address of the IN
+   __IM uint32_t DIEPDMAB4;                     /*!< 0x0000099C This register contains the DMA Buffer Address of the IN
                                                                 Endpoint 4 of the Device controller. Note: This register exists
                                                                 for an endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for
                                                                 that endpoint. */
-    __IOM uint32_t DIEPCTL5;                      /*!< 0x000009A0 This register is used to control the characteristics of
+  __IOM uint32_t DIEPCTL5;                      /*!< 0x000009A0 This register is used to control the characteristics of
                                                                 Endpoint 5. Note: This register exists for an endpoint i if the
                                                                 OTG_EP_DIR_i parameter is 0 or 1 for that endpoint. */
-    __IM uint32_t RESERVED38;
-    __IOM uint32_t DIEPINT5;                      /*!< 0x000009A8 This register contains the interrupts for the IN Endpoint 5 of
+   __IM uint32_t RESERVED38;
+  __IOM uint32_t DIEPINT5;                      /*!< 0x000009A8 This register contains the interrupts for the IN Endpoint 5 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t RESERVED39;
-    __IOM uint32_t DIEPTSIZ5;                     /*!< 0x000009B0 This register reflects the Transfer Size of the IN Endpoint 5
+   __IM uint32_t RESERVED39;
+  __IOM uint32_t DIEPTSIZ5;                     /*!< 0x000009B0 This register reflects the Transfer Size of the IN Endpoint 5
                                                                 of the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IOM uint32_t DIEPDMA5;                      /*!< 0x000009B4 This register contains the DMA Address for the IN Endpoint 5 of
+  __IOM uint32_t DIEPDMA5;                      /*!< 0x000009B4 This register contains the DMA Address for the IN Endpoint 5 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t DTXFSTS5;                      /*!< 0x000009B8 This register reflects the status of the IN Endpoint Transmit
+   __IM uint32_t DTXFSTS5;                      /*!< 0x000009B8 This register reflects the status of the IN Endpoint Transmit
                                                                 FIFO Status Register 5 of the Device controller. Note: This
                                                                 register exists for an endpoint i if the OTG_EP_DIR_i parameter
                                                                 is 0 or 1 for that endpoint. */
-    __IM uint32_t DIEPDMAB5;                     /*!< 0x000009BC This register contains the DMA Buffer Address of the IN
+   __IM uint32_t DIEPDMAB5;                     /*!< 0x000009BC This register contains the DMA Buffer Address of the IN
                                                                 Endpoint 5 of the Device controller. Note: This register exists
                                                                 for an endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for
                                                                 that endpoint. */
-    __IOM uint32_t DIEPCTL6;                      /*!< 0x000009C0 This register is used to control the characteristics of
+  __IOM uint32_t DIEPCTL6;                      /*!< 0x000009C0 This register is used to control the characteristics of
                                                                 Endpoint 6. Note: This register exists for an endpoint i if the
                                                                 OTG_EP_DIR_i parameter is 0 or 1 for that endpoint. */
-    __IM uint32_t RESERVED40;
-    __IOM uint32_t DIEPINT6;                      /*!< 0x000009C8 This register contains the interrupts for the IN Endpoint 6 of
+   __IM uint32_t RESERVED40;
+  __IOM uint32_t DIEPINT6;                      /*!< 0x000009C8 This register contains the interrupts for the IN Endpoint 6 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t RESERVED41;
-    __IOM uint32_t DIEPTSIZ6;                     /*!< 0x000009D0 This register reflects the Transfer Size of the IN Endpoint 6
+   __IM uint32_t RESERVED41;
+  __IOM uint32_t DIEPTSIZ6;                     /*!< 0x000009D0 This register reflects the Transfer Size of the IN Endpoint 6
                                                                 of the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IOM uint32_t DIEPDMA6;                      /*!< 0x000009D4 This register contains the DMA Address for the IN Endpoint 6 of
+  __IOM uint32_t DIEPDMA6;                      /*!< 0x000009D4 This register contains the DMA Address for the IN Endpoint 6 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t DTXFSTS6;                      /*!< 0x000009D8 This register reflects the status of the IN Endpoint Transmit
+   __IM uint32_t DTXFSTS6;                      /*!< 0x000009D8 This register reflects the status of the IN Endpoint Transmit
                                                                 FIFO Status Register 6 of the Device controller. Note: This
                                                                 register exists for an endpoint i if the OTG_EP_DIR_i parameter
                                                                 is 0 or 1 for that endpoint. */
-    __IM uint32_t DIEPDMAB6;                     /*!< 0x000009DC This register contains the DMA Buffer Address of the IN
+   __IM uint32_t DIEPDMAB6;                     /*!< 0x000009DC This register contains the DMA Buffer Address of the IN
                                                                 Endpoint 6 of the Device controller. Note: This register exists
                                                                 for an endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for
                                                                 that endpoint. */
-    __IOM uint32_t DIEPCTL7;                      /*!< 0x000009E0 This register is used to control the characteristics of
+  __IOM uint32_t DIEPCTL7;                      /*!< 0x000009E0 This register is used to control the characteristics of
                                                                 Endpoint 7. Note: This register exists for an endpoint i if the
                                                                 OTG_EP_DIR_i parameter is 0 or 1 for that endpoint. */
-    __IM uint32_t RESERVED42;
-    __IOM uint32_t DIEPINT7;                      /*!< 0x000009E8 This register contains the interrupts for the IN Endpoint 7 of
+   __IM uint32_t RESERVED42;
+  __IOM uint32_t DIEPINT7;                      /*!< 0x000009E8 This register contains the interrupts for the IN Endpoint 7 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t RESERVED43;
-    __IOM uint32_t DIEPTSIZ7;                     /*!< 0x000009F0 This register reflects the Transfer Size of the IN Endpoint 7
+   __IM uint32_t RESERVED43;
+  __IOM uint32_t DIEPTSIZ7;                     /*!< 0x000009F0 This register reflects the Transfer Size of the IN Endpoint 7
                                                                 of the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IOM uint32_t DIEPDMA7;                      /*!< 0x000009F4 This register contains the DMA Address for the IN Endpoint 7 of
+  __IOM uint32_t DIEPDMA7;                      /*!< 0x000009F4 This register contains the DMA Address for the IN Endpoint 7 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t DTXFSTS7;                      /*!< 0x000009F8 This register reflects the status of the IN Endpoint Transmit
+   __IM uint32_t DTXFSTS7;                      /*!< 0x000009F8 This register reflects the status of the IN Endpoint Transmit
                                                                 FIFO Status Register 7 of the Device controller. Note: This
                                                                 register exists for an endpoint i if the OTG_EP_DIR_i parameter
                                                                 is 0 or 1 for that endpoint. */
-    __IM uint32_t DIEPDMAB7;                     /*!< 0x000009FC This register contains the DMA Buffer Address of the IN
+   __IM uint32_t DIEPDMAB7;                     /*!< 0x000009FC This register contains the DMA Buffer Address of the IN
                                                                 Endpoint 7 of the Device controller. Note: This register exists
                                                                 for an endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for
                                                                 that endpoint. */
-    __IOM uint32_t DIEPCTL8;                      /*!< 0x00000A00 This register is used to control the characteristics of
+  __IOM uint32_t DIEPCTL8;                      /*!< 0x00000A00 This register is used to control the characteristics of
                                                                 Endpoint 8. Note: This register exists for an endpoint i if the
                                                                 OTG_EP_DIR_i parameter is 0 or 1 for that endpoint. */
-    __IM uint32_t RESERVED44;
-    __IOM uint32_t DIEPINT8;                      /*!< 0x00000A08 This register contains the interrupts for the IN Endpoint 8 of
+   __IM uint32_t RESERVED44;
+  __IOM uint32_t DIEPINT8;                      /*!< 0x00000A08 This register contains the interrupts for the IN Endpoint 8 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t RESERVED45;
-    __IOM uint32_t DIEPTSIZ8;                     /*!< 0x00000A10 This register reflects the Transfer Size of the IN Endpoint 8
+   __IM uint32_t RESERVED45;
+  __IOM uint32_t DIEPTSIZ8;                     /*!< 0x00000A10 This register reflects the Transfer Size of the IN Endpoint 8
                                                                 of the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IOM uint32_t DIEPDMA8;                      /*!< 0x00000A14 This register contains the DMA Address for the IN Endpoint 8 of
+  __IOM uint32_t DIEPDMA8;                      /*!< 0x00000A14 This register contains the DMA Address for the IN Endpoint 8 of
                                                                 the Device controller. Note: This register exists for an
                                                                 endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for that
                                                                 endpoint. */
-    __IM uint32_t DTXFSTS8;                      /*!< 0x00000A18 This register reflects the status of the IN Endpoint Transmit
+   __IM uint32_t DTXFSTS8;                      /*!< 0x00000A18 This register reflects the status of the IN Endpoint Transmit
                                                                 FIFO Status Register 8 of the Device controller. Note: This
                                                                 register exists for an endpoint i if the OTG_EP_DIR_i parameter
                                                                 is 0 or 1 for that endpoint. */
-    __IM uint32_t DIEPDMAB8;                     /*!< 0x00000A1C This register contains the DMA Buffer Address of the IN
+   __IM uint32_t DIEPDMAB8;                     /*!< 0x00000A1C This register contains the DMA Buffer Address of the IN
                                                                 Endpoint 8 of the Device controller. Note: This register exists
                                                                 for an endpoint i if the OTG_EP_DIR_i parameter is 0 or 1 for
                                                                 that endpoint. */
-    __IM uint32_t RESERVED46[56];
-    __IOM uint32_t DOEPCTL0;                      /*!< 0x00000B00 This register is used to control the characteristics of the OUT
+   __IM uint32_t RESERVED46[56];
+  __IOM uint32_t DOEPCTL0;                      /*!< 0x00000B00 This register is used to control the characteristics of the OUT
                                                                 Endpoint 0 of the Device controller. */
-    __IM uint32_t RESERVED47;
-    __IOM uint32_t DOEPINT0;                      /*!< 0x00000B08 This register contains the interrupts for the OUT Endpoint 0 of
+   __IM uint32_t RESERVED47;
+  __IOM uint32_t DOEPINT0;                      /*!< 0x00000B08 This register contains the interrupts for the OUT Endpoint 0 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED48;
-    __IOM uint32_t DOEPTSIZ0;                     /*!< 0x00000B10 This register contains the Transfer Size for the OUT Endpoint 0
+   __IM uint32_t RESERVED48;
+  __IOM uint32_t DOEPTSIZ0;                     /*!< 0x00000B10 This register contains the Transfer Size for the OUT Endpoint 0
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA0;                      /*!< 0x00000B14 This register contains the DMA Address for the OUT Endpoint 0
+  __IOM uint32_t DOEPDMA0;                      /*!< 0x00000B14 This register contains the DMA Address for the OUT Endpoint 0
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED49;
-    __IM uint32_t DOEPDMAB0;                     /*!< 0x00000B1C This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED49;
+   __IM uint32_t DOEPDMAB0;                     /*!< 0x00000B1C This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 0 of the Device controller. */
-    __IOM uint32_t DOEPCTL1;                      /*!< 0x00000B20 This register is used to control the characteristics of OUT
+  __IOM uint32_t DOEPCTL1;                      /*!< 0x00000B20 This register is used to control the characteristics of OUT
                                                                 Endpoint 1 of the Device controller. */
-    __IM uint32_t RESERVED50;
-    __IOM uint32_t DOEPINT1;                      /*!< 0x00000B28 This register contains the interrupts for the OUT Endpoint 1 of
+   __IM uint32_t RESERVED50;
+  __IOM uint32_t DOEPINT1;                      /*!< 0x00000B28 This register contains the interrupts for the OUT Endpoint 1 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED51;
-    __IOM uint32_t DOEPTSIZ1;                     /*!< 0x00000B30 This register contains the Transfer Size for the OUT Endpoint 1
+   __IM uint32_t RESERVED51;
+  __IOM uint32_t DOEPTSIZ1;                     /*!< 0x00000B30 This register contains the Transfer Size for the OUT Endpoint 1
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA1;                      /*!< 0x00000B34 This register contains the DMA Address for the OUT Endpoint 1
+  __IOM uint32_t DOEPDMA1;                      /*!< 0x00000B34 This register contains the DMA Address for the OUT Endpoint 1
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED52;
-    __IM uint32_t DOEPDMAB1;                     /*!< 0x00000B3C This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED52;
+   __IM uint32_t DOEPDMAB1;                     /*!< 0x00000B3C This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 1 of the Device controller. */
-    __IOM uint32_t DOEPCTL2;                      /*!< 0x00000B40 This register is used to control the characteristics of OUT
+  __IOM uint32_t DOEPCTL2;                      /*!< 0x00000B40 This register is used to control the characteristics of OUT
                                                                 Endpoint 2 of the Device controller. */
-    __IM uint32_t RESERVED53;
-    __IOM uint32_t DOEPINT2;                      /*!< 0x00000B48 This register contains the interrupts for the OUT Endpoint 2 of
+   __IM uint32_t RESERVED53;
+  __IOM uint32_t DOEPINT2;                      /*!< 0x00000B48 This register contains the interrupts for the OUT Endpoint 2 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED54;
-    __IOM uint32_t DOEPTSIZ2;                     /*!< 0x00000B50 This register contains the Transfer Size for the OUT Endpoint 2
+   __IM uint32_t RESERVED54;
+  __IOM uint32_t DOEPTSIZ2;                     /*!< 0x00000B50 This register contains the Transfer Size for the OUT Endpoint 2
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA2;                      /*!< 0x00000B54 This register contains the DMA Address for the OUT Endpoint 2
+  __IOM uint32_t DOEPDMA2;                      /*!< 0x00000B54 This register contains the DMA Address for the OUT Endpoint 2
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED55;
-    __IM uint32_t DOEPDMAB2;                     /*!< 0x00000B5C This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED55;
+   __IM uint32_t DOEPDMAB2;                     /*!< 0x00000B5C This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 2 of the Device controller. */
-    __IOM uint32_t DOEPCTL3;                      /*!< 0x00000B60 This register is used to control the characteristics of OUT
+  __IOM uint32_t DOEPCTL3;                      /*!< 0x00000B60 This register is used to control the characteristics of OUT
                                                                 Endpoint 3 of the Device controller. */
-    __IM uint32_t RESERVED56;
-    __IOM uint32_t DOEPINT3;                      /*!< 0x00000B68 This register contains the interrupts for the OUT Endpoint 3 of
+   __IM uint32_t RESERVED56;
+  __IOM uint32_t DOEPINT3;                      /*!< 0x00000B68 This register contains the interrupts for the OUT Endpoint 3 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED57;
-    __IOM uint32_t DOEPTSIZ3;                     /*!< 0x00000B70 This register contains the Transfer Size for the OUT Endpoint 3
+   __IM uint32_t RESERVED57;
+  __IOM uint32_t DOEPTSIZ3;                     /*!< 0x00000B70 This register contains the Transfer Size for the OUT Endpoint 3
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA3;                      /*!< 0x00000B74 This register contains the DMA Address for the OUT Endpoint 3
+  __IOM uint32_t DOEPDMA3;                      /*!< 0x00000B74 This register contains the DMA Address for the OUT Endpoint 3
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED58;
-    __IM uint32_t DOEPDMAB3;                     /*!< 0x00000B7C This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED58;
+   __IM uint32_t DOEPDMAB3;                     /*!< 0x00000B7C This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 3 of the Device controller. */
-    __IOM uint32_t DOEPCTL4;                      /*!< 0x00000B80 This register is used to control the characteristics of OUT
+  __IOM uint32_t DOEPCTL4;                      /*!< 0x00000B80 This register is used to control the characteristics of OUT
                                                                 Endpoint 4 of the Device controller. */
-    __IM uint32_t RESERVED59;
-    __IOM uint32_t DOEPINT4;                      /*!< 0x00000B88 This register contains the interrupts for the OUT Endpoint 4 of
+   __IM uint32_t RESERVED59;
+  __IOM uint32_t DOEPINT4;                      /*!< 0x00000B88 This register contains the interrupts for the OUT Endpoint 4 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED60;
-    __IOM uint32_t DOEPTSIZ4;                     /*!< 0x00000B90 This register contains the Transfer Size for the OUT Endpoint 4
+   __IM uint32_t RESERVED60;
+  __IOM uint32_t DOEPTSIZ4;                     /*!< 0x00000B90 This register contains the Transfer Size for the OUT Endpoint 4
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA4;                      /*!< 0x00000B94 This register contains the DMA Address for the OUT Endpoint 4
+  __IOM uint32_t DOEPDMA4;                      /*!< 0x00000B94 This register contains the DMA Address for the OUT Endpoint 4
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED61;
-    __IM uint32_t DOEPDMAB4;                     /*!< 0x00000B9C This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED61;
+   __IM uint32_t DOEPDMAB4;                     /*!< 0x00000B9C This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 4 of the Device controller. */
-    __IOM uint32_t DOEPCTL5;                      /*!< 0x00000BA0 This register is used to control the characteristics of OUT
+  __IOM uint32_t DOEPCTL5;                      /*!< 0x00000BA0 This register is used to control the characteristics of OUT
                                                                 Endpoint 5 of the Device controller. */
-    __IM uint32_t RESERVED62;
-    __IOM uint32_t DOEPINT5;                      /*!< 0x00000BA8 This register contains the interrupts for the OUT Endpoint 5 of
+   __IM uint32_t RESERVED62;
+  __IOM uint32_t DOEPINT5;                      /*!< 0x00000BA8 This register contains the interrupts for the OUT Endpoint 5 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED63;
-    __IOM uint32_t DOEPTSIZ5;                     /*!< 0x00000BB0 This register contains the Transfer Size for the OUT Endpoint 5
+   __IM uint32_t RESERVED63;
+  __IOM uint32_t DOEPTSIZ5;                     /*!< 0x00000BB0 This register contains the Transfer Size for the OUT Endpoint 5
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA5;                      /*!< 0x00000BB4 This register contains the DMA Address for the OUT Endpoint 5
+  __IOM uint32_t DOEPDMA5;                      /*!< 0x00000BB4 This register contains the DMA Address for the OUT Endpoint 5
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED64;
-    __IM uint32_t DOEPDMAB5;                     /*!< 0x00000BBC This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED64;
+   __IM uint32_t DOEPDMAB5;                     /*!< 0x00000BBC This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 5 of the Device controller. */
-    __IOM uint32_t DOEPCTL6;                      /*!< 0x00000BC0 This register is used to control the characteristics of OUT
+  __IOM uint32_t DOEPCTL6;                      /*!< 0x00000BC0 This register is used to control the characteristics of OUT
                                                                 Endpoint 6 of the Device controller. */
-    __IM uint32_t RESERVED65;
-    __IOM uint32_t DOEPINT6;                      /*!< 0x00000BC8 This register contains the interrupts for the OUT Endpoint 6 of
+   __IM uint32_t RESERVED65;
+  __IOM uint32_t DOEPINT6;                      /*!< 0x00000BC8 This register contains the interrupts for the OUT Endpoint 6 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED66;
-    __IOM uint32_t DOEPTSIZ6;                     /*!< 0x00000BD0 This register contains the Transfer Size for the OUT Endpoint 6
+   __IM uint32_t RESERVED66;
+  __IOM uint32_t DOEPTSIZ6;                     /*!< 0x00000BD0 This register contains the Transfer Size for the OUT Endpoint 6
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA6;                      /*!< 0x00000BD4 This register contains the DMA Address for the OUT Endpoint 6
+  __IOM uint32_t DOEPDMA6;                      /*!< 0x00000BD4 This register contains the DMA Address for the OUT Endpoint 6
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED67;
-    __IM uint32_t DOEPDMAB6;                     /*!< 0x00000BDC This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED67;
+   __IM uint32_t DOEPDMAB6;                     /*!< 0x00000BDC This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 6 of the Device controller. */
-    __IOM uint32_t DOEPCTL7;                      /*!< 0x00000BE0 This register is used to control the characteristics of OUT
+  __IOM uint32_t DOEPCTL7;                      /*!< 0x00000BE0 This register is used to control the characteristics of OUT
                                                                 Endpoint 7 of the Device controller. */
-    __IM uint32_t RESERVED68;
-    __IOM uint32_t DOEPINT7;                      /*!< 0x00000BE8 This register contains the interrupts for the OUT Endpoint 7 of
+   __IM uint32_t RESERVED68;
+  __IOM uint32_t DOEPINT7;                      /*!< 0x00000BE8 This register contains the interrupts for the OUT Endpoint 7 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED69;
-    __IOM uint32_t DOEPTSIZ7;                     /*!< 0x00000BF0 This register contains the Transfer Size for the OUT Endpoint 7
+   __IM uint32_t RESERVED69;
+  __IOM uint32_t DOEPTSIZ7;                     /*!< 0x00000BF0 This register contains the Transfer Size for the OUT Endpoint 7
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA7;                      /*!< 0x00000BF4 This register contains the DMA Address for the OUT Endpoint 7
+  __IOM uint32_t DOEPDMA7;                      /*!< 0x00000BF4 This register contains the DMA Address for the OUT Endpoint 7
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED70;
-    __IM uint32_t DOEPDMAB7;                     /*!< 0x00000BFC This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED70;
+   __IM uint32_t DOEPDMAB7;                     /*!< 0x00000BFC This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 7 of the Device controller. */
-    __IOM uint32_t DOEPCTL8;                      /*!< 0x00000C00 This register is used to control the characteristics of OUT
+  __IOM uint32_t DOEPCTL8;                      /*!< 0x00000C00 This register is used to control the characteristics of OUT
                                                                 Endpoint 8 of the Device controller. */
-    __IM uint32_t RESERVED71;
-    __IOM uint32_t DOEPINT8;                      /*!< 0x00000C08 This register contains the interrupts for the OUT Endpoint 8 of
+   __IM uint32_t RESERVED71;
+  __IOM uint32_t DOEPINT8;                      /*!< 0x00000C08 This register contains the interrupts for the OUT Endpoint 8 of
                                                                 the Device controller. */
-    __IM uint32_t RESERVED72;
-    __IOM uint32_t DOEPTSIZ8;                     /*!< 0x00000C10 This register contains the Transfer Size for the OUT Endpoint 8
+   __IM uint32_t RESERVED72;
+  __IOM uint32_t DOEPTSIZ8;                     /*!< 0x00000C10 This register contains the Transfer Size for the OUT Endpoint 8
                                                                 of the Device controller. */
-    __IOM uint32_t DOEPDMA8;                      /*!< 0x00000C14 This register contains the DMA Address for the OUT Endpoint 8
+  __IOM uint32_t DOEPDMA8;                      /*!< 0x00000C14 This register contains the DMA Address for the OUT Endpoint 8
                                                                 of the Device controller. */
-    __IM uint32_t RESERVED73;
-    __IM uint32_t DOEPDMAB8;                     /*!< 0x00000C1C This register contains the DMA Buffer Address for the OUT
+   __IM uint32_t RESERVED73;
+   __IM uint32_t DOEPDMAB8;                     /*!< 0x00000C1C This register contains the DMA Buffer Address for the OUT
                                                                 Endpoint 8 of the Device controller. */
-    __IM uint32_t RESERVED74[120];
-    __IOM uint32_t PCGCCTL;                       /*!< 0x00000E00 This register is used to control the Power and Clock Gating
+   __IM uint32_t RESERVED74[120];
+  __IOM uint32_t PCGCCTL;                       /*!< 0x00000E00 This register is used to control the Power and Clock Gating
                                                                 characteristics of the controller. */
-    __IOM uint32_t PCGCCTL1;                      /*!< 0x00000E04 This register is used to control the Power and Clock Gating
+  __IOM uint32_t PCGCCTL1;                      /*!< 0x00000E04 This register is used to control the Power and Clock Gating
                                                                 characteristics of the controller. */
-    __IM uint32_t RESERVED75[62];
+   __IM uint32_t RESERVED75[62];
 } USBHS_DWC_OTG_INTREG_Type;                    /*!< Size = 3840 (0xF00) */
 
 /**
   * \brief USBHS Subsystem, Controller, PHY control,configuration and status registers (USBHS_SS)
   */
-typedef struct
-{
-    __IOM uint32_t SUBSYSTEM_CTL;                 /*!< 0x00000000 Subsystem level control register */
-    __IOM uint32_t PHY_FUNC_CTL_1;                /*!< 0x00000004 Subsystem level- PHY functional mode control register 1 */
-    __IOM uint32_t PHY_FUNC_CTL_2;                /*!< 0x00000008 Subsystem level- PHY functional mode control register 2 */
-    __IOM uint32_t PHY_TEST_CTL;                  /*!< 0x0000000C Subsystem level- PHY test mode control register */
-    __IOM uint32_t CONTROLLER_DDFT_CTL;           /*!< 0x00000010 Subsystem level- Controller DDFT control register */
-    __IOM uint32_t INTR_SS;                       /*!< 0x00000014 Subsystem level- Interrupt register */
-    __IOM uint32_t INTR_SS_SET;                   /*!< 0x00000018 Subsystem level- Interrupt set register */
-    __IOM uint32_t INTR_SS_MASK;                  /*!< 0x0000001C Subsystem level- Interrupt mask register */
-    __IM uint32_t INTR_SS_MASKED;                /*!< 0x00000020 Subsystem level- Interrupt masked register */
-    __IM uint32_t RESERVED[55];
+typedef struct {
+  __IOM uint32_t SUBSYSTEM_CTL;                 /*!< 0x00000000 Subsystem level control register */
+  __IOM uint32_t PHY_FUNC_CTL_1;                /*!< 0x00000004 Subsystem level- PHY functional mode control register 1 */
+  __IOM uint32_t PHY_FUNC_CTL_2;                /*!< 0x00000008 Subsystem level- PHY functional mode control register 2 */
+  __IOM uint32_t PHY_TEST_CTL;                  /*!< 0x0000000C Subsystem level- PHY test mode control register */
+  __IOM uint32_t CONTROLLER_DDFT_CTL;           /*!< 0x00000010 Subsystem level- Controller DDFT control register */
+  __IOM uint32_t INTR_SS;                       /*!< 0x00000014 Subsystem level- Interrupt register */
+  __IOM uint32_t INTR_SS_SET;                   /*!< 0x00000018 Subsystem level- Interrupt set register */
+  __IOM uint32_t INTR_SS_MASK;                  /*!< 0x0000001C Subsystem level- Interrupt mask register */
+   __IM uint32_t INTR_SS_MASKED;                /*!< 0x00000020 Subsystem level- Interrupt masked register */
+   __IM uint32_t RESERVED[55];
 } USBHS_SS_Type;                                /*!< Size = 256 (0x100) */
 
 /**
   * \brief Regmap for both Subsystem and Controller IP (USBHS)
   */
-typedef struct
-{
-    USBHS_DWC_OTG_INTREG_Type DWC_OTG_INTREG; /*!< 0x00000000 Internal register map */
-    __IM uint32_t RESERVED[64576];
-    USBHS_SS_Type SS;                       /*!< 0x00040000 USBHS Subsystem, Controller, PHY control,configuration and
+typedef struct {
+        USBHS_DWC_OTG_INTREG_Type DWC_OTG_INTREG; /*!< 0x00000000 Internal register map */
+   __IM uint32_t RESERVED[64576];
+        USBHS_SS_Type SS;                       /*!< 0x00040000 USBHS Subsystem, Controller, PHY control,configuration and
                                                                 status registers */
 } USBHS_Type;                                   /*!< Size = 262400 (0x40100) */
 

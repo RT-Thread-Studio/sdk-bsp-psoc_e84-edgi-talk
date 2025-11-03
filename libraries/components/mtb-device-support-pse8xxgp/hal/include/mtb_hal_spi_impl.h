@@ -62,7 +62,7 @@ extern "C" {
  * @return The status of the init request
  */
 cy_rslt_t mtb_hal_spi_setup(mtb_hal_spi_t* obj, const mtb_hal_spi_configurator_t* config,
-                            cy_stc_scb_spi_context_t *context, const mtb_hal_clock_t *clock);
+                            cy_stc_scb_spi_context_t* context, const mtb_hal_clock_t* clock);
 
 
 /** Checks if the specified SPI peripheral is in use
@@ -80,8 +80,8 @@ __STATIC_INLINE bool mtb_hal_spi_is_busy(mtb_hal_spi_t* obj)
 // mtb_hal_spi_set_fifo_level_internal
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE cy_rslt_t mtb_hal_spi_set_fifo_level_internal(mtb_hal_spi_t* obj,
-        mtb_hal_spi_fifo_type_t type,
-        uint16_t level)
+                                                              mtb_hal_spi_fifo_type_t type,
+                                                              uint16_t level)
 {
     if (type == MTB_HAL_SPI_FIFO_RX)
     {

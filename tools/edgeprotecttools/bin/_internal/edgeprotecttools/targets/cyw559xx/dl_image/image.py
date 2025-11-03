@@ -80,9 +80,31 @@ class DlImage:
     @property
     def cert_address(self) -> int:
         """Gets the certificates start address"""
-        cert_data = self.data[self.ds.address + self.ds.size:]
-        address = min(cert_data.addresses(), default=None)
-        return address
+        return min(self.cert_data.addresses(), default=None)
+
+    @cert_address.setter
+    def cert_address(self, new_address: int):
+        """Sets the certificates start address by relocating all
+        certificate data
+        """
+        current_cert_data = self.cert_data
+        current_cert_address = self.cert_address
+        offset = new_address - current_cert_address
+        if offset == 0:
+            return
+
+        # Create new IntelHex with relocated certificate data
+        relocated_cert_data = IntelHex()
+        for addr in current_cert_data.addresses():
+            relocated_cert_data[addr + offset] = current_cert_data[addr]
+
+        # Remove old certificate data from main data
+        for addr in current_cert_data.addresses():
+            del self.data[addr]
+
+        # Add relocated certificate data to main data
+        for addr in relocated_cert_data.addresses():
+            self.data[addr] = relocated_cert_data[addr]
 
     @property
     def cert_data(self) -> IntelHex:

@@ -29,15 +29,15 @@
 #include "mtb_syspm_callbacks_hw_resources.h"
 
 #if defined(MTB_SYSPM_CALLBACKS_AVAILABLE_DMA_DW)
-    #include "mtb_syspm_callbacks_dma_dw.h"
+#include "mtb_syspm_callbacks_dma_dw.h"
 #endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_DMA_DW)
 
 #if defined(MTB_SYSPM_CALLBACKS_AVAILABLE_DMA_DMAC)
-    #if ((CY_IP_MXSAXIDMAC_INSTANCES) > 0)
-        #include "mtb_syspm_callbacks_dma_axidmac.h"
-    #else
-        #include "mtb_syspm_callbacks_dma_dmac.h"
-    #endif // ((CY_IP_MXSAXIDMAC_INSTANCES) > 0)
+#if ((CY_IP_MXSAXIDMAC_INSTANCES) > 0)
+#include "mtb_syspm_callbacks_dma_axidmac.h"
+#else
+#include "mtb_syspm_callbacks_dma_dmac.h"
+#endif // ((CY_IP_MXSAXIDMAC_INSTANCES) > 0)
 #endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_DMA_DMAC)
 
 #if defined(__cplusplus)
@@ -48,7 +48,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 2, \
                              'Rule requires const attributes for inputs but signature for following APIs needs to match requested one in PDL');
 
 /**
- * \addtogroup group_DMA DMA Deep Sleep Callback
+ * \addtogroup mtb_syspm_group_DMA DMA Deep Sleep Callback
  * \{
  * Implementation of the DMA Deep Sleep callbacks
  */
@@ -68,7 +68,7 @@ typedef struct
  * @return Returns CY_SYSPM_SUCCESS if successful, an error code otherwise
  */
 cy_en_syspm_status_t mtb_syspm_dma_dw_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode);
 #endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_DMA_DW)
 
@@ -81,7 +81,7 @@ cy_en_syspm_status_t mtb_syspm_dma_dw_deepsleep_callback(
  * @return Returns CY_SYSPM_SUCCESS if successful, an error code otherwise
  */
 cy_en_syspm_status_t mtb_syspm_dma_dmac_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode);
 
 #endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_DMA_DMAC)
@@ -90,5 +90,5 @@ cy_en_syspm_status_t mtb_syspm_dma_dmac_deepsleep_callback(
 }
 #endif
 
-/** \} group_dma */
+/** \} mtb_syspm_group_dma */
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.13');

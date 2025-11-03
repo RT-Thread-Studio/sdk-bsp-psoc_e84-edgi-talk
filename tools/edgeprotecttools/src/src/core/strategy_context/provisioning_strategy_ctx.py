@@ -83,7 +83,7 @@ class ProvisioningContext:
         """
         Delegates work to the Strategy object.
         """
-        self._strategy.erase_flash(tool, target)
+        return self._strategy.erase_flash(tool, target)
 
     def transit_to_rma(self, tool, target, cert, **kwargs):
         """

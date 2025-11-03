@@ -1,74 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Woundings xml_version="1" xmlns="http://cypress.com/xsd/cychipresourcewoundings_v1">
-  <MemoryWounding name="RRAM_KB" memoryId="RRAM"/>
-  <MemoryWounding name="SRAM_KB" memoryId="SRAM"/>
-  <MemoryWounding name="SOCMEM_KB" memoryId="SOCMEM_RAM"/>
-  
+  <MemoryWounding name="RRAM_KB" memoryId="RRAM" />
+  <MemoryWounding name="DCDRAM_KB" memoryId="DCDRAM" />
+  <MemoryWounding name="SRAM_KB" memoryId="SRAM" />
+  <MemoryWounding name="SOCMEM_KB" memoryId="SOCMEM_RAM" />
+  <BooleanWounding name="CAMERA">
+    <Block name="ispss" />
+  </BooleanWounding>
   <BooleanWounding name="CAN_FD">
-    <Block name="canfd.chan"/>
+    <Block name="canfd.chan" />
   </BooleanWounding>
   <BooleanWounding name="CRYPTO">
-    <Block name="mxcrypto"/>
-    <Block name="mxcryptolite"/>
+    <Block name="crypto" />
   </BooleanWounding>
   <BooleanWounding name="DIRDRIVELCD">
-    <Block name="lcd"/>
+    <Block name="lcd" />
   </BooleanWounding>
   <BooleanWounding name="GFX">
-    <Block name="gfxss"/>
+    <Block name="gfxss" />
   </BooleanWounding>
   <BooleanWounding name="U55">
-    <Block name="mxu55"/>
+    <Block name="mxu55" />
   </BooleanWounding>
-
+  <BooleanWounding name="U85">
+    <Block name="mxu85" />
+  </BooleanWounding>
   <NaWounding name="USB_TYPE">
-    <Block name="usb"/>
-    <Block name="usbhs"/>
+    <Block name="usb" />
+    <Block name="usbhs" />
   </NaWounding>
-
   <NaWounding name="BLUETOOTH">
-    <Block name="btss"/>
-    <Block name="srss.clock.althf"/>
+    <Block name="btss" />
+    <Block name="srss.clock.althf" />
   </NaWounding>
-
   <RemoveListWounding name="DAC12_REMOVED">
-    <Block name="pass.dac"/>
+    <Block name="pass.dac" />
   </RemoveListWounding>
   <RemoveListWounding name="ETH_REMOVED">
-    <Block name="eth"/>
+    <Block name="eth" />
   </RemoveListWounding>
-  <!-- TODO: enable once mxtdm_v3.cydatasrc is updated with Block type="ch"
-  <RemoveListWounding name="I2S_REMOVED">
-    <Block name="tdm.ch"/>
-  </RemoveListWounding>
-  -->
   <RemoveListWounding name="I3C_REMOVED">
-    <Block name="i3c"/>
+    <Block name="i3c" />
   </RemoveListWounding>
   <RemoveListWounding name="LIN_REMOVED">
-    <Block name="lin"/>
+    <Block name="lin" />
   </RemoveListWounding>
   <RemoveListWounding name="LPCOMP_REMOVED">
-    <Block name="lpcomp.comp"/>
+    <Block name="lpcomp.comp" />
   </RemoveListWounding>
-  <!-- TODO: enable once mxpdm_v1.cydatasrc is updated with Block type="ch"
+  <RemoveListWounding name="I2S_REMOVED">
+    <Block name="tdm.tdm" />
+  </RemoveListWounding>
   <RemoveListWounding name="PDM_REMOVED">
-    <Block name="pdm.ch"/>
+    <Block name="pdm.rx_struct" />
+    <Block name="pdm.tx_struct" />
   </RemoveListWounding>
-  -->
   <RemoveListWounding name="SAR12_REMOVED">
-    <Block name="pass.sar"/>
+    <Block name="pass.sar" />
   </RemoveListWounding>
   <RemoveListWounding name="SCB_REMOVED">
-    <Block name="scb"/>
+    <Block name="scb" />
   </RemoveListWounding>
   <RemoveListWounding name="SDHC_REMOVED">
-    <Block name="sdhc"/>
+    <Block name="sdhc" />
   </RemoveListWounding>
   <RemoveListWounding name="TIMERCOUNTERPWM_REMOVED">
-    <Block name="tcpwm.group.cnt"/>
+    <Block name="tcpwm.group.cnt" />
   </RemoveListWounding>
-
   <IndexResourceWounding name="SMIF_REMOVED">
     <ResourceIndex index="0">
       <Block name="smif[0].core[0]" />

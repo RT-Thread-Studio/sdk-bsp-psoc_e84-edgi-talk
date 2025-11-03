@@ -46,7 +46,6 @@
   @param[in]     mu         step size that controls filter coefficient updates.
   @param[in]     blockSize  number of samples to process.
   @param[in]     postShift  bit shift applied to coefficients.
-  @return        none
 
   @par           Details
                    <code>pCoeffs</code> points to the array of filter coefficients stored in time reversed order:
@@ -59,32 +58,32 @@
                    input samples processed by each call to <code>arm_lms_q15()</code>.
  */
 
-void arm_lms_init_q15(
-    arm_lms_instance_q15 * S,
-    uint16_t numTaps,
-    q15_t * pCoeffs,
-    q15_t * pState,
-    q15_t mu,
-    uint32_t blockSize,
-    uint32_t postShift)
+ARM_DSP_ATTRIBUTE void arm_lms_init_q15(
+  arm_lms_instance_q15 * S,
+  uint16_t numTaps,
+  q15_t * pCoeffs,
+  q15_t * pState,
+  q15_t mu,
+  uint32_t blockSize,
+  uint32_t postShift)
 {
-    /* Assign filter taps */
-    S->numTaps = numTaps;
+  /* Assign filter taps */
+  S->numTaps = numTaps;
 
-    /* Assign coefficient pointer */
-    S->pCoeffs = pCoeffs;
+  /* Assign coefficient pointer */
+  S->pCoeffs = pCoeffs;
 
-    /* Clear state buffer and size is always blockSize + numTaps - 1 */
-    memset(pState, 0, (numTaps + (blockSize - 1U)) * sizeof(q15_t));
+  /* Clear state buffer and size is always blockSize + numTaps - 1 */
+  memset(pState, 0, (numTaps + (blockSize - 1U)) * sizeof(q15_t));
 
-    /* Assign state pointer */
-    S->pState = pState;
+  /* Assign state pointer */
+  S->pState = pState;
 
-    /* Assign Step size value */
-    S->mu = mu;
+  /* Assign Step size value */
+  S->mu = mu;
 
-    /* Assign postShift value to be applied */
-    S->postShift = postShift;
+  /* Assign postShift value to be applied */
+  S->postShift = postShift;
 }
 
 /**

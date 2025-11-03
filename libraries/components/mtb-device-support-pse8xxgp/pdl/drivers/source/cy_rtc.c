@@ -29,9 +29,10 @@
 #if defined (CY_IP_MXS40SRSS_RTC) || defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS)
 
 #include "cy_rtc.h"
+#include "mtb_srf.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 2.2', 3, \
-                             'The unused code due to weak implementation can be overwritten further and then interrupt handler can call it.')
+'The unused code due to weak implementation can be overwritten further and then interrupt handler can call it.')
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -43,6 +44,105 @@ extern "C" {
 #define CONVERT_BCD_TO_DEC(bcdNum) Cy_RTC_ConvertBcdToDec(bcdNum)
 #define CONVERT_DEC_TO_BCD(decNum) Cy_RTC_ConvertDecToBcd(decNum)
 #endif /* CY_IP_MXS40SRSS_RTC, CY_IP_MXS28SRSS, CY_IP_MXS40SSRSS, CY_IP_MXS22SRSS*/
+
+/*******************************************************************************
+*    Secure Aware Support
+*******************************************************************************/
+#if defined(COMPONENT_SECURE_DEVICE) && defined(CY_PDL_RTC_ENABLE_SRF_INTEG)
+
+__WEAK mtb_srf_permission_s_t cy_pdl_rtc_srf_permissions[] =
+{
+    {
+        .base = NULL,
+        .sub_block = 0UL,
+        .write_allowed = false,
+    },
+};
+
+cy_rslt_t cy_pdl_rtc_srf_get_datetime_impl_s(mtb_srf_input_ns_t* inputs_ns,
+                                             mtb_srf_output_ns_t* outputs_ns,
+                                             mtb_srf_invec_ns_t* inputs_ptr_ns,
+                                             uint8_t inputs_ptr_cnt_ns,
+                                             mtb_srf_outvec_ns_t* outputs_ptr_ns,
+                                             uint8_t outputs_ptr_cnt_ns)
+{
+    CY_UNUSED_PARAMETER(inputs_ns);
+    CY_UNUSED_PARAMETER(outputs_ns);
+    CY_UNUSED_PARAMETER(inputs_ptr_ns);
+    CY_UNUSED_PARAMETER(inputs_ptr_cnt_ns);
+    CY_UNUSED_PARAMETER(outputs_ptr_cnt_ns);
+
+    CY_ASSERT_L2((inputs_ns->request).module_id == MTB_SRF_MODULE_PDL);
+    CY_ASSERT_L2((inputs_ns->request).op_id == CY_PDL_RTC_OP_GET_DATETIME);
+    CY_ASSERT_L2((inputs_ns->request).submodule_id == CY_PDL_SECURE_SUBMODULE_RTC);
+
+    CY_ASSERT_L2(outputs_ptr_cnt_ns >= 1);
+    CY_ASSERT_L2(outputs_ptr_ns[0].len >= sizeof(cy_stc_rtc_config_t));
+
+    Cy_RTC_GetDateAndTime((cy_stc_rtc_config_t*)(outputs_ptr_ns[0].base));
+
+    return (cy_rslt_t)CY_RTC_SUCCESS;
+}
+
+cy_rslt_t cy_pdl_rtc_srf_get_hr_format_impl_s(mtb_srf_input_ns_t* inputs_ns,
+                                              mtb_srf_output_ns_t* outputs_ns,
+                                              mtb_srf_invec_ns_t* inputs_ptr_ns,
+                                              uint8_t inputs_ptr_cnt_ns,
+                                              mtb_srf_outvec_ns_t* outputs_ptr_ns,
+                                              uint8_t outputs_ptr_cnt_ns)
+{
+    CY_UNUSED_PARAMETER(inputs_ns);
+    CY_UNUSED_PARAMETER(inputs_ptr_ns);
+    CY_UNUSED_PARAMETER(inputs_ptr_cnt_ns);
+    CY_UNUSED_PARAMETER(outputs_ptr_ns);
+    CY_UNUSED_PARAMETER(outputs_ptr_cnt_ns);
+
+    CY_ASSERT_L2((inputs_ns->request).module_id == MTB_SRF_MODULE_PDL);
+    CY_ASSERT_L2((inputs_ns->request).op_id == CY_PDL_RTC_OP_GET_HR_FORMAT);
+    CY_ASSERT_L2((inputs_ns->request).submodule_id == CY_PDL_SECURE_SUBMODULE_RTC);
+
+    cy_rslt_t status;
+    cy_pdl_rtc_srf_get_hr_format_out_t output;
+    output.hrs_format = Cy_RTC_GetHoursFormat();
+    status = mtb_srf_copy_output_value(outputs_ns, &output, sizeof(output));
+
+    return status;
+}
+
+/* All operations for the RTC submodule of the PDL module */
+mtb_srf_op_s_t _cy_pdl_rtc_srf_operations[] =
+{
+    {
+        .module_id = MTB_SRF_MODULE_PDL,
+        .submodule_id = CY_PDL_SECURE_SUBMODULE_RTC,
+        .op_id = CY_PDL_RTC_OP_GET_DATETIME,
+        .write_required = false,
+        .impl = cy_pdl_rtc_srf_get_datetime_impl_s,
+        .input_values_len = 0U,
+        .output_values_len = 0U,
+        .input_len = {0, 0, 0},
+        .needs_copy = {false, false, false},
+        .output_len = {sizeof(cy_stc_rtc_config_t), 0, 0},
+        .allowed_rsc = cy_pdl_rtc_srf_permissions,
+        .num_allowed = 1UL
+    },
+    {
+        .module_id = MTB_SRF_MODULE_PDL,
+        .submodule_id = CY_PDL_SECURE_SUBMODULE_RTC,
+        .op_id = CY_PDL_RTC_OP_GET_HR_FORMAT,
+        .write_required = false,
+        .impl = cy_pdl_rtc_srf_get_hr_format_impl_s,
+        .input_values_len = 0U,
+        .output_values_len = sizeof(cy_pdl_rtc_srf_get_hr_format_out_t),
+        .input_len = {0, 0, 0},
+        .needs_copy = {false, false, false},
+        .output_len = {0, 0, 0},
+        .allowed_rsc = cy_pdl_rtc_srf_permissions,
+        .num_allowed = 1UL
+    },
+};
+
+#endif /* defined(COMPONENT_SECURE_DEVICE) && defined(CY_PDL_RTC_ENABLE_SRF_INTEG) */
 
 /** RTC days in months table */
 uint8_t const cy_RTC_daysInMonthTbl[CY_RTC_MONTHS_PER_YEAR] = {CY_RTC_DAYS_IN_JANUARY,
@@ -56,13 +156,12 @@ uint8_t const cy_RTC_daysInMonthTbl[CY_RTC_MONTHS_PER_YEAR] = {CY_RTC_DAYS_IN_JA
                                                                CY_RTC_DAYS_IN_SEPTEMBER,
                                                                CY_RTC_DAYS_IN_OCTOBER,
                                                                CY_RTC_DAYS_IN_NOVEMBER,
-                                                               CY_RTC_DAYS_IN_DECEMBER
-                                                              };
+                                                               CY_RTC_DAYS_IN_DECEMBER};
 
 /* Static functions */
 static void ConstructTimeDate(cy_stc_rtc_config_t const *timeDate, uint32_t *timeBcd, uint32_t *dateBcd);
 static void ConstructAlarmTimeDate(cy_stc_rtc_alarm_t const *alarmDateTime, uint32_t *alarmTimeBcd,
-                                   uint32_t *alarmDateBcd);
+                                                                                   uint32_t *alarmDateBcd);
 static uint32_t RelativeToFixed(cy_stc_rtc_dst_format_t const *convertDst);
 
 
@@ -82,7 +181,7 @@ static uint32_t RelativeToFixed(cy_stc_rtc_dst_format_t const *convertDst);
 *******************************************************************************/
 cy_en_rtc_status_t Cy_RTC_Init(cy_stc_rtc_config_t const *config)
 {
-    return (Cy_RTC_SetDateAndTime(config));
+    return(Cy_RTC_SetDateAndTime(config));
 }
 
 
@@ -129,7 +228,7 @@ cy_en_rtc_status_t Cy_RTC_SetDateAndTime(cy_stc_rtc_config_t const *dateTime)
         CY_ASSERT_L3(CY_RTC_IS_MONTH_VALID(dateTime->month));
         CY_ASSERT_L3(CY_RTC_IS_YEAR_SHORT_VALID(dateTime->year));
         CY_ASSERT_L3(CY_RTC_IS_DATE_VALID(dateTime->date, tmpDaysInMonth));
-//        CY_ASSERT_L3(CY_RTC_IS_WEEK_DAY_VALID(dateTime->dayOfWeek, Cy_RTC_ConvertDayOfWeek(dateTime->date, dateTime->month, (dateTime->year + CY_RTC_TWO_THOUSAND_YEARS))));
+        CY_ASSERT_L3(CY_RTC_IS_WEEK_DAY_VALID(dateTime->dayOfWeek, Cy_RTC_ConvertDayOfWeek(dateTime->date, dateTime->month, (dateTime->year + CY_RTC_TWO_THOUSAND_YEARS))));
 
         if ((dateTime->date > 0U) && (dateTime->date <= tmpDaysInMonth))
         {
@@ -152,7 +251,7 @@ cy_en_rtc_status_t Cy_RTC_SetDateAndTime(cy_stc_rtc_config_t const *dateTime)
             Cy_SysLib_ExitCriticalSection(interruptState);
         }
     }
-    return (retVal);
+    return(retVal);
 }
 
 
@@ -163,12 +262,58 @@ cy_en_rtc_status_t Cy_RTC_SetDateAndTime(cy_stc_rtc_config_t const *dateTime)
 * Gets the current RTC time and date. The AHB RTC Time and Date register values
 * are stored into the *dateTime structure.
 *
+* \note This API is Secure Aware. On devices with ARM TrustZone enabled, it is safe
+* to call on a Secure hardware resource from a Non-Secure CPU state.
+* The involved PPC region is PROT_PERI0_RTC_BACKUP.
+* See \ref group_rtc_section_secure_aware for further details.
+*
+* \note Ensure that dataTime argument is DCache aligned when calling from a
+* non-secured Core onto a secured hardware resource.  This is only relevent for
+* cross-core calls, not calls between security contexts on the same core.
+*
 * \param dateTime
 * The RTC time and date structure. See \ref group_rtc_data_structures.
 *
 *******************************************************************************/
 void   Cy_RTC_GetDateAndTime(cy_stc_rtc_config_t* dateTime)
 {
+#if !defined(COMPONENT_SECURE_DEVICE) && defined(CY_PDL_RTC_ENABLE_SRF_INTEG)
+    mtb_srf_invec_ns_t* inVec = NULL;
+    mtb_srf_outvec_ns_t* outVec = NULL;
+    mtb_srf_output_ns_t* output = NULL;
+
+    cy_rslt_t result = mtb_srf_pool_allocate(&cy_pdl_srf_default_pool, &inVec, &outVec, CY_PDL_RTC_SRF_POOL_TIMEOUT);
+    CY_ASSERT_L2(result == CY_RSLT_SUCCESS);
+
+    void* outvec_bases[] = {dateTime, NULL};
+    size_t outvec_sizes[] = {sizeof(cy_stc_rtc_config_t), 0U};
+    cy_pdl_invoke_srf_args invoke_args =
+    {
+        .inVec = inVec,
+        .outVec = outVec,
+        .output_ptr = &output,
+        .op_id = CY_PDL_RTC_OP_GET_DATETIME,
+        .submodule_id = CY_PDL_SECURE_SUBMODULE_RTC,
+        .base = NULL,
+        .sub_block = 0UL,
+        .input_base = NULL,
+        .input_len = 0UL,
+        .output_base = NULL,
+        .output_len = 0UL,
+        .invec_bases = NULL,
+        .invec_sizes = 0UL,
+        .outvec_bases = outvec_bases,
+        .outvec_sizes = outvec_sizes
+    };
+    result = _Cy_PDL_Invoke_SRF(&invoke_args);
+    CY_ASSERT_L2(result == CY_RSLT_SUCCESS);
+
+    // No result unpacking required as we passed in dateTime as a pointer
+
+    result = mtb_srf_pool_free(&cy_pdl_srf_default_pool, inVec, outVec);
+    CY_ASSERT_L2(result == CY_RSLT_SUCCESS);
+    CY_UNUSED_PARAMETER(result);
+#else
     uint32_t tmpTime;
     uint32_t tmpDate;
 
@@ -195,7 +340,7 @@ void   Cy_RTC_GetDateAndTime(cy_stc_rtc_config_t* dateTime)
     if (dateTime->hrFormat != CY_RTC_24_HOURS)
     {
         dateTime->hour =
-            CONVERT_BCD_TO_DEC((tmpTime & CY_RTC_BACKUP_RTC_TIME_RTC_12HOUR) >> BACKUP_RTC_TIME_RTC_HOUR_Pos);
+        CONVERT_BCD_TO_DEC((tmpTime & CY_RTC_BACKUP_RTC_TIME_RTC_12HOUR) >> BACKUP_RTC_TIME_RTC_HOUR_Pos);
         dateTime->amPm = ((0U != (tmpTime & CY_RTC_BACKUP_RTC_TIME_RTC_PM)) ? CY_RTC_PM : CY_RTC_AM);
     }
     else
@@ -208,6 +353,7 @@ void   Cy_RTC_GetDateAndTime(cy_stc_rtc_config_t* dateTime)
     dateTime->date  = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_RTC_DATE_RTC_DATE, tmpDate));
     dateTime->month = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_RTC_DATE_RTC_MON, tmpDate));
     dateTime->year  = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_RTC_DATE_RTC_YEAR, tmpDate));
+#endif
 }
 
 
@@ -302,7 +448,7 @@ cy_en_rtc_status_t Cy_RTC_SetAlarmDateAndTime(cy_stc_rtc_alarm_t const *alarmDat
         Cy_SysLib_ExitCriticalSection(interruptState);
     }
 
-    return (retVal);
+    return(retVal);
 }
 
 
@@ -344,10 +490,10 @@ void   Cy_RTC_GetAlarmDateAndTime(cy_stc_rtc_alarm_t *alarmDateTime, cy_en_rtc_a
 
         alarmDateTime->sec   = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM1_TIME_ALM_SEC, tmpAlarmTime));
         alarmDateTime->secEn =
-            ((_FLD2BOOL(BACKUP_ALM1_TIME_ALM_SEC_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM1_TIME_ALM_SEC_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
         alarmDateTime->min   = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM1_TIME_ALM_MIN, tmpAlarmTime));
         alarmDateTime->minEn =
-            ((_FLD2BOOL(BACKUP_ALM1_TIME_ALM_MIN_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM1_TIME_ALM_MIN_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         /* Read the current hour mode to know how many hour bits to convert.
         *  In the 24-hour mode, the hour value is presented in [21:16] bits in
@@ -358,22 +504,22 @@ void   Cy_RTC_GetAlarmDateAndTime(cy_stc_rtc_alarm_t *alarmDateTime, cy_en_rtc_a
         if (curHoursFormat != CY_RTC_24_HOURS)
         {
             alarmDateTime->hour =
-                CONVERT_BCD_TO_DEC((tmpAlarmTime & CY_RTC_BACKUP_RTC_TIME_RTC_12HOUR)
-                                   >> BACKUP_ALM1_TIME_ALM_HOUR_Pos);
+            CONVERT_BCD_TO_DEC((tmpAlarmTime & CY_RTC_BACKUP_RTC_TIME_RTC_12HOUR)
+                                                                         >> BACKUP_ALM1_TIME_ALM_HOUR_Pos);
 
             /* In the structure, the hour value should be presented in the 24-hour mode. In
             *  that condition the firmware checks the AM/PM status and adds 12 hours to
             *  the converted hour value if the PM bit is set.
             */
             if ((alarmDateTime->hour < CY_RTC_HOURS_PER_HALF_DAY) &&
-                    (0U != (BACKUP_ALM1_TIME & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
+            (0U != (BACKUP_ALM1_TIME & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
             {
                 alarmDateTime->hour += CY_RTC_HOURS_PER_HALF_DAY;
             }
 
             /* Set zero hour, as the 12 A hour is zero hour in 24-hour format */
             if ((alarmDateTime->hour == CY_RTC_HOURS_PER_HALF_DAY) &&
-                    (0U == (BACKUP_ALM1_TIME & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
+              (0U == (BACKUP_ALM1_TIME & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
             {
                 alarmDateTime->hour = 0U;
             }
@@ -384,22 +530,22 @@ void   Cy_RTC_GetAlarmDateAndTime(cy_stc_rtc_alarm_t *alarmDateTime, cy_en_rtc_a
             alarmDateTime->hour = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM1_TIME_ALM_HOUR, tmpAlarmTime));
         }
         alarmDateTime->hourEn =
-            ((_FLD2BOOL(BACKUP_ALM1_TIME_ALM_HOUR_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM1_TIME_ALM_HOUR_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->dayOfWeek = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM1_TIME_ALM_DAY, tmpAlarmTime));
         alarmDateTime->dayOfWeekEn =
-            ((_FLD2BOOL(BACKUP_ALM1_TIME_ALM_DAY_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM1_TIME_ALM_DAY_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->date = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM1_DATE_ALM_DATE, tmpAlarmDate));
         alarmDateTime->dateEn  =
-            ((_FLD2BOOL(BACKUP_ALM1_DATE_ALM_DATE_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM1_DATE_ALM_DATE_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->month = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM1_DATE_ALM_MON, tmpAlarmDate));
         alarmDateTime->monthEn =
-            ((_FLD2BOOL(BACKUP_ALM1_DATE_ALM_MON_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM1_DATE_ALM_MON_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->almEn =
-            ((_FLD2BOOL(BACKUP_ALM1_DATE_ALM_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM1_DATE_ALM_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
     }
     else
     {
@@ -408,11 +554,11 @@ void   Cy_RTC_GetAlarmDateAndTime(cy_stc_rtc_alarm_t *alarmDateTime, cy_en_rtc_a
 
         alarmDateTime->sec   = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM2_TIME_ALM_SEC, tmpAlarmTime));
         alarmDateTime->secEn =
-            ((_FLD2BOOL(BACKUP_ALM2_TIME_ALM_SEC_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM2_TIME_ALM_SEC_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->min   = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM2_TIME_ALM_MIN, tmpAlarmTime));
         alarmDateTime->minEn =
-            ((_FLD2BOOL(BACKUP_ALM2_TIME_ALM_MIN_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM2_TIME_ALM_MIN_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         /* Read the current hour mode to know how many hour bits to convert.
         *  In the 24-hour mode, the hour value is presented in [21:16] bits in
@@ -423,19 +569,19 @@ void   Cy_RTC_GetAlarmDateAndTime(cy_stc_rtc_alarm_t *alarmDateTime, cy_en_rtc_a
         if (curHoursFormat != CY_RTC_24_HOURS)
         {
             alarmDateTime->hour = CONVERT_BCD_TO_DEC((tmpAlarmTime & CY_RTC_BACKUP_RTC_TIME_RTC_12HOUR) >>
-                                  BACKUP_ALM2_TIME_ALM_HOUR_Pos);
+                                                                             BACKUP_ALM2_TIME_ALM_HOUR_Pos);
             /* In the structure, the hour value should be presented in the 24-hour mode. In
             *  that condition the firmware checks the AM/PM status and adds 12 hours to
             *  the converted hour value if the PM bit is set.
             */
             if ((alarmDateTime->hour < CY_RTC_HOURS_PER_HALF_DAY) &&
-                    (0U != (BACKUP_ALM2_TIME & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
+            (0U != (BACKUP_ALM2_TIME & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
             {
                 alarmDateTime->hour += CY_RTC_HOURS_PER_HALF_DAY;
             }
             /* Set zero hour, as the 12 am hour is zero hour in 24-hour format */
             else if ((alarmDateTime->hour == CY_RTC_HOURS_PER_HALF_DAY) &&
-                     (0U == (BACKUP_ALM2_TIME & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
+                    (0U == (BACKUP_ALM2_TIME & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
             {
                 alarmDateTime->hour = 0U;
             }
@@ -449,22 +595,22 @@ void   Cy_RTC_GetAlarmDateAndTime(cy_stc_rtc_alarm_t *alarmDateTime, cy_en_rtc_a
             alarmDateTime->hour = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM2_TIME_ALM_HOUR, tmpAlarmTime));
         }
         alarmDateTime->hourEn =
-            ((_FLD2BOOL(BACKUP_ALM2_TIME_ALM_HOUR_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM2_TIME_ALM_HOUR_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->dayOfWeek = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM2_TIME_ALM_DAY, tmpAlarmTime));
         alarmDateTime->dayOfWeekEn =
-            ((_FLD2BOOL(BACKUP_ALM2_TIME_ALM_DAY_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM2_TIME_ALM_DAY_EN, tmpAlarmTime)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->date = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM2_DATE_ALM_DATE, tmpAlarmDate));
         alarmDateTime->dateEn  =
-            ((_FLD2BOOL(BACKUP_ALM2_DATE_ALM_DATE_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM2_DATE_ALM_DATE_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->month = CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_ALM2_DATE_ALM_MON, tmpAlarmDate));
         alarmDateTime->monthEn =
-            ((_FLD2BOOL(BACKUP_ALM2_DATE_ALM_MON_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM2_DATE_ALM_MON_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
 
         alarmDateTime->almEn =
-            ((_FLD2BOOL(BACKUP_ALM2_DATE_ALM_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
+        ((_FLD2BOOL(BACKUP_ALM2_DATE_ALM_EN, tmpAlarmDate)) ? CY_RTC_ALARM_ENABLE : CY_RTC_ALARM_DISABLE);
     }
 }
 
@@ -503,7 +649,7 @@ void   Cy_RTC_GetAlarmDateAndTime(cy_stc_rtc_alarm_t *alarmDateTime, cy_en_rtc_a
 *
 *******************************************************************************/
 cy_en_rtc_status_t Cy_RTC_SetDateAndTimeDirect(uint32_t sec, uint32_t min, uint32_t hour,
-        uint32_t date, uint32_t month, uint32_t year)
+                                               uint32_t date, uint32_t month, uint32_t year)
 {
     cy_en_rtc_status_t retVal = CY_RTC_BAD_PARAM;
     cy_stc_rtc_config_t curTimeAndDate;
@@ -542,7 +688,7 @@ cy_en_rtc_status_t Cy_RTC_SetDateAndTimeDirect(uint32_t sec, uint32_t min, uint3
             *  except that the hour is 12.
             */
             curTimeAndDate.hour =
-                (hour > CY_RTC_HOURS_PER_HALF_DAY) ? ((uint32_t) hour - CY_RTC_HOURS_PER_HALF_DAY) : hour;
+            (hour > CY_RTC_HOURS_PER_HALF_DAY) ? ((uint32_t) hour - CY_RTC_HOURS_PER_HALF_DAY) : hour;
 
             curTimeAndDate.amPm = CY_RTC_PM;
         }
@@ -577,7 +723,7 @@ cy_en_rtc_status_t Cy_RTC_SetDateAndTimeDirect(uint32_t sec, uint32_t min, uint3
     }
     Cy_SysLib_ExitCriticalSection(interruptState);
 
-    return (retVal);
+    return(retVal);
 }
 
 
@@ -613,7 +759,7 @@ cy_en_rtc_status_t Cy_RTC_SetDateAndTimeDirect(uint32_t sec, uint32_t min, uint3
 *
 *******************************************************************************/
 cy_en_rtc_status_t Cy_RTC_SetAlarmDateAndTimeDirect(uint32_t sec, uint32_t min, uint32_t hour,
-        uint32_t date, uint32_t month, cy_en_rtc_alarm_t alarmIndex)
+                                                    uint32_t date, uint32_t month, cy_en_rtc_alarm_t alarmIndex)
 {
     uint32_t tmpCurrentYear;
     cy_en_rtc_status_t retVal = CY_RTC_BAD_PARAM;
@@ -679,7 +825,7 @@ cy_en_rtc_status_t Cy_RTC_SetAlarmDateAndTimeDirect(uint32_t sec, uint32_t min, 
     }
     Cy_SysLib_ExitCriticalSection(interruptState);
 
-    return (retVal);
+    return(retVal);
 }
 
 
@@ -727,7 +873,7 @@ cy_en_rtc_status_t Cy_RTC_SetHoursFormat(cy_en_rtc_hours_format_t hoursFormat)
                 /* The current hour is more than 12 or equal 12 in the 24-hour
                 *  mode. Set the PM bit and convert the hour: hour = hour - 12.
                 */
-                hourValue = (uint32_t)(hourValue - CY_RTC_HOURS_PER_HALF_DAY);
+                hourValue = (uint32_t) (hourValue - CY_RTC_HOURS_PER_HALF_DAY);
                 hourValue = ((0U != hourValue) ? hourValue : CY_RTC_HOURS_PER_HALF_DAY);
 
                 curTime = (_CLR_SET_FLD32U(curTime, BACKUP_RTC_TIME_RTC_HOUR, CONVERT_DEC_TO_BCD(hourValue)));
@@ -739,8 +885,8 @@ cy_en_rtc_status_t Cy_RTC_SetHoursFormat(cy_en_rtc_hours_format_t hoursFormat)
                 *  to 12:00 AM
                 */
                 curTime =
-                    (_CLR_SET_FLD32U(curTime, BACKUP_RTC_TIME_RTC_HOUR,
-                                     CONVERT_DEC_TO_BCD(CY_RTC_HOURS_PER_HALF_DAY)));
+                (_CLR_SET_FLD32U(curTime, BACKUP_RTC_TIME_RTC_HOUR,
+                  CONVERT_DEC_TO_BCD(CY_RTC_HOURS_PER_HALF_DAY)));
                 /* Set the AM bit */
                 curTime &= ((uint32_t) ~CY_RTC_BACKUP_RTC_TIME_RTC_PM);
             }
@@ -758,8 +904,8 @@ cy_en_rtc_status_t Cy_RTC_SetHoursFormat(cy_en_rtc_hours_format_t hoursFormat)
         {
             /* Mask the AM/PM bit as the hour value is in [20:16] bits */
             hourValue =
-                CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_RTC_TIME_RTC_HOUR,
-                                            (curTime & (uint32_t) ~CY_RTC_BACKUP_RTC_TIME_RTC_PM)));
+            CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_RTC_TIME_RTC_HOUR,
+            (curTime & (uint32_t) ~CY_RTC_BACKUP_RTC_TIME_RTC_PM)));
             /* Add 12 hours in condition that current time is in PM period */
             if ((hourValue < CY_RTC_HOURS_PER_HALF_DAY) && (0U != (curTime & CY_RTC_BACKUP_RTC_TIME_RTC_PM)))
             {
@@ -797,7 +943,7 @@ cy_en_rtc_status_t Cy_RTC_SetHoursFormat(cy_en_rtc_hours_format_t hoursFormat)
     {
         retVal = CY_RTC_SUCCESS;
     }
-    return (retVal);
+    return(retVal);
 }
 
 #if defined (CY_IP_MXS40SRSS_RTC) || defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS)
@@ -948,7 +1094,7 @@ cy_en_rtc_status_t Cy_RTC_SetNextDstTime(cy_stc_rtc_dst_format_t const *nextDst)
     if (NULL != nextDst)
     {
         CY_ASSERT_L3(CY_RTC_IS_DST_FORMAT_VALID(nextDst->format));
-        uint32_t tryesToSetup = CY_RTC_TRYES_TO_SETUP_DST;
+        uint32_t triesToSetup = CY_RTC_TRIES_TO_SETUP_DST;
         cy_stc_rtc_alarm_t dstAlarmTimeAndDate;
 
         /* Configure an alarm structure based on the DST structure */
@@ -975,13 +1121,13 @@ cy_en_rtc_status_t Cy_RTC_SetNextDstTime(cy_stc_rtc_dst_format_t const *nextDst)
         dstAlarmTimeAndDate.monthEn = CY_RTC_ALARM_ENABLE;
         dstAlarmTimeAndDate.almEn = CY_RTC_ALARM_ENABLE;
 
-        while ((retVal != CY_RTC_SUCCESS) && (0U != tryesToSetup))
+        while((retVal != CY_RTC_SUCCESS) && (0U != triesToSetup))
         {
             retVal = Cy_RTC_SetAlarmDateAndTime(&dstAlarmTimeAndDate, CY_RTC_ALARM_2);
-            --tryesToSetup;
+            --triesToSetup;
         }
 
-        if (tryesToSetup == 0U)
+        if (triesToSetup == 0U)
         {
             retVal = CY_RTC_TIMEOUT;
         }
@@ -1053,14 +1199,14 @@ bool Cy_RTC_GetDstStatus(cy_stc_rtc_dst_t const *dstTime, cy_stc_rtc_config_t co
     *  [9-5]   - Day of Month
     *  [0-4]   - Hour
     */
-    dstStartTime = ((uint32_t)(dstTime->startDst.month << CY_RTC_DST_MONTH_POSITION) |
-                    (dstStartDayOfMonth << CY_RTC_DST_DAY_OF_MONTH_POSITION) | (dstTime->startDst.hour));
+    dstStartTime = ((uint32_t) (dstTime->startDst.month << CY_RTC_DST_MONTH_POSITION) |
+    (dstStartDayOfMonth << CY_RTC_DST_DAY_OF_MONTH_POSITION) | (dstTime->startDst.hour));
 
-    currentTime = ((uint32_t)(timeDate->month << CY_RTC_DST_MONTH_POSITION) |
-                   (timeDate->date << CY_RTC_DST_DAY_OF_MONTH_POSITION) | (timeDate->hour));
+    currentTime = ((uint32_t) (timeDate->month << CY_RTC_DST_MONTH_POSITION) |
+    (timeDate->date << CY_RTC_DST_DAY_OF_MONTH_POSITION) | (timeDate->hour));
 
-    dstStopTime = ((uint32_t)(dstTime->stopDst.month << CY_RTC_DST_MONTH_POSITION) |
-                   (dstStopDayOfMonth << CY_RTC_DST_DAY_OF_MONTH_POSITION) | (dstTime->stopDst.hour));
+    dstStopTime = ((uint32_t) (dstTime->stopDst.month << CY_RTC_DST_MONTH_POSITION) |
+    (dstStopDayOfMonth << CY_RTC_DST_DAY_OF_MONTH_POSITION) | (dstTime->stopDst.hour));
 
     if ((dstStartTime <= currentTime) && (dstStopTime > currentTime))
     {
@@ -1073,18 +1219,18 @@ bool Cy_RTC_GetDstStatus(cy_stc_rtc_dst_t const *dstTime, cy_stc_rtc_config_t co
             Cy_RTC_GetAlarmDateAndTime(&alarm, CY_RTC_ALARM_2);
 
             /* If Alarm2 is set for the "Start DST" event - the "Stop DST" event is already passed:  */
-            if ((alarm.almEn       == CY_RTC_ALARM_ENABLE) &&
-                    (alarm.monthEn     == CY_RTC_ALARM_ENABLE) &&
-                    (alarm.month       == dstTime->startDst.month) &&
-                    (alarm.dateEn      == CY_RTC_ALARM_ENABLE) &&
-                    (alarm.date        == locDate) &&
-                    (alarm.dayOfWeekEn == CY_RTC_ALARM_DISABLE) &&
-                    (alarm.hourEn      == CY_RTC_ALARM_ENABLE) &&
-                    (alarm.hour        == dstTime->startDst.hour) &&
-                    (alarm.minEn       == CY_RTC_ALARM_ENABLE) &&
-                    (alarm.min         == 0UL) &&
-                    (alarm.secEn       == CY_RTC_ALARM_ENABLE) &&
-                    (alarm.sec         == 0UL))
+            if ((alarm.almEn       == CY_RTC_ALARM_ENABLE    ) &&
+                (alarm.monthEn     == CY_RTC_ALARM_ENABLE    ) &&
+                (alarm.month       == dstTime->startDst.month) &&
+                (alarm.dateEn      == CY_RTC_ALARM_ENABLE    ) &&
+                (alarm.date        == locDate                ) &&
+                (alarm.dayOfWeekEn == CY_RTC_ALARM_DISABLE   ) &&
+                (alarm.hourEn      == CY_RTC_ALARM_ENABLE    ) &&
+                (alarm.hour        == dstTime->startDst.hour ) &&
+                (alarm.minEn       == CY_RTC_ALARM_ENABLE    ) &&
+                (alarm.min         == 0UL                    ) &&
+                (alarm.secEn       == CY_RTC_ALARM_ENABLE    ) &&
+                (alarm.sec         == 0UL                    ))
             {
                 status = false;
             }
@@ -1186,10 +1332,10 @@ void Cy_RTC_DstInterrupt(cy_stc_rtc_dst_t const *dstTime)
             *  the valid range [1-31]. Increment month value.
             */
             if (curDateTime.date > Cy_RTC_DaysInMonth(curDateTime.month,
-                    (curDateTime.year + CY_RTC_TWO_THOUSAND_YEARS)))
+                                                    (curDateTime.year + CY_RTC_TWO_THOUSAND_YEARS)))
             {
-                curDateTime.date = CY_RTC_FIRST_DAY_OF_MONTH;
-                curDateTime.month++;
+               curDateTime.date = CY_RTC_FIRST_DAY_OF_MONTH;
+               curDateTime.month++;
             }
 
             /* Correct a month if its incrementation adjusted it out of the
@@ -1235,9 +1381,9 @@ void Cy_RTC_DstInterrupt(cy_stc_rtc_dst_t const *dstTime)
             */
             if (curDateTime.date < CY_RTC_FIRST_DAY_OF_MONTH)
             {
-                curDateTime.month--;
-                curDateTime.date =
-                    Cy_RTC_DaysInMonth(curDateTime.month, (curDateTime.year + CY_RTC_TWO_THOUSAND_YEARS));
+               curDateTime.month--;
+               curDateTime.date =
+               Cy_RTC_DaysInMonth(curDateTime.month, (curDateTime.year + CY_RTC_TWO_THOUSAND_YEARS));
             }
 
             /* Correct a month if its increment pushed it out of the valid
@@ -1296,7 +1442,7 @@ uint32_t Cy_RTC_GetInterruptStatus(void)
     /* On some devices BACKUP_INTR register gets value later than interrupt signal assertion */
     (void) BACKUP_INTR;
 #endif
-    return (BACKUP_INTR);
+    return(BACKUP_INTR);
 }
 
 
@@ -1314,7 +1460,7 @@ uint32_t Cy_RTC_GetInterruptStatus(void)
 *******************************************************************************/
 uint32_t Cy_RTC_GetInterruptStatusMasked(void)
 {
-    return (BACKUP_INTR_MASKED);
+    return(BACKUP_INTR_MASKED);
 }
 
 
@@ -1481,44 +1627,44 @@ void Cy_RTC_Interrupt(cy_stc_rtc_dst_t const *dstTime, bool mode)
 * (cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode);
 *
 *******************************************************************************/
-cy_en_syspm_status_t Cy_RTC_DeepSleepCallback(const cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
+cy_en_syspm_status_t Cy_RTC_DeepSleepCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
 {
     cy_en_syspm_status_t retVal = CY_SYSPM_FAIL;
 
     if (callbackParams != NULL)
     {
-        switch (mode)
+        switch(mode)
         {
-        case CY_SYSPM_CHECK_READY:
-        {
-            if (CY_RTC_AVAILABLE == Cy_RTC_GetSyncStatus())
+            case CY_SYSPM_CHECK_READY:
+            {
+                if (CY_RTC_AVAILABLE == Cy_RTC_GetSyncStatus())
+                {
+                    retVal = CY_SYSPM_SUCCESS;
+                }
+            }
+            break;
+
+            case CY_SYSPM_CHECK_FAIL:
             {
                 retVal = CY_SYSPM_SUCCESS;
             }
-        }
-        break;
-
-        case CY_SYSPM_CHECK_FAIL:
-        {
-            retVal = CY_SYSPM_SUCCESS;
-        }
-        break;
-
-        case CY_SYSPM_BEFORE_TRANSITION:
-        {
-            retVal = CY_SYSPM_SUCCESS;
-        }
-        break;
-
-        case CY_SYSPM_AFTER_TRANSITION:
-        {
-            retVal = CY_SYSPM_SUCCESS;
-        }
-        break;
-
-        default:
-            /* Unknown state */
             break;
+
+            case CY_SYSPM_BEFORE_TRANSITION:
+            {
+                retVal = CY_SYSPM_SUCCESS;
+            }
+            break;
+
+            case CY_SYSPM_AFTER_TRANSITION:
+            {
+                retVal = CY_SYSPM_SUCCESS;
+            }
+            break;
+
+            default:
+                /* Unknown state */
+                break;
         }
     }
     return (retVal);
@@ -1552,7 +1698,7 @@ cy_en_syspm_status_t Cy_RTC_DeepSleepCallback(const cy_stc_syspm_callback_params
 * (cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode);
 *
 *******************************************************************************/
-cy_en_syspm_status_t Cy_RTC_HibernateCallback(const cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
+cy_en_syspm_status_t Cy_RTC_HibernateCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
 {
     return (Cy_RTC_DeepSleepCallback(callbackParams, mode));
 }
@@ -1593,19 +1739,19 @@ cy_en_rtc_status_t Cy_RTC_CalibrationControlEnable(uint8_t calib_val, cy_en_rtc_
     if (CY_RTC_SUCCESS == retVal)
     {
         BACKUP_CAL_CTL =
-            _VAL2FLD(BACKUP_CAL_CTL_CALIB_VAL, calib_val)  |
-            _VAL2FLD(BACKUP_CAL_CTL_CALIB_SIGN, (uint32_t)calib_sign) |
+        _VAL2FLD(BACKUP_CAL_CTL_CALIB_VAL, calib_val)  |
+        _VAL2FLD(BACKUP_CAL_CTL_CALIB_SIGN, (uint32_t)calib_sign) |
 #if defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS_RTC_VERSION) && (CY_IP_MXS40SRSS_RTC_VERSION >= 2)) || defined (CY_IP_MXS22SRSS)
-            _VAL2FLD(BACKUP_CAL_CTL_CAL_SEL, (uint32_t)calib_sel) |
+        _VAL2FLD(BACKUP_CAL_CTL_CAL_SEL, (uint32_t)calib_sel) |
 #endif
-            _VAL2FLD(BACKUP_CAL_CTL_CAL_OUT, 1U);
+        _VAL2FLD(BACKUP_CAL_CTL_CAL_OUT, 1U);
 
         /* Clear the RTC Write bit to finish RTC update */
         retVal = Cy_RTC_WriteEnable(CY_RTC_WRITE_DISABLED);
     }
     Cy_SysLib_ExitCriticalSection(interruptState);
 
-    return (retVal);
+    return(retVal);
 }
 
 /*******************************************************************************
@@ -1631,14 +1777,14 @@ cy_en_rtc_status_t Cy_RTC_CalibrationControlDisable(void)
     if (CY_RTC_SUCCESS == retVal)
     {
         BACKUP_CAL_CTL =
-            _VAL2FLD(BACKUP_CAL_CTL_CAL_OUT, 0U);
+        _VAL2FLD(BACKUP_CAL_CTL_CAL_OUT, 0U);
 
         /* Clear the RTC Write bit to finish RTC update */
         retVal = Cy_RTC_WriteEnable(CY_RTC_WRITE_DISABLED);
     }
     Cy_SysLib_ExitCriticalSection(interruptState);
 
-    return (retVal);
+    return(retVal);
 }
 
 
@@ -1713,7 +1859,7 @@ static void ConstructTimeDate(cy_stc_rtc_config_t const *timeDate, uint32_t *tim
 
     if (timeDate->dayOfWeek == CY_RTC_DAY_AUTO)
     {
-        tmpTime |= (_VAL2FLD(BACKUP_RTC_TIME_RTC_DAY, CONVERT_DEC_TO_BCD(Cy_RTC_ConvertDayOfWeek(timeDate->date, timeDate->month, (timeDate->year + CY_RTC_TWO_THOUSAND_YEARS)))));
+        tmpTime |=  (_VAL2FLD(BACKUP_RTC_TIME_RTC_DAY, CONVERT_DEC_TO_BCD(Cy_RTC_ConvertDayOfWeek(timeDate->date, timeDate->month, (timeDate->year + CY_RTC_TWO_THOUSAND_YEARS)))));
     }
     else
     {
@@ -1776,7 +1922,7 @@ static void ConstructTimeDate(cy_stc_rtc_config_t const *timeDate, uint32_t *tim
 *
 *******************************************************************************/
 static void ConstructAlarmTimeDate(cy_stc_rtc_alarm_t const *alarmDateTime, uint32_t *alarmTimeBcd,
-                                   uint32_t *alarmDateBcd)
+                                                                                   uint32_t *alarmDateBcd)
 {
     uint32_t tmpAlarmTime;
     uint32_t tmpAlarmDate;
@@ -1806,19 +1952,19 @@ static void ConstructAlarmTimeDate(cy_stc_rtc_alarm_t const *alarmDateTime, uint
             hourValue = (uint32_t) alarmDateTime->hour - CY_RTC_HOURS_PER_HALF_DAY;
             hourValue = ((0U != hourValue) ? hourValue : CY_RTC_HOURS_PER_HALF_DAY);
             tmpAlarmTime |=
-                CY_RTC_BACKUP_RTC_TIME_RTC_PM | (_VAL2FLD(BACKUP_ALM1_TIME_ALM_HOUR, CONVERT_DEC_TO_BCD(hourValue)));
+            CY_RTC_BACKUP_RTC_TIME_RTC_PM | (_VAL2FLD(BACKUP_ALM1_TIME_ALM_HOUR, CONVERT_DEC_TO_BCD(hourValue)));
         }
         else if (alarmDateTime->hour < 1U)
         {
             /* The current hour in the 24-hour mode is 0 which is equal to 12:00 AM */
             tmpAlarmTime = (tmpAlarmTime & ((uint32_t) ~CY_RTC_BACKUP_RTC_TIME_RTC_PM)) |
-                           (_VAL2FLD(BACKUP_ALM1_TIME_ALM_HOUR, CY_RTC_HOURS_PER_HALF_DAY));
+            (_VAL2FLD(BACKUP_ALM1_TIME_ALM_HOUR, CY_RTC_HOURS_PER_HALF_DAY));
         }
         else
         {
             /* The current hour is less than 12. Set the AM bit */
             tmpAlarmTime = (tmpAlarmTime & ((uint32_t) ~CY_RTC_BACKUP_RTC_TIME_RTC_PM)) |
-                           (_VAL2FLD(BACKUP_ALM1_TIME_ALM_HOUR, CONVERT_DEC_TO_BCD(alarmDateTime->hour)));
+            (_VAL2FLD(BACKUP_ALM1_TIME_ALM_HOUR, CONVERT_DEC_TO_BCD(alarmDateTime->hour)));
         }
         tmpAlarmTime |= BACKUP_RTC_TIME_CTRL_12HR_Msk;
     }
@@ -1869,13 +2015,13 @@ static uint32_t RelativeToFixed(cy_stc_rtc_dst_format_t const *convertDst)
     Cy_RTC_SyncFromRtc();
 
     currentYear =
-        CY_RTC_TWO_THOUSAND_YEARS + CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_RTC_DATE_RTC_YEAR, BACKUP_RTC_DATE));
+    CY_RTC_TWO_THOUSAND_YEARS + CONVERT_BCD_TO_DEC(_FLD2VAL(BACKUP_RTC_DATE_RTC_YEAR, BACKUP_RTC_DATE));
     currentDay  = CY_RTC_FIRST_DAY_OF_MONTH;
     currentWeek = CY_RTC_FIRST_WEEK_OF_MONTH;
     daysInMonth = Cy_RTC_DaysInMonth(convertDst->month, currentYear);
     tmpDayOfMonth  = currentDay;
 
-    while ((currentWeek <= convertDst->weekOfMonth) && (currentDay <= daysInMonth))
+    while((currentWeek <= convertDst->weekOfMonth) && (currentDay <= daysInMonth))
     {
         if (convertDst->dayOfWeek == Cy_RTC_ConvertDayOfWeek(currentDay, convertDst->month, currentYear))
         {
@@ -1884,7 +2030,7 @@ static uint32_t RelativeToFixed(cy_stc_rtc_dst_format_t const *convertDst)
         }
         currentDay++;
     }
-    return (tmpDayOfMonth);
+    return(tmpDayOfMonth);
 }
 
 #if defined(__cplusplus)

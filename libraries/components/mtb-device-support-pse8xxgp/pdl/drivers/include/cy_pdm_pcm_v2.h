@@ -26,7 +26,6 @@
 * \addtogroup group_pdm_pcm_v2
 * \{
 * \note IP Supported: PDM
-* \note Device Categories: CAT1B and CAT1D. Please refer <a href="usergroup1.html">Device Catalog</a>.
 *
 * The pulse-density modulation to pulse-code modulation (PDM-PCM) driver provides an
 * API to manage PDM-PCM conversion. A PDM-PCM converter is used
@@ -91,21 +90,6 @@
 *
 * If a DMA is used and the DMA channel is properly configured, no CPU activity
 * (or application code) is needed for PDM-PCM operation.
-*
-* \section group_pdm_pcm_changelog_v2 Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.10</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
 *
 * \defgroup group_pdm_pcm_macros_v2 Macros
 * \defgroup group_pdm_pcm_functions_v2 Functions
@@ -251,6 +235,42 @@ typedef enum
     CY_PDM_PCM_CHAN_DCBLOCK_CODE_128 = 7U,         /**< DCBLOCK Filter alpha = 1 - (1/2^(12-7))*/
 } cy_en_pdm_pcm_ch_dcblock_coef_t;
 
+/** PDM Gain Enums */
+typedef enum
+{
+    CY_PDM_PCM_SEL_GAIN_83DB               = 0U,  /**< Gain of 83db corresponding to scale 0 */
+    CY_PDM_PCM_SEL_GAIN_77DB               = 1U,  /**< Gain of 77db corresponding to scale 1 */
+    CY_PDM_PCM_SEL_GAIN_71DB               = 2U,  /**< Gain of 71db corresponding to scale 2 */
+    CY_PDM_PCM_SEL_GAIN_65DB               = 3U,  /**< Gain of 65db corresponding to scale 3 */
+    CY_PDM_PCM_SEL_GAIN_59DB               = 4U,  /**< Gain of 59db corresponding to scale 4 */
+    CY_PDM_PCM_SEL_GAIN_53DB               = 5U,  /**< Gain of 53db corresponding to scale 5 */
+    CY_PDM_PCM_SEL_GAIN_47DB               = 6U,  /**< Gain of 47db corresponding to scale 6 */
+    CY_PDM_PCM_SEL_GAIN_41DB               = 7U,  /**< Gain of 41db corresponding to scale 7 */
+    CY_PDM_PCM_SEL_GAIN_35DB               = 8U,  /**< Gain of 35db corresponding to scale 8 */
+    CY_PDM_PCM_SEL_GAIN_29DB               = 9U,  /**< Gain of 29db corresponding to scale 9 */
+    CY_PDM_PCM_SEL_GAIN_23DB               = 10U, /**< Gain of 23db corresponding to scale 10 */
+    CY_PDM_PCM_SEL_GAIN_17DB               = 11U, /**< Gain of 17db corresponding to scale 11 */
+    CY_PDM_PCM_SEL_GAIN_11DB               = 12U, /**< Gain of 11db corresponding to scale 12 */
+    CY_PDM_PCM_SEL_GAIN_5DB                = 13U, /**< Gain of 5db corresponding to scale 13 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_1DB       = 14U, /**< Gain of -1db corresponding to scale 14 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_7DB       = 15U, /**< Gain of -7db corresponding to scale 15 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_13DB      = 16U, /**< Gain of -13db corresponding to scale 16 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_19DB      = 17U, /**< Gain of -19db corresponding to scale 17 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_25DB      = 18U, /**< Gain of -25db corresponding to scale 18 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_31DB      = 19U, /**< Gain of -31db corresponding to scale 19 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_37DB      = 20U, /**< Gain of -37db corresponding to scale 20 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_43DB      = 21U, /**< Gain of -43db corresponding to scale 21 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_49DB      = 22U, /**< Gain of -49db corresponding to scale 22 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_55DB      = 23U, /**< Gain of -55db corresponding to scale 23 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_61DB      = 24U, /**< Gain of -61db corresponding to scale 24 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_67DB      = 25U, /**< Gain of -67db corresponding to scale 25 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_73DB      = 26U, /**< Gain of -73db corresponding to scale 26 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_79DB      = 27U, /**< Gain of -79db corresponding to scale 27 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_85DB      = 28U, /**< Gain of -85db corresponding to scale 28 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_91DB      = 29U, /**< Gain of -91db corresponding to scale 29 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_97DB      = 30U, /**< Gain of -97db corresponding to scale 30 */
+    CY_PDM_PCM_SEL_GAIN_NEGATIVE_103DB     = 31U  /**< Gain of -103db corresponding to scale 31 */
+} cy_en_pdm_pcm_gain_sel_t;
 /** \cond INTERNAL */
 /** PDM Output Mode*/
 typedef enum
@@ -265,9 +285,14 @@ typedef enum
 typedef enum
 {
     CY_PDM_PCM_SUCCESS         = 0x00UL,    /**< Success status code*/
-    CY_PDM_PCM_BAD_PARAM       = CY_PDM_PCM_V2_ID | CY_PDL_STATUS_ERROR | 0x01UL    /**< Bad parameter status code*/
+    CY_PDM_PCM_BAD_PARAM       = CY_PDM_PCM_V2_ID | CY_PDL_STATUS_ERROR |0x01UL     /**< Bad parameter status code*/
 } cy_en_pdm_pcm_status_t;
 
+/** The PCM bit size*/
+typedef enum {
+    CY_PDM_PCM_16BIT = 0U,
+    CY_PDM_PCM_24BIT = 1U
+} cy_en_pdm_pcm_format_t;
 /** \} group_pdm_pcm_enums_v2 */
 
 
@@ -280,55 +305,55 @@ typedef enum
  * Global type definitions
  ******************************************************************************/
 
-/** PDM-PCM Test Mode configuration */
-typedef struct
-{
-    uint8_t drive_delay_hi;                /**< Interface drive delay on the high phase of the PDM interface clock.
+ /** PDM-PCM Test Mode configuration */
+ typedef struct
+ {
+     uint8_t drive_delay_hi;                /**< Interface drive delay on the high phase of the PDM interface clock.
                                              This field specifies when a PDM value is driven expressed in clk_if clock cycles.
                                              DRIVE_DELAY should be set in the range [0, IF_CTL.CLOCK_DIV]:
                                             "0": Drive PDM value 1 clk_if cycle after the rising edge of clk_pdm.
                                             "1": Drive PDM value 2 clk_if cycles after the rising edge of clk_pdm.
                                             ...
                                             "255": Drive PDM value 256 clk_if cycles after the rising edge of clk_pdm*/
-    uint8_t drive_delay_lo;                /**< Interface drive delay on the low phase of the PDM interface clock.
+     uint8_t drive_delay_lo;                /**< Interface drive delay on the low phase of the PDM interface clock.
                                              This field specifies when a PDM value is driven expressed in clk_if clock cycles.
                                              DRIVE_DELAY should be set in the range [0, IF_CTL.CLOCK_DIV]:
                                             "0": Drive PDM value 1 clk_if cycle after the rising edge of clk_pdm.
                                             "1": Drive PDM value 2 clk_if cycles after the rising edge of clk_pdm.
                                             ...
                                             "255": Drive PDM value 256 clk_if cycles after the rising edge of clk_pdm*/
-    uint8_t mode_hi;                        /**< Pattern generator mode on the high phase of the PDM interface clock.
+     uint8_t mode_hi;                        /**< Pattern generator mode on the high phase of the PDM interface clock.
                                             This field specifies the type of pattern driven by the generator:
                                             "0": constant 0's
                                             "1": constant 1's
                                             "2": alternating 0's and 1's (clock pattern)
                                             "3": sine wave */
-    uint8_t mode_lo;                        /**< Pattern generator mode on the low phase of the PDM interface clock.
+     uint8_t mode_lo;                        /**< Pattern generator mode on the low phase of the PDM interface clock.
                                             This field specifies the type of pattern driven by the generator:
                                             "0": constant 0's
                                             "1": constant 1's
                                             "2": alternating 0's and 1's (clock pattern)
                                             "3": sine wave */
-    uint8_t audio_freq_div;                /**< Frequency division factor (legal range [3, 13]) to obtain audio frequency
+     uint8_t audio_freq_div;                /**< Frequency division factor (legal range [3, 13]) to obtain audio frequency
                                             from the PDM clock frequency. This field determines the frequency of the sine wave
                                             generated by the pattern generator when MODE=3. The formula is below:
                                             Sine wave Frequency = PDM clock frequency / 2p*2^(AUDIO_FREQ_DIV) */
-    bool    enable;            /**<  enable*/
+     bool    enable;            /**<  enable*/
 
 
-} cy_stc_test_config_t;
+ }cy_stc_test_config_t;
 
-/** PDM-PCM fir coeff_data structure */
-typedef struct
-{
+ /** PDM-PCM fir coeff_data structure */
+ typedef struct
+ {
 
     int16_t         coeff_data0;            /**<  filter taps coefficients data 0*/
     int16_t         coeff_data1;            /**<  filter taps coefficients data 1*/
-} cy_stc_pdm_pcm_fir_coeff_t;
+ }cy_stc_pdm_pcm_fir_coeff_t;
 
-/** PDM-PCM Channel initialization configuration */
-typedef struct
-{
+ /** PDM-PCM Channel initialization configuration */
+ typedef struct
+ {
     uint8_t                               sampledelay;    /**< Interface sample delay. This field specifies when a PDM value is captured. The value that user assigns here will be incremented by 1 and assigned internally */
 
     cy_en_pdm_pcm_word_size_t             wordSize;       /**< see #cy_en_pdm_pcm_word_size_t */
@@ -357,7 +382,7 @@ typedef struct
     bool                                   dc_block_disable;  /**< Disables DC BLOCK if set to true. This is for debug only. To be used for test modes 0,1 and 2 in test config ie. if the input is constant 0's or constant 1's or alternating 0's and 1's*/
 
     cy_en_pdm_pcm_ch_dcblock_coef_t        dc_block_code;    /**< DC blocker coefficient. \ref cy_en_pdm_pcm_ch_dcblock_coef_t*/
-} cy_stc_pdm_pcm_channel_config_t;
+ } cy_stc_pdm_pcm_channel_config_t;
 
 
 /** PDM-PCM initialization configuration */
@@ -502,7 +527,7 @@ typedef cy_stc_pdm_pcm_config_v2_t cy_stc_pdm_pcm_config_t;
                                                 ((wordSize) == CY_PDM_PCM_WSIZE_24_BIT) || \
                                                 ((wordSize) == CY_PDM_PCM_WSIZE_32_BIT))
 
-#define CY_PDM_PCM_IS_SCALE_VALID(scale)        ((scale) <= 31)
+#define CY_PDM_PCM_IS_SCALE_VALID(scale)        ((scale) <= (uint8_t)31)
 
 #define CY_PDM_PCM_IS_ENABLE_VALID(enable)         ((enable == 0)||(enable == 1))
 
@@ -522,19 +547,22 @@ cy_en_pdm_pcm_status_t Cy_PDM_PCM_Channel_Init(PDM_Type * base, cy_stc_pdm_pcm_c
 void Cy_PDM_PCM_Channel_DeInit(PDM_Type * base, uint8_t channel_num);
 
 cy_en_pdm_pcm_status_t   Cy_PDM_PCM_Init(PDM_Type * base, cy_stc_pdm_pcm_config_v2_t const * config);
-void     Cy_PDM_PCM_DeInit(PDM_Type * base);
+                void     Cy_PDM_PCM_DeInit(PDM_Type * base);
 
 cy_en_pdm_pcm_status_t      Cy_PDM_PCM_test_Init(PDM_Type * base, cy_stc_pdm_pcm_config_v2_t const * config, cy_stc_test_config_t const * test_config);
 
-__STATIC_INLINE void      Cy_PDM_PCM_Activate_Channel(PDM_Type * base, uint8_t channel_num);
-__STATIC_INLINE void      Cy_PDM_PCM_DeActivate_Channel(PDM_Type * base, uint8_t channel_num);
+cy_en_pdm_pcm_status_t Cy_PDM_PCM_SetGain (PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_gain_sel_t gain);
+
+
+__STATIC_INLINE void     Cy_PDM_PCM_Activate_Channel(PDM_Type * base, uint8_t channel_num);
+__STATIC_INLINE void     Cy_PDM_PCM_DeActivate_Channel(PDM_Type * base, uint8_t channel_num);
 __STATIC_INLINE void     Cy_PDM_PCM_SetRateSampling(PDM_Type * base, cy_en_pdm_pcm_halve_rate_sel_t rate);
 
 __STATIC_INLINE void     Cy_PDM_PCM_Channel_Enable(PDM_Type * base, uint8_t channel_num);
 __STATIC_INLINE void     Cy_PDM_PCM_Channel_Disable(PDM_Type * base, uint8_t channel_num);
 __STATIC_INLINE void     Cy_PDM_PCM_Channel_Set_Cic_DecimCode(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_cic_decimcode_t decimcode);
-__STATIC_INLINE void     Cy_PDM_PCM_Channel_Set_Fir0(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_fir0_decimcode_t decimcode, uint8_t scale);
-__STATIC_INLINE void     Cy_PDM_PCM_Channel_Set_Fir1(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_fir1_decimcode_t decimcode, uint8_t scale);
+__STATIC_INLINE void     Cy_PDM_PCM_Channel_Set_Fir0(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_fir0_decimcode_t decimcode,uint8_t scale);
+__STATIC_INLINE void     Cy_PDM_PCM_Channel_Set_Fir1(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_fir1_decimcode_t decimcode,uint8_t scale);
 __STATIC_INLINE void     Cy_PDM_PCM_Channel_Set_DCblock(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_dcblock_coef_t coef);
 __STATIC_INLINE void     Cy_PDM_PCM_Channel_SetInterruptMask(PDM_Type * base, uint8_t channel_num, uint32_t interrupt);
 __STATIC_INLINE uint32_t Cy_PDM_PCM_Channel_GetInterruptMask(PDM_Type const * base, uint8_t channel_num);
@@ -547,7 +575,10 @@ __STATIC_INLINE uint32_t Cy_PDM_PCM_Channel_ReadFifo(PDM_Type const * base, uint
 __STATIC_INLINE void     Cy_PDM_PCM_Channel_FreezeFifo(PDM_Type * base, uint8_t channel_num);
 __STATIC_INLINE void     Cy_PDM_PCM_Channel_UnfreezeFifo(PDM_Type * base, uint8_t channel_num);
 __STATIC_INLINE uint32_t Cy_PDM_PCM_Channel_ReadFifoSilent(PDM_Type const * base, uint8_t channel_num);
-
+__STATIC_INLINE void     Cy_PDM_PCM_DCBlock_Enable (PDM_Type * base, uint8_t channel_num);
+__STATIC_INLINE void     Cy_PDM_PCM_DCBlock_Disable (PDM_Type * base, uint8_t channel_num);
+cy_en_pdm_pcm_status_t   Cy_PDM_PCM_SetFIR0_Scale (PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_gain_sel_t scale);
+cy_en_pdm_pcm_status_t   Cy_PDM_PCM_ApplyPCM_Gain (const int32_t *in_sample, int32_t gain_db, cy_en_pdm_pcm_format_t out_format, int32_t *out_sample);
 
 /** \} group_pdm_pcm_functions_v2 */
 
@@ -571,7 +602,7 @@ __STATIC_INLINE uint32_t Cy_PDM_PCM_Channel_ReadFifoSilent(PDM_Type const * base
 ******************************************************************************/
 __STATIC_INLINE void Cy_PDM_PCM_Channel_Enable(PDM_Type * base, uint8_t channel_num)
 {
-    PDM_PCM_CH_CTL(base, channel_num) |= PDM_CH_CTL_ENABLED_Msk;
+    PDM_PCM_CH_CTL(base,channel_num) |= PDM_CH_CTL_ENABLED_Msk;
 
 }
 
@@ -590,7 +621,7 @@ __STATIC_INLINE void Cy_PDM_PCM_Channel_Enable(PDM_Type * base, uint8_t channel_
 ******************************************************************************/
 __STATIC_INLINE void Cy_PDM_PCM_Channel_Disable(PDM_Type * base, uint8_t channel_num)
 {
-    PDM_PCM_CH_CTL(base, channel_num) &= (uint32_t) ~PDM_CH_CTL_ENABLED_Msk;
+    PDM_PCM_CH_CTL(base,channel_num) &= (uint32_t) ~PDM_CH_CTL_ENABLED_Msk;
 
 }
 
@@ -647,7 +678,7 @@ __STATIC_INLINE void Cy_PDM_PCM_DeActivate_Channel(PDM_Type * base, uint8_t chan
 ******************************************************************************/
 __STATIC_INLINE bool Cy_PDM_PCM_Channel_GetCurrentState(PDM_Type const * base, uint8_t channel_num)
 {
-    return ((bool)(PDM_PCM_CTL(base) & (1UL << channel_num)));
+    return ((bool) (PDM_PCM_CTL(base) & (1UL << channel_num)));
 }
 
 
@@ -710,12 +741,12 @@ __STATIC_INLINE void  Cy_PDM_PCM_Channel_Set_Cic_DecimCode(PDM_Type * base, uint
 * \snippet pdm_pcmv2/snippet/main.c snippet_Cy_PDM_PCM_Channel_Set_Fir0
 *
 ******************************************************************************/
-__STATIC_INLINE void  Cy_PDM_PCM_Channel_Set_Fir0(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_fir0_decimcode_t decimcode, uint8_t scale)
+__STATIC_INLINE void  Cy_PDM_PCM_Channel_Set_Fir0(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_fir0_decimcode_t decimcode,uint8_t scale)
 {
     CY_ASSERT_L2(CY_PDM_PCM_IS_SCALE_VALID(scale));
     PDM_PCM_CH_FIR0_CTL(base, channel_num) &= ~(PDM_CH_FIR0_CTL_DECIM3_Msk | PDM_CH_FIR0_CTL_SCALE_Msk);
     PDM_PCM_CH_FIR0_CTL(base, channel_num) |= _VAL2FLD(PDM_CH_FIR0_CTL_DECIM3,  decimcode) |
-        _VAL2FLD(PDM_CH_FIR0_CTL_SCALE,        scale);
+                                              _VAL2FLD(PDM_CH_FIR0_CTL_SCALE,        scale);
 }
 
 /******************************************************************************
@@ -733,12 +764,12 @@ __STATIC_INLINE void  Cy_PDM_PCM_Channel_Set_Fir0(PDM_Type * base, uint8_t chann
 * \snippet pdm_pcmv2/snippet/main.c snippet_Cy_PDM_PCM_Channel_Set_Fir1
 *
 ******************************************************************************/
-__STATIC_INLINE void  Cy_PDM_PCM_Channel_Set_Fir1(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_fir1_decimcode_t decimcode, uint8_t scale)
+__STATIC_INLINE void  Cy_PDM_PCM_Channel_Set_Fir1(PDM_Type * base, uint8_t channel_num, cy_en_pdm_pcm_ch_fir1_decimcode_t decimcode,uint8_t scale)
 {
     CY_ASSERT_L2(CY_PDM_PCM_IS_SCALE_VALID(scale));
     PDM_PCM_CH_FIR1_CTL(base, channel_num) &= ~(PDM_CH_FIR1_CTL_DECIM2_Msk | PDM_CH_FIR1_CTL_SCALE_Msk);
     PDM_PCM_CH_FIR1_CTL(base, channel_num) |= _VAL2FLD(PDM_CH_FIR1_CTL_DECIM2,  decimcode) |
-        _VAL2FLD(PDM_CH_FIR1_CTL_SCALE,        scale);
+                                             _VAL2FLD(PDM_CH_FIR1_CTL_SCALE,        scale);
 }
 
 
@@ -903,7 +934,7 @@ __STATIC_INLINE void Cy_PDM_PCM_Channel_SetInterrupt(PDM_Type * base, uint8_t ch
 ******************************************************************************/
 __STATIC_INLINE uint8_t Cy_PDM_PCM_Channel_GetNumInFifo(PDM_Type const * base, uint8_t channel_num)
 {
-    return (uint8_t)(_FLD2VAL(PDM_CH_RX_FIFO_STATUS_USED, PDM_PCM_RX_FIFO_STATUS(base, channel_num)));
+    return (uint8_t) (_FLD2VAL(PDM_CH_RX_FIFO_STATUS_USED, PDM_PCM_RX_FIFO_STATUS(base, channel_num)));
 }
 
 
@@ -981,6 +1012,42 @@ __STATIC_INLINE void Cy_PDM_PCM_Channel_UnfreezeFifo(PDM_Type * base, uint8_t ch
 __STATIC_INLINE uint32_t Cy_PDM_PCM_Channel_ReadFifoSilent(PDM_Type const * base, uint8_t channel_num)
 {
     return (PDM_PCM_RX_FIFO_RD_SILENT(base, channel_num));
+}
+
+/******************************************************************************
+* Function Name: Cy_PDM_PCM_DCBlock_Enable
+***************************************************************************//**
+*
+* Enable DC Block Filter for the given channel.
+*
+* \param base
+* The pointer to the PDM-PCM instance address.
+*
+* \param channel_num
+* The channel number.
+*
+******************************************************************************/
+__STATIC_INLINE void Cy_PDM_PCM_DCBlock_Enable (PDM_Type * base, uint8_t channel_num)
+{
+    PDM_PCM_CH_DC_BLOCK_CTL(base, channel_num) |= _VAL2FLD(PDM_CH_DC_BLOCK_CTL_ENABLED, CY_PDM_PCM_ENABLE);
+}
+
+/******************************************************************************
+* Function Name: Cy_PDM_PCM_DCBlock_Disable
+***************************************************************************//**
+*
+* Disable DC Block Filter for the given channel.
+*
+* \param base
+* The pointer to the PDM-PCM instance address.
+*
+* \param channel_num
+* The channel number.
+*
+******************************************************************************/
+__STATIC_INLINE void Cy_PDM_PCM_DCBlock_Disable (PDM_Type * base, uint8_t channel_num)
+{
+    CY_REG32_CLR_SET(PDM_PCM_CH_DC_BLOCK_CTL(base, channel_num),PDM_CH_DC_BLOCK_CTL_ENABLED, CY_PDM_PCM_DISABLE);
 }
 
 /** \} group_pdm_pcm_functions_v2 */

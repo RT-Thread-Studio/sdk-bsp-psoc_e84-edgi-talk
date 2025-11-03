@@ -43,10 +43,10 @@ extern "C" {
 #define MASK_IF_NON_ZERO(x) (x) != 0 ? ~0 : 0
 #define SELECT_USING_MASK(mask, a, b) ((mask) & (a)) ^ (~(mask) & (b))
 #ifndef MAX
-#define MAX(A, B) ((A) > (B) ? (A) : (B))
+  #define MAX(A, B) ((A) > (B) ? (A) : (B))
 #endif
 #ifndef MIN
-#define MIN(A, B) ((A) < (B) ? (A) : (B))
+  #define MIN(A, B) ((A) < (B) ? (A) : (B))
 #endif
 #define CLAMP(x, h, l) MAX(MIN((x), (h)), (l))
 
@@ -392,17 +392,17 @@ arm_status arm_nn_vec_mat_mult_t_s8(const q7_t *lhs,
  *
  */
 arm_status arm_nn_vec_mat_mult_t_svdf_s8(const q7_t *lhs,
-        const q7_t *rhs,
-        q15_t *dst,
-        const int32_t lhs_offset,
-        const int32_t rhs_offset,
-        const int32_t scatter_offset,
-        const int32_t dst_multiplier,
-        const int32_t dst_shift,
-        const int32_t rhs_cols,
-        const int32_t rhs_rows,
-        const int32_t activation_min,
-        const int32_t activation_max);
+                                         const q7_t *rhs,
+                                         q15_t *dst,
+                                         const int32_t lhs_offset,
+                                         const int32_t rhs_offset,
+                                         const int32_t scatter_offset,
+                                         const int32_t dst_multiplier,
+                                         const int32_t dst_shift,
+                                         const int32_t rhs_cols,
+                                         const int32_t rhs_rows,
+                                         const int32_t activation_min,
+                                         const int32_t activation_max);
 
 /**
  * @brief Depthwise convolution of transposed rhs matrix with 4 lhs matrices. To be used in padded cases where
@@ -433,17 +433,17 @@ arm_status arm_nn_vec_mat_mult_t_svdf_s8(const q7_t *lhs,
  *                  - rhs
  */
 q7_t *arm_nn_depthwise_conv_nt_t_padded_s8(const q7_t *lhs,
-        const q7_t *rhs,
-        const int32_t lhs_offset,
-        const uint16_t num_ch,
-        const int32_t *out_shift,
-        const int32_t *out_mult,
-        const int32_t out_offset,
-        const int32_t activation_min,
-        const int32_t activation_max,
-        const uint16_t row_x_col,
-        const int32_t *const output_bias,
-        q7_t *out);
+                                           const q7_t *rhs,
+                                           const int32_t lhs_offset,
+                                           const uint16_t num_ch,
+                                           const int32_t *out_shift,
+                                           const int32_t *out_mult,
+                                           const int32_t out_offset,
+                                           const int32_t activation_min,
+                                           const int32_t activation_max,
+                                           const uint16_t row_x_col,
+                                           const int32_t *const output_bias,
+                                           q7_t *out);
 
 /**
  * @brief Depthwise convolution of transposed rhs matrix with 4 lhs matrices. To be used in non-padded cases.
@@ -877,7 +877,7 @@ __STATIC_FORCEINLINE int32x4_t arm_divide_by_power_of_two_mve(const int32x4_t di
 __STATIC_FORCEINLINE int32x4_t arm_requantize_mve(const int32x4_t val, const q31_t multiplier, const q31_t shift)
 {
     return arm_divide_by_power_of_two_mve(
-               arm_doubling_high_mult_mve(vshlq_s32(val, vdupq_n_s32(LEFT_SHIFT(shift))), multiplier), RIGHT_SHIFT(shift));
+        arm_doubling_high_mult_mve(vshlq_s32(val, vdupq_n_s32(LEFT_SHIFT(shift))), multiplier), RIGHT_SHIFT(shift));
 }
 
 __STATIC_FORCEINLINE int32x4_t arm_doubling_high_mult_mve_32x4(const int32x4_t m1, const int32x4_t m2)
@@ -894,8 +894,8 @@ __STATIC_FORCEINLINE int32x4_t arm_divide_by_power_of_two_mve_32x4(const int32x4
 }
 
 __STATIC_FORCEINLINE int32x4_t arm_requantize_mve_32x4(const int32x4_t val,
-        const int32x4_t multiplier,
-        const int32x4_t shift)
+                                                       const int32x4_t multiplier,
+                                                       const int32x4_t shift)
 {
     const int32x4_t zz = vdupq_n_s32(0);
     const mve_pred16_t p = vcmpgtq_n_s32(shift, 0);
@@ -904,7 +904,7 @@ __STATIC_FORCEINLINE int32x4_t arm_requantize_mve_32x4(const int32x4_t val,
     const int32x4_t right_shift = -vpselq_s32(zz, shift, p);
 
     return arm_divide_by_power_of_two_mve_32x4(arm_doubling_high_mult_mve_32x4(vshlq_s32(val, left_shift), multiplier),
-            right_shift);
+                                               right_shift);
 }
 #endif
 
@@ -921,7 +921,7 @@ __STATIC_FORCEINLINE int32_t arm_nn_exp_on_negative_values(int32_t val)
     const int32_t x2 = MUL_SAT(x, x);
 
     int32_t result = 1895147668 +
-                     MUL_SAT(1895147668, x + DIV_POW2(MUL_SAT(DIV_POW2(MUL_SAT(x2, x2), 2) + MUL_SAT(x2, x), 715827883) + x2, 1));
+        MUL_SAT(1895147668, x + DIV_POW2(MUL_SAT(DIV_POW2(MUL_SAT(x2, x2), 2) + MUL_SAT(x2, x), 715827883) + x2, 1));
 
 #define SELECT_IF_NON_ZERO(x)                                                                                          \
     {                                                                                                                  \

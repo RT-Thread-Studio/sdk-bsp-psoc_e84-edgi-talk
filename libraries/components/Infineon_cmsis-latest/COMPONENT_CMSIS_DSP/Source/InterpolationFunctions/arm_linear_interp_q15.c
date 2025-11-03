@@ -37,24 +37,24 @@
    * @{
    */
 
-/**
- *
- * @brief  Process function for the Q15 Linear Interpolation Function.
- * @param[in] pYData   pointer to Q15 Linear Interpolation table
- * @param[in] x        input sample to process
- * @param[in] nValues  number of table values
- * @return y processed output sample.
- *
- * \par
- * Input sample <code>x</code> is in 12.20 format which contains 12 bits for table index and 20 bits for fractional part.
- * This function can support maximum of table size 2^12.
- *
- */
-q15_t arm_linear_interp_q15(
-    const q15_t * pYData,
-    q31_t x,
-    uint32_t nValues)
-{
+  /**
+   *
+   * @brief  Process function for the Q15 Linear Interpolation Function.
+   * @param[in] pYData   pointer to Q15 Linear Interpolation table
+   * @param[in] x        input sample to process
+   * @param[in] nValues  number of table values
+   * @return y processed output sample.
+   *
+   * \par
+   * Input sample <code>x</code> is in 12.20 format which contains 12 bits for table index and 20 bits for fractional part.
+   * This function can support maximum of table size 2^12.
+   *
+   */
+  q15_t arm_linear_interp_q15(
+  const q15_t * pYData,
+  q31_t x,
+  uint32_t nValues)
+  {
     q63_t y;                                     /* output */
     q15_t y0, y1;                                /* Nearest output values */
     q31_t fract;                                 /* fractional part */
@@ -67,35 +67,35 @@ q15_t arm_linear_interp_q15(
 
     if (index >= (int32_t)(nValues - 1))
     {
-        return (pYData[nValues - 1]);
+      return (pYData[nValues - 1]);
     }
     else if (index < 0)
     {
-        return (pYData[0]);
+      return (pYData[0]);
     }
     else
     {
-        /* 20 bits for the fractional part */
-        /* fract is in 12.20 format */
-        fract = (x & 0x000FFFFF);
+      /* 20 bits for the fractional part */
+      /* fract is in 12.20 format */
+      fract = (x & 0x000FFFFF);
 
-        /* Read two nearest output values from the index */
-        y0 = pYData[index];
-        y1 = pYData[index + 1];
+      /* Read two nearest output values from the index */
+      y0 = pYData[index];
+      y1 = pYData[index + 1];
 
-        /* Calculation of y0 * (1-fract) and y is in 13.35 format */
-        y = ((q63_t) y0 * (0xFFFFF - fract));
+      /* Calculation of y0 * (1-fract) and y is in 13.35 format */
+      y = ((q63_t) y0 * (0xFFFFF - fract));
 
-        /* Calculation of (y0 * (1-fract) + y1 * fract) and y is in 13.35 format */
-        y += ((q63_t) y1 * (fract));
+      /* Calculation of (y0 * (1-fract) + y1 * fract) and y is in 13.35 format */
+      y += ((q63_t) y1 * (fract));
 
-        /* convert y to 1.15 format */
-        return (q15_t)(y >> 20);
+      /* convert y to 1.15 format */
+      return (q15_t) (y >> 20);
     }
-}
+  }
 
 
-/**
- * @} end of LinearInterpolate group
- */
+  /**
+   * @} end of LinearInterpolate group
+   */
 

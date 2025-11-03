@@ -44,7 +44,6 @@
   @param[in]     pSrc       points to the input vector
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
 
 
@@ -52,10 +51,10 @@
 
 #include "arm_helium_utils.h"
 
-void arm_abs_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_abs_f16(
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
     uint32_t blkCnt;                               /* Loop counter */
     f16x8_t vec1;
@@ -77,7 +76,7 @@ void arm_abs_f16(
         /* Increment pointers */
         pSrc += 8;
         pDst += 8;
-
+        
         /* Decrement the loop counter */
         blkCnt--;
     }
@@ -88,22 +87,22 @@ void arm_abs_f16(
 
     if (blkCnt > 0U)
     {
-        /* C = |A| */
-        mve_pred16_t p0 = vctp16q(blkCnt);
-        vec1 = vld1q(pSrc);
-        vstrhq_p(pDst, vabsq(vec1), p0);
+      /* C = |A| */
+      mve_pred16_t p0 = vctp16q(blkCnt);
+      vec1 = vld1q(pSrc);
+      vstrhq_p(pDst, vabsq(vec1), p0);
     }
 
 }
 
 #else
 #if defined(ARM_FLOAT16_SUPPORTED)
-void arm_abs_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_abs_f16(
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 #if defined(ARM_MATH_NEON_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
     f16x8_t vec1;
@@ -116,7 +115,7 @@ void arm_abs_f16(
     {
         /* C = |A| */
 
-        /* Calculate absolute values and then store the results in the destination buffer. */
+    	/* Calculate absolute values and then store the results in the destination buffer. */
         vec1 = vld1q_f16(pSrc);
         res = vabsq_f16(vec1);
         vst1q_f16(pDst, res);
@@ -124,7 +123,7 @@ void arm_abs_f16(
         /* Increment pointers */
         pSrc += 4;
         pDst += 4;
-
+        
         /* Decrement the loop counter */
         blkCnt--;
     }
@@ -135,47 +134,47 @@ void arm_abs_f16(
 #else
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = |A| */
+  while (blkCnt > 0U)
+  {
+    /* C = |A| */
 
-        /* Calculate absolute and store result in destination buffer. */
-        *pDst++ = (_Float16)fabsf((float32_t) * pSrc++);
+    /* Calculate absolute and store result in destination buffer. */
+    *pDst++ = (_Float16)fabsf((float32_t)*pSrc++);
 
-        *pDst++ = (_Float16)fabsf((float32_t) * pSrc++);
+    *pDst++ = (_Float16)fabsf((float32_t)*pSrc++);
 
-        *pDst++ = (_Float16)fabsf((float32_t) * pSrc++);
+    *pDst++ = (_Float16)fabsf((float32_t)*pSrc++);
 
-        *pDst++ = (_Float16)fabsf((float32_t) * pSrc++);
+    *pDst++ = (_Float16)fabsf((float32_t)*pSrc++);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 #endif /* #if defined(ARM_MATH_NEON) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = |A| */
+  while (blkCnt > 0U)
+  {
+    /* C = |A| */
 
-        /* Calculate absolute and store result in destination buffer. */
-        *pDst++ = (_Float16)fabsf((float32_t) * pSrc++);
+    /* Calculate absolute and store result in destination buffer. */
+    *pDst++ = (_Float16)fabsf((float32_t)*pSrc++);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_FLOAT16_SUPPORTED */

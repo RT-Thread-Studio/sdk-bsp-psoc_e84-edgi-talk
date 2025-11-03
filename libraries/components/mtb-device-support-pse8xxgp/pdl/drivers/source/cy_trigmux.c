@@ -29,7 +29,7 @@
 #include "cy_trigmux.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 14.3', 4, \
-                             'CY_PERI_V1 is not available for CAT1B devices.')
+'CY_PERI_V1 is not available for CAT1B devices.')
 
 
 /*******************************************************************************
@@ -88,33 +88,33 @@ cy_en_trigmux_status_t Cy_TrigMux_Connect(uint32_t inTrig, uint32_t outTrig, boo
         if (0UL != (outTrig & PERI_INSTANCE_1_IDENT_Msk))
         {
             CY_TRIGMUX1_TR_CTL(outTrig) = (CY_TRIGMUX1_TR_CTL(outTrig) &
-                                           (uint32_t)~(PERI_TR_GR_TR_OUT_CTL_TR_SEL_Msk |
-                                               PERI_TR_GR_TR_OUT_CTL_TR_INV_Msk |
-                                               PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Msk)) |
-                                          (_VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_SEL, inTrig) |
-                                           _BOOL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_INV, invert) |
-                                           _VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_EDGE, trigType));
+                                      (uint32_t)~(PERI_TR_GR_TR_OUT_CTL_TR_SEL_Msk |
+                                                  PERI_TR_GR_TR_OUT_CTL_TR_INV_Msk |
+                                                  PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Msk)) |
+                                        (_VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_SEL, inTrig) |
+                                        _BOOL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_INV, invert) |
+                                         _VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_EDGE, trigType));
 
         }
         else
         {
             CY_TRIGMUX_TR_CTL(outTrig) = (CY_TRIGMUX_TR_CTL(outTrig) &
-                                          (uint32_t)~(PERI_TR_GR_TR_OUT_CTL_TR_SEL_Msk |
-                                              PERI_TR_GR_TR_OUT_CTL_TR_INV_Msk |
-                                              PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Msk)) |
-                                         (_VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_SEL, inTrig) |
-                                          _BOOL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_INV, invert) |
-                                          _VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_EDGE, trigType));
+                                      (uint32_t)~(PERI_TR_GR_TR_OUT_CTL_TR_SEL_Msk |
+                                                  PERI_TR_GR_TR_OUT_CTL_TR_INV_Msk |
+                                                  PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Msk)) |
+                                        (_VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_SEL, inTrig) |
+                                        _BOOL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_INV, invert) |
+                                         _VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_EDGE, trigType));
         }
 #else
 
         CY_TRIGMUX_TR_CTL(outTrig) = (CY_TRIGMUX_TR_CTL(outTrig) &
                                       (uint32_t)~(PERI_TR_GR_TR_OUT_CTL_TR_SEL_Msk |
-                                          PERI_TR_GR_TR_OUT_CTL_TR_INV_Msk |
-                                          PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Msk)) |
-                                     (_VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_SEL, inTrig) |
-                                      _BOOL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_INV, invert) |
-                                      _VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_EDGE, trigType));
+                                                  PERI_TR_GR_TR_OUT_CTL_TR_INV_Msk |
+                                                  PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Msk)) |
+                                        (_VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_SEL, inTrig) |
+                                        _BOOL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_INV, invert) |
+                                         _VAL2FLD(PERI_TR_GR_TR_OUT_CTL_TR_EDGE, trigType));
 #endif
 
         Cy_SysLib_ExitCriticalSection(interruptState);
@@ -158,30 +158,23 @@ cy_en_trigmux_status_t Cy_TrigMux_Connect(uint32_t inTrig, uint32_t outTrig, boo
 *******************************************************************************/
 cy_en_trigmux_status_t Cy_TrigMux_Select(uint32_t outTrig, bool invert, en_trig_type_t trigType)
 {
-    cy_en_trigmux_status_t retVal = CY_TRIGMUX_BAD_PARAM;
-
     CY_ASSERT_L3(CY_TRIGMUX_IS_TRIGTYPE_VALID(trigType));
     CY_ASSERT_L2(CY_TRIGMUX_IS_ONETRIG_VALID(outTrig));
 
-    if (CY_PERI_V1 == 0U) /* !mxperi_v1 */
-    {
-        uint32_t interruptState;
+    uint32_t interruptState;
 
-        interruptState = Cy_SysLib_EnterCriticalSection();
+    interruptState = Cy_SysLib_EnterCriticalSection();
 
-        CY_TRIGMUX_TR_CTL(outTrig) = (CY_TRIGMUX_TR_CTL(outTrig) &
-                                      (uint32_t)~(PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV_Msk |
-                                          PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE_Msk)) |
-                                     (PERI_TR_1TO1_GR_V2_TR_CTL_TR_SEL_Msk      |
-                                      _BOOL2FLD(PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV, invert) |
-                                      _VAL2FLD(PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE, trigType));
+    CY_TRIGMUX_TR_CTL(outTrig) = (CY_TRIGMUX_TR_CTL(outTrig) &
+                        (uint32_t)~(PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV_Msk |
+                                    PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE_Msk)) |
+                                    (PERI_TR_1TO1_GR_V2_TR_CTL_TR_SEL_Msk      |
+                        _BOOL2FLD(PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV, invert) |
+                            _VAL2FLD(PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE, trigType));
 
-        Cy_SysLib_ExitCriticalSection(interruptState);
+    Cy_SysLib_ExitCriticalSection(interruptState);
 
-        retVal = CY_TRIGMUX_SUCCESS;
-    }
-
-    return retVal;
+    return CY_TRIGMUX_SUCCESS;
 }
 
 
@@ -208,26 +201,19 @@ cy_en_trigmux_status_t Cy_TrigMux_Select(uint32_t outTrig, bool invert, en_trig_
 *******************************************************************************/
 cy_en_trigmux_status_t Cy_TrigMux_Deselect(uint32_t outTrig)
 {
-    cy_en_trigmux_status_t retVal = CY_TRIGMUX_BAD_PARAM;
-
     CY_ASSERT_L2(CY_TRIGMUX_IS_ONETRIG_VALID(outTrig));
 
-    if (CY_PERI_V1 == 0U) /* !mxperi_v1 */
-    {
-        uint32_t interruptState;
+    uint32_t interruptState;
 
-        interruptState = Cy_SysLib_EnterCriticalSection();
+    interruptState = Cy_SysLib_EnterCriticalSection();
 
-        CY_TRIGMUX_TR_CTL(outTrig) &= (uint32_t)~(PERI_TR_1TO1_GR_V2_TR_CTL_TR_SEL_Msk |
-                                      PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV_Msk |
-                                      PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE_Msk);
+    CY_TRIGMUX_TR_CTL(outTrig) &= (uint32_t)~(PERI_TR_1TO1_GR_V2_TR_CTL_TR_SEL_Msk |
+                                                PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV_Msk |
+                                                PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE_Msk);
 
-        Cy_SysLib_ExitCriticalSection(interruptState);
+    Cy_SysLib_ExitCriticalSection(interruptState);
 
-        retVal = CY_TRIGMUX_SUCCESS;
-    }
-
-    return retVal;
+    return CY_TRIGMUX_SUCCESS;
 }
 
 
@@ -259,29 +245,22 @@ cy_en_trigmux_status_t Cy_TrigMux_Deselect(uint32_t outTrig)
 *******************************************************************************/
 cy_en_trigmux_status_t Cy_TrigMux_SetDebugFreeze(uint32_t outTrig, bool enable)
 {
-    cy_en_trigmux_status_t retVal = CY_TRIGMUX_BAD_PARAM;
+    uint32_t interruptState;
 
-    if (CY_PERI_V1 == 0U) /* !mxperi_v1 */
+    interruptState = Cy_SysLib_EnterCriticalSection();
+
+    if (enable)
     {
-        uint32_t interruptState;
-
-        interruptState = Cy_SysLib_EnterCriticalSection();
-
-        if (enable)
-        {
-            CY_TRIGMUX_TR_CTL(outTrig) |= PERI_TR_GR_V2_TR_CTL_DBG_FREEZE_EN_Msk;
-        }
-        else
-        {
-            CY_TRIGMUX_TR_CTL(outTrig) &= (uint32_t)~PERI_TR_GR_V2_TR_CTL_DBG_FREEZE_EN_Msk;
-        }
-
-        Cy_SysLib_ExitCriticalSection(interruptState);
-
-        retVal = CY_TRIGMUX_SUCCESS;
+        CY_TRIGMUX_TR_CTL(outTrig) |= PERI_TR_GR_V2_TR_CTL_DBG_FREEZE_EN_Msk;
+    }
+    else
+    {
+        CY_TRIGMUX_TR_CTL(outTrig) &= (uint32_t)~PERI_TR_GR_V2_TR_CTL_DBG_FREEZE_EN_Msk;
     }
 
-    return retVal;
+    Cy_SysLib_ExitCriticalSection(interruptState);
+
+    return CY_TRIGMUX_SUCCESS;
 }
 
 

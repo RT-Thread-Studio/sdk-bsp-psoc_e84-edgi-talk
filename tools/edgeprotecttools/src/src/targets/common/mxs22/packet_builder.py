@@ -40,7 +40,11 @@ class PacketBuilder:
         map_id, unprotected, b_payload = self._cose_headers(**kwargs)
         protected = Cose.cose_sign1(b_payload, key_path, kid=kwargs.get('kid'))
         packet = {map_id: unprotected}
-        packet[map_id][CoseSign1Packet.COSE_PACKET_ID] = protected
+        cose_packet_id = kwargs.get(
+            'cose_packet_id',
+            CoseSign1Packet.COSE_PACKET_ID
+        )
+        packet[map_id][cose_packet_id] = protected
         packet = cbor.dumps(packet)
         return packet
 
@@ -83,7 +87,11 @@ class PacketBuilder:
         b_signature = self._signature_bytes(signature)
         tag = cbor.Tag(18, [b_protected, b_kid, b_payload, b_signature])
         packet = {map_id: unprotected}
-        packet[map_id][CoseSign1Packet.COSE_PACKET_ID] = cbor.dumps(tag)
+        cose_packet_id = kwargs.get(
+            'cose_packet_id',
+            CoseSign1Packet.COSE_PACKET_ID
+        )
+        packet[map_id][cose_packet_id] = cbor.dumps(tag)
         packet = cbor.dumps(packet)
         return packet
 

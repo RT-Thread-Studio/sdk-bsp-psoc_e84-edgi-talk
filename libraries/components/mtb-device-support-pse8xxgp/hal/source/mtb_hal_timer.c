@@ -49,19 +49,19 @@ extern "C" {
 // mtb_hal_timer_setup
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_timer_setup(mtb_hal_timer_t* obj, const mtb_hal_timer_configurator_t* hal_config,
-                              mtb_hal_clock_t *clk)
+                              mtb_hal_clock_t* clk)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
 
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(NULL != obj, MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT);
     CY_ASSERT_AND_RETURN(NULL != hal_config, MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT);
-#else
+    #else
     if ((NULL == obj) || (NULL == hal_config))
     {
         return MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT;
     }
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
 
     /* start with a clean Timer object */
     memset(obj, 0, sizeof(mtb_hal_timer_t));
@@ -90,14 +90,14 @@ cy_rslt_t mtb_hal_timer_start(mtb_hal_timer_t* obj)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
 
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(NULL != obj, MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT);
-#else
+    #else
     if (NULL == obj)
     {
         return MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT;
     }
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
 
     Cy_TCPWM_Counter_Enable(obj->tcpwm.base, obj->tcpwm.cntnum);
 
@@ -113,14 +113,14 @@ cy_rslt_t mtb_hal_timer_start(mtb_hal_timer_t* obj)
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_timer_stop(mtb_hal_timer_t* obj)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(NULL != obj, MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT);
-#else
+    #else
     if (NULL == obj)
     {
         return MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT;
     }
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
 
     Cy_TCPWM_Counter_Disable(obj->tcpwm.base, obj->tcpwm.cntnum);
     return CY_RSLT_SUCCESS;
@@ -132,14 +132,14 @@ cy_rslt_t mtb_hal_timer_stop(mtb_hal_timer_t* obj)
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_timer_reset(mtb_hal_timer_t* obj, uint32_t start_value)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(NULL != obj, MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT);
-#else
+    #else
     if (NULL == obj)
     {
         return MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT;
     }
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
 
     Cy_TCPWM_Counter_SetCounter(obj->tcpwm.base, obj->tcpwm.cntnum, start_value);
     return CY_RSLT_SUCCESS;
@@ -167,7 +167,7 @@ uint32_t mtb_hal_timer_read(const mtb_hal_timer_t* obj)
 // mtb_hal_timer_register_callback
 //--------------------------------------------------------------------------------------------------
 void mtb_hal_timer_register_callback(mtb_hal_timer_t* obj, mtb_hal_timer_event_callback_t callback,
-                                     void *callback_arg)
+                                     void* callback_arg)
 {
     if (obj != NULL)
     {
@@ -195,15 +195,15 @@ void mtb_hal_timer_enable_event(mtb_hal_timer_t* obj, mtb_hal_timer_event_t even
             // Clear any newly enabled events so that old IRQs don't trigger ISRs
             Cy_TCPWM_ClearInterrupt(obj->tcpwm.base, obj->tcpwm.cntnum, ~old_mask & event);
         }
-#if (_MTB_HAL_IRQ_MUXING)
+        #if (_MTB_HAL_IRQ_MUXING)
         /* Only clear the interrupt status if there isn't a pending interrupt */
         if ((Cy_TCPWM_GetInterruptStatus(obj->tcpwm.base, obj->tcpwm.cntnum) == 0) || enable)
-#endif
+        #endif
         {
             uint32_t new_event = enable ? (old_mask | event) : (old_mask & ~event);
             Cy_TCPWM_SetInterruptMask(obj->tcpwm.base, obj->tcpwm.cntnum, new_event);
         }
-#if (_MTB_HAL_IRQ_MUXING)
+        #if (_MTB_HAL_IRQ_MUXING)
         else
         {
             /* Note that this interrupt cause should be cleared the next time an interrupt
@@ -211,7 +211,7 @@ void mtb_hal_timer_enable_event(mtb_hal_timer_t* obj, mtb_hal_timer_event_t even
              */
             obj->clear_intr_mask |= event;
         }
-#endif
+        #endif
 
         if (enable)
         {
@@ -236,14 +236,14 @@ cy_rslt_t mtb_hal_timer_process_interrupt(mtb_hal_timer_t* obj)
           not set for the requested timer */
     cy_rslt_t result     = MTB_HAL_TIMER_RSLT_WRN_INTERRUPT_STATUS_NOT_SET;
 
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(NULL != obj, MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT);
-#else
+    #else
     if (NULL == obj)
     {
         return MTB_HAL_TIMER_RSLT_ERR_BAD_ARGUMENT;
     }
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
 
     // Get and clear the interrupt cause
     uint32_t intrCause = Cy_TCPWM_GetInterruptStatusMasked(obj->tcpwm.base, obj->tcpwm.cntnum);
@@ -262,7 +262,7 @@ cy_rslt_t mtb_hal_timer_process_interrupt(mtb_hal_timer_t* obj)
         }
     }
 
-#if (_MTB_HAL_IRQ_MUXING)
+    #if (_MTB_HAL_IRQ_MUXING)
     /* Disable any interrupts that couldn't be disabled from enable_event */
     if (0u != obj->clear_intr_mask)
     {
@@ -272,7 +272,7 @@ cy_rslt_t mtb_hal_timer_process_interrupt(mtb_hal_timer_t* obj)
                                   (old_mask & ~(obj->clear_intr_mask)));
         obj->clear_intr_mask = 0u;
     }
-#endif // (_MTB_HAL_IRQ_MUXING)
+    #endif // (_MTB_HAL_IRQ_MUXING)
 
     return result;
 }

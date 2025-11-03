@@ -102,13 +102,13 @@ $ edgeprotecttools -t psoc_c3 <COMMAND> --help
 ## Common options
 The interface provides common options. These options are common for all commands and must precede them:
 
-| Name           | Description                 |
-| -------------- | --------------------------- |
-| -t, --target   | Device name or family       |
-| -v, --verbose  | Provides debug-level log    |
-| -q, --quiet    | Quiet display option        |
-| --logfile-off  | Disabling logging to a file |
-| --timestamps   | Enable displaying timestamps in log messages |
+| Name          | Description                                  |
+|---------------|----------------------------------------------|
+| -t, --target  | Device name or family                        |
+| -v, --verbose | Provides debug-level log                     |
+| -q, --quiet   | Quiet display option                         |
+| --logfile-off | Disabling logging to a file                  |
+| --timestamps  | Enable displaying timestamps in log messages |
 
 
 ## Create project
@@ -126,20 +126,25 @@ The integrity exam is implemented as a combination of a RAM application collecti
 The tool gets the RAM application output and compares it with the device integrity certificate data. This acceptance test is recommended before the device OEM provisioning and determines that there are no modifications of fuses or flash bits.
 ### Command: `integrity-exam`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| --probe-id        | optional           | Probe serial number. |
+| Name              | Optional/Required | Description                                                |
+|-------------------|:-----------------:|------------------------------------------------------------|
+| --probe-id        |     optional      | Probe serial number.                                       |
+| --cert            |     required      | Path to the integrity certificate.                         |
+| --custom-regions  |     optional      | Path to a custom regions template for integrity check.     |
+| --key             |     optional      | Key to sign the DLM package.                               |
+| --existing-packet |     optional      | Skip provisioning packet creation and use an existing one. |
+
 ### Usage example
 ```bash
-$ edgeprotecttools -t psoc_c3 integrity-exam --probe-id 061003B803260400
+$ edgeprotecttools -t psoc_c3 integrity-exam --probe-id 061003B803260400 --cert packets/device_integrity_cert.json
 ```
 
 ## Provision device
 Configuring a device with a set of keys and policies.
 ### Command: `provision-device`
 ### Parameters
-| Name              | Optional/Required  | Description                                                                                                                                                       |
-| ----------------- |:------------------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name              | Optional/Required | Description                                                                                                                                                       |
+|-------------------|:-----------------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | -p, --policy      |     required      | The path to the provisioning policy.                                                                                                                              |
 | --key, --key-path |     optional      | The path to the key used to sign the provisioning packet. If not specified, an unsigned packet will be created. Applicable only for policy type "prot_fw_policy". |
 | --probe-id        |     optional      | Probe serial number.                                                                                                                                              |
@@ -154,7 +159,7 @@ Reconfiguring a device with the updated policies.
 ### Command: `reprovision-device`
 ### Parameters
 | Name              | Optional/Required | Description                                                                                                                                                     |
-| ----------------- |:-----------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|-------------------|:-----------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | -p, --policy      |     required      | The path to the reprovisioning policy.                                                                                                                          |
 | --key, --key-path |     optional      | The path to the key used to sign the reprovisioning packet. If not specified, an unsigned packet will be created.                                               |
 | --existing-packet |     optional      | Skip provisioning packet creation and use the existing packet. This may be useful when a packet already exists and the tool does not have to generate it again. |
@@ -169,11 +174,11 @@ $ edgeprotecttools -t psoc_c3 reprovision-device -p policy/policy_oem_reprovisio
 Creates a provisioning/reprovisioning data packet without starting the device provisioning process.
 ### Command: `create-provisioning-packet`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| -p, --policy      |     required       | The path to the provisioning policy. |
-| --key, --key-path |     optional       | The path to the key used to sign the reprovisioning packet. If not specified, an unsigned packet will be created. |
-| -o, --output      |     optional       | The path where to save the packet. |
+| Name              | Optional/Required | Description                                                                                                       |
+|-------------------|:-----------------:|-------------------------------------------------------------------------------------------------------------------|
+| -p, --policy      |     required      | The path to the provisioning policy.                                                                              |
+| --key, --key-path |     optional      | The path to the key used to sign the reprovisioning packet. If not specified, an unsigned packet will be created. |
+| -o, --output      |     optional      | The path where to save the packet.                                                                                |
 ### Usage example
 #### Signed
 ```bash
@@ -188,14 +193,14 @@ $ edgeprotecttools -t psoc_c3 create-provisioning-packet -p policy/policy_oem_re
 Builds the RAM application and it's inputs into a single signed package.
 ### Command: `build-ramapp-package`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| -a, --app         |     required       | The path to the RAM application binary. |
-| -o, --output      |     required       | The path to the DLM package output file. |
-| --inparams        |     optional       | The path to the application input parameters. |
-| --key, --key-path |     optional       | Private key to sign the package. |
-| --hex-addr        |     optional       | Adjust address in hex output file. |
-| -S, --slot-size   |     optional       | Sets the maximum slot size. |
+| Name              | Optional/Required | Description                                   |
+|-------------------|:-----------------:|-----------------------------------------------|
+| -a, --app         |     required      | The path to the RAM application binary.       |
+| -o, --output      |     required      | The path to the DLM package output file.      |
+| --inparams        |     optional      | The path to the application input parameters. |
+| --key, --key-path |     optional      | Private key to sign the package.              |
+| --hex-addr        |     optional      | Adjust address in hex output file.            |
+| -S, --slot-size   |     optional      | Sets the maximum slot size.                   |
 ### Usage example
 ```bash
 # Create signed DLM package (the --key option may be skipped for BOOT_SIMPLE_APP)
@@ -206,14 +211,14 @@ $ edgeprotecttools -t psoc_c3 build-ramapp-package --app packets/apps/prov_oem/c
 ## Create debug token
 The debug token is used to enable CM33 or the system access port when it is temporarily disabled. Note that the token cannot enable an access port that is permanently disabled by the access restrictions. Also, the debug token can be used to enable/disable invasive or non-invasive debugging for CM33-AP.
 
-The command creates a signed debug token binary based on the template. By default, the template is configured to be applicable for any die ID. See the [Read die id](#read-die-id) section to the find die ID of your device. See the [Get device info](#get-a-device-info) section to find the silicon ID, family ID, and revision ID needed to create a certificate.
+The command creates a signed debug token binary based on the template. By default, the template is configured to be applicable for any die ID. See the [Read die id](#read-die-id) section to the find die ID of your device. See the [Get device info](#get-device-info) section to find the silicon ID, family ID, and revision ID needed to create a certificate.
 ### Command: `debug-token`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| -T, --template    | optional           | The path to the token template. The template can be found in the _packets_ directory of the project (_debug_token.json_). |
-| --key, --key-path | optional           | The path to the private key to sign the token. If the token to be signed by HSM, do not specify the option. |
-| -o, --output      | required           | The file where to save the debug token. |
+| Name              | Optional/Required | Description                                                                                                               |
+|-------------------|:-----------------:|---------------------------------------------------------------------------------------------------------------------------|
+| -T, --template    |     optional      | The path to the token template. The template can be found in the _packets_ directory of the project (_debug_token.json_). |
+| --key, --key-path |     optional      | The path to the private key to sign the token. If the token to be signed by HSM, do not specify the option.               |
+| -o, --output      |     required      | The file where to save the debug token.                                                                                   |
 ### Usage example
 ```bash
 $ edgeprotecttools -t psoc_c3 debug-token --template packets/debug_token.json -o packets/debug_token.bin --key keys/oem_rot_priv_key_0.pem
@@ -224,10 +229,10 @@ $ edgeprotecttools -t psoc_c3 debug-token --template packets/debug_token.json -o
 Reads the die ID from a device.
 ### Command: `read-die-id`
 ### Parameters
-| Name           | Optional/Required  | Description   |
-| -------------- |:------------------:| ------------- |
-| -o, --out-file | optional           | The name of the file where to save the die ID. If not specified, the information will be displayed in the console. |
-| --probe-id     | optional           | Probe serial number. |
+| Name           | Optional/Required | Description                                                                                                        |
+|----------------|:-----------------:|--------------------------------------------------------------------------------------------------------------------|
+| -o, --out-file |     optional      | The name of the file where to save the die ID. If not specified, the information will be displayed in the console. |
+| --probe-id     |     optional      | Probe serial number.                                                                                               |
 ### Usage example
 ```bash
 $ edgeprotecttools -t psoc_c3 read-die-id
@@ -235,15 +240,15 @@ $ edgeprotecttools -t psoc_c3 read-die-id
 
 
 ## Get firmware version
-Outputs version of ROM_BOOT, RRAM_SE_BOOT, BASE_SE_RT_SERVICES, SE_RT_SERVICES and CM33_L1_BOOT.
+Outputs version of ROM_BOOT, FLASH_BOOT
 ### Command: `version`
 ### Parameters
-| Name           | Optional/Required  | Description   |
-| -------------- |:------------------:| ------------- |
-| --probe-id     | optional           | Probe serial number. |
+| Name       | Optional/Required | Description          |
+|------------|:-----------------:|----------------------|
+| --probe-id |     optional      | Probe serial number. |
 ### Usage example
 ```bash
-$ edgeprotecttools -t psoc_c3 -p version
+$ edgeprotecttools -t psoc_c3 version
 ```
 
 
@@ -251,10 +256,10 @@ $ edgeprotecttools -t psoc_c3 -p version
 Gets device information - silicon ID, silicon revision, and family ID.
 ### Command: `device-info`
 ### Parameters
-| Name           | Optional/Required  | Description   |
-| -------------- |:------------------:| ------------- |
-| --probe-id     | optional           | Probe serial number. |
-| --ap           | optional           | The access port used to read the data - "cm33" or "sysap". The default value is "sysap". |
+| Name       | Optional/Required | Description                                                                              |
+|------------|:-----------------:|------------------------------------------------------------------------------------------|
+| --probe-id |     optional      | Probe serial number.                                                                     |
+| --ap       |     optional      | The access port used to read the data - "cm33" or "sysap". The default value is "sysap". |
 ### Usage example
 ```bash
 $ edgeprotecttools -t psoc_c3 device-info
@@ -327,7 +332,7 @@ The flow:
 ### Step 1
 In the packets/debug_token.json change the "rma" property to `Enable`. Create a token but do not specify the `--key` option.
 ```bash
-$ edgeprotecttools -t psoc_c3 rma-token --template packets/debug_token.json --output rma_token_unsigned.bin
+$ edgeprotecttools -t psoc_c3 debug-token --template packets/debug_token.json --output rma_token_unsigned.bin
 ```
 ### Step 2
 Use the tools provided by your HSM provider to sign the extended image on the HSM machine. Save the signature returned by the HSM to a file.
@@ -339,35 +344,46 @@ $ edgeprotecttools merge-bin --image rma_token_unsigned.bin --image signature_hs
 
 
 # Return Merchandise Authorization (RMA)
-The flow for the transition device to the RMA lifecycle stage and open DAP.
+The flow for the transition device to the `RMA` lifecycle stage and open DAP.
 ## RMA token
-For the transition of the device into the RMA lifecycle stage you need to create a token, which contains the device DIE_ID and is signed with the OEM key.
-The token template is located in the _packets_ directory of the project. _debug_token.json_ defines the DIE_ID of the devices the token can be applied to. The default template min and max values are applicable for all devices. Modify it for specific devices only if needed. Set "rma" property to `Enable`.
-This token is used to transit the device to the RMA LCS.
+For the transition of the device into the `RMA` lifecycle stage you need to create a token, which contains the device DIE_ID and is signed with the OEM RoT key.
+
+There are two types of RMA tokens - "Transit to RMA" and "Open RMA". The tokens can be created with the `debug-token` command and the enabled `rma` property in the token template.
+
+The token template is located in the _packets_ directory of the project. _debug_token.json_ defines the DIE_ID of the devices the token can be applied to. The default template min and max values are applicable for all devices. Modify it for specific devices only if needed. Set `rma` property to `Enable`.
+
+"Transit to RMA" token is used to transit the device to the `RMA` LCS.
 ### Command: `debug-token`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| -T, --template    | optional           | The path to the token template. The template can be found in the _packets_ directory of the project (_debug_token.json_). |
-| --key, --key-path | optional           | The path to the private key to sign the token. If the token to be signed by HSM, do not specify the option. |
-| -o, --output      | required           | The file where to save the RMA token. |
+| Name              | Optional/Required | Description                                                                                                               |
+|-------------------|:-----------------:|---------------------------------------------------------------------------------------------------------------------------|
+| -T, --template    |     required      | The path to the token template. The template can be found in the _packets_ directory of the project (_debug_token.json_). |
+| --key, --key-path |     optional      | The path to the private key to sign the token. If the token to be signed by HSM, do not specify the option.               |
+| -o, --output      |     required      | The file where to save the "Transit to RMA" token.                                                                        |
 ### Usage example
 ```bash
-$ edgeprotecttools -t psoc_c3 debug-token --template packets/debug_token.json -o debug_token.bin --key keys/oem_rot_priv_key_0.pem
+$ edgeprotecttools -t psoc_c3 debug-token --template packets/debug_token.json -o packets/rma_token.bin --key keys/oem_rot_priv_key_0.pem
 ```
 
 ## Transition to RMA
-The command advances the device lifecycle stage to RMA. The token must be signed with the OEM key.
+The command advances the device lifecycle stage to `RMA`. The token must be signed with the OEM key. 
+
+For the device in `NORMAL_PROVISIONED` LCS, the DLM package does not need to be signed, and specifying the `--key` option is unnecessary. 
+
+For the device in `SECURE` LCS, the DLM package must be signed with OEM RoT private key, and specifying the `--key` option is mandatory.
+
 ### Command: `transit-to-rma`
 ### Parameters
-| Name          | Optional/Required  | Description   |
-| ------------- |:------------------:| ------------- |
-| --token       | optional           | Path to the "Transit to RMA" token. |
-| --probe-id    | optional           | Probe serial number. |
+| Name              | Optional/Required | Description                                                  |
+|-------------------|:-----------------:|--------------------------------------------------------------|
+| --token           |     required      | Path to the "Transit to RMA" token.                          |
+| --key, --key-path |     optional      | The path to the OEM RoT private key to sign the DLM package. |
+| --probe-id        |     optional      | Probe serial number.                                         |
 
 ### Usage example
 ```bash
 $ edgeprotecttools -t psoc_c3 transit-to-rma --token packets/rma_token.bin
+$ edgeprotecttools -t psoc_c3 transit-to-rma --token packets/rma_token.bin --key keys/oem_rot_priv_key_0.pem
 ```
 
 # Protected Firmware Update

@@ -42,7 +42,6 @@
   @param[in]     pSrc        points to input vector
   @param[out]    pDst        points to output vector
   @param[in]     numSamples  number of samples in each vector
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function implements 1.31 by 1.31 multiplications and finally output is converted into 2.30 format.
@@ -53,10 +52,10 @@
 
 #include "arm_helium_utils.h"
 
-void arm_cmplx_mag_q31(
-    const q31_t * pSrc,
-    q31_t * pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_mag_q31(
+  const q31_t * pSrc,
+        q31_t * pDst,
+        uint32_t numSamples)
 {
     int32_t blockSize = numSamples;  /* loop counters */
     uint32_t  blkCnt;           /* loop counters */
@@ -103,95 +102,95 @@ void arm_cmplx_mag_q31(
     blkCnt = blockSize & 3;
     while (blkCnt > 0U)
     {
-        /* C[0] = sqrt(A[0] * A[0] + A[1] * A[1]) */
-
-        real = *pSrc++;
-        imag = *pSrc++;
-        acc0 = (q31_t)(((q63_t) real * real) >> 33);
-        acc1 = (q31_t)(((q63_t) imag * imag) >> 33);
-
-        /* store result in 2.30 format in destination buffer. */
-        arm_sqrt_q31(acc0 + acc1, pDst++);
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* C[0] = sqrt(A[0] * A[0] + A[1] * A[1]) */
+  
+      real = *pSrc++;
+      imag = *pSrc++;
+      acc0 = (q31_t) (((q63_t) real * real) >> 33);
+      acc1 = (q31_t) (((q63_t) imag * imag) >> 33);
+  
+      /* store result in 2.30 format in destination buffer. */
+      arm_sqrt_q31(acc0 + acc1, pDst++);
+  
+      /* Decrement loop counter */
+      blkCnt--;
     }
 }
 
 #else
-void arm_cmplx_mag_q31(
-    const q31_t * pSrc,
-    q31_t * pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_mag_q31(
+  const q31_t * pSrc,
+        q31_t * pDst,
+        uint32_t numSamples)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q31_t real, imag;                              /* Temporary input variables */
-    q31_t acc0, acc1;                              /* Accumulators */
+        uint32_t blkCnt;                               /* Loop counter */
+        q31_t real, imag;                              /* Temporary input variables */
+        q31_t acc0, acc1;                              /* Accumulators */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] = sqrt(A[0] * A[0] + A[1] * A[1]) */
+  while (blkCnt > 0U)
+  {
+    /* C[0] = sqrt(A[0] * A[0] + A[1] * A[1]) */
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        acc0 = (q31_t)(((q63_t) real * real) >> 33);
-        acc1 = (q31_t)(((q63_t) imag * imag) >> 33);
+    real = *pSrc++;
+    imag = *pSrc++;
+    acc0 = (q31_t) (((q63_t) real * real) >> 33);
+    acc1 = (q31_t) (((q63_t) imag * imag) >> 33);
 
-        /* store result in 2.30 format in destination buffer. */
-        arm_sqrt_q31(acc0 + acc1, pDst++);
+    /* store result in 2.30 format in destination buffer. */
+    arm_sqrt_q31(acc0 + acc1, pDst++);
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        acc0 = (q31_t)(((q63_t) real * real) >> 33);
-        acc1 = (q31_t)(((q63_t) imag * imag) >> 33);
-        arm_sqrt_q31(acc0 + acc1, pDst++);
+    real = *pSrc++;
+    imag = *pSrc++;
+    acc0 = (q31_t) (((q63_t) real * real) >> 33);
+    acc1 = (q31_t) (((q63_t) imag * imag) >> 33);
+    arm_sqrt_q31(acc0 + acc1, pDst++);
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        acc0 = (q31_t)(((q63_t) real * real) >> 33);
-        acc1 = (q31_t)(((q63_t) imag * imag) >> 33);
-        arm_sqrt_q31(acc0 + acc1, pDst++);
+    real = *pSrc++;
+    imag = *pSrc++;
+    acc0 = (q31_t) (((q63_t) real * real) >> 33);
+    acc1 = (q31_t) (((q63_t) imag * imag) >> 33);
+    arm_sqrt_q31(acc0 + acc1, pDst++);
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        acc0 = (q31_t)(((q63_t) real * real) >> 33);
-        acc1 = (q31_t)(((q63_t) imag * imag) >> 33);
-        arm_sqrt_q31(acc0 + acc1, pDst++);
+    real = *pSrc++;
+    imag = *pSrc++;
+    acc0 = (q31_t) (((q63_t) real * real) >> 33);
+    acc1 = (q31_t) (((q63_t) imag * imag) >> 33);
+    arm_sqrt_q31(acc0 + acc1, pDst++);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = numSamples % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = numSamples % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] = sqrt(A[0] * A[0] + A[1] * A[1]) */
+  while (blkCnt > 0U)
+  {
+    /* C[0] = sqrt(A[0] * A[0] + A[1] * A[1]) */
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        acc0 = (q31_t)(((q63_t) real * real) >> 33);
-        acc1 = (q31_t)(((q63_t) imag * imag) >> 33);
+    real = *pSrc++;
+    imag = *pSrc++;
+    acc0 = (q31_t) (((q63_t) real * real) >> 33);
+    acc1 = (q31_t) (((q63_t) imag * imag) >> 33);
 
-        /* store result in 2.30 format in destination buffer. */
-        arm_sqrt_q31(acc0 + acc1, pDst++);
+    /* store result in 2.30 format in destination buffer. */
+    arm_sqrt_q31(acc0 + acc1, pDst++);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

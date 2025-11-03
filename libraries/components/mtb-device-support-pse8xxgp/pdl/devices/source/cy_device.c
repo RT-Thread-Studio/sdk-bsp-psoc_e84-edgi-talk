@@ -33,24 +33,24 @@
 /* This is set in Cy_PDL_Init() to the device information relevant
  * for the current target.
  */
-const cy_stc_device_t *cy_device;
+const cy_stc_device_t* cy_device;
 
 /* Platform and peripheral block configuration */
 const cy_stc_device_t cy_deviceIpBlockCfg ;
 
 const uint32_t IPC_CHANNELS_NR[CY_IPC_INSTANCES] =
 {
-    CY_IPC_IP0_CH, CY_IPC_IP1_CH,
+    CY_IPC_IP0_CH,CY_IPC_IP1_CH,
 };
 
 const uint32_t IPC_IRQ_NR[CY_IPC_INSTANCES] =
 {
-    CY_IPC_IP0_INT, CY_IPC_IP1_INT,
+    CY_IPC_IP0_INT,CY_IPC_IP1_INT,
 };
 
 const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES] =
 {
-    IPC0_BASE, IPC1_BASE,
+    IPC0_BASE,IPC1_BASE,
 };
 
 /******************************************************************************
@@ -75,12 +75,12 @@ void Cy_PDL_Init(const cy_stc_device_t * device)
 
 #ifdef SMIF_JEDEC_STANDARD_DEVICE_RESET_SUPPORT
 #if defined(CORE_NAME_CM55_0)
-    CY_SECTION_ITCM_BEGIN
+CY_SECTION_ITCM_BEGIN
 #else
-    CY_SECTION_RAMFUNC_BEGIN
+CY_SECTION_RAMFUNC_BEGIN
 #endif
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.6', 1, \
-                             'Cy_SMIF_Reset_Memory is a WEAK function and can have multiple definition.')
+            'Cy_SMIF_Reset_Memory is a WEAK function and can have multiple definition.')
 __WEAK void Cy_SMIF_Reset_Memory(SMIF_Type *base, cy_en_smif_slave_select_t slaveSelect)
 {
     uint32_t interruptState = 0;
@@ -90,7 +90,7 @@ __WEAK void Cy_SMIF_Reset_Memory(SMIF_Type *base, cy_en_smif_slave_select_t slav
     Cy_GPIO_Pin_FastInit(SMIF_SS_PORT(base, slaveSelect), SMIF_SS_PIN(base, slaveSelect), CY_GPIO_DM_STRONG, 1U, HSIOM_SEL_GPIO);
     Cy_GPIO_Pin_FastInit(SMIF_DQ0_PORT(base), 0U, CY_GPIO_DM_STRONG, 1U, HSIOM_SEL_GPIO);
 
-    for (int i = 0; i < 4; i++)
+    for(int i=0; i <4;i++)
     {
         Cy_GPIO_Inv(SMIF_DQ0_PORT(base), 0U);
         Cy_GPIO_Inv(SMIF_SS_PORT(base, slaveSelect), SMIF_SS_PIN(base, slaveSelect));
@@ -108,9 +108,9 @@ __WEAK void Cy_SMIF_Reset_Memory(SMIF_Type *base, cy_en_smif_slave_select_t slav
 }
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.6')
 #if CY_CPU_CORTEX_M55
-    CY_SECTION_ITCM_END
+CY_SECTION_ITCM_END
 #else
-    CY_SECTION_RAMFUNC_END
+CY_SECTION_RAMFUNC_END
 #endif
 #endif
 

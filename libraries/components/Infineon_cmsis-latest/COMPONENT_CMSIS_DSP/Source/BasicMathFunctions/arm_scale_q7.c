@@ -44,7 +44,6 @@
   @param[in]     shift      number of bits to shift the result by
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The input data <code>*pSrc</code> and <code>scaleFract</code> are in 1.7 format.
@@ -55,7 +54,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_scale_q7(
+ARM_DSP_ATTRIBUTE void arm_scale_q7(
     const q7_t * pSrc,
     q7_t   scaleFract,
     int8_t  shift,
@@ -81,10 +80,10 @@ void arm_scale_q7(
 
         low = vmullbq_int(vecSrc, vdupq_n_s8(scaleFract));
         low = vqshlq_r(low, shift);
-        vecDst = vqshrnbq_n_s16(vecDst, low, 7);
+        vecDst = vqshrnbq_n_s16(vecDst,low,7);
         high = vmulltq_int(vecSrc, vdupq_n_s8(scaleFract));
         high = vqshlq_r(high, shift);
-        vecDst = vqshrntq_n_s16(vecDst, high, 7);
+        vecDst = vqshrntq_n_s16(vecDst,high,7);
 
         vst1q(pDst, vecDst);
         /*
@@ -107,11 +106,11 @@ void arm_scale_q7(
         vecSrc = vld1q(pSrc);
         low = vmullbq_int_s8(vecSrc, vdupq_n_s8(scaleFract));
         low = vqshlq_r(low, shift);
-        vecDst = vqshrnbq_n_s16(vecDst, low, 7);
+        vecDst = vqshrnbq_n_s16(vecDst,low,7);
 
         high = vmulltq_int_s8(vecSrc, vdupq_n_s8(scaleFract));
         high = vqshlq_r(high, shift);
-        vecDst = vqshrntq_n_s16(vecDst, high, 7);
+        vecDst = vqshrntq_n_s16(vecDst,high,7);
 
         /* narrowing & merge */
         vstrbq_p_s8(pDst, vecDst, p0);
@@ -120,76 +119,76 @@ void arm_scale_q7(
 }
 
 #else
-void arm_scale_q7(
-    const q7_t * pSrc,
-    q7_t scaleFract,
-    int8_t shift,
-    q7_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_scale_q7(
+  const q7_t * pSrc,
+        q7_t scaleFract,
+        int8_t shift,
+        q7_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    int8_t kShift = 7 - shift;                     /* Shift to apply after scaling */
+        uint32_t blkCnt;                               /* Loop counter */
+        int8_t kShift = 7 - shift;                     /* Shift to apply after scaling */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
 #if defined (ARM_MATH_DSP)
-    q7_t in1,  in2,  in3,  in4;                    /* Temporary input variables */
-    q7_t out1, out2, out3, out4;                   /* Temporary output variables */
+  q7_t in1,  in2,  in3,  in4;                    /* Temporary input variables */
+  q7_t out1, out2, out3, out4;                   /* Temporary output variables */
 #endif
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A * scale */
+  while (blkCnt > 0U)
+  {
+    /* C = A * scale */
 
 #if defined (ARM_MATH_DSP)
-        /* Reading 4 inputs from memory */
-        in1 = *pSrc++;
-        in2 = *pSrc++;
-        in3 = *pSrc++;
-        in4 = *pSrc++;
+    /* Reading 4 inputs from memory */
+    in1 = *pSrc++;
+    in2 = *pSrc++;
+    in3 = *pSrc++;
+    in4 = *pSrc++;
 
-        /* Scale inputs and store result in the temporary variable. */
-        out1 = (q7_t)(__SSAT(((in1) * scaleFract) >> kShift, 8));
-        out2 = (q7_t)(__SSAT(((in2) * scaleFract) >> kShift, 8));
-        out3 = (q7_t)(__SSAT(((in3) * scaleFract) >> kShift, 8));
-        out4 = (q7_t)(__SSAT(((in4) * scaleFract) >> kShift, 8));
+    /* Scale inputs and store result in the temporary variable. */
+    out1 = (q7_t) (__SSAT(((in1) * scaleFract) >> kShift, 8));
+    out2 = (q7_t) (__SSAT(((in2) * scaleFract) >> kShift, 8));
+    out3 = (q7_t) (__SSAT(((in3) * scaleFract) >> kShift, 8));
+    out4 = (q7_t) (__SSAT(((in4) * scaleFract) >> kShift, 8));
 
-        /* Pack and store result in destination buffer (in single write) */
-        write_q7x4_ia(&pDst, __PACKq7(out1, out2, out3, out4));
+    /* Pack and store result in destination buffer (in single write) */
+    write_q7x4_ia (&pDst, __PACKq7(out1, out2, out3, out4));
 #else
-        *pDst++ = (q7_t)(__SSAT((((q15_t) * pSrc++ * scaleFract) >> kShift), 8));
-        *pDst++ = (q7_t)(__SSAT((((q15_t) * pSrc++ * scaleFract) >> kShift), 8));
-        *pDst++ = (q7_t)(__SSAT((((q15_t) * pSrc++ * scaleFract) >> kShift), 8));
-        *pDst++ = (q7_t)(__SSAT((((q15_t) * pSrc++ * scaleFract) >> kShift), 8));
+    *pDst++ = (q7_t) (__SSAT((((q15_t) *pSrc++ * scaleFract) >> kShift), 8));
+    *pDst++ = (q7_t) (__SSAT((((q15_t) *pSrc++ * scaleFract) >> kShift), 8));
+    *pDst++ = (q7_t) (__SSAT((((q15_t) *pSrc++ * scaleFract) >> kShift), 8));
+    *pDst++ = (q7_t) (__SSAT((((q15_t) *pSrc++ * scaleFract) >> kShift), 8));
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A * scale */
+  while (blkCnt > 0U)
+  {
+    /* C = A * scale */
 
-        /* Scale input and store result in destination buffer. */
-        *pDst++ = (q7_t)(__SSAT((((q15_t) * pSrc++ * scaleFract) >> kShift), 8));
+    /* Scale input and store result in destination buffer. */
+    *pDst++ = (q7_t) (__SSAT((((q15_t) *pSrc++ * scaleFract) >> kShift), 8));
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

@@ -89,7 +89,7 @@ void Cy_SCB_ReadArrayNoCheck(CySCB_Type const *base, void *buffer, uint32_t size
             buf[idx] = (uint8_t) Cy_SCB_ReadRxFifo(base);
         }
     }
-    else if (datawidth <= CY_SCB_HALF_WORD_WIDTH)
+    else if(datawidth <= CY_SCB_HALF_WORD_WIDTH)
     {
         uint16_t *buf = (uint16_t *) buffer;
 
@@ -188,7 +188,7 @@ void Cy_SCB_ReadArrayBlocking(CySCB_Type const *base, void *buffer, uint32_t siz
     {
         numCopied = Cy_SCB_ReadArray(base, (void *) buf, size);
 #if((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
-        buf = &buf[((datawidth / 8UL) * numCopied)];
+        buf = &buf[((datawidth/8UL) * numCopied)];
 #elif((defined (CY_IP_MXSCB_VERSION) && CY_IP_MXSCB_VERSION==1))
         buf = &buf[(byteMode ? (numCopied) : (2UL * numCopied))];
 #endif /* CY_IP_MXSCB_VERSION */
@@ -293,7 +293,7 @@ void Cy_SCB_WriteArrayNoCheck(CySCB_Type *base, void *buffer, uint32_t size)
             Cy_SCB_WriteTxFifo(base, (uint32_t) buf[idx]);
         }
     }
-    else if (datawidth <= CY_SCB_HALF_WORD_WIDTH)
+    else if(datawidth <= CY_SCB_HALF_WORD_WIDTH)
     {
         uint16_t *buf = (uint16_t *) buffer;
 
@@ -391,7 +391,7 @@ void Cy_SCB_WriteArrayBlocking(CySCB_Type *base, void *buffer, uint32_t size)
     {
         numCopied = Cy_SCB_WriteArray(base, (void *) buf, size);
 #if((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=2)) || defined (CY_IP_MXS22SCB))
-        buf = &buf[((datawidth / 8UL) * numCopied)];
+        buf = &buf[((datawidth/8UL) * numCopied)];
 #elif((defined (CY_IP_MXSCB_VERSION) && CY_IP_MXSCB_VERSION==1))
         buf = &buf[(byteMode ? (numCopied) : (2UL * numCopied))];
 #endif /* CY_IP_MXSCB_VERSION */

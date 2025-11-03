@@ -41,17 +41,17 @@
    * @{
    */
 
-/**
- * @brief  Process function for the floating-point Linear Interpolation Function.
- * @param[in,out] S  is an instance of the floating-point Linear Interpolation structure
- * @param[in]     x  input sample to process
- * @return y processed output sample.
- *
- */
-float16_t arm_linear_interp_f16(
-    arm_linear_interp_instance_f16 * S,
-    float16_t x)
-{
+  /**
+   * @brief  Process function for the floating-point Linear Interpolation Function.
+   * @param[in,out] S  is an instance of the floating-point Linear Interpolation structure
+   * @param[in]     x  input sample to process
+   * @return y processed output sample.
+   *
+   */
+  float16_t arm_linear_interp_f16(
+  const arm_linear_interp_instance_f16 * S,
+  float16_t x)
+  {
     float16_t y;
     float16_t x0, x1;                            /* Nearest input values */
     float16_t y0, y1;                            /* Nearest output values */
@@ -60,42 +60,42 @@ float16_t arm_linear_interp_f16(
     const float16_t *pYData = S->pYData;               /* pointer to output table */
 
     /* Calculation of index */
-    i = (int32_t)(((_Float16)x - (_Float16)S->x1) / (_Float16)xSpacing);
+    i = (int32_t) (((_Float16)x - (_Float16)S->x1) / (_Float16)xSpacing);
 
     if (((_Float16)x < (_Float16)S->x1))
     {
-        /* Iniatilize output for below specified range as least output value of table */
-        y = pYData[0];
+      /* Iniatilize output for below specified range as least output value of table */
+      y = pYData[0];
     }
     else if ((uint32_t)i >= (S->nValues - 1))
     {
-        /* Iniatilize output for above specified range as last output value of table */
-        y = pYData[S->nValues - 1];
+      /* Iniatilize output for above specified range as last output value of table */
+      y = pYData[S->nValues - 1];
     }
     else
     {
-        /* Calculation of nearest input values */
-        x0 = (_Float16)S->x1 + (_Float16)i      * (_Float16)xSpacing;
-        x1 = (_Float16)S->x1 + (_Float16)(i + 1) * (_Float16)xSpacing;
+      /* Calculation of nearest input values */
+      x0 = (_Float16)S->x1 +  (_Float16)i      * (_Float16)xSpacing;
+      x1 = (_Float16)S->x1 + (_Float16)(i + 1) * (_Float16)xSpacing;
 
-        /* Read of nearest output values */
-        y0 = pYData[i];
-        y1 = pYData[i + 1];
+      /* Read of nearest output values */
+      y0 = pYData[i];
+      y1 = pYData[i + 1];
 
-        /* Calculation of output */
-        y = (_Float16)y0 + ((_Float16)x - (_Float16)x0) *
-            (((_Float16)y1 - (_Float16)y0) / ((_Float16)x1 - (_Float16)x0));
+      /* Calculation of output */
+      y = (_Float16)y0 + ((_Float16)x - (_Float16)x0) * 
+      (((_Float16)y1 - (_Float16)y0) / ((_Float16)x1 - (_Float16)x0));
 
     }
 
     /* returns output value */
     return (y);
-}
+  }
 
-/**
- * @} end of LinearInterpolate group
- */
+  /**
+   * @} end of LinearInterpolate group
+   */
 
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

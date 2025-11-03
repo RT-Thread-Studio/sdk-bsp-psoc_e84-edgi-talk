@@ -205,9 +205,8 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_INSUFFICIENT_CONTEXT</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF00001Au)</td></tr>
 <tr class="memdesc:ga13a76a095839d023017be9cee8ddab90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when no operation context is available. <br /></td></tr>
 <tr class="separator:ga13a76a095839d023017be9cee8ddab90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac057a36af6f35d34fb61e70f83c00cc9"><td class="memItemLeft" align="right" valign="top"><a id="gac057a36af6f35d34fb61e70f83c00cc9" name="gac057a36af6f35d34fb61e70f83c00cc9"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_INVALID_TEMPERATURE</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF00001Bu)</td></tr>
-<tr class="memdesc:gac057a36af6f35d34fb61e70f83c00cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when allowed temperature is not in supported range (-40C - +125C) <br /></td></tr>
+<tr class="memitem:gac057a36af6f35d34fb61e70f83c00cc9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__syscall__errors.html#gac057a36af6f35d34fb61e70f83c00cc9">IFX_SE_SYSCALL_INVALID_TEMPERATURE</a>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF00001Bu)</td></tr>
+<tr class="memdesc:gac057a36af6f35d34fb61e70f83c00cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when measured temperature is not in supported range (-40C - +125C)  <a href="group__syscall__errors.html#gac057a36af6f35d34fb61e70f83c00cc9">More...</a><br /></td></tr>
 <tr class="separator:gac057a36af6f35d34fb61e70f83c00cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab501d142304138f96200d6ed07093b5f"><td class="memItemLeft" align="right" valign="top"><a id="gab501d142304138f96200d6ed07093b5f" name="gab501d142304138f96200d6ed07093b5f"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_INSUFFICIENT_COUNTER</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF00001Cu)</td></tr>
@@ -221,11 +220,53 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_INVALID_MEM_ALLOC</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF0000FFu)</td></tr>
 <tr class="memdesc:ga469d4a3c3efae8c44609956891549ff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when memory allocation failed. <br /></td></tr>
 <tr class="separator:ga469d4a3c3efae8c44609956891549ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf4abfce9bc77da93a0974d24f2a4197b"><td class="memItemLeft" align="right" valign="top"><a id="gaf4abfce9bc77da93a0974d24f2a4197b" name="gaf4abfce9bc77da93a0974d24f2a4197b"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_SS_ON</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF000100u)</td></tr>
+<tr class="memdesc:gaf4abfce9bc77da93a0974d24f2a4197b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when subsystem is attempted to be powered on but it is already in ON state. <br /></td></tr>
+<tr class="separator:gaf4abfce9bc77da93a0974d24f2a4197b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0ab02c3d3d5d1de4e98fcc7d4976a543"><td class="memItemLeft" align="right" valign="top"><a id="ga0ab02c3d3d5d1de4e98fcc7d4976a543" name="ga0ab02c3d3d5d1de4e98fcc7d4976a543"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_SS_POWERON_FAIL</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF000101u)</td></tr>
+<tr class="memdesc:ga0ab02c3d3d5d1de4e98fcc7d4976a543"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when the subsystem is failed to power on. <br /></td></tr>
+<tr class="separator:ga0ab02c3d3d5d1de4e98fcc7d4976a543"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4476a30e29976f2b0de6e8f6b357b143"><td class="memItemLeft" align="right" valign="top"><a id="ga4476a30e29976f2b0de6e8f6b357b143" name="ga4476a30e29976f2b0de6e8f6b357b143"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_SS_RESET_FAIL</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF000102u)</td></tr>
+<tr class="memdesc:ga4476a30e29976f2b0de6e8f6b357b143"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when the subsystem is failed to come out of reset. <br /></td></tr>
+<tr class="separator:ga4476a30e29976f2b0de6e8f6b357b143"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad436632b295bbf1c0b471fa63ca1eee2"><td class="memItemLeft" align="right" valign="top"><a id="gad436632b295bbf1c0b471fa63ca1eee2" name="gad436632b295bbf1c0b471fa63ca1eee2"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_SS_INVALID_STATE</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF000103u)</td></tr>
+<tr class="memdesc:gad436632b295bbf1c0b471fa63ca1eee2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when the subsystem could not transition to the required state to execute the service. <br /></td></tr>
+<tr class="separator:gad436632b295bbf1c0b471fa63ca1eee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gace002d8bcdf057103b2ffc48ecb3aa55"><td class="memItemLeft" align="right" valign="top"><a id="gace002d8bcdf057103b2ffc48ecb3aa55" name="gace002d8bcdf057103b2ffc48ecb3aa55"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>IFX_SE_SYSCALL_CORRUPTION_DETECTED</b>&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFFBADBADu)</td></tr>
 <tr class="memdesc:gace002d8bcdf057103b2ffc48ecb3aa55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returned when data corruption detected. <br /></td></tr>
 <tr class="separator:gace002d8bcdf057103b2ffc48ecb3aa55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="gac057a36af6f35d34fb61e70f83c00cc9" name="gac057a36af6f35d34fb61e70f83c00cc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac057a36af6f35d34fb61e70f83c00cc9">&#9670;&nbsp;</a></span>IFX_SE_SYSCALL_INVALID_TEMPERATURE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IFX_SE_SYSCALL_INVALID_TEMPERATURE&#160;&#160;&#160;<a class="el" href="group__syscall__errors.html#ga48c82ae501e07f6762abf8e78c092d27">IFX_SE_ERROR_CODE</a>(0xFF00001Bu)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returned when measured temperature is not in supported range (-40C - +125C) </p>
+<p >Temperature is measured during EPC4 device boot process. User application may read its status by <a class="el" href="group__platform__power.html#gae1f284c29baa8a507b806cb38d293982">ifx_se_get_info</a> API.</p>
+<p >When temperature error occurs, it is no longer possible to perform the next operations:</p><ul>
+<li>generate key</li>
+<li>generate IV, nonce, random data</li>
+<li>sign hash or message</li>
+<li>key derivation</li>
+<li>generate attestation token.</li>
+</ul>
+<p >To return the Secure Runtime Services to the normal operational state the user application should call sequence of <a class="el" href="group__platform__power.html#gaf3d754a1b8ff3bc246690da6948dbed1">ifx_se_disable</a> and <a class="el" href="group__platform__power.html#gad44ca40a50427c6d684c51ba61c252ee">ifx_se_enable</a> when device temperature is returned to allowed range. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part

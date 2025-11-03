@@ -40,16 +40,16 @@ extern "C" {
 #if (CPUSS_CRYPTO_DES == 1) && defined(CY_CRYPTO_CFG_DES_C)
 
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Des(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t const *key,
-        uint8_t *dst,
-        uint8_t const *src);
+                                        cy_en_crypto_dir_mode_t dirMode,
+                                        uint8_t const *key,
+                                        uint8_t *dst,
+                                        uint8_t const *src);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Tdes(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t const *key,
-        uint8_t *dst,
-        uint8_t const *src);
+                                        cy_en_crypto_dir_mode_t dirMode,
+                                        uint8_t const *key,
+                                        uint8_t *dst,
+                                        uint8_t const *src);
 
 
 #endif /* (CPUSS_CRYPTO_DES == 1) && defined(CY_CRYPTO_CFG_DES_C) */

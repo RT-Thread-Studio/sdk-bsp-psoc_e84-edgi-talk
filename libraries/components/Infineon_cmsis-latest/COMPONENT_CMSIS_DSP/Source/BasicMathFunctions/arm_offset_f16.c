@@ -43,20 +43,19 @@
   @param[in]     offset     is the offset to be added
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
-void arm_offset_f16(
-    const float16_t *pSrc,
-    float16_t offset,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_offset_f16(
+  const float16_t * pSrc,
+        float16_t offset,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
     f16x8_t vec1;
     f16x8_t res;
@@ -66,16 +65,16 @@ void arm_offset_f16(
     while (blkCnt > 0U)
     {
         /* C = A + offset */
-
+ 
         /* Add offset and then store the results in the destination buffer. */
         vec1 = vld1q(pSrc);
-        res = vaddq(vec1, offset);
+        res = vaddq(vec1,offset);
         vst1q(pDst, res);
 
         /* Increment pointers */
         pSrc += 8;
         pDst += 8;
-
+        
         /* Decrement the loop counter */
         blkCnt--;
     }
@@ -95,57 +94,57 @@ void arm_offset_f16(
 
 #else
 #if defined(ARM_FLOAT16_SUPPORTED)
-void arm_offset_f16(
-    const float16_t *pSrc,
-    float16_t offset,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_offset_f16(
+  const float16_t * pSrc,
+        float16_t offset,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A + offset */
+  while (blkCnt > 0U)
+  {
+    /* C = A + offset */
 
-        /* Add offset and store result in destination buffer. */
-        *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
+    /* Add offset and store result in destination buffer. */
+    *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
 
-        *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
+    *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
 
-        *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
+    *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
 
-        *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
+    *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A + offset */
+  while (blkCnt > 0U)
+  {
+    /* C = A + offset */
 
-        /* Add offset and store result in destination buffer. */
-        *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
+    /* Add offset and store result in destination buffer. */
+    *pDst++ = (_Float16)(*pSrc++) + (_Float16)offset;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif

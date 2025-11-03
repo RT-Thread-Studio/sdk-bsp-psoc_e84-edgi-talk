@@ -42,6 +42,7 @@ class MultiImage:
         self._signature = kwargs.get('signature')
         self._segments = kwargs.get('segments')
         self._padding = kwargs.get('erased_val', 0)
+        self._add_size = kwargs.get('add_size', True)
         if self._padding:
             self._padding = int(str(self._padding), 0)
             if not 0 <= self._padding <= 255:
@@ -86,6 +87,11 @@ class MultiImage:
     def padding(self):
         """Value to pad missing parts in segments"""
         return self._padding
+
+    @property
+    def add_size(self):
+        """Whether to add size to the beginning of the packet"""
+        return self._add_size
 
     def create(self):
         """Creates a multi-image COSE packet
@@ -148,7 +154,12 @@ class MultiImage:
         with open(signature, 'rb') as f:
             sig = f.read()
         signed = Cose.add_signature1(cbor_data, sig, algorithm, kid=self.kid)
-        packet = len(signed).to_bytes(4, byteorder='little') + signed
+        packet = signed
+        if self.add_size:
+            length = len(signed).to_bytes(4, byteorder='little')
+            packet = length + packet
+            logger.info('4-byte packet size header added: %s (%s bytes)',
+                        length.hex(), len(signed))
 
         return packet
 
@@ -185,9 +196,12 @@ class MultiImage:
         @return: Signed COSE multi-image packet
         """
         cose_signed = Cose.cose_sign1(cbor_data, key, kid=self.kid)
-        packet = len(cose_signed).to_bytes(
-            4, byteorder='little') + cose_signed
-
+        packet = cose_signed
+        if self.add_size:
+            length = len(cose_signed).to_bytes(4, byteorder='little')
+            packet = length + packet
+            logger.info('4-byte packet size header added: %s (%s bytes)',
+                        length.hex(), len(cose_signed))
         return packet
 
     @staticmethod

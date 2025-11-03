@@ -42,21 +42,20 @@
   @param[in]     pSrc       points to input vector
   @param[out]    pDst       points to output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_copy_q31(
-    const q31_t * pSrc,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_copy_q31(
+  const q31_t * pSrc,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;
-    blkCnt = blockSize >> 2U;
+  uint32_t blkCnt;
+  blkCnt = blockSize >> 2U;
 
-    /* Compute 4 outputs at a time */
-    while (blkCnt > 0U)
-    {
-        vstrwq_s32(pDst, vldrwq_s32(pSrc));
+  /* Compute 4 outputs at a time */
+  while (blkCnt > 0U)
+  {
+        vstrwq_s32(pDst,vldrwq_s32(pSrc));
         /*
          * Decrement the blockSize loop counter
          * Advance vector source and destination pointers
@@ -64,69 +63,69 @@ void arm_copy_q31(
         pSrc += 4;
         pDst += 4;
         blkCnt --;
-    }
+  }
 
-    blkCnt = blockSize & 3;
-    while (blkCnt > 0U)
-    {
-        /* C = A */
+  blkCnt = blockSize & 3;
+  while (blkCnt > 0U)
+  {
+    /* C = A */
 
-        /* Copy and store result in destination buffer */
-        *pDst++ = *pSrc++;
+    /* Copy and store result in destination buffer */
+    *pDst++ = *pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
-
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+    
 }
 
 #else
-void arm_copy_q31(
-    const q31_t * pSrc,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_copy_q31(
+  const q31_t * pSrc,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+  uint32_t blkCnt;                               /* Loop counter */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A */
+  while (blkCnt > 0U)
+  {
+    /* C = A */
 
-        /* Copy and store result in destination buffer */
-        *pDst++ = *pSrc++;
-        *pDst++ = *pSrc++;
-        *pDst++ = *pSrc++;
-        *pDst++ = *pSrc++;
+    /* Copy and store result in destination buffer */
+    *pDst++ = *pSrc++;
+    *pDst++ = *pSrc++;
+    *pDst++ = *pSrc++;
+    *pDst++ = *pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A */
+  while (blkCnt > 0U)
+  {
+    /* C = A */
 
-        /* Copy and store result in destination buffer */
-        *pDst++ = *pSrc++;
+    /* Copy and store result in destination buffer */
+    *pDst++ = *pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

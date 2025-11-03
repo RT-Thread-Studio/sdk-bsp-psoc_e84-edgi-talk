@@ -41,46 +41,44 @@
 /*
  * PPU 1.1 register definitions
  */
-struct ppu_v1_reg
-{
-    __IOM  uint32_t PWPR;
-    __IOM  uint32_t PMER;
-    __IM   uint32_t PWSR;
-    uint32_t RESERVED0;
-    __IM   uint32_t DISR;
-    __IM   uint32_t MISR;
-    __IM   uint32_t STSR;
-    __IOM  uint32_t UNLK;
-    __IOM  uint32_t PWCR;
-    __IOM  uint32_t PTCR;
-    uint32_t RESERVED1[2];
-    __IOM  uint32_t IMR;
-    __IOM  uint32_t AIMR;
-    __IOM  uint32_t ISR;
-    __IOM  uint32_t AISR;
-    __IOM  uint32_t IESR;
-    __IOM  uint32_t OPSR;
-    uint32_t RESERVED2[2];
-    __IOM  uint32_t FUNRR;
-    __IOM  uint32_t FULRR;
-    __IOM  uint32_t MEMRR;
-    uint8_t  RESERVED3[0x160 - 0x5C];
-    __IOM  uint32_t EDTR0;
-    __IOM  uint32_t EDTR1;
-    uint32_t RESERVED4[2];
-    __IOM  uint32_t DCCR0;
-    __IOM  uint32_t DCCR1;
-    uint8_t  RESERVED5[0xFB0 - 0x178];
-    __IM   uint32_t IDR0;
-    __IM   uint32_t IDR1;
-    uint8_t  RESERVED6[0xFC8 - 0xFB8];
-    __IM   uint32_t IIDR;
-    __IM   uint32_t AIDR;
-    uint8_t  RESERVED7[0x1000 - 0xFD0];
+struct ppu_v1_reg {
+  __IOM  uint32_t PWPR;
+  __IOM  uint32_t PMER;
+  __IM   uint32_t PWSR;
+          uint32_t RESERVED0;
+  __IM   uint32_t DISR;
+  __IM   uint32_t MISR;
+  __IM   uint32_t STSR;
+  __IOM  uint32_t UNLK;
+  __IOM  uint32_t PWCR;
+  __IOM  uint32_t PTCR;
+          uint32_t RESERVED1[2];
+  __IOM  uint32_t IMR;
+  __IOM  uint32_t AIMR;
+  __IOM  uint32_t ISR;
+  __IOM  uint32_t AISR;
+  __IOM  uint32_t IESR;
+  __IOM  uint32_t OPSR;
+          uint32_t RESERVED2[2];
+  __IOM  uint32_t FUNRR;
+  __IOM  uint32_t FULRR;
+  __IOM  uint32_t MEMRR;
+          uint8_t  RESERVED3[0x160 - 0x5C];
+  __IOM  uint32_t EDTR0;
+  __IOM  uint32_t EDTR1;
+          uint32_t RESERVED4[2];
+  __IOM  uint32_t DCCR0;
+  __IOM  uint32_t DCCR1;
+          uint8_t  RESERVED5[0xFB0 - 0x178];
+  __IM   uint32_t IDR0;
+  __IM   uint32_t IDR1;
+          uint8_t  RESERVED6[0xFC8 - 0xFB8];
+  __IM   uint32_t IIDR;
+  __IM   uint32_t AIDR;
+          uint8_t  RESERVED7[0x1000 - 0xFD0];
 };
 
-enum ppu_v1_mode
-{
+enum ppu_v1_mode {
     PPU_V1_MODE_OFF         = 0,
     PPU_V1_MODE_OFF_EMU     = 1,
     PPU_V1_MODE_MEM_RET     = 2,
@@ -96,8 +94,7 @@ enum ppu_v1_mode
     PPU_V1_MODE_COUNT
 };
 
-enum ppu_v1_opmode
-{
+enum ppu_v1_opmode {
     PPU_V1_OPMODE_00,
     PPU_V1_OPMODE_01,
     PPU_V1_OPMODE_02,
@@ -118,8 +115,7 @@ enum ppu_v1_opmode
     PPU_V1_OPMODE_COUNT
 };
 
-enum ppu_v1_op_devactive
-{
+enum ppu_v1_op_devactive {
     PPU_V1_OP_DEVACTIVE_0,
     PPU_V1_OP_DEVACTIVE_1,
     PPU_V1_OP_DEVACTIVE_2,
@@ -178,8 +174,7 @@ enum ppu_v1_op_devactive
 /*
  * Definitions for IESR and OPSR
  */
-enum ppu_v1_edge_sensitivity
-{
+enum ppu_v1_edge_sensitivity {
     PPU_V1_EDGE_SENSITIVITY_MASKED,
     PPU_V1_EDGE_SENSITIVITY_RISING_EDGE,
     PPU_V1_EDGE_SENSITIVITY_FALLING_EDGE,
@@ -395,7 +390,7 @@ void ppu_v1_interrupt_mask(struct ppu_v1_reg *ppu, unsigned int mask);
  * Set one or more bits of the additional interrupt mask register.
  */
 void ppu_v1_additional_interrupt_mask(struct ppu_v1_reg *ppu,
-                                      unsigned int mask);
+    unsigned int mask);
 
 /*
  * Clear one or more bits of the interrupt mask register.
@@ -406,13 +401,13 @@ void ppu_v1_interrupt_unmask(struct ppu_v1_reg *ppu, unsigned int mask);
  * Clear one or more bits of the additional interrupt mask register.
  */
 void ppu_v1_additional_interrupt_unmask(struct ppu_v1_reg *ppu,
-                                        unsigned int mask);
+    unsigned int mask);
 
 /*
  * Check if some additional interrupts are pending.
  */
 bool ppu_v1_is_additional_interrupt_pending(struct ppu_v1_reg *ppu,
-        unsigned int mask);
+    unsigned int mask);
 
 /*
  * Acknowledge one or more interrupts.
@@ -429,7 +424,7 @@ void ppu_v1_ack_additional_interrupt(struct ppu_v1_reg *ppu, unsigned int mask);
  * available sensitivities.
  */
 void ppu_v1_set_input_edge_sensitivity(struct ppu_v1_reg *ppu,
-                                       enum ppu_v1_mode ppu_mode, enum ppu_v1_edge_sensitivity edge_sensitivity);
+    enum ppu_v1_mode ppu_mode, enum ppu_v1_edge_sensitivity edge_sensitivity);
 
 /*
  * Get input edge sensitivity. See 'enum ppu_v1_edge_sensitivity' for the
@@ -442,21 +437,21 @@ enum ppu_v1_edge_sensitivity ppu_v1_get_input_edge_sensitivity(
  * Acknowledge a power active edge interrupt.
  */
 void ppu_v1_ack_power_active_edge_interrupt(struct ppu_v1_reg *ppu,
-        enum ppu_v1_mode ppu_mode);
+                                            enum ppu_v1_mode ppu_mode);
 
 /*
  * Check if a power active edge interrupt is pending.
  */
 bool ppu_v1_is_power_active_edge_interrupt(struct ppu_v1_reg *ppu,
-        enum ppu_v1_mode ppu_mode);
+                                           enum ppu_v1_mode ppu_mode);
 
 /*
  * Set operating mode active edge sensitivity. See
  * 'enum ppu_v1_edge_sensitivity' for the available sensitivities.
  */
 void ppu_v1_set_op_active_edge_sensitivity(struct ppu_v1_reg *ppu,
-        enum ppu_v1_op_devactive op_devactive,
-        enum ppu_v1_edge_sensitivity edge_sensitivity);
+    enum ppu_v1_op_devactive op_devactive,
+    enum ppu_v1_edge_sensitivity edge_sensitivity);
 
 /*
  * Get operating mode active edge sensitivity.
@@ -469,13 +464,13 @@ enum ppu_v1_edge_sensitivity ppu_v1_get_op_active_edge_sensitivity(
  * Acknowledge operating mode active edge interrupt.
  */
 void ppu_v1_ack_op_active_edge_interrupt(struct ppu_v1_reg *ppu,
-        enum ppu_v1_op_devactive op_devactive);
+    enum ppu_v1_op_devactive op_devactive);
 
 /*
  * Check if an operating mode active edge interrupt is pending.
  */
 bool ppu_v1_is_op_active_edge_interrupt(struct ppu_v1_reg *ppu,
-                                        enum ppu_v1_op_devactive op_devactive);
+    enum ppu_v1_op_devactive op_devactive);
 
 /*
  * Check if the DYN input edge interrupt is pending.

@@ -26,8 +26,8 @@
  * limitations under the License.
  */
 
-#ifndef _ARM_UTILS_HELIUM_H_
-#define _ARM_UTILS_HELIUM_H_
+#ifndef ARM_UTILS_HELIUM_H_
+#define ARM_UTILS_HELIUM_H_
 
 
 #ifdef   __cplusplus
@@ -127,7 +127,7 @@ __STATIC_FORCEINLINE float16x8_t __mve_cmplx_sum_intra_vec_f16(
     /*
      * shift left, random tmp insertion in bottom
      */
-    vecOut = vreinterpretq_f16_s32(vshlcq_s32(vreinterpretq_s32_f16(vecOut), &tmp, 32));
+    vecOut = vreinterpretq_f16_s32(vshlcq_s32(vreinterpretq_s32_f16(vecOut)   , &tmp, 32));
     /*
      * Compute:
      *    DONTCARE     |    DONTCARE     | re0+re1+re0+re1 |im0+im1+im0+im1
@@ -179,7 +179,7 @@ __STATIC_FORCEINLINE void mve_cmplx_sum_intra_vec_f16(
 }
 
 #endif
-#endif
+#endif 
 
 /***************************************
 
@@ -189,8 +189,8 @@ Definitions available for MVEI and MVEF only
 #if (defined (ARM_MATH_HELIUM) || defined(ARM_MATH_MVEF) || defined(ARM_MATH_MVEI))  && !defined(ARM_MATH_AUTOVECTORIZE)
 /* Following functions are used to transpose matrix in f32 and q31 cases */
 __STATIC_INLINE arm_status arm_mat_trans_32bit_2x2_mve(
-    uint32_t *pDataSrc,
-    uint32_t *pDataDest)
+    uint32_t * pDataSrc,
+    uint32_t * pDataDest)
 {
     static const uint32x4_t vecOffs = { 0, 2, 1, 3 };
     /*
@@ -206,8 +206,8 @@ __STATIC_INLINE arm_status arm_mat_trans_32bit_2x2_mve(
 }
 
 __STATIC_INLINE arm_status arm_mat_trans_32bit_3x3_mve(
-    uint32_t *pDataSrc,
-    uint32_t *pDataDest)
+    uint32_t * pDataSrc,
+    uint32_t * pDataDest)
 {
     const uint32x4_t vecOffs1 = { 0, 3, 6, 1};
     const uint32x4_t vecOffs2 = { 4, 7, 2, 5};
@@ -259,8 +259,8 @@ __STATIC_INLINE arm_status arm_mat_trans_32bit_4x4_mve(uint32_t * pDataSrc, uint
 __STATIC_INLINE arm_status arm_mat_trans_32bit_generic_mve(
     uint16_t    srcRows,
     uint16_t    srcCols,
-    uint32_t   *pDataSrc,
-    uint32_t   *pDataDest)
+    uint32_t  * pDataSrc,
+    uint32_t  * pDataDest)
 {
     uint32x4_t vecOffs;
     uint32_t  i;
@@ -282,7 +282,7 @@ __STATIC_INLINE arm_status arm_mat_trans_32bit_generic_mve(
         while (blkCnt > 0U)
         {
             vecIn = vldrwq_gather_shifted_offset_u32(pDataC, vecOffs);
-            vstrwq(pDataDestR, vecIn);
+            vstrwq(pDataDestR, vecIn); 
             pDataDestR += 4;
             pDataC = pDataC + srcCols * 4;
             /*
@@ -362,13 +362,13 @@ __STATIC_INLINE arm_status arm_mat_cmplx_trans_32bit(
         while (blkCnt > 0U)
         {
             vecIn = vldrwq_gather_shifted_offset(pDataC, vecOffsCur);
-            vstrwq(pDataDestR, vecIn);
+            vstrwq(pDataDestR, vecIn); 
             pDataDestR += 4;
             vecOffsCur = vaddq(vecOffsCur, (srcCols << 2));
             /*
              * Decrement the blockSize loop counter
              */
-            blkCnt--;
+             blkCnt--;
         }
         /*
          * tail
@@ -458,8 +458,8 @@ __STATIC_INLINE arm_status arm_mat_trans_16bit_4x4_mve(uint16_t * pDataSrc, uint
 __STATIC_INLINE arm_status arm_mat_trans_16bit_generic(
     uint16_t    srcRows,
     uint16_t    srcCols,
-    uint16_t   *pDataSrc,
-    uint16_t   *pDataDest)
+    uint16_t  * pDataSrc,
+    uint16_t  * pDataDest)
 {
     uint16x8_t    vecOffs;
     uint32_t        i;
@@ -472,7 +472,7 @@ __STATIC_INLINE arm_status arm_mat_trans_16bit_generic(
     vecOffs = vecOffs * srcCols;
 
     i = srcCols;
-    while (i > 0U)
+    while(i > 0U)
     {
         pDataC = (uint16_t const *) pDataSrc;
         pDataDestR = pDataDest;
@@ -481,7 +481,7 @@ __STATIC_INLINE arm_status arm_mat_trans_16bit_generic(
         while (blkCnt > 0U)
         {
             vecIn = vldrhq_gather_shifted_offset_u16(pDataC, vecOffs);
-            vstrhq_u16(pDataDestR, vecIn);
+            vstrhq_u16(pDataDestR, vecIn); 
             pDataDestR += 8;
             pDataC = pDataC + srcCols * 8;
             /*
@@ -551,8 +551,8 @@ __STATIC_INLINE arm_status arm_mat_cmplx_trans_16bit(
      * build  [0, 1, 2xcol, 2xcol+1, 4xcol, 4xcol+1, 6xcol, 6xcol+1]
      */
     vecOffsRef = vldrhq_u16((uint16_t const *) loadCmplxCol);
-    vecOffsRef = vmulq(vecOffsRef, (uint16_t)(srcCols * CMPLX_DIM))
-                 + viwdupq_u16((uint32_t)0, (uint16_t) 2, 1);
+    vecOffsRef = vmulq(vecOffsRef, (uint16_t) (srcCols * CMPLX_DIM))
+                    + viwdupq_u16((uint32_t)0, (uint16_t) 2, 1);
 
     pDataRow = pDataSrc;
     pDataDestRow = pDataDest;
@@ -567,8 +567,8 @@ __STATIC_INLINE arm_status arm_mat_cmplx_trans_16bit(
         while (blkCnt > 0U)
         {
             vecIn = vldrhq_gather_shifted_offset(pDataC, vecOffsCur);
-            vstrhq(pDataDestR, vecIn);
-            pDataDestR += 8; // VEC_LANES_U16
+            vstrhq(pDataDestR, vecIn);  
+            pDataDestR+= 8; // VEC_LANES_U16
             vecOffsCur = vaddq(vecOffsCur, (srcCols << 3));
             /*
              * Decrement the blockSize loop counter

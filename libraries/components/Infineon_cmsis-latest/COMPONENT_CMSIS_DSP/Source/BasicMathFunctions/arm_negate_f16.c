@@ -43,17 +43,16 @@
   @param[in]     pSrc       points to input vector.
   @param[out]    pDst       points to output vector.
   @param[in]     blockSize  number of samples in each vector.
-  @return        none
  */
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
-void arm_negate_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_negate_f16(
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
     uint32_t blkCnt;                               /* Loop counter */
     f16x8_t vec1;
@@ -74,7 +73,7 @@ void arm_negate_f16(
         /* Increment pointers */
         pSrc += 8;
         pDst += 8;
-
+        
         /* Decrement the loop counter */
         blkCnt--;
     }
@@ -83,66 +82,66 @@ void arm_negate_f16(
     blkCnt = blockSize & 0x7;
     if (blkCnt > 0U)
     {
-        /* C = |A| */
-        mve_pred16_t p0 = vctp16q(blkCnt);
-        vec1 = vld1q((float16_t const *) pSrc);
-        vstrhq_p(pDst, vnegq(vec1), p0);
+      /* C = |A| */
+      mve_pred16_t p0 = vctp16q(blkCnt);
+      vec1 = vld1q((float16_t const *) pSrc);
+      vstrhq_p(pDst, vnegq(vec1), p0);
     }
 
 }
 
 #else
 #if defined(ARM_FLOAT16_SUPPORTED)
-void arm_negate_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_negate_f16(
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
-        /* Negate and store result in destination buffer. */
-        *pDst++ = -(_Float16) * pSrc++;
+    /* Negate and store result in destination buffer. */
+    *pDst++ = -(_Float16)*pSrc++;
 
-        *pDst++ = -(_Float16) * pSrc++;
+    *pDst++ = -(_Float16)*pSrc++;
 
-        *pDst++ = -(_Float16) * pSrc++;
+    *pDst++ = -(_Float16)*pSrc++;
 
-        *pDst++ = -(_Float16) * pSrc++;
+    *pDst++ = -(_Float16)*pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
-        /* Negate and store result in destination buffer. */
-        *pDst++ = -(_Float16) * pSrc++;
+    /* Negate and store result in destination buffer. */
+    *pDst++ = -(_Float16)*pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif

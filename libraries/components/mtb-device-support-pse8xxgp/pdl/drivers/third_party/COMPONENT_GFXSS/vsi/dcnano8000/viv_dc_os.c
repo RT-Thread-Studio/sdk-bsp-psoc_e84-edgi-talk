@@ -32,7 +32,7 @@
 #include "viv_dc_type.h"
 #include "viv_dc_os.h"
 #if _BAREMETAL
-    #include "cy_syslib.h"
+#include "cy_syslib.h"
 #endif
 
 #define MAX_SIZE 0x1FA400
@@ -47,14 +47,14 @@
 gctPOINTER viv_os_file_open(
     gctCHAR* path,
     gctINT type
-)
+    )
 {
     return vivNULL;
 }
 
 gctINT viv_os_file_close(
     gctPOINTER p
-)
+    )
 {
     return 0;
 }
@@ -63,7 +63,7 @@ gctSIZE_T viv_os_file_read(
     gctPOINTER ptr,
     gctSIZE_T size,
     gctPOINTER p
-)
+    )
 {
     return 0;
 }
@@ -72,7 +72,7 @@ gctINT viv_os_file_seek(
     gctPOINTER p,
     gctSIZE_T offset,
     gctBOOL end
-)
+    )
 {
     return 0;
 }
@@ -81,7 +81,7 @@ gctINT viv_os_file_write(
     gctPOINTER ptr,
     gctSIZE_T size,
     gctPOINTER p
-)
+    )
 {
     return 0;
 }
@@ -93,28 +93,28 @@ gctINT dc_os_file_write_word(gctPOINTER p, gctUINT16 w)
 
 gctUINT8 viv_os_file_read_byte(
     gctPOINTER p
-)
+    )
 {
     return 0;
 }
 
 gctUINT16 viv_os_file_read_word(
     gctPOINTER p
-)
+    )
 {
     return 0;
 }
 
 gctUINT32 viv_os_file_read_dword(
     gctPOINTER p
-)
+    )
 {
     return 0;
 }
 
 gctINT viv_os_file_read_long(
     gctPOINTER p
-)
+    )
 {
     return 0;
 }
@@ -122,7 +122,7 @@ gctINT viv_os_file_read_long(
 gctINT dc_os_file_write_dword(
     gctPOINTER p,
     gctUINT32 dw
-)
+    )
 {
     return 0;
 }
@@ -136,7 +136,7 @@ gctINT dc_os_file_write_long(
 
 gctUINT dc_os_file_tell(
     gctPOINTER p
-)
+    )
 {
     return 0;
 }
@@ -145,7 +145,7 @@ gctUINT8_PTR viv_os_fgets(
     gctPOINTER Buffer,
     gctUINT32 BufferLen,
     gctPOINTER File
-)
+    )
 {
     return vivNULL;
 }
@@ -153,14 +153,14 @@ gctUINT8_PTR viv_os_fgets(
 gctINT viv_os_fputs(
     gctPOINTER line,
     gctPOINTER file
-)
+    )
 {
     return 0;
 }
 
 gctINT viv_os_feof(
     gctPOINTER file
-)
+    )
 {
     return 0;
 }
@@ -168,7 +168,7 @@ gctINT viv_os_feof(
 gctVOID viv_os_print(
     gctCHAR *message,
     ...
-)
+    )
 {
 #if vivENABLE_DC_DEBUG
     va_list arguments;
@@ -183,7 +183,7 @@ gctVOID viv_os_sprint(
     gctCHAR *str,
     gctCHAR *message,
     ...
-)
+    )
 {
     va_list arguments;
 
@@ -195,11 +195,11 @@ gctVOID viv_os_fprint(
     gctPOINTER fp,
     gctCHAR *message,
     ...
-)
+    )
 {}
 gctPOINTER viv_os_mem_alloc(
     gctSIZE_T size
-)
+    )
 {
     if (size > MAX_SIZE)
     {
@@ -218,9 +218,9 @@ gctPOINTER viv_os_mem_alloc(
 
 gctVOID viv_os_mem_free(
     gctPOINTER addr
-)
+    )
 {
-    if (!addr)
+    if(!addr)
     {
         viv_os_print("%s try to free an invalid memory.\n", __FUNCTION__);
     }
@@ -238,7 +238,7 @@ gctPOINTER viv_os_memcpy(
     gctPOINTER dst,
     gctPOINTER src,
     gctSIZE_T num
-)
+    )
 {
     gctUINT i = 0;
     gctUINT8* tsrc = (gctUINT8*) src;
@@ -256,7 +256,7 @@ gctINT viv_os_memcmp(
     gctCHAR *s1,
     gctCHAR *s2,
     gctSIZE_T n
-)
+    )
 {
     if (n)
         return strncmp(s1, s2, n);
@@ -269,7 +269,7 @@ gctPOINTER viv_os_memset(
     gctPOINTER addr,
     gctINT value,
     gctSIZE_T num
-)
+    )
 {
     gctUINT i = 0;
     gctUINT8* dst = (gctUINT8*) addr;
@@ -286,7 +286,7 @@ gctPOINTER dc_os_memcpy(
     gctPOINTER dst,
     gctPOINTER src,
     gctSIZE_T num
-)
+    )
 {
     gctUINT i = 0;
     gctUINT8* tsrc = (gctUINT8*) src;
@@ -302,14 +302,14 @@ gctPOINTER dc_os_memcpy(
 
 vivSTATUS viv_os_devmem_open(
     gctVOID
-)
+    )
 {
     return vivSTATUS_NOT_SUPPORT;
 }
 
 vivSTATUS viv_os_devmem_close(
     gctVOID
-)
+    )
 {
     return vivSTATUS_NOT_SUPPORT;
 }
@@ -318,14 +318,14 @@ vivSTATUS viv_os_get_dev_mem(
     gctUINT32 size,
     gctUINT32 *physical,
     gctPOINTER *logical
-)
+    )
 {
     return vivSTATUS_NOT_SUPPORT;
 }
 
 vivSTATUS viv_os_free_dev_mem(
     gctVOID
-)
+    )
 {
     return vivSTATUS_NOT_SUPPORT;
 }
@@ -333,7 +333,7 @@ vivSTATUS viv_os_free_dev_mem(
 gctVOID
 viv_os_sleep(
     gctUINT32 Delay
-)
+    )
 {
     Cy_SysLib_Delay(Delay);
 }
@@ -369,7 +369,7 @@ viv_os_window_draw_image(
 gctUINT viv_os_read_reg(
     viv_dc_os *os,
     gctUINT addr
-)
+    )
 {
     gctUINT read = 0;
 
@@ -386,7 +386,7 @@ gctVOID viv_os_write_reg(
     viv_dc_os *os,
     gctUINT addr,
     gctUINT data
-)
+    )
 {
     *((gctUINT*)(os->reg_phys_addr + addr)) = data;
 
@@ -398,7 +398,7 @@ gctVOID viv_os_write_reg(
 gctUINT viv_os_get_page_count(
     gctUINT size,
     gctUINT offset
-)
+    )
 {
     return GET_PAGE_COUNT(size, offset);
 }
@@ -407,7 +407,7 @@ vivSTATUS viv_os_alloc_memory(
     viv_dc_os *os,
     gctUINT bytes,
     gctPOINTER *memory
-)
+    )
 {
     gctPOINTER mem = vivNULL;
 
@@ -442,7 +442,7 @@ vivSTATUS viv_os_alloc_memory(
 vivSTATUS viv_os_free_memory(
     viv_dc_os *os,
     gctPOINTER memory
-)
+    )
 {
     if (memory == vivNULL)
     {
@@ -468,10 +468,10 @@ vivSTATUS viv_os_alloc_buffer(
     gctPOINTER *Logical,
     gctADDRESS *Physical,
     viv_pool_type *Pool
-)
+    )
 {
     gctPOINTER pointer = vivNULL;
-    if (!Size || !Handle || !Logical || !Physical)
+    if(!Size || !Handle || !Logical || !Physical)
     {
         viv_os_print("%s invalid arguments.\n", __FUNCTION__);
         return vivSTATUS_INVALID_ARGUMENTS;
@@ -482,7 +482,7 @@ vivSTATUS viv_os_alloc_buffer(
 #else
     pointer = (gctPOINTER)malloc(Size);
 #endif
-    if (!pointer)
+    if(!pointer)
     {
         viv_os_print("%s invalid arguments.\n", __FUNCTION__);
         return vivSTATUS_INVALID_ARGUMENTS;
@@ -498,10 +498,10 @@ vivSTATUS viv_os_alloc_buffer(
 vivSTATUS viv_os_free_buffer(
     viv_dc_os *os,
     gctPOINTER Handle
-)
+    )
 {
     vivSTATUS ret = vivSTATUS_OK;
-    if (!Handle)
+    if(!Handle)
     {
         viv_os_print("%s invalid arguments.\n", __FUNCTION__);
         return vivSTATUS_INVALID_ARGUMENTS;

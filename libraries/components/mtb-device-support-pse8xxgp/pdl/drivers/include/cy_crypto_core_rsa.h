@@ -41,58 +41,58 @@ extern "C" {
 #if (CPUSS_CRYPTO_VU == 1) && defined(CY_CRYPTO_CFG_RSA_C)
 
 typedef cy_en_crypto_status_t (*cy_crypto_rsa_proc_func_t)(CRYPTO_Type *base,
-        cy_stc_crypto_rsa_pub_key_t const *key,
-        uint8_t const *message,
-        uint32_t messageSize,
-        uint8_t *processedMessage);
+                                              cy_stc_crypto_rsa_pub_key_t const *key,
+                                              uint8_t const *message,
+                                              uint32_t messageSize,
+                                              uint8_t *processedMessage);
 
 typedef cy_en_crypto_status_t (*cy_crypto_rsa_coef_func_t)(CRYPTO_Type *base,
-        cy_stc_crypto_rsa_pub_key_t const *key);
+                                              cy_stc_crypto_rsa_pub_key_t const *key);
 
 
 
 cy_en_crypto_status_t Cy_Crypto_Core_Rsa_Proc(CRYPTO_Type *base,
-        cy_stc_crypto_rsa_pub_key_t const *key,
-        uint8_t const *message,
-        uint32_t messageSize,
-        uint8_t *processedMessage);
+                                              cy_stc_crypto_rsa_pub_key_t const *key,
+                                              uint8_t const *message,
+                                              uint32_t messageSize,
+                                              uint8_t *processedMessage);
 
 cy_en_crypto_status_t Cy_Crypto_Core_Rsa_Coef(CRYPTO_Type *base,
-        cy_stc_crypto_rsa_pub_key_t const *key);
+                                              cy_stc_crypto_rsa_pub_key_t const *key);
 
 #if defined(CY_CRYPTO_CFG_RSA_VERIFY_ENABLED)
 typedef cy_en_crypto_status_t (*cy_crypto_rsa_ver_func_t)(CRYPTO_Type *base,
-        cy_en_crypto_rsa_ver_result_t *verResult,
-        cy_en_crypto_sha_mode_t digestType,
-        uint8_t const *digest,
-        uint8_t const *decryptedSignature,
-        uint32_t decryptedSignatureLength);
+                                              cy_en_crypto_rsa_ver_result_t *verResult,
+                                              cy_en_crypto_sha_mode_t digestType,
+                                              uint8_t const *digest,
+                                              uint8_t const *decryptedSignature,
+                                              uint32_t decryptedSignatureLength);
 
 cy_en_crypto_status_t Cy_Crypto_Core_Rsa_Verify(CRYPTO_Type *base,
-        cy_en_crypto_rsa_ver_result_t *verResult,
-        cy_en_crypto_sha_mode_t digestType,
-        uint8_t const *digest,
-        uint8_t const *decryptedSignature,
-        uint32_t decryptedSignatureLength);
+                            cy_en_crypto_rsa_ver_result_t *verResult,
+                            cy_en_crypto_sha_mode_t digestType,
+                            uint8_t const *digest,
+                            uint8_t const *decryptedSignature,
+                            uint32_t decryptedSignatureLength);
 
 cy_en_crypto_status_t Cy_Crypto_Core_Rsa_Verify_Ext(CRYPTO_Type *base,
-        cy_en_crypto_rsa_ver_result_t *verResult,
-        cy_en_crypto_sha_mode_t digestType,
-        uint8_t const *digest,
-        uint32_t digestLength,
-        uint8_t const *decryptedSignature,
-        uint32_t decryptedSignatureLength);
-
+                            cy_en_crypto_rsa_ver_result_t *verResult,
+                            cy_en_crypto_sha_mode_t digestType,
+                            uint8_t const *digest,
+                            uint32_t digestLength,
+                            uint8_t const *decryptedSignature,
+                            uint32_t decryptedSignatureLength);
+                            
 #endif /* defined(CY_CRYPTO_CFG_RSA_VERIFY_ENABLED) */
 
 
 #if defined(CY_CRYPTO_CFG_RSA_SIGN_ENABLED)
 cy_en_crypto_status_t Cy_Crypto_Core_Rsa_Sign(CRYPTO_Type *base,
-        cy_en_crypto_sha_mode_t digestType,
-        uint8_t const *digest,
-        uint32_t digestLength,
-        uint8_t *signature,
-        uint32_t signatureLength);
+                            cy_en_crypto_sha_mode_t digestType,
+                            uint8_t const *digest,
+                            uint32_t digestLength,
+                            uint8_t *signature,
+                            uint32_t signatureLength);
 #endif /* defined(CY_CRYPTO_CFG_RSA_SIGN_ENABLED) */
 
 #endif /* (CPUSS_CRYPTO_VU == 1) && defined(CY_CRYPTO_CFG_RSA_C) */

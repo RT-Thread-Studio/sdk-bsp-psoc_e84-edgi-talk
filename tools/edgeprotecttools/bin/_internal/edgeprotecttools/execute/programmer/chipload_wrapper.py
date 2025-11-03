@@ -39,7 +39,9 @@ class ChipLoad(ProgrammerBase):
 
     def connect(self, target_name=None, interface=None, probe_id=None, ap=None,
                 acquire=True, power=None, voltage=None, rev=None):
-        """Checks whether the serial port name exists in the comm ports list"""
+        """Checks whether the serial port name exists in the comm
+        ports list and opens the port
+        """
         if self.require_path and self.tool_path:
             self.runner.tool_path = self.tool_path
 
@@ -56,19 +58,22 @@ class ChipLoad(ProgrammerBase):
             for commport in commports:
                 if port_name in (commport.device, commport.name):
                     logger.info('Using port %s', port_name)
-                    return True
+                    self.runner.open_serial_port()
+                    return self.runner.check_connected()
         else:
             commports = glob.glob('/dev/tty.*')
             logger.info('Available serial ports: %s', commports)
             for commport in commports:
                 if port_name == commport:
                     logger.info('Using port %s', port_name)
-                    return True
+                    self.runner.open_serial_port()
+                    return self.runner.check_connected()
 
         raise ValueError(f"Unknown port '{port_name}'")
 
     def disconnect(self):
-        """N/A for ChipLoad"""
+        """Closes the serial port"""
+        self.runner.close_serial_port()
 
     def get_ap(self):
         """N/A for ChipLoad"""
@@ -133,13 +138,34 @@ class ChipLoad(ProgrammerBase):
         """N/A for ChipLoad"""
         raise NotImplementedError
 
-    def erase(self, address, size):
-        """N/A for ChipLoad"""
-        raise NotImplementedError
+    def erase(self, address=None, size=None, **kwargs) -> bool:
+        """Erases chip
+        :param address: NA for erase operation
+        :param size: NA for erase operation
+        :param kwargs: Additional arguments
+            config: ChipLoad -CONFIG argument
+            btp: ChipLoad -BTP argument
+        :return: The status of the erase operation
+        """
+        status = False
+        if self.runner.enter_download_mode():
+            self.runner.close_serial_port()
+            status = self.runner.run('erase', kwargs.get('config'),
+                                     kwargs.get('btp'))
+        return status
 
-    def program(self, filename, file_format=None, address=None, **kwargs):
+    def program(self, filename, file_format=None, address=None,
+                **kwargs) -> bool:
         """Programs image into device and run"""
-        return self.runner.run(filename, address, **kwargs)
+        status = False
+        if self.runner.enter_download_mode():
+            self.runner.close_serial_port()
+            if self.runner.run('program', filename, kwargs.get('btp'),
+                               launch_addr=address):
+                self.runner.open_serial_port()
+                status = self.runner.is_app_executed()
+                self.runner.close_serial_port()
+        return status
 
     def read(self, address, length):
         """N/A for ChipLoad"""
@@ -164,3 +190,7 @@ class ChipLoad(ProgrammerBase):
     def hci_command(self, command, timeout=1):
         """Executes HCI commands and returns received data"""
         return self.runner.hci_run(command, timeout)
+
+    def is_dm_mode(self) -> bool:
+        """Checks if the device is in DM mode"""
+        return self.runner.device_in_dm_state()

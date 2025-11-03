@@ -84,6 +84,6 @@
  * in
  * \ref group_hal_availability should be used.
  */
-#define MTB_HAL_API_VERSION                         (3)
+ #define MTB_HAL_API_VERSION                         (3)
 
 /** \} group_hal_impl */

@@ -101,17 +101,17 @@ arm_status arm_svdf_s8(const cmsis_nn_context *input_ctx,
         const q7_t *input = input_data + i_batch * input_height;
 
         arm_status res = arm_nn_vec_mat_mult_t_svdf_s8(input,
-                         weight,
-                         res_ptr,
-                         -zp_in,
-                         0,
-                         time_batches,
-                         multiplier_in,
-                         shift_in,
-                         input_height,
-                         feature_batches,
-                         in_activation_min,
-                         in_activation_max);
+                                                       weight,
+                                                       res_ptr,
+                                                       -zp_in,
+                                                       0,
+                                                       time_batches,
+                                                       multiplier_in,
+                                                       shift_in,
+                                                       input_height,
+                                                       feature_batches,
+                                                       in_activation_min,
+                                                       in_activation_max);
 
         if (res != ARM_MATH_SUCCESS)
         {
@@ -242,7 +242,7 @@ arm_status arm_svdf_s8(const cmsis_nn_context *input_ctx,
     for (int i = 0; i < input_batches * unit_count; i++)
     {
         output_data[i] = (q7_t)CLAMP(
-                             arm_nn_requantize(buffer_b[i], multiplier_out, shift_2) + zp_out, out_activation_max, out_activation_min);
+            arm_nn_requantize(buffer_b[i], multiplier_out, shift_2) + zp_out, out_activation_max, out_activation_min);
     }
 #endif
 

@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from ...core.enums import KeyAlgorithm
-from ...targets.common.mxs40sv2 import KeyValidatorMXS40sv2
+from ...core.key_validator import KeyValidator
 
 
-class KeyValidatorPsocC3(KeyValidatorMXS40sv2):
+class KeyValidatorPsocC3(KeyValidator):
     """Key validator for PSoC C3 platform"""
 
     key_algorithms = (

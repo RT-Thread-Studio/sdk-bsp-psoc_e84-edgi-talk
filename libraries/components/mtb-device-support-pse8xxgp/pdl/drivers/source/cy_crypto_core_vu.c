@@ -41,12 +41,12 @@ extern "C" {
 #include "cy_syslib.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 4, \
-                             'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
+'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 14.3', 4, \
-                             'Since value of CY_CRYPTO_V1 is decided by PDL device agnostic / hardware specific model, controlling expression will not have an invariant value.')
+'Since value of CY_CRYPTO_V1 is decided by PDL device agnostic / hardware specific model, controlling expression will not have an invariant value.')
 
 #if !defined (CY_CRYPTO_SERVICE_LIBRARY_LEVEL)
-#define CY_CRYPTO_SERVICE_LIBRARY_LEVEL CY_CRYPTO_FULL_LIBRARY
+    #define CY_CRYPTO_SERVICE_LIBRARY_LEVEL CY_CRYPTO_FULL_LIBRARY
 #endif
 
 void Cy_Crypto_Core_Vu_SetMemValue(CRYPTO_Type *base, uint32_t dstReg, uint8_t const *src, uint32_t size)
@@ -70,7 +70,7 @@ void Cy_Crypto_Core_Vu_SetMemValue(CRYPTO_Type *base, uint32_t dstReg, uint8_t c
     uint32_t destAddr = (uint32_t)Cy_Crypto_Core_Vu_RegMemPointer(base, dstReg);
 
     CY_ASSERT_L1(size <= Cy_Crypto_Core_Vu_RegBitSizeRead(base, dstReg));
-    CY_ASSERT_L1(((destAddr + byteSize) - 1u) < ((uint32_t)Cy_Crypto_Core_GetVuMemoryAddress(base) + Cy_Crypto_Core_GetVuMemorySize(base)));
+    CY_ASSERT_L1( ((destAddr + byteSize) - 1u) < ((uint32_t)Cy_Crypto_Core_GetVuMemoryAddress(base) + Cy_Crypto_Core_GetVuMemorySize(base)));
 
     Cy_Crypto_Core_MemSet(base, (void*)destAddr, 0u, (uint16_t)CY_CRYPTO_WORD_SIZE_OF_BITS(size) * 4u);
     Cy_Crypto_Core_MemCpy(base, (void*)destAddr, (const void*)srcRemap, byteSize);
@@ -102,7 +102,7 @@ void Cy_Crypto_Core_Vu_GetMemValue(CRYPTO_Type *base, uint8_t *dst, uint32_t src
     uint32_t dataAddr = (uint32_t)Cy_Crypto_Core_Vu_RegMemPointer(base, srcReg);
 
     CY_ASSERT_L1(size <= Cy_Crypto_Core_Vu_RegBitSizeRead(base, srcReg));
-    CY_ASSERT_L1(((dataAddr + byteSize) - 1u) < ((uint32_t)Cy_Crypto_Core_GetVuMemoryAddress(base) + Cy_Crypto_Core_GetVuMemorySize(base)));
+    CY_ASSERT_L1( ((dataAddr + byteSize) - 1u) < ((uint32_t)Cy_Crypto_Core_GetVuMemoryAddress(base) + Cy_Crypto_Core_GetVuMemorySize(base)));
 
     Cy_Crypto_Core_MemCpy(base, (void*)dstRemap, (void*)dataAddr, byteSize);
 
@@ -138,7 +138,7 @@ bool Cy_Crypto_Core_Vu_IsRegEqual(CRYPTO_Type *base, uint32_t srcReg0, uint32_t 
     bool tmpResult;
     uint32_t status;
 
-    CY_CRYPTO_VU_CMP_SUB(base, srcReg1, srcReg0);                 /* C = (a >= b) */
+    CY_CRYPTO_VU_CMP_SUB (base, srcReg1, srcReg0);                /* C = (a >= b) */
     status = Cy_Crypto_Core_Vu_StatusRead(base);
 
     if (0u != (status &  CY_CRYPTO_VU_STATUS_ZERO_BIT))
@@ -158,7 +158,7 @@ bool Cy_Crypto_Core_Vu_IsRegLess(CRYPTO_Type *base, uint32_t srcReg0, uint32_t s
     bool tmpResult;
     uint32_t status;
 
-    CY_CRYPTO_VU_CMP_SUB(base, srcReg1, srcReg0);                 /* C = (a >= b) */
+    CY_CRYPTO_VU_CMP_SUB (base, srcReg1, srcReg0);                /* C = (a >= b) */
     status = Cy_Crypto_Core_Vu_StatusRead(base);
 
     if (0u != (status &  CY_CRYPTO_VU_STATUS_CARRY_BIT))
@@ -180,7 +180,7 @@ void Cy_Crypto_Core_VU_RegInvertEndianness(CRYPTO_Type *base, uint32_t srcReg)
     uint32_t *dataAddr = (uint32_t *)CY_REMAP_ADDRESS_FOR_CPU(Cy_Crypto_Core_Vu_RegMemPointer(base, srcReg));
 #else
     uint32_t *dataAddr = Cy_Crypto_Core_Vu_RegMemPointer(base, srcReg);
-#endif
+#endif    
     Cy_Crypto_Core_InvertEndianness(dataAddr, byteSize);
 }
 

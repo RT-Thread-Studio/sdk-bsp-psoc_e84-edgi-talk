@@ -101,7 +101,7 @@ static void _mtb_hal_rtc_from_pdl_time(cy_stc_rtc_config_t* pdlTime, const uint1
 
     // The number of days that precede each month of the year, not including Feb 29
     static const uint16_t CUMULATIVE_DAYS[] =
-    { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
+        { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };
 
     time->tm_sec = (int32_t)pdlTime->sec;
     time->tm_min = (int32_t)pdlTime->min;
@@ -131,15 +131,6 @@ __STATIC_INLINE void _mtb_hal_rtc_set_century(uint16_t century)
     _MTB_HAL_RTC_BREG |= _VAL2FLD(_MTB_HAL_RTC_BREG_CENTURY, century);
 
     _mtb_hal_rtc_wait_until_not_busy();
-}
-
-
-//--------------------------------------------------------------------------------------------------
-// Cy_RTC_CenturyInterrupt
-//--------------------------------------------------------------------------------------------------
-void Cy_RTC_CenturyInterrupt(void)
-{
-    _mtb_hal_rtc_set_century(_mtb_hal_rtc_get_century() + 100);
 }
 
 
@@ -176,10 +167,10 @@ cy_rslt_t mtb_hal_rtc_write(mtb_hal_rtc_t* obj, const struct tm* time)
     cy_rslt_t rslt;
     uint32_t retry = 0;
     if (!CY_RTC_IS_SEC_VALID((uint32_t)time->tm_sec) ||
-            !CY_RTC_IS_MIN_VALID((uint32_t)time->tm_min) ||
-            !CY_RTC_IS_HOUR_VALID((uint32_t)time->tm_hour) ||
-            !CY_RTC_IS_MONTH_VALID((uint32_t)(time->tm_mon + 1)) ||
-            !CY_RTC_IS_YEAR_SHORT_VALID(year2digit))
+        !CY_RTC_IS_MIN_VALID((uint32_t)time->tm_min) ||
+        !CY_RTC_IS_HOUR_VALID((uint32_t)time->tm_hour) ||
+        !CY_RTC_IS_MONTH_VALID((uint32_t)(time->tm_mon + 1)) ||
+        !CY_RTC_IS_YEAR_SHORT_VALID(year2digit))
     {
         return MTB_HAL_RTC_RSLT_BAD_ARGUMENT;
     }
@@ -199,8 +190,7 @@ cy_rslt_t mtb_hal_rtc_write(mtb_hal_rtc_t* obj, const struct tm* time)
         }
         mtb_hal_system_critical_section_exit(savedIntrStatus);
         ++retry;
-    }
-    while (rslt == CY_RTC_INVALID_STATE && retry < _MTB_HAL_RTC_MAX_RETRY);
+    } while (rslt == CY_RTC_INVALID_STATE && retry < _MTB_HAL_RTC_MAX_RETRY);
 
     _mtb_hal_rtc_wait_until_not_busy();
 

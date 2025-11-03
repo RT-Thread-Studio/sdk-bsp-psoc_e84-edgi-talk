@@ -27,7 +27,6 @@ from .core.strategy_context import (
 from .execute.keygens import ec_keygen
 from .targets.common.mxs22 import CertificateStrategyMXS22
 from .targets.common.mxs22 import ImageVerificationMXS22
-from .targets.common.mxs22.cert_adapter import CertAdapter
 from .targets.common.mxs22.enums import LifecycleStage
 from .targets.common.mxs22.multi_image_packet import MultiImageMXS22
 
@@ -39,59 +38,6 @@ class Mxs22API(CommonAPI):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-    def oem_csr(self, output, key_path, **kwargs):
-        """Creates certificate signing request
-        @param output: Path where to save the created OEM CSR
-        @param key_path: The key path tuple with the private key_0, key_1 paths
-        @param kwargs:
-            :certificate_name: The name of the certificate (b0 applicable)
-            :oem: The OEM name
-            :project: The OEM project name
-            :project_number: The OEM project number
-            :issuer: The issuer name (b0 applicable)
-            :signer_id: Signer unique ID (b0 applicable)
-            :pub_key_0: Public key 0 path or HEX value
-            :pub_key_1: Public key 1 path or HEX value
-            :date: The date of the OEM certificate creation (auto-generated if not provided)
-            :cert_type: Defines the "LCS" of the project development or production
-            :cert_id: A unique S/N for this certificate (b0 applicable)
-            :rev: Device revision value
-            :algorithm: Key algorithm. Applicable values: ES256, ES384
-            :use_adapter: Use the certificate adapter to convert CLI arguments to dictionary
-        @return CSR object
-        """
-        template = None
-        if kwargs.get('use_adapter'):
-            create = CertAdapter()
-            template = create.oem_csr(**kwargs)
-        context = CertificateContext(self.target.certificate_strategy)
-        return context.create_csr(output, key_path, template=template, **kwargs)
-
-    def ifx_oem_cert(self, output, **kwargs):
-        """Creates certificate
-        @param output: Path where to save the created IFX OEM certificate
-        @param kwargs:
-            :certificate_name: The name of the certificate (b0 applicable)
-            :csr: Path where to save the certificate
-            :issuer: The issuer name (b0 applicable)
-            :signer_id: Signer unique ID (b0 applicable)
-            :date: The date of the OEM certificate creation (auto-generated if not provided)
-            :cert_id: A unique S/N for this certificate
-            :rev: Device revision value
-            :algorithm: Key algorithm. Applicable values: ES256, ES384
-            :key_path: Private key path to sign certificate
-            :signer_id: Signer unique ID
-            :use_adapter: Use the certificate adapter to convert CLI arguments to dictionary
-        @return: Certificate object
-        """
-        template = None
-        if kwargs.get('use_adapter'):
-            create = CertAdapter()
-            template = create.oem_cert(**kwargs)
-        context = CertificateContext(self.target.certificate_strategy)
-        return context.create_certificate(output, None, None, dev_cert='oem',
-                                          template=template, **kwargs)
 
     def ifx_device_cert(self, output, **kwargs):
         """Creates IFX Device certificate
@@ -106,20 +52,6 @@ class Mxs22API(CommonAPI):
         """
         context = CertificateContext(self.target.certificate_strategy)
         return context.create_certificate(output, None, None, dev_cert='device',
-                                          **kwargs)
-
-    def create_cert(self, output, **kwargs):
-        """Creates certificate from JSON template
-        @param output: Path where to save the created CBOR certificate
-        @param kwargs:
-            :template: Certificate template path
-            :csr: Path where to save the certificate
-            :key_path: Private key path to sign certificate
-            :json_cert: Path where to save JSON certificate
-        @return: Certificate object
-        """
-        context = CertificateContext(self.target.certificate_strategy)
-        return context.create_certificate(output, None, None, dev_cert='cert',
                                           **kwargs)
 
     @staticmethod

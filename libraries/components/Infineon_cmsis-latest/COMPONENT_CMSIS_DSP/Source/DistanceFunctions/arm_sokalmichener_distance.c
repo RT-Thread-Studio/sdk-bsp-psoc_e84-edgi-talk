@@ -33,13 +33,13 @@
 
 
 extern void arm_boolean_distance_TT_FF_TF_FT(const uint32_t *pA
-        , const uint32_t *pB
-        , uint32_t numberOfBools
-        , uint32_t *cTT
-        , uint32_t *cFF
-        , uint32_t *cTF
-        , uint32_t *cFT
-                                            );
+       , const uint32_t *pB
+       , uint32_t numberOfBools
+       , uint32_t *cTT
+       , uint32_t *cFF
+       , uint32_t *cTF
+       , uint32_t *cFT
+       );
 
 
 /**
@@ -57,17 +57,17 @@ extern void arm_boolean_distance_TT_FF_TF_FT(const uint32_t *pA
  *
  */
 
-float32_t arm_sokalmichener_distance(const uint32_t *pA, const uint32_t *pB, uint32_t numberOfBools)
+ARM_DSP_ATTRIBUTE float32_t arm_sokalmichener_distance(const uint32_t *pA, const uint32_t *pB, uint32_t numberOfBools)
 {
-    uint32_t ctt = 0, cff = 0, cft = 0, ctf = 0;
-    float32_t r, s;
+    uint32_t ctt=0,cff=0,cft=0,ctf=0;
+    float32_t r,s;
 
     arm_boolean_distance_TT_FF_TF_FT(pA, pB, numberOfBools, &ctt, &cff, &ctf, &cft);
 
-    r = 2.0 * (ctf + cft);
-    s = 1.0 * (cff + ctt);
+   r = 2.0*(ctf + cft);
+   s = 1.0*(cff + ctt);
 
-    return (r / (s + r));
+    return(r / (s+r));
 }
 
 

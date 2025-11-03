@@ -6,7 +6,9 @@ Refer to the [README.md](./README.md) and the [API Reference Guide](https://infi
 
 ## Defect Fixes
 
-#### v0.5.400
+#### v1.1.0
+- Documentation updates
+#### v1.0.0
 * Initial release
 
 ## Supported Software and Tools

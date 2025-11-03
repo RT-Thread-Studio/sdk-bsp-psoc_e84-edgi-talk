@@ -116,7 +116,7 @@ extern "C" {
  * @return the status of the HAL setup
  */
 cy_rslt_t mtb_hal_pwm_setup(mtb_hal_pwm_t* obj, const mtb_hal_pwm_configurator_t* config,
-                            const mtb_hal_clock_t *clock);
+                            const mtb_hal_clock_t* clock);
 
 /** Set the number of microseconds for the PWM period & pulse width
  *
@@ -147,7 +147,7 @@ cy_rslt_t mtb_hal_pwm_stop(mtb_hal_pwm_t* obj);
 #endif
 
 #ifdef MTB_HAL_PWM_IMPL_HEADER
-    #include MTB_HAL_PWM_IMPL_HEADER
+#include MTB_HAL_PWM_IMPL_HEADER
 #endif /* MTB_HAL_PWM_IMPL_HEADER */
 
 #endif //defined(MTB_HAL_DRIVER_AVAILABLE_PWM)

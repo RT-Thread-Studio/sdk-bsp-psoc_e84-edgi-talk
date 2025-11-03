@@ -24,9 +24,9 @@
 #define ARM_PMU_ARMV8_H
 
 #if   defined ( __ICCARM__ )
-    #pragma system_include         /* treat file as system include file for MISRA check */
+  #pragma system_include         /* treat file as system include file for MISRA check */
 #elif defined (__clang__)
-    #pragma clang system_header    /* treat file as system include file */
+  #pragma clang system_header    /* treat file as system include file */
 #endif
 
 /**
@@ -195,7 +195,7 @@ __STATIC_INLINE void ARM_PMU_CNTR_Increment(uint32_t mask);
 */
 __STATIC_INLINE void ARM_PMU_Enable(void)
 {
-    PMU->CTRL |= PMU_CTRL_ENABLE_Msk;
+  PMU->CTRL |= PMU_CTRL_ENABLE_Msk;
 }
 
 /**
@@ -203,7 +203,7 @@ __STATIC_INLINE void ARM_PMU_Enable(void)
 */
 __STATIC_INLINE void ARM_PMU_Disable(void)
 {
-    PMU->CTRL &= ~PMU_CTRL_ENABLE_Msk;
+  PMU->CTRL &= ~PMU_CTRL_ENABLE_Msk;
 }
 
 /**
@@ -213,7 +213,7 @@ __STATIC_INLINE void ARM_PMU_Disable(void)
 */
 __STATIC_INLINE void ARM_PMU_Set_EVTYPER(uint32_t num, uint32_t type)
 {
-    PMU->EVTYPER[num] = type;
+  PMU->EVTYPER[num] = type;
 }
 
 /**
@@ -221,7 +221,7 @@ __STATIC_INLINE void ARM_PMU_Set_EVTYPER(uint32_t num, uint32_t type)
 */
 __STATIC_INLINE void ARM_PMU_CYCCNT_Reset(void)
 {
-    PMU->CTRL |= PMU_CTRL_CYCCNT_RESET_Msk;
+  PMU->CTRL |= PMU_CTRL_CYCCNT_RESET_Msk;
 }
 
 /**
@@ -229,7 +229,7 @@ __STATIC_INLINE void ARM_PMU_CYCCNT_Reset(void)
 */
 __STATIC_INLINE void ARM_PMU_EVCNTR_ALL_Reset(void)
 {
-    PMU->CTRL |= PMU_CTRL_EVENTCNT_RESET_Msk;
+  PMU->CTRL |= PMU_CTRL_EVENTCNT_RESET_Msk;
 }
 
 /**
@@ -241,7 +241,7 @@ __STATIC_INLINE void ARM_PMU_EVCNTR_ALL_Reset(void)
 */
 __STATIC_INLINE void ARM_PMU_CNTR_Enable(uint32_t mask)
 {
-    PMU->CNTENSET = mask;
+  PMU->CNTENSET = mask;
 }
 
 /**
@@ -253,7 +253,7 @@ __STATIC_INLINE void ARM_PMU_CNTR_Enable(uint32_t mask)
 */
 __STATIC_INLINE void ARM_PMU_CNTR_Disable(uint32_t mask)
 {
-    PMU->CNTENCLR = mask;
+  PMU->CNTENCLR = mask;
 }
 
 /**
@@ -262,7 +262,7 @@ __STATIC_INLINE void ARM_PMU_CNTR_Disable(uint32_t mask)
 */
 __STATIC_INLINE uint32_t ARM_PMU_Get_CCNTR(void)
 {
-    return PMU->CCNTR;
+  return PMU->CCNTR;
 }
 
 /**
@@ -272,7 +272,7 @@ __STATIC_INLINE uint32_t ARM_PMU_Get_CCNTR(void)
 */
 __STATIC_INLINE uint32_t ARM_PMU_Get_EVCNTR(uint32_t num)
 {
-    return PMU_EVCNTR_CNT_Msk & PMU->EVCNTR[num];
+  return PMU_EVCNTR_CNT_Msk & PMU->EVCNTR[num];
 }
 
 /**
@@ -283,7 +283,7 @@ __STATIC_INLINE uint32_t ARM_PMU_Get_EVCNTR(uint32_t num)
 */
 __STATIC_INLINE uint32_t ARM_PMU_Get_CNTR_OVS(void)
 {
-    return PMU->OVSSET;
+  return PMU->OVSSET;
 }
 
 /**
@@ -295,7 +295,7 @@ __STATIC_INLINE uint32_t ARM_PMU_Get_CNTR_OVS(void)
 */
 __STATIC_INLINE void ARM_PMU_Set_CNTR_OVS(uint32_t mask)
 {
-    PMU->OVSCLR = mask;
+  PMU->OVSCLR = mask;
 }
 
 /**
@@ -307,7 +307,7 @@ __STATIC_INLINE void ARM_PMU_Set_CNTR_OVS(uint32_t mask)
 */
 __STATIC_INLINE void ARM_PMU_Set_CNTR_IRQ_Enable(uint32_t mask)
 {
-    PMU->INTENSET = mask;
+  PMU->INTENSET = mask;
 }
 
 /**
@@ -319,7 +319,7 @@ __STATIC_INLINE void ARM_PMU_Set_CNTR_IRQ_Enable(uint32_t mask)
 */
 __STATIC_INLINE void ARM_PMU_Set_CNTR_IRQ_Disable(uint32_t mask)
 {
-    PMU->INTENCLR = mask;
+  PMU->INTENCLR = mask;
 }
 
 /**
@@ -329,7 +329,7 @@ __STATIC_INLINE void ARM_PMU_Set_CNTR_IRQ_Disable(uint32_t mask)
 */
 __STATIC_INLINE void ARM_PMU_CNTR_Increment(uint32_t mask)
 {
-    PMU->SWINC = mask;
+  PMU->SWINC = mask;
 }
 
 #endif

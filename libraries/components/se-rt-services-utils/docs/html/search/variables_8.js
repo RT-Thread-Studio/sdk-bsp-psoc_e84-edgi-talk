@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['temperature_0',['temperature',['../group__platform__power.html#a54e77f400c8ee44c95a2fb286a026752',1,'ifx_se_rt_info_t']]]
+  ['region_5fsize_0',['region_size',['../group__platform__mpc.html#a7e08056ff1c597e1009b42e6dd8aec79',1,'ifx_se_mpc_rot_cfg_t']]]
 ];

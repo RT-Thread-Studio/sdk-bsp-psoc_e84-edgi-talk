@@ -50,20 +50,20 @@ extern "C" {
 cy_rslt_t mtb_hal_lptimer_set_delay(mtb_hal_lptimer_t* obj, uint32_t delay)
 {
     obj->clear_int_mask = true;
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(Cy_MCWDT_GetEnabledStatus(obj->base, CY_MCWDT_COUNTER0)
                          || Cy_MCWDT_GetEnabledStatus(obj->base, CY_MCWDT_COUNTER1)
                          || Cy_MCWDT_GetEnabledStatus(obj->base,
-                                 CY_MCWDT_COUNTER2),
+                                                      CY_MCWDT_COUNTER2),
                          MTB_HAL_LPTIMER_RSLT_ERR_DISABLED);
-#else
+    #else
     if ((Cy_MCWDT_GetEnabledStatus(obj->base, CY_MCWDT_COUNTER0) == 0UL)
-            || (Cy_MCWDT_GetEnabledStatus(obj->base, CY_MCWDT_COUNTER1) == 0UL)
-            || (Cy_MCWDT_GetEnabledStatus(obj->base, CY_MCWDT_COUNTER2) == 0UL))
+        || (Cy_MCWDT_GetEnabledStatus(obj->base, CY_MCWDT_COUNTER1) == 0UL)
+        || (Cy_MCWDT_GetEnabledStatus(obj->base, CY_MCWDT_COUNTER2) == 0UL))
     {
         return MTB_HAL_LPTIMER_RSLT_ERR_DISABLED;
     }
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
 
     /**
      * - 16 bit Counter0 (C0) & Counter1 (C1) are cascaded to generated a 32 bit counter.
@@ -126,9 +126,9 @@ cy_rslt_t mtb_hal_lptimer_set_delay(mtb_hal_lptimer_t* obj, uint32_t delay)
         c0_current_ticks = (uint16_t)Cy_MCWDT_GetCount(obj->base, CY_MCWDT_COUNTER0);
         timeout--;
     }
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(timeout != 0, MTB_HAL_LPTIMER_RSLT_ERR_DISABLED);
-#else
+    #else
     if (timeout == 0UL)
     {
         // Timeout has occurred. There could have been a clock failure while waiting for the count
@@ -136,7 +136,7 @@ cy_rslt_t mtb_hal_lptimer_set_delay(mtb_hal_lptimer_t* obj, uint32_t delay)
         Cy_SysLib_ExitCriticalSection(critical_section);
         return MTB_HAL_LPTIMER_RSLT_ERR_DISABLED;
     }
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
 
     uint16_t c0_match = (uint16_t)(c0_current_ticks + delay);
     // Changes can take up to 2 clk_lf cycles to propagate. If we set the match within this window
@@ -147,15 +147,15 @@ cy_rslt_t mtb_hal_lptimer_set_delay(mtb_hal_lptimer_t* obj, uint32_t delay)
     while (((c0_new_ticks == c0_match) ||
             (c0_new_ticks == ((uint16_t)(c0_match + 1))) ||
             (c0_new_ticks == ((uint16_t)(c0_match + 2))))
-            && (timeout != 0UL))
+           && (timeout != 0UL))
     {
         c0_new_ticks = (uint16_t)Cy_MCWDT_GetCount(obj->base, CY_MCWDT_COUNTER0);
         timeout--;
     }
 
     delay -= (c0_new_ticks >= c0_current_ticks)
-             ? (uint32_t)(c0_new_ticks - c0_current_ticks)
-             : (uint32_t)((0xFFFFU - c0_current_ticks) + c0_new_ticks);
+        ? (uint32_t)(c0_new_ticks - c0_current_ticks)
+        : (uint32_t)((0xFFFFU - c0_current_ticks) + c0_new_ticks);
 
     c0_match = (uint16_t)(c0_current_ticks + delay);
     uint16_t c1_current_ticks = (uint16_t)Cy_MCWDT_GetCount(obj->base, CY_MCWDT_COUNTER1);

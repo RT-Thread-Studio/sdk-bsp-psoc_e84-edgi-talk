@@ -1,7 +1,7 @@
 /*******************************************************************************
  * File Name:   retarget_io_init.c
  *
- * Description: This file contains the initialization routine for the
+ * Description: This file contains the initialization routine for the 
  *              retarget-io middleware
  *
  * Related Document: See README.md
@@ -48,8 +48,8 @@
 * Global Variables
 *******************************************************************************/
 /* For the RetargetIO (Debug UART) usage */
-static cy_stc_scb_uart_context_t    DEBUG_UART_context;
-static mtb_hal_uart_t               DEBUG_UART_hal_obj;
+static cy_stc_scb_uart_context_t    DEBUG_UART_context;  
+static mtb_hal_uart_t               DEBUG_UART_hal_obj;  
 
 /* Retarget-io deepsleep callback parameters  */
 #if (CY_CFG_PWR_SYS_IDLE_MODE == CY_CFG_PWR_MODE_DEEPSLEEP)
@@ -65,7 +65,7 @@ static mtb_syspm_uart_deepsleep_context_t retarget_io_syspm_ds_context =
         .pinNum         = CYBSP_DEBUG_UART_TX_PIN,
         .hsiom          = CYBSP_DEBUG_UART_TX_HSIOM
     },
-    .rts_pin =
+    .rts_pin = 
     {
         .port           = DEBUG_UART_RTS_PORT,
         .pinNum         = DEBUG_UART_RTS_PIN,
@@ -97,7 +97,7 @@ static cy_stc_syspm_callback_t retarget_io_syspm_cb =
 * Function Name: init_retarget_io
 ********************************************************************************
 * Summary:
-* User defined function to initialize the debug UART.
+* User defined function to initialize the debug UART. 
 *
 * Parameters:
 *  void
@@ -111,27 +111,27 @@ void init_retarget_io(void)
     cy_rslt_t result = CY_RSLT_SUCCESS;
 
     /* Initialize the SCB UART */
-    result = (cy_rslt_t)Cy_SCB_UART_Init(CYBSP_DEBUG_UART_HW,
-                                         &CYBSP_DEBUG_UART_config,
-                                         &DEBUG_UART_context);
-
+    result = (cy_rslt_t)Cy_SCB_UART_Init(CYBSP_DEBUG_UART_HW, 
+                                        &CYBSP_DEBUG_UART_config, 
+                                        &DEBUG_UART_context);
+    
     /* UART initialization failed. Stop program execution. */
     if (CY_RSLT_SUCCESS != result)
     {
-        handle_app_error();
+        handle_error();
     }
 
     /* Enable the SCB UART */
     Cy_SCB_UART_Enable(CYBSP_DEBUG_UART_HW);
 
-    result = mtb_hal_uart_setup(&DEBUG_UART_hal_obj,
-                                &CYBSP_DEBUG_UART_hal_config,
+    result = mtb_hal_uart_setup(&DEBUG_UART_hal_obj, 
+                                &CYBSP_DEBUG_UART_hal_config, 
                                 &DEBUG_UART_context, NULL);
-
+    
     /* UART setup failed. Stop program execution. */
     if (CY_RSLT_SUCCESS != result)
     {
-        handle_app_error();
+        handle_error();
     }
 
     /* Initialize retarget-io to use the debug UART port. */
@@ -140,7 +140,7 @@ void init_retarget_io(void)
     /* retarget-io initialization failed. Stop program execution. */
     if (CY_RSLT_SUCCESS != result)
     {
-        handle_app_error();
+        handle_error();
     }
 
 #if (CY_CFG_PWR_SYS_IDLE_MODE == CY_CFG_PWR_MODE_DEEPSLEEP)

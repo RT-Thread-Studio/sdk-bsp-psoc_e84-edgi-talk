@@ -30,7 +30,7 @@
 #include <limits.h>
 #include <math.h>
 #if defined(ARM_MATH_NEON) && defined(__aarch64__)
-    #include "arm_vec_math.h"
+#include "arm_vec_math.h"
 #endif
 
 /**
@@ -47,29 +47,29 @@
  *
  */
 
-float64_t arm_entropy_f64(const float64_t * pSrcA, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float64_t arm_entropy_f64(const float64_t * pSrcA, uint32_t blockSize)
 {
     const float64_t *pIn;
     uint32_t blkCnt;
     float64_t accum, p;
-
+    
     pIn = pSrcA;
-
+    
     accum = 0.0;
 
     blkCnt = blockSize;
-
-    while (blkCnt > 0)
+    
+    while(blkCnt > 0)
     {
         p = *pIn++;
-
+        
         accum += p * log(p);
-
+        
         blkCnt--;
-
+        
     }
-
-    return (-accum);
+    
+    return(-accum);
 }
 
 /**

@@ -63,15 +63,15 @@ cy_en_tcpwm_status_t Cy_TCPWM_ShiftReg_Init(TCPWM_Type const *base, uint32_t cnt
         bool enabled_bit = _FLD2BOOL(TCPWM_GRP_CNT_V2_CTRL_ENABLED, TCPWM_GRP_CNT_CTRL(base, grp, cntNum));
 
         TCPWM_GRP_CNT_CTRL(base, grp, cntNum) =
-            (_VAL2FLD(TCPWM_GRP_CNT_V2_CTRL_MODE, CY_TCPWM_MODE_SHIFTREG) |
-             (config->enableCompare0Swap ? TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Msk : 0UL) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_CTRL_QUAD_ENCODING_MODE,
-                      (config->invertShiftRegOut | (config->invertShiftRegOutN << 1U))) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_CTRL_PWM_DISABLE_MODE, config->shiftRegOnDisable) |
+                (_VAL2FLD(TCPWM_GRP_CNT_V2_CTRL_MODE, CY_TCPWM_MODE_SHIFTREG) |
+                (config->enableCompare0Swap ? TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Msk : 0UL) |
+                _VAL2FLD(TCPWM_GRP_CNT_V2_CTRL_QUAD_ENCODING_MODE,
+                    (config->invertShiftRegOut | (config->invertShiftRegOutN << 1U))) |
+                _VAL2FLD(TCPWM_GRP_CNT_V2_CTRL_PWM_DISABLE_MODE, config->shiftRegOnDisable) |
 #if defined (CY_IP_MXS40TCPWM)
-             _VAL2FLD(TCPWM_GRP_CNT_V3_CTRL_SWAP_ENABLED, config->buffer_swap_enable) |
+                _VAL2FLD(TCPWM_GRP_CNT_V3_CTRL_SWAP_ENABLED, config->buffer_swap_enable) |
 #endif
-             (enabled_bit ? TCPWM_GRP_CNT_V2_CTRL_ENABLED_Msk : 0UL));
+                (enabled_bit ? TCPWM_GRP_CNT_V2_CTRL_ENABLED_Msk : 0UL));
 
         TCPWM_GRP_CNT_DT(base, grp, cntNum) = _VAL2FLD(TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L, (uint8_t)config->clockPrescaler);
 
@@ -81,27 +81,27 @@ cy_en_tcpwm_status_t Cy_TCPWM_ShiftReg_Init(TCPWM_Type const *base, uint32_t cnt
         TCPWM_GRP_CNT_PERIOD_BUFF(base, grp, cntNum) = config->tapsEnabled;
 
         TCPWM_GRP_CNT_TR_IN_SEL0(base, grp, cntNum) =
-            (_VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL, config->serialInput) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL, config->reloadInput) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL, config->killInput) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL, config->shiftInput));
+                (_VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL, config->serialInput) |
+                 _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL, config->reloadInput) |
+                 _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL, config->killInput) |
+                 _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL, config->shiftInput));
 
         TCPWM_GRP_CNT_TR_IN_SEL1(base, grp, cntNum) = _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL, config->startInput);
 
         TCPWM_GRP_CNT_TR_IN_EDGE_SEL(base, grp, cntNum) =
-            (_VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE, config->serialInputMode) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE, config->reloadInputMode) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE, config->startInputMode) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE, config->killInputMode) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE, config->shiftInputMode));
+                (_VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE, config->serialInputMode) |
+                 _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE, config->reloadInputMode) |
+                 _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE, config->startInputMode) |
+                 _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE, config->killInputMode) |
+                 _VAL2FLD(TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE, config->shiftInputMode));
 
         TCPWM_GRP_CNT_TR_OUT_SEL(base, grp, cntNum) =
-            (_VAL2FLD(TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT0, config->trigger0Event) |
-             _VAL2FLD(TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT1, config->trigger1Event));
+                (_VAL2FLD(TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT0, config->trigger0Event) |
+                 _VAL2FLD(TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT1, config->trigger1Event));
 
         TCPWM_GRP_CNT_INTR_MASK(base, grp, cntNum) = config->interruptSources;
 
-        if (TCPWM_GRP_CC1(base, grp))
+        if(TCPWM_GRP_CC1(base, grp))
         {
             TCPWM_GRP_CNT_CC1(base, grp, cntNum) = config->compare1;
             TCPWM_GRP_CNT_CC1_BUFF(base, grp, cntNum) = config->compareBuf1;
@@ -122,7 +122,7 @@ cy_en_tcpwm_status_t Cy_TCPWM_ShiftReg_Init(TCPWM_Type const *base, uint32_t cnt
 
     status = CY_TCPWM_UNSUPPORTED_FEATURE;
 #endif
-    return (status);
+    return(status);
 }
 
 /*******************************************************************************

@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 Purpose : Public header of the human interface device class
@@ -267,18 +267,17 @@ typedef int USB_HID_HANDLE;
 *     to at most one packet of at most 64 bytes per frame (on full
 *     speed devices).
 */
-typedef struct
-{
-    U16           Flags;            // Reserved, must be set to 0.
-    U8            EPIn;             // Endpoint for sending data to the host.
-    U8            EPOut;            // Endpoint for receiving data from the host.
-    const U8     *pReport;          // Pointer to a report descriptor.
-    U16           NumBytesReport;   // Size of the HID report descriptor in bytes.
-    U16           BuffSize;         // Size of the buffer pointed to by pBuff.
-    // Must be at least the size of the output report.
-    U8           *pBuff;            // Pointer to a buffer for receiving reports
-    // from the host via endpoint 0 (Set_Report request).
-    const char *pInterfaceName;     // Name of the interface. May be NULL.
+typedef struct {
+  U16           Flags;            // Reserved, must be set to 0.
+  U8            EPIn;             // Endpoint for sending data to the host.
+  U8            EPOut;            // Endpoint for receiving data from the host.
+  const U8    * pReport;          // Pointer to a report descriptor.
+  U16           NumBytesReport;   // Size of the HID report descriptor in bytes.
+  U16           BuffSize;         // Size of the buffer pointed to by pBuff.
+                                  // Must be at least the size of the output report.
+  U8          * pBuff;            // Pointer to a buffer for receiving reports
+                                  // from the host via endpoint 0 (Set_Report request).
+  const char * pInterfaceName;    // Name of the interface. May be NULL.
 } USB_HID_INIT_DATA_EX;
 
 /*********************************************************************
@@ -314,24 +313,22 @@ typedef struct
 *     to at most one packet of at most 64 bytes per frame (on full
 *     speed devices).
 */
-typedef struct
-{
-    U8          EPIn;             // Endpoint for sending data to the host.
-    U8          EPOut;            // Endpoint for receiving data from the host.
-    const U8   *pReport;          // Pointer to a report descriptor.
-    U16         NumBytesReport;   // Size of the HID report descriptor in bytes.
-    U16         BuffSize;         // Size of the buffer pointed to by pBuff.
-    // Must be at least the size of the output report.
-    U8         *pBuff;            // Pointer to a buffer for receiving reports
-    // from the host via endpoint 0 (Set_Report request).
+typedef struct {
+  U8          EPIn;             // Endpoint for sending data to the host.
+  U8          EPOut;            // Endpoint for receiving data from the host.
+  const U8  * pReport;          // Pointer to a report descriptor.
+  U16         NumBytesReport;   // Size of the HID report descriptor in bytes.
+  U16         BuffSize;         // Size of the buffer pointed to by pBuff.
+                                // Must be at least the size of the output report.
+  U8        * pBuff;            // Pointer to a buffer for receiving reports
+                                // from the host via endpoint 0 (Set_Report request).
 } USB_HID_INIT_DATA;
 
-typedef enum _USB_HID_REPORT_TYPE
-{
-    USB_HID_REPORT_TYPE_NONE    = 0,
-    USB_HID_REPORT_TYPE_INPUT   = USB_HID_INPUT_REPORT,
-    USB_HID_REPORT_TYPE_OUTPUT  = USB_HID_OUTPUT_REPORT,
-    USB_HID_REPORT_TYPE_FEATURE = USB_HID_FEATURE_REPORT
+typedef enum _USB_HID_REPORT_TYPE {
+  USB_HID_REPORT_TYPE_NONE    = 0,
+  USB_HID_REPORT_TYPE_INPUT   = USB_HID_INPUT_REPORT,
+  USB_HID_REPORT_TYPE_OUTPUT  = USB_HID_OUTPUT_REPORT,
+  USB_HID_REPORT_TYPE_FEATURE = USB_HID_FEATURE_REPORT
 } USB_HID_REPORT_TYPE;
 
 /*********************************************************************
@@ -339,7 +336,7 @@ typedef enum _USB_HID_REPORT_TYPE
 *       USB_HID_ON_GETREPORT_REQUEST_FUNC
 *
 *   Description
-*     Callback function description which is set via
+*     Callback function which is set via
 *     USBD_HID_SetOnGetReportRequest().
 *
 *   Parameters
@@ -349,7 +346,7 @@ typedef enum _USB_HID_REPORT_TYPE
 *                   * USB_HID_REPORT_TYPE_FEATURE
 *     ReportId    - The ID of the report for which the GET_REPORT request has been sent.
 *     pData       - [IN] Pointer to a pointer to the data to send via GET_REPORT request.
-*     pNumBytes   - IN: Number of bytes requested. Out: Number of bytes that shall be sent.
+*     pNumBytes   - [IN] Number of bytes requested. Out: Number of bytes that shall be sent.
 *
 *   Return value
 *     == 0: No data available. The stack will send a zero length packet as a response.
@@ -363,7 +360,7 @@ typedef int  USB_HID_ON_GETREPORT_REQUEST_FUNC(USB_HID_REPORT_TYPE ReportType, u
 *       USB_HID_ON_SETREPORT_REQUEST_FUNC
 *
 *   Description
-*     Callback function description which is set via USBD_HID_SetOnSetReportRequest().
+*     Callback function which is set via USBD_HID_SetOnSetReportRequest().
 *     The function is called after a SET_REPORT command was sent from the host via
 *     the control endpoint. The report should be read using USBD_HID_ReadReport().
 *
@@ -387,29 +384,29 @@ typedef void USB_HID_ON_SETREPORT_REQUEST_FUNC(USB_HID_REPORT_TYPE ReportType, u
 *
 **********************************************************************
 */
-void           USBD_HID_Init(void);
+void           USBD_HID_Init                   (void);
 
-USB_HID_HANDLE USBD_HID_Add(const USB_HID_INIT_DATA * pInitData);
-USB_HID_HANDLE USBD_HID_AddEx(const USB_HID_INIT_DATA_EX * pInitData);
+USB_HID_HANDLE USBD_HID_Add                    (const USB_HID_INIT_DATA * pInitData);
+USB_HID_HANDLE USBD_HID_AddEx                  (const USB_HID_INIT_DATA_EX * pInitData);
 
-unsigned       USBD_HID_GetInterfaceNo(USB_HID_HANDLE hInst);
-unsigned       USBD_HID_GetNumBytesInBuffer(USB_HID_HANDLE hInst);
-unsigned       USBD_HID_GetNumBytesRemToWrite(USB_HID_HANDLE hInst);
-unsigned       USBD_HID_GetNumBytesRemToRead(USB_HID_HANDLE hInst);
+unsigned       USBD_HID_GetInterfaceNo         (USB_HID_HANDLE hInst);
+unsigned       USBD_HID_GetNumBytesInBuffer    (USB_HID_HANDLE hInst);
+unsigned       USBD_HID_GetNumBytesRemToWrite  (USB_HID_HANDLE hInst);
+unsigned       USBD_HID_GetNumBytesRemToRead   (USB_HID_HANDLE hInst);
 
-int            USBD_HID_ReadReport(USB_HID_HANDLE hInst, void* pData, unsigned NumBytes);
-int            USBD_HID_Receive(USB_HID_HANDLE hInst, void* pData, unsigned NumBytes, int Timeout);
-int            USBD_HID_ReceivePoll(USB_HID_HANDLE hInst, void* pData, unsigned NumBytes, unsigned Timeout);
-int            USBD_HID_Read(USB_HID_HANDLE hInst, void* pData, unsigned NumBytes, unsigned Timeout);
-int            USBD_HID_ReadOverlapped(USB_HID_HANDLE hInst, void* pData, unsigned NumBytes);
-void           USBD_HID_StartReadTransfer(USB_HID_HANDLE hInst);
-int            USBD_HID_WaitForRX(USB_HID_HANDLE hInst, unsigned Timeout);
+int            USBD_HID_ReadReport             (USB_HID_HANDLE hInst, void* pData, unsigned NumBytes);
+int            USBD_HID_Receive                (USB_HID_HANDLE hInst, void* pData, unsigned NumBytes, int Timeout);
+int            USBD_HID_ReceivePoll            (USB_HID_HANDLE hInst, void* pData, unsigned NumBytes, unsigned Timeout);
+int            USBD_HID_Read                   (USB_HID_HANDLE hInst, void* pData, unsigned NumBytes, unsigned Timeout);
+int            USBD_HID_ReadOverlapped         (USB_HID_HANDLE hInst, void* pData, unsigned NumBytes);
+void           USBD_HID_StartReadTransfer      (USB_HID_HANDLE hInst);
+int            USBD_HID_WaitForRX              (USB_HID_HANDLE hInst, unsigned Timeout);
 
-int            USBD_HID_Write(USB_HID_HANDLE hInst, const void* pData, unsigned NumBytes, int Timeout);
-int            USBD_HID_WaitForTX(USB_HID_HANDLE hInst, unsigned Timeout);
+int            USBD_HID_Write                  (USB_HID_HANDLE hInst, const void* pData, unsigned NumBytes, int Timeout);
+int            USBD_HID_WaitForTX              (USB_HID_HANDLE hInst, unsigned Timeout);
 
-void           USBD_HID_SetOnGetReportRequest(USB_HID_HANDLE hInst, USB_HID_ON_GETREPORT_REQUEST_FUNC * pfOnGetReportRequest);
-void           USBD_HID_SetOnSetReportRequest(USB_HID_HANDLE hInst, USB_HID_ON_SETREPORT_REQUEST_FUNC * pfOnSetReportRequest);
+void           USBD_HID_SetOnGetReportRequest  (USB_HID_HANDLE hInst, USB_HID_ON_GETREPORT_REQUEST_FUNC * pfOnGetReportRequest);
+void           USBD_HID_SetOnSetReportRequest  (USB_HID_HANDLE hInst, USB_HID_ON_SETREPORT_REQUEST_FUNC * pfOnSetReportRequest);
 
 /*********************************************************************
 *
@@ -451,7 +448,7 @@ void           USBD_HID_SetOnSetReportRequest(USB_HID_HANDLE hInst, USB_HID_ON_S
 #endif
 
 #if defined(__cplusplus)
-}              /* Make sure we have C-declarations in C++ programs */
+  }              /* Make sure we have C-declarations in C++ programs */
 #endif
 
 #endif                 /* Avoid multiple inclusion */

@@ -34,19 +34,19 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 // mtb_syspm_i2s_deepsleep_callback
 //--------------------------------------------------------------------------------------------------
 cy_en_syspm_status_t mtb_syspm_i2s_tdm_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode)
 {
     bool allow = false;
     switch (mode)
     {
-    case CY_SYSPM_CHECK_READY:
-        allow = !_mtb_syspm_i2s_tdm_is_active(params) && !_mtb_syspm_i2s_tdm_is_busy(params);
-        break;
+        case CY_SYSPM_CHECK_READY:
+            allow = !_mtb_syspm_i2s_tdm_is_active(params) && !_mtb_syspm_i2s_tdm_is_busy(params);
+            break;
 
-    default:
-        allow = true;
-        break;
+        default:
+            allow = true;
+            break;
     }
     if (allow)
     {

@@ -62,84 +62,6 @@
 * \section group_lvd_more_information More Information
 * See the LVD chapter of the device technical reference manual (TRM).
 *
-* \section group_lvd_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason of Change</th></tr>
-*   <tr>
-*     <td>1.80</td>
-*     <td>Added new APIs \ref Cy_LVD_SetActionConfig, \ref Cy_LVD_GetActionConfig
-*       - Added enum \ref cy_en_lvd_action_config_t.</td>
-*     <td>LVD set and get config APIs added.</td>
-*   </tr>
-*   <tr>
-*     <td>1.70</td>
-*     <td>Added support for TRAVEO&trade; II Body Entry devices.<br>
-*       Changed pre-processor logic so SRSS version 2 is grouped with version 3 instead of version 1.</td>
-*     <td>Code enhancement and support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>1.60</td>
-*     <td>Added PSE84 device support.</td>
-*     <td>Added support for PSE84 family of devices.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">1.50</td>
-*     <td>Added CAT1B device support.</td>
-*     <td>Added support for CAT1B family of devices.</td>
-*   </tr>
-*   <tr>
-*     <td>New APIs Added
-*         * Cy_LVD_GetSourceVoltage()
-*         * Cy_LVD_SetSourceVoltage()
-*     </td>
-*     <td>Added new APIs to set and get the source voltage.</td>
-*   </tr>
-*   <tr>
-*     <td>1.40</td>
-*     <td>Added new device support.</td>
-*     <td>Added new family of devices.</td>
-*   </tr>
-*   <tr>
-*     <td>1.30</td>
-*     <td>Fixed/documented MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>1.20</td>
-*     <td>
-            Updated the following functions for the PSoC 64 devices:
-            \ref Cy_LVD_Enable, \ref Cy_LVD_Disable, \ref Cy_LVD_SetThreshold,
-            \ref Cy_LVD_ClearInterrupt, \ref Cy_LVD_SetInterrupt,
-            \ref Cy_LVD_SetInterruptMask, \ref Cy_LVD_ClearInterruptMask, and
-            \ref Cy_LVD_SetInterruptConfig.
-      </td>
-*     <td>Added PSoC 64 device support.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">1.10</td>
-*     <td>Flattened the organization of the driver source code into the single
-*         source directory and the single include directory.
-*     </td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Added register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0.1</td>
-*     <td>Added Low Power Callback section</td>
-*     <td>Documentation update and clarification</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial Version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_lvd_macros Macros
 * \defgroup group_lvd_functions Functions
 *   \{
@@ -175,8 +97,8 @@ extern "C" {
 /** The LVD driver identifier */
 #define CY_LVD_ID                      (CY_PDL_DRV_ID(0x39U))
 
-
-
+ 
+ 
 #if defined (CY_IP_MXS22SRSS)
 /** Interrupt mask for \ref Cy_LVD_GetInterruptStatus(),
                        \ref Cy_LVD_ClearInterrupt() */
@@ -196,7 +118,7 @@ extern "C" {
 /** Enable mask for \ref Cy_LVD_Enable() and /ref Cy_LVD_Disable() */
 #define CY_LVD_SRSS_PWR_LVD_CTL_HVLVD_EN_Msk   (SRSS_PWR_LVD_CTL_HVLVD_EN_Msk)
 #endif
-
+ 
 
 /** \} group_lvd_macros */
 
@@ -219,9 +141,9 @@ typedef enum
     CY_LVD_THRESHOLD_3_15_V    = 0x4U, /**<Select LVD reference voltage: 3.15V */
 } cy_en_lvd_tripsel_t;
 #endif
-/**
-* LVD interrupt configuration select.
-*/
+ /**
+ * LVD interrupt configuration select.
+ */
 typedef enum
 {
     CY_LVD_INTR_DISABLE    = 0x0U,  /**<Select LVD interrupt: disabled */
@@ -272,7 +194,7 @@ typedef enum
                                           ((threshold) == CY_LVD_THRESHOLD_3_15_V))
 
 #endif
-#define CY_LVD_CHECK_INTR_CFG(intrCfg)   (((intrCfg) == CY_LVD_INTR_DISABLE) || \
+ #define CY_LVD_CHECK_INTR_CFG(intrCfg)   (((intrCfg) == CY_LVD_INTR_DISABLE) || \
                                           ((intrCfg) == CY_LVD_INTR_RISING) || \
                                           ((intrCfg) == CY_LVD_INTR_FALLING) || \
                                           ((intrCfg) == CY_LVD_INTR_BOTH))
@@ -301,7 +223,7 @@ __STATIC_INLINE void Cy_LVD_SetInterruptMask(void);
 __STATIC_INLINE void Cy_LVD_ClearInterruptMask(void);
 __STATIC_INLINE uint32_t Cy_LVD_GetInterruptStatusMasked(void);
 __STATIC_INLINE void Cy_LVD_SetInterruptConfig(cy_en_lvd_intr_config_t lvdInterruptConfig);
-
+ 
 /** \addtogroup group_lvd_functions_syspm_callback
 * The driver supports SysPm callback for Deep Sleep transition.
 * \{
@@ -320,7 +242,7 @@ cy_en_syspm_status_t Cy_LVD_DeepSleepCallback(cy_stc_syspm_callback_params_t * c
 *******************************************************************************/
 __STATIC_INLINE void Cy_LVD_Enable(void)
 {
-    SRSS_PWR_LVD_CTL |= CY_LVD_SRSS_PWR_LVD_CTL_HVLVD_EN_Msk;
+        SRSS_PWR_LVD_CTL |= CY_LVD_SRSS_PWR_LVD_CTL_HVLVD_EN_Msk;
 }
 
 
@@ -333,7 +255,7 @@ __STATIC_INLINE void Cy_LVD_Enable(void)
 *******************************************************************************/
 __STATIC_INLINE void Cy_LVD_Disable(void)
 {
-    SRSS_PWR_LVD_CTL &= (uint32_t) ~CY_LVD_SRSS_PWR_LVD_CTL_HVLVD_EN_Msk;
+        SRSS_PWR_LVD_CTL &= (uint32_t) ~CY_LVD_SRSS_PWR_LVD_CTL_HVLVD_EN_Msk;
 }
 
 
@@ -355,7 +277,7 @@ __STATIC_INLINE void Cy_LVD_SetThreshold(cy_en_lvd_tripsel_t threshold)
 {
     CY_ASSERT_L3(CY_LVD_CHECK_TRIPSEL(threshold));
     SRSS_PWR_LVD_CTL = _CLR_SET_FLD32U(SRSS_PWR_LVD_CTL, SRSS_PWR_LVD_CTL_HVLVD_TRIPSEL, threshold);
-}
+ }
 
 
 /*******************************************************************************
@@ -370,9 +292,9 @@ __STATIC_INLINE void Cy_LVD_SetThreshold(cy_en_lvd_tripsel_t threshold)
 *******************************************************************************/
 __STATIC_INLINE cy_en_lvd_status_t Cy_LVD_GetStatus(void)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'SRSS_PWR_LVD_STATUS_HVLVD_OK_Msk extracts only 1 bit value');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','SRSS_PWR_LVD_STATUS_HVLVD_OK_Msk extracts only 1 bit value');
     return ((cy_en_lvd_status_t) _FLD2VAL(SRSS_PWR_LVD_STATUS_HVLVD_OK, SRSS_PWR_LVD_STATUS));
-}
+ }
 
 
 /*******************************************************************************
@@ -388,7 +310,7 @@ __STATIC_INLINE cy_en_lvd_status_t Cy_LVD_GetStatus(void)
 __STATIC_INLINE uint32_t Cy_LVD_GetInterruptStatus(void)
 {
     return (SRSS_SRSS_AINTR & CY_LVD_SRSS_INTR_HVLVD1_MASK);
-}
+ }
 
 
 /*******************************************************************************
@@ -404,7 +326,7 @@ __STATIC_INLINE void Cy_LVD_ClearInterrupt(void)
     SRSS_SRSS_AINTR = CY_LVD_SRSS_INTR_HVLVD1_MASK;
     /* This dummy reading is necessary here. It provides a guarantee that interrupt is cleared at returning from this function. */
     (void) SRSS_SRSS_INTR;
-}
+ }
 
 
 /*******************************************************************************
@@ -418,7 +340,7 @@ __STATIC_INLINE void Cy_LVD_ClearInterrupt(void)
 __STATIC_INLINE void Cy_LVD_SetInterrupt(void)
 {
     SRSS_SRSS_AINTR_SET = CY_LVD_SRSS_INTR_SET_HVLVD1_MASK;
-}
+ }
 
 
 /*******************************************************************************
@@ -434,7 +356,7 @@ __STATIC_INLINE void Cy_LVD_SetInterrupt(void)
 __STATIC_INLINE uint32_t Cy_LVD_GetInterruptMask(void)
 {
     return (SRSS_SRSS_AINTR_MASK & CY_LVD_SRSS_INTR_MASK_HVLVD1_MASK);
-}
+ }
 
 
 /*******************************************************************************
@@ -448,7 +370,7 @@ __STATIC_INLINE uint32_t Cy_LVD_GetInterruptMask(void)
 __STATIC_INLINE void Cy_LVD_SetInterruptMask(void)
 {
     SRSS_SRSS_AINTR_MASK |= CY_LVD_SRSS_INTR_MASK_HVLVD1_MASK;
-}
+ }
 
 
 /*******************************************************************************
@@ -462,7 +384,7 @@ __STATIC_INLINE void Cy_LVD_SetInterruptMask(void)
 __STATIC_INLINE void Cy_LVD_ClearInterruptMask(void)
 {
     SRSS_SRSS_AINTR_MASK &= (uint32_t) ~CY_LVD_SRSS_INTR_MASK_HVLVD1_MASK;
-}
+ }
 
 
 /*******************************************************************************
@@ -479,7 +401,7 @@ __STATIC_INLINE void Cy_LVD_ClearInterruptMask(void)
 __STATIC_INLINE uint32_t Cy_LVD_GetInterruptStatusMasked(void)
 {
     return (SRSS_SRSS_AINTR_MASKED & CY_LVD_SRSS_INTR_MASKED_HVLVD1_MASK);
-}
+ }
 
 
 /*******************************************************************************
@@ -496,12 +418,12 @@ __STATIC_INLINE void Cy_LVD_SetInterruptConfig(cy_en_lvd_intr_config_t lvdInterr
 {
     CY_ASSERT_L3(CY_LVD_CHECK_INTR_CFG(lvdInterruptConfig));
 
-
-
+ 
+ 
 #if defined (CY_IP_MXS22SRSS)
-    SRSS_PWR_LVD_CTL = _CLR_SET_FLD32U(SRSS_PWR_LVD_CTL, SRSS_PWR_LVD_CTL_HVLVD_EDGE_SEL, lvdInterruptConfig);
+        SRSS_PWR_LVD_CTL = _CLR_SET_FLD32U(SRSS_PWR_LVD_CTL, SRSS_PWR_LVD_CTL_HVLVD_EDGE_SEL, lvdInterruptConfig);
 #endif
-
+ 
     /* This dummy reading is necessary here. It provides a guarantee that interrupt is cleared at returning from this function. */
     (void) lvdInterruptConfig;
 }
@@ -537,8 +459,8 @@ __STATIC_INLINE cy_en_lvd_action_config_t Cy_LVD_GetActionConfig(void)
     return (((SRSS_PWR_LVD_CTL & SRSS_PWR_LVD_CTL_HVLVD_ACTION_Msk) != 0UL) ? CY_LVD_ACTION_FAULT : CY_LVD_ACTION_INTERRUPT);
 }
 #endif
-
-
+ 
+ 
 /** \} group_lvd_functions */
 
 #ifdef __cplusplus

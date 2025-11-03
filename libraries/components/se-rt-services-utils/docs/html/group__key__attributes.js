@@ -5,7 +5,10 @@ var group__key__attributes =
     [ "Key policies", "group__key__policy.html", "group__key__policy" ],
     [ "Key lifetimes", "group__key__lifetimes.html", "group__key__lifetimes" ],
     [ "Built-In keys", "group__builtin__keys.html", "group__builtin__keys" ],
-    [ "ifx_se_svc_key_id_t", "group__key__attributes.html#structifx__se__svc__key__id__t", null ],
+    [ "ifx_se_svc_key_id_t", "group__key__attributes.html#structifx__se__svc__key__id__t", [
+      [ "key_id", "group__key__attributes.html#a0db9a87c97d3a7dce799c55efc0fb1d2", null ],
+      [ "owner", "group__key__attributes.html#a64a53438f20e2b9425d535321d74837f", null ]
+    ] ],
     [ "IFX_SE_KEY_ATTRIBUTES_INIT", "group__key__attributes.html#ga5ad00c2092aaa27fc2a8fee1dedfadbc", null ],
     [ "IFX_SE_KEY_ID_NULL", "group__key__attributes.html#gaa0d31868818705bf5c0536f18c7a58d2", null ],
     [ "IFX_SE_KEY_ID_USER_MIN", "group__key__attributes.html#ga9be9d06f3147dece1c40e9b3b0083331", null ],

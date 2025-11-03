@@ -20,7 +20,7 @@
 #define __CMSIS_GCC_A_H
 
 #ifndef __CMSIS_GCC_H
-    #error "This file must not be included directly"
+  #error "This file must not be included directly"
 #endif
 
 /* ignore some GCC warnings */
@@ -40,9 +40,9 @@
  */
 __STATIC_FORCEINLINE uint32_t __get_CPSR(void)
 {
-    uint32_t result;
-    __ASM volatile("MRS %0, cpsr" : "=r"(result));
-    return (result);
+  uint32_t result;
+  __ASM volatile("MRS %0, cpsr" : "=r" (result) );
+  return(result);
 }
 
 /** \brief  Set CPSR Register
@@ -50,7 +50,7 @@ __STATIC_FORCEINLINE uint32_t __get_CPSR(void)
  */
 __STATIC_FORCEINLINE void __set_CPSR(uint32_t cpsr)
 {
-    __ASM volatile("MSR cpsr, %0" : : "r"(cpsr) : "cc", "memory");
+  __ASM volatile ("MSR cpsr, %0" : : "r" (cpsr) : "cc", "memory");
 }
 
 /** \brief  Get Mode
@@ -58,7 +58,7 @@ __STATIC_FORCEINLINE void __set_CPSR(uint32_t cpsr)
  */
 __STATIC_FORCEINLINE uint32_t __get_mode(void)
 {
-    return (__get_CPSR() & 0x1FU);
+  return (__get_CPSR() & 0x1FU);
 }
 
 /** \brief  Set Mode
@@ -66,7 +66,7 @@ __STATIC_FORCEINLINE uint32_t __get_mode(void)
  */
 __STATIC_FORCEINLINE void __set_mode(uint32_t mode)
 {
-    __ASM volatile("MSR  cpsr_c, %0" : : "r"(mode) : "memory");
+  __ASM volatile("MSR  cpsr_c, %0" : : "r" (mode) : "memory");
 }
 
 /** \brief  Get Stack Pointer
@@ -74,9 +74,9 @@ __STATIC_FORCEINLINE void __set_mode(uint32_t mode)
  */
 __STATIC_FORCEINLINE uint32_t __get_SP(void)
 {
-    uint32_t result;
-    __ASM volatile("MOV  %0, sp" : "=r"(result) : : "memory");
-    return result;
+  uint32_t result;
+  __ASM volatile("MOV  %0, sp" : "=r" (result) : : "memory");
+  return result;
 }
 
 /** \brief  Set Stack Pointer
@@ -84,7 +84,7 @@ __STATIC_FORCEINLINE uint32_t __get_SP(void)
  */
 __STATIC_FORCEINLINE void __set_SP(uint32_t stack)
 {
-    __ASM volatile("MOV  sp, %0" : : "r"(stack) : "memory");
+  __ASM volatile("MOV  sp, %0" : : "r" (stack) : "memory");
 }
 
 /** \brief  Get USR/SYS Stack Pointer
@@ -92,15 +92,15 @@ __STATIC_FORCEINLINE void __set_SP(uint32_t stack)
  */
 __STATIC_FORCEINLINE uint32_t __get_SP_usr(void)
 {
-    uint32_t cpsr = __get_CPSR();
-    uint32_t result;
-    __ASM volatile(
-        "CPS     #0x1F  \n"
-        "MOV     %0, sp   " : "=r"(result) : : "memory"
-    );
-    __set_CPSR(cpsr);
-    __ISB();
-    return result;
+  uint32_t cpsr = __get_CPSR();
+  uint32_t result;
+  __ASM volatile(
+    "CPS     #0x1F  \n"
+    "MOV     %0, sp   " : "=r"(result) : : "memory"
+   );
+  __set_CPSR(cpsr);
+  __ISB();
+  return result;
 }
 
 /** \brief  Set USR/SYS Stack Pointer
@@ -108,13 +108,13 @@ __STATIC_FORCEINLINE uint32_t __get_SP_usr(void)
  */
 __STATIC_FORCEINLINE void __set_SP_usr(uint32_t topOfProcStack)
 {
-    uint32_t cpsr = __get_CPSR();
-    __ASM volatile(
-        "CPS     #0x1F  \n"
-        "MOV     sp, %0   " : : "r"(topOfProcStack) : "memory"
-    );
-    __set_CPSR(cpsr);
-    __ISB();
+  uint32_t cpsr = __get_CPSR();
+  __ASM volatile(
+    "CPS     #0x1F  \n"
+    "MOV     sp, %0   " : : "r" (topOfProcStack) : "memory"
+   );
+  __set_CPSR(cpsr);
+  __ISB();
 }
 
 /** \brief  Get FPEXC
@@ -123,11 +123,11 @@ __STATIC_FORCEINLINE void __set_SP_usr(uint32_t topOfProcStack)
 __STATIC_FORCEINLINE uint32_t __get_FPEXC(void)
 {
 #if (__FPU_PRESENT == 1)
-    uint32_t result;
-    __ASM volatile("VMRS %0, fpexc" : "=r"(result) : : "memory");
-    return (result);
+  uint32_t result;
+  __ASM volatile("VMRS %0, fpexc" : "=r" (result) : : "memory");
+  return(result);
 #else
-    return (0);
+  return(0);
 #endif
 }
 
@@ -137,7 +137,7 @@ __STATIC_FORCEINLINE uint32_t __get_FPEXC(void)
 __STATIC_FORCEINLINE void __set_FPEXC(uint32_t fpexc)
 {
 #if (__FPU_PRESENT == 1)
-    __ASM volatile("VMSR fpexc, %0" : : "r"(fpexc) : "memory");
+  __ASM volatile ("VMSR fpexc, %0" : : "r" (fpexc) : "memory");
 #endif
 }
 
@@ -158,62 +158,62 @@ __STATIC_FORCEINLINE void __set_FPEXC(uint32_t fpexc)
  */
 __STATIC_INLINE void __FPU_Enable(void)
 {
-    // Permit access to VFP/NEON, registers by modifying CPACR
-    const uint32_t cpacr = __get_CPACR();
-    __set_CPACR(cpacr | 0x00F00000ul);
-    __ISB();
+  // Permit access to VFP/NEON, registers by modifying CPACR
+  const uint32_t cpacr = __get_CPACR();
+  __set_CPACR(cpacr | 0x00F00000ul);
+  __ISB();
 
-    // Enable VFP/NEON
-    const uint32_t fpexc = __get_FPEXC();
-    __set_FPEXC(fpexc | 0x40000000ul);
+  // Enable VFP/NEON
+  const uint32_t fpexc = __get_FPEXC();
+  __set_FPEXC(fpexc | 0x40000000ul);
 
-    __ASM volatile(
-        // Initialise VFP/NEON registers to 0
-        "        MOV     R2,#0             \n"
+  __ASM volatile(
+    // Initialise VFP/NEON registers to 0
+    "        MOV     R2,#0             \n"
 
-        // Initialise D16 registers to 0
-        "        VMOV    D0, R2,R2         \n"
-        "        VMOV    D1, R2,R2         \n"
-        "        VMOV    D2, R2,R2         \n"
-        "        VMOV    D3, R2,R2         \n"
-        "        VMOV    D4, R2,R2         \n"
-        "        VMOV    D5, R2,R2         \n"
-        "        VMOV    D6, R2,R2         \n"
-        "        VMOV    D7, R2,R2         \n"
-        "        VMOV    D8, R2,R2         \n"
-        "        VMOV    D9, R2,R2         \n"
-        "        VMOV    D10,R2,R2         \n"
-        "        VMOV    D11,R2,R2         \n"
-        "        VMOV    D12,R2,R2         \n"
-        "        VMOV    D13,R2,R2         \n"
-        "        VMOV    D14,R2,R2         \n"
-        "        VMOV    D15,R2,R2         \n"
+    // Initialise D16 registers to 0
+    "        VMOV    D0, R2,R2         \n"
+    "        VMOV    D1, R2,R2         \n"
+    "        VMOV    D2, R2,R2         \n"
+    "        VMOV    D3, R2,R2         \n"
+    "        VMOV    D4, R2,R2         \n"
+    "        VMOV    D5, R2,R2         \n"
+    "        VMOV    D6, R2,R2         \n"
+    "        VMOV    D7, R2,R2         \n"
+    "        VMOV    D8, R2,R2         \n"
+    "        VMOV    D9, R2,R2         \n"
+    "        VMOV    D10,R2,R2         \n"
+    "        VMOV    D11,R2,R2         \n"
+    "        VMOV    D12,R2,R2         \n"
+    "        VMOV    D13,R2,R2         \n"
+    "        VMOV    D14,R2,R2         \n"
+    "        VMOV    D15,R2,R2         \n"
 
 #if (defined(__ARM_NEON) && (__ARM_NEON == 1))
-        // Initialise D32 registers to 0
-        "        VMOV    D16,R2,R2         \n"
-        "        VMOV    D17,R2,R2         \n"
-        "        VMOV    D18,R2,R2         \n"
-        "        VMOV    D19,R2,R2         \n"
-        "        VMOV    D20,R2,R2         \n"
-        "        VMOV    D21,R2,R2         \n"
-        "        VMOV    D22,R2,R2         \n"
-        "        VMOV    D23,R2,R2         \n"
-        "        VMOV    D24,R2,R2         \n"
-        "        VMOV    D25,R2,R2         \n"
-        "        VMOV    D26,R2,R2         \n"
-        "        VMOV    D27,R2,R2         \n"
-        "        VMOV    D28,R2,R2         \n"
-        "        VMOV    D29,R2,R2         \n"
-        "        VMOV    D30,R2,R2         \n"
-        "        VMOV    D31,R2,R2         \n"
+    // Initialise D32 registers to 0
+    "        VMOV    D16,R2,R2         \n"
+    "        VMOV    D17,R2,R2         \n"
+    "        VMOV    D18,R2,R2         \n"
+    "        VMOV    D19,R2,R2         \n"
+    "        VMOV    D20,R2,R2         \n"
+    "        VMOV    D21,R2,R2         \n"
+    "        VMOV    D22,R2,R2         \n"
+    "        VMOV    D23,R2,R2         \n"
+    "        VMOV    D24,R2,R2         \n"
+    "        VMOV    D25,R2,R2         \n"
+    "        VMOV    D26,R2,R2         \n"
+    "        VMOV    D27,R2,R2         \n"
+    "        VMOV    D28,R2,R2         \n"
+    "        VMOV    D29,R2,R2         \n"
+    "        VMOV    D30,R2,R2         \n"
+    "        VMOV    D31,R2,R2         \n"
 #endif
-        : : : "cc", "r2"
-    );
+    : : : "cc", "r2"
+  );
 
-    // Initialise FPSCR to a known state
-    const uint32_t fpscr = __get_FPSCR();
-    __set_FPSCR(fpscr & 0x00086060ul);
+  // Initialise FPSCR to a known state
+  const uint32_t fpscr = __get_FPSCR();
+  __set_FPSCR(fpscr & 0x00086060ul);
 }
 
 /*@} end of group CMSIS_Core_intrinsics */

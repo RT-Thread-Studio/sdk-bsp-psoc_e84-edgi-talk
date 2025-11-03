@@ -52,17 +52,17 @@ extern "C" {
 //--------------------------------------------------------------------------------------------------
 static inline cy_en_syspm_deep_sleep_mode_t _mtb_hal_syspm_get_pdl_dsmode(void)
 {
-#if (CY_CPU_CORTEX_M55)
+    #if (CY_CPU_CORTEX_M55)
     return Cy_SysPm_GetAppDeepSleepMode();
-#else
+    #else
     return Cy_SysPm_GetSysDeepSleepMode();
-#endif
+    #endif
 }
 
 
 #if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER)
 extern cy_en_syspm_status_t _mtb_hal_syspm_handle_lptimer(cy_stc_syspm_callback_params_t* params,
-        cy_en_syspm_callback_mode_t mode);
+                                                          cy_en_syspm_callback_mode_t mode);
 extern cy_stc_syspm_callback_params_t _mtb_hal_syspm_cb_params_default;
 
 //--------------------------------------------------------------------------------------------------

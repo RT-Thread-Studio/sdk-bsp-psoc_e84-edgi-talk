@@ -113,7 +113,7 @@
         // executable matches the image in the chip exactly, or else strange things can happen//CM55 Only//
         // with breakpoints, variables, etc.//CM55 Only//
         {//CM55 Only//
-            "name": "&&MTB_COMBINE_SIGN_&&IDX&&_CONFIG_NAME&& Add CM55 to CM33 PSOCE84 (KitProg3_MiniProg4)",//CM55 Only//
+            "name": "Add CM55 to CM33 PSOCE84 (KitProg3_MiniProg4)",//CM55 Only//
             "type": "cortex-debug",//CM55 Only//
             "request": "attach",//CM55 Only//
             "cwd": "${workspaceFolder}",//CM55 Only//

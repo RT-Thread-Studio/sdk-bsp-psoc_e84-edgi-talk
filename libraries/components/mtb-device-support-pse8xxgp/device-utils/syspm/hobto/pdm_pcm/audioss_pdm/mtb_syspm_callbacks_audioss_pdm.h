@@ -37,7 +37,7 @@ extern "C" {
 // _mtb_syspm_pdm_pcm_is_active
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE  bool _mtb_syspm_pdm_pcm_is_active(const cy_stc_syspm_callback_params_t* params,
-        uint8_t channelNum)
+                                                   uint8_t channelNum)
 {
     CY_UNUSED_PARAMETER(channelNum);
     return (0u != Cy_PDM_PCM_GetCurrentState(params->base));

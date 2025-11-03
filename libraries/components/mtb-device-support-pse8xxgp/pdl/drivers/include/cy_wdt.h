@@ -193,127 +193,6 @@
 * For more information on the WDT peripheral, refer to the technical reference
 * manual (TRM).
 *
-* \section group_wdt_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.90</td>
-*     <td>Updated internal macro for parameter validation.</td>
-*     <td>Code enhancement</td>
-*   </tr>
-*   <tr>
-*     <td>1.80</td>
-*     <td>Added support for TRAVEO&trade; II Body Entry devices.<br>
-*          MXS40SRSS_VERSION compares now expect &lt; or &gt;= 2, previously 3.</td>
-*     <td>Code enhancement and support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">1.70</td>
-*     <td>Modified Cy_WDT_SetIgnoreBits() API to work correctly with CAT1B.<br>
-*         Newly Added API : Cy_WDT_ResetCounter() for resetting counter to zero.</td>
-*     <td>Code Enhancements for CAT1B.</td>
-*   </tr>
-*   <tr>
-*     <td>Added \ref Cy_WDT_ResetCounter new API and few macros.</td>
-*     <td>Usability enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.60</td>
-*     <td>Updated \ref cy_en_wdt_clk_sources_t enum and added support for PSE8.</td>
-*     <td>Code Enhancement and new device support added.</td>
-*   </tr>
-*   <tr>
-*     <td>1.50</td>
-*     <td>Added WDT_B type support required for CAT1C devices.<br>Newly added APIs:
-*         \n Cy_WDT_SetLowerLimit(),
-*         \n Cy_WDT_SetUpperLimit(),
-*         \n Cy_WDT_SetWarnLimit(),
-*         \n Cy_WDT_SetLowerAction(),
-*         \n Cy_WDT_SetUpperAction(),
-*         \n Cy_WDT_SetWarnAction(),
-*         \n Cy_WDT_SetAutoService(),
-*         \n Cy_WDT_SetDeepSleepPause(),
-*         \n Cy_WDT_SetHibernatePause(),
-*         \n Cy_WDT_SetDebugRun(),
-*         \n Cy_WDT_SetService(),
-*     <td>Support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>1.40</td>
-*     <td>CAT1B, CAT1C devices support.<br>
-*         Newly added API's Cy_WDT_SetClkSource() to configure the WDT clock source, Cy_WDT_GetClkSource() to get the WDT clock source configured,
-*         Cy_WDT_SetMatchBits() to configure the bit position above which the bits will be ignored for match, Cy_WDT_GetMatchBits() to get the bit position above which the bits will be ignored for match.</td>
-*     <td>Support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>1.30.1</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Removed MISRA 2004 compliance details and verified MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">1.30</td>
-*     <td>Updated the following functions for the PSoC 64 devices: \ref Cy_WDT_ClearInterrupt(),
-*         \ref Cy_WDT_MaskInterrupt(), and \ref Cy_WDT_UnmaskInterrupt().</td>
-*     <td>Added PSoC 64 device support.</td>
-*   </tr>
-*   <tr>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.20</td>
-*     <td>Added a new API function \ref Cy_WDT_IsEnabled() </td>
-*     <td>Enhancement based on usability feedback.</td>
-*   </tr>
-*   <tr>
-*     <td>1.10.1</td>
-*     <td>Added info that the WDT lock state is not retained during
-*        system Deep Sleep power mode.
-*     </td>
-*     <td>Documentation updates.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="4">1.10</td>
-*     <td>Flattened the organization of the driver source code into the single
-*         source directory and the single include directory.
-*     </td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td> Removed critical section usage in the following functions:
-*           - \ref Cy_WDT_Init()
-*           - \ref Cy_WDT_Lock()
-*           - \ref Cy_WDT_Unlock()
-*     </td>
-*   <td>Driver functions simplification</td>
-*   </tr>
-*   <tr>
-*     <td>Updated the \ref Cy_WDT_Init(), \ref Cy_WDT_Enable() to clear WDT interrupt.</td>
-*     <td>Corner case reliability improvements</td>
-*   </tr>
-*   <tr>
-*     <td>Added register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0.2</td>
-*     <td>Minor documentation updates</td>
-*     <td>Corrected info about a reset generation</td>
-*   </tr>
-*   <tr>
-*     <td>1.0.1</td>
-*     <td>General documentation updates</td>
-*     <td>Added info about periodic interrupt generation use case</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_wdt_macros Macros
 * \defgroup group_wdt_clk_src_enums Enums
 * \defgroup group_wdt_functions Functions
@@ -389,8 +268,8 @@ extern "C" {
 #endif
 
 
-/* Internal macro to validate match value */
-#define CY_WDT_IS_MATCH_VAL_VALID(match)        ((match) <= (WDT_MAX_MATCH_VALUE-1))
+ /* Internal macro to validate match value */
+ #define CY_WDT_IS_MATCH_VAL_VALID(match)        ((match) <= (WDT_MAX_MATCH_VALUE))
 
 /* Internal macro to validate match value */
 #define CY_WDT_IS_IGNORE_BITS_VALID(bitsNum)     ((bitsNum) <= WDT_MAX_IGNORE_BITS)
@@ -563,9 +442,9 @@ __STATIC_INLINE uint32_t Cy_WDT_GetMatch(void)
 __STATIC_INLINE uint32_t Cy_WDT_GetIgnoreBits(void)
 {
 #if defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS)
-    return ((uint32_t)(WDT_MAX_IGNORE_BITS - _FLD2VAL(SRSS_WDT_MATCH2_IGNORE_BITS_ABOVE, SRSS_WDT_MATCH2)));
+    return((uint32_t) (WDT_MAX_IGNORE_BITS - _FLD2VAL(SRSS_WDT_MATCH2_IGNORE_BITS_ABOVE, SRSS_WDT_MATCH2)));
 #else
-    return ((uint32_t) _FLD2VAL(SRSS_WDT_MATCH_IGNORE_BITS, SRSS_WDT_MATCH));
+    return((uint32_t) _FLD2VAL(SRSS_WDT_MATCH_IGNORE_BITS, SRSS_WDT_MATCH));
 #endif
 }
 
@@ -606,7 +485,7 @@ __STATIC_INLINE void Cy_WDT_SetClkSource(cy_en_wdt_clk_sources_t src)
 *******************************************************************************/
 __STATIC_INLINE cy_en_wdt_clk_sources_t Cy_WDT_GetClkSource(void)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_wdt_clk_sources_t enum.');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_wdt_clk_sources_t enum.');
     return ((cy_en_wdt_clk_sources_t) _FLD2VAL(SRSS_WDT_CTL_WDT_CLK_SEL, SRSS_WDT_CTL));
 }
 
@@ -621,7 +500,7 @@ __STATIC_INLINE cy_en_wdt_clk_sources_t Cy_WDT_GetClkSource(void)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_WDT_GetMatchBits(void)
 {
-    return ((uint32_t)(_FLD2VAL(SRSS_WDT_MATCH2_IGNORE_BITS_ABOVE, SRSS_WDT_MATCH2)));
+    return((uint32_t) (_FLD2VAL(SRSS_WDT_MATCH2_IGNORE_BITS_ABOVE, SRSS_WDT_MATCH2)));
 }
 #endif
 
@@ -676,11 +555,11 @@ __STATIC_INLINE void Cy_WDT_MaskInterrupt(void)
 #if (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION >= 2))
     SRSS_WDT_INTR_MASK &= ~WDT_INTR_MASK_WDT_Msk;
 #else
-#if CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE)
-    CY_PRA_REG32_CLR_SET(CY_PRA_INDX_SRSS_SRSS_INTR_MASK, SRSS_SRSS_INTR_MASK_WDT_MATCH, 0U);
-#else
-    SRSS_SRSS_INTR_MASK &= (uint32_t)(~ _VAL2FLD(SRSS_SRSS_INTR_MASK_WDT_MATCH, 1U));
-#endif /* CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE) */
+    #if CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE)
+        CY_PRA_REG32_CLR_SET(CY_PRA_INDX_SRSS_SRSS_INTR_MASK, SRSS_SRSS_INTR_MASK_WDT_MATCH, 0U);
+    #else
+        SRSS_SRSS_INTR_MASK &= (uint32_t)(~ _VAL2FLD(SRSS_SRSS_INTR_MASK_WDT_MATCH, 1U));
+    #endif /* CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE) */
 #endif
 }
 
@@ -698,11 +577,11 @@ __STATIC_INLINE void Cy_WDT_UnmaskInterrupt(void)
 #if (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION >= 2))
     SRSS_WDT_INTR_MASK |= WDT_INTR_MASK_WDT_Msk;
 #else
-#if CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE)
-    CY_PRA_REG32_CLR_SET(CY_PRA_INDX_SRSS_SRSS_INTR_MASK, SRSS_SRSS_INTR_MASK_WDT_MATCH, 1U);
-#else
-    SRSS_SRSS_INTR_MASK |= _VAL2FLD(SRSS_SRSS_INTR_MASK_WDT_MATCH, 1U);
-#endif /* CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE) */
+    #if CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE)
+        CY_PRA_REG32_CLR_SET(CY_PRA_INDX_SRSS_SRSS_INTR_MASK, SRSS_SRSS_INTR_MASK_WDT_MATCH, 1U);
+    #else
+        SRSS_SRSS_INTR_MASK |= _VAL2FLD(SRSS_SRSS_INTR_MASK_WDT_MATCH, 1U);
+    #endif /* CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE) */
 #endif
 }
 /** \} group_wdt_functions */

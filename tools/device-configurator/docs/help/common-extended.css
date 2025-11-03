@@ -27,7 +27,7 @@ m|math {
   --prism-url: #67cdcc;
 }
 
-[data-theme="dark"] {
+[data-bs-theme="dark"] {
   --prism-maintext: #ccc;
   --prism-background: #2d2d2d;
   --prism-text: #999;
@@ -56,7 +56,7 @@ m|math {
     --prism-url: #9a6e3a;
   }
 
-  [data-theme="light"] {
+  [data-bs-theme="light"] {
     --prism-maintext: black;
     --prism-background: #f5f2f0;
     --prism-text: #999;
@@ -114,6 +114,47 @@ pre[class*="language-"] {
 	padding: .1em;
 	border-radius: .3em;
 	white-space: normal;
+}
+
+pre[class*="language-"].show-line-numbers {
+	position: relative;
+	padding-left: 3.8em;
+	counter-reset: linenumber;
+}
+
+
+pre[class*="language-"].show-line-numbers > code {
+	position: relative;
+	white-space: inherit;
+}
+
+.show-line-numbers .line-numbers-rows {
+	position: absolute;
+	pointer-events: none;
+	font-size: 100%;
+	left: -3em;
+	width: 2em; /* works for line-numbers below 1000 lines */
+	letter-spacing: -1px;
+	border-right: 1px solid;
+	border-right-color: var(--prism-text, #999);
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+}
+
+span.line-numbers-rows{
+	display: inline;
+	counter-increment: linenumber;
+}
+
+span.line-numbers-rows:before {
+	content: counter(linenumber);
+	color: var(--prism-text, #999);
+	display: inline;
+	padding-right: 0.8em;
+	text-align: right;
 }
 
 .token.comment,

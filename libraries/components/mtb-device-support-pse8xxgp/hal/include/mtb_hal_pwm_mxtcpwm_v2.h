@@ -51,13 +51,13 @@ extern "C" {
 #define _MTB_HAL_TCPWM_GET_GRP(block) ((block) % _MTB_HAL_TCPWM_MAX_GRPS_PER_IP_BLOCK)
 
 #if (CY_IP_MXTCPWM_INSTANCES == 1)
-#define _MTB_HAL_TCPWM_INSTANCES     TCPWM_GRP_NR
-#define _MTB_HAL_TCPWM_CNT_NUMBER(group, cntnum) (((group) << 8) | (cntnum))
+    #define _MTB_HAL_TCPWM_INSTANCES     TCPWM_GRP_NR
+    #define _MTB_HAL_TCPWM_CNT_NUMBER(group, cntnum) (((group) << 8) | (cntnum))
 #elif (CY_IP_MXTCPWM_INSTANCES == 2)
-#define _MTB_HAL_TCPWM_INSTANCES     (TCPWM0_GRP_NR + TCPWM1_GRP_NR)
+    #define _MTB_HAL_TCPWM_INSTANCES     (TCPWM0_GRP_NR + TCPWM1_GRP_NR)
 // This is based on the model of 4x continuous groups mapping to x IP blocks
 // (0-3 to 1, 4-7 to 2, etc)
-#define _MTB_HAL_TCPWM_CNT_NUMBER(group, cntnum) \
+    #define _MTB_HAL_TCPWM_CNT_NUMBER(group, cntnum) \
     ((((group) % _MTB_HAL_TCPWM_MAX_GRPS_PER_IP_BLOCK) << 8) | (cntnum))
 #endif
 
@@ -80,7 +80,7 @@ __STATIC_INLINE void _mtb_hal_tcpwm_trigger_reload(mtb_hal_pwm_t* obj)
 __STATIC_INLINE bool _mtb_hal_tcpwm_is_center_aligned(mtb_hal_pwm_t* obj)
 {
     uint32_t pwm_ctrl_reg = TCPWM_GRP_CNT_TR_PWM_CTRL(obj->tcpwm.base, obj->tcpwm.group,
-                            obj->tcpwm.cntnum);
+                                                      obj->tcpwm.cntnum);
     uint32_t cc1_ignore_mask = (0 == obj->tcpwm.group) ? 0 : CY_TCPWM_PWM_MODE_CC1_IGNORE;
     bool is_center_aligned =
         (pwm_ctrl_reg == (CY_TCPWM_PWM_MODE_CNTR_OR_ASYMM | cc1_ignore_mask)) ||
@@ -97,16 +97,16 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_pwm_get_killed_state(mtb_hal_pwm_t* obj, bool
     uint32_t pwm_ctrl_reg =
         TCPWM_GRP_CNT_CTRL(obj->tcpwm.base, obj->tcpwm.group, obj->tcpwm.cntnum);
     uint32_t pwm_status_reg = TCPWM_GRP_CNT_STATUS(obj->tcpwm.base, obj->tcpwm.group,
-                              obj->tcpwm.cntnum);
+                                                   obj->tcpwm.cntnum);
     uint32_t pwm_tr_in_sel0_reg = TCPWM_GRP_CNT_TR_IN_SEL0(obj->tcpwm.base, obj->tcpwm.group,
-                                  obj->tcpwm.cntnum);
+                                                           obj->tcpwm.cntnum);
     uint32_t tcpwm_mode = _FLD2VAL(TCPWM_GRP_CNT_V2_CTRL_MODE, pwm_ctrl_reg);
     uint32_t is_stop_on_kill = _FLD2VAL(TCPWM_GRP_CNT_V2_CTRL_PWM_STOP_ON_KILL, pwm_ctrl_reg);
     uint32_t kill_signal = _FLD2VAL(TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL, pwm_tr_in_sel0_reg);
 
     if ((kill_signal == 0UL) ||
-            ((tcpwm_mode != CY_TCPWM_PWM_MODE_PWM) && (tcpwm_mode != CY_TCPWM_PWM_MODE_DEADTIME) &&
-             (tcpwm_mode != CY_TCPWM_PWM_MODE_PSEUDORANDOM)))
+        ((tcpwm_mode != CY_TCPWM_PWM_MODE_PWM) && (tcpwm_mode != CY_TCPWM_PWM_MODE_DEADTIME) &&
+         (tcpwm_mode != CY_TCPWM_PWM_MODE_PSEUDORANDOM)))
     {
         *killed = false;
     }

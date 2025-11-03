@@ -39,7 +39,7 @@ Export('RTT_ROOT')
 Export('rtconfig')
 Export('env')
 
-# Resolve shared BSP location so generated headers are visible to every module.
+# Resolve path to shared BSP sources so we can add the generated headers once.
 if os.path.exists(os.path.join(os.getcwd(), "libs")):
     libs_source = 'libs'
 else:
@@ -125,7 +125,8 @@ if os.path.exists(os.path.join(os.getcwd(), "libraries")):
     objs.extend(SConscript('libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
     objs.extend(SConscript('libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
     objs.extend(SConscript('libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
-    objs.extend(SConscript('libraries/components/emusb-device/SConscript', variant_dir='build/libraries/components/emusb-device', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
     objs.extend(SConscript('libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
 else:
     # Set VariantDir for external libraries
@@ -142,7 +143,8 @@ else:
     objs.extend(SConscript('../../../libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
-    objs.extend(SConscript('../../../libraries/components/emusb-device/SConscript', variant_dir='build/libraries/components/emusb-device', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
 
 # make a building

@@ -12,5 +12,6 @@ var group__builtin__keys =
     [ "IFX_SE_KEY_ID_BUILTIN_TEST_CMAC128", "group__builtin__keys.html#ga5b886dd85ee085176d0e34f132c00b72", null ],
     [ "IFX_SE_KEY_ID_BUILTIN_TEST_CMAC256", "group__builtin__keys.html#ga6ac3866e631744431e63e435636abe27", null ],
     [ "IFX_SE_KEY_ID_BUILTIN_TEST_ECC384", "group__builtin__keys.html#ga060d6aaf8bb7de8fa3301dc711af9f83", null ],
-    [ "IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF", "group__builtin__keys.html#gac114e6899a3029d1396febd69470739d", null ]
+    [ "IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF", "group__builtin__keys.html#gac114e6899a3029d1396febd69470739d", null ],
+    [ "IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB", "group__builtin__keys.html#ga60711dbbbf0411ab337790b7a10a722a", null ]
 ];

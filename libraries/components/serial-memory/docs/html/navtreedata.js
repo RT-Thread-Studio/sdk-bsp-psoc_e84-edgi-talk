@@ -24,8 +24,7 @@
 */
 var NAVTREE =
 [
-  [ "(serial-memory)", "index.html", [
-    [ "Serial Memory", "index.html", null ],
+  [ "Serial Memory", "index.html", [
     [ "API Reference", "modules.html", "modules" ]
   ] ]
 ];

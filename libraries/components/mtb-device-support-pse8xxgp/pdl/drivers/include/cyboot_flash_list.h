@@ -99,7 +99,7 @@ typedef struct
     uint32_t reserved[2]; /* size to be 8 bytes aligned */
 } cyboot_flash_context_t;
 
-typedef uint32_t cyboot_flash_row_t[(CY_FLASH_ROW_SIZE + CYBOOT_FLASH_COLUMN33_SIZE) / sizeof(uint32_t)];
+typedef uint32_t cyboot_flash_row_t[(CY_FLASH_ROW_SIZE + CYBOOT_FLASH_COLUMN33_SIZE)/ sizeof(uint32_t)];
 
 /* Sub sector, sector, bulk functions */
 typedef uint32_t (*cyboot_flash_erase_sub_sector_t)(uint32_t flash_address, cyboot_flash_context_t *ctx);
@@ -109,12 +109,12 @@ typedef uint32_t (*cyboot_flash_program_sub_sector_t)(uint32_t flash_address, ui
 typedef uint32_t (*cyboot_flash_program_sector_t)(uint32_t flash_address, uint32_t data, cyboot_flash_context_t *ctx);
 typedef uint32_t (*cyboot_flash_program_all_t)(uint32_t flash_address, uint32_t data, cyboot_flash_context_t *ctx);
 typedef uint32_t (*cyboot_flash_margin_mode_screen_t)(uint32_t flash_address, uint32_t n_rows, uint32_t params,
-        uint32_t *ram_buffer,
-        cyboot_flash_context_t *ctx);
+                                                uint32_t *ram_buffer,
+                                                cyboot_flash_context_t *ctx);
 
-typedef void (*cyboot_flash_refresh_init_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh);
-typedef void (*cyboot_flash_refresh_init_all_t)(cyboot_flash_refresh_t *refresh);
-typedef bool (*cyboot_flash_refresh_test_t)(const cyboot_flash_refresh_t *refresh);
+typedef void     (*cyboot_flash_refresh_init_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh);
+typedef void     (*cyboot_flash_refresh_init_all_t)(cyboot_flash_refresh_t *refresh);
+typedef bool     (*cyboot_flash_refresh_test_t)(const cyboot_flash_refresh_t *refresh);
 typedef uint32_t (*cyboot_flash_refresh_perform_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh);
 typedef uint32_t (*cyboot_flash_refresh_perform_start_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh, const cyboot_flash_context_t *ctx);;
 typedef uint32_t (*cyboot_flash_refresh_recover_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh);
@@ -122,8 +122,8 @@ typedef uint32_t (*cyboot_flash_refresh_recover_all_t)(cyboot_flash_refresh_t *r
 
 typedef uint32_t (*cyboot_flash_read_scratch_col33_t)(uint32_t sector_idx, uint32_t row_idx, uint32_t *count, uint32_t *ref_addr);
 typedef uint32_t (*cyboot_flash_read_main_col33_t)(uint32_t sector_idx, uint32_t row_idx, uint32_t *count);
-typedef void (*cyboot_flash_refresh_get_scratch_idx_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh);
-typedef void (*cyboot_flash_refresh_get_min_max_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh);
+typedef void     (*cyboot_flash_refresh_get_scratch_idx_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh);
+typedef void     (*cyboot_flash_refresh_get_min_max_t)(uint32_t sector_idx, cyboot_flash_refresh_t *refresh);
 typedef uint32_t (*cyboot_flash_refresh_get_sector_idx_t)(uint32_t flash_addr, uint32_t *sector_idx, uint32_t *row_idx);
 
 /* Non-blocking additional functions */

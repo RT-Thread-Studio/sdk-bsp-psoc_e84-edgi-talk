@@ -36,12 +36,7 @@ extern "C" {
 
 #if !defined(CYBSP_BT_PLATFORM_CFG_BAUD_DOWNLOAD)
 /** If not already defined, the baud rate to download data at. */
-#if defined(COMPONENT_CAT1D)
-/* To be changed to 3M once HAL NEXT is stable */
 #define CYBSP_BT_PLATFORM_CFG_BAUD_DOWNLOAD     (3000000)
-#else
-#define CYBSP_BT_PLATFORM_CFG_BAUD_DOWNLOAD     (115200)
-#endif /* defined(COMPONENT_CAT1D) */
 #endif /* !defined(CYBSP_BT_PLATFORM_CFG_BAUD_DOWNLOAD) */
 
 #if !defined(CYBSP_BT_PLATFORM_CFG_BAUD_FEATURE)
@@ -69,14 +64,9 @@ extern "C" {
 #define CYBSP_BT_PLATFORM_CFG_SLEEP_MODE_LP_ENABLED      (CYCFG_BT_LP_ENABLED)
 #endif
 
-#if defined(COMPONENT_CAT1D) && !defined(CY_USING_HAL)
 #if !defined(CYBSP_BT_PLATFORM_CFG_FLOW_CONTROL_ENABLE)
 #define CYBSP_BT_PLATFORM_CFG_FLOW_CONTROL_ENABLE      (1)
 #endif /* !defined(CYBSP_BT_PLATFORM_CFG_FLOW_CONTROL_ENABLE) */
-#else
-/** Bluetooth platform configuration settings for the board. */
-extern const cybt_platform_config_t cybsp_bt_platform_cfg;
-#endif /* defined(COMPONENT_CAT1D) && !defined(CY_USING_HAL) */
 
 #ifdef __cplusplus
 }

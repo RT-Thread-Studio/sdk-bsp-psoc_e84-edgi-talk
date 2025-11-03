@@ -30,11 +30,11 @@
 #include "mtb_syspm_callbacks_hw_resources.h"
 
 #if defined(MTB_SYSPM_CALLBACKS_AVAILABLE_AUDIOSS_PDM)
-    #include "mtb_syspm_callbacks_audioss_pdm.h"
+#include "mtb_syspm_callbacks_audioss_pdm.h"
 #endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_AUDIOSS_PDM)
 
 #if defined(MTB_SYSPM_CALLBACKS_AVAILABLE_MX_PDM)
-    #include "mtb_syspm_callbacks_mxpdm.h"
+#include "mtb_syspm_callbacks_mxpdm.h"
 #endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_MX_PDM)
 
 #if defined(__cplusplus)
@@ -45,7 +45,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
                              'Rule requires const attributes for inputs but signature for following APIs needs to match requested one in PDL');
 
 /**
- * \addtogroup group_pdm_pcm PDM PCM Deep Sleep Callback
+ * \addtogroup mtb_syspm_group_pdm_pcm PDM PCM Deep Sleep Callback
  * \{
  * Implementation of the PDM PCM Deep Sleep callback
  */
@@ -64,7 +64,7 @@ typedef struct
  * @return Returns CY_SYSPM_SUCCESS if successful, an error code otherwise
  */
 cy_en_syspm_status_t mtb_syspm_pdm_pcm_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode);
 
 
@@ -72,5 +72,5 @@ cy_en_syspm_status_t mtb_syspm_pdm_pcm_deepsleep_callback(
 }
 #endif
 
-/** \} group_pdm_pcm */
+/** \} mtb_syspm_group_pdm_pcm */
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.13');

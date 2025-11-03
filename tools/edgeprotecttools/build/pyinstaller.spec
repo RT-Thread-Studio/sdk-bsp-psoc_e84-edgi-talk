@@ -8,7 +8,7 @@ hiddenimports += collect_submodules('elftools')
 a = Analysis(
     ['../src/src/pyinstaller_wrapper.py'],
     pathex=[],
-    datas=[('../src/', './edgeprotecttools/.')],
+    datas=[('../src/src', './edgeprotecttools')],
     hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
@@ -43,5 +43,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='edgeprotecttools',
+    name='bin',
 )

@@ -11,6 +11,7 @@ var group__key__policy =
     [ "IFX_SE_KEY_USAGE_VERIFY_HASH", "group__key__policy.html#gaa3c223edc514126af12fda453b2adc90", null ],
     [ "IFX_SE_KEY_USAGE_DERIVE", "group__key__policy.html#ga70772b0c644888fb60605bfddd86f1bb", null ],
     [ "IFX_SE_KEY_USAGE_VERIFY_DERIVATION", "group__key__policy.html#ga3b40ef045d9fcc8a773a3d86e6d39dd4", null ],
+    [ "ifx_se_key_policy_t", "group__key__policy.html#gacc66ae69390a8149c644d256d1187341", null ],
     [ "ifx_se_key_usage_t", "group__key__policy.html#ga941e9bad26f411ac76714eaaa0ecbe61", null ],
     [ "ifx_se_key_policy_init", "group__key__policy.html#ga63d91cdbe0c4eddbe5bb580ffee8c81d", null ],
     [ "ifx_se_set_key_usage_flags", "group__key__policy.html#ga014b0b9497d9644e95cd23177ba24f90", null ],

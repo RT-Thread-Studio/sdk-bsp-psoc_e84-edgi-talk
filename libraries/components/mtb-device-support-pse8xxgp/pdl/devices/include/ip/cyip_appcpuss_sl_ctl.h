@@ -38,10 +38,9 @@
 /**
   * \brief APPCPUSS Internal slave control registers (APPCPUSS_SL_CTL)
   */
-typedef struct
-{
-    __IOM uint32_t SL_CTL;                        /*!< 0x00000000 Slave control (Clock enables) */
-    __IOM uint32_t SL_CTL2;                       /*!< 0x00000004 Slave control2 (Reset enables) */
+typedef struct {
+  __IOM uint32_t SL_CTL;                        /*!< 0x00000000 Slave control (Clock enables) */
+  __IOM uint32_t SL_CTL2;                       /*!< 0x00000004 Slave control2 (Reset enables) */
 } APPCPUSS_SL_CTL_Type;                         /*!< Size = 8 (0x8) */
 
 

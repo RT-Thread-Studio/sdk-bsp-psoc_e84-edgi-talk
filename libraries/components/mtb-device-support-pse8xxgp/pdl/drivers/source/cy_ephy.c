@@ -51,7 +51,7 @@ extern "C" {
 * \return CY_EPHY_SUCCESS for successfully initializes the internal data structures.
 *
 *******************************************************************************/
-cy_en_ephy_status_t Cy_EPHY_Init(cy_stc_ephy_t *phy, cy_ephy_read_handle fnRead, cy_ephy_write_handle fnWrite)
+cy_en_ephy_status_t Cy_EPHY_Init( cy_stc_ephy_t *phy, cy_ephy_read_handle fnRead, cy_ephy_write_handle fnWrite )
 {
     CY_ASSERT_L2(phy != NULL);
     CY_ASSERT_L2(fnRead != NULL);
@@ -81,7 +81,7 @@ cy_en_ephy_status_t Cy_EPHY_Init(cy_stc_ephy_t *phy, cy_ephy_read_handle fnRead,
 * \return CY_EPHY_SUCCESS PHY chip contains a valid PHY ID
 *
 *******************************************************************************/
-cy_en_ephy_status_t Cy_EPHY_Discover(cy_stc_ephy_t *phy)
+cy_en_ephy_status_t Cy_EPHY_Discover( cy_stc_ephy_t *phy )
 {
     uint32_t phyAddress = DEFAULT_PHY_ADDRESS;
     uint32_t ulLowerID = 0;
@@ -91,20 +91,20 @@ cy_en_ephy_status_t Cy_EPHY_Discover(cy_stc_ephy_t *phy)
     CY_ASSERT_L2(phy->fnPhyRead != NULL);
     CY_ASSERT_L2(phy->fnPhyWrite != NULL);
 
-    phy->fnPhyRead(phyAddress, PHYREG_03_PHYSID2, &ulLowerID);
-    if (CY_EPHY_INVALID_VALUE == ulLowerID)
+    phy->fnPhyRead( phyAddress, PHYREG_03_PHYSID2, &ulLowerID );
+    if ( CY_EPHY_INVALID_VALUE == ulLowerID )
     {
         return CY_EPHY_ERROR;
     }
     /* A valid PHY id can not be all zeros or all ones. */
-    if (ulLowerID != (uint16_t)0UL)
+    if( ulLowerID != ( uint16_t )0UL )
     {
-        phy->fnPhyRead(phyAddress, PHYREG_02_PHYSID1, &ulUpperID);
-        if (CY_EPHY_INVALID_VALUE == ulUpperID)
+        phy->fnPhyRead( phyAddress, PHYREG_02_PHYSID1, &ulUpperID );
+        if ( CY_EPHY_INVALID_VALUE == ulUpperID )
         {
             return CY_EPHY_ERROR;
         }
-        ulPhyID = (_VAL2FLD(PHYID_ID1, ulUpperID) | _VAL2FLD(PHYID_ID2, ulLowerID));
+        ulPhyID = ( _VAL2FLD( PHYID_ID1, ulUpperID ) | _VAL2FLD( PHYID_ID2, ulLowerID ) );
     }
     phy->phyId = ulPhyID;
     return CY_EPHY_SUCCESS;
@@ -125,19 +125,19 @@ cy_en_ephy_status_t Cy_EPHY_Reset(cy_stc_ephy_t *phy)
 {
     uint32_t ulConfig;
     uint32_t phyAddress = DEFAULT_PHY_ADDRESS;
-    uint32_t delay, max_delay = 10;
+    uint32_t delay, max_delay=10;
 
     CY_ASSERT_L2(phy->fnPhyRead != NULL);
     CY_ASSERT_L2(phy->fnPhyWrite != NULL);
 
     /* Read Control register. */
-    phy->fnPhyRead(phyAddress, PHYREG_00_BMCR, &ulConfig);
-    phy->fnPhyWrite(phyAddress, PHYREG_00_BMCR, (ulConfig | PHYBMCR_RESET_Msk));
+    phy->fnPhyRead( phyAddress, PHYREG_00_BMCR, &ulConfig );
+    phy->fnPhyWrite( phyAddress, PHYREG_00_BMCR, ( ulConfig | PHYBMCR_RESET_Msk ) );
     /* The reset should last less than a second. */
-    for (delay = 0; delay < max_delay; delay++)
+    for( delay=0; delay < max_delay; delay++ )
     {
-        phy->fnPhyRead(phyAddress, PHYREG_00_BMCR, &ulConfig);
-        if (_FLD2VAL(PHYBMCR_RESET, ulConfig) == 0UL)
+        phy->fnPhyRead( phyAddress, PHYREG_00_BMCR, &ulConfig );
+        if(_FLD2VAL(PHYBMCR_RESET, ulConfig) == 0UL)
         {
             break;
         }
@@ -145,8 +145,8 @@ cy_en_ephy_status_t Cy_EPHY_Reset(cy_stc_ephy_t *phy)
     }
 
     /* Clear the reset bits. */
-    phy->fnPhyRead(phyAddress, PHYREG_00_BMCR, &ulConfig);
-    phy->fnPhyWrite(phyAddress, PHYREG_00_BMCR, (ulConfig & (~PHYBMCR_RESET_Msk)));
+    phy->fnPhyRead( phyAddress, PHYREG_00_BMCR, &ulConfig );
+    phy->fnPhyWrite( phyAddress, PHYREG_00_BMCR, ( ulConfig & ( ~PHYBMCR_RESET_Msk ) ) );
     Cy_SysLib_Delay(50);
     return CY_EPHY_SUCCESS;
 }
@@ -173,7 +173,7 @@ cy_en_ephy_status_t Cy_EPHY_Reset(cy_stc_ephy_t *phy)
 *       highest capabilities. For more details please refer to the PHY datasheet.
 *
 *******************************************************************************/
-cy_en_ephy_status_t Cy_EPHY_Configure(cy_stc_ephy_t *phy, cy_stc_ephy_config_t *config)
+cy_en_ephy_status_t Cy_EPHY_Configure( cy_stc_ephy_t *phy, cy_stc_ephy_config_t *config )
 {
     uint32_t ulConfig, reg, bmsr;
     uint32_t phyAddress = DEFAULT_PHY_ADDRESS;
@@ -183,13 +183,13 @@ cy_en_ephy_status_t Cy_EPHY_Configure(cy_stc_ephy_t *phy, cy_stc_ephy_config_t *
     CY_ASSERT_L2(phy->fnPhyWrite != NULL);
 
     /* Read Control register. */
-    phy->fnPhyRead(phyAddress, PHYREG_00_BMCR, &ulConfig);
+    phy->fnPhyRead( phyAddress, PHYREG_00_BMCR, &ulConfig );
 
     if ((config->speed == ((uint32_t)CY_EPHY_SPEED_AUTO)) || (config->duplex == ((uint32_t)CY_EPHY_DUPLEX_AUTO)))
     {
         /* check AN is supported */
-        phy->fnPhyRead(phyAddress, PHYREG_01_BMSR, &reg);
-        if (_FLD2VAL(PHYBMSR_AN_ABILITY, reg) == 1UL)
+        phy->fnPhyRead( phyAddress, PHYREG_01_BMSR, &reg);
+        if (_FLD2VAL(PHYBMSR_AN_ABILITY,reg) == 1UL)
         {
             /* 1. BMCR enable AN */
             ulConfig |= PHYBMCR_AN_ENABLE_Msk;
@@ -204,13 +204,13 @@ cy_en_ephy_status_t Cy_EPHY_Configure(cy_stc_ephy_t *phy, cy_stc_ephy_config_t *
     else
     {
         /* Read Control register. */
-        phy->fnPhyRead(phyAddress, PHYREG_01_BMSR, &bmsr);
+        phy->fnPhyRead( phyAddress, PHYREG_01_BMSR, &bmsr );
         /* check BMSR 8th bit. All PHYs supporting 1000 Mb/s operation
          * shall have this bit set to a logic one */
 
-        ulConfig &= ~(PHYBMCR_SPEED_1000_Msk | PHYBMCR_SPEED_100_Msk | PHYBMCR_FULL_DUPLEX_Msk | PHYBMCR_AN_ENABLE_Msk);
+        ulConfig &= ~( PHYBMCR_SPEED_1000_Msk | PHYBMCR_SPEED_100_Msk | PHYBMCR_FULL_DUPLEX_Msk | PHYBMCR_AN_ENABLE_Msk);
 
-        if (config->speed == ((uint32_t)CY_EPHY_SPEED_100))
+        if( config->speed == ((uint32_t)CY_EPHY_SPEED_100))
         {
             ulConfig |= PHYBMCR_SPEED_100_Msk;
         }
@@ -219,7 +219,7 @@ cy_en_ephy_status_t Cy_EPHY_Configure(cy_stc_ephy_t *phy, cy_stc_ephy_config_t *
             ulConfig |= PHYBMCR_AN_ENABLE_Msk;
             ulConfig |= PHYBMCR_SPEED_1000_Msk;
         }
-        else if (config->speed == ((uint32_t)CY_EPHY_SPEED_10))
+        else if( config->speed == ((uint32_t)CY_EPHY_SPEED_10))
         {
             ulConfig &= ~PHYBMCR_SPEED_100_Msk;
         }
@@ -229,11 +229,11 @@ cy_en_ephy_status_t Cy_EPHY_Configure(cy_stc_ephy_t *phy, cy_stc_ephy_config_t *
             ret = CY_EPHY_ERROR;
         }
 
-        if (config->duplex == ((uint32_t)CY_EPHY_DUPLEX_FULL))
+        if( config->duplex == ((uint32_t)CY_EPHY_DUPLEX_FULL))
         {
             ulConfig |= PHYBMCR_FULL_DUPLEX_Msk;
         }
-        else if (config->duplex == ((uint32_t)CY_EPHY_DUPLEX_HALF))
+        else if( config->duplex == ((uint32_t)CY_EPHY_DUPLEX_HALF))
         {
             ulConfig &= ~PHYBMCR_FULL_DUPLEX_Msk;
         }
@@ -250,7 +250,7 @@ cy_en_ephy_status_t Cy_EPHY_Configure(cy_stc_ephy_t *phy, cy_stc_ephy_config_t *
         phy->bmcr = ulConfig & ~PHYBMCR_ISOLATE_Msk;
 
         /* configure bmcr */
-        phy->fnPhyWrite(phyAddress, PHYREG_00_BMCR, phy->bmcr);
+        phy->fnPhyWrite( phyAddress, PHYREG_00_BMCR, phy->bmcr);
     }
 
     return ret;
@@ -271,14 +271,14 @@ cy_en_ephy_status_t Cy_EPHY_Configure(cy_stc_ephy_t *phy, cy_stc_ephy_config_t *
 *******************************************************************************/
 uint32_t Cy_EPHY_GetLinkStatus(cy_stc_ephy_t *phy)
 {
-    uint32_t phyAddress = DEFAULT_PHY_ADDRESS;
+    uint32_t phyAddress=DEFAULT_PHY_ADDRESS;
     uint32_t status;
 
     CY_ASSERT_L2(phy->fnPhyRead != NULL);
     CY_ASSERT_L2(phy->fnPhyWrite != NULL);
 
     /* read bmcr */
-    phy->fnPhyRead(phyAddress, PHYREG_00_BMCR, &status);
+    phy->fnPhyRead( phyAddress, PHYREG_00_BMCR, &status);
 
     /* check for auto-neg-restart. Autoneg is being started, therefore disregard
      * BMSR value and report link as down.
@@ -290,7 +290,7 @@ uint32_t Cy_EPHY_GetLinkStatus(cy_stc_ephy_t *phy)
 
     /* Read link and Auto-Negotiation status */
     status = 0;
-    phy->fnPhyRead(phyAddress, PHYREG_01_BMSR, &status);
+    phy->fnPhyRead( phyAddress, PHYREG_01_BMSR, &status);
 
     if (CY_EPHY_INVALID_VALUE == status)
     {
@@ -298,7 +298,7 @@ uint32_t Cy_EPHY_GetLinkStatus(cy_stc_ephy_t *phy)
     }
     else
     {
-        return _FLD2VAL(PHYBMSR_LINK_STATUS, status);
+        return _FLD2VAL( PHYBMSR_LINK_STATUS, status);
     }
 }
 
@@ -320,7 +320,7 @@ uint32_t Cy_EPHY_GetLinkStatus(cy_stc_ephy_t *phy)
 uint32_t Cy_EPHY_GetAutoNegotiationStatus(cy_stc_ephy_t *phy)
 {
     uint32_t reg;
-    uint32_t phyAddress = DEFAULT_PHY_ADDRESS;
+    uint32_t phyAddress=DEFAULT_PHY_ADDRESS;
 
     CY_ASSERT_L2(phy->fnPhyRead != NULL);
     CY_ASSERT_L2(phy->fnPhyWrite != NULL);
@@ -359,17 +359,17 @@ cy_en_ephy_status_t Cy_EPHY_getLinkPartnerCapabilities(cy_stc_ephy_t *phy, cy_st
     lpConfig->duplex = (uint32_t)CY_EPHY_DUPLEX_HALF;
 
     /* Check Extended Register is supported */
-    phy->fnPhyRead(phyAddress, PHYREG_01_BMSR, &reg);
-    if (_FLD2VAL(PHYBMSR_EXT_CAPABILITY, reg) == 1UL)
+    phy->fnPhyRead( phyAddress, PHYREG_01_BMSR, &reg);
+    if (_FLD2VAL( PHYBMSR_EXT_CAPABILITY, reg) == 1UL)
     {
         /* 1. check gigabit is supported or not */
-        phy->fnPhyRead(phyAddress, PHYREG_10_MSSR, &reg);
-        if ((_FLD2VAL(MSSR_1000BASE_T_FULLDUPLEX, reg) == 1UL) && (PHYREG_INVALID_VALUE != reg))
+        phy->fnPhyRead( phyAddress, PHYREG_10_MSSR, &reg);
+        if ((_FLD2VAL( MSSR_1000BASE_T_FULLDUPLEX, reg) == 1UL) && (PHYREG_INVALID_VALUE != reg))
         {
             lpConfig->speed = (uint32_t)CY_EPHY_SPEED_1000;
             lpConfig->duplex = (uint32_t)CY_EPHY_DUPLEX_FULL;
         }
-        else if ((_FLD2VAL(MSSR_1000BASE_T_HALFDUPLEX, reg) == 1UL)  && (PHYREG_INVALID_VALUE != reg))
+        else if ((_FLD2VAL( MSSR_1000BASE_T_HALFDUPLEX, reg) == 1UL)  && (PHYREG_INVALID_VALUE != reg))
         {
             lpConfig->speed = (uint32_t)CY_EPHY_SPEED_1000;
             lpConfig->duplex = (uint32_t)CY_EPHY_DUPLEX_HALF;
@@ -377,25 +377,25 @@ cy_en_ephy_status_t Cy_EPHY_getLinkPartnerCapabilities(cy_stc_ephy_t *phy, cy_st
         else
         {
             /* 2. if not then check 10 and 100 Mbps */
-            phy->fnPhyRead(phyAddress, PHYREG_05_ANLPAR, &reg);
+            phy->fnPhyRead( phyAddress, PHYREG_05_ANLPAR, &reg);
             if (PHYREG_INVALID_VALUE != reg)
             {
-                if (_FLD2VAL(ANLPAR_TXFD, reg) == 1UL)
+                if (_FLD2VAL( ANLPAR_TXFD, reg) == 1UL)
                 {
                     lpConfig->speed = (uint32_t)CY_EPHY_SPEED_100;
                     lpConfig->duplex = (uint32_t)CY_EPHY_DUPLEX_FULL;
                 }
-                else if ((_FLD2VAL(ANLPAR_T4, reg) == 1UL) || (_FLD2VAL(ANLPAR_TX, reg) == 1UL))
+                else if ((_FLD2VAL( ANLPAR_T4, reg) == 1UL) || (_FLD2VAL( ANLPAR_TX, reg) == 1UL))
                 {
                     lpConfig->speed = (uint32_t)CY_EPHY_SPEED_100;
                     lpConfig->duplex = (uint32_t)CY_EPHY_DUPLEX_HALF;
                 }
-                else if (_FLD2VAL(ANLPAR_10FD, reg) == 1UL)
+                else if (_FLD2VAL( ANLPAR_10FD, reg) == 1UL)
                 {
                     lpConfig->speed = (uint32_t)CY_EPHY_SPEED_10;
                     lpConfig->duplex = (uint32_t)CY_EPHY_DUPLEX_FULL;
                 }
-                else if (_FLD2VAL(ANLPAR_10, reg) == 1UL)
+                else if (_FLD2VAL( ANLPAR_10, reg) == 1UL)
                 {
                     lpConfig->speed = (uint32_t)CY_EPHY_SPEED_10;
                     lpConfig->duplex = (uint32_t)CY_EPHY_DUPLEX_HALF;

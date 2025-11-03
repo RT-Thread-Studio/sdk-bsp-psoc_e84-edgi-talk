@@ -63,7 +63,7 @@
 #include "arm_helium_utils.h"
 #include "arm_vec_math.h"
 
-float16_t arm_cityblock_distance_f16(const float16_t *pA, const float16_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float16_t arm_cityblock_distance_f16(const float16_t *pA,const float16_t *pB, uint32_t blockSize)
 {
     uint32_t        blkCnt;
     f16x8_t         a, b, accumV, tempV;
@@ -71,8 +71,7 @@ float16_t arm_cityblock_distance_f16(const float16_t *pA, const float16_t *pB, u
     accumV = vdupq_n_f16(0.0f);
 
     blkCnt = blockSize >> 3;
-    while (blkCnt > 0U)
-    {
+    while (blkCnt > 0U) {
         a = vld1q(pA);
         b = vld1q(pB);
 
@@ -89,8 +88,7 @@ float16_t arm_cityblock_distance_f16(const float16_t *pA, const float16_t *pB, u
      * (will be merged thru tail predication)
      */
     blkCnt = blockSize & 7;
-    if (blkCnt > 0U)
-    {
+    if (blkCnt > 0U) {
         mve_pred16_t    p0 = vctp16q(blkCnt);
 
         a = vldrhq_z_f16(pA, p0);
@@ -104,21 +102,21 @@ float16_t arm_cityblock_distance_f16(const float16_t *pA, const float16_t *pB, u
 }
 
 #else
-float16_t arm_cityblock_distance_f16(const float16_t *pA, const float16_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float16_t arm_cityblock_distance_f16(const float16_t *pA,const float16_t *pB, uint32_t blockSize)
 {
-    _Float16 accum, tmpA, tmpB;
+   _Float16 accum,tmpA, tmpB;
 
-    accum = 0.0f16;
-    while (blockSize > 0)
-    {
-        tmpA = *pA++;
-        tmpB = *pB++;
-        accum  += (_Float16)fabsf((float32_t)((_Float16)tmpA - (_Float16)tmpB));
-
-        blockSize --;
-    }
-
-    return (accum);
+   accum = 0.0f16;
+   while(blockSize > 0)
+   {
+      tmpA = *pA++;
+      tmpB = *pB++;
+      accum  += (_Float16)fabsf((float32_t)((_Float16)tmpA - (_Float16)tmpB));
+      
+      blockSize --;
+   }
+  
+   return(accum);
 }
 #endif
 
@@ -126,5 +124,5 @@ float16_t arm_cityblock_distance_f16(const float16_t *pA, const float16_t *pB, u
  * @} end of Manhattan group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

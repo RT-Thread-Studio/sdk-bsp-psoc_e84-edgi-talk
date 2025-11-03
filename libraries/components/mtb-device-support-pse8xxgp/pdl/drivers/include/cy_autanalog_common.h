@@ -172,102 +172,102 @@ __STATIC_INLINE cy_en_autanalog_status_t Cy_AutAnalog_IdxToBaseAddr(cy_en_autana
         switch (subSystem)
         {
 #ifdef CY_IP_MXS22LPPASS_CTB
-        case CY_AUTANALOG_CTB:
-            /* Debug mode */
-            CY_ASSERT_L1(CY_AUTANALOG_CTB_IDX(subSystemIdx));
-            /* Release mode */
-            if (CY_AUTANALOG_CTB_IDX(subSystemIdx))
-            {
-#ifdef CTBL0_BASE
-                if (0U == subSystemIdx)
+            case CY_AUTANALOG_CTB:
+                /* Debug mode */
+                CY_ASSERT_L1(CY_AUTANALOG_CTB_IDX(subSystemIdx));
+                /* Release mode */
+                if (CY_AUTANALOG_CTB_IDX(subSystemIdx))
                 {
-                    *baseAddr = CTBL0_BASE;
-                    result = CY_AUTANALOG_SUCCESS;
-                }
+#ifdef CTBL0_BASE
+                   if (0U == subSystemIdx)
+                   {
+                       *baseAddr = CTBL0_BASE;
+                       result = CY_AUTANALOG_SUCCESS;
+                   }
 #endif
 #ifdef CTBL1_BASE
-                if (1U == subSystemIdx)
-                {
-                    *baseAddr = CTBL1_BASE;
-                    result = CY_AUTANALOG_SUCCESS;
-                }
+                   if (1U == subSystemIdx)
+                   {
+                       *baseAddr = CTBL1_BASE;
+                       result = CY_AUTANALOG_SUCCESS;
+                   }
 #endif
-            }
+                }
             break;
 #endif
 
 #ifdef CY_IP_MXS22LPPASS_PTC
-        case CY_AUTANALOG_PTC:
-            /* Debug mode */
-            CY_ASSERT_L1(CY_AUTANALOG_PTCOMP_IDX(subSystemIdx));
-            /* Release mode */
-            if (CY_AUTANALOG_PTCOMP_IDX(subSystemIdx))
-            {
+            case CY_AUTANALOG_PTC:
+                /* Debug mode */
+                CY_ASSERT_L1(CY_AUTANALOG_PTCOMP_IDX(subSystemIdx));
+                /* Release mode */
+                if (CY_AUTANALOG_PTCOMP_IDX(subSystemIdx))
+                {
 #ifdef PTC_BASE
-                *baseAddr = PTC_BASE;
-                result = CY_AUTANALOG_SUCCESS;
+                    *baseAddr = PTC_BASE;
+                    result = CY_AUTANALOG_SUCCESS;
 #endif
-            }
+                }
             break;
 #endif
 
 #ifdef CY_IP_MXS22LPPASS_DAC
-        case CY_AUTANALOG_DAC:
-            /* Debug mode */
-            CY_ASSERT_L1(CY_AUTANALOG_DAC_IDX(subSystemIdx));
-            /* Release mode */
-            if (CY_AUTANALOG_DAC_IDX(subSystemIdx))
-            {
-#ifdef DAC0_BASE
-                if (0U == subSystemIdx)
+            case CY_AUTANALOG_DAC:
+                /* Debug mode */
+                CY_ASSERT_L1(CY_AUTANALOG_DAC_IDX(subSystemIdx));
+                /* Release mode */
+                if (CY_AUTANALOG_DAC_IDX(subSystemIdx))
                 {
-                    *baseAddr = DAC0_BASE;
-                    result = CY_AUTANALOG_SUCCESS;
-                }
+#ifdef DAC0_BASE
+                   if (0U == subSystemIdx)
+                   {
+                       *baseAddr = DAC0_BASE;
+                       result = CY_AUTANALOG_SUCCESS;
+                   }
 #endif
 #ifdef DAC1_BASE
-                if (1U == subSystemIdx)
-                {
-                    *baseAddr = DAC1_BASE;
-                    result = CY_AUTANALOG_SUCCESS;
-                }
+                   if (1U == subSystemIdx)
+                   {
+                       *baseAddr = DAC1_BASE;
+                       result = CY_AUTANALOG_SUCCESS;
+                   }
 #endif
-            }
+                }
             break;
 #endif
 
 #ifdef CY_IP_MXS22LPPASS_SAR
-        case CY_AUTANALOG_SAR:
-            /* Debug mode */
-            CY_ASSERT_L1(CY_AUTANALOG_SAR_IDX(subSystemIdx));
-            /* Release mode */
-            if (CY_AUTANALOG_SAR_IDX(subSystemIdx))
-            {
+            case CY_AUTANALOG_SAR:
+                /* Debug mode */
+                CY_ASSERT_L1(CY_AUTANALOG_SAR_IDX(subSystemIdx));
+                /* Release mode */
+                if (CY_AUTANALOG_SAR_IDX(subSystemIdx))
+                {
 #ifdef SAR_BASE
-                *baseAddr = SAR_BASE;
-                result = CY_AUTANALOG_SUCCESS;
+                    *baseAddr = SAR_BASE;
+                    result = CY_AUTANALOG_SUCCESS;
 #endif
-            }
+                }
             break;
 #endif
 
 #ifdef CY_IP_MXS22LPPASS_FIFO
-        case CY_AUTANALOG_FIFO:
-            /* Debug mode */
-            CY_ASSERT_L1(CY_AUTANALOG_FIFO_IDX(subSystemIdx));
-            /* Release mode */
-            if (CY_AUTANALOG_FIFO_IDX(subSystemIdx))
-            {
+            case CY_AUTANALOG_FIFO:
+                /* Debug mode */
+                CY_ASSERT_L1(CY_AUTANALOG_FIFO_IDX(subSystemIdx));
+                /* Release mode */
+                if (CY_AUTANALOG_FIFO_IDX(subSystemIdx))
+                {
 #ifdef LPPASS_MMIO_BASE
-                *baseAddr = LPPASS_MMIO_BASE;
-                result = CY_AUTANALOG_SUCCESS;
+                    *baseAddr = LPPASS_MMIO_BASE;
+                    result = CY_AUTANALOG_SUCCESS;
 #endif
-            }
+                }
             break;
 #endif
 
-        default:
-            CY_ASSERT_L1(false);
+            default:
+                CY_ASSERT_L1(false);
             break;
         }
     }

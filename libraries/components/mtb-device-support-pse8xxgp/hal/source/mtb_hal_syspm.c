@@ -35,7 +35,7 @@
 #include "mtb_hal_utils.h"
 
 #if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0)
-    #include "mtb_hal_lptimer.h"
+#include "mtb_hal_lptimer.h"
 #endif /* (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0) */
 
 #if (MTB_HAL_DRIVER_AVAILABLE_SYSPM)
@@ -63,13 +63,13 @@ static uint16_t _mtb_hal_syspm_deepsleep_lock = 0;
 /* State for pre-deep-sleep LPTimer handling */
 typedef struct
 {
-    mtb_hal_lptimer_t *lptimer;
+    mtb_hal_lptimer_t* lptimer;
     uint32_t desired_sleep_ms;
-#if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
+    #if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
     uint32_t pre_sleep_ticks;
     uint32_t post_sleep_ticks
     uint32_t actual_sleep_ms;
-#endif
+    #endif
 } _mtb_hal_syspm_lptimer_context_t;
 
 static _mtb_hal_syspm_lptimer_context_t _mtb_hal_syspm_lptimer_context;
@@ -79,7 +79,7 @@ static _mtb_hal_syspm_lptimer_context_t _mtb_hal_syspm_lptimer_context;
 // _mtb_hal_syspm_check_ds_lock
 //--------------------------------------------------------------------------------------------------
 static cy_en_syspm_status_t _mtb_hal_syspm_check_ds_lock(cy_stc_syspm_callback_params_t* params,
-        cy_en_syspm_callback_mode_t mode)
+                                                         cy_en_syspm_callback_mode_t mode)
 {
     /* This callback is configured to be only called for check ready */
     CY_UNUSED_PARAMETER(mode);
@@ -100,8 +100,8 @@ void _mtb_hal_syspm_ensure_cb_registered_dslock(void)
         .type           = CY_SYSPM_DEEPSLEEP,
         // We only care about CHECK_READY so we can block DeepSleep if it's locked
         .skipMode       =
-        (CY_SYSPM_SKIP_BEFORE_TRANSITION | CY_SYSPM_SKIP_AFTER_TRANSITION |
-        CY_SYSPM_SKIP_CHECK_FAIL),
+            (CY_SYSPM_SKIP_BEFORE_TRANSITION | CY_SYSPM_SKIP_AFTER_TRANSITION |
+             CY_SYSPM_SKIP_CHECK_FAIL),
         .callbackParams = &_mtb_hal_syspm_cb_params_default,
         .prevItm        = NULL,
         .nextItm        = NULL,
@@ -125,7 +125,7 @@ void _mtb_hal_syspm_ensure_cb_registered_dslock(void)
 // _mtb_hal_syspm_handle_lptimer
 //--------------------------------------------------------------------------------------------------
 cy_en_syspm_status_t _mtb_hal_syspm_handle_lptimer(cy_stc_syspm_callback_params_t* params,
-        cy_en_syspm_callback_mode_t mode)
+                                                   cy_en_syspm_callback_mode_t mode)
 {
     CY_UNUSED_PARAMETER(params);
     cy_en_syspm_status_t result = CY_SYSPM_SUCCESS;
@@ -133,37 +133,37 @@ cy_en_syspm_status_t _mtb_hal_syspm_handle_lptimer(cy_stc_syspm_callback_params_
     if (NULL != _mtb_hal_syspm_lptimer_context.lptimer)
     {
         uint32_t desired_ms = _mtb_hal_syspm_lptimer_context.desired_sleep_ms;
-        mtb_hal_lptimer_t *lptimer = _mtb_hal_syspm_lptimer_context.lptimer;
+        mtb_hal_lptimer_t* lptimer = _mtb_hal_syspm_lptimer_context.lptimer;
         if (CY_SYSPM_BEFORE_TRANSITION == mode)
         {
             // LPTimer is driven by clk_lf
-            uint32_t lptimer_frequency_hz = Cy_SysClk_ClkLfGetFrequency();
+            uint32_t lptimer_frequency_hz = lptimer->lfclk_freqhz;
 
             // lp_ticks = ms * lp_rate_khz
             uint32_t sleep_ticks = _MTB_HAL_UTILS_HZ_TO_KHZ(
-                                       ((uint64_t)(desired_ms - 1)) * lptimer_frequency_hz);
+                ((uint64_t)(desired_ms - 1)) * lptimer_frequency_hz);
             mtb_hal_lptimer_enable_event(lptimer, MTB_HAL_LPTIMER_COMPARE_MATCH, true);
             result = (cy_en_syspm_status_t)mtb_hal_lptimer_set_delay(lptimer, sleep_ticks);
             CY_ASSERT(CY_RSLT_SUCCESS == result);
 
-#if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
+            #if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
             _mtb_hal_syspm_lptimer_context.pre_sleep_ticks = mtb_hal_lptimer_read(lptimer);
-#endif
+            #endif
         }
         else if (CY_SYSPM_AFTER_TRANSITION == mode)
         {
-#if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
+            #if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
             /* Compute time spent actually in DeepSleep state, for debugging */
             uint32_t pre_sleep_ticks = _mtb_hal_syspm_lptimer_context.pre_sleep_ticks;
             uint32_t post_sleep_ticks = mtb_hal_lptimer_read(lptimer);
             uint32_t ticks = (post_sleep_ticks < pre_sleep_ticks)
-                             ? (_MTB_HAL_LPTIMER_MAX_DELAY_TICKS - pre_sleep_ticks) + post_sleep_ticks
-                             : post_sleep_ticks - pre_sleep_ticks;
+                ? (_MTB_HAL_LPTIMER_MAX_DELAY_TICKS - pre_sleep_ticks) + post_sleep_ticks
+                : post_sleep_ticks - pre_sleep_ticks;
             _mtb_hal_syspm_lptimer_context.post_sleep_ticks = post_sleep_ticks;
 
             _mtb_hal_syspm_lptimer_context.actual_sleep_ms =
                 (uint32_t)(_MTB_HAL_UTILS_KHZ_TO_HZ(ticks) / lptimer_frequency_hz);
-#endif // if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
+            #endif // if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
             mtb_hal_lptimer_enable_event(lptimer, MTB_HAL_LPTIMER_COMPARE_MATCH, false);
             // Null out the lptimer so that the next DeepSleep attempt doesn't
             // attempt to reuse these values, which are no longer applicable
@@ -241,16 +241,16 @@ void _mtb_hal_syspm_ensure_cb_registered_lptimer(void)
 // _mtb_hal_syspm_tickless_setup
 //--------------------------------------------------------------------------------------------------
 static inline void _mtb_hal_syspm_tickless_setup(mtb_hal_lptimer_t* lptimer,
-        uint32_t desired_sleep_ms)
+                                                 uint32_t desired_sleep_ms)
 {
     _mtb_hal_syspm_ensure_cb_registered_lptimer();
     _mtb_hal_syspm_lptimer_context.lptimer          = lptimer;
     _mtb_hal_syspm_lptimer_context.desired_sleep_ms = desired_sleep_ms;
-#if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
+    #if defined(MTB_HAL_SYSPM_DEBUG_TICKLESS)
     _mtb_hal_syspm_lptimer_context.pre_sleep_ticks  = 0u;
     _mtb_hal_syspm_lptimer_context.post_sleep_ticks = 0u;
     _mtb_hal_syspm_lptimer_context.actual_sleep_ms  = 0u;
-#endif
+    #endif
 }
 
 
@@ -260,18 +260,18 @@ static inline void _mtb_hal_syspm_tickless_setup(mtb_hal_lptimer_t* lptimer,
 // _mtb_hal_syspm_cb_wrapper
 //--------------------------------------------------------------------------------------------------
 static cy_en_syspm_status_t _mtb_hal_syspm_cb_wrapper(
-    cy_stc_syspm_callback_params_t *callback_params, cy_en_syspm_callback_mode_t mode)
+    cy_stc_syspm_callback_params_t* callback_params, cy_en_syspm_callback_mode_t mode)
 {
     // We don't have a traditional "base address" here, so we repurpose that to store the
     // user CB address, and store the HAL object pointer in the `context` member
     mtb_hal_syspm_callback_t user_callback  = (mtb_hal_syspm_callback_t)callback_params->base;
-    mtb_hal_syspm_callback_data_t *cb_data  =
+    mtb_hal_syspm_callback_data_t* cb_data  =
         (mtb_hal_syspm_callback_data_t*)callback_params->context;
     // We store this as a uint32_t on the HAL object to avoid circular includes
     mtb_hal_syspm_callback_state_t state    = (mtb_hal_syspm_callback_state_t)cb_data->state;
     // mtb_hal_pdl_map ensures this value can be directly cast
     mtb_hal_syspm_callback_mode_t  hal_mode = (mtb_hal_syspm_callback_mode_t)mode;
-    void                          *cb_arg   = cb_data->user_arg;
+    void*                          cb_arg   = cb_data->user_arg;
     bool result = user_callback(state, hal_mode, cb_arg);
     return result ? CY_SYSPM_SUCCESS : CY_SYSPM_FAIL;
 }
@@ -290,7 +290,7 @@ static cy_rslt_t _mtb_hal_syspm_deepsleep_internal(void)
 // mtb_hal_syspm_register_callback
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_syspm_register_callback(mtb_hal_syspm_callback_data_t* obj,
-        mtb_hal_syspm_callback_params_t *params)
+                                          mtb_hal_syspm_callback_params_t* params)
 {
     CY_ASSERT(obj != NULL);
     CY_ASSERT(params != NULL);
@@ -362,11 +362,13 @@ cy_rslt_t mtb_hal_syspm_deepsleep(void)
 }
 
 
+#if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0)
+
 //--------------------------------------------------------------------------------------------------
 // _mtb_hal_syspm_tickless_sleep_deepsleep
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t _mtb_hal_syspm_tickless_sleep_deepsleep(mtb_hal_lptimer_t* obj, uint32_t desired_ms,
-        uint32_t *actual_ms, bool deep_sleep)
+                                                  uint32_t* actual_ms, bool deep_sleep)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
 
@@ -375,7 +377,7 @@ cy_rslt_t _mtb_hal_syspm_tickless_sleep_deepsleep(mtb_hal_lptimer_t* obj, uint32
         return MTB_HAL_SYSPM_RSLT_DEEPSLEEP_LOCKED;
     }
 
-#if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0)
+    #if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0)
     CY_ASSERT(obj != NULL);
     *actual_ms = 0;
 
@@ -393,28 +395,31 @@ cy_rslt_t _mtb_hal_syspm_tickless_sleep_deepsleep(mtb_hal_lptimer_t* obj, uint32
         /* We need to do the following steps whether or not the DeepSleep entry succeeded */
         uint32_t final_ticks = mtb_hal_lptimer_read(obj);
         _mtb_hal_syspm_enable_systick();
-        uint32_t lptimer_frequency_hz = Cy_SysClk_ClkLfGetFrequency();
+        uint32_t lptimer_frequency_hz = obj->lfclk_freqhz;
         /* Total Idle ticks, handling rollover */
         uint32_t idle_ticks = (final_ticks < initial_ticks)
-                              ? (_MTB_HAL_LPTIMER_MAX_DELAY_TICKS - initial_ticks) + final_ticks
-                              : final_ticks - initial_ticks;
+                        ? (_MTB_HAL_LPTIMER_MAX_DELAY_TICKS - initial_ticks) + final_ticks
+                        : final_ticks - initial_ticks;
         /* To avoid precision loss due to truncation, convert the idle ticks to hz first, then
            divide */
         uint64_t idle_ticks_hz = _MTB_HAL_UTILS_KHZ_TO_HZ(idle_ticks);
         *actual_ms = (uint32_t)(idle_ticks_hz / lptimer_frequency_hz);
     }
 
-#else // if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0)
+    #else // if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0)
     /* no lptimer available on currently selected device */
     result = MTB_HAL_SYSPM_RSLT_ERR_NOT_SUPPORTED;
     CY_UNUSED_PARAMETER(obj);
     CY_UNUSED_PARAMETER(desired_ms);
     CY_UNUSED_PARAMETER(actual_ms);
     CY_UNUSED_PARAMETER(deep_sleep);
-#endif /* (MTB_HAL_DRIVER_AVAILABLE_LPTIMER) */
+    #endif /* (MTB_HAL_DRIVER_AVAILABLE_LPTIMER) */
 
     return result;
 }
+
+
+#endif /* (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0) */
 
 
 //--------------------------------------------------------------------------------------------------
@@ -423,31 +428,31 @@ cy_rslt_t _mtb_hal_syspm_tickless_sleep_deepsleep(mtb_hal_lptimer_t* obj, uint32
 mtb_hal_syspm_system_deep_sleep_mode_t mtb_hal_syspm_get_deepsleep_mode(void)
 {
     mtb_hal_syspm_system_deep_sleep_mode_t deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP;
-#if defined(_MTB_HAL_SYSPM_SUPPORTS_DS_MODES)
+    #if defined(_MTB_HAL_SYSPM_SUPPORTS_DS_MODES)
     cy_en_syspm_deep_sleep_mode_t mode = _mtb_hal_syspm_get_pdl_dsmode();
     switch (mode)
     {
-    case CY_SYSPM_MODE_DEEPSLEEP:
-        deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP;
-        break;
+        case CY_SYSPM_MODE_DEEPSLEEP:
+            deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP;
+            break;
 
-    case CY_SYSPM_MODE_DEEPSLEEP_RAM:
-        deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP_RAM;
-        break;
+        case CY_SYSPM_MODE_DEEPSLEEP_RAM:
+            deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP_RAM;
+            break;
 
-    case CY_SYSPM_MODE_DEEPSLEEP_OFF:
-        deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP_OFF;
-        break;
+        case CY_SYSPM_MODE_DEEPSLEEP_OFF:
+            deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP_OFF;
+            break;
 
-    case CY_SYSPM_MODE_DEEPSLEEP_NONE:
-        deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP_NONE;
-        break;
+        case CY_SYSPM_MODE_DEEPSLEEP_NONE:
+            deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP_NONE;
+            break;
 
-    default:
-        deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP_NONE;
-        break;
+        default:
+            deep_sleep_mode = MTB_HAL_SYSPM_SYSTEM_DEEPSLEEP_NONE;
+            break;
     }
-#endif // defined(_MTB_HAL_SYSPM_SUPPORTS_DS_MODES)
+    #endif // defined(_MTB_HAL_SYSPM_SUPPORTS_DS_MODES)
 
     return deep_sleep_mode;
 }

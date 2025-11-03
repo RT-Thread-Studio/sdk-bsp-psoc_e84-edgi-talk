@@ -1,6 +1,6 @@
 /**
  * \file ifx_se_psacrypto_types.h
- * \version 1.1.0
+ * \version 1.2.0
  *
  * \brief PSA cryptography module: type aliases.
  *
@@ -15,7 +15,7 @@
  *
  *******************************************************************************
  * \copyright
- * Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+ * Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
  * All rights reserved.
  * You may use this file only in accordance with the license, terms, conditions,
  * disclaimers, and limitations in the end user license agreement accompanying
@@ -321,10 +321,9 @@ typedef int32_t ifx_se_key_owner_id_t;
  */
 
 /** Encoding of identifiers of persistent keys. */
-typedef struct
-{
-    ifx_se_key_id_t key_id;
-    ifx_se_key_owner_id_t owner;
+typedef struct {
+    ifx_se_key_id_t key_id; /*!< Key ID in persistent key storage */
+    ifx_se_key_owner_id_t owner; /*!< Encoded owner of a key with this ID */
 } ifx_se_svc_key_id_t;
 
 /** The type of the of keys identifier transfer data.
@@ -332,6 +331,10 @@ typedef struct
  * This is an implementation-defined \c struct. Applications should not
  * make any assumptions about the content of this structure except
  * as directed by the documentation of a specific implementation.
+ *
+ * Members:
+ * - ifx_se_fih_uint **key_id** - ID of a key
+ * - ifx_se_fih_uint **owner** - Key owner
  */
 typedef struct ifx_se_key_id_fih_s ifx_se_key_id_fih_t;
 
@@ -351,6 +354,14 @@ typedef uint32_t ifx_se_key_usage_t;
  */
 
 /** The type of a structure containing key attributes.
+ *
+ * Members:
+ *
+ * - #ifx_se_key_type_t **type** - Defines key type
+ * - #ifx_se_key_bits_t **bits** - Defines size of a key in bits
+ * - #ifx_se_key_lifetime_t **lifetime** - Defines type of storage (persistent or volatile storage)
+ * - #ifx_se_key_policy_t **policy** - Defines usage policy (algorithms, etc)
+ * - #ifx_se_svc_key_id_t **id** - Defined ID for persistent keys
  *
  * This is an opaque structure that can represent the metadata of a key
  * object. Metadata that can be stored in attributes includes:

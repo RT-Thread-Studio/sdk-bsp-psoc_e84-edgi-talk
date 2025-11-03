@@ -9,6 +9,10 @@ A utility library to retarget the standard input/output (STDIO) messages to a UA
 * Optional PDL-only support
 
 ### What Changed?
+#### v1.8.1
+* Documentation update
+#### v1.8.0
+* Updated `_read` and `_write` function attributes to support GCC 14.
 #### v1.7.0
 * Added support for MTB HAL API version 3.
 * UART peripheral to be set up and initilalized as a prerquisite for using the retarget-io library.
@@ -44,22 +48,21 @@ This version of the Retarget IO was validated for compatibility with the followi
 
 | Software and Tools                        | Version |
 | :---                                      | :----:  |
-| ModusToolbox™ Software Environment        | 3.0.0   |
-| GCC Compiler                              | 10.3.1  |
+| ModusToolbox™ Software Environment        | 3.5.0   |
+| GCC Compiler                              | 14.2.1  |
 | IAR Compiler                              | 9.40.2  |
 | ARM Compiler 6                            | 6.16    |
 
-Minimum required ModusToolbox™ Software Environment: v2.0
+Minimum required ModusToolbox™ Software Environment: v3.5.0
 
 ### More information
 
 * [API Reference Guide](https://infineon.github.io/retarget-io/html/index.html)
-* [Cypress Semiconductor, an Infineon Technologies Company](http://www.cypress.com)
+* [Infineon](http://www.infineon.com)
 * [Infineon GitHub](https://github.com/infineon)
-* [ModusToolbox™](https://www.cypress.com/products/modustoolbox-software-environment)
+* [ModusToolbox Software Environment, Quick Start Guide, Documentation, and Videos](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/)
 * [PSoC™ 6 Code Examples using ModusToolbox™ IDE](https://github.com/infineon/Code-Examples-for-ModusToolbox-Software)
 * [ModusToolbox™ Software](https://github.com/Infineon/modustoolbox-software)
-* [PSoC™ 6 Resources - KBA223067](https://community.cypress.com/docs/DOC-14644)
 
 ---
-© Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation, 2019-2023.
+© Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation, 2019-2025.

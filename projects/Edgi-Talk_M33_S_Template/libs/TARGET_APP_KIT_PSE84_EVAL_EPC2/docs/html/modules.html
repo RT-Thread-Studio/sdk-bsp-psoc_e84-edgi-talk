@@ -58,7 +58,7 @@ $(function() {
       <div id="nav-sync" class="sync"></div>
     </div>
   </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
+  <div id="splitbar" style="-moz-user-select:none;"
        class="ui-resizable-handle">
   </div>
 </div>
@@ -77,7 +77,7 @@ $(document).ready(function(){initNavTree('modules.html',''); initResizable(); })
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
+<iframe src="javascript:void(0)" frameborder="0"
         name="MSearchResults" id="MSearchResults">
 </iframe>
 </div>
@@ -87,16 +87,26 @@ $(document).ready(function(){initNavTree('modules.html',''); initResizable(); })
 </div><!--header-->
 <div class="contents">
 <div class="textblock">The following provides a list of BSP API documentation</div><div class="directory">
-<div class="levels">[detail level <span onclick="javascript:toggleLevel(1);">1</span><span onclick="javascript:toggleLevel(2);">2</span>]</div><table class="directory">
-<tr id="row_0_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__errors.html" target="_self">Error Codes</a></td><td class="desc">Error codes specific to the board </td></tr>
-<tr id="row_1_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__functions.html" target="_self">Functions</a></td><td class="desc">All functions exposed by the board </td></tr>
-<tr id="row_2_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_2_" class="arrow" onclick="toggleFolder('2_')">&#9660;</span><a class="el" href="group__group__bsp__pins.html" target="_self">Pin Mappings</a></td><td class="desc">Macro definitions for common peripheral pins on the board </td></tr>
-<tr id="row_2_0_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__pins__led.html" target="_self">LED Pins</a></td><td class="desc">Pins connected to user LEDs on the board </td></tr>
-<tr id="row_2_1_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__pins__btn.html" target="_self">Button Pins</a></td><td class="desc">Pins connected to user buttons on the board </td></tr>
-<tr id="row_2_2_"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__pins__comm.html" target="_self">Communication Pins</a></td><td class="desc">Pins associated with connections on the board for communication interfaces (UART/I2C/SPI/...) </td></tr>
-<tr id="row_2_3_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__pins__wco.html" target="_self">WCO</a></td><td class="desc">Pins connected to the WCO on the board </td></tr>
-<tr id="row_3_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__pin__state.html" target="_self">Pin States</a></td><td class="desc">Macros to abstract out whether the LEDs &amp; Buttons are wired high or active low </td></tr>
-<tr id="row_4_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__bt.html" target="_self">Bluetooth Configuration Structure</a></td><td class="desc">Basic configuration structure for the Bluetooth interface on this board </td></tr>
+<div class="levels">[detail level <span onclick="javascript:toggleLevel(1);">1</span><span onclick="javascript:toggleLevel(2);">2</span><span onclick="javascript:toggleLevel(3);">3</span>]</div><table class="directory">
+<tr id="row_0_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_0_" class="arrow" onclick="toggleFolder('0_')">&#9660;</span><a class="el" href="group__group__system__config__psoc__edge.html" target="_self">Startup/System</a></td><td class="desc">Provides device startup, system configuration, and linker script files </td></tr>
+<tr id="row_0_0_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_0_0_" class="arrow" onclick="toggleFolder('0_0_')">&#9660;</span><a class="el" href="group__group__system__config__macro__edge.html" target="_self">Macros</a></td><td class="desc"></td></tr>
+<tr id="row_0_0_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__group__system__config__system__macro__edge.html" target="_self">System Macros</a></td><td class="desc"></td></tr>
+<tr id="row_0_0_1_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__group__system__config__core__status__macro__edge.html" target="_self">Core Status Macros</a></td><td class="desc"></td></tr>
+<tr id="row_0_0_2_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__group__system__config__user__settings__macro__edge.html" target="_self">User Settings Macros</a></td><td class="desc"></td></tr>
+<tr id="row_0_1_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_0_1_" class="arrow" onclick="toggleFolder('0_1_')">&#9660;</span><a class="el" href="group__group__system__config__enum__edge.html" target="_self">Enumerated Types</a></td><td class="desc"></td></tr>
+<tr id="row_0_1_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__group__system__enums.html" target="_self">APPCPU Debug mode Enumerated Types</a></td><td class="desc"></td></tr>
+<tr id="row_0_2_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_0_2_" class="arrow" onclick="toggleFolder('0_2_')">&#9660;</span><a class="el" href="group__group__system__config__functions__edge.html" target="_self">Functions</a></td><td class="desc"></td></tr>
+<tr id="row_0_2_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__group__system__config__cm33__functions__edge.html" target="_self">Cortex-M33 Control Functions</a></td><td class="desc"></td></tr>
+<tr id="row_0_2_1_"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><a class="el" href="group__group__system__config__cm55__functions__edge.html" target="_self">Cortex-M55 Control Functions</a></td><td class="desc"></td></tr>
+<tr id="row_0_3_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><a class="el" href="group__group__system__config__globals__edge.html" target="_self">Global Variables</a></td><td class="desc"></td></tr>
+<tr id="row_1_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__bt.html" target="_self">Bluetooth Configuration Structure</a></td><td class="desc">Basic configuration structure for the Bluetooth interface on this board </td></tr>
+<tr id="row_2_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__errors.html" target="_self">Error Codes</a></td><td class="desc">Error codes specific to the board </td></tr>
+<tr id="row_3_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__externs.html" target="_self">Externs</a></td><td class="desc">Global structures exposed by the BSP </td></tr>
+<tr id="row_4_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__functions.html" target="_self">Functions</a></td><td class="desc">All functions exposed by the board </td></tr>
+<tr id="row_5_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__pins.html" target="_self">Pin Mappings</a></td><td class="desc">Macro definitions for common peripheral pins on the board </td></tr>
+<tr id="row_6_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__bsp__pin__state.html" target="_self">Pin States</a></td><td class="desc">Macros to abstract out whether the LEDs &amp; Buttons are wired high or active low </td></tr>
+<tr id="row_7_"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__mtb__ipc__config.html" target="_self">MTB IPC Configuration</a></td><td class="desc">The ModusToolbox Interprocessor communication library (MTB-IPC) requires reservation of IPC channels and interrupts </td></tr>
+<tr id="row_8_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><a class="el" href="group__group__mtb__srf__config.html" target="_self">Secure Request Framework Configuration</a></td><td class="desc">The Secure Request Framework (SRF) requires modules be defined with unique values </td></tr>
 </table>
 </div><!-- directory -->
 </div><!-- contents -->

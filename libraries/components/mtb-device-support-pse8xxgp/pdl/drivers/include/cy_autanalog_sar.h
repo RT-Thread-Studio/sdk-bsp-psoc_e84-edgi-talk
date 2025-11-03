@@ -206,7 +206,8 @@
 * The selection of a particular value of the acquisition time is defined in the corresponding Static configuration,
 * refer to cy_stc_autanalog_sar_sta_lp_t::lpSampleTime.
 *
-* \note 5us is the recommended sampling time for Die temperature measurement.
+* \note 15us is the recommended sampling time for Die temperature measurement in LP mode.
+* \note 12us is the recommended sampling time for Die temperature measurement in HS mode.
 *
 *   \section group_autanalog_sar_vref Reference Voltage
 *
@@ -347,7 +348,9 @@
 *
 * \snippet autanalog/snippet/autanalog_sar.c SNIPPET_ADC_INIT_COMMON
 *
-* \snippet autanalog/snippet/autanalog_sar.c SNIPPET_ADC_LOLAD_CFG
+* \snippet autanalog/snippet/autanalog_sar.c SNIPPET_ADC_LOAD_CFG
+*
+* \warning The first reading of the die temperature in HS mode may be incorrect.
 *
 *   \defgroup group_autanalog_sar_macros Macros
 *   \{
@@ -642,6 +645,10 @@ extern "C" {
 
 
 /* Forward declarations */
+void Cy_AutAnalog_SAR_LoadDieTempTrimmCoeff(uint32_t dieTrimmMultiplierHS,
+                                            uint32_t dieTrimmOffsetHS,
+                                            uint32_t dieTrimmMultiplierLP,
+                                            uint32_t dieTrimmOffsetLP);
 __STATIC_INLINE uint32_t Cy_AutAnalog_FIFO_GetInterruptCause(uint8_t fifoIdx);
 __STATIC_INLINE uint32_t Cy_AutAnalog_FIFO_GetInterruptStatus(uint8_t fifoIdx);
 __STATIC_INLINE void Cy_AutAnalog_FIFO_ClearInterrupt(uint8_t fifoIdx, uint32_t interrupt);
@@ -649,13 +656,6 @@ __STATIC_INLINE void Cy_AutAnalog_FIFO_SetInterrupt(uint8_t fifoIdx, uint32_t in
 __STATIC_INLINE void Cy_AutAnalog_FIFO_SetInterruptMask(uint8_t fifoIdx, uint32_t mask);
 __STATIC_INLINE uint32_t Cy_AutAnalog_FIFO_GetInterruptMask(uint8_t fifoIdx);
 __STATIC_INLINE uint32_t Cy_AutAnalog_FIFO_GetInterruptStatusMasked(uint8_t fifoIdx);
-
-
-/* Global variables */
-extern uint32_t cyAutanalogTempMultiplierHS;
-extern uint32_t cyAutanalogTempOffsetHS;
-extern uint32_t cyAutanalogTempMultiplierLP;
-extern uint32_t cyAutanalogTempOffsetLP;
 
 
 /***************************************
@@ -1109,9 +1109,9 @@ typedef struct
                                                                                       *   actual value is SAMPLE_TIME + 1,
                                                                                       *   valid range 1...1024.
                                                                                       * Refer to \ref group_autanalog_sar_sampling chapter.
-                                                                                      * \note 5us is the recommended sampling time for
+                                                                                      * \note 12us (SAMPLE_TIME: 1023) is the recommended sampling time for
                                                                                       *       Die temperature measurement. */
-    cy_stc_autanalog_sar_hs_chan_t *hsGpioChan[PASS_SAR_SAR_GPIO_CHANNELS];         /**< The array of pointers to
+    cy_stc_autanalog_sar_hs_chan_t * hsGpioChan[PASS_SAR_SAR_GPIO_CHANNELS];         /**< The array of pointers to
                                                                                       *   configuration structures for GPIO channels,
                                                                                       *   NULL means the channel is not configured */
     uint8_t                          hsGpioResultMask;                               /**< GPIO channels result mask,
@@ -1136,7 +1136,7 @@ typedef struct
                                                                                 *   actual value is SAMPLE_TIME + 1,
                                                                                 *   valid range 1...1024.
                                                                                 * Refer to \ref group_autanalog_sar_sampling chapter.
-                                                                                * \note 5us is the recommended sampling time for
+                                                                                * \note 15us (SAMPLE_TIME: 61) is the recommended sampling time for
                                                                                 *       Die temperature measurement. */
 } cy_stc_autanalog_sar_sta_lp_t;
 
@@ -1147,10 +1147,10 @@ typedef struct
  */
 typedef struct
 {
-    cy_stc_autanalog_sar_sta_lp_t    *lpStaCfg;                                  /**< LP part of static configuration
+    cy_stc_autanalog_sar_sta_lp_t   * lpStaCfg;                                  /**< LP part of static configuration
                                                                                   *   \note This part is optional,
                                                                                   *    NULL pointer allowed for this field */
-    cy_stc_autanalog_sar_sta_hs_t    *hsStaCfg;                                  /**< HS part of static configuration
+    cy_stc_autanalog_sar_sta_hs_t   * hsStaCfg;                                  /**< HS part of static configuration
                                                                                    *   \note This part is optional,
                                                                                    *    NULL pointer allowed for this field */
     cy_en_autanalog_sar_buf_pwr_t     posBufPwr;                                 /**< The power mode of the buffer
@@ -1172,10 +1172,10 @@ typedef struct
                                                                                    *  refer to \ref group_autanalog_sar_avg chapter
                                                                                    *   - FALSE - 12 bit;
                                                                                    *   - TRUE - 16 bit; */
-    cy_stc_autanalog_sar_mux_chan_t *intMuxChan[PASS_SAR_SAR_MUX_CHANNELS];     /**< The array of pointers to
+    cy_stc_autanalog_sar_mux_chan_t * intMuxChan[PASS_SAR_SAR_MUX_CHANNELS];     /**< The array of pointers to
                                                                                    *  configuration structures for MUX channels,
                                                                                    *  NULL means the channel is not configured */
-    cy_stc_autanalog_sar_limit_t     *limitCond[CY_AUTANALOG_SAR_LIMIT_CFG_NUM]; /**< The array of pointers to the
+    cy_stc_autanalog_sar_limit_t    * limitCond[CY_AUTANALOG_SAR_LIMIT_CFG_NUM]; /**< The array of pointers to the
                                                                                    *   configuration structures for the
                                                                                    *   ADC output range detection,
                                                                                    *   a NULL element means that the
@@ -1269,7 +1269,7 @@ typedef struct
 typedef struct
 {
     cy_en_autanalog_sar_fir_channel_t   chanSel;     /**< The logical channel selection for the FIR filter */
-    int16_t                            *coeff;       /**< The array of FIR filter coefficients,
+    int16_t                           * coeff;       /**< The array of FIR filter coefficients,
                                                       *   the size of the array is defined by defined by
                                                       *   \ref cy_stc_autanalog_sar_fir_cfg_t::tapSel.
                                                       *   Refer to \ref group_autanalog_sar_fir chapter */
@@ -1296,25 +1296,25 @@ typedef struct
 typedef struct
 {
     /* Static configuration */
-    cy_stc_autanalog_sar_sta_t         *sarStaCfg;   /**< The pointer to a static part of the ADC configuration */
+    cy_stc_autanalog_sar_sta_t        * sarStaCfg;   /**< The pointer to a static part of the ADC configuration */
 
     /* Sequencer table for HS mode */
     uint8_t                             hsSeqTabNum; /**< The number of HS Sequencer Table structures, valid range 0...32 */
-    cy_stc_autanalog_sar_seq_tab_hs_t *hsSeqTabArr; /**< Pointer to the array of HS Sequencer Table structures,
+    cy_stc_autanalog_sar_seq_tab_hs_t * hsSeqTabArr; /**< Pointer to the array of HS Sequencer Table structures,
                                                       *   the array length is specified by hsSeqTabNum */
 
     /* Sequencer table for LP mode */
     uint8_t                             lpSeqTabNum; /**< The number of LP Sequencer Table structures, valid range 0...32 */
-    cy_stc_autanalog_sar_seq_tab_lp_t *lpSeqTabArr; /**< Pointer to the array of HS Sequencer Table structures,
+    cy_stc_autanalog_sar_seq_tab_lp_t * lpSeqTabArr; /**< Pointer to the array of HS Sequencer Table structures,
                                                       *   the array length is specified by lpSeqTabNum */
 
     /* FIR filter */
     uint8_t                             firNum;      /**< Number of used FIR filters, valid range 0...2 */
-    cy_stc_autanalog_sar_fir_cfg_t     *firCfg;      /**< Pointer to the array of FIR filter configuration structures,
+    cy_stc_autanalog_sar_fir_cfg_t    * firCfg;      /**< Pointer to the array of FIR filter configuration structures,
                                                       *   the array length is specified by firNum */
 
     /* FIFO buffer */
-    cy_stc_autanalog_fifo_cfg_t        *fifoCfg;     /**< Pointer to the FIFO configuration structure */
+    cy_stc_autanalog_fifo_cfg_t       * fifoCfg;     /**< Pointer to the FIFO configuration structure */
 
 } cy_stc_autanalog_sar_t;
 
@@ -1344,7 +1344,7 @@ typedef struct
     uint8_t entryState; /**< ADC Sequencer entry state, points to the item of the
                           *   \ref cy_stc_autanalog_sar_t::hsSeqTabArr or
                           *   \ref cy_stc_autanalog_sar_t::lpSeqTabArr depends on the current
-                          *   \ref cy_stc_autanalog_stt_ac_t::mode setting,
+                          *   \ref cy_stc_autanalog_stt_ac_t::lpMode setting,
                           *   the valid range is 0...31
                           */
 } cy_stc_autanalog_stt_sar_t;
@@ -1436,7 +1436,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadStaticConfig(uint8_t sarIdx, const
 *
 *******************************************************************************/
 cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadHSseqTable(uint8_t sarIdx, uint8_t seqTabNum,
-        const cy_stc_autanalog_sar_seq_tab_hs_t *seqTabArr);
+                                                         const cy_stc_autanalog_sar_seq_tab_hs_t * seqTabArr);
 
 
 /*******************************************************************************
@@ -1461,7 +1461,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadHSseqTable(uint8_t sarIdx, uint8_t
 *
 *******************************************************************************/
 cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadLPseqTable(uint8_t sarIdx, uint8_t seqTabNum,
-        const cy_stc_autanalog_sar_seq_tab_lp_t *seqTabArr);
+                                                         const cy_stc_autanalog_sar_seq_tab_lp_t * seqTabArr);
 
 
 /*******************************************************************************
@@ -1487,7 +1487,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadLPseqTable(uint8_t sarIdx, uint8_t
 *
 *******************************************************************************/
 cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadFIRconfig(uint8_t sarIdx, uint8_t firIdx,
-        const cy_stc_autanalog_sar_fir_cfg_t *firCfg);
+                                                        const cy_stc_autanalog_sar_fir_cfg_t * firCfg);
 
 /** \} group_autanalog_sar_functions_init */
 
@@ -1890,7 +1890,7 @@ __STATIC_INLINE int32_t Cy_AutAnalog_SAR_FIRreadResult(uint8_t sarIdx, uint8_t f
 *
 *******************************************************************************/
 cy_en_autanalog_status_t Cy_AutAnalog_SAR_FIRloadCoeff(uint8_t sarIdx, uint8_t firIdx, uint8_t firCoeffNum,
-        const int16_t *firCoeffArr);
+                                                        const int16_t * firCoeffArr);
 
 /** \} group_autanalog_sar_functions_fir */
 
@@ -2001,7 +2001,7 @@ __STATIC_INLINE int32_t Cy_AutAnalog_SAR_ReadResult(uint8_t sarIdx, cy_en_autana
     {
         CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 2, 'Review shows that type conversion from unsigned to signed does not have any negative drawbacks');
         regVal = (input == CY_AUTANALOG_SAR_INPUT_GPIO) ?
-                 (int32_t)_FLD2VAL(SAR_STA_GPIO_CHAN_RESULT_RESULT, AUTANALOG_SAR_GPIO_CHAN_RESULT(baseAddr, channel)) :
+                 (int32_t)_FLD2VAL(SAR_STA_GPIO_CHAN_RESULT_RESULT, AUTANALOG_SAR_GPIO_CHAN_RESULT(baseAddr, channel)):
                  (int32_t)_FLD2VAL(SAR_STA_MUX_CHAN_RESULT_RESULT, AUTANALOG_SAR_MUX_CHAN_RESULT(baseAddr, channel));
         CY_MISRA_BLOCK_END('MISRA C-2012 Rule 10.8');
     }
@@ -2051,14 +2051,14 @@ __STATIC_INLINE int32_t Cy_AutAnalog_SAR_ReadResult(uint8_t sarIdx, cy_en_autana
 *
 *******************************************************************************/
 float32_t Cy_AutAnalog_SAR_CountsTo_Volts(uint8_t sarIdx, bool sarLP, uint8_t sarSequencer, cy_en_autanalog_sar_input_t sarInput,
-        uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts);
+                                       uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts);
 
 
 /*******************************************************************************
 * Function Name: Cy_AutAnalog_SAR_CountsTo_mVolts
 ****************************************************************************//**
 *
-* Converts the ADC output to miliVolts.
+* Converts the ADC output to milliVolts.
 *
 * \param sarIdx
 * The index of the ADC subsystem within the Autonomous Analog,
@@ -2070,7 +2070,7 @@ float32_t Cy_AutAnalog_SAR_CountsTo_Volts(uint8_t sarIdx, bool sarLP, uint8_t sa
 * - TRUE - Low Power;
 *
 * \param sarSequencer
-* The ADC sequencer to convert the output data to miliVolts,
+* The ADC sequencer to convert the output data to milliVolts,
 * valid range 0...31.
 *
 * \param sarInput
@@ -2090,12 +2090,12 @@ float32_t Cy_AutAnalog_SAR_CountsTo_Volts(uint8_t sarIdx, bool sarLP, uint8_t sa
 * (\ref Cy_AutAnalog_FIFO_ReadAllData, \ref Cy_AutAnalog_FIFO_ReadDataChanId).
 *
 * \return
-* The ADC result in miliVolts.
+* The ADC result in milliVolts.
 * \note Under invalid ADC index, "zero" returns in the result.
 *
 *******************************************************************************/
 int16_t Cy_AutAnalog_SAR_CountsTo_mVolts(uint8_t sarIdx, bool sarLP, uint8_t sarSequencer, cy_en_autanalog_sar_input_t sarInput,
-        uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts);
+                                      uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts);
 
 
 /*******************************************************************************
@@ -2139,7 +2139,7 @@ int16_t Cy_AutAnalog_SAR_CountsTo_mVolts(uint8_t sarIdx, bool sarLP, uint8_t sar
 *
 *******************************************************************************/
 int32_t Cy_AutAnalog_SAR_CountsTo_uVolts(uint8_t sarIdx, bool sarLP, uint8_t sarSequencer, cy_en_autanalog_sar_input_t sarInput,
-        uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts);
+                                      uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts);
 
 
 /*******************************************************************************
@@ -2149,6 +2149,8 @@ int32_t Cy_AutAnalog_SAR_CountsTo_uVolts(uint8_t sarIdx, bool sarLP, uint8_t sar
 * Converts the ADC output to degrees Celsius.
 *
 * \warning Vbgr should be used as reference voltage when measuring the die temperature.
+*
+* \warning The first reading of the die temperature in HS mode may be incorrect.
 *
 * \note The die temperature measurement only works for MUX channels in differential configuration
 *  for LP mode and pseudo differential configuration for HS mode.
@@ -2183,7 +2185,7 @@ int32_t Cy_AutAnalog_SAR_CountsTo_uVolts(uint8_t sarIdx, bool sarLP, uint8_t sar
 *
 *******************************************************************************/
 int16_t Cy_AutAnalog_SAR_CountsTo_degreeC(uint8_t sarIdx, bool sarLP, uint8_t sarSequencer, uint8_t sarChannel,
-        int32_t sarCounts);
+                                          int32_t sarCounts);
 
 /** \} group_autanalog_sar_functions_conv */
 

@@ -49,7 +49,7 @@
 /**
   @brief         Householder transform of a double floating point vector.
   @param[in]     pSrc        points to the input vector.
-  @param[in]     threshold   norm2 threshold.
+  @param[in]     threshold   norm2 threshold.  
   @param[in]     blockSize   dimension of the vector space.
   @param[out]    pOut        points to the output vector.
   @return        beta        return the scaling factor beta
@@ -58,56 +58,56 @@
 
 
 
-float64_t arm_householder_f64(
-    const float64_t *pSrc,
+ARM_DSP_ATTRIBUTE float64_t arm_householder_f64(
+    const float64_t * pSrc,
     const float64_t threshold,
     uint32_t    blockSize,
-    float64_t *pOut
-)
+    float64_t * pOut
+    )
 
 {
-    uint32_t i;
-    float64_t epsilon;
-    float64_t x1norm2, alpha;
-    float64_t beta, tau, r;
+  uint32_t i;
+  float64_t epsilon;
+  float64_t x1norm2,alpha;
+  float64_t beta,tau,r;
 
-    epsilon = threshold;
+  epsilon = threshold;
 
-    alpha = pSrc[0];
+  alpha = pSrc[0];
 
-    for (i = 1; i < blockSize; i++)
+  for(i=1; i < blockSize; i++)
+  {
+    pOut[i] = pSrc[i];
+  }
+  pOut[0] = 1.0;
+
+  arm_dot_prod_f64(pSrc+1,pSrc+1,blockSize-1,&x1norm2);
+
+  if (x1norm2<=epsilon)
+  {
+     tau = 0.0;
+     memset(pOut,0,blockSize * sizeof(float64_t));
+  }
+  else
+  {
+    beta =  alpha * alpha + x1norm2;
+    beta=sqrt(beta);
+
+    if (alpha > 0.0)
     {
-        pOut[i] = pSrc[i];
+      beta = -beta;
     }
+
+    r = 1.0 / (alpha -beta);
+    arm_scale_f64(pOut,r,pOut,blockSize);
     pOut[0] = 1.0;
 
-    arm_dot_prod_f64(pSrc + 1, pSrc + 1, blockSize - 1, &x1norm2);
+    
+    tau = (beta - alpha) / beta;
 
-    if (x1norm2 <= epsilon)
-    {
-        tau = 0.0;
-        memset(pOut, 0, blockSize * sizeof(float64_t));
-    }
-    else
-    {
-        beta =  alpha * alpha + x1norm2;
-        beta = sqrt(beta);
+  }
 
-        if (alpha > 0.0)
-        {
-            beta = -beta;
-        }
-
-        r = 1.0 / (alpha - beta);
-        arm_scale_f64(pOut, r, pOut, blockSize);
-        pOut[0] = 1.0;
-
-
-        tau = (beta - alpha) / beta;
-
-    }
-
-    return (tau);
+  return(tau);
 
 }
 

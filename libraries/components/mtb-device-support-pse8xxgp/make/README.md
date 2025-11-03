@@ -14,7 +14,7 @@ To list the build options, run the "help" target by typing "make help" in CLI. F
 
 
 ## More information
-* [Recipe-make-pse8xxgp Release Notes](./RELEASE.md)
+* [Recipe-make Release Notes](./RELEASE.md)
 * [Infineon GitHub](https://github.com/Infineon)
 * [ModusToolbox™](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software)
 

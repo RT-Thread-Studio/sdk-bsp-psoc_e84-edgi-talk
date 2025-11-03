@@ -225,12 +225,6 @@
 *   and 0x30. Firmware is required to ACK only the primary and secondary
 *   addresses 0x24 and 0x30 and NAK all others 0x20 and 0x34.
 *
-* \note
-* Only applicable for <b>rev-08 of the CY8CKIT-062-BLE</b>.
-* For proper operation, when the EZI2C slave is configured to be a wakeup
-* source from Deep Sleep mode, the \ref Cy_SCB_EZI2C_DeepSleepCallback must
-* be copied and modified. Refer to the function description to get the details.
-*
 * \defgroup group_scb_ezi2c_macros Macros
 * \defgroup group_scb_ezi2c_functions Functions
 * \{
@@ -363,11 +357,11 @@ typedef struct cy_stc_scb_ezi2c_context
 
     uint8_t *buf1;          /**< The pointer to the buffer exposed  on the request intended for the primary slave address */
     uint32_t buf1Size;      /**< The buffer size assigned to the primary slave address */
-    uint32_t buf1rwBondary; /**< The Read/Write boundary within the buffer assigned to the primary slave address */
+    uint32_t buf1rwBoundary; /**< The Read/Write boundary within the buffer assigned to the primary slave address */
 
     uint8_t *buf2;          /**< The pointer to the buffer exposed on the request intended for the secondary slave address */
     uint32_t buf2Size;      /**< The buffer size assigned to the secondary slave address */
-    uint32_t buf2rwBondary; /**< The Read/Write boundary within the buffer assigned for the secondary slave address */
+    uint32_t buf2rwBoundary; /**< The Read/Write boundary within the buffer assigned for the secondary slave address */
     /** \endcond */
 } cy_stc_scb_ezi2c_context_t;
 /** \} group_scb_ezi2c_data_structures */
@@ -382,7 +376,7 @@ typedef struct cy_stc_scb_ezi2c_context
 * \{
 */
 cy_en_scb_ezi2c_status_t Cy_SCB_EZI2C_Init(CySCB_Type *base, cy_stc_scb_ezi2c_config_t const *config,
-        cy_stc_scb_ezi2c_context_t *context);
+                                           cy_stc_scb_ezi2c_context_t *context);
 void     Cy_SCB_EZI2C_DeInit(CySCB_Type *base);
 __STATIC_INLINE void Cy_SCB_EZI2C_Enable(CySCB_Type *base);
 void     Cy_SCB_EZI2C_Disable(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
@@ -573,7 +567,7 @@ __STATIC_INLINE void Cy_SCB_EZI2C_Enable(CySCB_Type *base)
 *******************************************************************************/
 __STATIC_INLINE void Cy_SCB_SetEzI2CMode(CySCB_Type *base, bool ezMode)
 {
-    if (ezMode)
+    if(ezMode)
     {
         SCB_CTRL(base) |= SCB_CTRL_EZ_MODE_Msk;
     }

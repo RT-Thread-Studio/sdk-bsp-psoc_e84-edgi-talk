@@ -28,7 +28,7 @@
 
 #include "cy_pdl.h"
 #if defined(COMPONENT_MW_ASYNC_TRANSFER)
-    #include "mtb_async_transfer.h"
+#include "mtb_async_transfer.h"
 #endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
 
 /** \cond INTERNAL */
@@ -40,7 +40,7 @@
 typedef struct
 {
     cy_israddress                       callback;
-    void                               *callback_arg;
+    void*                               callback_arg;
 } _mtb_hal_event_callback_data_t;
 
 /**
@@ -54,17 +54,17 @@ typedef struct
 {
     union
     {
-        void       *v;
-        uint8_t    *u8;
-        uint16_t   *u16;
-        uint32_t   *u32;
+        void*       v;
+        uint8_t*    u8;
+        uint16_t*   u16;
+        uint32_t*   u32;
     } addr;
     uint32_t size;
 } _mtb_hal_buffer_info_t;
 
 #if defined(COMPONENT_MW_ASYNC_TRANSFER)
-    /** Function to handle the async transfer */
-    typedef cy_rslt_t (* async_transfer_handler_t)(void* obj);
+/** Function to handle the async transfer */
+typedef cy_rslt_t (* async_transfer_handler_t)(void* obj);
 #endif // defined(COMPONENT_MW_ASYNC_TRANSFER)
 
 /** \endcond */

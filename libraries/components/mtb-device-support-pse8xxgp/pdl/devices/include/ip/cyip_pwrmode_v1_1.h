@@ -47,165 +47,155 @@
 /**
   * \brief Power Domain Dependency Sense Register (PWRMODE_PD)
   */
-typedef struct
-{
-    __IOM uint32_t PD_SENSE;                      /*!< 0x00000000 Dependency Sense Register */
-    __IM uint32_t PD_SPT;                        /*!< 0x00000004 Dependency Support Register */
-    __IM uint32_t RESERVED[2];
+typedef struct {
+  __IOM uint32_t PD_SENSE;                      /*!< 0x00000000 Dependency Sense Register */
+   __IM uint32_t PD_SPT;                        /*!< 0x00000004 Dependency Support Register */
+   __IM uint32_t RESERVED[2];
 } PWRMODE_PD_Type;                              /*!< Size = 16 (0x10) */
 
 /**
   * \brief Power Policy Unit Registers for the main power domain (VCCACT_PD) (PWRMODE_PPU_MAIN_PPU)
   */
-typedef struct
-{
-    __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
-    __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
-    __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
-    __IM uint32_t RESERVED;
-    __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
-    __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
-    __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
-    __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
-    __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
-    __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
-    __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
-    __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
-    __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
-    __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
-    __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
-    __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
-    __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
-    __IM uint32_t RESERVED3[65];
-    __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
-    __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
-    __IM uint32_t RESERVED4[2];
-    __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
-    __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
-    __IM uint32_t RESERVED5[910];
-    __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
-    __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
-    __IM uint32_t RESERVED6[4];
-    __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
-    __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
-    __IM uint32_t RESERVED7[12];
+typedef struct {
+  __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
+  __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
+   __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
+   __IM uint32_t RESERVED;
+   __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
+   __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
+   __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
+  __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
+  __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
+  __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
+  __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
+  __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
+  __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
+  __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
+  __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
+  __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
+  __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
+   __IM uint32_t RESERVED3[65];
+  __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
+  __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
+   __IM uint32_t RESERVED4[2];
+   __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
+   __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
+   __IM uint32_t RESERVED5[910];
+   __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
+   __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
+   __IM uint32_t RESERVED6[4];
+   __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
+   __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
+   __IM uint32_t RESERVED7[12];
 } PWRMODE_PPU_MAIN_PPU_Type;                    /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Power Policy Unit for Active Domain (PWRMODE_PPU_MAIN)
   */
-typedef struct
-{
-    PWRMODE_PPU_MAIN_PPU_Type PPU;          /*!< 0x00000000 Power Policy Unit Registers for the main power domain
+typedef struct {
+        PWRMODE_PPU_MAIN_PPU_Type PPU;          /*!< 0x00000000 Power Policy Unit Registers for the main power domain
                                                                 (VCCACT_PD) */
 } PWRMODE_PPU_MAIN_Type;                        /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Power Policy Unit Registers for the main power domain (VCCACT_PD) (PWRMODE_PPU_PD1_PPU_MAIN)
   */
-typedef struct
-{
-    __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
-    __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
-    __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
-    __IM uint32_t RESERVED;
-    __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
-    __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
-    __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
-    __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
-    __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
-    __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
-    __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
-    __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
-    __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
-    __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
-    __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
-    __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
-    __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
-    __IM uint32_t RESERVED3[65];
-    __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
-    __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
-    __IM uint32_t RESERVED4[2];
-    __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
-    __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
-    __IM uint32_t RESERVED5[910];
-    __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
-    __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
-    __IM uint32_t RESERVED6[4];
-    __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
-    __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
-    __IM uint32_t RESERVED7[12];
+typedef struct {
+  __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
+  __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
+   __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
+   __IM uint32_t RESERVED;
+   __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
+   __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
+   __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
+  __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
+  __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
+  __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
+  __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
+  __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
+  __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
+  __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
+  __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
+  __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
+  __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
+   __IM uint32_t RESERVED3[65];
+  __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
+  __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
+   __IM uint32_t RESERVED4[2];
+   __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
+   __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
+   __IM uint32_t RESERVED5[910];
+   __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
+   __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
+   __IM uint32_t RESERVED6[4];
+   __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
+   __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
+   __IM uint32_t RESERVED7[12];
 } PWRMODE_PPU_PD1_PPU_MAIN_Type;                /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Power Policy Unit for PD1 Active Domain (PWRMODE_PPU_PD1)
   */
-typedef struct
-{
-    PWRMODE_PPU_PD1_PPU_MAIN_Type PPU_MAIN; /*!< 0x00000000 Power Policy Unit Registers for the main power domain
+typedef struct {
+        PWRMODE_PPU_PD1_PPU_MAIN_Type PPU_MAIN; /*!< 0x00000000 Power Policy Unit Registers for the main power domain
                                                                 (VCCACT_PD) */
 } PWRMODE_PPU_PD1_Type;                         /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Power Domain Controller (PWRMODE_PD0_CTRL_PD)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
-    __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
-    __IM uint32_t RESERVED[6];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
+  __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
+   __IM uint32_t RESERVED[6];
 } PWRMODE_PD0_CTRL_PD_Type;                     /*!< Size = 32 (0x20) */
 
 /**
   * \brief PD0 Power Domain Control Registers (PWRMODE_PD0_CTRL)
   */
-typedef struct
-{
-    PWRMODE_PD0_CTRL_PD_Type PD;            /*!< 0x00000000 Power Domain Controller */
+typedef struct {
+        PWRMODE_PD0_CTRL_PD_Type PD;            /*!< 0x00000000 Power Domain Controller */
 } PWRMODE_PD0_CTRL_Type;                        /*!< Size = 32 (0x20) */
 
 /**
   * \brief Power Domain Controller (PWRMODE_PD1_CTRL_PD)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
-    __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
-    __IM uint32_t RESERVED[6];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
+  __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
+   __IM uint32_t RESERVED[6];
 } PWRMODE_PD1_CTRL_PD_Type;                     /*!< Size = 32 (0x20) */
 
 /**
   * \brief PD1 Power Domain Control Registers (PWRMODE_PD1_CTRL)
   */
-typedef struct
-{
-    PWRMODE_PD1_CTRL_PD_Type PD;            /*!< 0x00000000 Power Domain Controller */
+typedef struct {
+        PWRMODE_PD1_CTRL_PD_Type PD;            /*!< 0x00000000 Power Domain Controller */
 } PWRMODE_PD1_CTRL_Type;                        /*!< Size = 32 (0x20) */
 
 /**
   * \brief SRSS Power Mode Control Registers (PWRMODE)
   */
-typedef struct
-{
-    PWRMODE_PD_Type PD[16];                 /*!< 0x00000000 Power Domain Dependency Sense Register */
-    __IM uint32_t RESERVED[960];
-    PWRMODE_PPU_MAIN_Type PPU_MAIN;         /*!< 0x00001000 Power Policy Unit for Active Domain */
-    __IOM uint32_t CLK_SELECT;                    /*!< 0x00002000 Clock Selection for Power Mode Components */
-    __IM uint32_t PDCM_HWSTAT_IN;                /*!< 0x00002004 PPU Status input */
-    __IM uint32_t PDCM_PD_PRESENT;               /*!< 0x00002008 Mask for whether a PD is present in the PDCM */
-    __IM uint32_t RESERVED1[1021];
-    PWRMODE_PPU_PD1_Type PPU_PD1;           /*!< 0x00003000 Power Policy Unit for PD1 Active Domain */
-    PWRMODE_PD0_CTRL_Type PD0_CTRL;         /*!< 0x00004000 PD0 Power Domain Control Registers */
-    __IM uint32_t RESERVED2[1016];
-    PWRMODE_PD1_CTRL_Type PD1_CTRL;         /*!< 0x00005000 PD1 Power Domain Control Registers */
+typedef struct {
+        PWRMODE_PD_Type PD[16];                 /*!< 0x00000000 Power Domain Dependency Sense Register */
+   __IM uint32_t RESERVED[960];
+        PWRMODE_PPU_MAIN_Type PPU_MAIN;         /*!< 0x00001000 Power Policy Unit for Active Domain */
+  __IOM uint32_t CLK_SELECT;                    /*!< 0x00002000 Clock Selection for Power Mode Components */
+   __IM uint32_t PDCM_HWSTAT_IN;                /*!< 0x00002004 PPU Status input */
+   __IM uint32_t PDCM_PD_PRESENT;               /*!< 0x00002008 Mask for whether a PD is present in the PDCM */
+   __IM uint32_t RESERVED1[1021];
+        PWRMODE_PPU_PD1_Type PPU_PD1;           /*!< 0x00003000 Power Policy Unit for PD1 Active Domain */
+        PWRMODE_PD0_CTRL_Type PD0_CTRL;         /*!< 0x00004000 PD0 Power Domain Control Registers */
+   __IM uint32_t RESERVED2[1016];
+        PWRMODE_PD1_CTRL_Type PD1_CTRL;         /*!< 0x00005000 PD1 Power Domain Control Registers */
 } PWRMODE_Type;                                 /*!< Size = 20512 (0x5020) */
 
 

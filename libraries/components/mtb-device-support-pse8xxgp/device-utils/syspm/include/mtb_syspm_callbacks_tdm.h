@@ -42,11 +42,11 @@ __STATIC_INLINE  bool _mtb_syspm_i2s_tdm_is_active(const cy_stc_syspm_callback_p
 {
     const TDM_STRUCT_Type* base = (params->base);
     if ((0u !=
-            (TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_ACTIVE_Msk &
-             base->TDM_RX_STRUCT.RX_FIFO_CTL)) ||
-            (0u !=
-             (TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_ACTIVE_Msk &
-              base->TDM_TX_STRUCT.TX_FIFO_CTL)))
+         (TDM_TDM_STRUCT_TDM_RX_STRUCT_RX_FIFO_CTL_ACTIVE_Msk &
+          base->TDM_RX_STRUCT.RX_FIFO_CTL)) ||
+        (0u !=
+         (TDM_TDM_STRUCT_TDM_TX_STRUCT_TX_FIFO_CTL_ACTIVE_Msk &
+          base->TDM_TX_STRUCT.TX_FIFO_CTL)))
     {
         return true;
     }

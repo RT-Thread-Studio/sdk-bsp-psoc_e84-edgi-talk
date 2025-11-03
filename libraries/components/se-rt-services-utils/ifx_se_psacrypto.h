@@ -1,14 +1,14 @@
 /*******************************************************************************
 *
 * \file ifx_se_psacrypto.h
-* \version 1.1.0
+* \version 1.2.0
 *
 * \brief
 *  This is the header file for the SE RT Services PSA crypto syscalls.
 *
 ********************************************************************************
 * \copyright
-* Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+* Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
 * All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
@@ -120,12 +120,15 @@ extern "C" {
  *                              value such that #IFX_SE_ALG_IS_SIGN_HASH(\p alg)
  *                              is true), that is compatible with
  *                              the type of \p key.
- * \param[in] hash              The hash or message to sign.
- * \param[in] hash_length       Size of the \p hash buffer in bytes.
- * \param[out] signature        Buffer where the signature is to be written.
- * \param[in] signature_size    Size of the \p signature buffer in bytes.
+ * \param[in] hash              The hash or message to sign
+ *                              (encoded pointer to input data).
+ * \param[in] hash_length       Size of the \p hash buffer in bytes (size_t).
+ * \param[out] signature        Buffer where the signature is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in] signature_size    Size of the \p signature buffer in bytes (size_t).
  * \param[out] signature_length On success, the number of bytes
- *                              that make up the returned signature value.
+ *                              that make up the returned signature value
+ *                              (encoded pointer to size_t variable).
  * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -177,10 +180,12 @@ ifx_se_status_t ifx_se_sign_hash(
  *                              is true), that is compatible with
  *                              the type of \p key.
  * \param[in] hash              The hash or message whose signature is to be
- *                              verified.
- * \param[in] hash_length       Size of the \p hash buffer in bytes.
- * \param[in] signature         Buffer containing the signature to verify.
- * \param[in] signature_length  Size of the \p signature buffer in bytes.
+ *                              verified
+ *                              (encoded pointer to input data).
+ * \param[in] hash_length       Size of the \p hash buffer in bytes (size_t).
+ * \param[in] signature         Buffer containing the signature to verify
+ *                              (encoded pointer to input data).
+ * \param[in] signature_length  Size of the \p signature buffer in bytes (size_t).
  * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -225,11 +230,13 @@ ifx_se_status_t ifx_se_verify_hash(
  *                              value such that #IFX_SE_ALG_IS_SIGN_MESSAGE(\p alg)
  *                              is true), that is compatible with the type of
  *                              \p key.
- * \param[in]  input            The input message to sign.
- * \param[in]  input_length     Size of the \p input buffer in bytes.
- * \param[out] signature        Buffer where the signature is to be written.
- * \param[in]  signature_size   Size of the \p signature buffer in bytes. This
- *                              must be appropriate for the selected
+ * \param[in]  input            The input message to sign
+ *                              (encoded pointer to input data).
+ * \param[in]  input_length     Size of the \p input buffer in bytes (size_t).
+ * \param[out] signature        Buffer where the signature is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in]  signature_size   Size of the \p signature buffer in bytes (size_t).
+ *                              This must be appropriate for the selected
  *                              algorithm and key:
  *                              - The required signature size is
  *                                #IFX_SE_SIGN_OUTPUT_SIZE(\c key_type, \c key_bits, \p alg)
@@ -239,7 +246,8 @@ ifx_se_status_t ifx_se_verify_hash(
  *                                maximum signature size of any supported
  *                                signature algorithm.
  * \param[out] signature_length On success, the number of bytes that make up
- *                              the returned signature value.
+ *                              the returned signature value
+ *                              (encoded pointer to size_t variable).
  * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -293,10 +301,12 @@ ifx_se_status_t ifx_se_sign_message(
  *                              value such that #IFX_SE_ALG_IS_SIGN_MESSAGE(\p alg)
  *                              is true), that is compatible with the type of
  *                              \p key.
- * \param[in]  input            The message whose signature is to be verified.
- * \param[in]  input_length     Size of the \p input buffer in bytes.
- * \param[out] signature        Buffer containing the signature to verify.
- * \param[in]  signature_length Size of the \p signature buffer in bytes.
+ * \param[in]  input            The message whose signature is to be verified
+ *                              (encoded pointer to input data).
+ * \param[in]  input_length     Size of the \p input buffer in bytes (size_t).
+ * \param[in]  signature        Buffer containing the signature to verify
+ *                              (encoded pointer to input data).
+ * \param[in]  signature_length Size of the \p signature buffer in bytes (size_t).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -342,22 +352,27 @@ ifx_se_status_t ifx_se_verify_message(
  * \param[in] alg                 The AEAD algorithm to compute
  *                                (\c IFX_SE_ALG_XXX value such that
  *                                #IFX_SE_ALG_IS_AEAD(\p alg) is true).
- * \param[in] nonce               Nonce or IV to use.
- * \param[in] nonce_length        Size of the \p nonce buffer in bytes.
+ * \param[in] nonce               Nonce or IV to use
+ *                                (encoded pointer to input data).
+ * \param[in] nonce_length        Size of the \p nonce buffer in bytes (size_t).
  * \param[in] additional_data     Additional data that will be authenticated
- *                                but not encrypted.
- * \param[in] additional_data_length  Size of \p additional_data in bytes.
+ *                                but not encrypted
+ *                                (encoded pointer to input data).
+ * \param[in] additional_data_length  Size of \p additional_data in bytes (size_t).
  * \param[in] plaintext           Data that will be authenticated and
- *                                encrypted.
- * \param[in] plaintext_length    Size of \p plaintext in bytes.
+ *                                encrypted
+ *                                (encoded pointer to input data).
+ * \param[in] plaintext_length    Size of \p plaintext in bytes (size_t).
  * \param[out] ciphertext         Output buffer for the authenticated and
- *                                encrypted data. The additional data is not
+ *                                encrypted data
+ *                                (encoded pointer to output buffer).
+ *                                The additional data is not
  *                                part of this output. For algorithms where the
  *                                encrypted data and the authentication tag
  *                                are defined as separate outputs, the
  *                                authentication tag is appended to the
  *                                encrypted data.
- * \param[in] ciphertext_size     Size of the \p ciphertext buffer in bytes.
+ * \param[in] ciphertext_size     Size of the \p ciphertext buffer in bytes (size_t).
  *                                This must be appropriate for the selected
  *                                algorithm and key:
  *                                - A sufficient output size is
@@ -369,7 +384,8 @@ ifx_se_status_t ifx_se_verify_message(
  *                                  ciphertext size of any supported AEAD
  *                                  encryption.
  * \param[out] ciphertext_length  On success, the size of the output
- *                                in the \p ciphertext buffer.
+ *                                in the \p ciphertext buffer
+ *                                (encoded pointer to size_t variable).
  * \param[in]  ctx                The pointer to the SE syscall context that
  *                                contain a special syscall data
  *                                (IPC release callback etc).
@@ -416,20 +432,26 @@ ifx_se_status_t ifx_se_aead_encrypt(
  * \param[in] alg                 The AEAD algorithm to compute
  *                                (\c IFX_SE_ALG_XXX value such that
  *                                #IFX_SE_ALG_IS_AEAD(\p alg) is true).
- * \param[in] nonce               Nonce or IV to use.
- * \param[in] nonce_length        Size of the \p nonce buffer in bytes.
+ * \param[in] nonce               Nonce or IV to use
+ *                                (encoded pointer to input data).
+ * \param[in] nonce_length        Size of the \p nonce buffer in bytes (size_t).
  * \param[in] additional_data     Additional data that has been authenticated
- *                                but not encrypted.
- * \param[in] additional_data_length  Size of \p additional_data in bytes.
+ *                                but not encrypted
+ *                                (encoded pointer to input data).
+ * \param[in] additional_data_length  Size of \p additional_data in bytes (size_t).
  * \param[in] ciphertext          Data that has been authenticated and
- *                                encrypted. For algorithms where the
+ *                                encrypted
+ *                                (encoded pointer to input data).
+ *                                For algorithms where the
  *                                encrypted data and the authentication tag
  *                                are defined as separate inputs, the buffer
  *                                must contain the encrypted data followed
  *                                by the authentication tag.
- * \param[in] ciphertext_length   Size of \p ciphertext in bytes.
- * \param[out] plaintext          Output buffer for the decrypted data.
- * \param[in] plaintext_size      Size of the \p plaintext buffer in bytes.
+ * \param[in] ciphertext_length   Size of \p ciphertext in bytes
+ *                                (encoded pointer to input data).
+ * \param[out] plaintext          Output buffer for the decrypted data
+ *                                (encoded pointer to output buffer).
+ * \param[in] plaintext_size      Size of the \p plaintext buffer in bytes (size_t).
  *                                This must be appropriate for the selected
  *                                algorithm and key:
  *                                - A sufficient output size is
@@ -441,7 +463,8 @@ ifx_se_status_t ifx_se_aead_encrypt(
  *                                  plaintext size of any supported AEAD
  *                                  decryption.
  * \param[out] plaintext_length   On success, the size of the output
- *                                in the \p plaintext buffer.
+ *                                in the \p plaintext buffer
+ *                                (encoded pointer to size_t variable).
  * \param[in] ctx                 The pointer to the SE syscall context that
  *                                contain a special syscall data
  *                                (IPC release callback etc).
@@ -634,10 +657,12 @@ ifx_se_status_t ifx_se_aead_decrypt_setup(
  *
  * \param[in,out] operation     Active AEAD operation.
  * \param[out] nonce            Buffer where the generated nonce is to be
- *                              written.
- * \param[in] nonce_size        Size of the \p nonce buffer in bytes.
+ *                              written
+ *                              (encoded pointer to output buffer).
+ * \param[in] nonce_size        Size of the \p nonce buffer in bytes (size_t).
  * \param[out] nonce_length     On success, the number of bytes of the
- *                              generated nonce.
+ *                              generated nonce
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -652,7 +677,7 @@ ifx_se_status_t ifx_se_aead_decrypt_setup(
  * \retval #IFX_SE_ERROR_CORRUPTION_DETECTED
  * \retval #IFX_SE_ERROR_STORAGE_FAILURE
  * \retval #IFX_SE_ERROR_BAD_STATE
- *         The operation state is not valid (it must be an active aead encrypt
+ *         The operation state is not valid (it must be an active AEAD encrypt
  *         operation, with no nonce set).
  */
 ifx_se_status_t ifx_se_aead_generate_nonce(
@@ -678,8 +703,9 @@ ifx_se_status_t ifx_se_aead_generate_nonce(
  * a non-random IV.
  *
  * \param[in,out] operation     Active AEAD operation.
- * \param[in] nonce             Buffer containing the nonce to use.
- * \param[in] nonce_length      Size of the nonce in bytes.
+ * \param[in] nonce             Buffer containing the nonce to use
+ *                              (encoded pointer to input data).
+ * \param[in] nonce_length      Size of the nonce in bytes (size_t).
  * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -724,9 +750,9 @@ ifx_se_status_t ifx_se_aead_set_nonce(
  *
  * \param[in,out] operation     Active AEAD operation.
  * \param[in] ad_length         Size of the non-encrypted additional
- *                              authenticated data in bytes.
- * \param[in] plaintext_length  Size of the plaintext to encrypt in bytes.
- * \param[in]  ctx              The pointer to the SE syscall context that
+ *                              authenticated data in bytes (size_t).
+ * \param[in] plaintext_length  Size of the plaintext to encrypt in bytes (size_t).
+ * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
  *
@@ -773,8 +799,9 @@ ifx_se_status_t ifx_se_aead_set_lengths(
  *
  * \param[in,out] operation     Active AEAD operation.
  * \param[in] input             Buffer containing the fragment of
- *                              additional data.
- * \param[in] input_length      Size of the \p input buffer in bytes.
+ *                              additional data
+ *                              (encoded pointer to input data).
+ * \param[in] input_length      Size of the \p input buffer in bytes (size_t).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -836,10 +863,12 @@ ifx_se_status_t ifx_se_aead_update_ad(
  *
  * \param[in,out] operation     Active AEAD operation.
  * \param[in] input             Buffer containing the message fragment to
- *                              encrypt or decrypt.
- * \param[in] input_length      Size of the \p input buffer in bytes.
- * \param[out] output           Buffer where the output is to be written.
- * \param[in] output_size       Size of the \p output buffer in bytes.
+ *                              encrypt or decrypt
+ *                              (encoded pointer to input data).
+ * \param[in] input_length      Size of the \p input buffer in bytes (size_t).
+ * \param[out] output           Buffer where the output is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in] output_size       Size of the \p output buffer in bytes (size_t).
  *                              This must be appropriate for the selected
  *                                algorithm and key:
  *                                - A sufficient output size is
@@ -853,7 +882,8 @@ ifx_se_status_t ifx_se_aead_update_ad(
  *                                  output size of any supported AEAD
  *                                  algorithm.
  * \param[out] output_length    On success, the number of bytes
- *                              that make up the returned output.
+ *                              that make up the returned output
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -909,8 +939,9 @@ ifx_se_status_t ifx_se_aead_update(
  *
  * \param[in,out] operation     Active AEAD operation.
  * \param[out] ciphertext       Buffer where the last part of the ciphertext
- *                              is to be written.
- * \param[in] ciphertext_size   Size of the \p ciphertext buffer in bytes.
+ *                              is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in] ciphertext_size   Size of the \p ciphertext buffer in bytes (size_t).
  *                              This must be appropriate for the selected
  *                              algorithm and key:
  *                              - A sufficient output size is
@@ -922,10 +953,12 @@ ifx_se_status_t ifx_se_aead_update(
  *                                the maximum output size of any supported AEAD
  *                                algorithm.
  * \param[out] ciphertext_length On success, the number of bytes of
- *                              returned ciphertext.
+ *                              returned ciphertext
+ *                              (encoded pointer to size_t variable).
  * \param[out] tag              Buffer where the authentication tag is
- *                              to be written.
- * \param[in] tag_size          Size of the \p tag buffer in bytes.
+ *                              to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in] tag_size          Size of the \p tag buffer in bytes (size_t).
  *                              This must be appropriate for the selected
  *                              algorithm and key:
  *                              - The exact tag size is #IFX_SE_AEAD_TAG_LENGTH(\c
@@ -938,7 +971,8 @@ ifx_se_status_t ifx_se_aead_update(
  *                                maximum tag size of any supported AEAD
  *                                algorithm.
  * \param[out] tag_length       On success, the number of bytes
- *                              that make up the returned tag.
+ *                              that make up the returned tag
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1005,11 +1039,13 @@ ifx_se_status_t ifx_se_aead_finish(
  *
  * \param[in,out] operation     Active AEAD operation.
  * \param[out] plaintext        Buffer where the last part of the plaintext
- *                              is to be written. This is the remaining data
+ *                              is to be written
+ *                              (encoded pointer to output buffer).
+ *                              This is the remaining data
  *                              from previous calls to ifx_se_aead_update()
  *                              that could not be processed until the end
  *                              of the input.
- * \param[in] plaintext_size    Size of the \p plaintext buffer in bytes.
+ * \param[in] plaintext_size    Size of the \p plaintext buffer in bytes (size_t).
  *                              This must be appropriate for the selected algorithm and key:
  *                              - A sufficient output size is
  *                                #IFX_SE_AEAD_VERIFY_OUTPUT_SIZE(\c key_type,
@@ -1020,9 +1056,11 @@ ifx_se_status_t ifx_se_aead_finish(
  *                                the maximum output size of any supported AEAD
  *                                algorithm.
  * \param[out] plaintext_length On success, the number of bytes of
- *                              returned plaintext.
- * \param[in] tag               Buffer containing the authentication tag.
- * \param[in] tag_length        Size of the \p tag buffer in bytes.
+ *                              returned plaintext
+ *                              (encoded pointer to size_t variable).
+ * \param[in] tag               Buffer containing the authentication tag
+ *                              (encoded pointer to input data).
+ * \param[in] tag_length        Size of the \p tag buffer in bytes (size_t).
  * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1103,14 +1141,18 @@ ifx_se_status_t ifx_se_aead_abort(
  * \param[in] alg               The cipher algorithm to compute
  *                              (\c IFX_SE_ALG_XXX value such that
  *                              #IFX_SE_ALG_IS_CIPHER(\p alg) is true).
- * \param[in] iv                Buffer containing the IV to use.
- * \param[in] iv_length         Size of the IV in bytes.
- * \param[in] input             Buffer containing the message to encrypt.
- * \param[in] input_length      Size of the \p input buffer in bytes.
- * \param[out] output           Buffer where the output is to be written.
- * \param[in] output_size       Size of the \p output buffer in bytes.
+ * \param[in] iv                Buffer containing the IV to use
+ *                              (encoded pointer to input data).
+ * \param[in] iv_length         Size of the IV in bytes (size_t).
+ * \param[in] input             Buffer containing the message to encrypt
+ *                              (encoded pointer to input data).
+ * \param[in] input_length      Size of the \p input buffer in bytes (size_t).
+ * \param[out] output           Buffer where the output is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in] output_size       Size of the \p output buffer in bytes (size_t).
  * \param[out] output_length    On success, the number of bytes
- *                              that make up the output.
+ *                              that make up the output
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1153,14 +1195,17 @@ ifx_se_status_t ifx_se_cipher_encrypt(
  * \param[in] alg               The cipher algorithm to compute
  *                              (\c IFX_SE_ALG_XXX value such that
  *                              #IFX_SE_ALG_IS_CIPHER(\p alg) is true).
- * \param[in] input             Buffer containing the message to decrypt.
+ * \param[in] input             Buffer containing the message to decrypt
+ *                              (encoded pointer to input data).
  *                              This consists of the IV followed by the
  *                              ciphertext proper.
- * \param[in] input_length      Size of the \p input buffer in bytes.
- * \param[out] output           Buffer where the plaintext is to be written.
- * \param[in] output_size       Size of the \p output buffer in bytes.
+ * \param[in] input_length      Size of the \p input buffer in bytes (size_t).
+ * \param[out] output           Buffer where the plaintext is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in] output_size       Size of the \p output buffer in bytes (size_t).
  * \param[out] output_length    On success, the number of bytes
- *                              that make up the output.
+ *                              that make up the output
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1229,7 +1274,7 @@ ifx_se_status_t ifx_se_cipher_decrypt(
  * \param[in] alg               The cipher algorithm to compute
  *                              (\c IFX_SE_ALG_XXX value such that
  *                              #IFX_SE_ALG_IS_CIPHER(\p alg) is true).
- * \param[in]  ctx              The pointer to the SE syscall context that
+ * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
  *
@@ -1294,7 +1339,7 @@ ifx_se_status_t ifx_se_cipher_encrypt_setup(
  * \param[in] alg               The cipher algorithm to compute
  *                              (\c IFX_SE_ALG_XXX value such that
  *                              #IFX_SE_ALG_IS_CIPHER(\p alg) is true).
- * \param[in]  ctx              The pointer to the SE syscall context that
+ * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
  *
@@ -1333,10 +1378,12 @@ ifx_se_status_t ifx_se_cipher_decrypt_setup(
  * state and must be aborted by calling ifx_se_cipher_abort().
  *
  * \param[in,out] operation     Active cipher operation.
- * \param[out] iv               Buffer where the generated IV is to be written.
- * \param[in]  iv_size          Size of the \p iv buffer in bytes.
+ * \param[out] iv               Buffer where the generated IV is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in]  iv_size          Size of the \p iv buffer in bytes (size_t).
  * \param[out] iv_length        On success, the number of bytes of the
- *                              generated IV.
+ *                              generated IV
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1376,8 +1423,9 @@ ifx_se_status_t ifx_se_cipher_generate_iv(
  * a non-random IV.
  *
  * \param[in,out] operation     Active cipher operation.
- * \param[in] iv                Buffer containing the IV to use.
- * \param[in] iv_length         Size of the IV in bytes.
+ * \param[in] iv                Buffer containing the IV to use
+ *                              (encoded pointer to input data).
+ * \param[in] iv_length         Size of the IV in bytes (size_t).
  * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1416,12 +1464,15 @@ ifx_se_status_t ifx_se_cipher_set_iv(
  *
  * \param[in,out] operation     Active cipher operation.
  * \param[in] input             Buffer containing the message fragment to
- *                              encrypt or decrypt.
- * \param[in]  input_length     Size of the \p input buffer in bytes.
- * \param[out] output           Buffer where the output is to be written.
- * \param[in]  output_size      Size of the \p output buffer in bytes.
+ *                              encrypt or decrypt
+ *                              (encoded pointer to input data).
+ * \param[in]  input_length     Size of the \p input buffer in bytes (size_t).
+ * \param[out] output           Buffer where the output is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in]  output_size      Size of the \p output buffer in bytes (size_t).
  * \param[out] output_length    On success, the number of bytes
- *                              that make up the returned output.
+ *                              that make up the returned output
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1464,10 +1515,12 @@ ifx_se_status_t ifx_se_cipher_update(
  * state and must be aborted by calling ifx_se_cipher_abort().
  *
  * \param[in,out] operation     Active cipher operation.
- * \param[out] output           Buffer where the output is to be written.
- * \param[in]  output_size      Size of the \p output buffer in bytes.
+ * \param[out] output           Buffer where the output is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in]  output_size      Size of the \p output buffer in bytes (size_t).
  * \param[out] output_length    On success, the number of bytes
- *                              that make up the returned output.
+ *                              that make up the returned output
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1595,7 +1648,7 @@ ifx_se_status_t ifx_se_destroy_key(ifx_se_key_id_fih_t key, void *ctx);
  * \param[in]  ctx    The pointer to the SE syscall context that
  *                    contain a special syscall data
  *                    (IPC release callback etc).
- *
+ *                              
  * \retval #IFX_SE_SUCCESS
  *         The key material will have been removed from memory if it is not
  *         currently required.
@@ -1615,10 +1668,12 @@ ifx_se_status_t ifx_se_purge_key(ifx_se_key_id_fih_t key, void *ctx);
  * Implementations must reject an attempt to generate a key of size 0.
  *
  * \param[in] attributes    The attributes for the new key.
- * \param[out] key          On success, an identifier for the newly created
- *                          key. For persistent keys, this is the key
+ * \param[out] key          On success, a pointer to identifier
+ *                          of newly created key
+ *                          (encoded pointer to #ifx_se_key_id_fih_t variable).
+ *                          For persistent keys, this is the key
  *                          identifier defined in \p attributes.
- *                          \c 0 on failure.
+ *                          \c 0 on failure. 
  * \param[in]  ctx          The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
@@ -1757,8 +1812,9 @@ ifx_se_status_t ifx_se_hash_setup(
  * state and must be aborted by calling ifx_se_hash_abort().
  *
  * \param[in,out] operation   Active hash operation.
- * \param[in] input           Buffer containing the message fragment to hash.
- * \param[in] input_length    Size of the \p input buffer in bytes.
+ * \param[in] input           Buffer containing the message fragment to hash
+ *                            (encoded pointer to input data).
+ * \param[in] input_length    Size of the \p input buffer in bytes (size_t).
  * \param[in] ctx             The pointer to the SE syscall context that
  *                            contain a special syscall data
  *                            (IPC release callback etc).
@@ -1797,12 +1853,15 @@ ifx_se_status_t ifx_se_hash_update(
  *          a valid hash and thereby bypass security controls.
  *
  * \param[in,out] operation     Active hash operation.
- * \param[out] hash             Buffer where the hash is to be written.
- * \param[in]  hash_size        Size of the \p hash buffer in bytes.
+ * \param[out] hash             Buffer where the hash is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in]  hash_size        Size of the \p hash buffer in bytes (size_t).
  * \param[out] hash_length      On success, the number of bytes
- *                              that make up the hash value. This is always
- *                              #IFX_SE_HASH_LENGTH(\c alg) where \c alg is the
- *                              hash algorithm that is calculated.
+ *                              that make up the hash value
+ *                              (encoded pointer to size_t variable).
+ *                              This is always #IFX_SE_HASH_LENGTH(\c alg)
+ *                              where \c alg is the hash algorithm
+ *                              that is calculated.
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -1846,9 +1905,10 @@ ifx_se_status_t ifx_se_hash_finish(
  * in constant time.
  *
  * \param[in,out] operation     Active hash operation.
- * \param[in] hash              Buffer containing the expected hash value.
- * \param[in] hash_length       Size of the \p hash buffer in bytes.
- * \param[in]  ctx              The pointer to the SE syscall context that
+ * \param[in] hash              Buffer containing the expected hash value
+ *                              (encoded pointer to input data).
+ * \param[in] hash_length       Size of the \p hash buffer in bytes (size_t).
+ * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
  *
@@ -1885,7 +1945,7 @@ ifx_se_status_t ifx_se_hash_verify(
  * ifx_se_hash_verify() is safe and has no effect.
  *
  * \param[in,out] operation     Initialized hash operation.
- * \param[in]  ctx              The pointer to the SE syscall context that
+ * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
  *
@@ -1905,13 +1965,16 @@ ifx_se_status_t ifx_se_hash_abort(
  *
  * \param[in] alg           The hash algorithm to compute (\c IFX_SE_ALG_XXX value
  *                          such that #IFX_SE_ALG_IS_HASH(\p alg) is true).
- * \param[in] input         Buffer containing the message to hash.
- * \param[in] input_length  Size of the \p input buffer in bytes.
- * \param[out] hash         Buffer where the hash is to be written.
- * \param[in]  hash_size    Size of the \p hash buffer in bytes.
+ * \param[in] input         Buffer containing the message to hash
+ *                          (encoded pointer to input data).
+ * \param[in] input_length  Size of the \p input buffer in bytes (size_t).
+ * \param[out] hash         Buffer where the hash is to be written
+ *                              (encoded pointer to output buffer).
+ * \param[in]  hash_size    Size of the \p hash buffer in bytes (size_t).
  * \param[out] hash_length  On success, the number of bytes
- *                          that make up the hash value. This is always
- *                          #IFX_SE_HASH_LENGTH(\p alg).
+ *                          that make up the hash value
+ *                          (encoded pointer to size_t variable).
+ *                          This is always #IFX_SE_HASH_LENGTH(\p alg).
  * \param[in]  ctx          The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
@@ -1951,7 +2014,7 @@ ifx_se_status_t ifx_se_hash_compute(
  * \param[in] source_operation      The active hash operation to clone.
  * \param[in,out] target_operation  The operation object to set up.
  *                                  It must be initialized but not active.
- * \param[in]  ctx                  The pointer to the SE syscall context that
+ * \param[in] ctx                   The pointer to the SE syscall context that
  *                                  contain a special syscall data
  *                                  (IPC release callback etc).
  *
@@ -2003,11 +2066,13 @@ ifx_se_status_t ifx_se_hash_clone(
  *                          \p data buffer.
  *                          If the key size in \p attributes is nonzero,
  *                          it must be equal to the size from \p data.
- * \param[out] key          On success, an identifier to the newly created key.
+ * \param[out] key          On success, an identifier to the newly created key
+ *                          (encoded pointer to #ifx_se_key_id_fih_t variable).
  *                          For persistent keys, this is the key identifier
  *                          defined in \p attributes.
  *                          \c 0 on failure.
- * \param[in] data          Buffer containing the key data. The content of this
+ * \param[in] data          Buffer containing the key data
+ *                          (encoded pointer to input data). The content of this
  *                          buffer is interpreted according to the type declared
  *                          in \p attributes.
  *                          All implementations must support at least the format
@@ -2018,7 +2083,7 @@ ifx_se_status_t ifx_se_hash_clone(
  *                          should err on the side of rejecting content if it
  *                          may be erroneous (e.g. wrong type or truncated data).
  * \param[in] data_length   Size of the \p data buffer with CRC included
- *                          in bytes.
+ *                          in bytes (size_t).
  * \param[in] ctx           The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
@@ -2116,11 +2181,13 @@ ifx_se_status_t ifx_se_import_key(
  * \param[in] key           Identifier of the key to export. It must allow the
  *                          usage #IFX_SE_KEY_USAGE_EXPORT, unless it is
  *                          a public key.
- * \param[out] data         Buffer where the key data is to be written.
+ * \param[out] data         Buffer where the key data is to be written
+ *                          (encoded pointer to output buffer).
  * \param[in]  data_size    Size of the \p data buffer with CRC included
- *                          in bytes.
+ *                          in bytes (size_t).
  * \param[out] data_length  On success, the number of bytes
- *                          that make up the key data.
+ *                          that make up the key data
+ *                          (encoded pointer to size_t variable).
  * \param[in]  ctx          The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
@@ -2143,10 +2210,10 @@ ifx_se_status_t ifx_se_import_key(
  * \retval #IFX_SE_ERROR_INSUFFICIENT_MEMORY
  */
 ifx_se_status_t ifx_se_export_key(ifx_se_key_id_fih_t key,
-                                  ifx_se_fih_ptr_t data,
-                                  ifx_se_fih_t data_size, /* with CRC included */
-                                  ifx_se_fih_ptr_t data_length,
-                                  void *ctx);
+    ifx_se_fih_ptr_t data,
+    ifx_se_fih_t data_size, /* with CRC included */
+    ifx_se_fih_ptr_t data_length,
+    void *ctx);
 
 /**
  * \brief Export a public key or the public part of a key pair in binary format.
@@ -2186,17 +2253,19 @@ ifx_se_status_t ifx_se_export_key(ifx_se_key_id_fih_t key,
  *   #IFX_SE_KEY_TYPE_IS_DH_PUBLIC_KEY is true),
  *   the format is the representation of the public key `y = g^x mod p` as a
  *   big-endian byte string. The length of the byte string is the length of the
- *   base prime `p` in bytes.
+ *   base prime `p` in bytes (size_t).
  *
  * Exporting a public key object or the public part of a key pair is
  * always permitted, regardless of the key's usage flags.
  *
  * \param[in] key               Identifier of the key to export.
- * \param[out] data             Buffer where the key data is to be written.
+ * \param[out] data             Buffer where the key data is to be written
+ *                              (encoded pointer to output buffer).
  * \param[in]  data_size        Size of the \p data buffer with CRC included
- *                              in bytes.
+ *                              in bytes (size_t).
  * \param[out] data_length      On success, the number of bytes
- *                              that make up the key data.
+ *                              that make up the key data
+ *                              (encoded pointer to size_t variable).
  * \param[in]  ctx              The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
@@ -2219,10 +2288,10 @@ ifx_se_status_t ifx_se_export_key(ifx_se_key_id_fih_t key,
  * \retval #IFX_SE_ERROR_INSUFFICIENT_MEMORY
  */
 ifx_se_status_t ifx_se_export_public_key(ifx_se_key_id_fih_t key,
-        ifx_se_fih_ptr_t data,
-        ifx_se_fih_t data_size, /* with CRC included */
-        ifx_se_fih_ptr_t data_length,
-        void *ctx);
+    ifx_se_fih_ptr_t data,
+    ifx_se_fih_t data_size, /* with CRC included */
+    ifx_se_fih_ptr_t data_length,
+    void *ctx);
 
 /** Make a copy of a key.
  *
@@ -2278,8 +2347,10 @@ ifx_se_status_t ifx_se_export_public_key(ifx_se_key_id_fih_t key,
  *                            the source key and \p attributes so that
  *                            both sets of restrictions apply, as
  *                            described in the documentation of this function.
- * \param[out] target_key   On success, an identifier for the newly created
- *                          key. For persistent keys, this is the key
+ * \param[out] target_key   On success, an identifier for the newly created key
+ *                          (encoded pointer to
+ *                          #ifx_se_key_id_fih_t variable).
+ *                          For persistent keys, this is the key
  *                          identifier defined in \p attributes.
  *                          \c 0 on failure.
  * \param[in]  ctx          The pointer to the SE syscall context that
@@ -2338,7 +2409,7 @@ ifx_se_status_t ifx_se_copy_key(
  * call ifx_se_key_derivation_abort() on an operation that has not been set up.
  *
  * \param[in,out] operation    The operation to abort.
- * \param[in]  ctx             The pointer to the SE syscall context that
+ * \param[in] ctx              The pointer to the SE syscall context that
  *                             contain a special syscall data
  *                             (IPC release callback etc).
  *
@@ -2391,7 +2462,7 @@ ifx_se_status_t ifx_se_key_derivation_abort(
  * \param[in] alg                 The key derivation algorithm to compute
  *                                (\c IFX_SE_ALG_XXX value such that
  *                                #IFX_SE_ALG_IS_KEY_DERIVATION(\p alg) is true).
- * \param[in]  ctx                The pointer to the SE syscall context that
+ * \param[in] ctx                 The pointer to the SE syscall context that
  *                                contain a special syscall data
  *                                (IPC release callback etc).
  *
@@ -2421,7 +2492,8 @@ ifx_se_status_t ifx_se_key_derivation_setup(
  * this reduces its capacity by *N*.
  *
  * \param[in]  operation     The operation to query.
- * \param[out] capacity      On success, the capacity of the operation.
+ * \param[out] capacity      On success, the capacity of the operation
+ *                           (encoded pointer to size_t variable).
  * \param[in]  ctx           The pointer to the SE syscall context that
  *                           contain a special syscall data
  *                           (IPC release callback etc).
@@ -2447,7 +2519,7 @@ ifx_se_status_t ifx_se_key_derivation_get_capacity(
  * \param[in] capacity       The new capacity of the operation.
  *                           It must be less or equal to the operation's
  *                           current capacity.
- * \param[in]  ctx           The pointer to the SE syscall context that
+ * \param[in] ctx            The pointer to the SE syscall context that
  *                           contain a special syscall data
  *                           (IPC release callback etc).
  *
@@ -2558,9 +2630,10 @@ ifx_se_status_t ifx_se_key_derivation_input_key(
  *                                ifx_se_key_derivation_setup() and must not
  *                                have produced any output yet.
  * \param[in] step                Which step the input data is for.
- * \param[in] data                Input data to use.
- * \param[in] data_length         Size of the \p data buffer in bytes.
- * \param[in]  ctx                The pointer to the SE syscall context that
+ * \param[in] data                Input data to use
+ *                                (encoded pointer to input data).
+ * \param[in] data_length         Size of the \p data buffer in bytes (size_t).
+ * \param[in] ctx                 The pointer to the SE syscall context that
  *                                contain a special syscall data
  *                                (IPC release callback etc).
  *
@@ -2600,7 +2673,8 @@ ifx_se_status_t ifx_se_key_derivation_input_bytes(
  * state and must be aborted by calling ifx_se_key_derivation_abort().
  *
  * \param[in,out] operation    The key derivation operation object to read from.
- * \param[out] output          Buffer where the output will be written.
+ * \param[out] output          Buffer where the output will be written
+ *                             (encoded pointer to output buffer).
  * \param[in]  output_length   Number of bytes to output.
  * \param[in]  ctx             The pointer to the SE syscall context that
  *                             contain a special syscall data
@@ -2735,11 +2809,12 @@ ifx_se_status_t ifx_se_key_derivation_output_bytes(
  *                          the policy must be the same as in the current
  *                          operation.
  * \param[in,out] operation The key derivation operation object to read from.
- * \param[out] key          On success, an identifier for the newly created
- *                          key. For persistent keys, this is the key
+ * \param[out] key          On success, an identifier for the newly created key
+ *                          (encoded pointer to #ifx_se_key_id_fih_t variable).
+ *                          For persistent keys, this is the key
  *                          identifier defined in \p attributes.
  *                          \c 0 on failure.
- * \param[in]  ctx          The pointer to the SE syscall context that
+ * \param[in] ctx           The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
  *
@@ -2805,10 +2880,12 @@ ifx_se_status_t ifx_se_key_derivation_output_key(
  *                          is false).
  *                          The operation must be ready for an input
  *                          of the type given by \p step.
- * \param step              Which step the input data is for.
- * \param private_key       Identifier of the private key to use. It must
+ * \param[in] step          Which step the input data is for.
+ * \param[in] private_key   Identifier of the private key to use. It must
  *                          allow the usage #IFX_SE_KEY_USAGE_DERIVE.
- * \param[in] peer_key      Public key of the peer. The peer key must be in the
+ * \param[in] peer_key      Public key of the peer
+ *                          (encoded pointer to input data).
+ *                          The peer key must be in the
  *                          same format that ifx_se_import_key() accepts for the
  *                          public key type corresponding to the type of
  *                          private_key. That is, this function performs the
@@ -2822,11 +2899,11 @@ ifx_se_status_t ifx_se_key_derivation_output_key(
  *                          private key is on. The standard formats for public
  *                          keys are documented in the documentation of
  *                          ifx_se_export_public_key().
- * \param peer_key_length   Size of \p peer_key in bytes.
+ * \param[in] peer_key_length Size of \p peer_key in bytes (size_t).
  * \param[in] ctx           The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
- *
+ *                              
  * \retval #IFX_SE_SUCCESS
  *         Success.
  * \retval #IFX_SE_ERROR_INVALID_HANDLE
@@ -2870,23 +2947,25 @@ ifx_se_status_t ifx_se_key_derivation_key_agreement(
  *                                (\c IFX_SE_ALG_XXX value such that
  *                                #IFX_SE_ALG_IS_RAW_KEY_AGREEMENT(\p alg)
  *                                is true).
- * \param private_key             Identifier of the private key to use. It must
+ * \param[in] private_key         Identifier of the private key to use. It must
  *                                allow the usage #IFX_SE_KEY_USAGE_DERIVE.
- * \param[in] peer_key            Public key of the peer. It must be
+ * \param[in] peer_key            Public key of the peer
+ *                                (encoded pointer to input data). It must be
  *                                in the same format that ifx_se_import_key()
  *                                accepts. The standard formats for public
  *                                keys are documented in the documentation
  *                                of ifx_se_export_public_key().
- * \param peer_key_length         Size of \p peer_key in bytes.
+ * \param[in] peer_key_length     Size of \p peer_key in bytes (size_t).
  * \param[out] output             Buffer where the raw shared secret is to
- *                                be written.
- * \param output_size             Size of the \c output buffer in bytes.
+ *                                be written (encoded pointer to output buffer).
+ * \param[in] output_size         Size of the \c output buffer in bytes (size_t).
  * \param[out] output_length      On success, the number of bytes
- *                                that make up the returned output.
+ *                                that make up the returned output
+ *                                (encoded pointer to size_t variable).
   * \param[in] ctx                The pointer to the SE syscall context that
  *                                contain a special syscall data
  *                                (IPC release callback etc).
- *
+ *                              
  * \retval #IFX_SE_SUCCESS
  *         Success.
  * \retval #IFX_SE_ERROR_INVALID_HANDLE
@@ -2911,13 +2990,13 @@ ifx_se_status_t ifx_se_key_derivation_key_agreement(
  *         results in this error code.
  */
 ifx_se_status_t ifx_se_raw_key_agreement(ifx_se_alg_fih_t alg,
-        ifx_se_key_id_fih_t private_key,
-        const ifx_se_fih_ptr_t peer_key,
-        ifx_se_fih_t peer_key_length,
-        ifx_se_fih_ptr_t output,
-        ifx_se_fih_t output_size,
-        ifx_se_fih_ptr_t output_length,
-        void *ctx);
+                                    ifx_se_key_id_fih_t private_key,
+                                    const ifx_se_fih_ptr_t peer_key,
+                                    ifx_se_fih_t peer_key_length,
+                                    ifx_se_fih_ptr_t output,
+                                    ifx_se_fih_t output_size,
+                                    ifx_se_fih_ptr_t output_length,
+                                    void *ctx);
 
 /** \} */
 
@@ -2963,7 +3042,7 @@ ifx_se_status_t ifx_se_raw_key_agreement(ifx_se_alg_fih_t alg,
  *                          It must allow the usage IFX_SE_KEY_USAGE_SIGN_MESSAGE.
  * \param[in] alg           The MAC algorithm to compute (\c IFX_SE_ALG_XXX value
  *                          such that #IFX_SE_ALG_IS_MAC(\p alg) is true).
- * \param[in]  ctx          The pointer to the SE syscall context that
+ * \param[in] ctx           The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
  *
@@ -3027,7 +3106,7 @@ ifx_se_status_t ifx_se_mac_sign_setup(
  *                          IFX_SE_KEY_USAGE_VERIFY_MESSAGE.
  * \param[in] alg           The MAC algorithm to compute (\c IFX_SE_ALG_XXX value
  *                          such that #IFX_SE_ALG_IS_MAC(\p alg) is true).
- * \param[in]  ctx          The pointer to the SE syscall context that
+ * \param[in] ctx           The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
  *
@@ -3064,9 +3143,10 @@ ifx_se_status_t ifx_se_mac_verify_setup(
  *
  * \param[in,out] operation   Active MAC operation.
  * \param[in] input           Buffer containing the message fragment to add to
- *                            the MAC calculation.
- * \param[in] input_length    Size of the \p input buffer in bytes.
- * \param[in]  ctx            The pointer to the SE syscall context that
+ *                            the MAC calculation
+ *                            (encoded pointer to input data).
+ * \param[in] input_length    Size of the \p input buffer in bytes (size_t).
+ * \param[in] ctx             The pointer to the SE syscall context that
  *                            contain a special syscall data
  *                            (IPC release callback etc).
  *
@@ -3105,10 +3185,12 @@ ifx_se_status_t ifx_se_mac_update(
  *          a valid MAC and thereby bypass security controls.
  *
  * \param[in,out] operation Active MAC operation.
- * \param[out] mac          Buffer where the MAC value is to be written.
- * \param[in]  mac_size     Size of the \p mac buffer in bytes.
+ * \param[out] mac          Buffer where the MAC value is to be written
+ *                          (encoded pointer to output buffer).
+ * \param[in]  mac_size     Size of the \p mac buffer in bytes (size_t).
  * \param[out] mac_length   On success, the number of bytes
- *                          that make up the MAC value. This is always
+ *                          that make up the MAC value
+ *                          (encoded pointer to size_t variable). This is always
  *                          #IFX_SE_MAC_LENGTH(\c key_type, \c key_bits, \c alg)
  *                          where \c key_type and \c key_bits are the type and
  *                          bit-size respectively of the key and \c alg is the
@@ -3156,8 +3238,9 @@ ifx_se_status_t ifx_se_mac_sign_finish(
  * in constant time.
  *
  * \param[in,out] operation    Active MAC operation.
- * \param[in] mac              Buffer containing the expected MAC value.
- * \param[in] mac_length       Size of the \p mac buffer in bytes.
+ * \param[in] mac              Buffer containing the expected MAC value
+ *                             (encoded pointer to input data).
+ * \param[in] mac_length       Size of the \p mac buffer in bytes (size_t).
  * \param[in] ctx              The pointer to the SE syscall context that
  *                             contain a special syscall data
  *                             (IPC release callback etc).
@@ -3197,7 +3280,7 @@ ifx_se_status_t ifx_se_mac_verify_finish(
  * ifx_se_mac_verify_finish() is safe and has no effect.
  *
  * \param[in,out] operation     Initialized MAC operation.
- * \param[in]  ctx              The pointer to the SE syscall context that
+ * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
  *
@@ -3224,12 +3307,15 @@ ifx_se_status_t ifx_se_mac_abort(
  *                          must allow the usage IFX_SE_KEY_USAGE_SIGN_MESSAGE.
  * \param[in] alg           The MAC algorithm to compute (\c IFX_SE_ALG_XXX
  *                          value such that #IFX_SE_ALG_IS_MAC(\p alg) is true).
- * \param[in] input         Buffer containing the input message.
- * \param[in] input_length  Size of the \p input buffer in bytes.
- * \param[out] mac          Buffer where the MAC value is to be written.
- * \param[in]  mac_size     Size of the \p mac buffer in bytes.
+ * \param[in] input         Buffer containing the input message
+ *                          (encoded pointer to input data).
+ * \param[in] input_length  Size of the \p input buffer in bytes (size_t).
+ * \param[out] mac          Buffer where the MAC value is to be written
+ *                          (encoded pointer to output buffer).
+ * \param[in]  mac_size     Size of the \p mac buffer in bytes (size_t).
  * \param[out] mac_length   On success, the number of bytes
- *                          that make up the MAC value.
+ *                          that make up the MAC value
+ *                          (encoded pointer to size_t variable).
  * \param[in]  ctx          The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
@@ -3267,11 +3353,13 @@ ifx_se_status_t ifx_se_mac_compute(
  *                          must allow the usage IFX_SE_KEY_USAGE_VERIFY_MESSAGE.
  * \param[in] alg           The MAC algorithm to compute (\c IFX_SE_ALG_XXX
  *                          value such that #IFX_SE_ALG_IS_MAC(\p alg) is true).
- * \param[in] input         Buffer containing the input message.
- * \param[in] input_length  Size of the \p input buffer in bytes.
- * \param[out] mac          Buffer containing the expected MAC value.
- * \param[in]  mac_length   Size of the \p mac buffer in bytes.
- * \param[in]  ctx          The pointer to the SE syscall context that
+ * \param[in] input         Buffer containing the input message
+ *                          (encoded pointer to input data).
+ * \param[in] input_length  Size of the \p input buffer in bytes (size_t).
+ * \param[in] mac           Buffer containing the expected MAC value
+ *                          (encoded pointer to input data).
+ * \param[in] mac_length    Size of the \p mac buffer in bytes (size_t).
+ * \param[in] ctx           The pointer to the SE syscall context that
  *                          contain a special syscall data
  *                          (IPC release callback etc).
  *
@@ -3320,7 +3408,7 @@ ifx_se_status_t ifx_se_mac_verify(
  *
  * \param[in,out] attributes    The attribute structure to reset.
  */
-void ifx_se_reset_key_attributes(ifx_se_key_attributes_t *attributes);
+void ifx_se_reset_key_attributes( ifx_se_key_attributes_t *attributes );
 
 /** Retrieve the attributes of a key.
  *
@@ -3336,7 +3424,7 @@ void ifx_se_reset_key_attributes(ifx_se_key_attributes_t *attributes);
  * \param[in,out] attributes    On success, the attributes of the key.
  *                              On failure, equivalent to a
  *                              freshly-initialized structure.
- * \param[in]  ctx              The pointer to the SE syscall context that
+ * \param[in] ctx               The pointer to the SE syscall context that
  *                              contain a special syscall data
  *                              (IPC release callback etc).
  *
@@ -3354,8 +3442,8 @@ void ifx_se_reset_key_attributes(ifx_se_key_attributes_t *attributes);
  *         results in this error code.
  */
 ifx_se_status_t ifx_se_get_key_attributes(ifx_se_key_id_fih_t key,
-        ifx_se_key_attributes_t *attributes,
-        void *ctx);
+                                          ifx_se_key_attributes_t *attributes,
+                                          void *ctx);
 
 /** \} */
 

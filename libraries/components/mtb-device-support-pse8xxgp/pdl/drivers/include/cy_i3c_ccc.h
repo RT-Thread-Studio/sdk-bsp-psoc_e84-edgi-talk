@@ -196,21 +196,21 @@ extern "C" {
 typedef struct cy_stc_i3c_ccc_events
 {
     uint8_t events;  /**< bitmask of CY_I3C_CCC_EVENT_xxx events */
-} cy_stc_i3c_ccc_events_t;
+}cy_stc_i3c_ccc_events_t;
 
 /** SETMWL/GETMWL CCC payload structure */
 typedef struct cy_stc_i3c_ccc_mrwl
 {
     uint16_t len;             /**< maximum read/write length in bytes */
     uint8_t payloadSize;      /**< Optional IBI Payload size */
-} cy_stc_i3c_ccc_mrwl_t;
+}cy_stc_i3c_ccc_mrwl_t;
 
 /** SETMRL/GETMRL CCC payload structure */
 typedef struct cy_stc_i3c_ccc_mrl
 {
     uint16_t readLen;             /**< maximum read/write length in bytes */
     uint8_t payloadSize;     /**< Optional IBI Payload size */
-} cy_stc_i3c_ccc_mrl_t;
+}cy_stc_i3c_ccc_mrl_t;
 
 /** GETXTIME CCC payload structure */
 typedef struct cy_stc_i3c_ccc_getxtime
@@ -219,20 +219,19 @@ typedef struct cy_stc_i3c_ccc_getxtime
     uint8_t state;            /**< Bit mask indicating which Timing Control Mode (if any) is currently enabled for the Target and overflow bit*/
     uint8_t frequency;        /**< Byte representing the Frequency of the Targets internal oscillator, in increments of 0.5 MHz*/
     uint8_t inaccuracy;       /**< Byte representing the maximum variation of the Targets internal oscillator in 1/10th percent (0.1%) increments */
-} cy_stc_i3c_ccc_getxtime_t;
+}cy_stc_i3c_ccc_getxtime_t;
 
 /** I3C/I2C device descriptor used for DEFTGTS */
 typedef struct cy_stc_i3c_ccc_dev_desc
 {
     uint8_t dynAddress; /**< dynamic address assigned to the I3C target or 0 if the entry is describing an I2C Target */
-    union
-    {
+    union {
         uint8_t dcr; /**< DCR value (not applicable to entries describing I2C devices) */
         uint8_t lvr; /**< LVR value (not applicable to entries describing I3C devices) */
     };
     uint8_t bcr; /**< BCR value or 0 if this entry is describing an I2C target */
     uint8_t staticAddress; /**< static address or 0 if the device does not have a static address */
-} cy_stc_i3c_ccc_dev_desc_t;
+}cy_stc_i3c_ccc_dev_desc_t;
 
 /** DEFTGTS CCC payload structure */
 typedef struct cy_stc_i3c_ccc_deftgts
@@ -240,43 +239,43 @@ typedef struct cy_stc_i3c_ccc_deftgts
     uint8_t count; /**<  number of dev descriptors */
     cy_stc_i3c_ccc_dev_desc_t controller; /**< descriptor describing the current controller */
     cy_stc_i3c_ccc_dev_desc_t targets[CY_I3C_MAX_DEVS]; /**< array of descriptors describing targets controlled by the current controller */
-} cy_stc_i3c_ccc_deftgts_t ;
+}cy_stc_i3c_ccc_deftgts_t ;
 
 /** SETNEWDA and SETDASA CCCs payload structure */
 typedef struct cy_stc_i3c_ccc_setda
 {
     uint8_t address; /**<  dynamic address to assign to an I3C device */
-} cy_stc_i3c_ccc_setda_t;
+}cy_stc_i3c_ccc_setda_t;
 
 /** GETPID CCC payload structure */
 typedef struct cy_stc_i3c_ccc_getpid
 {
     uint8_t pid[6U]; /**< 48 bits PID in big endian */
-} cy_stc_i3c_ccc_getpid_t;
+}cy_stc_i3c_ccc_getpid_t;
 
 /** GETBCR CCC payload structure */
 typedef struct cy_stc_i3c_ccc_getbcr
 {
     uint8_t bcr; /**< BCR (Bus Characteristic Register) value */
-} cy_stc_i3c_ccc_getbcr_t;
+}cy_stc_i3c_ccc_getbcr_t;
 
 /** GETDCR CCC payload structure */
 typedef struct cy_stc_i3c_ccc_getdcr
 {
     uint8_t dcr; /**< DCR (Device Characteristic Register) value */
-} cy_stc_i3c_ccc_getdcr_t;
+}cy_stc_i3c_ccc_getdcr_t;
 
 /** GETSTATUS CCC payload structure */
 typedef struct cy_stc_i3c_ccc_getstatus
 {
     uint16_t status; /**< status of the I3C target (see I3C_CCC_STATUS_xxx macros for more information */
-} cy_stc_i3c_ccc_getstatus_t;
+}cy_stc_i3c_ccc_getstatus_t;
 
 /** GETACCCR CCC payload structure */
 typedef struct cy_stc_i3c_ccc_getacccr
 {
     uint8_t newcontroller; /**< address of the controller taking bus ownership */
-} cy_stc_i3c_ccc_getacccr_t;
+}cy_stc_i3c_ccc_getacccr_t;
 
 /** GETMXDS CCC payload structure */
 typedef struct cy_stc_i3c_ccc_getmxds
@@ -284,7 +283,7 @@ typedef struct cy_stc_i3c_ccc_getmxds
     uint8_t maxwr; /**< write limitations */
     uint8_t maxrd; /**< read limitations */
     uint8_t maxrdturn[3U]; /**< maximum read turn-around expressed micro-seconds and little-endian formatted */
-} cy_stc_i3c_ccc_getmxds_t;
+}cy_stc_i3c_ccc_getmxds_t;
 
 /** GETHDRCAP CCC payload structure */
 typedef struct cy_stc_i3c_ccc_gethdrcap
@@ -293,13 +292,13 @@ typedef struct cy_stc_i3c_ccc_gethdrcap
     uint8_t getcapByte2; /**< second byte for getcaps ccc */
     uint8_t getcapByte3; /**< third byte for getcaps ccc */
     uint8_t getcapByte4; /**< forth byte for getcaps ccc */
-} cy_stc_i3c_ccc_gethdrcap_t;
+}cy_stc_i3c_ccc_gethdrcap_t;
 
 /** RSTACT CCC payload structure */
 typedef struct cy_stc_i3c_ccc_rstact
 {
     uint8_t resetTime; /**< time required for reset */
-} cy_stc_i3c_ccc_rstact_t;
+}cy_stc_i3c_ccc_rstact_t;
 
 /** DEVCTRL Address Mask */
 typedef enum
@@ -338,7 +337,7 @@ typedef struct cy_stc_i3c_ccc_devctrl
     uint8_t payloadByte1; /**< payload Byte 1  */
     uint8_t payloadByte2; /**< payload Byte 2 */
     uint8_t payloadByte3; /**< payload Byte 3  */
-} cy_stc_i3c_ccc_devctrl_t;
+}cy_stc_i3c_ccc_devctrl_t;
 /** \} group_i3c_data_structures */
 
 #if defined(__cplusplus)

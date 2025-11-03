@@ -23,13 +23,13 @@
 #include "ethosu_log.h"
 
 #if defined(ETHOSU55)
-    #include "ethosu_config_u55.h"
+#include "ethosu_config_u55.h"
 #elif defined(ETHOSU65)
-    #include "ethosu_config_u65.h"
+#include "ethosu_config_u65.h"
 #elif defined(ETHOSU85)
-    #include "ethosu_config_u85.h"
+#include "ethosu_config_u85.h"
 #else
-    #error Missing device type macro
+#error Missing device type macro
 #endif
 
 #include <assert.h>
@@ -131,10 +131,10 @@ static struct ethosu_driver *registered_drivers = NULL;
  */
 void __attribute__((weak)) ethosu_flush_dcache(uint32_t *p, size_t bytes)
 {
-    if (p)
-        SCB_CleanDCache_by_Addr(p, bytes);
-    else
-        SCB_CleanDCache();
+  if (p)
+    SCB_CleanDCache_by_Addr(p, bytes);
+  else
+    SCB_CleanDCache();
 }
 
 /*
@@ -144,10 +144,10 @@ void __attribute__((weak)) ethosu_flush_dcache(uint32_t *p, size_t bytes)
 void __attribute__((weak)) ethosu_invalidate_dcache(uint32_t *p, size_t bytes)
 {
 
-    if (p)
-        SCB_InvalidateDCache_by_Addr(p, bytes);
-    else
-        SCB_InvalidateDCache();
+  if (p)
+    SCB_InvalidateDCache_by_Addr(p, bytes);
+  else
+    SCB_InvalidateDCache();
 }
 
 /******************************************************************************
@@ -466,7 +466,11 @@ void ethosu_deinit(struct ethosu_driver *drv)
 {
     ethosu_deregister_driver(drv);
     ethosu_semaphore_destroy(drv->semaphore);
+    ethosu_semaphore_destroy(ethosu_semaphore);
+    ethosu_mutex_destroy(ethosu_mutex);
     ethosu_dev_deinit(drv->dev);
+    ethosu_semaphore = NULL;
+    ethosu_mutex = NULL;
     drv->dev = NULL;
 }
 
@@ -551,7 +555,7 @@ int ethosu_wait(struct ethosu_driver *drv, bool block)
             ret = 1;
             break;
         }
-    // fall through
+        // fall through
     case ETHOSU_JOB_DONE:
         // Wait for interrupt in blocking mode. In non-blocking mode
         // the interrupt has already triggered
@@ -604,7 +608,7 @@ int ethosu_wait(struct ethosu_driver *drv, bool block)
                 for (int i = 0; i < drv->job.num_base_addr; i++)
                 {
                     if ((uint32_t *)(uintptr_t)drv->job.base_addr[i] != NULL)
-                        ethosu_invalidate_dcache((uint32_t *)(uintptr_t)drv->job.base_addr[i], drv->job.base_addr_size[i]);
+                      ethosu_invalidate_dcache((uint32_t *)(uintptr_t)drv->job.base_addr[i], drv->job.base_addr_size[i]);
                 }
             }
             else
@@ -743,7 +747,7 @@ int ethosu_invoke_v3(struct ethosu_driver *drv,
                      void *user_arg)
 {
     if (ethosu_invoke_async(
-                drv, custom_data_ptr, custom_data_size, base_addr, base_addr_size, num_base_addr, user_arg) < 0)
+            drv, custom_data_ptr, custom_data_size, base_addr, base_addr_size, num_base_addr, user_arg) < 0)
     {
         return -1;
     }

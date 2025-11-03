@@ -46,7 +46,6 @@
   @param[in]     pSrc       points to the Q15 input vector
   @param[out]    pDst       points to the floating-point output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Details
                    The equation used for the conversion process is:
@@ -56,147 +55,147 @@
  */
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_q15_to_float(
-    const q15_t * pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q15_to_float(
+  const q15_t * pSrc,
+  float32_t * pDst,
+  uint32_t blockSize)
 {
-    uint32_t blkCnt;
+  uint32_t blkCnt;
 
-    q15x8_t vecDst;
-    q15_t const *pSrcVec;
+  q15x8_t vecDst;
+  q15_t const *pSrcVec;
 
-    pSrcVec = (q15_t const *) pSrc;
-    blkCnt = blockSize >> 2;
-    while (blkCnt > 0U)
-    {
-        /* C = (float32_t) A / 32768 */
-        /* convert from q15 to float and then store the results in the destination buffer */
-        vecDst = vldrhq_s32(pSrcVec);
-        pSrcVec += 4;
-        vstrwq(pDst, vcvtq_n_f32_s32((int32x4_t)vecDst, 15));
-        pDst += 4;
-        /*
-         * Decrement the blockSize loop counter
-         */
-        blkCnt--;
-    }
+  pSrcVec = (q15_t const *) pSrc;
+  blkCnt = blockSize >> 2;
+  while (blkCnt > 0U)
+  {
+      /* C = (float32_t) A / 32768 */
+      /* convert from q15 to float and then store the results in the destination buffer */
+      vecDst = vldrhq_s32(pSrcVec);
+      pSrcVec += 4;
+      vstrwq(pDst, vcvtq_n_f32_s32((int32x4_t)vecDst, 15));
+      pDst += 4;
+      /*
+       * Decrement the blockSize loop counter
+       */
+      blkCnt--;
+  }
 
-    blkCnt = blockSize & 3;
-    while (blkCnt > 0U)
-    {
-        /* C = (float32_t) A / 32768 */
+  blkCnt = blockSize & 3;
+  while (blkCnt > 0U)
+  {
+    /* C = (float32_t) A / 32768 */
 
-        /* Convert from q15 to float and store result in destination buffer */
-        *pDst++ = ((float32_t) * pSrcVec++ / 32768.0f);
+    /* Convert from q15 to float and store result in destination buffer */
+    *pDst++ = ((float32_t) *pSrcVec++ / 32768.0f);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 }
 #else
 #if defined(ARM_MATH_NEON_EXPERIMENTAL)
-void arm_q15_to_float(
-    const q15_t * pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q15_to_float(
+  const q15_t * pSrc,
+  float32_t * pDst,
+  uint32_t blockSize)
 {
-    const q15_t *pIn = pSrc;                             /* Src pointer */
-    uint32_t blkCnt;                               /* loop counter */
+  const q15_t *pIn = pSrc;                             /* Src pointer */
+  uint32_t blkCnt;                               /* loop counter */
 
-    int16x8_t inV;
-    int32x4_t inV0, inV1;
-    float32x4_t outV;
+  int16x8_t inV;
+  int32x4_t inV0, inV1;
+  float32x4_t outV;
 
-    blkCnt = blockSize >> 3U;
+  blkCnt = blockSize >> 3U;
 
-    /* Compute 8 outputs at a time.
-     ** a second loop below computes the remaining 1 to 7 samples. */
-    while (blkCnt > 0U)
-    {
-        /* C = (float32_t) A / 32768 */
-        /* convert from q15 to float and then store the results in the destination buffer */
-        inV = vld1q_s16(pIn);
-        pIn += 8;
+  /* Compute 8 outputs at a time.
+   ** a second loop below computes the remaining 1 to 7 samples. */
+  while (blkCnt > 0U)
+  {
+    /* C = (float32_t) A / 32768 */
+    /* convert from q15 to float and then store the results in the destination buffer */
+    inV = vld1q_s16(pIn);
+    pIn += 8;
 
-        inV0 = vmovl_s16(vget_low_s16(inV));
-        inV1 = vmovl_s16(vget_high_s16(inV));
+    inV0 = vmovl_s16(vget_low_s16(inV));
+    inV1 = vmovl_s16(vget_high_s16(inV));
 
-        outV = vcvtq_n_f32_s32(inV0, 15);
-        vst1q_f32(pDst, outV);
-        pDst += 4;
+    outV = vcvtq_n_f32_s32(inV0,15);
+    vst1q_f32(pDst, outV);
+    pDst += 4;
 
-        outV = vcvtq_n_f32_s32(inV1, 15);
-        vst1q_f32(pDst, outV);
-        pDst += 4;
+    outV = vcvtq_n_f32_s32(inV1,15);
+    vst1q_f32(pDst, outV);
+    pDst += 4;
 
-        /* Decrement the loop counter */
-        blkCnt--;
-    }
+    /* Decrement the loop counter */
+    blkCnt--;
+  }
 
-    /* If the blockSize is not a multiple of 8, compute any remaining output samples here.
-     ** No loop unrolling is used. */
-    blkCnt = blockSize & 7;
+  /* If the blockSize is not a multiple of 8, compute any remaining output samples here.
+   ** No loop unrolling is used. */
+  blkCnt = blockSize & 7;
 
 
-    while (blkCnt > 0U)
-    {
-        /* C = (float32_t) A / 32768 */
-        /* convert from q15 to float and then store the results in the destination buffer */
-        *pDst++ = ((float32_t) * pIn++ / 32768.0f);
+  while (blkCnt > 0U)
+  {
+    /* C = (float32_t) A / 32768 */
+    /* convert from q15 to float and then store the results in the destination buffer */
+    *pDst++ = ((float32_t) * pIn++ / 32768.0f);
 
-        /* Decrement the loop counter */
-        blkCnt--;
-    }
+    /* Decrement the loop counter */
+    blkCnt--;
+  }
 }
 #else
-void arm_q15_to_float(
-    const q15_t * pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q15_to_float(
+  const q15_t * pSrc,
+        float32_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    const q15_t *pIn = pSrc;                             /* Source pointer */
+        uint32_t blkCnt;                               /* Loop counter */
+  const q15_t *pIn = pSrc;                             /* Source pointer */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = (float32_t) A / 32768 */
+  while (blkCnt > 0U)
+  {
+    /* C = (float32_t) A / 32768 */
 
-        /* Convert from q15 to float and store result in destination buffer */
-        *pDst++ = ((float32_t) * pIn++ / 32768.0f);
-        *pDst++ = ((float32_t) * pIn++ / 32768.0f);
-        *pDst++ = ((float32_t) * pIn++ / 32768.0f);
-        *pDst++ = ((float32_t) * pIn++ / 32768.0f);
+    /* Convert from q15 to float and store result in destination buffer */
+    *pDst++ = ((float32_t) * pIn++ / 32768.0f);
+    *pDst++ = ((float32_t) * pIn++ / 32768.0f);
+    *pDst++ = ((float32_t) * pIn++ / 32768.0f);
+    *pDst++ = ((float32_t) * pIn++ / 32768.0f);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = (float32_t) A / 32768 */
+  while (blkCnt > 0U)
+  {
+    /* C = (float32_t) A / 32768 */
 
-        /* Convert from q15 to float and store result in destination buffer */
-        *pDst++ = ((float32_t) * pIn++ / 32768.0f);
+    /* Convert from q15 to float and store result in destination buffer */
+    *pDst++ = ((float32_t) *pIn++ / 32768.0f);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* #if defined(ARM_MATH_NEON) */

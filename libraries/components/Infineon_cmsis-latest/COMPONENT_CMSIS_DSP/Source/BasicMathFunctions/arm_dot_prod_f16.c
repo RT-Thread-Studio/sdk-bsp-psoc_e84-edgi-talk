@@ -44,7 +44,6 @@
   @param[in]     pSrcB      points to the second input vector.
   @param[in]     blockSize  number of samples in each vector.
   @param[out]    result     output result returned here.
-  @return        none
  */
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
@@ -52,16 +51,16 @@
 #include "arm_helium_utils.h"
 
 
-void arm_dot_prod_f16(
-    const float16_t *pSrcA,
-    const float16_t *pSrcB,
+ARM_DSP_ATTRIBUTE void arm_dot_prod_f16(
+    const float16_t * pSrcA,
+    const float16_t * pSrcB,
     uint32_t    blockSize,
-    float16_t *result)
+    float16_t * result)
 {
     f16x8_t vecA, vecB;
     f16x8_t vecSum;
-    uint32_t blkCnt;
-    float16_t sum = 0.0f;
+    uint32_t blkCnt; 
+    float16_t sum = 0.0f;  
     vecSum = vdupq_n_f16(0.0f);
 
     /* Compute 4 outputs at a time */
@@ -75,7 +74,7 @@ void arm_dot_prod_f16(
          */
         vecA = vld1q(pSrcA);
         pSrcA += 8;
-
+        
         vecB = vld1q(pSrcB);
         pSrcB += 8;
 
@@ -107,63 +106,63 @@ void arm_dot_prod_f16(
 
 #else
 #if defined(ARM_FLOAT16_SUPPORTED)
-void arm_dot_prod_f16(
-    const float16_t *pSrcA,
-    const float16_t *pSrcB,
-    uint32_t blockSize,
-    float16_t *result)
+ARM_DSP_ATTRIBUTE void arm_dot_prod_f16(
+  const float16_t * pSrcA,
+  const float16_t * pSrcB,
+        uint32_t blockSize,
+        float16_t * result)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    _Float16 sum = 0.0f;                          /* Temporary return variable */
+        uint32_t blkCnt;                               /* Loop counter */
+        _Float16 sum = 0.0f;                          /* Temporary return variable */
 
 
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    /* First part of the processing with loop unrolling. Compute 4 outputs at a time.
-     ** a second loop below computes the remaining 1 to 3 samples. */
-    while (blkCnt > 0U)
-    {
-        /* C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1] */
+  /* First part of the processing with loop unrolling. Compute 4 outputs at a time.
+   ** a second loop below computes the remaining 1 to 3 samples. */
+  while (blkCnt > 0U)
+  {
+    /* C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1] */
 
-        /* Calculate dot product and store result in a temporary buffer. */
-        sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
+    /* Calculate dot product and store result in a temporary buffer. */
+    sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
 
-        sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
+    sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
 
-        sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
+    sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
 
-        sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
+    sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1] */
+  while (blkCnt > 0U)
+  {
+    /* C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1] */
 
-        /* Calculate dot product and store result in a temporary buffer. */
-        sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
+    /* Calculate dot product and store result in a temporary buffer. */
+    sum += (_Float16)(*pSrcA++) * (_Float16)(*pSrcB++);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Store result in destination buffer */
-    *result = sum;
+  /* Store result in destination buffer */
+  *result = sum;
 }
 #endif
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

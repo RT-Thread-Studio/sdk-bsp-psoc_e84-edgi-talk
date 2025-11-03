@@ -1,13 +1,13 @@
 /***************************************************************************//**
 * \file ifx_se_crc32.c
-* \version 1.1.0
+* \version 1.2.0
 *
 * \brief
 * Fast high-distance 32-bit CRC for data integrity protection.
 *
 ********************************************************************************
 * \copyright
-* Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+* Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
 * All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
@@ -40,7 +40,7 @@ uint32_t ifx_se_crc32d6a(size_t n, uint8_t const *Q, uint32_t init)
 
     ifx_se_crc32d6_open(&P, init);
 
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < n; ++i) 
     {
         ifx_se_crc32d6a_update(&P, Q[i]);
     }
@@ -66,7 +66,7 @@ uint32_t ifx_se_crc32d6b(size_t n, uint16_t const *Q, uint32_t init)
 
     ifx_se_crc32d6_open(&P, init);
 
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < n; ++i) 
     {
         ifx_se_crc32d6b_update(&P, Q[i]);
     }

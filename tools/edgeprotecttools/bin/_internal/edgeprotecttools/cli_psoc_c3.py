@@ -14,23 +14,129 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+import json
 import logging
 import os
 import sys
 
 import click
 
+from .core.connect_helper import ConnectHelper
 from .cli import main, process_handler
-from . import cli_mxs40sv2
 
 logger = logging.getLogger(__name__)
 
 
-cmd_init = cli_mxs40sv2.cmd_init
-"""The 'init' command. Initializes a new project"""
+@main.command('device-info',
+              help='Reads device information - silicon ID, family ID, silicon '
+                   'revision',
+              short_help='Reads device information - silicon ID, family ID, '
+                         'silicon revision')
+@click.option('--probe-id', default=None, help='Probe serial number')
+@click.pass_context
+def cmd_device_info(ctx, probe_id):
+    @process_handler()
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        status = True
+        ConnectHelper.do_not_disconnect = True
+        dev_info = ctx.obj['TOOL'].get_device_info(probe_id)
+        ConnectHelper.do_not_disconnect = False
+        lifecycle = ctx.obj['TOOL'].get_device_lifecycle(probe_id)
 
-cmd_load_and_run_app = cli_mxs40sv2.cmd_load_and_run_app
-"""The 'load-and-run-app' command. Loads and runs RAM application"""
+        logger.info('*' * 39)
+        if dev_info:
+            logger.info(
+                'Silicon: 0x%x, Family: 0x%0x, Rev.: 0x%0x',
+                dev_info.silicon_id, dev_info.family_id, dev_info.silicon_rev)
+        else:
+            logger.error('Failed to read Silicon ID, Family, Rev.')
+            status = False
+
+        if lifecycle:
+            logger.info('Chip lifecycle stage: %s', lifecycle)
+        else:
+            logger.error('Failed to read chip lifecycle stage')
+            status = False
+
+        return status
+
+    return process
+
+
+@main.command('read-die-id', help='Reads die ID from device')
+@click.option('-o', '--out-file', default=None,
+              help='Filename where to save die ID')
+@click.option('--probe-id', default=None,
+              help='Probe serial number')
+@click.pass_context
+def cmd_read_die_id(ctx, out_file, probe_id):
+    @process_handler()
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        data = ctx.obj['TOOL'].read_die_id(probe_id)
+        if data:
+            logger.info('die_id = %s', json.dumps(data, indent=4))
+            if out_file:
+                with open(out_file, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=4)
+            return True
+        return False
+
+    return process
+
+
+@main.command('version', short_help='Show BootROM version')
+@click.option('--probe-id', 'probe_id', type=click.STRING, default=None,
+              help='Probe serial number')
+@click.option('--testapps', is_flag=True, hidden=True)
+@click.option('--testapps-si', is_flag=True, hidden=True)
+@click.pass_context
+def cmd_version(ctx, probe_id, testapps, testapps_si):
+    @process_handler()
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        validate_testapps_args(testapps, testapps_si)
+        ctx.obj['TOOL'].print_version(
+            probe_id, testapps=test_pkg_type(testapps, testapps_si))
+        return True
+
+    return process
+
+
+@main.command('init', help='Initializes new project')
+@click.option('--testapps', is_flag=True, hidden=True)
+@click.option('--testapps-si', is_flag=True, hidden=True)
+@click.pass_context
+def cmd_init(ctx, testapps, testapps_si):
+    @process_handler()
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        validate_testapps_args(testapps, testapps_si)
+        ctx.obj['TOOL'].init(testapps=test_pkg_type(testapps, testapps_si))
+        return True
+
+    return process
+
+
+@main.command('load-and-run-app', hidden=True,
+              help='Loads and runs RAM application')
+@click.option('-c', '--config', type=click.Path(), required=True,
+              help='Path to the application configuration file')
+@click.option('--probe-id', default=None, help='Probe serial number')
+@click.pass_context
+def cmd_load_and_run_app(ctx, config, probe_id):
+    @process_handler(None)
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        return ctx.obj['TOOL'].load_and_run_app(config, probe_id)
+
+    return process
 
 
 @main.command('integrity-cert', hidden=True,
@@ -383,7 +489,7 @@ def cmd_debug_token(ctx, template, key, output):
 @main.command('transit-to-rma', help='Transition device to RMA lifecycle stage')
 @click.option('-c', '--cert', '--token', 'cert', type=click.Path(),
               required=True, help='Token for transition into RMA LCS')
-@click.option('--key', '--key-path', type=click.Path(), required=True,
+@click.option('--key', '--key-path', type=click.Path(),
               help='OEM private key used to sign the DLM package')
 @click.option('--probe-id', default=None, help='Probe serial number')
 @click.option('--testapps', is_flag=True, hidden=True)
@@ -409,10 +515,19 @@ def cmd_convert_to_rma(ctx, cert, key, probe_id, testapps, testapps_si):
     return process
 
 
-test_pkg_type = cli_mxs40sv2.test_pkg_type
-"""Gets test package type based on a specified testapps flag"""
+def test_pkg_type(testapps=False, testapps_si=False):
+    """ Gets test package type based on a specified testapps flag """
+    if testapps:
+        return 'testapps'
+    if testapps_si:
+        return 'testapps_si'
+    return None
 
 
-validate_testapps_args = cli_mxs40sv2.validate_testapps_args
-"""Validates testapps options"""
+def validate_testapps_args(testapps, testapps_si):
+    """ Validates testapps options """
+    if testapps and testapps_si:
+        sys.stderr.write("The '--testapps' and '--testapps-si' options "
+                         "are mutually exclusive.")
+        sys.exit(2)
 

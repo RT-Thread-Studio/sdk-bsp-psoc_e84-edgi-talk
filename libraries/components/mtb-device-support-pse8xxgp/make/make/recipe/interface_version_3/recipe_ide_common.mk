@@ -87,12 +87,8 @@ _MTB_RECIPE__ECLIPSE_PRJ_PROG_FILE:=$${cy_prj_path}/$(_MTB_RECIPE__IDE_BUILD_PAT
 _MTB_RECIPE__ECLIPSE_APP_PROG_FILE:=$${cy_prj_path}/../$(_MTB_RECIPE__IDE_COMBINED_HEX_RELATIVE)
 
 # JLink path
-ifneq (,$(MTB_JLINK_DIR))
 ifneq (,$(MTB_CORE__JLINK_GDB_EXE))
 _MTB_RECIPE__ECLIPSE_JLINK_EXE:=$(MTB_CORE__JLINK_GDB_EXE)
-else
-_MTB_RECIPE__ECLIPSE_JLINK_EXE:=$${jlink_path}/$${jlink_gdbserver}
-endif
 else
 _MTB_RECIPE__ECLIPSE_JLINK_EXE:=$${jlink_path}/$${jlink_gdbserver}
 endif

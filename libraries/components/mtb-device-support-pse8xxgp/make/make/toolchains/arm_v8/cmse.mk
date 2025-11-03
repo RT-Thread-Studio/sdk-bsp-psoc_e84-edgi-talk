@@ -1,4 +1,4 @@
-############################################################################### 
+###############################################################################
 # \file cmse.mk
 #
 # \brief
@@ -27,8 +27,16 @@ ifeq ($(WHICHFILE),true)
 $(info Processing $(lastword $(MAKEFILE_LIST)))
 endif
 
-ifneq ($(filter SECURE,$(VCORE_ATTRS)),)
 ifneq ($(NSC_VENEER),)
+clean_proj: _print_clean_nsc_veneer
+
+_print_clean_nsc_veneer:
+	$(info )
+	$(info NOTE: This secure project uses a non-secure callable veneer object file: $(NSC_VENEER).)
+	$(info This file is not automatically cleaned by the 'make clean'. It is recommended that you save this file into version control.)
+	$(info )
+
+ifneq ($(filter SECURE,$(VCORE_ATTRS)),)
 # The veneer files need to be copy back from the temp file back into the none temp version.
 # The linker generate an error if the input veneer file is the same as output veneer.
 # Generate a temp veneer and replace the original as a post build step.
@@ -36,7 +44,10 @@ _mtb_cmse_post_build_copy:| $(_MTB_RECIPE__TARG_FILE)
 	$(MTB__NOISE)[ ! -f $(NSC_VENEER).tmp ] || cmp -s $(NSC_VENEER).tmp $(NSC_VENEER) || mv -f $(NSC_VENEER).tmp $(NSC_VENEER);\
 	rm -f $(NSC_VENEER).tmp
 
+ifeq (,$(filter ide_postbuild,$(MAKECMDGOALS)))
+# If running ide_postbuild, don't create veneers. Both UV and EW have GUI settings for trustzone veneer, it managed by the IDE.
 recipe_postbuild:_mtb_cmse_post_build_copy
+endif
 
 _RECIPE__VENEER_DIR:=$(dir $(NSC_VENEER))
 
@@ -49,14 +60,12 @@ endif
 .PHONY:_mtb_cmse_post_build_copy
 
 CY_IGNORE+=$(NSC_VENEER)
-endif
-endif
+endif #ifneq ($(filter SECURE,$(VCORE_ATTRS)),)
 
 ifneq ($(filter NON_SECURE,$(VCORE_ATTRS)),)
-ifneq ($(NSC_VENEER),)
 MTB_RECIPE__LIBS+=$(NSC_VENEER)
 endif
-endif
+endif #ifneq ($(NSC_VENEER),)
 
 ################################################################################
 # Vulnerabilities check

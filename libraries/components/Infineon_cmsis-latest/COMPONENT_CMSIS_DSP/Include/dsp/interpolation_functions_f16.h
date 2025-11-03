@@ -23,9 +23,9 @@
  * limitations under the License.
  */
 
-
-#ifndef _INTERPOLATION_FUNCTIONS_F16_H_
-#define _INTERPOLATION_FUNCTIONS_F16_H_
+ 
+#ifndef INTERPOLATION_FUNCTIONS_F16_H_
+#define INTERPOLATION_FUNCTIONS_F16_H_
 
 #include "arm_math_types_f16.h"
 #include "arm_math_memory.h"
@@ -40,6 +40,9 @@ extern "C"
 
 #if defined(ARM_FLOAT16_SUPPORTED)
 
+/**
+ * @brief Instance structure for the half floating-point Linear Interpolate function.
+ */
 typedef struct
 {
     uint32_t  nValues;        /**< nValues */
@@ -58,47 +61,46 @@ typedef struct
     const float16_t *pData; /**< points to the data table. */
 } arm_bilinear_interp_instance_f16;
 
-/**
- * @addtogroup LinearInterpolate
- * @{
- */
+  /**
+   * @addtogroup LinearInterpolate
+   * @{
+   */
 
-/**
-* @brief  Process function for the floating-point Linear Interpolation Function.
-* @param[in,out] S  is an instance of the floating-point Linear Interpolation structure
-* @param[in]     x  input sample to process
-* @return y processed output sample.
-*
-*/
-float16_t arm_linear_interp_f16(
-    arm_linear_interp_instance_f16 * S,
-    float16_t x);
+    /**
+   * @brief  Process function for the floating-point Linear Interpolation Function.
+   * @param[in,out] S  is an instance of the floating-point Linear Interpolation structure
+   * @param[in]     x  input sample to process
+   * @return y processed output sample.
+   */
+  float16_t arm_linear_interp_f16(
+  const arm_linear_interp_instance_f16 * S,
+  float16_t x);
 
-/**
-* @} end of LinearInterpolate group
-*/
+    /**
+   * @} end of LinearInterpolate group
+   */
 
 /**
    * @addtogroup BilinearInterpolate
    * @{
    */
 
-/**
-* @brief  Floating-point bilinear interpolation.
-* @param[in,out] S  points to an instance of the interpolation structure.
-* @param[in]     X  interpolation coordinate.
-* @param[in]     Y  interpolation coordinate.
-* @return out interpolated value.
-*/
-float16_t arm_bilinear_interp_f16(
-    const arm_bilinear_interp_instance_f16 * S,
-    float16_t X,
-    float16_t Y);
+  /**
+  * @brief  Floating-point bilinear interpolation.
+  * @param[in,out] S  points to an instance of the interpolation structure.
+  * @param[in]     X  interpolation coordinate.
+  * @param[in]     Y  interpolation coordinate.
+  * @return out interpolated value.
+  */
+  float16_t arm_bilinear_interp_f16(
+  const arm_bilinear_interp_instance_f16 * S,
+  float16_t X,
+  float16_t Y);
 
 
-/**
- * @} end of BilinearInterpolate group
- */
+  /**
+   * @} end of BilinearInterpolate group
+   */
 #endif /*defined(ARM_FLOAT16_SUPPORTED)*/
 #ifdef   __cplusplus
 }

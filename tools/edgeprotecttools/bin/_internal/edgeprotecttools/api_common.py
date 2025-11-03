@@ -25,6 +25,7 @@ import sys
 from cryptography.hazmat.primitives.asymmetric import ec, rsa, x25519
 from intelhex import IntelHex, HexRecordError
 
+from .core.certificate_strategy import CertAdapterV1
 from .core.connect_helper import ConnectHelper
 from .core.cose import Cose
 from .core.deprecated import deprecated
@@ -36,7 +37,9 @@ from .core.ocd_settings import OcdSettings
 from .core.project_base import ProjectInitializerBase
 from .core.logging_configurator import LoggingConfigurator
 from .core.signtool_base import SignToolBase
-from .core.strategy_context import ProvisioningPacketCtx, ProvisioningContext
+from .core.strategy_context import (
+    ProvisioningPacketCtx, ProvisioningContext, CertificateContext
+)
 from .core.enums import (
     ValidationStatus, ProvisioningStatus, KeyAlgorithm, KeyPair
 )
@@ -47,12 +50,17 @@ from .execute.combine_sign_tool import (CommandJsonValidator,
                                         CommandGroupParser)
 from .execute.ihex2hcd import hex2hcd
 from .execute.image_signing import MergeTool, SplitTool, SignTool, MultiImage
-from .execute.keygens import ec_keygen, rsa_keygen, aes_keygen, x25519_keygen
+from .execute.keygens import (ec_keygen, rsa_keygen, aes_keygen,
+                              x25519_keygen, lms_keygen)
+from .execute.programmer.dfuht_wrapper import Dfuht
 from .execute.programmer.programmer import ProgrammingTool
 from .execute.encryption import EncryptorAES, XipEncryptor
 from .execute.cbor_parser import CborParser
 from .execute import dump
 from .execute.x509 import X509CertificateGenerator
+from .execute.combine_sign_tool.symbol_adapter import SymbolAdapter
+from .execute.combine_sign_tool.symbol_file_finder import SymbolFileFinder
+from .execute.hex_relocator import HexRelocator
 from .pkg_globals import PkgData
 from .targets import get_target_builder, print_targets, is_mxs40v1, is_mxs40sv2
 
@@ -155,8 +163,121 @@ class CommonAPI:
                          'for the selected target')
             return False
 
-    def run_config(self, infile, variable):
-        """Executes commands specified in JSON file"""
+    def create_cert(self, output, **kwargs):
+        """Creates certificate from JSON template
+        @param output: Path where to save the created CBOR certificate
+        @param kwargs:
+            :template: Certificate template path
+            :csr: Path where to save the certificate
+            :key_path: Private key path to sign certificate
+            :json_cert: Path where to save JSON certificate
+        @return: Certificate object
+        """
+        if not self.target or not self.target.certificate_strategy:
+            logger.error('Creating certificates is not supported '
+                         'for the selected target')
+            return False
+
+        context = CertificateContext(self.target.certificate_strategy)
+        return context.create_certificate(output, None, None, dev_cert='cert',
+                                          **kwargs)
+
+    def oem_csr(self, output, key_path, **kwargs):
+        """Creates certificate signing request
+        @param output: Path where to save the created OEM CSR
+        @param key_path: The key path tuple with the private key_0, key_1 paths
+        @param kwargs:
+            :certificate_name: The name of the certificate
+            :oem: The OEM name
+            :project: The OEM project name
+            :project_number: The OEM project number
+            :issuer: The issuer name
+            :signer_id: Signer unique ID
+            :pub_key_0: Public key 0 path or HEX value
+            :pub_key_1: Public key 1 path or HEX value
+            :date: The date of the OEM certificate creation (auto-generated if not provided)
+            :cert_type: Defines the "LCS" of the project development or production
+            :cert_id: A unique S/N for this certificate (b0 applicable)
+            :rev: Device revision value
+            :algorithm: Key algorithm. Applicable values: ES256, ES384, ES512
+            :use_adapter: Use the certificate adapter to convert CLI arguments to dictionary
+        @return CSR object
+        """
+        if not self.target or not self.target.certificate_strategy:
+            logger.error('Creating certificates is not supported '
+                         'for the selected target')
+            return False
+
+        template = None
+        if kwargs.get('use_adapter'):
+            create = CertAdapterV1()
+            template = create.oem_csr(key_path=key_path, **kwargs)
+        context = CertificateContext(self.target.certificate_strategy)
+        return context.create_csr(output, key_path, template=template, **kwargs)
+
+    def ifx_oem_cert(self, output, **kwargs):
+        """Creates certificate
+        @param output: Path where to save the created IFX OEM certificate
+        @param kwargs:
+            :certificate_name: The name of the certificate
+            :csr: Path where to save the certificate
+            :issuer: The issuer name
+            :signer_id: Signer unique ID
+            :date: The date of the OEM certificate creation
+            (auto-generated if not provided)
+            :cert_id: A unique S/N for this certificate
+            :rev: Device revision value
+            :algorithm: Key algorithm. Applicable values: ES256, ES384, ES512
+            :key_path: Private key path to sign certificate
+            :signer_id: Signer unique ID
+            :use_adapter: Use the certificate adapter to convert CLI arguments to dictionary
+        @return: Certificate object
+        """
+        if not self.target or not self.target.certificate_strategy:
+            logger.error('Creating certificates is not supported '
+                         'for the selected target')
+            return False
+
+        template = None
+        if kwargs.get('use_adapter'):
+            create = CertAdapterV1()
+            template = create.oem_cert(**kwargs)
+        context = CertificateContext(self.target.certificate_strategy)
+        return context.create_certificate(output, None, None, dev_cert='oem',
+                                          template=template, **kwargs)
+
+    def run_config(self, infile, variable=None, symbol=None, symbol_search=None):
+        """
+        Executes commands specified in a JSON file with variable
+        interpolation.
+
+        Parameters:
+            infile (str): Path to the JSON file containing commands.
+            variable (tuple, optional): Tuple of (name, value) pairs
+                for variable interpolation.
+            symbol (str, list, optional): Path(s) to symbol file(s)
+                providing additional variables for interpolation.
+            symbol_search (str, list, optional): Path(s) to a directory
+                to search for symbol files.
+
+        Variable sources (variable, symbol, symbol_search) are merged for
+        interpolation. Variable names must be unique across all sources;
+        duplicates will raise an error.
+
+        Returns:
+            bool: True if all commands executed successfully, False
+                otherwise.
+        """
+        if variable is None:
+            variable = ()
+
+        symbols = []
+        symbols.extend(SymbolFileFinder.discover_symbol_files(symbol))
+        symbols.extend(SymbolFileFinder.discover_symbol_files(symbol_search))
+        if symbols:
+            adapted = SymbolAdapter.adapt(symbols)
+            variable = SymbolAdapter.merge(variable, adapted)
+
         command_group_parser = CommandGroupParser(infile)
         json_validator = CommandJsonValidator(command_group_parser)
 
@@ -482,6 +603,54 @@ class CommonAPI:
             logger.info("Created a key '%s'", os.path.abspath(keys.public))
         return True
 
+    def create_keys_lms(self, lms_type, lmots_type, output):
+        """Creates LMS key pair
+        @param lms_type: LMS key type
+        @param lmots_type: LM-OTS key type
+        @param output: Tuple or list with private and public key paths"""
+        if not isinstance(output, (tuple, list)):
+            raise ValueError('Incorrect output path data format')
+        if len(output) != 2:
+            raise ValueError('No path for private or public keys')
+
+        keys_exist = False
+        for key_path in output:
+            keys_exist = os.path.isfile(key_path)
+            if keys_exist:
+                logger.warning("Key already exists '%s'",
+                               os.path.abspath(key_path))
+        if keys_exist and (not self.skip_prompts):
+            answer = input('Overwrite ? (y/n): ')
+            if answer.lower() != 'y':
+                logger.info('Terminated by user')
+                return True
+
+        private_path, public_path = output
+
+        if private_path == public_path:
+            raise ValueError('Same path for private and public keys')
+
+        try:
+            private, public = lms_keygen.generate_key(lms_type, lmots_type)
+        except ValueError as e:
+            raise ValueError(f'Failed to create LMS key: {e}') from e
+
+        if private and public:
+            try:
+                lms_keygen.save_key(private, private_path)
+                lms_keygen.save_key(public, public_path)
+            except (ValueError, OSError) as e:
+                raise ValueError(f"Unable to save keys: {e}") from e
+
+            logger.info("Created an LMS private key '%s'",
+                        os.path.abspath(private_path))
+            logger.info("Created an LMS public key '%s'",
+                        os.path.abspath(public_path))
+        else:
+            raise ValueError('Missing data for key generation')
+
+        return True
+
     @staticmethod
     def convert_key(key, enc_fmt, **kwargs):
         """Converts key to other formats
@@ -507,7 +676,9 @@ class CommonAPI:
                     ec.EllipticCurvePrivateKey, ec.EllipticCurvePublicKey,
                     rsa.RSAPrivateKey, rsa.RSAPublicKey,
                     x25519.X25519PrivateKey, x25519.X25519PublicKey)):
-                result = emit_c(key, key_format, password=password, var_name=var_name)
+                result = emit_c(
+                    key, key_format, password=password, var_name=var_name
+                )
             else:
                 raise ValueError('The expected key types are: '
                                  'RSA, ECDSA, or X25519')
@@ -766,6 +937,20 @@ class CommonAPI:
         return False
 
     @staticmethod
+    def hex_relocate(input_file, output_file, regions):
+        """
+        Relocate segments in a hex file to new address regions.
+        :param input_file: Path to input HEX file.
+        :param output_file: Path to output HEX file.
+        :param regions: List of (start, size, dest) tuples.
+        :return: Value returned by relocate_file (usually None).
+        """
+        result = HexRelocator.relocate_file(input_file, output_file, regions)
+        if result:
+            logger.info("Saved file to '%s'", output_file)
+        return result
+
+    @staticmethod
     def multi_image_cbor(input_path, output, key, **kwargs):
         """Creates a multi-image COSE packet
         @param input_path: The path to the hex image
@@ -993,6 +1178,23 @@ class CommonAPI:
             cert = self.target.debug_certificate.create(template, key, output,
                                                         sign_cert, **kwargs)
         return cert
+
+    def get_extended_boot_info(self, probe_id=None, ap='sysap', acquire=True):
+        """Get extended boot info
+        @param probe_id: Probe serial number
+        @param ap: The access port used to read the data
+        @param acquire: Enable acquire device
+        @return: Int. data of the extended boot mode and status.
+        """
+        connected = ConnectHelper.connect(self.tool, self.target,
+                                          probe_id=probe_id, ap=ap,
+                                          acquire=acquire)
+        mode = None
+        status = None
+        if connected and not isinstance(self.tool, Dfuht):
+            mode, status = self.target.silicon_data_reader.read_extended_boot_info(self.tool)
+        ConnectHelper.disconnect(self.tool)
+        return mode, status
 
     @staticmethod
     def device_list():

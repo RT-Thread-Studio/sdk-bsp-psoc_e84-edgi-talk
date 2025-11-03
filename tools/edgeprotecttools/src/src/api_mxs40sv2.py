@@ -17,9 +17,13 @@ limitations under the License.
 import os
 import logging
 
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec
+
 from .api_common import CommonAPI
 from .core.enums import KeyAlgorithm, ProvisioningStatus, EntranceExamStatus
 from .core.connect_helper import ConnectHelper
+from .core.key_handlers.ec_handler import ECHandler
 from .core.strategy_context import (ProvisioningContext, ProvisioningPacketCtx,
                                     CertificateContext)
 from .execute.keygens import rsa_keygen, aes_keygen
@@ -258,3 +262,62 @@ class Mxs40sv2API(CommonAPI):
             logger.info('Nonce path: %s',
                         os.path.abspath(nonce_output))
         return result
+
+    @staticmethod
+    def extract_iak(infile, output):
+        """Extracts IAK from the results of prov_oem application"""
+
+        app_completion_status = b'\x01\x00\xa0\xf2'
+        packet_size = 144
+
+        with open(infile, 'rb') as f:
+            data = f.read()
+
+        assert len(data) >= packet_size
+        assert data[0:4] == app_completion_status
+
+        curve = None
+        key_bytes = None
+        key_data = None
+
+        if data[4:8] == b'\x00\x00\x00\x00':
+            logger.info("No IAK found in '%s'", os.path.abspath(infile))
+            return False
+        elif data[4:8] == b'\x0c\x00\x00\xf3':
+            logger.info("AES-256 key found in '%s'", os.path.abspath(infile))
+            key_data = data[8:8+32]
+            curve = None
+        elif data[4:8] == b'\x3a\x00\x00\xc5':
+            logger.info("ECDSA-P256 key found in '%s'", os.path.abspath(infile))
+            key_bytes = data[8:8+65]
+            curve = ec.SECP256R1()
+        elif data[4:8] == b'\x59\x00\x00\xa6':
+            logger.info("ECDSA-P384 key found in '%s'", os.path.abspath(infile))
+            key_bytes = data[8:8+97]
+            curve = ec.SECP384R1()
+        elif data[4:8] == b'\x6f\x00\x00\x90':
+            logger.info("ECDSA-P521 key found in '%s'", os.path.abspath(infile))
+            key_bytes = data[8:8+133]
+            curve = ec.SECP521R1()
+        else:
+            logger.error('Invalid input file format')
+            return False
+
+        if curve:
+            try:
+                public_key = ECHandler.populate_public_key(key_bytes,
+                                                           curve=curve)
+            except ValueError as e:
+                logger.error('Failed to create public key: %s', e)
+                return False
+            key_data = public_key.public_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PublicFormat.SubjectPublicKeyInfo
+            )
+
+        if output:
+            with open(output, 'wb') as f:
+                f.write(key_data)
+            logger.info('Key saved to %s', os.path.abspath(output))
+
+        return True

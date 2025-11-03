@@ -46,7 +46,7 @@
                    - \ref ARM_MATH_SIZE_MISMATCH : Matrix size check failed
  */
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_instance_q7 *pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_instance_q7 *pDst)
 {
 
     uint16x8_t    vecOffs;
@@ -56,8 +56,8 @@ arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_insta
     uint8_t        *pDataDestR;
     uint16x8_t    vecIn;
 
-    const uint8_t    *pDataSrc = (const uint8_t  *)pSrc->pData;
-    uint8_t    *pDataDst = (uint8_t  *)pDst->pData;
+    const uint8_t   * pDataSrc=(const uint8_t  *)pSrc->pData;
+    uint8_t   * pDataDst=(uint8_t  *)pDst->pData;
 
 #ifdef ARM_MATH_MATRIX_CHECK
     /* Check for matrix mismatch condition */
@@ -82,7 +82,7 @@ arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_insta
         {
             /* widened loads */
             vecIn = vldrbq_gather_offset_u16(pDataC, vecOffs);
-            vstrbq_u16(pDataDestR, vecIn);
+            vstrbq_u16(pDataDestR, vecIn);  
             pDataDestR += 8;
             pDataC = pDataC + pSrc->numCols * 8;
             /*
@@ -110,7 +110,7 @@ arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_insta
     return (ARM_MATH_SUCCESS);
 }
 #else
-arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_instance_q7 *pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_instance_q7 *pDst)
 {
     q7_t *pSrcA = pSrc->pData;         /* input data matrix pointer */
     q7_t *pOut = pDst->pData;          /* output data matrix pointer */
@@ -122,19 +122,16 @@ arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_insta
 
 #ifdef ARM_MATH_MATRIX_CHECK
     /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numCols) || (pSrc->numCols != pDst->numRows))
-    {
+    if ((pSrc->numRows != pDst->numCols) || (pSrc->numCols != pDst->numRows)) {
         /* Set status as ARM_MATH_SIZE_MISMATCH */
         status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+    } else
 #endif /*    #ifdef ARM_MATH_MATRIX_CHECK    */
 
     {
         /* Matrix transpose by exchanging the rows with columns */
         /* row loop     */
-        do
-        {
+        do {
             /* The pointer pOut is set to starting address of the column being processed */
             pOut = pDst->pData + i;
 
@@ -142,8 +139,7 @@ arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_insta
             col = nColumns;
 
 
-            while (col > 0U)
-            {
+            while (col > 0U) {
                 /* Read and store the input element in the destination */
                 *pOut = *pSrcA++;
 
@@ -159,8 +155,7 @@ arm_status arm_mat_trans_q7(const arm_matrix_instance_q7 *pSrc, arm_matrix_insta
             /* Decrement the row loop counter */
             row--;
 
-        }
-        while (row > 0U);
+        } while (row > 0U);
 
         /* set status as ARM_MATH_SUCCESS */
         status = ARM_MATH_SUCCESS;

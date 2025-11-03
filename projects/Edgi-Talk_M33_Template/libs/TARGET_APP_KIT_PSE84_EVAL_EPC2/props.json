@@ -1,22 +1,24 @@
 {
     "core": {
-        "version": "0.9.5.46457"
+        "version": "1.1.0.414"
     },
     "opt": {
         "props": {
             "capabilities": [
                 "adc",
-                "bsp_gen4",
+                "audio",
+                "bsp_gen6",
                 "bt",
                 "can",
-                "cat1",
-                "cat1d",
                 "comp",
                 "cyw55513",
+                "cyw55xxx",
                 "dac",
                 "dma",
+                "epc2",
                 "ethernet",
                 "flash_0k",
+                "gfx",
                 "hal",
                 "i2c",
                 "i2s",
@@ -28,8 +30,10 @@
                 "mcu_gp",
                 "memory_qspi",
                 "multi_core",
+                "npu",
                 "opamp",
                 "pdm",
+                "pse8xxgp",
                 "qspi",
                 "rtc",
                 "sdhc",
@@ -38,6 +42,7 @@
                 "spi",
                 "sram_1024k",
                 "std_crypto",
+                "switch",
                 "tdm",
                 "uart",
                 "usb_device",
@@ -45,17 +50,17 @@
                 "wifi"
             ],
             "dependencies": {
-                "bt-fw-ifx-cyw55500a1": "release-v2.2.0",
-                "core-lib": "release-v1.4.200",
-                "core-make": "release-v3.6.100",
-                "mtb-device-support-pse8xxgp": "release-v1.0.200"
+                "bt-fw-ifx-cyw55500a1": "latest-v2.X",
+                "core-lib": "latest-v1.X",
+                "core-make": "latest-v3.X",
+                "mtb-dsl-pse8xxgp": "release-v1.0.0",
+                "se-rt-services-utils": "release-v1.2.0"
             },
-            "docs_dir": "docs",
             "flow_version": "2.0",
-            "min_tools": "3.5.0",
+            "min_tools": "3.6.0",
             "template": {
                 "id": "mtb-template-pse8xxgp",
-                "version": "release-v1.0.200"
+                "version": "release-v1.1.0"
             }
         }
     }

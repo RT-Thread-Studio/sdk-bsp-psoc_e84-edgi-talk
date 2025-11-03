@@ -40,41 +40,38 @@
 /**
   * \brief Master protection context control (MS)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Master 'x' protection context control */
-    __IM uint32_t RESERVED[3];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Master 'x' protection context control */
+   __IM uint32_t RESERVED[3];
 } MS_Type;                                      /*!< Size = 16 (0x10) */
 
 /**
   * \brief Master protection context value (MS_PC)
   */
-typedef struct
-{
-    __IOM uint32_t PC;                            /*!< 0x00000000 Master 'x' protection context value */
-    __IM uint32_t PC_READ_MIR;                   /*!< 0x00000004 Master 'x' protection context value read mirror register */
-    __IM uint32_t RESERVED[2];
+typedef struct {
+  __IOM uint32_t PC;                            /*!< 0x00000000 Master 'x' protection context value */
+   __IM uint32_t PC_READ_MIR;                   /*!< 0x00000004 Master 'x' protection context value read mirror register */
+   __IM uint32_t RESERVED[2];
 } MS_PC_Type;                                   /*!< Size = 16 (0x10) */
 
 /**
   * \brief Master control registers (MS_CTL_2_0)
   */
-typedef struct
-{
-    MS_Type  MS[32];                        /*!< 0x00000000 Master protection context control */
-    __IM uint32_t RESERVED[896];
-    MS_PC_Type MS_PC[32];                   /*!< 0x00001000 Master protection context value */
-    __IM uint32_t RESERVED1[896];
-    __IOM uint32_t CODE_MS0_MSC_ACG_CTL;          /*!< 0x00002000 CODE_MS0 master security Controller & ACG configuration */
-    __IM uint32_t RESERVED2[3];
-    __IOM uint32_t SYS_MS0_MSC_ACG_CTL;           /*!< 0x00002010 SYS_MS0  master security Controller & ACG configuration */
-    __IOM uint32_t SYS_MS1_MSC_ACG_CTL;           /*!< 0x00002014 SYS_MS1  master security Controller & ACG configuration */
-    __IM uint32_t RESERVED3[2];
-    __IOM uint32_t EXP_MS_MSC_ACG_CTL;            /*!< 0x00002020 EXP_MS  master security Controller & ACG configuration */
-    __IM uint32_t RESERVED4[3];
-    __IOM uint32_t DMAC0_MSC_ACG_CTL;             /*!< 0x00002030 DMAC-0  master security Controller & ACG configuration */
-    __IM uint32_t RESERVED5[3];
-    __IOM uint32_t DMAC1_MSC_ACG_CTL;             /*!< 0x00002040 DMAC-1  master security Controller & ACG configuration */
+typedef struct {
+        MS_Type  MS[32];                        /*!< 0x00000000 Master protection context control */
+   __IM uint32_t RESERVED[896];
+        MS_PC_Type MS_PC[32];                   /*!< 0x00001000 Master protection context value */
+   __IM uint32_t RESERVED1[896];
+  __IOM uint32_t CODE_MS0_MSC_ACG_CTL;          /*!< 0x00002000 CODE_MS0 master security Controller & ACG configuration */
+   __IM uint32_t RESERVED2[3];
+  __IOM uint32_t SYS_MS0_MSC_ACG_CTL;           /*!< 0x00002010 SYS_MS0  master security Controller & ACG configuration */
+  __IOM uint32_t SYS_MS1_MSC_ACG_CTL;           /*!< 0x00002014 SYS_MS1  master security Controller & ACG configuration */
+   __IM uint32_t RESERVED3[2];
+  __IOM uint32_t EXP_MS_MSC_ACG_CTL;            /*!< 0x00002020 EXP_MS  master security Controller & ACG configuration */
+   __IM uint32_t RESERVED4[3];
+  __IOM uint32_t DMAC0_MSC_ACG_CTL;             /*!< 0x00002030 DMAC-0  master security Controller & ACG configuration */
+   __IM uint32_t RESERVED5[3];
+  __IOM uint32_t DMAC1_MSC_ACG_CTL;             /*!< 0x00002040 DMAC-1  master security Controller & ACG configuration */
 } MS_CTL_2_0_Type;                              /*!< Size = 8260 (0x2044) */
 
 

@@ -34,7 +34,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"group__group__DMA.html"
+"group__mtb__syspm__group__DMA.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

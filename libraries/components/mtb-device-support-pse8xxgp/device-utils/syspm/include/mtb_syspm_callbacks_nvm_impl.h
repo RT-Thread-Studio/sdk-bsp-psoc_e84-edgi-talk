@@ -27,9 +27,9 @@
 #pragma once
 
 #if defined (CY_IP_MXFLASHC_VERSION_ECT) || defined (CY_IP_MXS40FLASHC)
-    #include "mtb_syspm_callbacks_nvm_flashc.h"
+#include "mtb_syspm_callbacks_nvm_flashc.h"
 #elif defined (CY_IP_MXS22RRAMC)
-    #include "mtb_syspm_callbacks_nvm_mxs22rramc.h"
+#include "mtb_syspm_callbacks_nvm_mxs22rramc.h"
 #else
-    #error "Unhandled version"
+#error "Unhandled version"
 #endif

@@ -67,7 +67,8 @@
                                         "bin2hex",
                                         "hash",
                                         "hex-dump",
-                                        "hex2bin"
+                                        "hex2bin",
+                                        "hex-relocate"
                                     ]
                                 },
                                 "inputs": {

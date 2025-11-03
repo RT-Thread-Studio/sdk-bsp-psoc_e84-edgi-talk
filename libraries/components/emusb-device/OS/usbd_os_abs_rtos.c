@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 File        : usbd_os_abs_rtos.c
@@ -66,15 +66,15 @@ Purpose     : OS Layer for the emUSB-Device. RTOS_AWARE component must be define
 *
 *********************************************************************/
 #if !defined (USBD_USE_PDL)
-    #define USBD_USE_PDL                       (0U)
+#define USBD_USE_PDL                       (0U)
 #endif /* #if !defined (USBD_USE_PDL) */
 
 #if !defined (USBD_NORTOS_TICKCNT_ENABLE)
-    #if defined (COMPONENT_RTOS_AWARE)
-        #define USBD_NORTOS_TICKCNT_ENABLE              (0U)
-    #else
-        #define USBD_NORTOS_TICKCNT_ENABLE              (1U)
-    #endif /* #if defined (COMPONENT_RTOS_AWARE) */
+#if defined (COMPONENT_RTOS_AWARE)
+#define USBD_NORTOS_TICKCNT_ENABLE              (0U)
+#else
+#define USBD_NORTOS_TICKCNT_ENABLE              (1U)
+#endif /* #if defined (COMPONENT_RTOS_AWARE) */
 #endif /* #if !defined USBD_NORTOS_TICKCNT_ENABLE */
 
 
@@ -84,7 +84,7 @@ Purpose     : OS Layer for the emUSB-Device. RTOS_AWARE component must be define
 *
 *********************************************************************/
 #if defined (COMPONENT_RTOS_AWARE) && (USBD_NORTOS_TICKCNT_ENABLE == 1U)
-    #error "USBD_NORTOS_TICKCNT_ENABLE option must be always set to 0 for non-RTOS environment"
+#error "USBD_NORTOS_TICKCNT_ENABLE option must be always set to 0 for non-RTOS environment"
 #endif /* #if defined (COMPONENT_RTOS_AWARE) && (USBD_USE_PDL == 1U) */
 
 #if (USBD_NORTOS_TICKCNT_ENABLE == 1U) && (USBD_USE_PDL == 1U) && !defined (COMPONENT_RTOS_AWARE)
@@ -92,8 +92,8 @@ Purpose     : OS Layer for the emUSB-Device. RTOS_AWARE component must be define
         of USB_OS_GetTickCnt() must be provided and USBD_NORTOS_TICKCNT_ENABLE is set to 0"
 #endif /* #if (USBD_NORTOS_TICKCNT_ENABLE == 1U) && (USBD_USE_PDL == 1U) */
 
-#if !(defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1D)) && (USBD_USE_PDL == 1U)
-    #error "USBD_USE_PDL option is applicable only for CAT1A and CAT1D device families"
+#if !(defined (COMPONENT_CAT1A) || defined (COMPONENT_PSE84)) && (USBD_USE_PDL == 1U)
+#error "USBD_USE_PDL option is applicable only for CAT1A and PSE84 device families"
 #endif /* #if defined (COMPONENT_RTOS_AWARE) && (USBD_USE_PDL == 1U) */
 
 
@@ -102,20 +102,20 @@ Purpose     : OS Layer for the emUSB-Device. RTOS_AWARE component must be define
 *       Include Device-specific libraries
 *
 *********************************************************************/
-#if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1D)
-    #include "cy_pdl.h"
-    #if (USBD_USE_PDL == 0U)
-        #include "mtb_hal.h"
-    #endif /* #if (USBD_USE_PDL == 0U) */
+#if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSE84)
+#include "cy_pdl.h"
+#if (USBD_USE_PDL == 0U)
+#include "mtb_hal.h"
+#endif /* #if (USBD_USE_PDL == 0U) */
 #elif defined (COMPONENT_CAT3)
-    #include "cybsp.h"
-    #include "cy_utils.h"
+#include "cybsp.h"
+#include "cy_utils.h"
 #else
-    #error "Unsupported Device Family"
-#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1D) */
+#error "Unsupported Device Family"
+#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSE84) */
 
 #if defined (COMPONENT_RTOS_AWARE)
-    #include "cyabs_rtos.h"
+#include "cyabs_rtos.h"
 #endif /* #if defined (COMPONENT_RTOS_AWARE) */
 
 
@@ -131,26 +131,26 @@ static volatile unsigned usbd_event_transact_cnt[USBD_NUM_ALL_EVENTS];
 
 #if defined (COMPONENT_RTOS_AWARE)
 
-    #define TRANSACT_CNT_EVENT_BITS_MASK            (0x1U)
+#define TRANSACT_CNT_EVENT_BITS_MASK            (0x1U)
 
-    static cy_mutex_t critical_section_mutex;
-    static cy_event_t usbd_event[USBD_NUM_ALL_EVENTS];
+static cy_mutex_t critical_section_mutex;
+static cy_event_t usbd_event[USBD_NUM_ALL_EVENTS];
 
-    #if USB_NUM_MUTEXES > 0
-        static cy_mutex_t mutex_list[USB_NUM_MUTEXES];
-        static uint32_t mutex_num = 0U;
-    #endif
+#if USB_NUM_MUTEXES > 0
+static cy_mutex_t mutex_list[USB_NUM_MUTEXES];
+static uint32_t mutex_num = 0U;
+#endif
 
 #else /* Non-RTOS environment */
 
-    static volatile bool usbd_event_transact_flag[USBD_NUM_ALL_EVENTS];
+static volatile bool usbd_event_transact_flag[USBD_NUM_ALL_EVENTS];
 
-    #if (USBD_NORTOS_TICKCNT_ENABLE == 1U)
-        #if defined (COMPONENT_CAT3) || defined (COMPONENT_CAT1D)
-            void usbd_timer_config(void);
-            void usbd_timer_config_deinit(void);
-        #endif /* defined (COMPONENT_CAT3) || defined (COMPONENT_CAT1D) */
-    #endif /* #if (USBD_NORTOS_TICKCNT_ENABLE == 1U) */
+#if (USBD_NORTOS_TICKCNT_ENABLE == 1U)
+#if defined (COMPONENT_CAT3) || defined (COMPONENT_PSE84)
+void usbd_timer_config(void);
+void usbd_timer_config_deinit(void);
+#endif /* defined (COMPONENT_CAT3) || defined (COMPONENT_PSE84) */
+#endif /* #if (USBD_NORTOS_TICKCNT_ENABLE == 1U) */
 #endif /* #if defined (COMPONENT_RTOS_AWARE) */
 
 
@@ -214,15 +214,15 @@ void USB_OS_DeInit(void)
 #else /* Non-RTOS environment */
 #if (USBD_NORTOS_TICKCNT_ENABLE == 1U)
 
-#if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1D)
-    /* cyhal_timer_free(&timer_obj); was removed because of porting to HAL Next in
-      MIDDLEWARE-15649 */
-    usbd_timer_config_deinit();
+#if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSE84)
+/* cyhal_timer_free(&timer_obj); was removed because of porting to HAL Next in
+  MIDDLEWARE-15649 */
+  usbd_timer_config_deinit();
 #elif defined (COMPONENT_CAT3)
     /* Stops the counter for CAT3 Device */
     XMC_CCU4_SLICE_StopClearTimer(emUSB_OS_Timer_HW);
     NVIC_DisableIRQ(emUSB_OS_Timer_IRQN);
-#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1D) */
+#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSE84) */
 #endif /* #if (USBD_NORTOS_TICKCNT_ENABLE == 1U) */
 #endif /* #if defined (COMPONENT_RTOS_AWARE) */
 }
@@ -244,7 +244,7 @@ void USB_OS_Delay(int ms)
     CY_ASSERT(CY_RSLT_SUCCESS == result);
     (void)result;  /* To avoid the compiler warning in Release mode */
 #else /* Non-RTOS environment */
-#if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1D)
+#if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSE84)
 #if (USBD_USE_PDL == 0U)
     cy_rslt_t result = mtb_hal_system_delay_ms((uint32_t)ms);
     CY_ASSERT(CY_RSLT_SUCCESS == result);
@@ -254,7 +254,7 @@ void USB_OS_Delay(int ms)
 #endif /* #if (USBD_USE_PDL == 0U) */
 #elif defined (COMPONENT_CAT3)
     XMC_Delay((uint32_t)ms);
-#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_CAT1D) */
+#endif /* #if defined (COMPONENT_CAT1A) || defined (COMPONENT_PSE84) */
 #endif /* #if defined (COMPONENT_RTOS_AWARE) */
 }
 
@@ -291,9 +291,9 @@ void USB_OS_DecRI(void)
     /* If called from an interrupt, it need not do anything. */
     if (0U == __get_IPSR())
     {
-        /* Use mutex to allow/block critical_section_count variable incrementing
-        * for other tasks
-        */
+    /* Use mutex to allow/block critical_section_count variable incrementing
+    * for other tasks
+    */
 #if defined (COMPONENT_RTOS_AWARE)
         cy_rslt_t result = cy_rtos_get_mutex(&critical_section_mutex, CY_RTOS_NEVER_TIMEOUT);
         CY_ASSERT(CY_RSLT_SUCCESS == result);
@@ -309,9 +309,9 @@ void USB_OS_DecRI(void)
             USBD_X_EnableInterrupt();
         }
 
-        /* Use mutex to allow/block critical_section_count variable incrementing
-        * for other tasks
-        */
+    /* Use mutex to allow/block critical_section_count variable incrementing
+    * for other tasks
+    */
 #if defined (COMPONENT_RTOS_AWARE)
         result = cy_rtos_set_mutex(&critical_section_mutex);
         CY_ASSERT(CY_RSLT_SUCCESS == result);
@@ -352,9 +352,9 @@ void USB_OS_IncDI(void)
     /* If called from an interrupt, it need not do anything. */
     if (0U == __get_IPSR())
     {
-        /* Use mutex to allow/block critical_section_count variable decrementing
-        * for other tasks
-        */
+    /* Use mutex to allow/block critical_section_count variable decrementing
+    * for other tasks
+    */
 #if defined (COMPONENT_RTOS_AWARE)
         cy_rslt_t result = cy_rtos_get_mutex(&critical_section_mutex, CY_RTOS_NEVER_TIMEOUT);
         CY_ASSERT(CY_RSLT_SUCCESS == result);
@@ -367,9 +367,9 @@ void USB_OS_IncDI(void)
         }
         critical_section_count++;
 
-        /* Use mutex to allow/block critical_section_count variable decrementing
-        * for other tasks
-        */
+    /* Use mutex to allow/block critical_section_count variable decrementing
+    * for other tasks
+    */
 #if defined (COMPONENT_RTOS_AWARE)
         result = cy_rtos_set_mutex(&critical_section_mutex);
         CY_ASSERT(CY_RSLT_SUCCESS == result);
@@ -446,14 +446,14 @@ void USB_OS_Wait(unsigned EPIndex, unsigned TransactCnt)
     {
         uint32_t bits = TRANSACT_CNT_EVENT_BITS_MASK;
         cy_rslt_t result = cy_rtos_event_waitbits(&usbd_event[EPIndex], &bits,
-                           true, false, CY_RTOS_NEVER_TIMEOUT);
+                                                  true, false, CY_RTOS_NEVER_TIMEOUT);
         CY_ASSERT(CY_RSLT_SUCCESS == result);
         (void)result;  /* To avoid the compiler warning in Release mode */
 
         /* Exit from USB_OS_Wait() only if signaling transaction is
          * the same as TransactCnt, otherwise continue to wait.
          */
-        if (usbd_event_transact_cnt[EPIndex] == TransactCnt)
+        if(usbd_event_transact_cnt[EPIndex] == TransactCnt)
         {
             break;
         }
@@ -468,7 +468,7 @@ void USB_OS_Wait(unsigned EPIndex, unsigned TransactCnt)
             /* Exit from USB_OS_Wait() only if signaling transaction is
              * the same as TransactCnt, otherwise continue to wait.
              */
-            if (usbd_event_transact_cnt[EPIndex] == TransactCnt)
+            if(usbd_event_transact_cnt[EPIndex] == TransactCnt)
             {
                 break;
             }
@@ -531,7 +531,7 @@ int USB_OS_WaitTimed(unsigned EPIndex, unsigned ms, unsigned TransactCnt)
          */
         if (result == CY_RSLT_SUCCESS)
         {
-            if (usbd_event_transact_cnt[EPIndex] == TransactCnt)
+            if(usbd_event_transact_cnt[EPIndex] == TransactCnt)
             {
                 status = 0;
                 break;
@@ -617,7 +617,7 @@ static void usbd_timer_config()
     XMC_CCU4_SLICE_ClearEvent(emUSB_OS_Timer_HW, emUSB_OS_Timer_EVENT);
 
     NVIC_ClearPendingIRQ(emUSB_OS_Timer_IRQN);
-
+    
     NVIC_EnableIRQ(emUSB_OS_Timer_IRQN);
 
     XMC_CCU4_SLICE_StartTimer(emUSB_OS_Timer_HW);

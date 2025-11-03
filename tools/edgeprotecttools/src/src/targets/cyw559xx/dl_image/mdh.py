@@ -15,21 +15,44 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from array import array
+from typing import Union
+
+from intelhex import IntelHex
 
 
 class MDH:
     """Data structure for Meta Data Header"""
-    def __init__(self, data):
+    def __init__(self, data: IntelHex):
         self.data = data
         self.sub_ds_sec_fw = SubDsInfo(data, 0)
         self.sub_ds_fw = SubDsInfo(data, 12)
         self.sub_ds_app = SubDsInfo(data, 24)
-        self.padding = data[36:48]
 
     @property
     def mdh_bytes(self) -> bytes:
         """Gets the MDH bytes"""
-        return self.data.gets(0, 48)
+        if self.sub_ds_app.encrypted:
+            return bytes(self.data[0:64].tobinarray())
+        return bytes(self.data[0:48].tobinarray())
+
+    @property
+    def iv(self) -> Union[bytes, None]:
+        """Gets the IV bytes"""
+        iv_bytes = bytes(self.data[36:52].tobinarray())
+        return bytes(iv_bytes) if self.sub_ds_app.encrypted else None
+
+    @iv.setter
+    def iv(self, value: bytes):
+        """Add IV to MDH"""
+        padding = b'\x00' * 12
+        self.data.puts(36, value + padding)
+
+    @property
+    def padding(self) -> bytes:
+        """Gets the padding bytes"""
+        if self.sub_ds_app.encrypted:
+            return bytes(self.data[52:64].tobinarray())
+        return bytes(self.data[36:48].tobinarray())
 
 class SubDsInfo:
     """Data structure for sub Dynamic Section"""

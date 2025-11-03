@@ -80,20 +80,20 @@
  */
 
 arm_status arm_depthwise_separable_conv_HWC_q7(const q7_t *Im_in,
-        const uint16_t dim_im_in,
-        const uint16_t ch_im_in,
-        const q7_t *wt,
-        const uint16_t ch_im_out,
-        const uint16_t dim_kernel,
-        const uint16_t padding,
-        const uint16_t stride,
-        const q7_t *bias,
-        const uint16_t bias_shift,
-        const uint16_t out_shift,
-        q7_t *Im_out,
-        const uint16_t dim_im_out,
-        q15_t *bufferA,
-        q7_t *bufferB)
+                                               const uint16_t dim_im_in,
+                                               const uint16_t ch_im_in,
+                                               const q7_t *wt,
+                                               const uint16_t ch_im_out,
+                                               const uint16_t dim_kernel,
+                                               const uint16_t padding,
+                                               const uint16_t stride,
+                                               const q7_t *bias,
+                                               const uint16_t bias_shift,
+                                               const uint16_t out_shift,
+                                               q7_t *Im_out,
+                                               const uint16_t dim_im_out,
+                                               q15_t *bufferA,
+                                               q7_t *bufferB)
 {
     (void)bufferB;
 #if defined(ARM_MATH_DSP)
@@ -264,11 +264,11 @@ arm_status arm_depthwise_separable_conv_HWC_q7(const q7_t *Im_in,
                              "subs %[colCnt], #1\n"
                              "bne COL_LOOP_%=\n"
                              : [ sum ] "+r"(sum),
-                             [ sum2 ] "+r"(sum2),
-                             [ sum3 ] "+r"(sum3),
-                             [ sum4 ] "+r"(sum4),
-                             [ pB ] "+r"(pB),
-                             [ pA ] "+r"(pA)
+                               [ sum2 ] "+r"(sum2),
+                               [ sum3 ] "+r"(sum3),
+                               [ sum4 ] "+r"(sum4),
+                               [ pB ] "+r"(pB),
+                               [ pA ] "+r"(pA)
                              : [ colCnt ] "r"(colCnt), [ ch_im_in ] "r"(ch_im_in)
                              : "r0", "r1", "r2", "r3", "r4", "r5");
 #else
@@ -308,11 +308,11 @@ arm_status arm_depthwise_separable_conv_HWC_q7(const q7_t *Im_in,
                              "subs %[colCnt], #1\n"
                              "bne COL_LOOP_%=\n"
                              : [ sum ] "+r"(sum),
-                             [ sum2 ] "+r"(sum2),
-                             [ sum3 ] "+r"(sum3),
-                             [ sum4 ] "+r"(sum4),
-                             [ pB ] "+r"(pB),
-                             [ pA ] "+r"(pA)
+                               [ sum2 ] "+r"(sum2),
+                               [ sum3 ] "+r"(sum3),
+                               [ sum4 ] "+r"(sum4),
+                               [ pB ] "+r"(pB),
+                               [ pA ] "+r"(pA)
                              : [ colCnt ] "r"(colCnt), [ ch_im_in ] "r"(ch_im_in)
                              : "r0", "r1", "r2", "r3", "r4", "r5");
 
@@ -401,7 +401,7 @@ arm_status arm_depthwise_separable_conv_HWC_q7(const q7_t *Im_in,
                         if (in_row >= 0 && in_col >= 0 && in_row < dim_im_in && in_col < dim_im_in)
                         {
                             conv_out += Im_in[(in_row * dim_im_in + in_col) * ch_im_in + i_ch_out] *
-                                        wt[(i_ker_y * dim_kernel + i_ker_x) * ch_im_out + i_ch_out];
+                                wt[(i_ker_y * dim_kernel + i_ker_x) * ch_im_out + i_ch_out];
                         }
                     }
                 }

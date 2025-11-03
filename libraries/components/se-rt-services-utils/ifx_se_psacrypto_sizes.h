@@ -1,6 +1,6 @@
 /**
  * \file ifx_se_psacrypto_sizes.h
- * \version 1.1.0
+ * \version 1.2.0
  *
  * \brief PSA cryptography module: Mbed TLS buffer size macros
  *
@@ -23,7 +23,7 @@
  *
  *******************************************************************************
  * \copyright
- * Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+ * Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
  * All rights reserved.
  * You may use this file only in accordance with the license, terms, conditions,
  * disclaimers, and limitations in the end user license agreement accompanying

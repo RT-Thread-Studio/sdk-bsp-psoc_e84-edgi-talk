@@ -6,21 +6,77 @@ CYMEM_CM55_0_m55_data_OFFSET = 0x00000000;
 CYMEM_CM55_0_m55_code_INTERNAL_START = 0x00000000;
 CYMEM_CM55_0_m55_code_SIZE = 0x00040000;
 CYMEM_CM55_0_m55_code_OFFSET = 0x00000000;
+CYMEM_CM55_0_user_nvm_C_START = 0x0205B000;
+CYMEM_CM55_0_user_nvm_SIZE = 0x00008000;
+CYMEM_CM55_0_user_nvm_OFFSET = 0x0005B000;
 CYMEM_CM55_0_m55_nvm_START = 0x60580000;
-CYMEM_CM55_0_m55_nvm_SIZE = 0x002FFC00;
+CYMEM_CM55_0_m55_nvm_SIZE = 0x00A00000;
 CYMEM_CM55_0_m55_nvm_OFFSET = 0x00580000;
-CYMEM_CM55_0_m55_code2_START = 0x26000000;
-CYMEM_CM55_0_m55_code2_SIZE = 0x00060800;
-CYMEM_CM55_0_m55_code2_OFFSET = 0x00000000;
-CYMEM_CM55_0_gfx_mem_START = 0x26060800;
+CYMEM_CM55_0_m55_trailer_START = 0x60F80000;
+CYMEM_CM55_0_m55_trailer_SIZE = 0x00040000;
+CYMEM_CM55_0_m55_trailer_OFFSET = 0x00F80000;
+CYMEM_CM55_0_m55_hyperram_START = 0x64200000;
+CYMEM_CM55_0_m55_hyperram_SIZE = 0x00200000;
+CYMEM_CM55_0_m55_hyperram_OFFSET = 0x00200000;
+CYMEM_CM55_0_m33_m55_shared_hyperram_START = 0x64400000;
+CYMEM_CM55_0_m33_m55_shared_hyperram_SIZE = 0x00C00000;
+CYMEM_CM55_0_m33_m55_shared_hyperram_OFFSET = 0x00400000;
+CYMEM_CM55_0_m55_code_secondary_START = 0x26000000;
+CYMEM_CM55_0_m55_code_secondary_SIZE = 0x00060000;
+CYMEM_CM55_0_m55_code_secondary_OFFSET = 0x00000000;
+CYMEM_CM55_0_m55_data_secondary_START = 0x26060000;
+CYMEM_CM55_0_m55_data_secondary_SIZE = 0x00160000;
+CYMEM_CM55_0_m55_data_secondary_OFFSET = 0x00060000;
+CYMEM_CM55_0_m33_m55_shared_START = 0x261C0000;
+CYMEM_CM55_0_m33_m55_shared_SIZE = 0x00040000;
+CYMEM_CM55_0_m33_m55_shared_OFFSET = 0x001C0000;
+CYMEM_CM55_0_gfx_mem_START = 0x26200000;
 CYMEM_CM55_0_gfx_mem_SIZE = 0x00300000;
-CYMEM_CM55_0_gfx_mem_OFFSET = 0x00060800;
-CYMEM_CM55_0_m33_m55_shared_START = 0x26360800;
-CYMEM_CM55_0_m33_m55_shared_SIZE = 0x0001F800;
-CYMEM_CM55_0_m33_m55_shared_OFFSET = 0x00360800;
-CYMEM_CM55_0_m55_data2_START = 0x26380000;
-CYMEM_CM55_0_m55_data2_SIZE = 0x00180000;
-CYMEM_CM55_0_m55_data2_OFFSET = 0x00380000;
-CYMEM_CM55_0_m33_m55_system_shared_START = 0x240FD000;
-CYMEM_CM55_0_m33_m55_system_shared_SIZE = 0x00003000;
-CYMEM_CM55_0_m33_m55_system_shared_OFFSET = 0x000FD000;
+CYMEM_CM55_0_gfx_mem_OFFSET = 0x00200000;
+CYMEM_CM55_0_m33_data_START = 0x240BD000;
+CYMEM_CM55_0_m33_data_SIZE = 0x00040000;
+CYMEM_CM55_0_m33_data_OFFSET = 0x000BD000;
+CYMEM_CM55_0_m33s_allocatable_shared_START = 0x240FD000;
+CYMEM_CM55_0_m33s_allocatable_shared_SIZE = 0x00001000;
+CYMEM_CM55_0_m33s_allocatable_shared_OFFSET = 0x000FD000;
+CYMEM_CM55_0_m33_allocatable_shared_START = 0x240FE000;
+CYMEM_CM55_0_m33_allocatable_shared_SIZE = 0x00001000;
+CYMEM_CM55_0_m33_allocatable_shared_OFFSET = 0x000FE000;
+CYMEM_CM55_0_m55_allocatable_shared_START = 0x240FF000;
+CYMEM_CM55_0_m55_allocatable_shared_SIZE = 0x00001000;
+CYMEM_CM55_0_m55_allocatable_shared_OFFSET = 0x000FF000;
+
+MEMORY
+{
+    m55_data_INTERNAL : ORIGIN = 0x20000000, LENGTH = 0x00040000
+    m55_code_INTERNAL : ORIGIN = 0x00000000, LENGTH = 0x00040000
+    user_nvm_C : ORIGIN = 0x0205B000, LENGTH = 0x00008000
+    m55_nvm : ORIGIN = 0x60580000, LENGTH = 0x00A00000
+    m55_trailer : ORIGIN = 0x60F80000, LENGTH = 0x00040000
+    m55_hyperram : ORIGIN = 0x64200000, LENGTH = 0x00200000
+    m33_m55_shared_hyperram : ORIGIN = 0x64400000, LENGTH = 0x00C00000
+    m55_code_secondary : ORIGIN = 0x26000000, LENGTH = 0x00060000
+    m55_data_secondary : ORIGIN = 0x26060000, LENGTH = 0x00160000
+    m33_m55_shared : ORIGIN = 0x261C0000, LENGTH = 0x00040000
+    gfx_mem : ORIGIN = 0x26200000, LENGTH = 0x00300000
+    m33_data : ORIGIN = 0x240BD000, LENGTH = 0x00040000
+    m33s_allocatable_shared : ORIGIN = 0x240FD000, LENGTH = 0x00001000
+    m33_allocatable_shared : ORIGIN = 0x240FE000, LENGTH = 0x00001000
+    m55_allocatable_shared : ORIGIN = 0x240FF000, LENGTH = 0x00001000
+}
+
+REGION_ALIAS("m55_data_sel", m55_data_INTERNAL)
+REGION_ALIAS("m55_code_sel", m55_code_INTERNAL)
+REGION_ALIAS("user_nvm_sel", user_nvm_C)
+REGION_ALIAS("m55_nvm_sel", m55_nvm)
+REGION_ALIAS("m55_trailer_sel", m55_trailer)
+REGION_ALIAS("m55_hyperram_sel", m55_hyperram)
+REGION_ALIAS("m33_m55_shared_hyperram_sel", m33_m55_shared_hyperram)
+REGION_ALIAS("m55_code_secondary_sel", m55_code_secondary)
+REGION_ALIAS("m55_data_secondary_sel", m55_data_secondary)
+REGION_ALIAS("m33_m55_shared_sel", m33_m55_shared)
+REGION_ALIAS("gfx_mem_sel", gfx_mem)
+REGION_ALIAS("m33_data_sel", m33_data)
+REGION_ALIAS("m33s_allocatable_shared_sel", m33s_allocatable_shared)
+REGION_ALIAS("m33_allocatable_shared_sel", m33_allocatable_shared)
+REGION_ALIAS("m55_allocatable_shared_sel", m55_allocatable_shared)

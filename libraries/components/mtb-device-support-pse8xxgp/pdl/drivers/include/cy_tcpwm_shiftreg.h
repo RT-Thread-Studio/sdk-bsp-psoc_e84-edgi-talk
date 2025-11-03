@@ -37,6 +37,7 @@ extern "C" {
 
 /**
 * \addtogroup group_tcpwm_shiftreg
+* \{
 * Driver API for Shift Register.
 *
 * The functions and other declarations used in this part of the driver are in cy_tcpwm_shiftreg.h.
@@ -99,14 +100,13 @@ extern "C" {
 * To start Shift Register operation \ref Cy_TCPWM_TriggerStart_Single API can be used.
 *
 * \snippet tcpwm/shiftreg/snippet/main.c snippet_Cy_TCPWM_ShiftReg_Start
-* \{
 */
 
 /**
 * \defgroup group_tcpwm_macros_shiftreg          Macros
 * \defgroup group_tcpwm_functions_shiftreg       Functions
 * \defgroup group_tcpwm_data_structures_shiftreg Data Structures
-* \} */
+*/
 
 /**
 * \addtogroup group_tcpwm_data_structures_shiftreg
@@ -117,7 +117,7 @@ extern "C" {
 /** Shift Register configuration structure */
 typedef struct cy_stc_tcpwm_shiftreg_config
 {
-    uint32_t    clockPrescaler;     /**< Sets the clock prescaler inside the TCWPM block.*/
+    uint32_t    clockPrescaler;     /**< Sets the clock prescaler inside the TCPWM block.*/
     uint32_t    tapsEnabled;        /**< In shift register this sets the enabled taps. */
     uint32_t    compare0;           /**< Sets the value for Compare 0. */
     uint32_t    compareBuf0;        /**< Sets the value for the buffered Compare 0. */
@@ -144,7 +144,7 @@ typedef struct cy_stc_tcpwm_shiftreg_config
 #if defined (CY_IP_MXS40TCPWM) || defined (CY_DOXYGEN)
     bool        buffer_swap_enable; /**< Configures swapping mechanism between CC0 and buffered CC0, CC1 and buffered CC1, PERIOD and buffered PERIOD, DT and buffered DT  */
 #endif /* defined (CY_IP_MXS40TCPWM) || defined (CY_DOXYGEN) */
-} cy_stc_tcpwm_shiftreg_config_t;
+}cy_stc_tcpwm_shiftreg_config_t;
 
 #else
 
@@ -246,7 +246,7 @@ __STATIC_INLINE void Cy_TCPWM_ShiftReg_SetCounter(TCPWM_Type *base, uint32_t cnt
 __STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_GetCounter(TCPWM_Type const *base, uint32_t cntNum);
 __STATIC_INLINE void Cy_TCPWM_ShiftReg_SetTaps(TCPWM_Type *base, uint32_t cntNum, uint32_t taps);
 __STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_GetTaps(TCPWM_Type const *base, uint32_t cntNum);
-__STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_LineOutStatus(TCPWM_Type const *base, uint32_t cntNum, uint32_t shiftRegOutSelect);
+__STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_LineOutStatus (TCPWM_Type const *base, uint32_t cntNum, uint32_t shiftRegOutSelect);
 #endif
 #if defined (CY_IP_MXS40TCPWM) || defined (CY_DOXYGEN)
 __STATIC_INLINE void Cy_TCPWM_Shiftreg_EnableSwap(TCPWM_Type *base, uint32_t cntNum,  bool enable);
@@ -320,7 +320,7 @@ __STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_GetStatus(TCPWM_Type const *base, uin
 
     status = TCPWM_GRP_CNT_STATUS(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 
-    return (status);
+    return(status);
 }
 
 
@@ -529,7 +529,7 @@ __STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_GetCompare1BufVal(TCPWM_Type const *b
 *******************************************************************************/
 __STATIC_INLINE void Cy_TCPWM_ShiftReg_EnableCompare0Swap(TCPWM_Type *base, uint32_t cntNum,  bool enable)
 {
-    Cy_TCPWM_Block_EnableCompare0Swap(base, cntNum, enable);
+     Cy_TCPWM_Block_EnableCompare0Swap(base, cntNum, enable);
 }
 
 
@@ -676,24 +676,24 @@ __STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_GetTaps(TCPWM_Type const *base, uint3
 * \snippet tcpwm/shiftreg/snippet/main.c snippet_Cy_TCPWM_ShiftReg_LineOutStatus
 *
 *******************************************************************************/
-__STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_LineOutStatus(TCPWM_Type const *base, uint32_t cntNum, uint32_t shiftRegOutSelect)
+__STATIC_INLINE uint32_t Cy_TCPWM_ShiftReg_LineOutStatus (TCPWM_Type const *base, uint32_t cntNum, uint32_t shiftRegOutSelect)
 {
     uint32_t status = 0UL;
 
     status = TCPWM_GRP_CNT_STATUS(base, TCPWM_GRP_CNT_GET_GRP(cntNum), cntNum);
 
-    switch (shiftRegOutSelect)
-    {
-    case CY_TCPWM_SHIFTREG_LINE_OUT:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_LINE_OUT, status);
-        break;
-    case CY_TCPWM_SHIFTREG_LINE_OUT_INV:
-        status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_LINE_COMPL_OUT, status);
-        break;
-    default:
-        /* Not a Valid Line output */
-        CY_ASSERT_L3(false);
-        break;
+     switch(shiftRegOutSelect)
+     {
+         case CY_TCPWM_SHIFTREG_LINE_OUT:
+             status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_LINE_OUT, status);
+             break;
+         case CY_TCPWM_SHIFTREG_LINE_OUT_INV:
+             status = _FLD2VAL(TCPWM_GRP_CNT_V2_STATUS_LINE_COMPL_OUT, status);
+             break;
+         default:
+             /* Not a Valid Line output */
+             CY_ASSERT_L3(false);
+             break;
     }
     return status;
 }

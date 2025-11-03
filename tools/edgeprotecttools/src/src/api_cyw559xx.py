@@ -150,16 +150,28 @@ class CYW559xxAPI(CommonAPI):
         dl_img = DlImage()
         dl_img.load(image)
         ds_size = dl_img.ds.header.ds_size
+        ds_address = dl_img.ds.header.ds_address
 
-        logger.debug('Calculate number of bytes to be appended to DS')
-        logger.debug('DS size: %d (0x%x)', ds_size, ds_size)
-        logger.debug('CERT address: 0x%x', dl_img.cert_address)
+        logger.info('DS size: %d (0x%x)', ds_size, ds_size)
+        logger.info('Certificate chain address: 0x%08X', dl_img.cert_address)
 
+        # Calculate new DS size
         ds_append_num = 16 - (ds_size % 16) if ds_size % 16 else 0
         ds_append_num += 16 + 1
         new_ds_size = ds_size + ds_append_num
         logger.info('New DS size: %d (0x%x)', new_ds_size, new_ds_size)
         dl_img.ds.header.ds_size = new_ds_size
+
+        # Calculate new certificate address
+        new_cert_addr = (ds_address + new_ds_size + 16 + 256)
+        if new_cert_addr % 256:
+            new_cert_addr += 256 - (new_cert_addr % 256)
+        if new_cert_addr > dl_img.cert_address:
+            logger.info('New certificate chain address: 0x%08X', new_cert_addr)
+            dl_img.cert_address = new_cert_addr
+        elif new_cert_addr == dl_img.cert_address:
+            logger.info('Certificate chain address unchanged: 0x%08X',
+                        new_cert_addr)
 
         ota_image_bytes = (dl_img.mdh.mdh_bytes + dl_img.ds.ds_bytes +
                            dl_img.ds.padding + dl_img.cert_bytes)
@@ -199,14 +211,23 @@ class CYW559xxAPI(CommonAPI):
                 iv = bytes.fromhex(iv)
                 if len(iv) != 16:
                     raise ValueError
+                logger.info('IV: %s', iv.hex())
             except ValueError:
                 logger.error("Invalid IV. It must be a 16-byte binary file "
                              "or a hex string")
                 return None
 
+        # IV is stored as another MDH section and cannot contain zeros at
+        # the end because this will be considered as a zero address of the
+        # section, and the header fails to parse
+        if b'\x00\x00\x00' in iv:
+            logger.error('The IV must not contain three consecutive zero bytes')
+            return None
+
         dl_img = DlImage()
         dl_img.load(image)
         dl_img.mdh.sub_ds_app.encrypted = True
+        dl_img.mdh.iv = iv
         app = bytes(dl_img.sub_ds_app.tobinarray())
         enc = EncryptorAES.encrypt(app, key, iv, 'CTR', pad=False)
         dl_img.sub_ds_app = enc
@@ -230,3 +251,11 @@ class CYW559xxAPI(CommonAPI):
             info = DeviceData(self.tool)
             return info.read_soc_id(output)
         return False
+
+    def erase_flash(self) -> bool:
+        """Erases flash memory of the device"""
+        status = False
+        if ConnectHelper.connect(self.tool, self.target):
+            context = ProvisioningContext(self.target.provisioning_strategy)
+            status = context.erase_flash(self.tool, self.target)
+        return status

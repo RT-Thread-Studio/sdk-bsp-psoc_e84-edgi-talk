@@ -48,15 +48,14 @@
   @param[in]     pSrc       points to the f64 input vector
   @param[out]    pDst       points to the f16 output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
  */
 
 
-void arm_f64_to_f16(
-    const float64_t *pSrc,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_f64_to_f16(
+  const float64_t * pSrc,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
     const float64_t *pIn = pSrc;      /* Src pointer */
     uint32_t  blkCnt;           /* loop counter */
@@ -80,4 +79,4 @@ void arm_f64_to_f16(
   @} end of f64_to_x group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 

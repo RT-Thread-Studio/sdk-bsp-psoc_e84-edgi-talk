@@ -119,41 +119,6 @@
 * For more information on the Autonomous Analog,
 * refer to the device Architecture Technical Reference Manual (TRM).
 *
-* \section group_autanalog_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td rowspan="5">2.0</td>
-*     <td>Change interface and update \ref Cy_AutAnalog_SAR_CountsTo_degreeC;</td>
-*     <td>Remove the reference voltage from the parameter list.</td>
-*   </tr>
-*   <tr>
-*     <td>Extend type \ref cy_en_autanalog_dac_ref_buf_pwr_t with new option.</td>
-*     <td>Introduce new operational mode for CT DAC reference buffer.</td>
-*   </tr>
-*   <tr>
-*     <td>
-*        Add new APIs \ref Cy_AutAnalog_FIFO_SetInterruptMask and \ref Cy_AutAnalog_ClearInterruptMask;\n
-*        Add new API \ref Cy_AutAnalog_FIFO_ReadAllData based on existing \ref Cy_AutAnalog_FIFO_ReadData;\n
-*        Extend interface for \ref Cy_AutAnalog_FIFO_ReadData with an extra parameter that reads the given number of words;\n
-*     </td>
-*     <td>Improve FIFO API usability.</td>
-*   </tr>
-*   <tr>
-*     <td>Renaming the CTB macros.</td>
-*     <td>API enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-* </table>
-*
 * \defgroup group_autanalog_ac     AC      (Autonomous Controller)
 * \defgroup group_autanalog_ctb    CTB     (Continuous Time Block)
 * \defgroup group_autanalog_ptcomp PTComp  (Programmable Threshold Comparator)
@@ -182,19 +147,19 @@
 #ifdef CY_IP_MXS22LPPASS
 
 #ifdef CY_IP_MXS22LPPASS_CTB
-    #include "cy_autanalog_ctb.h"
+#include "cy_autanalog_ctb.h"
 #endif /* CY_IP_MXS22LPPASS_CTB */
 
 #ifdef CY_IP_MXS22LPPASS_PTC
-    #include "cy_autanalog_ptc.h"
+#include "cy_autanalog_ptc.h"
 #endif /* CY_IP_MXS22LPPASS_PTC */
 
 #ifdef CY_IP_MXS22LPPASS_DAC
-    #include "cy_autanalog_dac.h"
+#include "cy_autanalog_dac.h"
 #endif /* CY_IP_MXS22LPPASS_DAC */
 
 #ifdef CY_IP_MXS22LPPASS_SAR
-    #include "cy_autanalog_sar.h"
+#include "cy_autanalog_sar.h"
 #endif /* CY_IP_MXS22LPPASS_SAR */
 
 #if defined(__cplusplus)
@@ -378,7 +343,7 @@ typedef struct
 typedef struct
 {
     /** PRB */
-    cy_stc_autanalog_prb_cfg_t   *prb[CY_AUTANALOG_PRB_NUM]; /**< The configuration structure for the PRB */
+    cy_stc_autanalog_prb_cfg_t  * prb[CY_AUTANALOG_PRB_NUM]; /**< The configuration structure for the PRB */
 
 } cy_stc_autanalog_prb_t;
 
@@ -426,23 +391,23 @@ typedef struct
  */
 typedef struct
 {
-    cy_stc_autanalog_prb_t     *prb;                  /**< The pointer to the PRB configuration */
-    cy_stc_autanalog_ac_t      *ac;                   /**< The pointer to the AC configurations */
+    cy_stc_autanalog_prb_t    * prb;                  /**< The pointer to the PRB configuration */
+    cy_stc_autanalog_ac_t     * ac;                   /**< The pointer to the AC configurations */
 
 #ifdef CY_IP_MXS22LPPASS_CTB
-    cy_stc_autanalog_ctb_t     *ctb[PASS_NR_CTBLS];   /**< The array of pointers to the CTB subsystem configurations */
+    cy_stc_autanalog_ctb_t    * ctb[PASS_NR_CTBLS];   /**< The array of pointers to the CTB subsystem configurations */
 #endif /* CTBs */
 
 #ifdef CY_IP_MXS22LPPASS_PTC
-    cy_stc_autanalog_ptcomp_t *ptcomp[PASS_NR_PTCS];  /**< The array of pointers to the PTComp subsystem configurations */
+    cy_stc_autanalog_ptcomp_t * ptcomp[PASS_NR_PTCS]; /**< The array of pointers to the PTComp subsystem configurations */
 #endif /* PTCs */
 
 #ifdef CY_IP_MXS22LPPASS_DAC
-    cy_stc_autanalog_dac_t     *dac[PASS_NR_DACS];    /**< The array of pointers to the DAC subsystem configurations */
+    cy_stc_autanalog_dac_t    * dac[PASS_NR_DACS];    /**< The array of pointers to the DAC subsystem configurations */
 #endif /* DACs */
 
 #ifdef CY_IP_MXS22LPPASS_SAR
-    cy_stc_autanalog_sar_t     *sar[PASS_NR_SARS];    /**< The array of pointers to the SAR subsystem configurations */
+    cy_stc_autanalog_sar_t    * sar[PASS_NR_SARS];    /**< The array of pointers to the SAR subsystem configurations */
 #endif /* SARs */
 
 } cy_stc_autanalog_cfg_t;
@@ -458,23 +423,23 @@ typedef struct
  */
 typedef struct
 {
-    cy_stc_autanalog_stt_ac_t      *ac;                   /**< The pointer to the AC subsystem STT */
-    cy_stc_autanalog_stt_prb_t     *prb;                  /**< The pointer to the PRB subsystem STT */
+    cy_stc_autanalog_stt_ac_t     * ac;                   /**< The pointer to the AC subsystem STT */
+    cy_stc_autanalog_stt_prb_t    * prb;                  /**< The pointer to the PRB subsystem STT */
 
 #ifdef CY_IP_MXS22LPPASS_CTB
-    cy_stc_autanalog_stt_ctb_t     *ctb[PASS_NR_CTBLS];   /**< The array of pointers to the CTB subsystem STT */
+    cy_stc_autanalog_stt_ctb_t    * ctb[PASS_NR_CTBLS];   /**< The array of pointers to the CTB subsystem STT */
 #endif /* CTBs */
 
 #ifdef CY_IP_MXS22LPPASS_PTC
-    cy_stc_autanalog_stt_ptcomp_t *ptcomp[PASS_NR_PTCS];  /**< The array of pointers to the PTComp subsystem STT */
+    cy_stc_autanalog_stt_ptcomp_t * ptcomp[PASS_NR_PTCS]; /**< The array of pointers to the PTComp subsystem STT */
 #endif /* PTCs*/
 
 #ifdef CY_IP_MXS22LPPASS_DAC
-    cy_stc_autanalog_stt_dac_t     *dac[PASS_NR_DACS];    /**< The array of pointers to the DAC subsystem STT */
+    cy_stc_autanalog_stt_dac_t    * dac[PASS_NR_DACS];    /**< The array of pointers to the DAC subsystem STT */
 #endif /* DACs */
 
 #ifdef CY_IP_MXS22LPPASS_SAR
-    cy_stc_autanalog_stt_sar_t     *sar[PASS_NR_SARS];    /**< The array of pointers to the SAR subsystem STT */
+    cy_stc_autanalog_stt_sar_t    * sar[PASS_NR_SARS];    /**< The array of pointers to the SAR subsystem STT */
 #endif /* SARs */
 
 } cy_stc_autanalog_stt_t;
@@ -486,9 +451,9 @@ typedef struct
  */
 typedef struct
 {
-    cy_stc_autanalog_cfg_t *configuration;         /**< The pointer to the whole configuration structure */
+    cy_stc_autanalog_cfg_t * configuration;        /**< The pointer to the whole configuration structure */
     uint8_t                  numSttEntries;        /**< The number of states in the State Transition Table */
-    cy_stc_autanalog_stt_t *stateTransitionTable;  /**< The pointer to the array of the entire State Transition Table */
+    cy_stc_autanalog_stt_t * stateTransitionTable; /**< The pointer to the array of the entire State Transition Table */
 
 } cy_stc_autanalog_t;
 

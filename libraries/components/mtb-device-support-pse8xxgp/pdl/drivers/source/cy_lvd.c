@@ -56,20 +56,20 @@ cy_en_syspm_status_t Cy_LVD_DeepSleepCallback(cy_stc_syspm_callback_params_t * c
 
     if (callbackParams != NULL)
     {
-        switch (mode)
+        switch(mode)
         {
-        case CY_SYSPM_CHECK_READY:
-        case CY_SYSPM_CHECK_FAIL:
-        case CY_SYSPM_BEFORE_TRANSITION:
-            break;
+            case CY_SYSPM_CHECK_READY:
+            case CY_SYSPM_CHECK_FAIL:
+            case CY_SYSPM_BEFORE_TRANSITION:
+                break;
 
-        case CY_SYSPM_AFTER_TRANSITION:
-            Cy_LVD_Enable();
-            break;
+            case CY_SYSPM_AFTER_TRANSITION:
+                Cy_LVD_Enable();
+                break;
 
-        default:
-            ret = CY_SYSPM_FAIL;
-            break;
+            default:
+                ret = CY_SYSPM_FAIL;
+                break;
         }
     }
     return (ret);

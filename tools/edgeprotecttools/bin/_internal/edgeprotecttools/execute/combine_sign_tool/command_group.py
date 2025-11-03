@@ -22,7 +22,7 @@ from .commands import (Command, CommandHexSegment, CommandSign, CommandShift,
                        CommandMerge, CommandExtractPayload, CommandEncryptAes,
                        CommandAddSignature, CommandSubprocessRunner,
                        CommandBinDump, CommandBin2Hex, CommandHash,
-                       CommandHexDump, CommandHex2Bin)
+                       CommandHexDump, CommandHex2Bin, CommandHexRelocate)
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,8 @@ class CommandGroup:
         'bin2hex': CommandBin2Hex,
         'hash': CommandHash,
         'hex-dump': CommandHexDump,
-        'hex2bin': CommandHex2Bin
+        'hex2bin': CommandHex2Bin,
+        'hex-relocate': CommandHexRelocate
     }
 
     def __init__(self, **kwargs):

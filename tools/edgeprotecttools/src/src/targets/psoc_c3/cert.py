@@ -17,14 +17,34 @@ limitations under the License.
 import logging
 
 from .key_validator import KeyValidatorPsocC3
-from ...targets.common.mxs40sv2.cert_mxs40sv2 import CertificateStrategyMXS40Sv2
+from ...core.certificate_strategy import CertificateStrategyV1
 
 logger = logging.getLogger(__name__)
 
 
-class CertificateStrategyPsocC3(CertificateStrategyMXS40Sv2):
+class CertificateStrategyPsocC3(CertificateStrategyV1):
     """Create certificates for PSoC C3 platform"""
 
     def __init__(self):
         super().__init__()
         self.key_validator = KeyValidatorPsocC3()
+
+    def create_certificate(self, filename, encoding, overwrite, **kwargs):
+        """Creates certificate in CBOR format"""
+        private_key = kwargs.get('key')
+        if private_key:
+            self.key_validator.validate_private_key(private_key)
+
+        dev_cert = kwargs.get('dev_cert').lower()
+        if dev_cert == 'device_integrity':
+            return self._device_integrity_cert(output=filename, **kwargs)
+        raise ValueError(f"Invalid type of ifx certificate '{dev_cert}'")
+
+    def create_csr(self, output, key_path, **kwargs):
+        raise NotImplementedError("N/A for PSOC C3 platform")
+
+    def default_certificate_data(self, tool, target, probe_id):
+        raise NotImplementedError("N/A for PSOC C3 platform")
+
+    def verify_certificate(self, cert_path, root_cert_path=None, key_path=None):
+        raise NotImplementedError("N/A for PSOC C3 platform")

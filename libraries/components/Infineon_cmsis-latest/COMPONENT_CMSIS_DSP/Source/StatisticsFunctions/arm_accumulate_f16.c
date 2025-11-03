@@ -37,14 +37,14 @@
 
 /**
  @defgroup Accumulation Accumulation functions
-
+ 
  Calculates the accumulation of the input vector. Sum is defined as the addition of the elements in the vector.
  The underlying algorithm is used:
-
+ 
  <pre>
  Result = (pSrc[0] + pSrc[1] + pSrc[2] + ... + pSrc[blockSize-1]);
  </pre>
-
+ 
  There are separate functions for floating-point, Q31, Q15, and Q7 data types.
  */
 
@@ -58,59 +58,58 @@
  @param[in]     pSrc       points to the input vector.
  @param[in]     blockSize  number of samples in input vector.
  @param[out]    pResult    sum of values in input vector.
- @return        none
  */
 
-void arm_accumulate_f16(
-    const float16_t *pSrc,
-    uint32_t blockSize,
-    float16_t *pResult)
+ARM_DSP_ATTRIBUTE void arm_accumulate_f16(
+                        const float16_t * pSrc,
+                        uint32_t blockSize,
+                        float16_t * pResult)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    float16_t sum = 0.0f16;                          /* Temporary result storage */
-
+  uint32_t blkCnt;                               /* Loop counter */
+  float16_t sum = 0.0f16;                          /* Temporary result storage */
+  
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
-
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
-
-    while (blkCnt > 0U)
-    {
-        /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
-        sum += (_Float16) * pSrc++;
-
-        sum += (_Float16) * pSrc++;
-
-        sum += (_Float16) * pSrc++;
-
-        sum += (_Float16) * pSrc++;
-
-        /* Decrement the loop counter */
-        blkCnt--;
-    }
-
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
-
-#else
-
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
-
-#endif /* #if defined (ARM_MATH_LOOPUNROLL) */
-
-    while (blkCnt > 0U)
-    {
-        /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
-        sum += (_Float16) * pSrc++;
-
-        /* Decrement loop counter */
-        blkCnt--;
-    }
-
+  
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
+  
+  while (blkCnt > 0U)
+  {
     /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
-    /* Store result to destination */
-    *pResult = sum ;
+    sum += (_Float16)*pSrc++;
+    
+    sum += (_Float16)*pSrc++;
+    
+    sum += (_Float16)*pSrc++;
+    
+    sum += (_Float16)*pSrc++;
+    
+    /* Decrement the loop counter */
+    blkCnt--;
+  }
+  
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
+  
+#else
+  
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
+  
+#endif /* #if defined (ARM_MATH_LOOPUNROLL) */
+  
+  while (blkCnt > 0U)
+  {
+    /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
+    sum += (_Float16)*pSrc++;
+    
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+  
+  /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
+  /* Store result to destination */
+  *pResult = sum ;
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
 

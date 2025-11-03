@@ -1,14 +1,14 @@
 /***************************************************************************//**
 *
 * \file ifx_se_psacrypto.c
-* \version 1.1.0
+* \version 1.2.0
 *
 * \brief
 *  This is the source code file for Secure Services psa crypto syscalls.
 *
 ********************************************************************************
 * \copyright
-* Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+* Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
 * All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
@@ -23,24 +23,24 @@
 #include "cy_utils.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 38, \
-                             'The "operation" context changes inside SE RT Services.')
+    'The "operation" context changes inside SE RT Services.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 59, \
-                             'Intentional typecast of "ipc_packet[]" to "ifx_se_fih_uint *" type.')
+    'Intentional typecast of "ipc_packet[]" to "ifx_se_fih_uint *" type.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.4', 103, \
-                             'Intentional typecast of "ipc_packet" to an integer type.')
+    'Intentional typecast of "ipc_packet" to an integer type.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Directive 4.9', 221, \
-                             'Use function-like macro as simple inline functions.')
+    'Use function-like macro as simple inline functions.')
 
 ifx_se_status_t ifx_se_sign_hash(
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    const ifx_se_fih_ptr_t hash,
-    ifx_se_fih_t hash_length,
-    const ifx_se_fih_ptr_t signature,
-    ifx_se_fih_t signature_size,
-    ifx_se_fih_ptr_t signature_length,
-    void *ctx)
-{
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    const ifx_se_fih_ptr_t hash,
+                                    ifx_se_fih_t hash_length,
+                                    const ifx_se_fih_ptr_t signature,
+                                    ifx_se_fih_t signature_size,
+                                    ifx_se_fih_ptr_t signature_length,
+                                    void *ctx)
+ {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
     /* 8 parameters */
@@ -62,16 +62,16 @@ ifx_se_status_t ifx_se_sign_hash(
     status = ifx_se_syscall(ifx_se_fih_ptr_encode(ipc_packet), ifx_se_fih_uint_encode(sizeof(ipc_packet)), ctx);
 
     return status;
-}
+ }
 
 ifx_se_status_t ifx_se_verify_hash(
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    const ifx_se_fih_ptr_t hash,
-    ifx_se_fih_t hash_length,
-    const ifx_se_fih_ptr_t signature,
-    ifx_se_fih_t signature_length,
-    void *ctx)
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    const ifx_se_fih_ptr_t hash,
+                                    ifx_se_fih_t hash_length,
+                                    const ifx_se_fih_ptr_t signature,
+                                    ifx_se_fih_t signature_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -96,13 +96,13 @@ ifx_se_status_t ifx_se_verify_hash(
 }
 
 ifx_se_status_t ifx_se_sign_message(ifx_se_key_id_fih_t key,
-                                    ifx_se_alg_fih_t alg,
-                                    const ifx_se_fih_ptr_t input,
-                                    ifx_se_fih_t input_length,
-                                    ifx_se_fih_ptr_t signature,
-                                    ifx_se_fih_t signature_size,
-                                    ifx_se_fih_ptr_t signature_length,
-                                    void *ctx)
+                               ifx_se_alg_fih_t alg,
+                               const ifx_se_fih_ptr_t input,
+                               ifx_se_fih_t input_length,
+                               ifx_se_fih_ptr_t signature,
+                               ifx_se_fih_t signature_size,
+                               ifx_se_fih_ptr_t signature_length,
+                               void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -128,12 +128,12 @@ ifx_se_status_t ifx_se_sign_message(ifx_se_key_id_fih_t key,
 }
 
 ifx_se_status_t ifx_se_verify_message(ifx_se_key_id_fih_t key,
-                                      ifx_se_alg_fih_t alg,
-                                      const ifx_se_fih_ptr_t input,
-                                      ifx_se_fih_t input_length,
-                                      const ifx_se_fih_ptr_t signature,
-                                      ifx_se_fih_t signature_length,
-                                      void *ctx)
+                                 ifx_se_alg_fih_t alg,
+                                 const ifx_se_fih_ptr_t input,
+                                 ifx_se_fih_t input_length,
+                                 const ifx_se_fih_ptr_t signature,
+                                 ifx_se_fih_t signature_length,
+                                 void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -158,18 +158,18 @@ ifx_se_status_t ifx_se_verify_message(ifx_se_key_id_fih_t key,
 }
 
 ifx_se_status_t ifx_se_aead_encrypt(
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    const ifx_se_fih_ptr_t nonce,
-    ifx_se_fih_t nonce_length,
-    const ifx_se_fih_ptr_t additional_data,
-    ifx_se_fih_t additional_data_length,
-    const ifx_se_fih_ptr_t plaintext,
-    ifx_se_fih_t plaintext_length,
-    const ifx_se_fih_ptr_t ciphertext,
-    ifx_se_fih_t ciphertext_size,
-    ifx_se_fih_ptr_t ciphertext_length,
-    void *ctx)
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    const ifx_se_fih_ptr_t nonce,
+                                    ifx_se_fih_t nonce_length,
+                                    const ifx_se_fih_ptr_t additional_data,
+                                    ifx_se_fih_t additional_data_length,
+                                    const ifx_se_fih_ptr_t plaintext,
+                                    ifx_se_fih_t plaintext_length,
+                                    const ifx_se_fih_ptr_t ciphertext,
+                                    ifx_se_fih_t ciphertext_size,
+                                    ifx_se_fih_ptr_t ciphertext_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -199,18 +199,18 @@ ifx_se_status_t ifx_se_aead_encrypt(
 }
 
 ifx_se_status_t ifx_se_aead_decrypt(
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    const ifx_se_fih_ptr_t nonce,
-    ifx_se_fih_t nonce_length,
-    const ifx_se_fih_ptr_t additional_data,
-    ifx_se_fih_t additional_data_length,
-    const ifx_se_fih_ptr_t ciphertext,
-    ifx_se_fih_t ciphertext_length,
-    const ifx_se_fih_ptr_t plaintext,
-    ifx_se_fih_t plaintext_size,
-    ifx_se_fih_ptr_t plaintext_length,
-    void *ctx)
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    const ifx_se_fih_ptr_t nonce,
+                                    ifx_se_fih_t nonce_length,
+                                    const ifx_se_fih_ptr_t additional_data,
+                                    ifx_se_fih_t additional_data_length,
+                                    const ifx_se_fih_ptr_t ciphertext,
+                                    ifx_se_fih_t ciphertext_length,
+                                    const ifx_se_fih_ptr_t plaintext,
+                                    ifx_se_fih_t plaintext_size,
+                                    ifx_se_fih_ptr_t plaintext_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -240,9 +240,9 @@ ifx_se_status_t ifx_se_aead_decrypt(
 }
 
 ifx_se_status_t ifx_se_aead_encrypt_setup(ifx_se_aead_operation_t *operation,
-        ifx_se_key_id_fih_t key,
-        ifx_se_alg_fih_t alg,
-        void *ctx)
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -264,9 +264,9 @@ ifx_se_status_t ifx_se_aead_encrypt_setup(ifx_se_aead_operation_t *operation,
 }
 
 ifx_se_status_t ifx_se_aead_decrypt_setup(ifx_se_aead_operation_t *operation,
-        ifx_se_key_id_fih_t key,
-        ifx_se_alg_fih_t alg,
-        void *ctx)
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -288,10 +288,10 @@ ifx_se_status_t ifx_se_aead_decrypt_setup(ifx_se_aead_operation_t *operation,
 }
 
 ifx_se_status_t ifx_se_aead_generate_nonce(ifx_se_aead_operation_t *operation,
-        ifx_se_fih_ptr_t nonce,
-        ifx_se_fih_t nonce_size,
-        ifx_se_fih_ptr_t nonce_length,
-        void *ctx)
+                                     ifx_se_fih_ptr_t nonce,
+                                     ifx_se_fih_t nonce_size,
+                                     ifx_se_fih_ptr_t nonce_length,
+                                     void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -313,9 +313,9 @@ ifx_se_status_t ifx_se_aead_generate_nonce(ifx_se_aead_operation_t *operation,
 }
 
 ifx_se_status_t ifx_se_aead_set_nonce(ifx_se_aead_operation_t *operation,
-                                      const ifx_se_fih_ptr_t nonce,
-                                      ifx_se_fih_t nonce_length,
-                                      void *ctx)
+                                const ifx_se_fih_ptr_t nonce,
+                                ifx_se_fih_t nonce_length,
+                                void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -336,9 +336,9 @@ ifx_se_status_t ifx_se_aead_set_nonce(ifx_se_aead_operation_t *operation,
 }
 
 ifx_se_status_t ifx_se_aead_set_lengths(ifx_se_aead_operation_t *operation,
-                                        ifx_se_fih_t ad_length,
-                                        ifx_se_fih_t plaintext_length,
-                                        void *ctx)
+                                  ifx_se_fih_t ad_length,
+                                  ifx_se_fih_t plaintext_length,
+                                  void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -359,9 +359,9 @@ ifx_se_status_t ifx_se_aead_set_lengths(ifx_se_aead_operation_t *operation,
 }
 
 ifx_se_status_t ifx_se_aead_update_ad(ifx_se_aead_operation_t *operation,
-                                      const ifx_se_fih_ptr_t input,
-                                      ifx_se_fih_t input_length,
-                                      void *ctx)
+                                const ifx_se_fih_ptr_t input,
+                                ifx_se_fih_t input_length,
+                                void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -382,12 +382,12 @@ ifx_se_status_t ifx_se_aead_update_ad(ifx_se_aead_operation_t *operation,
 }
 
 ifx_se_status_t ifx_se_aead_update(ifx_se_aead_operation_t *operation,
-                                   const ifx_se_fih_ptr_t input,
-                                   ifx_se_fih_t input_length,
-                                   ifx_se_fih_ptr_t output,
-                                   ifx_se_fih_t output_size,
-                                   ifx_se_fih_ptr_t output_length,
-                                   void *ctx)
+                             const ifx_se_fih_ptr_t input,
+                             ifx_se_fih_t input_length,
+                             ifx_se_fih_ptr_t output,
+                             ifx_se_fih_t output_size,
+                             ifx_se_fih_ptr_t output_length,
+                             void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -411,13 +411,13 @@ ifx_se_status_t ifx_se_aead_update(ifx_se_aead_operation_t *operation,
 }
 
 ifx_se_status_t ifx_se_aead_finish(ifx_se_aead_operation_t *operation,
-                                   ifx_se_fih_ptr_t ciphertext,
-                                   ifx_se_fih_t ciphertext_size,
-                                   ifx_se_fih_ptr_t ciphertext_length,
-                                   ifx_se_fih_ptr_t tag,
-                                   ifx_se_fih_t tag_size,
-                                   ifx_se_fih_ptr_t tag_length,
-                                   void *ctx)
+                             ifx_se_fih_ptr_t ciphertext,
+                             ifx_se_fih_t ciphertext_size,
+                             ifx_se_fih_ptr_t ciphertext_length,
+                             ifx_se_fih_ptr_t tag,
+                             ifx_se_fih_t tag_size,
+                             ifx_se_fih_ptr_t tag_length,
+                             void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -442,12 +442,12 @@ ifx_se_status_t ifx_se_aead_finish(ifx_se_aead_operation_t *operation,
 }
 
 ifx_se_status_t ifx_se_aead_verify(ifx_se_aead_operation_t *operation,
-                                   ifx_se_fih_ptr_t plaintext,
-                                   ifx_se_fih_t plaintext_size,
-                                   ifx_se_fih_ptr_t plaintext_length,
-                                   const ifx_se_fih_ptr_t tag,
-                                   ifx_se_fih_t tag_length,
-                                   void *ctx)
+                             ifx_se_fih_ptr_t plaintext,
+                             ifx_se_fih_t plaintext_size,
+                             ifx_se_fih_ptr_t plaintext_length,
+                             const ifx_se_fih_ptr_t tag,
+                             ifx_se_fih_t tag_length,
+                             void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -489,16 +489,16 @@ ifx_se_status_t ifx_se_aead_abort(ifx_se_aead_operation_t *operation, void *ctx)
 }
 
 ifx_se_status_t ifx_se_cipher_encrypt(
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    const ifx_se_fih_ptr_t iv,
-    ifx_se_fih_t iv_length,
-    const ifx_se_fih_ptr_t input,
-    ifx_se_fih_t input_length,
-    ifx_se_fih_ptr_t output,
-    ifx_se_fih_t output_size,
-    ifx_se_fih_ptr_t output_length,
-    void *ctx)
+                                ifx_se_key_id_fih_t key,
+                                ifx_se_alg_fih_t alg,
+                                const ifx_se_fih_ptr_t iv,
+                                ifx_se_fih_t iv_length,
+                                const ifx_se_fih_ptr_t input,
+                                ifx_se_fih_t input_length,
+                                ifx_se_fih_ptr_t output,
+                                ifx_se_fih_t output_size,
+                                ifx_se_fih_ptr_t output_length,
+                                void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -526,13 +526,13 @@ ifx_se_status_t ifx_se_cipher_encrypt(
 }
 
 ifx_se_status_t ifx_se_cipher_decrypt(ifx_se_key_id_fih_t key,
-                                      ifx_se_alg_fih_t alg,
-                                      const ifx_se_fih_ptr_t input,
-                                      ifx_se_fih_t input_length,
-                                      ifx_se_fih_ptr_t output,
-                                      ifx_se_fih_t output_size,
-                                      ifx_se_fih_ptr_t output_length,
-                                      void *ctx)
+                                ifx_se_alg_fih_t alg,
+                                const ifx_se_fih_ptr_t input,
+                                ifx_se_fih_t input_length,
+                                ifx_se_fih_ptr_t output,
+                                ifx_se_fih_t output_size,
+                                ifx_se_fih_ptr_t output_length,
+                                void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -558,10 +558,10 @@ ifx_se_status_t ifx_se_cipher_decrypt(ifx_se_key_id_fih_t key,
 }
 
 ifx_se_status_t ifx_se_cipher_encrypt_setup(
-    ifx_se_cipher_operation_t *operation,
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    void *ctx)
+                                    ifx_se_cipher_operation_t *operation,
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -583,10 +583,10 @@ ifx_se_status_t ifx_se_cipher_encrypt_setup(
 }
 
 ifx_se_status_t ifx_se_cipher_decrypt_setup(
-    ifx_se_cipher_operation_t *operation,
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    void *ctx)
+                                    ifx_se_cipher_operation_t *operation,
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -608,11 +608,11 @@ ifx_se_status_t ifx_se_cipher_decrypt_setup(
 }
 
 ifx_se_status_t ifx_se_cipher_finish(
-    ifx_se_cipher_operation_t *operation,
-    ifx_se_fih_ptr_t output,
-    ifx_se_fih_t output_size,
-    ifx_se_fih_ptr_t output_length,
-    void *ctx)
+                                    ifx_se_cipher_operation_t *operation,
+                                    ifx_se_fih_ptr_t output,
+                                    ifx_se_fih_t output_size,
+                                    ifx_se_fih_ptr_t output_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -634,11 +634,11 @@ ifx_se_status_t ifx_se_cipher_finish(
 }
 
 ifx_se_status_t ifx_se_cipher_generate_iv(
-    ifx_se_cipher_operation_t *operation,
-    ifx_se_fih_ptr_t iv,
-    ifx_se_fih_t iv_size,
-    ifx_se_fih_ptr_t iv_length,
-    void *ctx)
+                                    ifx_se_cipher_operation_t *operation,
+                                    ifx_se_fih_ptr_t iv,
+                                    ifx_se_fih_t iv_size,
+                                    ifx_se_fih_ptr_t iv_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -660,10 +660,10 @@ ifx_se_status_t ifx_se_cipher_generate_iv(
 }
 
 ifx_se_status_t ifx_se_cipher_set_iv(
-    ifx_se_cipher_operation_t *operation,
-    const ifx_se_fih_ptr_t iv,
-    ifx_se_fih_t iv_length,
-    void *ctx)
+                                    ifx_se_cipher_operation_t *operation,
+                                    const ifx_se_fih_ptr_t iv,
+                                    ifx_se_fih_t iv_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -684,13 +684,13 @@ ifx_se_status_t ifx_se_cipher_set_iv(
 }
 
 ifx_se_status_t ifx_se_cipher_update(
-    ifx_se_cipher_operation_t *operation,
-    const ifx_se_fih_ptr_t input,
-    ifx_se_fih_t input_length,
-    ifx_se_fih_ptr_t output,
-    ifx_se_fih_t output_size,
-    ifx_se_fih_ptr_t output_length,
-    void *ctx)
+                                    ifx_se_cipher_operation_t *operation,
+                                    const ifx_se_fih_ptr_t input,
+                                    ifx_se_fih_t input_length,
+                                    ifx_se_fih_ptr_t output,
+                                    ifx_se_fih_t output_size,
+                                    ifx_se_fih_ptr_t output_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -792,8 +792,8 @@ ifx_se_status_t ifx_se_generate_key(const ifx_se_key_attributes_t *attributes,
 }
 
 ifx_se_status_t ifx_se_generate_random(ifx_se_fih_ptr_t output,
-                                       ifx_se_fih_t output_size,
-                                       void *ctx)
+                                    ifx_se_fih_t output_size,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -813,8 +813,8 @@ ifx_se_status_t ifx_se_generate_random(ifx_se_fih_ptr_t output,
 }
 
 ifx_se_status_t ifx_se_key_derivation_abort(
-    ifx_se_key_derivation_operation_t *operation,
-    void *ctx)
+                                    ifx_se_key_derivation_operation_t *operation,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -833,9 +833,9 @@ ifx_se_status_t ifx_se_key_derivation_abort(
 }
 
 ifx_se_status_t ifx_se_hash_setup(
-    ifx_se_hash_operation_t *operation,
-    ifx_se_alg_fih_t alg,
-    void *ctx)
+                                    ifx_se_hash_operation_t *operation,
+                                    ifx_se_alg_fih_t alg,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -855,10 +855,10 @@ ifx_se_status_t ifx_se_hash_setup(
 }
 
 ifx_se_status_t ifx_se_hash_update(
-    ifx_se_hash_operation_t *operation,
-    const ifx_se_fih_ptr_t input,
-    ifx_se_fih_t input_length,
-    void *ctx)
+                                    ifx_se_hash_operation_t *operation,
+                                    const ifx_se_fih_ptr_t input,
+                                    ifx_se_fih_t input_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -879,11 +879,11 @@ ifx_se_status_t ifx_se_hash_update(
 }
 
 ifx_se_status_t ifx_se_hash_finish(
-    ifx_se_hash_operation_t *operation,
-    ifx_se_fih_ptr_t hash,
-    ifx_se_fih_t hash_size,
-    ifx_se_fih_ptr_t hash_length,
-    void *ctx)
+                                    ifx_se_hash_operation_t *operation,
+                                    ifx_se_fih_ptr_t hash,
+                                    ifx_se_fih_t hash_size,
+                                    ifx_se_fih_ptr_t hash_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -905,10 +905,10 @@ ifx_se_status_t ifx_se_hash_finish(
 }
 
 ifx_se_status_t ifx_se_hash_verify(
-    ifx_se_hash_operation_t *operation,
-    const ifx_se_fih_ptr_t hash,
-    ifx_se_fih_t hash_length,
-    void *ctx)
+                                    ifx_se_hash_operation_t *operation,
+                                    const ifx_se_fih_ptr_t hash,
+                                    ifx_se_fih_t hash_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -947,12 +947,12 @@ ifx_se_status_t ifx_se_hash_abort(ifx_se_hash_operation_t *operation, void *ctx)
 }
 
 ifx_se_status_t ifx_se_hash_compute(ifx_se_alg_fih_t alg,
-                                    const ifx_se_fih_ptr_t input,
-                                    ifx_se_fih_t input_length,
-                                    ifx_se_fih_ptr_t hash,
-                                    ifx_se_fih_t hash_size,
-                                    ifx_se_fih_ptr_t hash_length,
-                                    void *ctx)
+                              const ifx_se_fih_ptr_t input,
+                              ifx_se_fih_t input_length,
+                              ifx_se_fih_ptr_t hash,
+                              ifx_se_fih_t hash_size,
+                              ifx_se_fih_ptr_t hash_length,
+                              void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -976,8 +976,8 @@ ifx_se_status_t ifx_se_hash_compute(ifx_se_alg_fih_t alg,
 }
 
 ifx_se_status_t ifx_se_hash_clone(const ifx_se_hash_operation_t *source_operation,
-                                  ifx_se_hash_operation_t *target_operation,
-                                  void *ctx)
+                            ifx_se_hash_operation_t *target_operation,
+                            void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -997,11 +997,11 @@ ifx_se_status_t ifx_se_hash_clone(const ifx_se_hash_operation_t *source_operatio
 }
 
 ifx_se_status_t ifx_se_import_key(
-    const ifx_se_key_attributes_t *attributes,
-    const ifx_se_fih_ptr_t data,
-    ifx_se_fih_t data_length,
-    ifx_se_fih_ptr_t key,
-    void *ctx)
+                                    const ifx_se_key_attributes_t *attributes,
+                                    const ifx_se_fih_ptr_t data,
+                                    ifx_se_fih_t data_length,
+                                    ifx_se_fih_ptr_t key,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1023,11 +1023,11 @@ ifx_se_status_t ifx_se_import_key(
 }
 
 ifx_se_status_t ifx_se_export_key(
-    ifx_se_key_id_fih_t key,
-    ifx_se_fih_ptr_t data,
-    ifx_se_fih_t data_size,
-    ifx_se_fih_ptr_t data_length,
-    void *ctx)
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_fih_ptr_t data,
+                                    ifx_se_fih_t data_size,
+                                    ifx_se_fih_ptr_t data_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1050,11 +1050,11 @@ ifx_se_status_t ifx_se_export_key(
 }
 
 ifx_se_status_t ifx_se_export_public_key(
-    ifx_se_key_id_fih_t key,
-    ifx_se_fih_ptr_t data,
-    ifx_se_fih_t data_size,
-    ifx_se_fih_ptr_t data_length,
-    void *ctx)
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_fih_ptr_t data,
+                                    ifx_se_fih_t data_size,
+                                    ifx_se_fih_ptr_t data_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1077,9 +1077,9 @@ ifx_se_status_t ifx_se_export_public_key(
 }
 
 ifx_se_status_t ifx_se_copy_key(ifx_se_key_id_fih_t source_key,
-                                const ifx_se_key_attributes_t *attributes,
-                                ifx_se_fih_ptr_t target_key,
-                                void *ctx)
+                          const ifx_se_key_attributes_t *attributes,
+                          ifx_se_fih_ptr_t target_key,
+                          void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1101,10 +1101,10 @@ ifx_se_status_t ifx_se_copy_key(ifx_se_key_id_fih_t source_key,
 }
 
 ifx_se_status_t ifx_se_key_derivation_output_key(
-    const ifx_se_key_attributes_t *attributes,
-    ifx_se_key_derivation_operation_t *operation,
-    ifx_se_fih_ptr_t key,
-    void *ctx)
+                                    const ifx_se_key_attributes_t *attributes,
+                                    ifx_se_key_derivation_operation_t *operation,
+                                    ifx_se_fih_ptr_t key,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1125,10 +1125,10 @@ ifx_se_status_t ifx_se_key_derivation_output_key(
 }
 
 ifx_se_status_t ifx_se_key_derivation_input_key(
-    ifx_se_key_derivation_operation_t *operation,
-    ifx_se_key_derivation_step_t step,
-    ifx_se_key_id_fih_t key,
-    void *ctx)
+                                    ifx_se_key_derivation_operation_t *operation,
+                                    ifx_se_key_derivation_step_t step,
+                                    ifx_se_key_id_fih_t key,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1150,11 +1150,11 @@ ifx_se_status_t ifx_se_key_derivation_input_key(
 }
 
 ifx_se_status_t ifx_se_key_derivation_input_bytes(
-    ifx_se_key_derivation_operation_t *operation,
-    ifx_se_key_derivation_step_t step,
-    const ifx_se_fih_ptr_t data,
-    ifx_se_fih_t data_length,
-    void *ctx)
+                                    ifx_se_key_derivation_operation_t *operation,
+                                    ifx_se_key_derivation_step_t step,
+                                    const ifx_se_fih_ptr_t data,
+                                    ifx_se_fih_t data_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1176,10 +1176,10 @@ ifx_se_status_t ifx_se_key_derivation_input_bytes(
 }
 
 ifx_se_status_t ifx_se_key_derivation_output_bytes(
-    ifx_se_key_derivation_operation_t *operation,
-    ifx_se_fih_ptr_t output,
-    ifx_se_fih_t output_length,
-    void *ctx)
+                                    ifx_se_key_derivation_operation_t *operation,
+                                    ifx_se_fih_ptr_t output,
+                                    ifx_se_fih_t output_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1201,9 +1201,9 @@ ifx_se_status_t ifx_se_key_derivation_output_bytes(
 
 
 ifx_se_status_t ifx_se_key_derivation_setup(
-    ifx_se_key_derivation_operation_t *operation,
-    ifx_se_alg_fih_t alg,
-    void *ctx)
+                                    ifx_se_key_derivation_operation_t *operation,
+                                    ifx_se_alg_fih_t alg,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1223,9 +1223,9 @@ ifx_se_status_t ifx_se_key_derivation_setup(
 }
 
 ifx_se_status_t ifx_se_key_derivation_get_capacity(
-    const ifx_se_key_derivation_operation_t *operation,
-    ifx_se_fih_ptr_t capacity,
-    void *ctx)
+                                    const ifx_se_key_derivation_operation_t *operation,
+                                    ifx_se_fih_ptr_t capacity,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1245,9 +1245,9 @@ ifx_se_status_t ifx_se_key_derivation_get_capacity(
 }
 
 ifx_se_status_t ifx_se_key_derivation_set_capacity(
-    ifx_se_key_derivation_operation_t *operation,
-    ifx_se_fih_t capacity,
-    void *ctx)
+                                    ifx_se_key_derivation_operation_t *operation,
+                                    ifx_se_fih_t capacity,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1267,12 +1267,12 @@ ifx_se_status_t ifx_se_key_derivation_set_capacity(
 }
 
 ifx_se_status_t ifx_se_key_derivation_key_agreement(
-    ifx_se_key_derivation_operation_t *operation,
-    ifx_se_key_derivation_step_t step,
-    ifx_se_key_id_fih_t private_key,
-    const ifx_se_fih_ptr_t peer_key,
-    ifx_se_fih_t peer_key_length,
-    void *ctx)
+                                    ifx_se_key_derivation_operation_t *operation,
+                                    ifx_se_key_derivation_step_t step,
+                                    ifx_se_key_id_fih_t private_key,
+                                    const ifx_se_fih_ptr_t peer_key,
+                                    ifx_se_fih_t peer_key_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1296,13 +1296,13 @@ ifx_se_status_t ifx_se_key_derivation_key_agreement(
 }
 
 ifx_se_status_t ifx_se_raw_key_agreement(ifx_se_alg_fih_t alg,
-        ifx_se_key_id_fih_t private_key,
-        const ifx_se_fih_ptr_t peer_key,
-        ifx_se_fih_t peer_key_length,
-        ifx_se_fih_ptr_t output,
-        ifx_se_fih_t output_size,
-        ifx_se_fih_ptr_t output_length,
-        void *ctx)
+                                    ifx_se_key_id_fih_t private_key,
+                                    const ifx_se_fih_ptr_t peer_key,
+                                    ifx_se_fih_t peer_key_length,
+                                    ifx_se_fih_ptr_t output,
+                                    ifx_se_fih_t output_size,
+                                    ifx_se_fih_ptr_t output_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1328,13 +1328,13 @@ ifx_se_status_t ifx_se_raw_key_agreement(ifx_se_alg_fih_t alg,
 }
 
 ifx_se_status_t ifx_se_mac_compute(ifx_se_key_id_fih_t key,
-                                   ifx_se_alg_fih_t alg,
-                                   const ifx_se_fih_ptr_t input,
-                                   ifx_se_fih_t input_length,
-                                   ifx_se_fih_ptr_t mac,
-                                   ifx_se_fih_t mac_size,
-                                   ifx_se_fih_ptr_t mac_length,
-                                   void *ctx)
+                             ifx_se_alg_fih_t alg,
+                             const ifx_se_fih_ptr_t input,
+                             ifx_se_fih_t input_length,
+                             ifx_se_fih_ptr_t mac,
+                             ifx_se_fih_t mac_size,
+                             ifx_se_fih_ptr_t mac_length,
+                             void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1360,12 +1360,12 @@ ifx_se_status_t ifx_se_mac_compute(ifx_se_key_id_fih_t key,
 }
 
 ifx_se_status_t ifx_se_mac_verify(ifx_se_key_id_fih_t key,
-                                  ifx_se_alg_fih_t alg,
-                                  const ifx_se_fih_ptr_t input,
-                                  ifx_se_fih_t input_length,
-                                  const ifx_se_fih_ptr_t mac,
-                                  ifx_se_fih_t mac_length,
-                                  void *ctx)
+                            ifx_se_alg_fih_t alg,
+                            const ifx_se_fih_ptr_t input,
+                            ifx_se_fih_t input_length,
+                            const ifx_se_fih_ptr_t mac,
+                            ifx_se_fih_t mac_length,
+                            void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1390,10 +1390,10 @@ ifx_se_status_t ifx_se_mac_verify(ifx_se_key_id_fih_t key,
 }
 
 ifx_se_status_t ifx_se_mac_sign_setup(
-    ifx_se_mac_operation_t *operation,
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    void *ctx)
+                                    ifx_se_mac_operation_t *operation,
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1415,10 +1415,10 @@ ifx_se_status_t ifx_se_mac_sign_setup(
 }
 
 ifx_se_status_t ifx_se_mac_verify_setup(
-    ifx_se_mac_operation_t *operation,
-    ifx_se_key_id_fih_t key,
-    ifx_se_alg_fih_t alg,
-    void *ctx)
+                                    ifx_se_mac_operation_t *operation,
+                                    ifx_se_key_id_fih_t key,
+                                    ifx_se_alg_fih_t alg,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1440,10 +1440,10 @@ ifx_se_status_t ifx_se_mac_verify_setup(
 }
 
 ifx_se_status_t ifx_se_mac_update(
-    ifx_se_mac_operation_t *operation,
-    const ifx_se_fih_ptr_t input,
-    ifx_se_fih_t input_length,
-    void *ctx)
+                                    ifx_se_mac_operation_t *operation,
+                                    const ifx_se_fih_ptr_t input,
+                                    ifx_se_fih_t input_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1464,11 +1464,11 @@ ifx_se_status_t ifx_se_mac_update(
 }
 
 ifx_se_status_t ifx_se_mac_sign_finish(
-    ifx_se_mac_operation_t *operation,
-    ifx_se_fih_ptr_t mac,
-    ifx_se_fih_t mac_size,
-    ifx_se_fih_ptr_t mac_length,
-    void *ctx)
+                                    ifx_se_mac_operation_t *operation,
+                                    ifx_se_fih_ptr_t mac,
+                                    ifx_se_fih_t mac_size,
+                                    ifx_se_fih_ptr_t mac_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1490,10 +1490,10 @@ ifx_se_status_t ifx_se_mac_sign_finish(
 }
 
 ifx_se_status_t ifx_se_mac_verify_finish(
-    ifx_se_mac_operation_t *operation,
-    const ifx_se_fih_ptr_t mac,
-    ifx_se_fih_t mac_length,
-    void *ctx)
+                                    ifx_se_mac_operation_t *operation,
+                                    const ifx_se_fih_ptr_t mac,
+                                    ifx_se_fih_t mac_length,
+                                    void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -1531,14 +1531,14 @@ ifx_se_status_t ifx_se_mac_abort(ifx_se_mac_operation_t *operation, void *ctx)
     return status;
 }
 
-void ifx_se_reset_key_attributes(ifx_se_key_attributes_t *attributes)
+void ifx_se_reset_key_attributes( ifx_se_key_attributes_t *attributes )
 {
-    (void)memset(attributes, 0, sizeof(*attributes));
+    (void)memset( attributes, 0, sizeof( *attributes ) );
 }
 
 ifx_se_status_t ifx_se_get_key_attributes(ifx_se_key_id_fih_t key,
-        ifx_se_key_attributes_t *attributes,
-        void *ctx)
+                                          ifx_se_key_attributes_t *attributes,
+                                          void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 

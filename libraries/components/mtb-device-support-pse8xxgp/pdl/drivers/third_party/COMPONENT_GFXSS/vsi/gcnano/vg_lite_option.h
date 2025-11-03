@@ -64,63 +64,63 @@ extern "C" {
  * Set gcdVG_ENABLE_WRITEBUFFER to 0 for Linux Uncacheable memory access
 */
 #ifndef gcdVG_ENABLE_WRITEBUFFER
-#define gcdVG_ENABLE_WRITEBUFFER                     1
+    #define gcdVG_ENABLE_WRITEBUFFER                     1
 #endif
 
 /*
  * Backup state command, only support Linux and RTOS
 */
 #ifndef gcdVG_ENABLE_BACKUP_COMMAND
-#define gcdVG_ENABLE_BACKUP_COMMAND                  0
+    #define gcdVG_ENABLE_BACKUP_COMMAND                  0
 #endif
 
 /*
  * Backup command buffer by user
 */
 #ifndef gcdVG_ENABLE_COMMAND_BUFFER_CACHE
-#define gcdVG_ENABLE_COMMAND_BUFFER_CACHE            0
+    #define gcdVG_ENABLE_COMMAND_BUFFER_CACHE            0
 #endif
 
 /*
  * Power management, only support Linux and RTOS
 */
 #ifndef gcdVG_ENABLE_POWER_MANAGEMENT
-#define gcdVG_ENABLE_POWER_MANAGEMENT                0
+    #define gcdVG_ENABLE_POWER_MANAGEMENT                0
 #endif
 
 /*
  * when set to 1, vg_lite_hal_trace can use to print message
 */
 #ifndef gcdVG_ENABLE_DEBUG
-#define gcdVG_ENABLE_DEBUG                           0
+    #define gcdVG_ENABLE_DEBUG                           0
 #endif
 
 /*
  * when set to 1, dump last submit command from kernel
 */
 #ifndef gcdVG_ENABLE_DUMP_COMMAND
-#define gcdVG_ENABLE_DUMP_COMMAND                    0
+    #define gcdVG_ENABLE_DUMP_COMMAND                    0
 #endif
 
 /*
  * when gpu hang, set 1 to open gpu reset function
 */
 #ifndef gcdVG_ENABLE_GPU_RESET
-#define gcdVG_ENABLE_GPU_RESET                       0
+    #define gcdVG_ENABLE_GPU_RESET                       0
 #endif
 
 /*
  * Set 1 to open gpu auto clock gating feature
 */
 #ifndef gcdVG_ENABLE_AUTO_CLOCK_GATING
-#define gcdVG_ENABLE_AUTO_CLOCK_GATING               0
+    #define gcdVG_ENABLE_AUTO_CLOCK_GATING               0
 #endif
 
 /*
  * Set 1 to open dump debug register
 */
 #ifndef gcdVG_DUMP_DEBUG_REGISTER
-#define gcdVG_DUMP_DEBUG_REGISTER                    0
+    #define gcdVG_DUMP_DEBUG_REGISTER                    0
 #endif
 
 /*
@@ -128,14 +128,14 @@ extern "C" {
  * Set gcdVG_ENABLE_DELAY_RESUME to 1 to open delay resume feature.
 */
 #ifndef gcdVG_ENABLE_DELAY_RESUME
-#define gcdVG_ENABLE_DELAY_RESUME                    0
+    #define gcdVG_ENABLE_DELAY_RESUME                    0
 #endif
 
 /*
  * Set 1 to record GPU hardware running time.
 */
 #ifndef gcdVG_RECORD_HARDWARE_RUNNING_TIME
-#define gcdVG_RECORD_HARDWARE_RUNNING_TIME           0
+    #define gcdVG_RECORD_HARDWARE_RUNNING_TIME           0
 #endif
 
 #ifdef __cplusplus

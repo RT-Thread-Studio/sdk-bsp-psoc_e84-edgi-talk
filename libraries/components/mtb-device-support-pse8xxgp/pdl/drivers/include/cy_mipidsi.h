@@ -32,7 +32,7 @@
 *
 * MIPI-DSI Host Controller and D-PHY (MIPIDSI) features
 * - DPI-2 and and DBI-2 Type B displays.
-* - Up to 2 data lanes, max 1.5 Gbps per lane.
+* - Up to 2 data lanes, max 1.5 Gbps per lane. 
 * - PLL for high-speed mode clock generation.
 * - Generic command interface (DCS and proprietary read & write).
 * - Video Pattern generator.
@@ -48,17 +48,6 @@
 *
 * For more information on the MIPI DSI and Graphics subsystem, refer to the technical reference
 * manual (TRM).
-*
-* \section group_mipidsi_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial Driver.</td>
-*     <td>Initial Driver.</td>
-*   </tr>
-*   </tr>
-* </table>
 *
 * \defgroup group_mipidsi_macros Macros
 * \defgroup group_mipidsi_functions Functions
@@ -115,7 +104,9 @@ extern "C" {
 #define VID_MODE_TYPE_MASK                                 0x3
 
 /** BIT definition */
+#ifndef BIT
 #define BIT(x)                                            (1UL << (x))
+#endif
 
 /** video mode */
 #define MIPI_DSI_MODE_VIDEO        BIT(0)
@@ -192,36 +183,35 @@ extern "C" {
 /** MIPI DSI API result */
 typedef enum
 {
-    CY_MIPIDSI_SUCCESS,          /**< Success */
-    CY_MIPIDSI_BAD_PARAM,        /**< Bad parameter */
-    CY_MIPIDSI_TIMEOUT,          /**< Operation timeout */
+   CY_MIPIDSI_SUCCESS,          /**< Success */
+   CY_MIPIDSI_BAD_PARAM,        /**< Bad parameter */
+   CY_MIPIDSI_TIMEOUT,          /**< Operation timeout */
 } cy_en_mipidsi_status_t;
 
 /** DPI/DBI interface pixel color format */
 typedef enum
 {
-    CY_MIPIDSI_FMT_8BIT_8BPP,
-    CY_MIPIDSI_FMT_8BIT_12BPP,
-    CY_MIPIDSI_FMT_8BIT_16BPP,
-    CY_MIPIDSI_FMT_8BIT_18BPP,
-    CY_MIPIDSI_FMT_8BIT_24BPP,
-    CY_MIPIDSI_FMT_9BIT_18BPP,
-    CY_MIPIDSI_FMT_16BIT_8BPP,
-    CY_MIPIDSI_FMT_16BIT_12BPP,
-    CY_MIPIDSI_FMT_16BIT_16BPP,
-    CY_MIPIDSI_FMT_16BIT_18BPP_OP1,
-    CY_MIPIDSI_FMT_16BIT_18BPP_OP2,
-    CY_MIPIDSI_FMT_16BIT_24BPP_OP1,
-    CY_MIPIDSI_FMT_16BIT_24BPP_OP2,
-    CY_MIPIDSI_FMT_RGB888,
-    CY_MIPIDSI_FMT_RGB666,
-    CY_MIPIDSI_FMT_RGB666_PACKED,
-    CY_MIPIDSI_FMT_RGB565
+   CY_MIPIDSI_FMT_8BIT_8BPP,
+   CY_MIPIDSI_FMT_8BIT_12BPP,
+   CY_MIPIDSI_FMT_8BIT_16BPP,
+   CY_MIPIDSI_FMT_8BIT_18BPP,
+   CY_MIPIDSI_FMT_8BIT_24BPP,
+   CY_MIPIDSI_FMT_9BIT_18BPP,
+   CY_MIPIDSI_FMT_16BIT_8BPP,
+   CY_MIPIDSI_FMT_16BIT_12BPP,
+   CY_MIPIDSI_FMT_16BIT_16BPP,
+   CY_MIPIDSI_FMT_16BIT_18BPP_OP1,
+   CY_MIPIDSI_FMT_16BIT_18BPP_OP2,
+   CY_MIPIDSI_FMT_16BIT_24BPP_OP1,
+   CY_MIPIDSI_FMT_16BIT_24BPP_OP2,
+   CY_MIPIDSI_FMT_RGB888,
+   CY_MIPIDSI_FMT_RGB666,
+   CY_MIPIDSI_FMT_RGB666_PACKED,
+   CY_MIPIDSI_FMT_RGB565
 } cy_en_mipidsi_pixel_format_t;
 
 /** MIPI DSI Packet Type */
-typedef enum
-{
+typedef enum {
     MIPI_DSI_V_SYNC_START = 0x01,
     MIPI_DSI_V_SYNC_END = 0x11,
     MIPI_DSI_H_SYNC_START = 0x21,
@@ -255,11 +245,10 @@ typedef enum
     MIPI_DSI_PACKED_PIXEL_STREAM_18 = 0x1e,
     MIPI_DSI_PIXEL_STREAM_3BYTE_18 = 0x2e,
     MIPI_DSI_PACKED_PIXEL_STREAM_24 = 0x3e
-} cy_en_mipidsi_packet_type_t;
+}cy_en_mipidsi_packet_type_t;
 
 /** MIPI DCS commands */
-typedef enum
-{
+typedef enum {
     MIPI_DCS_NOP            = 0x00,
     MIPI_DCS_SOFT_RESET        = 0x01,
     MIPI_DCS_GET_COMPRESSION_MODE    = 0x03,
@@ -320,21 +309,19 @@ typedef enum
     MIPI_DCS_READ_PPS_START        = 0xA2,
     MIPI_DCS_READ_DDB_CONTINUE    = 0xA8,
     MIPI_DCS_READ_PPS_CONTINUE    = 0xA9,
-} cy_en_mipidsi_dcs_cmd_type_t;
+}cy_en_mipidsi_dcs_cmd_type_t;
 
 /** MIPI DSI mode of operation */
-typedef enum
-{
+typedef enum  {
     DSI_VIDEO_MODE,
-    DSI_COMMAND_MODE
-} cy_en_mipidsi_mode_t;
+    DSI_COMMAND_MODE    
+}cy_en_mipidsi_mode_t;
 
 /** MIPI DSI transfer mode */
-typedef enum
-{
+typedef enum  {    
     DSI_LP_MODE,
-    DSI_HS_MODE
-} cy_en_mipi_dsi_transfer_mode;
+    DSI_HS_MODE    
+}cy_en_mipi_dsi_transfer_mode;
 
 
 /** \} group_mipidsi_enums */
@@ -362,11 +349,10 @@ typedef struct
     uint16_t vfp;             /**< Vertical Front Porch */
     uint16_t vbp;             /**< Vertical Back Porch */
     uint32_t polarity_flags;  /**< Polarity flags */
-} cy_stc_mipidsi_display_params_t;
+}cy_stc_mipidsi_display_params_t;
 
 /** MIPI DSI Block Configuration */
-typedef struct
-{
+typedef struct {
     uint32_t                          virtual_ch;             /**< Display controller configuration */
     uint32_t                          num_of_lanes;           /**< GPU configuration is optional */
     uint32_t                          per_lane_mbps;          /**< per lane speed in mbps */
@@ -375,7 +361,7 @@ typedef struct
     cy_en_mipidsi_mode_t              dsi_mode;               /**< Command mode/Video mode */
     uint32_t                          mode_flags;             /**< Additional mode information */
     cy_stc_mipidsi_display_params_t   *display_params;        /**< Display parameters */
-} cy_stc_mipidsi_config_t;
+}cy_stc_mipidsi_config_t;
 
 /** MIPI DSI internal context data. The user must not modify it. */
 typedef struct
@@ -391,10 +377,10 @@ typedef struct
     uint32_t                          mode_flags;             /**< Additional mode information */
     cy_stc_mipidsi_display_params_t   display_params;         /**< Display parameters */
     bool                              enable;                  /**< Dsi enable state*/
-
+    
     /** \endcond */
-} cy_stc_mipidsi_context_t;
-
+}cy_stc_mipidsi_context_t;
+ 
 /** \} group_mipidsi_data_structures */
 
 
@@ -515,7 +501,7 @@ uint32_t  Cy_MIPIDSI_GetInterruptStatusMasked(GFXSS_MIPIDSI_Type const *base);
 * Function Name: Cy_MIPIDSI_WritePacket
 ****************************************************************************//**
 *
-* Writes DCS packet on DSI interface.
+* Writes DCS packet on DSI interface. 
 *
 * \param base
 * Pointer to the MIPI DSI register base address.
@@ -704,6 +690,28 @@ cy_en_mipidsi_status_t Cy_MIPIDSI_EnterULPM_Data(GFXSS_MIPIDSI_Type *base);
 *******************************************************************************/
 cy_en_mipidsi_status_t Cy_MIPIDSI_ExitULPM_Data(GFXSS_MIPIDSI_Type *base);
 
+/*******************************************************************************
+* Function Name: Cy_MIPIDSI_CMD_MODE_DCS_SetLowPower(GFXSS_MIPIDSI_Type *base, bool enable)
+****************************************************************************//**
+*
+* Enable Low Power transfer of DCS packets for CMD mode displays.
+*
+* \param base
+* Pointer to the MIPI DSI register base address.
+*
+* \param enable
+* Enable/Disable Low Power transfer of DCS packets for CMD mode displays.
+*
+* \return
+* Status of the operation.
+*
+* \note Default configuration for Command mode displays is set to send command \n
+*  mode data in HS mode. Some panels do not support HS mode for panel commands, \n
+* in that case this function can be used to enable Low Power transfer of DCS \n
+* packets.
+*******************************************************************************/
+cy_en_mipidsi_status_t Cy_MIPIDSI_CMD_MODE_DCS_SetLowPower(GFXSS_MIPIDSI_Type *base, bool enable);
+    
 /** \} group_mipidsi_functions */
 
 #if defined(__cplusplus)

@@ -66,14 +66,14 @@
  */
 
 arm_status arm_fully_connected_mat_q7_vec_q15(const q15_t *pV,
-        const q7_t *pM,
-        const uint16_t dim_vec,
-        const uint16_t num_of_rows,
-        const uint16_t bias_shift,
-        const uint16_t out_shift,
-        const q7_t *bias,
-        q15_t *pOut,
-        q15_t *vec_buffer)
+                                              const q7_t *pM,
+                                              const uint16_t dim_vec,
+                                              const uint16_t num_of_rows,
+                                              const uint16_t bias_shift,
+                                              const uint16_t out_shift,
+                                              const q7_t *bias,
+                                              q15_t *pOut,
+                                              q15_t *vec_buffer)
 {
     (void)vec_buffer;
 #if defined(ARM_MATH_DSP)

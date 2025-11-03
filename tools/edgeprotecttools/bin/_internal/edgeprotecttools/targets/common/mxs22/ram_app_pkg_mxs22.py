@@ -43,7 +43,9 @@ class RamAppPackageMXS22:
             'allow_signed': True,
             'header_size': 0x20,
             'slot_size': 0x100000,
-            'remove_tlv': [TLV_VALUES['SHA256'], TLV_VALUES['KEYHASH']]
+            'remove_tlv': [
+                TLV_VALUES['SHA256'], TLV_VALUES['SHA384'],
+                TLV_VALUES['SHA512'], TLV_VALUES['KEYHASH']]
         }
 
     @property

@@ -57,7 +57,7 @@ __STATIC_INLINE bool _mtb_syspm_nvm_before_transition(mtb_syspm_nvm_type_t type,
      * cases, the basic "context->enum == enum" can be automatically cast into a
      * "int32_t == uint32_t" comparison.  Cast both to uint32_t to avoid this. */
     if (((uint32_t)(type) == (uint32_t)(MTB_SYSPM_NVM_TYPE_OTP))
-            || ((uint32_t)(type) == (uint32_t)(MTB_SYSPM_NVM_TYPE_RRAM)))
+        || ((uint32_t)(type) == (uint32_t)(MTB_SYSPM_NVM_TYPE_RRAM)))
     {
         /* RRAM/OTP works in sleep, but we must set to sleep mode */
         Cy_RRAM_EnableSleepMode((RRAMC_Type*)(base));
@@ -75,7 +75,7 @@ __STATIC_INLINE bool _mtb_syspm_nvm_after_transition(mtb_syspm_nvm_type_t type, 
      * cases, the basic "context->enum == enum" can be automatically cast into a
      * "int32_t == uint32_t" comparison.  Cast both to uint32_t to avoid this. */
     if (((uint32_t)(type) == (uint32_t)(MTB_SYSPM_NVM_TYPE_OTP))
-            || ((uint32_t)(type) == (uint32_t)(MTB_SYSPM_NVM_TYPE_RRAM)))
+        || ((uint32_t)(type) == (uint32_t)(MTB_SYSPM_NVM_TYPE_RRAM)))
     {
         /* Restore RRAM/OTP to normal mode */
         Cy_RRAM_DisableSleepMode((RRAMC_Type*)(base));

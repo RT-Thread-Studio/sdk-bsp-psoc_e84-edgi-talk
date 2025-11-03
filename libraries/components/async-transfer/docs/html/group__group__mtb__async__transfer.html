@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>(async-transfer)</title>
+<title>Async Transfer</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><a href="http://www.cypress.com/"><img alt="Logo" src="logo.png"/></a></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">(async-transfer)</div>
+   <div id="projectname">Async Transfer</div>
   </td>
  </tr>
  </tbody>
@@ -604,7 +604,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">context</td><td>The context object for this peripheral that was populated by <a class="el" href="group__group__mtb__async__transfer.html#ga44c0d4c223daff0e24eca2253c0875ff">mtb_async_transfer_init</a> </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">dest</td><td>Pointer to the buffer to which the data read from the peripheral should be stored. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">dest</td><td>Pointer to the buffer to which the data read from the peripheral should be stored. This buffer must remain valid for the duration of the transfer, and its contents should not be accessed until the read transfer is complete. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">length</td><td>Length, in bytes, of the data that is to be read</td></tr>
   </table>
   </dd>
@@ -653,7 +653,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">context</td><td>The context object for this peripheral that was populated by <a class="el" href="group__group__mtb__async__transfer.html#ga44c0d4c223daff0e24eca2253c0875ff">mtb_async_transfer_init</a> </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">source</td><td>Pointer to the data that is to be written to the peripheral </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">source</td><td>Pointer to the data that is to be written to the peripheral This buffer must remain valid for the duration of the transfer, and its contents should not be accessed until the write transfer is complete. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">length</td><td>Length, in bytes, of the data that is to be written to the peripheral</td></tr>
   </table>
   </dd>
@@ -905,7 +905,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath">
     <ul>
         <li class="footer">
-            Generated for <b>(async-transfer)</b> by <b>Cypress Semiconductor Corporation</b>.
+            Generated for <b>Async Transfer</b> by <b>Cypress Semiconductor Corporation</b>.
             All rights reserved.
         </li>
     </ul>

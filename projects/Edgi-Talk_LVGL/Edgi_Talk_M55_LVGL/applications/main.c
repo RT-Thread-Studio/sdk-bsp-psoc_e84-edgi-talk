@@ -20,10 +20,7 @@ int main(void)
     rt_kprintf("Hello RT-Thread\r\n");
     rt_kprintf("It's cortex-m55\r\n");
     rt_pin_mode(LED_PIN_G, PIN_MODE_OUTPUT);
-
     lvgl_thread_init();
-
-
     while (1)
     {
         rt_pin_write(LED_PIN_G, PIN_LOW);

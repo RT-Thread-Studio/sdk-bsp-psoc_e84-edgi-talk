@@ -39,48 +39,46 @@
 /**
   * \brief AXI DMA controller channel (SAXI_DMAC_CH)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Channel control */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 Channel status */
-    __IM uint32_t RESERVED[2];
-    __IM uint32_t IDX;                           /*!< 0x00000010 Channel current X and Y indices */
-    __IM uint32_t SRC;                           /*!< 0x00000014 Channel current source address */
-    __IM uint32_t DST;                           /*!< 0x00000018 Channel current destination address */
-    __IM uint32_t M_IDX;                         /*!< 0x0000001C Channel current M index */
-    __IOM uint32_t CURR;                          /*!< 0x00000020 Channel current descriptor pointer */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t TR_CMD;                        /*!< 0x00000028 Channel software trigger */
-    __IM uint32_t RESERVED2[5];
-    __IM uint32_t DESCR_STATUS;                  /*!< 0x00000040 Channel descriptor status */
-    __IM uint32_t RESERVED3[3];
-    __IM uint32_t DESCR_CTL;                     /*!< 0x00000050 Channel descriptor control */
-    __IM uint32_t DESCR_SRC;                     /*!< 0x00000054 Channel descriptor source */
-    __IM uint32_t DESCR_DST;                     /*!< 0x00000058 Channel descriptor destination */
-    __IM uint32_t DESCR_M_SIZE;                  /*!< 0x0000005C Channel descriptor M size */
-    __IM uint32_t DESCR_X_SIZE;                  /*!< 0x00000060 Channel descriptor X size */
-    __IM uint32_t DESCR_X_INCR;                  /*!< 0x00000064 Channel descriptor X increment */
-    __IM uint32_t DESCR_Y_SIZE;                  /*!< 0x00000068 Channel descriptor Y size */
-    __IM uint32_t DESCR_Y_INCR;                  /*!< 0x0000006C Channel descriptor Y increment */
-    __IM uint32_t DESCR_NEXT;                    /*!< 0x00000070 Channel descriptor next pointer */
-    __IM uint32_t RESERVED4[3];
-    __IOM uint32_t INTR;                          /*!< 0x00000080 Interrupt */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000084 Interrupt set */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000088 Interrupt mask */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000008C Interrupt masked */
-    __IM uint32_t RESERVED5[28];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Channel control */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 Channel status */
+   __IM uint32_t RESERVED[2];
+   __IM uint32_t IDX;                           /*!< 0x00000010 Channel current X and Y indices */
+   __IM uint32_t SRC;                           /*!< 0x00000014 Channel current source address */
+   __IM uint32_t DST;                           /*!< 0x00000018 Channel current destination address */
+   __IM uint32_t M_IDX;                         /*!< 0x0000001C Channel current M index */
+  __IOM uint32_t CURR;                          /*!< 0x00000020 Channel current descriptor pointer */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t TR_CMD;                        /*!< 0x00000028 Channel software trigger */
+   __IM uint32_t RESERVED2[5];
+   __IM uint32_t DESCR_STATUS;                  /*!< 0x00000040 Channel descriptor status */
+   __IM uint32_t RESERVED3[3];
+   __IM uint32_t DESCR_CTL;                     /*!< 0x00000050 Channel descriptor control */
+   __IM uint32_t DESCR_SRC;                     /*!< 0x00000054 Channel descriptor source */
+   __IM uint32_t DESCR_DST;                     /*!< 0x00000058 Channel descriptor destination */
+   __IM uint32_t DESCR_M_SIZE;                  /*!< 0x0000005C Channel descriptor M size */
+   __IM uint32_t DESCR_X_SIZE;                  /*!< 0x00000060 Channel descriptor X size */
+   __IM uint32_t DESCR_X_INCR;                  /*!< 0x00000064 Channel descriptor X increment */
+   __IM uint32_t DESCR_Y_SIZE;                  /*!< 0x00000068 Channel descriptor Y size */
+   __IM uint32_t DESCR_Y_INCR;                  /*!< 0x0000006C Channel descriptor Y increment */
+   __IM uint32_t DESCR_NEXT;                    /*!< 0x00000070 Channel descriptor next pointer */
+   __IM uint32_t RESERVED4[3];
+  __IOM uint32_t INTR;                          /*!< 0x00000080 Interrupt */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000084 Interrupt set */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000088 Interrupt mask */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000008C Interrupt masked */
+   __IM uint32_t RESERVED5[28];
 } SAXI_DMAC_CH_Type;                            /*!< Size = 256 (0x100) */
 
 /**
   * \brief AXI DMAC (SAXI_DMAC)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 Enabled channels */
-    __IM uint32_t ACTIVE;                        /*!< 0x00000008 Active channels */
-    __IM uint32_t RESERVED[1021];
-    SAXI_DMAC_CH_Type CH[8];                /*!< 0x00001000 AXI DMA controller channel */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 Enabled channels */
+   __IM uint32_t ACTIVE;                        /*!< 0x00000008 Active channels */
+   __IM uint32_t RESERVED[1021];
+        SAXI_DMAC_CH_Type CH[8];                /*!< 0x00001000 AXI DMA controller channel */
 } SAXI_DMAC_Type;                               /*!< Size = 6144 (0x1800) */
 
 

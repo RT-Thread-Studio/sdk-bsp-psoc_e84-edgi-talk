@@ -220,7 +220,7 @@ typedef enum
           Otherwise the return value is ignored.
  */
 typedef bool (* mtb_hal_syspm_callback_t)(mtb_hal_syspm_callback_state_t state,
-        mtb_hal_syspm_callback_mode_t mode, void *callback_arg);
+                                          mtb_hal_syspm_callback_mode_t mode, void* callback_arg);
 
 /** Power management callback data object. This is used to register a new
  * callback handler for power management transitions. The specific power
@@ -236,7 +236,7 @@ typedef struct mtb_hal_syspm_callback_data
      * \ref mtb_hal_syspm_callback_mode_t values can be ored together. */
     mtb_hal_syspm_callback_mode_t         ignore_modes;
     /** Argument value to provide to the callback. */
-    void *arg;
+    void* arg;
 } mtb_hal_syspm_callback_params_t;
 
 /** Register the specified handler with the power manager to be notified of power
@@ -251,7 +251,7 @@ typedef struct mtb_hal_syspm_callback_data
 
  */
 cy_rslt_t mtb_hal_syspm_register_callback(mtb_hal_syspm_callback_data_t* obj,
-        mtb_hal_syspm_callback_params_t *params);
+                                          mtb_hal_syspm_callback_params_t* params);
 
 /** Removes the registered handler from the power manager so no future notifications are made.
  *
@@ -291,6 +291,8 @@ void mtb_hal_syspm_lock_deepsleep(void);
  */
 void mtb_hal_syspm_unlock_deepsleep(void);
 
+#if (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0)
+
 /** Timed deep-sleep without system timer.
  *
  * Provides a way to deep-sleep for a desired number of milliseconds(ms) with the system timer
@@ -309,7 +311,7 @@ void mtb_hal_syspm_unlock_deepsleep(void);
  * @return The status of the deep-sleep request.
  */
 cy_rslt_t mtb_hal_syspm_tickless_deepsleep(mtb_hal_lptimer_t* lptimer_obj, uint32_t desired_ms,
-        uint32_t *actual_ms);
+                                           uint32_t* actual_ms);
 
 /** Timed sleep without system timer.
  *
@@ -328,7 +330,9 @@ cy_rslt_t mtb_hal_syspm_tickless_deepsleep(mtb_hal_lptimer_t* lptimer_obj, uint3
  * @return The status of the sleep request.
  */
 cy_rslt_t mtb_hal_syspm_tickless_sleep(mtb_hal_lptimer_t* lptimer_obj, uint32_t desired_ms,
-                                       uint32_t *actual_ms);
+                                       uint32_t* actual_ms);
+
+#endif /* (MTB_HAL_DRIVER_AVAILABLE_LPTIMER != 0) */
 
 /** Get current deep sleep mode.
  *
@@ -342,7 +346,7 @@ mtb_hal_syspm_system_deep_sleep_mode_t mtb_hal_syspm_get_deepsleep_mode(void);
 #endif
 
 #ifdef MTB_HAL_SYSPM_IMPL_HEADER
-    #include MTB_HAL_SYSPM_IMPL_HEADER
+#include MTB_HAL_SYSPM_IMPL_HEADER
 #endif /* MTB_HAL_SYSTEM_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_SYSPM)

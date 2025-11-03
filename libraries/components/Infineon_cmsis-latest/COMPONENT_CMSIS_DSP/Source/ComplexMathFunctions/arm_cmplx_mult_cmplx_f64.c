@@ -43,38 +43,37 @@
   @param[in]     pSrcB       points to second input vector
   @param[out]    pDst        points to output vector
   @param[in]     numSamples  number of samples in each vector
-  @return        none
  */
 
-void arm_cmplx_mult_cmplx_f64(
-    const float64_t *pSrcA,
-    const float64_t *pSrcB,
-    float64_t *pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_mult_cmplx_f64(
+  const float64_t * pSrcA,
+  const float64_t * pSrcB,
+        float64_t * pDst,
+        uint32_t numSamples)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    float64_t a, b, c, d;  /* Temporary variables to store real and imaginary values */
+  uint32_t blkCnt;                               /* Loop counter */
+  float64_t a, b, c, d;  /* Temporary variables to store real and imaginary values */
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
-    while (blkCnt > 0U)
-    {
-        /* C[2 * i    ] = A[2 * i] * B[2 * i    ] - A[2 * i + 1] * B[2 * i + 1]. */
-        /* C[2 * i + 1] = A[2 * i] * B[2 * i + 1] + A[2 * i + 1] * B[2 * i    ]. */
+  while (blkCnt > 0U)
+  {
+    /* C[2 * i    ] = A[2 * i] * B[2 * i    ] - A[2 * i + 1] * B[2 * i + 1]. */
+    /* C[2 * i + 1] = A[2 * i] * B[2 * i + 1] + A[2 * i + 1] * B[2 * i    ]. */
 
-        a = *pSrcA++;
-        b = *pSrcA++;
-        c = *pSrcB++;
-        d = *pSrcB++;
+    a = *pSrcA++;
+    b = *pSrcA++;
+    c = *pSrcB++;
+    d = *pSrcB++;
 
-        /* store result in destination buffer. */
-        *pDst++ = (a * c) - (b * d);
-        *pDst++ = (a * d) + (b * c);
+    /* store result in destination buffer. */
+    *pDst++ = (a * c) - (b * d);
+    *pDst++ = (a * d) + (b * c);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 

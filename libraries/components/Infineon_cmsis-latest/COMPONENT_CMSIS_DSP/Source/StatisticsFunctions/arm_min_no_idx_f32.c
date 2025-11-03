@@ -28,7 +28,7 @@
 
 #include "dsp/statistics_functions.h"
 #if (defined(ARM_MATH_NEON) || defined(ARM_MATH_MVEF)) && !defined(ARM_MATH_AUTOVECTORIZE)
-    #include <limits.h>
+#include <limits.h>
 #endif
 
 /**
@@ -46,27 +46,26 @@
   @param[in]     pSrc       points to the input vector
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    minimum value returned here
-  @return        none
  */
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_min_no_idx_f32(
+ARM_DSP_ATTRIBUTE void arm_min_no_idx_f32(
     const float32_t *pSrc,
     uint32_t   blockSize,
     float32_t *pResult)
 {
-    f32x4_t     vecSrc;
-    f32x4_t     curExtremValVec = vdupq_n_f32(F32_MAX);
-    float32_t   minValue = F32_MAX;
-    float32_t   newVal;
-    uint32_t    blkCnt;
+   f32x4_t     vecSrc;
+   f32x4_t     curExtremValVec = vdupq_n_f32(F32_MAX);
+   float32_t   minValue = F32_MAX;
+   float32_t   newVal;
+   uint32_t    blkCnt;
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+   /* Loop unrolling: Compute 4 outputs at a time */
+   blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
+   while (blkCnt > 0U)
+   {
 
         vecSrc = vldrwq_f32(pSrc);
         /*
@@ -106,29 +105,29 @@ void arm_min_no_idx_f32(
 
 #else
 
-void arm_min_no_idx_f32(
+ARM_DSP_ATTRIBUTE void arm_min_no_idx_f32(
     const float32_t *pSrc,
     uint32_t   blockSize,
     float32_t *pResult)
 {
-    float32_t   minValue = F32_MAX;
-    float32_t   newVal;
+   float32_t   minValue = F32_MAX;
+   float32_t   newVal;
 
-    while (blockSize > 0U)
-    {
-        newVal = *pSrc++;
-
-        /* compare for the minimum value */
-        if (minValue > newVal)
-        {
-            /* Update the minimum value and it's index */
-            minValue = newVal;
-        }
-
-        blockSize --;
-    }
-
-    *pResult = minValue;
+   while (blockSize > 0U)
+   {
+       newVal = *pSrc++;
+   
+       /* compare for the minimum value */
+       if (minValue > newVal)
+       {
+           /* Update the minimum value and it's index */
+           minValue = newVal;
+       }
+   
+       blockSize --;
+   }
+    
+   *pResult = minValue;
 }
 
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

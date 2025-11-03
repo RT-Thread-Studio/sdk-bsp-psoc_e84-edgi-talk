@@ -51,15 +51,15 @@ extern "C"
 *******************************************************************************/
 
 cy_rslt_t mtb_hal_adc_setup(mtb_hal_adc_t* obj, const mtb_hal_adc_configurator_t* config,
-                            mtb_hal_clock_t *clk, mtb_hal_adc_channel_t **channels)
+                            mtb_hal_clock_t* clk, mtb_hal_adc_channel_t** channels)
 {
     CY_ASSERT(obj != NULL);
     CY_ASSERT(config != NULL);
     CY_ASSERT(config->num_channels >= 1);
     CY_ASSERT(channels != NULL);
-#if !defined(_MTB_HAL_ADC_SAR_SKIP_BASE)
+    #if !defined(_MTB_HAL_ADC_SAR_SKIP_BASE)
     obj->base                   = config->base;
-#endif
+    #endif
     obj->clock                  = (clk == NULL) ? config->clock : clk;
 
     /* IP-specific setup */
@@ -85,20 +85,20 @@ uint16_t mtb_hal_adc_read_u16(const mtb_hal_adc_channel_t* obj)
 // mtb_hal_adc_read_multiple
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_adc_read_multiple(mtb_hal_adc_channel_t** channels, uint32_t num_channels,
-                                    int32_t *result)
+                                    int32_t* result)
 {
     /* If one or more ADC channels conversion is not done yet, return busy. */
     for (uint8_t i = 0; i < num_channels; ++i)
     {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+        #if defined(MTB_HAL_DISABLE_ERR_CHECK)
         CY_ASSERT_AND_RETURN(_mtb_hal_adc_is_conversion_complete(
                                  channels[i]), MTB_HAL_ADC_RSLT_ERR_BUSY);
-#else
+        #else
         if (_mtb_hal_adc_is_conversion_complete(channels[i]) == false)
         {
             return MTB_HAL_ADC_RSLT_ERR_BUSY;
         }
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+        #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
         _mtb_hal_adc_read_latest(channels[i], &result[i]);
     }
     return CY_RSLT_SUCCESS;

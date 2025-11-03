@@ -67,7 +67,8 @@ class ProvisioningPacketMXS22(ProvisioningPacketStrategy):
         else:
             policy_type = flow_name
         if policy_type in ('device_identity', 'device_identity_images',
-                           'device_integrity_exam'):
+                           'device_integrity_exam',
+                           'img_update_cpuss'):
             packet = self.packet_builder.build_unsigned_packet(**kwargs)
             info = f'{policy_type} packet created'
             packet = len(packet).to_bytes(4, byteorder='little') + packet
@@ -78,6 +79,14 @@ class ProvisioningPacketMXS22(ProvisioningPacketStrategy):
                 del kwargs['signature']
             packet, info = self.generate_cose_sign1(key_path, signature,
                                                     **kwargs)
+        elif policy_type == 'img_update_wifiss_params':
+            if 'key_path' in kwargs:
+                del kwargs['key_path']
+            if 'signature' in kwargs:
+                del kwargs['signature']
+            packet, info = self.generate_packet(key_path, signature,
+                                                **kwargs,
+                                                cose_packet_id=0x15010002)
         else:
             if 'key_path' in kwargs:
                 del kwargs['key_path']

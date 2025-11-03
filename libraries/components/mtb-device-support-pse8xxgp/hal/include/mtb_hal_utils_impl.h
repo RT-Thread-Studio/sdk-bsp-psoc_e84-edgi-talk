@@ -39,7 +39,7 @@
 #include "cy_utils.h"
 #include "mtb_hal_utils.h"
 #if MTB_HAL_DRIVER_AVAILABLE_CLOCK
-    #include "mtb_hal_clock.h"
+#include "mtb_hal_clock.h"
 #endif /* MTB_HAL_DRIVER_AVAILABLE_CLOCK */
 
 #if defined(__cplusplus)
@@ -56,7 +56,7 @@ extern "C" {
  * @return the computed tolerance
  */
 int32_t _mtb_hal_utils_calculate_tolerance(mtb_hal_clock_tolerance_unit_t type, uint32_t desired_hz,
-        uint32_t actual_hz);
+                                           uint32_t actual_hz);
 #endif /* MTB_HAL_DRIVER_AVAILABLE_CLOCK */
 
 typedef bool (* _mtb_hal_wait_status_funcptr_t)(void* obj, uint32_t status);

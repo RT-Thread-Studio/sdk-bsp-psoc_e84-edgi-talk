@@ -97,8 +97,8 @@ static cy_rslt_t _mtb_async_transfer_update_tx_level(const mtb_async_transfer_co
     /* Set the TX FIFO level to 'tx transfer length' */
     context->interface.set_tx_fifo_level(context->interface.inst_ref,
                                          context->interface.get_tx_transfer_len(context->
-                                                 interface.
-                                                 inst_ref));
+                                                                                interface.
+                                                                                inst_ref));
 
     return CY_RSLT_SUCCESS;
 }
@@ -148,32 +148,32 @@ static cy_rslt_t _mtb_async_transfer_cpu_read(mtb_async_transfer_context_t* cont
     /* Data available to read and Read transfer width is less than or equal to 1 byte */
     if ((0u != rx_len) && (context->interface.transfer_width <= 1u))
     {
-        uint8_t *buffer = (uint8_t*)(context->dest_addr);
+        uint8_t* buffer = (uint8_t*)(context->dest_addr);
         /* Read the data from the RX FIFO to the buffer */
         for (index = 0u; index < rx_len; index++)
         {
-            buffer[index] = (uint8_t)(*(context->interface.rx_addr));
+            buffer[index]=  (uint8_t)(*(context->interface.rx_addr));
         }
     }
     /* Data available to read and Read transfer width is in between 1 byte(not including) and 2
        bytes */
     else if ((0u != rx_len) && (context->interface.transfer_width <= 2u))
     {
-        uint16_t *buffer = (uint16_t*)(context->dest_addr);
+        uint16_t* buffer = (uint16_t*)(context->dest_addr);
         /* Read the data from the RX FIFO to the buffer */
         for (index = 0u; index < rx_len; index++)
         {
-            buffer[index] = (uint16_t)(*(context->interface.rx_addr));
+            buffer[index]= (uint16_t)(*(context->interface.rx_addr));
         }
     }
     /* Data available to read and Read transfer width is in between 2(not including) and 4 bytes */
     else if (0u != rx_len)
     {
-        uint32_t *buffer = (uint32_t*)(context->dest_addr);
+        uint32_t* buffer = (uint32_t*)(context->dest_addr);
         /* Read from the RX FIFO */
         for (index = 0u; index < rx_len; index++)
         {
-            buffer[index] = *(context->interface.rx_addr);
+            buffer[index]= *(context->interface.rx_addr);
         }
     }
     irq_status = context->interface.enter_critical_section();
@@ -225,7 +225,7 @@ static cy_rslt_t _mtb_async_transfer_cpu_write(mtb_async_transfer_context_t* con
     /* Data is to be written and Write transfer width is less than or equal to 1 byte */
     if ((0u != tx_len) && (context->interface.transfer_width <= 1u))
     {
-        const uint8_t *buffer = (const uint8_t*)(context->src_addr);
+        const uint8_t* buffer = (const uint8_t*)(context->src_addr);
         /* Write the data from the buffer to the TX FIFO */
         for (index = 0u; index < tx_len; index++)
         {
@@ -235,7 +235,7 @@ static cy_rslt_t _mtb_async_transfer_cpu_write(mtb_async_transfer_context_t* con
     /* Data  is to be written and Write transfer width is in between 1(not including) and 2 bytes */
     else if ((0u != tx_len) && (context->interface.transfer_width <= 2u))
     {
-        const uint16_t *buffer = (const uint16_t*)(context->src_addr);
+        const uint16_t* buffer = (const uint16_t*)(context->src_addr);
         /* Write the data from the buffer to the TX FIFO */
         for (index = 0u; index < tx_len; index++)
         {
@@ -245,7 +245,7 @@ static cy_rslt_t _mtb_async_transfer_cpu_write(mtb_async_transfer_context_t* con
     /* Read data transfer width is in between 2(not including) and 4 bytes */
     else if (0u != tx_len)
     {
-        const uint32_t *buffer = (const uint32_t*)(context->src_addr);
+        const uint32_t* buffer = (const uint32_t*)(context->src_addr);
         /* Write the data from the buffer to the TX FIFO */
         for (index = 0u; index < tx_len; index++)
         {
@@ -289,7 +289,7 @@ static cy_rslt_t _mtb_async_transfer_dma_read(mtb_async_transfer_context_t* cont
     /* Update the transfer length with lesser of 'num of bytes that can be read from FIFO' or
         'bytes to read' */
     dma_transfer_length = _MTB_ASYNC_TRANSFER_MIN(context->dest_length, context->interface.get_rx_transfer_len(
-                              context->interface.inst_ref));
+                                                      context->interface.inst_ref));
     /* Disable the DMA RX interface */
     context->interface.dma_enable_rx(context->interface.dma_rx_ref, false);
     if (dma_transfer_length > 0u)
@@ -309,10 +309,10 @@ static cy_rslt_t _mtb_async_transfer_dma_read(mtb_async_transfer_context_t* cont
         /* Setting up the length of the DMA transfer */
         (void)context->interface.dma_set_length(context->interface.dma_rx_ref, dma_transfer_length);
 
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+        #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
         SCB_InvalidateDCache_by_Addr((void*)context->dest_addr,
                                      (context->interface.transfer_width * dma_transfer_length));
-#endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
+        #endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
 
         irq_status = context->interface.enter_critical_section();
         /* Update the buffer and length */
@@ -367,7 +367,7 @@ static cy_rslt_t _mtb_async_transfer_dma_write(mtb_async_transfer_context_t* con
     /* Update the transfer length with lesser of 'num of bytes that can be written to FIFO' or
         'bytes to write' */
     dma_transfer_length = _MTB_ASYNC_TRANSFER_MIN(context->src_length, context->interface.get_tx_transfer_len(
-                              context->interface.inst_ref));
+                                                      context->interface.inst_ref));
     /* Disable the DMA TX interface */
     context->interface.dma_enable_tx(context->interface.dma_tx_ref, false);
     if (dma_transfer_length > 0u)
@@ -387,10 +387,10 @@ static cy_rslt_t _mtb_async_transfer_dma_write(mtb_async_transfer_context_t* con
         /* Setting up the length of the DMA transfer */
         (void)context->interface.dma_set_length(context->interface.dma_tx_ref, dma_transfer_length);
 
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+        #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
         SCB_CleanDCache_by_Addr((void*)context->src_addr,
                                 (context->interface.transfer_width * dma_transfer_length));
-#endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
+        #endif /* defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U) */
 
         irq_status = context->interface.enter_critical_section();
         /* Update the buffer and length */
@@ -437,7 +437,7 @@ static cy_rslt_t _mtb_async_transfer_dma_write_handler(mtb_async_transfer_contex
 *******************************************************************************/
 /** Initializes an async transfer library instance */
 cy_rslt_t mtb_async_transfer_init(mtb_async_transfer_context_t* context,
-                                  const mtb_async_transfer_interface_t *iface)
+                                  const mtb_async_transfer_interface_t* iface)
 {
     cy_rslt_t result = MTB_ASYNC_TRANSFER_BAD_PARAM_ERROR;
 
@@ -625,8 +625,8 @@ cy_rslt_t mtb_async_transfer_abort_write(mtb_async_transfer_context_t* context)
 
 /** Register a callback to be invoked when an async transfer is complete */
 cy_rslt_t mtb_async_transfer_register_callback(mtb_async_transfer_context_t* context,
-        mtb_async_transfer_event_callback_t callback,
-        void *arg)
+                                               mtb_async_transfer_event_callback_t callback,
+                                               void* arg)
 {
     uint32_t irq_status;
     cy_rslt_t result = MTB_ASYNC_TRANSFER_BAD_PARAM_ERROR;
@@ -646,7 +646,7 @@ cy_rslt_t mtb_async_transfer_register_callback(mtb_async_transfer_context_t* con
 
 /** Handler for when the FIFO in the peripheral reaches the trigger level */
 cy_rslt_t mtb_async_transfer_process_fifo_level_event(mtb_async_transfer_context_t* context,
-        mtb_async_transfer_direction_t direction)
+                                                      mtb_async_transfer_direction_t direction)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
 
@@ -668,7 +668,7 @@ cy_rslt_t mtb_async_transfer_process_fifo_level_event(mtb_async_transfer_context
     }
     result =
         ((result ==
-          (MTB_ASYNC_TRANSFER_READ_ERROR |
+          (MTB_ASYNC_TRANSFER_READ_ERROR|
            MTB_ASYNC_TRANSFER_WRITE_ERROR)) ? MTB_ASYNC_TRANSFER_READ_WRITE_ERROR : result);
     return result;
 }
@@ -676,24 +676,24 @@ cy_rslt_t mtb_async_transfer_process_fifo_level_event(mtb_async_transfer_context
 
 /** Handler for when a DMA transfer is complete */
 cy_rslt_t mtb_async_transfer_process_dma_complete(mtb_async_transfer_context_t* context,
-        mtb_async_transfer_direction_t direction)
+                                                  mtb_async_transfer_direction_t direction)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
 
     if ((0u != ((uint32_t)direction & (uint32_t)MTB_ASYNC_TRANSFER_DIRECTION_READ)) &&
-            (NULL != context->interface.dma_rx_ref))
+        (NULL != context->interface.dma_rx_ref))
     {
         result = _mtb_async_transfer_dma_read_handler(context);
     }
 
     if ((0u != ((uint32_t)direction & (uint32_t)MTB_ASYNC_TRANSFER_DIRECTION_WRITE)) &&
-            (NULL != context->interface.dma_tx_ref))
+        (NULL != context->interface.dma_tx_ref))
     {
         result |= _mtb_async_transfer_dma_write_handler(context);
     }
     result =
         ((result ==
-          (MTB_ASYNC_TRANSFER_READ_ERROR |
+          (MTB_ASYNC_TRANSFER_READ_ERROR|
            MTB_ASYNC_TRANSFER_WRITE_ERROR)) ? MTB_ASYNC_TRANSFER_READ_WRITE_ERROR : result);
 
     return result;

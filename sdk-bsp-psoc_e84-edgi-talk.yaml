@@ -96,14 +96,14 @@ template_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -125,11 +125,18 @@ example_projects:
     - cybsp_doc.h
     - cybsp_hw_config.h
     - cybsp_types.h
-    - partition_cat1d.h
-    - startup_cat1d.h
-    - system_cat1d.c
-    - system_cat1d.h
+    - partition_edge.h
+    - startup_edge.h
+    - system_edge.c
+    - system_edge.h
     - system_pse84.h
+    - cy_device_headers.h
+    - cy_device_headers_s.h
+    - pse84_config.h
+    - gpio_pse84_bga_220.h
+    - mtb_ipc_config.h
+    - mtb_srf_config.h
+    - partition_edge.h
     - COMPONENT_CM33/COMPONENT_SECURE_DEVICE
     - config
   - source_path_offset: 'libraries/components'
@@ -140,6 +147,8 @@ example_projects:
     - Infineon_retarget-io-latest
     - serial-memory
     - se-rt-services-utils
+    - mtb-ipc
+    - mtb-srf
     - Infineon_cmsis-latest/Core/Include
     - mtb-device-support-pse8xxgp/hal
     - mtb-device-support-pse8xxgp/device-utils
@@ -156,14 +165,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -193,14 +202,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -230,14 +239,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -267,14 +276,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -304,14 +313,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -341,14 +350,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -378,14 +387,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -406,11 +415,18 @@ example_projects:
     - cybsp_doc.h
     - cybsp_hw_config.h
     - cybsp_types.h
-    - partition_cat1d.h
-    - startup_cat1d.h
-    - system_cat1d.c
-    - system_cat1d.h
+    - partition_edge.h
+    - startup_edge.h
+    - system_edge.c
+    - system_edge.h
     - system_pse84.h
+    - cy_device_headers.h
+    - cy_device_headers_s.h
+    - pse84_config.h
+    - gpio_pse84_bga_220.h
+    - mtb_ipc_config.h
+    - mtb_srf_config.h
+    - partition_edge.h
     - COMPONENT_CM33/COMPONENT_SECURE_DEVICE
     - config
 
@@ -422,13 +438,16 @@ example_projects:
     - Infineon_retarget-io-latest
     - serial-memory
     - se-rt-services-utils
+    - mtb-ipc
+    - mtb-srf
     - Infineon_cmsis-latest/Core/Include
     - mtb-device-support-pse8xxgp/hal
+    - mtb-device-support-pse8xxgp/device-utils
     - mtb-device-support-pse8xxgp/pdl/drivers/third_party/ethernet
+    - mtb-device-support-pse8xxgp/pdl/drivers/third_party/COMPONENT_GFXSS
     - mtb-device-support-pse8xxgp/pdl/devices
     - mtb-device-support-pse8xxgp/pdl/drivers/include
     - mtb-device-support-pse8xxgp/pdl/drivers/source
-    - mtb-device-support-pse8xxgp/device-utils
   - source_path_offset: 'tools'
     target_path_offset: 'tools'
     files_and_folders:
@@ -437,14 +456,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -474,14 +493,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -511,14 +530,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -548,14 +567,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -585,14 +604,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -622,14 +641,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -659,14 +678,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -696,14 +715,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -733,14 +752,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -770,27 +789,27 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
     
-- project_name: Edgi_Talk_M33_emUSB-device_CDC_Echo
+- project_name: Edgi_Talk_M33_CDC_Echo
   project_description: creat this peoject if user choose rt-thread project
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_emUSB-device_CDC_Echo/Edgi_Talk_M33_emUSB-device_CDC_Echo
+  - source_path_offset: projects/Edgi-Talk_CDC_Echo/Edgi_Talk_M33_CDC_Echo
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_emUSB-device_CDC_Echo'
+  - source_path_offset: 'projects/Edgi-Talk_CDC_Echo'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -807,14 +826,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
@@ -844,14 +863,14 @@ example_projects:
   - package_name: GNU_Tools_for_ARM_Embedded_Processors
     package_type: ToolChain_Support_Packages
     package_vendor: 'ARM'
-    package_version: 10.2.1
+    package_version: '13.3'
     source_path_offset: '.'
     target_path_offset: '.'
     files_and_folders: []
   - package_name: OpenOCD-Infineon
     package_type: Debugger_Support_Packages
     package_vendor: 'Infineon'
-    package_version: 2.0.0
+    package_version: '2.0.0'
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []

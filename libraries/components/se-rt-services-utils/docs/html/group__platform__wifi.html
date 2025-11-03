@@ -93,19 +93,19 @@ $(document).ready(function(){initNavTree('group__platform__wifi.html',''); initR
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga9e879340c096831c46055347645b5595"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__fih.html#structifx__se__fih__uint">ifx_se_status_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__wifi.html#ga9e879340c096831c46055347645b5595">ifx_se_enable_wifi</a> (const uint8_t *image_addr, void *ctx)</td></tr>
-<tr class="memdesc:ga9e879340c096831c46055347645b5595"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs HASH validation for RRAM WiFiSS FW Image and if success starts this image on WiFiSS.  <a href="group__platform__wifi.html#ga9e879340c096831c46055347645b5595">More...</a><br /></td></tr>
-<tr class="separator:ga9e879340c096831c46055347645b5595"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga26f33386fc89b0e6bda1037994ac8834"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__fih.html#structifx__se__fih__uint">ifx_se_status_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__wifi.html#ga26f33386fc89b0e6bda1037994ac8834">ifx_se_enable_wifi</a> (void *ctx)</td></tr>
+<tr class="memdesc:ga26f33386fc89b0e6bda1037994ac8834"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs HASH validation for RRAM WiFiSS FW Image and if success starts the WIFI FW.  <a href="group__platform__wifi.html#ga26f33386fc89b0e6bda1037994ac8834">More...</a><br /></td></tr>
+<tr class="separator:ga26f33386fc89b0e6bda1037994ac8834"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaceb886f3c0f816b489b02b0ba9bddd26"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__fih.html#structifx__se__fih__uint">ifx_se_status_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__wifi.html#gaceb886f3c0f816b489b02b0ba9bddd26">ifx_se_disable_wifi</a> (void *ctx)</td></tr>
-<tr class="memdesc:gaceb886f3c0f816b489b02b0ba9bddd26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disables WiFiSS and switch its power off.  <a href="group__platform__wifi.html#gaceb886f3c0f816b489b02b0ba9bddd26">More...</a><br /></td></tr>
+<tr class="memdesc:gaceb886f3c0f816b489b02b0ba9bddd26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disables WiFiSS and power off the WIFI SS.  <a href="group__platform__wifi.html#gaceb886f3c0f816b489b02b0ba9bddd26">More...</a><br /></td></tr>
 <tr class="separator:gaceb886f3c0f816b489b02b0ba9bddd26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7a6243c844a5b5beebf9a85137993a90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__fih.html#structifx__se__fih__uint">ifx_se_status_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__platform__wifi.html#ga7a6243c844a5b5beebf9a85137993a90">ifx_se_enable_wifi_sram_access</a> (void *ctx)</td></tr>
 <tr class="memdesc:ga7a6243c844a5b5beebf9a85137993a90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables only Wi-Fi SS SRAM for staging of RAM_APPs and allows CPUSS access to this memory.  <a href="group__platform__wifi.html#ga7a6243c844a5b5beebf9a85137993a90">More...</a><br /></td></tr>
 <tr class="separator:ga7a6243c844a5b5beebf9a85137993a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga9e879340c096831c46055347645b5595" name="ga9e879340c096831c46055347645b5595"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga9e879340c096831c46055347645b5595">&#9670;&nbsp;</a></span>ifx_se_enable_wifi()</h2>
+<a id="ga26f33386fc89b0e6bda1037994ac8834" name="ga26f33386fc89b0e6bda1037994ac8834"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga26f33386fc89b0e6bda1037994ac8834">&#9670;&nbsp;</a></span>ifx_se_enable_wifi()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -113,29 +113,16 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="group__fih.html#structifx__se__fih__uint">ifx_se_status_t</a> ifx_se_enable_wifi </td>
           <td>(</td>
-          <td class="paramtype">const uint8_t *&#160;</td>
-          <td class="paramname"><em>image_addr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>ctx</em>&#160;</td>
-        </tr>
-        <tr>
+          <td class="paramname"><em>ctx</em></td><td>)</td>
           <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Performs HASH validation for RRAM WiFiSS FW Image and if success starts this image on WiFiSS. </p>
-<p >The image address is provided as an input parameter.</p>
-<p >It also makes sure that CPUSS APP(s) cannot access the WiFiSS and its SRAM contents when Wi-Fi is functional.</p>
+<p>Performs HASH validation for RRAM WiFiSS FW Image and if success starts the WIFI FW. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*image_addr</td><td>The image address. The length of the image is located in the first 4 bytes in the image. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -160,7 +147,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Disables WiFiSS and switch its power off. </p>
+<p>Disables WiFiSS and power off the WIFI SS. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
@@ -188,6 +175,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Enables only Wi-Fi SS SRAM for staging of RAM_APPs and allows CPUSS access to this memory. </p>
+<p >WIFI SS needs to be turned off before calling this API.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>

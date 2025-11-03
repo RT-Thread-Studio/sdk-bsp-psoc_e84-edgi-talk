@@ -26,14 +26,16 @@
 
 #pragma once
 
-#if (defined (CY_IP_MXS40SRSS_RTC))
-    #include "mtb_hal_rtc_mxs40srss_ver3.h"
+#if (defined (CY_IP_MXS40SRSS_RTC) && (CY_IP_MXS40SRSS_RTC_VERSION == 2))
+#include "mtb_hal_rtc_mxs40srss_ver2.h"
+#elif (defined (CY_IP_MXS40SRSS_RTC))
+#include "mtb_hal_rtc_mxs40srss_ver3.h"
 #elif (defined (CY_IP_MXS40SSRSS))
-    #include "mtb_hal_rtc_mxs40ssrss.h"
+#include "mtb_hal_rtc_mxs40ssrss.h"
 #elif (defined (CY_IP_MXS22SRSS))
-    #include "mtb_hal_rtc_mxs22srss.h"
+#include "mtb_hal_rtc_mxs22srss.h"
 #else
-    #error "Unhandled version"
+#error "Unhandled version"
 #endif
 
 #if defined(__cplusplus)
@@ -59,7 +61,7 @@ extern "C" {
  * @return the status of the HAL setup
  */
 __STATIC_INLINE cy_rslt_t mtb_hal_rtc_setup(mtb_hal_rtc_t* obj,
-        const mtb_hal_rtc_configurator_t *config)
+                                            const mtb_hal_rtc_configurator_t* config)
 {
     CY_UNUSED_PARAMETER(obj);
     CY_UNUSED_PARAMETER(config);

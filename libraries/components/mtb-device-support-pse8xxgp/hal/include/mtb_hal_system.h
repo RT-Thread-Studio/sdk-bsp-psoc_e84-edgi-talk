@@ -195,7 +195,7 @@ cy_rslt_t mtb_hal_system_reset_device(void);
 #endif
 
 #ifdef MTB_HAL_SYSTEM_IMPL_HEADER
-    #include MTB_HAL_SYSTEM_IMPL_HEADER
+#include MTB_HAL_SYSTEM_IMPL_HEADER
 #endif /* MTB_HAL_SYSTEM_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_SYSTEM)

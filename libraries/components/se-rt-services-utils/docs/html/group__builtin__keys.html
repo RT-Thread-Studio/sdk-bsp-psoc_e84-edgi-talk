@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('group__builtin__keys.html',''); initRe
 <p >SE RT Services provides the next built-in keys in two groups:</p>
 <ul>
 <li>main built-in keys (from <a class="el" href="group__builtin__keys.html#gaabd3f1c2af342dacb7b5ccc89d06c0cb">IFX_SE_KEY_ID_BUILTIN_HUK</a> to <a class="el" href="group__builtin__keys.html#ga3d98f32200768ec83eb4428de898e01c">IFX_SE_KEY_ID_BUILTIN_ATTEST_PUB</a>)</li>
-<li>test built-in keys (from <a class="el" href="group__builtin__keys.html#gad2e9c1fe087145c139ef94a2b4a4a272">IFX_SE_KEY_ID_BUILTIN_TEST_AES128</a> to <a class="el" href="group__builtin__keys.html#gac114e6899a3029d1396febd69470739d">IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF</a>).</li>
+<li>test built-in keys (from <a class="el" href="group__builtin__keys.html#gad2e9c1fe087145c139ef94a2b4a4a272">IFX_SE_KEY_ID_BUILTIN_TEST_AES128</a> to <a class="el" href="group__builtin__keys.html#ga60711dbbbf0411ab337790b7a10a722a">IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB</a>).</li>
 </ul>
 <p >Main built-in keys used during boot and in the normal operating flow.</p>
 <p >Test built-in keys used for test purpose (for application self-test as example).</p>
@@ -116,7 +116,7 @@ $(document).ready(function(){initNavTree('group__builtin__keys.html',''); initRe
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft"><a class="el" href="group__builtin__keys.html#ga3d98f32200768ec83eb4428de898e01c">IFX_SE_KEY_ID_BUILTIN_ATTEST_PUB</a>   </td><td class="markdownTableBodyLeft">ECC Public key   </td><td class="markdownTableBodyLeft">ECDSA-256R1 (SHA_256)   </td><td class="markdownTableBodyLeft"><a class="el" href="group__key__policy.html#gaa3c223edc514126af12fda453b2adc90">IFX_SE_KEY_USAGE_VERIFY_HASH</a> <a class="el" href="group__key__policy.html#ga1fecbf97097714a092864632a172aab3">IFX_SE_KEY_USAGE_VERIFY_MESSAGE</a> <a class="el" href="group__key__policy.html#ga0a565bee4a19b8533466559312596d9a">IFX_SE_KEY_USAGE_EXPORT</a>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft" rowspan="6">Test keys   </td><td class="markdownTableBodyLeft"><a class="el" href="group__builtin__keys.html#gad2e9c1fe087145c139ef94a2b4a4a272">IFX_SE_KEY_ID_BUILTIN_TEST_AES128</a>   </td><td class="markdownTableBodyLeft">AES-128   </td><td class="markdownTableBodyLeft">AES CBC NO_PADDING   </td><td class="markdownTableBodyLeft"><a class="el" href="group__key__policy.html#ga943d38f66cd37626b8ced5ba81e48fdf">IFX_SE_KEY_USAGE_DECRYPT</a> <a class="el" href="group__key__policy.html#gaacd41a9ee857d3c8cd33aefb1ad0aa9f">IFX_SE_KEY_USAGE_ENCRYPT</a> <a class="el" href="group__key__policy.html#ga0a565bee4a19b8533466559312596d9a">IFX_SE_KEY_USAGE_EXPORT</a>    </td></tr>
+<td class="markdownTableBodyLeft" rowspan="7">Test keys   </td><td class="markdownTableBodyLeft"><a class="el" href="group__builtin__keys.html#gad2e9c1fe087145c139ef94a2b4a4a272">IFX_SE_KEY_ID_BUILTIN_TEST_AES128</a>   </td><td class="markdownTableBodyLeft">AES-128   </td><td class="markdownTableBodyLeft">AES CBC NO_PADDING   </td><td class="markdownTableBodyLeft"><a class="el" href="group__key__policy.html#ga943d38f66cd37626b8ced5ba81e48fdf">IFX_SE_KEY_USAGE_DECRYPT</a> <a class="el" href="group__key__policy.html#gaacd41a9ee857d3c8cd33aefb1ad0aa9f">IFX_SE_KEY_USAGE_ENCRYPT</a> <a class="el" href="group__key__policy.html#ga0a565bee4a19b8533466559312596d9a">IFX_SE_KEY_USAGE_EXPORT</a>    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft"><a class="el" href="group__builtin__keys.html#gac5ba7cd5ec3d007a3be5726cb8ff0cc9">IFX_SE_KEY_ID_BUILTIN_TEST_ECC256_PRIV</a>   </td><td class="markdownTableBodyLeft">ECC Private key   </td><td class="markdownTableBodyLeft">ECDSA-256R1 (SHA_256)   </td><td class="markdownTableBodyLeft"><a class="el" href="group__key__policy.html#ga7a2f42a21b65a0108b3f92832b41ad8d">IFX_SE_KEY_USAGE_SIGN_HASH</a> <a class="el" href="group__key__policy.html#gadf6e9679083f048ae6e2a917b89097a8">IFX_SE_KEY_USAGE_SIGN_MESSAGE</a> <a class="el" href="group__key__policy.html#gaa3c223edc514126af12fda453b2adc90">IFX_SE_KEY_USAGE_VERIFY_HASH</a> <a class="el" href="group__key__policy.html#ga1fecbf97097714a092864632a172aab3">IFX_SE_KEY_USAGE_VERIFY_MESSAGE</a> <a class="el" href="group__key__policy.html#ga0a565bee4a19b8533466559312596d9a">IFX_SE_KEY_USAGE_EXPORT</a>    </td></tr>
 <tr class="markdownTableRowEven">
@@ -126,7 +126,9 @@ $(document).ready(function(){initNavTree('group__builtin__keys.html',''); initRe
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft"><a class="el" href="group__builtin__keys.html#ga060d6aaf8bb7de8fa3301dc711af9f83">IFX_SE_KEY_ID_BUILTIN_TEST_ECC384</a>   </td><td class="markdownTableBodyLeft">ECC Public key   </td><td class="markdownTableBodyLeft">ECDSA-384R1 (SHA_256)   </td><td class="markdownTableBodyLeft"><a class="el" href="group__key__policy.html#gaa3c223edc514126af12fda453b2adc90">IFX_SE_KEY_USAGE_VERIFY_HASH</a> <a class="el" href="group__key__policy.html#ga1fecbf97097714a092864632a172aab3">IFX_SE_KEY_USAGE_VERIFY_MESSAGE</a> <a class="el" href="group__key__policy.html#ga0a565bee4a19b8533466559312596d9a">IFX_SE_KEY_USAGE_EXPORT</a>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft"><a class="el" href="group__builtin__keys.html#gac114e6899a3029d1396febd69470739d">IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF</a>   </td><td class="markdownTableBodyLeft">AES-256   </td><td class="markdownTableBodyLeft">CMAC-KDF   </td><td class="markdownTableBodyLeft"><a class="el" href="group__key__policy.html#ga70772b0c644888fb60605bfddd86f1bb">IFX_SE_KEY_USAGE_DERIVE</a>   </td></tr>
+<td class="markdownTableBodyLeft"><a class="el" href="group__builtin__keys.html#gac114e6899a3029d1396febd69470739d">IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF</a>   </td><td class="markdownTableBodyLeft">AES-256   </td><td class="markdownTableBodyLeft">CMAC-KDF   </td><td class="markdownTableBodyLeft"><a class="el" href="group__key__policy.html#ga70772b0c644888fb60605bfddd86f1bb">IFX_SE_KEY_USAGE_DERIVE</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><a class="el" href="group__builtin__keys.html#ga60711dbbbf0411ab337790b7a10a722a">IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB</a>   </td><td class="markdownTableBodyLeft">ECC Public key   </td><td class="markdownTableBodyLeft">ECDSA-256R1 (SHA_256)   </td><td class="markdownTableBodyLeft"><a class="el" href="group__key__policy.html#gaa3c223edc514126af12fda453b2adc90">IFX_SE_KEY_USAGE_VERIFY_HASH</a> <a class="el" href="group__key__policy.html#ga1fecbf97097714a092864632a172aab3">IFX_SE_KEY_USAGE_VERIFY_MESSAGE</a> <a class="el" href="group__key__policy.html#ga0a565bee4a19b8533466559312596d9a">IFX_SE_KEY_USAGE_EXPORT</a>   </td></tr>
 </table>
 <dl class="section note"><dt>Note</dt><dd>* <a class="el" href="group__builtin__keys.html#gac7b5e1607ccd25a33008b7fb5f840402">IFX_SE_KEY_ID_BUILTIN_DEVICE</a> used only in provisioning stage to generate device certificates and not available for user SIGN operations.</dd>
 <dd>
@@ -179,6 +181,9 @@ Macros</h2></td></tr>
 <tr class="memitem:gac114e6899a3029d1396febd69470739d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__builtin__keys.html#gac114e6899a3029d1396febd69470739d">IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF</a>&#160;&#160;&#160;(<a class="el" href="group__key__attributes.html#ga346a603d5accf446a756ec3265c38026">IFX_SE_KEY_ID_BUILTIN_MIN</a> + 37u)</td></tr>
 <tr class="memdesc:gac114e6899a3029d1396febd69470739d"><td class="mdescLeft">&#160;</td><td class="mdescRight">AES-256 key for CMAC-KDF key derivation tests.  <a href="group__builtin__keys.html#gac114e6899a3029d1396febd69470739d">More...</a><br /></td></tr>
 <tr class="separator:gac114e6899a3029d1396febd69470739d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga60711dbbbf0411ab337790b7a10a722a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__builtin__keys.html#ga60711dbbbf0411ab337790b7a10a722a">IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB</a>&#160;&#160;&#160;(<a class="el" href="group__key__attributes.html#ga346a603d5accf446a756ec3265c38026">IFX_SE_KEY_ID_BUILTIN_MIN</a> + 38u)</td></tr>
+<tr class="memdesc:ga60711dbbbf0411ab337790b7a10a722a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Built-in public ECC (P-256) key to use in verify.  <a href="group__builtin__keys.html#ga60711dbbbf0411ab337790b7a10a722a">More...</a><br /></td></tr>
+<tr class="separator:ga60711dbbbf0411ab337790b7a10a722a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="gac53b4cd4b657a108a97f3d2698623c0e" name="gac53b4cd4b657a108a97f3d2698623c0e"></a>
@@ -318,6 +323,33 @@ Macros</h2></td></tr>
 <p>AES-256 key for CMAC-KDF key derivation tests. </p>
 <pre class="fragment">*
 * Test vector csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_CMAC.pdf, Example #2
+* </pre> 
+</div>
+</div>
+<a id="ga60711dbbbf0411ab337790b7a10a722a" name="ga60711dbbbf0411ab337790b7a10a722a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga60711dbbbf0411ab337790b7a10a722a">&#9670;&nbsp;</a></span>IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB&#160;&#160;&#160;(<a class="el" href="group__key__attributes.html#ga346a603d5accf446a756ec3265c38026">IFX_SE_KEY_ID_BUILTIN_MIN</a> + 38u)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Built-in public ECC (P-256) key to use in verify. </p>
+<pre class="fragment">* 
+* csrc.nist.gov/CSRC/media/Projects/Cryptographic-Algorithm-Validation-Program/documents/dss/186-4ecdsatestvectors.zip
+*
+* SigVer.rsp [P-256, SHA-256]
+*     Msg = 5905238877c77421f73e43ee3da6f2d9e2ccad5fc942dcec0cbd25482935faaf416983fe165b1a045ee2bcd2e6dca3bdf46c4310a7461f9a37960ca672d3feb5473e253605fb1ddfd28065b53cb5858a8ad28175bf9bd386a5e471ea7a65c17cc934a9d791e91491eb3754d03799790fe2d308d16146d5c9b0d0debd97d79ce8
+*     d = 519b423d715f8b581f4fa8ee59f4771a5b44c8130b4e3eacca54a56dda72b464
+*     Qx = 1ccbe91c075fc7f4f033bfa248db8fccd3565de94bbfb12f3c59ff46c271bf83
+*     Qy = ce4014c68811f9a21a1fdb2c0e6113e06db7ca93b7404e78dc7ccd5ca89a4ca9
+*     k = 94a1bbb14b906a61a280f245f9e93c7f3b4a6247824f5d33b9670787642a68de
+*     R = f3ac8061b514795b8843e3d6629527ed2afd6b1f6a555a7acabb5e6f79c8c2ac
+*     S = 8bf77819ca05a6b2786c76262bf7371cef97b218e96f175a3ccdda2acc058903
 * </pre> 
 </div>
 </div>

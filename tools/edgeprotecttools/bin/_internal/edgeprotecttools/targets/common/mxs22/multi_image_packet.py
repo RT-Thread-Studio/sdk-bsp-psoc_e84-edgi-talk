@@ -125,9 +125,9 @@ class MultiImageMXS22(MultiImage):
         @param segments: List of IntelHex objects containing hex segments
         """
         meta = {}
-        adc = {}
+        edc = {}
         for field in item:
-            if field in ('addr', 'nv_counter', 'nv_counter_addr_nvm', 
+            if field in ('addr', 'nv_counter', 'nv_counter_addr_nvm',
                          'nv_counter_addr_otp', 'hash_addr', 'l1_ver_img_idx',
                          'img_info_offset'):
                 meta.update(self.process_field(item, field))
@@ -136,24 +136,34 @@ class MultiImageMXS22(MultiImage):
                     self.process_hash(item.get('hash'), meta.get('addr'),
                                       segments))
             elif field == 'edc_addr':
-                adc.update(self.process_field(item, field))
+                edc.update(self.process_field(item, field))
+            elif field == 'iv':
+                meta.update(self.process_iv(item, field))
             else:
                 meta.update({field: item.get(field)})
         image_info = [meta]
-        if adc:
-            image_info.append(adc)
+        if edc:
+            image_info.append(edc)
         return image_info
 
     def process_hash(self, img_hash, img_addr, segments):
-        """Computes image hash SHA-256 if hash field is empty
+        """Computes image hash if hash field is 'auto' or algorithm specified,
         or converts to bytes array
         @param img_hash: Image hash value
         @param img_addr: Image address
         @param segments: List of IntelHex objects containing hex segments
         """
-        if img_hash == 'auto':
+        if img_hash in ('auto', 'sha256'):
             img = self.select_segment_bytes(segments, img_addr)
             img_hash = hashlib.sha256(img)
+            return {'hash': img_hash.digest()}
+        if img_hash == 'sha384':
+            img = self.select_segment_bytes(segments, img_addr)
+            img_hash = hashlib.sha384(img)
+            return {'hash': img_hash.digest()}
+        if img_hash == 'sha512':
+            img = self.select_segment_bytes(segments, img_addr)
+            img_hash = hashlib.sha512(img)
             return {'hash': img_hash.digest()}
         return {'hash': bytes.fromhex(img_hash)}
 
@@ -167,6 +177,24 @@ class MultiImageMXS22(MultiImage):
             elif field == 'edc_addr':
                 field = 'addr'
             return {field: int(str(data), 0)}
+        raise ValueError(f"The '{field}' field is empty")
+
+    def process_iv(self, item, field):
+        """Processes IV field from the template item"""
+        iv = item.get(field)
+        if iv is not None:
+            try:
+                with open(os.path.join(os.path.dirname(self.input_path), iv),
+                          'rb') as f:
+                    data = f.read()
+            except (FileNotFoundError, OSError, ValueError):
+                try:
+                    data = bytes.fromhex(iv)
+                except ValueError as e:
+                    raise ValueError(
+                        f"Error parsing data: '{field}'"
+                    ) from e
+            return {'iv': data}
         raise ValueError(f"The '{field}' field is empty")
 
     @staticmethod

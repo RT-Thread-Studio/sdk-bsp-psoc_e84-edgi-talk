@@ -43,14 +43,13 @@
   @param[in]     pSrcB      points to input vector B
   @param[out]    pDst       points to output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
 
-void arm_xor_u32(
-    const uint32_t *pSrcA,
-    const uint32_t *pSrcB,
-    uint32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_xor_u32(
+    const uint32_t * pSrcA,
+    const uint32_t * pSrcB,
+          uint32_t * pDst,
+          uint32_t blockSize)
 {
     uint32_t blkCnt;      /* Loop counter */
 
@@ -65,7 +64,7 @@ void arm_xor_u32(
         vecSrcA = vld1q(pSrcA);
         vecSrcB = vld1q(pSrcB);
 
-        vst1q(pDst, veorq_u32(vecSrcA, vecSrcB));
+        vst1q(pDst, veorq_u32(vecSrcA, vecSrcB) );
 
         pSrcA += 4;
         pSrcB += 4;
@@ -97,7 +96,7 @@ void arm_xor_u32(
         vecA = vld1q_u32(pSrcA);
         vecB = vld1q_u32(pSrcB);
 
-        vst1q_u32(pDst, veorq_u32(vecA, vecB));
+        vst1q_u32(pDst, veorq_u32(vecA, vecB) );
 
         pSrcA += 4;
         pSrcB += 4;
@@ -116,7 +115,7 @@ void arm_xor_u32(
 
     while (blkCnt > 0U)
     {
-        *pDst++ = (*pSrcA++) ^ (*pSrcB++);
+        *pDst++ = (*pSrcA++)^(*pSrcB++);
 
         /* Decrement the loop counter */
         blkCnt--;

@@ -304,6 +304,10 @@ SE RT Services have only 16 usage limit counters for ALL AES keys.
 \note
 E.g. if device provisioned with 8 AES Vendor keys, only 8 limit counters
 left to use for imported AES User keys.
+\note
+AES crypto limits the usage of non-volatile keys to 100k blocks of operation. 
+For side channel protection reasons user applications should limit the usage of 
+volatile keys also to 100k, or use other protective measures.
 
 ## Performance
 PSA Crypto API benchmark for the PSOC Edge E84 device with the SE core frequency

@@ -43,7 +43,6 @@
   @param[in]     pSrc       points to the block of input data
   @param[out]    pDst       points to the block of output data
   @param[in]     blockSize  number of samples to process
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function is implemented using a 64-bit internal accumulator.
@@ -149,58 +148,58 @@
         vstrhq_p_s16(pTempDest, vldrhq_z_s16(pTempSrc, p), p);                               \
     }                                                                                        \
 }
-
-static void arm_fir_q15_25_32_mve(const arm_fir_instance_q15 * S,
-                                  const q15_t * __restrict pSrc,
-                                  q15_t * __restrict pDst, uint32_t blockSize)
+    
+static void arm_fir_q15_25_32_mve(const arm_fir_instance_q15 * S, 
+  const q15_t * __restrict pSrc,
+  q15_t * __restrict pDst, uint32_t blockSize)
 {
-#define NBTAPS 32
-#define NBVECTAPS (NBTAPS / 8)
+    #define NBTAPS 32
+    #define NBVECTAPS (NBTAPS / 8)
     FIR_Q15_MAIN_CORE();
-#undef NBVECTAPS
-#undef NBTAPS
+    #undef NBVECTAPS
+    #undef NBTAPS
 }
 
-static void arm_fir_q15_17_24_mve(const arm_fir_instance_q15 * S,
-                                  const q15_t * __restrict pSrc,
-                                  q15_t * __restrict pDst, uint32_t blockSize)
+static void arm_fir_q15_17_24_mve(const arm_fir_instance_q15 * S, 
+  const q15_t * __restrict pSrc,
+  q15_t * __restrict pDst, uint32_t blockSize)
 {
-#define NBTAPS 24
-#define NBVECTAPS (NBTAPS / 8)
+    #define NBTAPS 24
+    #define NBVECTAPS (NBTAPS / 8)
     FIR_Q15_MAIN_CORE();
-#undef NBVECTAPS
-#undef NBTAPS
-}
-
-
-static void arm_fir_q15_9_16_mve(const arm_fir_instance_q15 * S,
-                                 const q15_t * __restrict pSrc,
-                                 q15_t * __restrict pDst, uint32_t blockSize)
-{
-#define NBTAPS 16
-#define NBVECTAPS (NBTAPS / 8)
-    FIR_Q15_MAIN_CORE();
-#undef NBVECTAPS
-#undef NBTAPS
-}
-
-static void arm_fir_q15_1_8_mve(const arm_fir_instance_q15 * S,
-                                const q15_t * __restrict pSrc,
-                                q15_t * __restrict pDst, uint32_t blockSize)
-{
-#define NBTAPS 8
-#define NBVECTAPS (NBTAPS / 8)
-    FIR_Q15_MAIN_CORE();
-#undef NBVECTAPS
-#undef NBTAPS
+    #undef NBVECTAPS
+    #undef NBTAPS
 }
 
 
-void arm_fir_q15(
-    const arm_fir_instance_q15 * S,
-    const q15_t * pSrc,
-    q15_t * pDst,
-    uint32_t blockSize)
+static void arm_fir_q15_9_16_mve(const arm_fir_instance_q15 * S, 
+  const q15_t * __restrict pSrc,
+  q15_t * __restrict pDst, uint32_t blockSize)
+{
+    #define NBTAPS 16
+    #define NBVECTAPS (NBTAPS / 8)
+    FIR_Q15_MAIN_CORE();
+    #undef NBVECTAPS
+    #undef NBTAPS
+}
+
+static void arm_fir_q15_1_8_mve(const arm_fir_instance_q15 * S, 
+  const q15_t * __restrict pSrc, 
+  q15_t * __restrict pDst, uint32_t blockSize)
+{
+    #define NBTAPS 8
+    #define NBVECTAPS (NBTAPS / 8)
+    FIR_Q15_MAIN_CORE();
+    #undef NBVECTAPS
+    #undef NBTAPS
+}
+
+
+ARM_DSP_ATTRIBUTE void arm_fir_q15(
+  const arm_fir_instance_q15 * S,
+  const q15_t * pSrc,
+        q15_t * pDst,
+        uint32_t blockSize)
 {
     q15_t    *pState = S->pState;   /* State pointer */
     const q15_t    *pCoeffs = S->pCoeffs; /* Coefficient pointer */
@@ -216,10 +215,9 @@ void arm_fir_q15(
     q63_t     acc0, acc1, acc2, acc3;
 
 
-    int32_t nbTaps = (numTaps + 7) >> 3;
+int32_t nbTaps = (numTaps + 7) >> 3;
 
-    switch (nbTaps)
-    {
+switch(nbTaps) {
 
     case 1:
         arm_fir_q15_1_8_mve(S, pSrc, pDst, blockSize);
@@ -305,133 +303,133 @@ void arm_fir_q15(
     switch (residual)
     {
     case 3:
-    {
-        const q15_t    *pCoeffsTmp = pCoeffs;
-        const q15_t    *pSamplesTmp = pSamples;
-
-        acc0 = 0LL;
-        acc1 = 0LL;
-        acc2 = 0LL;
-
-        /*
-         * Save 8 input samples in the history buffer
-         */
-        *(q15x8_t *) pStateCur = *(q15x8_t *) pTempSrc;
-        pStateCur += 8;
-        pTempSrc += 8;
-
-        int       i = tapsBlkCnt;
-        while (i > 0)
         {
+            const q15_t    *pCoeffsTmp = pCoeffs;
+            const q15_t    *pSamplesTmp = pSamples;
+
+            acc0 = 0LL;
+            acc1 = 0LL;
+            acc2 = 0LL;
+
             /*
-             * load 8 coefs
+             * Save 8 input samples in the history buffer
              */
-            q15x8_t vecCoeffs = *(q15x8_t *) pCoeffsTmp;
+            *(q15x8_t *) pStateCur = *(q15x8_t *) pTempSrc;
+            pStateCur += 8;
+            pTempSrc += 8;
 
-            vecIn0 = vld1q(pSamplesTmp);
-            acc0 = vmlaldavaq(acc0, vecIn0, vecCoeffs);
+            int       i = tapsBlkCnt;
+            while (i > 0)
+            {
+                /*
+                 * load 8 coefs
+                 */
+                q15x8_t vecCoeffs = *(q15x8_t *) pCoeffsTmp;
 
-            vecIn0 = vld1q(&pSamplesTmp[2]);
-            acc1 = vmlaldavaq(acc1, vecIn0, vecCoeffs);
+                vecIn0 = vld1q(pSamplesTmp);
+                acc0 = vmlaldavaq(acc0, vecIn0, vecCoeffs);
 
-            vecIn0 = vld1q(&pSamplesTmp[4]);
-            acc2 = vmlaldavaq(acc2, vecIn0, vecCoeffs);
+                vecIn0 = vld1q(&pSamplesTmp[2]);
+                acc1 = vmlaldavaq(acc1, vecIn0, vecCoeffs);
 
-            pSamplesTmp += 8;
-            pCoeffsTmp += 8;
-            /*
-             * Decrement the taps block loop counter
-             */
-            i--;
+                vecIn0 = vld1q(&pSamplesTmp[4]);
+                acc2 = vmlaldavaq(acc2, vecIn0, vecCoeffs);
+
+                pSamplesTmp += 8;
+                pCoeffsTmp += 8;
+                /*
+                 * Decrement the taps block loop counter
+                 */
+                i--;
+            }
+
+            acc0 = asrl(acc0, 15);
+            acc1 = asrl(acc1, 15);
+            acc2 = asrl(acc2, 15);
+
+            *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc0, 15);
+            *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc1, 15);
+            *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc2, 15);
         }
-
-        acc0 = asrl(acc0, 15);
-        acc1 = asrl(acc1, 15);
-        acc2 = asrl(acc2, 15);
-
-        *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc0, 15);
-        *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc1, 15);
-        *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc2, 15);
-    }
-    break;
+        break;
 
     case 2:
-    {
-        const q15_t    *pCoeffsTmp = pCoeffs;
-        const q15_t    *pSamplesTmp = pSamples;
-
-        acc0 = 0LL;
-        acc1 = 0LL;
-        /*
-         * Save 8 input samples in the history buffer
-         */
-        vst1q(pStateCur, vld1q(pTempSrc));
-        pStateCur += 8;
-        pTempSrc += 8;
-
-        int       i = tapsBlkCnt;
-        while (i > 0)
         {
+            const q15_t    *pCoeffsTmp = pCoeffs;
+            const q15_t    *pSamplesTmp = pSamples;
+
+            acc0 = 0LL;
+            acc1 = 0LL;
             /*
-             * load 8 coefs
+             * Save 8 input samples in the history buffer
              */
-            q15x8_t vecCoeffs = *(q15x8_t *) pCoeffsTmp;
+            vst1q(pStateCur, vld1q(pTempSrc));
+            pStateCur += 8;
+            pTempSrc += 8;
 
-            vecIn0 = vld1q(pSamplesTmp);
-            acc0 = vmlaldavaq(acc0, vecIn0, vecCoeffs);
+            int       i = tapsBlkCnt;
+            while (i > 0)
+            {
+                /*
+                 * load 8 coefs
+                 */
+                q15x8_t vecCoeffs = *(q15x8_t *) pCoeffsTmp;
 
-            vecIn0 = vld1q(&pSamplesTmp[2]);
-            acc1 = vmlaldavaq(acc1, vecIn0, vecCoeffs);
+                vecIn0 = vld1q(pSamplesTmp);
+                acc0 = vmlaldavaq(acc0, vecIn0, vecCoeffs);
 
-            pSamplesTmp += 8;
-            pCoeffsTmp += 8;
-            /*
-             * Decrement the taps block loop counter
-             */
-            i--;
+                vecIn0 = vld1q(&pSamplesTmp[2]);
+                acc1 = vmlaldavaq(acc1, vecIn0, vecCoeffs);
+
+                pSamplesTmp += 8;
+                pCoeffsTmp += 8;
+                /*
+                 * Decrement the taps block loop counter
+                 */
+                i--;
+            }
+
+            *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc0, 15);
+            *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc1, 15);
         }
-
-        *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc0, 15);
-        *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc1, 15);
-    }
-    break;
+        break;
 
     case 1:
-    {
-        const q15_t    *pCoeffsTmp = pCoeffs;
-        const q15_t    *pSamplesTmp = pSamples;
-
-        acc0 = 0LL;
-
-        /*
-         * Save 8 input samples in the history buffer
-         */
-        vst1q(pStateCur, vld1q(pTempSrc));
-        pStateCur += 8;
-        pTempSrc += 8;
-
-        int       i = tapsBlkCnt;
-        while (i > 0)
         {
-            /*
-             * load 8 coefs
-             */
-            q15x8_t vecCoeffs = *(q15x8_t *) pCoeffsTmp;
+            const q15_t    *pCoeffsTmp = pCoeffs;
+            const q15_t    *pSamplesTmp = pSamples;
 
-            vecIn0 = vld1q(pSamplesTmp);
-            acc0 = vmlaldavaq(acc0, vecIn0, vecCoeffs);
+            acc0 = 0LL;
 
-            pSamplesTmp += 8;
-            pCoeffsTmp += 8;
             /*
-             * Decrement the taps block loop counter
+             * Save 8 input samples in the history buffer
              */
-            i--;
+            vst1q(pStateCur, vld1q(pTempSrc));
+            pStateCur += 8;
+            pTempSrc += 8;
+
+            int       i = tapsBlkCnt;
+            while (i > 0)
+            {
+                /*
+                 * load 8 coefs
+                 */
+                q15x8_t vecCoeffs = *(q15x8_t *) pCoeffsTmp;
+
+                vecIn0 = vld1q(pSamplesTmp);
+                acc0 = vmlaldavaq(acc0, vecIn0, vecCoeffs);
+
+                pSamplesTmp += 8;
+                pCoeffsTmp += 8;
+                /*
+                 * Decrement the taps block loop counter
+                 */
+                i--;
+            }
+
+            *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc0, 15);
         }
-
-        *pOutput++ = (q15_t) MVE_ASRL_SAT16(acc0, 15);
-    }
-    break;
+        break;
     }
 
     /*
@@ -457,273 +455,273 @@ void arm_fir_q15(
 }
 
 #else
-void arm_fir_q15(
-    const arm_fir_instance_q15 * S,
-    const q15_t * pSrc,
-    q15_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_fir_q15(
+  const arm_fir_instance_q15 * S,
+  const q15_t * pSrc,
+        q15_t * pDst,
+        uint32_t blockSize)
 {
-    q15_t *pState = S->pState;                     /* State pointer */
-    const q15_t *pCoeffs = S->pCoeffs;                   /* Coefficient pointer */
-    q15_t *pStateCurnt;                            /* Points to the current sample of the state */
-    q15_t *px;                                     /* Temporary pointer for state buffer */
-    const q15_t *pb;                                     /* Temporary pointer for coefficient buffer */
-    q63_t acc0;                                    /* Accumulators */
-    uint32_t numTaps = S->numTaps;                 /* Number of filter coefficients in the filter */
-    uint32_t tapCnt, blkCnt;                       /* Loop counters */
+        q15_t *pState = S->pState;                     /* State pointer */
+  const q15_t *pCoeffs = S->pCoeffs;                   /* Coefficient pointer */
+        q15_t *pStateCurnt;                            /* Points to the current sample of the state */
+        q15_t *px;                                     /* Temporary pointer for state buffer */
+  const q15_t *pb;                                     /* Temporary pointer for coefficient buffer */
+        q63_t acc0;                                    /* Accumulators */
+        uint32_t numTaps = S->numTaps;                 /* Number of filter coefficients in the filter */
+        uint32_t tapCnt, blkCnt;                       /* Loop counters */
 
 #if defined (ARM_MATH_LOOPUNROLL)
-    q63_t acc1, acc2, acc3;                        /* Accumulators */
-    q31_t x0, x1, x2, c0;                          /* Temporary variables to hold state and coefficient values */
+        q63_t acc1, acc2, acc3;                        /* Accumulators */
+        q31_t x0, x1, x2, c0;                          /* Temporary variables to hold state and coefficient values */
 #endif
 
-    /* S->pState points to state array which contains previous frame (numTaps - 1) samples */
-    /* pStateCurnt points to the location where the new input data should be written */
-    pStateCurnt = &(S->pState[(numTaps - 1U)]);
+  /* S->pState points to state array which contains previous frame (numTaps - 1) samples */
+  /* pStateCurnt points to the location where the new input data should be written */
+  pStateCurnt = &(S->pState[(numTaps - 1U)]);
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 output values simultaneously.
-     * The variables acc0 ... acc3 hold output values that are being computed:
-     *
-     *    acc0 =  b[numTaps-1] * x[n-numTaps-1] + b[numTaps-2] * x[n-numTaps-2] + b[numTaps-3] * x[n-numTaps-3] +...+ b[0] * x[0]
-     *    acc1 =  b[numTaps-1] * x[n-numTaps]   + b[numTaps-2] * x[n-numTaps-1] + b[numTaps-3] * x[n-numTaps-2] +...+ b[0] * x[1]
-     *    acc2 =  b[numTaps-1] * x[n-numTaps+1] + b[numTaps-2] * x[n-numTaps]   + b[numTaps-3] * x[n-numTaps-1] +...+ b[0] * x[2]
-     *    acc3 =  b[numTaps-1] * x[n-numTaps+2] + b[numTaps-2] * x[n-numTaps+1] + b[numTaps-3] * x[n-numTaps]   +...+ b[0] * x[3]
-     */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 output values simultaneously.
+   * The variables acc0 ... acc3 hold output values that are being computed:
+   *
+   *    acc0 =  b[numTaps-1] * x[n-numTaps-1] + b[numTaps-2] * x[n-numTaps-2] + b[numTaps-3] * x[n-numTaps-3] +...+ b[0] * x[0]
+   *    acc1 =  b[numTaps-1] * x[n-numTaps]   + b[numTaps-2] * x[n-numTaps-1] + b[numTaps-3] * x[n-numTaps-2] +...+ b[0] * x[1]
+   *    acc2 =  b[numTaps-1] * x[n-numTaps+1] + b[numTaps-2] * x[n-numTaps]   + b[numTaps-3] * x[n-numTaps-1] +...+ b[0] * x[2]
+   *    acc3 =  b[numTaps-1] * x[n-numTaps+2] + b[numTaps-2] * x[n-numTaps+1] + b[numTaps-3] * x[n-numTaps]   +...+ b[0] * x[3]
+   */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
+  while (blkCnt > 0U)
+  {
+    /* Copy 4 new input samples into the state buffer. */
+    *pStateCurnt++ = *pSrc++;
+    *pStateCurnt++ = *pSrc++;
+    *pStateCurnt++ = *pSrc++;
+    *pStateCurnt++ = *pSrc++;
+
+    /* Set all accumulators to zero */
+    acc0 = 0;
+    acc1 = 0;
+    acc2 = 0;
+    acc3 = 0;
+
+    /* Typecast q15_t pointer to q31_t pointer for state reading in q31_t */
+    px = pState;
+
+    /* Typecast q15_t pointer to q31_t pointer for coefficient reading in q31_t */
+    pb = pCoeffs;
+
+    /* Read the first two samples from the state buffer:  x[n-N], x[n-N-1] */
+    x0 = read_q15x2_ia (&px);
+
+    /* Read the third and forth samples from the state buffer: x[n-N-2], x[n-N-3] */
+    x2 = read_q15x2_ia (&px);
+
+    /* Loop over the number of taps.  Unroll by a factor of 4.
+       Repeat until we've computed numTaps-(numTaps%4) coefficients. */
+    tapCnt = numTaps >> 2U;
+
+    while (tapCnt > 0U)
     {
-        /* Copy 4 new input samples into the state buffer. */
-        *pStateCurnt++ = *pSrc++;
-        *pStateCurnt++ = *pSrc++;
-        *pStateCurnt++ = *pSrc++;
-        *pStateCurnt++ = *pSrc++;
+      /* Read the first two coefficients using SIMD:  b[N] and b[N-1] coefficients */
+      c0 = read_q15x2_ia (&pb);
 
-        /* Set all accumulators to zero */
-        acc0 = 0;
-        acc1 = 0;
-        acc2 = 0;
-        acc3 = 0;
+      /* acc0 +=  b[N] * x[n-N] + b[N-1] * x[n-N-1] */
+      acc0 = __SMLALD(x0, c0, acc0);
 
-        /* Typecast q15_t pointer to q31_t pointer for state reading in q31_t */
-        px = pState;
+      /* acc2 +=  b[N] * x[n-N-2] + b[N-1] * x[n-N-3] */
+      acc2 = __SMLALD(x2, c0, acc2);
 
-        /* Typecast q15_t pointer to q31_t pointer for coefficient reading in q31_t */
-        pb = pCoeffs;
-
-        /* Read the first two samples from the state buffer:  x[n-N], x[n-N-1] */
-        x0 = read_q15x2_ia(&px);
-
-        /* Read the third and forth samples from the state buffer: x[n-N-2], x[n-N-3] */
-        x2 = read_q15x2_ia(&px);
-
-        /* Loop over the number of taps.  Unroll by a factor of 4.
-           Repeat until we've computed numTaps-(numTaps%4) coefficients. */
-        tapCnt = numTaps >> 2U;
-
-        while (tapCnt > 0U)
-        {
-            /* Read the first two coefficients using SIMD:  b[N] and b[N-1] coefficients */
-            c0 = read_q15x2_ia(&pb);
-
-            /* acc0 +=  b[N] * x[n-N] + b[N-1] * x[n-N-1] */
-            acc0 = __SMLALD(x0, c0, acc0);
-
-            /* acc2 +=  b[N] * x[n-N-2] + b[N-1] * x[n-N-3] */
-            acc2 = __SMLALD(x2, c0, acc2);
-
-            /* pack  x[n-N-1] and x[n-N-2] */
+      /* pack  x[n-N-1] and x[n-N-2] */
 #ifndef ARM_MATH_BIG_ENDIAN
-            x1 = __PKHBT(x2, x0, 0);
+      x1 = __PKHBT(x2, x0, 0);
 #else
-            x1 = __PKHBT(x0, x2, 0);
+      x1 = __PKHBT(x0, x2, 0);
 #endif
 
-            /* Read state x[n-N-4], x[n-N-5] */
-            x0 = read_q15x2_ia(&px);
+      /* Read state x[n-N-4], x[n-N-5] */
+      x0 = read_q15x2_ia (&px);
 
-            /* acc1 +=  b[N] * x[n-N-1] + b[N-1] * x[n-N-2] */
-            acc1 = __SMLALDX(x1, c0, acc1);
+      /* acc1 +=  b[N] * x[n-N-1] + b[N-1] * x[n-N-2] */
+      acc1 = __SMLALDX(x1, c0, acc1);
 
-            /* pack  x[n-N-3] and x[n-N-4] */
+      /* pack  x[n-N-3] and x[n-N-4] */
 #ifndef ARM_MATH_BIG_ENDIAN
-            x1 = __PKHBT(x0, x2, 0);
+      x1 = __PKHBT(x0, x2, 0);
 #else
-            x1 = __PKHBT(x2, x0, 0);
+      x1 = __PKHBT(x2, x0, 0);
 #endif
 
-            /* acc3 +=  b[N] * x[n-N-3] + b[N-1] * x[n-N-4] */
-            acc3 = __SMLALDX(x1, c0, acc3);
+      /* acc3 +=  b[N] * x[n-N-3] + b[N-1] * x[n-N-4] */
+      acc3 = __SMLALDX(x1, c0, acc3);
 
-            /* Read coefficients b[N-2], b[N-3] */
-            c0 = read_q15x2_ia(&pb);
+      /* Read coefficients b[N-2], b[N-3] */
+      c0 = read_q15x2_ia (&pb);
 
-            /* acc0 +=  b[N-2] * x[n-N-2] + b[N-3] * x[n-N-3] */
-            acc0 = __SMLALD(x2, c0, acc0);
+      /* acc0 +=  b[N-2] * x[n-N-2] + b[N-3] * x[n-N-3] */
+      acc0 = __SMLALD(x2, c0, acc0);
 
-            /* Read state x[n-N-6], x[n-N-7] with offset */
-            x2 = read_q15x2_ia(&px);
+      /* Read state x[n-N-6], x[n-N-7] with offset */
+      x2 = read_q15x2_ia (&px);
 
-            /* acc2 +=  b[N-2] * x[n-N-4] + b[N-3] * x[n-N-5] */
-            acc2 = __SMLALD(x0, c0, acc2);
+      /* acc2 +=  b[N-2] * x[n-N-4] + b[N-3] * x[n-N-5] */
+      acc2 = __SMLALD(x0, c0, acc2);
 
-            /* acc1 +=  b[N-2] * x[n-N-3] + b[N-3] * x[n-N-4] */
-            acc1 = __SMLALDX(x1, c0, acc1);
+      /* acc1 +=  b[N-2] * x[n-N-3] + b[N-3] * x[n-N-4] */
+      acc1 = __SMLALDX(x1, c0, acc1);
 
-            /* pack  x[n-N-5] and x[n-N-6] */
+      /* pack  x[n-N-5] and x[n-N-6] */
 #ifndef ARM_MATH_BIG_ENDIAN
-            x1 = __PKHBT(x2, x0, 0);
+      x1 = __PKHBT(x2, x0, 0);
 #else
-            x1 = __PKHBT(x0, x2, 0);
+      x1 = __PKHBT(x0, x2, 0);
 #endif
 
-            /* acc3 +=  b[N-2] * x[n-N-5] + b[N-3] * x[n-N-6] */
-            acc3 = __SMLALDX(x1, c0, acc3);
+      /* acc3 +=  b[N-2] * x[n-N-5] + b[N-3] * x[n-N-6] */
+      acc3 = __SMLALDX(x1, c0, acc3);
 
-            /* Decrement tap count */
-            tapCnt--;
-        }
+      /* Decrement tap count */
+      tapCnt--;
+    }
 
-        /* If the filter length is not a multiple of 4, compute the remaining filter taps.
-           This is always be 2 taps since the filter length is even. */
-        if ((numTaps & 0x3U) != 0U)
-        {
-            /* Read last two coefficients */
-            c0 = read_q15x2_ia(&pb);
+    /* If the filter length is not a multiple of 4, compute the remaining filter taps.
+       This is always be 2 taps since the filter length is even. */
+    if ((numTaps & 0x3U) != 0U)
+    {
+      /* Read last two coefficients */
+      c0 = read_q15x2_ia (&pb);
 
-            /* Perform the multiply-accumulates */
-            acc0 = __SMLALD(x0, c0, acc0);
-            acc2 = __SMLALD(x2, c0, acc2);
+      /* Perform the multiply-accumulates */
+      acc0 = __SMLALD(x0, c0, acc0);
+      acc2 = __SMLALD(x2, c0, acc2);
 
-            /* pack state variables */
+      /* pack state variables */
 #ifndef ARM_MATH_BIG_ENDIAN
-            x1 = __PKHBT(x2, x0, 0);
+      x1 = __PKHBT(x2, x0, 0);
 #else
-            x1 = __PKHBT(x0, x2, 0);
+      x1 = __PKHBT(x0, x2, 0);
 #endif
 
-            /* Read last state variables */
-            x0 = read_q15x2(px);
+      /* Read last state variables */
+      x0 = read_q15x2 (px);
 
-            /* Perform the multiply-accumulates */
-            acc1 = __SMLALDX(x1, c0, acc1);
+      /* Perform the multiply-accumulates */
+      acc1 = __SMLALDX(x1, c0, acc1);
 
-            /* pack state variables */
+      /* pack state variables */
 #ifndef ARM_MATH_BIG_ENDIAN
-            x1 = __PKHBT(x0, x2, 0);
+      x1 = __PKHBT(x0, x2, 0);
 #else
-            x1 = __PKHBT(x2, x0, 0);
+      x1 = __PKHBT(x2, x0, 0);
 #endif
 
-            /* Perform the multiply-accumulates */
-            acc3 = __SMLALDX(x1, c0, acc3);
-        }
+      /* Perform the multiply-accumulates */
+      acc3 = __SMLALDX(x1, c0, acc3);
+    }
 
-        /* The results in the 4 accumulators are in 2.30 format. Convert to 1.15 with saturation.
-           Then store the 4 outputs in the destination buffer. */
+    /* The results in the 4 accumulators are in 2.30 format. Convert to 1.15 with saturation.
+       Then store the 4 outputs in the destination buffer. */
 #ifndef ARM_MATH_BIG_ENDIAN
-        write_q15x2_ia(&pDst, __PKHBT(__SSAT((acc0 >> 15), 16), __SSAT((acc1 >> 15), 16), 16));
-        write_q15x2_ia(&pDst, __PKHBT(__SSAT((acc2 >> 15), 16), __SSAT((acc3 >> 15), 16), 16));
+    write_q15x2_ia (&pDst, __PKHBT(__SSAT((acc0 >> 15), 16), __SSAT((acc1 >> 15), 16), 16));
+    write_q15x2_ia (&pDst, __PKHBT(__SSAT((acc2 >> 15), 16), __SSAT((acc3 >> 15), 16), 16));
 #else
-        write_q15x2_ia(&pDst, __PKHBT(__SSAT((acc1 >> 15), 16), __SSAT((acc0 >> 15), 16), 16));
-        write_q15x2_ia(&pDst, __PKHBT(__SSAT((acc3 >> 15), 16), __SSAT((acc2 >> 15), 16), 16));
+    write_q15x2_ia (&pDst, __PKHBT(__SSAT((acc1 >> 15), 16), __SSAT((acc0 >> 15), 16), 16));
+    write_q15x2_ia (&pDst, __PKHBT(__SSAT((acc3 >> 15), 16), __SSAT((acc2 >> 15), 16), 16));
 #endif /* #ifndef ARM_MATH_BIG_ENDIAN */
 
-        /* Advance the state pointer by 4 to process the next group of 4 samples */
-        pState = pState + 4U;
+    /* Advance the state pointer by 4 to process the next group of 4 samples */
+    pState = pState + 4U;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining output samples */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining output samples */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of taps */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of taps */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
+  while (blkCnt > 0U)
+  {
+    /* Copy two samples into state buffer */
+    *pStateCurnt++ = *pSrc++;
+
+    /* Set the accumulator to zero */
+    acc0 = 0;
+
+    /* Use SIMD to hold states and coefficients */
+    px = pState;
+    pb = pCoeffs;
+
+    tapCnt = numTaps >> 1U;
+
+    while (tapCnt > 0U)
     {
-        /* Copy two samples into state buffer */
-        *pStateCurnt++ = *pSrc++;
+      acc0 += (q31_t) *px++ * *pb++;
+	    acc0 += (q31_t) *px++ * *pb++;
 
-        /* Set the accumulator to zero */
-        acc0 = 0;
-
-        /* Use SIMD to hold states and coefficients */
-        px = pState;
-        pb = pCoeffs;
-
-        tapCnt = numTaps >> 1U;
-
-        while (tapCnt > 0U)
-        {
-            acc0 += (q31_t) * px++ * *pb++;
-            acc0 += (q31_t) * px++ * *pb++;
-
-            tapCnt--;
-        }
-
-
-        /* The result is in 2.30 format. Convert to 1.15 with saturation.
-           Then store the output in the destination buffer. */
-        *pDst++ = (q15_t)(__SSAT((acc0 >> 15), 16));
-
-        /* Advance state pointer by 1 for the next sample */
-        pState = pState + 1U;
-
-        /* Decrement loop counter */
-        blkCnt--;
+      tapCnt--;
     }
+    
 
-    /* Processing is complete.
-       Now copy the last numTaps - 1 samples to the start of the state buffer.
-       This prepares the state buffer for the next function call. */
+    /* The result is in 2.30 format. Convert to 1.15 with saturation.
+       Then store the output in the destination buffer. */
+    *pDst++ = (q15_t) (__SSAT((acc0 >> 15), 16));
 
-    /* Points to the start of the state buffer */
-    pStateCurnt = S->pState;
+    /* Advance state pointer by 1 for the next sample */
+    pState = pState + 1U;
+
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+
+  /* Processing is complete.
+     Now copy the last numTaps - 1 samples to the start of the state buffer.
+     This prepares the state buffer for the next function call. */
+
+  /* Points to the start of the state buffer */
+  pStateCurnt = S->pState;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 taps at a time */
-    tapCnt = (numTaps - 1U) >> 2U;
+  /* Loop unrolling: Compute 4 taps at a time */
+  tapCnt = (numTaps - 1U) >> 2U;
 
-    /* Copy data */
-    while (tapCnt > 0U)
-    {
-        *pStateCurnt++ = *pState++;
-        *pStateCurnt++ = *pState++;
-        *pStateCurnt++ = *pState++;
-        *pStateCurnt++ = *pState++;
+  /* Copy data */
+  while (tapCnt > 0U)
+  {
+    *pStateCurnt++ = *pState++;
+    *pStateCurnt++ = *pState++;
+    *pStateCurnt++ = *pState++;
+    *pStateCurnt++ = *pState++;
 
-        /* Decrement loop counter */
-        tapCnt--;
-    }
+    /* Decrement loop counter */
+    tapCnt--;
+  }
 
-    /* Calculate remaining number of copies */
-    tapCnt = (numTaps - 1U) % 0x4U;
+  /* Calculate remaining number of copies */
+  tapCnt = (numTaps - 1U) % 0x4U;
 
 #else
 
-    /* Initialize tapCnt with number of taps */
-    tapCnt = (numTaps - 1U);
+  /* Initialize tapCnt with number of taps */
+  tapCnt = (numTaps - 1U);
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    /* Copy remaining data */
-    while (tapCnt > 0U)
-    {
-        *pStateCurnt++ = *pState++;
+  /* Copy remaining data */
+  while (tapCnt > 0U)
+  {
+    *pStateCurnt++ = *pState++;
 
-        /* Decrement loop counter */
-        tapCnt--;
-    }
+    /* Decrement loop counter */
+    tapCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

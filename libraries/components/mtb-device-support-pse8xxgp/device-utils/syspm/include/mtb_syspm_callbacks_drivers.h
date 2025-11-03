@@ -7,7 +7,7 @@
 *
 ********************************************************************************
 * \copyright
-* Copyright 2024-2024 Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2024-2025 Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation
 *
 * SPDX-License-Identifier: Apache-2.0
@@ -24,33 +24,13 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 *******************************************************************************/
+
 #pragma once
 
-
-#if (MTB_SYSPM_CALLBACKS_AVAILABLE_DMA)
-    #include "mtb_syspm_callbacks_dma.h"
-#endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_DMA)
-
-#if (MTB_SYSPM_CALLBACKS_AVAILABLE_I2S_TDM)
-    #include "mtb_syspm_callbacks_i2s_tdm.h"
-#endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_I2S_TDM)
-
-#if (MTB_SYSPM_CALLBACKS_AVAILABLE_NVM)
-    #include "mtb_syspm_callbacks_nvm.h"
-#endif
-
-#if defined(MTB_SYSPM_CALLBACKS_AVAILABLE_PDM_PCM)
-    #include "mtb_syspm_callbacks_pdm_pcm.h"
-#endif // defined(MTB_SYSPM_CALLBACKS_AVAILABLE_PDM_PCM)
-
-#if (MTB_SYSPM_CALLBACKS_AVAILABLE_SCB_UART)
-    #include "mtb_syspm_callbacks_scb_uart.h"
-#endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_SCB_UART)
-
-#if (MTB_SYSPM_CALLBACKS_AVAILABLE_SMIF)
-    #include "mtb_syspm_callbacks_smif.h"
-#endif // (MTB_SYSPM_CALLBACKS_AVAILABLE_SMIF)
-
-#if (MTB_SYSPM_CALLBACKS_AVAILABLE_TCPWM)
-    #include "mtb_syspm_callbacks_tcpwm.h"
-#endif
+#include "mtb_syspm_callbacks_dma.h"
+#include "mtb_syspm_callbacks_i2s_tdm.h"
+#include "mtb_syspm_callbacks_nvm.h"
+#include "mtb_syspm_callbacks_pdm_pcm.h"
+#include "mtb_syspm_callbacks_scb_uart.h"
+#include "mtb_syspm_callbacks_smif.h"
+#include "mtb_syspm_callbacks_tcpwm.h"

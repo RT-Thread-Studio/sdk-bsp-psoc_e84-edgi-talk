@@ -119,7 +119,7 @@ typedef enum
     MTB_HAL_TIMER_EVENT_COMPARE_CC0     = (MTB_HAL_MAP_TIMER_EVENT_COMPARE_CC0),
     /** Timer Event Compare Count 0 -or- Terminal Count */
     MTB_HAL_TIMER_EVENT_COMPARE_CC0_OR_TERMINAL_COUNT \
-    = (MTB_HAL_MAP_TIMER_EVENT_COMPARE_CC0_OR_TERMINAL_COUNT),
+        = (MTB_HAL_MAP_TIMER_EVENT_COMPARE_CC0_OR_TERMINAL_COUNT),
     /** Timer Event Compare Count 1 = (timer reached compare 1 count), */
     MTB_HAL_TIMER_EVENT_COMPARE_CC1     = (MTB_HAL_MAP_TIMER_EVENT_COMPARE_CC1),
     /** All Timer Events Combined */
@@ -156,7 +156,7 @@ typedef void(* mtb_hal_timer_event_callback_t)(void* callback_arg, mtb_hal_timer
  * @return the status of the HAL setup
  */
 cy_rslt_t mtb_hal_timer_setup(mtb_hal_timer_t* obj, const mtb_hal_timer_configurator_t* config,
-                              mtb_hal_clock_t *clock);
+                              mtb_hal_clock_t* clock);
 
 /** Starts the timer/counter with the pre-set configuration.
  * This does not reset the counter. The count value will start from the value that was
@@ -203,7 +203,7 @@ uint32_t mtb_hal_timer_read(const mtb_hal_timer_t* obj);
  * @param[in] callback_arg Generic argument that will be provided to the callback when called
  */
 void mtb_hal_timer_register_callback(mtb_hal_timer_t* obj, mtb_hal_timer_event_callback_t callback,
-                                     void *callback_arg);
+                                     void* callback_arg);
 
 /** Configure timer/counter event enablement <br>
  *
@@ -230,7 +230,7 @@ cy_rslt_t mtb_hal_timer_process_interrupt(mtb_hal_timer_t* obj);
 #endif
 
 #ifdef MTB_HAL_TIMER_IMPL_HEADER
-    #include MTB_HAL_TIMER_IMPL_HEADER
+#include MTB_HAL_TIMER_IMPL_HEADER
 #endif /* MTB_HAL_TIMER_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_TIMER)

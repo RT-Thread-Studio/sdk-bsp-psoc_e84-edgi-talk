@@ -42,22 +42,22 @@
   spectrum and is very widely used in signal and image coding applications.
   The family of DCTs (DCT type- 1,2,3,4) is the outcome of different combinations of homogeneous boundary conditions.
   DCT has an excellent energy-packing capability, hence has many applications and in data compression in particular.
-
+  
   DCT is essentially the Discrete Fourier Transform(DFT) of an even-extended real signal.
   Reordering of the input data makes the computation of DCT just a problem of
   computing the DFT of a real signal with a few additional operations.
   This approach provides regular, simple, and very efficient DCT algorithms for practical hardware and software implementations.
-
+  
   DCT type-II can be implemented using Fast fourier transform (FFT) internally, as the transform is applied on real values, Real FFT can be used.
   DCT4 is implemented using DCT2 as their implementations are similar except with some added pre-processing and post-processing.
   DCT2 implementation can be described in the following steps:
   - Re-ordering input
   - Calculating Real FFT
   - Multiplication of weights and Real FFT output and getting real part from the product.
-
+  
   This process is explained by the block diagram below:
   \image html DCT4.gif "Discrete Cosine Transform - type-IV"
-
+ 
   @par           Algorithm
                    The N-point type-IV DCT is defined as a real, linear transformation by the formula:
                    \f[
@@ -75,7 +75,7 @@
                    The symmetry of the transform matrix indicates that the fast algorithms for the forward
                    and inverse transform computation are identical.
                    Note that the implementation of Inverse DCT4 and DCT4 is same, hence same process function can be used for both.
-
+ 
   @par           Lengths supported by the transform:
                    As DCT4 internally uses Real FFT, it supports all the lengths 128, 512, 2048 and 8192.
                    The library provides separate functions for Q15, Q31, and floating-point data types.
@@ -84,7 +84,7 @@
                    The instances for Real FFT and FFT, cosine values table and twiddle factor table are stored in an instance data structure.
                    A separate instance structure must be defined for each transform.
                    There are separate instance structure declarations for each of the 3 supported data types.
-
+                 
   @par           Initialization Functions
                    There is also an associated initialization function for each data type.
                    The initialization function performs the following operations:
@@ -108,17 +108,17 @@
                    \c pCfft points to the complex FFT instance;
                    The CFFT and RFFT structures also needs to be initialized, refer to arm_cfft_radix4_f32()
                    and arm_rfft_f32() respectively for details regarding static initialization.
-
+ 
   @par           Fixed-Point Behavior
                    Care must be taken when using the fixed-point versions of the DCT4 transform functions.
                    In particular, the overflow and saturation behavior of the accumulator used in each function must be considered.
                    Refer to the function specific documentation below for usage guidelines.
  */
 
-/**
- @addtogroup DCT4F32
- @{
-*/
+ /**
+  @addtogroup DCT4F32
+  @{
+ */
 
 /**
   @brief         Processing function for the floating-point DCT4/IDCT4.
@@ -126,331 +126,322 @@
   @param[in]     S             points to an instance of the floating-point DCT4/IDCT4 structure
   @param[in]     pState        points to state buffer
   @param[in,out] pInlineBuffer points to the in-place input and output buffer
-  @return        none
  */
 
-void arm_dct4_f32(
-    const arm_dct4_instance_f32 * S,
-    float32_t *pState,
-    float32_t *pInlineBuffer)
+ARM_DSP_ATTRIBUTE void arm_dct4_f32(
+  const arm_dct4_instance_f32 * S,
+        float32_t * pState,
+        float32_t * pInlineBuffer)
 {
-    const float32_t *weights = S->pTwiddle;              /* Pointer to the Weights table */
-    const float32_t *cosFact = S->pCosFactor;            /* Pointer to the cos factors table */
-    float32_t *pS1, *pS2, *pbuff;                  /* Temporary pointers for input buffer and pState buffer */
-    float32_t in;                                  /* Temporary variable */
-    uint32_t i;                                    /* Loop counter */
+  const float32_t *weights = S->pTwiddle;              /* Pointer to the Weights table */
+  const float32_t *cosFact = S->pCosFactor;            /* Pointer to the cos factors table */
+        float32_t *pS1, *pS2, *pbuff;                  /* Temporary pointers for input buffer and pState buffer */
+        float32_t in;                                  /* Temporary variable */
+        uint32_t i;                                    /* Loop counter */
 
 
-    /* DCT4 computation involves DCT2 (which is calculated using RFFT)
-     * along with some pre-processing and post-processing.
-     * Computational procedure is explained as follows:
-     * (a) Pre-processing involves multiplying input with cos factor,
-     *     r(n) = 2 * u(n) * cos(pi*(2*n+1)/(4*n))
-     *              where,
-     *                 r(n) -- output of preprocessing
-     *                 u(n) -- input to preprocessing(actual Source buffer)
-     * (b) Calculation of DCT2 using FFT is divided into three steps:
-     *                  Step1: Re-ordering of even and odd elements of input.
-     *                  Step2: Calculating FFT of the re-ordered input.
-     *                  Step3: Taking the real part of the product of FFT output and weights.
-     * (c) Post-processing - DCT4 can be obtained from DCT2 output using the following equation:
-     *                   Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
-     *                        where,
-     *                           Y4 -- DCT4 output,   Y2 -- DCT2 output
-     * (d) Multiplying the output with the normalizing factor sqrt(2/N).
-     */
+  /* DCT4 computation involves DCT2 (which is calculated using RFFT)
+   * along with some pre-processing and post-processing.
+   * Computational procedure is explained as follows:
+   * (a) Pre-processing involves multiplying input with cos factor,
+   *     r(n) = 2 * u(n) * cos(pi*(2*n+1)/(4*n))
+   *              where,
+   *                 r(n) -- output of preprocessing
+   *                 u(n) -- input to preprocessing(actual Source buffer)
+   * (b) Calculation of DCT2 using FFT is divided into three steps:
+   *                  Step1: Re-ordering of even and odd elements of input.
+   *                  Step2: Calculating FFT of the re-ordered input.
+   *                  Step3: Taking the real part of the product of FFT output and weights.
+   * (c) Post-processing - DCT4 can be obtained from DCT2 output using the following equation:
+   *                   Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
+   *                        where,
+   *                           Y4 -- DCT4 output,   Y2 -- DCT2 output
+   * (d) Multiplying the output with the normalizing factor sqrt(2/N).
+   */
 
-    /*-------- Pre-processing ------------*/
-    /* Multiplying input with cos factor i.e. r(n) = 2 * x(n) * cos(pi*(2*n+1)/(4*n)) */
-    arm_scale_f32(pInlineBuffer, 2.0f, pInlineBuffer, S->N);
-    arm_mult_f32(pInlineBuffer, cosFact, pInlineBuffer, S->N);
+  /*-------- Pre-processing ------------*/
+  /* Multiplying input with cos factor i.e. r(n) = 2 * x(n) * cos(pi*(2*n+1)/(4*n)) */
+  arm_scale_f32(pInlineBuffer, 2.0f, pInlineBuffer, S->N);
+  arm_mult_f32(pInlineBuffer, cosFact, pInlineBuffer, S->N);
 
-    /* ----------------------------------------------------------------
-     * Step1: Re-ordering of even and odd elements as
-     *             pState[i] =  pInlineBuffer[2*i] and
-     *             pState[N-i-1] = pInlineBuffer[2*i+1] where i = 0 to N/2
-     ---------------------------------------------------------------------*/
+  /* ----------------------------------------------------------------
+   * Step1: Re-ordering of even and odd elements as
+   *             pState[i] =  pInlineBuffer[2*i] and
+   *             pState[N-i-1] = pInlineBuffer[2*i+1] where i = 0 to N/2
+   ---------------------------------------------------------------------*/
 
-    /* pS1 initialized to pState */
-    pS1 = pState;
+  /* pS1 initialized to pState */
+  pS1 = pState;
 
-    /* pS2 initialized to pState+N-1, so that it points to the end of the state buffer */
-    pS2 = pState + (S->N - 1U);
+  /* pS2 initialized to pState+N-1, so that it points to the end of the state buffer */
+  pS2 = pState + (S->N - 1U);
 
-    /* pbuff initialized to input buffer */
-    pbuff = pInlineBuffer;
+  /* pbuff initialized to input buffer */
+  pbuff = pInlineBuffer;
 
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Initializing the loop counter to N/2 >> 2 for loop unrolling by 4 */
-    i = S->Nby2 >> 2U;
+  /* Initializing the loop counter to N/2 >> 2 for loop unrolling by 4 */
+  i = S->Nby2 >> 2U;
 
-    /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
-     ** a second loop below computes the remaining 1 to 3 samples. */
-    do
-    {
-        /* Re-ordering of even and odd elements */
-        /* pState[i] =  pInlineBuffer[2*i] */
-        *pS1++ = *pbuff++;
-        /* pState[N-i-1] = pInlineBuffer[2*i+1] */
-        *pS2-- = *pbuff++;
+  /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+   ** a second loop below computes the remaining 1 to 3 samples. */
+  do
+  {
+    /* Re-ordering of even and odd elements */
+    /* pState[i] =  pInlineBuffer[2*i] */
+    *pS1++ = *pbuff++;
+    /* pState[N-i-1] = pInlineBuffer[2*i+1] */
+    *pS2-- = *pbuff++;
 
-        *pS1++ = *pbuff++;
-        *pS2-- = *pbuff++;
+    *pS1++ = *pbuff++;
+    *pS2-- = *pbuff++;
 
-        *pS1++ = *pbuff++;
-        *pS2-- = *pbuff++;
+    *pS1++ = *pbuff++;
+    *pS2-- = *pbuff++;
 
-        *pS1++ = *pbuff++;
-        *pS2-- = *pbuff++;
+    *pS1++ = *pbuff++;
+    *pS2-- = *pbuff++;
 
-        /* Decrement loop counter */
-        i--;
-    }
-    while (i > 0U);
+    /* Decrement loop counter */
+    i--;
+  } while (i > 0U);
 
-    /* pbuff initialized to input buffer */
-    pbuff = pInlineBuffer;
+  /* pbuff initialized to input buffer */
+  pbuff = pInlineBuffer;
 
-    /* pS1 initialized to pState */
-    pS1 = pState;
+  /* pS1 initialized to pState */
+  pS1 = pState;
 
-    /* Initializing the loop counter to N/4 instead of N for loop unrolling */
-    i = S->N >> 2U;
+  /* Initializing the loop counter to N/4 instead of N for loop unrolling */
+  i = S->N >> 2U;
 
-    /* Processing with loop unrolling 4 times as N is always multiple of 4.
-     * Compute 4 outputs at a time */
-    do
-    {
-        /* Writing the re-ordered output back to inplace input buffer */
-        *pbuff++ = *pS1++;
-        *pbuff++ = *pS1++;
-        *pbuff++ = *pS1++;
-        *pbuff++ = *pS1++;
+  /* Processing with loop unrolling 4 times as N is always multiple of 4.
+   * Compute 4 outputs at a time */
+  do
+  {
+    /* Writing the re-ordered output back to inplace input buffer */
+    *pbuff++ = *pS1++;
+    *pbuff++ = *pS1++;
+    *pbuff++ = *pS1++;
+    *pbuff++ = *pS1++;
 
-        /* Decrement the loop counter */
-        i--;
-    }
-    while (i > 0U);
+    /* Decrement the loop counter */
+    i--;
+  } while (i > 0U);
 
 
-    /* ---------------------------------------------------------
-     *     Step2: Calculate RFFT for N-point input
-     * ---------------------------------------------------------- */
-    /* pInlineBuffer is real input of length N , pState is the complex output of length 2N */
-    arm_rfft_f32(S->pRfft, pInlineBuffer, pState);
+  /* ---------------------------------------------------------
+   *     Step2: Calculate RFFT for N-point input
+   * ---------------------------------------------------------- */
+  /* pInlineBuffer is real input of length N , pState is the complex output of length 2N */
+  arm_rfft_f32 (S->pRfft, pInlineBuffer, pState);
 
-    /*----------------------------------------------------------------------
-     *  Step3: Multiply the FFT output with the weights.
-     *----------------------------------------------------------------------*/
-    arm_cmplx_mult_cmplx_f32(pState, weights, pState, S->N);
+  /*----------------------------------------------------------------------
+   *  Step3: Multiply the FFT output with the weights.
+   *----------------------------------------------------------------------*/
+  arm_cmplx_mult_cmplx_f32 (pState, weights, pState, S->N);
 
-    /* ----------- Post-processing ---------- */
-    /* DCT-IV can be obtained from DCT-II by the equation,
-     *       Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
-     *       Hence, Y4(0) = Y2(0)/2  */
-    /* Getting only real part from the output and Converting to DCT-IV */
+  /* ----------- Post-processing ---------- */
+  /* DCT-IV can be obtained from DCT-II by the equation,
+   *       Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
+   *       Hence, Y4(0) = Y2(0)/2  */
+  /* Getting only real part from the output and Converting to DCT-IV */
 
-    /* Initializing the loop counter to N >> 2 for loop unrolling by 4 */
-    i = (S->N - 1U) >> 2U;
+  /* Initializing the loop counter to N >> 2 for loop unrolling by 4 */
+  i = (S->N - 1U) >> 2U;
 
-    /* pbuff initialized to input buffer. */
-    pbuff = pInlineBuffer;
+  /* pbuff initialized to input buffer. */
+  pbuff = pInlineBuffer;
 
-    /* pS1 initialized to pState */
-    pS1 = pState;
+  /* pS1 initialized to pState */
+  pS1 = pState;
 
-    /* Calculating Y4(0) from Y2(0) using Y4(0) = Y2(0)/2 */
-    in = *pS1++ * (float32_t) 0.5;
-    /* input buffer acts as inplace, so output values are stored in the input itself. */
+  /* Calculating Y4(0) from Y2(0) using Y4(0) = Y2(0)/2 */
+  in = *pS1++ * (float32_t) 0.5;
+  /* input buffer acts as inplace, so output values are stored in the input itself. */
+  *pbuff++ = in;
+
+  /* pState pointer is incremented twice as the real values are located alternatively in the array */
+  pS1++;
+
+  /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+   ** a second loop below computes the remaining 1 to 3 samples. */
+  do
+  {
+    /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
+    /* pState pointer (pS1) is incremented twice as the real values are located alternatively in the array */
+    in = *pS1++ - in;
     *pbuff++ = in;
-
-    /* pState pointer is incremented twice as the real values are located alternatively in the array */
+    /* points to the next real value */
     pS1++;
 
-    /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
-     ** a second loop below computes the remaining 1 to 3 samples. */
-    do
-    {
-        /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
-        /* pState pointer (pS1) is incremented twice as the real values are located alternatively in the array */
-        in = *pS1++ - in;
-        *pbuff++ = in;
-        /* points to the next real value */
-        pS1++;
+    in = *pS1++ - in;
+    *pbuff++ = in;
+    pS1++;
 
-        in = *pS1++ - in;
-        *pbuff++ = in;
-        pS1++;
+    in = *pS1++ - in;
+    *pbuff++ = in;
+    pS1++;
 
-        in = *pS1++ - in;
-        *pbuff++ = in;
-        pS1++;
+    in = *pS1++ - in;
+    *pbuff++ = in;
+    pS1++;
 
-        in = *pS1++ - in;
-        *pbuff++ = in;
-        pS1++;
+    /* Decrement the loop counter */
+    i--;
+  } while (i > 0U);
 
-        /* Decrement the loop counter */
-        i--;
-    }
-    while (i > 0U);
+  /* If the blockSize is not a multiple of 4, compute any remaining output samples here.
+   ** No loop unrolling is used. */
+  i = (S->N - 1U) % 0x4U;
 
-    /* If the blockSize is not a multiple of 4, compute any remaining output samples here.
-     ** No loop unrolling is used. */
-    i = (S->N - 1U) % 0x4U;
+  while (i > 0U)
+  {
+    /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
+    /* pState pointer (pS1) is incremented twice as the real values are located alternatively in the array */
+    in = *pS1++ - in;
+    *pbuff++ = in;
 
-    while (i > 0U)
-    {
-        /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
-        /* pState pointer (pS1) is incremented twice as the real values are located alternatively in the array */
-        in = *pS1++ - in;
-        *pbuff++ = in;
+    /* points to the next real value */
+    pS1++;
 
-        /* points to the next real value */
-        pS1++;
-
-        /* Decrement the loop counter */
-        i--;
-    }
+    /* Decrement the loop counter */
+    i--;
+  }
 
 
-    /*------------ Normalizing the output by multiplying with the normalizing factor ----------*/
+  /*------------ Normalizing the output by multiplying with the normalizing factor ----------*/
 
-    /* Initializing the loop counter to N/4 instead of N for loop unrolling */
-    i = S->N >> 2U;
+  /* Initializing the loop counter to N/4 instead of N for loop unrolling */
+  i = S->N >> 2U;
 
-    /* pbuff initialized to the pInlineBuffer(now contains the output values) */
-    pbuff = pInlineBuffer;
+  /* pbuff initialized to the pInlineBuffer(now contains the output values) */
+  pbuff = pInlineBuffer;
 
-    /* Processing with loop unrolling 4 times as N is always multiple of 4.  Compute 4 outputs at a time */
-    do
-    {
-        /* Multiplying pInlineBuffer with the normalizing factor sqrt(2/N) */
-        in = *pbuff;
-        *pbuff++ = in * S->normalize;
+  /* Processing with loop unrolling 4 times as N is always multiple of 4.  Compute 4 outputs at a time */
+  do
+  {
+    /* Multiplying pInlineBuffer with the normalizing factor sqrt(2/N) */
+    in = *pbuff;
+    *pbuff++ = in * S->normalize;
 
-        in = *pbuff;
-        *pbuff++ = in * S->normalize;
+    in = *pbuff;
+    *pbuff++ = in * S->normalize;
 
-        in = *pbuff;
-        *pbuff++ = in * S->normalize;
+    in = *pbuff;
+    *pbuff++ = in * S->normalize;
 
-        in = *pbuff;
-        *pbuff++ = in * S->normalize;
+    in = *pbuff;
+    *pbuff++ = in * S->normalize;
 
-        /* Decrement the loop counter */
-        i--;
-    }
-    while (i > 0U);
+    /* Decrement the loop counter */
+    i--;
+  } while (i > 0U);
 
 
 #else
 
-    /* Initializing the loop counter to N/2 */
-    i = S->Nby2;
+  /* Initializing the loop counter to N/2 */
+  i = S->Nby2;
 
-    do
-    {
-        /* Re-ordering of even and odd elements */
-        /* pState[i] =  pInlineBuffer[2*i] */
-        *pS1++ = *pbuff++;
-        /* pState[N-i-1] = pInlineBuffer[2*i+1] */
-        *pS2-- = *pbuff++;
+  do
+  {
+    /* Re-ordering of even and odd elements */
+    /* pState[i] =  pInlineBuffer[2*i] */
+    *pS1++ = *pbuff++;
+    /* pState[N-i-1] = pInlineBuffer[2*i+1] */
+    *pS2-- = *pbuff++;
 
-        /* Decrement the loop counter */
-        i--;
-    }
-    while (i > 0U);
+    /* Decrement the loop counter */
+    i--;
+  } while (i > 0U);
 
-    /* pbuff initialized to input buffer */
-    pbuff = pInlineBuffer;
+  /* pbuff initialized to input buffer */
+  pbuff = pInlineBuffer;
 
-    /* pS1 initialized to pState */
-    pS1 = pState;
+  /* pS1 initialized to pState */
+  pS1 = pState;
 
-    /* Initializing the loop counter */
-    i = S->N;
+  /* Initializing the loop counter */
+  i = S->N;
 
-    do
-    {
-        /* Writing the re-ordered output back to inplace input buffer */
-        *pbuff++ = *pS1++;
+  do
+  {
+    /* Writing the re-ordered output back to inplace input buffer */
+    *pbuff++ = *pS1++;
 
-        /* Decrement the loop counter */
-        i--;
-    }
-    while (i > 0U);
+    /* Decrement the loop counter */
+    i--;
+  } while (i > 0U);
 
 
-    /* ---------------------------------------------------------
-     *     Step2: Calculate RFFT for N-point input
-     * ---------------------------------------------------------- */
-    /* pInlineBuffer is real input of length N , pState is the complex output of length 2N */
-    arm_rfft_f32(S->pRfft, pInlineBuffer, pState);
+  /* ---------------------------------------------------------
+   *     Step2: Calculate RFFT for N-point input
+   * ---------------------------------------------------------- */
+  /* pInlineBuffer is real input of length N , pState is the complex output of length 2N */
+  arm_rfft_f32 (S->pRfft, pInlineBuffer, pState);
 
-    /*----------------------------------------------------------------------
-     *  Step3: Multiply the FFT output with the weights.
-     *----------------------------------------------------------------------*/
-    arm_cmplx_mult_cmplx_f32(pState, weights, pState, S->N);
+  /*----------------------------------------------------------------------
+   *  Step3: Multiply the FFT output with the weights.
+   *----------------------------------------------------------------------*/
+  arm_cmplx_mult_cmplx_f32 (pState, weights, pState, S->N);
 
-    /* ----------- Post-processing ---------- */
-    /* DCT-IV can be obtained from DCT-II by the equation,
-     *       Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
-     *       Hence, Y4(0) = Y2(0)/2  */
-    /* Getting only real part from the output and Converting to DCT-IV */
+  /* ----------- Post-processing ---------- */
+  /* DCT-IV can be obtained from DCT-II by the equation,
+   *       Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
+   *       Hence, Y4(0) = Y2(0)/2  */
+  /* Getting only real part from the output and Converting to DCT-IV */
 
-    /* pbuff initialized to input buffer. */
-    pbuff = pInlineBuffer;
+  /* pbuff initialized to input buffer. */
+  pbuff = pInlineBuffer;
 
-    /* pS1 initialized to pState */
-    pS1 = pState;
+  /* pS1 initialized to pState */
+  pS1 = pState;
 
-    /* Calculating Y4(0) from Y2(0) using Y4(0) = Y2(0)/2 */
-    in = *pS1++ * (float32_t) 0.5;
-    /* input buffer acts as inplace, so output values are stored in the input itself. */
+  /* Calculating Y4(0) from Y2(0) using Y4(0) = Y2(0)/2 */
+  in = *pS1++ * (float32_t) 0.5;
+  /* input buffer acts as inplace, so output values are stored in the input itself. */
+  *pbuff++ = in;
+
+  /* pState pointer is incremented twice as the real values are located alternatively in the array */
+  pS1++;
+
+  /* Initializing the loop counter */
+  i = (S->N - 1U);
+
+  do
+  {
+    /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
+    /* pState pointer (pS1) is incremented twice as the real values are located alternatively in the array */
+    in = *pS1++ - in;
     *pbuff++ = in;
 
-    /* pState pointer is incremented twice as the real values are located alternatively in the array */
+    /* points to the next real value */
     pS1++;
 
-    /* Initializing the loop counter */
-    i = (S->N - 1U);
+    /* Decrement loop counter */
+    i--;
+  } while (i > 0U);
 
-    do
-    {
-        /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
-        /* pState pointer (pS1) is incremented twice as the real values are located alternatively in the array */
-        in = *pS1++ - in;
-        *pbuff++ = in;
+  /*------------ Normalizing the output by multiplying with the normalizing factor ----------*/
 
-        /* points to the next real value */
-        pS1++;
+  /* Initializing loop counter */
+  i = S->N;
 
-        /* Decrement loop counter */
-        i--;
-    }
-    while (i > 0U);
+  /* pbuff initialized to the pInlineBuffer (now contains the output values) */
+  pbuff = pInlineBuffer;
 
-    /*------------ Normalizing the output by multiplying with the normalizing factor ----------*/
+  do
+  {
+    /* Multiplying pInlineBuffer with the normalizing factor sqrt(2/N) */
+    in = *pbuff;
+    *pbuff++ = in * S->normalize;
 
-    /* Initializing loop counter */
-    i = S->N;
-
-    /* pbuff initialized to the pInlineBuffer (now contains the output values) */
-    pbuff = pInlineBuffer;
-
-    do
-    {
-        /* Multiplying pInlineBuffer with the normalizing factor sqrt(2/N) */
-        in = *pbuff;
-        *pbuff++ = in * S->normalize;
-
-        /* Decrement loop counter */
-        i--;
-    }
-    while (i > 0U);
+    /* Decrement loop counter */
+    i--;
+  } while (i > 0U);
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 

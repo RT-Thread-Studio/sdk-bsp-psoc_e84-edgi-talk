@@ -34,23 +34,40 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 // mtb_syspm_smif_deepsleep_callback
 //--------------------------------------------------------------------------------------------------
 cy_en_syspm_status_t mtb_syspm_smif_deepsleep_callback(cy_stc_syspm_callback_params_t* params,
-        cy_en_syspm_callback_mode_t mode)
+                                                       cy_en_syspm_callback_mode_t mode)
 {
     bool allow = true;
-    const mtb_syspm_smif_deepsleep_context_t *context =
+    mtb_syspm_smif_deepsleep_context_t* context =
         (mtb_syspm_smif_deepsleep_context_t*)(params->context);
     switch (mode)
     {
-    case CY_SYSPM_CHECK_READY:
-        allow &= context->smif_context->txBufferCounter == 0u;
-        allow &= context->smif_context->rxBufferCounter == 0u;
-        allow &= Cy_SMIF_GetRxFifoStatus(params->base) == 0u;
-        allow &= Cy_SMIF_GetTxFifoStatus(params->base) == 0u;
-        break;
+        case CY_SYSPM_CHECK_READY:
+            allow &= context->smif_context->txBufferCounter == 0u;
+            allow &= context->smif_context->rxBufferCounter == 0u;
+            allow &= Cy_SMIF_GetRxFifoStatus(params->base) == 0u;
+            allow &= Cy_SMIF_GetTxFifoStatus(params->base) == 0u;
+            break;
 
-    default:
-        allow = true;
-        break;
+        case CY_SYSPM_BEFORE_TRANSITION:
+            context->smif_crypto_input1 = SMIF_CRYPTO_INPUT1(params->base);
+            context->smif_crypto_input2 = SMIF_CRYPTO_INPUT2(params->base);
+            context->smif_crypto_input3 = SMIF_CRYPTO_INPUT3(params->base);
+            break;
+
+        case CY_SYSPM_AFTER_TRANSITION:
+            SMIF_CRYPTO_INPUT1(params->base) = context->smif_crypto_input1;
+            SMIF_CRYPTO_INPUT2(params->base) = context->smif_crypto_input2;
+            SMIF_CRYPTO_INPUT3(params->base) = context->smif_crypto_input3;
+
+            //Zero out saved values afterwards
+            context->smif_crypto_input1 = 0u;
+            context->smif_crypto_input2 = 0u;
+            context->smif_crypto_input3 = 0u;
+            break;
+
+        default:
+            allow = true;
+            break;
     }
     if (allow)
     {

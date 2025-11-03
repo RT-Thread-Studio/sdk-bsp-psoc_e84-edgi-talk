@@ -44,13 +44,13 @@ extern "C" {
 #include "cy_crypto_core_hw.h"
 
 typedef void (*cy_crypto_memcpy_func_t)(CRYPTO_Type *base,
-                                        void *dst, void const *src, uint16_t size);
+                               void* dst, void const *src, uint16_t size);
 typedef void (*cy_crypto_memset_func_t)(CRYPTO_Type *base,
-                                        void *dst, uint8_t data, uint16_t size);
+                               void* dst, uint8_t data, uint16_t size);
 typedef uint32_t (*cy_crypto_memcmp_func_t)(CRYPTO_Type *base,
-        void const *src0, void const *src1, uint16_t size);
+                               void const *src0, void const *src1, uint16_t size);
 typedef void (*cy_crypto_memxor_func_t)(CRYPTO_Type *base, void* dst,
-                                        void const *src0, void const *src1, uint16_t size);
+                               void const *src0, void const *src1, uint16_t size);
 
 /**
 * \addtogroup group_crypto_lld_mem_functions
@@ -83,15 +83,15 @@ __STATIC_INLINE void Cy_Crypto_Core_MemCpy(CRYPTO_Type *base, void* dst, void co
 {
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         Cy_Crypto_Core_V1_MemCpy(base, dst, src, size);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         Cy_Crypto_Core_V2_MemCpy(base, dst, src, size);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 }
 
@@ -120,15 +120,15 @@ __STATIC_INLINE void Cy_Crypto_Core_MemSet(CRYPTO_Type *base, void* dst, uint8_t
 {
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         Cy_Crypto_Core_V1_MemSet(base, dst, data, size);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         Cy_Crypto_Core_V2_MemSet(base, dst, data, size);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 }
 
@@ -161,15 +161,15 @@ __STATIC_INLINE uint32_t Cy_Crypto_Core_MemCmp(CRYPTO_Type *base, void const *sr
     uint32_t tmpResult = 1u;
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_MemCmp(base, src0, src1, size);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_MemCmp(base, src0, src1, size);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return (tmpResult);
@@ -201,19 +201,19 @@ __STATIC_INLINE uint32_t Cy_Crypto_Core_MemCmp(CRYPTO_Type *base, void const *sr
 *
 *******************************************************************************/
 __STATIC_INLINE void Cy_Crypto_Core_MemXor(CRYPTO_Type *base, void* dst,
-        void const *src0, void const *src1, uint16_t size)
+                                           void const *src0, void const *src1, uint16_t size)
 {
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         Cy_Crypto_Core_V1_MemXor(base, dst, src0, src1, size);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         Cy_Crypto_Core_V2_MemXor(base, dst, src0, src1, size);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 }
 

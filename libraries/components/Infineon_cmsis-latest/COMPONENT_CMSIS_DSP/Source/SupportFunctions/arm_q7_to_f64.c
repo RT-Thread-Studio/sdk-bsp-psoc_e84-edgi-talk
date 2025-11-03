@@ -46,7 +46,6 @@
   @param[in]     pSrc       points to the Q7 input vector
   @param[out]    pDst       points to the 64 bit floating-point output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
  @par            Details
                    The equation used for the conversion process is:
@@ -54,53 +53,53 @@
       pDst[n] = (float64_t) pSrc[n] / 128;   0 <= n < blockSize.
   </pre>
  */
-void arm_q7_to_f64(
-    const q7_t * pSrc,
-    float64_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q7_to_f64(
+  const q7_t * pSrc,
+        float64_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    const q7_t *pIn = pSrc;                              /* Source pointer */
+        uint32_t blkCnt;                               /* Loop counter */
+  const q7_t *pIn = pSrc;                              /* Source pointer */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = (float64_t) A / 128 */
+  while (blkCnt > 0U)
+  {
+    /* C = (float64_t) A / 128 */
 
-        /* Convert from q7 to float and store result in destination buffer */
-        *pDst++ = ((float64_t) * pIn++ / 128.0);
-        *pDst++ = ((float64_t) * pIn++ / 128.0);
-        *pDst++ = ((float64_t) * pIn++ / 128.0);
-        *pDst++ = ((float64_t) * pIn++ / 128.0);
+    /* Convert from q7 to float and store result in destination buffer */
+    *pDst++ = ((float64_t) * pIn++ / 128.0);
+    *pDst++ = ((float64_t) * pIn++ / 128.0);
+    *pDst++ = ((float64_t) * pIn++ / 128.0);
+    *pDst++ = ((float64_t) * pIn++ / 128.0);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = (float64_t) A / 128 */
+  while (blkCnt > 0U)
+  {
+    /* C = (float64_t) A / 128 */
 
-        /* Convert from q7 to float and store result in destination buffer */
-        *pDst++ = ((float64_t) * pIn++ / 128.0);
+    /* Convert from q7 to float and store result in destination buffer */
+    *pDst++ = ((float64_t) * pIn++ / 128.0);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 
@@ -108,4 +107,4 @@ void arm_q7_to_f64(
 /**
   @} end of q7_to_x group
  */
-
+  

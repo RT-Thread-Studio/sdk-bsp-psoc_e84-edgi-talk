@@ -26,44 +26,44 @@
 /**
 * \addtogroup group_ppc
 * \{
-* Peripheral Protection Controller (PPC) replaces the PPU to provide peripheral
-* access based on protection context (PC)
-* and ARM's TrustZone-M. PPC checks the security attribute of the peripheral region
-* for the transaction from the respective masters for security violation. If the
-* transaction has security violation, the transaction is blocked. The master's security
-* attributes are setup by Master Security Control (MSC) and is part of CPUSS which is
-* out of context of this document. The main difference between PPU and PPC is
-* on the programming model of the security attribute and privilege attribute.
-* PPC encompass the protection context on top of the ARM's TrustZone-M secure methodology.
+* The Peripheral Protection Controller (PPC) is a hardware block designed to enforce security policies
+* for peripheral access, utilizing Protection Contexts (PC) and ARM TrustZone-M technology.
 *
-* The functions and other declarations used in this driver are in cy_ppc.h.
-* You can include cy_pdl.h (ModusToolbox only) to get access to all functions
-* and declarations in the PDL.
+* The PPC monitors transactions initiated by bus masters to peripheral regions, checking the security attributes
+* of each transaction against the configured access policies. If a transaction violates the security configuration
+* (for example, a non-secure master attempts to access a secure peripheral), the PPC blocks the transaction,
+* preventing unauthorized access and helping to maintain system integrity. The response on transaction can be configured
+* to be either Read Zero/Write Ignore or Bus Error.
 *
-* You can use this driver to configure peripheral access as secure/non-secure.
+* Security attributes for bus masters are configured by the Master Security Control (MSC). The PPC complements
+* this by allowing fine-grained control over peripheral regions, supporting both secure and non-secure access,
+* as well as privilege levels. Protection Contexts provide additional flexibility, enabling multiple levels of
+* access control beyond the basic secure/non-secure distinction.
+*
+* Up to 1024 regions can be protected by the PPC. However, the configuration of the response on an access violation
+* is only available at the PPC instance level. Therefore, every region associated with a given PPC instance will have 
+* the same response type for access violations.
+*
+* The PPC driver provides APIs to configure the security attributes, privilege levels, and protection context masks
+* for peripheral regions. These APIs allows:
+* - Set a peripheral region as secure or non-secure
+* - Configure privilege access for secure and non-secure regions
+* - Set protection context masks to restrict access based on the current context
+* - Lock configuration to prevent further changes until a system reset
+*
+* All functions and declarations for PPC configuration are provided in cy_ppc.h.
+* For ModusToolbox users, including cy_pdl.h will provide access to all Peripheral Driver Library (PDL) functions.
+*
+* This driver is typically used in applications that require robust security, such as IoT devices, secure boot,
+* and systems with multiple privilege levels or secure/non-secure partitions.
 *
 * \section group_ppc_more_information More Information
 *
-* For more information on the PPC , refer to
-* the technical reference manual (TRM).
+* For detailed information on the PPC hardware and its configuration, refer to the device's
+* Technical Reference Manual (TRM) and ARM TrustZone-M documentation.
 *
 * \section group_ppc_MISRA MISRA-C Compliance
-* The ppc driver does not have any specific deviations.
-*
-* \section group_ppc_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>1.10</td>
-*     <td>New devices support added</td>
-*     <td></td>
-*   </tr>
-* </table>
+* The PPC driver does not have any specific MISRA-C deviations.
 *
 * \defgroup group_ppc_macros Macros
 * \defgroup group_ppc_functions Functions
@@ -111,7 +111,7 @@ extern "C" {
 /** \} group_ppc_macros */
 
 /**
-* Prot Driver error codes
+* PPC Driver error codes
 */
 /**
 * \addtogroup group_ppc_enums
@@ -122,16 +122,13 @@ typedef enum
 {
     CY_PPC_SUCCESS       = 0x00U,                                   /**< Returned successful */
     CY_PPC_BAD_PARAM     = CY_PPC_ID | CY_PDL_STATUS_ERROR | 0x01U, /**< Bad parameter was passed */
-    CY_PPC_INVALID_STATE = CY_PPC_ID | CY_PDL_STATUS_ERROR | 0x02U, /**< The operation is not setup */
-    CY_PPC_FAILURE       = CY_PPC_ID | CY_PDL_STATUS_ERROR | 0x03U, /**< The resource is locked */
-    CY_PPC_UNAVAILABLE   = CY_PPC_ID | CY_PDL_STATUS_ERROR | 0x04U  /**< The resource is unavailable */
 } cy_en_ppc_status_t;
 
 /** PPC response configuration */
 typedef enum
 {
     CY_PPC_RZWI     = 0, /**< Read Zero and Write ignore */
-    CY_PPC_BUS_ERR = 1  /**< Generate bus error  */
+    CY_PPC_BUS_ERR  = 1  /**< Generate bus error  */
 } cy_en_ppc_resp_cfg_t;
 
 
@@ -142,19 +139,13 @@ typedef enum
     CY_PPC_NON_SECURE = 1  /**< PPC region is Non-secure */
 } cy_en_ppc_sec_attribute_t;
 
-/** PPC Non-secure privilege attributes */
-typedef enum
-{
-    CY_PPC_NON_SEC_PRIV     = 0, /**< Privilege access to non-secure region */
-    CY_PPC_NON_SEC_NONPRIV = 1   /**< Privilege and non-privilege access to non-secure region  */
-} cy_en_ppc_nspriv_attribute_t;
 
 /** PPC Secure privilege attributes */
 typedef enum
 {
-    CY_PPC_SEC_PRIV     = 0, /**< Privilege access to secure region */
-    CY_PPC_SEC_NONPRIV = 1   /**< Privilege and non-privilege access to secure region  */
-} cy_en_ppc_secpriv_attribute_t;
+    CY_PPC_PRIV       = 0,    /**< Privilege access to secure/non-secure region */
+    CY_PPC_NONPRIV    = 1,    /**< Privilege/non-privilege access to secure/non-secure region  */
+} cy_en_ppc_priv_attribute_t;
 
 /** \} group_ppc_enums */
 
@@ -162,30 +153,22 @@ typedef enum
 * \addtogroup group_ppc_data_structures
 * \{
 */
-/** PPC initialization structure */
-typedef struct
-{
-    cy_en_ppc_resp_cfg_t respConfig;  /**< Starting peripheral region ID */
-} cy_stc_ppc_init_t;
 
-
-/** PPC PC mask initialization structure */
-typedef struct
-{
-    cy_en_prot_region_t startRegion; /**< Starting peripheral region ID */
-    cy_en_prot_region_t endRegion;   /**< Ending peripheral region ID */
-    uint32_t pcMask;                 /**< PC mask */
-} cy_stc_ppc_pc_mask_t;
 
 /** PPC attribute initialization structure */
 typedef struct
 {
-    cy_en_prot_region_t startRegion;                /**< Starting peripheral region ID */
-    cy_en_prot_region_t endRegion;                  /**< Ending peripheral region ID. To apply policy to a single peripheral region, assign the same value to startRegion and endRegion */
+    uint32_t pcMask;                                /**< Protection Context mask */
     cy_en_ppc_sec_attribute_t secAttribute;         /**< Security attribute */
-    cy_en_ppc_secpriv_attribute_t secPrivAttribute; /**< Secure Privilege attribute */
-    cy_en_ppc_nspriv_attribute_t nsPrivAttribute;   /**< Non-secure Privilege attribute */
+    cy_en_ppc_priv_attribute_t privAttribute;       /**< Privilege attribute */
 } cy_stc_ppc_attribute_t;
+
+/** PPC domains configuration structure */
+typedef struct {
+    const cy_en_prot_region_t* regions;        /**< Pointer to the array of regions for the domain */
+    uint32_t region_count;                     /**< Number of regions in the regions array */
+    const cy_stc_ppc_attribute_t* cfg;         /**< Pointer to the PPC attribute configuration for the domain */
+} cy_stc_ppc_cfg_t;
 
 /** \} group_ppc_data_structures */
 
@@ -193,17 +176,51 @@ typedef struct
 * \addtogroup group_ppc_functions
 * \{
 */
-cy_en_ppc_status_t Cy_Ppc_InitPpc(PPC_Type* base, const cy_stc_ppc_init_t* ppcInit);
+cy_en_ppc_status_t Cy_Ppc_InitPpc(PPC_Type* base, const cy_en_ppc_resp_cfg_t ppcResponse);
+cy_en_ppc_status_t Cy_Ppc_ConfigAttrib(PPC_Type* base, const cy_en_prot_region_t region, const cy_stc_ppc_attribute_t* attribute);
+cy_en_ppc_status_t Cy_Ppc_SetPcMask(PPC_Type* base, const cy_en_prot_region_t region, uint32_t pcMask);
 
-cy_en_ppc_status_t Cy_Ppc_ConfigAttrib(PPC_Type* base, cy_stc_ppc_attribute_t* attribute);
+/*******************************************************************************
+* Function Name: Cy_Ppc_GetLockMask
+****************************************************************************//**
+*
+* \brief Reads the lock mask value for the referenced PPC
+*
+*
+* \param base
+* Base address of PPC being configured
+*
+* \return
+* Mask value read
+*
+*******************************************************************************/
+__STATIC_INLINE uint32_t Cy_Ppc_GetLockMask(const PPC_Type* base)
+{
+    return base->LOCK_MASK;
+}
 
-cy_en_ppc_status_t Cy_Ppc_SetPcMask(PPC_Type* base, cy_stc_ppc_pc_mask_t* pcMaskConfig);
-
-cy_en_ppc_status_t Cy_Ppc_SetLockMask(PPC_Type* base, uint32_t lockMask);
-
-uint32_t Cy_Ppc_GetLockMask(PPC_Type* base);
+/*******************************************************************************
+* Function Name: Cy_Ppc_Lock
+****************************************************************************//**
+*
+* \brief Sets the lock for the referenced PPC
+*
+*
+* \param base
+* Base address of ppc being configured
+*
+* \return
+* Initialization status
+*
+*******************************************************************************/
+__STATIC_INLINE cy_en_ppc_status_t Cy_Ppc_Lock(PPC_Type* base)
+{
+    base->LOCK_MASK = 0xFFFFFFFFU;
+    return CY_PPC_SUCCESS;
+}
 
 /** \} group_ppc_functions */
+
 
 #if defined(__cplusplus)
 }

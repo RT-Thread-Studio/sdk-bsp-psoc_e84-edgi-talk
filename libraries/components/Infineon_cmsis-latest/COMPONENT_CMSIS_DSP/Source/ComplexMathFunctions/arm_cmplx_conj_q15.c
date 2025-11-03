@@ -42,7 +42,6 @@
   @param[in]     pSrc        points to the input vector
   @param[out]    pDst        points to the output vector
   @param[in]     numSamples  number of samples in each vector
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function uses saturating arithmetic.
@@ -51,14 +50,14 @@
 
 
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_cmplx_conj_q15(
-    const q15_t * pSrc,
-    q15_t * pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_conj_q15(
+  const q15_t * pSrc,
+        q15_t * pDst,
+        uint32_t numSamples)
 {
     uint32_t blockSize = numSamples * CMPLX_DIM;   /* loop counters */
     uint32_t blkCnt;
-    q31_t in1;
+    q31_t in1; 
 
     q15x8x2_t vecSrc;
     q15x8_t zero;
@@ -71,7 +70,7 @@ void arm_cmplx_conj_q15(
     {
         vecSrc = vld2q(pSrc);
         vecSrc.val[1] = vqsubq(zero, vecSrc.val[1]);
-        vst2q(pDst, vecSrc);
+        vst2q(pDst,vecSrc);
         /*
          * Decrement the blkCnt loop counter
          * Advance vector source and destination pointers
@@ -80,124 +79,124 @@ void arm_cmplx_conj_q15(
         pDst += 16;
         blkCnt --;
     }
-
-    /* Tail */
+    
+     /* Tail */
     blkCnt = (blockSize & 0xF) >> 1;
 
     while (blkCnt > 0U)
     {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
-
-        /* Calculate Complex Conjugate and store result in destination buffer. */
-        *pDst++ =  *pSrc++;
-        in1 = *pSrc++;
-        *pDst++ = __SSAT(-in1, 16);
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  
+      /* Calculate Complex Conjugate and store result in destination buffer. */
+      *pDst++ =  *pSrc++;
+      in1 = *pSrc++;
+      *pDst++ = __SSAT(-in1, 16);
+  
+      /* Decrement loop counter */
+      blkCnt--;
     }
 }
 #else
-void arm_cmplx_conj_q15(
-    const q15_t * pSrc,
-    q15_t * pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_conj_q15(
+  const q15_t * pSrc,
+        q15_t * pDst,
+        uint32_t numSamples)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q31_t in1;                                     /* Temporary input variable */
+        uint32_t blkCnt;                               /* Loop counter */
+        q31_t in1;                                     /* Temporary input variable */
 
 #if defined (ARM_MATH_LOOPUNROLL) && defined (ARM_MATH_DSP)
-    q31_t in2, in3, in4;                           /* Temporary input variables */
+        q31_t in2, in3, in4;                           /* Temporary input variables */
 #endif
 
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  while (blkCnt > 0U)
+  {
+    /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
 
-        /* Calculate Complex Conjugate and store result in destination buffer. */
+    /* Calculate Complex Conjugate and store result in destination buffer. */
 
 #if defined (ARM_MATH_DSP)
-        in1 = read_q15x2_ia(&pSrc);
-        in2 = read_q15x2_ia(&pSrc);
-        in3 = read_q15x2_ia(&pSrc);
-        in4 = read_q15x2_ia(&pSrc);
+    in1 = read_q15x2_ia (&pSrc);
+    in2 = read_q15x2_ia (&pSrc);
+    in3 = read_q15x2_ia (&pSrc);
+    in4 = read_q15x2_ia (&pSrc);
 
 #ifndef ARM_MATH_BIG_ENDIAN
-        in1 = __QASX(0, in1);
-        in2 = __QASX(0, in2);
-        in3 = __QASX(0, in3);
-        in4 = __QASX(0, in4);
+    in1 = __QASX(0, in1);
+    in2 = __QASX(0, in2);
+    in3 = __QASX(0, in3);
+    in4 = __QASX(0, in4);
 #else
-        in1 = __QSAX(0, in1);
-        in2 = __QSAX(0, in2);
-        in3 = __QSAX(0, in3);
-        in4 = __QSAX(0, in4);
+    in1 = __QSAX(0, in1);
+    in2 = __QSAX(0, in2);
+    in3 = __QSAX(0, in3);
+    in4 = __QSAX(0, in4);
 #endif /* #ifndef ARM_MATH_BIG_ENDIAN */
 
-        in1 = ((uint32_t) in1 >> 16) | ((uint32_t) in1 << 16);
-        in2 = ((uint32_t) in2 >> 16) | ((uint32_t) in2 << 16);
-        in3 = ((uint32_t) in3 >> 16) | ((uint32_t) in3 << 16);
-        in4 = ((uint32_t) in4 >> 16) | ((uint32_t) in4 << 16);
+    in1 = ((uint32_t) in1 >> 16) | ((uint32_t) in1 << 16);
+    in2 = ((uint32_t) in2 >> 16) | ((uint32_t) in2 << 16);
+    in3 = ((uint32_t) in3 >> 16) | ((uint32_t) in3 << 16);
+    in4 = ((uint32_t) in4 >> 16) | ((uint32_t) in4 << 16);
 
-        write_q15x2_ia(&pDst, in1);
-        write_q15x2_ia(&pDst, in2);
-        write_q15x2_ia(&pDst, in3);
-        write_q15x2_ia(&pDst, in4);
+    write_q15x2_ia (&pDst, in1);
+    write_q15x2_ia (&pDst, in2);
+    write_q15x2_ia (&pDst, in3);
+    write_q15x2_ia (&pDst, in4);
 #else
-        *pDst++ =  *pSrc++;
-        in1 = *pSrc++;
-        *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
+    *pDst++ =  *pSrc++;
+    in1 = *pSrc++;
+    *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
 
-        *pDst++ =  *pSrc++;
-        in1 = *pSrc++;
-        *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
+    *pDst++ =  *pSrc++;
+    in1 = *pSrc++;
+    *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
 
-        *pDst++ =  *pSrc++;
-        in1 = *pSrc++;
-        *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
+    *pDst++ =  *pSrc++;
+    in1 = *pSrc++;
+    *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
 
-        *pDst++ =  *pSrc++;
-        in1 = *pSrc++;
-        *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
+    *pDst++ =  *pSrc++;
+    in1 = *pSrc++;
+    *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
 
 #endif /* #if defined (ARM_MATH_DSP) */
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = numSamples % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = numSamples % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  while (blkCnt > 0U)
+  {
+    /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
 
-        /* Calculate Complex Conjugate and store result in destination buffer. */
-        *pDst++ =  *pSrc++;
-        in1 = *pSrc++;
+    /* Calculate Complex Conjugate and store result in destination buffer. */
+    *pDst++ =  *pSrc++;
+    in1 = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = __SSAT(-in1, 16);
+    *pDst++ = __SSAT(-in1, 16);
 #else
-        *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
+    *pDst++ = (in1 == (q15_t) 0x8000) ? (q15_t) 0x7fff : -in1;
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

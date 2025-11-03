@@ -40,12 +40,11 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 20.5', 5, \
-                             'Since CY_CRYPTO_ECC_MAX_SIZE is decided by curve type, use of #undef will not make it ambiguous that which macros exist at a particular point within a translation unit.')
+'Since CY_CRYPTO_ECC_MAX_SIZE is decided by curve type, use of #undef will not make it ambiguous that which macros exist at a particular point within a translation unit.')
 
 #if (CPUSS_CRYPTO_VU == 1) && defined (CY_CRYPTO_CFG_ECP_C)
 
-typedef enum cy_en_red_mul_algs
-{
+typedef enum cy_en_red_mul_algs {
     CY_CRYPTO_NIST_P_CURVE_SPECIFIC_RED_ALG = 0,
     CY_CRYPTO_NIST_P_SHIFT_MUL_RED_ALG,
     CY_CRYPTO_NIST_P_BARRETT_RED_ALG
@@ -53,8 +52,7 @@ typedef enum cy_en_red_mul_algs
 
 
 /** Structure defines a NIST GF(p) curve */
-typedef struct
-{
+typedef struct {
     /**  The curve ID */
     cy_en_crypto_ecc_curve_id_t id;
     /** The size of the curve in bits */
@@ -75,11 +73,14 @@ typedef struct
     const uint8_t *Gx;
     /** The y co-ordinate of the base point on the curve (hex) */
     const uint8_t *Gy;
+    /** A (hex) */
+    const uint8_t *a;
+    /** B (hex) */
+    const uint8_t *b;
 } cy_stc_crypto_ecc_dp_type;
 
 /** Structure defines a Edwards GF(p) curve */
-typedef struct
-{
+typedef struct {
     /**  The curve ID */
     cy_en_crypto_ecc_curve_id_t id;
     /** The size of the curve in bits */
@@ -100,11 +101,11 @@ typedef struct
     const uint8_t *order;
     /** Barrett coefficient for reduction modulo ECC order (hex) */
     const uint8_t *barrett_o;
-    /** D (hex) */
+   /** D (hex) */
     const uint8_t *d;
-    /** A (hex) */
+   /** A (hex) */
     const uint8_t *a;
-    /** The x co-ordinate of the base point on the curve (hex) */
+   /** The x co-ordinate of the base point on the curve (hex) */
     const uint8_t *Gx;
     /** The y co-ordinate of the base point on the curve (hex) */
     const uint8_t *Gy;
@@ -138,81 +139,85 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_MakeKeyPair(CRYPTO_Type *base,
 
 #if defined(CY_CRYPTO_CFG_ECDSA_SIGN_C)
 cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base,
-        const uint8_t *hash,
-        uint32_t hashlen,
-        uint8_t *sig,
-        const cy_stc_crypto_ecc_key *key,
-        const uint8_t *messageKey);
+                                    const uint8_t *hash,
+                                    uint32_t hashlen,
+                                    uint8_t *sig,
+                                    const cy_stc_crypto_ecc_key *key,
+                                    const uint8_t *messageKey);
 #endif /* defined(CY_CRYPTO_CFG_ECDSA_SIGN_C) */
 
 #if defined(CY_CRYPTO_CFG_ECDSA_VERIFY_C)
 cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
-        const uint8_t *sig,
-        const uint8_t *hash,
-        uint32_t hashlen,
-        uint8_t *stat,
-        const cy_stc_crypto_ecc_key *key);
+                                    const uint8_t *sig,
+                                    const uint8_t *hash,
+                                    uint32_t hashlen,
+                                    uint8_t *stat,
+                                    const cy_stc_crypto_ecc_key *key);
 #endif /* defined(CY_CRYPTO_CFG_ECDSA_VERIFY_C) */
 
 #if defined(CY_CRYPTO_CFG_EDDSA_SIGN_C)
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Sign(CRYPTO_Type *base,
-        const uint8_t *hash,
-        uint32_t hashlen,
-        uint8_t *sig, const cy_stc_crypto_ecc_key *key,
-        cy_en_eddsa_sig_type_t sigType,
-        const uint8_t *sigctx,
-        uint32_t sigctx_len);
+                                    const uint8_t *hash,
+                                    uint32_t hashlen,
+                                    uint8_t *sig,const cy_stc_crypto_ecc_key *key,
+                                    cy_en_eddsa_sig_type_t sigType,
+                                    const uint8_t *sigctx,
+                                    uint32_t sigctx_len);
 
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointMultiplication(CRYPTO_Type *base,
-        cy_en_crypto_ecc_curve_id_t curveID,
-        const uint8_t *ecpGX,
-        const uint8_t *ecpGY,
-        const uint8_t *ecpD,
-        uint8_t *ecpQX,
-        uint8_t *ecpQY);
+                                    cy_en_crypto_ecc_curve_id_t curveID,
+                                    const uint8_t *ecpGX,
+                                    const uint8_t *ecpGY,
+                                    const uint8_t *ecpD,
+                                    uint8_t *ecpQX,
+                                    uint8_t *ecpQY);
 #endif /* defined(CY_CRYPTO_CFG_EDDSA_SIGN_C) */
 
 #if defined(CY_CRYPTO_CFG_EDDSA_VERIFY_C)
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_PointDecode(CRYPTO_Type *base,
-        cy_en_crypto_ecc_curve_id_t curveID,
-        const uint8_t *publicKey,
-        uint8_t *pubKey_x,
-        uint8_t *pubKey_y);
+                                    cy_en_crypto_ecc_curve_id_t curveID,
+                                    const uint8_t *publicKey,
+                                    uint8_t *pubKey_x,
+                                    uint8_t *pubKey_y);
 
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_Verify(CRYPTO_Type *base,
-        uint8_t *sig,
-        const uint8_t *hash,
-        uint32_t hashlen,
-        const cy_stc_crypto_ecc_key *key,
-        uint32_t *stat,
-        cy_en_eddsa_sig_type_t sigType,
-        const uint8_t *sigctx,
-        uint32_t sigctx_len);
+                                    uint8_t *sig,
+                                    const uint8_t *hash,
+                                    uint32_t hashlen,
+                                    const cy_stc_crypto_ecc_key *key,
+                                    uint32_t *stat,
+                                    cy_en_eddsa_sig_type_t sigType,
+                                    const uint8_t *sigctx,
+                                    uint32_t sigctx_len);
+
+cy_en_crypto_status_t Cy_Crypto_Core_ECC_CheckPublicKey(CRYPTO_Type *base,
+                                    cy_en_crypto_ecc_curve_id_t curveID,
+                                    cy_stc_crypto_ecc_key *publicKey);
 #endif /* defined(CY_CRYPTO_CFG_EDDSA_VERIFY_C) */
 
 #if defined (CY_CRYPTO_CFG_EDDSA_GENKEY_C)
 cy_en_crypto_status_t Cy_Crypto_Core_ED25519_MakePublicKey(CRYPTO_Type *base,
-        cy_en_crypto_ecc_curve_id_t curveID,
-        const uint8_t *privateKey,
-        cy_stc_crypto_ecc_key *publicKey);
+                                    cy_en_crypto_ecc_curve_id_t curveID,
+                                    const uint8_t *privateKey,
+                                    cy_stc_crypto_ecc_key *publicKey);
 #endif /* defined(CY_CRYPTO_CFG_EDDSA_GENKEY_C) */
 
 #if defined (CY_CRYPTO_CFG_EC25519_GENKEY_C)
 cy_en_crypto_status_t Cy_Crypto_Core_EC25519_MakePublicKey(CRYPTO_Type *base,
-        const uint8_t *privateKey,
-        cy_stc_crypto_ecc_key *publicKey);
+                                    const uint8_t *privateKey,
+                                    cy_stc_crypto_ecc_key *publicKey);
 
 cy_en_crypto_status_t Cy_Crypto_Core_EC25519_MakePrivateKey(CRYPTO_Type *base,
-        uint8_t *key,
-        cy_func_get_random_data_t GetRandomDataFunc,
-        void *randomDataInfo);
+                                    uint8_t *key,
+                                    cy_func_get_random_data_t GetRandomDataFunc,
+                                    void *randomDataInfo);
 #endif /* defined (CY_CRYPTO_CFG_EC25519_GENKEY_C) */
 
 #if defined (CY_CRYPTO_CFG_EC25519_C)
 cy_en_crypto_status_t Cy_Crypto_Core_EC25519_PointMultiplication(CRYPTO_Type *base,
-        uint8_t *p_r,
-        const uint8_t *p_x,
-        const uint8_t *p_d);
+                                    uint8_t *p_r,
+                                    const uint8_t *p_x,
+                                    const uint8_t *p_d);
 #endif /* defined (CY_CRYPTO_CFG_EC25519_C) */
 
 /** \} group_crypto_lld_asymmetric_functions */

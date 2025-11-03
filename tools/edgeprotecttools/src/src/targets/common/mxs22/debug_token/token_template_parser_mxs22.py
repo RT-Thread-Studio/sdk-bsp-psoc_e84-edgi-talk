@@ -139,7 +139,7 @@ class TokenTemplateParserMXS22:
     def ctrl_word_permission_field(self, *args):
         """Get value of specified control_word field"""
         value = self.field('control_word', *args)
-        return ApPermissionDebugToken[value]
+        return ApPermissionDebugToken[str(value)]
 
     def open_rma_token_ctrl_word_permission_field(self, *args):
         """Get value of specified control_word field"""
@@ -148,7 +148,7 @@ class TokenTemplateParserMXS22:
 
     def ctrl_word_bool_field(self, *args):
         """Get boolean value of specified field"""
-        return int(self.field('control_word', *args))
+        return int(bool(self.field('control_word', *args)))
 
     def debug_token_control_word(self):
         """Generates control_word data for debug token"""

@@ -175,11 +175,11 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to use for the operation. It must be an asymmetric key pair. The key must allow the usage <a class="el" href="group__key__policy.html#ga7a2f42a21b65a0108b3f92832b41ad8d" title="Whether the key may be used to sign a message.">IFX_SE_KEY_USAGE_SIGN_HASH</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">alg</td><td>A signature algorithm (IFX_SE_ALG_XXX value such that <a class="el" href="group__crypto__algs.html#ga60b0f5dbe9cea243e59affa8fa6509ef" title="Whether the specified algorithm is a signature algorithm that can be used with ifx_se_sign_hash() and...">IFX_SE_ALG_IS_SIGN_HASH</a>(<code>alg</code>) is true), that is compatible with the type of <code>key</code>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">hash</td><td>The hash or message to sign. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">hash_length</td><td>Size of the <code>hash</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">signature</td><td>Buffer where the signature is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">signature_size</td><td>Size of the <code>signature</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">signature_length</td><td>On success, the number of bytes that make up the returned signature value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hash</td><td>The hash or message to sign (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hash_length</td><td>Size of the <code>hash</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">signature</td><td>Buffer where the signature is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signature_size</td><td>Size of the <code>signature</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">signature_length</td><td>On success, the number of bytes that make up the returned signature value (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -266,10 +266,10 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to use for the operation. It must be a public key or an asymmetric key pair. The key must allow the usage <a class="el" href="group__key__policy.html#gaa3c223edc514126af12fda453b2adc90" title="Whether the key may be used to verify a message signature.">IFX_SE_KEY_USAGE_VERIFY_HASH</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">alg</td><td>A signature algorithm (IFX_SE_ALG_XXX value such that <a class="el" href="group__crypto__algs.html#ga60b0f5dbe9cea243e59affa8fa6509ef" title="Whether the specified algorithm is a signature algorithm that can be used with ifx_se_sign_hash() and...">IFX_SE_ALG_IS_SIGN_HASH</a>(<code>alg</code>) is true), that is compatible with the type of <code>key</code>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">hash</td><td>The hash or message whose signature is to be verified. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">hash_length</td><td>Size of the <code>hash</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">signature</td><td>Buffer containing the signature to verify. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">signature_length</td><td>Size of the <code>signature</code> buffer in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hash</td><td>The hash or message whose signature is to be verified (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hash_length</td><td>Size of the <code>hash</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signature</td><td>Buffer containing the signature to verify (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signature_length</td><td>Size of the <code>signature</code> buffer in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -362,15 +362,15 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to use for the operation. It must be an asymmetric key pair. The key must allow the usage <a class="el" href="group__key__policy.html#gadf6e9679083f048ae6e2a917b89097a8" title="Whether the key may be used to sign a message.">IFX_SE_KEY_USAGE_SIGN_MESSAGE</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">alg</td><td>An asymmetric signature algorithm (IFX_SE_ALG_XXX value such that <a class="el" href="group__crypto__algs.html#gaeee32a773055d94fdb6df9f0f87c35b8" title="Whether the specified algorithm is a signature algorithm that can be used with ifx_se_sign_message() ...">IFX_SE_ALG_IS_SIGN_MESSAGE</a>(<code>alg</code>) is true), that is compatible with the type of <code>key</code>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>The input message to sign. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">signature</td><td>Buffer where the signature is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">signature_size</td><td>Size of the <code>signature</code> buffer in bytes. This must be appropriate for the selected algorithm and key:<ul>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>The input message to sign (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">signature</td><td>Buffer where the signature is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signature_size</td><td>Size of the <code>signature</code> buffer in bytes (size_t). This must be appropriate for the selected algorithm and key:<ul>
 <li>The required signature size is <a class="el" href="group__constants__sizes.html#ga5f947bd48cf391becc3d49d1a16a9813" title="Sufficient signature buffer size for ifx_se_sign_hash().">IFX_SE_SIGN_OUTPUT_SIZE</a>(<code>key_type</code>, <code>key_bits</code>, <code>alg</code>) where <code>key_type</code> and <code>key_bits</code> are the type and bit-size respectively of key.</li>
 <li><a class="el" href="group__constants__sizes.html#gac3320dec942ac856b711debc88579b1d" title="Maximum size of an asymmetric signature.">IFX_SE_SIGNATURE_MAX_SIZE</a> evaluates to the maximum signature size of any supported signature algorithm. </li>
 </ul>
 </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">signature_length</td><td>On success, the number of bytes that make up the returned signature value. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">signature_length</td><td>On success, the number of bytes that make up the returned signature value (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -459,10 +459,10 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to use for the operation. It must be a public key or an asymmetric key pair. The key must allow the usage <a class="el" href="group__key__policy.html#ga1fecbf97097714a092864632a172aab3" title="Whether the key may be used to verify a message.">IFX_SE_KEY_USAGE_VERIFY_MESSAGE</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">alg</td><td>An asymmetric signature algorithm (IFX_SE_ALG_XXX value such that <a class="el" href="group__crypto__algs.html#gaeee32a773055d94fdb6df9f0f87c35b8" title="Whether the specified algorithm is a signature algorithm that can be used with ifx_se_sign_message() ...">IFX_SE_ALG_IS_SIGN_MESSAGE</a>(<code>alg</code>) is true), that is compatible with the type of <code>key</code>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>The message whose signature is to be verified. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">signature</td><td>Buffer containing the signature to verify. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">signature_length</td><td>Size of the <code>signature</code> buffer in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>The message whose signature is to be verified (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signature</td><td>Buffer containing the signature to verify (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">signature_length</td><td>Size of the <code>signature</code> buffer in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc). </td></tr>
   </table>
   </dd>

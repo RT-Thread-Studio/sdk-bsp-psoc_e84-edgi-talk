@@ -42,12 +42,16 @@ import os.path
 import struct
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes, hmac
+from cryptography.hazmat.primitives import hashes, hmac, cmac
 from cryptography.hazmat.primitives.asymmetric import ec, padding
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+from cryptography.hazmat.primitives.kdf.kbkdf import (
+    KBKDFCMAC, Mode, CounterLocation
+)
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+from cryptography.hazmat.primitives import keywrap
 
 from . import keys
 from .keys import rsa, ecdsa, x25519
@@ -207,7 +211,7 @@ class Image():
                  slot_size=0, max_sectors=DEFAULT_MAX_SECTORS,
                  overwrite_only=False, endian="little", load_addr=0,
                  rom_fixed=None, erased_val=None, save_enctlv=False,
-                 security_counter=None, image_addr=0):
+                 security_counter=None, image_addr=0, kdf=None):
 
         if load_addr and rom_fixed:
             raise click.UsageError("Can not set rom_fixed and load_addr at the same time")
@@ -230,10 +234,11 @@ class Image():
         self.enckey = None
         self.save_enctlv = save_enctlv
         self.enctlv_len = 0
-        self.hkdf_salt = None
-        self.hkdf_len = 48
+        self.kdf_salt = None
+        self.kdf_len = 48
         self.enc_nonce = bytes([0] * 16)
         self.image_addr = image_addr
+        self.kdf = kdf.upper() if kdf else 'HKDF'
 
         if security_counter == 'auto':
             # Security counter has not been explicitly provided,
@@ -350,6 +355,42 @@ class Image():
                           len(self.payload), tsize, self.slot_size)
                 raise click.UsageError(msg)
 
+    def key_derivation(self, name):
+        """Return a KDF object depends on the key derivation function name"""
+        if name == 'HKDF':
+            return HKDF(
+                algorithm=hashes.SHA256(), length=self.kdf_len,
+                salt=self.kdf_salt, info=b'MCUBoot_ECIES_v1',
+                backend=default_backend()
+            )
+        elif name == 'KBKDFCMAC':
+            return KBKDFCMAC(
+                algorithm=algorithms.AES,
+                mode=Mode.CounterMode,
+                length=self.kdf_len,
+                rlen=4,
+                llen=4,
+                location=CounterLocation.BeforeFixed,
+                label=b'MCUBoot_ECIES_v1',
+                context=self.kdf_salt,
+                fixed=None
+            )
+        else:
+            raise ValueError(f"Invalid KDF type: {name}")
+
+    def mac(self, key, name):
+        """Return a MAC object depends on the key derivation function name"""
+        if name == 'HKDF':
+            return hmac.HMAC(
+                key=key,
+                algorithm=hashes.SHA256(),
+                backend=default_backend()
+            )
+        elif name == 'KBKDFCMAC':
+            return cmac.CMAC(algorithms.AES(key))
+        else:
+            raise ValueError(f"Invalid MAC type: {name}")
+
     def ecies_hkdf(self, enckey, plainkey):
         if isinstance(enckey, ecdsa.ECDSA256P1Public):
             newpk = ec.generate_private_key(ec.SECP256R1(), default_backend())
@@ -358,14 +399,13 @@ class Image():
             newpk = X25519PrivateKey.generate()
             shared = newpk.exchange(enckey._get_public())
 
-        if (self.hkdf_salt is not None) and (self.image_addr > 0):
-            self.hkdf_salt = self.hkdf_salt[:28] + self.image_addr.to_bytes(
+        if (self.kdf_salt is not None) and (self.image_addr > 0):
+            self.kdf_salt = self.kdf_salt[:28] + self.image_addr.to_bytes(
                 4, 'little')
-        derived_key = HKDF(
-            algorithm=hashes.SHA256(), length=self.hkdf_len,
-            salt=self.hkdf_salt, info=b'MCUBoot_ECIES_v1',
-            backend=default_backend()).derive(shared)
-        if self.hkdf_salt is not None:
+
+        derived_key = self.key_derivation(self.kdf).derive(shared)
+
+        if self.kdf_salt is not None:
             key_nonce = derived_key[48:64]
             self.enc_nonce = derived_key[64:76] + bytes([0] * 4)
         else:
@@ -375,10 +415,11 @@ class Image():
                            modes.CTR(key_nonce),
                            backend=default_backend()).encryptor()
         cipherkey = encryptor.update(plainkey) + encryptor.finalize()
-        mac = hmac.HMAC(derived_key[16:48], hashes.SHA256(),
-                        backend=default_backend())
+
+        mac = self.mac(derived_key[16:48], self.kdf)
         mac.update(cipherkey)
         ciphermac = mac.finalize()
+
         if isinstance(enckey, ecdsa.ECDSA256P1Public):
             pubk = newpk.public_key().public_bytes(
                 encoding=Encoding.X962,
@@ -387,6 +428,7 @@ class Image():
             pubk = newpk.public_key().public_bytes(
                 encoding=Encoding.Raw,
                 format=PublicFormat.Raw)
+
         return cipherkey, ciphermac, pubk
 
     def create(self, key, public_key_format, enckey, dependencies=None,
@@ -402,8 +444,8 @@ class Image():
             hash_tlv = "SHA256"
 
         if use_random_iv:
-            self.hkdf_salt = os.urandom(32)
-            self.hkdf_len += 16 * 2  # 48 for basic scheme + 16 * 2 for random IVs
+            self.kdf_salt = os.urandom(32)
+            self.kdf_len += 16 * 2  # 48 for basic scheme + 16 * 2 for random IVs
 
         # Calculate the hash of the public key
         if key is not None:
@@ -565,13 +607,17 @@ class Image():
                                      x25519.X25519Public)):
                 cipherkey, mac, pubk = self.ecies_hkdf(enckey, plainkey)
                 enctlv = pubk + mac + cipherkey
-                if self.hkdf_salt is not None:
-                    enctlv += self.hkdf_salt
+                if self.kdf_salt is not None:
+                    enctlv += self.kdf_salt
                 self.enctlv_len = len(enctlv)
                 if isinstance(enckey, ecdsa.ECDSA256P1Public):
                     tlv.add('ENCEC256', enctlv)
                 else:
                     tlv.add('ENCX25519', enctlv)
+            elif isinstance(enckey, bytes):
+                wrapped = keywrap.aes_key_wrap(enckey, plainkey)
+                self.enctlv_len = len(wrapped)
+                tlv.add('ENCKW128', wrapped)
 
             nonce = self.enc_nonce
             img = bytes(self.payload[self.header_size:])

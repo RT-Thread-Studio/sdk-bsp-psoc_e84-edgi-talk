@@ -9,19 +9,7 @@
             "required": ["si", "family", "rev"],
             "properties": {
                 "si": {
-                    "type": "string",
-                    "enum": [
-                        "0xED84", "0xED81", "0xED91", "0xED94", "0xED97",
-                        "0xED9A", "0xED9C", "0xED90", "0xED9D", "0xED93",
-                        "0xED9E", "0xED96", "0xED9F", "0xED99", "0xED92",
-                        "0xED95", "0xED98", "0xED9B", "0xEDA0", "0xEDA1",
-                        "0xEDA2", "0xEDA3", "0xEDA4", "0xEDA5", "0xEDA6",
-                        "0xEDA7", "0xEDA8", "0xEDA9", "0xEDAA", "0xEDAB",
-                        "0xEDAC", "0xEDAD", "0xEDAE", "0xEDAF", "0xEDB0",
-                        "0xEDB1", "0xEDB2", "0xEDB3", "0xEDB4", "0xEDB5",
-                        "0xEDB6", "0xEDB7", "0xEDB8", "0xEDB9", "0xEDBA",
-                        "0xEDBB", "0xEDBC", "0xEDBD", "0xEDBE", "0xEDBF"
-                    ]
+                    "type": "string"
                 },
                 "family": {
                     "type": "string"

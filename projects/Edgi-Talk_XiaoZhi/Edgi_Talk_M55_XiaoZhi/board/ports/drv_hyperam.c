@@ -9,7 +9,7 @@
 #define LOG_TAG         "drv_hyperam"
 #include <drv_log.h>
 
-#define PSRAM_ADDRESS                 (0x64800000) /* PSRAM test address */
+#define PSRAM_ADDRESS                 (0x64400000) /* PSRAM test address */
 
 #ifdef BSP_USING_HYPERAM
 #ifdef RT_USING_MEMHEAP_AS_HEAP

@@ -4,12 +4,12 @@ Syspm callbacks provides a set of prebuilt implementations for handling DeepSlee
 ### What's Included?
 This release of the syspm-callbacks includes support for the following drivers:
 * DMA
-* Flash
+* I2S/TDM
+* NVM
 * PDM_PCM
+* SCB UART
 * SMIF
 * TCPWM
-* TDM
-* UART
 
 ### What Changed?
 #### v1.0.0
@@ -21,12 +21,13 @@ This version of the syspm-callbacks was validated for compatibility with the fol
 
 | Software and Tools                        | Version |
 | :---                                      | :----:  |
-| ModusToolbox™ Software Environment        | 3.4.0   |
-| GCC Compiler                              | 11.3.1  |
+| ModusToolbox™ Software Environment        | 3.6.0   |
+| GCC Compiler                              | 14.2.1  |
 | IAR Compiler                              | 9.50.2  |
 | ARM Compiler                              | 6.22    |
+| LLVM ARM Compiler                         | 19.1.5  |
 
-Minimum required ModusToolbox™ Software Environment: v3.3
+Minimum required ModusToolbox™ Software Environment: v3.6
 
 ### More information
 Use the following links for more information, as needed:

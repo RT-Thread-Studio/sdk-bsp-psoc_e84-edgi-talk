@@ -42,7 +42,6 @@
   @param[in]     pSrc       points to the Q7 input vector
   @param[out]    pDst       points to the Q31 output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Details
                    The equation used for the conversion process is:
@@ -51,12 +50,12 @@
   </pre>
  */
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_q7_to_q31(
-    const q7_t * pSrc,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q7_to_q31(
+  const q7_t * pSrc,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;
+    uint32_t blkCnt;   
     q31x4_t         vecDst;
 
     blkCnt = blockSize >> 2;
@@ -77,84 +76,84 @@ void arm_q7_to_q31(
         pDst += 4;
         pSrc += 4;
         blkCnt --;
-    }
+     }
 
-    blkCnt = blockSize & 3;
-    while (blkCnt > 0U)
-    {
-        /* C = (q31_t) A << 24 */
+  blkCnt = blockSize & 3;
+  while (blkCnt > 0U)
+  {
+    /* C = (q31_t) A << 24 */
 
-        /* Convert from q7 to q31 and store result in destination buffer */
-        *pDst++ = (q31_t) * pSrc++ << 24;
+    /* Convert from q7 to q31 and store result in destination buffer */
+    *pDst++ = (q31_t) *pSrc++ << 24;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 }
 
 #else
-void arm_q7_to_q31(
-    const q7_t * pSrc,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q7_to_q31(
+  const q7_t * pSrc,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    const q7_t *pIn = pSrc;                              /* Source pointer */
+        uint32_t blkCnt;                               /* Loop counter */
+  const q7_t *pIn = pSrc;                              /* Source pointer */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    q31_t in;
+        q31_t in;
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = (q31_t) A << 24 */
+  while (blkCnt > 0U)
+  {
+    /* C = (q31_t) A << 24 */
 
-        /* Convert from q7 to q31 and store result in destination buffer */
-        in = read_q7x4_ia(&pIn);
+    /* Convert from q7 to q31 and store result in destination buffer */
+    in = read_q7x4_ia (&pIn);
 
 #ifndef ARM_MATH_BIG_ENDIAN
 
-        *pDst++ = (__ROR(in, 8)) & 0xFF000000;
-        *pDst++ = (__ROR(in, 16)) & 0xFF000000;
-        *pDst++ = (__ROR(in, 24)) & 0xFF000000;
-        *pDst++ = (in & 0xFF000000);
+    *pDst++ = (__ROR(in, 8)) & 0xFF000000;
+    *pDst++ = (__ROR(in, 16)) & 0xFF000000;
+    *pDst++ = (__ROR(in, 24)) & 0xFF000000;
+    *pDst++ = (in & 0xFF000000);
 
 #else
 
-        *pDst++ = (in & 0xFF000000);
-        *pDst++ = (__ROR(in, 24)) & 0xFF000000;
-        *pDst++ = (__ROR(in, 16)) & 0xFF000000;
-        *pDst++ = (__ROR(in, 8)) & 0xFF000000;
+    *pDst++ = (in & 0xFF000000);
+    *pDst++ = (__ROR(in, 24)) & 0xFF000000;
+    *pDst++ = (__ROR(in, 16)) & 0xFF000000;
+    *pDst++ = (__ROR(in, 8)) & 0xFF000000;
 
 #endif /* #ifndef ARM_MATH_BIG_ENDIAN */
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = (q31_t) A << 24 */
+  while (blkCnt > 0U)
+  {
+    /* C = (q31_t) A << 24 */
 
-        /* Convert from q7 to q31 and store result in destination buffer */
-        *pDst++ = (q31_t) * pIn++ << 24;
+    /* Convert from q7 to q31 and store result in destination buffer */
+    *pDst++ = (q31_t) * pIn++ << 24;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

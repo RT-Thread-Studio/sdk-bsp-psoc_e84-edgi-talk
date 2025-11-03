@@ -39,7 +39,6 @@ if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
 
 if GetDepend(['RT_USING_SERIAL']):
     src += ['drivers/source/cy_dma.c']
-    src += ['drivers/source/cy_dmac.c']
     src += ['drivers/source/cy_scb_uart.c']
 
 if GetDepend(['RT_USING_I2C']):
@@ -47,7 +46,6 @@ if GetDepend(['RT_USING_I2C']):
 
 if GetDepend(['RT_USING_ADC']):
     src += ['drivers/source/cy_dma.c']
-    src += ['drivers/source/cy_dmac.c']
     if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
         src += ['drivers/source/cy_autanalog_sar.c']
         src += ['drivers/source/cy_autanalog_ac.c']
@@ -63,17 +61,9 @@ if GetDepend(['BSP_USING_SDCARD']) or GetDepend(['BSP_USING_WIFI_HOST_DRIVER']):
 
 if GetDepend(['RT_USING_PWM']):
     src += ['drivers/source/cy_tcpwm_pwm.c']
-#     if not GetDepend(['RT_USING_HWTIMER']):
-#         src += ['drivers/source/cy_tcpwm_counter.c']
 
 if GetDepend(['RT_USING_SPI']):
     src += ['drivers/source/cy_scb_spi.c']
-
-# if GetDepend(['BSP_USING_FLASH']):
-#     src += ['drivers/source/cy_smif.c']
-#     src += ['drivers/source/cy_smif_memslot.c']
-#     src += ['drivers/source/cy_smif_sfdp.c']
-#     src += ['drivers/source/cy_smif_hb_flash.c']
 
 if GetDepend('BSP_USING_LCD'):
     src += Split('''
@@ -103,23 +93,13 @@ if GetDepend('BSP_USING_LCD'):
             
             ''')
             
-    path += [cwd + '/drivers/include']
-    path += [cwd + '/drivers/third_party/COMPONENT_GFXSS']
-    path += [cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000']
-    path += [cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/gcnano']
-
-
-CPPDEFINES = [
-"APP_SOCMEMSRAM_GPUBUF_SIZE=0x00300000",
-"APP_SOCMEMSRAM_CM55NS_APP_SIZE=0x00060800",
-"APP_SOCMEMSRAM_GPUBUF_SHARED_SIZE=0x0001F800",
-]
+path += [cwd + '/drivers/include']
+path += [cwd + '/drivers/third_party/COMPONENT_GFXSS']
+path += [cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000']
+path += [cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/gcnano']
 
 if GetDepend('BSP_USING_RTC'):
     src += ['drivers/source/cy_rtc.c']
-
-# if GetDepend('BSP_USING_ON_CHIP_FLASH') or GetDepend('BSP_USING_CYW43012_BT') :
-#     src += ['drivers/source/cy_flash.c']
 
 if GetDepend(['BSP_USING_HYPERAM']):
     src += ['drivers/source/cy_smif.c']
@@ -141,6 +121,6 @@ if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
     path += [cwd + '/devices/include']
     path += [cwd + '/devices/include/ip']
 
-group = DefineGroup('Libraries', src, depend=[''], CPPPATH=path, CPPDEFINES = CPPDEFINES)
+group = DefineGroup('Libraries', src, depend=[''], CPPPATH=path)
 Return('group')
 

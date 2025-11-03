@@ -24,12 +24,10 @@
 */
 var NAVTREE =
 [
-  [ "(core-lib)", "index.html", [
-    [ "Core Library", "index.html", [
-      [ "Overview", "index.html#autotoc_md1", null ],
-      [ "Features", "index.html#autotoc_md2", null ],
-      [ "More information", "index.html#autotoc_md3", null ]
-    ] ],
+  [ "Core Library", "index.html", [
+    [ "Overview", "index.html#autotoc_md1", null ],
+    [ "Features", "index.html#autotoc_md2", null ],
+    [ "More information", "index.html#autotoc_md3", null ],
     [ "API Reference", "modules.html", "modules" ]
   ] ]
 ];

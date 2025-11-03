@@ -51,14 +51,13 @@
   @param[in]     pSrcB      points to input vector B
   @param[out]    pDst       points to output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
 
-void arm_and_u16(
-    const uint16_t *pSrcA,
-    const uint16_t *pSrcB,
-    uint16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_and_u16(
+    const uint16_t * pSrcA,
+    const uint16_t * pSrcB,
+          uint16_t * pDst,
+          uint32_t blockSize)
 {
     uint32_t blkCnt;      /* Loop counter */
 
@@ -73,7 +72,7 @@ void arm_and_u16(
         vecSrcA = vld1q(pSrcA);
         vecSrcB = vld1q(pSrcB);
 
-        vst1q(pDst, vandq_u16(vecSrcA, vecSrcB));
+        vst1q(pDst, vandq_u16(vecSrcA, vecSrcB) );
 
         pSrcA += 8;
         pSrcB += 8;
@@ -105,7 +104,7 @@ void arm_and_u16(
         vecA = vld1q_u16(pSrcA);
         vecB = vld1q_u16(pSrcB);
 
-        vst1q_u16(pDst, vandq_u16(vecA, vecB));
+        vst1q_u16(pDst, vandq_u16(vecA, vecB) );
 
         pSrcA += 8;
         pSrcB += 8;
@@ -124,7 +123,7 @@ void arm_and_u16(
 
     while (blkCnt > 0U)
     {
-        *pDst++ = (*pSrcA++) & (*pSrcB++);
+        *pDst++ = (*pSrcA++)&(*pSrcB++);
 
         /* Decrement the loop counter */
         blkCnt--;

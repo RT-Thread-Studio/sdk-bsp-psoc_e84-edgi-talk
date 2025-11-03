@@ -78,15 +78,18 @@
 * <B>NOTE:</B> DMA will read descriptors from SRAM memory. To run DMA on devices with Core CM7,
 * D cache needs to be cleaned before DMA transfer and should be invalidated after DMA transfer. \n
 * <B>NOTE:</B> Even if a DMA channel is enabled, it is not operational until
-* the DMA block is enabled using function \ref Cy_DMA_Enable.\n
+* the DMA block is enabled using function \ref Cy_DMA_Enable .\n
 * <B>NOTE:</B> If the DMA descriptor is configured to generate an interrupt,
 * the interrupt must be enabled using the \ref Cy_DMA_Channel_SetInterruptMask
 * function for each DMA channel.
+* <B>NOTE:</B> When DCache is enabled it is critical to clean the DCache right before calling \ref Cy_DMA_Channel_Enable
+* .Cleaning the cache too early or too late may result in a \ref CY_DMA_INTR_CAUSE_SRC_BUS_ERROR interrupt.\n
+* Ensure cache maintenance operations are performed at the correct point in the sequence to avoid data coherency issues.
 *
 * For example:
 * \snippet dma/snippet/main.c snippet_Cy_DMA_Enable
 *
-* CM7 cores support Data Cache. Data Cache line is 32 bytes.
+*  Data Cache line is 32 bytes.
 * User needs to make sure that the source and destination buffer pointers and the config structure pointers passed
 * to the following functions points to 32 bit aligned data.
 * Cy_DMA_Channel_SetDescriptor, Cy_DMA_Descriptor_SetNextDescriptor, Cy_DMA_Descriptor_SetSrcAddress, Cy_DMA_Descriptor_SetDstAddress.
@@ -98,105 +101,8 @@
 * \section group_dma_more_information More Information.
 * See: the DMA chapter of the device technical reference manual (TRM);
 *      the DMA Component datasheet;
-*      CE219940 - PSoC 6 MCU Multiple DMA Concatenation.
+ 
 *
-* \section group_dma_changelog Changelog
-*
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>2.90</td>
-*     <td>Added new APIs \ref Cy_DMA_Channel_IsEnabled and \ref Cy_DMA_Channel_GetCurrentYIndex.</td>
-*     <td>New devices support.</td>
-*   </tr>
-*   <tr>
-*     <td>2.80</td>
-*     <td>Updated \ref Cy_DMA_GetActiveChannel. Added new API \ref Cy_DMA_GetActiveChannelIndex.</td>
-*     <td>Bug fix.</td>
-*   </tr>
-*   <tr>
-*     <td>2.70</td>
-*     <td>Updated \ref Cy_DMA_Descriptor_SetNextDescriptor and \ref Cy_DMA_Descriptor_GetNextDescriptor.</td>
-*     <td>Coverity bug fixes.</td>
-*   </tr>
-*   <tr>
-*     <td>2.60</td>
-*     <td>Fixed MISRA 2012 violations and minor documentation update.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>2.50</td>
-*     <td>Fixed MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>2.40.1</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Update to configure DMA on core CM7.</td>
-*   </tr>
-*   <tr>
-*     <td>2.40</td>
-*     <td>Minor Bug fixes.</td>
-*     <td>Check for valid parameters.</td>
-*   </tr>
-*   <tr>
-*     <td>2.30</td>
-*     <td>Fixed MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>2.20.1</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>2.20</td>
-*     <td>The channel number validation method is updated.</td>
-*     <td>New devices support.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="3">2.10</td>
-*     <td>Flattened the organization of the driver source code into the single source directory and the single include directory.</td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Added CRC mode and the CRC descriptor support. \n Added the \ref Cy_DMA_Crc_Init function.</td>
-*     <td>New devices support.</td>
-*   </tr>
-*   <tr>
-*     <td>Added register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>2.0.1</td>
-*     <td>Changed CY_DMA_BWC macro values from Boolean to numeric</td>
-*     <td>Improvements made based on usability feedback</td>
-*   </tr>
-*   <tr>
-*     <td>2.0</td>
-*     <td> * All the API is refactored to be consistent within itself and with the
-*            rest of the PDL content.
-*          * The descriptor API is updated as follows:
-*            The \ref Cy_DMA_Descriptor_Init function sets a full bunch of descriptor
-*            settings, and the rest of the descriptor API is a get/set interface
-*            to each of the descriptor settings.
-*          * There is a group of macros to support the backward compatibility with most
-*            of the driver version 1.0 API. But, you should use
-*            the new v2.0 interface in new designs (do not just copy-paste from old
-*            projects). To enable the backward compatibility support, the CY_DMA_BWC
-*            definition should be changed to "1".</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
-
 * \defgroup group_dma_macros Macros
 * \defgroup group_dma_functions Functions
 * \{
@@ -225,7 +131,7 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 15, \
-                             'Value extracted from _VAL2FLD macro will not exceed enum range.')
+'Value extracted from _VAL2FLD macro will not exceed enum range.')
 
 /******************************************************************************
  * Macro definitions                                                          *
@@ -264,7 +170,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 15, \
 /** The backward compatibility flag. Enables a group of macros which provide
 * the backward compatibility with most of the DMA driver version 1.0 interface. */
 #ifndef CY_DMA_BWC
-#define CY_DMA_BWC                 (0U) /* Disabled by default */
+    #define CY_DMA_BWC                 (0U) /* Disabled by default */
 #endif
 
 /** \} group_dma_macros */
@@ -459,8 +365,8 @@ typedef struct
     cy_en_dma_transfer_size_t   srcTransferSize; /**< The source transfer size. */
     cy_en_dma_transfer_size_t   dstTransferSize; /**< The destination transfer size. */
     cy_en_dma_descriptor_type_t descriptorType;  /**< The type of the descriptor. See \ref cy_en_dma_descriptor_type_t. */
-    void                       *srcAddress;      /**< The source address of the transfer. */
-    void                       *dstAddress;      /**< The destination address of the transfer.
+    void *                      srcAddress;      /**< The source address of the transfer. */
+    void *                      dstAddress;      /**< The destination address of the transfer.
                                                    *  For CPUSS_ver2 only: for CRC transfer, the CRC result without post-processing
                                                    *  (reversing and/or XORing, if used) is placed into the dstAddress.
                                                    */
@@ -470,13 +376,13 @@ typedef struct
     int32_t                     srcYincrement;   /**< The address increment of the source after each Y-loop transfer. Valid range is -2048 ... 2047. */
     int32_t                     dstYincrement;   /**< The address increment of the destination after each Y-loop transfer. Valid range is -2048 ... 2047. */
     uint32_t                    yCount;          /**< The number of X-loops in the Y-loop. Valid range is 1 ... 256. */
-    cy_stc_dma_descriptor_t    *nextDescriptor;  /**< The next descriptor to chain after completion. A NULL value will signify no chaining. */
+    cy_stc_dma_descriptor_t *   nextDescriptor;  /**< The next descriptor to chain after completion. A NULL value will signify no chaining. */
 } cy_stc_dma_descriptor_config_t;
 
 /** This structure holds the initialization values for the DMA channel */
 typedef struct
 {
-    cy_stc_dma_descriptor_t *descriptor;       /**< The DMA descriptor associated with the channel being initialized.           */
+    cy_stc_dma_descriptor_t * descriptor;      /**< The DMA descriptor associated with the channel being initialized.           */
     bool     preemptable;                      /**< Specifies whether the channel is preemptable by another higher-priority channel. */
     uint32_t priority;                         /**< This parameter specifies the channel's priority.                            */
     bool     enable;                           /**< This parameter specifies whether the channel is enabled after initializing.      */
@@ -526,12 +432,12 @@ typedef struct
 */
 
 
-__STATIC_INLINE void     Cy_DMA_Enable(DW_Type * base);
-__STATIC_INLINE void     Cy_DMA_Disable(DW_Type * base);
-__STATIC_INLINE uint32_t Cy_DMA_GetActiveChannel(DW_Type const * base);
-__STATIC_INLINE void    *Cy_DMA_GetActiveSrcAddress(DW_Type const * base);
-__STATIC_INLINE void    *Cy_DMA_GetActiveDstAddress(DW_Type const * base);
-cy_en_dma_status_t Cy_DMA_Crc_Init(DW_Type * base, cy_stc_dma_crc_config_t const * crcConfig);
+__STATIC_INLINE void     Cy_DMA_Enable             (DW_Type * base);
+__STATIC_INLINE void     Cy_DMA_Disable            (DW_Type * base);
+__STATIC_INLINE uint32_t Cy_DMA_GetActiveChannel   (DW_Type const * base);
+__STATIC_INLINE void *   Cy_DMA_GetActiveSrcAddress(DW_Type const * base);
+__STATIC_INLINE void *   Cy_DMA_GetActiveDstAddress(DW_Type const * base);
+      cy_en_dma_status_t Cy_DMA_Crc_Init           (DW_Type * base, cy_stc_dma_crc_config_t const * crcConfig);
 
 /** \} group_dma_block_functions */
 
@@ -540,25 +446,25 @@ cy_en_dma_status_t Cy_DMA_Crc_Init(DW_Type * base, cy_stc_dma_crc_config_t const
 * \addtogroup group_dma_channel_functions
 * \{
 */
-cy_en_dma_status_t Cy_DMA_Channel_Init(DW_Type       * base, uint32_t channel, cy_stc_dma_channel_config_t const * channelConfig);
-void     Cy_DMA_Channel_DeInit(DW_Type       * base, uint32_t channel);
-__STATIC_INLINE void     Cy_DMA_Channel_SetDescriptor(DW_Type       * base, uint32_t channel, cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE void     Cy_DMA_Channel_Enable(DW_Type       * base, uint32_t channel);
-__STATIC_INLINE bool     Cy_DMA_Channel_IsEnabled(DW_Type       * base, uint32_t channel);
-__STATIC_INLINE void     Cy_DMA_Channel_Disable(DW_Type       * base, uint32_t channel);
-__STATIC_INLINE void     Cy_DMA_Channel_SetPriority(DW_Type       * base, uint32_t channel, uint32_t priority);
-__STATIC_INLINE uint32_t Cy_DMA_Channel_GetPriority(DW_Type const * base, uint32_t channel);
+      cy_en_dma_status_t Cy_DMA_Channel_Init                    (DW_Type       * base, uint32_t channel, cy_stc_dma_channel_config_t const * channelConfig);
+                void     Cy_DMA_Channel_DeInit                  (DW_Type       * base, uint32_t channel);
+__STATIC_INLINE void     Cy_DMA_Channel_SetDescriptor           (DW_Type       * base, uint32_t channel, cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE void     Cy_DMA_Channel_Enable                  (DW_Type       * base, uint32_t channel);
+__STATIC_INLINE bool     Cy_DMA_Channel_IsEnabled               (DW_Type       * base, uint32_t channel);
+__STATIC_INLINE void     Cy_DMA_Channel_Disable                 (DW_Type       * base, uint32_t channel);
+__STATIC_INLINE void     Cy_DMA_Channel_SetPriority             (DW_Type       * base, uint32_t channel, uint32_t priority);
+__STATIC_INLINE uint32_t Cy_DMA_Channel_GetPriority             (DW_Type const * base, uint32_t channel);
 __STATIC_INLINE
-cy_en_dma_intr_cause_t Cy_DMA_Channel_GetStatus(DW_Type const * base, uint32_t channel);
+  cy_en_dma_intr_cause_t Cy_DMA_Channel_GetStatus               (DW_Type const * base, uint32_t channel);
 __STATIC_INLINE
-cy_stc_dma_descriptor_t *Cy_DMA_Channel_GetCurrentDescriptor(DW_Type const * base, uint32_t channel);
-__STATIC_INLINE uint8_t  Cy_DMA_Channel_GetCurrentYIndex(DW_Type const * base, uint32_t channel);
+cy_stc_dma_descriptor_t * Cy_DMA_Channel_GetCurrentDescriptor   (DW_Type const * base, uint32_t channel);
+__STATIC_INLINE uint8_t  Cy_DMA_Channel_GetCurrentYIndex        (DW_Type const * base, uint32_t channel);
 
-__STATIC_INLINE uint32_t Cy_DMA_Channel_GetInterruptStatus(DW_Type const * base, uint32_t channel);
-__STATIC_INLINE void     Cy_DMA_Channel_ClearInterrupt(DW_Type       * base, uint32_t channel);
-__STATIC_INLINE void     Cy_DMA_Channel_SetInterrupt(DW_Type       * base, uint32_t channel);
-__STATIC_INLINE uint32_t Cy_DMA_Channel_GetInterruptMask(DW_Type const * base, uint32_t channel);
-__STATIC_INLINE void     Cy_DMA_Channel_SetInterruptMask(DW_Type       * base, uint32_t channel, uint32_t interrupt);
+__STATIC_INLINE uint32_t Cy_DMA_Channel_GetInterruptStatus      (DW_Type const * base, uint32_t channel);
+__STATIC_INLINE void     Cy_DMA_Channel_ClearInterrupt          (DW_Type       * base, uint32_t channel);
+__STATIC_INLINE void     Cy_DMA_Channel_SetInterrupt            (DW_Type       * base, uint32_t channel);
+__STATIC_INLINE uint32_t Cy_DMA_Channel_GetInterruptMask        (DW_Type const * base, uint32_t channel);
+__STATIC_INLINE void     Cy_DMA_Channel_SetInterruptMask        (DW_Type       * base, uint32_t channel, uint32_t interrupt);
 __STATIC_INLINE uint32_t Cy_DMA_Channel_GetInterruptStatusMasked(DW_Type const * base, uint32_t channel);
 #if !(defined (CY_IP_M4CPUSS_DMA) && (CY_IP_M4CPUSS_DMA_VERSION == 1u)) || defined (CY_DOXYGEN)
 __STATIC_FORCEINLINE  void Cy_DMA_Channel_SetSWTrigger(DW_Type const * base, uint32_t channel);
@@ -571,46 +477,46 @@ __STATIC_FORCEINLINE  void Cy_DMA_Channel_SetSWTrigger(DW_Type const * base, uin
 * \{
 */
 
-cy_en_dma_status_t Cy_DMA_Descriptor_Init(cy_stc_dma_descriptor_t * descriptor, cy_stc_dma_descriptor_config_t const * config);
-void Cy_DMA_Descriptor_DeInit(cy_stc_dma_descriptor_t * descriptor);
+  cy_en_dma_status_t Cy_DMA_Descriptor_Init  (cy_stc_dma_descriptor_t * descriptor, cy_stc_dma_descriptor_config_t const * config);
+                void Cy_DMA_Descriptor_DeInit(cy_stc_dma_descriptor_t * descriptor);
 
-void Cy_DMA_Descriptor_SetNextDescriptor(cy_stc_dma_descriptor_t * descriptor, cy_stc_dma_descriptor_t const * nextDescriptor);
-void Cy_DMA_Descriptor_SetDescriptorType(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_descriptor_type_t descriptorType);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetSrcAddress(cy_stc_dma_descriptor_t * descriptor, void const * srcAddress);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetDstAddress(cy_stc_dma_descriptor_t * descriptor, void const * dstAddress);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetXloopDataCount(cy_stc_dma_descriptor_t * descriptor, uint32_t xCount);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetYloopDataCount(cy_stc_dma_descriptor_t * descriptor, uint32_t yCount);
+                void Cy_DMA_Descriptor_SetNextDescriptor   (cy_stc_dma_descriptor_t * descriptor, cy_stc_dma_descriptor_t const * nextDescriptor);
+                void Cy_DMA_Descriptor_SetDescriptorType   (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_descriptor_type_t descriptorType);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetSrcAddress       (cy_stc_dma_descriptor_t * descriptor, void const * srcAddress);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetDstAddress       (cy_stc_dma_descriptor_t * descriptor, void const * dstAddress);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetXloopDataCount   (cy_stc_dma_descriptor_t * descriptor, uint32_t xCount);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetYloopDataCount   (cy_stc_dma_descriptor_t * descriptor, uint32_t yCount);
 __STATIC_INLINE void Cy_DMA_Descriptor_SetXloopSrcIncrement(cy_stc_dma_descriptor_t * descriptor, int32_t srcXincrement);
 __STATIC_INLINE void Cy_DMA_Descriptor_SetXloopDstIncrement(cy_stc_dma_descriptor_t * descriptor, int32_t dstXincrement);
 __STATIC_INLINE void Cy_DMA_Descriptor_SetYloopSrcIncrement(cy_stc_dma_descriptor_t * descriptor, int32_t srcYincrement);
 __STATIC_INLINE void Cy_DMA_Descriptor_SetYloopDstIncrement(cy_stc_dma_descriptor_t * descriptor, int32_t dstYincrement);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetInterruptType(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_trigger_type_t interruptType);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetTriggerInType(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_trigger_type_t triggerInType);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetTriggerOutType(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_trigger_type_t triggerOutType);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetDataSize(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_data_size_t dataSize);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetSrcTransferSize(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_transfer_size_t srcTransferSize);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetDstTransferSize(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_transfer_size_t dstTransferSize);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetRetrigger(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_retrigger_t retrigger);
-__STATIC_INLINE void Cy_DMA_Descriptor_SetChannelState(cy_stc_dma_descriptor_t * descriptor, cy_en_dma_channel_state_t channelState);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetInterruptType    (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_trigger_type_t interruptType);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetTriggerInType    (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_trigger_type_t triggerInType);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetTriggerOutType   (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_trigger_type_t triggerOutType);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetDataSize         (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_data_size_t dataSize);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetSrcTransferSize  (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_transfer_size_t srcTransferSize);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetDstTransferSize  (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_transfer_size_t dstTransferSize);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetRetrigger        (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_retrigger_t retrigger);
+__STATIC_INLINE void Cy_DMA_Descriptor_SetChannelState     (cy_stc_dma_descriptor_t * descriptor, cy_en_dma_channel_state_t channelState);
 
-cy_stc_dma_descriptor_t    *Cy_DMA_Descriptor_GetNextDescriptor(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_descriptor_type_t Cy_DMA_Descriptor_GetDescriptorType(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE void                       *Cy_DMA_Descriptor_GetSrcAddress(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE void                       *Cy_DMA_Descriptor_GetDstAddress(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE uint32_t                    Cy_DMA_Descriptor_GetXloopDataCount(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE uint32_t                    Cy_DMA_Descriptor_GetYloopDataCount(cy_stc_dma_descriptor_t const * descriptor);
+                cy_stc_dma_descriptor_t *   Cy_DMA_Descriptor_GetNextDescriptor   (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_descriptor_type_t Cy_DMA_Descriptor_GetDescriptorType   (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE void *                      Cy_DMA_Descriptor_GetSrcAddress       (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE void *                      Cy_DMA_Descriptor_GetDstAddress       (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE uint32_t                    Cy_DMA_Descriptor_GetXloopDataCount   (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE uint32_t                    Cy_DMA_Descriptor_GetYloopDataCount   (cy_stc_dma_descriptor_t const * descriptor);
 __STATIC_INLINE int32_t                     Cy_DMA_Descriptor_GetXloopSrcIncrement(cy_stc_dma_descriptor_t const * descriptor);
 __STATIC_INLINE int32_t                     Cy_DMA_Descriptor_GetXloopDstIncrement(cy_stc_dma_descriptor_t const * descriptor);
 __STATIC_INLINE int32_t                     Cy_DMA_Descriptor_GetYloopSrcIncrement(cy_stc_dma_descriptor_t const * descriptor);
 __STATIC_INLINE int32_t                     Cy_DMA_Descriptor_GetYloopDstIncrement(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_trigger_type_t    Cy_DMA_Descriptor_GetInterruptType(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_trigger_type_t    Cy_DMA_Descriptor_GetTriggerInType(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_trigger_type_t    Cy_DMA_Descriptor_GetTriggerOutType(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_data_size_t       Cy_DMA_Descriptor_GetDataSize(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_transfer_size_t   Cy_DMA_Descriptor_GetSrcTransferSize(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_transfer_size_t   Cy_DMA_Descriptor_GetDstTransferSize(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_retrigger_t       Cy_DMA_Descriptor_GetRetrigger(cy_stc_dma_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_dma_channel_state_t   Cy_DMA_Descriptor_GetChannelState(cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_trigger_type_t    Cy_DMA_Descriptor_GetInterruptType    (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_trigger_type_t    Cy_DMA_Descriptor_GetTriggerInType    (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_trigger_type_t    Cy_DMA_Descriptor_GetTriggerOutType   (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_data_size_t       Cy_DMA_Descriptor_GetDataSize         (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_transfer_size_t   Cy_DMA_Descriptor_GetSrcTransferSize  (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_transfer_size_t   Cy_DMA_Descriptor_GetDstTransferSize  (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_retrigger_t       Cy_DMA_Descriptor_GetRetrigger        (cy_stc_dma_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_dma_channel_state_t   Cy_DMA_Descriptor_GetChannelState     (cy_stc_dma_descriptor_t const * descriptor);
 
 /** \} group_dma_descriptor_functions */
 
@@ -692,24 +598,24 @@ __STATIC_INLINE uint32_t Cy_DMA_GetActiveChannel(DW_Type const * base)
 {
 
 #if defined (CY_IP_M4CPUSS_DMA) && (CY_IP_M4CPUSS_DMA_VERSION == 1u)
-    /* DW version 1 provides consolidated status of pending and active channels in PENDING register */
-    return (DW_PENDING(base));
+        /* DW version 1 provides consolidated status of pending and active channels in PENDING register */
+        return (DW_PENDING(base));
 #else
-    /* DW version 2 supports upto 512 channels and cannot fit the status in a 32-bit integer */
-    /* Returns bit-field for 32 channels in case more channels are available user to use new API */
-    {
-        uint32_t channels_pending = 0UL;
-        uint32_t max_channels = CY_DMA_CH_NR_AVAILABLE(base);
-
-        /* Get Channel Pending status from individual channel status information */
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 14.3', 'channel_nr may be higher or lower than 32 depending on target device.');
-        for (uint8_t channel_nr = 0U; (channel_nr < 32U && channel_nr < max_channels); channel_nr++)
+        /* DW version 2 supports upto 512 channels and cannot fit the status in a 32-bit integer */
+        /* Returns bit-field for 32 channels in case more channels are available user to use new API */
         {
-            channels_pending |= (_FLD2VAL(DW_CH_STRUCT_CH_STATUS_PENDING, DW_CH_STATUS(base, channel_nr)) << channel_nr);
-        }
+            uint32_t channels_pending = 0UL;
+            uint32_t max_channels = CY_DMA_CH_NR_AVAILABLE(base);
 
-        return channels_pending;
-    }
+            /* Get Channel Pending status from individual channel status information */
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 14.3','channel_nr may be higher or lower than 32 depending on target device.');
+            for(uint8_t channel_nr = 0U; (channel_nr < 32U && channel_nr < max_channels); channel_nr++)
+            {
+                channels_pending |= (_FLD2VAL(DW_CH_STRUCT_CH_STATUS_PENDING, DW_CH_STATUS(base, channel_nr)) << channel_nr);
+            }
+
+            return channels_pending;
+        }
 #endif
 
 }
@@ -730,7 +636,7 @@ __STATIC_INLINE uint32_t Cy_DMA_GetActiveChannelIndex(DW_Type const * base)
 {
     if (_FLD2VAL(DW_STATUS_ACTIVE, DW_STATUS(base)) == 1U)
     {
-        return (_FLD2VAL(CY_DW_STATUS_CH_IDX, DW_STATUS(base)));
+        return(_FLD2VAL(CY_DW_STATUS_CH_IDX, DW_STATUS(base)));
     }
     else
     {
@@ -755,7 +661,7 @@ __STATIC_INLINE uint32_t Cy_DMA_GetActiveChannelIndex(DW_Type const * base)
 * \snippet dma/snippet/main.c snippet_Cy_DMA_GetActiveSrcAddress
 *
 *******************************************************************************/
-__STATIC_INLINE void *Cy_DMA_GetActiveSrcAddress(DW_Type const * base)
+__STATIC_INLINE void * Cy_DMA_GetActiveSrcAddress(DW_Type const * base)
 {
     return ((void *) DW_DESCR_SRC(base));
 }
@@ -777,7 +683,7 @@ __STATIC_INLINE void *Cy_DMA_GetActiveSrcAddress(DW_Type const * base)
 * \snippet dma/snippet/main.c snippet_Cy_DMA_GetActiveSrcAddress
 *
 *******************************************************************************/
-__STATIC_INLINE void *Cy_DMA_GetActiveDstAddress(DW_Type const * base)
+__STATIC_INLINE void * Cy_DMA_GetActiveDstAddress(DW_Type const * base)
 {
     return ((void *) DW_DESCR_DST(base));
 }
@@ -829,7 +735,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetSrcAddress(cy_stc_dma_descriptor_t * d
 * \snippet dma/snippet/main.c snippet_Cy_DMA_Descriptor_GetterFunctions
 *
 *******************************************************************************/
-__STATIC_INLINE void *Cy_DMA_Descriptor_GetSrcAddress(cy_stc_dma_descriptor_t const * descriptor)
+__STATIC_INLINE void * Cy_DMA_Descriptor_GetSrcAddress(cy_stc_dma_descriptor_t const * descriptor)
 {
     return ((void *) descriptor->src);
 }
@@ -874,7 +780,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetDstAddress(cy_stc_dma_descriptor_t * d
 * \snippet dma/snippet/main.c snippet_Cy_DMA_Descriptor_GetterFunctions
 *
 *******************************************************************************/
-__STATIC_INLINE void *Cy_DMA_Descriptor_GetDstAddress(cy_stc_dma_descriptor_t const * descriptor)
+__STATIC_INLINE void * Cy_DMA_Descriptor_GetDstAddress(cy_stc_dma_descriptor_t const * descriptor)
 {
     return ((void *) descriptor->dst);
 }
@@ -922,7 +828,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetInterruptType(cy_stc_dma_descriptor_t 
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_trigger_type_t Cy_DMA_Descriptor_GetInterruptType(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_trigger_type_t) _FLD2VAL(CY_DMA_CTL_INTR_TYPE, descriptor->ctl));
+    return((cy_en_dma_trigger_type_t) _FLD2VAL(CY_DMA_CTL_INTR_TYPE, descriptor->ctl));
 }
 
 
@@ -968,7 +874,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetTriggerInType(cy_stc_dma_descriptor_t 
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_trigger_type_t Cy_DMA_Descriptor_GetTriggerInType(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_trigger_type_t) _FLD2VAL(CY_DMA_CTL_TR_IN_TYPE, descriptor->ctl));
+    return((cy_en_dma_trigger_type_t) _FLD2VAL(CY_DMA_CTL_TR_IN_TYPE, descriptor->ctl));
 }
 
 
@@ -1014,7 +920,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetTriggerOutType(cy_stc_dma_descriptor_t
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_trigger_type_t Cy_DMA_Descriptor_GetTriggerOutType(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_trigger_type_t) _FLD2VAL(CY_DMA_CTL_TR_OUT_TYPE, descriptor->ctl));
+    return((cy_en_dma_trigger_type_t) _FLD2VAL(CY_DMA_CTL_TR_OUT_TYPE, descriptor->ctl));
 }
 
 
@@ -1060,7 +966,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetDataSize(cy_stc_dma_descriptor_t * des
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_data_size_t Cy_DMA_Descriptor_GetDataSize(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_data_size_t) _FLD2VAL(CY_DMA_CTL_DATA_SIZE, descriptor->ctl));
+    return((cy_en_dma_data_size_t) _FLD2VAL(CY_DMA_CTL_DATA_SIZE, descriptor->ctl));
 }
 
 
@@ -1106,7 +1012,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetSrcTransferSize(cy_stc_dma_descriptor_
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_transfer_size_t Cy_DMA_Descriptor_GetSrcTransferSize(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_transfer_size_t) _FLD2VAL(CY_DMA_CTL_SRC_SIZE, descriptor->ctl));
+    return((cy_en_dma_transfer_size_t) _FLD2VAL(CY_DMA_CTL_SRC_SIZE, descriptor->ctl));
 }
 
 
@@ -1152,7 +1058,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetDstTransferSize(cy_stc_dma_descriptor_
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_transfer_size_t Cy_DMA_Descriptor_GetDstTransferSize(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_transfer_size_t) _FLD2VAL(CY_DMA_CTL_DST_SIZE, descriptor->ctl));
+    return((cy_en_dma_transfer_size_t) _FLD2VAL(CY_DMA_CTL_DST_SIZE, descriptor->ctl));
 }
 
 
@@ -1201,7 +1107,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetRetrigger(cy_stc_dma_descriptor_t * de
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_retrigger_t Cy_DMA_Descriptor_GetRetrigger(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_retrigger_t) _FLD2VAL(CY_DMA_CTL_RETRIG, descriptor->ctl));
+    return((cy_en_dma_retrigger_t) _FLD2VAL(CY_DMA_CTL_RETRIG, descriptor->ctl));
 }
 
 
@@ -1223,7 +1129,7 @@ __STATIC_INLINE cy_en_dma_retrigger_t Cy_DMA_Descriptor_GetRetrigger(cy_stc_dma_
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_descriptor_type_t Cy_DMA_Descriptor_GetDescriptorType(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_descriptor_type_t) _FLD2VAL(CY_DMA_CTL_TYPE, descriptor->ctl));
+    return((cy_en_dma_descriptor_type_t) _FLD2VAL(CY_DMA_CTL_TYPE, descriptor->ctl));
 }
 
 
@@ -1269,7 +1175,7 @@ __STATIC_INLINE void Cy_DMA_Descriptor_SetChannelState(cy_stc_dma_descriptor_t *
 *******************************************************************************/
 __STATIC_INLINE cy_en_dma_channel_state_t Cy_DMA_Descriptor_GetChannelState(cy_stc_dma_descriptor_t const * descriptor)
 {
-    return ((cy_en_dma_channel_state_t) _FLD2VAL(CY_DMA_CTL_CH_DISABLE, descriptor->ctl));
+    return((cy_en_dma_channel_state_t) _FLD2VAL(CY_DMA_CTL_CH_DISABLE, descriptor->ctl));
 }
 
 
@@ -1763,7 +1669,7 @@ __STATIC_INLINE uint32_t Cy_DMA_Channel_GetPriority(DW_Type const * base, uint32
 * \snippet dma/snippet/main.c snippet_Cy_DMA_Descriptor_Deinit
 *
 *******************************************************************************/
-__STATIC_INLINE cy_stc_dma_descriptor_t *Cy_DMA_Channel_GetCurrentDescriptor(DW_Type const * base, uint32_t channel)
+__STATIC_INLINE cy_stc_dma_descriptor_t * Cy_DMA_Channel_GetCurrentDescriptor(DW_Type const * base, uint32_t channel)
 {
     CY_ASSERT_L1(CY_DMA_IS_CH_NR_VALID(base, channel));
 
@@ -2009,131 +1915,131 @@ __STATIC_FORCEINLINE  void Cy_DMA_Channel_SetSWTrigger(DW_Type const * base, uin
 
 #if(0U != CY_DMA_BWC)
 
-/* Type definitions */
-#define cy_stc_dma_chnl_config_t        cy_stc_dma_channel_config_t
-#define cy_stc_dma_descr_t              cy_stc_dma_descriptor_t
-#define cy_stc_dma_descr_config_t       cy_stc_dma_descriptor_config_t
-#define cy_en_dma_trig_type_t           cy_en_dma_trigger_type_t
+    /* Type definitions */
+    #define cy_stc_dma_chnl_config_t        cy_stc_dma_channel_config_t
+    #define cy_stc_dma_descr_t              cy_stc_dma_descriptor_t
+    #define cy_stc_dma_descr_config_t       cy_stc_dma_descriptor_config_t
+    #define cy_en_dma_trig_type_t           cy_en_dma_trigger_type_t
 
-/* Structure items */
-#define DMA_Descriptor                  descriptor
-#define deact                           retrigger
-#define intrType                        interruptType
-#define chStateAtCmplt                  channelState
-#define srcTxfrSize                     srcTransferSize
-#define destTxfrSize                    dstTransferSize
-#define trigoutType                     triggerOutType
-#define triginType                      triggerInType
-#define descrType                       descriptorType
-#define srcAddr                         srcAddress
-#define destAddr                        dstAddress
-#define srcXincr                        srcXincrement
-#define srcYincr                        srcYincrement
-#define destXincr                       dstXincrement
-#define destYincr                       dstYincrement
-#define descrNext                       nextDescriptor
+    /* Structure items */
+    #define DMA_Descriptor                  descriptor
+    #define deact                           retrigger
+    #define intrType                        interruptType
+    #define chStateAtCmplt                  channelState
+    #define srcTxfrSize                     srcTransferSize
+    #define destTxfrSize                    dstTransferSize
+    #define trigoutType                     triggerOutType
+    #define triginType                      triggerInType
+    #define descrType                       descriptorType
+    #define srcAddr                         srcAddress
+    #define destAddr                        dstAddress
+    #define srcXincr                        srcXincrement
+    #define srcYincr                        srcYincrement
+    #define destXincr                       dstXincrement
+    #define destYincr                       dstYincrement
+    #define descrNext                       nextDescriptor
 
-/* Constants */
-#define CY_DMA_CH_DISABLED              (CY_DMA_CHANNEL_DISABLED)
-#define CY_DMA_CH_ENABLED               (CY_DMA_CHANNEL_ENABLED)
+    /* Constants */
+    #define CY_DMA_CH_DISABLED              (CY_DMA_CHANNEL_DISABLED)
+    #define CY_DMA_CH_ENABLED               (CY_DMA_CHANNEL_ENABLED)
 
-#define CY_DMA_TXFR_SIZE_DATA_SIZE      (CY_DMA_TRANSFER_SIZE_DATA)
-#define CY_DMA_TXFR_SIZE_WORD           (CY_DMA_TRANSFER_SIZE_WORD)
+    #define CY_DMA_TXFR_SIZE_DATA_SIZE      (CY_DMA_TRANSFER_SIZE_DATA)
+    #define CY_DMA_TXFR_SIZE_WORD           (CY_DMA_TRANSFER_SIZE_WORD)
 
-#define CY_DMA_INTR_1ELEMENT_CMPLT      (CY_DMA_1ELEMENT)
-#define CY_DMA_INTR_X_LOOP_CMPLT        (CY_DMA_X_LOOP)
-#define CY_DMA_INTR_DESCR_CMPLT         (CY_DMA_DESCR)
-#define CY_DMA_INTR_DESCRCHAIN_CMPLT    (CY_DMA_DESCR_CHAIN)
+    #define CY_DMA_INTR_1ELEMENT_CMPLT      (CY_DMA_1ELEMENT)
+    #define CY_DMA_INTR_X_LOOP_CMPLT        (CY_DMA_X_LOOP)
+    #define CY_DMA_INTR_DESCR_CMPLT         (CY_DMA_DESCR)
+    #define CY_DMA_INTR_DESCRCHAIN_CMPLT    (CY_DMA_DESCR_CHAIN)
 
-#define CY_DMA_TRIGOUT_1ELEMENT_CMPLT   (CY_DMA_1ELEMENT)
-#define CY_DMA_TRIGOUT_X_LOOP_CMPLT     (CY_DMA_X_LOOP)
-#define CY_DMA_TRIGOUT_DESCR_CMPLT      (CY_DMA_DESCR)
-#define CY_DMA_TRIGOUT_DESCRCHAIN_CMPLT (CY_DMA_DESCR_CHAIN)
+    #define CY_DMA_TRIGOUT_1ELEMENT_CMPLT   (CY_DMA_1ELEMENT)
+    #define CY_DMA_TRIGOUT_X_LOOP_CMPLT     (CY_DMA_X_LOOP)
+    #define CY_DMA_TRIGOUT_DESCR_CMPLT      (CY_DMA_DESCR)
+    #define CY_DMA_TRIGOUT_DESCRCHAIN_CMPLT (CY_DMA_DESCR_CHAIN)
 
-#define CY_DMA_TRIGIN_1ELEMENT          (CY_DMA_1ELEMENT)
-#define CY_DMA_TRIGIN_XLOOP             (CY_DMA_X_LOOP)
-#define CY_DMA_TRIGIN_DESCR             (CY_DMA_DESCR)
-#define CY_DMA_TRIGIN_DESCRCHAIN        (CY_DMA_DESCR_CHAIN)
+    #define CY_DMA_TRIGIN_1ELEMENT          (CY_DMA_1ELEMENT)
+    #define CY_DMA_TRIGIN_XLOOP             (CY_DMA_X_LOOP)
+    #define CY_DMA_TRIGIN_DESCR             (CY_DMA_DESCR)
+    #define CY_DMA_TRIGIN_DESCRCHAIN        (CY_DMA_DESCR_CHAIN)
 
-#define CY_DMA_INVALID_INPUT_PARAMETERS (CY_DMA_BAD_PARAM)
+    #define CY_DMA_INVALID_INPUT_PARAMETERS (CY_DMA_BAD_PARAM)
 
-#define CY_DMA_RETDIG_IM                (CY_DMA_RETRIG_IM)
-#define CY_DMA_RETDIG_4CYC              (CY_DMA_RETRIG_4CYC)
-#define CY_DMA_RETDIG_16CYC             (CY_DMA_RETRIG_16CYC)
+    #define CY_DMA_RETDIG_IM                (CY_DMA_RETRIG_IM)
+    #define CY_DMA_RETDIG_4CYC              (CY_DMA_RETRIG_4CYC)
+    #define CY_DMA_RETDIG_16CYC             (CY_DMA_RETRIG_16CYC)
 
-/* Descriptor structure items */
-#define DESCR_CTL                       ctl
-#define DESCR_SRC                       src
-#define DESCR_DST                       dst
-#define DESCR_X_CTL                     xCtl
-#define DESCR_Y_CTL                     yCtl
-#define DESCR_NEXT_PTR                  nextPtr
+    /* Descriptor structure items */
+    #define DESCR_CTL                       ctl
+    #define DESCR_SRC                       src
+    #define DESCR_DST                       dst
+    #define DESCR_X_CTL                     xCtl
+    #define DESCR_Y_CTL                     yCtl
+    #define DESCR_NEXT_PTR                  nextPtr
 
-/* Descriptor structure bitfields */
-#define DW_DESCR_STRUCT_DESCR_CTL_WAIT_FOR_DEACT_Pos 0UL
-#define DW_DESCR_STRUCT_DESCR_CTL_WAIT_FOR_DEACT_Msk 0x3UL
-#define DW_DESCR_STRUCT_DESCR_CTL_INTR_TYPE_Pos 2UL
-#define DW_DESCR_STRUCT_DESCR_CTL_INTR_TYPE_Msk 0xCUL
-#define DW_DESCR_STRUCT_DESCR_CTL_TR_OUT_TYPE_Pos 4UL
-#define DW_DESCR_STRUCT_DESCR_CTL_TR_OUT_TYPE_Msk 0x30UL
-#define DW_DESCR_STRUCT_DESCR_CTL_TR_IN_TYPE_Pos 6UL
-#define DW_DESCR_STRUCT_DESCR_CTL_TR_IN_TYPE_Msk 0xC0UL
-#define DW_DESCR_STRUCT_DESCR_CTL_CH_DISABLE_Pos 24UL
-#define DW_DESCR_STRUCT_DESCR_CTL_CH_DISABLE_Msk 0x1000000UL
-#define DW_DESCR_STRUCT_DESCR_CTL_SRC_TRANSFER_SIZE_Pos 26UL
-#define DW_DESCR_STRUCT_DESCR_CTL_SRC_TRANSFER_SIZE_Msk 0x4000000UL
-#define DW_DESCR_STRUCT_DESCR_CTL_DST_TRANSFER_SIZE_Pos 27UL
-#define DW_DESCR_STRUCT_DESCR_CTL_DST_TRANSFER_SIZE_Msk 0x8000000UL
-#define DW_DESCR_STRUCT_DESCR_CTL_DATA_SIZE_Pos 28UL
-#define DW_DESCR_STRUCT_DESCR_CTL_DATA_SIZE_Msk 0x30000000UL
-#define DW_DESCR_STRUCT_DESCR_CTL_DESCR_TYPE_Pos 30UL
-#define DW_DESCR_STRUCT_DESCR_CTL_DESCR_TYPE_Msk 0xC0000000UL
-#define DW_DESCR_STRUCT_DESCR_SRC_SRC_ADDR_Pos  0UL
-#define DW_DESCR_STRUCT_DESCR_SRC_SRC_ADDR_Msk  0xFFFFFFFFUL
-#define DW_DESCR_STRUCT_DESCR_DST_DST_ADDR_Pos  0UL
-#define DW_DESCR_STRUCT_DESCR_DST_DST_ADDR_Msk  0xFFFFFFFFUL
-#define DW_DESCR_STRUCT_DESCR_X_CTL_SRC_X_INCR_Pos 0UL
-#define DW_DESCR_STRUCT_DESCR_X_CTL_SRC_X_INCR_Msk 0xFFFUL
-#define DW_DESCR_STRUCT_DESCR_X_CTL_DST_X_INCR_Pos 12UL
-#define DW_DESCR_STRUCT_DESCR_X_CTL_DST_X_INCR_Msk 0xFFF000UL
-#define DW_DESCR_STRUCT_DESCR_X_CTL_X_COUNT_Pos 24UL
-#define DW_DESCR_STRUCT_DESCR_X_CTL_X_COUNT_Msk 0xFF000000UL
-#define DW_DESCR_STRUCT_DESCR_Y_CTL_SRC_Y_INCR_Pos 0UL
-#define DW_DESCR_STRUCT_DESCR_Y_CTL_SRC_Y_INCR_Msk 0xFFFUL
-#define DW_DESCR_STRUCT_DESCR_Y_CTL_DST_Y_INCR_Pos 12UL
-#define DW_DESCR_STRUCT_DESCR_Y_CTL_DST_Y_INCR_Msk 0xFFF000UL
-#define DW_DESCR_STRUCT_DESCR_Y_CTL_Y_COUNT_Pos 24UL
-#define DW_DESCR_STRUCT_DESCR_Y_CTL_Y_COUNT_Msk 0xFF000000UL
-#define DW_DESCR_STRUCT_DESCR_NEXT_PTR_ADDR_Pos 2UL
-#define DW_DESCR_STRUCT_DESCR_NEXT_PTR_ADDR_Msk 0xFFFFFFFCUL
+    /* Descriptor structure bitfields */
+    #define DW_DESCR_STRUCT_DESCR_CTL_WAIT_FOR_DEACT_Pos 0UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_WAIT_FOR_DEACT_Msk 0x3UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_INTR_TYPE_Pos 2UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_INTR_TYPE_Msk 0xCUL
+    #define DW_DESCR_STRUCT_DESCR_CTL_TR_OUT_TYPE_Pos 4UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_TR_OUT_TYPE_Msk 0x30UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_TR_IN_TYPE_Pos 6UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_TR_IN_TYPE_Msk 0xC0UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_CH_DISABLE_Pos 24UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_CH_DISABLE_Msk 0x1000000UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_SRC_TRANSFER_SIZE_Pos 26UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_SRC_TRANSFER_SIZE_Msk 0x4000000UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_DST_TRANSFER_SIZE_Pos 27UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_DST_TRANSFER_SIZE_Msk 0x8000000UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_DATA_SIZE_Pos 28UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_DATA_SIZE_Msk 0x30000000UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_DESCR_TYPE_Pos 30UL
+    #define DW_DESCR_STRUCT_DESCR_CTL_DESCR_TYPE_Msk 0xC0000000UL
+    #define DW_DESCR_STRUCT_DESCR_SRC_SRC_ADDR_Pos  0UL
+    #define DW_DESCR_STRUCT_DESCR_SRC_SRC_ADDR_Msk  0xFFFFFFFFUL
+    #define DW_DESCR_STRUCT_DESCR_DST_DST_ADDR_Pos  0UL
+    #define DW_DESCR_STRUCT_DESCR_DST_DST_ADDR_Msk  0xFFFFFFFFUL
+    #define DW_DESCR_STRUCT_DESCR_X_CTL_SRC_X_INCR_Pos 0UL
+    #define DW_DESCR_STRUCT_DESCR_X_CTL_SRC_X_INCR_Msk 0xFFFUL
+    #define DW_DESCR_STRUCT_DESCR_X_CTL_DST_X_INCR_Pos 12UL
+    #define DW_DESCR_STRUCT_DESCR_X_CTL_DST_X_INCR_Msk 0xFFF000UL
+    #define DW_DESCR_STRUCT_DESCR_X_CTL_X_COUNT_Pos 24UL
+    #define DW_DESCR_STRUCT_DESCR_X_CTL_X_COUNT_Msk 0xFF000000UL
+    #define DW_DESCR_STRUCT_DESCR_Y_CTL_SRC_Y_INCR_Pos 0UL
+    #define DW_DESCR_STRUCT_DESCR_Y_CTL_SRC_Y_INCR_Msk 0xFFFUL
+    #define DW_DESCR_STRUCT_DESCR_Y_CTL_DST_Y_INCR_Pos 12UL
+    #define DW_DESCR_STRUCT_DESCR_Y_CTL_DST_Y_INCR_Msk 0xFFF000UL
+    #define DW_DESCR_STRUCT_DESCR_Y_CTL_Y_COUNT_Pos 24UL
+    #define DW_DESCR_STRUCT_DESCR_Y_CTL_Y_COUNT_Msk 0xFF000000UL
+    #define DW_DESCR_STRUCT_DESCR_NEXT_PTR_ADDR_Pos 2UL
+    #define DW_DESCR_STRUCT_DESCR_NEXT_PTR_ADDR_Msk 0xFFFFFFFCUL
 
-/* Functions */
-#define Cy_DMA_GetActiveChnl            Cy_DMA_GetActiveChannel
-#define Cy_DMA_GetActiveSrcAddr         Cy_DMA_GetActiveSrcAddress
-#define Cy_DMA_GetActiveDstAddr         Cy_DMA_GetActiveDstAddress
-#define Cy_DMA_Descr_Init               Cy_DMA_Descriptor_Init
-#define Cy_DMA_Descr_DeInit             Cy_DMA_Descriptor_DeInit
-#define Cy_DMA_Descr_SetSrcAddr         Cy_DMA_Descriptor_SetSrcAddress
-#define Cy_DMA_Descr_SetDestAddr        Cy_DMA_Descriptor_SetDstAddress
-#define Cy_DMA_Descr_SetNxtDescr        Cy_DMA_Descriptor_SetNextDescriptor
-#define Cy_DMA_Descr_SetIntrType        Cy_DMA_Descriptor_SetInterruptType
-#define Cy_DMA_Descr_SetTrigInType      Cy_DMA_Descriptor_SetTriggerInType
-#define Cy_DMA_Descr_SetTrigOutType     Cy_DMA_Descriptor_SetTriggerOutType
-#define Cy_DMA_Chnl_Init                Cy_DMA_Channel_Init
-#define Cy_DMA_Chnl_DeInit              Cy_DMA_Channel_DeInit
-#define Cy_DMA_Chnl_SetDescr            Cy_DMA_Channel_SetDescriptor
-#define Cy_DMA_Chnl_Enable              Cy_DMA_Channel_Enable
-#define Cy_DMA_Chnl_Disable             Cy_DMA_Channel_Disable
-#define Cy_DMA_Chnl_GetCurrentDescr     Cy_DMA_Channel_GetCurrentDescriptor
-#define Cy_DMA_Chnl_SetPriority         Cy_DMA_Channel_SetPriority
-#define Cy_DMA_Chnl_GetPriority         Cy_DMA_Channel_GetPriority
-#define Cy_DMA_Chnl_GetInterruptStatus  Cy_DMA_Channel_GetInterruptStatus
-#define Cy_DMA_Chnl_GetInterruptCause   Cy_DMA_Channel_GetStatus
-#define Cy_DMA_Chnl_ClearInterrupt      Cy_DMA_Channel_ClearInterrupt
-#define Cy_DMA_Chnl_SetInterrupt        Cy_DMA_Channel_SetInterrupt
-#define Cy_DMA_Chnl_GetInterruptMask    Cy_DMA_Channel_GetInterruptMask
-#define Cy_DMA_Chnl_GetInterruptStatusMasked Cy_DMA_Channel_GetInterruptStatusMasked
-#define Cy_DMA_Chnl_SetInterruptMask(base, channel) (Cy_DMA_Channel_SetInterruptMask(base, channel, CY_DMA_INTR_MASK))
+    /* Functions */
+    #define Cy_DMA_GetActiveChnl            Cy_DMA_GetActiveChannel
+    #define Cy_DMA_GetActiveSrcAddr         Cy_DMA_GetActiveSrcAddress
+    #define Cy_DMA_GetActiveDstAddr         Cy_DMA_GetActiveDstAddress
+    #define Cy_DMA_Descr_Init               Cy_DMA_Descriptor_Init
+    #define Cy_DMA_Descr_DeInit             Cy_DMA_Descriptor_DeInit
+    #define Cy_DMA_Descr_SetSrcAddr         Cy_DMA_Descriptor_SetSrcAddress
+    #define Cy_DMA_Descr_SetDestAddr        Cy_DMA_Descriptor_SetDstAddress
+    #define Cy_DMA_Descr_SetNxtDescr        Cy_DMA_Descriptor_SetNextDescriptor
+    #define Cy_DMA_Descr_SetIntrType        Cy_DMA_Descriptor_SetInterruptType
+    #define Cy_DMA_Descr_SetTrigInType      Cy_DMA_Descriptor_SetTriggerInType
+    #define Cy_DMA_Descr_SetTrigOutType     Cy_DMA_Descriptor_SetTriggerOutType
+    #define Cy_DMA_Chnl_Init                Cy_DMA_Channel_Init
+    #define Cy_DMA_Chnl_DeInit              Cy_DMA_Channel_DeInit
+    #define Cy_DMA_Chnl_SetDescr            Cy_DMA_Channel_SetDescriptor
+    #define Cy_DMA_Chnl_Enable              Cy_DMA_Channel_Enable
+    #define Cy_DMA_Chnl_Disable             Cy_DMA_Channel_Disable
+    #define Cy_DMA_Chnl_GetCurrentDescr     Cy_DMA_Channel_GetCurrentDescriptor
+    #define Cy_DMA_Chnl_SetPriority         Cy_DMA_Channel_SetPriority
+    #define Cy_DMA_Chnl_GetPriority         Cy_DMA_Channel_GetPriority
+    #define Cy_DMA_Chnl_GetInterruptStatus  Cy_DMA_Channel_GetInterruptStatus
+    #define Cy_DMA_Chnl_GetInterruptCause   Cy_DMA_Channel_GetStatus
+    #define Cy_DMA_Chnl_ClearInterrupt      Cy_DMA_Channel_ClearInterrupt
+    #define Cy_DMA_Chnl_SetInterrupt        Cy_DMA_Channel_SetInterrupt
+    #define Cy_DMA_Chnl_GetInterruptMask    Cy_DMA_Channel_GetInterruptMask
+    #define Cy_DMA_Chnl_GetInterruptStatusMasked Cy_DMA_Channel_GetInterruptStatusMasked
+    #define Cy_DMA_Chnl_SetInterruptMask(base, channel) (Cy_DMA_Channel_SetInterruptMask(base, channel, CY_DMA_INTR_MASK))
 
 
 /*******************************************************************************
@@ -2142,21 +2048,21 @@ __STATIC_FORCEINLINE  void Cy_DMA_Channel_SetSWTrigger(DW_Type const * base, uin
 * This is a legacy API function. It is left here just for backward compatibility.
 * Do not use it in new designs.
 *******************************************************************************/
-__STATIC_INLINE void Cy_DMA_Descr_SetTxfrWidth(cy_stc_dma_descr_t * descriptor,
-        uint32_t dataElementSize,
-        uint32_t srcTxfrWidth,
-        uint32_t dstTxfrWidth)
-{
-    uint32_t regValue;
-    regValue = descriptor->ctl & ((uint32_t)(~(DW_DESCR_STRUCT_DESCR_CTL_DATA_SIZE_Msk |
-                                  DW_DESCR_STRUCT_DESCR_CTL_SRC_TRANSFER_SIZE_Msk |
-                                  DW_DESCR_STRUCT_DESCR_CTL_DST_TRANSFER_SIZE_Msk)));
+    __STATIC_INLINE void Cy_DMA_Descr_SetTxfrWidth(cy_stc_dma_descr_t * descriptor,
+                                                               uint32_t dataElementSize,
+                                                               uint32_t srcTxfrWidth,
+                                                               uint32_t dstTxfrWidth)
+    {
+        uint32_t regValue;
+        regValue = descriptor->ctl & ((uint32_t)(~(DW_DESCR_STRUCT_DESCR_CTL_DATA_SIZE_Msk |
+            DW_DESCR_STRUCT_DESCR_CTL_SRC_TRANSFER_SIZE_Msk |
+            DW_DESCR_STRUCT_DESCR_CTL_DST_TRANSFER_SIZE_Msk)));
 
-    descriptor->ctl = regValue |
-                      _VAL2FLD(DW_DESCR_STRUCT_DESCR_CTL_DATA_SIZE, dataElementSize) |
-                      _VAL2FLD(DW_DESCR_STRUCT_DESCR_CTL_SRC_TRANSFER_SIZE, srcTxfrWidth) |
-                      _VAL2FLD(DW_DESCR_STRUCT_DESCR_CTL_DST_TRANSFER_SIZE, dstTxfrWidth);
-}
+        descriptor->ctl = regValue |
+            _VAL2FLD(DW_DESCR_STRUCT_DESCR_CTL_DATA_SIZE, dataElementSize) |
+            _VAL2FLD(DW_DESCR_STRUCT_DESCR_CTL_SRC_TRANSFER_SIZE, srcTxfrWidth) |
+            _VAL2FLD(DW_DESCR_STRUCT_DESCR_CTL_DST_TRANSFER_SIZE, dstTxfrWidth);
+    }
 
 #endif /* CY_DMA_BWC */
 

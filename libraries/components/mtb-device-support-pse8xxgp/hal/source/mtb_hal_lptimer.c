@@ -43,7 +43,7 @@ extern "C" {
 // mtb_hal_lptimer_setup
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_lptimer_setup(mtb_hal_lptimer_t* obj,
-                                const mtb_hal_lptimer_configurator_t *config)
+                                const mtb_hal_lptimer_configurator_t* config)
 {
     CY_ASSERT(NULL != obj);
     CY_ASSERT(NULL != config);
@@ -53,6 +53,7 @@ cy_rslt_t mtb_hal_lptimer_setup(mtb_hal_lptimer_t* obj,
     obj->callback_data.callback = NULL;
     obj->callback_data.callback_arg = NULL;
     obj->isr_instruction = 0;
+    obj->lfclk_freqhz = config->lfclk_freqhz;
 
     /* Perform any additional IP-specific setup */
     _mtb_hal_lptimer_setup(obj);
@@ -66,7 +67,7 @@ cy_rslt_t mtb_hal_lptimer_setup(mtb_hal_lptimer_t* obj,
 //--------------------------------------------------------------------------------------------------
 void mtb_hal_lptimer_register_callback(mtb_hal_lptimer_t* obj,
                                        mtb_hal_lptimer_event_callback_t callback,
-                                       void *callback_arg)
+                                       void* callback_arg)
 {
     CY_ASSERT(obj != NULL);
 
@@ -96,7 +97,7 @@ void mtb_hal_lptimer_enable_event(mtb_hal_lptimer_t* obj, mtb_hal_lptimer_event_
     }
     else
     {
-#if (_MTB_HAL_IRQ_MUXING)
+        #if (_MTB_HAL_IRQ_MUXING)
         /* We may be in a critical section. Only clear the interrupt status if there isn't a pending
            interrupt */
         if (Cy_MCWDT_GetInterruptStatus(obj->base) != 0)
@@ -104,7 +105,7 @@ void mtb_hal_lptimer_enable_event(mtb_hal_lptimer_t* obj, mtb_hal_lptimer_event_
             obj->isr_instruction |= _MTB_HAL_LPTIMER_ISR_CRITICAL_SECTION_MASK;
         }
         else
-#endif
+        #endif
         {
             _mtb_hal_lptimer_disable_event(obj);
         }

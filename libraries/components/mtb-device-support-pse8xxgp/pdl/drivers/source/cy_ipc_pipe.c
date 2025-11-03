@@ -31,9 +31,9 @@
 
 /* Define a pointer to array of endPoints.
 *  ( This comprises of all channels present in all IPC IP instances. ) */
-static cy_stc_ipc_pipe_ep_t *cy_ipc_pipe_epArray = NULL;
+static cy_stc_ipc_pipe_ep_t * cy_ipc_pipe_epArray = NULL;
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 12, \
-                             'Intentional typecast to IRQn_Type enum.')
+'Intentional typecast to IRQn_Type enum.')
 
 /*******************************************************************************
 * Function Name: Cy_IPC_Pipe_Config
@@ -88,43 +88,43 @@ void Cy_IPC_Pipe_Config(cy_stc_ipc_pipe_ep_t * theEpArray)
 void Cy_IPC_Pipe_Init(cy_stc_ipc_pipe_config_t const *config)
 {
     /* Create the interrupt structures and arrays needed */
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Intentional typecast to IRQn_Type.');
-    cy_stc_sysint_t                 ipc_intr_cypipeConfig = {.intrSrc = (IRQn_Type)0U, .intrPriority = 0U};
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Intentional typecast to IRQn_Type.');
+    cy_stc_sysint_t                 ipc_intr_cypipeConfig={.intrSrc=(IRQn_Type)0U,.intrPriority=0U};
 
     cy_stc_ipc_pipe_ep_config_t        epConfigDataA;
     cy_stc_ipc_pipe_ep_config_t        epConfigDataB;
 
     /* Parameters checking begin */
     CY_ASSERT_L1(NULL != config);
-#if (CY_CPU_CORTEX_M0P)
+    #if (CY_CPU_CORTEX_M0P)
     CY_ASSERT_L2((uint32_t)(1UL << __NVIC_PRIO_BITS) > config->ep0ConfigData.ipcNotifierPriority);
-#else
+    #else
     CY_ASSERT_L2((uint32_t)(1UL << __NVIC_PRIO_BITS) > config->ep1ConfigData.ipcNotifierPriority);
-#endif
+    #endif
     CY_ASSERT_L1(NULL != config->endpointsCallbacksArray);
     CY_ASSERT_L1(NULL != config->userPipeIsrHandler);
     /* Parameters checking end */
 
 
-    /* Receiver endpoint = EP0, Sender endpoint = EP1 */
+   /* Receiver endpoint = EP0, Sender endpoint = EP1 */
     epConfigDataA = config->ep0ConfigData;
     epConfigDataB = config->ep1ConfigData;
 
-    /* New Implementation which supports all devices */
+/* New Implementation which supports all devices */
 #if (CY_IPC_INSTANCES > 1)
     /* Configure CM33 interrupts */
-    if (epConfigDataA.ipcNotifierNumber < CY_IPC_IP0_INT)
+    if(epConfigDataA.ipcNotifierNumber < CY_IPC_IP0_INT)
     {
-        ipc_intr_cypipeConfig.intrSrc          = (IRQn_Type)((int32_t)cpuss_interrupts_ipc_0_IRQn +
-            (int32_t)epConfigDataA.ipcNotifierNumber);
+        ipc_intr_cypipeConfig.intrSrc          = (IRQn_Type) ((int32_t)cpuss_interrupts_ipc_0_IRQn +
+                                                 (int32_t)epConfigDataA.ipcNotifierNumber);
         ipc_intr_cypipeConfig.intrPriority     = epConfigDataA.ipcNotifierPriority;
     }
 #if !(CY_CPU_CORTEX_M0P)
-    else if (epConfigDataA.ipcNotifierNumber >= CY_IPC_IP0_INT)
+    else if(epConfigDataA.ipcNotifierNumber >= CY_IPC_IP0_INT)
     {
-        ipc_intr_cypipeConfig.intrSrc          = (IRQn_Type)((int32_t)cpuss_interrupts_ipc_1_IRQn +
-            (int32_t)(epConfigDataA.ipcNotifierNumber - CY_IPC_IP0_INT));
-        ipc_intr_cypipeConfig.intrPriority     = epConfigDataA.ipcNotifierPriority;
+         ipc_intr_cypipeConfig.intrSrc          = (IRQn_Type) ((int32_t)cpuss_interrupts_ipc_1_IRQn +
+                                                  (int32_t)(epConfigDataA.ipcNotifierNumber - CY_IPC_IP0_INT));
+         ipc_intr_cypipeConfig.intrPriority     = epConfigDataA.ipcNotifierPriority;
     }
 #endif /* !(CY_CPU_CORTEX_M0P) */
     else
@@ -150,10 +150,10 @@ void Cy_IPC_Pipe_Init(cy_stc_ipc_pipe_config_t const *config)
 #if (CY_IPC_INSTANCES > 1U)
     /* Initialize the pipe endpoints */
     Cy_IPC_Pipe_EndpointInitExt(epConfigDataA.epAddress,
-                                config->endpointsCallbacksArray,
-                                config->endpointClientsCount,
-                                &(epConfigDataA.epConfig),
-                                &ipc_intr_cypipeConfig);
+                             config->endpointsCallbacksArray,
+                             config->endpointClientsCount,
+                             &(epConfigDataA.epConfig),
+                             &ipc_intr_cypipeConfig);
 
     /* Create the endpoints for the CM4 just for reference */
     Cy_IPC_Pipe_EndpointInitExt(epConfigDataB.epAddress, NULL, 0UL, &(epConfigDataB.epConfig), NULL);
@@ -173,12 +173,12 @@ void Cy_IPC_Pipe_Init(cy_stc_ipc_pipe_config_t const *config)
 
     /* Enable the interrupts */
 #if defined (CY_IP_M7CPUSS) || (defined (CY_IP_M4CPUSS) && (CY_IP_M4CPUSS_VERSION == 2) && (CPUSS_SYSTEM_IRQ_PRESENT))
-    {
-        IRQn_Type IRQn = (IRQn_Type)(((uint32_t)ipc_intr_cypipeConfig.intrSrc >> CY_SYSINT_INTRSRC_MUXIRQ_SHIFT)
-                                     & CY_SYSINT_INTRSRC_MASK); /* Fetch bit 12-31 to get CPU IRQ value */
-        NVIC_EnableIRQ(IRQn);
-        NVIC_SetPriority(IRQn, ipc_intr_cypipeConfig.intrPriority);
-    }
+{
+    IRQn_Type IRQn = (IRQn_Type)(((uint32_t)ipc_intr_cypipeConfig.intrSrc >> CY_SYSINT_INTRSRC_MUXIRQ_SHIFT)
+                                      & CY_SYSINT_INTRSRC_MASK); /* Fetch bit 12-31 to get CPU IRQ value */
+    NVIC_EnableIRQ(IRQn);
+    NVIC_SetPriority(IRQn, ipc_intr_cypipeConfig.intrPriority);
+}
 #else
     NVIC_EnableIRQ(ipc_intr_cypipeConfig.intrSrc);
 #endif /* defined (CY_IP_M7CPUSS) */
@@ -231,7 +231,7 @@ void Cy_IPC_Pipe_Init(cy_stc_ipc_pipe_config_t const *config)
 void Cy_IPC_Pipe_EndpointInit(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr_t cbArray,
                               uint32_t cbCnt, uint32_t epConfig, cy_stc_sysint_t const *epInterrupt)
 {
-    cy_stc_ipc_pipe_ep_t *endpoint;
+    cy_stc_ipc_pipe_ep_t * endpoint;
 
     CY_ASSERT_L1(NULL != cy_ipc_pipe_epArray);
 
@@ -243,7 +243,7 @@ void Cy_IPC_Pipe_EndpointInit(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr_t 
     endpoint->pipeIntMask     = _FLD2VAL(CY_IPC_PIPE_CFG_IMASK, epConfig);
 
     /* Assign IPC channel to this endpoint */
-    endpoint->ipcPtr   = Cy_IPC_Drv_GetIpcBaseAddress(endpoint->ipcChan);
+    endpoint->ipcPtr   = Cy_IPC_Drv_GetIpcBaseAddress (endpoint->ipcChan);
 
     /* Assign interrupt structure to endpoint and Initialize the interrupt mask for this endpoint */
     endpoint->ipcIntrPtr = Cy_IPC_Drv_GetIntrBaseAddr(endpoint->intrChan);
@@ -258,11 +258,11 @@ void Cy_IPC_Pipe_EndpointInit(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr_t 
 
     if (NULL != epInterrupt)
     {
-#if defined (CY_IP_M7CPUSS) || (defined (CY_IP_M4CPUSS) && (CY_IP_M4CPUSS_VERSION == 2) && (CPUSS_SYSTEM_IRQ_PRESENT))
-        endpoint->pipeIntrSrc     = (IRQn_Type)(((uint32_t)epInterrupt->intrSrc >> CY_SYSINT_INTRSRC_MUXIRQ_SHIFT) & CY_SYSINT_INTRSRC_MASK);
-#else
-        endpoint->pipeIntrSrc     = epInterrupt->intrSrc;
-#endif
+        #if defined (CY_IP_M7CPUSS) || (defined (CY_IP_M4CPUSS) && (CY_IP_M4CPUSS_VERSION == 2) && (CPUSS_SYSTEM_IRQ_PRESENT))
+            endpoint->pipeIntrSrc     = (IRQn_Type)(((uint32_t)epInterrupt->intrSrc >> CY_SYSINT_INTRSRC_MUXIRQ_SHIFT) & CY_SYSINT_INTRSRC_MASK);
+        #else
+            endpoint->pipeIntrSrc     = epInterrupt->intrSrc;
+        #endif
     }
 }
 
@@ -308,24 +308,24 @@ void Cy_IPC_Pipe_EndpointInit(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr_t 
 *
 *******************************************************************************/
 void Cy_IPC_Pipe_EndpointInitExt(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr_t cbArray,
-                                 uint32_t cbCnt, cy_stc_ipc_pipe_ep_config_mask_t *epConfig, cy_stc_sysint_t const *epInterrupt)
+                              uint32_t cbCnt, cy_stc_ipc_pipe_ep_config_mask_t *epConfig, cy_stc_sysint_t const *epInterrupt)
 {
-    cy_stc_ipc_pipe_ep_t *endpoint;
+    cy_stc_ipc_pipe_ep_t * endpoint;
 
     CY_ASSERT_L1(NULL != cy_ipc_pipe_epArray);
 
     endpoint = &cy_ipc_pipe_epArray[epAddr];
 
     /* Parameters checking begin */
-    CY_ASSERT_L2(CY_IPC_PIPE_IS_CHANNEL_INTR_COMBINATION_VALID(epConfig ->epChannel, epConfig ->epIntr));
+    CY_ASSERT_L2(CY_IPC_PIPE_IS_CHANNEL_INTR_COMBINATION_VALID(epConfig ->epChannel,epConfig ->epIntr));
 
     /* Extract the channel, interrupt and interrupt mask */
     endpoint->ipcChan         = epConfig ->epChannel;
     endpoint->intrChan        = epConfig ->epIntr;
-    endpoint->pipeIntMask     = CY_IPC_PIPE_COMPUTE_INTR_MASK(epConfig ->epChannel, epConfig ->epIntrmask);
+    endpoint->pipeIntMask     = CY_IPC_PIPE_COMPUTE_INTR_MASK(epConfig ->epChannel,epConfig ->epIntrmask);
 
     /* Assign IPC channel to this endpoint */
-    endpoint->ipcPtr   = Cy_IPC_Drv_GetIpcBaseAddress(endpoint->ipcChan);
+    endpoint->ipcPtr   = Cy_IPC_Drv_GetIpcBaseAddress (endpoint->ipcChan);
 
     /* Assign interrupt structure to endpoint and Initialize the interrupt mask for this endpoint */
     endpoint->ipcIntrPtr = Cy_IPC_Drv_GetIntrBaseAddr(endpoint->intrChan);
@@ -340,11 +340,11 @@ void Cy_IPC_Pipe_EndpointInitExt(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr
 
     if (NULL != epInterrupt)
     {
-#if defined (CY_IP_M7CPUSS) || (defined (CY_IP_M4CPUSS) && (CY_IP_M4CPUSS_VERSION == 2) && (CPUSS_SYSTEM_IRQ_PRESENT))
-        endpoint->pipeIntrSrc     = (IRQn_Type)(((uint32_t)epInterrupt->intrSrc >> CY_SYSINT_INTRSRC_MUXIRQ_SHIFT) & CY_SYSINT_INTRSRC_MASK);
-#else
-        endpoint->pipeIntrSrc     = epInterrupt->intrSrc;
-#endif
+        #if defined (CY_IP_M7CPUSS) || (defined (CY_IP_M4CPUSS) && (CY_IP_M4CPUSS_VERSION == 2) && (CPUSS_SYSTEM_IRQ_PRESENT))
+            endpoint->pipeIntrSrc     = (IRQn_Type)(((uint32_t)epInterrupt->intrSrc >> CY_SYSINT_INTRSRC_MUXIRQ_SHIFT) & CY_SYSINT_INTRSRC_MASK);
+        #else
+            endpoint->pipeIntrSrc     = epInterrupt->intrSrc;
+        #endif
     }
 }
 #endif /* CY_IPC_INSTANCES */
@@ -387,14 +387,14 @@ void Cy_IPC_Pipe_EndpointInitExt(uint32_t epAddr, cy_ipc_pipe_callback_array_ptr
 *
 *******************************************************************************/
 cy_en_ipc_pipe_status_t Cy_IPC_Pipe_SendMessage(uint32_t toAddr, uint32_t fromAddr,
-        void *msgPtr, cy_ipc_pipe_relcallback_ptr_t callBackPtr)
+                                                void * msgPtr, cy_ipc_pipe_relcallback_ptr_t callBackPtr)
 {
     cy_en_ipc_pipe_status_t  returnStatus;
     uint32_t releaseMask;
     uint32_t notifyMask;
 
-    cy_stc_ipc_pipe_ep_t *fromEp;
-    cy_stc_ipc_pipe_ep_t *toEp;
+    cy_stc_ipc_pipe_ep_t * fromEp;
+    cy_stc_ipc_pipe_ep_t * toEp;
 
     CY_ASSERT_L1(NULL != msgPtr);
     CY_ASSERT_L1(NULL != cy_ipc_pipe_epArray);
@@ -403,32 +403,32 @@ cy_en_ipc_pipe_status_t Cy_IPC_Pipe_SendMessage(uint32_t toAddr, uint32_t fromAd
     fromEp = &cy_ipc_pipe_epArray[fromAddr];
 
     /* Create the release mask for the "fromAddr" channel's interrupt channel */
-    releaseMask = (uint32_t)(1UL << CY_IPC_PIPE_INTR_NUMBER_WITHIN_INSTANCE(fromEp->intrChan));
+    releaseMask =  (uint32_t)(1UL << CY_IPC_PIPE_INTR_NUMBER_WITHIN_INSTANCE(fromEp->intrChan));
 
     /* Shift into position */
     releaseMask = _VAL2FLD(CY_IPC_PIPE_MSG_RELEASE, releaseMask);
 
     /* Create the notify mask for the "toAddr" channel's interrupt channel */
-    notifyMask  = (uint32_t)(1UL << CY_IPC_PIPE_INTR_NUMBER_WITHIN_INSTANCE(toEp->intrChan));
+    notifyMask  =  (uint32_t)(1UL << CY_IPC_PIPE_INTR_NUMBER_WITHIN_INSTANCE(toEp->intrChan));
 
     /* Check if IPC channel valid */
-    if (toEp->ipcPtr != NULL)
+    if( toEp->ipcPtr != NULL)
     {
-        if (fromEp->busy == CY_IPC_PIPE_ENDPOINT_NOTBUSY)
+        if(fromEp->busy == CY_IPC_PIPE_ENDPOINT_NOTBUSY)
         {
             /* Attempt to acquire the channel */
-            if (CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire(toEp->ipcPtr))
+            if( CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire(toEp->ipcPtr) )
             {
                 /* Mask out the release mask area */
                 * (uint32_t *) msgPtr &= ~(CY_IPC_PIPE_MSG_RELEASE_Msk);
 
                 * (uint32_t *) msgPtr |= releaseMask;
 
-#if (defined (CY_CPU_CORTEX_M7) && (CY_CPU_CORTEX_M7)) && (defined (CY_IP_M7CPUSS))
-                /* Flush the cache */
-                CY_MISRA_DEVIATE_LINE('SIZEOF_MISMATCH', 'SizeOf void pointer is passed.');
-                SCB_CleanDCache_by_Addr((uint32_t *)msgPtr, (int32_t)sizeof(msgPtr));
-#endif
+                #if CY_IPC_DRV_CACHE_PRESENT
+                    /* Flush the cache */
+                    CY_MISRA_DEVIATE_LINE('SIZEOF_MISMATCH','SizeOf void pointer is passed.');
+                    SCB_CleanDCache_by_Addr((uint32_t *)msgPtr,(int32_t)sizeof(msgPtr));
+                #endif
 
                 /* If the channel was acquired, write the message.   */
                 Cy_IPC_Drv_WriteDataValue(toEp->ipcPtr, (uint32_t) msgPtr);
@@ -497,7 +497,7 @@ cy_en_ipc_pipe_status_t Cy_IPC_Pipe_SendMessage(uint32_t toAddr, uint32_t fromAd
 cy_en_ipc_pipe_status_t Cy_IPC_Pipe_RegisterCallback(uint32_t epAddr, cy_ipc_pipe_callback_ptr_t callBackPtr,  uint32_t clientId)
 {
     cy_en_ipc_pipe_status_t returnStatus;
-    cy_stc_ipc_pipe_ep_t *thisEp;
+    cy_stc_ipc_pipe_ep_t * thisEp;
 
     CY_ASSERT_L1(NULL != cy_ipc_pipe_epArray);
 
@@ -547,7 +547,7 @@ cy_en_ipc_pipe_status_t Cy_IPC_Pipe_RegisterCallback(uint32_t epAddr, cy_ipc_pip
 *******************************************************************************/
 void Cy_IPC_Pipe_RegisterCallbackRel(uint32_t epAddr, cy_ipc_pipe_relcallback_ptr_t callBackPtr)
 {
-    cy_stc_ipc_pipe_ep_t *endpoint;
+    cy_stc_ipc_pipe_ep_t * endpoint;
 
     CY_ASSERT_L1(NULL != cy_ipc_pipe_epArray);
 
@@ -580,7 +580,7 @@ void Cy_IPC_Pipe_RegisterCallbackRel(uint32_t epAddr, cy_ipc_pipe_relcallback_pt
 *******************************************************************************/
 void Cy_IPC_Pipe_ExecuteCallback(uint32_t epAddr)
 {
-    cy_stc_ipc_pipe_ep_t *endpoint;
+    cy_stc_ipc_pipe_ep_t * endpoint;
 
     CY_ASSERT_L1(NULL != cy_ipc_pipe_epArray);
 
@@ -629,19 +629,19 @@ void Cy_IPC_Pipe_ExecCallback(cy_stc_ipc_pipe_ep_t * endpoint)
         /* Clear the notify interrupt.  */
         Cy_IPC_Drv_ClearInterrupt(endpoint->ipcIntrPtr, CY_IPC_NO_NOTIFICATION, Cy_IPC_Drv_ExtractAcquireMask(shadowIntr));
 
-        if (Cy_IPC_Drv_IsLockAcquired(endpoint->ipcPtr))
+        if ( Cy_IPC_Drv_IsLockAcquired (endpoint->ipcPtr) )
         {
             /* Extract Client ID  */
-            if (CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_ReadMsgPtr(endpoint->ipcPtr, (void **)&msgTempPtr))
+            if( CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_ReadMsgPtr (endpoint->ipcPtr, (void **)&msgTempPtr))
             {
                 msgPtr = (uint32_t *)GET_ALIAS_ADDRESS(msgTempPtr);
-#if (defined (CY_CPU_CORTEX_M7) && CY_CPU_CORTEX_M7) && (defined (CY_IP_M7CPUSS))
-                SCB_InvalidateDCache_by_Addr(msgPtr, (int32_t)sizeof(*msgPtr));
-#endif
+                #if CY_IPC_DRV_CACHE_PRESENT
+                    SCB_InvalidateDCache_by_Addr(msgPtr, (int32_t)sizeof(*msgPtr));
+                #endif
 
                 /* Get release mask */
                 releaseMask = _FLD2VAL(CY_IPC_PIPE_MSG_RELEASE, *msgPtr);
-                clientID    = _FLD2VAL(CY_IPC_PIPE_MSG_CLIENT, *msgPtr);
+                clientID    = _FLD2VAL(CY_IPC_PIPE_MSG_CLIENT,  *msgPtr);
 
                 /* Make sure client ID is within valid range */
                 if (endpoint->clientCount > clientID)
@@ -656,7 +656,7 @@ void Cy_IPC_Pipe_ExecCallback(cy_stc_ipc_pipe_ep_t * endpoint)
             }
 
             /* Must always release the IPC channel */
-            (void)Cy_IPC_Drv_LockRelease(endpoint->ipcPtr, releaseMask);
+            (void)Cy_IPC_Drv_LockRelease (endpoint->ipcPtr, releaseMask);
         }
     }
 
@@ -708,7 +708,7 @@ void Cy_IPC_Pipe_ExecCallback(cy_stc_ipc_pipe_ep_t * endpoint)
 *******************************************************************************/
 cy_en_ipc_pipe_status_t Cy_IPC_Pipe_EndpointPause(uint32_t epAddr)
 {
-    cy_stc_ipc_pipe_ep_t *endpoint;
+    cy_stc_ipc_pipe_ep_t * endpoint;
 
     CY_ASSERT_L1(NULL != cy_ipc_pipe_epArray);
 
@@ -740,7 +740,7 @@ cy_en_ipc_pipe_status_t Cy_IPC_Pipe_EndpointPause(uint32_t epAddr)
 *******************************************************************************/
 cy_en_ipc_pipe_status_t Cy_IPC_Pipe_EndpointResume(uint32_t epAddr)
 {
-    cy_stc_ipc_pipe_ep_t *endpoint;
+    cy_stc_ipc_pipe_ep_t * endpoint;
 
     CY_ASSERT_L1(NULL != cy_ipc_pipe_epArray);
 

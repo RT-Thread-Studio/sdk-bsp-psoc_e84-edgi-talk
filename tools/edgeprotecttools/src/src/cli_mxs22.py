@@ -22,7 +22,6 @@ import click
 
 from .core.connect_helper import ConnectHelper
 from .cli import main, process_handler
-from .targets.common.mxs22 import CertificateStrategyMXS22
 
 logger = logging.getLogger(__name__)
 
@@ -123,52 +122,41 @@ def get_output_nargs():
     return 2
 
 
-@main.command('create-cert', hidden=True,
-              help='Creates certificate from template')
-@click.option('--template', type=click.Path(), required=True,
-              help='CSR or Certificate template path')
+@main.command('integrity-cert', hidden=True,
+              help='Creates integrity certificate')
 @click.option('-o', '--output', type=click.Path(), required=True,
-              help='The path where to save the CSR or Certificate')
-@click.option('--json-cert', type=click.Path(),
-              help='The path where to save CSR or certificate JSON data')
-@click.option('--csr', type=click.Path(), help='The CSR path')
+              help='The certificate path')
+@click.option('-t', '--template', type=click.Path(), required=True,
+              help='The path to device integrity template')
 @click.option('--key', '--key-path', 'key', type=click.Path(),
               help='The key to sign the certificate')
-@click.option('--sign-key-0', type=click.Path(),
-              help='Primary key used to sign the CSR')
-@click.option('--sign-key-1', type=click.Path(),
-              help='Secondary key used to sign the CSR')
+@click.option('--algorithm', type=click.Choice(
+              ['ES256', 'ES384', 'RS256', 'RS384'],
+              case_sensitive=False),
+              help='The signature algorithm')
+@click.option('--cert', type=click.Path(),
+              help='The path to device integrity exam certificate')
 @click.pass_context
-def cmd_create_cert(
-        ctx, template, output, json_cert, csr, key, sign_key_0, sign_key_1):
-    """Creates certificate"""
+def cmd_integrity_cert(ctx, output, template, key, algorithm, cert):
+    """Creates Integrity certificate"""
     @process_handler()
     def process():
-        validate_args()
+        validate()
         if 'TOOL' not in ctx.obj:
             return False
-        key_path = key if key else (sign_key_0, sign_key_1)
-        result = ctx.obj['TOOL'].create_cert(output, template=template,
-                                             key_path=key_path, csr=csr,
-                                             json_cert=json_cert)
+
+        result = ctx.obj['TOOL'].integrity_cert(
+            output, template=template, key=key, algorithm=algorithm, cert=cert)
         return result
 
-    def validate_args():
-        if key and (sign_key_0 or sign_key_1):
-            sys.stderr.write("Error: The '--key' and '--sign-key-0/"
-                             "--sign-key-1' options are mutually exclusive.\n")
+    def validate():
+        if key and algorithm:
+            sys.stderr.write("Error: The '--key' and '--algorithm' options "
+                             "are mutually exclusive.\n")
             sys.exit(2)
-
-        if sign_key_1 and not sign_key_0:
-            sys.stderr.write("Error: Missing option '--sign-key-0'.\n")
-            sys.exit(2)
-
-        cert_data = CertificateStrategyMXS22.load_cert_template(template)
-        if cert_data.get('TEMPLATE_TYPE') == 'OEM_CSR' and key:
-            sys.stderr.write("Error: The '--key' option is not applicable for "
-                             "OEM CSR. Use '--sign-key-0' and '--sign-key-1' "
-                             "options.\n")
-            sys.exit(2)
+        if cert and (key or algorithm):
+            logger.warning("When using the '--cert' option, the '--key' and "
+                           "'--algorithm' options are ignored")
 
     return process
 
@@ -490,13 +478,15 @@ def cmd_transit_to_rma(
 @click.option('--key', '--key-path', 'key', type=click.Path(), required=True,
               help='Private key path to sign message')
 @click.option('--kid', help='Key ID')
+@click.option('--add-size/--no-add-size', default=True)
 @click.pass_context
-def multi_image_cbor(ctx, output, input_path, key, template, kid):
+def multi_image_cbor(ctx, output, input_path, key, template, kid, add_size):
     """Creates a multiple images COSE packet"""
     @process_handler()
     def process():
         return ctx.obj['TOOL'].multi_image_cose(
-            input_path, output, key, template=template, kid=kid)
+            input_path, output, key,
+            template=template, kid=kid, add_size=add_size)
 
     return process
 
@@ -516,15 +506,17 @@ def multi_image_cbor(ctx, output, input_path, key, template, kid):
 @click.option('--signature', type=click.Path(),
               help='Signature path to add to the message')
 @click.option('--kid', help='Key ID')
+@click.option('--add-size/--no-add-size', default=True)
 @click.pass_context
 def multi_image_cbor_hsm(ctx, output, input_path, template, algorithm,
-                         signature, kid):
+                         signature, kid, add_size):
     """Creates a multiple images COSE packet for signing with HSM or
     adds the signature to packet"""
     @process_handler()
     def process():
         return ctx.obj['TOOL'].multi_image_cose(
             input_path, output, None, template=template,
-            algorithm=algorithm, signature=signature, kid=kid)
+            algorithm=algorithm, signature=signature, kid=kid,
+            add_size=add_size)
 
     return process

@@ -56,7 +56,7 @@
                 "set mem inaccessible-by-default off",
                 "-enable-pretty-printing",
                 "set remotetimeout 90",
-                // Comment this next lines out if you don't want to reload program
+                // Comment out this line to disable program reload
                 "monitor flash write_image erase {&&_MTB_RECIPE__HEX_FILE_APPLICATION&&}",
                 "monitor reset init",
                 "monitor reset_halt &&_MTB_RECIPE__OPENOCD_RESET_TARGET&&"
@@ -85,7 +85,7 @@
                 "launches": [                               // Array of launches. Order is respected
                     {
                         "name": "Add CM55 to CM33 PSOCE84 (KitProg3_MiniProg4)",     // Name of another configuration
-                        "folder": "./&&_MTB_RECIPE__SECOND_APP_NAME&&",
+                        "folder": "./&&_MTB_RECIPE__CM55_PRJ_DIR&&",
                         "overrides": {
                             "postStartSessionCommands": [
                                 "tb main",

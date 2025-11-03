@@ -29,7 +29,7 @@
 #include "dsp/statistics_functions.h"
 
 #if (defined(ARM_MATH_NEON) || defined(ARM_MATH_MVEF)) && !defined(ARM_MATH_AUTOVECTORIZE)
-    #include <limits.h>
+#include <limits.h>
 #endif
 
 
@@ -56,16 +56,15 @@
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    minimum value returned here
   @param[out]    pIndex     index of minimum value returned here
-  @return        none
  */
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_min_f32(
-    const float32_t *pSrc,
-    uint32_t blockSize,
-    float32_t *pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_min_f32(
+  const float32_t * pSrc,
+  uint32_t blockSize,
+  float32_t * pResult,
+  uint32_t * pIndex)
 {
     uint32_t  blkCnt;           /* loop counters */
     f32x4_t vecSrc;
@@ -86,7 +85,7 @@ void arm_min_f32(
     blkCnt = blockSize >> 2U;
     while (blkCnt > 0U)
     {
-        vecSrc = vldrwq_f32(pSrcVec);
+        vecSrc = vldrwq_f32(pSrcVec);  
         pSrcVec += 4;
         /*
          * Get current max per lane and current index per lane
@@ -102,7 +101,7 @@ void arm_min_f32(
          */
         blkCnt--;
     }
-
+    
     /*
      * Get min value across the vector
      */
@@ -124,17 +123,17 @@ void arm_min_f32(
 
     while (blkCnt > 0U)
     {
-        /* Initialize minVal to the next consecutive values one by one */
-        tmp = *pSrc++;
-
-        /* compare for the minimum value */
-        if (minValue > tmp)
-        {
-            /* Update the minimum value and it's index */
-            minValue = tmp;
-            idx = blockSize - blkCnt;
-        }
-        blkCnt--;
+      /* Initialize minVal to the next consecutive values one by one */
+      tmp = *pSrc++;
+  
+      /* compare for the minimum value */
+      if (minValue > tmp)
+      {
+        /* Update the minimum value and it's index */
+        minValue = tmp;
+        idx = blockSize - blkCnt;
+      }
+      blkCnt--;
     }
     /*
      * Save result
@@ -145,215 +144,215 @@ void arm_min_f32(
 
 #else
 #if defined(ARM_MATH_NEON) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_min_f32(
-    const float32_t *pSrc,
-    uint32_t blockSize,
-    float32_t *pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_min_f32(
+  const float32_t * pSrc,
+  uint32_t blockSize,
+  float32_t * pResult,
+  uint32_t * pIndex)
 {
-    float32_t maxVal1, out;               /* Temporary variables to store the output value. */
-    uint32_t blkCnt, outIndex;              /* loop counter */
+  float32_t maxVal1, out;               /* Temporary variables to store the output value. */
+  uint32_t blkCnt, outIndex;              /* loop counter */
 
-    float32x4_t outV, srcV;
-    float32x2_t outV2;
+  float32x4_t outV, srcV;
+  float32x2_t outV2;
 
-    uint32x4_t idxV;
-    static const uint32_t indexInit[4] = {4, 5, 6, 7};
-    static const uint32_t countVInit[4] = {0, 1, 2, 3};
-    uint32x4_t maxIdx;
-    uint32x4_t index;
-    uint32x4_t delta;
-    uint32x4_t countV;
-    uint32x2_t countV2;
+  uint32x4_t idxV;
+  static const uint32_t indexInit[4]={4,5,6,7};
+  static const uint32_t countVInit[4]={0,1,2,3};
+  uint32x4_t maxIdx;
+  uint32x4_t index;
+  uint32x4_t delta;
+  uint32x4_t countV;
+  uint32x2_t countV2;
 
-    maxIdx = vdupq_n_u32(UINT_MAX);
-    delta = vdupq_n_u32(4);
-    index = vld1q_u32(indexInit);
-    countV = vld1q_u32(countVInit);
+  maxIdx = vdupq_n_u32(UINT_MAX);
+  delta = vdupq_n_u32(4);
+  index = vld1q_u32(indexInit);
+  countV = vld1q_u32(countVInit);
 
-    /* Initialise the index value to zero. */
-    outIndex = 0U;
+  /* Initialise the index value to zero. */
+  outIndex = 0U;
 
-    /* Load first input value that act as reference value for comparison */
-    if (blockSize <= 3)
-    {
-        out = *pSrc++;
+  /* Load first input value that act as reference value for comparison */
+  if (blockSize <= 3)
+  {
+      out = *pSrc++;
 
-        blkCnt = blockSize - 1;
+      blkCnt = blockSize - 1;
 
-        while (blkCnt > 0U)
+      while (blkCnt > 0U)
+      {
+        /* Initialize maxVal to the next consecutive values one by one */
+        maxVal1 = *pSrc++;
+    
+        /* compare for the maximum value */
+        if (out > maxVal1)
         {
-            /* Initialize maxVal to the next consecutive values one by one */
-            maxVal1 = *pSrc++;
-
-            /* compare for the maximum value */
-            if (out > maxVal1)
-            {
-                /* Update the maximum value and it's index */
-                out = maxVal1;
-                outIndex = blockSize - blkCnt;
-            }
-
-            /* Decrement the loop counter */
-            blkCnt--;
+          /* Update the maximum value and it's index */
+          out = maxVal1;
+          outIndex = blockSize - blkCnt;
         }
-    }
-    else
-    {
-        outV = vld1q_f32(pSrc);
+    
+        /* Decrement the loop counter */
+        blkCnt--;
+      }
+  }
+  else
+  {
+      outV = vld1q_f32(pSrc);
+      pSrc += 4;
+    
+      /* Compute 4 outputs at a time */
+      blkCnt = (blockSize - 4 ) >> 2U;
+    
+      while (blkCnt > 0U)
+      {
+        srcV = vld1q_f32(pSrc);
         pSrc += 4;
-
-        /* Compute 4 outputs at a time */
-        blkCnt = (blockSize - 4) >> 2U;
-
-        while (blkCnt > 0U)
+    
+        idxV = vcltq_f32(srcV, outV);
+        outV = vbslq_f32(idxV, srcV, outV );
+        countV = vbslq_u32(idxV, index,countV );
+    
+        index = vaddq_u32(index,delta);
+    
+        /* Decrement the loop counter */
+        blkCnt--;
+      }
+    
+      outV2 = vpmin_f32(vget_low_f32(outV),vget_high_f32(outV));
+      outV2 = vpmin_f32(outV2,outV2);
+      out = vget_lane_f32(outV2,0); 
+    
+      idxV = vceqq_f32(outV, vdupq_n_f32(out));
+      countV = vbslq_u32(idxV, countV,maxIdx);
+      
+      countV2 = vpmin_u32(vget_low_u32(countV),vget_high_u32(countV));
+      countV2 = vpmin_u32(countV2,countV2);
+      outIndex = vget_lane_u32(countV2,0); 
+    
+      /* if (blockSize - 1U) is not multiple of 4 */
+      blkCnt = (blockSize - 4 ) % 4U;
+    
+      while (blkCnt > 0U)
+      {
+        /* Initialize maxVal to the next consecutive values one by one */
+        maxVal1 = *pSrc++;
+    
+        /* compare for the maximum value */
+        if (out > maxVal1)
         {
-            srcV = vld1q_f32(pSrc);
-            pSrc += 4;
-
-            idxV = vcltq_f32(srcV, outV);
-            outV = vbslq_f32(idxV, srcV, outV);
-            countV = vbslq_u32(idxV, index, countV);
-
-            index = vaddq_u32(index, delta);
-
-            /* Decrement the loop counter */
-            blkCnt--;
+          /* Update the maximum value and it's index */
+          out = maxVal1;
+          outIndex = blockSize - blkCnt ;
         }
+    
+        /* Decrement the loop counter */
+        blkCnt--;
+      }
+  }
 
-        outV2 = vpmin_f32(vget_low_f32(outV), vget_high_f32(outV));
-        outV2 = vpmin_f32(outV2, outV2);
-        out = vget_lane_f32(outV2, 0);
-
-        idxV = vceqq_f32(outV, vdupq_n_f32(out));
-        countV = vbslq_u32(idxV, countV, maxIdx);
-
-        countV2 = vpmin_u32(vget_low_u32(countV), vget_high_u32(countV));
-        countV2 = vpmin_u32(countV2, countV2);
-        outIndex = vget_lane_u32(countV2, 0);
-
-        /* if (blockSize - 1U) is not multiple of 4 */
-        blkCnt = (blockSize - 4) % 4U;
-
-        while (blkCnt > 0U)
-        {
-            /* Initialize maxVal to the next consecutive values one by one */
-            maxVal1 = *pSrc++;
-
-            /* compare for the maximum value */
-            if (out > maxVal1)
-            {
-                /* Update the maximum value and it's index */
-                out = maxVal1;
-                outIndex = blockSize - blkCnt ;
-            }
-
-            /* Decrement the loop counter */
-            blkCnt--;
-        }
-    }
-
-    /* Store the maximum value and it's index into destination pointers */
-    *pResult = out;
-    *pIndex = outIndex;
+  /* Store the maximum value and it's index into destination pointers */
+  *pResult = out;
+  *pIndex = outIndex;
 }
 #else
-void arm_min_f32(
-    const float32_t *pSrc,
-    uint32_t blockSize,
-    float32_t *pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_min_f32(
+  const float32_t * pSrc,
+        uint32_t blockSize,
+        float32_t * pResult,
+        uint32_t * pIndex)
 {
-    float32_t minVal, out;                         /* Temporary variables to store the output value. */
-    uint32_t blkCnt, outIndex;                     /* Loop counter */
+        float32_t minVal, out;                         /* Temporary variables to store the output value. */
+        uint32_t blkCnt, outIndex;                     /* Loop counter */
 
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
-    uint32_t index;                                /* index of maximum value */
+        uint32_t index;                                /* index of maximum value */
 #endif
 
-    /* Initialise index value to zero. */
-    outIndex = 0U;
+  /* Initialise index value to zero. */
+  outIndex = 0U;
 
-    /* Load first input value that act as reference value for comparision */
-    out = *pSrc++;
+  /* Load first input value that act as reference value for comparision */
+  out = *pSrc++;
 
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
-    /* Initialise index of maximum value. */
-    index = 0U;
+  /* Initialise index of maximum value. */
+  index = 0U;
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = (blockSize - 1U) >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = (blockSize - 1U) >> 2U;
 
-    while (blkCnt > 0U)
+  while (blkCnt > 0U)
+  {
+    /* Initialize minVal to next consecutive values one by one */
+    minVal = *pSrc++;
+
+    /* compare for the minimum value */
+    if (out > minVal)
     {
-        /* Initialize minVal to next consecutive values one by one */
-        minVal = *pSrc++;
-
-        /* compare for the minimum value */
-        if (out > minVal)
-        {
-            /* Update the minimum value and it's index */
-            out = minVal;
-            outIndex = index + 1U;
-        }
-
-        minVal = *pSrc++;
-        if (out > minVal)
-        {
-            out = minVal;
-            outIndex = index + 2U;
-        }
-
-        minVal = *pSrc++;
-        if (out > minVal)
-        {
-            out = minVal;
-            outIndex = index + 3U;
-        }
-
-        minVal = *pSrc++;
-        if (out > minVal)
-        {
-            out = minVal;
-            outIndex = index + 4U;
-        }
-
-        index += 4U;
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* Update the minimum value and it's index */
+      out = minVal;
+      outIndex = index + 1U;
     }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = (blockSize - 1U) % 4U;
+    minVal = *pSrc++;
+    if (out > minVal)
+    {
+      out = minVal;
+      outIndex = index + 2U;
+    }
+
+    minVal = *pSrc++;
+    if (out > minVal)
+    {
+      out = minVal;
+      outIndex = index + 3U;
+    }
+
+    minVal = *pSrc++;
+    if (out > minVal)
+    {
+      out = minVal;
+      outIndex = index + 4U;
+    }
+
+    index += 4U;
+
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = (blockSize - 1U) % 4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = (blockSize - 1U);
+  /* Initialize blkCnt with number of samples */
+  blkCnt = (blockSize - 1U);
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
+  while (blkCnt > 0U)
+  {
+    /* Initialize minVal to the next consecutive values one by one */
+    minVal = *pSrc++;
+
+    /* compare for the minimum value */
+    if (out > minVal)
     {
-        /* Initialize minVal to the next consecutive values one by one */
-        minVal = *pSrc++;
-
-        /* compare for the minimum value */
-        if (out > minVal)
-        {
-            /* Update the minimum value and it's index */
-            out = minVal;
-            outIndex = blockSize - blkCnt;
-        }
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* Update the minimum value and it's index */
+      out = minVal;
+      outIndex = blockSize - blkCnt;
     }
 
-    /* Store the minimum value and it's index into destination pointers */
-    *pResult = out;
-    *pIndex = outIndex;
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+
+  /* Store the minimum value and it's index into destination pointers */
+  *pResult = out;
+  *pIndex = outIndex;
 }
 #endif /* #if defined(ARM_MATH_NEON) */
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

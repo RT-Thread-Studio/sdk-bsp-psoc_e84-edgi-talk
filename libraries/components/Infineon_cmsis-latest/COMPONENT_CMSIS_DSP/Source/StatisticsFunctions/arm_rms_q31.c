@@ -42,7 +42,6 @@
   @param[in]     pSrc       points to the input vector
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    root mean square value returned here
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function is implemented using an internal 64-bit accumulator.
@@ -58,81 +57,81 @@
  */
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_rms_q31(
-    const q31_t * pSrc,
-    uint32_t blockSize,
-    q31_t * pResult)
+ARM_DSP_ATTRIBUTE void arm_rms_q31(
+  const q31_t * pSrc,
+        uint32_t blockSize,
+        q31_t * pResult)
 {
     q63_t pow = 0.0f;
     q31_t normalizedPower;
     arm_power_q31(pSrc, blockSize, &pow);
 
-    normalizedPower = clip_q63_to_q31((pow / (q63_t) blockSize) >> 17);
+    normalizedPower=clip_q63_to_q31((pow / (q63_t) blockSize) >> 17);
     arm_sqrt_q31(normalizedPower, pResult);
 
 }
 
 #else
-void arm_rms_q31(
-    const q31_t * pSrc,
-    uint32_t blockSize,
-    q31_t * pResult)
+ARM_DSP_ATTRIBUTE void arm_rms_q31(
+  const q31_t * pSrc,
+        uint32_t blockSize,
+        q31_t * pResult)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    uint64_t sum = 0;                              /* Temporary result storage (can get never negative. changed type from q63 to uint64 */
-    q31_t in;                                      /* Temporary variable to store input value */
+        uint32_t blkCnt;                               /* Loop counter */
+        uint64_t sum = 0;                              /* Temporary result storage (can get never negative. changed type from q63 to uint64 */
+        q31_t in;                                      /* Temporary variable to store input value */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
+  while (blkCnt > 0U)
+  {
+    /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
 
-        in = *pSrc++;
-        /* Compute sum of squares and store result in a temporary variable, sum. */
-        sum += ((q63_t) in * in);
+    in = *pSrc++;
+    /* Compute sum of squares and store result in a temporary variable, sum. */
+    sum += ((q63_t) in * in);
 
-        in = *pSrc++;
-        sum += ((q63_t) in * in);
+    in = *pSrc++;
+    sum += ((q63_t) in * in);
 
-        in = *pSrc++;
-        sum += ((q63_t) in * in);
+    in = *pSrc++;
+    sum += ((q63_t) in * in);
 
-        in = *pSrc++;
-        sum += ((q63_t) in * in);
+    in = *pSrc++;
+    sum += ((q63_t) in * in);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
+  while (blkCnt > 0U)
+  {
+    /* C = A[0] * A[0] + A[1] * A[1] + ... + A[blockSize-1] * A[blockSize-1] */
 
-        in = *pSrc++;
-        /* Compute sum of squares and store result in a temporary variable. */
-        sum += ((q63_t) in * in);
+    in = *pSrc++;
+    /* Compute sum of squares and store result in a temporary variable. */
+    sum += ((q63_t) in * in);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Convert data in 2.62 to 1.31 by 31 right shifts and saturate */
-    /* Compute Rms and store result in destination vector */
-    arm_sqrt_q31(clip_q63_to_q31((sum / (q63_t) blockSize) >> 31), pResult);
+  /* Convert data in 2.62 to 1.31 by 31 right shifts and saturate */
+  /* Compute Rms and store result in destination vector */
+  arm_sqrt_q31(clip_q63_to_q31((sum / (q63_t) blockSize) >> 31), pResult);
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

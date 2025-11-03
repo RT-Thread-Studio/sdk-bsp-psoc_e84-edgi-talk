@@ -33,9 +33,7 @@
 #include <cy_syspm_ppu.h>
 #include "cy_syslib.h"
 #include "cy_syspm.h"
-#if defined(CY_USE_RPC_CALL) && (CY_USE_RPC_CALL == 1)
-    #include "cy_secure_services.h"
-#endif
+
 /**
 * \addtogroup group_syspm_ppu_functions
 * \{
@@ -80,41 +78,8 @@ cy_en_syspm_status_t cy_pd_ppu_init(struct ppu_v1_reg *ppu)
 enum ppu_v1_mode cy_pd_ppu_get_programmed_power_mode(struct ppu_v1_reg *ppu)
 {
     CY_ASSERT(ppu != NULL);
-#if (!defined(CY_USE_RPC_CALL) || (CY_USE_RPC_CALL == 0)) || !defined (CY_IP_MXS22SRSS) || (defined (COMPONENT_SECURE_DEVICE) && defined (CY_IP_MXS22SRSS))
     return ppu_v1_get_programmed_power_mode(ppu);
-#else
-    cy_rpc_service_args_t rpcInputArgs, rpcOutputArgs;
-    enum ppu_v1_mode mode = PPU_V1_MODE_OFF;
-    if ((ppu == (struct ppu_v1_reg *)SOCMEM_PPU_SOCMEM) || (ppu == (struct ppu_v1_reg *)U550_MXU55_PPU))
-    {
-        return ppu_v1_get_programmed_power_mode(ppu);
-    }
-    else
-    {
-        rpcInputArgs.argc = 3;
-        rpcInputArgs.argv[0] = (uint32_t)CY_SECURE_SERVICE_TYPE_PM;
-        rpcInputArgs.argv[1] = (uint32_t)CY_SECURE_SERVICE_PM_GET_PROGRAMMED_POWER_MODE;
-        rpcInputArgs.argv[2] = (uint32_t)ppu;
 
-        cy_rpc_invec_t in_vec[] =
-        {
-            { .base = &rpcInputArgs, .len = sizeof(rpcInputArgs) },
-        };
-        cy_rpc_outvec_t out_vec[] =
-        {
-            { .base = &rpcOutputArgs, .len = sizeof(rpcOutputArgs) },
-        };
-        rpcOutputArgs.argc = 0; /* updated in secure side */
-
-        Cy_SecureServices_RPC(in_vec, CY_RPC_IOVEC_LEN(in_vec), out_vec, CY_RPC_IOVEC_LEN(out_vec));
-        if (rpcOutputArgs.argc == 1)
-        {
-            mode = (enum ppu_v1_mode)rpcOutputArgs.argv[0];
-        }
-
-        return mode;
-    }
-#endif
 }
 
 
@@ -135,41 +100,9 @@ enum ppu_v1_mode cy_pd_ppu_get_programmed_power_mode(struct ppu_v1_reg *ppu)
 enum ppu_v1_mode cy_pd_ppu_get_power_mode(struct ppu_v1_reg *ppu)
 {
     CY_ASSERT(ppu != NULL);
-#if (!defined(CY_USE_RPC_CALL) || (CY_USE_RPC_CALL == 0)) || !defined (CY_IP_MXS22SRSS) || (defined (COMPONENT_SECURE_DEVICE) && defined (CY_IP_MXS22SRSS))
     return ppu_v1_get_power_mode(ppu);
-#else
-    enum ppu_v1_mode mode = PPU_V1_MODE_OFF;
-    cy_rpc_service_args_t rpcInputArgs, rpcOutputArgs;
 
-    if ((ppu == (struct ppu_v1_reg *)SOCMEM_PPU_SOCMEM) || (ppu == (struct ppu_v1_reg *)U550_MXU55_PPU))
-    {
-        return ppu_v1_get_power_mode(ppu);
-    }
-    else
-    {
-        rpcInputArgs.argc = 3;
-        rpcInputArgs.argv[0] = (uint32_t)CY_SECURE_SERVICE_TYPE_PM;
-        rpcInputArgs.argv[1] = (uint32_t)CY_SECURE_SERVICE_PM_GET_POWER_MODE;
-        rpcInputArgs.argv[2] = (uint32_t)ppu;
 
-        cy_rpc_invec_t in_vec[] =
-        {
-            { .base = &rpcInputArgs, .len = sizeof(rpcInputArgs) },
-        };
-        cy_rpc_outvec_t out_vec[] =
-        {
-            { .base = &rpcOutputArgs, .len = sizeof(rpcOutputArgs) },
-        };
-        rpcOutputArgs.argc = 0; /* updated in secure side */
-
-        Cy_SecureServices_RPC(in_vec, CY_RPC_IOVEC_LEN(in_vec), out_vec, CY_RPC_IOVEC_LEN(out_vec));
-        if (rpcOutputArgs.argc == 1)
-        {
-            mode = (enum ppu_v1_mode)rpcOutputArgs.argv[0];
-        }
-    }
-    return mode;
-#endif
 }
 
 /*******************************************************************************
@@ -191,7 +124,7 @@ enum ppu_v1_mode cy_pd_ppu_get_power_mode(struct ppu_v1_reg *ppu)
 
 cy_en_syspm_status_t cy_pd_ppu_set_power_mode(struct ppu_v1_reg *ppu, uint32_t mode)
 {
-#if (!defined(CY_USE_RPC_CALL) || (CY_USE_RPC_CALL == 0)) || !defined (CY_IP_MXS22SRSS) || (defined (COMPONENT_SECURE_DEVICE) && defined (CY_IP_MXS22SRSS))
+
     cy_en_syspm_status_t status = CY_SYSPM_INVALID_STATE;
     CY_ASSERT(ppu != NULL);
     CY_ASSERT(mode < PPU_V1_MODE_COUNT);
@@ -199,44 +132,7 @@ cy_en_syspm_status_t cy_pd_ppu_set_power_mode(struct ppu_v1_reg *ppu, uint32_t m
     (void)ppu_v1_dynamic_enable(ppu, (enum ppu_v1_mode) mode); /* Suppress a compiler warning about unused return value */
     status = CY_SYSPM_SUCCESS;
     return status;
-#else
-    cy_en_syspm_status_t status = CY_SYSPM_INVALID_STATE;
-    cy_rpc_service_args_t rpcInputArgs, rpcOutputArgs;
 
-    if ((ppu == (struct ppu_v1_reg *)SOCMEM_PPU_SOCMEM) || (ppu == (struct ppu_v1_reg *)U550_MXU55_PPU))
-    {
-        (void)ppu_v1_dynamic_enable(ppu, (enum ppu_v1_mode) mode); /* Suppress a compiler warning about unused return value */
-        status = CY_SYSPM_SUCCESS;
-    }
-    else
-    {
-
-        rpcInputArgs.argc = 4;
-        rpcInputArgs.argv[0] = (uint32_t)CY_SECURE_SERVICE_TYPE_PM;
-        rpcInputArgs.argv[1] = (uint32_t)CY_SECURE_SERVICE_PM_SET_POWER_MODE;
-        rpcInputArgs.argv[2] = (uint32_t)ppu;
-        rpcInputArgs.argv[3] = (uint32_t)mode;
-
-        cy_rpc_invec_t in_vec[] =
-        {
-            { .base = &rpcInputArgs, .len = sizeof(rpcInputArgs) },
-        };
-        cy_rpc_outvec_t out_vec[] =
-        {
-            { .base = &rpcOutputArgs, .len = sizeof(rpcOutputArgs) },
-        };
-        rpcOutputArgs.argc = 0; /* updated in secure side */
-
-        Cy_SecureServices_RPC(in_vec, CY_RPC_IOVEC_LEN(in_vec), out_vec, CY_RPC_IOVEC_LEN(out_vec));
-        if (rpcOutputArgs.argc == 1)
-        {
-            status = (cy_en_syspm_status_t)rpcOutputArgs.argv[0];
-        }
-
-    }
-    return status;
-
-#endif
 }
 
 /*******************************************************************************
@@ -258,8 +154,7 @@ cy_en_syspm_status_t cy_pd_ppu_set_power_mode(struct ppu_v1_reg *ppu, uint32_t m
 void cy_pd_ppu_enable_dynamic_mode(struct ppu_v1_reg *ppu, bool enable)
 {
     CY_ASSERT(ppu != NULL);
-#if (!defined(CY_USE_RPC_CALL) || (CY_USE_RPC_CALL == 0)) || !defined (CY_IP_MXS22SRSS) || (defined (COMPONENT_SECURE_DEVICE) && defined (CY_IP_MXS22SRSS))
-    if (enable)
+    if(enable)
     {
         ppu->PWPR |= PPU_V1_PWPR_DYNAMIC_EN;
     }
@@ -267,20 +162,6 @@ void cy_pd_ppu_enable_dynamic_mode(struct ppu_v1_reg *ppu, bool enable)
     {
         ppu->PWPR &= ~(PPU_V1_PWPR_DYNAMIC_EN);
     }
-#else
-    cy_rpc_service_args_t rpcInputArgs;
-    rpcInputArgs.argc = 4;
-    rpcInputArgs.argv[0] = (uint32_t)CY_SECURE_SERVICE_TYPE_PM;
-    rpcInputArgs.argv[1] = (uint32_t)CY_SECURE_SERVICE_PM_ENABLE_DYNAMIC_MODE;
-    rpcInputArgs.argv[2] = (uint32_t)ppu;
-    rpcInputArgs.argv[3] = (uint32_t)enable;
-    cy_rpc_invec_t in_vec[] =
-    {
-        { .base = &rpcInputArgs, .len = sizeof(rpcInputArgs) },
-    };
-    Cy_SecureServices_RPC(in_vec, CY_RPC_IOVEC_LEN(in_vec), NULL, 0);
-
-#endif
 }
 
 /*******************************************************************************
@@ -303,7 +184,6 @@ void cy_pd_ppu_enable_dynamic_mode(struct ppu_v1_reg *ppu, bool enable)
 cy_en_syspm_status_t cy_pd_ppu_set_static_power_mode(struct ppu_v1_reg *ppu, uint32_t mode)
 {
 
-#if (!defined(CY_USE_RPC_CALL) || (CY_USE_RPC_CALL == 0)) || !defined (CY_IP_MXS22SRSS) || (defined (COMPONENT_SECURE_DEVICE) && defined (CY_IP_MXS22SRSS))
     cy_en_syspm_status_t status = CY_SYSPM_INVALID_STATE;
     CY_ASSERT(ppu != NULL);
     CY_ASSERT(mode < PPU_V1_MODE_COUNT);
@@ -311,41 +191,7 @@ cy_en_syspm_status_t cy_pd_ppu_set_static_power_mode(struct ppu_v1_reg *ppu, uin
     (void)ppu_v1_set_power_mode(ppu, (enum ppu_v1_mode) mode); /* Suppress a compiler warning about unused return value */
     status = CY_SYSPM_SUCCESS;
     return status;
-#else
-    cy_en_syspm_status_t status = CY_SYSPM_INVALID_STATE;
-    cy_rpc_service_args_t rpcInputArgs, rpcOutputArgs;
-    if ((ppu == (struct ppu_v1_reg *)SOCMEM_PPU_SOCMEM) || (ppu == (struct ppu_v1_reg *)U550_MXU55_PPU))
-    {
-        (void)ppu_v1_set_power_mode(ppu, (enum ppu_v1_mode) mode); /* Suppress a compiler warning about unused return value */
-        status = CY_SYSPM_SUCCESS;
-    }
-    else
-    {
-        rpcInputArgs.argc = 4;
-        rpcInputArgs.argv[0] = (uint32_t)CY_SECURE_SERVICE_TYPE_PM;
-        rpcInputArgs.argv[1] = (uint32_t)CY_SECURE_SERVICE_PM_SET_STATIC_POWER_MODE;
-        rpcInputArgs.argv[2] = (uint32_t)ppu;
-        rpcInputArgs.argv[3] = (uint32_t)mode;
 
-        cy_rpc_invec_t in_vec[] =
-        {
-            { .base = &rpcInputArgs, .len = sizeof(rpcInputArgs) },
-        };
-
-        cy_rpc_outvec_t out_vec[] =
-        {
-            { .base = &rpcOutputArgs, .len = sizeof(rpcOutputArgs) },
-        };
-        rpcOutputArgs.argc = 0; /* updated in secure side */
-
-        Cy_SecureServices_RPC(in_vec, CY_RPC_IOVEC_LEN(in_vec), out_vec, CY_RPC_IOVEC_LEN(out_vec));
-        if (rpcOutputArgs.argc == 1)
-        {
-            status = (cy_en_syspm_status_t)rpcOutputArgs.argv[0];
-        }
-    }
-    return status;
-#endif
 }
 
 

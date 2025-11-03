@@ -24,7 +24,7 @@
 */
 var NAVTREE =
 [
-  [ "(async-transfer)", "index.html", [
+  [ "Async Transfer", "index.html", [
     [ "Async Transfer Utility Library", "index.html", [
       [ "Overview", "index.html#autotoc_md1", null ],
       [ "Features", "index.html#autotoc_md2", null ],

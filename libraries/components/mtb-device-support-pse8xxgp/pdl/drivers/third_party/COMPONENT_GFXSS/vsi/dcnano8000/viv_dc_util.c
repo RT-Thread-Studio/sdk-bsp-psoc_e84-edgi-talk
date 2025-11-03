@@ -35,9 +35,9 @@
 #include <stdlib.h>
 
 #ifdef RTOS
-    #include "viv_dc_os.h"
+#include "viv_dc_os.h"
 #else
-    #include "viv_dc_platform.h"
+#include "viv_dc_platform.h"
 #endif
 
 #define CHANNLE_TABLE_NUM 4
@@ -53,7 +53,7 @@ gctUINT32 GalLoadVimgToTSurfWithPool(
     gctUINT8 * Filename,
     gctUINT8 * Buffer, gctUINT8* TileStatus[],
     gctUINT32 Size
-);
+    );
 
 typedef struct
 {
@@ -101,7 +101,7 @@ gctINT viv_util_get_channel(
     gctUINT16* r,
     gctUINT16* g,
     gctUINT16* b
-)
+    )
 {
     if (format >= CHANNLE_TABLE_NUM)
         return vivSTATUS_INVALID_ARGUMENTS;
@@ -129,7 +129,7 @@ gctINT viv_util_get_bpp(
     gctUINT16* l1,
     gctUINT16* l2,
     gctUINT16* l3
-)
+    )
 {
     switch (Format)
     {
@@ -179,7 +179,7 @@ viv_util_get_plane_bpp(
     viv_input_format_type format,
     gctUINT32 *plane_num,
     gctUINT32 *bits_per_pixel
-)
+    )
 {
     vivSTATUS status = vivSTATUS_OK;
     gctUINT32 num, bpp[3];
@@ -247,15 +247,15 @@ viv_util_get_plane_bpp(
     case vivYUV444:
         num = 3;
         bpp[0] =
-            bpp[1] =
-                bpp[2] = 8;
+        bpp[1] =
+        bpp[2] = 8;
         break;
 
     case vivYUV444_10BIT:
         num = 3;
         bpp[0] =
-            bpp[1] =
-                bpp[2] = 10;
+        bpp[1] =
+        bpp[2] = 10;
         break;
 
 
@@ -283,7 +283,7 @@ viv_util_get_plane_bpp(
 
 gctBOOL viv_util_is_yuv(
     viv_input_format_type format
-)
+    )
 {
     switch (format)
     {
@@ -306,31 +306,31 @@ gctBOOL viv_util_is_yuv(
 
 /* Return the string name of format.
  */
-gctUINT8 *viv_util_format_string(
+gctUINT8* viv_util_format_string(
     viv_input_format_type format
-)
+    )
 {
     switch (format)
     {
-    case vivARGB1555:
-        return (gctUINT8*)"RGB1555";
+        case vivARGB1555:
+            return (gctUINT8*)"RGB1555";
 
-    case vivARGB4444:
-        return (gctUINT8*)"RGB444";
+        case vivARGB4444:
+            return (gctUINT8*)"RGB444";
 
-    case vivRGB565:
-        return (gctUINT8*)"RGB565";
+        case vivRGB565:
+            return (gctUINT8*)"RGB565";
 
-    case vivARGB8888:
-        return (gctUINT8*)"RGB888";
+        case vivARGB8888:
+            return (gctUINT8*)"RGB888";
 
-    case vivNV12:
-        return (gctUINT8*)"NV12";
+        case vivNV12:
+            return (gctUINT8*)"NV12";
 
-    case vivYUY2:
-        return (gctUINT8*)"YUY2";
-    default:
-        return vivNULL;
+        case vivYUY2:
+            return (gctUINT8*)"YUY2";
+        default:
+            return vivNULL;
     }
 
     //return vivNULL; //IFX: Fix IAR Warning. Code not reachable.
@@ -338,14 +338,14 @@ gctUINT8 *viv_util_format_string(
 
 /* Return the string name of output.
  */
-gctUINT8 *viv_util_output_string(
+gctUINT8* viv_util_output_string(
     gctUINT32 output
-)
+    )
 {
     switch (output)
     {
-    case vivDPI:
-        return (gctUINT8*)"DPI";
+        case vivDPI:
+            return (gctUINT8*)"DPI";
     }
 
     return vivNULL;
@@ -360,164 +360,164 @@ gctINT alignSize(
     viv_cache_mode CacheMode,
     gctUINT *Width,
     gctUINT *Height
-)
+    )
 {
     switch (TileMode)
     {
-    case vivTILED4X4:
-        switch (Format)
-        {
-        case vivYUV444:
-        case vivYUV444_10BIT:
-            *Width = UP_ALIGN(*Width, 32);
-            *Height = UP_ALIGN(*Height, 4);
-            break;
-        case vivNV12:
-            if (Features[vivFEATURE_CUSTOMER_TILE4X4])
-            {
-                *Width = UP_ALIGN(*Width, 8);
-                *Height = UP_ALIGN(*Height, 8);
-            }
-            else
-            {
-                *Width = UP_ALIGN(*Width, 64);
-                *Height = UP_ALIGN(*Height, 4);
-            }
-            break;
-        case vivNV12_10BIT:
-            *Width = UP_ALIGN(*Width, 64);
-            *Height = UP_ALIGN(*Height, 4);
-            break;
-        case vivARGB8888:
-            *Width = UP_ALIGN(*Width, 4);
-            *Height = UP_ALIGN(*Height, 4);
-            break;
-        case vivYUY2:
-            *Width = UP_ALIGN(*Width, 4);
-            *Height = UP_ALIGN(*Height, 4);
-            break;
-        default:
-            viv_os_print("current format is not supported\n");
-            return vivSTATUS_NOT_SUPPORT;
-            break;
-        }
-        break;
-    case vivTILED8X8:
-        *Width  = UP_ALIGN(*Width, 16);
-        *Height = UP_ALIGN(*Height, 8);
-        break;
-    case vivSUPER_TILED_X:
-    case vivSUPER_TILED_Y:
-        *Width  = UP_ALIGN(*Width, 64);
-        *Height = UP_ALIGN(*Height, 64);
-        break;
-    case vivLINEAR:
-        if (Compressed)
-        {
+        case vivTILED4X4:
             switch (Format)
             {
-            case vivARGB8888:
-            case vivXRGB8888:
-            case vivARGB2101010:
-                if (CacheMode == vivCACHE_256)
-                {
-                    *Width = UP_ALIGN(*Width, 64);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                else if (CacheMode == vivCACHE_128)
-                {
+                case vivYUV444:
+                case vivYUV444_10BIT:
                     *Width = UP_ALIGN(*Width, 32);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                break;
-            case vivRGB565:
-            case vivARGB1555:
-            case vivXRGB1555:
-            case vivARGB4444:
-            case vivXRGB4444:
-                if (CacheMode == vivCACHE_256)
-                {
-                    *Width = UP_ALIGN(*Width, 128);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                else if (CacheMode == vivCACHE_128)
-                {
+                    *Height = UP_ALIGN(*Height, 4);
+                    break;
+                case vivNV12:
+                    if (Features[vivFEATURE_CUSTOMER_TILE4X4])
+                    {
+                        *Width = UP_ALIGN(*Width, 8);
+                        *Height = UP_ALIGN(*Height, 8);
+                    }
+                    else
+                    {
+                        *Width = UP_ALIGN(*Width, 64);
+                        *Height = UP_ALIGN(*Height, 4);
+                    }
+                    break;
+                case vivNV12_10BIT:
                     *Width = UP_ALIGN(*Width, 64);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                break;
-            case vivYUY2:
-            case vivUYVY:
-                if (CacheMode == vivCACHE_256)
-                {
-                    *Width = UP_ALIGN(*Width, 128);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                else if (CacheMode == vivCACHE_128)
-                {
-                    *Width = UP_ALIGN(*Width, 64);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                break;
-            case vivNV12:
-            case vivNV21:
-                if (CacheMode == vivCACHE_128)
-                {
-                    *Width = UP_ALIGN(*Width, 128);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                else if (CacheMode == vivCACHE_256)
-                {
-                    *Width = UP_ALIGN(*Width, 256);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                break;
-            case vivP010:
-                if (CacheMode == vivCACHE_128)
-                {
-                    *Width = UP_ALIGN(*Width, 64);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                else if (CacheMode == vivCACHE_256)
-                {
-                    *Width = UP_ALIGN(*Width, 128);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                break;
-            case vivNV16:
-                if (CacheMode == vivCACHE_128)
-                {
-                    *Width = UP_ALIGN(*Width, 128);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                else if (CacheMode == vivCACHE_256)
-                {
-                    *Width = UP_ALIGN(*Width, 256);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                break;
-            case vivYV12:
-            case vivYU12:
-                if (CacheMode == vivCACHE_128)
-                {
-                    *Width = UP_ALIGN(*Width, 128);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                else if (CacheMode == vivCACHE_256)
-                {
-                    *Width = UP_ALIGN(*Width, 512);
-                    *Height = UP_ALIGN(*Height, 1);
-                }
-                break;
-            default:
-                viv_os_print("current format is not supported\n");
-                return vivSTATUS_NOT_SUPPORT;
-                break;
+                    *Height = UP_ALIGN(*Height, 4);
+                    break;
+                case vivARGB8888:
+                    *Width = UP_ALIGN(*Width, 4);
+                    *Height = UP_ALIGN(*Height, 4);
+                    break;
+                case vivYUY2:
+                    *Width = UP_ALIGN(*Width, 4);
+                    *Height = UP_ALIGN(*Height, 4);
+                    break;
+                default:
+                    viv_os_print("current format is not supported\n");
+                    return vivSTATUS_NOT_SUPPORT;
+                    break;
             }
-        }
-        break;
-    default:
-        break;
+            break;
+        case vivTILED8X8:
+            *Width  = UP_ALIGN(*Width, 16);
+            *Height = UP_ALIGN(*Height, 8);
+            break;
+        case vivSUPER_TILED_X:
+        case vivSUPER_TILED_Y:
+            *Width  = UP_ALIGN(*Width, 64);
+            *Height = UP_ALIGN(*Height, 64);
+            break;
+        case vivLINEAR:
+            if (Compressed)
+            {
+                switch (Format)
+                {
+                    case vivARGB8888:
+                    case vivXRGB8888:
+                    case vivARGB2101010:
+                        if (CacheMode == vivCACHE_256)
+                        {
+                            *Width = UP_ALIGN(*Width, 64);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        else if (CacheMode == vivCACHE_128)
+                        {
+                            *Width = UP_ALIGN(*Width, 32);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        break;
+                    case vivRGB565:
+                    case vivARGB1555:
+                    case vivXRGB1555:
+                    case vivARGB4444:
+                    case vivXRGB4444:
+                        if (CacheMode == vivCACHE_256)
+                        {
+                            *Width = UP_ALIGN(*Width, 128);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        else if (CacheMode == vivCACHE_128)
+                        {
+                            *Width = UP_ALIGN(*Width, 64);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        break;
+                    case vivYUY2:
+                    case vivUYVY:
+                        if (CacheMode == vivCACHE_256)
+                        {
+                            *Width = UP_ALIGN(*Width, 128);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        else if (CacheMode == vivCACHE_128)
+                        {
+                            *Width = UP_ALIGN(*Width, 64);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        break;
+                    case vivNV12:
+                    case vivNV21:
+                        if (CacheMode == vivCACHE_128)
+                        {
+                            *Width = UP_ALIGN(*Width, 128);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        else if (CacheMode == vivCACHE_256)
+                        {
+                            *Width = UP_ALIGN(*Width, 256);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        break;
+                    case vivP010:
+                        if (CacheMode == vivCACHE_128)
+                        {
+                            *Width = UP_ALIGN(*Width, 64);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        else if (CacheMode == vivCACHE_256)
+                        {
+                            *Width = UP_ALIGN(*Width, 128);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        break;
+                    case vivNV16:
+                        if (CacheMode == vivCACHE_128)
+                        {
+                            *Width = UP_ALIGN(*Width, 128);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        else if (CacheMode == vivCACHE_256)
+                        {
+                            *Width = UP_ALIGN(*Width, 256);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        break;
+                    case vivYV12:
+                    case vivYU12:
+                        if (CacheMode == vivCACHE_128)
+                        {
+                            *Width = UP_ALIGN(*Width, 128);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        else if (CacheMode == vivCACHE_256)
+                        {
+                            *Width = UP_ALIGN(*Width, 512);
+                            *Height = UP_ALIGN(*Height, 1);
+                        }
+                        break;
+                    default:
+                        viv_os_print("current format is not supported\n");
+                        return vivSTATUS_NOT_SUPPORT;
+                        break;
+                }
+            }
+            break;
+        default:
+            break;
     }
 
     return 0;
@@ -531,7 +531,7 @@ gctINT calculateBufferSize(
     gctUINT *width,
     gctUINT *height,
     gctUINT *bpp
-)
+    )
 {
     gctINT i;
     gctUINT16 l1, l2, l3;
@@ -648,7 +648,7 @@ vivSTATUS viv_util_prepare_wb_config(
     gctUINT *buffer_size,
     gctUINT width,
     gctUINT height
-)
+    )
 {
     gctUINT i = 0;
     vivSTATUS ret = vivSTATUS_OK;
@@ -659,17 +659,17 @@ vivSTATUS viv_util_prepare_wb_config(
     gctUINT dest_height[3] = {0};
     gctUINT dest_delta = 0;
 
-    if (!Features[vivFEATURE_PROGRAM_WB])
+    if(!Features[vivFEATURE_PROGRAM_WB])
     {
-        if (type == vivDP)
+        if(type == vivDP)
         {
             size = width * height * 8; /* For DP output, HW use 64bits/pixel write back */
             buffer->stride[0] = width * 8;
         }
         else
         {
-            size = width * height * 4;
-            buffer->stride[0] = width * 4;
+           size = width * height * 4;
+           buffer->stride[0] = width * 4;
         }
     }
     else
@@ -682,7 +682,7 @@ vivSTATUS viv_util_prepare_wb_config(
             dest_width,
             dest_height,
             dest_bpps
-        );
+            );
 
         for (i = 0; i < dest_nplane; i++)
         {
@@ -691,7 +691,7 @@ vivSTATUS viv_util_prepare_wb_config(
         }
 
     }
-    /* Allocate dest buffer. */
+        /* Allocate dest buffer. */
 #if defined(RTOS)
     viv_alloc_buffer(
         size,
@@ -714,41 +714,41 @@ vivSTATUS viv_util_prepare_wb_config(
     }
     else
 #endif
-        if (size <= MEM_THRESHOLD)
-        {
-            viv_alloc_buffer(
+    if (size <= MEM_THRESHOLD)
+    {
+        viv_alloc_buffer(
+            size,
+            &buffer->handle[0],
+            &buffer->phyAddress[0],
+            &buffer->logical[0],
+            (gctBOOL)vivFALSE,
+            gcvPOOL_CONTIGUOUS);
+    }
+    else
+    {
+        /* Solution for large mem alloc*/
+        ret = viv_os_get_dev_mem(
                 size,
-                &buffer->handle[0],
-                &buffer->phyAddress[0],
-                &buffer->logical[0],
-                (gctBOOL)vivFALSE,
-                gcvPOOL_CONTIGUOUS);
-        }
-        else
-        {
-            /* Solution for large mem alloc*/
-            ret = viv_os_get_dev_mem(
-                      size,
-                      &(buffer->phyAddress[0]),
-                      &buffer->logical[0]);
-            if (ret)
-                return ret;
-        }
+                &(buffer->phyAddress[0]),
+                &buffer->logical[0]);
+        if (ret)
+            return ret;
+    }
 #endif
 
-    if (Features[vivFEATURE_PROGRAM_WB])
+    if(Features[vivFEATURE_PROGRAM_WB])
     {
-        for (i = 1; i < dest_nplane; i++)
+        for(i = 1; i < dest_nplane; i++)
         {
-            dest_delta = buffer->stride[i - 1] * dest_height[i - 1];
-            buffer->logical[i] = (gctUINT8 *)buffer->logical[i - 1] + dest_delta;
-            buffer->phyAddress[i] = buffer->phyAddress[i - 1] + dest_delta;
+            dest_delta = buffer->stride[i-1] * dest_height[i-1];
+            buffer->logical[i] = (gctUINT8 *)buffer->logical[i-1] + dest_delta;
+            buffer->phyAddress[i] = buffer->phyAddress[i-1] + dest_delta;
         }
     }
 
     viv_os_memset(vivNULL, buffer->logical[0], 0, size);
 
-    if (!!buffer_size)
+    if(!!buffer_size)
     {
         *buffer_size = size;
     }
@@ -762,7 +762,7 @@ vivSTATUS viv_util_prepare_layer_config(
     Layer *layer,
     gctUINT id,
     gctADDRESS physical
-)
+    )
 {
     gctUINT16 y, uv;
     gctUINT32 srcWidth, srcHeight;
@@ -783,8 +783,8 @@ vivSTATUS viv_util_prepare_layer_config(
     /* Fill chip feature bit values to Features. */
     viv_query_chipinfo(Features);
     ret = viv_dc_query_feature(vivFEATURE_LAYER_COUNT, &layerCount);
-    if (vivSTATUS_OK != ret)
-        return ret;
+    if(vivSTATUS_OK != ret)
+       return ret;
 
     if (!layerCount)
     {
@@ -792,14 +792,14 @@ vivSTATUS viv_util_prepare_layer_config(
         return vivSTATUS_NOT_SUPPORT;
     }
 
-    if (viv_layer_query_capability(id, vivLAYER_CAP_DEC400_COMPRESSION, &layerDecompressCap) ||
-            viv_layer_query_capability(id, vivLAYER_CAP_ROTATION, &layerRotateCap) ||
-            viv_layer_query_capability(id, vivLAYER_CAP_SCALE, &layerScaleCap) ||
-            viv_layer_query_capability(id, vivLAYER_CAP_TILED, &layerTileCap) ||
-            viv_layer_query_capability(id, vivLAYER_CAP_ROI, &layerROICap))
+    if(viv_layer_query_capability(id, vivLAYER_CAP_DEC400_COMPRESSION, &layerDecompressCap)||
+       viv_layer_query_capability(id, vivLAYER_CAP_ROTATION, &layerRotateCap)||
+       viv_layer_query_capability(id, vivLAYER_CAP_SCALE, &layerScaleCap)||
+       viv_layer_query_capability(id, vivLAYER_CAP_TILED, &layerTileCap)||
+       viv_layer_query_capability(id, vivLAYER_CAP_ROI, &layerROICap))
     {
-        viv_print("layer feature is not supported.\n");
-        return vivSTATUS_NOT_SUPPORT;
+       viv_print("layer feature is not supported.\n");
+       return vivSTATUS_NOT_SUPPORT;
     }
 
 #if vivENABLE_LAYER_ROT
@@ -859,11 +859,11 @@ vivSTATUS viv_util_prepare_layer_config(
     srcHeight = layer->buffer.height;
 
     alignSize(layer->buffer.format,
-              layer->buffer.tiling,
-              layer->decompress_enable,
-              layer->cache_mode,
-              &srcWidth,
-              &srcHeight);
+        layer->buffer.tiling,
+        layer->decompress_enable,
+        layer->cache_mode,
+        &srcWidth,
+        &srcHeight);
 
     /* Get implied information. */
     calculateBufferSize(layer->buffer.format, srcWidth, srcHeight, &nPlane, width, height, bpps);
@@ -909,27 +909,27 @@ vivSTATUS viv_util_prepare_layer_config(
         }
         else
 #endif
-            if ((layer->fb_size + addressAlign) <= MEM_THRESHOLD)
-            {
-                viv_alloc_buffer(
-                    layer->fb_size + addressAlign,
-                    &layer->handle,
-                    &layer->hardwareAddress,
-                    &layer->logical,
-                    layer->layer_sec || layer->buffer.security,
-                    gcvPOOL_CONTIGUOUS);
-            }
-            else
-            {
-                /* Solution for large mem alloc*/
-                ret = viv_os_get_dev_mem(
-                          layer->fb_size + addressAlign,
-                          &layer->hardwareAddress,
-                          &layer->logical);
+        if ((layer->fb_size + addressAlign) <= MEM_THRESHOLD)
+        {
+            viv_alloc_buffer(
+                layer->fb_size + addressAlign,
+                &layer->handle,
+                &layer->hardwareAddress,
+                &layer->logical,
+                layer->layer_sec || layer->buffer.security,
+                gcvPOOL_CONTIGUOUS);
+        }
+        else
+        {
+            /* Solution for large mem alloc*/
+            ret = viv_os_get_dev_mem(
+                layer->fb_size + addressAlign,
+                &layer->hardwareAddress,
+                &layer->logical);
 
-                if (ret != vivSTATUS_OK)
-                    return ret;
-            }
+            if (ret != vivSTATUS_OK)
+                return ret;
+        }
 #endif
 
         physical = gcmALIGN(layer->hardwareAddress, (gctADDRESS)addressAlign);
@@ -941,7 +941,7 @@ vivSTATUS viv_util_prepare_layer_config(
 
     for (i = 1; i < nPlane; i++)
     {
-        layer->buffer.phyAddress[i] = layer->buffer.phyAddress[i - 1] + gcmALIGN((layer->buffer.stride[i - 1] * height[i - 1]), addressAlign);
+        layer->buffer.phyAddress[i] = layer->buffer.phyAddress[i - 1] + gcmALIGN((layer->buffer.stride[i - 1] * height[i - 1]),addressAlign);
         delta = layer->buffer.phyAddress[i] - layer->buffer.phyAddress[i - 1];
         layer->buffer.logical[i] = (gctUINT8 *)layer->buffer.logical[i - 1] + delta;
     }
@@ -974,27 +974,27 @@ vivSTATUS viv_util_prepare_layer_config(
             }
             else
 #endif
-                if ((layer->fb_size / 128 + addressAlign) <= MEM_THRESHOLD)
-                {
-                    viv_alloc_buffer(
+            if ((layer->fb_size / 128 + addressAlign) <= MEM_THRESHOLD)
+            {
+                viv_alloc_buffer(
+                    layer->fb_size / 128 + addressAlign,
+                    &(layer->tilestatus_buffer.tileStatusHandle[i]),
+                    &(tsHwAddress[i]),
+                    &(tsLogical[i]),
+                    layer->layer_sec || layer->buffer.security,
+                    gcvPOOL_CONTIGUOUS);
+            }
+            else
+            {
+                /* Solution for large mem alloc*/
+                ret = viv_os_get_dev_mem(
                         layer->fb_size / 128 + addressAlign,
-                        &(layer->tilestatus_buffer.tileStatusHandle[i]),
                         &(tsHwAddress[i]),
-                        &(tsLogical[i]),
-                        layer->layer_sec || layer->buffer.security,
-                        gcvPOOL_CONTIGUOUS);
-                }
-                else
-                {
-                    /* Solution for large mem alloc*/
-                    ret = viv_os_get_dev_mem(
-                              layer->fb_size / 128 + addressAlign,
-                              &(tsHwAddress[i]),
-                              &(tsLogical[i]));
+                        &(tsLogical[i]));
 
-                    if (ret != vivSTATUS_OK)
-                        return ret;
-                }
+                if (ret != vivSTATUS_OK)
+                    return ret;
+            }
 #endif
 
             layer->tilestatus_buffer.tileStatusHWAddress[i] = (gctADDRESS)gcmALIGN(tsHwAddress[i], (gctADDRESS)addressAlign);
@@ -1010,7 +1010,7 @@ vivSTATUS viv_util_prepare_layer_config(
 /* Free layer*/
 vivSTATUS viv_util_free_layer_buffer(
     Layer *layer
-)
+    )
 {
     if (!layer->handle)
     {
@@ -1043,7 +1043,7 @@ vivSTATUS viv_util_free_layer_buffer(
 
 gctINT viv_util_prepare_cursor_config(
     Cursor* cursor
-)
+    )
 {
     gctUINT32 cursor_width = 0;
     gctUINT32 cursor_height = 0;
@@ -1052,7 +1052,7 @@ gctINT viv_util_prepare_cursor_config(
     vivSTATUS ret = vivSTATUS_OK;
 
     ret = viv_dc_query_feature(vivFEATURE_CURSOR_COUNT, &cursor_count);
-    if (vivSTATUS_OK != ret)
+    if(vivSTATUS_OK != ret)
         return ret;
 
     if ((!cursor_count) && (cursor->enable == 1))
@@ -1061,19 +1061,19 @@ gctINT viv_util_prepare_cursor_config(
         return vivSTATUS_NOT_SUPPORT;
     }
 
-    switch (cursor->cursor.size)
+    switch(cursor->cursor.size)
     {
-    case vivCURSOR_32x32:
-        cursor_width = cursor_height = 32;
-        break;
+        case vivCURSOR_32x32:
+            cursor_width = cursor_height = 32;
+            break;
 
-    case vivCURSOR_64x64:
-        cursor_width = cursor_height = 64;
-        break;
+        case vivCURSOR_64x64:
+            cursor_width = cursor_height = 64;
+            break;
 
-    default:
-        viv_print("Invalid cursor size type.\n");
-        return vivSTATUS_INVALID_ARGUMENTS;
+        default:
+            viv_print("Invalid cursor size type.\n");
+            return vivSTATUS_INVALID_ARGUMENTS;
     }
 
     if (cursor->cursor.hsx > cursor_width || cursor->cursor.hsy > cursor_height)
@@ -1113,7 +1113,7 @@ gctINT viv_util_prepare_cursor_config(
 vivSTATUS viv_cursor_clear(
     Cursor* cursor,
     gctUINT32 color
-)
+    )
 {
     gctUINT col = 0, row = 0, width = 0, height = 0;
     gctUINT32* addr = vivNULL;
@@ -1123,17 +1123,17 @@ vivSTATUS viv_cursor_clear(
 
     if (cursor->cursor.format == vivCURSOR_ARGB)
     {
-        switch (cursor->cursor.size)
+        switch(cursor->cursor.size)
         {
-        case vivCURSOR_32x32:
-            width = height = 32;
-            break;
-        case vivCURSOR_64x64:
-            width = height = 64;
-            break;
-        default:
-            viv_print("Not support size.\n");
-            return vivSTATUS_INVALID_ARGUMENTS;
+            case vivCURSOR_32x32:
+                width = height = 32;
+                break;
+            case vivCURSOR_64x64:
+                width = height = 64;
+                break;
+            default:
+                viv_print("Not support size.\n");
+                return vivSTATUS_INVALID_ARGUMENTS;
         }
         /* Leave a hot spot. */
         for (row = 0; row < height; row++)
@@ -1166,19 +1166,19 @@ vivSTATUS viv_cursor_clear(
  */
 gctVOID viv_util_prepare_gamma_config( /* @suppress("No return") */
     Gamma* gamma
-)
+    )
 {
     gctINT i;
     gctFLOAT tmpf;
     gctUINT8 temp = 0;
     gctUINT32 ttt;
 
-    for (i = 0; i < GAMMA_TABLE_SIZE; i++)
+    for(i=0; i < GAMMA_TABLE_SIZE; i++)
     {
-        tmpf = (i + 0.5f) / 256.0f;
+        tmpf = (i + 0.5f)/256.0f;
         tmpf = (gctFLOAT)(vivPOW((gctDOUBLE)tmpf, (gctDOUBLE)0.45));
-        temp = (gctUINT8)(tmpf * 256 - 0.5f);
-        ttt = ((temp << 22) | (temp << 12) | (temp << 2));
+        temp = (gctUINT8)(tmpf*256 - 0.5f);
+        ttt = ((temp<<22) | (temp<<12) |(temp<<2));
         gamma->gamma_table[i][0] = (ttt >> 20) & 0x3FF;
         gamma->gamma_table[i][1] = (ttt >> 10) & 0x3FF;
         gamma->gamma_table[i][2] = ttt & 0x3FF;
@@ -1189,27 +1189,27 @@ gctVOID viv_util_prepare_gamma_config( /* @suppress("No return") */
  */
 gctFLOAT viv_util_dc_to_gamma(
     gctFLOAT  x
-)
+    )
 {
     gctDOUBLE c1, c2, c3;
     gctDOUBLE m, y;
     gctFLOAT ret;
 
-    if (!x)
+    if(!x)
         return 0;
 
-    m = (gctDOUBLE)((2523.f / 4096.f) * 128.f);
-    c1 = (gctDOUBLE)(3424.f / 4096.f);
-    c2 = (gctDOUBLE)((2413.f / 4096.f) * 32.f);
-    c3 = (gctDOUBLE)((2392.f / 4096.f) * 32.f);
-    y  = (gctDOUBLE)(x / 10000.f);
+    m = (gctDOUBLE)((2523.f/4096.f) * 128.f);
+    c1 = (gctDOUBLE)(3424.f/4096.f);
+    c2 = (gctDOUBLE)((2413.f/4096.f) *32.f);
+    c3 = (gctDOUBLE)((2392.f/4096.f) *32.f);
+    y  = (gctDOUBLE)(x/10000.f);
 
     c1 = c1 + c2 * y;
-    c3 = 1 + c3 * y;
+    c3 = 1+ c3 * y;
     c1 = c1 / c3;
     x = (gctFLOAT)(vivPOW(c1, m));
 
-    ret = (gctFLOAT)(x * 4095.f / 4096.f);
+    ret = (gctFLOAT)(x*4095.f /4096.f);
 
     return ret;
 }
@@ -1217,54 +1217,54 @@ gctFLOAT viv_util_dc_to_gamma(
 #if vivENABLE_DISPLAY_NEWGMMA
 gctVOID viv_util_prepare_new_gamma(
     Gamma* new_gamma
-)
+    )
 {
     gctUINT i, table_value;
     gctFLOAT tmpf0, tmpf1;
     gctUINT table0[17] = {0};
     gctUINT table1[257] = {0};
 
-    for (i = 0; i <= 16; i++)
+    for(i = 0; i <= 16; i++)
     {
-        tmpf0 = (gctFLOAT)(i / 1024.f * 10000.f);
+        tmpf0 = (gctFLOAT)(i/1024.f * 10000.f);
         tmpf1 = viv_util_dc_to_gamma(tmpf0);
-        table0[i] = (gctUINT)(tmpf1 * 4095.f + 0.95f);
+        table0[i] = (gctUINT)(tmpf1*4095.f + 0.95f);
     }
 
-    for (i = 4; i < 256; i++)
+    for(i = 4; i < 256; i++)
     {
-        tmpf0 = (gctFLOAT)(i / 256.f * 10000.f);
+        tmpf0 = (gctFLOAT)(i/256.f * 10000.f);
         tmpf1 = viv_util_dc_to_gamma(tmpf0);
-        table1[i] = (gctUINT)(tmpf1 * 4095.f + 0.5f);
+        table1[i] = (gctUINT)(tmpf1*4095.f + 0.5f);
     }
     table1[256] = 4095;
 
     /* final table construct */
-    for (i = 0; i < GAMMA_TABLE_SIZE; i++)
+    for(i = 0; i < GAMMA_TABLE_SIZE; i++)
     {
         /* When input data is less than 32, directly look up the table
          * Direct look up needs 32 entries
          */
-        if (i < 32)
+        if(i < 32)
         {
-            tmpf0 = (gctFLOAT)(i / 1024.f * 10000.f);
+            tmpf0 = (gctFLOAT)(i/1024.f * 10000.f);
             tmpf1 = viv_util_dc_to_gamma(tmpf0);
-            table_value = (gctUINT)(tmpf1 * (16384 - 1.f));
+            table_value = (gctUINT)(tmpf1*(16384 - 1.f));
         }
 
         /* When input data >=32 and < 256, look up the table and then do interpolation
          * Each interval has 16 data. [32,48),[48,64),[240,256).
          * It needs 15 entries
          */
-        else if (i < 47)
-            table_value = table0[i - 30]; /* use table0[2] - [16] */
+        else if(i < 47)
+            table_value = table0[i-30]; /* use table0[2] - [16] */
 
         /* When input data >=256, look up the  table and then do interpolation
          * Each interval has 64 data. [256,320),[320,384),[16320,12384)
          * It needs 252+1 entries.  Extra 1 is for 10384 look up.
          */
         else
-            table_value = table1[i - 43]; /* use table1[4] - [256] */
+            table_value = table1[i-43]; /* use table1[4] - [256] */
 
         new_gamma->gamma_table[i][0] = table_value & 0xFFF;
         new_gamma->gamma_table[i][1] = table_value & 0xFFF;
@@ -1278,27 +1278,27 @@ gctVOID viv_util_prepare_new_gamma(
  */
 gctFLOAT viv_util_dc_to_degamma(
     gctFLOAT  x
-)
+    )
 {
     gctDOUBLE c1, c2, c3;
     gctDOUBLE m1, m2;
     gctFLOAT ret;
 
-    m1 = (gctDOUBLE)(2610.f / 16384.f);
-    m2 = (gctDOUBLE)((2523.f / 4096.f) * 128.f);
-    c1 = (gctDOUBLE)(3424.f / 4096.f);
-    c2 = (gctDOUBLE)((2413.f / 4096.f) * 32.f);
-    c3 = (gctDOUBLE)((2392.f / 4096.f) * 32.f);
+    m1 = (gctDOUBLE)(2610.f/16384.f);
+    m2 = (gctDOUBLE)((2523.f/4096.f) * 128.f);
+    c1 = (gctDOUBLE)(3424.f/4096.f);
+    c2 = (gctDOUBLE)((2413.f/4096.f) *32.f);
+    c3 = (gctDOUBLE)((2392.f/4096.f) *32.f);
 
-    x = (gctFLOAT)((x * 4096) / 4095.f); /* This make 4095 mapping to 1.0 */
-    if (x > 1.0)
+    x = (gctFLOAT)((x*4096)/4095.f);  /* This make 4095 mapping to 1.0 */
+    if(x > 1.0)
         x = 1.0;
 
-    m1 = 1.f / m1;
-    m2 = vivPOW((gctDOUBLE)x, 1.f / m2);
+    m1 = 1.f/m1;
+    m2 = vivPOW((gctDOUBLE)x, 1.f/m2);
     c2 = c2 - c3 * m2;
     c1 = m2 - c1;
-    if (c1 < 0)
+    if(c1 < 0)
         return 0;
 
     c1 /= c2;
@@ -1311,7 +1311,7 @@ gctFLOAT viv_util_dc_to_degamma(
 gctVOID viv_util_prepare_degamma(
     Degamma*  de_gamma,
     gctBOOL   BT709
-)
+    )
 {
     gctUINT i, table_value;
     gctFLOAT tmpf0, tmpf1;
@@ -1322,40 +1322,40 @@ gctVOID viv_util_prepare_degamma(
      * [0,4),[4,8),...[1016,1020)
      * There are 255+1 entries for interpolation
      */
-    for (i = 0; i < 256; i++)
+    for(i = 0; i < 256; i++)
     {
-        tmpf0 = (gctFLOAT)(i / 256.f);
-        if (BT709)
+        tmpf0 = (gctFLOAT)(i/256.f);
+        if(BT709)
             tmpf1 = (gctFLOAT)vivPOW(tmpf0, 2.4f);    /* for 709 */
         else
             tmpf1 = viv_util_dc_to_degamma(tmpf0) / 10000.f;    /* for 2020 */
 
-        table1[i] = (gctUINT)(tmpf1 * (1 << 14) * 2.f);
+        table1[i] = (gctUINT)(tmpf1*(1<<14)*2.f);
     }
-    table1[256] = (gctUINT)((1 << 14) * 2.f - 1.f);
+    table1[256] = (gctUINT)((1<<14)*2.f - 1.f);
 
     /* When input data <1020, look up table and do interpolation.
      * When input data >=1020 ([1020,1023]),  directly look up the table.
      * There are 4 entries for direct look up.
      */
-    for (i = 1020; i <= 1023; i++)
+    for(i = 1020; i <= 1023; i++)
     {
-        tmpf0 = (gctFLOAT)(i / 1024.f);
-        if (BT709)
+        tmpf0 = (gctFLOAT)(i/1024.f);
+        if(BT709)
             tmpf1 = (gctFLOAT)vivPOW(tmpf0, 2.4f);    /* for 709 */
         else
             tmpf1 = viv_util_dc_to_degamma(tmpf0) / 10000.f;    /* for 2020 */
 
-        table2[i - 1020] = (gctUINT)(tmpf1 * ((1 << 14) - 1));
+        table2[i-1020] = (gctUINT)(tmpf1*((1<<14) - 1));
     }
 
     /* final table construct */
-    for (i = 0; i < DEGAMMA_TABLE_SIZE; i++)
+    for(i = 0; i < DEGAMMA_TABLE_SIZE; i++)
     {
-        if (i < 256)
+        if(i < 256)
             table_value = table1[i];
         else
-            table_value = table2[i - 256];
+            table_value = table2[i-256];
 
         de_gamma->degamma_table[i][0] = table_value & 0x7FFF;
         de_gamma->degamma_table[i][1] = table_value & 0x7FFF;
@@ -1367,7 +1367,7 @@ gctVOID viv_util_prepare_degamma(
 #if vivENABLE_DISPLAY_3DLUT
 vivSTATUS viv_util_prepare_threed_lut(
     gctUINT32* threed_lut
-)
+    )
 {
     gctUINT32 r_index = 0, g_index = 0, b_index = 0;
     gctUINT32 r_temp = 0, g_temp = 0, b_temp = 0;
@@ -1376,7 +1376,7 @@ vivSTATUS viv_util_prepare_threed_lut(
     vivSTATUS ret = vivSTATUS_OK;
 
     ret = viv_dc_query_feature(vivFEATURE_3D_LUT, &lut);
-    if (vivSTATUS_OK != ret)
+    if(vivSTATUS_OK != ret)
         return ret;
 
     if (!lut)
@@ -1391,15 +1391,15 @@ vivSTATUS viv_util_prepare_threed_lut(
         {
             for (b_index = 0; b_index < 17; b_index ++)
             {
-                r = (gctFLOAT) r_index / 16.f;
-                g = (gctFLOAT) g_index / 16.f;
-                b = (gctFLOAT) b_index / 16.f;
+                r = (gctFLOAT) r_index/16.f;
+                g = (gctFLOAT) g_index/16.f;
+                b = (gctFLOAT) b_index/16.f;
 
                 r_temp = (((gctUINT)(r * 1023.99f)) & 0x3FF) << 20;
                 g_temp = (((gctUINT)(g * 1023.99f)) & 0x3FF) << 10;
                 b_temp = ((gctUINT)(b * 1023.99f)) & 0x3FF;
 
-                threed_lut[r_index * 17 * 17 + g_index * 17 + b_index] = r_temp | g_temp | b_temp;
+                threed_lut[r_index*17*17 + g_index*17 + b_index] = r_temp | g_temp | b_temp;
             }
         }
     }
@@ -1416,9 +1416,9 @@ gctINT viv_util_load_bmp(
     gctUINT32 Size,
     gctUINT8* Lut,
     gctUINT32 Stride
-)
+    )
 {
-    vivSTATUS ret = vivSTATUS_OK;  //IFX: IAR warning integer conversion looses sign
+	vivSTATUS ret = vivSTATUS_OK;  //IFX: IAR warning integer conversion looses sign
     gctUINT32 i, size, offset, bpp;
     gctSIZE_T width, height, stride;
     gctPOINTER fp = vivNULL;
@@ -1451,7 +1451,7 @@ gctINT viv_util_load_bmp(
     height = vivABS(h);
     viv_os_file_read_word(fp);
     bpp = viv_os_file_read_word(fp);
-    stride = ((width * bpp / 8) + 3) & (~3);
+    stride = ((width*bpp/8)+3)&(~3);
     size = vivMAX(size, stride * height);
 
     /* biCompression. */
@@ -1515,9 +1515,9 @@ gctINT viv_util_load_bmp(
         for (i = 0; i < height; i++)
         {
             bits = h >= 0
-                   ? (gctUINT8 *)g_back_addr + (height - i - 1) * Stride
-                   : (gctUINT8 *)g_back_addr + i * Stride
-                   ;
+                 ? (gctUINT8 *)g_back_addr + (height - i - 1) * Stride
+                 : (gctUINT8 *)g_back_addr + i * Stride
+                 ;
 
             if (viv_os_file_read(bits, stride, fp) < stride)
             {
@@ -1553,9 +1553,9 @@ gctINT viv_util_load_bmp2buffer(
     gctUINT8* buffer,
     gctUINT32 *Width,
     gctUINT32 *Height
-)
+    )
 {
-    viv_status_type ret = vivSTATUS_OK; //IFX: Fix IAR warning, enumerated type mixed with integer.
+	viv_status_type ret = vivSTATUS_OK; //IFX: Fix IAR warning, enumerated type mixed with integer.
     gctUINT32 i, j, size, offset, bpp;
     gctSIZE_T width, height, stride;
     gctPOINTER fp = vivNULL;
@@ -1586,7 +1586,7 @@ gctINT viv_util_load_bmp2buffer(
     height = vivABS(h);
     viv_os_file_read_word(fp);
     bpp = viv_os_file_read_word(fp);
-    stride = ((width * (bpp / 8)) + 3) & (~3);
+    stride = ((width*(bpp/8))+3)&(~3);
     size = vivMAX(size, stride * height);
 
     if (bufferStride == 0)
@@ -1599,12 +1599,12 @@ gctINT viv_util_load_bmp2buffer(
 
     if (viv_os_file_seek(fp, offset, vivFALSE) == vivSTATUS_OK)
     {
-        for (i = 0, bits = buffer; i < height; i++, bits += bufferStride)
+        for (i=0, bits=buffer; i<height; i++, bits+=bufferStride)
         {
             bits = h >= 0
-                   ? (gctUINT8 *)buffer + (height - i - 1) * bufferStride
-                   : (gctUINT8 *)buffer + i * bufferStride
-                   ;
+                 ? (gctUINT8 *)buffer + (height - i - 1) * bufferStride
+                 : (gctUINT8 *)buffer + i * bufferStride
+                 ;
 
             if (bpp == 32)
             {
@@ -1650,7 +1650,7 @@ vivSTATUS viv_util_get_tile_size(
     gctUINT32 *tile_width_l2,
     gctUINT32 *tile_height_l2,
     gctUINT32 *tile_size_l2
-)
+    )
 {
     vivSTATUS status = vivSTATUS_OK;
     gctUINT32 w1[3], h1[3], w2[3], h2[3];
@@ -1702,7 +1702,7 @@ vivSTATUS viv_util_get_tile_size(
             h2[0] = 4;
         }
         else if ((format == vivRGB565) || (format == vivARGB1555) || (format == vivXRGB1555) ||
-                 (format == vivARGB4444) || (format == vivXRGB4444))
+            (format == vivARGB4444) || (format == vivXRGB4444))
         {
             w1[0] = 64;
             h1[0] = 64;
@@ -1803,7 +1803,7 @@ gctINT viv_util_load_bmp_area(
     gctUINT32 *ret_buf_height,
     gctUINT32 *ret_img_width,
     gctUINT32 *ret_img_height
-)
+    )
 {
     viv_status_type ret = vivSTATUS_OK;
     gctUINT i, j;
@@ -1815,7 +1815,7 @@ gctINT viv_util_load_bmp_area(
 
     gctUINT8 *img_buf = vivNULL;
 
-    if (!file_name || !buf)
+    if (!file_name|| !buf)
     {
         return vivSTATUS_INVALID_ARGUMENTS;
     }
@@ -1839,7 +1839,7 @@ gctINT viv_util_load_bmp_area(
     img_height = vivABS(h);
     viv_os_file_read_word(fp);
     bpp = viv_os_file_read_word(fp);
-    img_stride = (img_width * bpp / 8 + 3) & (~3);
+    img_stride = (img_width*bpp/8+3)&(~3);
 
     width  = vivMIN(buf_width, img_width);
     height = vivMIN(buf_height, img_height);
@@ -1884,14 +1884,14 @@ gctINT viv_util_load_bmp_area(
         gctUINT8 *img_bits = vivNULL;
 
         ret = viv_util_get_tile_size(
-                  format,
-                  tile_mode,
-                  compression,
-                  vivNULL,
-                  &tile_height_l1,
-                  vivNULL,
-                  vivNULL,
-                  vivNULL);
+            format,
+            tile_mode,
+            compression,
+            vivNULL,
+            &tile_height_l1,
+            vivNULL,
+            vivNULL,
+            vivNULL);
         if (ret != vivSTATUS_OK)
         {
             goto exit;
@@ -1943,8 +1943,8 @@ gctINT viv_util_load_bmp_area(
             {
                 /* h < 0 || tile_height == 1 */
                 bits = (h >= 0)
-                       ? (gctUINT8 *)buf + (height - i - tile_height_l1) * buf_stride
-                       : (gctUINT8 *)buf + i * buf_stride;
+                    ? (gctUINT8 *)buf + (height - i - tile_height_l1) * buf_stride
+                    : (gctUINT8 *)buf + i * buf_stride;
 
                 pos = dc_os_file_tell(fp);
 
@@ -2012,7 +2012,7 @@ gctINT viv_util_load_text_raw(
     gctUINT32 Format,
     gctUINT32 Height,
     gctUINT32 Stride[]
-)
+    )
 {
     gctINT ret = vivSTATUS_OK;
     gctPOINTER *fp = vivNULL;
@@ -2027,7 +2027,7 @@ gctINT viv_util_load_text_raw(
     gctUINT32 offset[3];
 
     if (filename == vivNULL ||
-            Buffer == vivNULL)
+        Buffer == vivNULL)
     {
         ret = vivSTATUS_INVALID_ARGUMENTS;
         goto exit;
@@ -2078,13 +2078,13 @@ gctINT viv_util_load_raw(
     gctUINT8* Buffer,
     gctUINT32 Size,
     gctUINT8* filename
-)
+    )
 {
     gctINT ret = vivSTATUS_OK;
     gctPOINTER *fp = vivNULL;
 
     if (filename == vivNULL ||
-            Buffer == vivNULL)
+        Buffer == vivNULL)
     {
         ret = vivSTATUS_INVALID_ARGUMENTS;
         goto exit;
@@ -2109,7 +2109,7 @@ exit:
 }
 
 gctINT viv_util_load_raw_area(
-    gctUINT8 **plane_addr,
+    gctUINT8** plane_addr,
     gctUINT32*  plane_stride,
     gctUINT32*  align_height,
     gctUINT32*  align_width,
@@ -2117,7 +2117,7 @@ gctINT viv_util_load_raw_area(
     gctUINT32  format,
     gctUINT32   plane_num,
     gctUINT8*   filename
-)
+    )
 {
     gctINT ret = vivSTATUS_OK;
     gctPOINTER *fp = vivNULL;
@@ -2137,17 +2137,16 @@ gctINT viv_util_load_raw_area(
         goto exit;
     }
 
-    for (i = 0; i < plane_num; i++)
+    for(i = 0; i < plane_num; i++)
     {
         gctUINT32 pos_line, pos_plane;
         p = plane_addr[i];
         pos_plane = dc_os_file_tell(fp);
-        for (j = 0; j < align_height[i]; j++)
-        {
+        for(j = 0;j < align_height[i];j++){
 
             pos_line = dc_os_file_tell(fp);
 
-            viv_os_file_read(p, align_width[i]*bpps[i] / 8, fp);
+            viv_os_file_read(p, align_width[i]*bpps[i]/8, fp);
             p += plane_stride[i];
             viv_os_file_seek(fp, pos_line + align_width[i] * bpps[i] / 8, vivFALSE);
         }
@@ -2171,7 +2170,7 @@ gctINT viv_source_capture_dump(
     gctADDRESS  phys_addr,
     gctBOOL    video,
     gctBOOL    final_plane
-)
+    )
 {
     gctINT    ret = vivSTATUS_OK;
     gctCHAR*  std_srting_0 = "40'h";
@@ -2179,9 +2178,9 @@ gctINT viv_source_capture_dump(
     gctUINT32* source;
     gctUINT32 i = 0;
 
-    if (fp_src == vivNULL)
+    if(fp_src == vivNULL)
     {
-        if (video)
+        if(video)
         {
             if ((fp_src = viv_os_file_open(VIDEO_SOURCE_PATH, vivFILE_WRITE)) == vivNULL)
             {
@@ -2190,7 +2189,7 @@ gctINT viv_source_capture_dump(
                 goto exit;
             }
         }
-        else if ((fp_src = viv_os_file_open(OVERLAY_SOURCE_PATH, vivFILE_WRITE)) == vivNULL)
+        else if((fp_src = viv_os_file_open(OVERLAY_SOURCE_PATH, vivFILE_WRITE)) == vivNULL)
         {
             viv_print("Overlay source capture file can't be opene\n");
             ret = vivSTATUS_FAILED;
@@ -2198,7 +2197,7 @@ gctINT viv_source_capture_dump(
         }
     }
 
-    if (!logical || !size)
+    if(!logical || !size)
     {
         viv_os_file_close(fp_src);
         fp_src = vivNULL;
@@ -2220,7 +2219,7 @@ gctINT viv_source_capture_dump(
     if (size % 4 != 0)
         viv_os_fprint(fp_src, "\n");
 
-    if (final_plane)
+    if(final_plane)
     {
         viv_os_file_close(fp_src);
         fp_src = vivNULL;
@@ -2242,7 +2241,7 @@ vivSTATUS viv_util_get_ts_bit(
     gctUINT32 plane_num,
     gctUINT32 *tile_size,
     gctUINT32 *ts_bit_len
-)
+    )
 {
     vivSTATUS status = vivSTATUS_OK;
     gctUINT32 i;
@@ -2253,8 +2252,8 @@ vivSTATUS viv_util_get_ts_bit(
     }
 
     if (!viv_util_is_yuv((viv_input_format_type)format) || //IFX - Fix Warning typecast needed.
-            (format == vivYUY2) ||
-            (format == vivUYVY))
+        (format == vivYUY2) ||
+        (format == vivUYVY))
     {
         ts_bit_len[0] = 4;
     }
@@ -2273,7 +2272,7 @@ vivSTATUS viv_util_get_ts_bit(
             }
 
             if ((tile_size[i] > 128) &&
-                    (tile_size[i] < 256))
+                (tile_size[i] < 256))
             {
                 tile_size[i] = 256;
             }
@@ -2350,7 +2349,7 @@ vivSTATUS viv_util_load_raw_ts(
     gctUINT32 buf_height_in_tile_l1,
     gctUINT32 img_width_in_tile_l1,
     gctUINT32 img_height_in_tile_l1
-)
+    )
 {
     vivSTATUS status = vivSTATUS_OK;
     gctPOINTER *fp = vivNULL;
@@ -2453,7 +2452,7 @@ vivSTATUS viv_util_load_ts(
     gctUINT32 buf_height_in_tile_l1,
     gctUINT32 img_width_in_tile_l1,
     gctUINT32 img_height_in_tile_l1
-)
+    )
 {
     vivSTATUS status = vivSTATUS_OK;
     gctUINT32 i;
@@ -2551,7 +2550,7 @@ exit:
 
 gctINT viv_util_free_hwcursor(
     Cursor *cursor
-)
+    )
 {
     if (!cursor->cursor_buffer.handle[0])
     {
@@ -2571,7 +2570,7 @@ gctUINT32 GalLoadVimgToTSurfWithPool(
     gctUINT8 * Filename,
     gctUINT8 * Buffer, gctUINT8* TileStatus[],
     gctUINT32 Size
-)
+    )
 {
     gctPOINTER file = vivNULL;
     vivSTATUS status;
@@ -2595,7 +2594,7 @@ gctUINT32 GalLoadVimgToTSurfWithPool(
     viv_os_file_read(&head, sizeof(head), file);
 
     if (head.magic[0] != 'V' || head.magic[1] != 'I'
-            || head.magic[2] != 'V')
+        || head.magic[2] != 'V')
     {
         return vivSTATUS_INVALID_ARGUMENTS;
     }
@@ -2641,7 +2640,7 @@ gctUINT32 GalLoadVimgToTSurfWithPool(
     if (v2 != vivNULL)
     {
         if ((v2->tileStatusOffset - v1->bitsOffset < v1->imageHeight * v1->imageStride)
-                || (n - v2->tileStatusOffset < v2->tileStatusSize))
+            || (n - v2->tileStatusOffset < v2->tileStatusSize))
         {
             return vivSTATUS_INVALID_ARGUMENTS;
         }
@@ -2664,59 +2663,59 @@ gctUINT32 GalLoadVimgToTSurfWithPool(
         switch (v1->imageStride / v1->imageWidth)
         {
         case 1:
-        {
-            unsigned char *p = Buffer;
+            {
+            unsigned char* p = Buffer;
             int count = Size;
 
             viv_os_file_read(
                 p,
                 count,
                 file
-            );
+                );
 
             break;
-        }
+            }
 
         case 2:
-        {
-            unsigned short *p = (unsigned short *)Buffer;
-            int n = Size / 2;
-            while (n > 0)
             {
-                *p = viv_os_file_read_word(file);
-                p++;
-                n--;
+                unsigned short* p = (unsigned short *)Buffer;
+                int n = Size / 2;
+                while (n > 0)
+                {
+                    *p = viv_os_file_read_word(file);
+                    p++;
+                    n--;
+                }
             }
-        }
-        break;
+            break;
 
         case 3:
-        {
-            unsigned char *p = Buffer;
-            int n = Size / 3;
-            while (n > 0)
             {
-                *(p + 2) = viv_os_file_read_byte(file);
-                *(p + 1) = viv_os_file_read_byte(file);
-                *(p)     = viv_os_file_read_byte(file);
-                p += 3;
-                n--;
+                unsigned char* p = Buffer;
+                int n = Size / 3;
+                while (n > 0)
+                {
+                    *(p + 2) = viv_os_file_read_byte(file);
+                    *(p + 1) = viv_os_file_read_byte(file);
+                    *(p)     = viv_os_file_read_byte(file);
+                    p += 3;
+                    n--;
+                }
             }
-        }
-        break;
+            break;
 
         case 4:
-        {
-            unsigned int *p = (unsigned int *)Buffer;
-            int n = Size / 4;
-            while (n > 0)
             {
-                *p = viv_os_file_read_dword(file);
-                p++;
-                n--;
+                unsigned int* p = (unsigned int *)Buffer;
+                int n = Size / 4;
+                while (n > 0)
+                {
+                    *p = viv_os_file_read_dword(file);
+                    p++;
+                    n--;
+                }
             }
-        }
-        break;
+            break;
         }
     }
 
@@ -2791,7 +2790,7 @@ gctINT viv_util_load_vimg(
     gctUINT32 *ret_buf_height,
     gctUINT32 *ret_img_width,
     gctUINT32 *ret_img_height
-)
+    )
 {
     gctINT status = vivSTATUS_OK;
     gctPOINTER fp = vivNULL;
@@ -2826,7 +2825,7 @@ gctINT viv_util_load_vimg(
     }
 
     if ((head.version == 1) ||
-            (head.version == 2))
+        (head.version == 2))
     {
         img.v1.format      = viv_os_file_read_dword(fp);
         img.v1.tiling      = viv_os_file_read_dword(fp);
@@ -2855,14 +2854,14 @@ gctINT viv_util_load_vimg(
     }
 
     status = viv_util_get_tile_size(
-                 format,
-                 tile_mode,
-                 compression,
-                 tile_width_l1,
-                 tile_height_l1,
-                 tile_width_l2,
-                 tile_height_l2,
-                 tile_size_l2);
+        format,
+        tile_mode,
+        compression,
+        tile_width_l1,
+        tile_height_l1,
+        tile_width_l2,
+        tile_height_l2,
+        tile_size_l2);
     if (status != vivSTATUS_OK)
     {
         goto exit;
@@ -2919,26 +2918,26 @@ gctINT viv_util_load_vimg(
 
     case vivYUV444:
         img_width[0] =
-            img_width[1] =
-                img_width[2] = img.v1.imageWidth;
+        img_width[1] =
+        img_width[2] = img.v1.imageWidth;
         img_height[0] =
-            img_height[1] =
-                img_height[2] = img.v1.imageHeight;
+        img_height[1] =
+        img_height[2] = img.v1.imageHeight;
         img_bpp[0] =
-            img_bpp[1] =
-                img_bpp[2] = 8;
+        img_bpp[1] =
+        img_bpp[2] = 8;
         break;
 
     case vivYUV444_10BIT:
         img_width[0] =
-            img_width[1] =
-                img_width[2] = img.v1.imageWidth;
+        img_width[1] =
+        img_width[2] = img.v1.imageWidth;
         img_height[0] =
-            img_height[1] =
-                img_height[2] = img.v1.imageHeight;
+        img_height[1] =
+        img_height[2] = img.v1.imageHeight;
         img_bpp[0] =
-            img_bpp[1] =
-                img_bpp[2] = 10;
+        img_bpp[1] =
+        img_bpp[2] = 10;
         break;
 
     case vivP010:
@@ -3006,13 +3005,13 @@ gctINT viv_util_load_vimg(
         offset[1] = img.tileStatusOffsetEx[0];
 
         status = viv_util_get_ts_bit(
-                     format,
-                     tile_mode,
-                     vivCOMPRESSION_DEC400_32_BYTES_ALIGNED,
-                     plane_num,
-                     tile_size_l2,
-                     ts_bit_len
-                 );
+            format,
+            tile_mode,
+            vivCOMPRESSION_DEC400_32_BYTES_ALIGNED,
+            plane_num,
+            tile_size_l2,
+            ts_bit_len
+            );
         if (status != vivSTATUS_OK)
         {
             goto exit;
@@ -3021,17 +3020,17 @@ gctINT viv_util_load_vimg(
         for (i = 0; i < plane_num; i++)
         {
             viv_util_load_ts(fp,
-                             offset[i],
-                             ts_buf[i],
-                             ts_bit_len[i],
-                             tile_width_l1[i],
-                             tile_height_l1[i],
-                             tile_width_l2[i],
-                             tile_height_l2[i],
-                             plane_width[i] / tile_width_l1[i],
-                             plane_height[i] / tile_height_l1[i],
-                             img_width[i] / tile_width_l1[i],
-                             img_height[i] / tile_height_l1[i]);
+                offset[i],
+                ts_buf[i],
+                ts_bit_len[i],
+                tile_width_l1[i],
+                tile_height_l1[i],
+                tile_width_l2[i],
+                tile_height_l2[i],
+                plane_width[i] / tile_width_l1[i],
+                plane_height[i] / tile_height_l1[i],
+                img_width[i] / tile_width_l1[i],
+                img_height[i] / tile_height_l1[i]);
         }
     }
 
@@ -3080,8 +3079,8 @@ int static GalSaveDIBitmap(const char *filename, BMPINFO *info, unsigned char *b
 {
     gctPOINTER fp;                      /* Open file pointer */
     unsigned int    size,                     /* Size of file */
-             infosize,                 /* Size of bitmap info */
-             bitsize;                  /* Size of bitmap pixels */
+        infosize,                 /* Size of bitmap info */
+        bitsize;                  /* Size of bitmap pixels */
     gctINT i;
     gctUINT bmpStride  =  info->bmiHeader.biWidth * ((info->bmiHeader.biBitCount + 7) / 8);
 
@@ -3101,8 +3100,8 @@ int static GalSaveDIBitmap(const char *filename, BMPINFO *info, unsigned char *b
     if (info->bmiHeader.biSizeImage == 0)
     {
         bitsize =  info->bmiHeader.biWidth *
-                   ((info->bmiHeader.biBitCount + 7) / 8) *
-                   abs(info->bmiHeader.biHeight);
+            ((info->bmiHeader.biBitCount + 7) / 8) *
+            abs(info->bmiHeader.biHeight);
     }
     else
     {
@@ -3117,12 +3116,12 @@ int static GalSaveDIBitmap(const char *filename, BMPINFO *info, unsigned char *b
         infosize += 12; /* Add 3 RGB doubleword masks */
         if (info->bmiHeader.biClrUsed == 0)
             break;
-    /*no break here*/
+        /*no break here*/
     case BIT_RGB :
         if (info->bmiHeader.biBitCount > 8 &&
-                info->bmiHeader.biClrUsed == 0)
+            info->bmiHeader.biClrUsed == 0)
             break;
-    /*no break here*/
+        /*no break here*/
     case BIT_RLE8 :
     case BIT_RLE4 :
         if (info->bmiHeader.biClrUsed == 0)
@@ -3172,7 +3171,7 @@ int static GalSaveDIBitmap(const char *filename, BMPINFO *info, unsigned char *b
     {
         if (info->bmiHeader.biHeight > 0)
         {
-            viv_os_file_write(bits + stride * i, bmpStride, fp);
+                viv_os_file_write(bits + stride * i, bmpStride, fp);
         }
         else
         {

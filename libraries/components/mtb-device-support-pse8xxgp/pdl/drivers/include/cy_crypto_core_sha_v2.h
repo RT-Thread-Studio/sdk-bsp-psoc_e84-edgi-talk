@@ -47,7 +47,7 @@ typedef struct
     /* Allocates CRYPTO_MAX_BLOCK_SIZE Bytes for the block. */
     uint32_t block[CY_CRYPTO_ALIGN_CACHE_LINE_WORD(CY_CRYPTO_SHA1_BLOCK_SIZE / 4u)];
     /* Allocates CRYPTO_MAX_HASH_SIZE Bytes for the hash. */
-    uint32_t hash[CY_CRYPTO_ALIGN_CACHE_LINE_WORD(CY_CRYPTO_SHA1_HASH_SIZE / 4u)];
+     uint32_t hash[CY_CRYPTO_ALIGN_CACHE_LINE_WORD(CY_CRYPTO_SHA1_HASH_SIZE / 4u)];
 } cy_stc_crypto_v2_sha1_buffers_t;
 #endif /* (CPUSS_CRYPTO_SHA1 == 1) && defined(CY_CRYPTO_CFG_SHA1_ENABLED) */
 
@@ -62,7 +62,7 @@ typedef struct
 #endif /* (CPUSS_CRYPTO_SHA256 == 1) && defined(CY_CRYPTO_CFG_SHA2_256_ENABLED) */
 
 #if (CPUSS_CRYPTO_SHA512 == 1) && defined(CY_CRYPTO_CFG_SHA2_512_ENABLED)
-typedef struct
+ typedef struct
 {
     /* Allocates CRYPTO_MAX_BLOCK_SIZE Bytes for the block. */
     uint32_t block[CY_CRYPTO_ALIGN_CACHE_LINE_WORD(CY_CRYPTO_SHA512_BLOCK_SIZE / 4u)];
@@ -79,7 +79,7 @@ typedef struct
 } cy_stc_crypto_v2_sha3_buffers_t;
 #endif /* (CPUSS_CRYPTO_SHA3 == 1) && defined(CY_CRYPTO_CFG_SHA3_ENABLED) */
 
-typedef struct
+ typedef struct
 {
     /* Allocates CRYPTO_MAX_BLOCK_SIZE Bytes for the block. */
     uint32_t block[CY_CRYPTO_ALIGN_CACHE_LINE_WORD(CY_CRYPTO_SHA_MAX_BLOCK_SIZE / 4u)];
@@ -88,28 +88,28 @@ typedef struct
 
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Sha_Init(CRYPTO_Type *base,
-        cy_stc_crypto_sha_state_t *hashState,
-        cy_en_crypto_sha_mode_t mode,
-        void *shaBuffers);
+                                cy_stc_crypto_sha_state_t *hashState,
+                                cy_en_crypto_sha_mode_t mode,
+                                void *shaBuffers);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Sha_Start(CRYPTO_Type *base, cy_stc_crypto_sha_state_t *hashState);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Sha_Update(CRYPTO_Type *base,
-        cy_stc_crypto_sha_state_t *hashState,
-        uint8_t const *message,
-        uint32_t messageSize);
+                                cy_stc_crypto_sha_state_t *hashState,
+                                uint8_t const *message,
+                                uint32_t messageSize);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Sha_Finish(CRYPTO_Type *base,
-        cy_stc_crypto_sha_state_t *hashState,
-        uint8_t *digest);
+                                cy_stc_crypto_sha_state_t *hashState,
+                                uint8_t *digest);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Sha_Free(CRYPTO_Type *base, cy_stc_crypto_sha_state_t *hashState);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Sha(CRYPTO_Type *base,
-        uint8_t const *message,
-        uint32_t messageSize,
-        uint8_t *digest,
-        cy_en_crypto_sha_mode_t mode);
+                                uint8_t const *message,
+                                uint32_t messageSize,
+                                uint8_t *digest,
+                                cy_en_crypto_sha_mode_t mode);
 
 /** \endcond */
 

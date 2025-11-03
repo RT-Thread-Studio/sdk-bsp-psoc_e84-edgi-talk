@@ -46,7 +46,7 @@
    *
    * @par        Algorithm
    *               The Selection sort algorithm is a comparison algorithm that
-   *               divides the input array into a sorted and an unsorted sublist
+   *               divides the input array into a sorted and an unsorted sublist 
    *               (initially the sorted sublist is empty and the unsorted sublist
    *               is the input array), looks for the smallest (or biggest)
    *               element in the unsorted sublist, swapping it with the leftmost
@@ -56,48 +56,48 @@
    *               function, a memcpy of the source vector is performed.
    */
 
-void arm_selection_sort_f32(
-    const arm_sort_instance_f32 * S,
-    float32_t *pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_selection_sort_f32(
+  const arm_sort_instance_f32 * S, 
+        float32_t * pSrc, 
+        float32_t * pDst, 
+        uint32_t blockSize)
 {
     uint32_t i, j, k;
     uint8_t dir = S->dir;
     float32_t temp;
 
-    float32_t *pA;
+    float32_t * pA;
 
-    if (pSrc != pDst) // out-of-place
+    if(pSrc != pDst) // out-of-place
     {
-        memcpy(pDst, pSrc, blockSize * sizeof(float32_t));
+        memcpy(pDst, pSrc, blockSize*sizeof(float32_t) );
         pA = pDst;
     }
     else
         pA = pSrc;
 
     /*  Move the boundary one element to the right */
-    for (i = 0; i < blockSize - 1; i++)
+    for (i=0; i<blockSize-1; i++)
     {
         /* Initialize the minimum/maximum as the first element */
         k = i;
 
         /* Look in the unsorted list to find the minimum/maximum value */
-        for (j = i + 1; j < blockSize; j++)
+        for (j=i+1; j<blockSize; j++)
         {
-            if (dir == (pA[j] < pA[k]))
+            if (dir==(pA[j] < pA[k]) )
             {
                 /* Update value */
                 k = j;
             }
         }
-
-        if (k != i)
+    
+        if (k != i) 
         {
             /* Swap the minimum/maximum with the leftmost element */
-            temp = pA[i];
-            pA[i] = pA[k];
-            pA[k] = temp;
+            temp=pA[i];
+	    pA[i]=pA[k];
+	    pA[k]=temp;
         }
     }
 }

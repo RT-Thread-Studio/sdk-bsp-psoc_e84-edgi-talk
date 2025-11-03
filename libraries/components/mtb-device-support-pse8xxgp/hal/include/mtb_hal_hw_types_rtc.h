@@ -52,7 +52,7 @@ extern "C" {
  */
 typedef struct
 {
-    void *empty;
+    void* empty;
 } mtb_hal_rtc_t;
 
 /**
@@ -65,7 +65,7 @@ typedef struct
  */
 typedef struct
 {
-    void *empty;
+    void* empty;
 } mtb_hal_rtc_configurator_t;
 
 #endif

@@ -268,7 +268,7 @@ __STATIC_INLINE uint16_t Cy_Crypto_Core_Vu_RegWordSizeRead(CRYPTO_Type *base, ui
 __STATIC_INLINE uint16_t Cy_Crypto_Core_Vu_RegDataPtrRead(CRYPTO_Type *base, uint32_t srcReg)
 {
     return (uint16_t)((_FLD2VAL(CRYPTO_RF_DATA_DATA32, REG_CRYPTO_VU_RF_DATA(base, srcReg)) >> CY_CRYPTO_VU_DATA_FLD_POS)
-                      & CY_CRYPTO_VU_DATA_FLD_MASK);
+                                & CY_CRYPTO_VU_DATA_FLD_MASK);
 }
 
 /*******************************************************************************
@@ -284,7 +284,7 @@ __STATIC_INLINE uint16_t Cy_Crypto_Core_Vu_RegDataPtrRead(CRYPTO_Type *base, uin
 * The source vector unit register.
 *
 *******************************************************************************/
-__STATIC_INLINE uint32_t *Cy_Crypto_Core_Vu_RegMemPointer(CRYPTO_Type *base, uint32_t srcReg)
+__STATIC_INLINE uint32_t * Cy_Crypto_Core_Vu_RegMemPointer(CRYPTO_Type *base, uint32_t srcReg)
 {
     return (uint32_t *)(CY_CRYPTO_VU_MEM_ALIAS_ADDRESS(base) + (4u * (uint32_t)Cy_Crypto_Core_Vu_RegDataPtrRead(base, srcReg)));
 }
@@ -304,7 +304,7 @@ __STATIC_INLINE uint32_t Cy_Crypto_Core_Vu_StatusRead(CRYPTO_Type *base)
     /* Wait until the VU instruction is complete */
     Cy_Crypto_Core_Vu_WaitForComplete(base);
 
-    return ((uint32_t)REG_CRYPTO_VU_STATUS(base));
+    return((uint32_t)REG_CRYPTO_VU_STATUS(base));
 }
 
 /*******************************************************************************

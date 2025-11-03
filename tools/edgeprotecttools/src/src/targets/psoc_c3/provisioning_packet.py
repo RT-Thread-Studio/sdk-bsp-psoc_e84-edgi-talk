@@ -48,11 +48,9 @@ class ProvisioningPacketPsocC3(ProvisioningPacketStrategy):
         """Creates RAM applications input parameters binary packets
         :return: True if packet created successfully, otherwise False.
         """
-        integrity_cert = kwargs.get('integrity_cert')
-        if integrity_cert:
+        if kwargs.get('integrity_cert'):
             kwargs['flow_name'] = 'device_integrity_exam'
         flow_name = kwargs.get('flow_name')
-        key = kwargs.get('key')
 
         if kwargs.get('output'):
             output = os.path.abspath(kwargs.get('output'))
@@ -66,25 +64,12 @@ class ProvisioningPacketPsocC3(ProvisioningPacketStrategy):
 
         self.policy_type = flow_name or self.policy_parser.policy_type()
 
-        if self.policy_type == 'reprovisioning':
-            try:
-                packet = self.reprovisioning_data(key)
-            except (CryptoKeyError, ValueError):
-                logger.error("Invalid key type '%s'. ECDSA is expected", key)
-                return False
-            if not key:
-                logger.warning('No key was specified. The data is unsigned')
-        elif self.policy_type == 'device_integrity_exam':
-            packet = self.device_integrity_data(integrity_cert)
-        elif self.policy_type == 'prot_fw_policy':
-            packet = self.prot_fw_policy_data()
-        else:
-            packet = self.provisioning_data()
+        packet, info = self._get_packet_data(**kwargs)
 
         os.makedirs(os.path.dirname(output), exist_ok=True)
         with open(output, 'wb') as f:
             f.write(packet)
-        logger.info("Provisioning packet created in '%s'", output)
+        logger.info("%s in '%s'", info, output)
 
         return True
 
@@ -195,7 +180,7 @@ class ProvisioningPacketPsocC3(ProvisioningPacketStrategy):
         return input_data
 
     def device_integrity_data(self, cert):
-        """Gets Protected FW packet data"""
+        """Gets device_integrity packet data"""
         if not cert:
             raise ValueError('Integrity cert must be specified')
 
@@ -243,6 +228,29 @@ class ProvisioningPacketPsocC3(ProvisioningPacketStrategy):
     @staticmethod
     def _get_ram_app_package(app_path, input_params=None):
         return RamAppPackagePsocC3(app_path, input_params=input_params)
+
+    def _get_packet_data(self, **kwargs):
+        key = kwargs.get('key')
+        integrity_cert = kwargs.get('integrity_cert')
+
+        if self.policy_type == 'reprovisioning':
+            try:
+                packet = self.reprovisioning_data(key)
+            except (CryptoKeyError, ValueError):
+                logger.error("Invalid key type '%s'. ECDSA is expected", key)
+                return False
+            if not key:
+                logger.warning('No key was specified. The data is unsigned')
+        elif self.policy_type == 'device_integrity_exam':
+            packet = self.device_integrity_data(integrity_cert)
+        elif self.policy_type == 'prot_fw_policy':
+            packet = self.prot_fw_policy_data()
+        else:
+            packet = self.provisioning_data()
+
+        info = 'Provisioning packet created'
+
+        return packet, info
 
     def _provisioning_assets(self):
         """Gets assets list"""

@@ -51,17 +51,17 @@
  *                  cosine_distance(u,v) is 1 - u . v / (Norm(u) Norm(v))
  */
 
-float32_t arm_cosine_distance_f32(const float32_t *pA, const float32_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_cosine_distance_f32(const float32_t *pA,const float32_t *pB, uint32_t blockSize)
 {
-    float32_t pwra, pwrb, dot, tmp;
+    float32_t pwra,pwrb,dot,tmp;
 
     arm_power_f32(pA, blockSize, &pwra);
     arm_power_f32(pB, blockSize, &pwrb);
 
-    arm_dot_prod_f32(pA, pB, blockSize, &dot);
+    arm_dot_prod_f32(pA,pB,blockSize,&dot);
 
     arm_sqrt_f32(pwra * pwrb, &tmp);
-    return (1.0f - dot / tmp);
+    return(1.0f - dot / tmp);
 
 }
 

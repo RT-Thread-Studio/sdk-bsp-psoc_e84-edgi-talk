@@ -1,0 +1,35 @@
+var group__group__crypto__data__structures =
+[
+    [ "cy_stc_crypto_rsa_pub_key_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__rsa__pub__key__t", null ],
+    [ "cy_stc_crypto_aes_buffers_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__aes__buffers__t", null ],
+    [ "cy_stc_crypto_aes_state_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__aes__state__t", null ],
+    [ "cy_stc_crypto_aes_ccm_buffers_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__aes__ccm__buffers__t", null ],
+    [ "cy_stc_crypto_aes_ccm_state_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__aes__ccm__state__t", null ],
+    [ "cy_stc_crypto_aes_gcm_buffers_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__aes__gcm__buffers__t", null ],
+    [ "cy_stc_crypto_aes_gcm_state_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__aes__gcm__state__t", null ],
+    [ "cy_stc_crypto_sha_state_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__sha__state__t", null ],
+    [ "cy_stc_crypto_hmac_state_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__hmac__state__t", null ],
+    [ "cy_stc_crypto_ecc_point", "group__group__crypto__data__structures.html#structcy__stc__crypto__ecc__point", null ],
+    [ "cy_stc_crypto_ecc_key", "group__group__crypto__data__structures.html#structcy__stc__crypto__ecc__key", null ],
+    [ "cy_stc_crypto_trng_config_t", "group__group__crypto__data__structures.html#structcy__stc__crypto__trng__config__t", [
+      [ "sampleClockDiv", "group__group__crypto__data__structures.html#a5f5612b5318cfd909e60919946a6d96e", null ],
+      [ "reducedClockDiv", "group__group__crypto__data__structures.html#a2523497dd255198158d400eeccaad740", null ],
+      [ "initDelay", "group__group__crypto__data__structures.html#a11d38691d7484d76e85bfed2572c04b8", null ],
+      [ "vnCorrectorEnable", "group__group__crypto__data__structures.html#af84839eab51523cc7f32ed75707ea17a", null ],
+      [ "stopOnAPDetect", "group__group__crypto__data__structures.html#a052c4044fc4c28d77aca8d0434fa0249", null ],
+      [ "stopOnRCDetect", "group__group__crypto__data__structures.html#ab1d223dba64491fc67a287e3af34448e", null ],
+      [ "ro11Enable", "group__group__crypto__data__structures.html#ae83e7a39d85d02b767a9ca40c3caa4fe", null ],
+      [ "ro15Enable", "group__group__crypto__data__structures.html#adef44f6f5cdfdef7a14cf64da9e33574", null ],
+      [ "garo15Enable", "group__group__crypto__data__structures.html#afa7c411e19e71a88e55665e0de2b436c", null ],
+      [ "garo31Enable", "group__group__crypto__data__structures.html#a06ed6e5855fb82c25df146b29488fe4e", null ],
+      [ "firo15Enable", "group__group__crypto__data__structures.html#aee633946eda1b3247ecc3f5f9d8cfa04", null ],
+      [ "firo31Enable", "group__group__crypto__data__structures.html#aec41942468a7c789b3e34fe35c4f320d", null ],
+      [ "garo31Poly", "group__group__crypto__data__structures.html#a6112be4ba43ba956bfcd5a7ef4ad534a", null ],
+      [ "firo31Poly", "group__group__crypto__data__structures.html#aa936d6b8a50e272c6dad032935a0983a", null ],
+      [ "monBitStreamSelect", "group__group__crypto__data__structures.html#aefccf5c8a9b77612c62e627b67a2ba05", null ],
+      [ "monCutoffCount8", "group__group__crypto__data__structures.html#a270c0d6e3f3856435467f267eae032bb", null ],
+      [ "monCutoffCount16", "group__group__crypto__data__structures.html#a7b1cac87f8528d6abf617bf2335d1f87", null ],
+      [ "monWindowSize", "group__group__crypto__data__structures.html#a6f827eb230a9f9dcb9be84a112adb576", null ]
+    ] ],
+    [ "cy_en_crypto_ecc_key_type_t", "group__group__crypto__data__structures.html#ga7b3a08afd0127d33b1110cdb536abdd3", null ]
+];

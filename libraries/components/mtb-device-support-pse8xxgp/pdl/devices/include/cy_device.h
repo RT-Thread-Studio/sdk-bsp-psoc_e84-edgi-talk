@@ -13,184 +13,38 @@
 #include <stddef.h>
 
 #include "cy_utils.h"
-#include "startup_cat1d.h"
+#include "startup_edge.h"
 #include "cmsis_compiler.h"
 #ifndef PSE84_PSVP_UUT
-    #include "cy_device_headers.h"
+#include "cy_device_headers.h"
 #endif
 /* CM55 NPU global defines */
 #ifndef ETHOSU55
-    #define ETHOSU55
+#define ETHOSU55
 #endif
 #ifndef ETHOSU_ARCH
-    #define ETHOSU_ARCH u55
+#define ETHOSU_ARCH u55
 #endif
-/* This define is used to differentiate default clock frequency between PSVP and actual silicon
-   To be removed when actual silicon arrives
-*/
-//#define PSE84_PSVP
 
-/* This is temporary flag until hal or bsp adopts IP enable API Cy_SysClk_PeriGroupSlaveInit
-   This flag ensures all necessary IP's gets released from reset in startup code.
-*/
-/* #define CY_DEVICE_FORCE_IP_ENABLE_IN_STARTUP */
-
-/* This is a feature flag available only for CAT1D devices supporting Cy_SysClk_PeriGroupSlaveInit
+/* This is a feature flag available only for PSoC Edge devices supporting Cy_SysClk_PeriGroupSlaveInit
 */
 #define CY_DEVICE_CONFIGURATOR_IP_ENABLE_FEATURE
 
 /* The SW workaround for RRAM on PSE84 silicon */
 #if (defined(CY_IP_MXS22RRAMC_VERSION) && (CY_IP_MXS22RRAMC_VERSION) < 2) && !defined(COMPONENT_CM0P)
-    #define WA__PM_0159902_6
+#define WA__PM_0159902_6
 #endif
 
 /* Defines a start address of the default vector table */
 #ifndef CY_SYS_CM55_DEFAULT_VECTOR_ADDRESS
-    /* For PSE84 the default vector table is in ITCM memory */
-    #define CY_SYS_CM55_DEFAULT_VECTOR_ADDRESS    (CY_CM55_ITCM_NS_SBUS_BASE)
+/* For PSE84 the default vector table is in ITCM memory */
+#define CY_SYS_CM55_DEFAULT_VECTOR_ADDRESS    (CY_CM55_ITCM_NS_SBUS_BASE)
 #endif /* CY_SYS_DEFAULT_VECTOR_ADDRESS */
 
 #if (defined(CY_IP_MXS22SRSS_VERSION) && (CY_IP_MXS22SRSS_VERSION == 1))
-    #define WA__DRIVERS_21925
+/* This forces the DPLL LP trim values to be updated in the personality */
+#define UPDATE_DPLL_LP_TRIM_VALUES
 #endif /* (defined(CY_IP_MXS22SRSS_VERSION) && (CY_IP_MXS22SRSS_VERSION == 1)) */
-
-/* These defines come from target specific BSP make file. If they are not defined,
- we can use these default values to avoid compilation errors */
-
-#ifndef CY_RRAM_MAIN_NVM_NS_OFFSET
-    #define CY_RRAM_MAIN_NVM_NS_OFFSET 0x0002A000
-#endif
-
-#ifndef CY_RRAM_MAIN_NVM_NS_SIZE
-    #ifdef CY_DEVICE_IFX_SECURITY_EPC2
-        #define CY_RRAM_MAIN_NVM_NS_SIZE 0x00040000
-    #else
-        #define CY_RRAM_MAIN_NVM_NS_SIZE 0x00016000
-    #endif /* CY_DEVICE_IFX_SECURITY_EPC2 */
-#endif
-
-#ifndef RRAM_NVM_DATA_NS_OFFSET
-    #define RRAM_NVM_DATA_NS_OFFSET 0x0002A000
-#endif
-
-#ifndef RRAM_NVM_DATA_NS_SIZE
-    #ifdef CY_DEVICE_IFX_SECURITY_EPC2
-        #define RRAM_NVM_DATA_NS_SIZE 0x00040000
-    #else
-        #define RRAM_NVM_DATA_NS_SIZE 0x00016000
-    #endif /* CY_DEVICE_IFX_SECURITY_EPC2 */
-#endif
-
-#ifndef CY_SMIF0_MAIN_NVM_NS_OFFSET
-    #define CY_SMIF0_MAIN_NVM_NS_OFFSET 0x00340000
-#endif
-
-#ifndef CY_SMIF0_MAIN_NVM_NS_SIZE
-    #define CY_SMIF0_MAIN_NVM_NS_SIZE 0x008C0000
-#endif
-
-#ifndef CY_SMIF1_MAIN_NVM_NS_OFFSET
-    #define CY_SMIF1_MAIN_NVM_NS_OFFSET 0x00000000
-#endif
-
-#ifndef CY_SMIF1_MAIN_NVM_NS_SIZE
-    #define CY_SMIF1_MAIN_NVM_NS_SIZE 0x04000000
-#endif
-
-#ifndef CY_SOCMEMSRAM_NS_OFFSET
-    #define CY_SOCMEMSRAM_NS_OFFSET 0x00000000
-#endif
-
-#ifndef CY_SOCMEMSRAM_NS_SIZE
-    #define CY_SOCMEMSRAM_NS_SIZE 0x00500000
-#endif
-
-#ifndef CY_SRAM0_NS_OFFSET
-
-    #ifdef FLASH_BOOT
-        #define CY_SRAM0_NS_OFFSET 0x00055000
-    #else
-        #define CY_SRAM0_NS_OFFSET 0x00020000
-    #endif
-
-#endif
-
-#ifndef CY_SRAM0_NS_SIZE
-
-    #ifdef FLASH_BOOT
-        #define CY_SRAM0_NS_SIZE 0x0002B000
-    #else
-        #define CY_SRAM0_NS_SIZE 0x00060000
-    #endif
-
-#endif
-
-#ifndef CY_SRAM0_SHM_S_OFFSET
-    #define CY_SRAM0_SHM_S_OFFSET 0x00053000
-#endif
-
-#ifndef CY_SRAM0_SHM_S_SIZE
-    #define CY_SRAM0_SHM_S_SIZE 0x00002000
-#endif
-
-#ifndef CY_SRAM1_NS_OFFSET
-    #define CY_SRAM1_NS_OFFSET 0x00000000
-#endif
-
-#ifndef CY_SRAM1_NS_SIZE
-    #define CY_SRAM1_NS_SIZE 0x0007E000
-#endif
-
-#ifndef CY_SRAM1_SHM_NS_OFFSET
-    #define CY_SRAM1_SHM_NS_OFFSET 0x0007E000
-#endif
-
-#ifndef CY_SRAM1_SHM_NS_SIZE
-    #define CY_SRAM1_SHM_NS_SIZE 0x00002000
-#endif
-
-#ifndef FLASH_BOOT
-    /* RAM BOOOT Defines START*/
-    #ifndef CY_CM33_SEC_APP_BOOT_ADDR
-        #define CY_CM33_SEC_APP_BOOT_ADDR 0x34000400
-    #endif
-
-    #ifndef CY_CM33_NSC_ADDR
-        #define CY_CM33_NSC_ADDR 0x1400ff00
-    #endif
-    #ifndef CY_CM33_NSC_SIZE
-        #define CY_CM33_NSC_SIZE 0x00000100
-    #endif
-    #ifndef CY_CM33_NS_APP_BOOT_ADDR
-        #define CY_CM33_NS_APP_BOOT_ADDR 0x24080400
-    #endif
-    #ifndef CY_CM55_APP_BOOT_ADDR
-        #define CY_CM55_APP_BOOT_ADDR 0x26000400
-    #endif
-    /* RAM BOOOT Defines END*/
-#else
-    /* FLASH BOOOT Defines START*/
-    #ifndef CY_CM33_SEC_APP_BOOT_ADDR
-        #define CY_CM33_SEC_APP_BOOT_ADDR 0x18100400
-    #endif
-    #ifndef CY_CM33_NSC_ADDR
-        #ifdef APP_NEXT_LOC_RAM
-            #define CY_CM33_NSC_ADDR 0x1202bf00
-        #else
-            #define CY_CM33_NSC_ADDR 0x1813ff00
-        #endif
-    #endif
-    #ifndef CY_CM33_NSC_SIZE
-        #define CY_CM33_NSC_SIZE 0x00000100
-    #endif
-    #ifndef CY_CM33_NS_APP_BOOT_ADDR
-        #define CY_CM33_NS_APP_BOOT_ADDR 0x08340400
-    #endif
-    #ifndef CY_CM55_APP_BOOT_ADDR
-        #define CY_CM55_APP_BOOT_ADDR 0x60580400
-    #endif
-    /* FLASH BOOOT Defines END*/
-#endif
 
 /* DIE_ID and REV_ID registers located in the NS_SFLASH sub-region
    of the RRAM PROTECTED NVM region */
@@ -222,7 +76,7 @@
 
 
 CY_MISRA_FP_BLOCK_START('MISRA C-2012 Rule 8.6', 1, \
-                        'Checked manually. The definition is a part of linker script.')
+'Checked manually. The definition is a part of linker script.')
 
 /* Device descriptor type */
 typedef struct
@@ -241,7 +95,7 @@ typedef struct
 
     /* Peripheral register offsets */
 
-    /* DW registers */
+   /* DW registers */
     uint16_t dwChOffset;
     uint16_t dwChSize;
     uint8_t  dwChCtlPrioPos;
@@ -263,16 +117,16 @@ typedef struct
 *******************************************************************************/
 
 extern const cy_stc_device_t   cy_deviceIpBlockCfg;
-extern const cy_stc_device_t *cy_device;
+extern const cy_stc_device_t* cy_device;
 
 /*******************************************************************************
 *               Macro Definitions
 *******************************************************************************/
 #define SECURE_ALIAS_OFFSET                 0x10000000UL
 #ifdef CY_PDL_TZ_ENABLED
-    #define GET_ALIAS_ADDRESS(addr)             ((uint32_t)((uint32_t)(addr) | SECURE_ALIAS_OFFSET))
+#define GET_ALIAS_ADDRESS(addr)             ((uint32_t)((uint32_t)(addr) | SECURE_ALIAS_OFFSET))
 #else
-    #define GET_ALIAS_ADDRESS(addr)             ((uint32_t)((uint32_t)(addr) & ~(SECURE_ALIAS_OFFSET)))
+#define GET_ALIAS_ADDRESS(addr)             ((uint32_t)((uint32_t)(addr) & ~(SECURE_ALIAS_OFFSET)))
 #endif
 #define GET_NSALIAS_ADDRESS(addr)           ((uint32_t)((uint32_t)(addr) & ~(SECURE_ALIAS_OFFSET)))
 
@@ -286,12 +140,8 @@ void Cy_PDL_Init(const cy_stc_device_t * device);
 /*******************************************************************************
 *               Register Access Helper Macros
 *******************************************************************************/
-#define CY_DEVICE_CAT1D            /* Device Category */
-#define CY_CRYPTO_V1                        (0U) /* CAT1D devices have only mxcrypto_v2 IP */
+#define CY_CRYPTO_V1                        (0U) /* We have mxcrypto_v2 IP */
 typedef CRYPTO_V2_Type CRYPTO_Type;
-
-#define CY_REMAP_ADDRESS_CBUS_TO_SAHB(addr)               ((void *)cy_PlatformRemapAddr(addr))
-#define CY_REMAP_ADDRESS_SAHB_TO_CBUS(addr)               ((void *)cy_PlatformInternalRemapAddr(addr))
 
 /*******************************************************************************
 *               SDHC
@@ -488,7 +338,7 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define SMIF_Base_Type                             SMIF_STRUCT_Type
 #define CY_SMIF_CORE_COUNT                         (2U)
 #if defined (SMIF_BRIDGE_PRESENT) && (SMIF_BRIDGE_PRESENT == 1U)
-    #define CY_SMIF_BRIDGE_REMAP_REGION_COUNT          (8U)
+#define CY_SMIF_BRIDGE_REMAP_REGION_COUNT          (8U)
 #endif
 
 #define SMIF_FAST_CA_CMD_INV_Msk                   SMIF_CORE_FAST_CA_CMD_INV_Msk
@@ -532,25 +382,14 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define SMIF_CRYPTO_CMD_START_Pos                  SMIF_CORE_SMIF_CRYPTO_CRYPTO_CMD_START_Pos
 #define SMIF_CRYPTO_CMD_START_Msk                  SMIF_CORE_SMIF_CRYPTO_CRYPTO_CMD_START_Msk
 
-#if defined (CY_IP_MXSMIF) && (CY_IP_MXSMIF_VERSION == 6u)
-    #define SMIF0_CORE0_DEVICE0             (SMIF0_CORE_DEVICE0)
-    #define SMIF0_CORE0_DEVICE1             (SMIF0_CORE_DEVICE0)
-    #define SMIF0_CORE0_DEVICE2             (SMIF0_CORE_DEVICE0)
-    #define SMIF0_CORE0_DEVICE3             (SMIF0_CORE_DEVICE0)
-    #define SMIF0_CORE1_DEVICE0             (SMIF1_CORE_DEVICE0)
-    #define SMIF0_CORE1_DEVICE1             (SMIF1_CORE_DEVICE1)
-    #define SMIF0_CORE1_DEVICE2             (SMIF1_CORE_DEVICE2)
-    #define SMIF0_CORE1_DEVICE3             (SMIF1_CORE_DEVICE3)
-#endif
-
 #if defined (CY_IP_MXSMIF) && (CY_IP_MXSMIF_VERSION == 5)
-    #define CY_SMIF_GPIO_BASE                         ((uint32_t)SMIF0_CORE0_SMIF_GPIO_SMIF_PRT0)
-    #define CY_SMIF_HSIOM_BASE                        ((uint32_t)SMIF0_CORE0_SMIF_HSIOM_SMIF_PRT0)
-    #define CY_SMIF_SECURE_HSIOM_BASE                 ((uint32_t)SMIF0_CORE0_SMIF_HSIOM_SMIF_SECURE_PRT0)
+#define CY_SMIF_GPIO_BASE                         ((uint32_t)SMIF0_CORE0_SMIF_GPIO_SMIF_PRT0)
+#define CY_SMIF_HSIOM_BASE                        ((uint32_t)SMIF0_CORE0_SMIF_HSIOM_SMIF_PRT0)
+#define CY_SMIF_SECURE_HSIOM_BASE                 ((uint32_t)SMIF0_CORE0_SMIF_HSIOM_SMIF_SECURE_PRT0)
 #else
-    #define CY_SMIF_GPIO_BASE                         ((uint32_t)SMIF0_CORE_SMIF_GPIO_SMIF_PRT0)
-    #define CY_SMIF_HSIOM_BASE                        ((uint32_t)SMIF0_CORE_SMIF_HSIOM_SMIF_PRT0)
-    #define CY_SMIF_SECURE_HSIOM_BASE                 ((uint32_t)SMIF0_CORE_SMIF_HSIOM_SMIF_SECURE_PRT0)
+#define CY_SMIF_GPIO_BASE                         ((uint32_t)SMIF0_CORE_SMIF_GPIO_SMIF_PRT0)
+#define CY_SMIF_HSIOM_BASE                        ((uint32_t)SMIF0_CORE_SMIF_HSIOM_SMIF_PRT0)
+#define CY_SMIF_SECURE_HSIOM_BASE                 ((uint32_t)SMIF0_CORE_SMIF_HSIOM_SMIF_SECURE_PRT0)
 #endif
 #define SMIF_CRYPTO_CMD(base)            (((SMIF_CORE_Type*) base)->SMIF_CRYPTO_BLOCK[0].CRYPTO_CMD)
 #define SMIF_CRYPTO_ADDR(base)           (((SMIF_CORE_Type*) base)->SMIF_CRYPTO_BLOCK[0].CRYPTO_ADDR)
@@ -588,12 +427,12 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define SMIF_CRYPTO_IDX_OUTPUT2(base, deviceIndex)         (SMIF_CRYPTO_IDX(base, deviceIndex).CRYPTO_OUTPUT2)
 
 #if defined (SMIF_BRIDGE_PRESENT) && (SMIF_BRIDGE_PRESENT == 1U)
-    #define SMIF_BRIDGE_CTL(base)                              ((((SMIF_Base_Type *)base)->SMIF_BRIDGE).CTL)
-    #define SMIF_REMAPREGION_CTL(base, index)                  (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).CTL)
-    #define SMIF_REMAPREGION_ADDR(base, index)                 (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).ADDR)
-    #define SMIF_REMAPREGION_MASK(base, index)                 (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).MASK)
-    #define SMIF_REMAPREGION_SMIF0_REMAP(base, index)          (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).SMIF0_REMAP)
-    #define SMIF_REMAPREGION_SMIF1_REMAP(base, index)          (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).SMIF1_REMAP)
+#define SMIF_BRIDGE_CTL(base)                              ((((SMIF_Base_Type *)base)->SMIF_BRIDGE).CTL)
+#define SMIF_REMAPREGION_CTL(base, index)                  (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).CTL)
+#define SMIF_REMAPREGION_ADDR(base, index)                 (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).ADDR)
+#define SMIF_REMAPREGION_MASK(base, index)                 (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).MASK)
+#define SMIF_REMAPREGION_SMIF0_REMAP(base, index)          (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).SMIF0_REMAP)
+#define SMIF_REMAPREGION_SMIF1_REMAP(base, index)          (((((SMIF_Base_Type *)base)->SMIF_BRIDGE).SMIF_REMAP_REGION[index]).SMIF1_REMAP)
 #endif
 
 #define SMIF_DEVICE_CTL(base)               (((SMIF_CORE_DEVICE_Type *)(base))->CTL)
@@ -683,21 +522,12 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define SMIF_RWDS_DRIVE_STRENGTH(base)            (((SMIF_CORE_Type *)(base))->SMIF_GPIO.SMIF_PRT[2].CFG_DRIVE_EXT0)
 #define SMIF_IDAC(base)                           (((SMIF_CORE_Type *)(base))->DLL_IDAC)
 
-/* Backward Compatibility - Default SMIF instance pointing to CORE0 */
-#if (CY_IP_MXSMIF_VERSION == 5)
-    #define SMIF_HW SMIF0_CORE0
-#else
-    #define SMIF_HW SMIF0_CORE
-#endif
-
-#define SMIF_config SMIF_0_CORE_0_config
-
 #if (CY_IP_MXSMIF_VERSION == 6)
-    #define SMIF_DEVICE_NR SMIF0_DEVICE_NR
+#define SMIF_DEVICE_NR SMIF0_DEVICE_NR
 #endif
 
 #ifndef SMIF_DELAY_TAPS_NR
-    #define SMIF_DELAY_TAPS_NR 16u
+#define SMIF_DELAY_TAPS_NR 16u
 #endif
 
 #define SMIF_CORE0_SS0_PORT           (GPIO_PRT5)
@@ -720,33 +550,29 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 
 #define SMIF_CORE0_SS_PORT(slaveSelectId)       ((slaveSelectId == CY_SMIF_SLAVE_SELECT_0) ? SMIF_CORE0_SS0_PORT : \
                                                 ((slaveSelectId == CY_SMIF_SLAVE_SELECT_1) ? SMIF_CORE0_SS1_PORT : \
-                                                ((slaveSelectId == CY_SMIF_SLAVE_SELECT_2) ? SMIF_CORE0_SS2_PORT : SMIF_CORE0_SS3_PORT)))
+												((slaveSelectId == CY_SMIF_SLAVE_SELECT_2) ? SMIF_CORE0_SS2_PORT : SMIF_CORE0_SS3_PORT)))
 #define SMIF_CORE1_SS_PORT(slaveSelectId)       ((slaveSelectId == CY_SMIF_SLAVE_SELECT_0) ? SMIF_CORE1_SS0_PORT : \
                                                 ((slaveSelectId == CY_SMIF_SLAVE_SELECT_1) ? SMIF_CORE1_SS1_PORT : \
-                                                ((slaveSelectId == CY_SMIF_SLAVE_SELECT_2) ? SMIF_CORE1_SS2_PORT : SMIF_CORE1_SS3_PORT)))
+												((slaveSelectId == CY_SMIF_SLAVE_SELECT_2) ? SMIF_CORE1_SS2_PORT : SMIF_CORE1_SS3_PORT)))
 
 #define SMIF_CORE0_SS_PIN(slaveSelectId)        ((slaveSelectId == CY_SMIF_SLAVE_SELECT_0) ? SMIF_CORE0_SS0_PIN : \
                                                 ((slaveSelectId == CY_SMIF_SLAVE_SELECT_1) ? SMIF_CORE0_SS1_PIN : \
-                                                ((slaveSelectId == CY_SMIF_SLAVE_SELECT_2) ? SMIF_CORE0_SS2_PIN : SMIF_CORE0_SS2_PIN)))
+												((slaveSelectId == CY_SMIF_SLAVE_SELECT_2) ? SMIF_CORE0_SS2_PIN : SMIF_CORE0_SS3_PIN)))
 #define SMIF_CORE1_SS_PIN(slaveSelectId)        ((slaveSelectId == CY_SMIF_SLAVE_SELECT_0) ? SMIF_CORE1_SS0_PIN : \
                                                 ((slaveSelectId == CY_SMIF_SLAVE_SELECT_1) ? SMIF_CORE1_SS1_PIN : \
-                                                ((slaveSelectId == CY_SMIF_SLAVE_SELECT_2) ? SMIF_CORE1_SS2_PIN : SMIF_CORE1_SS3_PIN)))
+												((slaveSelectId == CY_SMIF_SLAVE_SELECT_2) ? SMIF_CORE1_SS2_PIN : SMIF_CORE1_SS3_PIN)))
 
-#if defined (CY_IP_MXSMIF) && (CY_IP_MXSMIF_VERSION == 5)
-    #define SMIF_SS_PORT(base, salveIndex)  (((base) == SMIF0_CORE0) ? (SMIF_CORE0_SS_PORT((salveIndex))) : (SMIF_CORE1_SS_PORT((salveIndex))))
-    #define SMIF_SS_PIN(base, salveIndex)   (((base) == SMIF0_CORE0) ? (SMIF_CORE0_SS_PIN((salveIndex))) : (SMIF_CORE1_SS_PIN((salveIndex))))
-    #define SMIF_DQ0_PORT(base)             (((base) == SMIF0_CORE0) ? ((void *)SMIF0_CORE0_SMIF_GPIO_SMIF_PRT0) : ((void *)SMIF0_CORE1_SMIF_GPIO_SMIF_PRT0))
-#elif defined (CY_IP_MXSMIF) && (CY_IP_MXSMIF_VERSION == 6)
-    #define SMIF_SS_PORT(base, salveIndex)  (((base) == SMIF0_CORE) ? (SMIF_CORE0_SS_PORT((salveIndex))) : (SMIF_CORE1_SS_PORT((salveIndex))))
-    #define SMIF_SS_PIN(base, salveIndex)   (((base) == SMIF0_CORE) ? (SMIF_CORE0_SS_PIN((salveIndex))) : (SMIF_CORE1_SS_PIN((salveIndex))))
-    #define SMIF_DQ0_PORT(base)             (((base) == SMIF0_CORE) ? ((void *)SMIF0_CORE_SMIF_GPIO_SMIF_PRT0) : ((void *)SMIF1_CORE_SMIF_GPIO_SMIF_PRT0))
+#if defined (CY_IP_MXSMIF) && (CY_IP_MXSMIF_VERSION == 6)
+#define SMIF_SS_PORT(base, slaveIndex)  (((base) == SMIF0_CORE) ? (SMIF_CORE0_SS_PORT((slaveIndex))) : (SMIF_CORE1_SS_PORT((slaveIndex))))
+#define SMIF_SS_PIN(base, slaveIndex)   (((base) == SMIF0_CORE) ? (SMIF_CORE0_SS_PIN((slaveIndex))) : (SMIF_CORE1_SS_PIN((slaveIndex))))
+#define SMIF_DQ0_PORT(base)             (((base) == SMIF0_CORE) ? ((void *)SMIF0_CORE_SMIF_GPIO_SMIF_PRT0) : ((void *)SMIF1_CORE_SMIF_GPIO_SMIF_PRT0))
 #endif
 
 
 /* CY_XIP_BASE remaps the native XIP Base address definition below
    in order to match the API of other devices. */
 #ifndef CY_XIP_BASE
-    #define CY_XIP_BASE                         CY_XIP_PORT0_BASE
+#define CY_XIP_BASE                         CY_XIP_PORT0_BASE
 #endif
 
 /*******************************************************************************
@@ -795,18 +621,18 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define DW_CH_TR_CMD(base, chan)            (DW_CH((base), (chan))->TR_CMD)
 
 #if defined (CY_IP_MXDW)
-    #define DW_V2_CRC_CTL_DATA_REVERSE_Msk DW_CRC_CTL_DATA_REVERSE_Msk
-    #define DW_V2_CRC_CTL_REM_REVERSE_Msk DW_CRC_CTL_REM_REVERSE_Msk
-    #define DW_V2_CRC_DATA_CTL_DATA_XOR_Msk DW_CRC_DATA_CTL_DATA_XOR_Msk
-    #define DW_V2_CRC_REM_CTL_REM_XOR_Msk DW_CRC_REM_CTL_REM_XOR_Msk
-    #define DW_V2_CRC_POL_CTL_POLYNOMIAL_Msk DW_CRC_POL_CTL_POLYNOMIAL_Msk
-    #define DW_V2_CRC_LFSR_CTL_LFSR32_Msk DW_CRC_LFSR_CTL_LFSR32_Msk
-    #define DW_V2_CRC_CTL_DATA_REVERSE_Pos DW_CRC_CTL_DATA_REVERSE_Pos
-    #define DW_V2_CRC_CTL_REM_REVERSE_Pos DW_CRC_CTL_REM_REVERSE_Pos
-    #define DW_V2_CRC_DATA_CTL_DATA_XOR_Pos DW_CRC_DATA_CTL_DATA_XOR_Pos
-    #define DW_V2_CRC_REM_CTL_REM_XOR_Pos DW_CRC_REM_CTL_REM_XOR_Pos
-    #define DW_V2_CRC_POL_CTL_POLYNOMIAL_Pos DW_CRC_POL_CTL_POLYNOMIAL_Pos
-    #define DW_V2_CRC_LFSR_CTL_LFSR32_Pos DW_CRC_LFSR_CTL_LFSR32_Pos
+#define DW_V2_CRC_CTL_DATA_REVERSE_Msk DW_CRC_CTL_DATA_REVERSE_Msk
+#define DW_V2_CRC_CTL_REM_REVERSE_Msk DW_CRC_CTL_REM_REVERSE_Msk
+#define DW_V2_CRC_DATA_CTL_DATA_XOR_Msk DW_CRC_DATA_CTL_DATA_XOR_Msk
+#define DW_V2_CRC_REM_CTL_REM_XOR_Msk DW_CRC_REM_CTL_REM_XOR_Msk
+#define DW_V2_CRC_POL_CTL_POLYNOMIAL_Msk DW_CRC_POL_CTL_POLYNOMIAL_Msk
+#define DW_V2_CRC_LFSR_CTL_LFSR32_Msk DW_CRC_LFSR_CTL_LFSR32_Msk
+#define DW_V2_CRC_CTL_DATA_REVERSE_Pos DW_CRC_CTL_DATA_REVERSE_Pos
+#define DW_V2_CRC_CTL_REM_REVERSE_Pos DW_CRC_CTL_REM_REVERSE_Pos
+#define DW_V2_CRC_DATA_CTL_DATA_XOR_Pos DW_CRC_DATA_CTL_DATA_XOR_Pos
+#define DW_V2_CRC_REM_CTL_REM_XOR_Pos DW_CRC_REM_CTL_REM_XOR_Pos
+#define DW_V2_CRC_POL_CTL_POLYNOMIAL_Pos DW_CRC_POL_CTL_POLYNOMIAL_Pos
+#define DW_V2_CRC_LFSR_CTL_LFSR32_Pos DW_CRC_LFSR_CTL_LFSR32_Pos
 #endif /* CY_IP_MXDW */
 
 /* Redefine M33 DMA macros */
@@ -1045,6 +871,7 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define GPIO_INTR_CAUSE1                   ((GPIO)->INTR_CAUSE1)
 #define GPIO_INTR_CAUSE2                   ((GPIO)->INTR_CAUSE2)
 #define GPIO_INTR_CAUSE3                   ((GPIO)->INTR_CAUSE3)
+#define GPIO_VDD_MODE_SEL                  ((GPIO)->VDD_MODE_SEL)
 
 #define GPIO_PRT_OUT(base)                 (((GPIO_PRT_Type*)(base))->OUT)
 #define GPIO_PRT_OUT_CLR(base)             (((GPIO_PRT_Type*)(base))->OUT_CLR)
@@ -1091,6 +918,7 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define SCB_UART_TX_CTRL(base)              (((CySCB_Type*) (base))->UART_TX_CTRL)
 #define SCB_UART_RX_CTRL(base)              (((CySCB_Type*) (base))->UART_RX_CTRL)
 #define SCB_UART_FLOW_CTRL(base)            (((CySCB_Type*) (base))->UART_FLOW_CTRL)
+#define SCB_UART_RX_STATUS(base)            (((CySCB_Type*) (base))->UART_RX_STATUS)
 #define SCB_I2C_CTRL(base)                  (((CySCB_Type*) (base))->I2C_CTRL)
 #define SCB_I2C_STATUS(base)                (((CySCB_Type*) (base))->I2C_STATUS)
 #define SCB_I2C_M_CMD(base)                 (((CySCB_Type*) (base))->I2C_M_CMD)
@@ -1318,11 +1146,11 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define CY_SRSS_NUM_HFROOT                  SRSS_NUM_HFROOT
 #define CY_SRSS_ECO_PRESENT                 SRSS_ECO_PRESENT
 #if defined(SRSS_FLL_PRESENT)
-    #define CY_SRSS_FLL_PRESENT                 SRSS_FLL_PRESENT
+#define CY_SRSS_FLL_PRESENT                 SRSS_FLL_PRESENT
 #endif /* defined (SRSS_FLL_PRESENT) */
 #define CY_SRSS_PLL_PRESENT                 SRSS_NUM_TOTAL_DPLL
 #if defined (SRSS_ALTHF_PRESENT)
-    #define CY_SRSS_ALTHF_PRESENT               SRSS_ALTHF_PRESENT
+#define CY_SRSS_ALTHF_PRESENT               SRSS_ALTHF_PRESENT
 #endif /* defined SRSS_ALTHF_PRESENT */
 #define CY_SRSS_PILO_PRESENT                SRSS_PILO_PRESENT
 #define CY_SRSS_PLL400M_PRESENT             0
@@ -1350,9 +1178,9 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 
 /** HF PATH # used for Core */
 #ifdef CORE_NAME_CM33_0
-    #define CY_SYSCLK_CLK_CORE_HF_PATH_NUM     0U
+#define CY_SYSCLK_CLK_CORE_HF_PATH_NUM     0U
 #else
-    #define CY_SYSCLK_CLK_CORE_HF_PATH_NUM     1U
+#define CY_SYSCLK_CLK_CORE_HF_PATH_NUM     1U
 #endif
 
 /* HF PATH # Max Allowed Frequencies */
@@ -1376,7 +1204,6 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
                                           (200000000U)))))))))
 
 
-/* CAT1D specific macro redefinition */
 /* CLK_ECO.CONFIG */
 #define SRSS_CLK_ECO_CONFIG_ECO_DIV_DISABLE_Pos      CLK_ECO_CONFIG_ECO_DIV_DISABLE_Pos
 #define SRSS_CLK_ECO_CONFIG_ECO_DIV_DISABLE_Msk      CLK_ECO_CONFIG_ECO_DIV_DISABLE_Msk
@@ -1490,8 +1317,8 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 #define SRSS_CLK_DPLL_LP_CONFIG4(pllNum)    (((SRSS_Type *) SRSS)->CLK_DPLL_LP[pllNum].CONFIG4)
 #define SRSS_CLK_DPLL_LP_CONFIG5(pllNum)    (((SRSS_Type *) SRSS)->CLK_DPLL_LP[pllNum].CONFIG5)
 #if CY_IP_MXS22SRSS_VERSION_MINOR == (1u)
-    #define SRSS_CLK_DPLL_LP_CONFIG6(pllNum)    (((SRSS_Type *) SRSS)->CLK_DPLL_LP[pllNum].CONFIG6)
-    #define SRSS_CLK_DPLL_LP_CONFIG7(pllNum)    (((SRSS_Type *) SRSS)->CLK_DPLL_LP[pllNum].CONFIG7)
+#define SRSS_CLK_DPLL_LP_CONFIG6(pllNum)    (((SRSS_Type *) SRSS)->CLK_DPLL_LP[pllNum].CONFIG6)
+#define SRSS_CLK_DPLL_LP_CONFIG7(pllNum)    (((SRSS_Type *) SRSS)->CLK_DPLL_LP[pllNum].CONFIG7)
 #endif
 #define SRSS_CLK_DPLL_LP_STATUS(pllNum)     (((SRSS_Type *) SRSS)->CLK_DPLL_LP[pllNum].STATUS)
 
@@ -1522,15 +1349,7 @@ typedef CRYPTO_V2_Type CRYPTO_Type;
 *                PERI PCLK
 *******************************************************************************/
 
-#define PERI_INSTANCE_COUNT                    (2U)
-
-#ifndef PERI_PCLK0_BASE
-    #define PERI_PCLK0_BASE     PERI_PCLK_BASE
-#endif
-
-#ifndef PERI_PCLK1_BASE
-    #define PERI_PCLK1_BASE     0U
-#endif
+#define PERI_INSTANCE_COUNT                    (CY_IP_MXSPERI_INSTANCES)
 
 #define PERI_PCLK_PERI_NUM_Msk                 (0x000000FFU)
 #define PERI_PCLK_GR_NUM_Msk                   (0x0000FF00U)
@@ -1556,74 +1375,37 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_8_NR(uint32_t instNum, uint32_t grNum)
     uint32_t divider_num = 0U;
     switch (instNum)
     {
-    case 0:
-    {
-        switch (grNum)
-        {
         case 0:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_8_VECT;
-            break;
-        case 1:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_8_VECT;
-            break;
-        case 2:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_8_VECT;
-            break;
-        case 3:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_8_VECT;
-            break;
-        case 4:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_8_VECT;
-            break;
-        case 5:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_8_VECT;
-            break;
-        case 6:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR6_GR_DIV_8_VECT;
-            break;
-        case 7:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR7_GR_DIV_8_VECT;
-            break;
-        case 8:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR8_GR_DIV_8_VECT;
-            break;
-        case 9:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR9_GR_DIV_8_VECT;
-            break;
-        default: /* Unsupported grp number */
-            break;
-        }
-    }
-    break;
-    case 1:
-    {
-        switch (grNum)
         {
-        case 0:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_8_VECT;
-            break;
+            switch(grNum)
+            {
+                case 0: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_8_VECT; break;
+                case 1: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_8_VECT; break;
+                case 2: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_8_VECT; break;
+                case 3: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_8_VECT; break;
+                case 4: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_8_VECT; break;
+                case 5: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_8_VECT; break;
+                case 6: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR6_GR_DIV_8_VECT; break;
+                case 7: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR7_GR_DIV_8_VECT; break;
+                case 8: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR8_GR_DIV_8_VECT; break;
+                case 9: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR9_GR_DIV_8_VECT; break;
+                default: /* Unsupported grp number */ break;
+            }
+        }break;
         case 1:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_8_VECT;
-            break;
-        case 2:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_8_VECT;
-            break;
-        case 3:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_8_VECT;
-            break;
-        case 4:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_8_VECT;
-            break;
-        case 5:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_8_VECT;
-            break;
-        default: /* Unsupported grp number */
-            break;
-        }
-    }
-    break;
-    default: /* Unsupported instance number */
-        break;
+        {
+            switch(grNum)
+            {
+                case 0: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_8_VECT; break;
+                case 1: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_8_VECT; break;
+                case 2: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_8_VECT; break;
+                case 3: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_8_VECT; break;
+                case 4: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_8_VECT; break;
+                case 5: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_8_VECT; break;
+                default: /* Unsupported grp number */ break;
+            }
+        }break;
+        default: /* Unsupported instance number */ break;
     }
     return     divider_num;
 }
@@ -1632,74 +1414,37 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_16_NR(uint32_t instNum, uint32_t grNum
     uint32_t divider_num = 0U;
     switch (instNum)
     {
-    case 0:
-    {
-        switch (grNum)
-        {
         case 0:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_16_VECT;
-            break;
-        case 1:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_16_VECT;
-            break;
-        case 2:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_16_VECT;
-            break;
-        case 3:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_16_VECT;
-            break;
-        case 4:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_16_VECT;
-            break;
-        case 5:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_16_VECT;
-            break;
-        case 6:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR6_GR_DIV_16_VECT;
-            break;
-        case 7:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR7_GR_DIV_16_VECT;
-            break;
-        case 8:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR8_GR_DIV_16_VECT;
-            break;
-        case 9:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR9_GR_DIV_16_VECT;
-            break;
-        default: /* Unsupported grp number */
-            break;
-        }
-    }
-    break;
-    case 1:
-    {
-        switch (grNum)
         {
-        case 0:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_16_VECT;
-            break;
+            switch(grNum)
+            {
+                case 0: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_16_VECT; break;
+                case 1: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_16_VECT; break;
+                case 2: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_16_VECT; break;
+                case 3: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_16_VECT; break;
+                case 4: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_16_VECT; break;
+                case 5: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_16_VECT; break;
+                case 6: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR6_GR_DIV_16_VECT; break;
+                case 7: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR7_GR_DIV_16_VECT; break;
+                case 8: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR8_GR_DIV_16_VECT; break;
+                case 9: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR9_GR_DIV_16_VECT; break;
+                default: /* Unsupported grp number */ break;
+            }
+        }break;
         case 1:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_16_VECT;
-            break;
-        case 2:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_16_VECT;
-            break;
-        case 3:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_16_VECT;
-            break;
-        case 4:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_16_VECT;
-            break;
-        case 5:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_16_VECT;
-            break;
-        default: /* Unsupported grp number */
-            break;
-        }
-    }
-    break;
-    default: /* Unsupported instance number */
-        break;
+        {
+            switch(grNum)
+            {
+                case 0: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_16_VECT; break;
+                case 1: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_16_VECT; break;
+                case 2: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_16_VECT; break;
+                case 3: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_16_VECT; break;
+                case 4: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_16_VECT; break;
+                case 5: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_16_VECT; break;
+                default: /* Unsupported grp number */ break;
+            }
+        }break;
+        default: /* Unsupported instance number */ break;
     }
     return divider_num;
 }
@@ -1708,74 +1453,37 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_16_5_NR(uint32_t instNum, uint32_t grN
     uint32_t divider_num = 0U;
     switch (instNum)
     {
-    case 0:
-    {
-        switch (grNum)
-        {
         case 0:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_16_5_VECT;
-            break;
-        case 1:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_16_5_VECT;
-            break;
-        case 2:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_16_5_VECT;
-            break;
-        case 3:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_16_5_VECT;
-            break;
-        case 4:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_16_5_VECT;
-            break;
-        case 5:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_16_5_VECT;
-            break;
-        case 6:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR6_GR_DIV_16_5_VECT;
-            break;
-        case 7:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR7_GR_DIV_16_5_VECT;
-            break;
-        case 8:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR8_GR_DIV_16_5_VECT;
-            break;
-        case 9:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR9_GR_DIV_16_5_VECT;
-            break;
-        default: /* Unsupported grp number */
-            break;
-        }
-    }
-    break;
-    case 1:
-    {
-        switch (grNum)
         {
-        case 0:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_16_5_VECT;
-            break;
+            switch(grNum)
+            {
+                case 0: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_16_5_VECT; break;
+                case 1: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_16_5_VECT; break;
+                case 2: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_16_5_VECT; break;
+                case 3: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_16_5_VECT; break;
+                case 4: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_16_5_VECT; break;
+                case 5: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_16_5_VECT; break;
+                case 6: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR6_GR_DIV_16_5_VECT; break;
+                case 7: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR7_GR_DIV_16_5_VECT; break;
+                case 8: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR8_GR_DIV_16_5_VECT; break;
+                case 9: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR9_GR_DIV_16_5_VECT; break;
+                default: /* Unsupported grp number */ break;
+            }
+        }break;
         case 1:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_16_5_VECT;
-            break;
-        case 2:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_16_5_VECT;
-            break;
-        case 3:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_16_5_VECT;
-            break;
-        case 4:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_16_5_VECT;
-            break;
-        case 5:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_16_5_VECT;
-            break;
-        default: /* Unsupported grp number */
-            break;
-        }
-    }
-    break;
-    default: /* Unsupported instance number */
-        break;
+        {
+            switch(grNum)
+            {
+                case 0: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_16_5_VECT; break;
+                case 1: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_16_5_VECT; break;
+                case 2: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_16_5_VECT; break;
+                case 3: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_16_5_VECT; break;
+                case 4: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_16_5_VECT; break;
+                case 5: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_16_5_VECT; break;
+                default: /* Unsupported grp number */ break;
+            }
+        }break;
+        default: /* Unsupported instance number */ break;
     }
     return     divider_num;
 }
@@ -1784,74 +1492,37 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
     uint32_t divider_num = 0U;
     switch (instNum)
     {
-    case 0:
-    {
-        switch (grNum)
-        {
         case 0:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_24_5_VECT;
-            break;
-        case 1:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_24_5_VECT;
-            break;
-        case 2:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_24_5_VECT;
-            break;
-        case 3:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_24_5_VECT;
-            break;
-        case 4:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_24_5_VECT;
-            break;
-        case 5:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_24_5_VECT;
-            break;
-        case 6:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR6_GR_DIV_24_5_VECT;
-            break;
-        case 7:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR7_GR_DIV_24_5_VECT;
-            break;
-        case 8:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR8_GR_DIV_24_5_VECT;
-            break;
-        case 9:
-            divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR9_GR_DIV_24_5_VECT;
-            break;
-        default: /* Unsupported grp number */
-            break;
-        }
-    }
-    break;
-    case 1:
-    {
-        switch (grNum)
         {
-        case 0:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_24_5_VECT;
-            break;
+            switch(grNum)
+            {
+                case 0: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_24_5_VECT; break;
+                case 1: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_24_5_VECT; break;
+                case 2: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_24_5_VECT; break;
+                case 3: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_24_5_VECT; break;
+                case 4: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_24_5_VECT; break;
+                case 5: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_24_5_VECT; break;
+                case 6: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR6_GR_DIV_24_5_VECT; break;
+                case 7: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR7_GR_DIV_24_5_VECT; break;
+                case 8: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR8_GR_DIV_24_5_VECT; break;
+                case 9: divider_num = PERI0_PERI_PCLK_PCLK_GROUP_NR9_GR_DIV_24_5_VECT; break;
+                default: /* Unsupported grp number */ break;
+            }
+        }break;
         case 1:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_24_5_VECT;
-            break;
-        case 2:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_24_5_VECT;
-            break;
-        case 3:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_24_5_VECT;
-            break;
-        case 4:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_24_5_VECT;
-            break;
-        case 5:
-            divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_24_5_VECT;
-            break;
-        default: /* Unsupported grp number */
-            break;
-        }
-    }
-    break;
-    default: /* Unsupported      instance number */
-        break;
+        {
+            switch(grNum)
+            {
+                case 0: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR0_GR_DIV_24_5_VECT; break;
+                case 1: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR1_GR_DIV_24_5_VECT; break;
+                case 2: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR2_GR_DIV_24_5_VECT; break;
+                case 3: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR3_GR_DIV_24_5_VECT; break;
+                case 4: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR4_GR_DIV_24_5_VECT; break;
+                case 5: divider_num = PERI1_PERI_PCLK_PCLK_GROUP_NR5_GR_DIV_24_5_VECT; break;
+                default: /* Unsupported grp number */ break;
+            }
+        }break;
+        default: /* Unsupported      instance number */ break;
     }
     return     divider_num;
 }
@@ -1920,11 +1591,11 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
 #define CY_PERI_GROUP_NR                        6
 
 #ifndef PERI0_BASE
-    #define PERI0_BASE PERI_BASE
+#define PERI0_BASE PERI_BASE
 #endif
 
 #ifndef PERI1_BASE
-    #define PERI1_BASE 0U
+#define PERI1_BASE 0U
 #endif
 
 
@@ -1976,39 +1647,36 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
                                             ((trCtl) * (uint32_t)sizeof(uint32_t))))
 
 #if defined (CY_IP_MXSPERI)
-    #define PERI_TR_GR_TR_OUT_CTL_TR_SEL_Msk PERI_TR_GR_TR_CTL_TR_SEL_Msk
-    #define PERI_TR_GR_TR_OUT_CTL_TR_SEL_Pos PERI_TR_GR_TR_CTL_TR_SEL_Pos
-    #define CY_PERI_TR_CTL_SEL_Msk PERI_TR_GR_TR_CTL_TR_SEL_Msk
-    #define CY_PERI_TR_CTL_SEL_Pos PERI_TR_GR_TR_CTL_TR_SEL_Pos
-    #define PERI_V2_TR_CMD_OUT_SEL_Msk PERI_TR_CMD_OUT_SEL_Msk
-    #define PERI_V2_TR_CMD_OUT_SEL_Pos PERI_TR_CMD_OUT_SEL_Pos
-    #define PERI_V2_TR_CMD_GROUP_SEL_Msk PERI_TR_CMD_GROUP_SEL_Msk
-    #define PERI_V2_TR_CMD_GROUP_SEL_Pos PERI_TR_CMD_GROUP_SEL_Pos
-    #define CY_PERI_TR_CMD_GROUP_SEL_Msk PERI_TR_CMD_GROUP_SEL_Msk
-    #define CY_PERI_TR_CMD_GROUP_SEL_Pos PERI_TR_CMD_GROUP_SEL_Pos
-    #define CY_PERI_TR_CTL_SEL PERI_TR_GR_TR_CTL_TR_SEL
-    #define PERI_TR_GR_TR_OUT_CTL_TR_INV_Msk PERI_TR_GR_TR_CTL_TR_INV_Msk
-    #define PERI_TR_GR_TR_OUT_CTL_TR_INV_Pos PERI_TR_GR_TR_CTL_TR_INV_Pos
-    #define PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Msk PERI_TR_GR_TR_CTL_TR_EDGE_Msk
-    #define PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Pos PERI_TR_GR_TR_CTL_TR_EDGE_Pos
-    #define PERI_V2_TR_CMD_TR_EDGE_Msk PERI_TR_CMD_TR_EDGE_Msk
-    #define PERI_V2_TR_CMD_TR_EDGE_Pos PERI_TR_CMD_TR_EDGE_Pos
-    #define PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV_Msk PERI_TR_1TO1_GR_TR_CTL_TR_INV_Msk
-    #define PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV_Pos PERI_TR_1TO1_GR_TR_CTL_TR_INV_Pos
-    #define PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE_Msk PERI_TR_1TO1_GR_TR_CTL_TR_EDGE_Msk
-    #define PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE_Pos PERI_TR_1TO1_GR_TR_CTL_TR_EDGE_Pos
-    #define PERI_TR_1TO1_GR_V2_TR_CTL_TR_SEL_Msk PERI_TR_1TO1_GR_TR_CTL_TR_SEL_Msk
-    #define PERI_TR_1TO1_GR_V2_TR_CTL_TR_SEL_Pos PERI_TR_1TO1_GR_TR_CTL_TR_SEL_Pos
-    #define PERI_TR_GR_V2_TR_CTL_DBG_FREEZE_EN_Msk PERI_TR_GR_TR_CTL_DBG_FREEZE_EN_Msk
-    #define PERI_TR_GR_V2_TR_CTL_DBG_FREEZE_EN_Pos PERI_TR_GR_TR_CTL_DBG_FREEZE_EN_Pos
-    #define CY_PERI_V1 0U
-    #define PERI_TR_CMD_COUNT_Pos 0UL
-    #define PERI_TR_CMD_COUNT_Msk 0UL
+#define PERI_TR_GR_TR_OUT_CTL_TR_SEL_Msk PERI_TR_GR_TR_CTL_TR_SEL_Msk
+#define PERI_TR_GR_TR_OUT_CTL_TR_SEL_Pos PERI_TR_GR_TR_CTL_TR_SEL_Pos
+#define CY_PERI_TR_CTL_SEL_Msk PERI_TR_GR_TR_CTL_TR_SEL_Msk
+#define CY_PERI_TR_CTL_SEL_Pos PERI_TR_GR_TR_CTL_TR_SEL_Pos
+#define PERI_V2_TR_CMD_OUT_SEL_Msk PERI_TR_CMD_OUT_SEL_Msk
+#define PERI_V2_TR_CMD_OUT_SEL_Pos PERI_TR_CMD_OUT_SEL_Pos
+#define PERI_V2_TR_CMD_GROUP_SEL_Msk PERI_TR_CMD_GROUP_SEL_Msk
+#define PERI_V2_TR_CMD_GROUP_SEL_Pos PERI_TR_CMD_GROUP_SEL_Pos
+#define CY_PERI_TR_CMD_GROUP_SEL_Msk PERI_TR_CMD_GROUP_SEL_Msk
+#define CY_PERI_TR_CMD_GROUP_SEL_Pos PERI_TR_CMD_GROUP_SEL_Pos
+#define CY_PERI_TR_CTL_SEL PERI_TR_GR_TR_CTL_TR_SEL
+#define PERI_TR_GR_TR_OUT_CTL_TR_INV_Msk PERI_TR_GR_TR_CTL_TR_INV_Msk
+#define PERI_TR_GR_TR_OUT_CTL_TR_INV_Pos PERI_TR_GR_TR_CTL_TR_INV_Pos
+#define PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Msk PERI_TR_GR_TR_CTL_TR_EDGE_Msk
+#define PERI_TR_GR_TR_OUT_CTL_TR_EDGE_Pos PERI_TR_GR_TR_CTL_TR_EDGE_Pos
+#define PERI_V2_TR_CMD_TR_EDGE_Msk PERI_TR_CMD_TR_EDGE_Msk
+#define PERI_V2_TR_CMD_TR_EDGE_Pos PERI_TR_CMD_TR_EDGE_Pos
+#define PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV_Msk PERI_TR_1TO1_GR_TR_CTL_TR_INV_Msk
+#define PERI_TR_1TO1_GR_V2_TR_CTL_TR_INV_Pos PERI_TR_1TO1_GR_TR_CTL_TR_INV_Pos
+#define PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE_Msk PERI_TR_1TO1_GR_TR_CTL_TR_EDGE_Msk
+#define PERI_TR_1TO1_GR_V2_TR_CTL_TR_EDGE_Pos PERI_TR_1TO1_GR_TR_CTL_TR_EDGE_Pos
+#define PERI_TR_1TO1_GR_V2_TR_CTL_TR_SEL_Msk PERI_TR_1TO1_GR_TR_CTL_TR_SEL_Msk
+#define PERI_TR_1TO1_GR_V2_TR_CTL_TR_SEL_Pos PERI_TR_1TO1_GR_TR_CTL_TR_SEL_Pos
+#define PERI_TR_GR_V2_TR_CTL_DBG_FREEZE_EN_Msk PERI_TR_GR_TR_CTL_DBG_FREEZE_EN_Msk
+#define PERI_TR_GR_V2_TR_CTL_DBG_FREEZE_EN_Pos PERI_TR_GR_TR_CTL_DBG_FREEZE_EN_Pos
 
-    #if (CY_IP_MXSPERI_INSTANCES == 2U)
-        #define PERI_INSTANCE_1_IDENT_Pos 16UL
-        #define PERI_INSTANCE_1_IDENT_Msk 0x10000UL
-    #endif /* CY_IP_MXSPERI_INSTANCES == 2U */
+#if (CY_IP_MXSPERI_INSTANCES == 2U)
+#define PERI_INSTANCE_1_IDENT_Pos 16UL
+#define PERI_INSTANCE_1_IDENT_Msk 0x10000UL
+#endif /* CY_IP_MXSPERI_INSTANCES == 2U */
 
 #endif /* CY_IP_MXSPERI */
 
@@ -2055,14 +1723,14 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
 *                CPUSS
 *******************************************************************************/
 #if defined (CORE_NAME_CM55_0)
-    #define CPUSS_SYSTICK_NS_CTL                (((APPCPUSS_Type*) APPCPUSS_BASE)->SYSTICK_NS_CTL)
-    #define CPUSS_SYSTICK_S_CTL                 (((APPCPUSS_Type*) APPCPUSS_BASE)->SYSTICK_S_CTL)
-    #define CPUSS_PRODUCT_ID                    (((APPCPUSS_Type*) APPCPUSS_BASE)->PRODUCT_ID)
+#define CPUSS_SYSTICK_NS_CTL                (((APPCPUSS_Type*) APPCPUSS_BASE)->SYSTICK_NS_CTL)
+#define CPUSS_SYSTICK_S_CTL                 (((APPCPUSS_Type*) APPCPUSS_BASE)->SYSTICK_S_CTL)
+#define CPUSS_PRODUCT_ID                    (((APPCPUSS_Type*) APPCPUSS_BASE)->PRODUCT_ID)
 #else
-    #define CPUSS_SYSTICK_NS_CTL                (((CPUSS_Type*) CPUSS_BASE)->SYSTICK_NS_CTL)
-    #define CPUSS_SYSTICK_S_CTL                 (((CPUSS_Type*) CPUSS_BASE)->SYSTICK_S_CTL)
-    #define CPUSS_TRIM_ROM_CTL                  (((CPUSS_Type*) CPUSS_BASE)->TRIM_ROM_CTL)
-    #define CPUSS_PRODUCT_ID                    (((CPUSS_Type*) CPUSS_BASE)->PRODUCT_ID)
+#define CPUSS_SYSTICK_NS_CTL                (((CPUSS_Type*) CPUSS_BASE)->SYSTICK_NS_CTL)
+#define CPUSS_SYSTICK_S_CTL                 (((CPUSS_Type*) CPUSS_BASE)->SYSTICK_S_CTL)
+#define CPUSS_TRIM_ROM_CTL                  (((CPUSS_Type*) CPUSS_BASE)->TRIM_ROM_CTL)
+#define CPUSS_PRODUCT_ID                    (((CPUSS_Type*) CPUSS_BASE)->PRODUCT_ID)
 #endif
 
 /* ARM core registers */
@@ -2078,47 +1746,43 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
 #define __CMSIS_VERSION_5_9 ((5 << 16U) | 9)
 #define __CMSIS_VERSION_6_0 ((6 << 16U) | 0)
 
+#define SCS_CPPWR_SU10_Msk                  (0x100000U)
+#define SCB_ENABLE_CPACR_CP10_CP11          (0xFUL << 20u)
+#define SCS_ENABLE_CPPWR_SU10_SU11          (0xFUL << 20u)
+
 #if (__CM_CMSIS_VERSION >= __CMSIS_VERSION_6_0)
 
-    #if defined (CORE_NAME_CM33_0)
-        #define SCS_CPPWR                           (((SCnSCB_Type *)SCnSCB)->CPPWR)
-        #define SCS_CPPWR_SU10_Msk                  (0x100000U)
-        #define SCB_NS_CPACR_CP10_CP11_ENABLE      (0xFUL << 20u)
-    #elif defined (CORE_NAME_CM55_0)
-        #define SCS_CPPWR                           (((ICB_Type *)ICB)->CPPWR)
-        #define SCS_CPPWR_SU10_Msk                  (0x100000U)
-        #define SCB_NS_CPACR_CP10_CP11_ENABLE      (0xFUL << 20u)
-    #endif
-
-#else
-    #if defined (CORE_NAME_CM33_0) || defined (CORE_NAME_CM55_0)
-        #define SCS_CPPWR                           (((SCnSCB_Type *)SCnSCB)->CPPWR)
-        #define SCS_CPPWR_SU10_Msk                  (0x100000U)
-        #define SCB_NS_CPACR_CP10_CP11_ENABLE      (0xFUL << 20u)
-    #elif defined (CORE_NAME_CM55_0)
-    #endif
+#if defined (CORE_NAME_CM33_0)
+#define SCS_CPPWR                           (((SCnSCB_Type *)SCnSCB)->CPPWR)
+#elif defined (CORE_NAME_CM55_0)
+#define SCS_CPPWR                           (((ICB_Type *)ICB)->CPPWR)
+#endif
+#else /* <= __CMSIS_VERSION_5_9 */
+#if defined (CORE_NAME_CM33_0) || defined (CORE_NAME_CM55_0)
+#define SCS_CPPWR                           (((SCnSCB_Type *)SCnSCB)->CPPWR)
+#endif
 
 #endif //__CM_CMSIS_VERSION
 
 #if defined (CORE_NAME_CM55_0)
-    #if (__CM_CMSIS_VERSION >= __CMSIS_VERSION_5_9)
-        #define MEM_CTL_MSCR                        (((MemSysCtl_Type *)MEMSYSCTL)->MSCR)
-        #define EWIC_EWCI_ASCR                      (((EWIC_Type *)EWIC)->EWIC_ASCR)
-    #else
-        /* Remove below when CMSIS versiongrater than 5.9 */
-        #define MEMSYSCTL_MSCR_ICACTIVE_Pos        13U                                         /*!< MEMSYSCTL MSCR: ICACTIVE Position */
-        #define MEMSYSCTL_MSCR_ICACTIVE_Msk        (0x1UL << MEMSYSCTL_MSCR_ICACTIVE_Pos)      /*!< MEMSYSCTL MSCR: ICACTIVE Mask */
+#if (__CM_CMSIS_VERSION >= __CMSIS_VERSION_5_9)
+#define MEM_CTL_MSCR                        (((MemSysCtl_Type *)MEMSYSCTL)->MSCR)
+#define EWIC_EWCI_ASCR                      (((EWIC_Type *)EWIC)->EWIC_ASCR)
+#else
+/* Remove below when CMSIS versiongrater than 5.9 */
+#define MEMSYSCTL_MSCR_ICACTIVE_Pos        13U                                         /*!< MEMSYSCTL MSCR: ICACTIVE Position */
+#define MEMSYSCTL_MSCR_ICACTIVE_Msk        (0x1UL << MEMSYSCTL_MSCR_ICACTIVE_Pos)      /*!< MEMSYSCTL MSCR: ICACTIVE Mask */
 
-        #define MEMSYSCTL_MSCR_DCACTIVE_Pos        12U                                         /*!< MEMSYSCTL MSCR: DCACTIVE Position */
-        #define MEMSYSCTL_MSCR_DCACTIVE_Msk        (0x1UL << MEMSYSCTL_MSCR_DCACTIVE_Pos)      /*!< MEMSYSCTL MSCR: DCACTIVE Mask */
+#define MEMSYSCTL_MSCR_DCACTIVE_Pos        12U                                         /*!< MEMSYSCTL MSCR: DCACTIVE Position */
+#define MEMSYSCTL_MSCR_DCACTIVE_Msk        (0x1UL << MEMSYSCTL_MSCR_DCACTIVE_Pos)      /*!< MEMSYSCTL MSCR: DCACTIVE Mask */
 
-        /* EWIC Automatic Sequence Control (EWIC_ASCR) Register Definitions */
-        #define EWIC_EWIC_ASCR_ASPU_Pos             1U                                         /*!< EWIC EWIC_ASCR: ASPU Position */
-        #define EWIC_EWIC_ASCR_ASPU_Msk            (0x1UL << EWIC_EWIC_ASCR_ASPU_Pos)          /*!< EWIC EWIC_ASCR: ASPU Mask */
+/* EWIC Automatic Sequence Control (EWIC_ASCR) Register Definitions */
+#define EWIC_EWIC_ASCR_ASPU_Pos             1U                                         /*!< EWIC EWIC_ASCR: ASPU Position */
+#define EWIC_EWIC_ASCR_ASPU_Msk            (0x1UL << EWIC_EWIC_ASCR_ASPU_Pos)          /*!< EWIC EWIC_ASCR: ASPU Mask */
 
-        #define MEM_CTL_MSCR                        (*(volatile uint32_t *)(0xE001E000U))
-        #define EWIC_EWCI_ASCR                      (*(volatile uint32_t *)(0xE0047004U))
-    #endif
+#define MEM_CTL_MSCR                        (*(volatile uint32_t *)(0xE001E000U))
+#define EWIC_EWCI_ASCR                      (*(volatile uint32_t *)(0xE0047004U))
+#endif
 #endif
 
 /*******************************************************************************
@@ -2138,8 +1802,8 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
 #define LPCOMP_INTR_MASK(base)              (((LPCOMP_Type *)(base))->INTR_MASK)
 #define LPCOMP_INTR_MASKED(base)            (((LPCOMP_Type *)(base))->INTR_MASKED)
 #if defined (CY_IP_MXS22LPCOMP)
-    #define LPCOMP_CMP0_OFFSET_TRIM(base)       (((LPCOMP_Type *)(base))->CMP0_OFFSET_TRIM)
-    #define LPCOMP_CMP1_OFFSET_TRIM(base)       (((LPCOMP_Type *)(base))->CMP1_OFFSET_TRIM)
+#define LPCOMP_CMP0_OFFSET_TRIM(base)       (((LPCOMP_Type *)(base))->CMP0_OFFSET_TRIM)
+#define LPCOMP_CMP1_OFFSET_TRIM(base)       (((LPCOMP_Type *)(base))->CMP1_OFFSET_TRIM)
 #endif
 
 
@@ -2335,189 +1999,189 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
 #define TCPWM_GRP_CNT_INTR_MASKED(base, grp, cntNum)    (((TCPWM_Type *)(base))->GRP[grp].CNT[((cntNum) % 256U)].INTR_MASKED)
 
 #if (CY_IP_MXTCPWM_VERSION >= 2U)
-    #define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Pos TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_CC0_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Msk TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_CC0_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC1_Pos TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_CC1_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC1_Msk TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_CC1_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_PERIOD_Pos TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_PERIOD_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_PERIOD_Msk TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_PERIOD_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_LINE_SEL_Pos TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_LINE_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_LINE_SEL_Msk TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_LINE_SEL_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_CC0_MATCH_UP_EN_Pos TCPWM_GRP_CNT_CTRL_CC0_MATCH_UP_EN_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_CC0_MATCH_UP_EN_Msk TCPWM_GRP_CNT_CTRL_CC0_MATCH_UP_EN_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_CC0_MATCH_DOWN_EN_Pos TCPWM_GRP_CNT_CTRL_CC0_MATCH_DOWN_EN_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_CC0_MATCH_DOWN_EN_Msk TCPWM_GRP_CNT_CTRL_CC0_MATCH_DOWN_EN_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_CC1_MATCH_UP_EN_Pos TCPWM_GRP_CNT_CTRL_CC1_MATCH_UP_EN_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_CC1_MATCH_UP_EN_Msk TCPWM_GRP_CNT_CTRL_CC1_MATCH_UP_EN_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_CC1_MATCH_DOWN_EN_Pos TCPWM_GRP_CNT_CTRL_CC1_MATCH_DOWN_EN_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_CC1_MATCH_DOWN_EN_Msk TCPWM_GRP_CNT_CTRL_CC1_MATCH_DOWN_EN_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_PWM_IMM_KILL_Pos  TCPWM_GRP_CNT_CTRL_PWM_IMM_KILL_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_PWM_IMM_KILL_Msk  TCPWM_GRP_CNT_CTRL_PWM_IMM_KILL_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_PWM_STOP_ON_KILL_Pos TCPWM_GRP_CNT_CTRL_PWM_STOP_ON_KILL_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_PWM_STOP_ON_KILL_Msk TCPWM_GRP_CNT_CTRL_PWM_STOP_ON_KILL_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_PWM_SYNC_KILL_Pos TCPWM_GRP_CNT_CTRL_PWM_SYNC_KILL_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_PWM_SYNC_KILL_Msk TCPWM_GRP_CNT_CTRL_PWM_SYNC_KILL_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_PWM_DISABLE_MODE_Pos TCPWM_GRP_CNT_CTRL_PWM_DISABLE_MODE_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_PWM_DISABLE_MODE_Msk TCPWM_GRP_CNT_CTRL_PWM_DISABLE_MODE_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_UP_DOWN_MODE_Pos  TCPWM_GRP_CNT_CTRL_UP_DOWN_MODE_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_UP_DOWN_MODE_Msk  TCPWM_GRP_CNT_CTRL_UP_DOWN_MODE_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_ONE_SHOT_Pos      TCPWM_GRP_CNT_CTRL_ONE_SHOT_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_ONE_SHOT_Msk      TCPWM_GRP_CNT_CTRL_ONE_SHOT_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_QUAD_ENCODING_MODE_Pos TCPWM_GRP_CNT_CTRL_QUAD_ENCODING_MODE_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_QUAD_ENCODING_MODE_Msk TCPWM_GRP_CNT_CTRL_QUAD_ENCODING_MODE_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_MODE_Pos          TCPWM_GRP_CNT_CTRL_MODE_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_MODE_Msk          TCPWM_GRP_CNT_CTRL_MODE_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_DBG_FREEZE_EN_Pos TCPWM_GRP_CNT_CTRL_DBG_FREEZE_EN_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_DBG_FREEZE_EN_Msk TCPWM_GRP_CNT_CTRL_DBG_FREEZE_EN_Msk
-    #define TCPWM_GRP_CNT_V2_CTRL_ENABLED_Pos       TCPWM_GRP_CNT_CTRL_ENABLED_Pos
-    #define TCPWM_GRP_CNT_V2_CTRL_ENABLED_Msk       TCPWM_GRP_CNT_CTRL_ENABLED_Msk
-    /* TCPWM_GRP_CNT.STATUS */
-    #define TCPWM_GRP_CNT_V2_STATUS_DOWN_Pos        TCPWM_GRP_CNT_STATUS_DOWN_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_DOWN_Msk        TCPWM_GRP_CNT_STATUS_DOWN_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE0_Pos TCPWM_GRP_CNT_STATUS_TR_CAPTURE0_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE0_Msk TCPWM_GRP_CNT_STATUS_TR_CAPTURE0_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_COUNT_Pos    TCPWM_GRP_CNT_STATUS_TR_COUNT_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_COUNT_Msk    TCPWM_GRP_CNT_STATUS_TR_COUNT_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_RELOAD_Pos   TCPWM_GRP_CNT_STATUS_TR_RELOAD_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_RELOAD_Msk   TCPWM_GRP_CNT_STATUS_TR_RELOAD_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_STOP_Pos     TCPWM_GRP_CNT_STATUS_TR_STOP_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_STOP_Msk     TCPWM_GRP_CNT_STATUS_TR_STOP_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_START_Pos    TCPWM_GRP_CNT_STATUS_TR_START_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_START_Msk    TCPWM_GRP_CNT_STATUS_TR_START_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE1_Pos TCPWM_GRP_CNT_STATUS_TR_CAPTURE1_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE1_Msk TCPWM_GRP_CNT_STATUS_TR_CAPTURE1_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_LINE_OUT_Pos    TCPWM_GRP_CNT_STATUS_LINE_OUT_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_LINE_OUT_Msk    TCPWM_GRP_CNT_STATUS_LINE_OUT_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_LINE_COMPL_OUT_Pos TCPWM_GRP_CNT_STATUS_LINE_COMPL_OUT_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_LINE_COMPL_OUT_Msk TCPWM_GRP_CNT_STATUS_LINE_COMPL_OUT_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_RUNNING_Pos     TCPWM_GRP_CNT_STATUS_RUNNING_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_RUNNING_Msk     TCPWM_GRP_CNT_STATUS_RUNNING_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_DT_CNT_L_Pos    TCPWM_GRP_CNT_STATUS_DT_CNT_L_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_DT_CNT_L_Msk    TCPWM_GRP_CNT_STATUS_DT_CNT_L_Msk
-    #define TCPWM_GRP_CNT_V2_STATUS_DT_CNT_H_Pos    TCPWM_GRP_CNT_STATUS_DT_CNT_H_Pos
-    #define TCPWM_GRP_CNT_V2_STATUS_DT_CNT_H_Msk    TCPWM_GRP_CNT_STATUS_DT_CNT_H_Msk
-    /* TCPWM_GRP_CNT.COUNTER */
-    #define TCPWM_GRP_CNT_V2_COUNTER_COUNTER_Pos    TCPWM_GRP_CNT_COUNTER_COUNTER_Pos
-    #define TCPWM_GRP_CNT_V2_COUNTER_COUNTER_Msk    TCPWM_GRP_CNT_COUNTER_COUNTER_Msk
-    /* TCPWM_GRP_CNT.CC0 */
-    #define TCPWM_GRP_CNT_V2_CC0_CC_Pos             TCPWM_GRP_CNT_CC0_CC_Pos
-    #define TCPWM_GRP_CNT_V2_CC0_CC_Msk             TCPWM_GRP_CNT_CC0_CC_Msk
-    /* TCPWM_GRP_CNT.CC0_BUFF */
-    #define TCPWM_GRP_CNT_V2_CC0_BUFF_CC_Pos        TCPWM_GRP_CNT_CC0_BUFF_CC_Pos
-    #define TCPWM_GRP_CNT_V2_CC0_BUFF_CC_Msk        TCPWM_GRP_CNT_CC0_BUFF_CC_Msk
-    /* TCPWM_GRP_CNT.CC1 */
-    #define TCPWM_GRP_CNT_V2_CC1_CC_Pos             TCPWM_GRP_CNT_CC1_CC_Pos
-    #define TCPWM_GRP_CNT_V2_CC1_CC_Msk             TCPWM_GRP_CNT_CC1_CC_Msk
-    /* TCPWM_GRP_CNT.CC1_BUFF */
-    #define TCPWM_GRP_CNT_V2_CC1_BUFF_CC_Pos        TCPWM_GRP_CNT_CC1_BUFF_CC_Pos
-    #define TCPWM_GRP_CNT_V2_CC1_BUFF_CC_Msk        TCPWM_GRP_CNT_CC1_BUFF_CC_Msk
-    /* TCPWM_GRP_CNT.PERIOD */
-    #define TCPWM_GRP_CNT_V2_PERIOD_PERIOD_Pos      TCPWM_GRP_CNT_PERIOD_PERIOD_Pos
-    #define TCPWM_GRP_CNT_V2_PERIOD_PERIOD_Msk      TCPWM_GRP_CNT_PERIOD_PERIOD_Msk
-    /* TCPWM_GRP_CNT.PERIOD_BUFF */
-    #define TCPWM_GRP_CNT_V2_PERIOD_BUFF_PERIOD_Pos TCPWM_GRP_CNT_PERIOD_BUFF_PERIOD_Pos
-    #define TCPWM_GRP_CNT_V2_PERIOD_BUFF_PERIOD_Msk TCPWM_GRP_CNT_PERIOD_BUFF_PERIOD_Msk
-    /* TCPWM_GRP_CNT.LINE_SEL */
-    #define TCPWM_GRP_CNT_V2_LINE_SEL_OUT_SEL_Pos   TCPWM_GRP_CNT_LINE_SEL_OUT_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_LINE_SEL_OUT_SEL_Msk   TCPWM_GRP_CNT_LINE_SEL_OUT_SEL_Msk
-    #define TCPWM_GRP_CNT_V2_LINE_SEL_COMPL_OUT_SEL_Pos TCPWM_GRP_CNT_LINE_SEL_COMPL_OUT_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_LINE_SEL_COMPL_OUT_SEL_Msk TCPWM_GRP_CNT_LINE_SEL_COMPL_OUT_SEL_Msk
-    /* TCPWM_GRP_CNT.LINE_SEL_BUFF */
-    #define TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_OUT_SEL_Pos TCPWM_GRP_CNT_LINE_SEL_BUFF_OUT_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_OUT_SEL_Msk TCPWM_GRP_CNT_LINE_SEL_BUFF_OUT_SEL_Msk
-    #define TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_COMPL_OUT_SEL_Pos TCPWM_GRP_CNT_LINE_SEL_BUFF_COMPL_OUT_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_COMPL_OUT_SEL_Msk TCPWM_GRP_CNT_LINE_SEL_BUFF_COMPL_OUT_SEL_Msk
-    /* TCPWM_GRP_CNT.DT */
-    #define TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L_Pos   TCPWM_GRP_CNT_DT_DT_LINE_OUT_L_Pos
-    #define TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L_Msk   TCPWM_GRP_CNT_DT_DT_LINE_OUT_L_Msk
-    #define TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_H_Pos   TCPWM_GRP_CNT_DT_DT_LINE_OUT_H_Pos
-    #define TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_H_Msk   TCPWM_GRP_CNT_DT_DT_LINE_OUT_H_Msk
-    #define TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT_Pos TCPWM_GRP_CNT_DT_DT_LINE_COMPL_OUT_Pos
-    #define TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT_Msk TCPWM_GRP_CNT_DT_DT_LINE_COMPL_OUT_Msk
-    /* TCPWM_GRP_CNT.TR_CMD */
-    #define TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE0_Pos    TCPWM_GRP_CNT_TR_CMD_CAPTURE0_Pos
-    #define TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE0_Msk    TCPWM_GRP_CNT_TR_CMD_CAPTURE0_Msk
-    #define TCPWM_GRP_CNT_V2_TR_CMD_RELOAD_Pos      TCPWM_GRP_CNT_TR_CMD_RELOAD_Pos
-    #define TCPWM_GRP_CNT_V2_TR_CMD_RELOAD_Msk      TCPWM_GRP_CNT_TR_CMD_RELOAD_Msk
-    #define TCPWM_GRP_CNT_V2_TR_CMD_STOP_Pos        TCPWM_GRP_CNT_TR_CMD_STOP_Pos
-    #define TCPWM_GRP_CNT_V2_TR_CMD_STOP_Msk        TCPWM_GRP_CNT_TR_CMD_STOP_Msk
-    #define TCPWM_GRP_CNT_V2_TR_CMD_START_Pos       TCPWM_GRP_CNT_TR_CMD_START_Pos
-    #define TCPWM_GRP_CNT_V2_TR_CMD_START_Msk       TCPWM_GRP_CNT_TR_CMD_START_Msk
-    #define TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE1_Pos    TCPWM_GRP_CNT_TR_CMD_CAPTURE1_Pos
-    #define TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE1_Msk    TCPWM_GRP_CNT_TR_CMD_CAPTURE1_Msk
-    /* TCPWM_GRP_CNT.TR_IN_SEL0 */
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL0_CAPTURE0_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL0_CAPTURE0_SEL_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL0_COUNT_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL0_COUNT_SEL_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL0_RELOAD_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL0_RELOAD_SEL_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL0_STOP_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL0_STOP_SEL_Msk
-    /* TCPWM_GRP_CNT.TR_IN_SEL1 */
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL1_START_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL1_START_SEL_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL1_CAPTURE1_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL1_CAPTURE1_SEL_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_SEL1_CAPTURE1_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL1_CAPTURE1_SEL_Msk
-    /* TCPWM_GRP_CNT.TR_IN_EDGE_SEL */
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_COUNT_EDGE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_COUNT_EDGE_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_RELOAD_EDGE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_RELOAD_EDGE_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_STOP_EDGE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_STOP_EDGE_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_START_EDGE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_START_EDGE_Msk
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Msk
-    /* TCPWM_GRP_CNT.TR_PWM_CTRL */
-    #define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_CC0_MATCH_MODE_Pos TCPWM_GRP_CNT_TR_PWM_CTRL_CC0_MATCH_MODE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_CC0_MATCH_MODE_Msk TCPWM_GRP_CNT_TR_PWM_CTRL_CC0_MATCH_MODE_Msk
-    #define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_OVERFLOW_MODE_Pos TCPWM_GRP_CNT_TR_PWM_CTRL_OVERFLOW_MODE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_OVERFLOW_MODE_Msk TCPWM_GRP_CNT_TR_PWM_CTRL_OVERFLOW_MODE_Msk
-    #define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_UNDERFLOW_MODE_Pos TCPWM_GRP_CNT_TR_PWM_CTRL_UNDERFLOW_MODE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_UNDERFLOW_MODE_Msk TCPWM_GRP_CNT_TR_PWM_CTRL_UNDERFLOW_MODE_Msk
-    #define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_CC1_MATCH_MODE_Pos TCPWM_GRP_CNT_TR_PWM_CTRL_CC1_MATCH_MODE_Pos
-    #define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_CC1_MATCH_MODE_Msk TCPWM_GRP_CNT_TR_PWM_CTRL_CC1_MATCH_MODE_Msk
-    /* TCPWM_GRP_CNT.TR_OUT_SEL */
-    #define TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT0_Pos    TCPWM_GRP_CNT_TR_OUT_SEL_OUT0_Pos
-    #define TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT0_Msk    TCPWM_GRP_CNT_TR_OUT_SEL_OUT0_Msk
-    #define TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT1_Pos    TCPWM_GRP_CNT_TR_OUT_SEL_OUT1_Pos
-    #define TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT1_Msk    TCPWM_GRP_CNT_TR_OUT_SEL_OUT1_Msk
-    /* TCPWM_GRP_CNT.INTR */
-    #define TCPWM_GRP_CNT_V2_INTR_TC_Pos            TCPWM_GRP_CNT_INTR_TC_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_TC_Msk            TCPWM_GRP_CNT_INTR_TC_Msk
-    #define TCPWM_GRP_CNT_V2_INTR_CC0_MATCH_Pos     TCPWM_GRP_CNT_INTR_CC0_MATCH_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_CC0_MATCH_Msk     TCPWM_GRP_CNT_INTR_CC0_MATCH_Msk
-    #define TCPWM_GRP_CNT_V2_INTR_CC1_MATCH_Pos     TCPWM_GRP_CNT_INTR_CC1_MATCH_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_CC1_MATCH_Msk     TCPWM_GRP_CNT_INTR_CC1_MATCH_Msk
-    /* TCPWM_GRP_CNT.INTR_SET */
-    #define TCPWM_GRP_CNT_V2_INTR_SET_TC_Pos        TCPWM_GRP_CNT_INTR_SET_TC_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_SET_TC_Msk        TCPWM_GRP_CNT_INTR_SET_TC_Msk
-    #define TCPWM_GRP_CNT_V2_INTR_SET_CC0_MATCH_Pos TCPWM_GRP_CNT_INTR_SET_CC0_MATCH_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_SET_CC0_MATCH_Msk TCPWM_GRP_CNT_INTR_SET_CC0_MATCH_Msk
-    #define TCPWM_GRP_CNT_V2_INTR_SET_CC1_MATCH_Pos TCPWM_GRP_CNT_INTR_SET_CC1_MATCH_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_SET_CC1_MATCH_Msk TCPWM_GRP_CNT_INTR_SET_CC1_MATCH_Msk
-    /* TCPWM_GRP_CNT.INTR_MASK */
-    #define TCPWM_GRP_CNT_V2_INTR_MASK_TC_Pos       TCPWM_GRP_CNT_INTR_MASK_TC_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_MASK_TC_Msk       TCPWM_GRP_CNT_INTR_MASK_TC_Msk
-    #define TCPWM_GRP_CNT_V2_INTR_MASK_CC0_MATCH_Pos TCPWM_GRP_CNT_INTR_MASK_CC0_MATCH_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_MASK_CC0_MATCH_Msk TCPWM_GRP_CNT_INTR_MASK_CC0_MATCH_Msk
-    #define TCPWM_GRP_CNT_V2_INTR_MASK_CC1_MATCH_Pos TCPWM_GRP_CNT_INTR_MASK_CC1_MATCH_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_MASK_CC1_MATCH_Msk TCPWM_GRP_CNT_INTR_MASK_CC1_MATCH_Msk
-    /* TCPWM_GRP_CNT.INTR_MASKED */
-    #define TCPWM_GRP_CNT_V2_INTR_MASKED_TC_Pos     TCPWM_GRP_CNT_INTR_MASKED_TC_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_MASKED_TC_Msk     TCPWM_GRP_CNT_INTR_MASKED_TC_Msk
-    #define TCPWM_GRP_CNT_V2_INTR_MASKED_CC0_MATCH_Pos TCPWM_GRP_CNT_INTR_MASKED_CC0_MATCH_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_MASKED_CC0_MATCH_Msk TCPWM_GRP_CNT_INTR_MASKED_CC0_MATCH_Msk
-    #define TCPWM_GRP_CNT_V2_INTR_MASKED_CC1_MATCH_Pos TCPWM_GRP_CNT_INTR_MASKED_CC1_MATCH_Pos
-    #define TCPWM_GRP_CNT_V2_INTR_MASKED_CC1_MATCH_Msk TCPWM_GRP_CNT_INTR_MASKED_CC1_MATCH_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Pos TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_CC0_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC0_Msk TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_CC0_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC1_Pos TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_CC1_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_CC1_Msk TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_CC1_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_PERIOD_Pos TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_PERIOD_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_PERIOD_Msk TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_PERIOD_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_LINE_SEL_Pos TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_LINE_SEL_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_AUTO_RELOAD_LINE_SEL_Msk TCPWM_GRP_CNT_CTRL_AUTO_RELOAD_LINE_SEL_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_CC0_MATCH_UP_EN_Pos TCPWM_GRP_CNT_CTRL_CC0_MATCH_UP_EN_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_CC0_MATCH_UP_EN_Msk TCPWM_GRP_CNT_CTRL_CC0_MATCH_UP_EN_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_CC0_MATCH_DOWN_EN_Pos TCPWM_GRP_CNT_CTRL_CC0_MATCH_DOWN_EN_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_CC0_MATCH_DOWN_EN_Msk TCPWM_GRP_CNT_CTRL_CC0_MATCH_DOWN_EN_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_CC1_MATCH_UP_EN_Pos TCPWM_GRP_CNT_CTRL_CC1_MATCH_UP_EN_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_CC1_MATCH_UP_EN_Msk TCPWM_GRP_CNT_CTRL_CC1_MATCH_UP_EN_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_CC1_MATCH_DOWN_EN_Pos TCPWM_GRP_CNT_CTRL_CC1_MATCH_DOWN_EN_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_CC1_MATCH_DOWN_EN_Msk TCPWM_GRP_CNT_CTRL_CC1_MATCH_DOWN_EN_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_PWM_IMM_KILL_Pos  TCPWM_GRP_CNT_CTRL_PWM_IMM_KILL_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_PWM_IMM_KILL_Msk  TCPWM_GRP_CNT_CTRL_PWM_IMM_KILL_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_PWM_STOP_ON_KILL_Pos TCPWM_GRP_CNT_CTRL_PWM_STOP_ON_KILL_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_PWM_STOP_ON_KILL_Msk TCPWM_GRP_CNT_CTRL_PWM_STOP_ON_KILL_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_PWM_SYNC_KILL_Pos TCPWM_GRP_CNT_CTRL_PWM_SYNC_KILL_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_PWM_SYNC_KILL_Msk TCPWM_GRP_CNT_CTRL_PWM_SYNC_KILL_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_PWM_DISABLE_MODE_Pos TCPWM_GRP_CNT_CTRL_PWM_DISABLE_MODE_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_PWM_DISABLE_MODE_Msk TCPWM_GRP_CNT_CTRL_PWM_DISABLE_MODE_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_UP_DOWN_MODE_Pos  TCPWM_GRP_CNT_CTRL_UP_DOWN_MODE_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_UP_DOWN_MODE_Msk  TCPWM_GRP_CNT_CTRL_UP_DOWN_MODE_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_ONE_SHOT_Pos      TCPWM_GRP_CNT_CTRL_ONE_SHOT_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_ONE_SHOT_Msk      TCPWM_GRP_CNT_CTRL_ONE_SHOT_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_QUAD_ENCODING_MODE_Pos TCPWM_GRP_CNT_CTRL_QUAD_ENCODING_MODE_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_QUAD_ENCODING_MODE_Msk TCPWM_GRP_CNT_CTRL_QUAD_ENCODING_MODE_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_MODE_Pos          TCPWM_GRP_CNT_CTRL_MODE_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_MODE_Msk          TCPWM_GRP_CNT_CTRL_MODE_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_DBG_FREEZE_EN_Pos TCPWM_GRP_CNT_CTRL_DBG_FREEZE_EN_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_DBG_FREEZE_EN_Msk TCPWM_GRP_CNT_CTRL_DBG_FREEZE_EN_Msk
+#define TCPWM_GRP_CNT_V2_CTRL_ENABLED_Pos       TCPWM_GRP_CNT_CTRL_ENABLED_Pos
+#define TCPWM_GRP_CNT_V2_CTRL_ENABLED_Msk       TCPWM_GRP_CNT_CTRL_ENABLED_Msk
+/* TCPWM_GRP_CNT.STATUS */
+#define TCPWM_GRP_CNT_V2_STATUS_DOWN_Pos        TCPWM_GRP_CNT_STATUS_DOWN_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_DOWN_Msk        TCPWM_GRP_CNT_STATUS_DOWN_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE0_Pos TCPWM_GRP_CNT_STATUS_TR_CAPTURE0_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE0_Msk TCPWM_GRP_CNT_STATUS_TR_CAPTURE0_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_TR_COUNT_Pos    TCPWM_GRP_CNT_STATUS_TR_COUNT_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_TR_COUNT_Msk    TCPWM_GRP_CNT_STATUS_TR_COUNT_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_TR_RELOAD_Pos   TCPWM_GRP_CNT_STATUS_TR_RELOAD_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_TR_RELOAD_Msk   TCPWM_GRP_CNT_STATUS_TR_RELOAD_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_TR_STOP_Pos     TCPWM_GRP_CNT_STATUS_TR_STOP_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_TR_STOP_Msk     TCPWM_GRP_CNT_STATUS_TR_STOP_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_TR_START_Pos    TCPWM_GRP_CNT_STATUS_TR_START_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_TR_START_Msk    TCPWM_GRP_CNT_STATUS_TR_START_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE1_Pos TCPWM_GRP_CNT_STATUS_TR_CAPTURE1_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_TR_CAPTURE1_Msk TCPWM_GRP_CNT_STATUS_TR_CAPTURE1_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_LINE_OUT_Pos    TCPWM_GRP_CNT_STATUS_LINE_OUT_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_LINE_OUT_Msk    TCPWM_GRP_CNT_STATUS_LINE_OUT_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_LINE_COMPL_OUT_Pos TCPWM_GRP_CNT_STATUS_LINE_COMPL_OUT_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_LINE_COMPL_OUT_Msk TCPWM_GRP_CNT_STATUS_LINE_COMPL_OUT_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_RUNNING_Pos     TCPWM_GRP_CNT_STATUS_RUNNING_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_RUNNING_Msk     TCPWM_GRP_CNT_STATUS_RUNNING_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_DT_CNT_L_Pos    TCPWM_GRP_CNT_STATUS_DT_CNT_L_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_DT_CNT_L_Msk    TCPWM_GRP_CNT_STATUS_DT_CNT_L_Msk
+#define TCPWM_GRP_CNT_V2_STATUS_DT_CNT_H_Pos    TCPWM_GRP_CNT_STATUS_DT_CNT_H_Pos
+#define TCPWM_GRP_CNT_V2_STATUS_DT_CNT_H_Msk    TCPWM_GRP_CNT_STATUS_DT_CNT_H_Msk
+/* TCPWM_GRP_CNT.COUNTER */
+#define TCPWM_GRP_CNT_V2_COUNTER_COUNTER_Pos    TCPWM_GRP_CNT_COUNTER_COUNTER_Pos
+#define TCPWM_GRP_CNT_V2_COUNTER_COUNTER_Msk    TCPWM_GRP_CNT_COUNTER_COUNTER_Msk
+/* TCPWM_GRP_CNT.CC0 */
+#define TCPWM_GRP_CNT_V2_CC0_CC_Pos             TCPWM_GRP_CNT_CC0_CC_Pos
+#define TCPWM_GRP_CNT_V2_CC0_CC_Msk             TCPWM_GRP_CNT_CC0_CC_Msk
+/* TCPWM_GRP_CNT.CC0_BUFF */
+#define TCPWM_GRP_CNT_V2_CC0_BUFF_CC_Pos        TCPWM_GRP_CNT_CC0_BUFF_CC_Pos
+#define TCPWM_GRP_CNT_V2_CC0_BUFF_CC_Msk        TCPWM_GRP_CNT_CC0_BUFF_CC_Msk
+/* TCPWM_GRP_CNT.CC1 */
+#define TCPWM_GRP_CNT_V2_CC1_CC_Pos             TCPWM_GRP_CNT_CC1_CC_Pos
+#define TCPWM_GRP_CNT_V2_CC1_CC_Msk             TCPWM_GRP_CNT_CC1_CC_Msk
+/* TCPWM_GRP_CNT.CC1_BUFF */
+#define TCPWM_GRP_CNT_V2_CC1_BUFF_CC_Pos        TCPWM_GRP_CNT_CC1_BUFF_CC_Pos
+#define TCPWM_GRP_CNT_V2_CC1_BUFF_CC_Msk        TCPWM_GRP_CNT_CC1_BUFF_CC_Msk
+/* TCPWM_GRP_CNT.PERIOD */
+#define TCPWM_GRP_CNT_V2_PERIOD_PERIOD_Pos      TCPWM_GRP_CNT_PERIOD_PERIOD_Pos
+#define TCPWM_GRP_CNT_V2_PERIOD_PERIOD_Msk      TCPWM_GRP_CNT_PERIOD_PERIOD_Msk
+/* TCPWM_GRP_CNT.PERIOD_BUFF */
+#define TCPWM_GRP_CNT_V2_PERIOD_BUFF_PERIOD_Pos TCPWM_GRP_CNT_PERIOD_BUFF_PERIOD_Pos
+#define TCPWM_GRP_CNT_V2_PERIOD_BUFF_PERIOD_Msk TCPWM_GRP_CNT_PERIOD_BUFF_PERIOD_Msk
+/* TCPWM_GRP_CNT.LINE_SEL */
+#define TCPWM_GRP_CNT_V2_LINE_SEL_OUT_SEL_Pos   TCPWM_GRP_CNT_LINE_SEL_OUT_SEL_Pos
+#define TCPWM_GRP_CNT_V2_LINE_SEL_OUT_SEL_Msk   TCPWM_GRP_CNT_LINE_SEL_OUT_SEL_Msk
+#define TCPWM_GRP_CNT_V2_LINE_SEL_COMPL_OUT_SEL_Pos TCPWM_GRP_CNT_LINE_SEL_COMPL_OUT_SEL_Pos
+#define TCPWM_GRP_CNT_V2_LINE_SEL_COMPL_OUT_SEL_Msk TCPWM_GRP_CNT_LINE_SEL_COMPL_OUT_SEL_Msk
+/* TCPWM_GRP_CNT.LINE_SEL_BUFF */
+#define TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_OUT_SEL_Pos TCPWM_GRP_CNT_LINE_SEL_BUFF_OUT_SEL_Pos
+#define TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_OUT_SEL_Msk TCPWM_GRP_CNT_LINE_SEL_BUFF_OUT_SEL_Msk
+#define TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_COMPL_OUT_SEL_Pos TCPWM_GRP_CNT_LINE_SEL_BUFF_COMPL_OUT_SEL_Pos
+#define TCPWM_GRP_CNT_V2_LINE_SEL_BUFF_COMPL_OUT_SEL_Msk TCPWM_GRP_CNT_LINE_SEL_BUFF_COMPL_OUT_SEL_Msk
+/* TCPWM_GRP_CNT.DT */
+#define TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L_Pos   TCPWM_GRP_CNT_DT_DT_LINE_OUT_L_Pos
+#define TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_L_Msk   TCPWM_GRP_CNT_DT_DT_LINE_OUT_L_Msk
+#define TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_H_Pos   TCPWM_GRP_CNT_DT_DT_LINE_OUT_H_Pos
+#define TCPWM_GRP_CNT_V2_DT_DT_LINE_OUT_H_Msk   TCPWM_GRP_CNT_DT_DT_LINE_OUT_H_Msk
+#define TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT_Pos TCPWM_GRP_CNT_DT_DT_LINE_COMPL_OUT_Pos
+#define TCPWM_GRP_CNT_V2_DT_DT_LINE_COMPL_OUT_Msk TCPWM_GRP_CNT_DT_DT_LINE_COMPL_OUT_Msk
+/* TCPWM_GRP_CNT.TR_CMD */
+#define TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE0_Pos    TCPWM_GRP_CNT_TR_CMD_CAPTURE0_Pos
+#define TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE0_Msk    TCPWM_GRP_CNT_TR_CMD_CAPTURE0_Msk
+#define TCPWM_GRP_CNT_V2_TR_CMD_RELOAD_Pos      TCPWM_GRP_CNT_TR_CMD_RELOAD_Pos
+#define TCPWM_GRP_CNT_V2_TR_CMD_RELOAD_Msk      TCPWM_GRP_CNT_TR_CMD_RELOAD_Msk
+#define TCPWM_GRP_CNT_V2_TR_CMD_STOP_Pos        TCPWM_GRP_CNT_TR_CMD_STOP_Pos
+#define TCPWM_GRP_CNT_V2_TR_CMD_STOP_Msk        TCPWM_GRP_CNT_TR_CMD_STOP_Msk
+#define TCPWM_GRP_CNT_V2_TR_CMD_START_Pos       TCPWM_GRP_CNT_TR_CMD_START_Pos
+#define TCPWM_GRP_CNT_V2_TR_CMD_START_Msk       TCPWM_GRP_CNT_TR_CMD_START_Msk
+#define TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE1_Pos    TCPWM_GRP_CNT_TR_CMD_CAPTURE1_Pos
+#define TCPWM_GRP_CNT_V2_TR_CMD_CAPTURE1_Msk    TCPWM_GRP_CNT_TR_CMD_CAPTURE1_Msk
+/* TCPWM_GRP_CNT.TR_IN_SEL0 */
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL0_CAPTURE0_SEL_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL0_CAPTURE0_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL0_CAPTURE0_SEL_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL0_COUNT_SEL_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL0_COUNT_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL0_COUNT_SEL_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL0_RELOAD_SEL_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL0_RELOAD_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL0_RELOAD_SEL_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL0_STOP_SEL_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL0_STOP_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL0_STOP_SEL_Msk
+/* TCPWM_GRP_CNT.TR_IN_SEL1 */
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL1_START_SEL_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL1_START_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL1_START_SEL_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL1_CAPTURE1_SEL_Pos TCPWM_GRP_CNT_TR_IN_SEL1_CAPTURE1_SEL_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_SEL1_CAPTURE1_SEL_Msk TCPWM_GRP_CNT_TR_IN_SEL1_CAPTURE1_SEL_Msk
+/* TCPWM_GRP_CNT.TR_IN_EDGE_SEL */
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_CAPTURE0_EDGE_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_COUNT_EDGE_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_COUNT_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_COUNT_EDGE_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_RELOAD_EDGE_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_RELOAD_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_RELOAD_EDGE_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_STOP_EDGE_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_STOP_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_STOP_EDGE_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_START_EDGE_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_START_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_START_EDGE_Msk
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Pos TCPWM_GRP_CNT_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Pos
+#define TCPWM_GRP_CNT_V2_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Msk TCPWM_GRP_CNT_TR_IN_EDGE_SEL_CAPTURE1_EDGE_Msk
+/* TCPWM_GRP_CNT.TR_PWM_CTRL */
+#define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_CC0_MATCH_MODE_Pos TCPWM_GRP_CNT_TR_PWM_CTRL_CC0_MATCH_MODE_Pos
+#define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_CC0_MATCH_MODE_Msk TCPWM_GRP_CNT_TR_PWM_CTRL_CC0_MATCH_MODE_Msk
+#define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_OVERFLOW_MODE_Pos TCPWM_GRP_CNT_TR_PWM_CTRL_OVERFLOW_MODE_Pos
+#define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_OVERFLOW_MODE_Msk TCPWM_GRP_CNT_TR_PWM_CTRL_OVERFLOW_MODE_Msk
+#define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_UNDERFLOW_MODE_Pos TCPWM_GRP_CNT_TR_PWM_CTRL_UNDERFLOW_MODE_Pos
+#define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_UNDERFLOW_MODE_Msk TCPWM_GRP_CNT_TR_PWM_CTRL_UNDERFLOW_MODE_Msk
+#define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_CC1_MATCH_MODE_Pos TCPWM_GRP_CNT_TR_PWM_CTRL_CC1_MATCH_MODE_Pos
+#define TCPWM_GRP_CNT_V2_TR_PWM_CTRL_CC1_MATCH_MODE_Msk TCPWM_GRP_CNT_TR_PWM_CTRL_CC1_MATCH_MODE_Msk
+/* TCPWM_GRP_CNT.TR_OUT_SEL */
+#define TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT0_Pos    TCPWM_GRP_CNT_TR_OUT_SEL_OUT0_Pos
+#define TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT0_Msk    TCPWM_GRP_CNT_TR_OUT_SEL_OUT0_Msk
+#define TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT1_Pos    TCPWM_GRP_CNT_TR_OUT_SEL_OUT1_Pos
+#define TCPWM_GRP_CNT_V2_TR_OUT_SEL_OUT1_Msk    TCPWM_GRP_CNT_TR_OUT_SEL_OUT1_Msk
+/* TCPWM_GRP_CNT.INTR */
+#define TCPWM_GRP_CNT_V2_INTR_TC_Pos            TCPWM_GRP_CNT_INTR_TC_Pos
+#define TCPWM_GRP_CNT_V2_INTR_TC_Msk            TCPWM_GRP_CNT_INTR_TC_Msk
+#define TCPWM_GRP_CNT_V2_INTR_CC0_MATCH_Pos     TCPWM_GRP_CNT_INTR_CC0_MATCH_Pos
+#define TCPWM_GRP_CNT_V2_INTR_CC0_MATCH_Msk     TCPWM_GRP_CNT_INTR_CC0_MATCH_Msk
+#define TCPWM_GRP_CNT_V2_INTR_CC1_MATCH_Pos     TCPWM_GRP_CNT_INTR_CC1_MATCH_Pos
+#define TCPWM_GRP_CNT_V2_INTR_CC1_MATCH_Msk     TCPWM_GRP_CNT_INTR_CC1_MATCH_Msk
+/* TCPWM_GRP_CNT.INTR_SET */
+#define TCPWM_GRP_CNT_V2_INTR_SET_TC_Pos        TCPWM_GRP_CNT_INTR_SET_TC_Pos
+#define TCPWM_GRP_CNT_V2_INTR_SET_TC_Msk        TCPWM_GRP_CNT_INTR_SET_TC_Msk
+#define TCPWM_GRP_CNT_V2_INTR_SET_CC0_MATCH_Pos TCPWM_GRP_CNT_INTR_SET_CC0_MATCH_Pos
+#define TCPWM_GRP_CNT_V2_INTR_SET_CC0_MATCH_Msk TCPWM_GRP_CNT_INTR_SET_CC0_MATCH_Msk
+#define TCPWM_GRP_CNT_V2_INTR_SET_CC1_MATCH_Pos TCPWM_GRP_CNT_INTR_SET_CC1_MATCH_Pos
+#define TCPWM_GRP_CNT_V2_INTR_SET_CC1_MATCH_Msk TCPWM_GRP_CNT_INTR_SET_CC1_MATCH_Msk
+/* TCPWM_GRP_CNT.INTR_MASK */
+#define TCPWM_GRP_CNT_V2_INTR_MASK_TC_Pos       TCPWM_GRP_CNT_INTR_MASK_TC_Pos
+#define TCPWM_GRP_CNT_V2_INTR_MASK_TC_Msk       TCPWM_GRP_CNT_INTR_MASK_TC_Msk
+#define TCPWM_GRP_CNT_V2_INTR_MASK_CC0_MATCH_Pos TCPWM_GRP_CNT_INTR_MASK_CC0_MATCH_Pos
+#define TCPWM_GRP_CNT_V2_INTR_MASK_CC0_MATCH_Msk TCPWM_GRP_CNT_INTR_MASK_CC0_MATCH_Msk
+#define TCPWM_GRP_CNT_V2_INTR_MASK_CC1_MATCH_Pos TCPWM_GRP_CNT_INTR_MASK_CC1_MATCH_Pos
+#define TCPWM_GRP_CNT_V2_INTR_MASK_CC1_MATCH_Msk TCPWM_GRP_CNT_INTR_MASK_CC1_MATCH_Msk
+/* TCPWM_GRP_CNT.INTR_MASKED */
+#define TCPWM_GRP_CNT_V2_INTR_MASKED_TC_Pos     TCPWM_GRP_CNT_INTR_MASKED_TC_Pos
+#define TCPWM_GRP_CNT_V2_INTR_MASKED_TC_Msk     TCPWM_GRP_CNT_INTR_MASKED_TC_Msk
+#define TCPWM_GRP_CNT_V2_INTR_MASKED_CC0_MATCH_Pos TCPWM_GRP_CNT_INTR_MASKED_CC0_MATCH_Pos
+#define TCPWM_GRP_CNT_V2_INTR_MASKED_CC0_MATCH_Msk TCPWM_GRP_CNT_INTR_MASKED_CC0_MATCH_Msk
+#define TCPWM_GRP_CNT_V2_INTR_MASKED_CC1_MATCH_Pos TCPWM_GRP_CNT_INTR_MASKED_CC1_MATCH_Pos
+#define TCPWM_GRP_CNT_V2_INTR_MASKED_CC1_MATCH_Msk TCPWM_GRP_CNT_INTR_MASKED_CC1_MATCH_Msk
 
-    /* For backward compatibility, we set TCPWM_CNT_STATUS_RUNNING_Pos with TCPWM_GRP_CNT_V2_STATUS_RUNNING
-    we need to define this for version 2 only. */
-    #define TCPWM_CNT_STATUS_RUNNING_Pos 31UL
+/* For backward compatibility, we set TCPWM_CNT_STATUS_RUNNING_Pos with TCPWM_GRP_CNT_V2_STATUS_RUNNING
+we need to define this for version 2 only. */
+#define TCPWM_CNT_STATUS_RUNNING_Pos 31UL
 #endif
 
 /*******************************************************************************
@@ -2791,7 +2455,7 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
 #define CANFD_TEST(base, chan)                    (((CANFD_Type *)(base))->CH[chan].M_TTCAN.TEST)
 #define CANFD_CREL(base, chan)                    (((CANFD_Type *)(base))->CH[chan].M_TTCAN.CREL)
 
-#define CY_CANFD_CHANNELS_NUM                     (0x1UL)
+#define CY_CANFD_CHANNELS_NUM                     (CANFD_CAN_NR)
 
 /*******************************************************************************
 *                MXOTPC
@@ -2950,13 +2614,13 @@ __STATIC_INLINE uint32_t PERI_PCLK_GR_DIV_24_5_NR(uint32_t instNum, uint32_t grN
 
 /* System DEEPSLEEP Mode = (PPU_MAIN Mode)*/
 #ifdef CORE_NAME_CM55_0
-    #define CY_SYSTEM_DEEPSLEEP_PPU_MODES        (uint32_t)((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_MODE | ((uint32_t)CY_SYSTEM_PD1_PPU_DEEPSLEEP_MODE << 8U))
-    #define CY_SYSTEM_DEEPSLEEP_RAM_PPU_MODES    (uint32_t)((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_RAM_MODE | ((uint32_t)CY_SYSTEM_PD1_PPU_DEEPSLEEP_RAM_MODE << 8U))
-    #define CY_SYSTEM_DEEPSLEEP_OFF_PPU_MODES    (uint32_t)((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_OFF_MODE | ((uint32_t)CY_SYSTEM_PD1_PPU_DEEPSLEEP_OFF_MODE << 8U))
+#define CY_SYSTEM_DEEPSLEEP_PPU_MODES        (uint32_t)((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_MODE | ((uint32_t)CY_SYSTEM_PD1_PPU_DEEPSLEEP_MODE << 8U))
+#define CY_SYSTEM_DEEPSLEEP_RAM_PPU_MODES    (uint32_t)((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_RAM_MODE | ((uint32_t)CY_SYSTEM_PD1_PPU_DEEPSLEEP_RAM_MODE << 8U))
+#define CY_SYSTEM_DEEPSLEEP_OFF_PPU_MODES    (uint32_t)((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_OFF_MODE | ((uint32_t)CY_SYSTEM_PD1_PPU_DEEPSLEEP_OFF_MODE << 8U))
 #else
-    #define CY_SYSTEM_DEEPSLEEP_PPU_MODES        ((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_MODE)
-    #define CY_SYSTEM_DEEPSLEEP_RAM_PPU_MODES    ((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_RAM_MODE)
-    #define CY_SYSTEM_DEEPSLEEP_OFF_PPU_MODES    ((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_OFF_MODE)
+#define CY_SYSTEM_DEEPSLEEP_PPU_MODES        ((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_MODE)
+#define CY_SYSTEM_DEEPSLEEP_RAM_PPU_MODES    ((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_RAM_MODE)
+#define CY_SYSTEM_DEEPSLEEP_OFF_PPU_MODES    ((uint32_t)CY_SYSTEM_MAIN_PPU_DEEPSLEEP_OFF_MODE)
 #endif
 
 
@@ -3012,7 +2676,12 @@ extern const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES];
 
 #define CY_IPC_PIPE_IS_CHANNEL_INTR_COMBINATION_VALID(ipcChannel, ipcIntrIndex)  ((((ipcChannel) < CY_IPC_CHANNELS_PER_INSTANCE) && ((ipcIntrIndex) < CY_IPC_INTERRUPTS_PER_INSTANCE)) || \
                                                                                   (((ipcChannel) >= CY_IPC_CHANNELS_PER_INSTANCE) && ((ipcIntrIndex) >= CY_IPC_INTERRUPTS_PER_INSTANCE)))
-#define CY_IPC_STRUCT_PTR(ipcIndex)                                              CY_IPC_STRUCT_PTR_FOR_IP(((ipcIndex)%CY_IPC_CHANNELS_PER_INSTANCE), IPC_BASE_PTR[((ipcIndex)-((ipcIndex)%CY_IPC_CHANNELS_PER_INSTANCE))/CY_IPC_CHANNELS_PER_INSTANCE])
+#define CY_IPC_STRUCT_PTR(ipcIndex)                                              (((ipcIndex < (CY_IPC_CHANNELS_PER_INSTANCE * CY_IPC_INSTANCES)) && (ipcIndex > 0 )) ? \
+                                                                                    CY_IPC_STRUCT_PTR_FOR_IP(((ipcIndex)%CY_IPC_CHANNELS_PER_INSTANCE), \
+                                                                                    IPC_BASE_PTR[((ipcIndex)-((ipcIndex)%CY_IPC_CHANNELS_PER_INSTANCE))/CY_IPC_CHANNELS_PER_INSTANCE]) : \
+                                                                                    ( (ipcIndex == 0) ? (CY_IPC_STRUCT_PTR_FOR_IP(0,IPC_BASE_PTR[0])) : \
+                                                                                    ((ipcIndex == (CY_IPC_CHANNELS_PER_INSTANCE * CY_IPC_INSTANCES)) ? \
+                                                                                    (CY_IPC_STRUCT_PTR_FOR_IP(((ipcIndex)%CY_IPC_CHANNELS_PER_INSTANCE),IPC_BASE_PTR[CY_IPC_INSTANCES -1])) : NULL   ) )) 
 #define CY_IPC_INTR_STRUCT_PTR(ipcIntrIndex)                                     CY_IPC_INTR_STRUCT_PTR_FOR_IP(((ipcIntrIndex)%CY_IPC_INTERRUPTS_PER_INSTANCE), IPC_BASE_PTR[((ipcIntrIndex)-((ipcIntrIndex)%CY_IPC_INTERRUPTS_PER_INSTANCE))/CY_IPC_INTERRUPTS_PER_INSTANCE])
 /* ipcChannel comprises of total number of channels present in all IPC IP instances */
 #define CY_IPC_PIPE_COMPUTE_INTR_MASK(ipcChannel, ipcIntrmask)                   (((ipcChannel)<CY_IPC_CHANNELS_PER_INSTANCE)?(ipcIntrmask):((((ipcIntrmask)&0xFFFF0000U) != 0x0U)?((ipcIntrmask)>>CY_IPC_CHANNELS_PER_INSTANCE):(ipcIntrmask)))
@@ -3033,16 +2702,10 @@ extern const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES];
 #define CY_SYSPM_SEMA_POST_TRIM_STATUS       11UL
 
 #ifdef WA__PM_0159902_6
-    /* Used as lock for RRAM write operation */
-    #define CY_IPC_CHAN_RRAM_LOCK           (2UL)
+/* Used as lock for RRAM write operation */
+#define CY_IPC_CHAN_RRAM_LOCK           (2UL)
 #endif
 
-/* CM33 S IPC channel 16 for RPC */
-#define CM33_S_IPC1_RPC_CH_NUM          (0x0u + IPC0_IPC_NR)
-#define CM33_S_IPC1_RPC_CH_MASK         (CY_IPC_CH_MASK(CM33_S_IPC1_RPC_CH_NUM))
-#define CM33_S_IPC1_RPC_INTR_NUM        (0x0u + IPC0_IPC_IRQ_NR)
-#define CM33_S_IPC1_RPC_INTR_MASK       (CY_IPC_INTR_MASK(CM33_S_IPC1_RPC_INTR_NUM))
-#define CM33_S_IPC1_RPC_INTR_MUX        (CY_IPC1_INTR_MUX(CM33_S_IPC1_RPC_INTR_NUM))
 
 /** IPC Semaphores allocation */
 #define CY_IPC_SEMA_COUNT               (128UL)  /* <<< This will allow 128 (4*32) semaphores */
@@ -3052,41 +2715,29 @@ extern const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES];
 /* Secure Service IPC client */
 #define CY_IPC_MSG_SECURE_SERVICES      (2UL)
 
-/* CY_USE_RPC_CALL = 1, use RPC intergace for secure services */
-#ifndef CY_USE_RPC_CALL
-    #define CY_USE_RPC_CALL 0U
-#endif //CY_USE_RPC_CALL
-
-#if (defined(CY_USE_RPC_CALL) && (CY_USE_RPC_CALL == 1))
-    #ifndef CY_USE_FULL_PROTECTION
-        #define CY_USE_FULL_PROTECTION 0U
-    #endif
-    /* CY_PDL_CUSTOM_RPC = 1, use PDL RPC interface implementation */
-    #ifndef CY_PDL_CUSTOM_RPC
-        #define CY_PDL_CUSTOM_RPC 1U
-    #endif
-    /* CY_OMIT_PDL_PPC_SERVICES = 0, do not use PDL PPC serivce */
-    #ifndef  CY_OMIT_PDL_PPC_SERVICES
-        #define CY_OMIT_PDL_PPC_SERVICES 0U
-    #endif
-#endif //CY_USE_RPC_CALL =1
-
-
-/** Following IPC resources are for user:
-* IPC0 CH  - 3 to 7 and 11 to 15
-* IPC0 INT - 3 to 5
-* IPC1 CH  - 17 to 31
-* IPC1 INT - 9 to 15
+/**
+* \addtogroup group_ipc_macros
+* \{
+* * IPC0 CH  - 3 to 7 and 11 to 15
+* * IPC0 INT - 3 to 5
+* * IPC1 CH  - 17 to 31
+* * IPC1 INT - 9 to 15
+*
+* \note If there are high level middleware libraries used such as MTB-IPC/MTB-SRF, please refer to BSP documentation
+        for reservations under the section - MTB IPC Configuration
 */
-/* user IPC channel */
-#define CY_IPC0_CHAN_USER                (4u)   /** User ipc channel index of IPC0 instance */
-/* user IPC interrupt */
-#define CY_IPC0_INTR_USER                (2u)   /** First ipc interrupt index of IPC0 instance */
 
 /* user IPC channel */
-#define CY_IPC_CHAN_USER                 (1u + IPC0_IPC_NR)   /** First ipc channel index of IPC1 instance meant for CM33 <-> CM55 */
+#define CY_IPC0_CHAN_USER                (4u)   /**< User ipc channel index of IPC0 instance */
 /* user IPC interrupt */
-#define CY_IPC_INTR_USER                 (1u + IPC0_IPC_IRQ_NR)   /** First ipc interrupt index of IPC1 instance meant for CM33 <-> CM55 */
+#define CY_IPC0_INTR_USER                (2u)   /**< First ipc interrupt index of IPC0 instance */
+
+/* user IPC channel */
+#define CY_IPC_CHAN_USER                 (1u + IPC0_IPC_NR)   /**< First ipc channel index of IPC1 instance meant for CM33 <-> CM55 */
+/* user IPC interrupt */
+#define CY_IPC_INTR_USER                 (1u + IPC0_IPC_IRQ_NR)   /**< First ipc interrupt index of IPC1 instance meant for CM33 <-> CM55 */
+
+/** \} group_ipc_macros */
 
 /* These definitions will be removed in the next release */
 /* IPC0 channel-2 and interrupt-2 also reserved for secure domain */
@@ -3100,53 +2751,53 @@ extern const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES];
 *                LIN
 *******************************************************************************/
 #if defined (CY_IP_MXLIN)
-    #define LIN0_CH1                                ((LIN_CH_Type*) &LIN0->CH[1])
-    #define LIN0_CH2                                ((LIN_CH_Type*) &LIN0->CH[2])
-    #define LIN0_CH3                                ((LIN_CH_Type*) &LIN0->CH[3])
-    #define LIN0_CH4                                ((LIN_CH_Type*) &LIN0->CH[4])
-    #define LIN0_CH5                                ((LIN_CH_Type*) &LIN0->CH[5])
-    #define LIN0_CH6                                ((LIN_CH_Type*) &LIN0->CH[6])
-    #define LIN0_CH7                                ((LIN_CH_Type*) &LIN0->CH[7])
-    #define LIN0_CH8                                ((LIN_CH_Type*) &LIN0->CH[8])
-    #define LIN0_CH9                                ((LIN_CH_Type*) &LIN0->CH[9])
-    #define LIN0_CH10                               ((LIN_CH_Type*) &LIN0->CH[10])
-    #define LIN0_CH11                               ((LIN_CH_Type*) &LIN0->CH[11])
-    #define LIN0_CH12                               ((LIN_CH_Type*) &LIN0->CH[12])
-    #define LIN0_CH13                               ((LIN_CH_Type*) &LIN0->CH[13])
-    #define LIN0_CH14                               ((LIN_CH_Type*) &LIN0->CH[14])
-    #define LIN0_CH15                               ((LIN_CH_Type*) &LIN0->CH[15])
-    #define LIN0_CH16                               ((LIN_CH_Type*) &LIN0->CH[16])
-    #define LIN0_CH17                               ((LIN_CH_Type*) &LIN0->CH[17])
-    #define LIN0_CH18                               ((LIN_CH_Type*) &LIN0->CH[18])
-    #define LIN0_CH19                               ((LIN_CH_Type*) &LIN0->CH[19])
-    #define LIN0_CH20                               ((LIN_CH_Type*) &LIN0->CH[20])
-    #define LIN0_CH21                               ((LIN_CH_Type*) &LIN0->CH[21])
-    #define LIN0_CH22                               ((LIN_CH_Type*) &LIN0->CH[22])
-    #define LIN0_CH23                               ((LIN_CH_Type*) &LIN0->CH[23])
-    #define LIN0_CH24                               ((LIN_CH_Type*) &LIN0->CH[24])
-    #define LIN0_CH25                               ((LIN_CH_Type*) &LIN0->CH[25])
-    #define LIN0_CH26                               ((LIN_CH_Type*) &LIN0->CH[26])
-    #define LIN0_CH27                               ((LIN_CH_Type*) &LIN0->CH[27])
-    #define LIN0_CH28                               ((LIN_CH_Type*) &LIN0->CH[28])
-    #define LIN0_CH29                               ((LIN_CH_Type*) &LIN0->CH[29])
-    #define LIN0_CH30                               ((LIN_CH_Type*) &LIN0->CH[30])
-    #define LIN0_CH31                               ((LIN_CH_Type*) &LIN0->CH[31])
+#define LIN0_CH1                                ((LIN_CH_Type*) &LIN0->CH[1])
+#define LIN0_CH2                                ((LIN_CH_Type*) &LIN0->CH[2])
+#define LIN0_CH3                                ((LIN_CH_Type*) &LIN0->CH[3])
+#define LIN0_CH4                                ((LIN_CH_Type*) &LIN0->CH[4])
+#define LIN0_CH5                                ((LIN_CH_Type*) &LIN0->CH[5])
+#define LIN0_CH6                                ((LIN_CH_Type*) &LIN0->CH[6])
+#define LIN0_CH7                                ((LIN_CH_Type*) &LIN0->CH[7])
+#define LIN0_CH8                                ((LIN_CH_Type*) &LIN0->CH[8])
+#define LIN0_CH9                                ((LIN_CH_Type*) &LIN0->CH[9])
+#define LIN0_CH10                               ((LIN_CH_Type*) &LIN0->CH[10])
+#define LIN0_CH11                               ((LIN_CH_Type*) &LIN0->CH[11])
+#define LIN0_CH12                               ((LIN_CH_Type*) &LIN0->CH[12])
+#define LIN0_CH13                               ((LIN_CH_Type*) &LIN0->CH[13])
+#define LIN0_CH14                               ((LIN_CH_Type*) &LIN0->CH[14])
+#define LIN0_CH15                               ((LIN_CH_Type*) &LIN0->CH[15])
+#define LIN0_CH16                               ((LIN_CH_Type*) &LIN0->CH[16])
+#define LIN0_CH17                               ((LIN_CH_Type*) &LIN0->CH[17])
+#define LIN0_CH18                               ((LIN_CH_Type*) &LIN0->CH[18])
+#define LIN0_CH19                               ((LIN_CH_Type*) &LIN0->CH[19])
+#define LIN0_CH20                               ((LIN_CH_Type*) &LIN0->CH[20])
+#define LIN0_CH21                               ((LIN_CH_Type*) &LIN0->CH[21])
+#define LIN0_CH22                               ((LIN_CH_Type*) &LIN0->CH[22])
+#define LIN0_CH23                               ((LIN_CH_Type*) &LIN0->CH[23])
+#define LIN0_CH24                               ((LIN_CH_Type*) &LIN0->CH[24])
+#define LIN0_CH25                               ((LIN_CH_Type*) &LIN0->CH[25])
+#define LIN0_CH26                               ((LIN_CH_Type*) &LIN0->CH[26])
+#define LIN0_CH27                               ((LIN_CH_Type*) &LIN0->CH[27])
+#define LIN0_CH28                               ((LIN_CH_Type*) &LIN0->CH[28])
+#define LIN0_CH29                               ((LIN_CH_Type*) &LIN0->CH[29])
+#define LIN0_CH30                               ((LIN_CH_Type*) &LIN0->CH[30])
+#define LIN0_CH31                               ((LIN_CH_Type*) &LIN0->CH[31])
 
-    #define LIN_CH_CTL0(base)                       (((LIN_CH_Type *)(base))->CTL0)
-    #define LIN_CH_CTL1(base)                       (((LIN_CH_Type *)(base))->CTL1)
-    #define LIN_CH_STATUS(base)                     (((LIN_CH_Type *)(base))->STATUS)
-    #define LIN_CH_CMD(base)                        (((LIN_CH_Type *)(base))->CMD)
-    #define LIN_CH_TX_RX_STATUS(base)               (((LIN_CH_Type *)(base))->TX_RX_STATUS)
-    #define LIN_CH_PID_CHECKSUM(base)               (((LIN_CH_Type *)(base))->PID_CHECKSUM)
-    #define LIN_CH_DATA0(base)                      (((LIN_CH_Type *)(base))->DATA0)
-    #define LIN_CH_DATA1(base)                      (((LIN_CH_Type *)(base))->DATA1)
-    #define LIN_CH_INTR(base)                       (((LIN_CH_Type *)(base))->INTR)
-    #define LIN_CH_INTR_SET(base)                   (((LIN_CH_Type *)(base))->INTR_SET)
-    #define LIN_CH_INTR_MASK(base)                  (((LIN_CH_Type *)(base))->INTR_MASK)
-    #define LIN_CH_INTR_MASKED(base)                (((LIN_CH_Type *)(base))->INTR_MASKED)
+#define LIN_CH_CTL0(base)                       (((LIN_CH_Type *)(base))->CTL0)
+#define LIN_CH_CTL1(base)                       (((LIN_CH_Type *)(base))->CTL1)
+#define LIN_CH_STATUS(base)                     (((LIN_CH_Type *)(base))->STATUS)
+#define LIN_CH_CMD(base)                        (((LIN_CH_Type *)(base))->CMD)
+#define LIN_CH_TX_RX_STATUS(base)               (((LIN_CH_Type *)(base))->TX_RX_STATUS)
+#define LIN_CH_PID_CHECKSUM(base)               (((LIN_CH_Type *)(base))->PID_CHECKSUM)
+#define LIN_CH_DATA0(base)                      (((LIN_CH_Type *)(base))->DATA0)
+#define LIN_CH_DATA1(base)                      (((LIN_CH_Type *)(base))->DATA1)
+#define LIN_CH_INTR(base)                       (((LIN_CH_Type *)(base))->INTR)
+#define LIN_CH_INTR_SET(base)                   (((LIN_CH_Type *)(base))->INTR_SET)
+#define LIN_CH_INTR_MASK(base)                  (((LIN_CH_Type *)(base))->INTR_MASK)
+#define LIN_CH_INTR_MASKED(base)                (((LIN_CH_Type *)(base))->INTR_MASKED)
 
-    #define LIN_ERROR_CTL(base)                     (((LIN_Type *)(base))->ERROR_CTL)
-    #define LIN_TEST_CTL(base)                      (((LIN_Type *)(base))->TEST_CTL)
+#define LIN_ERROR_CTL(base)                     (((LIN_Type *)(base))->ERROR_CTL)
+#define LIN_TEST_CTL(base)                      (((LIN_Type *)(base))->TEST_CTL)
 #endif /* CY_IP_MXLIN */
 
 /*******************************************************************************
@@ -3154,25 +2805,25 @@ extern const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES];
 *******************************************************************************/
 #if defined (CY_IP_MXKEYSCAN)
 
-    #define KEYSCAN_CTL(base)                       (((MXKEYSCAN_Type *)(base))->KEYSCAN_CTL)
-    #define KEYSCAN_DEBOUNCE(base)                  (((MXKEYSCAN_Type *)(base))->DEBOUNCE)
-    #define KEYSCAN_KEYFIFO_CNT(base)               (((MXKEYSCAN_Type *)(base))->KEYFIFO_CNT)
-    #define KEYSCAN_KEYFIFO(base)                   (((MXKEYSCAN_Type *)(base))->KEYFIFO)
-    #define KEYSCAN_MIA_CTL(base)                   (((MXKEYSCAN_Type *)(base))->MIA_CTL)
-    #define KEYSCAN_MIA_STATUS(base)                (((MXKEYSCAN_Type *)(base))->MIA_STATUS)
-    #define KEYSCAN_KSI_USED(base)                  (((MXKEYSCAN_Type *)(base))->KSI_USED)
-    #define KEYSCAN_INTR(base)                      (((MXKEYSCAN_Type *)(base))->INTR)
-    #define KEYSCAN_INTR_SET(base)                  (((MXKEYSCAN_Type *)(base))->INTR_SET)
-    #define KEYSCAN_INTR_MASK(base)                 (((MXKEYSCAN_Type *)(base))->INTR_MASK)
-    #define KEYSCAN_INTR_MASKED(base)               (((MXKEYSCAN_Type *)(base))->INTR_MASKED)
+#define KEYSCAN_CTL(base)                       (((MXKEYSCAN_Type *)(base))->KEYSCAN_CTL)
+#define KEYSCAN_DEBOUNCE(base)                  (((MXKEYSCAN_Type *)(base))->DEBOUNCE)
+#define KEYSCAN_KEYFIFO_CNT(base)               (((MXKEYSCAN_Type *)(base))->KEYFIFO_CNT)
+#define KEYSCAN_KEYFIFO(base)                   (((MXKEYSCAN_Type *)(base))->KEYFIFO)
+#define KEYSCAN_MIA_CTL(base)                   (((MXKEYSCAN_Type *)(base))->MIA_CTL)
+#define KEYSCAN_MIA_STATUS(base)                (((MXKEYSCAN_Type *)(base))->MIA_STATUS)
+#define KEYSCAN_KSI_USED(base)                  (((MXKEYSCAN_Type *)(base))->KSI_USED)
+#define KEYSCAN_INTR(base)                      (((MXKEYSCAN_Type *)(base))->INTR)
+#define KEYSCAN_INTR_SET(base)                  (((MXKEYSCAN_Type *)(base))->INTR_SET)
+#define KEYSCAN_INTR_MASK(base)                 (((MXKEYSCAN_Type *)(base))->INTR_MASK)
+#define KEYSCAN_INTR_MASKED(base)               (((MXKEYSCAN_Type *)(base))->INTR_MASKED)
 
 #endif /* CY_IP_MXKEYSCAN */
 
 #define MPC_Type                                 RAMC_MPC_Type
 #ifdef RAMC_MPC_PC_NR
-    #define MPC_PC_NR                                RAMC_MPC_PC_NR
+#define MPC_PC_NR                                RAMC_MPC_PC_NR
 #else
-    #define MPC_PC_NR                                RAMC0_MPC_PC_NR
+#define MPC_PC_NR                                RAMC0_MPC_PC_NR
 #endif
 
 /*******************************************************************************
@@ -3180,89 +2831,89 @@ extern const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES];
 *******************************************************************************/
 #if CY_IP_MXCM33_VERSION_MINOR == (0u)
 
-    #define MS_CTL_PC_CTL_VX(index)          (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->MS[(index)].CTL)
-    #define MS_CTL_PC_VAL_VX(index)          (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->MS_PC[(index)].PC)
-    #define MS_CTL_PC_READ_MIRROR_VX(index)  (((MS_CTL_2_0_Type*) GET_NSALIAS_ADDRESS(MS_CTL_2_0_BASE))->MS_PC[(index)].PC_READ_MIR)
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_VX   (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->CODE_MS0_MSC_ACG_CTL)
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_VX    (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->SYS_MS0_MSC_ACG_CTL)
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_VX    (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->SYS_MS1_MSC_ACG_CTL)
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_VX     (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->EXP_MS_MSC_ACG_CTL)
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_VX      (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->DMAC0_MSC_ACG_CTL)
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_VX      (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->DMAC1_MSC_ACG_CTL)
+#define MS_CTL_PC_CTL_VX(index)          (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->MS[(index)].CTL)
+#define MS_CTL_PC_VAL_VX(index)          (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->MS_PC[(index)].PC)
+#define MS_CTL_PC_READ_MIRROR_VX(index)  (((MS_CTL_2_0_Type*) GET_NSALIAS_ADDRESS(MS_CTL_2_0_BASE))->MS_PC[(index)].PC_READ_MIR)
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_VX   (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->CODE_MS0_MSC_ACG_CTL)
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_VX    (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->SYS_MS0_MSC_ACG_CTL)
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_VX    (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->SYS_MS1_MSC_ACG_CTL)
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_VX     (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->EXP_MS_MSC_ACG_CTL)
+#define MS_CTL_DMAC0_MSC_ACG_CTL_VX      (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->DMAC0_MSC_ACG_CTL)
+#define MS_CTL_DMAC1_MSC_ACG_CTL_VX      (((MS_CTL_2_0_Type*) MS_CTL_2_0_BASE)->DMAC1_MSC_ACG_CTL)
 
-    /* MS_CTL.CODE_MS0_MSC_ACG_CTL */
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos   MS_CTL_2_0_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk   MS_CTL_2_0_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos        MS_CTL_2_0_CODE_MS0_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk        MS_CTL_2_0_CODE_MS0_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.SYS_MS0_MSC_ACG_CTL */
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos    MS_CTL_2_0_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk    MS_CTL_2_0_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos         MS_CTL_2_0_SYS_MS0_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk         MS_CTL_2_0_SYS_MS0_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.SYS_MS1_MSC_ACG_CTL */
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos    MS_CTL_2_0_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk    MS_CTL_2_0_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Pos         MS_CTL_2_0_SYS_MS1_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Msk         MS_CTL_2_0_SYS_MS1_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.EXP_MS_MSC_ACG_CTL */
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos     MS_CTL_2_0_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk     MS_CTL_2_0_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Pos          MS_CTL_2_0_EXP_MS_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Msk          MS_CTL_2_0_EXP_MS_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.DMAC0_MSC_ACG_CTL */
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos      MS_CTL_2_0_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk      MS_CTL_2_0_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Pos           MS_CTL_2_0_DMAC0_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Msk           MS_CTL_2_0_DMAC0_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.DMAC1_MSC_ACG_CTL */
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos      MS_CTL_2_0_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk      MS_CTL_2_0_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Pos           MS_CTL_2_0_DMAC1_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Msk           MS_CTL_2_0_DMAC1_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.CODE_MS0_MSC_ACG_CTL */
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos   MS_CTL_2_0_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk   MS_CTL_2_0_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos        MS_CTL_2_0_CODE_MS0_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk        MS_CTL_2_0_CODE_MS0_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.SYS_MS0_MSC_ACG_CTL */
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos    MS_CTL_2_0_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk    MS_CTL_2_0_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos         MS_CTL_2_0_SYS_MS0_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk         MS_CTL_2_0_SYS_MS0_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.SYS_MS1_MSC_ACG_CTL */
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos    MS_CTL_2_0_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk    MS_CTL_2_0_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Pos         MS_CTL_2_0_SYS_MS1_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Msk         MS_CTL_2_0_SYS_MS1_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.EXP_MS_MSC_ACG_CTL */
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos     MS_CTL_2_0_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk     MS_CTL_2_0_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Pos          MS_CTL_2_0_EXP_MS_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Msk          MS_CTL_2_0_EXP_MS_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.DMAC0_MSC_ACG_CTL */
+#define MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos      MS_CTL_2_0_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk      MS_CTL_2_0_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Pos           MS_CTL_2_0_DMAC0_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Msk           MS_CTL_2_0_DMAC0_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.DMAC1_MSC_ACG_CTL */
+#define MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos      MS_CTL_2_0_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk      MS_CTL_2_0_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Pos           MS_CTL_2_0_DMAC1_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Msk           MS_CTL_2_0_DMAC1_MSC_ACG_CTL_SEC_RESP_Msk
 
 #else
 
-    #define MS_CTL_PC_CTL_VX(index)          (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->MS[(index)].CTL)
-    #define MS_CTL_PC_VAL_VX(index)          (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->MS_PC[(index)].PC)
-    #define MS_CTL_PC_READ_MIRROR_VX(index)  (((MS_CTL_2_1_Type*) GET_NSALIAS_ADDRESS(MS_CTL_2_1_BASE))->MS_PC[(index)].PC_READ_MIR)
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_VX   (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->CODE_MS0_MSC_ACG_CTL)
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_VX    (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->SYS_MS0_MSC_ACG_CTL)
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_VX    (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->SYS_MS1_MSC_ACG_CTL)
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_VX     (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->EXP_MS_MSC_ACG_CTL)
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_VX      (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->DMAC0_MSC_ACG_CTL)
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_VX      (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->DMAC1_MSC_ACG_CTL)
+#define MS_CTL_PC_CTL_VX(index)          (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->MS[(index)].CTL)
+#define MS_CTL_PC_VAL_VX(index)          (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->MS_PC[(index)].PC)
+#define MS_CTL_PC_READ_MIRROR_VX(index)  (((MS_CTL_2_1_Type*) GET_NSALIAS_ADDRESS(MS_CTL_2_1_BASE))->MS_PC[(index)].PC_READ_MIR)
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_VX   (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->CODE_MS0_MSC_ACG_CTL)
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_VX    (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->SYS_MS0_MSC_ACG_CTL)
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_VX    (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->SYS_MS1_MSC_ACG_CTL)
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_VX     (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->EXP_MS_MSC_ACG_CTL)
+#define MS_CTL_DMAC0_MSC_ACG_CTL_VX      (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->DMAC0_MSC_ACG_CTL)
+#define MS_CTL_DMAC1_MSC_ACG_CTL_VX      (((MS_CTL_2_1_Type*) MS_CTL_2_1_BASE)->DMAC1_MSC_ACG_CTL)
 
-    /* MS_CTL.CODE_MS0_MSC_ACG_CTL */
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos   MS_CTL_2_1_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk   MS_CTL_2_1_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos        MS_CTL_2_1_CODE_MS0_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk        MS_CTL_2_1_CODE_MS0_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.SYS_MS0_MSC_ACG_CTL */
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos    MS_CTL_2_1_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk    MS_CTL_2_1_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos         MS_CTL_2_1_SYS_MS0_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk         MS_CTL_2_1_SYS_MS0_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.SYS_MS1_MSC_ACG_CTL */
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos    MS_CTL_2_1_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk    MS_CTL_2_1_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Pos         MS_CTL_2_1_SYS_MS1_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Msk         MS_CTL_2_1_SYS_MS1_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.EXP_MS_MSC_ACG_CTL */
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos     MS_CTL_2_1_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk     MS_CTL_2_1_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Pos          MS_CTL_2_1_EXP_MS_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Msk          MS_CTL_2_1_EXP_MS_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.DMAC0_MSC_ACG_CTL */
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos      MS_CTL_2_1_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk      MS_CTL_2_1_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Pos           MS_CTL_2_1_DMAC0_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Msk           MS_CTL_2_1_DMAC0_MSC_ACG_CTL_SEC_RESP_Msk
-    /* MS_CTL.DMAC1_MSC_ACG_CTL */
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos      MS_CTL_2_1_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_Pos
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk      MS_CTL_2_1_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_Msk
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Pos           MS_CTL_2_1_DMAC1_MSC_ACG_CTL_SEC_RESP_Pos
-    #define MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Msk           MS_CTL_2_1_DMAC1_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.CODE_MS0_MSC_ACG_CTL */
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos   MS_CTL_2_1_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk   MS_CTL_2_1_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos        MS_CTL_2_1_CODE_MS0_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk        MS_CTL_2_1_CODE_MS0_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.SYS_MS0_MSC_ACG_CTL */
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos    MS_CTL_2_1_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk    MS_CTL_2_1_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos         MS_CTL_2_1_SYS_MS0_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk         MS_CTL_2_1_SYS_MS0_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.SYS_MS1_MSC_ACG_CTL */
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos    MS_CTL_2_1_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk    MS_CTL_2_1_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Pos         MS_CTL_2_1_SYS_MS1_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Msk         MS_CTL_2_1_SYS_MS1_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.EXP_MS_MSC_ACG_CTL */
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos     MS_CTL_2_1_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk     MS_CTL_2_1_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Pos          MS_CTL_2_1_EXP_MS_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Msk          MS_CTL_2_1_EXP_MS_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.DMAC0_MSC_ACG_CTL */
+#define MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos      MS_CTL_2_1_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk      MS_CTL_2_1_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Pos           MS_CTL_2_1_DMAC0_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Msk           MS_CTL_2_1_DMAC0_MSC_ACG_CTL_SEC_RESP_Msk
+/* MS_CTL.DMAC1_MSC_ACG_CTL */
+#define MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos      MS_CTL_2_1_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_Pos
+#define MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk      MS_CTL_2_1_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_Msk
+#define MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Pos           MS_CTL_2_1_DMAC1_MSC_ACG_CTL_SEC_RESP_Pos
+#define MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Msk           MS_CTL_2_1_DMAC1_MSC_ACG_CTL_SEC_RESP_Msk
 
 #endif
 
@@ -3349,10 +3000,10 @@ extern const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES];
 /*******************************************************************************
 *                MXSRAMC
 *******************************************************************************/
-#define CY_MXSRAMC_BASE(sramNum)                        ((uint32_t)((uint32_t)RAMC0_BASE + (((uint32_t)(sramNum)) * 0x10000U )))
-#define MXSRAMC_STATUS(sramNum)                         (((RAMC_Type *) CY_MXSRAMC_BASE(sramNum))->STATUS)
-#define MXSRAMC_PWR_MACRO_CTL(sramNum)                  (((RAMC_Type *) CY_MXSRAMC_BASE(sramNum))->PWR_MACRO_CTL)
-#define MXSRAMC_PWR_MACRO_CTL_LOCK(sramNum)             (((RAMC_Type *) CY_MXSRAMC_BASE(sramNum))->PWR_MACRO_CTL_LOCK)
+#define CY_MXSRAMC_INST(sramNum)                        ((sramNum == 0) ? RAMC0 : RAMC1)
+#define MXSRAMC_STATUS(sramNum)                         (CY_MXSRAMC_INST(sramNum)->STATUS)
+#define MXSRAMC_PWR_MACRO_CTL(sramNum)                  (CY_MXSRAMC_INST(sramNum)->PWR_MACRO_CTL)
+#define MXSRAMC_PWR_MACRO_CTL_LOCK(sramNum)             (CY_MXSRAMC_INST(sramNum)->PWR_MACRO_CTL_LOCK)
 
 
 #define MXSRAMC_PWR_MACRO_CTL_LOCK_CLR0                 0X00000001U
@@ -3379,8 +3030,11 @@ extern const uint32_t IPC_BASE_PTR[CY_IPC_INSTANCES];
 *                PPC
 *******************************************************************************/
 
-#define PPC_VALIDATE(ipInst, regionID)                  ((((ipInst) == PPC0) && ((regionID) <= (uint32_t)PROT_PERI0_END)) || \
-                                                         (((ipInst) == PPC1) && ((regionID) <= (uint32_t)PROT_PERI1_END))? true : false)
+#define PPC_IS_VALID(ipInst, regionID)                  ((((ipInst) == PPC0) && ((regionID) <= (uint32_t)PROT_PERI0_END)) || \
+                                                         (((ipInst) == PPC1) && ((regionID) >= (uint32_t)PROT_PERI1_START)   \
+                                                                             && ((regionID) <= (uint32_t)PROT_PERI1_END))? true : false)
+
+#define PPC_REGION_GET_ACTUAL(ipInst, regionID)         (((ipInst) == PPC1) ? ((regionID) & ~(PROT_PERI1_START)) : (regionID))
 
 /*******************************************************************************
 *                CRYPTO

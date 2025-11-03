@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 -------------------------- END-OF-HEADER -----------------------------
 
@@ -69,11 +69,11 @@ Revision: $Rev: 32989 $
 #define U16   unsigned short
 #define I16   signed short
 #if defined(__x86_64__) || defined(__aarch64__)
-    #define U32   unsigned int
-    #define I32   int
+#define U32   unsigned int
+#define I32   int
 #else
-    #define U32   unsigned long
-    #define I32   signed long
+#define U32   unsigned long
+#define I32   signed long
 #endif
 
 //
@@ -82,40 +82,40 @@ Revision: $Rev: 32989 $
 // support C99 and its long type.
 //
 #ifdef CC_NO_LONG_SUPPORT
-    #define PTR_ADDR  U32
+  #define PTR_ADDR  U32
 #else  // Supports long type.
-    #if defined(_MSC_VER)
-        //
-        // Microsoft VC6 and newer.
-        // Older versions exist (_MSC_VER <= 1200) but are
-        // not even officially listed by Microsoft and might
-        // not work with these defines.
-        //
-        #define U64   unsigned __int64
-        #define U128  unsigned __int128
-        #define I64   __int64
-        #define I128  __int128
-        #if (_MSC_VER <= 1200)
-            #define U64_C(x) x##UI64
-        #else
-            #define U64_C(x) x##ULL
-        #endif
-    #else
-        //
-        // C99 compliant compiler.
-        //
-        #define U64   unsigned long long
-        #define I64   signed long long
-        #define U64_C(x) x##ULL
-    #endif
+  #if defined(_MSC_VER)
     //
-    // Types for pointer<->address conversions.
+    // Microsoft VC6 and newer.
+    // Older versions exist (_MSC_VER <= 1200) but are
+    // not even officially listed by Microsoft and might
+    // not work with these defines.
     //
-    #if (defined(_WIN64) || defined(__LP64__))  // 64-bit symbols used by Visual Studio and GCC, maybe others as well.
-        #define PTR_ADDR  U64
+    #define U64   unsigned __int64
+    #define U128  unsigned __int128
+    #define I64   __int64
+    #define I128  __int128
+    #if (_MSC_VER <= 1200)
+      #define U64_C(x) x##UI64
     #else
-        #define PTR_ADDR  U32
+      #define U64_C(x) x##ULL
     #endif
+  #else
+    //
+    // C99 compliant compiler.
+    //
+    #define U64   unsigned long long
+    #define I64   signed long long
+    #define U64_C(x) x##ULL
+  #endif
+  //
+  // Types for pointer<->address conversions.
+  //
+  #if (defined(_WIN64) || defined(__LP64__))  // 64-bit symbols used by Visual Studio and GCC, maybe others as well.
+    #define PTR_ADDR  U64
+  #else
+    #define PTR_ADDR  U32
+  #endif
 #endif  // Supports long type.
 
 #endif                      // Avoid multiple inclusion

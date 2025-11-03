@@ -39,16 +39,15 @@
 
 /**
   @brief         Compute the logical bitwise NOT of a fixed-point vector.
-  @param[in]     pSrc       points to input vector
+  @param[in]     pSrc       points to input vector 
   @param[out]    pDst       points to output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
 
-void arm_not_u8(
-    const uint8_t *pSrc,
-    uint8_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_not_u8(
+    const uint8_t * pSrc,
+          uint8_t * pDst,
+          uint32_t blockSize)
 {
     uint32_t blkCnt;      /* Loop counter */
 
@@ -62,7 +61,7 @@ void arm_not_u8(
     {
         vecSrc = vld1q(pSrc);
 
-        vst1q(pDst, vmvnq_u8(vecSrc));
+        vst1q(pDst, vmvnq_u8(vecSrc) );
 
         pSrc += 16;
         pDst += 16;
@@ -91,7 +90,7 @@ void arm_not_u8(
     {
         inV = vld1q_u8(pSrc);
 
-        vst1q_u8(pDst, vmvnq_u8(inV));
+        vst1q_u8(pDst, vmvnq_u8(inV) );
 
         pSrc += 16;
         pDst += 16;

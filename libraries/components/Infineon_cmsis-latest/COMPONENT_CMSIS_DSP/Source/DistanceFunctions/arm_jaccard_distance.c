@@ -34,12 +34,12 @@
 
 
 extern void arm_boolean_distance_TT_TF_FT(const uint32_t *pA
-        , const uint32_t *pB
-        , uint32_t numberOfBools
-        , uint32_t *cTT
-        , uint32_t *cTF
-        , uint32_t *cFT
-                                         );
+       , const uint32_t *pB
+       , uint32_t numberOfBools
+       , uint32_t *cTT
+       , uint32_t *cTF
+       , uint32_t *cFT
+       );
 
 
 /**
@@ -57,13 +57,13 @@ extern void arm_boolean_distance_TT_TF_FT(const uint32_t *pA
  *
  */
 
-float32_t arm_jaccard_distance(const uint32_t *pA, const uint32_t *pB, uint32_t numberOfBools)
+ARM_DSP_ATTRIBUTE float32_t arm_jaccard_distance(const uint32_t *pA, const uint32_t *pB, uint32_t numberOfBools)
 {
-    uint32_t ctt = 0, ctf = 0, cft = 0;
+    uint32_t ctt=0,ctf=0,cft=0;
 
     arm_boolean_distance_TT_TF_FT(pA, pB, numberOfBools, &ctt, &ctf, &cft);
 
-    return (1.0 * (ctf + cft) / (ctt + cft + ctf));
+    return(1.0*(ctf + cft) / (ctt + cft + ctf));
 }
 
 

@@ -64,7 +64,7 @@
 *
 * MIPI-DSI Host Controller and D-PHY (MIPIDSI)
 * - DPI-2 and and DBI-2 Type B displays.
-* - Up to 2 data lanes, max 1.5 Gbps per lane.
+* - Up to 2 data lanes, max 1.5 Gbps per lane. 
 * - PLL for high-speed mode clock generation.
 * - Generic command interface (DCS and proprietary read & write).
 * - Video Pattern generator.
@@ -80,17 +80,6 @@
 *
 * For more information on the Graphics subsystem, refer to the technical reference
 * manual (TRM).
-*
-* \section group_graphics_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial Driver.</td>
-*     <td>Initial Driver.</td>
-*   </tr>
-*   </tr>
-* </table>
 *
 * \defgroup group_graphics_macros Macros
 * \defgroup group_graphics_functions Functions
@@ -145,7 +134,7 @@ extern "C" {
 #define DC_CORE                                          dcCore
 
 /** Pointer to dc core*/
-extern viv_dc_core *dcCore;
+extern viv_dc_core* dcCore;
 
 /** Interrupt status mask for CORE interrupt */
 #define GFXSS_DC_INTR_CORE_MASK                         (0x00001)
@@ -197,68 +186,65 @@ extern viv_dc_core *dcCore;
 /** Graphics API result */
 typedef enum
 {
-    CY_GFX_SUCCESS,          /**< Success */
-    CY_GFX_BAD_PARAM,        /**< Bad parameter */
-    CY_GFX_TIMEOUT,          /**< Operation timeout */
+   CY_GFX_SUCCESS,          /**< Success */
+   CY_GFX_BAD_PARAM,        /**< Bad parameter */
+   CY_GFX_TIMEOUT,          /**< Operation timeout */
 } cy_en_gfx_status_t;
 
 /** RLAD image format */
 typedef enum
 {
-    CY_GFX_RLAD_FMT_ARGB4444,
-    CY_GFX_RLAD_FMT_ARGB1555,
-    CY_GFX_RLAD_FMT_RGB565,
-    CY_GFX_RLAD_FMT_ARGB8888,
-    CY_GFX_RLAD_FMT_RGB888,
-    CY_GFX_RLAD_FMT_RGB666,
-    CY_GFX_RLAD_FMT_RGB444,
-    CY_GFX_RLAD_FMT_GRAY8,
-    CY_GFX_RLAD_FMT_GRAY6,
-    CY_GFX_RLAD_FMT_GRAY4
-} cy_en_gfx_rlad_fmt_t;
+     CY_GFX_RLAD_FMT_ARGB4444,
+     CY_GFX_RLAD_FMT_ARGB1555,
+     CY_GFX_RLAD_FMT_RGB565,
+     CY_GFX_RLAD_FMT_ARGB8888,
+     CY_GFX_RLAD_FMT_RGB888,
+     CY_GFX_RLAD_FMT_RGB666,
+     CY_GFX_RLAD_FMT_RGB444,
+     CY_GFX_RLAD_FMT_GRAY8,
+     CY_GFX_RLAD_FMT_GRAY6,
+     CY_GFX_RLAD_FMT_GRAY4
+}cy_en_gfx_rlad_fmt_t;
 
 /** RLAD decoder status */
 typedef enum
 {
-    CY_GFX_RLAD_NORMAL_OPERATION,   /**< No fail state or Normal Operation. */
-    CY_GFX_RLAD_AXI_ERROR,          /**< An AXI error response was received when reading compressed image data. */
-    CY_GFX_RLAD_BUF_TOO_SMALL,      /**< The RLAD_SIZE setting is inconsistent with the compressed image data (image decompression not complete when end of buffer was reached). */
-    CY_GFX_RLAD_BUF_TOO_LARGE,      /**< The RLAD_SIZE setting is inconsistent with the compressed image data (image decompression completed before end of buffer was reached). */
-    CY_GFX_RLAD_DC_INVALID_SIZE,    /**< The DC was reading the first pixel of a frame when it was not expected. This means an inconsistent setup of RLAD and DC configuration. */
-    CY_GFX_RLAD_DC_INVALID_FORMAT   /**< The DC was reading data with an unexpected burst length. This means an invalid buffer format was configured. */
-} cy_en_gfx_rlad_status_t;
+     CY_GFX_RLAD_NORMAL_OPERATION,   /**< No fail state or Normal Operation. */
+     CY_GFX_RLAD_AXI_ERROR,          /**< An AXI error response was received when reading compressed image data. */ 
+     CY_GFX_RLAD_BUF_TOO_SMALL,      /**< The RLAD_SIZE setting is inconsistent with the compressed image data (image decompression not complete when end of buffer was reached). */
+     CY_GFX_RLAD_BUF_TOO_LARGE,      /**< The RLAD_SIZE setting is inconsistent with the compressed image data (image decompression completed before end of buffer was reached). */
+     CY_GFX_RLAD_DC_INVALID_SIZE,    /**< The DC was reading the first pixel of a frame when it was not expected. This means an inconsistent setup of RLAD and DC configuration. */
+     CY_GFX_RLAD_DC_INVALID_FORMAT   /**< The DC was reading data with an unexpected burst length. This means an invalid buffer format was configured. */
+}cy_en_gfx_rlad_status_t;
 
 /** RLAD compression mode */
 typedef enum
 {
-    CY_GFX_RLAD_MODE_RLAD,          /**< 'Run Length Adaptive Dithering' compression. It is a lossless image compression type. */
-    CY_GFX_RLAD_MODE_RLAD_UNIFORM,  /**< 'Run Length Adaptive Dithering' compression with uniform bits per pixel. It is a lossless image compression type. */
-    CY_GFX_RLAD_MODE_RLA,           /**< 'Run Length Adaptive' compression. It is a lossless image compression type. */
-    CY_GFX_RLAD_MODE_RL             /**< 'Run length Encoded' compression. It is a lossless image compression type. */
-} cy_en_gfx_rlad_comp_mode_t;
+     CY_GFX_RLAD_MODE_RLAD,          /**< 'Run Length Adaptive Dithering' compression. It is a lossless image compression type. */
+     CY_GFX_RLAD_MODE_RLAD_UNIFORM,  /**< 'Run Length Adaptive Dithering' compression with uniform bits per pixel. It is a lossless image compression type. */
+     CY_GFX_RLAD_MODE_RLA,           /**< 'Run Length Adaptive' compression. It is a lossless image compression type. */
+     CY_GFX_RLAD_MODE_RL             /**< 'Run length Encoded' compression. It is a lossless image compression type. */
+}cy_en_gfx_rlad_comp_mode_t;
 
 /** Layer type */
-typedef enum
-{
+typedef enum {
     GFX_LAYER_GRAPHICS,
     GFX_LAYER_OVERLAY0,
     GFX_LAYER_OVERLAY1,
-} cy_en_gfx_layer_type_t;
+}cy_en_gfx_layer_type_t;
 
 /** Display type */
-typedef enum
-{
+typedef enum {
     GFX_DISP_TYPE_DPI,
     GFX_DISP_TYPE_DBI_A,
     GFX_DISP_TYPE_DBI_B,
     GFX_DISP_TYPE_DBI_C,
     GFX_DISP_TYPE_DSI_DBI,
     GFX_DISP_TYPE_DSI_DPI
-} cy_en_gfx_display_type_t;
-
+}cy_en_gfx_display_type_t;
+  
 /** Display format type */
-typedef enum
-{
+typedef enum {
     /* DPI */
     GFX_DPI_D24,
     GFX_DPI_D16CFG1,
@@ -266,8 +252,8 @@ typedef enum
     GFX_DPI_D16CFG3,
     GFX_DPI_D18CFG1,
     GFXSS_DPI_D18CFG2,
-
-    /* DBI */
+  
+     /* DBI */
     GFX_DBI_D8R3G3B2,
     GFX_DBI_D8R4G4B4,
     GFX_DBI_D8R5G6B5,
@@ -283,14 +269,14 @@ typedef enum
     GFX_DBI_D16R8G8B8OP2,
     GFX_DBI_D1R5G6B5,
     GFX_DBI_D1R8G8B8,
-} cy_en_gfx_display_format_t;
+}cy_en_gfx_display_format_t;
 
 /** Display buffer update type */
 typedef enum
 {
-    GFX_SINGLE_BUFFER,
-    GFX_DOUBLE_BUFFER,
-    GFX_SPLIT_BUFFER,
+   GFX_SINGLE_BUFFER,
+   GFX_DOUBLE_BUFFER,
+   GFX_SPLIT_BUFFER,
 } cy_en_gfx_disp_buffer_update_type_t;
 
 /** \} group_graphics_enums */
@@ -306,8 +292,7 @@ typedef enum
 */
 
 /** Cursor Configuration */
-typedef struct
-{
+typedef struct {
     uint32_t *image_address;              /**< Cursor image address */
     uint8_t  hotspot_x;                   /**< Cursor hotspot x location */
     uint8_t  hotspot_y;                   /**< Cursor hotspot y location */
@@ -316,27 +301,27 @@ typedef struct
     uint32_t bgcolor;                     /**< Cursor background colour */
     uint32_t fgcolor;                     /**< Cursor foreground colour */
     bool     enable;                      /**<  Layer state */
-} cy_stc_gfx_cursor_config_t;
+}cy_stc_gfx_cursor_config_t;
 
-
+ 
 /** RLAD configuration structure */
 typedef struct
 {
-    cy_en_gfx_layer_type_t      layer_id;                  /**<  Layer ID*/
-    uint32_t                    image_width;               /**<  Width of the image in number of pixels minus one. */
-    uint32_t                    image_height;              /**<  Height of the image in number of pixels minus one */
-    uint32_t                    compressed_image_size;     /**<  Size of the the encoded image in number of 32-bit words minus one. Defined in image header file.*/
-    uint32_t                    *image_address;            /**<  Image address */
-    cy_en_gfx_rlad_comp_mode_t  compression_mode;          /**<  RLAD compression mode */
-    cy_en_gfx_rlad_fmt_t        rlad_format;               /**<  RLAD display format */
-    bool                        enable;                    /**<  Layer state */
-} cy_stc_gfx_rlad_cfg_t;
+  cy_en_gfx_layer_type_t      layer_id;                  /**<  Layer ID*/
+  uint32_t                    image_width;               /**<  Width of the image in number of pixels minus one. */
+  uint32_t                    image_height;              /**<  Height of the image in number of pixels minus one */
+  uint32_t                    compressed_image_size;     /**<  Size of the the encoded image in number of 32-bit words minus one. Defined in image header file.*/
+  uint32_t                    *image_address;            /**<  Image address */
+  cy_en_gfx_rlad_comp_mode_t  compression_mode;          /**<  RLAD compression mode */
+  cy_en_gfx_rlad_fmt_t        rlad_format;               /**<  RLAD display format */
+  bool                        enable;                    /**<  Layer state */
+}cy_stc_gfx_rlad_cfg_t;
 
 /** GPU configuration structure. Reserved for future use. */
 typedef struct
 {
     bool enable;   /**<  GPU  status */
-} cy_stc_gfx_gpu_cfg_t;
+}cy_stc_gfx_gpu_cfg_t;
 
 /** GPU context */
 typedef struct
@@ -349,16 +334,15 @@ typedef struct
     bool vg_lite_initialised; /**< vg_Lite initialisation status */
 
     /** \endcond */
-} cy_stc_gfx_gpu_context_t;
+}cy_stc_gfx_gpu_context_t;
 
 /** Layer Configuration structure */
-typedef struct
-{
+typedef struct {
     cy_en_gfx_layer_type_t  layer_type;            /**< Layer type */
     gctADDRESS              *buffer_address;       /**< Buffer */
-    gctADDRESS              *uv_buffer_address;    /**< UV Buffer */
-    viv_input_format_type   input_format_type;     /**< Inout format */
-    viv_tiling_type         tiling_type;           /**< Tiliing format */
+    gctADDRESS              *uv_buffer_address;    /**< UV Buffer, this is not available for overlay 1 */
+    viv_input_format_type   input_format_type;     /**< Input format, Overlay 1 supports only linear format while Graphics/Video Layer and Overlay 0 support both linear and tiled formats */
+    viv_tiling_type         tiling_type;           /**< Tiliing format, Overlay 1 supports only vivLINEAR tiling type */
     viv_layer_alpha_mode    alpha_mode;            /**< Alpha mode */
     gctUINT32               pos_x;                 /**< Position X */
     gctUINT32               pos_y;                 /**< Position Y */
@@ -366,57 +350,55 @@ typedef struct
     gctUINT32               height;                /**< Height */
     gctUINT8                zorder;                /**< Z Order */
     gctBOOL                 layer_enable;          /**< Layer status */
-
-} cy_stc_gfx_layer_config_t;
+    gctBOOL                 visibility;            /**< Layer visibility */
+ 
+ }cy_stc_gfx_layer_config_t;
 
 /** Display controller Configuration */
-typedef struct
-{
-    cy_stc_gfx_layer_config_t       *gfx_layer_config;     /**< Graphics/Video Layer configuration */
-    cy_stc_gfx_layer_config_t       *ovl0_layer_config;    /**< Overlay0 Layer configuration */
-    cy_stc_gfx_layer_config_t       *ovl1_layer_config;    /**< Overlay1 Layer configuration */
-    cy_stc_gfx_rlad_cfg_t           *rlad_config;          /**< RLAD configuration */
-    cy_stc_gfx_cursor_config_t      *cursor_config;        /**< Cursor configuration */
-    cy_en_gfx_display_type_t        display_type;          /**< Display type */
-    viv_display_format_type         display_format;        /**< Display format */
-    viv_display_size_type           display_size;          /**< Display size */
-    uint32_t                        display_width;         /**< Display width */
-    uint32_t                        display_height;        /**< Display height */
-    /** Interrupt mask refer to \ref group_graphics_macros_intrupter_macros */
-    uint32_t                        interrupt_mask;
+typedef struct {
+   cy_stc_gfx_layer_config_t       *gfx_layer_config;     /**< Graphics/Video Layer configuration */
+   cy_stc_gfx_layer_config_t       *ovl0_layer_config;    /**< Overlay0 Layer configuration */
+   cy_stc_gfx_layer_config_t       *ovl1_layer_config;    /**< Overlay1 Layer configuration */
+   cy_stc_gfx_rlad_cfg_t           *rlad_config;          /**< RLAD configuration */
+   cy_stc_gfx_cursor_config_t      *cursor_config;        /**< Cursor configuration */
+   cy_en_gfx_display_type_t        display_type;          /**< Display type */
+   viv_display_format_type         display_format;        /**< Display format */
+   viv_display_size_type           display_size;          /**< Display size */
+   uint32_t                        display_width;         /**< Display width */
+   uint32_t                        display_height;        /**< Display height */
+   /** Interrupt mask refer to \ref group_graphics_macros_intrupter_macros */
+   uint32_t                        interrupt_mask;        
 } cy_stc_gfx_dc_config_t;
 
 /** Display controller context */
-typedef struct
-{
+typedef struct {
     /** \cond INTERNAL */
 
-    cy_stc_gfx_layer_config_t       gfx_layer_config;     /**< Graphics/Video Layer configuration */
-    cy_stc_gfx_layer_config_t       ovl0_layer_config;    /**< Overlay0 Layer configuration */
-    cy_stc_gfx_layer_config_t       ovl1_layer_config;    /**< Overlay1 Layer configuration */
-    cy_stc_gfx_rlad_cfg_t           rlad_config;          /**< RLAD configuration */
-    cy_stc_gfx_cursor_config_t      cursor_config;        /**< Cursor configuration */
-    cy_en_gfx_display_type_t        display_type;          /**< Display type */
-    viv_display_format_type         display_format;        /**< Display format */
-    viv_display_size_type           display_size;          /**< Display size */
-    uint32_t                        display_width;         /**< Display width */
-    uint32_t                        display_height;         /**< Display height */
-    uint32_t                        interrupt_mask;        /**< Interrupt mask */
-
+   cy_stc_gfx_layer_config_t       gfx_layer_config;     /**< Graphics/Video Layer configuration */
+   cy_stc_gfx_layer_config_t       ovl0_layer_config;    /**< Overlay0 Layer configuration */
+   cy_stc_gfx_layer_config_t       ovl1_layer_config;    /**< Overlay1 Layer configuration */
+   cy_stc_gfx_rlad_cfg_t           rlad_config;          /**< RLAD configuration */
+   cy_stc_gfx_cursor_config_t      cursor_config;        /**< Cursor configuration */
+   cy_en_gfx_display_type_t        display_type;          /**< Display type */
+   viv_display_format_type         display_format;        /**< Display format */
+   viv_display_size_type           display_size;          /**< Display size */
+   uint32_t                        display_width;         /**< Display width */
+   uint32_t                        display_height;         /**< Display height */
+   uint32_t                        interrupt_mask;        /**< Interrupt mask */
+      
     /** \endcond */
-} cy_stc_gfx_dc_context_t;
+}cy_stc_gfx_dc_context_t;
 
 /** Graphics Block Configuration */
-typedef struct
-{
+typedef struct {
     cy_stc_gfx_dc_config_t                   *dc_cfg;             /**< Display controller configuration */
     cy_stc_gfx_gpu_cfg_t                     *gpu_cfg;            /**< GPU configuration is optional */
     cy_stc_mipidsi_config_t                  *mipi_dsi_cfg;       /**< MIPI DSI configuration */
     cy_en_gfx_disp_buffer_update_type_t      display_update_type; /**< Single / Dual / Split */
     uint32_t clockHz;     /**< The frequency of the clock connected to the GFXSS block in Hz. */
-} cy_stc_gfx_config_t;
-
-/** The Graphics internal context data. The user must not modify it. */
+}cy_stc_gfx_config_t;
+ 
+ /** The Graphics internal context data. The user must not modify it. */
 typedef struct
 {
     /** \cond INTERNAL */
@@ -428,7 +410,7 @@ typedef struct
     uint32_t clockHz;     /**< The frequency of the clock connected to the GFXSS block in Hz. */
 
     /** \endcond */
-} cy_stc_gfx_context_t;
+}cy_stc_gfx_context_t;
 /** \} group_graphics_data_structures */
 
 
@@ -627,7 +609,7 @@ __STATIC_INLINE cy_en_gfx_rlad_status_t Cy_GFXSS_Get_RLAD_Status(GFXSS_Type *bas
 * \return
 * CY_GFX_SUCCESS/CY_GFX_BAD_PARAM
 *
-* \note Framebuffer base address and stride for linear data should be
+* \note Framebuffer base address and stride for linear data should be 
 *       128-byte aligned.
 *
 *******************************************************************************/
@@ -654,7 +636,7 @@ cy_en_gfx_status_t Cy_GFXSS_Set_FrameBuffer(GFXSS_Type *base, uint32_t* gfx_laye
 * \return
 * CY_GFX_SUCCESS/CY_GFX_BAD_PARAM
 *
-* \note YUV Framebuffer base address and stride for linear data should be
+* \note YUV Framebuffer base address and stride for linear data should be 
 *       64-byte aligned.
 *
 *******************************************************************************/
@@ -670,7 +652,7 @@ cy_en_gfx_status_t Cy_GFXSS_Set_FrameBuffer_YUV(GFXSS_Type *base, uint32_t* y_bu
 * frame buffer address.
 *
 *******************************************************************************/
-uint32_t *Cy_GFXSS_Get_FrameBufferAddress(GFXSS_Type *base);
+uint32_t* Cy_GFXSS_Get_FrameBufferAddress(GFXSS_Type *base);
 
 /*******************************************************************************
 * Function Name: Cy_GFXSS_Set_Overlay0
@@ -739,6 +721,27 @@ cy_en_gfx_status_t Cy_GFXSS_Set_Overlay0_YUV(GFXSS_Type *base, uint32_t* y_buffe
 cy_en_gfx_status_t Cy_GFXSS_Set_Overlay1(GFXSS_Type *base, uint32_t* overlay1_buffer, cy_stc_gfx_context_t *context);
 
 /*******************************************************************************
+* Function Name: Cy_GFXSS_Set_Layer_Enabled
+****************************************************************************//**
+*
+* Enable/Disable the selected Layer
+*
+* \param base
+* Holds the base address of the Graphics block registers.
+*
+* \param layer_id
+* Layer type to be enabled/disabled.
+*
+* \param enable
+* Enable/Disable visibility of the Layer
+*
+* \return
+* SUCCESS/FAILURE.
+*
+*******************************************************************************/
+cy_en_gfx_status_t Cy_GFXSS_Set_Layer_Enabled(GFXSS_Type *base, cy_en_gfx_layer_type_t  layer_id, bool enable);
+
+/*******************************************************************************
 * Function Name: Cy_GFXSS_DeInit
 ****************************************************************************//**
 *
@@ -793,7 +796,7 @@ cy_en_gfx_status_t Cy_GFXSS_RLAD_SetImage(GFXSS_Type *base,  cy_stc_gfx_rlad_cfg
 * SUCESS/FAILURE
 *
 *******************************************************************************/
-cy_en_gfx_status_t Cy_GFXSS_RLAD_Enable(GFXSS_Type *base, cy_stc_gfx_context_t *context);
+cy_en_gfx_status_t Cy_GFXSS_RLAD_Enable( GFXSS_Type *base, cy_stc_gfx_context_t *context);
 
 /*******************************************************************************
 * Function Name: Cy_GFXSS_RLAD_Disable
@@ -811,7 +814,7 @@ cy_en_gfx_status_t Cy_GFXSS_RLAD_Enable(GFXSS_Type *base, cy_stc_gfx_context_t *
 * Initialization status.
 *
 *******************************************************************************/
-cy_en_gfx_status_t Cy_GFXSS_RLAD_Disable(GFXSS_Type *base, cy_stc_gfx_context_t *context);
+cy_en_gfx_status_t Cy_GFXSS_RLAD_Disable( GFXSS_Type *base, cy_stc_gfx_context_t *context);
 
 /*******************************************************************************
 * Function Name: Cy_GFXSS_Enable_GPU
@@ -829,7 +832,7 @@ cy_en_gfx_status_t Cy_GFXSS_RLAD_Disable(GFXSS_Type *base, cy_stc_gfx_context_t 
 * SUCESS/TIMEOUT status.
 *
 *******************************************************************************/
-cy_en_gfx_status_t Cy_GFXSS_Enable_GPU(GFXSS_Type *base, cy_stc_gfx_context_t *context);
+cy_en_gfx_status_t Cy_GFXSS_Enable_GPU( GFXSS_Type *base, cy_stc_gfx_context_t *context);
 
 /*******************************************************************************
 * Function Name: Cy_GFXSS_Disable_GPU
@@ -847,7 +850,7 @@ cy_en_gfx_status_t Cy_GFXSS_Enable_GPU(GFXSS_Type *base, cy_stc_gfx_context_t *c
 * SUCESS/TIMEOUT status.
 *
 *******************************************************************************/
-cy_en_gfx_status_t Cy_GFXSS_Disable_GPU(GFXSS_Type *base, cy_stc_gfx_context_t *context);
+cy_en_gfx_status_t Cy_GFXSS_Disable_GPU( GFXSS_Type *base, cy_stc_gfx_context_t *context);
 
 /*******************************************************************************
 * Function Name: Cy_GFXSS_Transfer_Frame
@@ -865,7 +868,31 @@ cy_en_gfx_status_t Cy_GFXSS_Disable_GPU(GFXSS_Type *base, cy_stc_gfx_context_t *
 * SUCESS/TIMEOUT status.
 *
 *******************************************************************************/
-cy_en_gfx_status_t Cy_GFXSS_Transfer_Frame(GFXSS_Type *base, cy_stc_gfx_context_t *context);
+cy_en_gfx_status_t Cy_GFXSS_Transfer_Frame( GFXSS_Type *base, cy_stc_gfx_context_t *context);
+
+/*******************************************************************************
+* Function Name: Cy_GFXSS_TransferPartialFrame
+****************************************************************************//**
+*
+* Transfer partial frame to display in DBI command mode.
+*
+* \param base
+* Pointer to the graphics sub system base address.
+*
+* \param start_line_offset 
+* Start line offset from the top of the frame buffer, beginning of partial frame.
+*
+* \param end_line_offset
+* End line offset from the top of the frame buffer, end of partial frame.
+*
+* \param context
+* context information used by the driver.
+*
+* \return
+* SUCESS/TIMEOUT status.
+*
+*******************************************************************************/
+cy_en_gfx_status_t Cy_GFXSS_TransferPartialFrame(GFXSS_Type *base, uint32_t start_line_offset, uint32_t end_line_offset, cy_stc_gfx_context_t *context);
 
 /*******************************************************************************
 * Function Name: Cy_GFXSS_Enable_GPU_Interrupt
@@ -904,11 +931,11 @@ __STATIC_INLINE uint32_t Cy_GFXSS_Get_DC_Interrupt_Status(GFXSS_Type *base)
 }
 __STATIC_INLINE uint32_t Cy_GFXSS_Get_GPU_Interrupt_Status(GFXSS_Type *base)
 {
-    return base->GFXSS_GPU.MXGPU.INTR;
+	return base->GFXSS_GPU.MXGPU.INTR;
 }
 __STATIC_INLINE cy_en_gfx_rlad_status_t Cy_GFXSS_Get_RLAD_Status(GFXSS_Type *base)
 {
-    return ((cy_en_gfx_rlad_status_t) _FLD2VAL(GFXSS_DC_MXDC_RLAD_STATUS_RLAD_FAILED, base->GFXSS_DC.MXDC.RLAD_STATUS));
+	return ((cy_en_gfx_rlad_status_t) _FLD2VAL(GFXSS_DC_MXDC_RLAD_STATUS_RLAD_FAILED, base->GFXSS_DC.MXDC.RLAD_STATUS));
 }
 
 

@@ -1,25 +1,25 @@
-/**********************************************************************
-* Copyright (C) 2014-2015 Cadence Design Systems, Inc.- http://www.cadence.com
-* SPDX-License-Identifier: Apache-2.0
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-***********************************************************************
-* edd_int.h
-* Private declarations for Ethernet DMA-MAC Driver
-*
-***********************************************************************/
+ /**********************************************************************
+ * Copyright (C) 2014-2015 Cadence Design Systems, Inc.- http://www.cadence.com
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ ***********************************************************************
+ * edd_int.h
+ * Private declarations for Ethernet DMA-MAC Driver
+ *
+ ***********************************************************************/
 
-/****************************************************************************
+ /****************************************************************************
 * Modification by Infineon: To make this file compile with ModusToolbox
 * toolchain
 *****************************************************************************/
@@ -31,8 +31,8 @@
 #include "cedi.h"
 
 #ifndef ETH_AXI_MASTER_PRESENT
-    // Assumed that if "ETH_AXI_MASTER_PRESENT" did not exist in Cypress header file, AXI is present.
-    #define ETH_AXI_MASTER_PRESENT 1
+  // Assumed that if "ETH_AXI_MASTER_PRESENT" did not exist in Cypress header file, AXI is present.
+  #define ETH_AXI_MASTER_PRESENT 1
 #endif
 
 /******************************************************************************
@@ -96,12 +96,12 @@
 
 #define CEDI_RXD_PRI_TAG         (1 << 20)
 #define CEDI_RXD_VLAN_TAG        (1 << 21)
-// either Type ID match register or
-// (if Rx chksum offload enabled) checksum status
+                // either Type ID match register or
+                // (if Rx chksum offload enabled) checksum status
 #define CEDI_RXD_TYP_IDR_CHK_STA_SHIFT (22)
 #define CEDI_RXD_TYP_IDR_CHK_STA_MASK (3 << CEDI_RXD_TYP_IDR_CHK_STA_SHIFT)
-// either Type ID matched or
-// (if Rx chksum offload enabled) SNAP encoded and no CFI
+                // either Type ID matched or
+                // (if Rx chksum offload enabled) SNAP encoded and no CFI
 #define CEDI_RXD_TYP_MAT_SNP_NCFI   (1 << 24)
 #define CEDI_RXD_SPEC_REG_SHIFT     (25)
 #define CEDI_RXD_SPEC_REG_MASK      (3 << CEDI_RXD_SPEC_REG_SHIFT)
@@ -155,13 +155,11 @@
  *****************************************************************************/
 
 /* Tx Descriptor defs */
-typedef struct
-{
+typedef struct {
     uint32_t word[CEDI_DESC_WORD_NUM_MAX];
 } txDesc;
 
-typedef struct
-{
+typedef struct {
     txDesc      *bdBase;        // base address of descriptor ring
     txDesc      *bdHead;        // first available descriptor
     txDesc      *bdTail;        // first descriptor waiting to be freed
@@ -172,38 +170,35 @@ typedef struct
     uintptr_t   *vTail;         // end of virt address circular array
     uintptr_t   *vAddrList;     // pointer to virt addresses storage
     uint8_t     firstToFree;    // flag indicating stage of frame clean-up: set
-    // when about to clear first buffer of frame
+                                // when about to clear first buffer of frame
     uint8_t     descNum;        // descriptor counter used by qTxBuf: stays at 0 until
-    // start 2nd desc of frame, then inc to 1, etc.
+                                // start 2nd desc of frame, then inc to 1, etc.
 } txQueue_t;
 
 /* Rx Descriptor defs */
-typedef struct
-{
+typedef struct {
     uint32_t word[CEDI_DESC_WORD_NUM_MAX];
 } rxDesc;
 
-typedef struct
-{
+typedef struct {
     rxDesc *rxDescStart;        // start of Rx descriptor list
     rxDesc *rxDescStop;         // end-stop Rx descriptor, trails behind "Tail";
-    //  always kept "used" but with no buffer
+                                //  always kept "used" but with no buffer
     rxDesc *rxDescTail;         // next Rx descriptor to process (one after end-stop)
     rxDesc *rxDescEnd;          // last descriptor in Rx list
     uint16_t numRxDesc;         // total number of descriptors in the list,
-    //  including unused end-stop
+                                //  including unused end-stop
     uint16_t numRxBufs;         // number of useable buffers/descriptors in list
     uintptr_t *rxTailVA;        // tail Rx virtual addr
     uintptr_t *rxStopVA;        // end-stop Rx virtual addr, corr. to rxDescStop
     uintptr_t *rxEndVA;         // end Rx virtual addr
     uintptr_t *rxBufVAddr;      // list of buffer virtual addresses in sync
-    // with physical addresses held in descriptor lists
+                            // with physical addresses held in descriptor lists
 } rxQueue_t;
 
 /* Driver private data - place the tx & rx virtual address lists after this
  * (with these included in privateData memory requirement) */
-typedef struct
-{
+typedef struct {
     CEDI_Config      cfg;            // copy of CEDI_Config info supplied to init
     CEDI_Callbacks   cb;             // pointers to callback functions
     CEDI_DesignCfg   hwCfg;          // copy of DesignCfg Debug registers
@@ -213,19 +208,19 @@ typedef struct
 //    CPS_LockHandle  isrLock;        // lock used during isr calls
     uint8_t         anLinkStat;     // retain link status (low) until read
     uint8_t         anRemFault;     // retain link partner remote fault status
-    //  (high) until read
+                                    //  (high) until read
     uint8_t         autoNegActive;  // auto-negotiation in progress flag
     uint8_t         basePageExp;    // data expected from link partner: set
-    // initially to indicate base page, clear
-    // after first received to denote next page
-    // expected. Set on start auto-negotiation.
+                                    // initially to indicate base page, clear
+                                    // after first received to denote next page
+                                    // expected. Set on start auto-negotiation.
 
     CEDI_LpPageRx    lpPageRx;       // reserved for passing page Rx in callback
     CEDI_NetAnStatus anStatus;       // reserved for a-n status in callback
     CEDI_1588TimerVal ptpTime;       // reserved for passing ptp event times
 //    CPS_LockHandle  autoNegLock;    // lock to protect auto-neg flags and next
-    // page register when isr writes null
-    // message page
+                                    // page register when isr writes null
+                                    // message page
     uint16_t txDescriptorSize;      // bytes per Tx descriptor
     uint16_t rxDescriptorSize;      // bytes per Rx descriptor
 } CEDI_PrivateData;
@@ -239,7 +234,7 @@ uint32_t subNsTsuInc24bSupport(void *pD);
 /* Driver API function prototypes (only required if called within API) */
 
 uint32_t emacSetEventEnable(void *pD, uint32_t events, uint8_t enable,
-                            uint8_t queueNum);
+        uint8_t queueNum);
 uint32_t emacResetPcs(void *pD);
 uint32_t emacWriteUserOutputs(void *pD, uint16_t outVal);
 uint32_t emacGetJumboFramesRx(void *pD, uint8_t *enable);
@@ -266,7 +261,7 @@ uint32_t emacSetNextPageTx(void *pD, CEDI_AnNextPage *npDat);
 uint32_t emacCalcMaxTxFrameSize(void *pD, CEDI_FrameSize *maxTxSize);
 
 uint32_t emacQueueTxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *bufAdd,
-                        uint32_t length, uint8_t flags);
+        uint32_t length, uint8_t flags);
 
 uint32_t emacQTxBuf(void *pD, CEDI_qTxBufParams *prm);
 
@@ -308,14 +303,14 @@ uint32_t emacEnableCbs(void *pD, uint8_t qSel, uint32_t idleSlope);
 void emacDisableCbs(void *pD, uint8_t qSel);
 
 uint32_t emacGetCbsQSetting(void *pD, uint8_t qSel,
-                            uint8_t *enable, uint32_t *idleSlope);
+               uint8_t *enable, uint32_t *idleSlope);
 
 
 uint32_t emacSetIpgStretch(void *pD, uint8_t enable, uint8_t multiplier,
-                           uint8_t divisor);
+        uint8_t divisor);
 
 uint32_t emacGetIpgStretch(void *pD, uint8_t *enabled, uint8_t *multiplier,
-                           uint8_t *divisor);
+        uint8_t *divisor);
 
 
 
@@ -324,14 +319,14 @@ uint32_t emacGetIpgStretch(void *pD, uint8_t *enabled, uint8_t *multiplier,
 uint32_t emacCalcMaxRxFrameSize(void *pD, uint32_t *maxSize);
 
 uint32_t emacAddRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf,
-                      uint8_t init);
+        uint8_t init);
 
 uint32_t emacNumRxBufs(void *pD, uint8_t queueNum, uint16_t *numBufs);
 
 uint32_t emacNumRxUsed(void *pD, uint8_t queueNum);
 
 uint32_t emacReadRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf,
-                       uint8_t init, CEDI_RxDescData *descData);
+                            uint8_t init, CEDI_RxDescData *descData);
 
 void emacGetRxDescStat(void *pD, uint32_t rxDStatWord, CEDI_RxDescStat *rxDStat);
 
@@ -346,7 +341,7 @@ void emacDisableRx(void *pD);
 uint32_t emacRemoveRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf);
 
 void emacFindQBaseAddr(void *pD, uint8_t queueNum, rxQueue_t *rxQ,
-                       uint32_t *pAddr, uintptr_t *vAddr);
+                        uint32_t *pAddr, uintptr_t *vAddr);
 
 uint32_t emacResetRxQ(void *pD, uint8_t queueNum, uint8_t ptrsOnly);
 
@@ -371,10 +366,10 @@ uint32_t emacSetRxPartialStFwd(void *pD, uint32_t watermark, uint8_t enable);
 uint32_t emacGetRxPartialStFwd(void *pD, uint32_t *watermark, uint8_t *enable);
 
 uint32_t emacSetSpecificAddr(void *pD, uint8_t addrNum, CEDI_MacAddress *addr,
-                             uint8_t specFilterType, uint8_t byteMask);
+         uint8_t specFilterType,uint8_t byteMask);
 
 uint32_t emacGetSpecificAddr(void *pD, uint8_t addrNum, CEDI_MacAddress *addr,
-                             uint8_t *specFilterType, uint8_t *byteMask);
+         uint8_t *specFilterType, uint8_t *byteMask);
 
 uint32_t emacSetSpecificAddr1Mask(void *pD, CEDI_MacAddress *mask);
 
@@ -383,10 +378,10 @@ uint32_t emacGetSpecificAddr1Mask(void *pD, CEDI_MacAddress *mask);
 uint32_t emacDisableSpecAddr(void *pD, uint8_t addrNum);
 
 uint32_t emacSetTypeIdMatch(void *pD, uint8_t matchSel, uint16_t typeId,
-                            uint8_t enable);
+        uint8_t enable);
 
 uint32_t emacGetTypeIdMatch(void *pD, uint8_t matchSel, uint16_t *typeId,
-                            uint8_t *enabled);
+        uint8_t *enabled);
 
 void emacSetUnicastEnable(void *pD, uint8_t enable);
 
@@ -436,10 +431,10 @@ uint32_t emacSetType2EthertypeReg(void *pD, uint8_t index, uint16_t eTypeVal);
 uint32_t emacGetType2EthertypeReg(void *pD, uint8_t index, uint16_t *eTypeVal);
 
 uint32_t emacSetType2CompareReg(void *pD, uint8_t index,
-                                CEDI_T2Compare *regVals);
+        CEDI_T2Compare *regVals);
 
 uint32_t emacGetType2CompareReg(void *pD, uint8_t index,
-                                CEDI_T2Compare *regVals);
+        CEDI_T2Compare *regVals);
 
 
 #endif /* multiple inclusion protection */

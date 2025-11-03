@@ -28,9 +28,9 @@
 
 #if defined(CY_IP_M4CPUSS_DMAC) || defined(CY_IP_M4CPUSS_DMA) || defined(CY_IP_M7CPUSS_DMAC) || \
     defined(CY_IP_M7CPUSS_DMA) || defined(CY_IP_MXAHBDMAC)
-    #include "mtb_hal_dma_dmac_ip_common.h"
+#include "mtb_hal_dma_dmac_ip_common.h"
 #elif defined(CY_IP_MXSAXIDMAC)
-    #include "mtb_hal_dma_dmac_mxsaxidmac_v1.h"
+#include "mtb_hal_dma_dmac_mxsaxidmac_v1.h"
 #endif
 
 #if defined(CY_IP_M4CPUSS_DMAC) || defined(CY_IP_M4CPUSS_DMA) || defined(CY_IP_M7CPUSS_DMAC) || \

@@ -5,7 +5,7 @@ This repository has CMSIS Core headers, CMSIS DSP and CMSIS NN source. It can be
 
 CMSIS Core is sourced from https://github.com/ARM-software/CMSIS_6
 
-CMSIS DSP is sourced from https://github.com/ARM-software/CMSIS-DSP
+CMSIS DSP is sourced from https://github.com/ARM-software/CMSIS-DSP/releases/tag/v1.16.2
 
 CMSIS NN is sourced from https://github.com/ARM-software/CMSIS_5/tree/5.9.0/CMSIS/NN
 

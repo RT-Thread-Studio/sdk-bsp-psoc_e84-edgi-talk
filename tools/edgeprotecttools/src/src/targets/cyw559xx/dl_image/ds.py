@@ -19,7 +19,7 @@ from intelhex import IntelHex
 
 class DS:
     """Data structure for Dynamic Section"""
-    def __init__(self, data):
+    def __init__(self, data: IntelHex):
         self._data = data
 
     @property

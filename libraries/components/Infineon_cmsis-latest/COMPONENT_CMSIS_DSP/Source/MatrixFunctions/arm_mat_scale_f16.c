@@ -52,151 +52,151 @@
  */
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-arm_status arm_mat_scale_f16(
-    const arm_matrix_instance_f16 * pSrc,
-    float16_t scale,
-    arm_matrix_instance_f16 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_scale_f16(
+  const arm_matrix_instance_f16 * pSrc,
+  float16_t scale,
+  arm_matrix_instance_f16 * pDst)
 {
-    arm_status status;                             /* status of matrix scaling     */
-#ifdef ARM_MATH_MATRIX_CHECK
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numRows) || (pSrc->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  arm_status status;                             /* status of matrix scaling     */
+  #ifdef ARM_MATH_MATRIX_CHECK
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numRows) || (pSrc->numCols != pDst->numCols))
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 #endif /*    #ifdef ARM_MATH_MATRIX_CHECK    */
+  {
+    float16_t *pIn = pSrc->pData;   /* input data matrix pointer */
+    float16_t *pOut = pDst->pData;  /* output data matrix pointer */
+    uint32_t  numSamples;           /* total number of elements in the matrix */
+    uint32_t  blkCnt;               /* loop counters */
+    f16x8_t vecIn, vecOut, vecScale;
+    float16_t const *pInVec;
+
+    pInVec = (float16_t const *) pIn;
+
+    vecScale = vdupq_n_f16(scale);
+    /*
+     * Total number of samples in the input matrix
+     */
+    numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
+    blkCnt = numSamples >> 3;
+    while (blkCnt > 0U)
     {
-        float16_t *pIn = pSrc->pData;   /* input data matrix pointer */
-        float16_t *pOut = pDst->pData;  /* output data matrix pointer */
-        uint32_t  numSamples;           /* total number of elements in the matrix */
-        uint32_t  blkCnt;               /* loop counters */
-        f16x8_t vecIn, vecOut, vecScale;
-        float16_t const *pInVec;
-
-        pInVec = (float16_t const *) pIn;
-
-        vecScale = vdupq_n_f16(scale);
         /*
-         * Total number of samples in the input matrix
+         * C(m,n) = A(m,n) * scale
+         * Scaling and results are stored in the destination buffer.
          */
-        numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
-        blkCnt = numSamples >> 3;
-        while (blkCnt > 0U)
-        {
-            /*
-             * C(m,n) = A(m,n) * scale
-             * Scaling and results are stored in the destination buffer.
-             */
-            vecIn = vld1q(pInVec);
-            pInVec += 8;
+        vecIn = vld1q(pInVec); 
+        pInVec += 8;
 
-            vecOut = vmulq_f16(vecIn, vecScale);
+        vecOut = vmulq_f16(vecIn, vecScale);
 
-            vst1q(pOut, vecOut);
-            pOut += 8;
-            /*
-             * Decrement the blockSize loop counter
-             */
-            blkCnt--;
-        }
+        vst1q(pOut, vecOut); 
+        pOut += 8;
         /*
-         * tail
+         * Decrement the blockSize loop counter
          */
-        blkCnt = numSamples & 7;
-        if (blkCnt > 0U)
-        {
-            mve_pred16_t p0 = vctp16q(blkCnt);
-            vecIn = vld1q(pInVec);
-            vecOut = vecIn * scale;
-
-            vstrhq_p(pOut, vecOut, p0);
-        }
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+        blkCnt--;
     }
+    /*
+     * tail
+     */
+    blkCnt = numSamples & 7;
+    if (blkCnt > 0U)
+    {
+        mve_pred16_t p0 = vctp16q(blkCnt);
+        vecIn = vld1q(pInVec); 
+        vecOut = vecIn * scale;
 
-    /* Return to application */
-    return (status);
+        vstrhq_p(pOut, vecOut, p0);
+    }
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 
 }
 #else
 
-arm_status arm_mat_scale_f16(
-    const arm_matrix_instance_f16 * pSrc,
-    float16_t                 scale,
-    arm_matrix_instance_f16 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_scale_f16(
+  const arm_matrix_instance_f16 * pSrc,
+        float16_t                 scale,
+        arm_matrix_instance_f16 * pDst)
 {
-    float16_t *pIn = pSrc->pData;                  /* Input data matrix pointer */
-    float16_t *pOut = pDst->pData;                 /* Output data matrix pointer */
-    uint32_t numSamples;                           /* Total number of elements in the matrix */
-    uint32_t blkCnt;                               /* Loop counters */
-    arm_status status;                             /* Status of matrix scaling */
+  float16_t *pIn = pSrc->pData;                  /* Input data matrix pointer */
+  float16_t *pOut = pDst->pData;                 /* Output data matrix pointer */
+  uint32_t numSamples;                           /* Total number of elements in the matrix */
+  uint32_t blkCnt;                               /* Loop counters */
+  arm_status status;                             /* Status of matrix scaling */
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numRows) ||
-            (pSrc->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numRows) ||
+      (pSrc->numCols != pDst->numCols)   )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
 
-    {
-        /* Total number of samples in input matrix */
-        numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
+  {
+    /* Total number of samples in input matrix */
+    numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-        /* Loop unrolling: Compute 4 outputs at a time */
-        blkCnt = numSamples >> 2U;
+    /* Loop unrolling: Compute 4 outputs at a time */
+    blkCnt = numSamples >> 2U;
 
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) * scale */
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) * scale */
 
-            /* Scale and store result in destination buffer. */
-            *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
-            *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
-            *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
-            *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
+      /* Scale and store result in destination buffer. */
+      *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
+      *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
+      *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
+      *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
+      /* Decrement loop counter */
+      blkCnt--;
+    }
 
-        /* Loop unrolling: Compute remaining outputs */
-        blkCnt = numSamples % 0x4U;
+    /* Loop unrolling: Compute remaining outputs */
+    blkCnt = numSamples % 0x4U;
 
 #else
 
-        /* Initialize blkCnt with number of samples */
-        blkCnt = numSamples;
+    /* Initialize blkCnt with number of samples */
+    blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) * scale */
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) * scale */
 
-            /* Scale and store result in destination buffer. */
-            *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
+      /* Scale and store result in destination buffer. */
+      *pOut++ = (_Float16)(*pIn++) * (_Float16)scale;
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
-
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+      /* Decrement loop counter */
+      blkCnt--;
     }
 
-    /* Return to application */
-    return (status);
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
 
@@ -204,5 +204,5 @@ arm_status arm_mat_scale_f16(
   @} end of MatrixScale group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

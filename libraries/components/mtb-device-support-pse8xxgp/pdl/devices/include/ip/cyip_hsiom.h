@@ -40,37 +40,34 @@
 /**
   * \brief HSIOM port registers (HSIOM_PRT)
   */
-typedef struct
-{
-    __IOM uint32_t PORT_SEL0;                     /*!< 0x00000000 Port selection 0 */
-    __IOM uint32_t PORT_SEL1;                     /*!< 0x00000004 Port selection 1 */
-    __IM uint32_t RESERVED[2];
+typedef struct {
+  __IOM uint32_t PORT_SEL0;                     /*!< 0x00000000 Port selection 0 */
+  __IOM uint32_t PORT_SEL1;                     /*!< 0x00000004 Port selection 1 */
+   __IM uint32_t RESERVED[2];
 } HSIOM_PRT_Type;                               /*!< Size = 16 (0x10) */
 
 /**
   * \brief HSIOM secure attribute port registers (HSIOM_SECURE_PRT)
   */
-typedef struct
-{
-    __IOM uint32_t NONSECURE_MASK;                /*!< 0x00000000 Non-Secure Mask */
-    __IM uint32_t RESERVED[3];
+typedef struct {
+  __IOM uint32_t NONSECURE_MASK;                /*!< 0x00000000 Non-Secure Mask */
+   __IM uint32_t RESERVED[3];
 } HSIOM_SECURE_PRT_Type;                        /*!< Size = 16 (0x10) */
 
 /**
   * \brief IO Matrix (IOM) (HSIOM)
   */
-typedef struct
-{
-    HSIOM_PRT_Type PRT[128];                /*!< 0x00000000 HSIOM port registers */
-    __IM uint32_t RESERVED[512];
-    HSIOM_SECURE_PRT_Type SECURE_PRT[128];  /*!< 0x00001000 HSIOM secure attribute port registers */
-    __IM uint32_t RESERVED1[512];
-    __IOM uint32_t AMUX_SPLIT_CTL[64];            /*!< 0x00002000 AMUX splitter cell control */
-    __IM uint32_t RESERVED2[64];
-    __IOM uint32_t MONITOR_CTL_0;                 /*!< 0x00002200 Power/Ground Monitor cell control 0 */
-    __IOM uint32_t MONITOR_CTL_1;                 /*!< 0x00002204 Power/Ground Monitor cell control 1 */
-    __IOM uint32_t MONITOR_CTL_2;                 /*!< 0x00002208 Power/Ground Monitor cell control 2 */
-    __IOM uint32_t MONITOR_CTL_3;                 /*!< 0x0000220C Power/Ground Monitor cell control 3 */
+typedef struct {
+        HSIOM_PRT_Type PRT[128];                /*!< 0x00000000 HSIOM port registers */
+   __IM uint32_t RESERVED[512];
+        HSIOM_SECURE_PRT_Type SECURE_PRT[128];  /*!< 0x00001000 HSIOM secure attribute port registers */
+   __IM uint32_t RESERVED1[512];
+  __IOM uint32_t AMUX_SPLIT_CTL[64];            /*!< 0x00002000 AMUX splitter cell control */
+   __IM uint32_t RESERVED2[64];
+  __IOM uint32_t MONITOR_CTL_0;                 /*!< 0x00002200 Power/Ground Monitor cell control 0 */
+  __IOM uint32_t MONITOR_CTL_1;                 /*!< 0x00002204 Power/Ground Monitor cell control 1 */
+  __IOM uint32_t MONITOR_CTL_2;                 /*!< 0x00002208 Power/Ground Monitor cell control 2 */
+  __IOM uint32_t MONITOR_CTL_3;                 /*!< 0x0000220C Power/Ground Monitor cell control 3 */
 } HSIOM_Type;                                   /*!< Size = 8720 (0x2210) */
 
 

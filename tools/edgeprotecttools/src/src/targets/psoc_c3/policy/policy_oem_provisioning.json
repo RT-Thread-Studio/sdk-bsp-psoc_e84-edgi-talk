@@ -44,7 +44,7 @@
         },
         "listen_window": {
           "description": "Configures the listen window time to acquire the CM33 debug access port in the SECURE LCS",
-          "applicable_conf": "100 ms, 20 ms, 1 ms, 0 ms",
+          "applicable_conf": "100 ms, 20 ms, 2 ms, 0 ms",
           "value": "100 ms"
         },
         "cm33_dbg": {

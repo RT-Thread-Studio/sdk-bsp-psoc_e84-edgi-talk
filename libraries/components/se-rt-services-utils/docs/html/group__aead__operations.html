@@ -258,19 +258,19 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to use for the operation. It must allow the usage <a class="el" href="group__key__policy.html#gaacd41a9ee857d3c8cd33aefb1ad0aa9f" title="Whether the key may be used to encrypt a message.">IFX_SE_KEY_USAGE_ENCRYPT</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">alg</td><td>The AEAD algorithm to compute (<code>IFX_SE_ALG_XXX</code> value such that <a class="el" href="group__crypto__algs.html#gad2180b8e6448f4b12f28b9a066ab21c3" title="Whether the specified algorithm is an authenticated encryption with associated data (AEAD) algorithm.">IFX_SE_ALG_IS_AEAD</a>(<code>alg</code>) is true). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nonce</td><td>Nonce or IV to use. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nonce_length</td><td>Size of the <code>nonce</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">additional_data</td><td>Additional data that will be authenticated but not encrypted. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">additional_data_length</td><td>Size of <code>additional_data</code> in bytes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext</td><td>Data that will be authenticated and encrypted. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext_length</td><td>Size of <code>plaintext</code> in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ciphertext</td><td>Output buffer for the authenticated and encrypted data. The additional data is not part of this output. For algorithms where the encrypted data and the authentication tag are defined as separate outputs, the authentication tag is appended to the encrypted data. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ciphertext_size</td><td>Size of the <code>ciphertext</code> buffer in bytes. This must be appropriate for the selected algorithm and key:<ul>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nonce</td><td>Nonce or IV to use (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nonce_length</td><td>Size of the <code>nonce</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">additional_data</td><td>Additional data that will be authenticated but not encrypted (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">additional_data_length</td><td>Size of <code>additional_data</code> in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext</td><td>Data that will be authenticated and encrypted (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext_length</td><td>Size of <code>plaintext</code> in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ciphertext</td><td>Output buffer for the authenticated and encrypted data (encoded pointer to output buffer). The additional data is not part of this output. For algorithms where the encrypted data and the authentication tag are defined as separate outputs, the authentication tag is appended to the encrypted data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ciphertext_size</td><td>Size of the <code>ciphertext</code> buffer in bytes (size_t). This must be appropriate for the selected algorithm and key:<ul>
 <li>A sufficient output size is <a class="el" href="group__constants__sizes.html#ga2c38388015c7b105bd6e9020836adcf4" title="The maximum size of the output of ifx_se_aead_encrypt(), in bytes.">IFX_SE_AEAD_ENCRYPT_OUTPUT_SIZE</a>(<code>key_type</code>, <code>alg</code>, <code>plaintext_length</code>) where <code>key_type</code> is the type of <code>key</code>.</li>
 <li><a class="el" href="group__constants__sizes.html#ga2a73783b9da0130c07bca3d0c60b1ee8" title="A sufficient output buffer size for ifx_se_aead_encrypt(), for any of the supported key types and AEA...">IFX_SE_AEAD_ENCRYPT_OUTPUT_MAX_SIZE</a>(<code>plaintext_length</code>) evaluates to the maximum ciphertext size of any supported AEAD encryption. </li>
 </ul>
 </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ciphertext_length</td><td>On success, the size of the output in the <code>ciphertext</code> buffer. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ciphertext_length</td><td>On success, the size of the output in the <code>ciphertext</code> buffer (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -385,19 +385,19 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to use for the operation. It must allow the usage <a class="el" href="group__key__policy.html#ga943d38f66cd37626b8ced5ba81e48fdf" title="Whether the key may be used to decrypt a message.">IFX_SE_KEY_USAGE_DECRYPT</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">alg</td><td>The AEAD algorithm to compute (<code>IFX_SE_ALG_XXX</code> value such that <a class="el" href="group__crypto__algs.html#gad2180b8e6448f4b12f28b9a066ab21c3" title="Whether the specified algorithm is an authenticated encryption with associated data (AEAD) algorithm.">IFX_SE_ALG_IS_AEAD</a>(<code>alg</code>) is true). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nonce</td><td>Nonce or IV to use. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nonce_length</td><td>Size of the <code>nonce</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">additional_data</td><td>Additional data that has been authenticated but not encrypted. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">additional_data_length</td><td>Size of <code>additional_data</code> in bytes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ciphertext</td><td>Data that has been authenticated and encrypted. For algorithms where the encrypted data and the authentication tag are defined as separate inputs, the buffer must contain the encrypted data followed by the authentication tag. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ciphertext_length</td><td>Size of <code>ciphertext</code> in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">plaintext</td><td>Output buffer for the decrypted data. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext_size</td><td>Size of the <code>plaintext</code> buffer in bytes. This must be appropriate for the selected algorithm and key:<ul>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nonce</td><td>Nonce or IV to use (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nonce_length</td><td>Size of the <code>nonce</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">additional_data</td><td>Additional data that has been authenticated but not encrypted (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">additional_data_length</td><td>Size of <code>additional_data</code> in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ciphertext</td><td>Data that has been authenticated and encrypted (encoded pointer to input data). For algorithms where the encrypted data and the authentication tag are defined as separate inputs, the buffer must contain the encrypted data followed by the authentication tag. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ciphertext_length</td><td>Size of <code>ciphertext</code> in bytes (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">plaintext</td><td>Output buffer for the decrypted data (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext_size</td><td>Size of the <code>plaintext</code> buffer in bytes (size_t). This must be appropriate for the selected algorithm and key:<ul>
 <li>A sufficient output size is <a class="el" href="group__constants__sizes.html#ga6122d9a995791d57949601534822d8a1" title="The maximum size of the output of ifx_se_aead_decrypt(), in bytes.">IFX_SE_AEAD_DECRYPT_OUTPUT_SIZE</a>(<code>key_type</code>, <code>alg</code>, <code>ciphertext_length</code>) where <code>key_type</code> is the type of <code>key</code>.</li>
 <li><a class="el" href="group__constants__sizes.html#gadce2ffa19d267d9d53f2617fd1ab2e60" title="A sufficient output buffer size for ifx_se_aead_decrypt(), for any of the supported key types and AEA...">IFX_SE_AEAD_DECRYPT_OUTPUT_MAX_SIZE</a>(<code>ciphertext_length</code>) evaluates to the maximum plaintext size of any supported AEAD decryption. </li>
 </ul>
 </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">plaintext_length</td><td>On success, the size of the output in the <code>plaintext</code> buffer. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">plaintext_length</td><td>On success, the size of the output in the <code>plaintext</code> buffer (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -636,9 +636,9 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active AEAD operation. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">nonce</td><td>Buffer where the generated nonce is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nonce_size</td><td>Size of the <code>nonce</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">nonce_length</td><td>On success, the number of bytes of the generated nonce. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">nonce</td><td>Buffer where the generated nonce is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nonce_size</td><td>Size of the <code>nonce</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">nonce_length</td><td>On success, the number of bytes of the generated nonce (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -652,7 +652,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname"><a class="el" href="group__psacrypto__error.html#ga06d90cd8966c5061f118ca580d76a2e0" title="A hardware failure was detected.">IFX_SE_ERROR_HARDWARE_FAILURE</a></td><td></td></tr>
     <tr><td class="paramname"><a class="el" href="group__psacrypto__error.html#ga90718ef69f96a0ff2b2877f65e58a3e1" title="A tampering attempt was detected.">IFX_SE_ERROR_CORRUPTION_DETECTED</a></td><td></td></tr>
     <tr><td class="paramname"><a class="el" href="group__psacrypto__error.html#gadbe9aa2de2448391e663c45506ada4e0" title="There was a storage failure that may have led to data loss.">IFX_SE_ERROR_STORAGE_FAILURE</a></td><td></td></tr>
-    <tr><td class="paramname"><a class="el" href="group__psacrypto__error.html#ga3a99268d483c4255eb0368d879ecfc7a" title="The requested action cannot be performed in the current state.">IFX_SE_ERROR_BAD_STATE</a></td><td>The operation state is not valid (it must be an active aead encrypt operation, with no nonce set). </td></tr>
+    <tr><td class="paramname"><a class="el" href="group__psacrypto__error.html#ga3a99268d483c4255eb0368d879ecfc7a" title="The requested action cannot be performed in the current state.">IFX_SE_ERROR_BAD_STATE</a></td><td>The operation state is not valid (it must be an active AEAD encrypt operation, with no nonce set). </td></tr>
   </table>
   </dd>
 </dl>
@@ -705,8 +705,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active AEAD operation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nonce</td><td>Buffer containing the nonce to use. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nonce_length</td><td>Size of the nonce in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nonce</td><td>Buffer containing the nonce to use (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nonce_length</td><td>Size of the nonce in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -777,8 +777,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active AEAD operation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ad_length</td><td>Size of the non-encrypted additional authenticated data in bytes. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext_length</td><td>Size of the plaintext to encrypt in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ad_length</td><td>Size of the non-encrypted additional authenticated data in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext_length</td><td>Size of the plaintext to encrypt in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -848,8 +848,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active AEAD operation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the fragment of additional data. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the fragment of additional data (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -942,15 +942,15 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active AEAD operation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the message fragment to encrypt or decrypt. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Buffer where the output is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">output_size</td><td>Size of the <code>output</code> buffer in bytes. This must be appropriate for the selected algorithm and key:<ul>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>Buffer containing the message fragment to encrypt or decrypt (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input_length</td><td>Size of the <code>input</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Buffer where the output is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output_size</td><td>Size of the <code>output</code> buffer in bytes (size_t). This must be appropriate for the selected algorithm and key:<ul>
 <li>A sufficient output size is <a class="el" href="group__constants__sizes.html#gab8f8444c61884d0b1e6f210abecd2b22" title="A sufficient output buffer size for ifx_se_aead_update().">IFX_SE_AEAD_UPDATE_OUTPUT_SIZE</a>(<code>key_type</code>, <code>alg</code>, <code>input_length</code>) where <code>key_type</code> is the type of key and <code>alg</code> is the algorithm that were used to set up the operation.</li>
 <li><a class="el" href="group__constants__sizes.html#gadce84030bb402e16e2abec0f5da32f3b" title="A sufficient output buffer size for ifx_se_aead_update(), for any of the supported key types and AEAD...">IFX_SE_AEAD_UPDATE_OUTPUT_MAX_SIZE</a>(<code>input_length</code>) evaluates to the maximum output size of any supported AEAD algorithm. </li>
 </ul>
 </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">output_length</td><td>On success, the number of bytes that make up the returned output. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output_length</td><td>On success, the number of bytes that make up the returned output (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -1045,20 +1045,20 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active AEAD operation. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ciphertext</td><td>Buffer where the last part of the ciphertext is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ciphertext_size</td><td>Size of the <code>ciphertext</code> buffer in bytes. This must be appropriate for the selected algorithm and key:<ul>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ciphertext</td><td>Buffer where the last part of the ciphertext is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ciphertext_size</td><td>Size of the <code>ciphertext</code> buffer in bytes (size_t). This must be appropriate for the selected algorithm and key:<ul>
 <li>A sufficient output size is <a class="el" href="group__constants__sizes.html#ga0dcccf0e8f57e2b61636da7531347b96" title="A sufficient ciphertext buffer size for ifx_se_aead_finish().">IFX_SE_AEAD_FINISH_OUTPUT_SIZE</a>(<code>key_type</code>, <code>alg</code>) where <code>key_type</code> is the type of key and <code>alg</code> is the algorithm that were used to set up the operation.</li>
 <li><a class="el" href="group__constants__sizes.html#ga28978e87d066f8157038215f2a3d7245" title="A sufficient ciphertext buffer size for ifx_se_aead_finish(), for any of the supported key types and ...">IFX_SE_AEAD_FINISH_OUTPUT_MAX_SIZE</a> evaluates to the maximum output size of any supported AEAD algorithm. </li>
 </ul>
 </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ciphertext_length</td><td>On success, the number of bytes of returned ciphertext. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">tag</td><td>Buffer where the authentication tag is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">tag_size</td><td>Size of the <code>tag</code> buffer in bytes. This must be appropriate for the selected algorithm and key:<ul>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ciphertext_length</td><td>On success, the number of bytes of returned ciphertext (encoded pointer to size_t variable). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">tag</td><td>Buffer where the authentication tag is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tag_size</td><td>Size of the <code>tag</code> buffer in bytes (size_t). This must be appropriate for the selected algorithm and key:<ul>
 <li>The exact tag size is <a class="el" href="group__constants__sizes.html#ga52d620a1aca480b838d59906bc6c4f7f" title="The length of a tag for an AEAD algorithm, in bytes.">IFX_SE_AEAD_TAG_LENGTH</a>(<code>key_type</code>, <code>key_bits</code>, <code>alg</code>) where <code>key_type</code> and <code>key_bits</code> are the type and bit-size of the key, and <code>alg</code> is the algorithm that were used in the call to <a class="el" href="group__aead__operations.html#gad22d84daa187457af4e3e1451411c696" title="Set the key for a multipart authenticated encryption operation.">ifx_se_aead_encrypt_setup()</a>.</li>
 <li><a class="el" href="group__constants__sizes.html#ga6591d9decbc41e79aaef7643192bd696" title="The maximum tag size for all supported AEAD algorithms, in bytes.">IFX_SE_AEAD_TAG_MAX_SIZE</a> evaluates to the maximum tag size of any supported AEAD algorithm. </li>
 </ul>
 </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">tag_length</td><td>On success, the number of bytes that make up the returned tag. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">tag_length</td><td>On success, the number of bytes that make up the returned tag (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -1150,15 +1150,15 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>Active AEAD operation. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">plaintext</td><td>Buffer where the last part of the plaintext is to be written. This is the remaining data from previous calls to <a class="el" href="group__aead__operations.html#ga088505209fac640f5de807198d4f16bd" title="Encrypt or decrypt a message fragment in an active AEAD operation.">ifx_se_aead_update()</a> that could not be processed until the end of the input. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext_size</td><td>Size of the <code>plaintext</code> buffer in bytes. This must be appropriate for the selected algorithm and key:<ul>
+    <tr><td class="paramdir">[out]</td><td class="paramname">plaintext</td><td>Buffer where the last part of the plaintext is to be written (encoded pointer to output buffer). This is the remaining data from previous calls to <a class="el" href="group__aead__operations.html#ga088505209fac640f5de807198d4f16bd" title="Encrypt or decrypt a message fragment in an active AEAD operation.">ifx_se_aead_update()</a> that could not be processed until the end of the input. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plaintext_size</td><td>Size of the <code>plaintext</code> buffer in bytes (size_t). This must be appropriate for the selected algorithm and key:<ul>
 <li>A sufficient output size is <a class="el" href="group__constants__sizes.html#gaf4eecf0f99f3eff7a55191a2a3637e70" title="A sufficient plaintext buffer size for ifx_se_aead_verify().">IFX_SE_AEAD_VERIFY_OUTPUT_SIZE</a>(<code>key_type</code>, <code>alg</code>) where <code>key_type</code> is the type of key and <code>alg</code> is the algorithm that were used to set up the operation.</li>
 <li><a class="el" href="group__constants__sizes.html#ga3cce514238c203a25cfacdc468a744a0" title="A sufficient plaintext buffer size for ifx_se_aead_verify(), for any of the supported key types and A...">IFX_SE_AEAD_VERIFY_OUTPUT_MAX_SIZE</a> evaluates to the maximum output size of any supported AEAD algorithm. </li>
 </ul>
 </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">plaintext_length</td><td>On success, the number of bytes of returned plaintext. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">tag</td><td>Buffer containing the authentication tag. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">tag_length</td><td>Size of the <code>tag</code> buffer in bytes. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">plaintext_length</td><td>On success, the number of bytes of returned plaintext (encoded pointer to size_t variable). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tag</td><td>Buffer containing the authentication tag (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tag_length</td><td>Size of the <code>tag</code> buffer in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>

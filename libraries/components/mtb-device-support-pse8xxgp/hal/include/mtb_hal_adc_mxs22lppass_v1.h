@@ -47,7 +47,7 @@ extern "C" {
 *                           Typedefs
 *******************************************************************************/
 
-typedef void *_MTB_HAL_ADC_SAR_Type;
+typedef void* _MTB_HAL_ADC_SAR_Type;
 
 
 /*******************************************************************************
@@ -62,15 +62,15 @@ typedef void *_MTB_HAL_ADC_SAR_Type;
 // _mtb_hal_adc_setup
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE cy_rslt_t _mtb_hal_adc_setup(mtb_hal_adc_t* obj,
-        const mtb_hal_adc_configurator_t *config,
-        mtb_hal_adc_channel_t **channels)
+                                             const mtb_hal_adc_configurator_t* config,
+                                             mtb_hal_adc_channel_t** channels)
 {
     cy_rslt_t status = CY_RSLT_SUCCESS;
     uint32_t enabled_channels = 0;
     uint32_t enabled_diff = 0;
     uint32_t enabled_signed = 0;
     bool enabled_continuous = true;
-    mtb_hal_adc_channel_t *channel;
+    mtb_hal_adc_channel_t* channel;
 
     for (uint8_t cnt = 0; cnt < _MTB_HAL_SAR_MAX_NUM_CHANNELS; cnt++)
     {
@@ -102,9 +102,10 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_adc_setup(mtb_hal_adc_t* obj,
                 obj->channel_config[cnt] = NULL;
             }
         }
-        else if ((config->config->hsSeqTabArr[cnt - 1].nextAction ==
-                  CY_AUTANALOG_SAR_NEXT_ACTION_STATE_STOP)
-                 && (cnt > 0))
+        else
+        if ((config->config->hsSeqTabArr[cnt - 1].nextAction ==
+             CY_AUTANALOG_SAR_NEXT_ACTION_STATE_STOP)
+            && (cnt > 0))
         {
             enabled_continuous = false;
         }
@@ -151,17 +152,17 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_adc_start_convert(mtb_hal_adc_t* obj)
 // _mtb_hal_adc_read_latest
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE cy_rslt_t _mtb_hal_adc_read_latest(const mtb_hal_adc_channel_t* obj,
-        int32_t *result)
+                                                   int32_t* result)
 {
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(_mtb_hal_adc_is_conversion_complete(obj), MTB_HAL_ADC_RSLT_ERR_BUSY);
-#else
+    #else
     if (!_mtb_hal_adc_is_conversion_complete(obj))
     {
         return MTB_HAL_ADC_RSLT_ERR_BUSY;
     }
     else
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
     {
         *result = Cy_AutAnalog_SAR_ReadResult(obj->adc->adc_index,
                                               CY_AUTANALOG_SAR_INPUT_GPIO, obj->channel_idx);
@@ -200,7 +201,7 @@ __STATIC_INLINE int32_t _mtb_hal_adc_read(const mtb_hal_adc_channel_t* obj)
 // _mtb_hal_adc_counts_to_u16
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE uint16_t _mtb_hal_adc_counts_to_u16(const mtb_hal_adc_channel_t* obj,
-        int32_t signed_result)
+                                                    int32_t signed_result)
 {
     const uint8_t RESULT_SCALING_FACTOR = UINT16_MAX / 0xFFF; // constant 12-bit SAR resolution
     uint16_t unsigned_result;

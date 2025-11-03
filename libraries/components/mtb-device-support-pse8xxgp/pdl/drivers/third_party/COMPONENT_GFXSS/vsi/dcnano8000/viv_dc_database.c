@@ -27,8 +27,7 @@
 
 #include "viv_dc_database.h"
 
-static gcsDC_FEATURES gDCFeatureInfos[] =
-{
+static gcsDC_FEATURES gDCFeatureInfos[] = {
     /* For cmodel verify */
     {
         0x0, /* ChipID */
@@ -373,14 +372,14 @@ static gcsDC_FEATURES gDCFeatureInfos[] =
     },
 };
 
-gcsDC_FEATURES *
+gcsDC_FEATURES*
 _DCQueryFeatures(
     gctUINT32 ChipID,
     gctUINT32 ChipVersion,
     gctUINT32 ProductID,
     gctUINT32 EcoID,
     gctUINT32 CustomerID
-)
+    )
 {
     gctINT size = sizeof(gDCFeatureInfos) / sizeof(gDCFeatureInfos[0]);
     gctINT i = 0;
@@ -388,11 +387,11 @@ _DCQueryFeatures(
     for (i = 0; i < size; ++i)
     {
         if ((gDCFeatureInfos[i].chipID == ChipID)
-                && (gDCFeatureInfos[i].chipVersion == ChipVersion)
-                && (gDCFeatureInfos[i].productID == ProductID)
-                && (gDCFeatureInfos[i].ecoID == EcoID)
-                && (gDCFeatureInfos[i].customerID == CustomerID)
-                /*&& (gDCFeatureInfos[i].formalRelease)*/
+            && (gDCFeatureInfos[i].chipVersion == ChipVersion)
+            && (gDCFeatureInfos[i].productID == ProductID)
+            && (gDCFeatureInfos[i].ecoID == EcoID)
+            && (gDCFeatureInfos[i].customerID == CustomerID)
+            /*&& (gDCFeatureInfos[i].formalRelease)*/
            )
         {
             return &gDCFeatureInfos[i];

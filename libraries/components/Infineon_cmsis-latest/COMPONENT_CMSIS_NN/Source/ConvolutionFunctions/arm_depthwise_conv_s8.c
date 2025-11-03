@@ -69,7 +69,7 @@ static void depthwise_conv_s8_mult_4(const int8_t *input,
         for (int32_t in_w = -pad_x, out_w = 0, ker_h_start = MAX(0, -in_h); out_w < output_x; in_w += stride_x, ++out_w)
         {
             for (int32_t in_ch = 0, out_ch = 0, ker_w_start = MAX(0, -in_w); out_ch < output_ch;
-                    ++in_ch, out_ch += ch_mult)
+                 ++in_ch, out_ch += ch_mult)
             {
                 for (int mult_tile = 0; mult_tile < ch_mult; mult_tile += 4)
                 {
@@ -86,7 +86,7 @@ static void depthwise_conv_s8_mult_4(const int8_t *input,
                         int32_t in_idx = (in_h + ker_h) * (input_ch * input_x) + in_w * input_ch + in_ch;
 
                         for (int32_t ker_w = ker_w_start; ker_w < MIN(kernel_x, input_x - in_w);
-                                ++ker_w, ker_idx += output_ch)
+                             ++ker_w, ker_idx += output_ch)
                         {
                             int32_t in_val = input[in_idx + ker_w * input_ch] + input_offset;
                             out_buff[0] += in_val * kernel[ker_idx + 0 + mult_tile];
@@ -109,13 +109,13 @@ static void depthwise_conv_s8_mult_4(const int8_t *input,
                     output += 4;
 #else
                     out_buff[0] = arm_nn_requantize(
-                                      out_buff[0], output_mult[out_ch + 0 + mult_tile], output_shift[out_ch + 0 + mult_tile]);
+                        out_buff[0], output_mult[out_ch + 0 + mult_tile], output_shift[out_ch + 0 + mult_tile]);
                     out_buff[1] = arm_nn_requantize(
-                                      out_buff[1], output_mult[out_ch + 1 + mult_tile], output_shift[out_ch + 1 + mult_tile]);
+                        out_buff[1], output_mult[out_ch + 1 + mult_tile], output_shift[out_ch + 1 + mult_tile]);
                     out_buff[2] = arm_nn_requantize(
-                                      out_buff[2], output_mult[out_ch + 2 + mult_tile], output_shift[out_ch + 2 + mult_tile]);
+                        out_buff[2], output_mult[out_ch + 2 + mult_tile], output_shift[out_ch + 2 + mult_tile]);
                     out_buff[3] = arm_nn_requantize(
-                                      out_buff[3], output_mult[out_ch + 3 + mult_tile], output_shift[out_ch + 3 + mult_tile]);
+                        out_buff[3], output_mult[out_ch + 3 + mult_tile], output_shift[out_ch + 3 + mult_tile]);
 
                     out_buff[0] += output_offset;
                     out_buff[1] += output_offset;

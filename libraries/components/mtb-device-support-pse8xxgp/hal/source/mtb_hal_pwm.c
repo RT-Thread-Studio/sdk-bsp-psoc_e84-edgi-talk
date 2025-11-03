@@ -48,18 +48,18 @@ extern "C" {
 // _mtb_hal_pwm_set_period_and_compare
 //--------------------------------------------------------------------------------------------------
 static cy_rslt_t _mtb_hal_pwm_set_period_and_compare(mtb_hal_pwm_t* obj, uint32_t period,
-        uint32_t compare)
+                                                     uint32_t compare)
 {
     uint32_t new_compare_value = 0;
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN((period >= 1) || (period < (obj->tcpwm.max_count - 1)),
                          MTB_HAL_PWM_RSLT_BAD_ARGUMENT);
-#else
+    #else
     if ((period < 1) || (period > obj->tcpwm.max_count))
     {
         return MTB_HAL_PWM_RSLT_BAD_ARGUMENT;
     }
-#endif // if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // if defined(MTB_HAL_DISABLE_ERR_CHECK)
 
     Cy_TCPWM_PWM_SetCompare0(obj->tcpwm.base, obj->tcpwm.cntnum, 0u);
     Cy_TCPWM_PWM_SetPeriod0(obj->tcpwm.base, obj->tcpwm.cntnum, (period - 1u));
@@ -106,7 +106,7 @@ static cy_rslt_t _mtb_hal_pwm_set_period_and_compare(mtb_hal_pwm_t* obj, uint32_
 // mtb_hal_pwm_setup
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_pwm_setup(mtb_hal_pwm_t* obj, const mtb_hal_pwm_configurator_t* config,
-                            const mtb_hal_clock_t *clock)
+                            const mtb_hal_clock_t* clock)
 {
     CY_ASSERT(NULL != obj);
     memset(obj, 0, sizeof(mtb_hal_pwm_t));
@@ -115,7 +115,7 @@ cy_rslt_t mtb_hal_pwm_setup(mtb_hal_pwm_t* obj, const mtb_hal_pwm_configurator_t
     obj->tcpwm.cntnum = _MTB_HAL_TCPWM_CNT_NUMBER(config->group, config->cntnum);
     obj->tcpwm.group = _MTB_HAL_TCPWM_GET_GRP(config->group);
     obj->tcpwm.grp_cnt_base = _MTB_HAL_PWM_OBJ_TO_GRP_CNT(config->base, config->group,
-                              config->cntnum);
+                                                          config->cntnum);
     obj->tcpwm.max_count = config->max_count;
     obj->tcpwm.clock = (clock == NULL) ? config->clock : clock;
 

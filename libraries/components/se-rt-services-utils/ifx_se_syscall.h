@@ -1,13 +1,13 @@
 /***************************************************************************//**
 * \file ifx_se_syscall.h
-* \version 1.1.0
+* \version 1.2.0
 *
 * \brief
 * This is the header file for low-level syscall functions.
 *
 ********************************************************************************
 * \copyright
-* Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+* Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
 * All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
@@ -37,6 +37,10 @@
 #define IFX_SE_SYSCALL_H
 
 #include <stdint.h>
+
+#if defined(IFX_SE_CONFIG_FILE)
+    #include IFX_SE_CONFIG_FILE
+#endif /* IFX_SE_CONFIG_FILE */
 
 #include "ifx_se_fih.h"
 #include "ifx_se_crc32.h"
@@ -250,7 +254,22 @@ typedef ifx_se_fih_uint ifx_se_status_t;
 #define IFX_SE_SYSCALL_INVALID_PACKET_PARAM    IFX_SE_ERROR_CODE(0xFF000019u)
 /** Returned when no operation context is available */
 #define IFX_SE_SYSCALL_INSUFFICIENT_CONTEXT    IFX_SE_ERROR_CODE(0xFF00001Au)
-/** Returned when allowed temperature is not in supported range (-40C - +125C) */
+/** Returned when measured temperature is not in supported range (-40C - +125C)
+ *
+ * Temperature is measured during EPC4 device boot process.
+ * User application may read its status by \ref ifx_se_get_info API.
+ *
+ * When temperature error occurs, it is no longer possible to perform the next
+ * operations:
+ * - generate key
+ * - generate IV, nonce, random data
+ * - sign hash or message
+ * - key derivation
+ * - generate attestation token.
+ *
+ * To return the Secure Runtime Services to the normal operational state
+ * the user application should call sequence of \ref ifx_se_disable and
+ * \ref ifx_se_enable when device temperature is returned to allowed range. */
 #define IFX_SE_SYSCALL_INVALID_TEMPERATURE     IFX_SE_ERROR_CODE(0xFF00001Bu)
 /** Returned when no key usage Limit counter is available */
 #define IFX_SE_SYSCALL_INSUFFICIENT_COUNTER    IFX_SE_ERROR_CODE(0xFF00001Cu)
@@ -258,6 +277,14 @@ typedef ifx_se_fih_uint ifx_se_status_t;
 #define IFX_SE_SYSCALL_TIMEOUT_ERROR           IFX_SE_ERROR_CODE(0xFF0000FEu)
 /** Returned when memory allocation failed */
 #define IFX_SE_SYSCALL_INVALID_MEM_ALLOC       IFX_SE_ERROR_CODE(0xFF0000FFu)
+/** Returned when subsystem is attempted to be powered on but it is already in ON state */
+#define IFX_SE_SYSCALL_SS_ON                   IFX_SE_ERROR_CODE(0xFF000100u)
+/** Returned when the subsystem is failed to power on */
+#define IFX_SE_SYSCALL_SS_POWERON_FAIL         IFX_SE_ERROR_CODE(0xFF000101u)
+/** Returned when the subsystem is failed to come out of reset */
+#define IFX_SE_SYSCALL_SS_RESET_FAIL           IFX_SE_ERROR_CODE(0xFF000102u)
+/** Returned when the subsystem could not transition to the required state to execute the service */
+#define IFX_SE_SYSCALL_SS_INVALID_STATE        IFX_SE_ERROR_CODE(0xFF000103u)
 /** Returned when data corruption detected */
 #define IFX_SE_SYSCALL_CORRUPTION_DETECTED     IFX_SE_ERROR_CODE(0xFFBADBADu)
 
@@ -281,7 +308,7 @@ typedef ifx_se_fih_uint ifx_se_status_t;
 /** \} */
 
 /*******************************************************************************
- * SE RT Services syscall communication uses the next IPC settings:
+ * SE RT Services syscall communication uses the next IPC settings by default:
  *
  * IPC channel to transfer data to SE RT Services
  * IFX_SE_IPC_SYSCALL =          (0u)
@@ -293,6 +320,21 @@ typedef ifx_se_fih_uint ifx_se_status_t;
  *                                        for processed request
  * IFX_SE_IPC_INTR_REL =         (1u)
  *
+ * \note Syscall communication may be initiated by multiple hosts in a multicore
+ *       system. In this case each host should specify its own IPC channel by setting
+ *       -DIFX_SE_IPC_SYSCALL = xU, where 'x' is a channel number, in Makefile of its
+ *       project, pass this define in build command or use ifx_se_config_template.h.
+ *       to define alternative values.
+ *
+ *       Currently supported channels:
+ *
+ *          0U for application in PC2;
+ *          2U for applications in PC6;
+ *
+ *       Interrupt channel remains the same and release channel is not used.
+ *       IPC channels are subjects for peripheral protections applications set in
+ *       SE RT Services.
+ *
  * \note For this notification user should setup appropriate
  *       interrupt handler in his code.
  * \note SE RT Services library does not setup this notification handler
@@ -302,13 +344,19 @@ typedef ifx_se_fih_uint ifx_se_status_t;
  */
 
 /* IPC channel to transfer data to SE RT Services */
-#define IFX_SE_IPC_SYSCALL                     (0U)
+#if !defined(IFX_SE_IPC_SYSCALL)
+    #define IFX_SE_IPC_SYSCALL                     (0U)
+#endif /* IFX_SE_IPC_SYSCALL */
 
 /* IPC interrupt channel to notify SE RT Services for new request */
-#define IFX_SE_IPC_INTR_ACQ                    (0U)
+#if !defined(IFX_SE_IPC_INTR_ACQ)
+    #define IFX_SE_IPC_INTR_ACQ                    (0U)
+#endif /* IFX_SE_IPC_INTR_ACQ */
 
 /* IPC interrupt channel to notify client from SE RT Services for processed request */
-#define IFX_SE_IPC_INTR_REL                    (1U)
+#if !defined(IFX_SE_IPC_INTR_REL)
+    #define IFX_SE_IPC_INTR_REL                    (1U)
+#endif /* IFX_SE_IPC_INTR_REL */
 
 /** \addtogroup syscall_funcs
  * \{

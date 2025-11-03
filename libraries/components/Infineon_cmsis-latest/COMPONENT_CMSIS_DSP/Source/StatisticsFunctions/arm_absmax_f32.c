@@ -28,7 +28,7 @@
 
 #include "dsp/statistics_functions.h"
 #if (defined(ARM_MATH_NEON) || defined(ARM_MATH_MVEF)) && !defined(ARM_MATH_AUTOVECTORIZE)
-    #include <limits.h>
+#include <limits.h>
 #endif
 
 /**
@@ -54,17 +54,16 @@
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    maximum value returned here
   @param[out]    pIndex     index of maximum value returned here
-  @return        none
  */
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
-void arm_absmax_f32(
-    const float32_t *pSrc,
-    uint32_t blockSize,
-    float32_t *pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_absmax_f32(
+  const float32_t * pSrc,
+        uint32_t blockSize,
+        float32_t * pResult,
+        uint32_t * pIndex)
 {
     int32_t blkSize = blockSize;
     f32x4_t vecSrc;
@@ -80,8 +79,7 @@ void arm_absmax_f32(
     indexVec = vidupq_wb_u32(&curIdx, 1);
     curExtremIdxVec = vdupq_n_u32(0);
 
-    do
-    {
+    do {
         mve_pred16_t p = vctp32q(blkSize);
 
         vecSrc = vldrwq_z_f32((float32_t const *) pSrc, p);
@@ -125,171 +123,134 @@ void arm_absmax_f32(
 
 #else
 #if defined(ARM_MATH_LOOPUNROLL)
-void arm_absmax_f32(
-    const float32_t *pSrc,
-    uint32_t blockSize,
-    float32_t *pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_absmax_f32(
+  const float32_t * pSrc,
+        uint32_t blockSize,
+        float32_t * pResult,
+        uint32_t * pIndex)
 {
-    float32_t cur_absmax, out;                     /* Temporary variables to store the output value. */\
-    uint32_t blkCnt, outIndex;                     /* Loop counter */                                   \
-    uint32_t index;                                /* index of maximum value */                         \
-    \
-    /* Initialize index value to zero. */                                                                     \
-    outIndex = 0U;
-    \
-    /* Load first input value that act as reference value for comparision */                                  \
-    out = *pSrc++;
-    \
-    out = (out > 0.0f) ? out : -out;
-    \
-    /* Initialize index of extrema value. */                                                                  \
-    index = 0U;
-    \
-    \
-    /* Loop unrolling: Compute 4 outputs at a time */                                                         \
-    blkCnt = (blockSize - 1U) >> 2U;
-    \
-    \
-    while (blkCnt > 0U)                                                                                       \
-    {
-        \
-        /* Initialize cur_absmax to next consecutive values one by one */                                         \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;
-        \
-        /* compare for the extrema value */                                                                     \
-        if (cur_absmax > out)                                                                         \
-        {
-            \
-            /* Update the extrema value and it's index */                                                         \
-            out = cur_absmax;
-            \
-            outIndex = index + 1U;
-            \
-        }                                                                                                       \
-        \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;
-        \
-        if (cur_absmax > out)                                                                         \
-        {
-            \
-            out = cur_absmax;
-            \
-            outIndex = index + 2U;
-            \
-        }                                                                                                       \
-        \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;
-        \
-        if (cur_absmax > out)                                                                          \
-        {
-            \
-            out = cur_absmax;
-            \
-            outIndex = index + 3U;
-            \
-        }                                                                                                       \
-        \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;
-        \
-        if (cur_absmax > out)                                                                          \
-        {
-            \
-            out = cur_absmax;
-            \
-            outIndex = index + 4U;
-            \
-        }                                                                                                       \
-        \
-        index += 4U;
-        \
-        \
-        /* Decrement loop counter */                                                                            \
-        blkCnt--;
-        \
-    }                                                                                                         \
-    \
-    /* Loop unrolling: Compute remaining outputs */                                                           \
-    blkCnt = (blockSize - 1U) % 4U;
-    \
-    \
-    \
-    while (blkCnt > 0U)                                                                                       \
-    {
-        \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;
-        \
-        if (cur_absmax > out)                                                                         \
-        {
-            \
-            out = cur_absmax;
-            \
-            outIndex = blockSize - blkCnt;
-            \
-        }                                                                                                       \
-        \
-        /* Decrement loop counter */                                                                            \
-        blkCnt--;
-        \
-    }                                                                                                         \
-    \
-    /* Store the extrema value and it's index into destination pointers */                                    \
-    *pResult = out;
-    \
-    *pIndex = outIndex;
+        float32_t cur_absmax, out;                     /* Temporary variables to store the output value. */\
+        uint32_t blkCnt, outIndex;                     /* Loop counter */                                   \
+        uint32_t index;                                /* index of maximum value */                         \
+                                                                                                            \
+  /* Initialize index value to zero. */                                                                     \
+  outIndex = 0U;                                                                                            \
+  /* Load first input value that act as reference value for comparision */                                  \
+  out = *pSrc++;                                                                                            \
+  out = (out > 0.0f) ? out : -out;                                                                             \
+  /* Initialize index of extrema value. */                                                                  \
+  index = 0U;                                                                                               \
+                                                                                                            \
+  /* Loop unrolling: Compute 4 outputs at a time */                                                         \
+  blkCnt = (blockSize - 1U) >> 2U;                                                                          \
+                                                                                                            \
+  while (blkCnt > 0U)                                                                                       \
+  {                                                                                                         \
+    /* Initialize cur_absmax to next consecutive values one by one */                                         \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;                                                                 \
+    /* compare for the extrema value */                                                                     \
+    if (cur_absmax > out)                                                                         \
+    {                                                                                                       \
+      /* Update the extrema value and it's index */                                                         \
+      out = cur_absmax;                                                                                       \
+      outIndex = index + 1U;                                                                                \
+    }                                                                                                       \
+                                                                                                            \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;                                                                 \
+    if (cur_absmax > out)                                                                         \
+    {                                                                                                       \
+      out = cur_absmax;                                                                                       \
+      outIndex = index + 2U;                                                                                \
+    }                                                                                                       \
+                                                                                                            \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;                                                                 \
+    if (cur_absmax > out)                                                                          \
+    {                                                                                                       \
+      out = cur_absmax;                                                                                       \
+      outIndex = index + 3U;                                                                                \
+    }                                                                                                       \
+                                                                                                            \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;                                                                 \
+    if (cur_absmax > out)                                                                          \
+    {                                                                                                       \
+      out = cur_absmax;                                                                                       \
+      outIndex = index + 4U;                                                                                \
+    }                                                                                                       \
+                                                                                                            \
+    index += 4U;                                                                                            \
+                                                                                                            \
+    /* Decrement loop counter */                                                                            \
+    blkCnt--;                                                                                               \
+  }                                                                                                         \
+                                                                                                            \
+  /* Loop unrolling: Compute remaining outputs */                                                           \
+  blkCnt = (blockSize - 1U) % 4U;                                                                           \
+                                                                                                            \
+                                                                                                            \
+  while (blkCnt > 0U)                                                                                       \
+  {                                                                                                         \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0.0f) ? cur_absmax : -cur_absmax;                                                                 \
+    if (cur_absmax > out)                                                                         \
+    {                                                                                                       \
+      out = cur_absmax;                                                                                       \
+      outIndex = blockSize - blkCnt;                                                                        \
+    }                                                                                                       \
+                                                                                                            \
+    /* Decrement loop counter */                                                                            \
+    blkCnt--;                                                                                               \
+  }                                                                                                         \
+                                                                                                            \
+  /* Store the extrema value and it's index into destination pointers */                                    \
+  *pResult = out;                                                                                           \
+  *pIndex = outIndex;  
 }
 #else
-void arm_absmax_f32(
-    const float32_t *pSrc,
-    uint32_t blockSize,
-    float32_t *pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_absmax_f32(
+  const float32_t * pSrc,
+        uint32_t blockSize,
+        float32_t * pResult,
+        uint32_t * pIndex)
 {
-    float32_t maxVal, out;                         /* Temporary variables to store the output value. */
-    uint32_t blkCnt, outIndex;                     /* Loop counter */
+        float32_t maxVal, out;                         /* Temporary variables to store the output value. */
+        uint32_t blkCnt, outIndex;                     /* Loop counter */
 
 
 
-    /* Initialise index value to zero. */
-    outIndex = 0U;
+  /* Initialise index value to zero. */
+  outIndex = 0U;
 
-    /* Load first input value that act as reference value for comparision */
-    out = fabsf(*pSrc++);
+  /* Load first input value that act as reference value for comparision */
+  out = fabsf(*pSrc++);
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = (blockSize - 1U);
+  /* Initialize blkCnt with number of samples */
+  blkCnt = (blockSize - 1U);
 
 
-    while (blkCnt > 0U)
+  while (blkCnt > 0U)
+  {
+    /* Initialize maxVal to the next consecutive values one by one */
+    maxVal = fabsf(*pSrc++);
+
+    /* compare for the maximum value */
+    if (out < maxVal)
     {
-        /* Initialize maxVal to the next consecutive values one by one */
-        maxVal = fabsf(*pSrc++);
-
-        /* compare for the maximum value */
-        if (out < maxVal)
-        {
-            /* Update the maximum value and it's index */
-            out = maxVal;
-            outIndex = blockSize - blkCnt;
-        }
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* Update the maximum value and it's index */
+      out = maxVal;
+      outIndex = blockSize - blkCnt;
     }
 
-    /* Store the maximum value and it's index into destination pointers */
-    *pResult = out;
-    *pIndex = outIndex;
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+
+  /* Store the maximum value and it's index into destination pointers */
+  *pResult = out;
+  *pIndex = outIndex;
 }
 #endif /* defined(ARM_MATH_LOOPUNROLL) */
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

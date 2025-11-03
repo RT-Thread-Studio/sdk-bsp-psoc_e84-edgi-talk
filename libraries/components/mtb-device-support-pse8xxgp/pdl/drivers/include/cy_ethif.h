@@ -1,12 +1,13 @@
 /***************************************************************************//**
 * \file cy_ethif.h
-* \version 1.30
+* \version 1.40
 *
 * Provides an API declaration of the Ethernet Interface driver
 *
 ********************************************************************************
 * \copyright
-* Copyright 2020-2024 Cypress Semiconductor Corporation
+* Copyright (c) (2020-2025), Cypress Semiconductor Corporation (an Infineon company) or
+* an affiliate of Cypress Semiconductor Corporation.
 * SPDX-License-Identifier: Apache-2.0
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -80,6 +81,13 @@
 * <table class="doxtable">
 *   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
 *   <tr>
+*     <td>1.40</td>
+*     <td>Added initialization checks for \ref Cy_ETHIF_Get1588TimerValue and
+*         \ref Cy_ETHIF_Set1588TimerValue functions, added new
+*         \ref cy_en_ethif_status_t \ref CY_ETHIF_NOT_INITIALIZED return status.</td>
+*     <td>Defect fix.</td>
+*   </tr>
+*   <tr>
 *     <td>1.30</td>
 *     <td>Added an internal low power callback.</td>
 *     <td>Code enhancement.</td>
@@ -134,7 +142,7 @@ extern "C" {
 #define CY_ETHIF_DRV_VERSION_MAJOR        1
 
 /** Driver minor version */
-#define CY_ETHIF_DRV_VERSION_MINOR        30
+#define CY_ETHIF_DRV_VERSION_MINOR        40
 
 /** Eth driver ID */
 #define CY_ETHIF_ID                     CY_PDL_DRV_ID(0x71U)
@@ -244,15 +252,15 @@ extern "C" {
 #define CY_ETHIF_PAUSE_P7                   (7U)
 
 #if (CY_IP_MXETH_INSTANCES > 1u)
-#define CY_ETHIF_IS_IP_INSTANCE_VALID(base) (((base) == CY_ETH0_TYPE) || ((base) == CY_ETH1_TYPE))
-#define CY_ETHIF_IP_INSTANCE(base) (((base) == CY_ETH0_TYPE) ? CY_ETHIF_INSTANCE_0 : CY_ETHIF_INSTANCE_1)
-#define CY_ETHIF_IP_ADDR_REGBASE(instance) (((instance) == CY_ETHIF_INSTANCE_0) ? CY_ETH0_TYPE : CY_ETH1_TYPE)
-#define CY_ETHIF_GEMGXL_ADDR_REGBASE(instance) (((instance) == CY_ETHIF_INSTANCE_0) ? CY_ETH0_GEMGXL_ADDR_REGBASE : CY_ETH1_GEMGXL_ADDR_REGBASE)
+    #define CY_ETHIF_IS_IP_INSTANCE_VALID(base) (((base) == CY_ETH0_TYPE) || ((base) == CY_ETH1_TYPE))
+    #define CY_ETHIF_IP_INSTANCE(base) (((base) == CY_ETH0_TYPE) ? CY_ETHIF_INSTANCE_0 : CY_ETHIF_INSTANCE_1)
+    #define CY_ETHIF_IP_ADDR_REGBASE(instance) (((instance) == CY_ETHIF_INSTANCE_0) ? CY_ETH0_TYPE : CY_ETH1_TYPE)
+    #define CY_ETHIF_GEMGXL_ADDR_REGBASE(instance) (((instance) == CY_ETHIF_INSTANCE_0) ? CY_ETH0_GEMGXL_ADDR_REGBASE : CY_ETH1_GEMGXL_ADDR_REGBASE)
 #else
-#define CY_ETHIF_IS_IP_INSTANCE_VALID(base) ((base) == CY_ETH0_TYPE)
-#define CY_ETHIF_IP_INSTANCE(base) (((base) == CY_ETH0_TYPE) ? CY_ETHIF_INSTANCE_0 : CY_ETHIF_INSTANCE_0)
-#define CY_ETHIF_IP_ADDR_REGBASE(instance) (((instance) == CY_ETHIF_INSTANCE_0) ? CY_ETH0_TYPE : CY_ETH0_TYPE)
-#define CY_ETHIF_GEMGXL_ADDR_REGBASE(instance) (((instance) == CY_ETHIF_INSTANCE_0) ? CY_ETH0_GEMGXL_ADDR_REGBASE : CY_ETH0_GEMGXL_ADDR_REGBASE)
+    #define CY_ETHIF_IS_IP_INSTANCE_VALID(base) ((base) == CY_ETH0_TYPE)
+    #define CY_ETHIF_IP_INSTANCE(base) (((base) == CY_ETH0_TYPE) ? CY_ETHIF_INSTANCE_0 : CY_ETHIF_INSTANCE_0)
+    #define CY_ETHIF_IP_ADDR_REGBASE(instance) (((instance) == CY_ETHIF_INSTANCE_0) ? CY_ETH0_TYPE : CY_ETH0_TYPE)
+    #define CY_ETHIF_GEMGXL_ADDR_REGBASE(instance) (((instance) == CY_ETHIF_INSTANCE_0) ? CY_ETH0_GEMGXL_ADDR_REGBASE : CY_ETH0_GEMGXL_ADDR_REGBASE)
 #endif
 
 /** \endcond */
@@ -284,12 +292,13 @@ extern "C" {
  *****************************************************************************/
 typedef enum
 {
-    CY_ETHIF_SUCCESS = 0U,               /**< Returned successful */
+    CY_ETHIF_SUCCESS = 0U,              /**< Returned successful */
     CY_ETHIF_BAD_PARAM,                 /**< Bad parameter was passed */
     CY_ETHIF_MEMORY_NOT_ENOUGH,         /**< Assigned memory for BDs not enough */
     CY_ETHIF_LINK_DOWN,                 /**< Link between nodes is not up */
     CY_ETHIF_LINK_UP,                   /**< Link between nodes is up */
     CY_ETHIF_BUFFER_NOT_AVAILABLE,      /**< No local buffer available to send the frame */
+    CY_ETHIF_NOT_INITIALIZED,           /**< Ethernet Interface not initialized */
 } cy_en_ethif_status_t;
 
 
@@ -454,8 +463,8 @@ typedef struct
  *****************************************************************************/
 typedef struct
 {
-    bool bTxQueueDisable[CY_ETH_QS2_2 + 1];         /**< Tx Queue0-2 || 0: Queue Enabled, 1: Queue Disabled */
-    bool bRxQueueDisable[CY_ETH_QS2_2 + 1];         /**< Rx Queue0-2 || 0: Queue Enabled, 1: Queue Disabled */
+    bool bTxQueueDisable[CY_ETH_QS2_2+1];           /**< Tx Queue0-2 || 0: Queue Enabled, 1: Queue Disabled */
+    bool bRxQueueDisable[CY_ETH_QS2_2+1];           /**< Rx Queue0-2 || 0: Queue Enabled, 1: Queue Disabled */
 } cy_stc_ethif_queue_disablestatus_t;
 
 
@@ -518,8 +527,8 @@ typedef struct
 /** struct for writing/reading 1588 timer */
 typedef struct
 {
-    cy_stc_ethif_1588_timer_val_t *pstcTimerValue;          /**< TSU Timer value     */
-    cy_stc_ethif_timer_increment_t *pstcTimerIncValue;      /**< TSU Timer increment value   */
+    cy_stc_ethif_1588_timer_val_t * pstcTimerValue;         /**< TSU Timer value     */
+    cy_stc_ethif_timer_increment_t * pstcTimerIncValue;     /**< TSU Timer increment value   */
     bool bOneStepTxSyncEnable;                              /**< One step sync enable    */
     cy_en_ethif_TxTs_mode_t enTxDescStoreTimeStamp;         /**< Store Time stamp value in Tx descriptor */
     cy_en_ethif_RxTs_mode_t enRxDescStoreTimeStamp;         /**< Store Time stamp value in Rx descriptor */
@@ -535,40 +544,40 @@ typedef struct
  ** \param base[IN] Pointer to register area of Ethernet MAC
  ** \param u8Queue[IN] Queue used for transmitting the frame
  *****************************************************************************/
-typedef void (*cy_ethif_tx_msg_cb_t)(ETH_Type *base, uint8_t u8QueueIndex);
+ typedef void (*cy_ethif_tx_msg_cb_t)(ETH_Type *base, uint8_t u8QueueIndex);
 
 
-/**
-*****************************************************************************
-** \brief Frame transmission Error callback function. Signals a transmission
-**        error.
-**
-** \param base[IN] Pointer to register area of Ethernet MAC
-** \param u8Queue[IN] Queue used for transmitting the frame
-*****************************************************************************/
-typedef void (*cy_ethif_tx_error_cb_t)(ETH_Type *base, uint8_t u8QueueIndex);
+ /**
+ *****************************************************************************
+ ** \brief Frame transmission Error callback function. Signals a transmission
+ **        error.
+ **
+ ** \param base[IN] Pointer to register area of Ethernet MAC
+ ** \param u8Queue[IN] Queue used for transmitting the frame
+ *****************************************************************************/
+ typedef void (*cy_ethif_tx_error_cb_t)(ETH_Type *base, uint8_t u8QueueIndex);
 
 
-/**
-*****************************************************************************
-** \brief Frame received callback function. Signals a successful reception
-**        of frame.
-**
-** \param base[IN] Pointer to register area of Ethernet MAC
-** \param u8RxBuffer[IN] Receive frame buffer
-** \param u32Length[IN] Frame buffer length
-*****************************************************************************/
-typedef void (*cy_ethif_rx_frame_cb_t)(ETH_Type *base, uint8_t * u8RxBuffer, uint32_t u32Length);
+ /**
+ *****************************************************************************
+ ** \brief Frame received callback function. Signals a successful reception
+ **        of frame.
+ **
+ ** \param base[IN] Pointer to register area of Ethernet MAC
+ ** \param u8RxBuffer[IN] Receive frame buffer
+ ** \param u32Length[IN] Frame buffer length
+ *****************************************************************************/
+ typedef void (*cy_ethif_rx_frame_cb_t)(ETH_Type *base, uint8_t * u8RxBuffer, uint32_t u32Length);
 
 
-/**
-*****************************************************************************
-** \brief TSU Second counter increment callback function. Signals a One second
-**        increment in the TSU.
-**
-** \param base[IN] Pointer to register area of Ethernet MAC
-*****************************************************************************/
-typedef void (*cy_ethif_tsu_inc_cb_t)(ETH_Type *base);
+ /**
+ *****************************************************************************
+ ** \brief TSU Second counter increment callback function. Signals a One second
+ **        increment in the TSU.
+ **
+ ** \param base[IN] Pointer to register area of Ethernet MAC
+ *****************************************************************************/
+ typedef void (*cy_ethif_tsu_inc_cb_t)(ETH_Type *base);
 
 /**
  *****************************************************************************
@@ -579,27 +588,27 @@ typedef void (*cy_ethif_tsu_inc_cb_t)(ETH_Type *base);
  ** \param u8RxBuffer[OUT] 32 bytes aligned Frame buffer
  ** \param u32Length[OUT] Frame buffer length
  *****************************************************************************/
-typedef void (*cy_ethif_rx_getbuffer_cb_t)(ETH_Type *base, uint8_t **u8RxBuffer, uint32_t *u32Length);
+ typedef void (*cy_ethif_rx_getbuffer_cb_t)(ETH_Type *base, uint8_t **u8RxBuffer, uint32_t *u32Length);
 
 
 /**
  *****************************************************************************
  ** \brief Pointer to a Buffer pool.
  *****************************************************************************/
-typedef uint8_t *cy_ethif_buffpool_t[CY_ETH_DEFINE_TOTAL_BD_PER_RXQUEUE];
+ typedef uint8_t* cy_ethif_buffpool_t[CY_ETH_DEFINE_TOTAL_BD_PER_RXQUEUE];
 
 /**
  *****************************************************************************
  ** \brief Ethernet MAC call back handlers
  *****************************************************************************/
-typedef struct
-{
+ typedef struct
+ {
     cy_ethif_tx_msg_cb_t        txcompletecb;     /**< Transmit complete    */
     cy_ethif_tx_error_cb_t      txerrorcb;        /**< Tx Error    */
     cy_ethif_rx_frame_cb_t      rxframecb;        /**< Frame Received */
     cy_ethif_tsu_inc_cb_t       tsuSecondInccb;   /**< TSU timer Second counter incremented */
     cy_ethif_rx_getbuffer_cb_t  rxgetbuff;        /**< Get buffer for Receive Frame */
-} cy_stc_ethif_cb_t;
+ } cy_stc_ethif_cb_t;
 
 
 
@@ -611,27 +620,27 @@ typedef struct
 {
     bool bintrEnable;                                   /**< interrupts/events to enable on start   */
     cy_en_ethif_dma_data_buffer_len_t dmaDataBurstLen;  /**< fixed burst length for DMA data transfers */
-    /**< bit4:0 amba_burst_length                                  */
-    /**< 1xxxx: attempt use burst up to 16 (CY_ETHIF_DMA_DBUR_LEN_16)  */
-    /**< 01xxx: attempt use burst up to  8 (CY_ETHIF_DMA_DBUR_LEN_8)   */
-    /**< 001xx: attempt use burst up to  4 (CY_ETHIF_DMA_DBUR_LEN_4)   */
-    /**< 0001x: always use single burst                            */
-    /**< 00001: always use single burst    (CY_ETHIF_AMBD_BURST_LEN_1) */
-    /**< 00000: best AXI burst up to 256 beats                     */
+                                                        /**< bit4:0 amba_burst_length                                  */
+                                                        /**< 1xxxx: attempt use burst up to 16 (CY_ETHIF_DMA_DBUR_LEN_16)  */
+                                                        /**< 01xxx: attempt use burst up to  8 (CY_ETHIF_DMA_DBUR_LEN_8)   */
+                                                        /**< 001xx: attempt use burst up to  4 (CY_ETHIF_DMA_DBUR_LEN_4)   */
+                                                        /**< 0001x: always use single burst                            */
+                                                        /**< 00001: always use single burst    (CY_ETHIF_AMBD_BURST_LEN_1) */
+                                                        /**< 00000: best AXI burst up to 256 beats                     */
     uint8_t u8dmaCfgFlags;                              /**< DMA config register bits 24, 25 & 26.                   */
-    /**< OR the following bit-flags to set corresponding bits -  */
-    /**< CY_ETHIF_CFG_DMA_DISC_RXP,              */
-    /**< CY_ETHIF_CFG_DMA_FRCE_RX_BRST,          */
-    /**< CY_ETHIF_CFG_DMA_FRCE_TX_BRST        */
+                                                        /**< OR the following bit-flags to set corresponding bits -  */
+                                                        /**< CY_ETHIF_CFG_DMA_DISC_RXP,              */
+                                                        /**< CY_ETHIF_CFG_DMA_FRCE_RX_BRST,          */
+                                                        /**< CY_ETHIF_CFG_DMA_FRCE_TX_BRST        */
     cy_en_ethif_dma_mdc_clk_div_t mdcPclkDiv;           /**< divisor to generate MDC from pclk */
-    /**< CY_ETHIF_MDC_DIV_BY_8 = 0       */
-    /**< CY_ETHIF_MDC_DIV_BY_16 = 1      */
-    /**< CY_ETHIF_MDC_DIV_BY_32 = 2      */
-    /**< CY_ETHIF_MDC_DIV_BY_48 = 3      */
-    /**< CY_ETHIF_MDC_DIV_BY_64 = 4      */
-    /**< CY_ETHIF_MDC_DIV_BY_96 = 5      */
-    /**< CY_ETHIF_MDC_DIV_BY_128 = 6     */
-    /**< CY_ETHIF_MDC_DIV_BY_224 = 7     */
+                                                        /**< CY_ETHIF_MDC_DIV_BY_8 = 0       */
+                                                        /**< CY_ETHIF_MDC_DIV_BY_16 = 1      */
+                                                        /**< CY_ETHIF_MDC_DIV_BY_32 = 2      */
+                                                        /**< CY_ETHIF_MDC_DIV_BY_48 = 3      */
+                                                        /**< CY_ETHIF_MDC_DIV_BY_64 = 4      */
+                                                        /**< CY_ETHIF_MDC_DIV_BY_96 = 5      */
+                                                        /**< CY_ETHIF_MDC_DIV_BY_128 = 6     */
+                                                        /**< CY_ETHIF_MDC_DIV_BY_224 = 7     */
     uint8_t u8rxLenErrDisc;                             /**< enable discard of frames with length field error */
     uint8_t u8disCopyPause;                             /**< disable copying Rx pause frames to memory */
     uint8_t u8chkSumOffEn;                              /**< enable checksum offload operation */
@@ -649,8 +658,8 @@ typedef struct
                                                         * Must not be = 0 if using AXI as this would disable reads
                                                         */
     uint8_t u8pfcMultiQuantum;                          /**< enable pfc multiple quantum (8 different priorities) */
-    cy_stc_ethif_wrapper_config_t *pstcWrapperConfig;   /**< Configuration for Wrapper */
-    cy_stc_ethif_tsu_config_t *pstcTSUConfig;           /**< Configuration for TSU */
+    cy_stc_ethif_wrapper_config_t * pstcWrapperConfig;  /**< Configuration for Wrapper */
+    cy_stc_ethif_tsu_config_t * pstcTSUConfig;          /**< Configuration for TSU */
     bool btxq0enable;                                   /**< Tx Q0 Enable    */
     bool btxq1enable;                                   /**< Tx Q1 Enable    */
     bool btxq2enable;                                   /**< Tx Q2 Enable    */

@@ -42,7 +42,6 @@
   @param[in]     pSrc       points to the Q31 input vector
   @param[out]    pDst       points to the Q7 output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Details
                    The equation used for the conversion process is:
@@ -51,10 +50,10 @@
   </pre>
  */
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_q31_to_q7(
-    const q31_t * pSrc,
-    q7_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q31_to_q7(
+  const q31_t * pSrc,
+        q7_t * pDst,
+        uint32_t blockSize)
 {
     uint32_t  blkCnt;           /* loop counters */
     q31x4x4_t tmp;
@@ -66,7 +65,7 @@ void arm_q31_to_q7(
     blkCnt = blockSize >> 4;
     while (blkCnt > 0U)
     {
-        tmp = vld4q(pSrcVec);
+        tmp = vld4q(pSrcVec);  
         pSrcVec += 16;
         /* C = (q7_t) A >> 24 */
         /* convert from q31 to q7 and then store the results in the destination buffer */
@@ -86,7 +85,7 @@ void arm_q31_to_q7(
         vecDst = vshrnbq_n_s16(vecDst, evVec, 8);
         vecDst = vshrntq_n_s16(vecDst, oddVec, 8);
 
-        vst1q(pDst, vecDst);
+        vst1q(pDst, vecDst);    
         pDst += 16;
         /*
          * Decrement the blockSize loop counter
@@ -99,67 +98,67 @@ void arm_q31_to_q7(
     blkCnt = blockSize & 0xF;
     while (blkCnt > 0U)
     {
-        /* C = (q7_t) (A >> 24) */
-
-        /* Convert from q31 to q7 and store result in destination buffer */
-        *pDst++ = (q7_t)(*pSrcVec++ >> 24);
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* C = (q7_t) (A >> 24) */
+  
+      /* Convert from q31 to q7 and store result in destination buffer */
+      *pDst++ = (q7_t) (*pSrcVec++ >> 24);
+  
+      /* Decrement loop counter */
+      blkCnt--;
     }
 }
 #else
-void arm_q31_to_q7(
-    const q31_t * pSrc,
-    q7_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q31_to_q7(
+  const q31_t * pSrc,
+        q7_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    const q31_t *pIn = pSrc;                             /* Source pointer */
+        uint32_t blkCnt;                               /* Loop counter */
+  const q31_t *pIn = pSrc;                             /* Source pointer */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    q7_t out1, out2, out3, out4;
+  q7_t out1, out2, out3, out4;
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = (q7_t) (A >> 24) */
+  while (blkCnt > 0U)
+  {
+    /* C = (q7_t) (A >> 24) */
 
-        /* Convert from q31 to q7 and store result in destination buffer */
+    /* Convert from q31 to q7 and store result in destination buffer */
 
-        out1 = (q7_t)(*pIn++ >> 24);
-        out2 = (q7_t)(*pIn++ >> 24);
-        out3 = (q7_t)(*pIn++ >> 24);
-        out4 = (q7_t)(*pIn++ >> 24);
-        write_q7x4_ia(&pDst, __PACKq7(out1, out2, out3, out4));
+    out1 = (q7_t) (*pIn++ >> 24);
+    out2 = (q7_t) (*pIn++ >> 24);
+    out3 = (q7_t) (*pIn++ >> 24);
+    out4 = (q7_t) (*pIn++ >> 24);
+    write_q7x4_ia (&pDst, __PACKq7(out1, out2, out3, out4));
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = (q7_t) (A >> 24) */
+  while (blkCnt > 0U)
+  {
+    /* C = (q7_t) (A >> 24) */
 
-        /* Convert from q31 to q7 and store result in destination buffer */
-        *pDst++ = (q7_t)(*pIn++ >> 24);
+    /* Convert from q31 to q7 and store result in destination buffer */
+    *pDst++ = (q7_t) (*pIn++ >> 24);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

@@ -38,7 +38,7 @@
   Multiplies a matrix by a scalar.  This is accomplished by multiplying each element in the
   matrix by the scalar.  For example:
 
-  @par Matrix Scaling of a 3 x 3 matrix
+  @par Matrix Scaling of a 3 x 3 matrix 
 
   \f[
   \begin{pmatrix}
@@ -46,7 +46,7 @@
   a_{2,1} & a_{2,2} & a_{2,3} \\
   a_{3,1} & a_{3,2} & a_{3,3} \\
   \end{pmatrix}
-  * K =
+  * K = 
   \begin{pmatrix}
    K a_{1,1} & K a_{1,2} & K a_{1,3} \\
    K a_{2,1} & K a_{2,2} & K a_{2,3} \\
@@ -80,219 +80,219 @@
                    - \ref ARM_MATH_SIZE_MISMATCH : Matrix size check failed
  */
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
-arm_status arm_mat_scale_f32(
-    const arm_matrix_instance_f32 * pSrc,
-    float32_t scale,
-    arm_matrix_instance_f32 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_scale_f32(
+  const arm_matrix_instance_f32 * pSrc,
+  float32_t scale,
+  arm_matrix_instance_f32 * pDst)
 {
-    arm_status status;                             /* status of matrix scaling     */
-#ifdef ARM_MATH_MATRIX_CHECK
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numRows) || (pSrc->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  arm_status status;                             /* status of matrix scaling     */
+  #ifdef ARM_MATH_MATRIX_CHECK
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numRows) || (pSrc->numCols != pDst->numCols))
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 #endif /*    #ifdef ARM_MATH_MATRIX_CHECK    */
+  {
+    float32_t *pIn = pSrc->pData;   /* input data matrix pointer */
+    float32_t *pOut = pDst->pData;  /* output data matrix pointer */
+    uint32_t  numSamples;           /* total number of elements in the matrix */
+    uint32_t  blkCnt;               /* loop counters */
+    f32x4_t vecIn, vecOut;
+    float32_t const *pInVec;
+
+    pInVec = (float32_t const *) pIn;
+    /*
+     * Total number of samples in the input matrix
+     */
+    numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
+    blkCnt = numSamples >> 2;
+    while (blkCnt > 0U)
     {
-        float32_t *pIn = pSrc->pData;   /* input data matrix pointer */
-        float32_t *pOut = pDst->pData;  /* output data matrix pointer */
-        uint32_t  numSamples;           /* total number of elements in the matrix */
-        uint32_t  blkCnt;               /* loop counters */
-        f32x4_t vecIn, vecOut;
-        float32_t const *pInVec;
-
-        pInVec = (float32_t const *) pIn;
         /*
-         * Total number of samples in the input matrix
+         * C(m,n) = A(m,n) * scale
+         * Scaling and results are stored in the destination buffer.
          */
-        numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
-        blkCnt = numSamples >> 2;
-        while (blkCnt > 0U)
-        {
-            /*
-             * C(m,n) = A(m,n) * scale
-             * Scaling and results are stored in the destination buffer.
-             */
-            vecIn = vld1q(pInVec);
-            pInVec += 4;
+        vecIn = vld1q(pInVec); 
+        pInVec += 4;
 
-            vecOut = vecIn * scale;
+        vecOut = vecIn * scale;
 
-            vst1q(pOut, vecOut);
-            pOut += 4;
-            /*
-             * Decrement the blockSize loop counter
-             */
-            blkCnt--;
-        }
+        vst1q(pOut, vecOut); 
+        pOut += 4;
         /*
-         * tail
+         * Decrement the blockSize loop counter
          */
-        blkCnt = numSamples & 3;
-        if (blkCnt > 0U)
-        {
-            mve_pred16_t p0 = vctp32q(blkCnt);
-            vecIn = vld1q(pInVec);
-            vecOut = vecIn * scale;
-
-            vstrwq_p(pOut, vecOut, p0);
-        }
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+        blkCnt--;
     }
+    /*
+     * tail
+     */
+    blkCnt = numSamples & 3;
+    if (blkCnt > 0U)
+    {
+        mve_pred16_t p0 = vctp32q(blkCnt);
+        vecIn = vld1q(pInVec); 
+        vecOut = vecIn * scale;
 
-    /* Return to application */
-    return (status);
+        vstrwq_p(pOut, vecOut, p0);
+    }
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 
 }
 #else
 #if defined(ARM_MATH_NEON_EXPERIMENTAL)
-arm_status arm_mat_scale_f32(
-    const arm_matrix_instance_f32 * pSrc,
-    float32_t scale,
-    arm_matrix_instance_f32 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_scale_f32(
+  const arm_matrix_instance_f32 * pSrc,
+  float32_t scale,
+  arm_matrix_instance_f32 * pDst)
 {
-    float32_t *pIn = pSrc->pData;                  /* input data matrix pointer */
-    float32_t *pOut = pDst->pData;                 /* output data matrix pointer */
-    uint32_t numSamples;                           /* total number of elements in the matrix */
-    uint32_t blkCnt;                               /* loop counters */
-    arm_status status;                             /* status of matrix scaling     */
+  float32_t *pIn = pSrc->pData;                  /* input data matrix pointer */
+  float32_t *pOut = pDst->pData;                 /* output data matrix pointer */
+  uint32_t numSamples;                           /* total number of elements in the matrix */
+  uint32_t blkCnt;                               /* loop counters */
+  arm_status status;                             /* status of matrix scaling     */
 
 
 #ifdef ARM_MATH_MATRIX_CHECK
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numRows) || (pSrc->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numRows) || (pSrc->numCols != pDst->numCols))
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 #endif /*    #ifdef ARM_MATH_MATRIX_CHECK    */
+  {
+    float32x4_t vec1;
+    float32x4_t res;
+
+    /* Total number of samples in the input matrix */
+    numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
+
+    blkCnt = numSamples >> 2;
+
+    /* Compute 4 outputs at a time.
+     ** a second loop below computes the remaining 1 to 3 samples. */
+    while (blkCnt > 0U)
     {
-        float32x4_t vec1;
-        float32x4_t res;
+      /* C(m,n) = A(m,n) * scale */
+      /* Scaling and results are stored in the destination buffer. */
+      vec1 = vld1q_f32(pIn);
+      res = vmulq_f32(vec1, vdupq_n_f32(scale));
+      vst1q_f32(pOut, res);
 
-        /* Total number of samples in the input matrix */
-        numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
+      /* update pointers to process next sampels */
+      pIn += 4U;
+      pOut += 4U;
 
-        blkCnt = numSamples >> 2;
-
-        /* Compute 4 outputs at a time.
-         ** a second loop below computes the remaining 1 to 3 samples. */
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) * scale */
-            /* Scaling and results are stored in the destination buffer. */
-            vec1 = vld1q_f32(pIn);
-            res = vmulq_f32(vec1, vdupq_n_f32(scale));
-            vst1q_f32(pOut, res);
-
-            /* update pointers to process next sampels */
-            pIn += 4U;
-            pOut += 4U;
-
-            /* Decrement the numSamples loop counter */
-            blkCnt--;
-        }
-
-        /* If the numSamples is not a multiple of 4, compute any remaining output samples here.
-         ** No loop unrolling is used. */
-        blkCnt = numSamples % 0x4U;
-
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) * scale */
-            /* The results are stored in the destination buffer. */
-            *pOut++ = (*pIn++) * scale;
-
-            /* Decrement the loop counter */
-            blkCnt--;
-        }
-
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+      /* Decrement the numSamples loop counter */
+      blkCnt--;
     }
 
-    /* Return to application */
-    return (status);
+    /* If the numSamples is not a multiple of 4, compute any remaining output samples here.
+     ** No loop unrolling is used. */
+    blkCnt = numSamples % 0x4U;
+
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) * scale */
+      /* The results are stored in the destination buffer. */
+      *pOut++ = (*pIn++) * scale;
+
+      /* Decrement the loop counter */
+      blkCnt--;
+    }
+
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 #else
-arm_status arm_mat_scale_f32(
-    const arm_matrix_instance_f32 * pSrc,
-    float32_t                 scale,
-    arm_matrix_instance_f32 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_scale_f32(
+  const arm_matrix_instance_f32 * pSrc,
+        float32_t                 scale,
+        arm_matrix_instance_f32 * pDst)
 {
-    float32_t *pIn = pSrc->pData;                  /* Input data matrix pointer */
-    float32_t *pOut = pDst->pData;                 /* Output data matrix pointer */
-    uint32_t numSamples;                           /* Total number of elements in the matrix */
-    uint32_t blkCnt;                               /* Loop counters */
-    arm_status status;                             /* Status of matrix scaling */
+  float32_t *pIn = pSrc->pData;                  /* Input data matrix pointer */
+  float32_t *pOut = pDst->pData;                 /* Output data matrix pointer */
+  uint32_t numSamples;                           /* Total number of elements in the matrix */
+  uint32_t blkCnt;                               /* Loop counters */
+  arm_status status;                             /* Status of matrix scaling */
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numRows) ||
-            (pSrc->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numRows) ||
+      (pSrc->numCols != pDst->numCols)   )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
 
-    {
-        /* Total number of samples in input matrix */
-        numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
+  {
+    /* Total number of samples in input matrix */
+    numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-        /* Loop unrolling: Compute 4 outputs at a time */
-        blkCnt = numSamples >> 2U;
+    /* Loop unrolling: Compute 4 outputs at a time */
+    blkCnt = numSamples >> 2U;
 
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) * scale */
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) * scale */
 
-            /* Scale and store result in destination buffer. */
-            *pOut++ = (*pIn++) * scale;
-            *pOut++ = (*pIn++) * scale;
-            *pOut++ = (*pIn++) * scale;
-            *pOut++ = (*pIn++) * scale;
+      /* Scale and store result in destination buffer. */
+      *pOut++ = (*pIn++) * scale;
+      *pOut++ = (*pIn++) * scale;
+      *pOut++ = (*pIn++) * scale;
+      *pOut++ = (*pIn++) * scale;
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
+      /* Decrement loop counter */
+      blkCnt--;
+    }
 
-        /* Loop unrolling: Compute remaining outputs */
-        blkCnt = numSamples % 0x4U;
+    /* Loop unrolling: Compute remaining outputs */
+    blkCnt = numSamples % 0x4U;
 
 #else
 
-        /* Initialize blkCnt with number of samples */
-        blkCnt = numSamples;
+    /* Initialize blkCnt with number of samples */
+    blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) * scale */
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) * scale */
 
-            /* Scale and store result in destination buffer. */
-            *pOut++ = (*pIn++) * scale;
+      /* Scale and store result in destination buffer. */
+      *pOut++ = (*pIn++) * scale;
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
-
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+      /* Decrement loop counter */
+      blkCnt--;
     }
 
-    /* Return to application */
-    return (status);
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 #endif /* #if defined(ARM_MATH_NEON) */
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

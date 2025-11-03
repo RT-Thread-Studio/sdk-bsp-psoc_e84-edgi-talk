@@ -35,28 +35,28 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 // mtb_syspm_dma_dw_deepsleep_callback
 //--------------------------------------------------------------------------------------------------
 cy_en_syspm_status_t mtb_syspm_dma_dw_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode)
 {
     bool allow = true;
-    const mtb_syspm_dma_deepsleep_context_t *context =
+    const mtb_syspm_dma_deepsleep_context_t* context =
         (mtb_syspm_dma_deepsleep_context_t*)(params->context);
     switch (mode)
     {
-    case CY_SYSPM_CHECK_READY:
-        if (_mtb_syspm_dma_dw_is_active(params, context->channelNum))
-        {
-            allow = false;
-        }
-        else
-        {
-            //Do nothing
-        }
-        break;
+        case CY_SYSPM_CHECK_READY:
+            if (_mtb_syspm_dma_dw_is_active(params, context->channelNum))
+            {
+                allow = false;
+            }
+            else
+            {
+                //Do nothing
+            }
+            break;
 
-    default:
-        allow = true;
-        break;
+        default:
+            allow = true;
+            break;
     }
     if (allow)
     {
@@ -80,28 +80,28 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 // mtb_syspm_dma_dmac_deepsleep_callback
 //--------------------------------------------------------------------------------------------------
 cy_en_syspm_status_t mtb_syspm_dma_dmac_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode)
 {
     bool allow = true;
-    const mtb_syspm_dma_deepsleep_context_t *context =
+    const mtb_syspm_dma_deepsleep_context_t* context =
         (mtb_syspm_dma_deepsleep_context_t*)(params->context);
     switch (mode)
     {
-    case CY_SYSPM_CHECK_READY:
-        if (_mtb_syspm_dma_dmac_is_active(params, context->channelNum))
-        {
-            allow = false;
-        }
-        else
-        {
-            //Do nothing
-        }
-        break;
+        case CY_SYSPM_CHECK_READY:
+            if (_mtb_syspm_dma_dmac_is_active(params, context->channelNum))
+            {
+                allow = false;
+            }
+            else
+            {
+                //Do nothing
+            }
+            break;
 
-    default:
-        allow = true;
-        break;
+        default:
+            allow = true;
+            break;
     }
     if (allow)
     {

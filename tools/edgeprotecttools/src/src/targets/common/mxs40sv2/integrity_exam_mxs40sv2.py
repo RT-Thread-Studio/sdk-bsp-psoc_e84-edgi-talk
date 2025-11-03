@@ -160,13 +160,17 @@ class IntegrityExamMXS40Sv2(EntranceExam):
                 if operation == 'hash' and not content:
                     raise ValueError('Corrupt region format')
 
-                result.append(EntranceExamRegion(address=address,
-                                                 size=size,
-                                                 description=description,
-                                                 label=label,
-                                                 operation=operation,
-                                                 owner=owner,
-                                                 content=content))
+                entrance_exam_region = EntranceExamRegion(
+                    address=address,
+                    size=size,
+                    description=description,
+                    label=label,
+                    operation=operation,
+                    owner=owner,
+                    content=content
+                )
+                logger.debug(repr(entrance_exam_region))
+                result.append(entrance_exam_region)
             else:
                 raise ValueError('Corrupt region type')
 

@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 Purpose : Public header of the CCID component
@@ -85,13 +85,13 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #define USB_CCID_FEATURE_AUTO_ACT_ICC     0x00000004u  // Automatic activation of ICC on inserting.
 #define USB_CCID_FEATURE_AUTO_ICC_VOLTAGE 0x00000008u  // Automatic ICC voltage selection.
 #define USB_CCID_FEATURE_AUTO_ICC_CLOCK   0x00000010u  // Automatic ICC clock frequency change according to active parameters
-// provided by the Host or self determined.
+                                                       // provided by the Host or self determined.
 #define USB_CCID_FEATURE_AUTO_BAUD_RATE   0x00000020u  // Automatic baud rate change according to active parameters
-// provided by the Host or self determined.
+                                                       // provided by the Host or self determined.
 #define USB_CCID_FEATURE_AUTO_PARAM_NEG   0x00000040u  // Automatic parameters negotiation made by the
-// CCID (use of warm or cold resets or PPS according to a
-// manufacturer proprietary algorithm to select the communication
-// parameters with the ICC).
+                                                       // CCID (use of warm or cold resets or PPS according to a
+                                                       // manufacturer proprietary algorithm to select the communication
+                                                       // parameters with the ICC).
 #define USB_CCID_FEATURE_AUTO_PPS         0x00000080u  // Automatic PPS made by the CCID according to the active parameters.
 #define USB_CCID_FEATURE_CLOCK_STOP       0x00000100u  // CCID can set ICC in clock stop mode.
 #define USB_CCID_FEATURE_NAD_VALUE        0x00000200u  // NAD value other than 00 accepted (T=1 protocol in use).
@@ -171,15 +171,14 @@ typedef void USBD_CCID_ABORT_CB(U8 Slot, U8 SeqNum);
 *  Function description
 *    Initialization structure that is needed when adding a CCID interface to emUSB-Device.
 */
-typedef struct
-{
-    U8 EPIn;                       // Endpoint for sending data to the host.
-    U8 EPOut;                      // Endpoint for receiving data from the host.
-    U8 EPInt;                      // Endpoint for sending notification to the host.
-    // Optional, may be 0.
-    U8 *pBuff;                     // Pointer to endpoint buffer for EPIn. Buffer should be able to hold one USB packet.
-    USBD_CCID_ABORT_CB *pfAbort;   // Callback function to signal an abort by the host.
-    // Optional, may be NULL.
+typedef struct {
+  U8 EPIn;                       // Endpoint for sending data to the host.
+  U8 EPOut;                      // Endpoint for receiving data from the host.
+  U8 EPInt;                      // Endpoint for sending notification to the host.
+                                 // Optional, may be 0.
+  U8 * pBuff;                    // Pointer to endpoint buffer for EPIn. Buffer should be able to hold one USB packet.
+  USBD_CCID_ABORT_CB * pfAbort;  // Callback function to signal an abort by the host.
+                                 // Optional, may be NULL.
 } USB_CCID_INIT_DATA;
 
 /*********************************************************************
@@ -189,37 +188,36 @@ typedef struct
 *  Function description
 *    Declares all properties of a CCID device.
 */
-typedef struct                    // NOLINT(clang-analyzer-optin.performance.Padding)
-{
-    U16          Flags;             // Reserved for future use, must be 0.
-    U8           NumSlots;          // Number of card slots supported by the device (max. 4).
-    U8           VoltageSupport;    // Supported voltages, see USB_CCID_VOLTAGE... macros.
-    U8           Protocols;         // Supported protocols (T=0, T=1), see USB_CCID_PROTOCOL... macros.
-    U8           NumClocks;         // Number of supported clock rates (number of entries in the table pointed to by pClocks).
-    // Must be >= 1.
-    U8           DefaultClockIdx;   // Index of the default clock within the table pClocks.
-    U8           NumDataRates;      // Number of supported data rates (number of entries in the table pointed to by pDataRates).
-    // May be 0 to indicate a range. In this case pDataRates must contain 2 entries (min, max)
-    // and DefaultDataRateIdx must be 0.
-    U8           DefaultDataRateIdx;// Index of the default data rate within the table pDataRates.
-    const U32   *pClocks;           // Table of all supported clock rates in KHz in increasing order.
-    const U32   *pDataRates;        // Table of all supported data rates in bps in increasing order.
-    U32          MaxIFSD;           // Indicates the maximum IFSD supported by CCID for protocol T=1.
-    U32          Features;          // This value indicates what intelligent features the CCID has.
-    // The value is a bitwise OR operation performed on the macros USB_CCID_FEATURE...
-    U32          MaxMessageLength;  // Maximum CCID message length.
-    U8           ClassGetResponse;  // Significant only for CCID that offers an APDU level for exchanges.
-    // Indicates the default class value used by the CCID when it sends a Get Response command
-    // to perform the transportation of an APDU by T=0 protocol.
-    // Value 0xFF indicates that the CCID echoes the class of the APDU.
-    U8           ClassEnvelope;     // Significant only for CCID that offers an extended APDU level for exchanges.
-    // Indicates the default class value used by the CCID when it sends an Envelope command
-    // to perform the transportation of an extended APDU by T=0 protocol.
-    // Value 0xFF indicates that the CCID echoes the class of the APDU.
-    U8           LCDLines;          // Number of lines of the LCD display. 0 if no display supported.
-    U8           LCDColumns;        // Number of characters per line of the LCD display. 0 if no display supported.
-    U8           PINSupport;        // This value indicates what PIN support features the CCID has.
-    const char *pInterfaceName;     // Name of the interface.
+typedef struct {                  // NOLINT(clang-analyzer-optin.performance.Padding)
+  U16          Flags;             // Reserved for future use, must be 0.
+  U8           NumSlots;          // Number of card slots supported by the device (max. 4).
+  U8           VoltageSupport;    // Supported voltages, see USB_CCID_VOLTAGE... macros.
+  U8           Protocols;         // Supported protocols (T=0, T=1), see USB_CCID_PROTOCOL... macros.
+  U8           NumClocks;         // Number of supported clock rates (number of entries in the table pointed to by pClocks).
+                                  // Must be >= 1.
+  U8           DefaultClockIdx;   // Index of the default clock within the table pClocks.
+  U8           NumDataRates;      // Number of supported data rates (number of entries in the table pointed to by pDataRates).
+                                  // May be 0 to indicate a range. In this case pDataRates must contain 2 entries (min, max)
+                                  // and DefaultDataRateIdx must be 0.
+  U8           DefaultDataRateIdx;// Index of the default data rate within the table pDataRates.
+  const U32  * pClocks;           // Table of all supported clock rates in KHz in increasing order.
+  const U32  * pDataRates;        // Table of all supported data rates in bps in increasing order.
+  U32          MaxIFSD;           // Indicates the maximum IFSD supported by CCID for protocol T=1.
+  U32          Features;          // This value indicates what intelligent features the CCID has.
+                                  // The value is a bitwise OR operation performed on the macros USB_CCID_FEATURE...
+  U32          MaxMessageLength;  // Maximum CCID message length.
+  U8           ClassGetResponse;  // Significant only for CCID that offers an APDU level for exchanges.
+                                  // Indicates the default class value used by the CCID when it sends a Get Response command
+                                  // to perform the transportation of an APDU by T=0 protocol.
+                                  // Value 0xFF indicates that the CCID echoes the class of the APDU.
+  U8           ClassEnvelope;     // Significant only for CCID that offers an extended APDU level for exchanges.
+                                  // Indicates the default class value used by the CCID when it sends an Envelope command
+                                  // to perform the transportation of an extended APDU by T=0 protocol.
+                                  // Value 0xFF indicates that the CCID echoes the class of the APDU.
+  U8           LCDLines;          // Number of lines of the LCD display. 0 if no display supported.
+  U8           LCDColumns;        // Number of characters per line of the LCD display. 0 if no display supported.
+  U8           PINSupport;        // This value indicates what PIN support features the CCID has.
+  const char * pInterfaceName;    // Name of the interface.
 } USB_CCID_PROPERTIES;
 
 /*********************************************************************
@@ -229,49 +227,48 @@ typedef struct                    // NOLINT(clang-analyzer-optin.performance.Pad
 *  Function description
 *    Contains information about a CCID command send from the host.
 */
-typedef struct
-{
-    U8  MessageType;      // Message type, see USB_CCID_MSG_... macros.
-    U8  Slot;             // Card slot index (counting from 0).
-    U8  SeqNum;           // Command sequence number.
-    U8  PowerSelect;      // Only valid for message type USB_CCID_MSG_ICC_POWER_ON.
-    // Contains voltage that is applied to the ICC:
-    // * 0 - Automatic Voltage Selection
-    // * 1 - 5.0 volts
-    // * 2 - 3.0 volts
-    // * 3 - 1.8 volts.
-    U8  BWI;              // Only valid for message types USB_CCID_MSG_XFR_BLOCK and USB_CCID_MSG_SECURE.
-    // Used to extend the CCIDs Block Waiting Timeout for this current transfer.
-    // The CCID shall timeout the block after "this number multiplied by the Block Waiting Time" has expired.
-    U8  LevelParameter;   // Only valid for message types USB_CCID_MSG_XFR_BLOCK and USB_CCID_MSG_SECURE.
-    // Use changes depending on the exchange level reported by the class descriptor in dwFeatures field:
-    // * Character level: Size of expected data to be returned by the bulk-IN endpoint.
-    // * Extended APDU level: Indicates if APDU begins or ends in this command.
-    U8  ProtocolNumber;   // Only valid for message types USB_CCID_MSG_SET_PARAMETERS.
-    // * 0: Structure for protocol T=0.
-    // * 1: Structure for protocol T=1.
-    U8  ClockCommand;     // Only valid for message types USB_CCID_MSG_ICC_CLOCK.
-    // * 0: restarts Clock.
-    // * 1: Stops Clock.
-    U8  ClassValid;       // Only valid for message types USB_CCID_MSG_T0APDU.
-    // Bit 0 == 1 indicates, that the field ClassGetResponse is valid.
-    // Bit 1 == 1 indicates, that the field ClassEnvelope is valid.
-    U8  ClassGetResponse; // Only valid for message types USB_CCID_MSG_T0APDU.
-    // Value to force the class byte of the header in a Get Response command.
-    // Value = 0xFF indicates that the class byte of the Get Response command echoes the
-    // class byte of the APDU.
-    U8  ClassEnvelope;    // Only valid for message types USB_CCID_MSG_T0APDU.
-    // Value to force the class byte of the header in a Envelope command.
-    // Value = 0xFF indicates that the class byte of the Envelope command echoes the class
-    // byte of the APDU.
-    U8  Function;         // Only valid for message types USB_CCID_MSG_MECHANICAL.
-    // This value corresponds to the mechanical function being requested:
-    // * 1 - Accept Card.
-    // * 2 - Eject Card.
-    // * 3 - Capture Card.
-    // * 4 - Lock Card.
-    // * 5 - Unlock Card.
-    unsigned DataLen;     // Size of data send with this command.
+typedef struct {
+  U8  MessageType;      // Message type, see USB_CCID_MSG_... macros.
+  U8  Slot;             // Card slot index (counting from 0).
+  U8  SeqNum;           // Command sequence number.
+  U8  PowerSelect;      // Only valid for message type USB_CCID_MSG_ICC_POWER_ON.
+                        // Contains voltage that is applied to the ICC:
+                        // * 0 - Automatic Voltage Selection
+                        // * 1 - 5.0 volts
+                        // * 2 - 3.0 volts
+                        // * 3 - 1.8 volts.
+  U8  BWI;              // Only valid for message types USB_CCID_MSG_XFR_BLOCK and USB_CCID_MSG_SECURE.
+                        // Used to extend the CCIDs Block Waiting Timeout for this current transfer.
+                        // The CCID shall timeout the block after "this number multiplied by the Block Waiting Time" has expired.
+  U8  LevelParameter;   // Only valid for message types USB_CCID_MSG_XFR_BLOCK and USB_CCID_MSG_SECURE.
+                        // Use changes depending on the exchange level reported by the class descriptor in dwFeatures field:
+                        // * Character level: Size of expected data to be returned by the bulk-IN endpoint.
+                        // * Extended APDU level: Indicates if APDU begins or ends in this command.
+  U8  ProtocolNumber;   // Only valid for message types USB_CCID_MSG_SET_PARAMETERS.
+                        // * 0: Structure for protocol T=0.
+                        // * 1: Structure for protocol T=1.
+  U8  ClockCommand;     // Only valid for message types USB_CCID_MSG_ICC_CLOCK.
+                        // * 0: restarts Clock.
+                        // * 1: Stops Clock.
+  U8  ClassValid;       // Only valid for message types USB_CCID_MSG_T0APDU.
+                        // Bit 0 == 1 indicates, that the field ClassGetResponse is valid.
+                        // Bit 1 == 1 indicates, that the field ClassEnvelope is valid.
+  U8  ClassGetResponse; // Only valid for message types USB_CCID_MSG_T0APDU.
+                        // Value to force the class byte of the header in a Get Response command.
+                        // Value = 0xFF indicates that the class byte of the Get Response command echoes the
+                        // class byte of the APDU.
+  U8  ClassEnvelope;    // Only valid for message types USB_CCID_MSG_T0APDU.
+                        // Value to force the class byte of the header in a Envelope command.
+                        // Value = 0xFF indicates that the class byte of the Envelope command echoes the class
+                        // byte of the APDU.
+  U8  Function;         // Only valid for message types USB_CCID_MSG_MECHANICAL.
+                        // This value corresponds to the mechanical function being requested:
+                        // * 1 - Accept Card.
+                        // * 2 - Eject Card.
+                        // * 3 - Capture Card.
+                        // * 4 - Lock Card.
+                        // * 5 - Unlock Card.
+  unsigned DataLen;     // Size of data send with this command.
 } USB_CCID_CMD;
 
 /*********************************************************************
@@ -281,13 +278,12 @@ typedef struct
 *  Function description
 *    Protocol parameters for T=0 protocol.
 */
-typedef struct
-{
-    U8 FindexDindex;            // see USB CCID specification.
-    U8 TCCKST0;                 // see USB CCID specification.
-    U8 GuardTimeT0;             // see USB CCID specification.
-    U8 WaitingIntegerT0;        // see USB CCID specification.
-    U8 ClockStop;               // see USB CCID specification.
+typedef struct {
+  U8 FindexDindex;            // see USB CCID specification.
+  U8 TCCKST0;                 // see USB CCID specification.
+  U8 GuardTimeT0;             // see USB CCID specification.
+  U8 WaitingIntegerT0;        // see USB CCID specification.
+  U8 ClockStop;               // see USB CCID specification.
 } USB_CCID_PROTOCOL_DATA_T0;
 
 /*********************************************************************
@@ -297,15 +293,14 @@ typedef struct
 *  Function description
 *    Protocol parameters for T=1 protocol.
 */
-typedef struct
-{
-    U8 FindexDindex;            // see USB CCID specification.
-    U8 TCCKST1;                 // see USB CCID specification.
-    U8 GuardTimeT1;             // see USB CCID specification.
-    U8 WaitingIntegerT1;        // see USB CCID specification.
-    U8 ClockStop;               // see USB CCID specification.
-    U8 IFSC;                    // see USB CCID specification.
-    U8 NadValue;                // see USB CCID specification.
+typedef struct {
+  U8 FindexDindex;            // see USB CCID specification.
+  U8 TCCKST1;                 // see USB CCID specification.
+  U8 GuardTimeT1;             // see USB CCID specification.
+  U8 WaitingIntegerT1;        // see USB CCID specification.
+  U8 ClockStop;               // see USB CCID specification.
+  U8 IFSC;                    // see USB CCID specification.
+  U8 NadValue;                // see USB CCID specification.
 } USB_CCID_PROTOCOL_DATA_T1;
 
 /*********************************************************************
@@ -314,20 +309,20 @@ typedef struct
 *
 **********************************************************************
 */
-void USBD_CCID_Init(void);
-void USBD_CCID_Add(const USB_CCID_INIT_DATA * pInitData, const USB_CCID_PROPERTIES *pProperties);
-void USBD_CCID_NotifySlotState(unsigned Slot, unsigned State);
-void USBD_CCID_NotifyHwError(unsigned Slot, U8 SeqNum, U8 ErrorCode);
-int  USBD_CCID_ReceiveCmd(USB_CCID_CMD *pCmd, unsigned BuffSize, U8 *pBuff, unsigned Timeout);
-int  USBD_CCID_SendStatus(const USB_CCID_CMD *pCmd, U8 Status, U8 Error, U8 ClockStatus);
-int  USBD_CCID_SendDataBlock(const USB_CCID_CMD *pCmd, U8 Status, U8 Error, U8 ChainParameter, unsigned DataLen, const U8 *pData);
-int  USBD_CCID_SendEscape(const USB_CCID_CMD *pCmd, U8 Status, U8 Error, unsigned DataLen, const U8 *pData);
-int  USBD_CCID_SendParameters(const USB_CCID_CMD *pCmd, U8 Status, U8 Error, U8 ProtocolNum, const void *pProtocolData);
+void USBD_CCID_Init             (void);
+void USBD_CCID_Add              (const USB_CCID_INIT_DATA * pInitData, const USB_CCID_PROPERTIES *pProperties);
+void USBD_CCID_NotifySlotState  (unsigned Slot, unsigned State);
+void USBD_CCID_NotifyHwError    (unsigned Slot, U8 SeqNum, U8 ErrorCode);
+int  USBD_CCID_ReceiveCmd       (USB_CCID_CMD *pCmd, unsigned BuffSize, U8 *pBuff, unsigned Timeout);
+int  USBD_CCID_SendStatus       (const USB_CCID_CMD *pCmd, U8 Status, U8 Error, U8 ClockStatus);
+int  USBD_CCID_SendDataBlock    (const USB_CCID_CMD *pCmd, U8 Status, U8 Error, U8 ChainParameter, unsigned DataLen, const U8 *pData);
+int  USBD_CCID_SendEscape       (const USB_CCID_CMD *pCmd, U8 Status, U8 Error, unsigned DataLen, const U8 *pData);
+int  USBD_CCID_SendParameters   (const USB_CCID_CMD *pCmd, U8 Status, U8 Error, U8 ProtocolNum, const void *pProtocolData);
 int  USBD_CCID_SendDataRateAndClockFrequency(const USB_CCID_CMD *pCmd, U8 Status, U8 Error, U32 ClockFrequency, U32 DataRate);
 
 
 #if defined(__cplusplus)
-}              /* Make sure we have C-declarations in C++ programs */
+  }              /* Make sure we have C-declarations in C++ programs */
 #endif
 
 #endif                 /* Avoid multiple inclusion */

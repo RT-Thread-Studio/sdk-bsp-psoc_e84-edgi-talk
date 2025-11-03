@@ -29,8 +29,16 @@
 #include "cy_result.h"
 #include "cybsp_types.h"
 #include "cybsp_hw_config.h"
+#include "cy_ipc_sema.h"
 #if defined(COMPONENT_WICED_BLE) || defined(COMPONENT_WICED_DUALMODE)
-    #include "cybsp_bt_config.h"
+#include "cybsp_bt_config.h"
+#endif
+#if defined(COMPONENT_MW_MTB_SRF)
+#include "mtb_srf.h"
+#if defined(COMPONENT_MW_MTB_IPC) && !defined(COMPONENT_SECURE_DEVICE)
+#include "mtb_ipc.h"
+#include "mtb_srf_ipc_init.h"
+#endif
 #endif
 
 #if defined(__cplusplus)
@@ -51,6 +59,35 @@ extern "C" {
     (CY_RSLT_CREATE(CY_RSLT_TYPE_ERROR, CY_RSLT_MODULE_ABSTRACTION_BSP, 0))
 
 /** \} group_bsp_errors */
+
+/**
+ * \addtogroup group_bsp_externs Externs
+ * \{
+ * Global structures exposed by the BSP
+ */
+#if (CY_SYSTEM_CPU_M33) && !defined(COMPONENT_SECURE_DEVICE)
+extern cy_stc_ipc_sema_t cybsp_ipc_sema;
+#endif
+#if defined(COMPONENT_MW_MTB_SRF) && !defined(CYBSP_DISABLE_SRF_INIT)
+#if defined(COMPONENT_SECURE_DEVICE)
+extern mtb_srf_context_s_t cybsp_srf_context;
+#else
+#if defined(COMPONENT_MW_MTB_IPC)
+#if (CY_SYSTEM_CPU_M55)
+/** Context for the SRF client */
+extern mtb_srf_ipc_client_context_t cybsp_mtb_srf_client_context;
+/** Instance of MTB IPC on the CM55 setup by SRF */
+extern mtb_ipc_t cybsp_cm55_ipc_instance;
+#elif (CY_SYSTEM_CPU_M33)
+/** Context for the SRF relay */
+extern mtb_srf_ipc_relay_context_t cybsp_mtb_srf_relay_context;
+/** Instance of MTB IPC on the CM33 setup by SRF*/
+extern mtb_ipc_t cybsp_cm33_ipc_instance;
+#endif // (CY_SYSTEM_CPU_M55)
+#endif // defined(COMPONENT_MW_MTB_IPC)
+#endif // defined(COMPONENT_SECURE_DEVICE)
+#endif // defined(COMPONENT_MW_MTB_SRF) && !defined(CYBSP_DISABLE_SRF_INIT)
+/** \} group_bsp_externs */
 
 /**
  * \addtogroup group_bsp_functions Functions
@@ -80,7 +117,6 @@ cy_rslt_t cybsp_register_custom_sysclk_pm_callback(void);
 #endif // defined(CYBSP_CUSTOM_SYSCLK_PM_CALLBACK)
 
 /** \} group_bsp_functions */
-
 #ifdef __cplusplus
 }
 #endif // __cplusplus

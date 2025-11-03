@@ -15,7 +15,7 @@
                             "file" : "../Debug/rtthread.hex",
                             "header-size": "0x400",
                             "fill-value" : "0xff",
-                            "slot-size" : "0x80000",
+                            "slot-size" : "0x240000",
                             "hex-address" : "0x70100000"
                         }
                     ],

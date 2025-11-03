@@ -4,7 +4,7 @@
  * Description:
  * Provides definitions of the SMIF-driver memory configuration.
  * This file was automatically generated and should not be modified.
- * QSPI Configurator 4.50.0.2481
+ * QSPI Configurator 4.60.0.2742
  *
  *******************************************************************************
  * Copyright 2025 Cypress Semiconductor Corporation (an Infineon company) or
@@ -411,11 +411,10 @@ static cy_stc_smif_hybrid_region_info_t S25FS128S_SMIF0_SlaveSlot_1_region2 =
     .eraseTime = 725U,
 };
 
-static cy_stc_smif_hybrid_region_info_t *S25FS128S_SMIF0_SlaveSlot_1_regionInfo[3] =
-{
-    &S25FS128S_SMIF0_SlaveSlot_1_region0,
-    &S25FS128S_SMIF0_SlaveSlot_1_region1,
-    &S25FS128S_SMIF0_SlaveSlot_1_region2
+static cy_stc_smif_hybrid_region_info_t * S25FS128S_SMIF0_SlaveSlot_1_regionInfo[3] = {
+   &S25FS128S_SMIF0_SlaveSlot_1_region0,
+   &S25FS128S_SMIF0_SlaveSlot_1_region1,
+   &S25FS128S_SMIF0_SlaveSlot_1_region2
 };
 
 #endif
@@ -767,7 +766,7 @@ cy_stc_smif_mem_config_t S70KS1283_SMIF1_SlaveSlot_2 =
     .baseAddress = 0x64000000U,
     /* The size allocated in the PSoC memory map, for the memory slave device.
     The size is allocated from the base address. Valid when the memory mapped mode is enabled. */
-    .memMappedSize = 0x4000000U,
+    .memMappedSize = 0x1000000U,
     /* If this memory device is one of the devices in the dual quad SPI configuration.
     Valid when the memory mapped mode is enabled. */
     .dualQuadSlots = 0,
@@ -782,9 +781,8 @@ cy_stc_smif_mem_config_t S70KS1283_SMIF1_SlaveSlot_2 =
 #endif /* CY_IP_MXSMIF_VERSION */
 };
 
-cy_stc_smif_mem_config_t *smif0MemConfigs[CY_SMIF_DEVICE_NUM0] =
-{
-    &S25FS128S_SMIF0_SlaveSlot_1,
+cy_stc_smif_mem_config_t* smif0MemConfigs[CY_SMIF_DEVICE_NUM0] = {
+   &S25FS128S_SMIF0_SlaveSlot_1,
 };
 
 cy_stc_smif_block_config_t smif0BlockConfig =
@@ -799,9 +797,8 @@ cy_stc_smif_block_config_t smif0BlockConfig =
     .minorVersion = CY_SMIF_DRV_VERSION_MINOR,
 };
 
-cy_stc_smif_mem_config_t *smif1MemConfigs[CY_SMIF_DEVICE_NUM1] =
-{
-    &S70KS1283_SMIF1_SlaveSlot_2,
+cy_stc_smif_mem_config_t* smif1MemConfigs[CY_SMIF_DEVICE_NUM1] = {
+   &S70KS1283_SMIF1_SlaveSlot_2,
 };
 
 cy_stc_smif_block_config_t smif1BlockConfig =

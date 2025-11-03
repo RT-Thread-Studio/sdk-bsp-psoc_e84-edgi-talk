@@ -88,10 +88,10 @@ void Cy_Crypto_Run1ParamInstr(CRYPTO_Type *base, uint8_t instr, uint32_t rdst0Sh
 void Cy_Crypto_Run2ParamInstr(CRYPTO_Type *base, uint8_t instr, uint32_t rdst0Shift, uint32_t rdst1Shift);
 
 void Cy_Crypto_Run3ParamInstr(CRYPTO_Type *base, uint8_t instr,
-                              uint8_t rdst0Shift, uint8_t rdst1Shift, uint8_t rdst2Shift);
+                            uint8_t rdst0Shift, uint8_t rdst1Shift, uint8_t rdst2Shift);
 
 void Cy_Crypto_Run4ParamInstr(CRYPTO_Type *base, uint8_t instr,
-                              uint32_t rdst0Shift, uint32_t rdst1Shift, uint32_t rdst2Shift, uint32_t rdst3Shift);
+                           uint32_t rdst0Shift, uint32_t rdst1Shift, uint32_t rdst2Shift, uint32_t rdst3Shift);
 
 
 #if defined(__cplusplus)

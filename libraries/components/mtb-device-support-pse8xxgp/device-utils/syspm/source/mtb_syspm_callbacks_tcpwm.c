@@ -34,43 +34,62 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
 // mtb_syspm_tcpwm_deepsleep_callback
 //--------------------------------------------------------------------------------------------------
 cy_en_syspm_status_t mtb_syspm_tcpwm_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode)
 {
     bool allow = false;
-    mtb_syspm_tcpwm_deepsleep_context_t *context =
+    mtb_syspm_tcpwm_deepsleep_context_t* context =
         (mtb_syspm_tcpwm_deepsleep_context_t*)(params->context);
     switch (mode)
     {
-    case CY_SYSPM_BEFORE_TRANSITION:
-    {
-        if (_mtb_syspm_tcpwm_is_enabled(params, context->channelNum))
+        case CY_SYSPM_BEFORE_TRANSITION:
         {
-            context->preSleepState = true;
-        }
-        else
-        {
-            context->preSleepState = false;
-        }
-        allow = true;
-        break;
-    }
+            if (_mtb_syspm_tcpwm_is_enabled(params, context->channelNum))
+            {
+                context->preSleepState = true;
 
-    case CY_SYSPM_AFTER_TRANSITION:
-    {
-        if (context->preSleepState)
-        {
-            Cy_TCPWM_Enable_Single(params->base, (context->channelNum));
+                // Check if the TCPWM is running
+                if (CY_TCPWM_PWM_STATUS_COUNTER_RUNNING &
+                    Cy_TCPWM_PWM_GetStatus(params->base, (context->channelNum)))
+                {
+                    context->preSleepRunning = true;
+                }
+                else
+                {
+                    context->preSleepRunning = false;
+                }
+            }
+            else
+            {
+                context->preSleepState = false;
+                context->preSleepRunning = false;
+            }
+            allow = true;
+            break;
         }
-        allow = true;
-        break;
-    }
 
-    default:
-    {
-        CY_ASSERT(false);
-        break;
-    }
+        case CY_SYSPM_AFTER_TRANSITION:
+        {
+            if (context->preSleepState)
+            {
+                Cy_TCPWM_Enable_Single(params->base, (context->channelNum));
+
+                // Trigger the TCPWM if it was running before sleep
+                if (context->preSleepRunning)
+                {
+                    Cy_TCPWM_TriggerStart_Single(params->base, (context->channelNum));
+                }
+            }
+
+            allow = true;
+            break;
+        }
+
+        default:
+        {
+            CY_ASSERT(false);
+            break;
+        }
     }
     if (allow)
     {

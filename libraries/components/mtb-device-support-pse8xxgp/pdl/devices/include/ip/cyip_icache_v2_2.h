@@ -38,17 +38,16 @@
 /**
   * \brief CM33_0/1 CA APB interface (ICACHE)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Cache control */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t CMD;                           /*!< 0x00000008 Cache command */
-    __IM uint32_t RESERVED1[29];
-    __IM uint32_t STATUS0;                       /*!< 0x00000080 Cache status 0 */
-    __IM uint32_t STATUS1;                       /*!< 0x00000084 Cache status 1 */
-    __IM uint32_t STATUS2;                       /*!< 0x00000088 Cache status 2 */
-    __IM uint32_t RESERVED2[29];
-    __IOM uint32_t ECC_CTL;                       /*!< 0x00000100 ECC control */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Cache control */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t CMD;                           /*!< 0x00000008 Cache command */
+   __IM uint32_t RESERVED1[29];
+   __IM uint32_t STATUS0;                       /*!< 0x00000080 Cache status 0 */
+   __IM uint32_t STATUS1;                       /*!< 0x00000084 Cache status 1 */
+   __IM uint32_t STATUS2;                       /*!< 0x00000088 Cache status 2 */
+   __IM uint32_t RESERVED2[29];
+  __IOM uint32_t ECC_CTL;                       /*!< 0x00000100 ECC control */
 } ICACHE_Type;                                  /*!< Size = 260 (0x104) */
 
 

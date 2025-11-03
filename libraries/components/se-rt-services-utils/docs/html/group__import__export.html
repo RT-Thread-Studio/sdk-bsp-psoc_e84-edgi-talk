@@ -253,7 +253,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">attributes</td><td>The attributes for the new key. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">key</td><td>On success, an identifier for the newly created key. For persistent keys, this is the key identifier defined in <code>attributes</code>. <code>0</code> on failure. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">key</td><td>On success, a pointer to identifier of newly created key (encoded pointer to <a class="el" href="group__key__attributes.html#ga40f81e5fa5d5b8c64b81b49d60ccc6dc" title="The type of the of keys identifier transfer data.">ifx_se_key_id_fih_t</a> variable). For persistent keys, this is the key identifier defined in <code>attributes</code>. <code>0</code> on failure. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -331,9 +331,9 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">attributes</td><td>The attributes for the new key. The key size is always determined from the <code>data</code> buffer. If the key size in <code>attributes</code> is nonzero, it must be equal to the size from <code>data</code>. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">key</td><td>On success, an identifier to the newly created key. For persistent keys, this is the key identifier defined in <code>attributes</code>. <code>0</code> on failure. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Buffer containing the key data. The content of this buffer is interpreted according to the type declared in <code>attributes</code>. All implementations must support at least the format described in the documentation of <a class="el" href="group__import__export.html#ga4a53bdb503a45522b6555cc255364759" title="Export a key in binary format.">ifx_se_export_key()</a> or <a class="el" href="group__import__export.html#ga120a3d6cb22b2a2d438edf1cdebc560f" title="Export a public key or the public part of a key pair in binary format.">ifx_se_export_public_key()</a> for the chosen type. Implementations may allow other formats, but should be conservative: implementations should err on the side of rejecting content if it may be erroneous (e.g. wrong type or truncated data). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data_length</td><td>Size of the <code>data</code> buffer with CRC included in bytes. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">key</td><td>On success, an identifier to the newly created key (encoded pointer to <a class="el" href="group__key__attributes.html#ga40f81e5fa5d5b8c64b81b49d60ccc6dc" title="The type of the of keys identifier transfer data.">ifx_se_key_id_fih_t</a> variable). For persistent keys, this is the key identifier defined in <code>attributes</code>. <code>0</code> on failure. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Buffer containing the key data (encoded pointer to input data). The content of this buffer is interpreted according to the type declared in <code>attributes</code>. All implementations must support at least the format described in the documentation of <a class="el" href="group__import__export.html#ga4a53bdb503a45522b6555cc255364759" title="Export a key in binary format.">ifx_se_export_key()</a> or <a class="el" href="group__import__export.html#ga120a3d6cb22b2a2d438edf1cdebc560f" title="Export a public key or the public part of a key pair in binary format.">ifx_se_export_public_key()</a> for the chosen type. Implementations may allow other formats, but should be conservative: implementations should err on the side of rejecting content if it may be erroneous (e.g. wrong type or truncated data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_length</td><td>Size of the <code>data</code> buffer with CRC included in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -430,9 +430,9 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to export. It must allow the usage <a class="el" href="group__key__policy.html#ga0a565bee4a19b8533466559312596d9a" title="Whether the key may be exported.">IFX_SE_KEY_USAGE_EXPORT</a>, unless it is a public key. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">data</td><td>Buffer where the key data is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data_size</td><td>Size of the <code>data</code> buffer with CRC included in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">data_length</td><td>On success, the number of bytes that make up the key data. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">data</td><td>Buffer where the key data is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_size</td><td>Size of the <code>data</code> buffer with CRC included in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">data_length</td><td>On success, the number of bytes that make up the key data (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -514,15 +514,15 @@ Functions</h2></td></tr>
 <li><code>y_P</code> as a <code>ceiling(m/8)</code>-byte string, big-endian.</li>
 </ul>
 </li>
-<li>For Diffie-Hellman key exchange public keys (key types for which <a class="el" href="group__crypto__types.html#ga4ea8841871573a5f78e79ae215f39fce" title="Whether a key type is a Diffie-Hellman public key.">IFX_SE_KEY_TYPE_IS_DH_PUBLIC_KEY</a> is true), the format is the representation of the public key <code>y = g^x mod p</code> as a big-endian byte string. The length of the byte string is the length of the base prime <code>p</code> in bytes.</li>
+<li>For Diffie-Hellman key exchange public keys (key types for which <a class="el" href="group__crypto__types.html#ga4ea8841871573a5f78e79ae215f39fce" title="Whether a key type is a Diffie-Hellman public key.">IFX_SE_KEY_TYPE_IS_DH_PUBLIC_KEY</a> is true), the format is the representation of the public key <code>y = g^x mod p</code> as a big-endian byte string. The length of the byte string is the length of the base prime <code>p</code> in bytes (size_t).</li>
 </ul>
 <p >Exporting a public key object or the public part of a key pair is always permitted, regardless of the key's usage flags.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">key</td><td>Identifier of the key to export. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">data</td><td>Buffer where the key data is to be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data_size</td><td>Size of the <code>data</code> buffer with CRC included in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">data_length</td><td>On success, the number of bytes that make up the key data. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">data</td><td>Buffer where the key data is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_size</td><td>Size of the <code>data</code> buffer with CRC included in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">data_length</td><td>On success, the number of bytes that make up the key data (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -604,7 +604,7 @@ Functions</h2></td></tr>
 <li>The policy constraints (usage flags and algorithm policy) are combined from the source key and <code>attributes</code> so that both sets of restrictions apply, as described in the documentation of this function. </li>
 </ul>
 </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">target_key</td><td>On success, an identifier for the newly created key. For persistent keys, this is the key identifier defined in <code>attributes</code>. <code>0</code> on failure. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">target_key</td><td>On success, an identifier for the newly created key (encoded pointer to <a class="el" href="group__key__attributes.html#ga40f81e5fa5d5b8c64b81b49d60ccc6dc" title="The type of the of keys identifier transfer data.">ifx_se_key_id_fih_t</a> variable). For persistent keys, this is the key identifier defined in <code>attributes</code>. <code>0</code> on failure. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>

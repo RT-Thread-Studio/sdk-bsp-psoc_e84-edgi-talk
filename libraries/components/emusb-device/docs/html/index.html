@@ -108,9 +108,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>Vendor Specific Class (VSC)</li>
 </ul>
 <p ><b>Device families supported by the Middleware:</b></p><ul>
-<li>PSOC6</li>
 <li>PSE84</li>
-<li>XMC4000</li>
 </ul>
 <h1><a class="anchor" id="section_emusb_device_general"></a>
 General Description</h1>
@@ -128,23 +126,12 @@ General Description</h1>
 <tr>
 <th>Device family</th><th>Drivers</th><th>Pointer to the driver API structure </th></tr>
 <tr>
-<td>PSOC6 </td><td>Cypress PSoC 6 driver </td><td>USB_Driver_Cypress_PSoC6  </td></tr>
-<tr>
 <td>PSE84 </td><td>PSOCE84 Driver </td><td><ul>
 <li>USB_Driver_Infineon_PSOCE84</li>
 <li>USB_Driver_Infineon_PSOCE84_DMA   </li>
 </ul>
 </td></tr>
-<tr>
-<td rowspan="2">XMC4000 </td><td>Synopsys DWC2 driver (slave mode)  </td><td><ul>
-<li>USB_Driver_Infineon_XMC45xx</li>
-<li>USB_Driver_Infineon_XMC45xx_DynMem   </li>
-</ul>
-</td></tr>
-<tr>
-<td>Synopsys DWC2 driver (DMA mode)  </td><td>USB_Driver_Infineon_XMC45xx_DMA   </td></tr>
 </table>
-<p >For XMC4000 device, the DMA engine of USB IP block does not have access to all SRAM regions. Check Reference Manual for XMC4000 device for more information. As a result the memory pool for USB_Driver_Infineon_XMC45xx_DMA driver must be placed only to SRAM region with DMA access. Typically linker script provided with mtb-xmclib-cat3 defines special region - USB_RAM. You can place memory pool to USB_RAM by the next approach: <b>CY_SECTION("USB_RAM") __USED static uint32_t mem_pool[512]</b>. Also it is compulsory to register appropriate callback by USBD_SetCheckAddress(). This callback should check if an address can be used for DMA transfers. You can use the next variables from linker script to determine the borders of the SRAM region: <b>USB_RAM_start, USB_RAM_end</b>. The example of driver configuration is provided in usbd_config.c file.</p>
 <p >For the PSE84 device, the DMA engine of the USB IP block does not have access to all SRAM regions. For details, see the PSE84 Reference Manual. As a result, the memory pool for the PSE84 driver must be located only to the SRAM region with DMA access. An example of the allocation memory pool is in the usbd_config.c file.</p>
 <dl class="section note"><dt>Note</dt><dd>For the USBD_AddDriver() function description, refer to the: <a href="./../UM09001_emUSBD.pdf"><b>SEGGER emUSB-Device User Guide &amp; Reference Manual</b></a>.</dd></dl>
 <p>The emUSB-Device is provided in the form of pre-build libraries. The pre-build library is selected automatically based on configuration of Application project.</p>
@@ -153,17 +140,18 @@ General Description</h1>
 <li>One common file responsible for the debug message output</li>
 <li>Device-specific files for the hardware configuration of each supported device family</li>
 </ul>
-<p >Also, the emUSB-Host/Device personality is present in the Device-configurator for simplify routine of configuration clocks and pins for USB IP block operation. The personality is a part of mtb-pdl-cat1 for PSOC6 and PSE84 devices and mtb-xmclib-cat3 for XMC4000 libraries.</p>
+<p >Also, the emUSB-Host/Device personality is present in the Device-configurator for simplify routine of configuration clocks and pins for USB IP block operation. The personality is part mtb-dsl-pse8xxgp for PSE84 devices.</p>
 <h1><a class="anchor" id="section_emusb_device_quick_start"></a>
 Quick Start</h1>
 <p >To set up emUSB-Device for mouse and keyboard Human Interface Devices (HID), follow the below-described steps. These code snippets will move the mouse cursor left and right and print the "Hello world" message into the opened text editor. The current snippet is based on SEGGER sample application.</p>
+<dl class="section note"><dt>Note</dt><dd>You can kickstart your project by using Code Examples from Project Creator app. Those contain already configured clocks and pins, you can take it as a basis for easy start.</dd></dl>
 <h2><a class="anchor" id="subsection_qsg_step1"></a>
 STEP 1: Add the emUSB-Device middleware.</h2>
 <ol type="1">
-<li>Launch the ModusToolbox Library Manager, click Add Library button and select the emUSB-Device. This step is required only if the ModusToolbox IDE is used. Otherwise, ensure that the emUSB-Device middleware is included in your project. <div class="image">
+<li><p class="startli">Launch the ModusToolbox Library Manager, click Add Library button and select the emUSB-Device. This step is required only if the ModusToolbox IDE is used. Otherwise, ensure that the emUSB-Device middleware is included in your project. </p><div class="image">
 <img src="emusb_device_lib_mngr.png" alt=""/>
 </div>
- <dl class="section note"><dt>Note</dt><dd>To use the terminal output, add <a href="https://infineon.github.io/retarget-io/html/index.html"><b>retarget-io middleware </b></a> from the Library Manager. </dd>
+<dl class="section note"><dt>Note</dt><dd>To use the terminal output, add <a href="https://infineon.github.io/retarget-io/html/index.html"><b>retarget-io middleware </b></a> from the Library Manager. </dd>
 <dd>
 Add the FreeRTOS middleware into the Library Manager if you want to use the FreeRTOS.</dd></dl>
 </li>
@@ -178,42 +166,16 @@ Add the FreeRTOS middleware into the Library Manager if you want to use the Free
 </ol>
 <h2><a class="anchor" id="subsection_qsg_step2"></a>
 STEP 2: Configure pins and clocks for emUSB-Device.</h2>
-<p ><b>PSOC6 Devices:</b></p>
-<ol type="1">
-<li>Launch the ModusToolbox Device Configurator and switch to the Peripherals tab (#1.1).</li>
-<li>Enable the USB personality under Communication (#1.2) and select the emUSB-Host/Device personality (#1.3).</li>
-<li>Ensure that USB mode is Device (#1.4) and the Clock is connected to CLK_HF3 (#1.5). <div class="image">
-<img src="cat1a_emusb_device_peripherals_cfg.png" alt=""/>
-</div>
-</li>
-<li><p class="startli">Switch to the System tab (#2.1).</p>
-<dl class="section note"><dt>Note</dt><dd>The clocking system can be different between devices.</dd></dl>
-</li>
-<li>Check the IMO clock is enabled (#2.2). Select Trim with the USB.</li>
-<li>If your device supports more than one PLL, select one. Enable the selected PLL and set a frequency of 48 MHz (#2.3). <dl class="section note"><dt>Note</dt><dd>Select the enabled source clock with accuracy +/-0.25% into the PATH_MUX section of the selected PLL (#2.4).</dd></dl>
-</li>
-<li>Select the CLK_HF3 USB clock (#2.5). Assign the source clock to the CLK_PATH connected to the configured previously PLL.</li>
-<li>Select the CLK_HF0 USB clock (#2.6). Assign the source clock to the CLK_PATH connected to the PLL with the clock accuracy +/-0.25%. <dl class="section note"><dt>Note</dt><dd>You can use the PLL selected for CLK_HF3 or choose another one as it shown into the example (#2.7) <div class="image">
-<img src="cat1a_emusb_device_system_cfg.png" alt=""/>
-</div>
-</dd></dl>
-</li>
-<li>If the Power personality is enabled, the System Idle Power Mode must be Active or CPU sleep. <div class="image">
-<img src="cat1a_emusb_device_power_cfg.png" alt=""/>
-</div>
-</li>
-<li>Select File-&gt;Save to generate initialization code.</li>
-</ol>
 <p ><b>PSE84 Devices:</b></p>
 <ol type="1">
 <li>Launch the ModusToolbox Device Configurator and switch to the Peripherals tab (#1.1).</li>
 <li>Enable the USB personality under Communication (#1.2) and select the emUSB-Host/Device personality (#1.3).</li>
 <li>Select Device mode (#1.4) and connect available clocks (#1.5).</li>
 <li>(Applicable only for non-RTOS environment) To enable the 1ms timer, check "Enable 1ms Timer" for auto setup the timer from personality <div class="image">
-<img src="cat1d_emusb_device_peripherals_cfg.png" alt=""/>
+<img src="pse84_emusb_device_peripherals_cfg.png" alt=""/>
 </div>
  After the enabling the timer need to choose the clock divider for the auto-selected TCPWM resource. <div class="image">
-<img src="cat1d_emusb_device_peripherals_cfg_2.png" alt=""/>
+<img src="pse84_emusb_device_peripherals_cfg_2.png" alt=""/>
 </div>
 </li>
 <li><p class="startli">Switch to the System tab (#2.1).</p>
@@ -222,36 +184,18 @@ STEP 2: Configure pins and clocks for emUSB-Device.</h2>
 <li>Enable PLL500M0 (#2.2), Set Desired Frequency to 400 MHz (#2.3),</li>
 <li>Select CLK_PATH2 as Source Clock for CLK_HF1 (#2.4). Ensure that CLK_HF1 has 400 MHz frequency (#2.5).</li>
 <li>Enable PLL250M1 (#2.6), set Desired Frequency to 200 MHz (#2.7) as a clock source. Use a clock with accuracy 0.05 % or better (#2.8).</li>
-<li>Select CLK_PATH0 as Source Clock for CLK_HF8 (#2.9). Ensure that CLK_HF8 frequency is 50 MHz with accuracy 0.05 % or better (#2.10). <div class="image">
-<img src="cat1d_emusb_device_system_cfg.png" alt=""/>
+<li>Select CLK_PATH0 or CLK_PATH1 as Source Clock for CLK_HF8 (#2.9). Ensure that CLK_HF8 frequency is 50 MHz with accuracy 0.05 % or better (#2.10). <div class="image">
+<img src="pse84_emusb_device_system_cfg.png" alt=""/>
 </div>
 </li>
-<li>If the Power personality is enabled, the System Idle Power Mode must be Active or CPU sleep and Low Power Profile is selected for System Active Power Profile. <div class="image">
-<img src="cat1d_emusb_device_power_cfg.png" alt=""/>
+<li>If the Power personality is enabled, the System Idle Power Mode must be Active or CPU sleep and HP profile is selected for System Active Power Profile. <div class="image">
+<img src="pse84_emusb_device_power_cfg.png" alt=""/>
 </div>
 </li>
-<li>Switch to the Peripheral-Groups tab (#3.1).</li>
-<li>Enable 8 bit Divider 0 of Peri 1 Group 3 (#3.2) and set 4 in the Divider field (#3.3). <div class="image">
-<img src="cat1d_emusb_device_peri_group_cfg.png" alt=""/>
+<li>Under Clocks tab in the Peri1 Memory MappedIO (#3.1).</li>
+<li>Ensure APP_MMIO3 Divider is enabled and set to 4 in the Divider field (#3.2). <div class="image">
+<img src="pse84_emusb_device_peri_group_cfg.png" alt=""/>
 </div>
-</li>
-<li>Select File-&gt;Save to generate initialization code.</li>
-</ol>
-<p ><b>XMC4000 Devices:</b></p>
-<ol type="1">
-<li>Launch the ModusToolbox Device Configurator Tool and switch to the Peripherals tab (#1.1).</li>
-<li>Enable the USB personality under Communication (#1.2).</li>
-<li>Select the USB mode as Device (#1.3).</li>
-<li>If you want to create a non-RTOS emUSB application, you should configure the emUSB OS Timer personality by selecting CCU4 source (#1.4) and configure the CCU4 Slice as the <em>emUSB OS Timer</em> personality (#1.5). Check the <em>CCU for OS</em> checkbox (#1.6) and select the appropriate emUSB OS Timer CCU Resource (#1.7). <div class="image">
-<img src="cat3_emusb_device_peripherals_cfg.png" alt=""/>
-</div>
-</li>
-<li>Follow the instructions in the bottom window to set up the clock source for USB. The USB clock source configuration must look like the configuration on the image below. <div class="image">
-<img src="cat3_emusb_device_system_cfg.png" alt=""/>
-</div>
- <dl class="section note"><dt>Note</dt><dd>You can also use <em>System PLL</em> instead <em>USB PLL</em> as a source.</dd>
-<dd>
-Recommended: set the highest frequency of <em>System PLL Clock -&gt; CPU Clock</em> for proper work of USB functionality.</dd></dl>
 </li>
 <li>Select File-&gt;Save to generate initialization code.</li>
 </ol>
@@ -619,11 +563,11 @@ STEP 3: Write the code in main.c.</h2>
 <div class="line">}</div>
 </div><!-- fragment --></li>
 <li><p class="startli">Initialize retarget-io to use the debug UART port:</p>
-<p class="startli"><b> For PSOC6 and PSE84 devices:</b> Open Device Configurator, select Peripherals, select the desired SCB resource (#1.1), select the UART in the window of choosing the personality (#1.2), click OK (#1.3). </p><div class="image">
-<img src="cat1d_emusb_device_uart_1.png" alt=""/>
+<p class="startli"><b> For PSE84 devices:</b> Open Device Configurator, select Peripherals, select the desired SCB resource (#1.1), select the UART in the window of choosing the personality (#1.2), click OK (#1.3). </p><div class="image">
+<img src="pse84_emusb_device_uart_1.png" alt=""/>
 </div>
 <p> Select the desired name for the SCB (#2.1) and the pins and clock for the SCB (#2.2). The other UART options can be set by default, see the screenshot below. </p><div class="image">
-<img src="cat1d_emusb_device_uart_2.png" alt=""/>
+<img src="pse84_emusb_device_uart_2.png" alt=""/>
 </div>
 <p> The desired name for the SCB resource is important because the generated structures, defines and variables have the prefix of that name. See below.</p>
 <div class="fragment"><div class="line"> </div>
@@ -651,17 +595,6 @@ STEP 3: Write the code in main.c.</h2>
 <div class="line">    <span class="keywordflow">if</span> (result != CY_RSLT_SUCCESS)</div>
 <div class="line">    {</div>
 <div class="line">        CY_ASSERT(0);</div>
-<div class="line">    }</div>
-<div class="line">}</div>
-</div><!-- fragment --><p class="startli"><b> For XMC4000 devices:</b></p>
-<div class="fragment"><div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> retarget_io_init(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    <span class="comment">/* Configures the retarget_io pins */</span></div>
-<div class="line">    cy_rslt_t result;</div>
-<div class="line">    result = cy_retarget_io_init(CYBSP_CYBSP_DEBUG_UART_HW);</div>
-<div class="line">    <span class="keywordflow">if</span> (CY_RSLT_SUCCESS != result)</div>
-<div class="line">    {</div>
-<div class="line">        XMC_ASSERT(0, <span class="stringliteral">&quot;cy_retarget_io_init returns error status&quot;</span>);</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --></li>
@@ -747,72 +680,23 @@ Hardware-dependent Configuration</h2>
 <p >For details on Hardware Dependent Configuration, refer to the - <a href="./../UM09001_emUSBD.pdf"><b>SEGGER emUSB-Device User Guide &amp; Reference Manual</b></a>.</p>
 <h3><a class="anchor" id="section_emusb_device_hw_dep_conf_pins"></a>
 USB Pins Configuration</h3>
-<p ><b> PSOC6 Devices Family </b></p>
-<p >The D+ and D- pins must be configured for USB operation. The emUSB-Host/Device personality in the Device Configurator allows for easy configuration of configuration of the pins. Otherwise, the pins can be configured manually by PDL APIs.</p>
-<p >The following snippet initializes GPIO pins for USB operation by <a href="https://github.com/Infineon/mtb-pdl-cat1"><b>mtb-pdl-cat1 APIs</b></a>.</p>
-<div class="fragment"><div class="line">    Cy_GPIO_Pin_FastInit(USBDP_PORT, USBDP_PIN, CY_GPIO_DM_ANALOG, 0U, USBDP_GPIO);</div>
-<div class="line">    Cy_GPIO_Pin_FastInit(USBDM_PORT, USBDM_PIN, CY_GPIO_DM_ANALOG, 0U, USBDM_GPIO);</div>
-</div><!-- fragment --><p ><b> PSE84 Devices Family </b></p>
-<p >The D+/D- pins are dedicated and do not require configuration.</p>
-<p ><b> XMC4000 Devices Family </b></p>
+<p ><b> PSE84 Devices Family </b></p>
 <p >The D+/D- pins are dedicated and do not require configuration.</p>
 <h3><a class="anchor" id="section_emusb_device_hw_dep_conf_clock"></a>
 USB Clock Configuration</h3>
 <p >The USB 2.0 specification defines the required bit rate accuracy for the device in section 7.1.11. Ensure that the clock sources for USB meet the requirements.</p>
-<p >The emUSB-Host/Device personality in the Device Configurator allows for easy configuration of the clocks for USB operation and also check if the clocks meet the requirements. Otherwise, the clocks can be configured manually by PDL/HAL Next APIs for PSOC6/PSE84 and by XMCLIB for XMC4000.</p>
-<p ><b> PSOC6 Devices Family </b></p>
-<p >The USB device requires two clocks for operation:</p><ul>
-<li>Clock the main clock at 48 MHz. Typically, the main clock is CLK_HF3 output signal, but refer to the device datasheet to identify the clock source for USB for a specific device.</li>
-<li>Clock the Clock (Bus Reset) at 100 kHz. Typically, Clock (Bus Reset) is connected to CLK_PERI through peripheral clock dividers but refer to the device datasheet to identify the Clock (Bus Reset) source for USB for a specific device.</li>
-</ul>
-<p >Both these clocks must be configured with the defined bit rate accuracy per USB 2.0 specification.</p>
-<dl class="section note"><dt>Note</dt><dd>Ensure that the clock sources for USB meet the requirements.</dd></dl>
-<p><b> PSE84 Devices Family </b></p>
+<p >The emUSB-Host/Device personality in the Device Configurator allows for easy configuration of the clocks for USB operation and also check if the clocks meet the requirements. Otherwise, the clocks can be configured manually by PDL/HAL Next APIs for PSE84.</p>
+<p ><b> PSE84 Devices Family </b></p>
 <p >The USB Device requires two clocks for operation:</p><ul>
 <li>Phy Pll reference clock configured at 50 MHz with the required bit rate accuracy according to the USB 2.0 specification. Typically, this clock is the CLK_HF8 output signal, but refer to the device datasheet to identify the clock source for USB for a specific device.</li>
 <li>The main clock configured at 400 MHz. This clock does not have requirements for the bit rate accuracy. Typically, this clock is the CLK_HF1 output signal, but refer to the device datasheet to identify the clock source for USB for a specific device. In addition, set to 4 the Divider of Peri 1 Group 3 to generate 100 MHz signal after CLK_HF1 for the USB controller.</li>
 </ul>
-<p >Also, enable the corresponding Peri Group by the Cy_SysClk_PeriGroupSlaveInit() function from the SysClk driver of mtb-pdl-cat1.</p>
-<p ><b> XMC4000 Devices Family </b></p>
-<p >The USB Device requires two clocks for operation:</p><ul>
-<li>The USB Phy Clock output must be configured at 48 MHz frequency with required bit rate accuracy according to the USB 2.0 specification.</li>
-<li>The second USB clock is connected to CPU clock. The CPU clock should be set to highest frequency as possible according to application design. If the CPU clock will have too low frequency the some of USB functionality won't work properly. For more details, refer to the Reference Manual of your XMC4000 device.</li>
-</ul>
+<p >Also, enable the corresponding Peri Group by the Cy_SysClk_PeriGroupSlaveInit() function from the SysClk driver of mtb-dsl-pse8xxgp.</p>
 <dl class="section note"><dt>Note</dt><dd>If the USB must operate during Deep Sleep, keep both clocks enabled.</dd></dl>
 <h3><a class="anchor" id="section_emusb_device_hw_dep_conf_int"></a>
 USB Interrupt Configuration</h3>
 <p >The interrupt is mandatory for the emUSB-Device Middleware operation. The interrupt priority selection is a part of Application level - the interrupt priority selected in the template files is not suitable for real project. For USB recommended setting the interrupt priority as high as possible.</p>
-<p ><b> PSOC6 Devices Family </b></p>
-<p >emUSB-Device uses only one interrupt source from the three available in the IP USB block - usb_interrupt_med_IRQn. The emUSB-Device code can be executed on CM4 and CM0+ cores. For CM0+, the interrupt source of the USB IP block can be connected to one of CM0+ IRQs. Refer to the device datasheet and <a href="https://infineon.github.io/mtb-pdl-cat1/pdl_api_reference_manual/html/group__group__sysint.html"><b>SysInt (System Interrupt) Driver documentation</b></a> to find the available IRQs for CM0+.</p>
-<ul>
-<li>The following code snippet shows the interrupt configuration for both CM4 and CM0+ cores. <div class="fragment"><div class="line"><span class="comment">/* Define the interrupt source */</span></div>
-<div class="line"><span class="preprocessor">#if (COMPONENT_CM0P)</span></div>
-<div class="line"><span class="comment">/* The number of CM0+ interrupt vectors is different for different devices,</span></div>
-<div class="line"><span class="comment"> * so, change the following macro for your selected device.</span></div>
-<div class="line"><span class="comment"> */</span></div>
-<div class="line"><span class="preprocessor">#define USBD_INTERRUPT_NUM                      (NvicMux7_IRQn)</span></div>
-<div class="line"><span class="preprocessor">#else</span></div>
-<div class="line"><span class="preprocessor">#define USBD_INTERRUPT_NUM                      (usb_interrupt_med_IRQn)</span></div>
-<div class="line"><span class="preprocessor">#endif </span><span class="comment">/* #if (COMPONENT_CM0P) */</span><span class="preprocessor"></span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* Define the interrupt priority */</span></div>
-<div class="line"><span class="preprocessor">#define USBD_ISR_PRIO                           (3U)</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* Register this function as a callback in USBD_SetISREnableFunc(). */</span></div>
-<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> enable_isr(USB_ISR_HANDLER * pfISRHandler)</div>
-<div class="line">{</div>
-<div class="line">    <span class="comment">/* Install interrupt service routine */</span></div>
-<div class="line">    cy_rslt_t result;</div>
-<div class="line">    result = cyhal_system_set_isr(USBD_INTERRUPT_NUM, usb_interrupt_med_IRQn, USBD_ISR_PRIO, pfISRHandler);</div>
-<div class="line">    CY_ASSERT(CY_RSLT_SUCCESS == result);</div>
-<div class="line">    (void) result; <span class="comment">/* To avoid the compiler warning in Release mode */</span></div>
-<div class="line"> </div>
-<div class="line">    NVIC_EnableIRQ(USBD_INTERRUPT_NUM);</div>
-<div class="line">}</div>
-</div><!-- fragment --></li>
-</ul>
-<dl class="section note"><dt>Note</dt><dd>The number of CM0+ interrupt vectors is different for different devices, so, this code snippet may not be suitable for all devices.</dd></dl>
-<p><b> PSE84 Devices </b></p>
+<p ><b> PSE84 Devices </b></p>
 <p >emUSB-Device use one interrupt source - usbhs_interrupt_usbhsctrl_IRQn. The emUSB-Device can be executed on the CM33 or CM55 core. The interrupt configuration is the same for both cores.</p>
 <ul>
 <li>The following code snippet shows the interrupt configuration: <div class="fragment"><div class="line"><span class="comment">/* Define interrupt priority */</span></div>
@@ -838,75 +722,10 @@ USB Interrupt Configuration</h3>
 <div class="line">}</div>
 </div><!-- fragment --></li>
 </ul>
-<p ><b> XMC4000 Devices Family </b></p>
-<p >XMC4000 devices have only one interrupt source in the IP USB block - USB0_0_IRQn.</p>
-<ul>
-<li>The following code snippet shows the interrupt configuration for XMC4000 devices: <div class="fragment"><div class="line"><span class="comment">/* Define interrupt priority. In case of FreeRTOS ensure that</span></div>
-<div class="line"><span class="comment"> * configMAX_SYSCALL_INTERRUPT_PRIORITY in FreeRTOSConfig.h is</span></div>
-<div class="line"><span class="comment"> * configured in accordance to XMC4000 interrupts configuration</span></div>
-<div class="line"><span class="comment"> */</span></div>
-<div class="line"><span class="preprocessor">#define USBD_ISR_PRIO                           (63U)</span></div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">static</span> USB_ISR_HANDLER * p_usb_isr_handler;</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/*********************************************************************</span></div>
-<div class="line"><span class="comment">*</span></div>
-<div class="line"><span class="comment">*       USB0_0_IRQHandler</span></div>
-<div class="line"><span class="comment">*  Function description</span></div>
-<div class="line"><span class="comment">*    USB IRQ Handler</span></div>
-<div class="line"><span class="comment">*</span></div>
-<div class="line"><span class="comment">*/</span></div>
-<div class="line"><span class="keywordtype">void</span> USB0_0_IRQHandler(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    (p_usb_isr_handler)();</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* Register this function as a callback in USBD_SetISREnableFunc(). */</span></div>
-<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> enable_isr(USB_ISR_HANDLER * pfISRHandler)</div>
-<div class="line">{</div>
-<div class="line">    p_usb_isr_handler = pfISRHandler;</div>
-<div class="line">    NVIC_SetPriority(USB0_0_IRQn, USBD_ISR_PRIO);</div>
-<div class="line">    NVIC_EnableIRQ(USB0_0_IRQn);</div>
-<div class="line">}</div>
-</div><!-- fragment --></li>
-</ul>
-<h3><a class="anchor" id="section_emusb_device_hw_dep_add_conf_cat1d_timer"></a>
+<h3><a class="anchor" id="section_emusb_device_hw_dep_add_conf_pse84_timer"></a>
 USB Timer Configuration</h3>
 <p ><b> PSE84 Devices Family </b></p>
-<p >This configuration is for non-RTOS environment. The timer is already configured in the usbd_config.c file for PSE84. But its initialization takes data from the generated code from the Device Configurator USB personality. Enable the "Enable 1ms Times" checkbox, and select the TCPWM set of the clock divider. The prefix name of the structures, defines, and variables set by default for TCPWM is "emUSB_OS_Timer". The prefix can be changed but note that it impacts the generated code used in the export/Config/COMPONENT_CAT1D/usbd_config.c file. For details on setting up the timer in the personality, see <a class="el" href="index.html#section_emusb_device_quick_start">Quick Start</a> for PSE84 devices.</p>
-<h3><a class="anchor" id="section_emusb_device_hw_dep_add_conf_cat3_stack"></a>
-XMC4000 Specific Configuration</h3>
-<p >Some of XMC4000 devices features, which affect the USB functionality are implemented outside of USB IP block and can not be configured inside emUSB-Device middleware. These features include: enable/disable power to the USB IP block, enable/disable reset state for the USB IP block and enable/disable the pull-up resistor. All mentioned features can be configured by SCU driver from mtb-xmclib-cat3.</p>
-<p >Additional USB configuration steps for XMC4000 devices:</p><ol type="1">
-<li>Enable the power for USB by using <em>XMC_SCU_POWER_EnableUsb()</em>.</li>
-<li>De-assert Reset from USB controller by calling <em>XMC_SCU_RESET_DeassertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_USB0)</em> for executing the USB functionality.</li>
-<li>Create the callback function which enable USB weak pull-up resistor by <em>XMC_SCU_PCU_EnableUsbPullUp()</em> as it shown in the following code snippet. <div class="fragment"><div class="line"><span class="comment">/*********************************************************************</span></div>
-<div class="line"><span class="comment">*</span></div>
-<div class="line"><span class="comment">*       hw_attach</span></div>
-<div class="line"><span class="comment">*  Function description</span></div>
-<div class="line"><span class="comment">*    Enable USB weak pull-up at PADN state</span></div>
-<div class="line"><span class="comment">*</span></div>
-<div class="line"><span class="comment">*/</span></div>
-<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> hw_attach(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    XMC_SCU_PCU_EnableUsbPullUp();</div>
-<div class="line">}</div>
-</div><!-- fragment --> The described callback is registers into <em>USBD_SetAttachFunc()</em>. <dl class="section note"><dt>Note</dt><dd>It is recommended to enable pull-up only inside a callback registered by USBD_SetAttachFunc().</dd></dl>
-Those steps are already implemented in usbd_config.c for XMC4000 devices. You can use this file as reference.</li>
-</ol>
-<h3><a class="anchor" id="section_emusb_device_dma_cat1a"></a>
-DMA driver for PSOC6 device</h3>
-<p >To use the driver with DMA support:</p><ol type="1">
-<li>Add USBD_ENABLE_DMA to the DEFINE variable in Makefile</li>
-<li>Connect the USB endpoints to a DMA channel in the USB personality or do it manually using APIs for the TrigMux driver. All used data endpoints must be connected to corresponding DMA channels.</li>
-<li>Enable the DMA block before starting emUSB-Device by Cy_DMA_Enable()</li>
-<li>Add DMA USB_Driver_Cypress_PSoC6_DMA driver by USBD_AddDriver().</li>
-<li>Allocate memory for the endpoints transfer-buffer by USBD_AssignMemory().</li>
-<li>Configure DMA parameters and DMA routines by USB_DRIVER_Cypress_PSoC6_ConfigDMA()</li>
-</ol>
-<p >Steps 3-6 are implemented in the usbd_config.c file.</p>
-<p >The emUSB-Device configures a DMA channel inside the USB driver, so, no need to configure a DMA channel in the application code or in the DMA personality. Configuration of a DMA channel in the DMA personality is ignored, the enable the resource for reservation and connecting the USB endpoints to available DMA channels.</p>
-<dl class="section note"><dt>Note</dt><dd>When DMA mode is enabled in the USB personality, the USB personality generates several macros used in the usbd_config.c file.</dd></dl>
+<p >This configuration is for non-RTOS environment. The timer is already configured in the usbd_config.c file for PSE84. But its initialization takes data from the generated code from the Device Configurator USB personality. Enable the "Enable 1ms Times" checkbox, and select the TCPWM set of the clock divider. The prefix name of the structures, defines, and variables set by default for TCPWM is "emUSB_OS_Timer". The prefix can be changed but note that it impacts the generated code used in the export/Config/COMPONENT_PSE84/usbd_config.c file. For details on setting up the timer in the personality, see <a class="el" href="index.html#section_emusb_device_quick_start">Quick Start</a> for PSE84 devices.</p>
 <h2><a class="anchor" id="section_emusb_device_debug_mes_out"></a>
 Debug Message Output</h2>
 <p >The debug builds of emUSB-Device allow using the debug message outputs. The template implementation of the message output functions is in export/Config/usbd_config_io.c file. This file is automatically copied into the ModusToolbox project when emUSB-Device middleware is added for the first time by the Library manager. Otherwise, copy this file manually. By default, <a href="https://github.com/Infineon/retarget-io"><b>retarget-io</b></a> is used for the message output, but message outputs can be redefined to any suitable output way. To disable the default message outputs, set USBD_DISABLE_STANDARD_OUTPUT=1 in the DEFINES variable in the application project Makefile. To provide a custom output method in addition to setting a variable add corresponding API under the #if (USBD_DISABLE_STANDARD_OUTPUT == 1U) condition inside the _puts() function.</p>
@@ -923,91 +742,11 @@ Low Power Support</h2>
 <tr>
 <th>Device family</th><th>Recommended low-power mode </th></tr>
 <tr>
-<td>PSOC6 </td><td>Deep Sleep  </td></tr>
-<tr>
 <td>PSE84 </td><td>Sleep  </td></tr>
-<tr>
-<td>XMC4000 </td><td>Deep Sleep  </td></tr>
 </table>
-<dl class="section note"><dt>Note</dt><dd>After a wake-up from low-power modes in which USB IP block cannot operate, the emUSB-Device must be re-initialized (Except Deep Sleep mode for PSOC6 device).</dd></dl>
-<p><b> PSOC6 Devices Family </b></p>
-<p >The USB IP block operates in Active and Sleep mode without any limitations, but in Deep Sleep, the USB IP block is disabled.</p>
-<dl class="section note"><dt>Note</dt><dd>No need to call USBD_DeInit() or USBD_Stop() before entering low-power mode and USBD_Init() or USBD_Start() after wake up contrary to described in <a href="./../UM09001_emUSBD.pdf"><b>SEGGER emUSB-Device User Guide &amp; Reference Manual</b></a> Low power mode chapter. If they are called, emUSB-Device does not return from Deep Sleep to the previous state after a wake up. The USB Host will probably identify some sets of events like disconnecting the old device and connecting a new device.</dd></dl>
-<p>emUSB-Device has two additional functions only for PSOC6 devices, which take part in detecting Suspend condition and restoring emUSB-Device after Deep Sleep - USB_DRIVER_Cypress_PSoC6_SysTick() and USB_DRIVER_Cypress_PSoC6_Resume(). The application must call USB_DRIVER_Cypress_PSoC6_SysTick() every millisecond in order to get suspend events handled. The USB_DRIVER_Cypress_PSoC6_Resume() function must be called after waking up from Deep Sleep low-power mode. For details, about these functions refer to the <a href="./../UM09001_emUSBD.pdf"><b>SEGGER emUSB-Device User Guide &amp; Reference Manual</b></a> PSoC6 driver chapter.</p>
-<dl class="section note"><dt>Note</dt><dd>After waking up from Deep Sleep, USBD_GetState() can returns the Suspend status for some time. Wait up to 10 milliseconds and then check the USB status with USBD_GetState() because USB_DRIVER_Cypress_PSoC6_SysTick() requires some time for identifying the Resume condition.</dd></dl>
-<p>The USB IP block is disabled during Deep Sleep mode, so, additional configuration of the D+ pins is required. Configure the falling edge interrupt on the D+ pin (before entering Deep Sleep) to exit low-power mode when the Host drivers resume. The interrupt on the D+ pin wakes up the device from low-power mode when the Host drivers resume. The interrupt is allowed only when emUSB-Device is in Suspended state and the microcontroller in Deep Sleep mode to prevent frequent triggering of GPIO interrupt and loading CPU.</p>
-<div class="fragment"><div class="line"><span class="comment">/* Interrupt mask for D+ pin */</span></div>
-<div class="line"><span class="preprocessor">#define GPIO_DP_INT_MASK                        (1U)</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* Configuration structure for D+ pin interrupt */</span></div>
-<div class="line"><span class="keyword">static</span> cy_stc_sysint_t dp_pin_interrupt_cfg =</div>
-<div class="line">{</div>
-<div class="line">    .intrSrc = ioss_interrupts_gpio_14_IRQn,</div>
-<div class="line">    .intrPriority = 0U,</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* Interrupt handler for D+ pin */</span></div>
-<div class="line"><span class="keywordtype">void</span> dp_pin_isr(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    <span class="comment">/* Check if an interrupt on the D+ pin was generated */</span></div>
-<div class="line">    <span class="keywordflow">if</span> (Cy_GPIO_GetInterruptStatusMasked(USBDP_PORT, USBDP_PIN))</div>
-<div class="line">    {</div>
-<div class="line">        <span class="comment">/* Clear D+ interrupt flag */</span></div>
-<div class="line">        Cy_GPIO_ClearInterrupt(USBDP_PORT, USBDP_PIN);</div>
-<div class="line">    }</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line"><span class="comment">/* Initialize and configure an interrupt for the D+ pin to detect Resume condition */</span></div>
-<div class="line"><span class="keywordtype">void</span> init_dp_interrupt(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    <span class="comment">/* Initialize an interrupt on the D+ pin to detect Resume condition */</span></div>
-<div class="line">    <span class="keywordflow">if</span> (CY_RSLT_SUCCESS != Cy_SysInt_Init(&amp;dp_pin_interrupt_cfg, &amp;dp_pin_isr))</div>
-<div class="line">    {</div>
-<div class="line">        <span class="comment">/* Insert error handler */</span></div>
-<div class="line">        CY_ASSERT(0);</div>
-<div class="line">    }</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Set up generation of an interrupt on the falling edge */</span></div>
-<div class="line">    Cy_GPIO_SetInterruptEdge(USBDP_PORT, USBDP_PIN, CY_GPIO_INTR_FALLING);</div>
-<div class="line">    Cy_GPIO_SetInterruptMask(USBDP_PORT, USBDP_PIN, GPIO_DP_INT_MASK);</div>
-<div class="line">}</div>
-</div><!-- fragment --><dl class="section note"><dt>Note</dt><dd>For a non-RTOS environment, disable the default timer for measuring the tick count (set USBD_NORTOS_TICKCNT_ENABLE macro to 0 in Makefile) and provide a specific implementation. For details, see <a class="el" href="index.html#section_emusb_device_use_in_rtos">Using emUSB-Device in an RTOS Environment</a></dd></dl>
-<p>The next code snippets show preparing/restoring emUSB-Device before/after Deep Sleep. </p><div class="fragment"><div class="line"><span class="comment">/* Enable interrupt for D+ pins before entering Deep Sleep</span></div>
-<div class="line"><span class="comment"> * for detecting Resume condition on USB Bus</span></div>
-<div class="line"><span class="comment"> */</span></div>
-<div class="line"><span class="keywordtype">void</span> enable_dp_interrupt(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    <span class="comment">/* Clear D+ interrupt flag */</span></div>
-<div class="line">    Cy_GPIO_ClearInterrupt(USBDP_PORT, USBDP_PIN);</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Clear any pending interrupt */</span></div>
-<div class="line">    NVIC_ClearPendingIRQ(dp_pin_interrupt_cfg.intrSrc);</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Enable the D+ interrupt */</span></div>
-<div class="line">    NVIC_EnableIRQ(dp_pin_interrupt_cfg.intrSrc);</div>
-<div class="line">}</div>
-</div><!-- fragment --> <div class="fragment"><div class="line"><span class="comment">/* Prepare emUSB-Device after wake-up from Deep Sleep</span></div>
-<div class="line"><span class="comment"> * for further operation</span></div>
-<div class="line"><span class="comment"> */</span></div>
-<div class="line"><span class="keywordtype">void</span> prepare_emusb_after_lpm(<span class="keywordtype">void</span>)</div>
-<div class="line">{</div>
-<div class="line">    <span class="comment">/* Disable the D+ interrupt */</span></div>
-<div class="line">    NVIC_DisableIRQ(dp_pin_interrupt_cfg.intrSrc);</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Resume emUSB-Device */</span></div>
-<div class="line">    USB_DRIVER_Cypress_PSoC6_Resume();</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">/* Wait up to 10 milliseconds for updating emUSB-Device state */</span></div>
-<div class="line">    USB_OS_Delay(10);</div>
-<div class="line">}</div>
-</div><!-- fragment --><p ><b> PSE84 Devices </b></p>
+<dl class="section note"><dt>Note</dt><dd>After a wake-up from low-power modes in which USB IP block cannot operate, the emUSB-Device must be re-initialized.</dd></dl>
+<p><b> PSE84 Devices </b></p>
 <p >The USB IP block can operate only in Active and Sleep mode.</p>
-<p ><b> XMC4000 Devices Family </b></p>
-<p >The USB IP block can operate in Active, Sleep, and Deep Sleep mode. For Sleep and Deep Sleep modes, the USB IP block clocking must remain active. This means that USB Phy Clock and System Clock must be enabled during low-power modes. After detecting Resume condition, the XMC4000 device exits Deep Sleep mode (The USB interrupt wake-up microcontroller) and enters Active power mode.</p>
-<p >If Suspend condition is detected, the device goes to Deep Sleep mode but the USB remains enabled. Example of configuration XMC4000 device with enabled USB during Deep Sleep mode: </p><div class="fragment"><div class="line">    XMC_SCU_CLOCK_SetDeepSleepConfig(XMC_SCU_CLOCK_DEEPSLEEP_MODE_CONFIG_ENABLE_USB);</div>
-<div class="line">    XMC_SCU_POWER_WaitForInterrupt(XMC_SCU_POWER_MODE_DEEPSLEEP, <span class="keyword">false</span>);</div>
-</div><!-- fragment --> <dl class="section note"><dt>Note</dt><dd>You can disable/enable the clock sources in Deep Sleep power mode by adding the appropriate clock source into XMC_SCU_CLOCK_SetDeepSleepConfig().</dd></dl>
 <h3><a class="anchor" id="section_emusb_device_low_power_rtos"></a>
 emUSB-Device in RTOS environment</h3>
 <p >Typically, RTOS decide to go to Idle state when no active tasks remain active. Often, the transition into Idle condition is accompanied by entering the microcontroller in one of low-power modes (Depends on RTOS configuration). But the USB device must provide correct responses to all events on the USB bus. The preventing mechanism must be implemented, which does not allow the microcontroller to enter low-power mode when emUSB-Device is not in Suspended state. For example, for FreeRTOS, a custom implementation of vApplicationSleep() must be provided.</p>
@@ -1021,14 +760,11 @@ Link Power Management (LPM)</h3>
 <li>Define the behavior of the device on LPM request from the Host by USBD_SetLPMResponse() (reject or acknowledge the LPM request). Call USBD_SetLPMResponse() after USBD_Start(), otherwise, the response configuration may be lost.</li>
 </ol>
 <p >Based on the received BESL value, the application can determine the level of the power optimization and select appropriate low-power modes. The behavior of the USB IP block during low-power modes for each device described in <a class="el" href="index.html#section_emusb_device_low_power">Low Power Support</a>.</p>
-<dl class="section note"><dt>Note</dt><dd>For the PSOC6 device, USB_DRIVER_Cypress_PSoC6_SysTick() must be called every millisecond and USB_DRIVER_Cypress_PSoC6_Resume() after a wake-up from Deep Sleep as well as for Suspend functionality.</dd></dl>
-<p>For more information about LPM, refer to "USB 2.0 Link Power Management
+<p >For more information about LPM, refer to "USB 2.0 Link Power Management
 Addendum" and "Errata for USB 2.0 ECN: Link Power Management (LPM) - 7/2007" from usb.org.</p>
-<dl class="section note"><dt>Note</dt><dd>XMC4000 devices do not support LPM features.</dd></dl>
 <h2><a class="anchor" id="section_emusb_device_only_pdl"></a>
 Only PDL APIs support</h2>
 <p >By default, emUSB-Device requires HAL Next APIs for operation. However, when HAL Next APIs cannot be used in the application, the USBD_USE_PDL option is available. With this macro set to 1, the emUSB-Device middleware will use PDL APIs instead of HAL Next APIs. When USBD_USE_PDL=1, the application must disable the standard debug output (USBD_DISABLE_STANDARD_OUTPUT=1) and, in a non-RTOS environment, provide the custom implementation for USB_OS_GetTickCnt() function (USBD_NORTOS_TICKCNT_ENABLE=0). The USBD_USE_PDL macro must be set in the DEFINES variable in the application project Makefile.</p>
-<dl class="section note"><dt>Note</dt><dd>This section is applicable only for PSOC6 and PSE84 devices.</dd></dl>
 <h2><a class="anchor" id="section_emusb_device_pick_lib"></a>
 Picking an emUSB-Device Library Variant</h2>
 <p >The Middleware provides emUSB-Device as pre-build libraries. The pre-build libraries are selected automatically based on configurations of Makefile configurations. The table below shows the availability of the configuration options.</p>
@@ -1036,60 +772,56 @@ Picking an emUSB-Device Library Variant</h2>
 <tr>
 <th>Configuration</th><th>Options</th><th>Make Variable </th></tr>
 <tr>
-<td>Device family </td><td>PSOC6, PSE84, XMC4000 </td><td>DEVICE_COMPONENTS  </td></tr>
+<td>Device family </td><td>PSE84 </td><td>DEVICE_COMPONENTS  </td></tr>
 <tr>
 <td>Build configuration </td><td>Debug, Release </td><td>CONFIG  </td></tr>
 <tr>
 <td>Core </td><td><ul>
-<li>CM0P, CM4 for PSOC6;</li>
-<li>CM33, CM55 for PSE84;</li>
-<li>CM4 for XMC4000;  </li>
+<li>CM33, CM55 for PSE84;  </li>
 </ul>
 </td><td>CORE  </td></tr>
 <tr>
 <td>Floating point </td><td>hardfp, softfp </td><td>VFP_SELECT  </td></tr>
 <tr>
-<td>Toolchain </td><td>GCC_ARM, IAR, ARM </td><td>TOOLCHAIN  </td></tr>
+<td>Toolchain </td><td>GCC_ARM, IAR, ARM, LLVM-ARM </td><td>TOOLCHAIN  </td></tr>
 </table>
-<dl class="section warning"><dt>Warning</dt><dd>XMC4000 device family supports only GCC_ARM compiler</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Typically, the device family and core are selected in BSP Makefile.</dd>
 <dd>
-CM0P supports only softfp.</dd></dl>
+CM55 LLVM-ARM supports only hardfp.</dd></dl>
 <h3><a class="anchor" id="section_emusb_device_lib_conf"></a>
 Pre-build libraries configuration</h3>
 <p >Some of the parameters/features of emUSB-Device are configured by the compile-time options (like the number of the interface that supports the ISO transfer, etc) during generation of pre-build libraries and cannot change in run-time. Header file USBD_ConfDefaults.h under the USBD directory contains the common compile time options used during pre-build libraries creation. Similarly, USBD_Conf.h under each COMPONENT_&lt;Device family&gt;/CONFIG_&lt; Build configuration&gt; directory contains the compile time options specific to the set of library variants. The compile time options defined in USBD_Conf.h have a higher priority than in USBD_ConfDefaults.h. Most of the compile time options are defined in these two header files but some are not visible like the macro, which define the number of interfaces. This section describes the compile time options not defined in USBD_Conf.h and USBD_ConfDefaults.h.</p>
 <p >This table shows the number of supported interfaces for each class between the device families.</p>
 <table class="doxtable">
 <tr>
-<th>USB Class</th><th>PSOC6</th><th>PSE84</th><th>XMC4000 </th></tr>
+<th>USB Class</th><th>PSE84 </th></tr>
 <tr>
-<td>Audio </td><td>1 </td><td>1 </td><td>1  </td></tr>
+<td>Audio </td><td>1  </td></tr>
 <tr>
-<td>Legacy Audio </td><td>1 </td><td>1 </td><td>1  </td></tr>
+<td>Legacy Audio </td><td>1  </td></tr>
 <tr>
-<td>Bulk </td><td>4 </td><td>3 </td><td>4  </td></tr>
+<td>Bulk </td><td>4  </td></tr>
 <tr>
-<td>CCID </td><td>1 </td><td>1 </td><td>1  </td></tr>
+<td>CCID </td><td>1  </td></tr>
 <tr>
-<td>CDC </td><td>2 </td><td>2 </td><td>2  </td></tr>
+<td>CDC </td><td>2  </td></tr>
 <tr>
-<td>HID </td><td>2 </td><td>2 </td><td>2  </td></tr>
+<td>HID </td><td>2  </td></tr>
 <tr>
-<td>MSD </td><td>1 </td><td>1 </td><td>1  </td></tr>
+<td>MSD </td><td>1  </td></tr>
 <tr>
-<td>MTP </td><td>1 </td><td>1 </td><td>1  </td></tr>
+<td>MTP </td><td>1  </td></tr>
 <tr>
-<td>Printer </td><td>1 </td><td>1 </td><td>1  </td></tr>
+<td>Printer </td><td>1  </td></tr>
 <tr>
-<td>VirtualMSD </td><td>1 </td><td>1 </td><td>1  </td></tr>
+<td>VirtualMSD </td><td>1  </td></tr>
 <tr>
-<td>VSC </td><td>Limited by USB_MAX_NUM_IF </td><td>Limited by USB_MAX_NUM_IF </td><td>Limited by USB_MAX_NUM_IF  </td></tr>
+<td>VSC </td><td>Limited by USB_MAX_NUM_IF  </td></tr>
 </table>
 <dl class="section note"><dt>Note</dt><dd>The MSD and MTP classes support the connection to up-to-four logical/storage units.</dd></dl>
 <h2><a class="anchor" id="section_emusb_device_emfile"></a>
 Integration with emFile</h2>
 <p >The MSD and MTP are supplied with already implemented storage drivers using <a href="https://github.com/Infineon/emfile"><b>emFile</b></a>. The MSD supports: USB_MSD_StorageByName and USB_MSD_StorageByIndex, the MTP supports: USB_MTP_StorageFS drivers. The implementation of these drivers are present in additional pre-build libraries. By default these libraries are not added to the build, to enable them - add USBD_EMFILE to the COMPONENTS variable in Makefile. The additional pre-build libraries with emFile storage drivers support the three different FAT sub types: FAT12, FAT16 and FAT32. The selection of a specific FAT type is the same as for the <a href="https://github.com/Infineon/emfile"><b>emFile</b></a> middleware - add EMFILE_FAT16 for FAT12/16 or EMFILE_FAT32 for supporting all three sub types to the COMPONENTS variable in Makefile.</p>
-<dl class="section note"><dt>Note</dt><dd>The storage drivers implemented by emFile APIs are available only for the PSOC6 and PSE84 devices.</dd></dl>
 <h2><a class="anchor" id="section_emusb_device_use_in_rtos"></a>
 Using emUSB-Device in an RTOS Environment</h2>
 <p >The emUSB-device has been already implemented the Target OS Interface for both RTOS and non-RTOS aware environments. Selecting the OS layer implementation is automatic based on the <em>RTOS_AWARE</em> component. To inform the emUSB-Device that an RTOS environment is being used, set the <em>RTOS_AWARE</em> component (<em>COMPONENTS+=RTOS_AWARE</em>).</p>
@@ -1100,17 +832,7 @@ USB_OS_DecRI() and USB_OS_IncDI() have only alternate implementation because the
 <li>
 The emUSB-Device middleware calls some functions of the OS layer from the USB interrupt. As a result, the USB interrupt priority must be aligned with the RTOS configuration. For example, for FreeRTOS, the USB interrupt must have a lower or equal priority to the MAX_API_CALL_INTERRUPT_PRIORITY macro.  </li>
 <li>
-<p class="startli">For non-RTOS environment: For <b>PSOC6</b> devices: USB_OS_GetTickCnt() configures one instance of the timer by <code>Timer (Timer/Counter)</code> Driver of HAL library for returning the current system time in milliseconds. The timer is started by initializing the emUSB-Device middleware. For non-RTOS environment: For <b>PSE84</b> devices: USB_OS_GetTickCnt() configures one instance of the timer by the driver of HAL Next library for returning the current system time in milliseconds. The timer is started by initializing the emUSB-Device middleware with data from the Universal Serial Bus (USB) personality by checking "Enable 1ms Timer". Universal Serial Bus (USB) personality reserves one of the available TCPWM that has the Timer-Counter setting. For details on the timer usage, see in <a class="el" href="index.html#section_emusb_device_quick_start">Quick Start</a> for PSE84 devices.</p>
-<p class="interli">To use USB_OS_GetTickCnt() with <b>XMC4000</b> devices:</p><ol type="1">
-<li>Enable emUSB OS Timer personality in the Device <em>Configurator-&gt;Peripherals-&gt;Digital-&gt;CCU4</em> section: <div class="image">
-<img src="cat3_emusb_os_timer_section.png" alt=""/>
-</div>
-</li>
-<li>Select the <em>Device</em> mode of emUSB personality. Select the CCU4 configured as emUSB OS Timer from the drop down list of "CCU for OS" section of emUSB personality. <div class="image">
-<img src="cat3_emusb_device_os.png" alt=""/>
-</div>
- USB_OS_GetTickCnt() configures the 1 millisecond timer using CCU4 driver reserved by emUSB OS Timer personality. The interrupt priority of reserved CCU4 is 63.</li>
-</ol>
+<p class="startli">For non-RTOS environment: For <b>PSE84</b> devices: USB_OS_GetTickCnt() configures one instance of the timer by the driver of HAL Next library for returning the current system time in milliseconds. The timer is started by initializing the emUSB-Device middleware with data from the Universal Serial Bus (USB) personality by checking "Enable 1ms Timer". Universal Serial Bus (USB) personality reserves one of the available TCPWM that has the Timer-Counter setting. For details on the timer usage, see in <a class="el" href="index.html#section_emusb_device_quick_start">Quick Start</a> for PSE84 devices.</p>
 <p class="interli">USB_OS_GetTickCnt() own implementation can be provided due to: </p><ul>
 <li>
 The optimization of handling the ISR routine (the timer generates an interrupt every 1 millisecond);  </li>
@@ -1120,7 +842,7 @@ Providing more reliable implementation (the timer value reloads every 49 days, 1
 The optimization of the HW resources usage (one instance of the TCPWM counter or similar HW resources, which can be used by <code>Timer (Timer/Counter)</code> Driver);  </li>
 </ul>
 <p>To do that, set the USBD_NORTOS_TICKCNT_ENABLE macro value to zero in Makefile file.</p>
-<dl class="section note"><dt>Note</dt><dd><b>For PSOC6 and PSE84 devices:</b> The own implementation of USB_OS_GetTickCnt() must be provided if the application uses the transit into Deep Sleep or Hibernate low-power modes.  </dd></dl>
+<dl class="section note"><dt>Note</dt><dd><b>For PSE84 devices:</b> The own implementation of USB_OS_GetTickCnt() must be provided if the application uses the transit into Deep Sleep or Hibernate low-power modes.  </dd></dl>
 </li>
 <li>
 For Free-RTOS, USB tasks priority must be lower than the priority of RTOS daemon tasks (also known as timer service tasks). The RTOS daemon task priority is defined in configTIMER_TASK_PRIORITY.  </li>
@@ -1141,6 +863,8 @@ Changelog</h1>
 <table class="doxtable">
 <tr>
 <th>Version</th><th>Changes</th><th>Reason for Change </th></tr>
+<tr>
+<td rowspan="1">2.1.0 </td><td>Updated the emUSB-Device stack to 3.66.5 </td><td>New version is available  </td></tr>
 <tr>
 <td rowspan="3">2.0.0 </td><td>Added LLVM compiler support. </td><td rowspan="2">Extending the supported features for emUSB-Device middleware  </td></tr>
 <tr>

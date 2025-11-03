@@ -34,7 +34,7 @@ extern "C" {
 
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 14.3', 75, \
-                             'Controlling expression are invariant.')
+'Controlling expression are invariant.')
 
 /*******************************************************************************
 *                             Function Prototypes
@@ -127,27 +127,24 @@ static cy_en_syspm_status_t Cy_I3C_DeepSleepCallback_After(cy_stc_syspm_callback
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *config, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == config) || (NULL == context))
+    if((NULL == base) || (NULL == config) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
 
     CY_ASSERT_L3(CY_I3C_IS_MODE_VALID(config->i3cMode));
-    if (CY_I3C_CONTROLLER == config->i3cMode || CY_I3C_SECONDARY_CONTROLLER == config->deviceRoleCap)
-    {
+    if(CY_I3C_CONTROLLER == config->i3cMode || CY_I3C_SECONDARY_CONTROLLER == config->deviceRoleCap){
         CY_ASSERT_L3(CY_I3C_IS_BUS_MODE_VALID(config->i3cBusMode));
         CY_ASSERT_L2(CY_IS_I3C_SDA_HOLD_TIME_VALID(config->sdaHoldTime));
         CY_ASSERT_L2(CY_IS_I3C_QUEUE_THLD_VALID(config->ibiQueueThld));
     }
-    if (CY_I3C_TARGET == config->i3cMode || CY_I3C_SECONDARY_CONTROLLER == config->deviceRoleCap)
-    {
+    if(CY_I3C_TARGET == config->i3cMode || CY_I3C_SECONDARY_CONTROLLER == config->deviceRoleCap){
         CY_ASSERT_L2(CY_IS_I3C_STATIC_ADDRESS_VALID(config->staticAddress));
         CY_ASSERT_L2(CY_IS_I3C_PID_VALID(config->pid));
         CY_ASSERT_L3(CY_IS_I3C_DEVICE_ROLE_CAP_VALID(config->deviceRoleCap));
         CY_ASSERT_L2(CY_IS_I3C_BUS_IDLE_TIME_VALID(config->busIdleTime));
     }
-    if (CY_I3C_CONTROLLER == config->i3cMode)
-    {
+    if(CY_I3C_CONTROLLER == config->i3cMode){
         CY_ASSERT_L2(CY_IS_I3C_ADDR_NOT_RESERVED(config->dynamicAddr));
     }
     CY_ASSERT_L3(CY_I3C_IS_BUFFER_DEPTH_VALID(config->txEmptyBufThld));
@@ -192,9 +189,9 @@ cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *c
     context->cbIbi = NULL;
 
     /* Enabling the IP */
-    I3C->CTRL = I3C_CTRL_ENABLED_Msk;
+    I3C->CTRL= I3C_CTRL_ENABLED_Msk;
 
-    if (CY_I3C_CONTROLLER == config->i3cMode)
+    if(CY_I3C_CONTROLLER == config->i3cMode)
     {
         cy_stc_i3c_controller_t *i3cController = &(context->i3cController);
 
@@ -210,31 +207,31 @@ cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *c
         /* Setting the device operation mode to Controller - 0U */
         I3C_CORE_DEVICE_CTRL_EXTENDED(base) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_CONTROLLER);
 
-        if (!config->manualDataRate)
+        if(!config->manualDataRate)
         {
             (void)Cy_I3C_SetDataRate(base, config->i3cSclRate, config->i3cClockHz, context);
         }
         else
         {
-            I3C_CORE_SCL_I3C_OD_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_HCNT, config->openDrainHighCnt) |
-                                               _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_LCNT, config->openDrainLowCnt);
-            I3C_CORE_SCL_I3C_PP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_HCNT, config->pushPullHighCnt) |
-                                               _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_LCNT, config->pushPullLowCnt);
-            I3C_CORE_SCL_I2C_FM_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_HCNT, config->i2cFMHighCnt) |
-                                               _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_LCNT, config->i2cFMLowCnt);
-            I3C_CORE_SCL_I2C_FMP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_HCNT, config->i2cFMPlusHighCnt) |
-                                                _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_LCNT, config->i2cFMPlusLowCnt);
-            I3C_CORE_SCL_EXT_LCNT_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_1, config->extLowCnt1) |
-                                                 _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_2, config->extLowCnt2) |
-                                                 _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_3, config->extLowCnt3) |
-                                                 _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_4, config->extLowCnt4);
+             I3C_CORE_SCL_I3C_OD_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_HCNT, config->openDrainHighCnt) |
+                                                _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_LCNT, config->openDrainLowCnt);
+             I3C_CORE_SCL_I3C_PP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_HCNT, config->pushPullHighCnt) |
+                                                _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_LCNT, config->pushPullLowCnt);
+             I3C_CORE_SCL_I2C_FM_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_HCNT, config->i2cFMHighCnt) |
+                                                _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_LCNT, config->i2cFMLowCnt);
+             I3C_CORE_SCL_I2C_FMP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_HCNT, config->i2cFMPlusHighCnt) |
+                                                 _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_LCNT, config->i2cFMPlusLowCnt);
+             I3C_CORE_SCL_EXT_LCNT_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_1, config->extLowCnt1) |
+                                                  _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_2, config->extLowCnt2) |
+                                                  _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_3, config->extLowCnt3) |
+                                                  _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_4, config->extLowCnt4);
             I3C_CORE_SCL_EXT_TERMN_LCNT_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_EXT_TERMN_LCNT_TIMING_I3C_EXT_TERMN_LCNT, config->extTerminationLowCnt);
         }
 
         I3C_CORE_DEVICE_CTRL(base) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_IBA_INCLUDE, config->ibaInclude ? 1UL : 0UL) |
                                      _VAL2FLD(I3C_CORE_DEVICE_CTRL_HOT_JOIN_CTRL, config->hotJoinCtrl ? 1UL : 0UL);
 
-        I3C_CORE_DEVICE_ADDR(base) = _VAL2FLD(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, config->dynamicAddr) |
+        I3C_CORE_DEVICE_ADDR(base) = _VAL2FLD( I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, config->dynamicAddr) |
                                      I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID_Msk;
 
         SetAddrslotStatus(config->dynamicAddr, CY_I3C_ADDR_SLOT_I3C_DEV, context);
@@ -247,10 +244,10 @@ cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *c
                                          _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_RESP_BUF_THLD, config->respQueueThld) |
                                          _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_STATUS_THLD, config->ibiQueueThld);
 
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
+        #if CY_IP_MXI3C_VERSION_MINOR == 1u
         CY_ASSERT_L2(CY_IS_I3C_IBI_DATA_THLD_VALID(config->ibiDataThld));
         I3C_CORE_QUEUE_THLD_CTRL(base) |= _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_DATA_THLD, config->ibiDataThld);
-#endif
+        #endif
 
         Cy_I3C_SetInterruptMask(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
         Cy_I3C_SetInterruptStatusMask(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
@@ -261,14 +258,14 @@ cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *c
 
     else
     {
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-        /* Setting the device operation mode to Target - 1U */
-        I3C_CORE_DEVICE_CTRL_EXTENDED(base) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET);
+        #if CY_IP_MXI3C_VERSION_MINOR == 1u
+         /* Setting the device operation mode to Target - 1U */
+         I3C_CORE_DEVICE_CTRL_EXTENDED(base) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET);
 
         /* On setting this ADAPTIVE_I2C_I3C bit, the controller generates hot-join request only when it is in/changes to I3C mode of operation. */
         I3C_CORE_DEVICE_CTRL(base) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_ADAPTIVE_I2C_I3C, config->adaptiveI2CI3C ? 1UL : 0UL);
 
-        if (0U != config->staticAddress)
+        if(0U != config->staticAddress)
         {
             I3C_CORE_DEVICE_ADDR(base) |= _VAL2FLD(I3C_CORE_DEVICE_ADDR_STATIC_ADDR, config->staticAddress) |
                                           I3C_CORE_DEVICE_ADDR_STATIC_ADDR_VALID_Msk;
@@ -281,7 +278,7 @@ cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *c
 
         I3C_CORE_TGT_PID_VALUE(base) = (uint32_t)config->pid;
 
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Intentional typecast from "unsigned 64-bit int" to narrower essential type "unsigned 32-bit int"');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Intentional typecast from "unsigned 64-bit int" to narrower essential type "unsigned 32-bit int"');
         I3C_CORE_TGT_MIPI_ID_VALUE(base) = (config->pid) >> 32UL;
 
         I3C_CORE_TGT_CHAR_CTRL(base) |= _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_MAX_DATA_SPEED_LIMIT, config->speedLimit) |
@@ -289,11 +286,11 @@ cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *c
                                         _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_DCR, config->dcr) |
                                         _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_DEVICE_ROLE, config->deviceRoleCap);
 
-        /* Note:
-            1. If this bit is set, the controller is allowed to send hot-join request intr on the bus. This bit, if set, can be set or cleared by the I3C controller
-               via ENEC or DISEC CCCs.
-            2. If this bit is set to 0, the controller will not be allowed to send hot-join request intr on the bus. The CCCs will not have any effects on this field.
-        */
+    /* Note:
+        1. If this bit is set, the controller is allowed to send hot-join request intr on the bus. This bit, if set, can be set or cleared by the I3C controller
+           via ENEC or DISEC CCCs.
+        2. If this bit is set to 0, the controller will not be allowed to send hot-join request intr on the bus. The CCCs will not have any effects on this field.
+    */
         I3C_CORE_TGT_EVENT_STATUS(base) &= (config->hotjoinEnable) ? I3C_CORE_TGT_EVENT_STATUS_HJ_EN_Msk : (~I3C_CORE_TGT_EVENT_STATUS_HJ_EN_Msk);
 
         I3C_CORE_BUS_FREE_AVAIL_TIMING(base) |=  _VAL2FLD(I3C_CORE_BUS_FREE_AVAIL_TIMING_BUS_AVAILABLE_TIME, config->busAvailTime);
@@ -304,7 +301,7 @@ cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *c
         I3C_CORE_QUEUE_THLD_CTRL(base) = _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_CMD_EMPTY_BUF_THLD, config->cmdQueueEmptyThld) |
                                          _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_RESP_BUF_THLD, config->respQueueThld);
 
-        if (CY_I3C_SECONDARY_CONTROLLER == config->deviceRoleCap) /* secondary Controller Mode */
+        if(CY_I3C_SECONDARY_CONTROLLER == config->deviceRoleCap) /* secondary Controller Mode */
         {
             Cy_I3C_SetInterruptMask(base, CY_I3C_TGT_INTR_Msk | CY_I3C_INTR_DEFTGT_STS);
             Cy_I3C_SetInterruptStatusMask(base, CY_I3C_TGT_INTR_Msk | CY_I3C_INTR_DEFTGT_STS);
@@ -319,13 +316,13 @@ cy_en_i3c_status_t Cy_I3C_Init(I3C_CORE_Type *base, cy_stc_i3c_config_t const *c
 
         context->resetMode = CY_I3C_PERIPHERAL_RESET;
         context->i3cSclRate = config->i3cSclRate;
-#endif
+        #endif
     }
 
     I3C_CORE_DATA_BUFFER_THLD_CTRL(base) = _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_BUF_THLD, config->rxBufThld) |
-                                           _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_EMPTY_BUF_THLD, config->txEmptyBufThld) |
-                                           _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_START_THLD, config->rxBufStartThld) |
-                                           _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_START_THLD, config->txBufStartThld);
+                                            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_EMPTY_BUF_THLD, config->txEmptyBufThld) |
+                                            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_START_THLD, config->rxBufStartThld) |
+                                            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_START_THLD, config->txBufStartThld);
 
     /* Config for DS wakeup restore */
     (void)memcpy(&(context->dsConfig), config, sizeof(cy_stc_i3c_config_t));
@@ -359,15 +356,15 @@ void Cy_I3C_DeInit(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 
     uint8_t index;
     context->Enabled = false;
-    if (_FLD2VAL(I3C_CTRL_ENABLED, I3C->CTRL) == 1U)
+    if(_FLD2VAL(I3C_CTRL_ENABLED, I3C->CTRL) == 1U)
     {
         Cy_I3C_Disable(base, context);
-        if (CY_I3C_TARGET != context->i3cMode)
+        if(CY_I3C_TARGET != context->i3cMode)
         {
             /* Set the address slot statuses to free */
             DeInitAddrslots(context);
 
-            for (index = 0U; (index < CY_I3C_MAX_DEVS); index++)
+            for(index = 0U; (index < CY_I3C_MAX_DEVS); index++)
             {
                 /* Clears the DAT entries */
                 Cy_I3C_WriteIntoDeviceAddressTable(base, index, 0UL);
@@ -410,7 +407,7 @@ void Cy_I3C_DeInit(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 cy_en_i3c_status_t Cy_I3C_ControllerAttachI2CDevice(I3C_CORE_Type *base, cy_stc_i2c_device_t *i2cDevice, cy_stc_i3c_context_t *context)
 {
 
-    if ((NULL == base) || (NULL == i2cDevice) || (NULL == context))
+    if((NULL == base) || (NULL == i2cDevice) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -420,7 +417,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerAttachI2CDevice(I3C_CORE_Type *base, cy_stc_
     uint8_t lvr, pos;
 
     /* Cannot add if there are already 11 devices on the bus */
-    if (CY_I3C_MAX_DEVS <= (i3cController->devCount))
+    if(CY_I3C_MAX_DEVS <= (i3cController->devCount))
     {
         return CY_I3C_CONTROLLER_MAX_DEVS_PRESENT;
     }
@@ -431,12 +428,12 @@ cy_en_i3c_status_t Cy_I3C_ControllerAttachI2CDevice(I3C_CORE_Type *base, cy_stc_
               others - reserved */
     lvr = i2cDevice->lvr;
 
-    if (CY_I3C_ADDR_SLOT_FREE != GetAaddrslotStatus(i2cDevice->staticAddress, context))
+    if( CY_I3C_ADDR_SLOT_FREE != GetAaddrslotStatus(i2cDevice->staticAddress, context))
     {
-        return CY_I3C_CONTROLLER_FREE_ADDR_UNAVIAL;
+        return CY_I3C_CONTROLLER_FREE_ADDR_UNAVAIL;
     }
     /* BROS mentions not to support devices that lack the 50ns spike filters */
-    if (0U != (CY_I3C_LVR_LEGACY_I2C_INDEX_MASK & lvr))
+    if(0U != (CY_I3C_LVR_LEGACY_I2C_INDEX_MASK & lvr))
     {
         return CY_I3C_CONTROLLER_BAD_I2C_DEVICE;
     }
@@ -455,7 +452,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerAttachI2CDevice(I3C_CORE_Type *base, cy_stc_
     Cy_I3C_UpdateI2CDevInList(i2cDevice, pos, context);
 
     /* Update the free position index of the device address table */
-    (i3cController->freePos) = ~(CY_I3C_BIT(pos));
+    (i3cController->freePos) = ~ (CY_I3C_BIT(pos));
     (i3cController->devCount)++;
     (i3cController->i2cDeviceCount)++;
 
@@ -489,7 +486,12 @@ cy_en_i3c_status_t Cy_I3C_ControllerAttachI2CDevice(I3C_CORE_Type *base, cy_stc_
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerDetachI2CDevice(I3C_CORE_Type *base, cy_stc_i2c_device_t *i2cDevice, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == i2cDevice) || (NULL == context))
+    if((NULL == base) || (NULL == i2cDevice) || (NULL == context))
+    {
+        return CY_I3C_BAD_PARAM;
+    }
+
+    if (!CY_IS_I3C_I2C_ADDRESS_VALID(i2cDevice->staticAddress))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -498,7 +500,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerDetachI2CDevice(I3C_CORE_Type *base, cy_stc_
 
     /* "devIndex" - Position of the device in the DAT which has to be detached */
     devIndex = GetI2CDevAddrPos(base, i2cDevice->staticAddress, context);
-    if (((uint32_t)CY_I3C_BAD_PARAM) == devIndex)
+    if(((uint32_t)CY_I3C_BAD_PARAM) == devIndex)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -542,7 +544,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerDetachI2CDevice(I3C_CORE_Type *base, cy_stc_
    assuming the controller treats no response as NACK after waiting for a decent amount of time */
 cy_en_i3c_status_t Cy_I3C_ControllerAttachI3CDevice(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cDevice, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == i3cDevice) || (NULL == context))
+    if((NULL == base) || (NULL == i3cDevice) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -555,21 +557,21 @@ cy_en_i3c_status_t Cy_I3C_ControllerAttachI3CDevice(I3C_CORE_Type *base, cy_stc_
     cy_stc_i3c_ccc_payload_t payload;
 
     /* Cannot add if there are already 11 devices on the bus */
-    if (CY_I3C_MAX_DEVS <= (i3cController->devCount))
+    if(CY_I3C_MAX_DEVS <= (i3cController->devCount))
     {
         return CY_I3C_CONTROLLER_MAX_DEVS_PRESENT;
     }
 
-    if (0U != i3cDevice->dynamicAddress)
+    if(0U != i3cDevice->dynamicAddress)
     {
         /* The I3C device has an expected dynamic address */
 
         /* check if the expected dynamic address is available to be assigned */
         /* If not available, return */
 
-        if (CY_I3C_ADDR_SLOT_FREE != GetAaddrslotStatus(i3cDevice->dynamicAddress, context))
+        if(CY_I3C_ADDR_SLOT_FREE != GetAaddrslotStatus(i3cDevice->dynamicAddress, context))
         {
-            return CY_I3C_CONTROLLER_FREE_ADDR_UNAVIAL;
+            return CY_I3C_CONTROLLER_FREE_ADDR_UNAVAIL;
         }
 
         dynamicAddress = i3cDevice->dynamicAddress;
@@ -579,7 +581,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerAttachI3CDevice(I3C_CORE_Type *base, cy_stc_
     {
         /* If the Target device doesn't have an expected dynamic address, pick a free address from the list */
         retStatus = Cy_I3C_ControllerGetFreeDeviceAddress(base, &dynamicAddress, context);
-        if (CY_I3C_CONTROLLER_FREE_ADDR_UNAVIAL == retStatus)
+        if(CY_I3C_CONTROLLER_FREE_ADDR_UNAVAIL == retStatus)
         {
             return retStatus;
         }
@@ -595,6 +597,12 @@ cy_en_i3c_status_t Cy_I3C_ControllerAttachI3CDevice(I3C_CORE_Type *base, cy_stc_
     cmd.cmd = (uint8_t)CY_I3C_CCC_SETDASA;
     cmd.address = i3cDevice->staticAddress;
     retStatus = Cy_I3C_SetDASA(base, &cmd, context);
+
+    /* Set the new dynamic address if the device does not have an expected dynamic address */
+    if ((CY_I3C_SUCCESS == retStatus) && (0U == i3cDevice->dynamicAddress))
+    {
+        i3cDevice->dynamicAddress = dynamicAddress;
+    }
 
     return retStatus;
 
@@ -625,7 +633,12 @@ cy_en_i3c_status_t Cy_I3C_ControllerAttachI3CDevice(I3C_CORE_Type *base, cy_stc_
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerDetachI3CDevice(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cDevice, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == i3cDevice) || (NULL == context))
+    if((NULL == base) || (NULL == i3cDevice) || (NULL == context))
+    {
+        return CY_I3C_BAD_PARAM;
+    }
+
+    if (0U == i3cDevice->dynamicAddress)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -636,7 +649,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerDetachI3CDevice(I3C_CORE_Type *base, cy_stc_
     cy_stc_i3c_ccc_payload_t payload;
 
     devIndex = GetI3CDevAddrPos(base, i3cDevice->dynamicAddress, context);
-    if (((uint32_t)CY_I3C_BAD_PARAM) == devIndex)
+    if(((uint32_t)CY_I3C_BAD_PARAM) == devIndex)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -648,14 +661,13 @@ cy_en_i3c_status_t Cy_I3C_ControllerDetachI3CDevice(I3C_CORE_Type *base, cy_stc_
     cccCmd.data->len = 0U;
 
     retstatus = rstdaa_ccc(base, &cccCmd, context);
-    if (CY_I3C_SUCCESS != retstatus)
+    if(CY_I3C_SUCCESS != retstatus)
     {
         return retstatus;
     }
 
     RearrangeAddrTable(base, (uint8_t)devIndex, context);
 
-    context->i3cController.devCount--;
     SetAddrslotStatus((i3cDevice->dynamicAddress), CY_I3C_ADDR_SLOT_FREE, context);
 
     return CY_I3C_SUCCESS;
@@ -690,11 +702,9 @@ void Cy_I3C_Enable(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
     {
         /* wait till the enable is completed */
         retStatus = I3C_Check_Timeout(&timeout);
-    }
-    while (retStatus == CY_I3C_SUCCESS && (_FLD2VAL(I3C_CORE_DEVICE_CTRL_ENABLE, I3C_CORE_DEVICE_CTRL(base))) != 1U);
+    }while(retStatus == CY_I3C_SUCCESS && (_FLD2VAL(I3C_CORE_DEVICE_CTRL_ENABLE, I3C_CORE_DEVICE_CTRL(base))) != 1U);
 #else
-    if (I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET == _FLD2VAL(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED(base)))
-    {
+    if(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET == _FLD2VAL(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED(base))){
         base->EXT_TX_DATA_PORT_2 = _VAL2FLD(I3C_CORE_EXT_TX_DATA_PORT_2_EXT_TX_DATA_PORT_2, 0x80U);
         base->EXT_TX_DATA_PORT_3 = _VAL2FLD(I3C_CORE_EXT_TX_DATA_PORT_3_EXT_TX_DATA_PORT_3, 0x80U);
         base->EXT_CMD_REG_2 |= _VAL2FLD(I3C_CORE_EXT_CMD_REG_3_DL_LSB, 1U) | _VAL2FLD(I3C_CORE_EXT_CMD_REG_3_DEFINING_BYTE, 0U) | _VAL2FLD(I3C_CORE_EXT_CMD_REG_3_CCC_TYPE, CY_I3C_CCC_RSTACT(false));
@@ -743,8 +753,7 @@ void Cy_I3C_Disable(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
     {
         /* wait till the disable is completed */
         retStatus = I3C_Check_Timeout(&timeout);
-    }
-    while (retStatus == CY_I3C_SUCCESS && (_FLD2VAL(I3C_CORE_DEVICE_CTRL_ENABLE, I3C_CORE_DEVICE_CTRL(base))) != 0U);
+    }while(retStatus == CY_I3C_SUCCESS && (_FLD2VAL(I3C_CORE_DEVICE_CTRL_ENABLE, I3C_CORE_DEVICE_CTRL(base))) != 0U);
 }
 
 
@@ -802,7 +811,7 @@ void Cy_I3C_Resume(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 *******************************************************************************/
 uint32_t Cy_I3C_GetI2CDeviceCount(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return (uint32_t)CY_I3C_BAD_PARAM;
     }
@@ -835,7 +844,7 @@ uint32_t Cy_I3C_GetI2CDeviceCount(I3C_CORE_Type *base, cy_stc_i3c_context_t *con
 *******************************************************************************/
 uint32_t Cy_I3C_GetI3CDeviceCount(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return (uint32_t)CY_I3C_BAD_PARAM;
     }
@@ -843,7 +852,7 @@ uint32_t Cy_I3C_GetI3CDeviceCount(I3C_CORE_Type *base, cy_stc_i3c_context_t *con
     /* Suppress a compiler warning about unused variables */
     (void) base;
 
-    return ((context->i3cController.devCount) - (context->i3cController.i2cDeviceCount));
+    return ((context->i3cController.devCount)-(context->i3cController.i2cDeviceCount));
 }
 
 
@@ -857,7 +866,9 @@ uint32_t Cy_I3C_GetI3CDeviceCount(I3C_CORE_Type *base, cy_stc_i3c_context_t *con
 * The pointer to the I3C instance.
 *
 * \param i2cDeviceList
-* The pointer to the I2C device list array.
+* The pointer to the I2C device list array. This will be updated with information about all of the I2C devices on the
+* bus. This array must be at least \ref Cy_I3C_GetI2CDeviceCount entries long
+* \note Only the first \ref Cy_I3C_GetI2CDeviceCount elements will be updated; the remaining elements will be left uninitialized.
 *
 * \param context
 * The pointer to the context structure \ref cy_stc_i3c_context_t allocated
@@ -871,7 +882,7 @@ uint32_t Cy_I3C_GetI3CDeviceCount(I3C_CORE_Type *base, cy_stc_i3c_context_t *con
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerGetI2CDevices(I3C_CORE_Type *base, cy_stc_i2c_device_t *i2cDeviceList, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == i2cDeviceList) || (NULL == context))
+    if((NULL == base) || (NULL == i2cDeviceList) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -880,9 +891,9 @@ cy_en_i3c_status_t Cy_I3C_ControllerGetI2CDevices(I3C_CORE_Type *base, cy_stc_i2
     uint8_t index;
     cy_stc_i3c_controller_devlist_t *ptr = context->devList;
 
-    for (index = 0U; index < i3cController->devCount; index++)
+    for(index = 0U; index < i3cController->devCount; index++)
     {
-        if (ptr->i2c)
+        if(ptr->i2c)
         {
             *i2cDeviceList = ptr->i2cDevice;
             i2cDeviceList++;
@@ -903,7 +914,9 @@ cy_en_i3c_status_t Cy_I3C_ControllerGetI2CDevices(I3C_CORE_Type *base, cy_stc_i2
 * The pointer to the I3C instance.
 *
 * \param i3cDeviceList
-* The pointer to the I3C device list array.
+* The pointer to the I3C device list array. This will be updated with information about all of the I3C devices on the
+* bus. This array must be at least \ref Cy_I3C_GetI3CDeviceCount entries long.
+* \note Only the first \ref Cy_I3C_GetI3CDeviceCount elements will be updated; the remaining elements will be left uninitialized.
 *
 * \param context
 * The pointer to the context structure \ref cy_stc_i3c_context_t allocated
@@ -917,7 +930,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerGetI2CDevices(I3C_CORE_Type *base, cy_stc_i2
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerGetI3CDevices(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cDeviceList, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == i3cDeviceList) || (NULL == context))
+    if((NULL == base) || (NULL == i3cDeviceList) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -927,9 +940,9 @@ cy_en_i3c_status_t Cy_I3C_ControllerGetI3CDevices(I3C_CORE_Type *base, cy_stc_i3
     cy_stc_i3c_controller_devlist_t *ptr = context->devList;
     count = (uint8_t)(i3cController->devCount);
 
-    for (index = 0U; index < count; index++)
+    for(index = 0U; index < count; index++)
     {
-        if (!ptr->i2c)
+        if(!ptr->i2c)
         {
             *i3cDeviceList = ptr->i3cDevice;
             i3cDeviceList++;
@@ -964,7 +977,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerGetI3CDevices(I3C_CORE_Type *base, cy_stc_i3
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerGetFreeDeviceAddress(I3C_CORE_Type *base, uint8_t *address, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == address) || (NULL == context))
+    if((NULL == base) || (NULL == address) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -974,10 +987,10 @@ cy_en_i3c_status_t Cy_I3C_ControllerGetFreeDeviceAddress(I3C_CORE_Type *base, ui
     uint8_t freeAddress;
     uint8_t startAddress = (i3cController->lastAddress) + 1U;
 
-    for (freeAddress = startAddress; freeAddress < CY_I3C_MAX_ADDR; freeAddress++)
+    for(freeAddress = startAddress; freeAddress < CY_I3C_MAX_ADDR; freeAddress++)
     {
         status = GetAaddrslotStatus(freeAddress, context);
-        if (CY_I3C_ADDR_SLOT_FREE == status)
+        if(CY_I3C_ADDR_SLOT_FREE == status)
         {
             *address = freeAddress;
             return CY_I3C_SUCCESS;
@@ -985,17 +998,17 @@ cy_en_i3c_status_t Cy_I3C_ControllerGetFreeDeviceAddress(I3C_CORE_Type *base, ui
     }
 
     /* case when a device is detached from the bus and the address is available */
-    for (freeAddress = 1U; freeAddress < startAddress; freeAddress++)
+    for(freeAddress = 1U; freeAddress < startAddress; freeAddress++)
     {
         status = GetAaddrslotStatus(freeAddress, context);
-        if (CY_I3C_ADDR_SLOT_FREE == status)
+        if(CY_I3C_ADDR_SLOT_FREE == status)
         {
             *address = freeAddress;
             return CY_I3C_SUCCESS;
         }
     }
 
-    return CY_I3C_CONTROLLER_FREE_ADDR_UNAVIAL;
+    return CY_I3C_CONTROLLER_FREE_ADDR_UNAVAIL;
 }
 
 
@@ -1012,7 +1025,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerGetFreeDeviceAddress(I3C_CORE_Type *base, ui
 * The CCC command to be checked.
 *
 * \return
-* ture: If the specified command is supported
+* true: If the specified command is supported
 * false: If the specified command is not supported.
 *
 *******************************************************************************/
@@ -1023,53 +1036,53 @@ bool Cy_I3C_isCCCCmdSupported(I3C_CORE_Type *base, uint8_t cccCmd)
     (void) base;
     bool ret = false;
 
-    switch (cccCmd)
-    {
-    case CY_I3C_CCC_ENEC(true):
-    case CY_I3C_CCC_ENEC(false):
-    case CY_I3C_CCC_DISEC(true):
-    case CY_I3C_CCC_DISEC(false):
-    case CY_I3C_CCC_ENTAS(0U, true):
-    case CY_I3C_CCC_ENTAS(0U, false):
-    case CY_I3C_CCC_RSTDAA(true):
-    case CY_I3C_CCC_RSTDAA(false):
-    case CY_I3C_CCC_ENTDAA:
-    case CY_I3C_CCC_SETAASA:
-    case CY_I3C_CCC_SETMWL(true):
-    case CY_I3C_CCC_SETMWL(false):
-    case CY_I3C_CCC_SETMRL(true):
-    case CY_I3C_CCC_SETMRL(false):
-    case CY_I3C_CCC_SETXTIME(false):
-    case CY_I3C_CCC_SETXTIME(true):
-    case CY_I3C_CCC_GETXTIME:
-    case CY_I3C_CCC_ENTHDR(0U):
-    case CY_I3C_CCC_SETDASA:
-    case CY_I3C_CCC_SETNEWDA:
-    case CY_I3C_CCC_GETMWL:
-    case CY_I3C_CCC_GETMRL:
-    case CY_I3C_CCC_GETPID:
-    case CY_I3C_CCC_GETBCR:
-    case CY_I3C_CCC_GETDCR:
-    case CY_I3C_CCC_GETSTATUS:
-    case CY_I3C_CCC_GETMXDS:
-    case CY_I3C_CCC_GETHDRCAP:
-    case CY_I3C_CCC_GETACCCR:
-    case CY_I3C_CCC_ENDXFER(true):
-    case CY_I3C_CCC_ENDXFER(false):
-    case CY_I3C_CCC_DEFTGTS:
-    case CY_I3C_CCC_RSTACT(true):
-    case CY_I3C_CCC_RSTACT(false):
-    case CY_I3C_CCC_DEVCTRL:
-    {
-        ret = true;
-        break;
-    }
-    default:
-    {
-        ret = false;
-        break;
-    }
-    }
+    switch(cccCmd)
+        {
+            case CY_I3C_CCC_ENEC(true):
+            case CY_I3C_CCC_ENEC(false):
+            case CY_I3C_CCC_DISEC(true):
+            case CY_I3C_CCC_DISEC(false):
+            case CY_I3C_CCC_ENTAS(0U, true):
+            case CY_I3C_CCC_ENTAS(0U, false):
+            case CY_I3C_CCC_RSTDAA(true):
+            case CY_I3C_CCC_RSTDAA(false):
+            case CY_I3C_CCC_ENTDAA:
+            case CY_I3C_CCC_SETAASA:
+            case CY_I3C_CCC_SETMWL(true):
+            case CY_I3C_CCC_SETMWL(false):
+            case CY_I3C_CCC_SETMRL(true):
+            case CY_I3C_CCC_SETMRL(false):
+            case CY_I3C_CCC_SETXTIME(false):
+            case CY_I3C_CCC_SETXTIME(true):
+            case CY_I3C_CCC_GETXTIME:
+            case CY_I3C_CCC_ENTHDR(0U):
+            case CY_I3C_CCC_SETDASA:
+            case CY_I3C_CCC_SETNEWDA:
+            case CY_I3C_CCC_GETMWL:
+            case CY_I3C_CCC_GETMRL:
+            case CY_I3C_CCC_GETPID:
+            case CY_I3C_CCC_GETBCR:
+            case CY_I3C_CCC_GETDCR:
+            case CY_I3C_CCC_GETSTATUS:
+            case CY_I3C_CCC_GETMXDS:
+            case CY_I3C_CCC_GETHDRCAP:
+            case CY_I3C_CCC_GETACCCR:
+            case CY_I3C_CCC_ENDXFER(true):
+            case CY_I3C_CCC_ENDXFER(false):
+            case CY_I3C_CCC_DEFTGTS:
+            case CY_I3C_CCC_RSTACT(true):
+            case CY_I3C_CCC_RSTACT(false):
+            case CY_I3C_CCC_DEVCTRL:
+            {
+                ret = true;
+                break;
+            }
+            default:
+            {
+                ret = false;
+                break;
+            }
+        }
     return ret;
 }
 
@@ -1098,7 +1111,7 @@ bool Cy_I3C_isCCCCmdSupported(I3C_CORE_Type *base, uint8_t cccCmd)
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_SendCCCCmd(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *cccCmd, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == cccCmd) || (NULL == context))
+    if((NULL == base) || (NULL == cccCmd) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -1106,134 +1119,134 @@ cy_en_i3c_status_t Cy_I3C_SendCCCCmd(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
     cy_en_i3c_status_t retStatus;
 
     context->controllerStatus = CY_I3C_CONTROLLER_BUSY;
-    switch (cccCmd->cmd)
+    switch(cccCmd->cmd)
     {
-    case CY_I3C_CCC_ENEC(true):
-    case CY_I3C_CCC_ENEC(false):
-    case CY_I3C_CCC_DISEC(true):
-    case CY_I3C_CCC_DISEC(false):
-    {
-        retStatus = enec_disec_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_RSTDAA(true):
-    case CY_I3C_CCC_RSTDAA(false):
-    {
-        retStatus = rstdaa_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_SETMWL(true):
-    case CY_I3C_CCC_SETMWL(false):
-    case CY_I3C_CCC_SETMRL(true):
-    case CY_I3C_CCC_SETMRL(false):
-    {
-        retStatus = setmrwl_ccc(base, cccCmd, context);
-        break;
-    }
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-    case CY_I3C_CCC_SETXTIME(true):
-    case CY_I3C_CCC_SETXTIME(false):
-    {
-        retStatus = setxtime_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_GETXTIME:
-    {
-        retStatus = getxtime_ccc(base, cccCmd, context);
-        break;
-    }
-#endif
-    case CY_I3C_CCC_SETNEWDA:
-    {
-        retStatus = setnewda_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_GETMWL:
-    case CY_I3C_CCC_GETMRL:
-    {
-        retStatus = getmrwl_ccc(base, cccCmd, context);
-        break;
-    }
+        case CY_I3C_CCC_ENEC(true):
+        case CY_I3C_CCC_ENEC(false):
+        case CY_I3C_CCC_DISEC(true):
+        case CY_I3C_CCC_DISEC(false):
+            {
+                retStatus = enec_disec_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_RSTDAA(true):
+        case CY_I3C_CCC_RSTDAA(false):
+            {
+                retStatus = rstdaa_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_SETMWL(true):
+        case CY_I3C_CCC_SETMWL(false):
+        case CY_I3C_CCC_SETMRL(true):
+        case CY_I3C_CCC_SETMRL(false):
+            {
+                retStatus = setmrwl_ccc(base, cccCmd, context);
+                break;
+            }
+        #if CY_IP_MXI3C_VERSION_MINOR == 1u
+        case CY_I3C_CCC_SETXTIME(true):
+        case CY_I3C_CCC_SETXTIME(false):
+            {
+                retStatus = setxtime_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_GETXTIME:
+            {
+                retStatus = getxtime_ccc(base, cccCmd, context);
+                break;
+            }
+        #endif
+        case CY_I3C_CCC_SETNEWDA:
+            {
+                retStatus = setnewda_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_GETMWL:
+        case CY_I3C_CCC_GETMRL:
+            {
+                retStatus = getmrwl_ccc(base, cccCmd, context);
+                break;
+            }
 
-    case CY_I3C_CCC_GETPID:
-    {
-        retStatus = getpid_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_GETBCR:
-    {
-        retStatus = getbcr_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_GETDCR:
-    {
-        retStatus = getdcr_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_GETSTATUS:
-    {
-        retStatus = getstatus_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_GETMXDS:
-    {
-        retStatus = getmxds_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_GETHDRCAP:
-    {
-        retStatus = gethdrcap_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_ENTAS(0U, true):
-    case CY_I3C_CCC_ENTAS(0U, false):
-    case CY_I3C_CCC_ENTAS(1U, true):
-    case CY_I3C_CCC_ENTAS(1U, false):
-    case CY_I3C_CCC_ENTAS(2U, true):
-    case CY_I3C_CCC_ENTAS(2U, false):
-    case CY_I3C_CCC_ENTAS(3U, true):
-    case CY_I3C_CCC_ENTAS(3U, false):
-    {
-        retStatus = entas_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_ENTHDR(0U):
-    {
-        retStatus = enthdr0_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_GETACCCR:
-    {
-        retStatus = getacccr_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_DEFTGTS:
-    {
-        retStatus = deftgts_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_RSTACT(true):
-    case CY_I3C_CCC_RSTACT(false):
-    {
-        retStatus = rstact_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_ENDXFER(true):
-    case CY_I3C_CCC_ENDXFER(false):
-    {
-        retStatus = endxfer_ccc(base, cccCmd, context);
-        break;
-    }
-    case CY_I3C_CCC_DEVCTRL:
-    {
-        retStatus = devctrl_ccc(base, cccCmd, context);
-        break;
-    }
-    default:
-    {
-        retStatus = CY_I3C_CONTROLLER_CCC_NOT_SUPPORTED;
-        break;
-    }
+        case CY_I3C_CCC_GETPID:
+            {
+                retStatus = getpid_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_GETBCR:
+            {
+                retStatus = getbcr_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_GETDCR:
+            {
+                retStatus = getdcr_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_GETSTATUS:
+            {
+                retStatus = getstatus_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_GETMXDS:
+            {
+                retStatus = getmxds_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_GETHDRCAP:
+            {
+                retStatus = gethdrcap_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_ENTAS(0U, true):
+        case CY_I3C_CCC_ENTAS(0U, false):
+        case CY_I3C_CCC_ENTAS(1U, true):
+        case CY_I3C_CCC_ENTAS(1U, false):
+        case CY_I3C_CCC_ENTAS(2U, true):
+        case CY_I3C_CCC_ENTAS(2U, false):
+        case CY_I3C_CCC_ENTAS(3U, true):
+        case CY_I3C_CCC_ENTAS(3U, false):
+            {
+                retStatus = entas_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_ENTHDR(0U):
+            {
+                retStatus = enthdr0_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_GETACCCR:
+            {
+                retStatus = getacccr_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_DEFTGTS:
+            {
+                retStatus = deftgts_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_RSTACT(true):
+        case CY_I3C_CCC_RSTACT(false):
+            {
+                retStatus = rstact_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_ENDXFER(true):
+        case CY_I3C_CCC_ENDXFER(false):
+            {
+                retStatus = endxfer_ccc(base, cccCmd, context);
+                break;
+            }
+        case CY_I3C_CCC_DEVCTRL:
+            {
+                retStatus = devctrl_ccc(base, cccCmd, context);
+                break;
+            }
+        default:
+            {
+                retStatus = CY_I3C_CONTROLLER_CCC_NOT_SUPPORTED;
+                break;
+            }
     }
 
     context->controllerStatus &= (~CY_I3C_CONTROLLER_BUSY);
@@ -1265,7 +1278,7 @@ cy_en_i3c_status_t Cy_I3C_SendCCCCmd(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_DisableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cDevice, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == i3cDevice) || (NULL == context))
+    if((NULL == base) || (NULL == i3cDevice) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -1275,16 +1288,16 @@ cy_en_i3c_status_t Cy_I3C_DisableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_devic
     cy_stc_i3c_ccc_payload_t payload;
 
     retStatus = CCCTargetAddressValidation(i3cDevice->dynamicAddress, true, context);
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
-#if CY_IP_MXI3C_VERSION_MINOR == 0u
+    #if CY_IP_MXI3C_VERSION_MINOR == 0u
     uint32_t bitpos = CY_I3C_IBI_TIR_REQ_ID(i3cDevice->dynamicAddress);
     I3C_CORE_IBI_TIR_REQ_REJECT(base) |= ((1UL) << bitpos); /* Setting the corresponding bit to 1: 1 -> Nack the TIR from the corresponding device */
     I3C_CORE_IBI_CR_REQ_REJECT(base) |= ((1UL) << bitpos); /* Setting the corresponding bit to 1: 1 -> Nack the MR from the corresponding device */
-#else
+    #else
 
     uint32_t value;
     uint8_t pos = (GetI3CDevAddrPos(base, i3cDevice->dynamicAddress, context));
@@ -1293,7 +1306,7 @@ cy_en_i3c_status_t Cy_I3C_DisableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_devic
     value |= (I3C_CORE_DEV_ADDR_TABLE_LOC1_TIR_REJECT_Msk | I3C_CORE_DEV_ADDR_TABLE_LOC1_CR_REJECT_Msk);
     Cy_I3C_WriteIntoDeviceAddressTable(base, pos, value);
 
-#endif
+    #endif
 
     /* Sending ENEC command */
     i3cCccENEC.events = (uint8_t)(CY_I3C_CCC_EVENT_SIR | CY_I3C_CCC_EVENT_MR);
@@ -1332,7 +1345,7 @@ cy_en_i3c_status_t Cy_I3C_DisableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_devic
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_EnableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cDevice, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == i3cDevice) || (NULL == context))
+    if((NULL == base) || (NULL == i3cDevice) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -1342,16 +1355,16 @@ cy_en_i3c_status_t Cy_I3C_EnableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_device
     cy_stc_i3c_ccc_payload_t payload;
 
     retStatus = CCCTargetAddressValidation(i3cDevice->dynamicAddress, true, context);
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
-#if CY_IP_MXI3C_VERSION_MINOR == 0u
+    #if CY_IP_MXI3C_VERSION_MINOR == 0u
     uint32_t bitpos = CY_I3C_IBI_TIR_REQ_ID(i3cDevice->dynamicAddress);
     I3C_CORE_IBI_TIR_REQ_REJECT(base) &= ~((1UL) << bitpos); /* Setting the corresponding bit to 0: 0 -> Ack the TIR from the corresponding device */
     I3C_CORE_IBI_CR_REQ_REJECT(base) &= ~((1UL) << bitpos); /* Setting the corresponding bit to 0: 0 -> Ack the MR from the corresponding device */
-#else
+    #else
 
     uint32_t value;
     uint8_t pos = (GetI3CDevAddrPos(base, i3cDevice->dynamicAddress, context));
@@ -1359,7 +1372,7 @@ cy_en_i3c_status_t Cy_I3C_EnableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_device
     value &= ~(I3C_CORE_DEV_ADDR_TABLE_LOC1_TIR_REJECT_Msk | I3C_CORE_DEV_ADDR_TABLE_LOC1_CR_REJECT_Msk);
     Cy_I3C_WriteIntoDeviceAddressTable(base, pos, value);
 
-#endif
+    #endif
 
     /* Sending DISEC command */
     i3cCccENEC.events = (uint8_t)(CY_I3C_CCC_EVENT_SIR | CY_I3C_CCC_EVENT_MR);
@@ -1402,7 +1415,7 @@ cy_en_i3c_status_t Cy_I3C_EnableDeviceIbi(I3C_CORE_Type *base, cy_stc_i3c_device
 *******************************************************************************/
 uint32_t Cy_I3C_SetDataRate(I3C_CORE_Type *base, uint32_t dataRateHz, uint32_t i3cClockHz, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return (uint32_t)CY_I3C_BAD_PARAM;
     }
@@ -1412,7 +1425,7 @@ uint32_t Cy_I3C_SetDataRate(I3C_CORE_Type *base, uint32_t dataRateHz, uint32_t i
 
     uint32_t i3cClockPeriod; /* in nanoSeconds */
     uint32_t resDataRate;
-    uint8_t hcnt, lcnt, lcnt_min;
+    uint8_t hcnt,lcnt,lcnt_min;
 
     /* CY_I3C_DIV_ROUND_UP - quotient will be rounded to the next number in non-integer cases */
     i3cClockPeriod = CY_I3C_DIV_ROUND_UP(1000000000U, i3cClockHz); /* time period in nanoseconds */
@@ -1424,32 +1437,26 @@ uint32_t Cy_I3C_SetDataRate(I3C_CORE_Type *base, uint32_t dataRateHz, uint32_t i
         hcnt = CY_I3C_SCL_I3C_TIMING_CNT_MIN;
     }
 
-    if ((CY_I3C_DIV_ROUND_UP(i3cClockHz, dataRateHz) - hcnt) < (uint32_t)CY_I3C_SCL_I3C_TIMING_CNT_MIN)
-    {
+    if ((CY_I3C_DIV_ROUND_UP(i3cClockHz, dataRateHz) - hcnt) < (uint32_t)CY_I3C_SCL_I3C_TIMING_CNT_MIN){
         lcnt = CY_I3C_SCL_I3C_TIMING_CNT_MIN;
-    }
-    else
-    {
+    }else{
         lcnt = (uint8_t)(CY_I3C_DIV_ROUND_UP(i3cClockHz, dataRateHz) - hcnt);
     }
 
-    resDataRate = CY_I3C_DIV_ROUND_UP(1000000000U, (((uint32_t)hcnt + (uint32_t)lcnt) * i3cClockPeriod));
+    resDataRate = CY_I3C_DIV_ROUND_UP(1000000000U,(((uint32_t)hcnt + (uint32_t)lcnt) * i3cClockPeriod));
 
     I3C_CORE_SCL_I3C_PP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_HCNT, hcnt) |
-                                       _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_LCNT, lcnt);
+                                      _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_LCNT, lcnt);
 
     lcnt_min = (uint8_t)(CY_I3C_DIV_ROUND_UP(CY_I3C_BUS_TLOW_OD_MIN_NS, i3cClockPeriod)); /*minimum required lcnt value.*/
-    if ((CY_I3C_DIV_ROUND_UP(i3cClockHz, context->openDrainSclRate) - hcnt) < (uint32_t)lcnt_min)
-    {
+    if ((CY_I3C_DIV_ROUND_UP(i3cClockHz, context->openDrainSclRate) - hcnt) < (uint32_t)lcnt_min){
         lcnt = lcnt_min;
-    }
-    else
-    {
+    }else{
         lcnt = (uint8_t)(CY_I3C_DIV_ROUND_UP(i3cClockHz, context->openDrainSclRate) - hcnt);
     }
 
     I3C_CORE_SCL_I3C_OD_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_HCNT, hcnt) |
-                                       _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_LCNT, lcnt);
+                                      _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_LCNT, lcnt);
 
     I3C_CORE_BUS_FREE_AVAIL_TIMING(base) = _VAL2FLD(I3C_CORE_BUS_FREE_AVAIL_TIMING_BUS_FREE_TIME, lcnt);
 
@@ -1462,7 +1469,7 @@ uint32_t Cy_I3C_SetDataRate(I3C_CORE_Type *base, uint32_t dataRateHz, uint32_t i
     lcnt = (uint8_t)(CY_I3C_DIV_ROUND_UP(i3cClockHz, CY_I3C_SDR4_DATA_RATE) - hcnt);
     I3C_CORE_SCL_EXT_LCNT_TIMING(base) |= _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_4, lcnt);
 
-    if (CY_I3C_BUS_PURE != context->i3cBusMode)
+    if(CY_I3C_BUS_PURE != context->i3cBusMode)
     {
         /* Mixed mode bus */
         lcnt = (uint8_t)(CY_I3C_DIV_ROUND_UP(CY_I3C_BUS_I2C_FMP_TLOW_MIN_NS, i3cClockPeriod));
@@ -1475,7 +1482,7 @@ uint32_t Cy_I3C_SetDataRate(I3C_CORE_Type *base, uint32_t dataRateHz, uint32_t i
         hcnt = ((uint8_t)CY_I3C_DIV_ROUND_UP(i3cClockHz, CY_I3C_I2C_FM_DATA_RATE) - lcnt);
 
         I3C_CORE_SCL_I2C_FM_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_HCNT, hcnt) |
-                                           _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_LCNT, lcnt);
+                                            _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_LCNT, lcnt);
 
         /* Configure the BUS_FREE_AVAIL_TIMING register with lcnt from Fast-Mode */
         I3C_CORE_BUS_FREE_AVAIL_TIMING(base) = _VAL2FLD(I3C_CORE_BUS_FREE_AVAIL_TIMING_BUS_FREE_TIME, lcnt);
@@ -1510,7 +1517,7 @@ uint32_t Cy_I3C_SetDataRate(I3C_CORE_Type *base, uint32_t dataRateHz, uint32_t i
 *******************************************************************************/
 uint32_t Cy_I3C_GetDataRate(I3C_CORE_Type const *base, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return (uint32_t)CY_I3C_BAD_PARAM;
     }
@@ -1544,7 +1551,7 @@ bool Cy_I3C_IsBusBusy(I3C_CORE_Type const *base)
 
     retStatus = I3C_CORE_PRESENT_STATE(base) & I3C_CORE_PRESENT_STATE_CM_TFR_STS_Msk;
 
-    if (0UL == retStatus)
+    if(0UL == retStatus)
     {
         return false;
     }
@@ -1573,7 +1580,7 @@ bool  Cy_I3C_IsController(I3C_CORE_Type const *base)
 
     uint32_t value = _FLD2VAL(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED(base));
 
-    if (I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET == value)
+    if(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET == value)
     {
         return false;
     }
@@ -1606,7 +1613,7 @@ cy_en_i3c_mode_t Cy_I3C_GetMode(I3C_CORE_Type const *base)
     mode = I3C_CORE_DEVICE_CTRL_EXTENDED(base);
     mode = _FLD2VAL(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, mode);
 
-    if (I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET == mode)
+    if(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET == mode)
     {
         return CY_I3C_TARGET;
     }
@@ -1643,7 +1650,7 @@ cy_en_i3c_mode_t Cy_I3C_GetMode(I3C_CORE_Type const *base)
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerWrite(I3C_CORE_Type *base, cy_stc_i3c_controller_xfer_config_t *xferConfig, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == xferConfig) || (NULL == context))
+    if((NULL == base) || (NULL == xferConfig) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -1651,7 +1658,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerWrite(I3C_CORE_Type *base, cy_stc_i3c_contro
     CY_ASSERT_L1(CY_IS_I3C_BUFFER_VALID(xferConfig->buffer, xferConfig->bufferSize));
     CY_ASSERT_L2(CY_IS_I3C_ADDR_VALID(xferConfig->targetAddress));
 
-    if (CY_I3C_FIFO_SIZE < xferConfig->bufferSize)
+    if(CY_I3C_FIFO_SIZE < xferConfig->bufferSize)
     {
         return CY_I3C_BAD_BUFFER_SIZE;
     }
@@ -1659,7 +1666,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerWrite(I3C_CORE_Type *base, cy_stc_i3c_contro
     cy_en_i3c_status_t retStatus = CY_I3C_CONTROLLER_NOT_READY;
     uint32_t timeout = MAX_I3C_TRANSACTION_TIMEOUT;
 
-    if (0UL != (CY_I3C_IDLE_MASK & context->state))
+    if(0UL != (CY_I3C_IDLE_MASK & context->state))
     {
         uint8_t validBytes;
         cy_en_i3c_addr_slot_status_t res;
@@ -1687,28 +1694,26 @@ cy_en_i3c_status_t Cy_I3C_ControllerWrite(I3C_CORE_Type *base, cy_stc_i3c_contro
         {
             /* wait till the reset is completed */
             retStatus = I3C_Check_Timeout(&timeout);
-        }
-        while (retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+        }while(retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
-        if (retStatus == CY_I3C_TIMEOUT)
-        {
+        if (retStatus == CY_I3C_TIMEOUT){
             return retStatus;
         }
 
         res = GetAaddrslotStatus(xferConfig->targetAddress, context);
 
         /* This helps to check if the device is actively present on the bus */
-        if ((CY_I3C_ADDR_SLOT_I3C_DEV != res) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
+        if((CY_I3C_ADDR_SLOT_I3C_DEV != res ) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
         {
             return CY_I3C_BAD_PARAM;
         }
 
-        if (CY_I3C_ADDR_SLOT_I2C_DEV == res)
+        if(CY_I3C_ADDR_SLOT_I2C_DEV == res)
         {
             /* The target device is an i2cDevice */
             pos = (uint8_t)(GetI2CDevAddrPos(base, xferConfig->targetAddress, context));
             i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-            writeDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C : CY_I3C_FMP_I2C);
+            writeDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C: CY_I3C_FMP_I2C);
             context->controllerStatus |= CY_I3C_CONTROLLER_I2C_SDR_WR_XFER;
         }
 
@@ -1717,65 +1722,57 @@ cy_en_i3c_status_t Cy_I3C_ControllerWrite(I3C_CORE_Type *base, cy_stc_i3c_contro
             /* The target is an i3cDevice */
             pos = (uint8_t)(GetI3CDevAddrPos(base, xferConfig->targetAddress, context));
             i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-            if (CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk == (i3cDeviceList->i3cDevice.bcr))
+            if(CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk == (i3cDeviceList->i3cDevice.bcr))
             {
                 writeDSMode = (i3cDeviceList->i3cDevice.maxWriteDs) & 0x07U;
             }
             context->controllerStatus |= CY_I3C_CONTROLLER_I3C_SDR_WR_XFER;
         }
 
-        switch (xferConfig->bufferSize)
+        switch(xferConfig->bufferSize)
         {
-        case 1UL:
-        {
-            validBytes = CY_I3C_BYTE_STROBE1;
-            cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0, *data);
-            context->controllerBufferSize -= 1U;
-            cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk |
-                          I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
-            break;
-        }
-        case 2UL:
-        {
-            validBytes = CY_I3C_BYTE_STROBE2;
-            cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0, *(data)) |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_1, *(data + 1U));
-            context->controllerBufferSize -= 2U;
-            cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk |
-                          I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
-            break;
-        }
-        case 3UL:
-        {
-            validBytes = CY_I3C_BYTE_STROBE3;
-            cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0, *data) |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_1, *(data + 1U)) |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_2, *(data + 2u));
-            context->controllerBufferSize -= 3U;
-            cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk |
-                          I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
-            break;
-        }
-        default:
-        {
+            case 1UL: {
+                      validBytes = CY_I3C_BYTE_STROBE1;
+                      cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0,*data);
+                      context->controllerBufferSize -= 1U;
+                      cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk |
+                                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
+                      break; }
+            case 2UL: {
+                      validBytes = CY_I3C_BYTE_STROBE2;
+                      cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0,*(data)) |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_1,*(data + 1U));
+                      context->controllerBufferSize -= 2U;
+                      cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk |
+                                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
+                      break; }
+            case 3UL: {
+                      validBytes = CY_I3C_BYTE_STROBE3;
+                      cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0,*data) |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_1,*(data + 1U)) |
+                                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_2,*(data + 2u));
+                      context->controllerBufferSize -= 3U;
+                      cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk |
+                                      I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
+                      break; }
+            default: {
 
-            /* Write transfer with data greater than 3 bytes */
-            ControllerHandleDataTransmit(base, context);
-            if (xferConfig->toc)
-            {
-                cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
-            }
+                      /* Write transfer with data greater than 3 bytes */
+                      ControllerHandleDataTransmit(base, context);
+                      if(xferConfig->toc)
+                      {
+                        cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
+                      }
 
-            cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                           _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, context->controllerBufferSize);
-            break;
-        }
+                      cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
+                                     _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, context->controllerBufferSize);
+                      break; }
         }
 
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
@@ -1783,8 +1780,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerWrite(I3C_CORE_Type *base, cy_stc_i3c_contro
                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, writeDSMode) |
                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk;
-        if (context->devList[pos].i3cDevice.PECEnabled)
-        {
+        if(context->devList[pos].i3cDevice.PECEnabled){
             cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
         }
         context->state = CY_I3C_CONTROLLER_TX;
@@ -1825,9 +1821,9 @@ cy_en_i3c_status_t Cy_I3C_ControllerWrite(I3C_CORE_Type *base, cy_stc_i3c_contro
 * ref cy_en_i3c_status_t.
 *
 *******************************************************************************/
-cy_en_i3c_status_t Cy_I3C_ControllerRead(I3C_CORE_Type *base, cy_stc_i3c_controller_xfer_config_t* xferConfig, cy_stc_i3c_context_t *context)
+cy_en_i3c_status_t Cy_I3C_ControllerRead (I3C_CORE_Type *base, cy_stc_i3c_controller_xfer_config_t* xferConfig, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == xferConfig) || (NULL == context))
+    if((NULL == base) || (NULL == xferConfig) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -1835,7 +1831,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerRead(I3C_CORE_Type *base, cy_stc_i3c_control
     CY_ASSERT_L1(CY_IS_I3C_BUFFER_VALID(xferConfig->buffer, xferConfig->bufferSize));
     CY_ASSERT_L2(CY_IS_I3C_ADDR_VALID(xferConfig->targetAddress));
 
-    if (CY_I3C_FIFO_SIZE < xferConfig->bufferSize)
+    if(CY_I3C_FIFO_SIZE < xferConfig->bufferSize)
     {
         return CY_I3C_BAD_BUFFER_SIZE;
     }
@@ -1843,7 +1839,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerRead(I3C_CORE_Type *base, cy_stc_i3c_control
     cy_en_i3c_status_t retStatus = CY_I3C_CONTROLLER_NOT_READY;
     uint32_t timeout = MAX_I3C_TRANSACTION_TIMEOUT;
 
-    if (0UL != (CY_I3C_IDLE_MASK & context->state))
+    if(0UL != (CY_I3C_IDLE_MASK & context->state))
     {
         cy_stc_i3c_ccc_t cmd;
         uint8_t pos = 0U;
@@ -1868,27 +1864,25 @@ cy_en_i3c_status_t Cy_I3C_ControllerRead(I3C_CORE_Type *base, cy_stc_i3c_control
         {
             /* wait till the reset is completed */
             retStatus = I3C_Check_Timeout(&timeout);
-        }
-        while (retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+        }while(retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
-        if (retStatus == CY_I3C_TIMEOUT)
-        {
+        if (retStatus == CY_I3C_TIMEOUT){
             return retStatus;
         }
         res = GetAaddrslotStatus(xferConfig->targetAddress, context);
 
         /* This helps to check if the device is actively present on the bus */
-        if ((CY_I3C_ADDR_SLOT_I3C_DEV != res) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
+        if((CY_I3C_ADDR_SLOT_I3C_DEV != res ) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
         {
             return CY_I3C_BAD_PARAM;
         }
 
-        if (CY_I3C_ADDR_SLOT_I2C_DEV == res)
+        if(CY_I3C_ADDR_SLOT_I2C_DEV == res)
         {
             /* The target device is an i2cDevice */
             pos = (uint8_t)(GetI2CDevAddrPos(base, xferConfig->targetAddress, context));
             i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-            readDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C : CY_I3C_FMP_I2C);
+            readDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C: CY_I3C_FMP_I2C);
             context->controllerStatus |= CY_I3C_CONTROLLER_I2C_SDR_RD_XFER;
         }
         else
@@ -1896,29 +1890,28 @@ cy_en_i3c_status_t Cy_I3C_ControllerRead(I3C_CORE_Type *base, cy_stc_i3c_control
             /* The target is an i3cDevice */
             pos = (uint8_t)(GetI3CDevAddrPos(base, xferConfig->targetAddress, context));
             i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-            if (CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk == (i3cDeviceList->i3cDevice.bcr))
+            if(CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk == (i3cDeviceList->i3cDevice.bcr))
             {
                 readDSMode = (i3cDeviceList->i3cDevice.maxReadDs) & 0x07U;
             }
             context->controllerStatus |= CY_I3C_CONTROLLER_I3C_SDR_RD_XFER;
         }
 
-        if (xferConfig->toc)
+        if(xferConfig->toc)
         {
             /* There are no bytes remaining to be read from the next READ, so terminate this READ with STOP */
             cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
         }
         cmd.cmdHigh |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, context->controllerBufferSize);
+                        _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, context->controllerBufferSize);
 
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
-                      _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_SDR_READ_TID) |
-                      _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, readDSMode) |
-                      _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
-                      I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk |
-                      I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk;
-        if (context->devList[pos].i3cDevice.PECEnabled)
-        {
+                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_SDR_READ_TID) |
+                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, readDSMode) |
+                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
+                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk |
+                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk;
+        if(context->devList[pos].i3cDevice.PECEnabled){
             cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
         }
 
@@ -1956,7 +1949,7 @@ void Cy_I3C_ControllerAbortTransfer(I3C_CORE_Type *base, cy_stc_i3c_context_t *c
     CY_ASSERT_L1(NULL != base);
     CY_ASSERT_L1(NULL != context);
 
-    if (CY_I3C_IDLE != context->state)
+    if(CY_I3C_IDLE != context->state)
     {
         uint32_t intrState;
         I3C_CORE_DEVICE_CTRL(base) |= I3C_CORE_DEVICE_CTRL_ABORT_Msk;
@@ -1996,7 +1989,7 @@ void Cy_I3C_ControllerAbortTransfer(I3C_CORE_Type *base, cy_stc_i3c_context_t *c
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targetAddress, int8_t data, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -2006,7 +1999,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targe
     cy_en_i3c_status_t retStatus = CY_I3C_CONTROLLER_NOT_READY;
     uint32_t timeout = MAX_I3C_TRANSACTION_TIMEOUT;
 
-    if (0UL != (CY_I3C_IDLE_MASK & context->state))
+    if(0UL != (CY_I3C_IDLE_MASK & context->state))
     {
         cy_en_i3c_addr_slot_status_t res;
         cy_stc_i3c_ccc_t cmd;
@@ -2029,28 +2022,26 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targe
         {
             /* wait till the reset is completed */
             retStatus = I3C_Check_Timeout(&timeout);
-        }
-        while (retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+        }while(retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
-        if (retStatus == CY_I3C_TIMEOUT)
-        {
+        if (retStatus == CY_I3C_TIMEOUT){
             return retStatus;
         }
 
         res = GetAaddrslotStatus(targetAddress, context);
 
         /* This helps to check if the device is actively present on the bus */
-        if ((CY_I3C_ADDR_SLOT_I3C_DEV != res) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
+        if((CY_I3C_ADDR_SLOT_I3C_DEV != res ) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
         {
             return CY_I3C_BAD_PARAM;
         }
 
-        if (CY_I3C_ADDR_SLOT_I2C_DEV == res)
+        if(CY_I3C_ADDR_SLOT_I2C_DEV == res)
         {
             /* The target device is an i2cDevice */
             pos = (uint8_t)(GetI2CDevAddrPos(base, targetAddress, context));
             i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-            writeDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C : CY_I3C_FMP_I2C);
+            writeDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C: CY_I3C_FMP_I2C);
             context->controllerStatus |= CY_I3C_CONTROLLER_I2C_SDR_WR_XFER;
         }
 
@@ -2059,7 +2050,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targe
             /* The target is an i3cDevice */
             pos = (uint8_t)(GetI3CDevAddrPos(base, targetAddress, context));
             i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-            if (CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk == (i3cDeviceList->i3cDevice.bcr))
+            if(CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk == (i3cDeviceList->i3cDevice.bcr))
             {
                 writeDSMode = (i3cDeviceList->i3cDevice.maxWriteDs) & 0x07U;
             }
@@ -2077,8 +2068,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targe
                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk |
                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
 
-        if (context->devList[pos].i3cDevice.PECEnabled)
-        {
+        if(context->devList[pos].i3cDevice.PECEnabled){
             cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
         }
 
@@ -2095,11 +2085,9 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targe
         {
             /* wait till the interrupt of response is received */
             retStatus = I3C_Check_Timeout(&timeout);
-        }
-        while (retStatus == CY_I3C_SUCCESS && 0UL == ((CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_TRANSFER_ERR_STS) & Cy_I3C_GetInterruptStatus(base)));
+        }while(retStatus == CY_I3C_SUCCESS && 0UL == ((CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_TRANSFER_ERR_STS) & Cy_I3C_GetInterruptStatus(base)));
 
-        if (retStatus == CY_I3C_TIMEOUT)
-        {
+        if (retStatus == CY_I3C_TIMEOUT){
             return retStatus;
         }
 
@@ -2108,7 +2096,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targe
         Cy_I3C_SetInterruptMask(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
         Cy_I3C_SetInterruptStatusMask(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
 
-        if (0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
+        if(0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
         {
             /* unsuccessful due to transfer error */
             retStatus = ResponseError(respCmdPort);
@@ -2154,7 +2142,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteByte(I3C_CORE_Type *base, uint8_t targe
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t targetAddress, uint8_t *data, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -2163,7 +2151,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t target
 
     cy_en_i3c_status_t retStatus = CY_I3C_CONTROLLER_NOT_READY;
 
-    if (0UL != (CY_I3C_IDLE_MASK & context->state))
+    if(0UL != (CY_I3C_IDLE_MASK & context->state))
     {
         cy_en_i3c_addr_slot_status_t res;
         cy_stc_i3c_ccc_t cmd;
@@ -2188,28 +2176,26 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t target
         {
             /* wait till the reset is completed */
             retStatus = I3C_Check_Timeout(&timeout);
-        }
-        while (retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+        }while(retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
-        if (retStatus == CY_I3C_TIMEOUT)
-        {
+        if (retStatus == CY_I3C_TIMEOUT){
             return retStatus;
         }
 
         res = GetAaddrslotStatus(targetAddress, context);
 
         /* This helps to check if the device is actively present on the bus */
-        if ((CY_I3C_ADDR_SLOT_I3C_DEV != res) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
+        if((CY_I3C_ADDR_SLOT_I3C_DEV != res ) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
         {
             return CY_I3C_BAD_PARAM;
         }
 
-        if (CY_I3C_ADDR_SLOT_I2C_DEV == res)
+        if(CY_I3C_ADDR_SLOT_I2C_DEV == res)
         {
             /* The target device is an i2cDevice */
             pos = (uint8_t)(GetI2CDevAddrPos(base, targetAddress, context));
             i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-            readDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C : CY_I3C_FMP_I2C);
+            readDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C: CY_I3C_FMP_I2C);
             context->controllerStatus |= CY_I3C_CONTROLLER_I2C_SDR_RD_XFER;
         }
 
@@ -2218,7 +2204,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t target
             /* The target is an i3cDevice */
             pos = (uint8_t)(GetI3CDevAddrPos(base, targetAddress, context));
             i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-            if (CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk == (i3cDeviceList->i3cDevice.bcr))
+            if(CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk == (i3cDeviceList->i3cDevice.bcr))
             {
                 readDSMode = (i3cDeviceList->i3cDevice.maxReadDs) & 0x07U;
             }
@@ -2229,13 +2215,12 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t target
                        _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, 1U);
 
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
-                      _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, readDSMode) |
-                      _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
-                      I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk |
-                      I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk |
-                      I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
-        if (context->devList[pos].i3cDevice.PECEnabled)
-        {
+                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, readDSMode) |
+                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
+                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk |
+                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk |
+                       I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
+        if(context->devList[pos].i3cDevice.PECEnabled){
             cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
         }
 
@@ -2252,11 +2237,9 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t target
         {
             /* wait till the interrupt of response is received */
             retStatus = I3C_Check_Timeout(&timeout);
-        }
-        while (retStatus == CY_I3C_SUCCESS && 0UL == ((CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_TRANSFER_ERR_STS) & Cy_I3C_GetInterruptStatus(base)));
+        }while(retStatus == CY_I3C_SUCCESS && 0UL == ((CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_TRANSFER_ERR_STS) & Cy_I3C_GetInterruptStatus(base)));
 
-        if (retStatus == CY_I3C_TIMEOUT)
-        {
+        if(retStatus == CY_I3C_TIMEOUT){
             return retStatus;
         }
 
@@ -2264,7 +2247,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t target
         Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_MASK);
         Cy_I3C_SetInterruptStatusMask(base, 0UL);
 
-        if (0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
+        if(0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
         {
             retStatus = ResponseError(respCmdPort);    /* unsuccessful due to transfer error */
             context->controllerStatus |= CY_I3C_CONTROLLER_HALT_STATE;
@@ -2273,7 +2256,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t target
         else
         {
             datalen = (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_DATA_LENGTH_Msk);
-            if (1UL == datalen)
+            if(1UL == datalen)
             {
                 *data = (uint8_t)Cy_I3C_ReadRxFIFO(base);
                 retStatus = CY_I3C_SUCCESS;
@@ -2313,20 +2296,20 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadByte(I3C_CORE_Type *base, uint8_t target
 *******************************************************************************/
 uint32_t Cy_I3C_GetBusStatus(I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return (uint32_t)CY_I3C_BAD_PARAM;
     }
 
     (void) base;
 
-    if (CY_I3C_CONTROLLER == Cy_I3C_GetMode(base))
+    if(CY_I3C_CONTROLLER == Cy_I3C_GetMode(base))
     {
         return (context->controllerStatus);
     }
     else
     {
-        return (context->targetStatus);
+        return(context->targetStatus);
     }
 
 }
@@ -2362,7 +2345,7 @@ uint32_t Cy_I3C_GetBusStatus(I3C_CORE_Type const *base, cy_stc_i3c_context_t con
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerStartEntDaa(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -2380,7 +2363,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerStartEntDaa(I3C_CORE_Type *base, cy_stc_i3c_
     cy_stc_i3c_ccc_cmd_t cccCmd = {0};
     cy_stc_i3c_ccc_payload_t payload;
 
-    if (CY_I3C_MAX_DEVS <= (i3cController->devCount)) /* cannot initialize the device as the bus already has 11 devices on it */
+    if(CY_I3C_MAX_DEVS <= (i3cController->devCount)) /* cannot initialize the device as the bus already has 11 devices on it */
     {
         return CY_I3C_CONTROLLER_MAX_DEVS_PRESENT;
     }
@@ -2391,10 +2374,10 @@ cy_en_i3c_status_t Cy_I3C_ControllerStartEntDaa(I3C_CORE_Type *base, cy_stc_i3c_
     pos = (uint8_t)(GetDATFreePos(base, context));
 
     /* Get the 'i3cDevCount' number of free addresses and populate the DAT before issuing ENTDAA CCC */
-    for (index = pos; index < i3cDevCount; index++)
+    for(index = pos; index < i3cDevCount; index++)
     {
         retStatus = Cy_I3C_ControllerGetFreeDeviceAddress(base, &dynamicAddress, context);
-        if (CY_I3C_CONTROLLER_FREE_ADDR_UNAVIAL == retStatus)
+        if(CY_I3C_CONTROLLER_FREE_ADDR_UNAVAIL == retStatus)
         {
             return retStatus;
         }
@@ -2429,11 +2412,9 @@ cy_en_i3c_status_t Cy_I3C_ControllerStartEntDaa(I3C_CORE_Type *base, cy_stc_i3c_
     {
         retStatus = I3C_Check_Timeout(&timeout);
         /* wait till the interrupt of response is received */
-    }
-    while (retStatus == CY_I3C_SUCCESS && 0UL == (CY_I3C_INTR_MASK & Cy_I3C_GetInterruptStatus(base)));
+    }while(retStatus == CY_I3C_SUCCESS && 0UL == (CY_I3C_INTR_MASK & Cy_I3C_GetInterruptStatus(base)));
 
-    if (retStatus == CY_I3C_TIMEOUT)
-    {
+    if(retStatus == CY_I3C_TIMEOUT){
         return retStatus;
     }
 
@@ -2444,9 +2425,9 @@ cy_en_i3c_status_t Cy_I3C_ControllerStartEntDaa(I3C_CORE_Type *base, cy_stc_i3c_
 
     i3cController->lastAddress = i3cController->lastAddress - (uint8_t)respLeftDevCount;
 
-    if (0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
+    if(0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
     {
-        if (I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_BROADCAST_ADDR_NACK_ERROR != (_FLD2VAL(I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS, respCmdPort)))
+        if(I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_BROADCAST_ADDR_NACK_ERROR != (_FLD2VAL(I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS, respCmdPort)))
         {
             /* Error in transfer */
             retStatus = ResponseError(respCmdPort);
@@ -2462,15 +2443,14 @@ cy_en_i3c_status_t Cy_I3C_ControllerStartEntDaa(I3C_CORE_Type *base, cy_stc_i3c_
     i3cController->devCount += i3cController->dynAddrDevCount;
 
     /* Maintaining a local list of i3c devices */
-    for (index = 0U; index < i3cController->dynAddrDevCount; index++)
+    for( index = 0U; index < i3cController->dynAddrDevCount; index++)
     {
         (void)memset(&i3cDev, 0, sizeof(cy_stc_i3c_device_t));
         Cy_I3C_ReadFromDevCharTable(base, index, &i3cDev);
         SetAddrslotStatus(i3cDev.dynamicAddress, CY_I3C_ADDR_SLOT_I3C_DEV, context);
         (void)RetrieveI3CDeviceInfo(base, &i3cDev, false, context);
 #if CY_IP_MXI3C_VERSION_MINOR == 1u
-        if (i3cDev.ibipayloadSize > 0U)
-        {
+        if(i3cDev.ibipayloadSize > 0U){
             EnableIbiPayload(base, i3cDev.dynamicAddress, context);
         }
 #endif
@@ -2480,7 +2460,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerStartEntDaa(I3C_CORE_Type *base, cy_stc_i3c_
         pos++;
     }
 
-    if (0UL != i3cController->dynAddrDevCount)
+    if(0UL != i3cController->dynAddrDevCount)
     {
         /* Send DEFTGTS and ENEC CCC commands */
         cccCmd.address = CY_I3C_BROADCAST_ADDR;
@@ -2523,7 +2503,7 @@ cy_en_i3c_status_t Cy_I3C_SetDASA(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *ccc
     cy_stc_i3c_device_t i3cDevice = {0};
 
     /* Expects 1 byte of data */
-    if (1U != cccCmd->data->len)
+    if(1U != cccCmd->data->len)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -2537,7 +2517,7 @@ cy_en_i3c_status_t Cy_I3C_SetDASA(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *ccc
     /* Handling the response */
     retStatus = ControllerHandleCCCResponse(base, NULL, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -2550,14 +2530,13 @@ cy_en_i3c_status_t Cy_I3C_SetDASA(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *ccc
     SetAddrslotStatus(dynAddr, CY_I3C_ADDR_SLOT_I3C_DEV, context);
     (void)RetrieveI3CDeviceInfo(base, &i3cDevice, true, context);
 #if CY_IP_MXI3C_VERSION_MINOR == 1u
-    if (i3cDevice.ibipayloadSize > 0U)
-    {
+    if(i3cDevice.ibipayloadSize > 0U){
         EnableIbiPayload(base, dynAddr, context);
     }
 #endif
     Cy_I3C_UpdateI3CDevInList(&i3cDevice, pos, context);
 
-    (i3cController->freePos) =  ~(CY_I3C_BIT(pos));
+    (i3cController->freePos) =  ~ (CY_I3C_BIT(pos));
     (i3cController->devCount)++;
 
     return CY_I3C_SUCCESS;
@@ -2613,7 +2592,7 @@ cy_en_i3c_status_t Cy_I3C_SetAASA(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cD
     /* Handling the response */
     retStatus = ControllerHandleCCCResponse(base, NULL, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -2621,7 +2600,7 @@ cy_en_i3c_status_t Cy_I3C_SetAASA(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cD
     i3cController->dynAddrDevCount += (uint32_t)(i3cDeviceCount);
     i3cController->devCount += i3cController->dynAddrDevCount;
 
-    for (index = 0U; index < i3cDeviceCount; index++)
+    for( index = 0U; index < i3cDeviceCount; index++)
     {
         /* Updating the Device Address Table */
         pos = (uint8_t)(GetDATFreePos(base, context));
@@ -2636,8 +2615,7 @@ cy_en_i3c_status_t Cy_I3C_SetAASA(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cD
         SetAddrslotStatus(i3cDevice->dynamicAddress, CY_I3C_ADDR_SLOT_I3C_DEV, context);
         (void)RetrieveI3CDeviceInfo(base, i3cDevice, true, context);
 #if CY_IP_MXI3C_VERSION_MINOR == 1u
-        if (i3cDevice->ibipayloadSize > 0U)
-        {
+        if(i3cDevice->ibipayloadSize > 0U){
             EnableIbiPayload(base, i3cDevice->dynamicAddress, context);
         }
 #endif
@@ -2677,7 +2655,7 @@ cy_en_i3c_status_t Cy_I3C_SetAASA(I3C_CORE_Type *base, cy_stc_i3c_device_t *i3cD
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_ControllerSendHdrCmds(I3C_CORE_Type *base, uint8_t targetAddress, cy_stc_i3c_hdr_cmd_t *hdrCmd, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == hdrCmd) || (NULL == context))
+    if((NULL == base) || (NULL == hdrCmd) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -2686,12 +2664,12 @@ cy_en_i3c_status_t Cy_I3C_ControllerSendHdrCmds(I3C_CORE_Type *base, uint8_t tar
     cy_en_i3c_addr_slot_status_t res;
     cy_en_i3c_status_t retStatus = CY_I3C_CONTROLLER_NOT_READY;
 
-    if (0UL != (CY_I3C_IDLE_MASK & context->state))
+    if(0UL != (CY_I3C_IDLE_MASK & context->state))
     {
         res = GetAaddrslotStatus(targetAddress, context);
 
         /* This helps to check if the device is actively present on the bus */
-        if ((CY_I3C_ADDR_SLOT_I3C_DEV != res) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
+        if((CY_I3C_ADDR_SLOT_I3C_DEV != res ) && (CY_I3C_ADDR_SLOT_I2C_DEV != res))
         {
             return CY_I3C_BAD_PARAM;
         }
@@ -2700,13 +2678,13 @@ cy_en_i3c_status_t Cy_I3C_ControllerSendHdrCmds(I3C_CORE_Type *base, uint8_t tar
 
         cy_stc_i3c_controller_devlist_t *i3cDevice = &(context->devList[pos]);
 
-        if (false == (i3cDevice->i3cDevice.hdrSupport))
+        if(false == (i3cDevice->i3cDevice.hdrSupport))
         {
             /* The device doesn't support HDR mode */
             return CY_I3C_NOT_HDR_CAP;
         }
 
-        if (0UL != (hdrCmd->code & CY_I3C_HDR_IS_READ_CMD))
+        if(0UL != (hdrCmd->code & CY_I3C_HDR_IS_READ_CMD))
         {
             /* Read command */
             uint32_t numToRead;
@@ -2754,7 +2732,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerSendHdrCmds(I3C_CORE_Type *base, uint8_t tar
 * in this structure.
 *
 *******************************************************************************/
-void Cy_I3C_Interrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
+void Cy_I3C_Interrupt (I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
     CY_ASSERT_L1(NULL != base);
     CY_ASSERT_L1(NULL != context);
@@ -2768,9 +2746,9 @@ void Cy_I3C_Interrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
     else
     {
         /* Execute a transfer as a Target */
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
+        #if CY_IP_MXI3C_VERSION_MINOR == 1u
         Cy_I3C_TargetInterrupt(base, context);
-#endif
+        #endif
     }
 }
 
@@ -2834,7 +2812,7 @@ void Cy_I3C_RegisterEventCallback(I3C_CORE_Type const *base, cy_cb_i3c_handle_ev
 * To remove the callback, pass NULL as the pointer to the callback function.
 *
 *******************************************************************************/
-void Cy_I3C_RegisterIbiCallback(I3C_CORE_Type const *base, cy_cb_i3c_handle_ibi_t callback, cy_stc_i3c_context_t *context)
+void Cy_I3C_RegisterIbiCallback (I3C_CORE_Type const *base, cy_cb_i3c_handle_ibi_t callback, cy_stc_i3c_context_t *context)
 {
     CY_ASSERT_L1(NULL != base);
     CY_ASSERT_L1(NULL != context);
@@ -2882,7 +2860,7 @@ void Cy_I3C_RegisterCCCRespCallback(I3C_CORE_Type const *base, cy_cb_i3c_handle_
 }
 
 /*******************************************************************************
-* Function Name: Cy_I3C_TargetGetcccData
+* Function Name: Cy_I3C_TargetGetCCCData
 ****************************************************************************//**
 *
 * Read data received from controller write CCC into given buffer.
@@ -2907,12 +2885,11 @@ void Cy_I3C_RegisterCCCRespCallback(I3C_CORE_Type const *base, cy_cb_i3c_handle_
 * reset successful status - CY_I3C_BAD_BUFFER_SIZE / CY_I3C_SUCCESS.
 *
 *******************************************************************************/
-cy_en_i3c_status_t Cy_I3C_TargetGetcccData(I3C_CORE_Type *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context)
+cy_en_i3c_status_t Cy_I3C_TargetGetCCCData(I3C_CORE_Type *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context)
 {
     CY_UNUSED_PARAMETER(context); /* Suppress a compiler warning about unused variables */
-    uint32_t maxEntries = ((CY_I3C_FIFO_SIZE / 4UL) - Cy_I3C_GetFreeEntriesInRxFifo(base)) * 4U;
-    if (maxEntries < size)
-    {
+    uint32_t maxEntries =  ((CY_I3C_FIFO_SIZE / 4UL) - Cy_I3C_GetFreeEntriesInRxFifo(base)) * 4U;
+    if (maxEntries < size){
         return CY_I3C_BAD_BUFFER_SIZE;
     }
     /* Read from the RX FIFO */
@@ -2947,11 +2924,11 @@ cy_en_i3c_status_t Cy_I3C_TargetGetcccData(I3C_CORE_Type *base, uint8_t *buffer,
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_TargetGetDynamicAddress(I3C_CORE_Type const *base, uint8_t *address, cy_stc_i3c_context_t const *context)
 {
-    if ((NULL == base) || (NULL == address) || (NULL == context))
+    if((NULL == base) || (NULL == address) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
-    if (0UL != (_FLD2VAL(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID, I3C_CORE_DEVICE_ADDR(base))))
+    if(0UL != (_FLD2VAL(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID, I3C_CORE_DEVICE_ADDR(base))))
     {
         *address = (uint8_t)_FLD2VAL(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, I3C_CORE_DEVICE_ADDR(base));
         return CY_I3C_SUCCESS;
@@ -3051,7 +3028,7 @@ uint32_t Cy_I3C_TargetGetMaxWriteLength(I3C_CORE_Type const *base, cy_stc_i3c_co
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_TargetGenerateIbi(I3C_CORE_Type *base, cy_stc_i3c_ibi_t *ibitype, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == ibitype) || (NULL == context))
+    if((NULL == base) || (NULL == ibitype) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -3061,35 +3038,28 @@ cy_en_i3c_status_t Cy_I3C_TargetGenerateIbi(I3C_CORE_Type *base, cy_stc_i3c_ibi_
     cy_en_i3c_status_t ret = CY_I3C_SUCCESS;
 
     /* Generate a TIR */
-    if (CY_I3C_IBI_SIR == ibitype->event)
+    if(CY_I3C_IBI_SIR == ibitype->event)
     {
-        if (0UL != (_FLD2VAL(I3C_CORE_TGT_EVENT_STATUS_TIR_EN, I3C_CORE_TGT_EVENT_STATUS(base))))
+        if(0UL != (_FLD2VAL(I3C_CORE_TGT_EVENT_STATUS_TIR_EN, I3C_CORE_TGT_EVENT_STATUS(base))))
         {
             /* When set, the controller attempts to issue the TIR on the bus. Once set, the application cannot clear this bit
             TIR_CTRL field of this reg is to be set to 0 */
-            if (ibitype->payloadSize > 4U)
-            {
+            if(ibitype->payloadSize > 4U){
                 return CY_I3C_BAD_BUFFER_SIZE;
             }
 
-            if (ibitype->payloadSize > 0U)
-            {
-                if (((uintptr_t)ibitype->payload % (uintptr_t)4U) == 0UL)     //checking 4 byte alignment
-                {
-                    value = (*(uint32_t *)ibitype->payload) & (~(0xFFFFFFFFUL << (ibitype->payloadSize * 8U)));
-                }
-                else
-                {
-                    for (index = 0; index < ibitype->payloadSize; index++)
-                    {
+            if(ibitype->payloadSize > 0U){
+                if(((uintptr_t)ibitype->payload % (uintptr_t)4U) == 0UL){     //checking 4 byte alignment
+                    value = (*(uint32_t *)ibitype->payload) & (~(0xFFFFFFFFUL << (ibitype->payloadSize*8U)));
+                }else{
+                    for(index = 0; index < ibitype->payloadSize; index++){
                         value |= *(ibitype->payload + index) << (index * 8U);
                     }
                 }
             }
             I3C_CORE_TGT_INTR_REQ(base) = _VAL2FLD(I3C_CORE_TGT_INTR_REQ_MDB, ibitype->mdb) | _VAL2FLD(I3C_CORE_TGT_INTR_REQ_TIR_DATA_LENGTH, ibitype->payloadSize);
             base->TGT_TIR_DATA = value;
-            if (context->ATM0Enabled)
-            {
+            if(context->ATM0Enabled){
                 I3C->TIMING_CNT_CTRL |= I3C_TIMING_CNT_CTRL_CNT_RESET_Msk;
                 I3C_CORE_TGT_INTR_REQ(base) |= I3C_CORE_TGT_INTR_REQ_TS_Msk;
             }
@@ -3105,9 +3075,9 @@ cy_en_i3c_status_t Cy_I3C_TargetGenerateIbi(I3C_CORE_Type *base, cy_stc_i3c_ibi_
     }
 
     /* Generate a controllership request */
-    else if ((CY_I3C_IBI_CONTROLLER_REQ == ibitype->event) && (CY_I3C_SECONDARY_CONTROLLER == context->i3cMode))
+    else if((CY_I3C_IBI_CONTROLLER_REQ == ibitype->event) && (CY_I3C_SECONDARY_CONTROLLER == context->i3cMode))
     {
-        if (0UL != (_FLD2VAL(I3C_CORE_TGT_EVENT_STATUS_CR_EN, I3C_CORE_TGT_EVENT_STATUS(base))))
+        if(0UL != (_FLD2VAL(I3C_CORE_TGT_EVENT_STATUS_CR_EN, I3C_CORE_TGT_EVENT_STATUS(base))))
         {
             /* When set, the controller attempts to issue the CR on the bus. Once set, the application cannot clear this bit */
             I3C_CORE_TGT_INTR_REQ(base) = I3C_CORE_TGT_INTR_REQ_CR_Msk;
@@ -3162,11 +3132,11 @@ cy_en_i3c_status_t Cy_I3C_TargetGenerateIbi(I3C_CORE_Type *base, cy_stc_i3c_ibi_
 * I3C supports only Primary Controller mode in PSE84A0. Secondary controller mode and Target mode are supported in PSE84B0.
 *
 *******************************************************************************/
-void Cy_I3C_TargetConfigReadBuf(I3C_CORE_Type *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context)
+void Cy_I3C_TargetConfigReadBuf (I3C_CORE_Type *base, uint8_t *buffer, uint32_t size, cy_stc_i3c_context_t *context)
 {
-    CY_ASSERT_L1(NULL != base);
-    CY_ASSERT_L1(NULL != context);
-    CY_ASSERT_L1(CY_IS_I3C_BUFFER_VALID(buffer, size));
+     CY_ASSERT_L1(NULL != base);
+     CY_ASSERT_L1(NULL != context);
+     CY_ASSERT_L1(CY_IS_I3C_BUFFER_VALID(buffer, size));
 
     /* Suppress a compiler warning about unused variables */
     (void) base;
@@ -3205,7 +3175,7 @@ void Cy_I3C_TargetConfigReadBuf(I3C_CORE_Type *base, uint8_t *buffer, uint32_t s
 * I3C supports only Primary Controller mode in PSE84A0. Secondary controller mode and Target mode are supported in PSE84B0.
 *
 *******************************************************************************/
-uint32_t Cy_I3C_TargetGetReadTransferCount(I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context)
+uint32_t Cy_I3C_TargetGetReadTransferCount (I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context)
 {
     CY_ASSERT_L1(NULL != base);
 
@@ -3284,7 +3254,7 @@ void Cy_I3C_TargetConfigWriteBuf(I3C_CORE_Type const *base, uint8_t *buffer, uin
 * I3C supports only Primary Controller mode in PSE84A0. Secondary controller mode and Target mode are supported in PSE84B0.
 *
 *******************************************************************************/
-uint32_t Cy_I3C_TargetGetWriteTransferCount(I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context)
+uint32_t Cy_I3C_TargetGetWriteTransferCount (I3C_CORE_Type const *base, cy_stc_i3c_context_t const *context)
 {
     CY_ASSERT_L1(NULL != base);
 
@@ -3322,7 +3292,7 @@ uint32_t Cy_I3C_TargetGetWriteTransferCount(I3C_CORE_Type const *base, cy_stc_i3
 *******************************************************************************/
 cy_en_i3c_status_t Cy_I3C_DeliverControllership(I3C_CORE_Type *base, uint8_t SecControllerAddress, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -3343,9 +3313,9 @@ cy_en_i3c_status_t Cy_I3C_DeliverControllership(I3C_CORE_Type *base, uint8_t Sec
     errorStatus = getacccr_ccc(base, &cccCmd, context);
     uint32_t timeout = MAX_I3C_TRANSACTION_TIMEOUT;
 
-    if (CY_I3C_SUCCESS == errorStatus)
+    if(CY_I3C_SUCCESS == errorStatus)
     {
-        if (addr != (getacccr.newcontroller >> 1U))
+        if(addr != (getacccr.newcontroller >> 1U))
         {
             errorStatus = CY_I3C_ADDR_MISMATCH;
         }
@@ -3356,9 +3326,9 @@ cy_en_i3c_status_t Cy_I3C_DeliverControllership(I3C_CORE_Type *base, uint8_t Sec
 
             uint32_t value;
 
-            value = _FLD2VAL(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED(base));
+            value = _FLD2VAL(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE,I3C_CORE_DEVICE_CTRL_EXTENDED(base));
 
-            if (I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET == value)
+            if(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET == value)
             {
                 /* Mode is changed to target */
                 cy_en_i3c_status_t  status;
@@ -3368,14 +3338,12 @@ cy_en_i3c_status_t Cy_I3C_DeliverControllership(I3C_CORE_Type *base, uint8_t Sec
 
                 do
                 {
-                    /* wait till the reset is completed */
-                    errorStatus = I3C_Check_Timeout(&timeout);
-                }
-                while (errorStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+                /* wait till the reset is completed */
+                errorStatus = I3C_Check_Timeout(&timeout);
+                }while(errorStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
-                if (errorStatus == CY_I3C_TIMEOUT)
-                {
-                    return errorStatus;
+                if (errorStatus == CY_I3C_TIMEOUT){
+                return errorStatus;
                 }
 
                 status = SecondaryControllerInit(base, false, context);
@@ -3411,12 +3379,12 @@ cy_en_i3c_status_t Cy_I3C_DeliverControllership(I3C_CORE_Type *base, uint8_t Sec
 #if CY_IP_MXI3C_VERSION_MINOR == 1u || defined(CY_DOXYGEN)
 cy_en_i3c_status_t Cy_I3C_RequestControllership(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
-    if ((NULL == base) || (NULL == context))
+    if((NULL == base) || (NULL == context))
     {
         return CY_I3C_BAD_PARAM;
     }
 
-    if (CY_I3C_SECONDARY_CONTROLLER != context->i3cMode)
+    if(CY_I3C_SECONDARY_CONTROLLER != context->i3cMode)
     {
         return CY_I3C_NOT_SECONDARY_CONTROLLER;
     }
@@ -3426,7 +3394,7 @@ cy_en_i3c_status_t Cy_I3C_RequestControllership(I3C_CORE_Type *base, cy_stc_i3c_
 
     retStatus = Cy_I3C_TargetGetDynamicAddress(base, &(ibi.targetAddress), context);
 
-    if (CY_I3C_SUCCESS == retStatus)
+    if(CY_I3C_SUCCESS == retStatus)
     {
         ibi.event = CY_I3C_IBI_CONTROLLER_REQ;
         retStatus = Cy_I3C_TargetGenerateIbi(base, &ibi, context);
@@ -3458,7 +3426,7 @@ cy_en_i3c_status_t Cy_I3C_RequestControllership(I3C_CORE_Type *base, cy_stc_i3c_
 *******************************************************************************/
 static cy_en_i3c_status_t SecondaryControllerInit(I3C_CORE_Type *base, bool isController, cy_stc_i3c_context_t *context)
 {
-    if (isController)
+    if(isController)
     {
         context->i3cMode = CY_I3C_CONTROLLER;
 
@@ -3468,7 +3436,7 @@ static cy_en_i3c_status_t SecondaryControllerInit(I3C_CORE_Type *base, bool isCo
         uint8_t staticAddress, dynamicAddress, dcr, bcr, i2c;
         cy_stc_i3c_device_t i3cDevice;
         cy_stc_i2c_device_t i2cDevice;
-        uint32_t *sec_dev_char_table_ptr;
+        uint32_t* sec_dev_char_table_ptr;
 
         i3cController->freePos = 0x7FFUL;
         i3cController->lastAddress = 0U;
@@ -3481,51 +3449,51 @@ static cy_en_i3c_status_t SecondaryControllerInit(I3C_CORE_Type *base, bool isCo
         InitAddrslots(context);
         SetAddrslotStatus(address, CY_I3C_ADDR_SLOT_I3C_DEV, context);
 
-        if (!context->dsConfig.manualDataRate)
+        if(!context->dsConfig.manualDataRate)
         {
             (void)Cy_I3C_SetDataRate(base, context->i3cSclRate, context->i3cClockHz, context);
         }
         else
         {
-            I3C_CORE_SCL_I3C_OD_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_HCNT, context->dsConfig.openDrainHighCnt) |
-                                               _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_LCNT, context->dsConfig.openDrainLowCnt);
-            I3C_CORE_SCL_I3C_PP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_HCNT, context->dsConfig.pushPullHighCnt) |
-                                               _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_LCNT, context->dsConfig.pushPullLowCnt);
-            I3C_CORE_SCL_I2C_FM_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_HCNT, context->dsConfig.i2cFMHighCnt) |
-                                               _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_LCNT, context->dsConfig.i2cFMLowCnt);
-            I3C_CORE_SCL_I2C_FMP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_HCNT, context->dsConfig.i2cFMPlusHighCnt) |
-                                                _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_LCNT, context->dsConfig.i2cFMPlusLowCnt);
-            I3C_CORE_SCL_EXT_LCNT_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_1, context->dsConfig.extLowCnt1) |
-                                                 _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_2, context->dsConfig.extLowCnt2) |
-                                                 _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_3, context->dsConfig.extLowCnt3) |
-                                                 _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_4, context->dsConfig.extLowCnt4);
+             I3C_CORE_SCL_I3C_OD_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_HCNT, context->dsConfig.openDrainHighCnt) |
+                                                _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_LCNT, context->dsConfig.openDrainLowCnt);
+             I3C_CORE_SCL_I3C_PP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_HCNT, context->dsConfig.pushPullHighCnt) |
+                                                _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_LCNT, context->dsConfig.pushPullLowCnt);
+             I3C_CORE_SCL_I2C_FM_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_HCNT, context->dsConfig.i2cFMHighCnt) |
+                                                _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_LCNT, context->dsConfig.i2cFMLowCnt);
+             I3C_CORE_SCL_I2C_FMP_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_HCNT, context->dsConfig.i2cFMPlusHighCnt) |
+                                                 _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_LCNT, context->dsConfig.i2cFMPlusLowCnt);
+             I3C_CORE_SCL_EXT_LCNT_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_1, context->dsConfig.extLowCnt1) |
+                                                  _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_2, context->dsConfig.extLowCnt2) |
+                                                  _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_3, context->dsConfig.extLowCnt3) |
+                                                  _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_4, context->dsConfig.extLowCnt4);
             I3C_CORE_SCL_EXT_TERMN_LCNT_TIMING(base) = _VAL2FLD(I3C_CORE_SCL_EXT_TERMN_LCNT_TIMING_I3C_EXT_TERMN_LCNT, context->dsConfig.extTerminationLowCnt);
         }
 
         I3C_CORE_DEVICE_CTRL(base) &= ~(_VAL2FLD(I3C_CORE_DEVICE_CTRL_IBA_INCLUDE, 1UL) | _VAL2FLD(I3C_CORE_DEVICE_CTRL_HOT_JOIN_CTRL, 1UL));
 
         I3C_CORE_DEVICE_CTRL(base) |= _VAL2FLD(I3C_CORE_DEVICE_CTRL_IBA_INCLUDE, context->dsConfig.ibaInclude ? 1UL : 0UL) |
-                                      _VAL2FLD(I3C_CORE_DEVICE_CTRL_HOT_JOIN_CTRL, context->dsConfig.hotJoinCtrl ? 1UL : 0UL);
+                                     _VAL2FLD(I3C_CORE_DEVICE_CTRL_HOT_JOIN_CTRL, context->dsConfig.hotJoinCtrl ? 1UL : 0UL);
 
         I3C_CORE_BUS_FREE_AVAIL_TIMING(base) |= _VAL2FLD(I3C_CORE_BUS_FREE_AVAIL_TIMING_BUS_FREE_TIME, context->dsConfig.busFreeTime);
 
         I3C_CORE_SDA_HOLD_SWITCH_DLY_TIMING(base) = _VAL2FLD(I3C_CORE_SDA_HOLD_SWITCH_DLY_TIMING_SDA_TX_HOLD, context->dsConfig.sdaHoldTime);
 
         I3C_CORE_QUEUE_THLD_CTRL(base) = _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_CMD_EMPTY_BUF_THLD, context->dsConfig.cmdQueueEmptyThld) |
-                                         _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_RESP_BUF_THLD, context->dsConfig.respQueueThld) |
-                                         _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_STATUS_THLD, context->dsConfig.ibiQueueThld);
+                                        _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_RESP_BUF_THLD, context->dsConfig.respQueueThld) |
+                                        _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_STATUS_THLD, context->dsConfig.ibiQueueThld);
 
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
+        #if CY_IP_MXI3C_VERSION_MINOR == 1u
         CY_ASSERT_L2(CY_IS_I3C_IBI_DATA_THLD_VALID(context->dsConfig.ibiDataThld));
         I3C_CORE_QUEUE_THLD_CTRL(base) |= _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_DATA_THLD, context->dsConfig.ibiDataThld);
-#endif
+        #endif
         Cy_I3C_SetInterruptMask(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
         Cy_I3C_SetInterruptStatusMask(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
 
-        for (idx = 0U; idx < context->deftgts_count; idx++)
+        for(idx = 0U; idx < context->deftgts_count; idx++)
         {
             (void)memset(&i3cDevice, 0, sizeof(cy_stc_i3c_device_t));
-            sec_dev_char_table_ptr = (uint32_t *) & (I3C_CORE_DEV_CHAR_TABLE1_LOC1(base)) + idx;
+            sec_dev_char_table_ptr = (uint32_t *)&(I3C_CORE_DEV_CHAR_TABLE1_LOC1(base)) + idx;
 
             staticAddress = (uint8_t)(*sec_dev_char_table_ptr & 0xFFUL);
             dynamicAddress = (uint8_t)((*sec_dev_char_table_ptr & 0xFF000000UL) >> 25UL);
@@ -3541,15 +3509,14 @@ static cy_en_i3c_status_t SecondaryControllerInit(I3C_CORE_Type *base, bool isCo
                     _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC10_LEGACY_I2C_DEVICE, i2c);
             dynamicAddress &= ~(parity << 7U);
 
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-            if ((bool)(bcr & CY_I3C_CORE_BCR_IBI_PAYLOAD_Msk))
-            {
+            #if CY_IP_MXI3C_VERSION_MINOR == 1u
+            if((bool)(bcr & CY_I3C_CORE_BCR_IBI_PAYLOAD_Msk)){
                 value |= I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_WITH_DATA_Msk;
             }
-#endif
+            #endif
             Cy_I3C_WriteIntoDeviceAddressTable(base, idx, value);
 
-            if (0UL != i2c)
+            if(0UL != i2c)
             {
                 /* I2C Device */
                 SetAddrslotStatus(staticAddress, CY_I3C_ADDR_SLOT_I2C_DEV, context);
@@ -3558,7 +3525,7 @@ static cy_en_i3c_status_t SecondaryControllerInit(I3C_CORE_Type *base, bool isCo
 
                 Cy_I3C_UpdateI2CDevInList(&i2cDevice, idx, context);
 
-                (i3cController->freePos) = ~(CY_I3C_BIT(idx));
+                (i3cController->freePos) = ~ (CY_I3C_BIT(idx));
                 (i3cController->devCount)++;
                 (i3cController->i2cDeviceCount)++;
             }
@@ -3620,76 +3587,73 @@ static cy_en_i3c_status_t SecondaryControllerInit(I3C_CORE_Type *base, bool isCo
 *
 *******************************************************************************/
 #if CY_IP_MXI3C_VERSION_MINOR == 1u || defined(CY_DOXYGEN)
-void Cy_I3C_TargetInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
+void Cy_I3C_TargetInterrupt (I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
     uint32_t intrCause;
     intrCause = Cy_I3C_GetInterruptStatus(base);
 
-    if (0UL != (CY_I3C_INTR_IBI_UPDATED_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_IBI_UPDATED_STS & intrCause))
     {
         Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_IBI_UPDATED_STS);
         /* Handle the response */
         uint8_t res = (uint8_t)_FLD2VAL(I3C_CORE_TGT_IBI_RESP_IBI_STS, base->TGT_IBI_RESP);
 
-        if (I3C_CORE_TGT_INTR_REQ_IBI_STS_IBI_NOT_ATTEMPTED == res)
-        {
+        if(I3C_CORE_TGT_INTR_REQ_IBI_STS_IBI_NOT_ATTEMPTED == res){
             /* IBI not attempted, if
             *  1. Controller has not assigned the dynamic address
             *  2. Controller has cleared the assigned dynamic address
             *  3. Controller has disabled the IBI (DISEC)
             *  4. The controller has switched to controller mode */
-            if (NULL != (context->cbEvents))
+            if(NULL != (context->cbEvents))
             {
                 context->cbEvents(CY_I3C_TARGET_IBI_NOT_ATTEMPTED_EVENT);
             }
-        }
-        else if (I3C_CORE_TGT_INTR_REQ_IBI_STS_IBI_EARLY_TERMINATE_BY_CONTROLLER == res)
-        {
+        }else
+        if(I3C_CORE_TGT_INTR_REQ_IBI_STS_IBI_EARLY_TERMINATE_BY_CONTROLLER == res){
             /* For TIR with data, controller terminated before reading all the data. */
-            if (NULL != (context->cbEvents))
+            if(NULL != (context->cbEvents))
             {
                 context->cbEvents(CY_I3C_TARGET_IBI_EARLY_STOP_EVENT);
             }
         }
-        else
-        {
+        else{
             /* IBI is acked */
-            if (NULL != (context->cbEvents))
+            if(NULL != (context->cbEvents))
             {
                 context->cbEvents(CY_I3C_TARGET_IBI_ACKNOWLEDGED_EVENT);
             }
         }
     }
 
-    if (0UL != (CY_I3C_INTR_TX_BUFFER_THLD_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_TX_BUFFER_THLD_STS & intrCause))
     {
         TargetHandleDataTransmit(base, context);
     }
 
-    if (0UL != (CY_I3C_INTR_RX_BUFFER_THLD_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_RX_BUFFER_THLD_STS & intrCause))
     {
         TargetHandleDataReceive(base, context);
     }
 
-    if (0UL != ((CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_DEFTGT_STS) & intrCause))
+    if(0UL != ((CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_DEFTGT_STS) & intrCause))
     {
         TargetRespReadyStsHandle(base, context);
         Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_RESP_READY_STS);
     }
 
-    if (0UL != (CY_I3C_INTR_CCC_UPDATED_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_CCC_UPDATED_STS & intrCause))
     {
-        if (0UL != (_FLD2VAL(I3C_CORE_TGT_EVENT_STATUS_MRL_UPDATED, I3C_CORE_TGT_EVENT_STATUS(base))))
+        if(0UL != (_FLD2VAL(I3C_CORE_TGT_EVENT_STATUS_MRL_UPDATED, I3C_CORE_TGT_EVENT_STATUS(base))))
         {
-            if (NULL != (context->cbEvents))
+            if(NULL != (context->cbEvents))
             {
                 context->cbEvents(CY_I3C_TARGET_MAX_RD_LEN_UPDT_EVENT);
             }
             I3C_CORE_TGT_EVENT_STATUS(base) |= I3C_CORE_TGT_EVENT_STATUS_MRL_UPDATED_Msk;
         }
-        else if (0UL != (_FLD2VAL(I3C_CORE_TGT_EVENT_STATUS_MWL_UPDATED, I3C_CORE_TGT_EVENT_STATUS(base))))
+        else if(0UL != (_FLD2VAL(I3C_CORE_TGT_EVENT_STATUS_MWL_UPDATED, I3C_CORE_TGT_EVENT_STATUS(base))))
         {
-            if (NULL != (context->cbEvents))
+            if(NULL != (context->cbEvents))
             {
                 context->cbEvents(CY_I3C_TARGET_MAX_WR_LEN_UPDT_EVENT);
             }
@@ -3697,18 +3661,18 @@ void Cy_I3C_TargetInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
         }
         else
         {
-            if (NULL != (context->cbEvents))
+            if(NULL != (context->cbEvents))
             {
-                context->cbEvents(CY_I3C_TARGET_CCC_REG_UPDATED_EVENT);
+            context->cbEvents(CY_I3C_TARGET_CCC_REG_UPDATED_EVENT);
             }
         }
 
         Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_CCC_UPDATED_STS);
     }
 
-    if (0UL != (CY_I3C_INTR_DYN_ADDR_ASSGN_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_DYN_ADDR_ASSGN_STS & intrCause))
     {
-        if (NULL != (context->cbEvents))
+        if(NULL != (context->cbEvents))
         {
             context->cbEvents(CY_I3C_TARGET_ASSIGNED_DYN_ADDR_EVENT);
         }
@@ -3716,18 +3680,18 @@ void Cy_I3C_TargetInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
     }
 
     /* Read request from the controller */
-    if (0UL != (CY_I3C_INTR_READ_REQ_RECV_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_READ_REQ_RECV_STS & intrCause))
     {
-        if (NULL != (context->cbEvents))
+        if(NULL != (context->cbEvents))
         {
             /* Callback - in case of error */
             uint32_t event;
             event = CY_I3C_TARGET_NO_VALID_CMD_IN_CMDQ_EVENT;
-            if (0UL != (_FLD2VAL(I3C_CORE_CCC_DEVICE_STATUS_DATA_NOT_READY, I3C_CORE_CCC_DEVICE_STATUS(base))))
+            if(0UL != (_FLD2VAL(I3C_CORE_CCC_DEVICE_STATUS_DATA_NOT_READY, I3C_CORE_CCC_DEVICE_STATUS(base))))
             {
                 event |= CY_I3C_TARGET_DATA_NOT_READY_EVENT;
             }
-            if (NULL != (context->cbEvents))
+            if(NULL != (context->cbEvents))
             {
                 context->cbEvents(event);
             }
@@ -3735,21 +3699,21 @@ void Cy_I3C_TargetInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
         Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_MASK);
     }
 
-    if (0UL != (CY_I3C_INTR_BUSOWNER_UPDATED_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_BUSOWNER_UPDATED_STS & intrCause))
     {
         Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_BUSOWNER_UPDATED_STS);
         Cy_I3C_Resume(base, context);
         (void)SecondaryControllerInit(base, true, context);
-        if (NULL != (context->cbEvents))
+        if(NULL != (context->cbEvents))
         {
             context->cbEvents(CY_I3C_CONTROLLER_ROLE_UPDATED_EVENT);
         }
         return;
     }
 
-    if (0UL != (CY_I3C_INTR_TGT_RST_PATTERN_DET_STS & intrCause))
+    if( 0UL != (CY_I3C_INTR_TGT_RST_PATTERN_DET_STS & intrCause))
     {
-        if (NULL != (context->cbEvents))
+        if(NULL != (context->cbEvents))
         {
             context->cbEvents(CY_I3C_TARGET_RESET_EVENT);
         }
@@ -3775,16 +3739,16 @@ void Cy_I3C_TargetInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 * in this structure.
 *
 *******************************************************************************/
-void Cy_I3C_ControllerInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
+void Cy_I3C_ControllerInterrupt (I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
     uint32_t intrCause;
     cy_en_i3c_status_t retStatus = CY_I3C_CONTROLLER_NOT_READY;
     uint32_t timeout = MAX_I3C_TRANSACTION_TIMEOUT;
     intrCause = Cy_I3C_GetInterruptStatus(base);
 
-    if (0UL != (CY_I3C_INTR_RESP_READY_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_RESP_READY_STS & intrCause))
     {
-        if (0UL != (CY_I3C_INTR_TRANSFER_ERR_STS & intrCause))
+        if(0UL != (CY_I3C_INTR_TRANSFER_ERR_STS & intrCause))
         {
             uint32_t respCmdPort, errorEvent;
             respCmdPort = I3C_CORE_RESPONSE_QUEUE_PORT(base);
@@ -3793,7 +3757,7 @@ void Cy_I3C_ControllerInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *conte
             context->controllerStatus &= (~CY_I3C_CONTROLLER_BUSY);
             context->state = CY_I3C_IDLE;
 
-            if (NULL != (context->cbEvents))
+            if(NULL != (context->cbEvents))
             {
                 /* Callback - in case of error  */
                 context->cbEvents(errorEvent);
@@ -3814,7 +3778,7 @@ void Cy_I3C_ControllerInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *conte
         return;
     }
 
-    if (0UL != (CY_I3C_INTR_TRANSFER_ABORT_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_TRANSFER_ABORT_STS & intrCause))
     {
         context->controllerStatus |= CY_I3C_CONTROLLER_XFER_ABORTED | CY_I3C_CONTROLLER_HALT_STATE;
         context->controllerStatus &= (~CY_I3C_CONTROLLER_BUSY);
@@ -3825,12 +3789,11 @@ void Cy_I3C_ControllerInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *conte
         {
             /* wait till the reset is completed */
             retStatus = I3C_Check_Timeout(&timeout);
-        }
-        while (retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+        }while(retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
         Cy_I3C_Resume(base, context);
 
-        if (NULL != context->cbEvents)
+        if(NULL != context->cbEvents)
         {
             context->cbEvents(CY_I3C_XFER_ABORTED_ERROR_EVENT);
         }
@@ -3842,7 +3805,7 @@ void Cy_I3C_ControllerInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *conte
         return;
     }
 
-    if (0UL != (CY_I3C_INTR_IBI_BUFFER_THLD_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_IBI_BUFFER_THLD_STS & intrCause))
     {
         Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
 
@@ -3851,11 +3814,11 @@ void Cy_I3C_ControllerInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context_t *conte
         return;
     }
 
-    if (0UL != (CY_I3C_INTR_BUSOWNER_UPDATED_STS & intrCause))
+    if(0UL != (CY_I3C_INTR_BUSOWNER_UPDATED_STS & intrCause))
     {
         Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_BUSOWNER_UPDATED_STS);
         Cy_I3C_Resume(base, context);
-        if (NULL != (context->cbEvents))
+        if(NULL != (context->cbEvents))
         {
             context->cbEvents(CY_I3C_CONTROLLER_ROLE_UPDATED_EVENT);
         }
@@ -3890,125 +3853,121 @@ static cy_en_syspm_status_t Cy_I3C_DeepSleepCallback_After(cy_stc_syspm_callback
 
     switch (locContext->i3cMode)
     {
-    case CY_I3C_CONTROLLER:
+        case CY_I3C_CONTROLLER:
 
-        /* Setting the device operation mode to Controller - 0U */
-        I3C_CORE_DEVICE_CTRL_EXTENDED(locBase) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_CONTROLLER);
+            /* Setting the device operation mode to Controller - 0U */
+            I3C_CORE_DEVICE_CTRL_EXTENDED(locBase) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_CONTROLLER);
 
-        if (!locConfig->manualDataRate)
-        {
-            (void)Cy_I3C_SetDataRate(locBase, locContext->i3cSclRate, locContext->i3cClockHz, locContext);
-        }
-        else
-        {
-            I3C_CORE_SCL_I3C_OD_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_HCNT, locConfig->openDrainHighCnt) |
-                                                  _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_LCNT, locConfig->openDrainLowCnt);
-            I3C_CORE_SCL_I3C_PP_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_HCNT, locConfig->pushPullHighCnt) |
-                                                  _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_LCNT, locConfig->pushPullLowCnt);
-            I3C_CORE_SCL_I2C_FM_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_HCNT, locConfig->i2cFMHighCnt) |
-                                                  _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_LCNT, locConfig->i2cFMLowCnt);
-            I3C_CORE_SCL_I2C_FMP_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_HCNT, locConfig->i2cFMPlusHighCnt) |
-                                                   _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_LCNT, locConfig->i2cFMPlusLowCnt);
-            I3C_CORE_SCL_EXT_LCNT_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_1, locConfig->extLowCnt1) |
-                                                    _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_2, locConfig->extLowCnt2) |
-                                                    _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_3, locConfig->extLowCnt3) |
-                                                    _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_4, locConfig->extLowCnt4);
-            I3C_CORE_SCL_EXT_TERMN_LCNT_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_EXT_TERMN_LCNT_TIMING_I3C_EXT_TERMN_LCNT, locConfig->extTerminationLowCnt);
-        }
-
-        I3C_CORE_DEVICE_CTRL(locBase) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_IBA_INCLUDE, locConfig->ibaInclude ? 1UL : 0UL) |
-                                        _VAL2FLD(I3C_CORE_DEVICE_CTRL_HOT_JOIN_CTRL, locConfig->hotJoinCtrl ? 1UL : 0UL);
-
-        I3C_CORE_DEVICE_ADDR(locBase) = _VAL2FLD(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, locConfig->dynamicAddr) |
-                                        I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID_Msk;
-
-        I3C_CORE_BUS_FREE_AVAIL_TIMING(locBase) |= _VAL2FLD(I3C_CORE_BUS_FREE_AVAIL_TIMING_BUS_FREE_TIME, locConfig->busFreeTime);
-
-        I3C_CORE_SDA_HOLD_SWITCH_DLY_TIMING(locBase) = _VAL2FLD(I3C_CORE_SDA_HOLD_SWITCH_DLY_TIMING_SDA_TX_HOLD, locConfig->sdaHoldTime);
-
-        I3C_CORE_QUEUE_THLD_CTRL(locBase) = _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_CMD_EMPTY_BUF_THLD, locConfig->cmdQueueEmptyThld) |
-                                            _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_RESP_BUF_THLD, locConfig->respQueueThld) |
-                                            _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_STATUS_THLD, locConfig->ibiQueueThld);
-
-
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-        I3C_CORE_QUEUE_THLD_CTRL(locBase) |= _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_DATA_THLD, locConfig->ibiDataThld);
-#endif
-        I3C_CORE_DATA_BUFFER_THLD_CTRL(locBase) = _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_BUF_THLD, locConfig->rxBufThld) |
-            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_EMPTY_BUF_THLD, locConfig->txEmptyBufThld) |
-            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_START_THLD, locConfig->rxBufStartThld) |
-            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_START_THLD, locConfig->txBufStartThld);
-
-        /* populate the device address table as per available devices. */
-        for (index = 0U; index < (locContext->i3cController.devCount); index++)
-        {
-            if (locContext->devList[index].i2c)
+            if(!locConfig->manualDataRate)
             {
-                staticAddress = locContext->devList[index].i2cDevice.staticAddress;
-                value = _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_STATIC_ADDR, staticAddress) | I3C_CORE_DEV_ADDR_TABLE_LOC1_LEGACY_I2C_DEVICE_Msk;
+                (void)Cy_I3C_SetDataRate(locBase, locContext->i3cSclRate, locContext->i3cClockHz, locContext);
             }
             else
             {
-                dynamicAddress = locContext->devList[index].i3cDevice.dynamicAddress;
-                staticAddress = locContext->devList[index].i3cDevice.staticAddress;
-                parity = even_parity(dynamicAddress);
-                dynamicAddress |= (parity << 7U);
-                value = _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_DYNAMIC_ADDR, dynamicAddress) | _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_STATIC_ADDR, staticAddress);
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-                if ((bool)(locContext->devList[index].i3cDevice.bcr & CY_I3C_CORE_BCR_IBI_PAYLOAD_Msk))
-                {
-                    value |= I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_WITH_DATA_Msk;
-                }
-#endif
+                 I3C_CORE_SCL_I3C_OD_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_HCNT, locConfig->openDrainHighCnt) |
+                                                    _VAL2FLD(I3C_CORE_SCL_I3C_OD_TIMING_I3C_OD_LCNT, locConfig->openDrainLowCnt);
+                 I3C_CORE_SCL_I3C_PP_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_HCNT, locConfig->pushPullHighCnt) |
+                                                    _VAL2FLD(I3C_CORE_SCL_I3C_PP_TIMING_I3C_PP_LCNT, locConfig->pushPullLowCnt);
+                 I3C_CORE_SCL_I2C_FM_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_HCNT, locConfig->i2cFMHighCnt) |
+                                                    _VAL2FLD(I3C_CORE_SCL_I2C_FM_TIMING_I2C_FM_LCNT, locConfig->i2cFMLowCnt);
+                 I3C_CORE_SCL_I2C_FMP_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_HCNT, locConfig->i2cFMPlusHighCnt) |
+                                                     _VAL2FLD(I3C_CORE_SCL_I2C_FMP_TIMING_I2C_FMP_LCNT, locConfig->i2cFMPlusLowCnt);
+                 I3C_CORE_SCL_EXT_LCNT_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_1, locConfig->extLowCnt1) |
+                                                      _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_2, locConfig->extLowCnt2) |
+                                                      _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_3, locConfig->extLowCnt3) |
+                                                      _VAL2FLD(I3C_CORE_SCL_EXT_LCNT_TIMING_I3C_EXT_LCNT_4, locConfig->extLowCnt4);
+                I3C_CORE_SCL_EXT_TERMN_LCNT_TIMING(locBase) = _VAL2FLD(I3C_CORE_SCL_EXT_TERMN_LCNT_TIMING_I3C_EXT_TERMN_LCNT, locConfig->extTerminationLowCnt);
             }
 
-            Cy_I3C_WriteIntoDeviceAddressTable(locBase, index, value);
-        }
+            I3C_CORE_DEVICE_CTRL(locBase) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_IBA_INCLUDE, locConfig->ibaInclude ? 1UL : 0UL) |
+                                         _VAL2FLD(I3C_CORE_DEVICE_CTRL_HOT_JOIN_CTRL, locConfig->hotJoinCtrl ? 1UL : 0UL);
 
-        result = CY_SYSPM_SUCCESS;
+            I3C_CORE_DEVICE_ADDR(locBase) = _VAL2FLD( I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, locConfig->dynamicAddr) |
+                                         I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID_Msk;
+
+            I3C_CORE_BUS_FREE_AVAIL_TIMING(locBase) |= _VAL2FLD(I3C_CORE_BUS_FREE_AVAIL_TIMING_BUS_FREE_TIME, locConfig->busFreeTime);
+
+            I3C_CORE_SDA_HOLD_SWITCH_DLY_TIMING(locBase) = _VAL2FLD(I3C_CORE_SDA_HOLD_SWITCH_DLY_TIMING_SDA_TX_HOLD, locConfig->sdaHoldTime);
+
+            I3C_CORE_QUEUE_THLD_CTRL(locBase) = _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_CMD_EMPTY_BUF_THLD, locConfig->cmdQueueEmptyThld) |
+                                             _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_RESP_BUF_THLD, locConfig->respQueueThld) |
+                                             _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_STATUS_THLD, locConfig->ibiQueueThld);
+
+
+            #if CY_IP_MXI3C_VERSION_MINOR == 1u
+            I3C_CORE_QUEUE_THLD_CTRL(locBase) |= _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_IBI_DATA_THLD, locConfig->ibiDataThld);
+            #endif
+            I3C_CORE_DATA_BUFFER_THLD_CTRL(locBase) = _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_BUF_THLD, locConfig->rxBufThld) |
+                                                    _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_EMPTY_BUF_THLD, locConfig->txEmptyBufThld) |
+                                                    _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_START_THLD, locConfig->rxBufStartThld) |
+                                                    _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_START_THLD, locConfig->txBufStartThld);
+
+            /* populate the device address table as per available devices. */
+            for(index = 0U; index < (locContext->i3cController.devCount); index++)
+            {
+                if (locContext->devList[index].i2c){
+                    staticAddress = locContext->devList[index].i2cDevice.staticAddress;
+                    value = _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_STATIC_ADDR, staticAddress) | I3C_CORE_DEV_ADDR_TABLE_LOC1_LEGACY_I2C_DEVICE_Msk;
+                }else{
+                    dynamicAddress = locContext->devList[index].i3cDevice.dynamicAddress;
+                    staticAddress = locContext->devList[index].i3cDevice.staticAddress;
+                    parity = even_parity(dynamicAddress);
+                    dynamicAddress |= (parity << 7U);
+                    value = _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_DYNAMIC_ADDR, dynamicAddress) | _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_STATIC_ADDR, staticAddress);
+                    #if CY_IP_MXI3C_VERSION_MINOR == 1u
+                    if((bool)(locContext->devList[index].i3cDevice.bcr & CY_I3C_CORE_BCR_IBI_PAYLOAD_Msk)){
+                        value |= I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_WITH_DATA_Msk;
+                    }
+                    #endif
+                }
+
+                Cy_I3C_WriteIntoDeviceAddressTable(locBase, index, value);
+            }
+
+            result = CY_SYSPM_SUCCESS;
 
         break;
 
-    case CY_I3C_SECONDARY_CONTROLLER:
-    case CY_I3C_TARGET:
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-        /* Setting the device operation mode to Target - 1U */
-        I3C_CORE_DEVICE_CTRL_EXTENDED(locBase) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET);
+        case CY_I3C_SECONDARY_CONTROLLER:
+        case CY_I3C_TARGET:
+            #if CY_IP_MXI3C_VERSION_MINOR == 1u
+            /* Setting the device operation mode to Target - 1U */
+            I3C_CORE_DEVICE_CTRL_EXTENDED(locBase) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE, I3C_CORE_DEVICE_CTRL_EXTENDED_DEV_OPERATION_MODE_TARGET);
 
-        /* On setting this ADAPTIVE_I2C_I3C bit, the controller generates hot-join request only when it is in/changes to I3C mode of operation. */
-        I3C_CORE_DEVICE_CTRL(locBase) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_ADAPTIVE_I2C_I3C, locConfig->adaptiveI2CI3C ? 1UL : 0UL);
-        if (0U != locConfig->staticAddress)
-        {
-            I3C_CORE_DEVICE_ADDR(locBase) |= _VAL2FLD(I3C_CORE_DEVICE_ADDR_STATIC_ADDR, locConfig->staticAddress) | I3C_CORE_DEVICE_ADDR_STATIC_ADDR_VALID_Msk;
-        }
+            /* On setting this ADAPTIVE_I2C_I3C bit, the controller generates hot-join request only when it is in/changes to I3C mode of operation. */
+            I3C_CORE_DEVICE_CTRL(locBase) = _VAL2FLD(I3C_CORE_DEVICE_CTRL_ADAPTIVE_I2C_I3C, locConfig->adaptiveI2CI3C ? 1UL : 0UL);
+            if(0U != locConfig->staticAddress)
+            {
+                I3C_CORE_DEVICE_ADDR(locBase) |= _VAL2FLD(I3C_CORE_DEVICE_ADDR_STATIC_ADDR, locConfig->staticAddress) |I3C_CORE_DEVICE_ADDR_STATIC_ADDR_VALID_Msk;
+            }
 
-        I3C_CORE_DEVICE_ADDR(locBase) |= _VAL2FLD(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, locConfig->dynamicAddr) | I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID_Msk;
-        I3C_CORE_TGT_PID_VALUE(locBase) = (uint32_t)locConfig->pid;
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Intentional typecast from "unsigned 64-bit int" to narrower essential type "unsigned 32-bit int"');
-        I3C_CORE_TGT_MIPI_ID_VALUE(locBase) = (locConfig->pid) >> 32UL;
-        I3C_CORE_TGT_CHAR_CTRL(locBase) |= _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_MAX_DATA_SPEED_LIMIT, locConfig->speedLimit) |
-                                           _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_HDR_CAPABLE, locConfig->hdrCapable) |
-                                           _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_DCR, locConfig->dcr) |
-                                           _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_DEVICE_ROLE, locConfig->deviceRoleCap);
+            I3C_CORE_DEVICE_ADDR(locBase) |= _VAL2FLD(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, locConfig->dynamicAddr) | I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID_Msk;
+            I3C_CORE_TGT_PID_VALUE(locBase) = (uint32_t)locConfig->pid;
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Intentional typecast from "unsigned 64-bit int" to narrower essential type "unsigned 32-bit int"');
+            I3C_CORE_TGT_MIPI_ID_VALUE(locBase) = (locConfig->pid) >> 32UL;
+            I3C_CORE_TGT_CHAR_CTRL(locBase) |= _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_MAX_DATA_SPEED_LIMIT, locConfig->speedLimit) |
+                                               _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_HDR_CAPABLE, locConfig->hdrCapable) |
+                                               _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_DCR, locConfig->dcr) |
+                                               _VAL2FLD(I3C_CORE_TGT_CHAR_CTRL_DEVICE_ROLE, locConfig->deviceRoleCap);
 
-        I3C_CORE_TGT_EVENT_STATUS(locBase) &= (locConfig->hotjoinEnable) ? I3C_CORE_TGT_EVENT_STATUS_HJ_EN_Msk : (~I3C_CORE_TGT_EVENT_STATUS_HJ_EN_Msk);
-        I3C_CORE_BUS_FREE_AVAIL_TIMING(locBase) |=  _VAL2FLD(I3C_CORE_BUS_FREE_AVAIL_TIMING_BUS_AVAILABLE_TIME, locConfig->busAvailTime);
-        I3C_CORE_BUS_IDLE_TIMING(locBase) = _VAL2FLD(I3C_CORE_BUS_IDLE_TIMING_BUS_IDLE_TIME, locConfig->busIdleTime);
+            I3C_CORE_TGT_EVENT_STATUS(locBase) &= (locConfig->hotjoinEnable) ? I3C_CORE_TGT_EVENT_STATUS_HJ_EN_Msk : (~I3C_CORE_TGT_EVENT_STATUS_HJ_EN_Msk);
+            I3C_CORE_BUS_FREE_AVAIL_TIMING(locBase) |=  _VAL2FLD(I3C_CORE_BUS_FREE_AVAIL_TIMING_BUS_AVAILABLE_TIME, locConfig->busAvailTime);
+            I3C_CORE_BUS_IDLE_TIMING(locBase) = _VAL2FLD(I3C_CORE_BUS_IDLE_TIMING_BUS_IDLE_TIME, locConfig->busIdleTime);
 
-        I3C_CORE_QUEUE_THLD_CTRL(locBase) = _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_CMD_EMPTY_BUF_THLD, locConfig->cmdQueueEmptyThld) |
-                                            _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_RESP_BUF_THLD, locConfig->respQueueThld);
+            I3C_CORE_QUEUE_THLD_CTRL(locBase) = _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_CMD_EMPTY_BUF_THLD, locConfig->cmdQueueEmptyThld) |
+                                             _VAL2FLD(I3C_CORE_QUEUE_THLD_CTRL_RESP_BUF_THLD, locConfig->respQueueThld);
 
-        I3C_CORE_DATA_BUFFER_THLD_CTRL(locBase) = _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_BUF_THLD, locConfig->rxBufThld) |
-            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_EMPTY_BUF_THLD, locConfig->txEmptyBufThld) |
-            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_START_THLD, locConfig->rxBufStartThld) |
-            _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_START_THLD, locConfig->txBufStartThld);
+            I3C_CORE_DATA_BUFFER_THLD_CTRL(locBase) = _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_BUF_THLD, locConfig->rxBufThld) |
+                                                   _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_EMPTY_BUF_THLD, locConfig->txEmptyBufThld) |
+                                                   _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_RX_START_THLD, locConfig->rxBufStartThld) |
+                                                   _VAL2FLD(I3C_CORE_DATA_BUFFER_THLD_CTRL_TX_START_THLD, locConfig->txBufStartThld);
 
-#endif
+            #endif
         result = CY_SYSPM_SUCCESS;
         break;
 
-    default:
-        result = CY_SYSPM_SUCCESS;
+        default:
+            result = CY_SYSPM_SUCCESS;
         break;
     }
 
@@ -4042,62 +4001,62 @@ static cy_en_syspm_status_t Cy_I3C_DeepSleepCallback_After(cy_stc_syspm_callback
 *******************************************************************************/
 cy_en_syspm_status_t Cy_I3C_DeepSleepCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
 {
-    I3C_CORE_Type *locBase = (I3C_CORE_Type *) callbackParams->base;
+   I3C_CORE_Type *locBase = (I3C_CORE_Type *) callbackParams->base;
     cy_stc_i3c_context_t *locContext = (cy_stc_i3c_context_t *) callbackParams->context;
     cy_en_syspm_status_t retStatus = CY_SYSPM_FAIL;
 
-    switch (mode)
+    switch(mode)
     {
-    case CY_SYSPM_CHECK_READY:
-    {
-        /* Check for cmd/rsp/ibi/Rx/Tx FIFO is empty and bus condition is idle*/
-        if (false == Cy_I3C_IsBusBusy((I3C_CORE_Type const *)locBase) && (locContext->state == CY_I3C_IDLE))
+        case CY_SYSPM_CHECK_READY:
         {
-            /*save the intr mask and disable all intr*/
-            locContext->intr_mask = Cy_I3C_GetInterruptMask(locBase);
-            Cy_I3C_SetInterruptMask(locBase, 0UL);
-            Cy_I3C_SetInterruptStatusMask(locBase, 0UL);
-            locContext->dsConfig.dynamicAddr = (uint8_t)_FLD2VAL(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, I3C_CORE_DEVICE_ADDR(locBase));
+            /* Check for cmd/rsp/ibi/Rx/Tx FIFO is empty and bus condition is idle*/
+            if(false == Cy_I3C_IsBusBusy((I3C_CORE_Type const *)locBase) && (locContext->state == CY_I3C_IDLE))
+            {
+                /*save the intr mask and disable all intr*/
+                locContext->intr_mask = Cy_I3C_GetInterruptMask(locBase);
+                Cy_I3C_SetInterruptMask(locBase, 0UL);
+                Cy_I3C_SetInterruptStatusMask(locBase, 0UL);
+                locContext->dsConfig.dynamicAddr = (uint8_t)_FLD2VAL(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, I3C_CORE_DEVICE_ADDR(locBase));
+                if (locContext->Enabled)
+                {
+                    Cy_I3C_Disable(locBase, locContext);
+                    locContext->Enabled = true;
+                }
+                retStatus = CY_SYSPM_SUCCESS;
+            }
+        }
+        break;
+
+        case CY_SYSPM_CHECK_FAIL:
+        {
+            /* enable IP */
+            Cy_I3C_SetInterruptMask(locBase, locContext->intr_mask);
+            Cy_I3C_SetInterruptStatusMask(locBase, locContext->intr_mask);
             if (locContext->Enabled)
             {
-                Cy_I3C_Disable(locBase, locContext);
-                locContext->Enabled = true;
+                Cy_I3C_Enable(locBase, locContext);
             }
             retStatus = CY_SYSPM_SUCCESS;
         }
-    }
-    break;
+        break;
 
-    case CY_SYSPM_CHECK_FAIL:
-    {
-        /* enable IP */
-        Cy_I3C_SetInterruptMask(locBase, locContext->intr_mask);
-        Cy_I3C_SetInterruptStatusMask(locBase, locContext->intr_mask);
-        if (locContext->Enabled)
+        case CY_SYSPM_BEFORE_TRANSITION:
         {
-            Cy_I3C_Enable(locBase, locContext);
+            /* Clear the interrupts*/
+            Cy_I3C_ClearInterrupt(locBase, CY_I3C_INTR_MASK);
+            retStatus = CY_SYSPM_SUCCESS;
         }
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
+        break;
 
-    case CY_SYSPM_BEFORE_TRANSITION:
-    {
-        /* Clear the interrupts*/
-        Cy_I3C_ClearInterrupt(locBase, CY_I3C_INTR_MASK);
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
+        case CY_SYSPM_AFTER_TRANSITION:
+        {
+            /* Apply all config, restore interrupts and enable IP */
+           retStatus = Cy_I3C_DeepSleepCallback_After(callbackParams);
+        }
+        break;
 
-    case CY_SYSPM_AFTER_TRANSITION:
-    {
-        /* Apply all config, restore interrupts and enable IP */
-        retStatus = Cy_I3C_DeepSleepCallback_After(callbackParams);
-    }
-    break;
-
-    default:
-        retStatus = CY_SYSPM_FAIL;
+        default:
+            retStatus = CY_SYSPM_FAIL;
         break;
     }
 
@@ -4156,7 +4115,7 @@ static uint8_t even_parity(uint8_t address)
 }
 
 /*******************************************************************************
-* Function Name: ffsq
+* Function Name: FirstSetBit
 ****************************************************************************//**
 *
 * Finds the position of the first set bit in the given value.
@@ -4252,13 +4211,13 @@ static void InitAddrslots(cy_stc_i3c_context_t *context)
     uint8_t index;
 
     /* Set all the addresses as free initially */
-    for (index = 0U; index < ((CY_I3C_MAX_ADDR + 1U) * 2U) / CY_I3C_BITS_PER_LONG; index++)
+    for(index = 0U; index < ((CY_I3C_MAX_ADDR + 1U) * 2U) / CY_I3C_BITS_PER_LONG; index++)
     {
         SetAddrslotStatus(index, CY_I3C_ADDR_SLOT_FREE, context);
     }
 
     /* Assigning reserved status for addresses from 1-7 */
-    for (index = 0U; index < 8U; index++)
+    for(index = 0U; index < 8U; index++)
     {
         SetAddrslotStatus(index, CY_I3C_ADDR_SLOT_RSVD, context);
     }
@@ -4293,9 +4252,9 @@ static void DeInitAddrslots(cy_stc_i3c_context_t *context)
     cy_stc_i3c_controller_t *i3cController = &(context->i3cController);
     uint8_t index;
     /*  Sets status of all the addresses as free */
-    for (index = 0U; index < (((CY_I3C_MAX_ADDR + 1U) * 2U) / CY_I3C_BITS_PER_LONG); index++)
+    for(index = 0U; index < (((CY_I3C_MAX_ADDR + 1U) * 2U) / CY_I3C_BITS_PER_LONG); index++)
     {
-        i3cController->addrslotsStatusArray[index] = 0UL;
+            i3cController->addrslotsStatusArray[index] = 0UL;
     }
 }
 
@@ -4328,9 +4287,9 @@ static uint32_t GetI2CDevAddrPos(I3C_CORE_Type *base, uint8_t staticAddress, cy_
 
     CY_UNUSED_PARAMETER(context);
 
-    for (index = 0U; index < CY_I3C_MAX_DEVS; index++)
+    for(index = 0U; index < CY_I3C_MAX_DEVS; index++)
     {
-        if (staticAddress == Cy_I3C_ReadStaticAddrFromDAT(base, index))
+        if(staticAddress == Cy_I3C_ReadStaticAddrFromDAT(base, index))
         {
             return (uint32_t)index;
         }
@@ -4368,11 +4327,11 @@ static uint32_t GetI3CDevAddrPos(I3C_CORE_Type *base, uint8_t dynamicAddress, cy
 
     CY_UNUSED_PARAMETER(context); /* Suppress a compiler warning about unused variables */
 
-    for (index = 0U; index < CY_I3C_MAX_DEVS; index++)
+    for(index = 0U; index < CY_I3C_MAX_DEVS; index++)
     {
         uint32_t ret;
         ret = Cy_I3C_ReadDynAddrFromDAT(base, index);
-        if (dynamicAddress == ret)
+        if(dynamicAddress == ret)
         {
             return (uint32_t)index;
         }
@@ -4391,7 +4350,7 @@ static uint32_t GetI3CDevAddrPos(I3C_CORE_Type *base, uint8_t dynamicAddress, cy
 * The pointer to the I3C instance.
 *
 * \param context
-* The pointer to the context structure \ref cy_stc_i3c_context_t allo * by the user. The structure is used during the I3C operation for internal
+* The pointer to the context structure \ref cy_stc_i3c_context_t allocated by the user. The structure is used during the I3C operation for internal
 * configuration and data retention. The user must not modify anything
 * in this structure.
 *
@@ -4441,7 +4400,7 @@ static cy_en_i3c_addr_slot_status_t GetAaddrslotStatus(uint8_t address, cy_stc_i
     status = (i3cController->addrslotsStatusArray[bitPos / CY_I3C_BITS_PER_LONG]);
     status >>= bitPos % CY_I3C_BITS_PER_LONG;
 
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_i3c_addr_slot_status_t enum.');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_i3c_addr_slot_status_t enum.');
     return (cy_en_i3c_addr_slot_status_t)(status & CY_I3C_ADDR_SLOT_STATUS_MASK);
 }
 
@@ -4466,35 +4425,16 @@ static cy_en_i3c_status_t ResponseError(uint32_t respCmd)
 
     switch (error)
     {
-    case 1U:
-        ret = CY_I3C_CONTROLLER_CRC_ERROR;
-        break;
-    case 2U:
-        ret = CY_I3C_CONTROLLER_PARITY_ERROR;
-        break;
-    case 3U:
-        ret = CY_I3C_CONTROLLER_FRAME_ERROR;
-        break;
-    case 4U:
-        ret = CY_I3C_CONTROLLER_BROADCAST_ADDR_NACK_ERROR;
-        break;
-    case 5U:
-        ret = CY_I3C_CONTROLLER_ADDR_NACK_ERROR;
-        break; //This is same as ERROR CE2
-    case 6U:
-        ret = CY_I3C_CONTROLLER_BUFFER_OVERFLOW_ERROR;
-        break;
-    case 8U:
-        ret = CY_I3C_CONTROLLER_XFER_ABORTED_ERROR;
-        break;
-    case 9U:
-        ret = CY_I3C_CONTROLLER_I2C_TGT_WDATA_NACK_ERROR;
-        break;
-    case 12U:
-        ret = CY_I3C_CONTROLLER_PEC_ERROR;
-        break;
-    default: /* Unknown Error */
-        break;
+        case 1U: ret = CY_I3C_CONTROLLER_CRC_ERROR; break;
+        case 2U: ret = CY_I3C_CONTROLLER_PARITY_ERROR; break;
+        case 3U: ret = CY_I3C_CONTROLLER_FRAME_ERROR; break;
+        case 4U: ret = CY_I3C_CONTROLLER_BROADCAST_ADDR_NACK_ERROR; break;
+        case 5U: ret = CY_I3C_CONTROLLER_ADDR_NACK_ERROR; break; //This is same as ERROR CE2
+        case 6U: ret = CY_I3C_CONTROLLER_BUFFER_OVERFLOW_ERROR; break;
+        case 8U: ret = CY_I3C_CONTROLLER_XFER_ABORTED_ERROR; break;
+        case 9U: ret = CY_I3C_CONTROLLER_I2C_TGT_WDATA_NACK_ERROR; break;
+        case 12U: ret = CY_I3C_CONTROLLER_PEC_ERROR; break;
+        default: /* Unknown Error */ break;
     }
     return ret;
 }
@@ -4521,38 +4461,17 @@ static uint32_t ResponseErrorEvent(uint32_t respCmd)
 
     switch (error)
     {
-    case 1U:
-        ret = CY_I3C_CRC_ERROR_EVENT;
-        break;
-    case 2U:
-        ret = CY_I3C_PARITY_ERROR_EVENT;
-        break;
-    case 3U:
-        ret = CY_I3C_FRAME_ERROR_EVENT;
-        break;
-    case 4U:
-        ret = CY_I3C_BROADCAST_ADDR_NACK_ERROR_EVENT;
-        break;
-    case 5U:
-        ret = CY_I3C_ADDR_NACK_ERROR_EVENT;
-        break;
-    case 6U:
-        ret = CY_I3C_BUFFER_OVERFLOW_ERROR_EVENT;
-        break;
-    case 8U:
-        ret = CY_I3C_XFER_ABORTED_ERROR_EVENT;
-        break;
-    case 9U:
-        ret = CY_I3C_I2C_TGT_WDATA_NACK_ERROR_EVENT;
-        break;
-    case 10U:
-        ret = CY_I3C_CONTROLLER_EARLY_TERMINATION_EVENT;
-        break;
-    case 12U:
-        ret = CY_I3C_PEC_ERROR_EVENT;
-        break;
-    default: /* Unknown Error */
-        break;
+        case 1U: ret = CY_I3C_CRC_ERROR_EVENT; break;
+        case 2U: ret = CY_I3C_PARITY_ERROR_EVENT; break;
+        case 3U: ret = CY_I3C_FRAME_ERROR_EVENT; break;
+        case 4U: ret = CY_I3C_BROADCAST_ADDR_NACK_ERROR_EVENT; break;
+        case 5U: ret = CY_I3C_ADDR_NACK_ERROR_EVENT; break;
+        case 6U: ret = CY_I3C_BUFFER_OVERFLOW_ERROR_EVENT; break;
+        case 8U: ret = CY_I3C_XFER_ABORTED_ERROR_EVENT; break;
+        case 9U: ret = CY_I3C_I2C_TGT_WDATA_NACK_ERROR_EVENT; break;
+        case 10U: ret = CY_I3C_CONTROLLER_EARLY_TERMINATION_EVENT; break;
+        case 12U: ret = CY_I3C_PEC_ERROR_EVENT; break;
+        default: /* Unknown Error */ break;
 
     }
     return ret;
@@ -4582,12 +4501,12 @@ static void WriteArray(I3C_CORE_Type *base, void *buffer, uint32_t size)
     uint32_t index;
 
     /*Put data in TX FIFO */
-    for (index = 0UL; index < (size / 4UL); ++index)
+    for(index = 0UL; index < (size / 4UL); ++index)
     {
         Cy_I3C_WriteTxFIFO(base, *(buf + index));
     }
 
-    if (0UL != (size & 3UL))
+    if(0UL != (size & 3UL))
     {
         uint8_t cnt = (uint8_t)(size & 3UL);
         uint8_t *srcPtr, *destPtr;
@@ -4595,7 +4514,7 @@ static void WriteArray(I3C_CORE_Type *base, void *buffer, uint32_t size)
         destPtr = (uint8_t *)(&value);
         srcPtr = (uint8_t *)(buf + index);
 
-        for (index = 0UL; index < cnt; index++)
+        for(index = 0UL; index < cnt; index++)
         {
             *destPtr = *srcPtr;
             destPtr++;
@@ -4629,31 +4548,30 @@ static void ReadArray(I3C_CORE_Type *base, void *buffer, uint32_t size)
     uint32_t value = 0UL;
     uint32_t wd_size = size / 4U, byte_size = size % 4U;
 
-    if (((uintptr_t)buffer % (uintptr_t)4U) == 0UL)      /* checking for 4 byte alignment */
+    if(((uintptr_t)buffer % (uintptr_t)4U) == 0UL)       /* checking for 4 byte alignment */
     {
-        for (index = 0UL; index < wd_size; index++)
+        for(index = 0UL; index < wd_size; index++)
         {
             value = Cy_I3C_ReadRxFIFO(base);
             *((uint32_t *)buffer + buffer_index++) = value;
         }
         buffer_index *= 4UL;
-    }
-    else
+    }else
     {
-        for (index = 0UL; index < wd_size; index++)
+        for(index = 0UL; index < wd_size; index++)
         {
             value = Cy_I3C_ReadRxFIFO(base);
             *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value & 0xFFU);
-            *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value >> 8U & 0xFFU);
-            *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value >> 16U & 0xFFU);
-            *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value >> 24U & 0xFFU);
+            *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value>>8U & 0xFFU);
+            *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value>>16U & 0xFFU);
+            *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value>>24U & 0xFFU);
         }
     }
 
-    if (byte_size > 0UL)
+    if(byte_size > 0UL)
     {
         value = Cy_I3C_ReadRxFIFO(base);
-        for (index = 0UL; index < byte_size; index++)
+        for(index = 0UL; index < byte_size; index++)
         {
             *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value & 0xFFU);
             value = value >> 8U;
@@ -4680,14 +4598,14 @@ static void ReadArray(I3C_CORE_Type *base, void *buffer, uint32_t size)
 *******************************************************************************/
 static void ControllerHandleDataTransmit(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
-    if (context->controllerBufferSize > 1UL)
-    {
-        /* Get the number of bytes to copy into TX FIFO */
-        uint32_t numToCopy = context->controllerBufferSize;
+        if (context->controllerBufferSize > 1UL)
+        {
+            /* Get the number of bytes to copy into TX FIFO */
+            uint32_t numToCopy = context->controllerBufferSize;
 
-        /* Write data into TX FIFO */
-        WriteArray(base, context->controllerBuffer, numToCopy);
-    }
+            /* Write data into TX FIFO */
+            WriteArray(base, context->controllerBuffer, numToCopy);
+        }
 }
 
 /*******************************************************************************
@@ -4750,13 +4668,13 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
     cccCmd.data = &payload;
     cy_en_i3c_status_t retStatus;
 
-    if (true == basicInfo)
+    if(true == basicInfo)
     {
         cy_stc_i3c_ccc_getbcr_t bcr = {0};
         cccCmd.data->data = &bcr;
         cccCmd.cmd = CY_I3C_CCC_GETBCR;
         retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-        if (CY_I3C_SUCCESS != retStatus)
+        if(CY_I3C_SUCCESS != retStatus)
         {
             return retStatus;
         }
@@ -4766,7 +4684,7 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
         cccCmd.data->data = &dcr;
         cccCmd.cmd = CY_I3C_CCC_GETDCR;
         retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-        if (CY_I3C_SUCCESS != retStatus)
+        if(CY_I3C_SUCCESS != retStatus)
         {
             return retStatus;
         }
@@ -4776,7 +4694,7 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
         cccCmd.data->data = &pid;
         cccCmd.cmd = CY_I3C_CCC_GETPID;
         retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-        if (CY_I3C_SUCCESS != retStatus)
+        if(CY_I3C_SUCCESS != retStatus)
         {
             return retStatus;
         }
@@ -4784,12 +4702,12 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
         uint8_t cnt;
         uint32_t shift;
         ptr = pid.pid;
-        i3cDevice->provisonalID = 0UL;
+        i3cDevice->provisionalID = 0UL;
 
-        for (cnt = 0U; cnt < sizeof(pid); cnt++)
+        for(cnt = 0U; cnt < sizeof(pid); cnt++)
         {
             shift = (sizeof(pid) - cnt - 1U) * 8U;
-            (i3cDevice->provisonalID) |= ((uint64_t)(*ptr)) << shift;
+            (i3cDevice->provisionalID) |= ((uint64_t)(*ptr)) << shift;
             ptr++;
         }
     }
@@ -4799,7 +4717,7 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
     cccCmd.data->data = &mrwl;
     cccCmd.cmd = CY_I3C_CCC_GETMRL;
     retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -4809,7 +4727,7 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
     /* Get max write len */
     cccCmd.cmd = CY_I3C_CCC_GETMWL;
     retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -4820,23 +4738,22 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
     cy_stc_i3c_ccc_getxtime_t getxtime_data;
     cccCmd.data->data = &getxtime_data;
     retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         Cy_I3C_Resume(base, context);
-    }
-    else
+    }else
     {
         i3cDevice->ATM0Supported = (bool)(getxtime_data.supportedModes & CY_I3C_BIT(1));
     }
 
-    if (0U != (CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk & (i3cDevice->bcr)))
+    if(0U != (CY_I3C_CORE_BCR_MAX_DATA_SPEED_LIM_Msk & (i3cDevice->bcr)))
     {
         cy_stc_i3c_ccc_getmxds_t mxds = {0};
         i3cDevice->speedLimit = true;
         cccCmd.data->data = &mxds;
         cccCmd.cmd = CY_I3C_CCC_GETMXDS;
         retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-        if (CY_I3C_SUCCESS != retStatus)
+        if(CY_I3C_SUCCESS != retStatus)
         {
             return retStatus;
         }
@@ -4852,21 +4769,20 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
         i3cDevice->speedLimit = false;
     }
 
-    if (0U != (CY_I3C_CORE_BCR_HDR_CAP_Msk & (i3cDevice->bcr)))
+    if(0U != (CY_I3C_CORE_BCR_HDR_CAP_Msk & (i3cDevice->bcr)))
     {
         cy_stc_i3c_ccc_gethdrcap_t hdrcap = {0};
         i3cDevice->hdrSupport = true;
         cccCmd.data->data = &hdrcap;
         cccCmd.cmd = CY_I3C_CCC_GETHDRCAP;
         retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-        if (CY_I3C_SUCCESS != retStatus)
+        if(CY_I3C_SUCCESS != retStatus)
         {
             return retStatus;
         }
         i3cDevice->HDRCap = hdrcap.modes;
 
-        if ((hdrcap.getcapByte2 & 0xC0U) != 0U)   //checking if target supports HDR flow control
-        {
+        if((hdrcap.getcapByte2 & 0xC0U) != 0U){   //checking if target supports HDR flow control
             cccCmd.cmd = CY_I3C_CCC_ENDXFER(false);
             cccCmd.dbp = true;
             cccCmd.db = 0xf7U;
@@ -4874,7 +4790,7 @@ static cy_en_i3c_status_t RetrieveI3CDeviceInfo(I3C_CORE_Type *base, cy_stc_i3c_
             cccCmd.data->data = &data;
             cccCmd.data->len = 1U;
             retStatus = Cy_I3C_SendCCCCmd(base, &cccCmd, context);
-            if (CY_I3C_SUCCESS != retStatus)
+            if(CY_I3C_SUCCESS != retStatus)
             {
                 return retStatus;
             }
@@ -4916,72 +4832,66 @@ static void CCC_Set(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *cccCmd,  cy_stc_i
 
     /* Check if the cmd is a Direct or broadcast command;
     If Direct command, get the address offset in the DAT */
-    if (0U != (cccCmd->cmd & CY_I3C_CCC_DIRECT))
+    if(0U != (cccCmd->cmd & CY_I3C_CCC_DIRECT))
     {
         pos = GetI3CDevAddrPos(base, cccCmd->address, context);
     }
 
-    uint8_t validBytes;
-    uint8_t *data;
-    data = (uint8_t *)cccCmd->data->data;
+      uint8_t validBytes;
+      uint8_t *data;
+      data = (uint8_t *)cccCmd->data->data;
 
-    if (!cccCmd->dbp)
+    if(!cccCmd->dbp)
     {
-        switch (dataLen)
+        switch(dataLen)
         {
-        case 1U:
-        {
-            validBytes = CY_I3C_BYTE_STROBE1;
-            cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0, *data);
+            case 1U: {
+                validBytes = CY_I3C_BYTE_STROBE1;
+                cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0,*data);
 
-            cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk;
-            break;
+                cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk;
+                break;
+            }
+            case 2U: {
+                validBytes = CY_I3C_BYTE_STROBE2;
+                cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0,*(data + 1U)) |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_1,*(data));
+
+                cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk;
+
+                break;
+            }
+            case 3U: {
+                validBytes = CY_I3C_BYTE_STROBE3;
+                cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0,*(data + 2))|
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_1,*(data + 1)) |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_2,*data);
+
+                cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk;
+
+                break;
+            }
+            default: {
+                /* Commands with greater than 3 bytes of payload
+                   Commands without payload; Also broadcast commands */
+                cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
+                                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, dataLen);
+
+                cmd.cmdLow = 0UL;
+                break;
+            }
         }
-        case 2U:
-        {
-            validBytes = CY_I3C_BYTE_STROBE2;
-            cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0, *(data + 1U)) |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_1, *(data));
-
-            cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk;
-
-            break;
-        }
-        case 3U:
-        {
-            validBytes = CY_I3C_BYTE_STROBE3;
-            cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_SHORT_DATA_ARG |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_BYTE_STRB, validBytes) |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_0, *(data + 2)) |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_1, *(data + 1)) |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_SHORT_DATA_ARG_DATA_BYTE_2, *data);
-
-            cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SDAP_Msk;
-
-            break;
-        }
-        default:
-        {
-            /* Commands with greater than 3 bytes of payload
-               Commands without payload; Also broadcast commands */
-            cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                          _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, dataLen);
-
-            cmd.cmdLow = 0UL;
-            break;
-        }
-        }
-    }
-    else
-    {
+    }else{
 
         cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                      _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, dataLen) |
-                      _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DB, cccCmd->db);
+                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, dataLen) |
+                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DB, cccCmd->db);
         cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DBP_Msk;
     }
     cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
@@ -4992,17 +4902,15 @@ static void CCC_Set(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *cccCmd,  cy_stc_i
                   I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
 
     /*For broadcast CCC set RnW bit*/
-    if ((0U == (cccCmd->cmd & CY_I3C_CCC_DIRECT)) && (cccCmd->cmd != CY_I3C_CCC_DEVCTRL) && (cccCmd->cmd != CY_I3C_CCC_DEFTGTS))
+    if((0U == (cccCmd->cmd & CY_I3C_CCC_DIRECT)) && (cccCmd->cmd != CY_I3C_CCC_DEVCTRL) && (cccCmd->cmd != CY_I3C_CCC_DEFTGTS))
     {
-        cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk;
+       cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk;
     }
-    if (cccCmd->dbp || dataLen > 3U)
-    {
+    if (cccCmd->dbp || dataLen > 3U){
         WriteArray(base, data, dataLen);
     }
 
-    if (context->devList[(uint8_t)pos].i3cDevice.PECEnabled)
-    {
+    if(context->devList[(uint8_t)pos].i3cDevice.PECEnabled){
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
     }
     /* Disable the interrupt signals by clearing the bits */
@@ -5046,7 +4954,7 @@ static void CCC_Get(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *cccCmd, cy_stc_i3
         DATA_LENGTH should be provided by the calling API and not the user */
 
     cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, dataLen);
+                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, dataLen);
 
     cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CP_Msk |
@@ -5056,13 +4964,11 @@ static void CCC_Get(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *cccCmd, cy_stc_i3
                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk |
                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
 
-    if (cccCmd->dbp)
-    {
+    if(cccCmd->dbp){
         cmd.cmdHigh |= _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DB, cccCmd->db);
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DBP_Msk;
     }
-    if (context->devList[(uint8_t)pos].i3cDevice.PECEnabled)
-    {
+    if(context->devList[(uint8_t)pos].i3cDevice.PECEnabled){
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
     }
 
@@ -5102,13 +5008,13 @@ static cy_en_i3c_status_t enec_disec_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, false, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
     /* Expects 1 byte of data */
-    if (0U == cccCmd->data->len)
+    if(0U == cccCmd->data->len)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -5150,7 +5056,7 @@ static cy_en_i3c_status_t rstdaa_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, false, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -5158,10 +5064,10 @@ static cy_en_i3c_status_t rstdaa_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
     CCC_Set(base, cccCmd, context);
 
     /* Handling of unicast command */
-    if (CY_I3C_BROADCAST_ADDR != cccCmd->address)
+    if(CY_I3C_BROADCAST_ADDR != cccCmd->address)
     {
         retStatus = ControllerHandleCCCResponse(base, NULL, context);
-        if (CY_I3C_SUCCESS != retStatus)
+        if(CY_I3C_SUCCESS != retStatus)
         {
             return retStatus;
         }
@@ -5179,12 +5085,12 @@ static cy_en_i3c_status_t rstdaa_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
     else
     {
         retStatus = ControllerHandleCCCResponse(base, NULL, context);
-        if (CY_I3C_SUCCESS != retStatus)
+        if(CY_I3C_SUCCESS != retStatus)
         {
             return retStatus;
         }
         devCount = context->i3cController.devCount;
-        for (pos = 0UL; pos < devCount; pos++)
+        for(pos = 0UL; pos < devCount; pos++)
         {
             Cy_I3C_WriteIntoDeviceAddressTable(base, (uint8_t)pos, 0UL);
 
@@ -5234,13 +5140,13 @@ static cy_en_i3c_status_t setmrwl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, false, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
     /* Expects 2 byte of data */
-    if (0U == cccCmd->data->len)
+    if(0U == cccCmd->data->len)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -5249,13 +5155,13 @@ static cy_en_i3c_status_t setmrwl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = ControllerHandleCCCResponse(base, NULL, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
 
     /* Set maximum read length for the target device */
-    if (CY_I3C_CCC_SETMRL(false) == cccCmd->cmd)
+    if( CY_I3C_CCC_SETMRL(false) == cccCmd->cmd)
     {
         pos = (uint8_t)(GetI3CDevAddrPos(base, cccCmd->address, context));
         data = (uint16_t *)(cccCmd->data->data);
@@ -5263,7 +5169,7 @@ static cy_en_i3c_status_t setmrwl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
     }
 
     /* Set maximum write length for the target device */
-    else if (CY_I3C_CCC_SETMWL(false) == cccCmd->cmd)
+    else if(CY_I3C_CCC_SETMWL(false) == cccCmd->cmd)
     {
         pos = (uint8_t)(GetI3CDevAddrPos(base, cccCmd->address, context));
         data = (uint16_t *)(cccCmd->data->data);
@@ -5271,12 +5177,12 @@ static cy_en_i3c_status_t setmrwl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
     }
 
     /* Set maximum read length for all the target I3C devices - broadcast command */
-    else if (CY_I3C_CCC_SETMRL(true) == cccCmd->cmd)
+    else if(CY_I3C_CCC_SETMRL(true) == cccCmd->cmd)
     {
         cy_stc_i3c_controller_devlist_t *devList = context->devList;
-        for (idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
+        for(idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
         {
-            if (!devList->i2c)
+            if(!devList->i2c)
             {
                 data = (uint16_t *)(cccCmd->data->data);
                 devList->i3cDevice.mrl = *data;
@@ -5289,9 +5195,9 @@ static cy_en_i3c_status_t setmrwl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
     else
     {
         cy_stc_i3c_controller_devlist_t *devList = context->devList;
-        for (idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
+        for(idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
         {
-            if (!devList->i2c)
+            if(!devList->i2c)
             {
                 data = (uint16_t *)(cccCmd->data->data);
                 devList->i3cDevice.mwl = *data;
@@ -5334,13 +5240,13 @@ static cy_en_i3c_status_t setxtime_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, false, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
     /* Expects 1 byte of data */
-    if (0U == cccCmd->data->len)
+    if(0U == cccCmd->data->len)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -5349,30 +5255,28 @@ static cy_en_i3c_status_t setxtime_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
 
     retStatus = ControllerHandleCCCResponse(base, NULL, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
 
-    if (*(uint8_t *)(cccCmd->data->data) == CY_I3C_ENTER_ASYNC_MODE0)
-    {
+    if(*(uint8_t *)(cccCmd->data->data) == CY_I3C_ENTER_ASYNC_MODE0){
 
         I3C->TIMING_CNT_CTRL |= I3C_TIMING_CNT_CTRL_CNT_ENABLE_Msk;
 
-        if (0U != (cccCmd->cmd & CY_I3C_CCC_DIRECT))   //Directed ccc
+        if(0U != (cccCmd->cmd & CY_I3C_CCC_DIRECT))    //Directed ccc
         {
             pos = GetI3CDevAddrPos(base, cccCmd->address, context);
             value = Cy_I3C_ReadFromDeviceAddressTable(base, pos);
             value |= I3C_CORE_DEV_ADDR_TABLE_LOC1_TS_Msk;
             Cy_I3C_WriteIntoDeviceAddressTable(base, pos, value);
 
-        }
-        else                                //Broadcast mode ccc
+        }else                               //Broadcast mode ccc
         {
             cy_stc_i3c_controller_devlist_t *devList = context->devList;
-            for (idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
+            for(idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
             {
-                if (!devList->i2c && devList->i3cDevice.ATM0Supported)
+                if(!devList->i2c && devList->i3cDevice.ATM0Supported)
                 {
                     pos = GetI3CDevAddrPos(base, devList->i3cDevice.dynamicAddress, context);
                     value = Cy_I3C_ReadFromDeviceAddressTable(base, pos);
@@ -5383,22 +5287,20 @@ static cy_en_i3c_status_t setxtime_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
             }
         }
     }
-    if (*(uint8_t *)(cccCmd->data->data) == CY_I3C_EXIT_ASYNC_MODES)
-    {
-        if (0U != (cccCmd->cmd & CY_I3C_CCC_DIRECT))     //Directed ccc
+    if(*(uint8_t *)(cccCmd->data->data) == CY_I3C_EXIT_ASYNC_MODES){
+        if(0U != (cccCmd->cmd & CY_I3C_CCC_DIRECT))      //Directed ccc
         {
             pos = GetI3CDevAddrPos(base, cccCmd->address, context);
             value = Cy_I3C_ReadFromDeviceAddressTable(base, pos);
             value &= ~I3C_CORE_DEV_ADDR_TABLE_LOC1_TS_Msk;
             Cy_I3C_WriteIntoDeviceAddressTable(base, pos, value);
 
-        }
-        else                                 //Broadcast mode ccc
+        }else                                //Broadcast mode ccc
         {
             cy_stc_i3c_controller_devlist_t *devList = context->devList;
-            for (idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
+            for(idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
             {
-                if (!devList->i2c)
+                if(!devList->i2c)
                 {
                     pos = GetI3CDevAddrPos(base, devList->i3cDevice.dynamicAddress, context);
                     value = Cy_I3C_ReadFromDeviceAddressTable(base, pos);
@@ -5441,7 +5343,7 @@ static cy_en_i3c_status_t getxtime_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -5453,7 +5355,7 @@ static cy_en_i3c_status_t getxtime_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -5463,9 +5365,9 @@ static cy_en_i3c_status_t getxtime_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
 
     getxtime_data = (cy_stc_i3c_ccc_getxtime_t *)cccCmd->data->data;
     getxtime_data->supportedModes = data & 0xFF;
-    getxtime_data->state = data >> 8U & 0xFF;
-    getxtime_data->frequency = data >> 16U & 0xFF;
-    getxtime_data->inaccuracy = data >> 24U & 0xFF;
+    getxtime_data->state = data>>8U & 0xFF;
+    getxtime_data->frequency = data>>16U & 0xFF;
+    getxtime_data->inaccuracy = data>>24U & 0xFF;
 
     return CY_I3C_SUCCESS;
 }
@@ -5506,12 +5408,12 @@ static void setda_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *cccCmd, cy_stc_
     Cy_I3C_SetInterruptMask(base, 0UL);
     Cy_I3C_SetInterruptStatusMask(base, (CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_TRANSFER_ERR_STS));
 
-    I3C_CORE_COMMAND_QUEUE_PORT(base) = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_ADDR_ASSGN_CMD |
-                                        _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_CMD, cccCmd->cmd) |
-                                        _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_DEV_INDX, pos) |
-                                        _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_DEV_COUNT, 1U) |
-                                        I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_ROC_Msk |
-                                        I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_TOC_Msk;
+    I3C_CORE_COMMAND_QUEUE_PORT(base)= I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_ADDR_ASSGN_CMD |
+                                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_CMD, cccCmd->cmd) |
+                                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_DEV_INDX, pos) |
+                                       _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_DEV_COUNT, 1U) |
+                                       I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_ROC_Msk |
+                                       I3C_CORE_COMMAND_QUEUE_PORT_ADDR_ASSGN_CMD_TOC_Msk;
 
 }
 
@@ -5545,7 +5447,7 @@ static cy_en_i3c_status_t setnewda_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
     uint8_t parity, pos;
 
     /* Expects 1 byte of data */
-    if (0U == cccCmd->data->len)
+    if(0U == cccCmd->data->len)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -5565,7 +5467,7 @@ static cy_en_i3c_status_t setnewda_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
     /* Handling the response */
     retStatus = ControllerHandleCCCResponse(base, NULL, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -5619,7 +5521,7 @@ static cy_en_i3c_status_t entas_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *c
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, false, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -5628,7 +5530,7 @@ static cy_en_i3c_status_t entas_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *c
 
     retStatus = ControllerHandleCCCResponse(base, NULL, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -5667,7 +5569,7 @@ static cy_en_i3c_status_t enthdr0_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 {
     cy_en_i3c_status_t retStatus;
 
-    if (CY_I3C_BROADCAST_ADDR != cccCmd->address)
+    if(CY_I3C_BROADCAST_ADDR != cccCmd->address)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -5680,7 +5582,7 @@ static cy_en_i3c_status_t enthdr0_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = ControllerHandleCCCResponse(base, NULL, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -5719,7 +5621,7 @@ static cy_en_i3c_status_t getmrwl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -5731,7 +5633,7 @@ static cy_en_i3c_status_t getmrwl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -5783,7 +5685,7 @@ static cy_en_i3c_status_t getpid_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -5794,7 +5696,7 @@ static cy_en_i3c_status_t getpid_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -5806,7 +5708,7 @@ static cy_en_i3c_status_t getpid_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
     ReadArray(base, data, sizeof(*getpid));
     getpid = (cy_stc_i3c_ccc_getpid_t *)cccCmd->data->data;
 
-    for (index = 0U; index < sizeof(*getpid); index++)
+    for(index = 0U; index< sizeof(*getpid); index++)
     {
         getpid->pid[index] = data[index];/* MSB byte will be received first */
     }
@@ -5845,18 +5747,18 @@ static cy_en_i3c_status_t getbcr_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
-    /* Expects 1 byte of data */
+   /* Expects 1 byte of data */
     cccCmd->data->len = (uint16_t)(sizeof(*getbcr));
 
     CCC_Get(base, cccCmd, context);
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -5901,7 +5803,7 @@ static cy_en_i3c_status_t getdcr_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -5912,13 +5814,13 @@ static cy_en_i3c_status_t getdcr_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
 
     /* Read data from the FIFO to the data_field of the cmd structure */
-    data = (uint8_t)(Cy_I3C_ReadRxFIFO(base));
+    data =(uint8_t)(Cy_I3C_ReadRxFIFO(base));
 
     getdcr = (cy_stc_i3c_ccc_getdcr_t *)cccCmd->data->data;
     getdcr->dcr = data;
@@ -5957,19 +5859,19 @@ static cy_en_i3c_status_t getstatus_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
     /* Expects 2 bytes of data */
-    cccCmd->data->len = (uint16_t)(sizeof(*getStatus));
+    cccCmd->data->len =(uint16_t)( sizeof(*getStatus));
 
     CCC_Get(base, cccCmd, context);
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -6011,7 +5913,7 @@ static cy_en_i3c_status_t getmxds_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     uint8_t idx;
     uint16_t data;
-    uint8_t dataMTR[5U] = {0};
+    uint8_t dataMTR[5U]={0};
     uint32_t recvDataLen;
     cy_en_i3c_status_t retStatus;
     uint32_t respCmdPort = 0UL;
@@ -6019,7 +5921,7 @@ static cy_en_i3c_status_t getmxds_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -6031,7 +5933,7 @@ static cy_en_i3c_status_t getmxds_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -6039,7 +5941,7 @@ static cy_en_i3c_status_t getmxds_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
     recvDataLen = respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_DATA_LENGTH_Msk;
 
     /* Read data from the FIFO to the data_field of the cmd structure */
-    if (2UL == recvDataLen)
+    if(2UL == recvDataLen)
     {
         data = (uint16_t)(Cy_I3C_ReadRxFIFO(base));
         getmxds = (cy_stc_i3c_ccc_getmxds_t *)cccCmd->data->data;
@@ -6057,7 +5959,7 @@ static cy_en_i3c_status_t getmxds_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
         getmxds->maxwr = dataMTR[0U];
         getmxds->maxrd = dataMTR[1U];
 
-        for (idx = 2U; idx < sizeof(*getmxds); idx++)
+        for( idx = 2U; idx < sizeof(*getmxds); idx++)
         {
             getmxds->maxrdturn[idx - 2U] = dataMTR[idx];
         }
@@ -6097,7 +5999,7 @@ static cy_en_i3c_status_t gethdrcap_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -6109,7 +6011,7 @@ static cy_en_i3c_status_t gethdrcap_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -6121,17 +6023,17 @@ static cy_en_i3c_status_t gethdrcap_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_
     gethdrcap = (cy_stc_i3c_ccc_gethdrcap_t *)cccCmd->data->data;
     gethdrcap->modes = (uint8_t)(data & 0xFFU);
 
-    if (recvDataLen >= 2UL)
+    if(recvDataLen >= 2UL)
     {
-        gethdrcap->getcapByte2 = (uint8_t)((data >> 8U) & 0xFFU);
+        gethdrcap->getcapByte2 = (uint8_t)((data>>8U) & 0xFFU);
     }
-    if (recvDataLen >= 3UL)
+    if(recvDataLen >= 3UL)
     {
-        gethdrcap->getcapByte3 = (uint8_t)((data >> 16U) & 0xFFU);
+        gethdrcap->getcapByte3 = (uint8_t)((data>>16U) & 0xFFU);
     }
-    if (recvDataLen == 4UL)
+    if(recvDataLen == 4UL)
     {
-        gethdrcap->getcapByte4 = (uint8_t)((data >> 24U) & 0xFFU);
+        gethdrcap->getcapByte4 = (uint8_t)((data>>24U) & 0xFFU);
     }
 
     return CY_I3C_SUCCESS;
@@ -6168,7 +6070,7 @@ static cy_en_i3c_status_t getacccr_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
@@ -6179,7 +6081,7 @@ static cy_en_i3c_status_t getacccr_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -6221,13 +6123,13 @@ static cy_en_i3c_status_t endxfer_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, false, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
     /* Expects 1 byte of data */
-    if (1U != cccCmd->data->len)
+    if(1U != cccCmd->data->len)
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -6276,12 +6178,12 @@ static cy_en_i3c_status_t deftgts_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
     /* Check for the presence of any secondary controllers on the bus */
     i3cDevCnt = (uint8_t)(i3cController->devCount);
 
-    for (index = 0U; index < (i3cDevCnt); index++)
+    for(index = 0U; index < (i3cDevCnt); index++)
     {
-        if (!devList->i2c)
+        if(!devList->i2c)
         {
             /* It is an i3c device */
-            if ((devList->i3cDevice.bcr & CY_I3C_CORE_BCR_DEVICE_ROLE_Msk) == CY_I3C_CORE_BCR_I3C_CONTROLLER)
+            if((devList->i3cDevice.bcr & CY_I3C_CORE_BCR_DEVICE_ROLE_Msk) == CY_I3C_CORE_BCR_I3C_CONTROLLER)
             {
                 /* The device is secondary controller capable
                 Secondary Controller will also have CONTROLLER value in this field */
@@ -6291,7 +6193,7 @@ static cy_en_i3c_status_t deftgts_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
         devList++;
     }
 
-    if (!send)
+    if(!send)
     {
         return CY_I3C_NO_SECONDARY_CONTROLLER_DEVICES;
     }
@@ -6300,9 +6202,9 @@ static cy_en_i3c_status_t deftgts_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     /* create the list of devices */
     devList = context->devList;
-    for (index = 0U; index < (i3cController->devCount); index++)
+    for(index = 0U; index < (i3cController->devCount); index++)
     {
-        if (devList->i2c)
+        if(devList->i2c)
         {
             /* i2c device */
             deftgts.targets[index].staticAddress = (devList->i2cDevice.staticAddress) << 1U;
@@ -6321,8 +6223,8 @@ static cy_en_i3c_status_t deftgts_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
         devList++;
     }
 
-    deftgts.controller.staticAddress = (uint8_t) _FLD2VAL(I3C_CORE_DEVICE_ADDR_STATIC_ADDR, I3C_CORE_DEVICE_ADDR(base)) << 1;
-    deftgts.controller.dynAddress = (uint8_t)_FLD2VAL(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, I3C_CORE_DEVICE_ADDR(base)) << 1;
+    deftgts.controller.staticAddress =(uint8_t) _FLD2VAL( I3C_CORE_DEVICE_ADDR_STATIC_ADDR, I3C_CORE_DEVICE_ADDR(base)) << 1;
+    deftgts.controller.dynAddress = (uint8_t)_FLD2VAL( I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, I3C_CORE_DEVICE_ADDR(base)) << 1;
     deftgts.controller.bcr = 0x00U;
     deftgts.controller.dcr = 0x00U;
     deftgts.count = (uint8_t)(i3cController->devCount) + 1U;
@@ -6334,7 +6236,7 @@ static cy_en_i3c_status_t deftgts_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
@@ -6381,21 +6283,21 @@ static cy_en_i3c_status_t rstact_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
     uint16_t dataLen = cccCmd->data->len;
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, true, context);
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
     /* Check if the cmd is a Direct or broadcast command;
     If Direct command, get the address offset in the DAT */
-    if (cccCmd->cmd == CY_I3C_CCC_RSTACT(false))
+    if(cccCmd->cmd == CY_I3C_CCC_RSTACT(false))
     {
         pos = GetI3CDevAddrPos(base, cccCmd->address, context);
     }
 
     cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DB, cccCmd->db) |
-                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, dataLen);
+                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DB, cccCmd->db)|
+                _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, dataLen);
 
     cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CP_Msk |
@@ -6405,22 +6307,18 @@ static cy_en_i3c_status_t rstact_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk |
                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
 
-    if (context->devList[(uint8_t)pos].i3cDevice.PECEnabled)
-    {
+    if(context->devList[(uint8_t)pos].i3cDevice.PECEnabled){
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
     }
 
-    if (cccCmd->cmd == CY_I3C_CCC_RSTACT(true))
+    if(cccCmd->cmd == CY_I3C_CCC_RSTACT(true))
     {
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk;
     }
 
-    if (cccCmd->db < 0x04U)
-    {
+    if (cccCmd->db < 0x04U){
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TGT_RST_Msk;
-    }
-    else
-    {
+    }else{
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk;
     }
 
@@ -6433,13 +6331,12 @@ static cy_en_i3c_status_t rstact_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t *
     I3C_CORE_COMMAND_QUEUE_PORT(base) = cmd.cmdLow ;
 
     retStatus = ControllerHandleCCCResponse(base, &respCmdPort, context);
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
 
-    if (cccCmd->db > 0x80U)
-    {
+    if (cccCmd->db > 0x80U){
         /* Expects 1 bytes of data */
         cccCmd->data->len = ((uint16_t)sizeof(*rst));
         rst = (cy_stc_i3c_ccc_rstact_t *)cccCmd->data->data;
@@ -6483,20 +6380,20 @@ static cy_en_i3c_status_t devctrl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = CCCTargetAddressValidation(cccCmd->address, false, context);
 
-    if (retStatus != CY_I3C_SUCCESS)
+    if(retStatus != CY_I3C_SUCCESS)
     {
         return retStatus;
     }
 
     /* Expects 6 byte of data */
-    if (6U != cccCmd->data->len)
+    if(6U != cccCmd->data->len)
     {
         return CY_I3C_BAD_PARAM;
     }
 
     /* Put the data into the TX fifo */
-    dataBuf[0] = ((((uint8_t)data.addrMask << 5U | (uint8_t)data.startOffset << 3U) | (uint8_t)data.PEC_BL << 1U) | (uint8_t)data.regMod);
-    dataBuf[1] = data.devID << 1U;
+    dataBuf[0] = ((((uint8_t)data.addrMask<<5U | (uint8_t)data.startOffset<<3U) | (uint8_t)data.PEC_BL<<1U) | (uint8_t)data.regMod);
+    dataBuf[1] = data.devID<<1U;
     dataBuf[2] = data.payloadByte0;
     dataBuf[3] = data.payloadByte1;
     dataBuf[4] = data.payloadByte2;
@@ -6507,86 +6404,72 @@ static cy_en_i3c_status_t devctrl_ccc(I3C_CORE_Type *base, cy_stc_i3c_ccc_cmd_t 
 
     retStatus = ControllerHandleCCCResponse(base, NULL, context);
 
-    if (CY_I3C_SUCCESS != retStatus)
+    if(CY_I3C_SUCCESS != retStatus)
     {
         return retStatus;
     }
 
-    if (data.addrMask == BROADCAST_CMD)               /* broadcast condition */
-    {
-        for (idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
+    if (data.addrMask == BROADCAST_CMD){              /* broadcast condition */
+        for(idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
         {
-            if (!devList->i2c)
+            if(!devList->i2c)
             {
                 devList->i3cDevice.PECEnabled = isPECEnabled;          /* setting PEC in context i3cdevice */
                 pos = (uint8_t)GetI3CDevAddrPos(base, devList->i3cDevice.dynamicAddress, context);
                 value = Cy_I3C_ReadFromDeviceAddressTable(base, pos);
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-                if (isPECEnabled)                                    /* setting PEC enabled in DAT */
-                {
+                #if CY_IP_MXI3C_VERSION_MINOR == 1u
+                if(isPECEnabled){                                    /* setting PEC enabled in DAT */
                     value |= I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_PEC_EN_Msk;
-                }
-                else
-                {
+                }else{
                     value &= ~I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_PEC_EN_Msk;
                 }
-#endif
+                #endif
                 Cy_I3C_WriteIntoDeviceAddressTable(base, pos, value);
             }
             devList++;
         }
-    }
-    else if (data.addrMask == MULTICAST_CMD)            /* multicast condition*/
-    {
-        for (idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
+    }else
+    if(data.addrMask == MULTICAST_CMD){            /* multicast condition*/
+        for(idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
         {
-            if (!devList->i2c && ((data.devID & CY_I3C_GENMASK(6U, 3U)) & devList->i3cDevice.dynamicAddress) == (data.devID & CY_I3C_GENMASK(6U, 3U)))
+            if(!devList->i2c && ((data.devID & CY_I3C_GENMASK(6U,3U)) & devList->i3cDevice.dynamicAddress) == (data.devID & CY_I3C_GENMASK(6U,3U)))
             {
                 devList->i3cDevice.PECEnabled = isPECEnabled;          /* setting PEC in context i3cdevice*/
                 pos = (uint8_t)GetI3CDevAddrPos(base, devList->i3cDevice.dynamicAddress, context);
                 value = Cy_I3C_ReadFromDeviceAddressTable(base, pos);
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-                if (isPECEnabled)                                    /* setting PEC enabled in DAT*/
-                {
+                #if CY_IP_MXI3C_VERSION_MINOR == 1u
+                if(isPECEnabled){                                    /* setting PEC enabled in DAT*/
                     value |= I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_PEC_EN_Msk;
-                }
-                else
-                {
+                }else{
                     value &= ~I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_PEC_EN_Msk;
                 }
-#endif
+                #endif
                 Cy_I3C_WriteIntoDeviceAddressTable(base, pos, value);
             }
             devList++;
         }
-    }
-    else if (data.addrMask == UNICAST_CMD)            /*unicast condition*/
-    {
-        for (idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
+    }else
+    if(data.addrMask == UNICAST_CMD){            /*unicast condition*/
+        for(idx = 0U; idx < (Cy_I3C_GetI3CDeviceCount(base, context)); idx++)
         {
-            if (!devList->i2c && (data.devID == devList->i3cDevice.dynamicAddress))
+            if(!devList->i2c && (data.devID == devList->i3cDevice.dynamicAddress))
             {
                 devList->i3cDevice.PECEnabled = isPECEnabled;          /*setting PEC in context i3cdevice*/
                 pos = (uint8_t)GetI3CDevAddrPos(base, devList->i3cDevice.dynamicAddress, context);
                 value = Cy_I3C_ReadFromDeviceAddressTable(base, pos);
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-                if (isPECEnabled)                                    /*setting PEC enabled in DAT*/
-                {
+                #if CY_IP_MXI3C_VERSION_MINOR == 1u
+                if(isPECEnabled){                                    /*setting PEC enabled in DAT*/
                     value |= I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_PEC_EN_Msk;
-                }
-                else
-                {
+                }else{
                     value &= ~I3C_CORE_DEV_ADDR_TABLE_LOC1_IBI_PEC_EN_Msk;
                 }
-#endif
+                #endif
                 Cy_I3C_WriteIntoDeviceAddressTable(base, pos, value);
                 break;
             }
             devList++;
         }
-    }
-    else
-    {
+    }else{
         retStatus = CY_I3C_BAD_PARAM;
     }
 
@@ -6630,9 +6513,8 @@ static void ControllerHDRWrite(I3C_CORE_Type *base, cy_stc_i3c_hdr_cmd_t *hdrCmd
     do
     {
         /* wait till the reset is completed */
-        retStatus = I3C_Check_Timeout(&timeout);
-    }
-    while (retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+         retStatus = I3C_Check_Timeout(&timeout);
+    }while(retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
     pos = GetI3CDevAddrPos(base, context->destDeviceAddr, context);
 
@@ -6640,17 +6522,17 @@ static void ControllerHDRWrite(I3C_CORE_Type *base, cy_stc_i3c_hdr_cmd_t *hdrCmd
     ControllerHandleDataTransmit(base, context);
 
     cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, (context->controllerBufferSize));
+                   _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, (context->controllerBufferSize));
 
 
     cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CP_Msk |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_HDR_WRITE_TID) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CMD, hdrCmd->code) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, CY_I3C_HDR_DDR) |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
+                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CP_Msk |
+                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_HDR_WRITE_TID) |
+                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CMD, hdrCmd->code) |
+                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
+                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, CY_I3C_HDR_DDR) |
+                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk |
+                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
 
     context->controllerStatus |= CY_I3C_CONTROLLER_HDR_DDR_WR_XFER;
     context->state = CY_I3C_CONTROLLER_TX;
@@ -6697,14 +6579,14 @@ static void ControllerHDRRead(I3C_CORE_Type *base, cy_stc_i3c_hdr_cmd_t *hdrCmd,
                   _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, (context->controllerBufferSize));
 
     cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CP_Msk |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_HDR_READ_TID) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CMD, hdrCmd->code) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, CY_I3C_HDR_DDR) |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
+                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CP_Msk |
+                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_HDR_READ_TID) |
+                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_CMD, hdrCmd->code) |
+                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
+                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, CY_I3C_HDR_DDR) |
+                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk |
+                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk |
+                  I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
 
     context->controllerStatus |= CY_I3C_CONTROLLER_HDR_DDR_RD_XFER;
     context->state = CY_I3C_CONTROLLER_RX;
@@ -6747,7 +6629,7 @@ static void ControllerRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context
 
     /* Handling the receive response for Controller SDR WRITE transfer */
     /* --------------------SDR/HDR WRITE TRANSFER----------------*/
-    if ((((uint8_t)CY_I3C_CONTROLLER_SDR_WRITE_TID) == tid) || (((uint8_t)CY_I3C_CONTROLLER_HDR_WRITE_TID) == tid))
+    if((((uint8_t)CY_I3C_CONTROLLER_SDR_WRITE_TID) == tid) || (((uint8_t)CY_I3C_CONTROLLER_HDR_WRITE_TID) == tid))
     {
         ControllerHandleWriteInterrupt(base, respCmdPort, context);
     }
@@ -6755,7 +6637,7 @@ static void ControllerRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context
     /* Handling the receive response for Controller SDR READ transfer */
     /* --------------------SDR/HDR READ TRANSFER----------------*/
 
-    else if ((((uint8_t)CY_I3C_CONTROLLER_SDR_READ_TID) == tid) || (((uint8_t)CY_I3C_CONTROLLER_HDR_READ_TID) == tid))
+    else if((((uint8_t)CY_I3C_CONTROLLER_SDR_READ_TID) == tid) || (((uint8_t)CY_I3C_CONTROLLER_HDR_READ_TID) == tid))
     {
         ControllerHandleReadInterrupt(base, respCmdPort, context);
     }
@@ -6801,7 +6683,7 @@ static void ControllerHandleWriteInterrupt(I3C_CORE_Type *base, uint32_t respCmd
 
     dataLen = (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_DATA_LENGTH_Msk);
 
-    if (NULL != context->cbEvents)
+    if(NULL != context->cbEvents)
     {
         (dataLen == 0UL) ? context->cbEvents(CY_I3C_CONTROLLER_WR_CMPLT_EVENT)  : context->cbEvents(CY_I3C_CONTROLLER_WR_EARLY_TERMINATION_EVENT);
     }
@@ -6833,13 +6715,13 @@ static void ControllerHandleWriteInterrupt(I3C_CORE_Type *base, uint32_t respCmd
 *******************************************************************************/
 static void ControllerHandleReadInterrupt(I3C_CORE_Type *base, uint32_t respCmdPort, cy_stc_i3c_context_t *context)
 {
-    if (0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_DATA_LENGTH_Msk))
+    if(0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_DATA_LENGTH_Msk))
     {
         ControllerHandleDataReceive(base, context);
         context->state = CY_I3C_IDLE;
         context->controllerStatus &= (~CY_I3C_CONTROLLER_BUSY);
 
-        if (NULL != context->cbEvents)
+        if(NULL != context->cbEvents)
         {
             context->cbEvents(CY_I3C_CONTROLLER_RD_CMPLT_EVENT);
         }
@@ -6874,59 +6756,59 @@ static void ControllerHandleIBIInterrupt(I3C_CORE_Type *base, cy_stc_i3c_context
     (void)base;
     (void)context;
 
-    uint32_t ibiData;
-    uint8_t ibiType, ibiStatus;
-    cy_stc_i3c_ibi_t ibiCallback;
+        uint32_t ibiData;
+        uint8_t ibiType, ibiStatus;
+        cy_stc_i3c_ibi_t ibiCallback;
 
-    ibiData = I3C_CORE_IBI_QUEUE_STATUS(base);
+        ibiData = I3C_CORE_IBI_QUEUE_STATUS(base);
 
-    ibiType = (uint8_t)(_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_IBI_ID, ibiData));
-    ibiStatus = (uint8_t)(_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_IBI_RESP_STS, ibiData));
+        ibiType =  (uint8_t)(_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_IBI_ID, ibiData));
+        ibiStatus = (uint8_t)(_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_IBI_RESP_STS, ibiData));
 
-    /* Hot-join */
-    if (false != (CY_I3C_IBI_TYPE_HOT_JOIN(ibiType)))
-    {
-        ibiCallback.event = CY_I3C_IBI_HOTJOIN;
-        ibiCallback.targetAddress = 0U;
-        ibiCallback.status = (uint32_t)((0U == ibiStatus) ? CY_I3C_CONTROLLER_HOTJOIN_IBI_ACK : CY_I3C_CONTROLLER_IBI_NACK);
-
-        if (NULL != context->cbIbi)
+        /* Hot-join */
+        if(false != (CY_I3C_IBI_TYPE_HOT_JOIN(ibiType)))
         {
-            context->cbIbi(&ibiCallback);
+            ibiCallback.event = CY_I3C_IBI_HOTJOIN;
+            ibiCallback.targetAddress = 0U;
+            ibiCallback.status = (uint32_t)((0U == ibiStatus) ? CY_I3C_CONTROLLER_HOTJOIN_IBI_ACK: CY_I3C_CONTROLLER_IBI_NACK);
+
+            if(NULL != context->cbIbi)
+            {
+                context->cbIbi(&ibiCallback);
+            }
         }
-    }
 
-    /* Controllership request */
-    else if (false != (CY_I3C_IBI_TYPE_CONTROLLERSHIP_REQUEST(ibiType)))
-    {
-        ibiCallback.event = CY_I3C_IBI_CONTROLLER_REQ;
-        ibiCallback.targetAddress = (uint8_t)(_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_IBI_ID, ibiData) >> 1U);
-        ibiCallback.status = (uint32_t)((0U == ibiStatus) ? CY_I3C_CONTROLLER_MR_IBI_ACK : CY_I3C_CONTROLLER_IBI_NACK);
-
-        if (NULL != context->cbIbi)
+        /* Controllership request */
+        else if(false != (CY_I3C_IBI_TYPE_CONTROLLERSHIP_REQUEST(ibiType)))
         {
-            context->cbIbi(&ibiCallback);
+            ibiCallback.event = CY_I3C_IBI_CONTROLLER_REQ;
+            ibiCallback.targetAddress = (uint8_t)(_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_IBI_ID, ibiData) >> 1U);
+            ibiCallback.status = (uint32_t)((0U == ibiStatus) ? CY_I3C_CONTROLLER_MR_IBI_ACK : CY_I3C_CONTROLLER_IBI_NACK);
+
+            if(NULL != context->cbIbi)
+            {
+                context->cbIbi(&ibiCallback);
+            }
         }
-    }
 
-    /* Target Interrupt Request */
-    else if (false != (CY_I3C_IBI_TYPE_TIR_REQUEST(ibiType)))
-    {
-        ibiCallback.event = CY_I3C_IBI_SIR;
-        ibiCallback.targetAddress = (uint8_t)(_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_IBI_ID, ibiData) & 0x7FUL);
-        ibiCallback.payloadSize = (uint8_t)_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_DATA_LENGTH, ibiData);
-        ibiCallback.status = (uint32_t)((0U == ibiStatus) ? CY_I3C_CONTROLLER_SIR_IBI_ACK : CY_I3C_CONTROLLER_IBI_NACK);
-
-        if (NULL != context->cbIbi)
+        /* Target Interrupt Request */
+        else if(false != (CY_I3C_IBI_TYPE_TIR_REQUEST(ibiType)))
         {
-            context->cbIbi(&ibiCallback);
-        }
-    }
+            ibiCallback.event = CY_I3C_IBI_SIR;
+            ibiCallback.targetAddress = (uint8_t)(_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_IBI_ID, ibiData) & 0x7FUL);
+            ibiCallback.payloadSize = (uint8_t)_FLD2VAL(I3C_CORE_IBI_QUEUE_STATUS_DATA_LENGTH, ibiData);
+            ibiCallback.status = (uint32_t)((0U == ibiStatus) ? CY_I3C_CONTROLLER_SIR_IBI_ACK : CY_I3C_CONTROLLER_IBI_NACK);
 
-    else
-    {
-        /* Do Nothing */
-    }
+            if(NULL != context->cbIbi)
+            {
+                context->cbIbi(&ibiCallback);
+            }
+        }
+
+        else
+        {
+            /* Do Nothing */
+        }
 }
 
 
@@ -6963,55 +6845,55 @@ static void RearrangeAddrTable(I3C_CORE_Type *base, uint8_t devIndex,  cy_stc_i3
     /* Case where the device being detached is not the top device on the list */
     topDevPos = (context->i3cController.devCount) - 1UL;
 
-    if (devIndex != topDevPos)
-    {
+        if(devIndex != topDevPos)
+        {
         /*
             1. Check if the top device is an i2c device or i3c device
             2. Update the DAT and the local list
             3. Also check for the case if the device to be detached is the top most device? Then do not perform the exchange
         */
-        if (context->devList[topDevPos].i2c)
-        {
-            /* Top device is an i2c device */
+            if(context->devList[topDevPos].i2c)
+            {
+                /* Top device is an i2c device */
 
-            /* Moving the top device to the detached device position */
-            i2cDeviceTop = context->devList[topDevPos].i2cDevice;
-            context->devList[devIndex].i2cDevice = i2cDeviceTop;
-            context->devList[devIndex].i2c = true;
+                /* Moving the top device to the detached device position */
+                i2cDeviceTop = context->devList[topDevPos].i2cDevice;
+                context->devList[devIndex].i2cDevice=i2cDeviceTop;
+                context->devList[devIndex].i2c = true;
 
-            /* Erase the top position entries and mark the position free */
-            context->i3cController.freePos |= CY_I3C_BIT(topDevPos);
+                /* Erase the top position entries and mark the position free */
+                context->i3cController.freePos |= CY_I3C_BIT(topDevPos);
 
-            value = _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_STATIC_ADDR, i2cDeviceTop.staticAddress) |
-                    I3C_CORE_DEV_ADDR_TABLE_LOC1_LEGACY_I2C_DEVICE_Msk;
-        }
+                value = _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_STATIC_ADDR, i2cDeviceTop.staticAddress) |
+                        I3C_CORE_DEV_ADDR_TABLE_LOC1_LEGACY_I2C_DEVICE_Msk;
+            }
 
-        else
-        {
-            /* Top Device is an i3c device */
+            else
+            {
+                /* Top Device is an i3c device */
 
-            /* Moving the top device to the detached device position */
-            i3cDeviceTop = context->devList[topDevPos].i3cDevice;
-            context->devList[devIndex].i3cDevice = i3cDeviceTop;
-            context->devList[devIndex].i2c = false;
+                /* Moving the top device to the detached device position */
+                i3cDeviceTop = context->devList[topDevPos].i3cDevice;
+                context->devList[devIndex].i3cDevice = i3cDeviceTop;
+                context->devList[devIndex].i2c = false;
 
-            /* Erase the top position entries and mark the position free */
-            context->i3cController.freePos |= CY_I3C_BIT(topDevPos);
+                /* Erase the top position entries and mark the position free */
+                context->i3cController.freePos |= CY_I3C_BIT(topDevPos);
 
-            value = _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_DYNAMIC_ADDR, i3cDeviceTop.dynamicAddress) |
-                    _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_STATIC_ADDR, i3cDeviceTop.staticAddress);
-        }
+                value = _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_DYNAMIC_ADDR, i3cDeviceTop.dynamicAddress) |
+                        _VAL2FLD(I3C_CORE_DEV_ADDR_TABLE_LOC1_DEV_STATIC_ADDR, i3cDeviceTop.staticAddress);
+            }
 
         Cy_I3C_WriteIntoDeviceAddressTable(base, (uint8_t)devIndex, value);
         Cy_I3C_WriteIntoDeviceAddressTable(base, (uint8_t)topDevPos, 0UL);
-    }
+        }
 
-    /* Case where the device getting detached is the top device on the list and thus no rearrangement is not required */
-    else
-    {
-        Cy_I3C_WriteIntoDeviceAddressTable(base, devIndex, 0UL);
-        context->i3cController.freePos |= CY_I3C_BIT(devIndex);
-    }
+        /* Case where the device getting detached is the top device on the list and thus no rearrangement is not required */
+        else
+        {
+            Cy_I3C_WriteIntoDeviceAddressTable(base, devIndex, 0UL);
+            context->i3cController.freePos |= CY_I3C_BIT(devIndex);
+        }
 
 }
 
@@ -7025,7 +6907,7 @@ static void RearrangeAddrTable(I3C_CORE_Type *base, uint8_t devIndex,  cy_stc_i3
 * \param address
 * The address to be validated.
 *
-* \param uincastOnly
+* \param unicastOnly
 * true: address is checked for I3C device address on the bus only.
 * false: otherwise.
 *
@@ -7045,9 +6927,9 @@ static cy_en_i3c_status_t CCCTargetAddressValidation(uint8_t address, bool unica
 
     res = GetAaddrslotStatus(address, context);
 
-    if (unicastOnly)
+    if(unicastOnly)
     {
-        if (CY_I3C_ADDR_SLOT_I3C_DEV != res)
+        if(CY_I3C_ADDR_SLOT_I3C_DEV != res)
         {
             return CY_I3C_BAD_PARAM;
         }
@@ -7060,12 +6942,12 @@ static cy_en_i3c_status_t CCCTargetAddressValidation(uint8_t address, bool unica
     else
     {
         /* This helps to check if the device is actively present on the bus */
-        if ((CY_I3C_ADDR_SLOT_I3C_DEV != res) && (CY_I3C_ADDR_SLOT_RSVD != res))
+        if((CY_I3C_ADDR_SLOT_I3C_DEV != res ) && (CY_I3C_ADDR_SLOT_RSVD != res))
         {
             return CY_I3C_BAD_PARAM;
         }
 
-        if (CY_I3C_BROADCAST_ADDR == address)
+        if(CY_I3C_BROADCAST_ADDR == address)
         {
             context->controllerStatus |= CY_I3C_CONTROLLER_BROADCAST_CCC_WR_XFER;
         }
@@ -7113,18 +6995,16 @@ static cy_en_i3c_status_t ControllerHandleCCCResponse(I3C_CORE_Type *base, uint3
     {
         retStatus = I3C_Check_Timeout(&timeout);
         /* wait until the response ready interrupt is received */
-    }
-    while (retStatus == CY_I3C_SUCCESS && 0UL == ((CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_TRANSFER_ERR_STS) & Cy_I3C_GetInterruptStatus(base)));
+    }while(retStatus == CY_I3C_SUCCESS && 0UL == ((CY_I3C_INTR_RESP_READY_STS | CY_I3C_INTR_TRANSFER_ERR_STS) & Cy_I3C_GetInterruptStatus(base)));
 
-    if (retStatus == CY_I3C_TIMEOUT)
-    {
+    if(retStatus == CY_I3C_TIMEOUT){
         return retStatus;
     }
 
     respCmdPort = I3C_CORE_RESPONSE_QUEUE_PORT(base);
     Cy_I3C_ClearInterrupt(base, CY_I3C_INTR_MASK);
 
-    if (0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
+    if(0UL != (respCmdPort & I3C_CORE_CONTROLLER_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
     {
         retStatus = ResponseError(respCmdPort);    /* unsuccessful due to transfer error */
         context->controllerStatus |= CY_I3C_CONTROLLER_HALT_STATE;
@@ -7133,8 +7013,7 @@ static cy_en_i3c_status_t ControllerHandleCCCResponse(I3C_CORE_Type *base, uint3
     Cy_I3C_SetInterruptMask(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
     Cy_I3C_SetInterruptStatusMask(base, CY_I3C_INTR_IBI_BUFFER_THLD_STS);
 
-    if (resp != NULL)
-    {
+    if(resp != NULL){
         *resp = respCmdPort;
     }
 
@@ -7170,22 +7049,22 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
     respCmdPort = I3C_CORE_RESPONSE_QUEUE_PORT(base);
     cccHeader = _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_CCC_HDR_HEADER, respCmdPort);
 
-    if (0UL != (respCmdPort & I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
+    if(0UL != (respCmdPort & I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_ERR_STS_Msk))
     {
         uint32_t errorEvent;
 
         errorEvent = ResponseErrorEvent(respCmdPort);
-        if (NULL != context->cbEvents)
+        if(NULL != context->cbEvents)
         {
             context->cbEvents(errorEvent);
         }
         return;
     }
 
-    if (CY_I3C_CCC_DEFTGTS == cccHeader)
+    if(CY_I3C_CCC_DEFTGTS == cccHeader)
     {
         context->deftgts_count = _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_DATA_LENGTH_LSB, respCmdPort);
-        if (NULL != context->cbEvents)
+        if(NULL != context->cbEvents)
         {
             context->cbEvents(CY_I3C_DEFTGT_EVENT);
         }
@@ -7194,15 +7073,14 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
     }
 
     /* Handle the SDR Transfer*/
-    if (0U == cccHeader)
+    if(0U == cccHeader)
     {
-        if (0UL != (respCmdPort & I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_RX_RSP_Msk))
+        if(0UL != (respCmdPort & I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_RX_RSP_Msk))
         {
             /* Receive Response - controller write */
             context->targetRxBufferCnt = _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_DATA_LENGTH, respCmdPort);
-            if (context->targetRxBuffer == NULL)
-            {
-                if (NULL != (context->cbEvents))
+            if(context->targetRxBuffer == NULL){
+                if(NULL != (context->cbEvents))
                 {
                     context->cbEvents(CY_I3C_TARGET_WR_BUFFER_NOT_CONFIGURED);
                 }
@@ -7215,14 +7093,13 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
             {
                 /* wait till the reset is completed */
                 retStatus = I3C_Check_Timeout(&timeout);
-            }
-            while (retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+            }while(retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
             context->targetStatus = CY_I3C_TARGET_RD_CMPLT;
             event = CY_I3C_TARGET_RD_CMPLT_EVENT;
 
             context->state = CY_I3C_IDLE;
-            if (NULL != context->cbEvents)
+            if(NULL != context->cbEvents)
             {
                 context->cbEvents(event);
             }
@@ -7233,14 +7110,14 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
             uint32_t size;
 
             /* Gets the number of entries in the Tx Fifo */
-            size = (CY_I3C_FIFO_SIZE / 4UL) - Cy_I3C_GetFreeEntriesInTxFifo(base);
+            size = (CY_I3C_FIFO_SIZE/4UL) - Cy_I3C_GetFreeEntriesInTxFifo(base);
 
             context->targetTxBufferCnt = (context->targetTxBufferIdx) - size;
             context->targetStatus = CY_I3C_TARGET_WR_CMPLT;
             event = CY_I3C_TARGET_WR_CMPLT_EVENT;
 
             context->state = CY_I3C_IDLE;
-            if (NULL != context->cbEvents)
+            if(NULL != context->cbEvents)
             {
                 context->cbEvents(event);
             }
@@ -7248,26 +7125,24 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
         return;
     }
     /* Handle the SETXTIME CCC*/
-    else if (CY_I3C_CCC_SETXTIME(false) == cccHeader  || CY_I3C_CCC_SETXTIME(true) == cccHeader)
+    else if(CY_I3C_CCC_SETXTIME(false) == cccHeader  || CY_I3C_CCC_SETXTIME(true) == cccHeader)
     {
         uint8_t subcmd;
         subcmd = (uint8_t)Cy_I3C_ReadRxFIFO(base);
-        if (subcmd == CY_I3C_ENTER_ASYNC_MODE0)
-        {
+        if (subcmd == CY_I3C_ENTER_ASYNC_MODE0){
             context->ATM0Enabled = true;
             I3C->TIMING_CNT_CTRL |= I3C_TIMING_CNT_CTRL_CNT_ENABLE_Msk;
             I3C->TIMING_CNT_CTRL |= I3C_TIMING_CNT_CTRL_CNT_RESET_Msk;
 
-        }
-        else if (subcmd == CY_I3C_EXIT_ASYNC_MODES)
-        {
+        }else
+        if (subcmd == CY_I3C_EXIT_ASYNC_MODES){
             context->ATM0Enabled = false;
             I3C->TIMING_CNT_CTRL &= ~I3C_TIMING_CNT_CTRL_CNT_ENABLE_Msk;
         }
         return;
     }
     /* Handle the RSTACT CCC*/
-    else if (CY_I3C_CCC_RSTACT(false) == cccHeader  || CY_I3C_CCC_RSTACT(true) == cccHeader)
+    else if(CY_I3C_CCC_RSTACT(false) == cccHeader  || CY_I3C_CCC_RSTACT(true) == cccHeader)
     {
         uint8_t data;
         cy_stc_i3c_ccc_cmd_t cccCmd = {0};
@@ -7276,11 +7151,9 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
         cccCmd.data = &payload;
         cccCmd.data->data = &(context->resetMode);
         cccCmd.data->len = 1U;
-        if (I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_RX_RSP_Msk & respCmdPort)        /*rstact write command response*/
-        {
+        if (I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_RX_RSP_Msk & respCmdPort){       /*rstact write command response*/
             data  = _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_DEFINING_BYTE, respCmdPort);
-            if (data > (uint8_t)CY_I3C_CHIP_RESET)
-            {
+            if(data > (uint8_t)CY_I3C_CHIP_RESET){
                 return;
             }
 
@@ -7293,17 +7166,12 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
             cccCmd.db = 0x01U;
             Cy_I3C_ConfigureVendorCCC(base, &cccCmd, 3U);
 
-        }
-        else                                                                /*rstact read command response*/
-        {
+        }else{                                                              /*rstact read command response*/
             /* reconfiguring vendor ccc for RSTACT*/
-            if (0U == _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_DEFINING_BYTE, respCmdPort))
-            {
+            if(0U == _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_DEFINING_BYTE, respCmdPort)){
                 cccCmd.db = 0x00U;
                 Cy_I3C_ConfigureVendorCCC(base, &cccCmd, 2U);
-            }
-            else
-            {
+            }else{
                 cccCmd.db = 0x01U;
                 Cy_I3C_ConfigureVendorCCC(base, &cccCmd, 3U);
             }
@@ -7311,52 +7179,43 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
         return;
     }
     /* Handle the DEVCTRL CCC*/
-    else if (CY_I3C_CCC_DEVCTRL == cccHeader)
+    else if(CY_I3C_CCC_DEVCTRL == cccHeader)
     {
         uint8_t data[6];
         uint8_t len = _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_DATA_LENGTH_LSB, respCmdPort);
-        Cy_I3C_TargetGetcccData(base, (uint8_t*)&data, len, context);
+        Cy_I3C_TargetGetCCCData(base, (uint8_t*)&data, len, context);
         bool isPECEnabled = context->PECEnabled;
         uint8_t addr = 0;
-        cy_en_i3c_devctrl_addrMsk_t addrMask = (cy_en_i3c_devctrl_addrMsk_t)(data[0] >> 5);
+        cy_en_i3c_devctrl_addrMsk_t addrMask = (cy_en_i3c_devctrl_addrMsk_t)(data[0]>>5);
         (void)Cy_I3C_TargetGetDynamicAddress(base, &addr, context);
 
         /*Check if DEVCTRL is applicable for this target*/
-        if (addrMask == BROADCAST_CMD)               /*broadcast condition*/
-        {
+        if (addrMask == BROADCAST_CMD){              /*broadcast condition*/
             isPECEnabled = (bool)(data[2] & CY_I3C_BIT(7));
-        }
-        else if (addrMask == MULTICAST_CMD)             /*multicast condition*/
-        {
-            if (((data[1] >> 1 & CY_I3C_GENMASK(6U, 3U)) & addr) == (data[1] >> 1 & CY_I3C_GENMASK(6U, 3U)))
-            {
+        }else
+        if (addrMask == MULTICAST_CMD){            /*multicast condition*/
+            if(( ( data[1]>>1 & CY_I3C_GENMASK(6U,3U) ) & addr) == ( data[1]>>1 & CY_I3C_GENMASK(6U,3U) )){
                 isPECEnabled = (bool)(data[2] & CY_I3C_BIT(7));
             }
-        }
-        else if (addrMask == UNICAST_CMD)             /*unicast condition*/
-        {
-            if ((data[1] >> 1) == addr)
-            {
+        }else
+        if (addrMask == UNICAST_CMD){            /*unicast condition*/
+            if( (data[1]>>1) == addr ){
                 isPECEnabled = (bool)(data[2] & CY_I3C_BIT(7));
 
             }
         }
 
-        if (isPECEnabled)
-        {
+        if(isPECEnabled){
             context->PECEnabled = true;
             I3C_CORE_DEVICE_CTRL(base) |= I3C_CORE_DEVICE_CTRL_TARGET_PEC_EN_Msk;
-        }
-        else
-        {
+        }else{
             context->PECEnabled = false;
             I3C_CORE_DEVICE_CTRL(base) &= ~I3C_CORE_DEVICE_CTRL_TARGET_PEC_EN_Msk;
         }
         return;
     }
     /* Handle the vendor CCC response*/
-    else
-    {
+    else{
         cy_stc_i3c_target_ccc_resp_t cccData;
         cccData.cmd = _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_CCC_HDR_HEADER, respCmdPort);
         cccData.db = _FLD2VAL(I3C_CORE_TARGET_RESPONSE_QUEUE_PORT_DEFINING_BYTE, respCmdPort);
@@ -7387,13 +7246,13 @@ static void TargetRespReadyStsHandle(I3C_CORE_Type *base, cy_stc_i3c_context_t *
 *******************************************************************************/
 static void TargetHandleDataReceive(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
-    if (context->targetRxBufferSize > 0UL)
+    if(context->targetRxBufferSize > 0UL)
     {
         context->state = CY_I3C_TARGET_RX;
         context->targetStatus = CY_I3C_TARGET_RD_BUSY;
         uint32_t numToCopy;
 
-        numToCopy = ((CY_I3C_FIFO_SIZE / 4UL) - Cy_I3C_GetFreeEntriesInRxFifo(base));
+        numToCopy =  ((CY_I3C_FIFO_SIZE / 4UL) - Cy_I3C_GetFreeEntriesInRxFifo(base));
 
         ReadArray(base, context->targetRxBuffer, numToCopy * 4UL);
         context->targetRxBufferIdx += numToCopy;
@@ -7422,7 +7281,7 @@ static void TargetHandleDataReceive(I3C_CORE_Type *base, cy_stc_i3c_context_t *c
 *******************************************************************************/
 static void TargetHandleDataTransmit(I3C_CORE_Type *base, cy_stc_i3c_context_t *context)
 {
-    if (0UL != context->targetTxBufferSize)
+    if(0UL != context->targetTxBufferSize)
     {
         context->state = CY_I3C_TARGET_TX;
         context->targetStatus = CY_I3C_TARGET_WR_BUSY;
@@ -7431,7 +7290,7 @@ static void TargetHandleDataTransmit(I3C_CORE_Type *base, cy_stc_i3c_context_t *
 
         numToCopy = Cy_I3C_GetFreeEntriesInTxFifo(base) * 4UL;
 
-        if (numToCopy > (context->targetTxBufferSize))
+        if(numToCopy > (context->targetTxBufferSize))
         {
             numToCopy = context->targetTxBufferSize;
         }
@@ -7439,9 +7298,7 @@ static void TargetHandleDataTransmit(I3C_CORE_Type *base, cy_stc_i3c_context_t *
         context->targetTxBufferIdx += numToCopy;
         context->targetTxBufferSize -= numToCopy;
         context->targetTxBuffer = &context->targetTxBuffer[context->targetTxBufferIdx];
-    }
-    else
-    {
+    }else{
         Cy_I3C_SetInterruptStatusMask(base, (~CY_I3C_INTR_TX_BUFFER_THLD_STS & Cy_I3C_GetInterruptStatusMask(base)));
         Cy_I3C_SetInterruptMask(base, (~CY_I3C_INTR_TX_BUFFER_THLD_STS & Cy_I3C_GetInterruptMask(base)));
     }
@@ -7504,8 +7361,7 @@ cy_en_i3c_status_t Cy_I3C_SoftReset(I3C_CORE_Type const *base)
     {
         /* wait till the reset is completed */
         retStatus = I3C_Check_Timeout(&timeout);
-    }
-    while (retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
+    }while(retStatus == CY_I3C_SUCCESS && I3C_CORE_RESET_CTRL(base) != 0U);
 
     return retStatus;
 }
@@ -7543,22 +7399,20 @@ cy_en_i3c_status_t Cy_I3C_Reset(I3C_CORE_Type *base, cy_stc_i3c_config_t const *
     cy_en_i3c_status_t retStatus = CY_I3C_SUCCESS;
 
     retStatus = Cy_I3C_SoftReset(base);
-    if (retStatus != CY_I3C_SUCCESS)
-    {
+    if (retStatus != CY_I3C_SUCCESS){
         return retStatus;
     }
 
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
+    #if CY_IP_MXI3C_VERSION_MINOR == 1u
     cy_en_i3c_status_t addressStatus = CY_I3C_SUCCESS;
     uint8_t addr = 0;
-    if (CY_I3C_TARGET == context->i3cMode)
+    if(CY_I3C_TARGET == context->i3cMode)
     {
         addressStatus = Cy_I3C_TargetGetDynamicAddress(base, &addr, context);
     }
-#endif
+    #endif
 
-    if (CY_I3C_CONTROLLER == context->i3cMode)
-    {
+    if(CY_I3C_CONTROLLER == context->i3cMode){
         context->i3cController.devCount = 0UL;
     }
     /* Disabling the IP */
@@ -7566,13 +7420,13 @@ cy_en_i3c_status_t Cy_I3C_Reset(I3C_CORE_Type *base, cy_stc_i3c_config_t const *
 
     retStatus = Cy_I3C_Init(base, config, context);
 
-#if CY_IP_MXI3C_VERSION_MINOR == 1u
-    if (CY_I3C_TARGET == context->i3cMode && addressStatus == CY_I3C_SUCCESS && retStatus == CY_I3C_SUCCESS)
+    #if CY_IP_MXI3C_VERSION_MINOR == 1u
+    if(CY_I3C_TARGET == context->i3cMode && addressStatus == CY_I3C_SUCCESS && retStatus == CY_I3C_SUCCESS)
     {
         I3C_CORE_DEVICE_ADDR(base) |= _VAL2FLD(I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR, addr) |
-                                      I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID_Msk;
+                                               I3C_CORE_DEVICE_ADDR_DYNAMIC_ADDR_VALID_Msk;
     }
-#endif
+    #endif
 
     Cy_I3C_Enable(base, context);
 
@@ -7613,18 +7467,18 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteDMA(I3C_CORE_Type *base, uint8_t target
     cy_en_i3c_addr_slot_status_t res = GetAaddrslotStatus(targetAddress, context);
 
     /* This helps to check if the device is actively present on the bus */
-    if (((CY_I3C_ADDR_SLOT_I3C_DEV != res) && (CY_I3C_ADDR_SLOT_I2C_DEV != res)) || (Datalength > MAX_I3C_DATA_LENGTH))
+    if(((CY_I3C_ADDR_SLOT_I3C_DEV != res ) && (CY_I3C_ADDR_SLOT_I2C_DEV != res)) || (Datalength > MAX_I3C_DATA_LENGTH))
     {
         return CY_I3C_BAD_PARAM;
 
     }
 
-    if (CY_I3C_ADDR_SLOT_I2C_DEV == res)
+    if(CY_I3C_ADDR_SLOT_I2C_DEV == res)
     {
         /* The target device is an i2cDevice */
         pos = (uint8_t)(GetI2CDevAddrPos(base, targetAddress, context));
         i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-        readDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C : CY_I3C_FMP_I2C);
+        readDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C: CY_I3C_FMP_I2C);
         context->controllerStatus |= CY_I3C_CONTROLLER_I2C_SDR_WR_XFER;
     }
     else
@@ -7632,23 +7486,22 @@ cy_en_i3c_status_t Cy_I3C_ControllerWriteDMA(I3C_CORE_Type *base, uint8_t target
         /* The target is an i3cDevice */
         pos = (uint8_t)(GetI3CDevAddrPos(base, targetAddress, context));
         i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-        if (i3cDeviceList->i3cDevice.speedLimit == true)
+        if(i3cDeviceList->i3cDevice.speedLimit == true)
         {
             readDSMode = (i3cDeviceList->i3cDevice.maxWriteDs) & 0x07U;
         }
         context->controllerStatus |= CY_I3C_CONTROLLER_I3C_SDR_WR_XFER;
     }
     cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk | I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_SDR_WRITE_TID) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, readDSMode) |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk;
+            _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_SDR_WRITE_TID) |
+            _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
+            _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, readDSMode) |
+            I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_ROC_Msk;
 
     cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, Datalength);
+            _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, Datalength);
 
-    if (context->devList[pos].i3cDevice.PECEnabled)
-    {
+    if(context->devList[pos].i3cDevice.PECEnabled){
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
     }
 
@@ -7691,18 +7544,18 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadDMA(I3C_CORE_Type *base, uint8_t targetA
     cy_en_i3c_addr_slot_status_t res = GetAaddrslotStatus(targetAddress, context);
 
     /* This helps to check if the device is actively present on the bus */
-    if (((CY_I3C_ADDR_SLOT_I3C_DEV != res) && (CY_I3C_ADDR_SLOT_I2C_DEV != res)) || (Datalength > MAX_I3C_DATA_LENGTH))
+    if(((CY_I3C_ADDR_SLOT_I3C_DEV != res ) && (CY_I3C_ADDR_SLOT_I2C_DEV != res)) || (Datalength > MAX_I3C_DATA_LENGTH))
     {
         return CY_I3C_BAD_PARAM;
 
     }
 
-    if (CY_I3C_ADDR_SLOT_I2C_DEV == res)
+    if(CY_I3C_ADDR_SLOT_I2C_DEV == res)
     {
         /* The target device is an i2cDevice */
         pos = (uint8_t)(GetI2CDevAddrPos(base, targetAddress, context));
         i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-        readDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C : CY_I3C_FMP_I2C);
+        readDSMode = (uint8_t)((0U != (i3cDeviceList->i2cDevice.lvr & CY_I3C_LVR_I2C_MODE_INDICATOR)) ? CY_I3C_FM_I2C: CY_I3C_FMP_I2C);
         context->controllerStatus |= CY_I3C_CONTROLLER_I2C_SDR_RD_XFER;
     }
     else
@@ -7710,7 +7563,7 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadDMA(I3C_CORE_Type *base, uint8_t targetA
         /* The target is an i3cDevice */
         pos = (uint8_t)(GetI3CDevAddrPos(base, targetAddress, context));
         i3cDeviceList = &(context->devList[pos]); /* pointing to the device position in the local list of devices on the bus */
-        if (i3cDeviceList->i3cDevice.speedLimit == true)
+        if(i3cDeviceList->i3cDevice.speedLimit == true)
         {
             readDSMode = (i3cDeviceList->i3cDevice.maxReadDs) & 0x07U;
         }
@@ -7718,16 +7571,15 @@ cy_en_i3c_status_t Cy_I3C_ControllerReadDMA(I3C_CORE_Type *base, uint8_t targetA
     }
 
     cmd.cmdHigh = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_ARG |
-                  _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, Datalength);
+                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_ARG_DATA_LENGTH, Datalength);
 
     cmd.cmdLow = I3C_CORE_COMMAND_QUEUE_PORT_CMD_ATTR_TRANSFER_CMD |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_SDR_READ_TID) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, readDSMode) |
-                 _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk |
-                 I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
-    if (context->devList[pos].i3cDevice.PECEnabled)
-    {
+                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TID, CY_I3C_CONTROLLER_SDR_READ_TID) |
+                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_SPEED, readDSMode) |
+                    _VAL2FLD(I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_DEV_INDX, pos) |
+                    I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_RnW_Msk |
+                    I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_TOC_Msk;
+    if(context->devList[pos].i3cDevice.PECEnabled){
         cmd.cmdLow |= I3C_CORE_COMMAND_QUEUE_PORT_TRANSFER_CMD_PEC_Msk;
     }
 
@@ -7769,7 +7621,7 @@ cy_en_i3c_status_t Cy_I3C_GetIbiPayload(I3C_CORE_Type *base, uint8_t *buffer, ui
     uint32_t value = 0UL;
     uint32_t wd_size = 0UL, byte_size = 0UL;
 
-    if (((uintptr_t)buffer % (uintptr_t)4U) == 0UL)      /*checking for 4 byte alignment*/
+    if(((uintptr_t)buffer % (uintptr_t)4U) == 0UL)       /*checking for 4 byte alignment*/
     {
         wd_size = size / 4U;
         byte_size = size % 4U;
@@ -7779,20 +7631,17 @@ cy_en_i3c_status_t Cy_I3C_GetIbiPayload(I3C_CORE_Type *base, uint8_t *buffer, ui
         byte_size = size;
     }
 
-    for (index = 0UL; index < wd_size; index++)
-    {
+    for(index = 0UL; index < wd_size; index++){
         value = I3C_CORE_IBI_QUEUE_DATA(base);
         *((uint32_t *)buffer + buffer_index++) = value;
     }
     buffer_index *= 4UL;
-    for (index = 0UL; index < byte_size; index++)
-    {
-        if (index % 4UL == 0UL)
-        {
+    for(index = 0UL; index < byte_size; index++){
+        if (index % 4UL == 0UL){
             value = I3C_CORE_IBI_QUEUE_DATA(base);
         }
         *((uint8_t *)buffer + buffer_index++) = (uint8_t)(value & 0xFFUL);
-        value = value >> 8UL;
+        value = value>>8UL;
     }
     CY_UNUSED_PARAMETER(context);
 
@@ -7821,14 +7670,13 @@ cy_en_i3c_status_t Cy_I3C_GetIbiPayload(I3C_CORE_Type *base, uint8_t *buffer, ui
 * reset successful status - CY_I3C_BAD_PARAM / CY_I3C_SUCCESS.
 *
 *******************************************************************************/
-cy_en_i3c_status_t EnableIbiPayload(I3C_CORE_Type *base, uint8_t targetAddress, cy_stc_i3c_context_t *context)
-{
+cy_en_i3c_status_t EnableIbiPayload(I3C_CORE_Type *base, uint8_t targetAddress, cy_stc_i3c_context_t *context){
     uint32_t value;
     uint8_t pos;
     cy_en_i3c_addr_slot_status_t res = GetAaddrslotStatus(targetAddress, context);
 
     /* This helps to check if the device is actively present on the bus */
-    if ((CY_I3C_ADDR_SLOT_I3C_DEV != res))
+    if((CY_I3C_ADDR_SLOT_I3C_DEV != res ))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -7873,7 +7721,7 @@ cy_en_i3c_status_t DisableIbiPayload(I3C_CORE_Type *base, uint8_t targetAddress,
     cy_en_i3c_addr_slot_status_t res = GetAaddrslotStatus(targetAddress, context);
 
     /* This helps to check if the device is actively present on the bus */
-    if ((CY_I3C_ADDR_SLOT_I3C_DEV != res))
+    if((CY_I3C_ADDR_SLOT_I3C_DEV != res ))
     {
         return CY_I3C_BAD_PARAM;
     }
@@ -7920,7 +7768,7 @@ bool CY_I3C_isIbiPayloadEnabled(I3C_CORE_Type *base, uint8_t targetAddress, cy_s
 
     cy_en_i3c_addr_slot_status_t res = GetAaddrslotStatus(targetAddress, context);
     /* This helps to check if the I3C device is actively present on the bus */
-    if ((CY_I3C_ADDR_SLOT_I3C_DEV != res))
+    if((CY_I3C_ADDR_SLOT_I3C_DEV != res ))
     {
         return false;
     }
@@ -7969,20 +7817,18 @@ static cy_en_i3c_status_t Cy_I3C_ConfigureVendorCCC(I3C_CORE_Type *base, cy_stc_
     {
         /* wait till the reset is completed */
         retStatus = I3C_Check_Timeout(&timeout);
-    }
-    while (retStatus == CY_I3C_SUCCESS && base->EXT_TX_QUEUE_RESET_CTRL != 0U);
+    }while(retStatus == CY_I3C_SUCCESS && base->EXT_TX_QUEUE_RESET_CTRL != 0U);
 
-    if (cccCmd->data->len > 8U)            /*checking for max data buffer size*/
-    {
+    if(cccCmd->data->len > 8U){            /*checking for max data buffer size*/
         return CY_I3C_BAD_BUFFER_SIZE;
     }
 
-    /*Write into TX_FIFO for Vendor specific CCCs*/
-    for (index = 0UL; index < (cccCmd->data->len / 4UL); ++index)
+   /*Write into TX_FIFO for Vendor specific CCCs*/
+    for(index = 0UL; index < (cccCmd->data->len / 4UL); ++index)
     {
         *DATA_PORT = _VAL2FLD(I3C_CORE_EXT_TX_DATA_PORT_0_EXT_TX_DATA_PORT_0, *(data + index));
     }
-    if (0UL != (cccCmd->data->len & 3UL)) /*write remaining bytes in Tx_Fifo */
+    if(0UL != (cccCmd->data->len & 3UL))  /*write remaining bytes in Tx_Fifo */
     {
         uint8_t cnt = (uint8_t)(cccCmd->data->len & 3UL);
         uint8_t *srcPtr, *destPtr;
@@ -7990,7 +7836,7 @@ static cy_en_i3c_status_t Cy_I3C_ConfigureVendorCCC(I3C_CORE_Type *base, cy_stc_
         destPtr = (uint8_t *)(&value);
         srcPtr = (uint8_t *)(data + index);
 
-        for (index = 0UL; index < cnt; index++)
+        for(index = 0UL; index < cnt; index++)
         {
             *destPtr = *srcPtr;
             destPtr++;
@@ -8068,7 +7914,7 @@ cy_en_i3c_status_t Cy_I3C_ConfigureVendorCCC1(I3C_CORE_Type *base, cy_stc_i3c_cc
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 14.3')
 
 #if defined(__cplusplus)
-}
+    }
 #endif
 
 #endif /* CY_IP_MXI3C */

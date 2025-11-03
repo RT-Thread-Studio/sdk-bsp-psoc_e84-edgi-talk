@@ -55,10 +55,11 @@
 #ifndef _vg_lite_kernel_h_
 #define _vg_lite_kernel_h_
 
+#include "vg_lite_options.h"
 #include "vg_lite_option.h"
 
 #if gcdVG_ENABLE_COMMAND_BUFFER_CACHE
-    #define CACHE_COMMAND_BUFFER_SIZE            1 << 20
+#define CACHE_COMMAND_BUFFER_SIZE            1 << 20 
 #endif
 
 /* Interrupt IDs from GPU. */
@@ -75,16 +76,16 @@
 #define VG_LITE_INFINITE    0xFFFFFFFF
 
 #if gcFEATURE_VG_SINGLE_COMMAND_BUFFER
-    #define CMDBUF_COUNT        1
+#define CMDBUF_COUNT        1
 #else
-    #define CMDBUF_COUNT        2
+#define CMDBUF_COUNT        2
 #endif
 
 #define VG_LITE_ALIGN(number, alignment)    \
         (((number) + ((alignment) - 1)) & ~((alignment) - 1))
 
 #ifndef  BIT
-    #define  BIT(x)                 (1 << x)
+#define  BIT(x)                 (1 << x)
 #endif
 
 #define VG_LITE_KERNEL_IS_GPU_IDLE() \
@@ -236,38 +237,34 @@ typedef enum vg_lite_kernel_command
 }
 vg_lite_kernel_command_t;
 
-typedef enum vg_lite_cache_op
-{
+typedef enum vg_lite_cache_op {
     VG_LITE_CACHE_CLEAN,
     VG_LITE_CACHE_INVALIDATE,
     VG_LITE_CACHE_FLUSH,
-}
+} 
 vg_lite_cache_op_t;
 
-typedef enum vg_lite_vidmem_pool
-{
+typedef enum vg_lite_vidmem_pool {
     VG_LITE_POOL_RESERVED_MEMORY1 = 0,
     VG_LITE_POOL_RESERVED_MEMORY2 = 1,
 }
 vg_lite_vidmem_pool_t;
 
-typedef enum vg_lite_gpu_execute_state
-{
+typedef enum vg_lite_gpu_execute_state {
     VG_LITE_GPU_STOP = 0,
     VG_LITE_GPU_RUN  = 1,
 }
 vg_lite_gpu_execute_state_t;
 
 /* Context structure. */
-typedef struct vg_lite_kernel_context
-{
+typedef struct vg_lite_kernel_context {
     /* Command buffer. */
     void                     *command_buffer[CMDBUF_COUNT];
     void                     *command_buffer_logical[CMDBUF_COUNT];
     void                     *command_buffer_klogical[CMDBUF_COUNT];
     uint32_t                  command_buffer_physical[CMDBUF_COUNT];
     uint32_t                  end_of_frame;
-
+    
     /* Tessellation buffer. */
     void                     *tess_buffer;
     void                     *tessbuf_logical;
@@ -284,8 +281,7 @@ typedef struct vg_lite_kernel_context
 }
 vg_lite_kernel_context_t;
 
-typedef struct frame_buffer_command
-{
+typedef struct frame_buffer_command {
     void                     *handle;
     void                     *command_buffer_logical;
     void                     *command_buffer_klogical;
@@ -301,7 +297,7 @@ typedef struct capabilities
     uint32_t l2_cache : 1;
 }
 capabilities_t;
-
+    
 typedef union vg_lite_capabilities
 {
     capabilities_t cap;
@@ -331,23 +327,23 @@ typedef struct vg_lite_kernel_initialize
     /* OUTPUT */
 
     /* Context pointer. */
-    vg_lite_kernel_context_t *context;
+    vg_lite_kernel_context_t * context;
 
     /* Capabilities. */
     vg_lite_capabilities_t capabilities;
 
     /* Allocated command buffer. */
-    void *command_buffer[CMDBUF_COUNT];
+    void * command_buffer[CMDBUF_COUNT];
 
     /* GPU address for command buffer. */
     uint32_t command_buffer_gpu[CMDBUF_COUNT];
-
+    
     /* GPU addresses for tesselation buffers. */
     uint32_t physical_addr;
-
+    
     /* Logic addresses for tessellation buffers: used by SW Tessellator. */
     uint8_t *logical_addr;
-
+    
     /* Size of each level of the tesselation buffer. */
     uint32_t tessbuf_size;
 
@@ -358,7 +354,7 @@ typedef struct vg_lite_kernel_initialize
     uint32_t tess_w_h;
 
     /* Logical address of fb command buffer. */
-    void *fb_command_buffer;
+    void* fb_command_buffer;
 
     /* Fb command buffer size. */
     uint32_t fb_command_buffer_size;
@@ -371,7 +367,7 @@ vg_lite_kernel_initialize_t;
 typedef struct vg_lite_kernel_terminate
 {
     /* Context to terminate. */
-    vg_lite_kernel_context_t *context;
+    vg_lite_kernel_context_t * context;
 }
 vg_lite_kernel_terminate_t;
 
@@ -394,13 +390,13 @@ typedef struct vg_lite_kernel_allocate
     /* OUTPUT */
 
     /* Memory handle. */
-    void *memory_handle;
+    void * memory_handle;
 
     /* Allocated memory. */
-    void *memory;
+    void * memory;
 
     /* kernel memory */
-    void *kmemory;
+    void * kmemory;
 
     /* GPU address of allocated memory. */
     uint32_t memory_gpu;
@@ -410,17 +406,17 @@ vg_lite_kernel_allocate_t;
 typedef struct vg_lite_kernel_free
 {
     /* Memory handle to free. */
-    void *memory_handle;
+    void * memory_handle;
 }
 vg_lite_kernel_free_t;
 
 typedef struct vg_lite_kernel_submit
 {
     /* Context to submit to. */
-    vg_lite_kernel_context_t *context;
+    vg_lite_kernel_context_t * context;
 
     /* Pointer to command buffer. */
-    void *commands;
+    void * commands;
 
     /* Number of bytes in command buffer. */
     uint32_t command_size;
@@ -442,11 +438,11 @@ vg_lite_gpu_reset_type_t;
 typedef struct vg_lite_kernel_wait
 {
     /* Context to wait for. */
-    vg_lite_kernel_context_t *context;
+    vg_lite_kernel_context_t * context;
 
     /* Timeout in milliseconds. */
     uint32_t timeout_ms;
-
+    
     /* The event to wait. */
     uint32_t event_mask;
 
@@ -461,7 +457,7 @@ vg_lite_kernel_wait_t;
 typedef struct vg_lite_kernel_reset
 {
     /* Context to reset. */
-    vg_lite_kernel_context_t *context;
+    vg_lite_kernel_context_t * context;
     uint32_t delay_resume_flag;
 }
 vg_lite_kernel_reset_t;
@@ -469,7 +465,7 @@ vg_lite_kernel_reset_t;
 typedef struct vg_lite_kernel_debug
 {
     /* Context to debug. */
-    vg_lite_kernel_context_t *context;
+    vg_lite_kernel_context_t * context;
 
     /* Bandwidth counter enabler. */
     vg_lite_kernel_counter_t bandwidth_counter;
@@ -498,7 +494,7 @@ vg_lite_kernel_debug_t;
 
 typedef struct vg_lite_kernel_map
 {
-    /* INPUT */
+    /* INPUT */  
     uint32_t flags;
 
     /* user memory */
@@ -506,7 +502,7 @@ typedef struct vg_lite_kernel_map
     uint32_t bytes;
 
     /* Logical memory address or NULL. */
-    void *logical;
+    void * logical;
 
     /* Physical memory address or 0. */
     uint32_t physical;
@@ -517,7 +513,7 @@ typedef struct vg_lite_kernel_map
 
     /* OUTPUT */
     /* Memory handle for mapped memory. */
-    void *memory_handle;
+    void * memory_handle;
 
     /* GPU address of mapped memory. */
     uint32_t memory_gpu;
@@ -527,16 +523,16 @@ vg_lite_kernel_map_t;
 typedef struct vg_lite_kernel_unmap
 {
     /* Memory handle to unmap. */
-    void *memory_handle;
+    void * memory_handle;
 }
 vg_lite_kernel_unmap_t;
 
 typedef struct vg_lite_kernel_cache
 {
-    vg_lite_cache_op_t cache_op;
+    vg_lite_cache_op_t cache_op;    
 
     /* Memory handle to operation. */
-    void *memory_handle;
+    void * memory_handle;
 }
 vg_lite_kernel_cache_t;
 
@@ -589,7 +585,7 @@ typedef struct vg_lite_kernel_map_memory
     uint32_t physical;
 
     /* Logical memory address. */
-    void *logical;
+    void * logical;
 }
 vg_lite_kernel_map_memory_t;
 
@@ -599,13 +595,13 @@ typedef struct vg_lite_kernel_unmap_memory
     uint32_t bytes;
 
     /* Logical memory address. */
-    void *logical;
+    void * logical;
 }
 vg_lite_kernel_unmap_memory_t;
 
 typedef struct vg_lite_kernel_close
 {
-    vg_lite_kernel_context_t *context;
+    vg_lite_kernel_context_t * context;
 }
 vg_lite_kernel_close_t;
 

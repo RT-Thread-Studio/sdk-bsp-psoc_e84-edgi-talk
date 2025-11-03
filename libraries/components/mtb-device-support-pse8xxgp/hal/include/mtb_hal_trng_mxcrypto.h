@@ -75,12 +75,12 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_trng_setup(mtb_hal_trng_t* obj)
 // _mtb_hal_trng_get_uint32_internal
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE cy_rslt_t _mtb_hal_trng_get_uint32_internal(const mtb_hal_trng_t* obj,
-        uint32_t *value)
+                                                            uint32_t* value)
 {
     CY_ASSERT(NULL != obj);
     CY_ASSERT(NULL != obj->base);
     return (cy_rslt_t)Cy_Crypto_Core_Trng(
-               obj->base, MTB_HAL_GARO31_INITSTATE, MTB_HAL_FIRO31_INITSTATE, MAX_TRNG_BIT_SIZE, value);
+        obj->base, MTB_HAL_GARO31_INITSTATE, MTB_HAL_FIRO31_INITSTATE, MAX_TRNG_BIT_SIZE, value);
 }
 
 

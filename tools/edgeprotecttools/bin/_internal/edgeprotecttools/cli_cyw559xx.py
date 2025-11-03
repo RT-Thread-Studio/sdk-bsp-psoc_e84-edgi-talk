@@ -160,10 +160,9 @@ def cmd_ota_image(ctx, image, output):
 @main.command('encrypt', help='Encrypts the application')
 @click.option('-i', '--image', type=click.Path(), required=True,
               help='Image HEX file')
-@click.option('--key', '--key-path', 'key', type=click.Path(), required=True,
-              help='The path to the key used to encrypt the application')
-@click.option('--iv', default="01010101010101010000000000000001", hidden=True,
-              help='Initialization vector (16 bytes)')
+@click.option('--key', '--key-path', 'key', required=True,
+              help='The key used to encrypt the application')
+@click.option('--iv', required=True, help='Initialization vector (16 bytes)')
 @click.option('-o', '--output', type=click.Path(), required=True,
               help='Encrypted image output path')
 @click.pass_context
@@ -205,5 +204,17 @@ def cmd_read_soc_id(ctx, output):
         if 'TOOL' not in ctx.obj:
             return False
         return ctx.obj['TOOL'].read_soc_id(output)
+
+    return process
+
+@main.command('erase-flash', help='Erase flash memory of the device')
+@click.pass_context
+def cmd_erase_flash(ctx):
+    """Erase flash memory of the device"""
+    @process_handler()
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        return ctx.obj['TOOL'].erase_flash()
 
     return process

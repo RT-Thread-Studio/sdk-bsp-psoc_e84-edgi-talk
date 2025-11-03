@@ -38,10 +38,9 @@
 /**
   * \brief Power Domain Controller (PD)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
-    __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
+  __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
 } PD_Type;                                      /*!< Size = 8 (0x8) */
 
 

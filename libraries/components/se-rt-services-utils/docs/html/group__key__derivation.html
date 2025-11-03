@@ -504,7 +504,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">operation</td><td>The operation to query. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">capacity</td><td>On success, the capacity of the operation. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">capacity</td><td>On success, the capacity of the operation (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -706,8 +706,8 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>The key derivation operation object to use. It must have been set up with <a class="el" href="group__key__derivation.html#gae24279023e83b8eebdec720f2eaa18ad" title="Set up a key derivation operation.">ifx_se_key_derivation_setup()</a> and must not have produced any output yet. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">step</td><td>Which step the input data is for. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Input data to use. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">data_length</td><td>Size of the <code>data</code> buffer in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Input data to use (encoded pointer to input data). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data_length</td><td>Size of the <code>data</code> buffer in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -772,7 +772,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>The key derivation operation object to read from. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Buffer where the output will be written. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Buffer where the output will be written (encoded pointer to output buffer). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">output_length</td><td>Number of bytes to output. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
@@ -866,7 +866,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">attributes</td><td>The attributes for the new key. If the key type to be created is <a class="el" href="group__crypto__types.html#ga1e7258c4c49b804ea349b77722af86a8" title="A secret value that can be used to verify a password hash.">IFX_SE_KEY_TYPE_PASSWORD_HASH</a> then the algorithm in the policy must be the same as in the current operation. </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>The key derivation operation object to read from. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">key</td><td>On success, an identifier for the newly created key. For persistent keys, this is the key identifier defined in <code>attributes</code>. <code>0</code> on failure. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">key</td><td>On success, an identifier for the newly created key (encoded pointer to <a class="el" href="group__key__attributes.html#ga40f81e5fa5d5b8c64b81b49d60ccc6dc" title="The type of the of keys identifier transfer data.">ifx_se_key_id_fih_t</a> variable). For persistent keys, this is the key identifier defined in <code>attributes</code>. <code>0</code> on failure. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -950,10 +950,10 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">operation</td><td>The key derivation operation object to use. It must have been set up with <a class="el" href="group__key__derivation.html#gae24279023e83b8eebdec720f2eaa18ad" title="Set up a key derivation operation.">ifx_se_key_derivation_setup()</a> with a key agreement and derivation algorithm <code>alg</code> (<code>IFX_SE_ALG_XXX</code> value such that <a class="el" href="group__crypto__algs.html#ga0d3e7ebf3f1412e39ed64ebc99c7c86a" title="Whether the specified algorithm is a key agreement algorithm.">IFX_SE_ALG_IS_KEY_AGREEMENT</a>(<code>alg</code>) is true and <a class="el" href="group__crypto__algs.html#gab3cfe6bc355240097b853cebae8e2d4c" title="Whether the specified algorithm is a raw key agreement algorithm.">IFX_SE_ALG_IS_RAW_KEY_AGREEMENT</a>(<code>alg</code>) is false). The operation must be ready for an input of the type given by <code>step</code>. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">step</td><td>Which step the input data is for. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">private_key</td><td>Identifier of the private key to use. It must allow the usage <a class="el" href="group__key__policy.html#ga70772b0c644888fb60605bfddd86f1bb" title="Whether the key may be used to derive other keys or produce a password hash.">IFX_SE_KEY_USAGE_DERIVE</a>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">peer_key</td><td>Public key of the peer. The peer key must be in the same format that <a class="el" href="group__import__export.html#ga8c4b3683086bedb13cf0ceb6f6b2c1f6" title="Import a key in binary format.">ifx_se_import_key()</a> accepts for the public key type corresponding to the type of private_key. That is, this function performs the equivalent of <a class="el" href="group__import__export.html#ga8c4b3683086bedb13cf0ceb6f6b2c1f6" title="Import a key in binary format.">ifx_se_import_key</a>(..., <code>peer_key</code>, <code>peer_key_length</code>) where with key attributes indicating the public key type corresponding to the type of <code>private_key</code>. For example, for EC keys, this means that peer_key is interpreted as a point on the curve that the private key is on. The standard formats for public keys are documented in the documentation of <a class="el" href="group__import__export.html#ga120a3d6cb22b2a2d438edf1cdebc560f" title="Export a public key or the public part of a key pair in binary format.">ifx_se_export_public_key()</a>. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">peer_key_length</td><td>Size of <code>peer_key</code> in bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">step</td><td>Which step the input data is for. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">private_key</td><td>Identifier of the private key to use. It must allow the usage <a class="el" href="group__key__policy.html#ga70772b0c644888fb60605bfddd86f1bb" title="Whether the key may be used to derive other keys or produce a password hash.">IFX_SE_KEY_USAGE_DERIVE</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">peer_key</td><td>Public key of the peer (encoded pointer to input data). The peer key must be in the same format that <a class="el" href="group__import__export.html#ga8c4b3683086bedb13cf0ceb6f6b2c1f6" title="Import a key in binary format.">ifx_se_import_key()</a> accepts for the public key type corresponding to the type of private_key. That is, this function performs the equivalent of <a class="el" href="group__import__export.html#ga8c4b3683086bedb13cf0ceb6f6b2c1f6" title="Import a key in binary format.">ifx_se_import_key</a>(..., <code>peer_key</code>, <code>peer_key_length</code>) where with key attributes indicating the public key type corresponding to the type of <code>private_key</code>. For example, for EC keys, this means that peer_key is interpreted as a point on the curve that the private key is on. The standard formats for public keys are documented in the documentation of <a class="el" href="group__import__export.html#ga120a3d6cb22b2a2d438edf1cdebc560f" title="Export a public key or the public part of a key pair in binary format.">ifx_se_export_public_key()</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">peer_key_length</td><td>Size of <code>peer_key</code> in bytes (size_t). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>
@@ -1044,12 +1044,12 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir"></td><td class="paramname">alg</td><td>The key agreement algorithm to compute (<code>IFX_SE_ALG_XXX</code> value such that <a class="el" href="group__crypto__algs.html#gab3cfe6bc355240097b853cebae8e2d4c" title="Whether the specified algorithm is a raw key agreement algorithm.">IFX_SE_ALG_IS_RAW_KEY_AGREEMENT</a>(<code>alg</code>) is true). </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">private_key</td><td>Identifier of the private key to use. It must allow the usage <a class="el" href="group__key__policy.html#ga70772b0c644888fb60605bfddd86f1bb" title="Whether the key may be used to derive other keys or produce a password hash.">IFX_SE_KEY_USAGE_DERIVE</a>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">peer_key</td><td>Public key of the peer. It must be in the same format that <a class="el" href="group__import__export.html#ga8c4b3683086bedb13cf0ceb6f6b2c1f6" title="Import a key in binary format.">ifx_se_import_key()</a> accepts. The standard formats for public keys are documented in the documentation of <a class="el" href="group__import__export.html#ga120a3d6cb22b2a2d438edf1cdebc560f" title="Export a public key or the public part of a key pair in binary format.">ifx_se_export_public_key()</a>. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">peer_key_length</td><td>Size of <code>peer_key</code> in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Buffer where the raw shared secret is to be written. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">output_size</td><td>Size of the <code>output</code> buffer in bytes. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">output_length</td><td>On success, the number of bytes that make up the returned output. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">private_key</td><td>Identifier of the private key to use. It must allow the usage <a class="el" href="group__key__policy.html#ga70772b0c644888fb60605bfddd86f1bb" title="Whether the key may be used to derive other keys or produce a password hash.">IFX_SE_KEY_USAGE_DERIVE</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">peer_key</td><td>Public key of the peer (encoded pointer to input data). It must be in the same format that <a class="el" href="group__import__export.html#ga8c4b3683086bedb13cf0ceb6f6b2c1f6" title="Import a key in binary format.">ifx_se_import_key()</a> accepts. The standard formats for public keys are documented in the documentation of <a class="el" href="group__import__export.html#ga120a3d6cb22b2a2d438edf1cdebc560f" title="Export a public key or the public part of a key pair in binary format.">ifx_se_export_public_key()</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">peer_key_length</td><td>Size of <code>peer_key</code> in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>Buffer where the raw shared secret is to be written (encoded pointer to output buffer). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">output_size</td><td>Size of the <code>output</code> buffer in bytes (size_t). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">output_length</td><td>On success, the number of bytes that make up the returned output (encoded pointer to size_t variable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ctx</td><td>The pointer to the SE syscall context that contain a special syscall data (IPC release callback etc).</td></tr>
   </table>
   </dd>

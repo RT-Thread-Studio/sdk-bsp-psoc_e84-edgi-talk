@@ -23,8 +23,12 @@ Source files which includes implemtation files e.g. https://github.com/ARM-softw
  CMSIS DSP is an optimized compute library for embedded systems. Different variants are
   available according to the core and most of the functions are using a vectorized version
   when the Helium or Neon extension is available.
-  CMSIS DSP is based on https://github.com/ARM-software/CMSIS-DSP/releases/tag/v1.15.0
-## More information
+  CMSIS DSP is based on https://github.com/ARM-software/CMSIS-DSP/releases/tag/v1.16.2
+
+### Known Issues
+GCC has  limitated support of Helium instructions, due to which some specific instructions like vstrb  may trigger assembler errors due to unsupported or misinterpreted syntax. Issue is seen in CMSIS DSP component when compiled with optimization other than Debug mode (Optimzation level -Og) for Cortex-M55.
+
+### More information
 
 * [ModusToolbox Software Environment, Quick Start Guide, Documentation, and Videos](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/)
 * [Infineon](http://www.infineon.com)

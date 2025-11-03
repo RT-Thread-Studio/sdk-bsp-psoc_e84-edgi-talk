@@ -39,34 +39,32 @@
 /**
   * \brief Fault structure (FAULT_STRUCT)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Fault control */
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t STATUS;                        /*!< 0x0000000C Fault status */
-    __IOM uint32_t DATA[4];                       /*!< 0x00000010 Fault data */
-    __IM uint32_t RESERVED1[8];
-    __IM uint32_t PENDING0;                      /*!< 0x00000040 Fault pending 0 */
-    __IM uint32_t PENDING1;                      /*!< 0x00000044 Fault pending 1 */
-    __IM uint32_t PENDING2;                      /*!< 0x00000048 Fault pending 2 */
-    __IM uint32_t RESERVED2;
-    __IOM uint32_t MASK0;                         /*!< 0x00000050 Fault mask 0 */
-    __IOM uint32_t MASK1;                         /*!< 0x00000054 Fault mask 1 */
-    __IOM uint32_t MASK2;                         /*!< 0x00000058 Fault mask 2 */
-    __IM uint32_t RESERVED3[25];
-    __IOM uint32_t INTR;                          /*!< 0x000000C0 Interrupt */
-    __IOM uint32_t INTR_SET;                      /*!< 0x000000C4 Interrupt set */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x000000C8 Interrupt mask */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x000000CC Interrupt masked */
-    __IM uint32_t RESERVED4[12];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Fault control */
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t STATUS;                        /*!< 0x0000000C Fault status */
+  __IOM uint32_t DATA[4];                       /*!< 0x00000010 Fault data */
+   __IM uint32_t RESERVED1[8];
+   __IM uint32_t PENDING0;                      /*!< 0x00000040 Fault pending 0 */
+   __IM uint32_t PENDING1;                      /*!< 0x00000044 Fault pending 1 */
+   __IM uint32_t PENDING2;                      /*!< 0x00000048 Fault pending 2 */
+   __IM uint32_t RESERVED2;
+  __IOM uint32_t MASK0;                         /*!< 0x00000050 Fault mask 0 */
+  __IOM uint32_t MASK1;                         /*!< 0x00000054 Fault mask 1 */
+  __IOM uint32_t MASK2;                         /*!< 0x00000058 Fault mask 2 */
+   __IM uint32_t RESERVED3[25];
+  __IOM uint32_t INTR;                          /*!< 0x000000C0 Interrupt */
+  __IOM uint32_t INTR_SET;                      /*!< 0x000000C4 Interrupt set */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x000000C8 Interrupt mask */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x000000CC Interrupt masked */
+   __IM uint32_t RESERVED4[12];
 } FAULT_STRUCT_Type;                            /*!< Size = 256 (0x100) */
 
 /**
   * \brief Fault structures (FAULT)
   */
-typedef struct
-{
-    FAULT_STRUCT_Type STRUCT[4];            /*!< 0x00000000 Fault structure */
+typedef struct {
+        FAULT_STRUCT_Type STRUCT[4];            /*!< 0x00000000 Fault structure */
 } FAULT_Type;                                   /*!< Size = 1024 (0x400) */
 
 

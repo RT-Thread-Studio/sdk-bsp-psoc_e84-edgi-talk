@@ -47,21 +47,21 @@ CRYPTO_MEM_ALIGN typedef struct
 } cy_stc_crypto_v2_chacha_buffers_t;
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_Init(CRYPTO_Type *base,
-        cy_stc_crypto_chacha_state_t *chachaState,
-        uint8_t rounds,
-        cy_stc_crypto_v2_chacha_buffers_t *chachaBuffers);
+                             cy_stc_crypto_chacha_state_t *chachaState,
+                             uint8_t rounds,
+                             cy_stc_crypto_v2_chacha_buffers_t * chachaBuffers);
 
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_start(CRYPTO_Type *base, cy_stc_crypto_chacha_state_t *chachaState,
-        uint8_t const *key,
-        uint8_t const *nonce,
-        uint32_t counter);
+                             uint8_t const *key,
+                             uint8_t const *nonce,
+                             uint32_t counter);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc_crypto_chacha_state_t *chachaState, uint8_t const *input, uint32_t inputSize, uint8_t *output);
 
 cy_en_crypto_status_t Cy_Crypto_Core_Chacha20(CRYPTO_Type *base,
-        uint8_t const *key, uint8_t const *nonce, uint32_t counter, uint8_t const *input,
-        uint32_t inputSize, uint8_t *output);
+                                     uint8_t const *key, uint8_t const *nonce, uint32_t counter, uint8_t const *input,
+                                     uint32_t inputSize, uint8_t *output);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_Free(CRYPTO_Type *base, cy_stc_crypto_chacha_state_t *chachaState);
 

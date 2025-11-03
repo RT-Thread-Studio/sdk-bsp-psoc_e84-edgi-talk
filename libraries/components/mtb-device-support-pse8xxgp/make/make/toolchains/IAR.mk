@@ -87,6 +87,15 @@ mtb_toolchain_IAR__elf2bin=$(MTB_TOOLCHAIN_IAR__ELF2BIN) -O binary $1 $2
 # Options
 ################################################################################
 
+# Force VFP_SELECT=hardfp by default for export to the IAR Embedded Workbench
+ifneq ($(filter ewarm8 ewarm, $(MAKECMDGOALS)),)
+ifeq ($(VFP_SELECT),)
+$(info Note: The VFP_SELECT variable is not set. The default value of VFP_SELECT is hardfp for IAR Embedded Workbench export.)
+VFP_SELECT=hardfp
+MTB_RECIPE__VFP_SELECT_DEFAULT=hardfp
+endif
+endif
+
 # DEBUG/NDEBUG selection
 ifeq ($(CONFIG),Debug)
 _MTB_TOOLCHAIN_IAR__DEBUG_FLAG:=-DDEBUG
@@ -276,7 +285,7 @@ MTB_TOOLCHAIN_IAR__ARFLAGS:=--create
 
 # Enable Multi-Threaded build arguments
 # Note: If these RTOS-specific flags are modified, the instructions in ide.mk should be updated to reflect the changes.
-ifneq (,$(filter MW_ABSTRACTION_RTOS,$(COMPONENTS)))
+ifneq (,$(filter MW_ABSTRACTION_RTOS,$(filter-out $(DISABLE_COMPONENTS),$(MTB_CORE__FULL_COMPONENT_LIST))))
 MTB_TOOLCHAIN_IAR__CFLAGS  +=--dlib_config=full
 MTB_TOOLCHAIN_IAR__CXXFLAGS+=--dlib_config=full
 MTB_TOOLCHAIN_IAR__LDFLAGS +=--threaded_lib
@@ -304,9 +313,9 @@ MTB_TOOLCHAIN_IAR__OUTPUT_OPTION:=-o
 MTB_TOOLCHAIN_IAR__ARCHIVE_LIB_OUTPUT_OPTION:=-o
 MTB_TOOLCHAIN_IAR__MAPFILE:=--map=
 MTB_TOOLCHAIN_IAR__LSFLAGS:=--config=
-MTB_TOOLCHAIN_IAR__INCRSPFILE:=-f 
-MTB_TOOLCHAIN_IAR__INCRSPFILE_ASM:=-f 
-MTB_TOOLCHAIN_IAR__OBJRSPFILE:=-f 
+MTB_TOOLCHAIN_IAR__INCRSPFILE:=-f$(MTB__SPACE)
+MTB_TOOLCHAIN_IAR__INCRSPFILE_ASM:=-f$(MTB__SPACE)
+MTB_TOOLCHAIN_IAR__OBJRSPFILE:=-f$(MTB__SPACE)
 
 # Produce a makefile dependency rule for each input file
 MTB_TOOLCHAIN_IAR__DEPENDENCIES=--dependencies=m "$(@:.$(MTB_TOOLCHAIN_IAR__SUFFIX_O)=.$(MTB_TOOLCHAIN_IAR__SUFFIX_D))"

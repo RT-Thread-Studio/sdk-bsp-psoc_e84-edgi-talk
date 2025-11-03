@@ -45,15 +45,14 @@
   @param[in]     pSrc        points to input vector
   @param[out]    pDst        points to output vector
   @param[in]     numSamples  number of samples in each vector
-  @return        none
  */
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_cmplx_mag_squared_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_mag_squared_f16(
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t numSamples)
 {
     int32_t blockSize = numSamples;  /* loop counters */
     f16x8x2_t vecSrc;
@@ -64,82 +63,82 @@ void arm_cmplx_mag_squared_f16(
     {
         mve_pred16_t p = vctp16q(blockSize);
         vecSrc = vld2q(pSrc);
-        sum = vmulq_m(vuninitializedq_f16(), vecSrc.val[0], vecSrc.val[0], p);
-        sum = vfmaq_m(sum, vecSrc.val[1], vecSrc.val[1], p);
-        vstrhq_p_f16(pDst, sum, p);
+        sum = vmulq_m(vuninitializedq_f16(),vecSrc.val[0], vecSrc.val[0],p);
+        sum = vfmaq_m(sum, vecSrc.val[1], vecSrc.val[1],p);
+        vstrhq_p_f16(pDst, sum,p);
 
         pSrc += 16;
         pDst += 8;
-
+        
         /*
          * Decrement the blockSize loop counter
          */
-        blockSize -= 8;
+        blockSize-= 8;
     }
 
 }
 
 #else
-void arm_cmplx_mag_squared_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_mag_squared_f16(
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t numSamples)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    _Float16 real, imag;                          /* Temporary input variables */
+        uint32_t blkCnt;                               /* Loop counter */
+        _Float16 real, imag;                          /* Temporary input variables */
 
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] = (A[0] * A[0] + A[1] * A[1]) */
+  while (blkCnt > 0U)
+  {
+    /* C[0] = (A[0] * A[0] + A[1] * A[1]) */
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        *pDst++ = (real * real) + (imag * imag);
+    real = *pSrc++;
+    imag = *pSrc++;
+    *pDst++ = (real * real) + (imag * imag);
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        *pDst++ = (real * real) + (imag * imag);
+    real = *pSrc++;
+    imag = *pSrc++;
+    *pDst++ = (real * real) + (imag * imag);
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        *pDst++ = (real * real) + (imag * imag);
+    real = *pSrc++;
+    imag = *pSrc++;
+    *pDst++ = (real * real) + (imag * imag);
 
-        real = *pSrc++;
-        imag = *pSrc++;
-        *pDst++ = (real * real) + (imag * imag);
+    real = *pSrc++;
+    imag = *pSrc++;
+    *pDst++ = (real * real) + (imag * imag);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = numSamples % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = numSamples % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] = (A[0] * A[0] + A[1] * A[1]) */
+  while (blkCnt > 0U)
+  {
+    /* C[0] = (A[0] * A[0] + A[1] * A[1]) */
 
-        real = *pSrc++;
-        imag = *pSrc++;
+    real = *pSrc++;
+    imag = *pSrc++;
 
-        /* store result in destination buffer. */
-        *pDst++ = (real * real) + (imag * imag);
+    /* store result in destination buffer. */
+    *pDst++ = (real * real) + (imag * imag);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

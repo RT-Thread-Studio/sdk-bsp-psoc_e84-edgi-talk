@@ -76,12 +76,12 @@
 #define CY_IPC_SEMA_PER_WORD    (uint32_t)32u   /**< 32 semaphores per word */
 
 #if defined(CY_IPC_SECURE_SEMA_DEVICE) || defined(CY_DOXYGEN)
-    /** Convert normal to secure semaphore number */
-    #define CY_IPC_SEMA_SEC(sema)       (0x10000000UL | (sema))
-    /** Check valid secure semaphore */
-    #define CY_IPC_SEMA_IS_SEC(sema)    (((sema) & 0x10000000UL) != 0UL)
-    /** Returns normal semaphore number */
-    #define CY_IPC_SEMA_GET_NUM(sema)   ((sema) & (~(0x10000000UL)))
+/** Convert normal to secure semaphore number */
+#define CY_IPC_SEMA_SEC(sema)       (0x10000000UL | (sema))
+/** Check valid secure semaphore */
+#define CY_IPC_SEMA_IS_SEC(sema)    (((sema) & 0x10000000UL) != 0UL)
+/** Returns normal semaphore number */
+#define CY_IPC_SEMA_GET_NUM(sema)   ((sema) & (~(0x10000000UL)))
 #endif /* CY_IPC_SECURE_SEMA_DEVICE */
 
 /** \} group_ipc_sema_macros */
@@ -108,7 +108,7 @@ typedef enum
     /** Semaphore API return when IPC channel was not acquired */
     CY_IPC_SEMA_NOT_ACQUIRED       = (uint32_t)(CY_IPC_SEMA_ID_INFO  | 2UL),
     /** Semaphore API return status when semaphore channel is busy or locked
-    *                              by another process */
+*                              by another process */
     CY_IPC_SEMA_LOCKED             = (uint32_t)(CY_IPC_SEMA_ID_INFO  | 3UL),
     /** Semaphore status return that the semaphore is set */
     CY_IPC_SEMA_STATUS_LOCKED      = (uint32_t)(CY_IPC_SEMA_ID_INFO  | 1UL),
@@ -120,12 +120,15 @@ typedef enum
 /** IPC semaphore control data structure. */
 typedef struct
 {
-    /** Maximum semaphores in system */
+    /** Maximum semaphores in system. Must be a multiple of 32.
+      * This count applies to both secure and non-secure semaphores */
     uint32_t maxSema;
-    /** Pointer to semaphores array  */
+    /** Pointer to semaphores array. Must have length maxSema / 32.
+      * This must be located in memory which is accessible to all
+      * processing environments which will interact with semaphores. */
     uint32_t *arrayPtr;
 #if defined (CY_IP_MXIPC) && (CY_IPC_INSTANCES > 1U)
-    /** Pointer to secure semaphores array  */
+    /** Pointer to secure semaphores array. Must have length maxSema / 32 */
     uint32_t *arrayPtr_sec;
 #endif
 } cy_stc_ipc_sema_t;
@@ -141,11 +144,11 @@ typedef struct
 extern "C" {
 #endif
 
-cy_en_ipcsema_status_t   Cy_IPC_Sema_Init(uint32_t ipcChannel, uint32_t count, uint32_t memPtr[]);
+cy_en_ipcsema_status_t   Cy_IPC_Sema_Init (uint32_t ipcChannel, uint32_t count, uint32_t memPtr[]);
 cy_en_ipcsema_status_t   Cy_IPC_Sema_InitExt(uint32_t ipcChannel, cy_stc_ipc_sema_t *ipcSema);
-cy_en_ipcsema_status_t   Cy_IPC_Sema_Set(uint32_t semaNumber, bool preemptable);
-cy_en_ipcsema_status_t   Cy_IPC_Sema_Clear(uint32_t semaNumber, bool preemptable);
-cy_en_ipcsema_status_t   Cy_IPC_Sema_Status(uint32_t semaNumber);
+cy_en_ipcsema_status_t   Cy_IPC_Sema_Set (uint32_t semaNumber, bool preemptable);
+cy_en_ipcsema_status_t   Cy_IPC_Sema_Clear (uint32_t semaNumber, bool preemptable);
+cy_en_ipcsema_status_t   Cy_IPC_Sema_Status (uint32_t semaNumber);
 uint32_t Cy_IPC_Sema_GetMaxSems(void);
 
 #ifdef __cplusplus

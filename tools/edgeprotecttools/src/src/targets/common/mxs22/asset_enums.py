@@ -136,8 +136,13 @@ KeyAlgorithm = Enum(
         ('ECDSA', PsaKeyAlgorithms.ECDSA),
         ('RSA', PsaKeyAlgorithms.RSA_PKCS1),
         ('AES-CTR', PsaKeyAlgorithms.CTR),
+        ('AES-CFB', PsaKeyAlgorithms.CBF),
+        ('AES-OFB', PsaKeyAlgorithms.OFB),
         ('AES-CBC', PsaKeyAlgorithms.CBC_NO_PADDING),
         ('AES-ECB', PsaKeyAlgorithms.ECB_NO_PADDING),
+        ('ECDH', PsaKeyAlgorithms.ECDH),
+        ('HKDF_ALG_SHA_256', PsaKeyAlgorithms.HKDF_ALG_SHA_256),
+        ('IFX_SE_ALG_KDF_AES_CMAC', PsaKeyAlgorithms.IFX_SE_ALG_KDF_AES_CMAC),
         ('NONE', PsaKeyAlgorithms.NONE)
     ]
 )
@@ -183,8 +188,7 @@ SmifMode = Enum(
     value='Mode',
     names=[
         ('AUTO', 0),
-        ('SDR', 1),
-        ('DDR', 2)
+        ('SDR', 1)
     ]
 )
 

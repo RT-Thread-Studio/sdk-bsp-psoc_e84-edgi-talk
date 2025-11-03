@@ -22,7 +22,7 @@ from .commands import (CommandAddSignature, CommandExtractPayload,
                        CommandEncryptAes, CommandHexSegment, CommandMerge,
                        CommandShift, CommandSign, CommandSubprocessRunner,
                        CommandBinDump, CommandBin2Hex, CommandHash,
-                       CommandHexDump, CommandHex2Bin)
+                       CommandHexDump, CommandHex2Bin, CommandHexRelocate)
 from ...core.enums import ValidationStatus
 from ...core.json_validator import JsonValidator
 
@@ -47,7 +47,8 @@ class CommandJsonValidator(JsonValidator):
                 CommandBin2Hex,
                 CommandHash,
                 CommandHexDump,
-                CommandHex2Bin
+                CommandHex2Bin,
+                CommandHexRelocate
         ):
             self.schemas[command] = join(self.schema_dir, command.schema)
 

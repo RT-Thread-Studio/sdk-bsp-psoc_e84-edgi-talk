@@ -39,24 +39,8 @@
 * \section group_syspm_pdcm_MISRA MISRA-C Compliance
 * The PDCM driver does not have any specific deviations.
 *
-* \section group_syspm_pdcm_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>5.150</td>
-*     <td>Version updated to match SYSPM driver.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_syspm_pdcm_macros Macros
 * \defgroup group_syspm_pdcm_functions Functions
-* \defgroup group_syspm_pdcm_data_structures Data Structures
 * \defgroup group_syspm_pdcm_enums Enumerated Types
 */
 /** \} group_syspm_pdcm */
@@ -148,9 +132,9 @@ typedef enum
 * \addtogroup group_syspm_pdcm_functions
 * \{
 */
-cy_pd_pdcm_dep_t cy_pd_pdcm_get_dependency(cy_pd_pdcm_id_t host_pd, cy_pd_pdcm_id_t dest_pd);
-cy_en_syspm_status_t cy_pd_pdcm_set_dependency(cy_pd_pdcm_id_t host_pd, cy_pd_pdcm_id_t dest_pd);
-cy_en_syspm_status_t cy_pd_pdcm_clear_dependency(cy_pd_pdcm_id_t host_pd, cy_pd_pdcm_id_t dest_pd);
+cy_pd_pdcm_dep_t cy_pd_pdcm_get_dependency(cy_pd_pdcm_id_t host_pd,cy_pd_pdcm_id_t dest_pd);
+cy_en_syspm_status_t cy_pd_pdcm_set_dependency(cy_pd_pdcm_id_t host_pd,cy_pd_pdcm_id_t dest_pd);
+cy_en_syspm_status_t cy_pd_pdcm_clear_dependency(cy_pd_pdcm_id_t host_pd,cy_pd_pdcm_id_t dest_pd);
 /** \} group_syspm_pdcm_functions */
 
 #endif /* CY_IP_MXS40SSRSS */

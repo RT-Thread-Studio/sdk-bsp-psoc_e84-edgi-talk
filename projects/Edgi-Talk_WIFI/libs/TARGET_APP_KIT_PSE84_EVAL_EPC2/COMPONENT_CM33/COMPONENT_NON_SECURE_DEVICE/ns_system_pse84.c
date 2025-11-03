@@ -29,9 +29,8 @@
 #include "cy_sysclk.h"
 #include "cy_syspm.h"
 #include "cy_syspm_pdcm.h"
-#if defined(CY_USE_RPC_CALL) && (CY_USE_RPC_CALL == 1)
-    #include "cy_secure_services.h"
-#endif
+#include "cybsp.h"
+
 /*******************************************************************************
 * SystemCoreClockUpdate()
 *******************************************************************************/
@@ -44,36 +43,15 @@
 
 /** Default system core frequency in Hz */
 #ifdef PSE84_PSVP
-    #define CY_CLK_SYSTEM_FREQ_HZ_DEFAULT       (12000000UL)
+#define CY_CLK_SYSTEM_FREQ_HZ_DEFAULT       (12000000UL)
 #else
-    #define CY_CLK_SYSTEM_FREQ_HZ_DEFAULT       (50000000UL)
+#define CY_CLK_SYSTEM_FREQ_HZ_DEFAULT       (50000000UL)
 #endif
 
 #define RRAM_NVM_PROTECTED_BLOCKS_TO_CONFIG 32 // 128KB/4KB  4KB block size
 
-/**
-* Holds the (Cortex-M33) system core clock,
-* which is the system clock frequency supplied to the SysTick timer and the
-* processor core clock.
-* This variable implements CMSIS Core global variable.
-* Refer to the [CMSIS documentation]
-* (http://www.keil.com/pack/doc/CMSIS/Core/html/group__system__init__gr.html "System and Clock Configuration")
-* for more details.
-* This variable can be used by debuggers to query the frequency
-* of the debug timer or to configure the trace clock speed.
-*
-* \attention Compilers must be configured to avoid removing this variable in case
-* the application program is not using it. Debugging systems require the variable
-* to be physically present in memory so that it can be examined to configure the debugger. */
 uint32_t SystemCoreClock = CY_CLK_SYSTEM_FREQ_HZ_DEFAULT;
 
-/** Holds the HFClk0 clock frequency. Updated by \ref SystemCoreClockUpdate(). */
-uint32_t cy_Hfclk0FreqHz  = CY_CLK_HFCLK0_FREQ_HZ_DEFAULT;
-
-/** Holds the PeriClk clock frequency. Updated by \ref SystemCoreClockUpdate(). */
-uint32_t cy_PeriClkFreqHz = CY_CLK_PERICLK_FREQ_HZ_DEFAULT;
-
-/** Holds the AHB frequency. Updated by \ref SystemCoreClockUpdate(). */
 uint32_t cy_AhbFreqHz = CY_CLK_SYSTEM_FREQ_HZ_DEFAULT;
 
 /*******************************************************************************
@@ -92,7 +70,7 @@ uint32_t cy_delayFreqKhz  = (CY_CLK_SYSTEM_FREQ_HZ_DEFAULT + CY_DELAY_1K_MINUS_1
                             CY_DELAY_1K_THRESHOLD;
 
 uint32_t cy_delayFreqMhz  = (uint8_t)((CY_CLK_SYSTEM_FREQ_HZ_DEFAULT + CY_DELAY_1M_MINUS_1_THRESHOLD) /
-                                      CY_DELAY_1M_THRESHOLD);
+                            CY_DELAY_1M_THRESHOLD);
 
 
 #define CY_ROOT_PATH_SRC_IMO                (0UL)
@@ -116,58 +94,28 @@ uint32_t cy_delayFreqMhz  = (uint8_t)((CY_CLK_SYSTEM_FREQ_HZ_DEFAULT + CY_DELAY_
 
 /*******************************************************************************
 * Function Name: SystemInit
-****************************************************************************//**
-* \cond
-* Initializes the system:
-* - Restores FLL registers to the default state for single core devices.
-* - Unlocks and disables WDT.
-* - Calls Cy_PDL_Init() function to define the driver library.
-* - Calls the Cy_SystemInit() function.
-* - Calls \ref SystemCoreClockUpdate().
-* \endcond
 *******************************************************************************/
 void SystemInit(void)
 {
     Cy_PDL_Init(CY_DEVICE_CFG);
-
     Cy_SystemInit();
-
-#ifdef CY_DEVICE_FORCE_IP_ENABLE_IN_STARTUP
-    (void)Cy_SysClk_PeriGroupSetSlaveCtl(PERI_1_GROUP_2, CY_SYSCLK_PERI_GROUP_SL_CTL, 0x3U);
-#endif
-#if  (!defined(CY_USE_FULL_PROTECTION) || (CY_USE_FULL_PROTECTION == 0))
-    SystemCoreClockUpdate();
-#endif
 }
 
 /*******************************************************************************
 * Function Name: Cy_SystemInit
-****************************************************************************//**
-*
-* The function is called during device startup.
-*
 *******************************************************************************/
 __WEAK void Cy_SystemInit(void)
 {
-    /* Empty weak function.
-    */
+     /* Empty weak function.
+     */
 }
 
 
 /*******************************************************************************
 * Function Name: SystemCoreClockUpdate
-****************************************************************************//**
-*
-* Gets core clock frequency and updates \ref SystemCoreClock, \ref
-* cy_Hfclk0FreqHz, and \ref cy_PeriClkFreqHz.
-*
-* Updates global variables used by the \ref Cy_SysLib_Delay(), \ref
-* Cy_SysLib_DelayUs(), and \ref Cy_SysLib_DelayCycles().
-*
 *******************************************************************************/
-void SystemCoreClockUpdate(void)
+void SystemCoreClockUpdate (void)
 {
-#if (!defined(CY_USE_FULL_PROTECTION) || (CY_USE_FULL_PROTECTION == 0)) || defined (COMPONENT_SECURE_DEVICE)
     uint32_t pathFreqHz;
     uint32_t clkHfPath;
     /* Get frequency for the high-frequency clock # 0 */
@@ -177,15 +125,6 @@ void SystemCoreClockUpdate(void)
 
     SystemCoreClock = pathFreqHz;
 
-    cy_Hfclk0FreqHz = SystemCoreClock;
-
-    /* Get frequency for the high-frequency clock # 2 , which is used for PERI PCLK*/
-    clkHfPath = CY_SYSCLK_CLK_PERI_HF_PATH_NUM;
-
-    pathFreqHz = Cy_SysClk_ClkHfGetFrequency(clkHfPath);
-
-    cy_PeriClkFreqHz = pathFreqHz;
-
     /* Sets clock frequency for Delay API */
     cy_delayFreqHz = SystemCoreClock;
     cy_delayFreqMhz = (uint32_t)((cy_delayFreqHz + CY_DELAY_1M_MINUS_1_THRESHOLD) / CY_DELAY_1M_THRESHOLD);
@@ -193,38 +132,20 @@ void SystemCoreClockUpdate(void)
 
     /* Get the frequency of AHB source, CLK HF0 is the source for AHB*/
     cy_AhbFreqHz = Cy_SysClk_ClkHfGetFrequency(0UL);
-#else
-    cy_rpc_service_args_t rpcInputArgs, rpcOutputArgs;
-    rpcInputArgs.argc = 5;
-    rpcInputArgs.argv[0] = (uint32_t)CY_SECURE_SERVICE_TYPE_SYSTEM;
-    rpcInputArgs.argv[1] = (uint32_t)CY_SECURE_SERVICE_SYS_GET_CORE_CLK;
-    /* Get frequency for the high-frequency clock # 0 */
-    rpcInputArgs.argv[2] = (uint32_t)CY_SYSCLK_CLK_CORE_HF_PATH_NUM;
-    /* Get frequency for the high-frequency clock # 2 , which is used for PERI PCLK*/
-    rpcInputArgs.argv[3] = (uint32_t)CY_SYSCLK_CLK_PERI_HF_PATH_NUM;
-    /* HF0 clk*/
-    rpcInputArgs.argv[4] = 0;
-    cy_rpc_invec_t in_vec[] =
-    {
-        { .base = &rpcInputArgs, .len = sizeof(rpcInputArgs) },
-    };
-    cy_rpc_outvec_t out_vec[] =
-    {
-        { .base = &rpcOutputArgs, .len = sizeof(rpcOutputArgs) },
-    };
-    Cy_SecureServices_RPC(in_vec, CY_RPC_IOVEC_LEN(in_vec), out_vec, CY_RPC_IOVEC_LEN(out_vec));
+}
 
-    if (rpcOutputArgs.argc == 4)
-    {
-        SystemCoreClock = rpcOutputArgs.argv[1];
-        cy_PeriClkFreqHz = rpcOutputArgs.argv[2];
-        /* Sets clock frequency for Delay API */
-        cy_delayFreqHz = SystemCoreClock;
-        cy_delayFreqMhz = (uint32_t)((cy_delayFreqHz + CY_DELAY_1M_MINUS_1_THRESHOLD) / CY_DELAY_1M_THRESHOLD);
-        cy_delayFreqKhz = (cy_delayFreqHz + CY_DELAY_1K_MINUS_1_THRESHOLD) / CY_DELAY_1K_THRESHOLD;
-        /* Get the frequency of AHB source, CLK HF0 is the source for AHB*/
-        cy_AhbFreqHz = rpcOutputArgs.argv[3];
-    }
-#endif
+/*******************************************************************************
+* Function Name: SystemCoreClockSetup
+*******************************************************************************/
+void SystemCoreClockSetup (uint32_t systemCoreClk_freq_hz, uint32_t ahb_freq_hz)
+{
+    SystemCoreClock = systemCoreClk_freq_hz;
+
+    /* Sets clock frequency for Delay API */
+    cy_delayFreqHz = SystemCoreClock;
+    cy_delayFreqMhz = (uint32_t)((cy_delayFreqHz + CY_DELAY_1M_MINUS_1_THRESHOLD) / CY_DELAY_1M_THRESHOLD);
+    cy_delayFreqKhz = (cy_delayFreqHz + CY_DELAY_1K_MINUS_1_THRESHOLD) / CY_DELAY_1K_THRESHOLD;
+
+    cy_AhbFreqHz = ahb_freq_hz;
 }
 /* [] END OF FILE */

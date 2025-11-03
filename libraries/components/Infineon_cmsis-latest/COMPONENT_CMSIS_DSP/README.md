@@ -46,20 +46,6 @@ With this wrapper you can design your algorithm in Python using an API as close 
 
 The goal is to make it easier to move from a design to a final implementation in C.
 
-### Compute Graph
-
-CMSIS-DSP is also providing an experimental [static scheduler for compute graph](ComputeGraph/README.md) to describe streaming solutions:
-
-* You define your compute graph in Python
-* A static and deterministic schedule (computed by the Python script) is generated
-* The static schedule can be run on the device with low overhead
-
-The Python scripts for the static scheduler generator are part of the CMSIS-DSP Python wrapper. 
-
-The header files are part of the CMSIS-DSP pack (version 1.10.2 and above).
-
-The Compute Graph makes it easier to implement a streaming solution : connecting different compute kernels each consuming and producing different amount of data.
-
 ## Support / Contact
 
 For any questions or to reach the CMSIS-DSP  team, please create a new issue in https://github.com/ARM-software/CMSIS-DSP/issues
@@ -277,12 +263,6 @@ Other folders are part of different projects, tests or examples.
 * Scripts:
   * Debugging scripts
   * Script to generate some coefficient tables used by CMSIS-DSP
-* Compute Graph:
-  * Not needed to build CMSIS-DSP. This project is relying on CMSIS-DSP library
-  * Examples for the Compute Graph
-  * C++ templates for the Compute Graph
-  * Default (and optional) nodes
-  
 * Source:
   * CMSIS-DSP source
 * Testing:
@@ -298,9 +278,3 @@ Some files are needed to generate the PythonWrapper:
 * MANIFEST.in
 * pyproject.toml
 * setup.py
-
-And we have a script to make it easier to customize the build:
-
-* cmsisdspconfig.py:
-  * Web browser UI to generate build configurations (temporary until the CMSIS-DSP configuration is reworked to be simpler and more maintainable)
-

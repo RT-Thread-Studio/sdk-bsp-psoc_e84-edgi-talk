@@ -42,91 +42,86 @@
 /**
   * \brief RRAM OTP map and Extra region (RRAMC_RRAM_EXTRA_AREA)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[4096];
-    __IOM uint32_t GENERAL_OTP[1408];             /*!< 0x00004000 GENERAL_OTP subregion (5.5KB) */
-    __IM uint32_t RESERVED1[10880];
+typedef struct {
+   __IM uint32_t RESERVED[4096];
+  __IOM uint32_t GENERAL_OTP[1408];             /*!< 0x00004000 GENERAL_OTP subregion (5.5KB) */
+   __IM uint32_t RESERVED1[10880];
 } RRAMC_RRAM_EXTRA_AREA_Type;                   /*!< Size = 65536 (0x10000) */
 
 /**
   * \brief RRAMC controller registers (RRAMC_RRAMC)
   */
-typedef struct
-{
-    __IOM uint32_t AHB_HRESP;                     /*!< 0x00000000 RRAMC AHB HRESP */
-    __IM uint32_t RESERVED[7];
-    __IOM uint32_t PC_MASK;                       /*!< 0x00000020 PC acquisition and releasing */
-    __IM uint32_t RRAM_PROTECTED_X;              /*!< 0x00000024 Size of PROTECTED_NVM subregion (8KB * X) */
-    __IM uint32_t RRAM_SFLASH_Y;                 /*!< 0x00000028 Size of SFLASH_NVM subregion (8KB * Y) */
-    __IM uint32_t RRAM_WORK_Z;                   /*!< 0x0000002C Size of WORK_NVM subregion (8KB * Z) */
-    __IM uint32_t RRAM_MAIN_N;                   /*!< 0x00000030 Size of MAIN_NVM subregion (8KB * N) */
-    __IM uint32_t RESERVED1[51];
-    __IOM uint32_t RRAM_CTL;                      /*!< 0x00000100 RRAM macro OSC control */
-    __IOM uint32_t PROTECTED_LOCKABLE_LOCK;       /*!< 0x00000104 PROTECTED_NVM lockable configuarion */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t UDS_CTL;                       /*!< 0x00000110 UDS control */
-    __IOM uint32_t RECLAIMED_MAIN_NVM_SIZE;       /*!< 0x00000114 Reclaimed size (KB) from upgradeable */
-    __IOM uint32_t TB_GATING_CTL;                 /*!< 0x00000118 Turn-off Tagbit post-read gating control check */
-    __IM uint32_t RESERVED3[953];
+typedef struct {
+  __IOM uint32_t AHB_HRESP;                     /*!< 0x00000000 RRAMC AHB HRESP */
+   __IM uint32_t RESERVED[7];
+  __IOM uint32_t PC_MASK;                       /*!< 0x00000020 PC acquisition and releasing */
+   __IM uint32_t RRAM_PROTECTED_X;              /*!< 0x00000024 Size of PROTECTED_NVM subregion (8KB * X) */
+   __IM uint32_t RRAM_SFLASH_Y;                 /*!< 0x00000028 Size of SFLASH_NVM subregion (8KB * Y) */
+   __IM uint32_t RRAM_WORK_Z;                   /*!< 0x0000002C Size of WORK_NVM subregion (8KB * Z) */
+   __IM uint32_t RRAM_MAIN_N;                   /*!< 0x00000030 Size of MAIN_NVM subregion (8KB * N) */
+   __IM uint32_t RESERVED1[51];
+  __IOM uint32_t RRAM_CTL;                      /*!< 0x00000100 RRAM macro OSC control */
+  __IOM uint32_t PROTECTED_LOCKABLE_LOCK;       /*!< 0x00000104 PROTECTED_NVM lockable configuarion */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t UDS_CTL;                       /*!< 0x00000110 UDS control */
+  __IOM uint32_t RECLAIMED_MAIN_NVM_SIZE;       /*!< 0x00000114 Reclaimed size (KB) from upgradeable */
+  __IOM uint32_t TB_GATING_CTL;                 /*!< 0x00000118 Turn-off Tagbit post-read gating control check */
+   __IM uint32_t RESERVED3[953];
 } RRAMC_RRAMC_Type;                             /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief MPC Memory Protection Controller registers (RRAMC_MPC)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
                                                                 the security owner PC. The error response configuration is
                                                                 located in CFG.RESPONSE, only one such configuration exists
                                                                 applying to all protection contexts in the system. */
-    __IM uint32_t RESERVED[63];
-    __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
+   __IM uint32_t RESERVED[63];
+  __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
                                                                 (Separate CTRL for each PC depends on access_pc) */
-    __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
-    __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
-    __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
+   __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
+   __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
+  __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
                                                                 for each PC depending on access_pc) */
-    __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
-    __IM uint32_t RESERVED1[59];
-    __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
-    __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
-    __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
-    __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
+  __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
+   __IM uint32_t RESERVED1[59];
+  __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
+   __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
+  __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
+  __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
                                                                 ROT_BLK_LUT */
-    __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
-    __IM uint32_t RESERVED3[889];
+  __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
+   __IM uint32_t RESERVED3[889];
 } RRAMC_MPC_Type;                               /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief RRAM macro SFR registers (RRAMC_RRAM_SFR)
   */
-typedef struct
-{
-    __IM uint32_t NVM_STATUS;                    /*!< 0x00000000 status register */
-    __IOM uint32_t NVM_PROG;                      /*!< 0x00000004 programming control register */
-    __IOM uint32_t NVM_ADDR;                      /*!< 0x00000008 address register */
-    __IOM uint32_t NVM_CONF1;                     /*!< 0x0000000C configuration register */
-    __IOM uint32_t NVM_HARDEN1;                   /*!< 0x00000010 hardening configuration register */
-    __IOM uint32_t NVM_HARDADDR;                  /*!< 0x00000014 hardening address register */
-    __IOM uint32_t NVM_HRESP;                     /*!< 0x00000018 bus response register */
-    __IM uint32_t NVM_ECCLOG;                    /*!< 0x0000001C ECC failure logging register */
-    __IOM uint32_t NVM_ECCLOGIR;                  /*!< 0x00000020 ECC failure logging interrupt register */
-    __IOM uint32_t NVM_VMODE;                     /*!< 0x00000024 voltage mode register */
-    __IM uint32_t RESERVED[1014];
+typedef struct {
+   __IM uint32_t NVM_STATUS;                    /*!< 0x00000000 status register */
+  __IOM uint32_t NVM_PROG;                      /*!< 0x00000004 programming control register */
+  __IOM uint32_t NVM_ADDR;                      /*!< 0x00000008 address register */
+  __IOM uint32_t NVM_CONF1;                     /*!< 0x0000000C configuration register */
+  __IOM uint32_t NVM_HARDEN1;                   /*!< 0x00000010 hardening configuration register */
+  __IOM uint32_t NVM_HARDADDR;                  /*!< 0x00000014 hardening address register */
+  __IOM uint32_t NVM_HRESP;                     /*!< 0x00000018 bus response register */
+   __IM uint32_t NVM_ECCLOG;                    /*!< 0x0000001C ECC failure logging register */
+  __IOM uint32_t NVM_ECCLOGIR;                  /*!< 0x00000020 ECC failure logging interrupt register */
+  __IOM uint32_t NVM_VMODE;                     /*!< 0x00000024 voltage mode register */
+   __IM uint32_t RESERVED[1014];
 } RRAMC_RRAM_SFR_Type;                          /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief RRAM controller registers (RRAMC)
   */
-typedef struct
-{
-    RRAMC_RRAM_EXTRA_AREA_Type RRAM_EXTRA_AREA; /*!< 0x00000000 RRAM OTP map and Extra region */
-    RRAMC_RRAMC_Type RRAMC[1];              /*!< 0x00010000 RRAMC controller registers */
-    RRAMC_MPC_Type MPC[2];                  /*!< 0x00011000 MPC Memory Protection Controller registers */
-    RRAMC_RRAM_SFR_Type RRAM_SFR;           /*!< 0x00013000 RRAM macro SFR registers */
+typedef struct {
+        RRAMC_RRAM_EXTRA_AREA_Type RRAM_EXTRA_AREA; /*!< 0x00000000 RRAM OTP map and Extra region */
+        RRAMC_RRAMC_Type RRAMC[1];              /*!< 0x00010000 RRAMC controller registers */
+        RRAMC_MPC_Type MPC[2];                  /*!< 0x00011000 MPC Memory Protection Controller registers */
+        RRAMC_RRAM_SFR_Type RRAM_SFR;           /*!< 0x00013000 RRAM macro SFR registers */
 } RRAMC_Type;                                   /*!< Size = 81920 (0x14000) */
 
 

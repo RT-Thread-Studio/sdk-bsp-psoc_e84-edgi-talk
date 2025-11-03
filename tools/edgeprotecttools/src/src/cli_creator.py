@@ -39,7 +39,7 @@ class CliCreator:
         if platform == 'mxs40sv2':
             if target == 'psoc_c3':
                 module_name = 'cli_psoc_c3'
-            elif target == 'psoc_c3p8':
+            elif target in ('psoc_c3p8', 'psoc_c3x7', 'psoc_c3x8'):
                 module_name = 'cli_psoc_c3p8'
             else:
                 if not is_help:
@@ -50,8 +50,10 @@ class CliCreator:
         elif platform == 'mxs22':
             if target in ('acw64xx', 'acw74xx'):
                 module_name = 'cli_acwx4xx'
-            elif target in ('pse84', 'psb3xxx', 'pse8xs2', 'pse8xs4'):
-                module_name = 'cli_pse84'
+            elif target in ('pse84', 'pse8xs2', 'pse8xs4'):
+                module_name = 'cli_pse8x'
+            elif target == 'psb3xxx':
+                module_name = 'cli_psb3xxx'
             else:
                 module_name = 'cli_mxs22'
         elif platform == 'traveo_t2g':

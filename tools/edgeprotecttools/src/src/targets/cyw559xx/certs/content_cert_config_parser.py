@@ -32,8 +32,12 @@ class ContentCertConfigParser(CertConfigParserBase):
     def load_verify_scheme(self, ret_value=False) -> Union[
         LoadVerifyScheme, int]:
         """Gets a value of load_verify_scheme.value property"""
-        return self.enum_field(LoadVerifyScheme, ret_value,
-                               'load_verify_scheme', 'value')
+        value = self.enum_field(LoadVerifyScheme, ret_value,
+                                'load_verify_scheme', 'value')
+        if value is None:
+            default = LoadVerifyScheme.RAM_VERIFY
+            return default.value if ret_value else default
+        return value
 
     def encrypted(self, ret_value=False) -> Union[bool, int]:
         """Gets a value of encrypted.value property"""
@@ -44,7 +48,11 @@ class ContentCertConfigParser(CertConfigParserBase):
 
     def crypto_type(self, ret_value=False) -> Union[CryptoType, int]:
         """Gets a value of crypto_type.value property"""
-        return self.enum_field(CryptoType, ret_value, 'crypto_type', 'value')
+        value = self.enum_field(CryptoType, ret_value, 'crypto_type', 'value')
+        if value is None:
+            default = CryptoType.PLAIN_IMAGE_HASH
+            return default.value if ret_value else default
+        return value
 
     def image_table(self) -> Union[str, None]:
         """Gets a value of image_table.value property"""

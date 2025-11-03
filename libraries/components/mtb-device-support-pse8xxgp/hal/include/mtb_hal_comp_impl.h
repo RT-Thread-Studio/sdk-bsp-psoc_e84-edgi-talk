@@ -32,16 +32,16 @@
 #if (MTB_HAL_DRIVER_AVAILABLE_COMP)
 
 #if ((CY_IP_MXS40LPCOMP_INSTANCES) > 0)
-    #include "mtb_hal_comp_mxs40lpcomp_v2.h"
+#include "mtb_hal_comp_mxs40lpcomp_v2.h"
 #elif ((CY_IP_MXS22LPCOMP_INSTANCES) > 0)
-    #include "mtb_hal_comp_mxs22lpcomp_v1.h"
+#include "mtb_hal_comp_mxs22lpcomp_v1.h"
 #endif
 
-#if ((CY_IP_MXS40PPSS_INSTANCES) > 0)
-    #include "mtb_hal_comp_mxs40ppss_dcsg_v1.h"
+#if ((CY_IP_MXS40PPSS_INSTANCES) > 0) && defined (_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
+#include "mtb_hal_comp_mxs40ppss_dcsg_v1.h"
 #endif
 #if ((CY_IP_MXS40MCPASS_INSTANCES) > 0)
-    #include "mtb_hal_comp_mxs40mcpass_csg_v1.h"
+#include "mtb_hal_comp_mxs40mcpass_csg_v1.h"
 #endif
 
 #if defined(__cplusplus)
@@ -60,43 +60,43 @@ extern "C" {
 // _mtb_hal_comp_setup
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE cy_rslt_t _mtb_hal_comp_setup(mtb_hal_comp_t* obj,
-        const mtb_hal_comp_configurator_t *config)
+                                              const mtb_hal_comp_configurator_t* config)
 {
     CY_ASSERT(obj != NULL);
     CY_ASSERT(config != NULL);
     cy_rslt_t result = CY_RSLT_SUCCESS;
 
     obj->comp_type = config->resource_type;
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
     if (obj->comp_type == MTB_HAL_COMP_DCSG)
     {
         result =  _mtb_hal_comp_dcsg_setup(obj, config);
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
     if (obj->comp_type == MTB_HAL_COMP_CSG)
     {
         result =  _mtb_hal_comp_csg_setup(obj, config);
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
     if (obj->comp_type == MTB_HAL_COMP_LP)
     {
         result =  _mtb_hal_comp_lpcomp_setup(obj, config);
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_PTC)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_PTC)
     if (obj->comp_type == MTB_HAL_COMP_PTC)
     {
         // TBD
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CTB)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CTB)
     if (obj->comp_type == MTB_HAL_COMP_OPAMP)
     {
         // TBD
     }
-#endif
+    #endif
     return result;
 }
 
@@ -110,36 +110,36 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_comp_setup(mtb_hal_comp_t* obj,
 __STATIC_INLINE bool _mtb_hal_comp_read(mtb_hal_comp_t* obj)
 {
     CY_ASSERT(obj != NULL);
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
     if (obj->comp_type == MTB_HAL_COMP_DCSG)
     {
         return _mtb_hal_comp_dcsg_read(obj);
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
     if (obj->comp_type == MTB_HAL_COMP_CSG)
     {
         return _mtb_hal_comp_csg_read(obj);
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
     if (obj->comp_type == MTB_HAL_COMP_LP)
     {
         return _mtb_hal_comp_lpcomp_read(obj);
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_PTC)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_PTC)
     if (obj->comp_type == MTB_HAL_COMP_PTC)
     {
         return false; // TBD
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CTB)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CTB)
     if (obj->comp_type == MTB_HAL_COMP_OPAMP)
     {
         return false; // TBD
     }
-#endif
+    #endif
     return false;
 }
 
@@ -154,24 +154,24 @@ __STATIC_INLINE cy_rslt_t _mtb_hal_comp_set_ref(mtb_hal_comp_t* obj, uint16_t re
 {
     CY_ASSERT(obj != NULL);
 
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_DCSG)
     if (obj->comp_type == MTB_HAL_COMP_DCSG)
     {
         return _mtb_hal_comp_dcsg_set_ref(obj, ref_mv);
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_CSG)
     if (obj->comp_type == MTB_HAL_COMP_CSG)
     {
         return _mtb_hal_comp_csg_set_ref(obj, ref_mv);
     }
-#endif
-#if (_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
+    #endif
+    #if (_MTB_HAL_DRIVER_AVAILABLE_COMP_LP)
     if (obj->comp_type == MTB_HAL_COMP_LP)
     {
         return _mtb_hal_comp_lpcomp_set_ref(obj, ref_mv);
     }
-#endif
+    #endif
     return MTB_HAL_COMP_RSLT_ERR_NOT_SUPPORTED;
 }
 

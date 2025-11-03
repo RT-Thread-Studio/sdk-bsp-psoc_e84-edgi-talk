@@ -38,12 +38,12 @@
  */
 
 
-/**
- * @param[in,out]  S            points to an instance of the sorting structure.
- * @param[in]      alg          Selected algorithm.
- * @param[in]      dir          Sorting order.
- */
-void arm_sort_init_f32(arm_sort_instance_f32 * S, arm_sort_alg alg, arm_sort_dir dir)
+  /**
+   * @param[in,out]  S            points to an instance of the sorting structure.
+   * @param[in]      alg          Selected algorithm.
+   * @param[in]      dir          Sorting order.
+   */
+ARM_DSP_ATTRIBUTE void arm_sort_init_f32(arm_sort_instance_f32 * S, arm_sort_alg alg, arm_sort_dir dir)
 {
     S->alg         = alg;
     S->dir         = dir;

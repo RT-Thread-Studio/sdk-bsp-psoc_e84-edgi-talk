@@ -33,9 +33,9 @@
 /* Trimming macros internal */
 #define TRIMM_BASE_ADDR                         (0x13C2B067UL)
 #if (CY_CPU_CORTEX_M0P)
-    #define TRIMM_BASE_ADDR_PUBLIC                  TRIMM_BASE_ADDR
+#define TRIMM_BASE_ADDR_PUBLIC                  TRIMM_BASE_ADDR
 #else
-    #define TRIMM_BASE_ADDR_PUBLIC                  (TRIMM_BASE_ADDR & ~SECURE_ALIAS_OFFSET)
+#define TRIMM_BASE_ADDR_PUBLIC                  (TRIMM_BASE_ADDR & ~SECURE_ALIAS_OFFSET)
 #endif
 
 #if !((CY_IP_MXS22LPPASS_VERSION == 1UL) && (CY_IP_MXS22LPPASS_VERSION_MINOR == 0UL))
@@ -104,7 +104,7 @@ bool Cy_Trimm_ReadRRAMdata(uint32_t size, uint32_t * data)
 {
     bool status = false;
 
-    if ((0UL != size) && (NULL != data))
+    if ((0UL != size) && (size <= TRIMM_SECTION_SIZE_BYTES) && (NULL != data))
     {
         if (CY_RRAM_SUCCESS == Cy_RRAM_NvmReadByteArray(RRAMC0, TRIMM_BASE_ADDR_PUBLIC, (uint8_t *)data, size))
         {

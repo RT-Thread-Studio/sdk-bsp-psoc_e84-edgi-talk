@@ -291,12 +291,6 @@
 * power mode transition function. Refer to \ref group_syspm driver for more
 * information about power mode transitions and callback registration.
 *
-* \note
-* Only applicable for <b>rev-08 of the CY8CKIT-062-BLE</b>.
-* For proper operation, when the I2C slave is configured to be a wakeup
-* source from Deep Sleep mode, the \ref Cy_SCB_I2C_DeepSleepCallback must be
-* copied and modified. Refer to the function description to get the details.
-*
 * \defgroup group_scb_i2c_macros Macros
 * \defgroup group_scb_i2c_functions Functions
 * \{
@@ -667,7 +661,7 @@ __STATIC_INLINE uint32_t Cy_SCB_I2C_SlaveGetAddressMask(CySCB_Type const *base);
 
 __STATIC_INLINE bool Cy_SCB_I2C_IsBusBusy(CySCB_Type const *base);
 
-__STATIC_INLINE void Cy_SCB_I2C_MasterSetLowPhaseDutyCycle(CySCB_Type *base, uint32_t clockCycles);
+__STATIC_INLINE void Cy_SCB_I2C_MasterSetLowPhaseDutyCycle (CySCB_Type *base, uint32_t clockCycles);
 __STATIC_INLINE void Cy_SCB_I2C_MasterSetHighPhaseDutyCycle(CySCB_Type *base, uint32_t clockCycles);
 #if (((defined (CY_IP_MXSCB_VERSION) && (CY_IP_MXSCB_VERSION>=3)) || defined (CY_IP_MXS22SCB)) || defined (CY_DOXYGEN))
 void Cy_SCB_I2C_SetStretchThreshold(CySCB_Type const *base, uint32_t value);
@@ -683,18 +677,18 @@ bool Cy_SCB_I2C_IsStretching(CySCB_Type const *base);
 * \addtogroup group_scb_i2c_slave_functions
 * \{
 */
-void Cy_SCB_I2C_SlaveConfigReadBuf(CySCB_Type const *base, uint8_t *buffer, uint32_t size,
-                                   cy_stc_scb_i2c_context_t *context);
-void Cy_SCB_I2C_SlaveAbortRead(CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
+void Cy_SCB_I2C_SlaveConfigReadBuf (CySCB_Type const *base, uint8_t *buffer, uint32_t size,
+                                    cy_stc_scb_i2c_context_t *context);
+void Cy_SCB_I2C_SlaveAbortRead     (CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
 void Cy_SCB_I2C_SlaveConfigWriteBuf(CySCB_Type const *base, uint8_t *buffer, uint32_t size,
                                     cy_stc_scb_i2c_context_t *context);
-void Cy_SCB_I2C_SlaveAbortWrite(CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
+void Cy_SCB_I2C_SlaveAbortWrite    (CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
 
-uint32_t Cy_SCB_I2C_SlaveGetStatus(CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
-uint32_t Cy_SCB_I2C_SlaveClearReadStatus(CySCB_Type const *base, cy_stc_scb_i2c_context_t *context);
+uint32_t Cy_SCB_I2C_SlaveGetStatus       (CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
+uint32_t Cy_SCB_I2C_SlaveClearReadStatus (CySCB_Type const *base, cy_stc_scb_i2c_context_t *context);
 uint32_t Cy_SCB_I2C_SlaveClearWriteStatus(CySCB_Type const *base, cy_stc_scb_i2c_context_t *context);
 
-uint32_t Cy_SCB_I2C_SlaveGetReadTransferCount(CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
+uint32_t Cy_SCB_I2C_SlaveGetReadTransferCount (CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
 uint32_t Cy_SCB_I2C_SlaveGetWriteTransferCount(CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
 /** \} group_scb_i2c_slave_functions */
 
@@ -703,42 +697,42 @@ uint32_t Cy_SCB_I2C_SlaveGetWriteTransferCount(CySCB_Type const *base, cy_stc_sc
 * \{
 */
 cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterWrite(CySCB_Type *base, cy_stc_scb_i2c_master_xfer_config_t *xferConfig,
-        cy_stc_scb_i2c_context_t *context);
-void     Cy_SCB_I2C_MasterAbortWrite(CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
-cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterRead(CySCB_Type *base, cy_stc_scb_i2c_master_xfer_config_t* xferConfig,
-        cy_stc_scb_i2c_context_t *context);
-void     Cy_SCB_I2C_MasterAbortRead(CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
-uint32_t Cy_SCB_I2C_MasterGetStatus(CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
-uint32_t Cy_SCB_I2C_MasterGetTransferCount(CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
+                                              cy_stc_scb_i2c_context_t *context);
+void     Cy_SCB_I2C_MasterAbortWrite         (CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
+cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterRead (CySCB_Type *base, cy_stc_scb_i2c_master_xfer_config_t* xferConfig,
+                                              cy_stc_scb_i2c_context_t *context);
+void     Cy_SCB_I2C_MasterAbortRead          (CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
+uint32_t Cy_SCB_I2C_MasterGetStatus          (CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
+uint32_t Cy_SCB_I2C_MasterGetTransferCount   (CySCB_Type const *base, cy_stc_scb_i2c_context_t const *context);
 /** \} group_scb_i2c_master_low_high_functions */
 
 /**
 * \addtogroup group_scb_i2c_master_low_level_functions
 * \{
 */
-cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterSendStart(CySCB_Type *base, uint32_t address, cy_en_scb_i2c_direction_t bitRnW,
-        uint32_t timeoutMs, cy_stc_scb_i2c_context_t *context);
+cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterSendStart  (CySCB_Type *base, uint32_t address, cy_en_scb_i2c_direction_t bitRnW,
+                                                    uint32_t timeoutMs, cy_stc_scb_i2c_context_t *context);
 cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterSendReStart(CySCB_Type *base, uint32_t address, cy_en_scb_i2c_direction_t bitRnW,
-        uint32_t timeoutMs, cy_stc_scb_i2c_context_t *context);
-cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterSendStop(CySCB_Type *base, uint32_t timeoutMs, cy_stc_scb_i2c_context_t *context);
-cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterReadByte(CySCB_Type *base, cy_en_scb_i2c_command_t ackNack, uint8_t *byte,
-        uint32_t timeoutMs, cy_stc_scb_i2c_context_t *context);
-cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterWriteByte(CySCB_Type *base, uint8_t byte, uint32_t timeoutMs,
-        cy_stc_scb_i2c_context_t *context);
+                                                    uint32_t timeoutMs, cy_stc_scb_i2c_context_t *context);
+cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterSendStop   (CySCB_Type *base,uint32_t timeoutMs, cy_stc_scb_i2c_context_t *context);
+cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterReadByte   (CySCB_Type *base, cy_en_scb_i2c_command_t ackNack, uint8_t *byte,
+                                                    uint32_t timeoutMs, cy_stc_scb_i2c_context_t *context);
+cy_en_scb_i2c_status_t Cy_SCB_I2C_MasterWriteByte  (CySCB_Type *base, uint8_t byte, uint32_t timeoutMs,
+                                                    cy_stc_scb_i2c_context_t *context);
 /** \} group_scb_i2c_master_low_level_functions */
 
 /**
 * \addtogroup group_scb_i2c_interrupt_functions
 * \{
 */
-void Cy_SCB_I2C_Interrupt(CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
-void Cy_SCB_I2C_SlaveInterrupt(CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
-void Cy_SCB_I2C_MasterInterrupt(CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
+void Cy_SCB_I2C_Interrupt      (CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
+void Cy_SCB_I2C_SlaveInterrupt (CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
+void Cy_SCB_I2C_MasterInterrupt (CySCB_Type *base, cy_stc_scb_i2c_context_t *context);
 
 __STATIC_INLINE void Cy_SCB_I2C_RegisterEventCallback(CySCB_Type const *base, cy_cb_scb_i2c_handle_events_t callback,
-        cy_stc_scb_i2c_context_t *context);
-__STATIC_INLINE void Cy_SCB_I2C_RegisterAddrCallback(CySCB_Type const *base, cy_cb_scb_i2c_handle_addr_t callback,
-        cy_stc_scb_i2c_context_t *context);
+                                                      cy_stc_scb_i2c_context_t *context);
+__STATIC_INLINE void Cy_SCB_I2C_RegisterAddrCallback (CySCB_Type const *base, cy_cb_scb_i2c_handle_addr_t callback,
+                                                      cy_stc_scb_i2c_context_t *context);
 /** \} group_scb_i2c_interrupt_functions */
 
 /**
@@ -1349,7 +1343,7 @@ __STATIC_INLINE void Cy_SCB_I2C_MasterSetHighPhaseDutyCycle(CySCB_Type *base, ui
 *
 *******************************************************************************/
 __STATIC_INLINE void Cy_SCB_I2C_RegisterEventCallback(CySCB_Type const *base,
-        cy_cb_scb_i2c_handle_events_t callback, cy_stc_scb_i2c_context_t *context)
+            cy_cb_scb_i2c_handle_events_t callback, cy_stc_scb_i2c_context_t *context)
 {
     /* Suppress a compiler warning about unused variables */
     (void) base;
@@ -1384,7 +1378,7 @@ __STATIC_INLINE void Cy_SCB_I2C_RegisterEventCallback(CySCB_Type const *base,
 *
 *******************************************************************************/
 __STATIC_INLINE void Cy_SCB_I2C_RegisterAddrCallback(CySCB_Type const *base,
-        cy_cb_scb_i2c_handle_addr_t callback, cy_stc_scb_i2c_context_t *context)
+              cy_cb_scb_i2c_handle_addr_t callback, cy_stc_scb_i2c_context_t *context)
 {
     /* Suppress a compiler warning about unused variables */
     (void) base;

@@ -50,7 +50,7 @@
  * The equation used for the conversion process is:
  *
  * <pre>
- *  pDst[n] = (q15_t) pSrc[n];   0 <= n < blockSize.
+ * 	pDst[n] = (q15_t) pSrc[n];   0 <= n < blockSize.
  * </pre>
  *
  */
@@ -109,7 +109,7 @@ void arm_q7_to_q15_no_shift(const q7_t *pSrc, q15_t *pDst, uint32_t blockSize)
     while (blkCnt > 0u)
     {
         /* convert from q7 to q15 and then store the results in the destination buffer */
-        *pDst++ = (q15_t) * pIn++;
+        *pDst++ = (q15_t)*pIn++;
 
         /* Decrement the loop counter */
         blkCnt--;

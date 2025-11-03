@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 Purpose : Public header of audio device class
@@ -271,14 +271,13 @@ typedef int USBD_AUDIO_CONTROL_FUNC(void * pUserContext, U8 Event, U8 Unit, U8 C
 *     The application should leave those values at zero,
 *     they are set by the stack after USBD_AUDIO_Add() has been called.
 */
-typedef struct _USBD_AUDIO_UNITS
-{
-    U8 Flags;           // Reserved. Set to zero.
-    U8 InterfaceNo;     // USB Interface number of the audio interface. Set by the emUSB-Device stack.
-    U8 AltInterfaceNo;  // Alternate setting number of the USB interface. Set by the emUSB-Device stack.
-    U8 InputTerminalID; // ID of the input terminal. Set by the emUSB-Device stack.
-    U8 OutputTerminalID;// ID of the output terminal. Set by the emUSB-Device stack.
-    U8 FeatureUnitID;   // ID of the feature unit. Set by the emUSB-Device stack.
+typedef struct _USBD_AUDIO_UNITS {
+  U8 Flags;           // Reserved. Set to zero.
+  U8 InterfaceNo;     // USB Interface number of the audio interface. Set by the emUSB-Device stack.
+  U8 AltInterfaceNo;  // Alternate setting number of the USB interface. Set by the emUSB-Device stack.
+  U8 InputTerminalID; // ID of the input terminal. Set by the emUSB-Device stack.
+  U8 OutputTerminalID;// ID of the output terminal. Set by the emUSB-Device stack.
+  U8 FeatureUnitID;   // ID of the feature unit. Set by the emUSB-Device stack.
 } USBD_AUDIO_UNITS;
 
 /*********************************************************************
@@ -288,15 +287,14 @@ typedef struct _USBD_AUDIO_UNITS
 *   Description
 *     Initialization data for a single audio format.
 */
-typedef struct _USBD_AUDIO_FORMAT
-{
-    U8  Flags;          // Reserved. Set to zero.
-    U8  NrChannels;     // Number of channels in this format. Muster never be greater than USBD_AUDIO_IF_CONF->TotalNrChannels
-    // While it is possible to configure less then the total number of channels
-    // for a format most host operating systems do not support such configurations.
-    U8  SubFrameSize;   // Size of an audio frame in bytes. Must be able to hold BitResolution bits.
-    U8  BitResolution;  // Number of bits inside the audio frame dedicated to audio data. (Any remaining bits are padding.)
-    U32 SamFreq;        // Supported sample frequency in Hz.
+typedef struct _USBD_AUDIO_FORMAT {
+  U8  Flags;          // Reserved. Set to zero.
+  U8  NrChannels;     // Number of channels in this format. Muster never be greater than USBD_AUDIO_IF_CONF->TotalNrChannels
+                      // While it is possible to configure less then the total number of channels
+                      // for a format most host operating systems do not support such configurations.
+  U8  SubFrameSize;   // Size of an audio frame in bytes. Must be able to hold BitResolution bits.
+  U8  BitResolution;  // Number of bits inside the audio frame dedicated to audio data. (Any remaining bits are padding.)
+  U32 SamFreq;        // Supported sample frequency in Hz.
 } USBD_AUDIO_FORMAT;
 
 /*********************************************************************
@@ -307,64 +305,63 @@ typedef struct _USBD_AUDIO_FORMAT
 *     Initialization structure for an audio microphone/speaker interface.
 *     Only one speaker and one microphone is supported.
 */
-typedef struct _USBD_AUDIO_IF_CONF
-{
-    U8 Flags;                           // Reserved. Set to zero.
-    U8 Controls;                        // Bitmask, a bit set to 1 indicates that the mentioned Control is supported:
-    // * b0: Mute
-    // * b1: Volume
-    // * b2: Bass
-    // * b3: Mid
-    // * b4: Treble
-    // * b5: Graphic Equalizer
-    // * b6: Automatic Gain
-    // * b7: Delay
-    U8 TotalNrChannels;                 // Number of audio channels for this interface.
-    U8 NumFormats;                      // Number of elements inside the paFormats array.
-    const USBD_AUDIO_FORMAT *paFormats; // Pointer to any array of USBD_AUDIO_FORMAT structures.
-    U16 bmChannelConfig;                // Bit map indicating the spatial locations of channels.
-    // Important: this value should not be left at 0 to avoid an issue with Windows.
-    // The bits correspond to the following locations:
-    // * b0: Left Front (L)
-    // * b1: Right Front (R)
-    // * b2: Center Front (C)
-    // * b3: Low Frequency Enhancement (LFE)
-    // * b4: Left Surround (LS)
-    // * b5: Right Surround (RS)
-    // * b6: Left of Center (LC)
-    // * b7: Right of Center (RC)
-    // * b8: Surround (S)
-    // * b9: Side Left (SL)
-    // * b10: Side Right (SR)
-    // * b11: Top (T)
-    // * b15..12: Reserved
-    // Channels are assigned to locations in ascending oder.
-    // E.g. if b6 and b11 are set and the other bits are zero
-    // channel 0 will be "LC" and channel 1 will be "T".
-    // Having more channels than bits set in this bit map is valid,
-    // the channels which do not have a bit set will
-    // be considered to have a non-predefined spatial position.
-    U16 TerminalType;                   // Defines the type of speaker/microphone for this interface.
-    // Only one speaker and one microphone is supported!
-    // The following defines can be used:
-    // * USB_AUDIO_TERMTYPE_INPUT_UNDEFINED
-    // * USB_AUDIO_TERMTYPE_INPUT_MICROPHONE
-    // * USB_AUDIO_TERMTYPE_INPUT_DESKTOP_MICROPHONE
-    // * USB_AUDIO_TERMTYPE_INPUT_PERSONAL_MICROPHONE
-    // * USB_AUDIO_TERMTYPE_INPUT_OMNI_DIRECTIONAL_MICROPHONE
-    // * USB_AUDIO_TERMTYPE_INPUT_MICROPHONE_ARRAY
-    // * USB_AUDIO_TERMTYPE_INPUT_PROCESSING_MICROPHONE_ARRAY
-    //
-    // * USB_AUDIO_TERMTYPE_OUTPUT_UNDEFINED
-    // * USB_AUDIO_TERMTYPE_OUTPUT_SPEAKER
-    // * USB_AUDIO_TERMTYPE_OUTPUT_HEADPHONES
-    // * USB_AUDIO_TERMTYPE_OUTPUT_HEAD_MOUNTED_DISPLAY_AUDIO
-    // * USB_AUDIO_TERMTYPE_OUTPUT_DESKTOP_SPEAKER
-    // * USB_AUDIO_TERMTYPE_OUTPUT_ROOM_SPEAKER
-    // * USB_AUDIO_TERMTYPE_OUTPUT_COMMUNICATION_SPEAKER
-    // * USB_AUDIO_TERMTYPE_OUTPUT_LOW_FREQUENCY_EFFECTS_SPEAKER
-    USBD_AUDIO_UNITS *pUnits;           // Pointer to a structure of type USBD_AUDIO_UNITS.
-    // This structure is filled by the emUSB-Device Audio class during initialization.
+typedef struct _USBD_AUDIO_IF_CONF {
+  U8 Flags;                           // Reserved. Set to zero.
+  U8 Controls;                        // Bitmask, a bit set to 1 indicates that the mentioned Control is supported:
+                                      // * b0: Mute
+                                      // * b1: Volume
+                                      // * b2: Bass
+                                      // * b3: Mid
+                                      // * b4: Treble
+                                      // * b5: Graphic Equalizer
+                                      // * b6: Automatic Gain
+                                      // * b7: Delay
+  U8 TotalNrChannels;                 // Number of audio channels for this interface.
+  U8 NumFormats;                      // Number of elements inside the paFormats array.
+  const USBD_AUDIO_FORMAT * paFormats;// Pointer to any array of USBD_AUDIO_FORMAT structures.
+  U16 bmChannelConfig;                // Bit map indicating the spatial locations of channels.
+                                      // Important: this value should not be left at 0 to avoid an issue with Windows.
+                                      // The bits correspond to the following locations:
+                                      // * b0: Left Front (L)
+                                      // * b1: Right Front (R)
+                                      // * b2: Center Front (C)
+                                      // * b3: Low Frequency Enhancement (LFE)
+                                      // * b4: Left Surround (LS)
+                                      // * b5: Right Surround (RS)
+                                      // * b6: Left of Center (LC)
+                                      // * b7: Right of Center (RC)
+                                      // * b8: Surround (S)
+                                      // * b9: Side Left (SL)
+                                      // * b10: Side Right (SR)
+                                      // * b11: Top (T)
+                                      // * b15..12: Reserved
+                                      // Channels are assigned to locations in ascending oder.
+                                      // E.g. if b6 and b11 are set and the other bits are zero
+                                      // channel 0 will be "LC" and channel 1 will be "T".
+                                      // Having more channels than bits set in this bit map is valid,
+                                      // the channels which do not have a bit set will
+                                      // be considered to have a non-predefined spatial position.
+  U16 TerminalType;                   // Defines the type of speaker/microphone for this interface.
+                                      // Only one speaker and one microphone is supported!
+                                      // The following defines can be used:
+                                      // * USB_AUDIO_TERMTYPE_INPUT_UNDEFINED
+                                      // * USB_AUDIO_TERMTYPE_INPUT_MICROPHONE
+                                      // * USB_AUDIO_TERMTYPE_INPUT_DESKTOP_MICROPHONE
+                                      // * USB_AUDIO_TERMTYPE_INPUT_PERSONAL_MICROPHONE
+                                      // * USB_AUDIO_TERMTYPE_INPUT_OMNI_DIRECTIONAL_MICROPHONE
+                                      // * USB_AUDIO_TERMTYPE_INPUT_MICROPHONE_ARRAY
+                                      // * USB_AUDIO_TERMTYPE_INPUT_PROCESSING_MICROPHONE_ARRAY
+                                      //
+                                      // * USB_AUDIO_TERMTYPE_OUTPUT_UNDEFINED
+                                      // * USB_AUDIO_TERMTYPE_OUTPUT_SPEAKER
+                                      // * USB_AUDIO_TERMTYPE_OUTPUT_HEADPHONES
+                                      // * USB_AUDIO_TERMTYPE_OUTPUT_HEAD_MOUNTED_DISPLAY_AUDIO
+                                      // * USB_AUDIO_TERMTYPE_OUTPUT_DESKTOP_SPEAKER
+                                      // * USB_AUDIO_TERMTYPE_OUTPUT_ROOM_SPEAKER
+                                      // * USB_AUDIO_TERMTYPE_OUTPUT_COMMUNICATION_SPEAKER
+                                      // * USB_AUDIO_TERMTYPE_OUTPUT_LOW_FREQUENCY_EFFECTS_SPEAKER
+  USBD_AUDIO_UNITS * pUnits;          // Pointer to a structure of type USBD_AUDIO_UNITS.
+                                      // This structure is filled by the emUSB-Device Audio class during initialization.
 } USBD_AUDIO_IF_CONF;
 
 /*********************************************************************
@@ -374,19 +371,18 @@ typedef struct _USBD_AUDIO_IF_CONF
 *   Description
 *     Initialization data for the Audio class instance.
 */
-typedef struct                                    // NOLINT(clang-analyzer-optin.performance.Padding)
-{
-    U8                         EPIn;                // Isochronous IN endpoint for sending data to the host. If microphone functionality is not desired set this to 0.
-    U8                         EPOut;               // Isochronous OUT endpoint for receiving data from the host. If speaker functionality is not desired set this to 0.
-    unsigned                   OutPacketSize;       // Size of a single audio OUT packet. Must be calculated as follows: (highest used) SampleRate * NumChannels * BitsPerSample / 8 / 1000
-    USBD_AUDIO_RX_FUNC        *pfOnOut;             // Pointer to a function of type USBD_AUDIO_RX_FUNC which handles incoming audio data. Needs to be set when the speaker interface is used.
-    USBD_AUDIO_TX_FUNC        *pfOnIn;              // Pointer to a function of type USBD_AUDIO_TX_FUNC which handles outgoing audio data. Needs to be set when the microphone interface is used.
-    USBD_AUDIO_CONTROL_FUNC   *pfOnControl;         // Pointer to a function of type USBD_AUDIO_CONTROL_FUNC which handles audio commands. Always needs to be set.
-    void                      *pControlUserContext; // Pointer to a user context which is passed to the pfOnControl function. Optional, can be NULL.
-    U8                         NumInterfaces;       // Number of elements in the paInterfaces array.
-    const USBD_AUDIO_IF_CONF *paInterfaces;         // Pointer to an array of structures of type USBD_AUDIO_IF_CONF which contain configuration data for the audio interfaces.
-    void                      *pOutUserContext;     // Pointer to a user context which is passed to the pfOnOut function. Optional, can be NULL.
-    void                      *pInUserContext;      // Pointer to a user context which is passed to the pfOnIn function. Optional, can be NULL.
+typedef struct {                                  // NOLINT(clang-analyzer-optin.performance.Padding)
+  U8                         EPIn;                // Isochronous IN endpoint for sending data to the host. If microphone functionality is not desired set this to 0.
+  U8                         EPOut;               // Isochronous OUT endpoint for receiving data from the host. If speaker functionality is not desired set this to 0.
+  unsigned                   OutPacketSize;       // Size of a single audio OUT packet. Must be calculated as follows: (highest used) SampleRate * NumChannels * BitsPerSample / 8 / 1000
+  USBD_AUDIO_RX_FUNC       * pfOnOut;             // Pointer to a function of type USBD_AUDIO_RX_FUNC which handles incoming audio data. Needs to be set when the speaker interface is used.
+  USBD_AUDIO_TX_FUNC       * pfOnIn;              // Pointer to a function of type USBD_AUDIO_TX_FUNC which handles outgoing audio data. Needs to be set when the microphone interface is used.
+  USBD_AUDIO_CONTROL_FUNC  * pfOnControl;         // Pointer to a function of type USBD_AUDIO_CONTROL_FUNC which handles audio commands. Always needs to be set.
+  void                     * pControlUserContext; // Pointer to a user context which is passed to the pfOnControl function. Optional, can be NULL.
+  U8                         NumInterfaces;       // Number of elements in the paInterfaces array.
+  const USBD_AUDIO_IF_CONF * paInterfaces;        // Pointer to an array of structures of type USBD_AUDIO_IF_CONF which contain configuration data for the audio interfaces.
+  void                     * pOutUserContext;     // Pointer to a user context which is passed to the pfOnOut function. Optional, can be NULL.
+  void                     * pInUserContext;      // Pointer to a user context which is passed to the pfOnIn function. Optional, can be NULL.
 } USBD_AUDIO_INIT_DATA;
 
 /*********************************************************************
@@ -395,16 +391,16 @@ typedef struct                                    // NOLINT(clang-analyzer-optin
 *
 **********************************************************************
 */
-USBD_AUDIO_HANDLE USBD_AUDIO_Add(const USBD_AUDIO_INIT_DATA * pInitData);
-void              USBD_AUDIO_Read_Task(void);
-void              USBD_AUDIO_Write_Task(void);
-int               USBD_AUDIO_Start_Play(USBD_AUDIO_HANDLE hInst, const U8 * pBufIn);
-void              USBD_AUDIO_Stop_Play(USBD_AUDIO_HANDLE hInst);
-int               USBD_AUDIO_Start_Listen(USBD_AUDIO_HANDLE hInst, U8 * pBufOut);
-void              USBD_AUDIO_Stop_Listen(USBD_AUDIO_HANDLE hInst);
-void              USBD_AUDIO_Set_Timeouts(USBD_AUDIO_HANDLE hInst, unsigned ReadTimeout, unsigned WriteTimeout);
+USBD_AUDIO_HANDLE USBD_AUDIO_Add          (const USBD_AUDIO_INIT_DATA * pInitData);
+void              USBD_AUDIO_Read_Task    (void);
+void              USBD_AUDIO_Write_Task   (void);
+int               USBD_AUDIO_Start_Play   (USBD_AUDIO_HANDLE hInst, const U8 * pBufIn);
+void              USBD_AUDIO_Stop_Play    (USBD_AUDIO_HANDLE hInst);
+int               USBD_AUDIO_Start_Listen (USBD_AUDIO_HANDLE hInst, U8 * pBufOut);
+void              USBD_AUDIO_Stop_Listen  (USBD_AUDIO_HANDLE hInst);
+void              USBD_AUDIO_Set_Timeouts (USBD_AUDIO_HANDLE hInst, unsigned ReadTimeout, unsigned WriteTimeout);
 #if defined(__cplusplus)
-}              /* Make sure we have C-declarations in C++ programs */
+  }              /* Make sure we have C-declarations in C++ programs */
 #endif
 
 #endif                 /* Avoid multiple inclusion */

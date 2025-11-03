@@ -32,7 +32,7 @@
 #include "viv_dc_hardware.h"
 
 vivSTATUS viv_conf_ioctl(
-    viv_dc_core **Core,
+    viv_dc_core ** Core,
     viv_interface *iface,
     gctUINT32 *touser
-);
+    );

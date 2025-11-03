@@ -45,7 +45,6 @@
   @param[in]     pScratchIn  points to a temporary buffer of size blockSize
   @param[in]     pScratchOut points to a temporary buffer of size blockSize
   @param[in]     blockSize   number of input samples to process
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function is implemented using a 32-bit internal accumulator.
@@ -56,49 +55,117 @@
                    Finally, the result is truncated to 1.7 format.
  */
 
-void arm_fir_sparse_q7(
-    arm_fir_sparse_instance_q7 * S,
-    const q7_t * pSrc,
-    q7_t * pDst,
-    q7_t * pScratchIn,
-    q31_t * pScratchOut,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_fir_sparse_q7(
+        arm_fir_sparse_instance_q7 * S,
+  const q7_t * pSrc,
+        q7_t * pDst,
+        q7_t * pScratchIn,
+        q31_t * pScratchOut,
+        uint32_t blockSize)
 {
-    q7_t *pState = S->pState;                      /* State pointer */
-    const q7_t *pCoeffs = S->pCoeffs;                    /* Coefficient pointer */
-    q7_t *px;                                      /* Scratch buffer pointer */
-    q7_t *py = pState;                             /* Temporary pointers for state buffer */
-    q7_t *pb = pScratchIn;                         /* Temporary pointers for scratch buffer */
-    q7_t *pOut = pDst;                             /* Destination pointer */
-    int32_t *pTapDelay = S->pTapDelay;             /* Pointer to the array containing offset of the non-zero tap values. */
-    uint32_t delaySize = S->maxDelay + blockSize;  /* state length */
-    uint16_t numTaps = S->numTaps;                 /* Number of filter coefficients in the filter  */
-    int32_t readIndex;                             /* Read index of the state buffer */
-    uint32_t tapCnt, blkCnt;                       /* loop counters */
-    q31_t *pScr2 = pScratchOut;                    /* Working pointer for scratch buffer of output values */
-    q31_t in;
-    q7_t coeff = *pCoeffs++;                       /* Read the coefficient value */
+        q7_t *pState = S->pState;                      /* State pointer */
+  const q7_t *pCoeffs = S->pCoeffs;                    /* Coefficient pointer */
+        q7_t *px;                                      /* Scratch buffer pointer */
+        q7_t *py = pState;                             /* Temporary pointers for state buffer */
+        q7_t *pb = pScratchIn;                         /* Temporary pointers for scratch buffer */
+        q7_t *pOut = pDst;                             /* Destination pointer */
+        int32_t *pTapDelay = S->pTapDelay;             /* Pointer to the array containing offset of the non-zero tap values. */
+        uint32_t delaySize = S->maxDelay + blockSize;  /* state length */
+        uint16_t numTaps = S->numTaps;                 /* Number of filter coefficients in the filter  */
+        int32_t readIndex;                             /* Read index of the state buffer */
+        uint32_t tapCnt, blkCnt;                       /* loop counters */
+        q31_t *pScr2 = pScratchOut;                    /* Working pointer for scratch buffer of output values */
+        q31_t in;
+        q7_t coeff = *pCoeffs++;                       /* Read the coefficient value */
 
 #if defined (ARM_MATH_LOOPUNROLL)
-    q7_t in1, in2, in3, in4;
+        q7_t in1, in2, in3, in4;
 #endif
 
-    /* BlockSize of Input samples are copied into the state buffer */
-    /* StateIndex points to the starting position to write in the state buffer */
-    arm_circularWrite_q7(py, (int32_t) delaySize, &S->stateIndex, 1, pSrc, 1, blockSize);
+  /* BlockSize of Input samples are copied into the state buffer */
+  /* StateIndex points to the starting position to write in the state buffer */
+  arm_circularWrite_q7(py, (int32_t) delaySize, &S->stateIndex, 1, pSrc, 1, blockSize);
 
-    /* Loop over the number of taps. */
-    tapCnt = numTaps;
+  /* Loop over the number of taps. */
+  tapCnt = numTaps;
 
-    /* Read Index, from where the state buffer should be read, is calculated. */
-    readIndex = (int32_t)(S->stateIndex - blockSize) - *pTapDelay++;
+  /* Read Index, from where the state buffer should be read, is calculated. */
+  readIndex = (int32_t) (S->stateIndex - blockSize) - *pTapDelay++;
 
-    /* Wraparound of readIndex */
-    if (readIndex < 0)
-    {
-        readIndex += (int32_t) delaySize;
-    }
+  /* Wraparound of readIndex */
+  if (readIndex < 0)
+  {
+    readIndex += (int32_t) delaySize;
+  }
 
+  /* Working pointer for state buffer is updated */
+  py = pState;
+
+  /* blockSize samples are read from the state buffer */
+  arm_circularRead_q7(py, (int32_t) delaySize, &readIndex, 1,
+                   pb, pb, (int32_t) blockSize, 1, blockSize);
+
+  /* Working pointer for the scratch buffer of state values */
+  px = pb;
+
+  /* Working pointer for scratch buffer of output values */
+  pScratchOut = pScr2;
+
+
+#if defined (ARM_MATH_LOOPUNROLL)
+
+  /* Loop unrolling: Compute 4 outputs at a time. */
+  blkCnt = blockSize >> 2U;
+
+  while (blkCnt > 0U)
+  {
+    /* Perform multiplication and store in the scratch buffer */
+    *pScratchOut++ = ((q31_t) *px++ * coeff);
+    *pScratchOut++ = ((q31_t) *px++ * coeff);
+    *pScratchOut++ = ((q31_t) *px++ * coeff);
+    *pScratchOut++ = ((q31_t) *px++ * coeff);
+
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
+
+#else
+
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
+
+#endif /* #if defined (ARM_MATH_LOOPUNROLL) */
+
+  while (blkCnt > 0U)
+  {
+    /* Perform Multiplication and store in the scratch buffer */
+    *pScratchOut++ = ((q31_t) *px++ * coeff);
+
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+
+  /* Load the coefficient value and
+   * increment the coefficient buffer for the next set of state values */
+  coeff = *pCoeffs++;
+
+  /* Read Index, from where the state buffer should be read, is calculated. */
+  readIndex = (int32_t) (S->stateIndex - blockSize) - *pTapDelay++;
+
+  /* Wraparound of readIndex */
+  if (readIndex < 0)
+  {
+    readIndex += (int32_t) delaySize;
+  }
+
+  /* Loop over the number of taps. */
+  tapCnt = (uint32_t) numTaps - 2U;
+
+  while (tapCnt > 0U)
+  {
     /* Working pointer for state buffer is updated */
     py = pState;
 
@@ -120,14 +187,18 @@ void arm_fir_sparse_q7(
 
     while (blkCnt > 0U)
     {
-        /* Perform multiplication and store in the scratch buffer */
-        *pScratchOut++ = ((q31_t) * px++ * coeff);
-        *pScratchOut++ = ((q31_t) * px++ * coeff);
-        *pScratchOut++ = ((q31_t) * px++ * coeff);
-        *pScratchOut++ = ((q31_t) * px++ * coeff);
+      /* Perform Multiply-Accumulate */
+      in = *pScratchOut + ((q31_t) * px++ * coeff);
+      *pScratchOut++ = in;
+      in = *pScratchOut + ((q31_t) * px++ * coeff);
+      *pScratchOut++ = in;
+      in = *pScratchOut + ((q31_t) * px++ * coeff);
+      *pScratchOut++ = in;
+      in = *pScratchOut + ((q31_t) * px++ * coeff);
+      *pScratchOut++ = in;
 
-        /* Decrement loop counter */
-        blkCnt--;
+      /* Decrement loop counter */
+      blkCnt--;
     }
 
     /* Loop unrolling: Compute remaining outputs */
@@ -142,11 +213,12 @@ void arm_fir_sparse_q7(
 
     while (blkCnt > 0U)
     {
-        /* Perform Multiplication and store in the scratch buffer */
-        *pScratchOut++ = ((q31_t) * px++ * coeff);
+      /* Perform Multiply-Accumulate */
+      in = *pScratchOut + ((q31_t) *px++ * coeff);
+      *pScratchOut++ = in;
 
-        /* Decrement loop counter */
-        blkCnt--;
+      /* Decrement loop counter */
+      blkCnt--;
     }
 
     /* Load the coefficient value and
@@ -154,185 +226,112 @@ void arm_fir_sparse_q7(
     coeff = *pCoeffs++;
 
     /* Read Index, from where the state buffer should be read, is calculated. */
-    readIndex = (int32_t)(S->stateIndex - blockSize) - *pTapDelay++;
+    readIndex = (int32_t) (S->stateIndex - blockSize) - *pTapDelay++;
 
     /* Wraparound of readIndex */
     if (readIndex < 0)
     {
-        readIndex += (int32_t) delaySize;
+      readIndex += (int32_t) delaySize;
     }
 
-    /* Loop over the number of taps. */
-    tapCnt = (uint32_t) numTaps - 2U;
+    /* Decrement loop counter */
+    tapCnt--;
+  }
 
-    while (tapCnt > 0U)
-    {
-        /* Working pointer for state buffer is updated */
-        py = pState;
+  /* Compute last tap without the final read of pTapDelay */
 
-        /* blockSize samples are read from the state buffer */
-        arm_circularRead_q7(py, (int32_t) delaySize, &readIndex, 1,
-                            pb, pb, (int32_t) blockSize, 1, blockSize);
+  /* Working pointer for state buffer is updated */
+  py = pState;
 
-        /* Working pointer for the scratch buffer of state values */
-        px = pb;
+  /* blockSize samples are read from the state buffer */
+  arm_circularRead_q7(py, (int32_t) delaySize, &readIndex, 1,
+                      pb, pb, (int32_t) blockSize, 1, blockSize);
 
-        /* Working pointer for scratch buffer of output values */
-        pScratchOut = pScr2;
+  /* Working pointer for the scratch buffer of state values */
+  px = pb;
+
+  /* Working pointer for scratch buffer of output values */
+  pScratchOut = pScr2;
 
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-        /* Loop unrolling: Compute 4 outputs at a time. */
-        blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time. */
+  blkCnt = blockSize >> 2U;
 
-        while (blkCnt > 0U)
-        {
-            /* Perform Multiply-Accumulate */
-            in = *pScratchOut + ((q31_t) * px++ * coeff);
-            *pScratchOut++ = in;
-            in = *pScratchOut + ((q31_t) * px++ * coeff);
-            *pScratchOut++ = in;
-            in = *pScratchOut + ((q31_t) * px++ * coeff);
-            *pScratchOut++ = in;
-            in = *pScratchOut + ((q31_t) * px++ * coeff);
-            *pScratchOut++ = in;
+  while (blkCnt > 0U)
+  {
+    /* Perform Multiply-Accumulate */
+    in = *pScratchOut + ((q31_t) *px++ * coeff);
+    *pScratchOut++ = in;
+    in = *pScratchOut + ((q31_t) *px++ * coeff);
+    *pScratchOut++ = in;
+    in = *pScratchOut + ((q31_t) *px++ * coeff);
+    *pScratchOut++ = in;
+    in = *pScratchOut + ((q31_t) *px++ * coeff);
+    *pScratchOut++ = in;
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-        /* Loop unrolling: Compute remaining outputs */
-        blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-        /* Initialize blkCnt with number of samples */
-        blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-        while (blkCnt > 0U)
-        {
-            /* Perform Multiply-Accumulate */
-            in = *pScratchOut + ((q31_t) * px++ * coeff);
-            *pScratchOut++ = in;
+  while (blkCnt > 0U)
+  {
+    /* Perform Multiply-Accumulate */
+    in = *pScratchOut + ((q31_t) *px++ * coeff);
+    *pScratchOut++ = in;
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-        /* Load the coefficient value and
-         * increment the coefficient buffer for the next set of state values */
-        coeff = *pCoeffs++;
-
-        /* Read Index, from where the state buffer should be read, is calculated. */
-        readIndex = (int32_t)(S->stateIndex - blockSize) - *pTapDelay++;
-
-        /* Wraparound of readIndex */
-        if (readIndex < 0)
-        {
-            readIndex += (int32_t) delaySize;
-        }
-
-        /* Decrement loop counter */
-        tapCnt--;
-    }
-
-    /* Compute last tap without the final read of pTapDelay */
-
-    /* Working pointer for state buffer is updated */
-    py = pState;
-
-    /* blockSize samples are read from the state buffer */
-    arm_circularRead_q7(py, (int32_t) delaySize, &readIndex, 1,
-                        pb, pb, (int32_t) blockSize, 1, blockSize);
-
-    /* Working pointer for the scratch buffer of state values */
-    px = pb;
-
-    /* Working pointer for scratch buffer of output values */
-    pScratchOut = pScr2;
-
-
+  /* All the output values are in pScratchOut buffer.
+     Convert them into 1.15 format, saturate and store in the destination buffer. */
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time. */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time. */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* Perform Multiply-Accumulate */
-        in = *pScratchOut + ((q31_t) * px++ * coeff);
-        *pScratchOut++ = in;
-        in = *pScratchOut + ((q31_t) * px++ * coeff);
-        *pScratchOut++ = in;
-        in = *pScratchOut + ((q31_t) * px++ * coeff);
-        *pScratchOut++ = in;
-        in = *pScratchOut + ((q31_t) * px++ * coeff);
-        *pScratchOut++ = in;
+  while (blkCnt > 0U)
+  {
+    in1 = (q7_t) __SSAT(*pScr2++ >> 7, 8);
+    in2 = (q7_t) __SSAT(*pScr2++ >> 7, 8);
+    in3 = (q7_t) __SSAT(*pScr2++ >> 7, 8);
+    in4 = (q7_t) __SSAT(*pScr2++ >> 7, 8);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    write_q7x4_ia (&pOut, __PACKq7(in1, in2, in3, in4));
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* Perform Multiply-Accumulate */
-        in = *pScratchOut + ((q31_t) * px++ * coeff);
-        *pScratchOut++ = in;
+  while (blkCnt > 0U)
+  {
+    *pOut++ = (q7_t) __SSAT(*pScr2++ >> 7, 8);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
-
-    /* All the output values are in pScratchOut buffer.
-       Convert them into 1.15 format, saturate and store in the destination buffer. */
-#if defined (ARM_MATH_LOOPUNROLL)
-
-    /* Loop unrolling: Compute 4 outputs at a time. */
-    blkCnt = blockSize >> 2U;
-
-    while (blkCnt > 0U)
-    {
-        in1 = (q7_t) __SSAT(*pScr2++ >> 7, 8);
-        in2 = (q7_t) __SSAT(*pScr2++ >> 7, 8);
-        in3 = (q7_t) __SSAT(*pScr2++ >> 7, 8);
-        in4 = (q7_t) __SSAT(*pScr2++ >> 7, 8);
-
-        write_q7x4_ia(&pOut, __PACKq7(in1, in2, in3, in4));
-
-        /* Decrement loop counter */
-        blkCnt--;
-    }
-
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
-
-#else
-
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
-
-#endif /* #if defined (ARM_MATH_LOOPUNROLL) */
-
-    while (blkCnt > 0U)
-    {
-        *pOut++ = (q7_t) __SSAT(*pScr2++ >> 7, 8);
-
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 

@@ -61,43 +61,43 @@
                    <code>M</code> is the decimation factor.
  */
 
-arm_status arm_fir_decimate_init_q15(
-    arm_fir_decimate_instance_q15 * S,
-    uint16_t numTaps,
-    uint8_t M,
-    const q15_t * pCoeffs,
-    q15_t * pState,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE arm_status arm_fir_decimate_init_q15(
+        arm_fir_decimate_instance_q15 * S,
+        uint16_t numTaps,
+        uint8_t M,
+  const q15_t * pCoeffs,
+        q15_t * pState,
+        uint32_t blockSize)
 {
-    arm_status status;
+  arm_status status;
 
-    /* The size of the input block must be a multiple of the decimation factor */
-    if ((blockSize % M) != 0U)
-    {
-        /* Set status as ARM_MATH_LENGTH_ERROR */
-        status = ARM_MATH_LENGTH_ERROR;
-    }
-    else
-    {
-        /* Assign filter taps */
-        S->numTaps = numTaps;
+  /* The size of the input block must be a multiple of the decimation factor */
+  if ((blockSize % M) != 0U)
+  {
+    /* Set status as ARM_MATH_LENGTH_ERROR */
+    status = ARM_MATH_LENGTH_ERROR;
+  }
+  else
+  {
+    /* Assign filter taps */
+    S->numTaps = numTaps;
 
-        /* Assign coefficient pointer */
-        S->pCoeffs = pCoeffs;
+    /* Assign coefficient pointer */
+    S->pCoeffs = pCoeffs;
 
-        /* Clear the state buffer. The size is always (blockSize + numTaps - 1) */
-        memset(pState, 0, (numTaps + (blockSize - 1U)) * sizeof(q15_t));
+    /* Clear the state buffer. The size is always (blockSize + numTaps - 1) */
+    memset(pState, 0, (numTaps + (blockSize - 1U)) * sizeof(q15_t));
 
-        /* Assign state pointer */
-        S->pState = pState;
+    /* Assign state pointer */
+    S->pState = pState;
 
-        /* Assign Decimation Factor */
-        S->M = M;
+    /* Assign Decimation Factor */
+    S->M = M;
 
-        status = ARM_MATH_SUCCESS;
-    }
+    status = ARM_MATH_SUCCESS;
+  }
 
-    return (status);
+  return (status);
 
 }
 

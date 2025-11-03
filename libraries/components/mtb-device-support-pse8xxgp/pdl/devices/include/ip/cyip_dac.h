@@ -40,53 +40,50 @@
 /**
   * \brief DAC static configuration registers (DAC_STA)
   */
-typedef struct
-{
-    __IOM uint32_t CTRL;                          /*!< 0x00000000 DAC control register (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t SAMPLE_TIME;                   /*!< 0x00000004 Sample control register (only accessible if
+typedef struct {
+  __IOM uint32_t CTRL;                          /*!< 0x00000000 DAC control register (only accessible if ACTRLR.STATUS.MODE=0) */
+  __IOM uint32_t SAMPLE_TIME;                   /*!< 0x00000004 Sample control register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t STEP_VAL[3];                   /*!< 0x00000008 step val register  (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t DEGLITCH_TIME;                 /*!< 0x00000018 deglitch time register (only accessible if
+  __IOM uint32_t STEP_VAL[3];                   /*!< 0x00000008 step val register  (only accessible if ACTRLR.STATUS.MODE=0) */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t DEGLITCH_TIME;                 /*!< 0x00000018 deglitch time register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t CHAN_CFG[15];                  /*!< 0x00000020 Channel configuration register (only accessible if
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t CHAN_CFG[15];                  /*!< 0x00000020 Channel configuration register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED2;
-    __IOM uint32_t FW_DAC_VAL;                    /*!< 0x00000060 Firmare Channel DAC Value (only accessible if
+   __IM uint32_t RESERVED2;
+  __IOM uint32_t FW_DAC_VAL;                    /*!< 0x00000060 Firmare Channel DAC Value (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t FW_DAC_VAL_NXT;                /*!< 0x00000064 Firmware Channel DAC Value Next */
-    __IM uint32_t RESERVED3[2];
-    __IOM uint32_t CHAN_STATUS_CFG[3];            /*!< 0x00000070 Channel status configuration register */
-    __IM uint32_t RESERVED4;
-    __IOM uint32_t RANGE_STATUS;                  /*!< 0x00000080 Range status register */
-    __IM uint32_t RESERVED5[95];
+  __IOM uint32_t FW_DAC_VAL_NXT;                /*!< 0x00000064 Firmware Channel DAC Value Next */
+   __IM uint32_t RESERVED3[2];
+  __IOM uint32_t CHAN_STATUS_CFG[3];            /*!< 0x00000070 Channel status configuration register */
+   __IM uint32_t RESERVED4;
+  __IOM uint32_t RANGE_STATUS;                  /*!< 0x00000080 Range status register */
+   __IM uint32_t RESERVED5[95];
 } DAC_STA_Type;                                 /*!< Size = 512 (0x200) */
 
 /**
   * \brief DAC trim registers (only accessible if ACTRLR.STATUS.MODE=0) (DAC_TRIM)
   */
-typedef struct
-{
-    __IOM uint32_t REFBUF_OFFSET_TRIM;            /*!< 0x00000000 Reference buffer trim control */
-    __IOM uint32_t REFBUF_SLOPE_OFFSET_TRIM;      /*!< 0x00000004 Reference buffer trim control */
-    __IOM uint32_t REFBUF_COMP_TRIM;              /*!< 0x00000008 Reference buffer trim control */
-    __IOM uint32_t OUTBUF_OFFSET_TRIM[2];         /*!< 0x0000000C Output buffer trim control */
-    __IOM uint32_t OUTBUF_SLOPE_OFFSET_TRIM[2];   /*!< 0x00000014 Output buffer trim control */
-    __IOM uint32_t OUTBUF_COMP_TRIM[2];           /*!< 0x0000001C Output buffer trim control */
-    __IOM uint32_t RMP_TRIM;                      /*!< 0x00000024 Risk Mitigation bits */
-    __IM uint32_t RESERVED[6];
+typedef struct {
+  __IOM uint32_t REFBUF_OFFSET_TRIM;            /*!< 0x00000000 Reference buffer trim control */
+  __IOM uint32_t REFBUF_SLOPE_OFFSET_TRIM;      /*!< 0x00000004 Reference buffer trim control */
+  __IOM uint32_t REFBUF_COMP_TRIM;              /*!< 0x00000008 Reference buffer trim control */
+  __IOM uint32_t OUTBUF_OFFSET_TRIM[2];         /*!< 0x0000000C Output buffer trim control */
+  __IOM uint32_t OUTBUF_SLOPE_OFFSET_TRIM[2];   /*!< 0x00000014 Output buffer trim control */
+  __IOM uint32_t OUTBUF_COMP_TRIM[2];           /*!< 0x0000001C Output buffer trim control */
+  __IOM uint32_t RMP_TRIM;                      /*!< 0x00000024 Risk Mitigation bits */
+   __IM uint32_t RESERVED[6];
 } DAC_TRIM_Type;                                /*!< Size = 64 (0x40) */
 
 /**
   * \brief DAC (DAC)
   */
-typedef struct
-{
-    __IOM uint32_t SRAM[512];                     /*!< 0x00000000 SRAM Waveform Table (only accessible if ACTRLR.STATUS.MODE=0) */
-    DAC_STA_Type STA;                       /*!< 0x00000800 DAC static configuration registers */
-    __IM uint32_t RESERVED[320];
-    DAC_TRIM_Type TRIM;                     /*!< 0x00000F00 DAC trim registers (only accessible if ACTRLR.STATUS.MODE=0) */
+typedef struct {
+  __IOM uint32_t SRAM[512];                     /*!< 0x00000000 SRAM Waveform Table (only accessible if ACTRLR.STATUS.MODE=0) */
+        DAC_STA_Type STA;                       /*!< 0x00000800 DAC static configuration registers */
+   __IM uint32_t RESERVED[320];
+        DAC_TRIM_Type TRIM;                     /*!< 0x00000F00 DAC trim registers (only accessible if ACTRLR.STATUS.MODE=0) */
 } DAC_Type;                                     /*!< Size = 3904 (0xF40) */
 
 

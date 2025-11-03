@@ -38,27 +38,26 @@
 /**
   * \brief Low Power Comparators (LPCOMP)
   */
-typedef struct
-{
-    __IOM uint32_t CONFIG;                        /*!< 0x00000000 LPCOMP Configuration Register */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 LPCOMP Status Register */
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t INTR;                          /*!< 0x00000010 LPCOMP Interrupt request register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000014 LPCOMP Interrupt set register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 LPCOMP Interrupt request mask */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C LPCOMP Interrupt request masked */
-    __IM uint32_t RESERVED1[8];
-    __IOM uint32_t CMP0_CTRL;                     /*!< 0x00000040 Comparator 0 control Register */
-    __IM uint32_t RESERVED2[3];
-    __IOM uint32_t CMP0_SW;                       /*!< 0x00000050 Comparator 0 switch control */
-    __IOM uint32_t CMP0_SW_CLEAR;                 /*!< 0x00000054 Comparator 0 switch control clear */
-    __IM uint32_t RESERVED3[10];
-    __IOM uint32_t CMP1_CTRL;                     /*!< 0x00000080 Comparator 1 control Register */
-    __IM uint32_t RESERVED4[3];
-    __IOM uint32_t CMP1_SW;                       /*!< 0x00000090 Comparator 1 switch control */
-    __IOM uint32_t CMP1_SW_CLEAR;                 /*!< 0x00000094 Comparator 1 switch control clear */
-    __IOM uint32_t CMP0_OFFSET_TRIM;              /*!< 0x00000098 Comparator 0 offset trim register */
-    __IOM uint32_t CMP1_OFFSET_TRIM;              /*!< 0x0000009C Comparator 1 offset trim register */
+typedef struct {
+  __IOM uint32_t CONFIG;                        /*!< 0x00000000 LPCOMP Configuration Register */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 LPCOMP Status Register */
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t INTR;                          /*!< 0x00000010 LPCOMP Interrupt request register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000014 LPCOMP Interrupt set register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 LPCOMP Interrupt request mask */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C LPCOMP Interrupt request masked */
+   __IM uint32_t RESERVED1[8];
+  __IOM uint32_t CMP0_CTRL;                     /*!< 0x00000040 Comparator 0 control Register */
+   __IM uint32_t RESERVED2[3];
+  __IOM uint32_t CMP0_SW;                       /*!< 0x00000050 Comparator 0 switch control */
+  __IOM uint32_t CMP0_SW_CLEAR;                 /*!< 0x00000054 Comparator 0 switch control clear */
+   __IM uint32_t RESERVED3[10];
+  __IOM uint32_t CMP1_CTRL;                     /*!< 0x00000080 Comparator 1 control Register */
+   __IM uint32_t RESERVED4[3];
+  __IOM uint32_t CMP1_SW;                       /*!< 0x00000090 Comparator 1 switch control */
+  __IOM uint32_t CMP1_SW_CLEAR;                 /*!< 0x00000094 Comparator 1 switch control clear */
+  __IOM uint32_t CMP0_OFFSET_TRIM;              /*!< 0x00000098 Comparator 0 offset trim register */
+  __IOM uint32_t CMP1_OFFSET_TRIM;              /*!< 0x0000009C Comparator 1 offset trim register */
 } LPCOMP_Type;                                  /*!< Size = 160 (0xA0) */
 
 

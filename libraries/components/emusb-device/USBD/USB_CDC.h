@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 File    : USB_CDC.h
@@ -91,20 +91,19 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 *  Function description
 *    Structure that contains the new line-coding information sent by the host.
 */
-typedef struct
-{
-    U32 DTERate;         // The data transfer rate for the device in bits per second.
-    U8  CharFormat;      // Number of stop bits:
-    // * 0 - 1 Stop bit
-    // * 1 - 1.5 Stop bits
-    // * 2 - 2 Stop bits
-    U8  ParityType;      // Specifies the parity type:
-    // * 0 - None
-    // * 1 - Odd
-    // * 2 - Even
-    // * 3 - Mark
-    // * 4 - Space
-    U8  DataBits;        // Specifies the bits per byte: (5, 6, 7, 8)
+typedef struct {
+  U32 DTERate;         // The data transfer rate for the device in bits per second.
+  U8  CharFormat;      // Number of stop bits:
+                       // * 0 - 1 Stop bit
+                       // * 1 - 1.5 Stop bits
+                       // * 2 - 2 Stop bits
+  U8  ParityType;      // Specifies the parity type:
+                       // * 0 - None
+                       // * 1 - Odd
+                       // * 2 - Even
+                       // * 3 - Mark
+                       // * 4 - Space
+  U8  DataBits;        // Specifies the bits per byte: (5, 6, 7, 8)
 } USB_CDC_LINE_CODING;
 
 /*********************************************************************
@@ -117,16 +116,15 @@ typedef struct
 *  Additional information
 *    All members of the structure may have value 0 (false) or 1 (true).
 */
-typedef struct
-{
-    U8 DCD;           // Data Carrier Detect: Tells that the device is connected to the telephone line.
-    U8 DSR;           // Data Set Read: Device is ready to receive data.
-    U8 Break;         // 1 - Break condition signaled.
-    U8 Ring;          // Device indicates that it has detected a ring signal on the telephone line.
-    U8 FramingError;  // When set to 1, the device indicates a framing error.
-    U8 ParityError;   // When set to 1, the device indicates a parity error.
-    U8 OverRunError;  // When set to 1, the device indicates an over-run error.
-    U8 CTS;           // Clear to Send: Deprecated, not used with USB.
+typedef struct {
+  U8 DCD;           // Data Carrier Detect: Tells that the device is connected to the telephone line.
+  U8 DSR;           // Data Set Read: Device is ready to receive data.
+  U8 Break;         // 1 - Break condition signaled.
+  U8 Ring;          // Device indicates that it has detected a ring signal on the telephone line.
+  U8 FramingError;  // When set to 1, the device indicates a framing error.
+  U8 ParityError;   // When set to 1, the device indicates a parity error.
+  U8 OverRunError;  // When set to 1, the device indicates an over-run error.
+  U8 CTS;           // Clear to Send: Deprecated, not used with USB.
 } USB_CDC_SERIAL_STATE;
 
 /*********************************************************************
@@ -139,10 +137,9 @@ typedef struct
 *  Additional information
 *    All members of the structure may have value 0 (false) or 1 (true).
 */
-typedef struct
-{
-    U8 DTR;       // Data Terminal Ready.
-    U8 RTS;       // Request To Send.
+typedef struct {
+  U8 DTR;       // Data Terminal Ready.
+  U8 RTS;       // Request To Send.
 } USB_CDC_CONTROL_LINE_STATE;
 
 typedef void USB_CDC_ON_SET_LINE_CODING(USB_CDC_LINE_CODING * pLineCoding);
@@ -158,11 +155,10 @@ typedef int USB_CDC_HANDLE;
 *  Function description
 *    Initialization structure that is needed when adding a CDC interface to emUSB-Device.
 */
-typedef struct
-{
-    U8 EPIn;        // Bulk IN endpoint for sending data to the host.
-    U8 EPOut;       // Bulk OUT endpoint for receiving data from the host.
-    U8 EPInt;       // Interrupt IN endpoint for sending status information.
+typedef struct {
+  U8 EPIn;        // Bulk IN endpoint for sending data to the host.
+  U8 EPOut;       // Bulk OUT endpoint for receiving data from the host.
+  U8 EPInt;       // Interrupt IN endpoint for sending status information.
 } USB_CDC_INIT_DATA;
 
 /*********************************************************************
@@ -171,34 +167,35 @@ typedef struct
 *
 **********************************************************************
 */
-void           USBD_CDC_Init(void);
-USB_CDC_HANDLE USBD_CDC_Add(const USB_CDC_INIT_DATA * pInitData);
-void           USBD_CDC_CancelRead(USB_CDC_HANDLE hInst);
-void           USBD_CDC_CancelWrite(USB_CDC_HANDLE hInst);
-int            USBD_CDC_Read(USB_CDC_HANDLE hInst, void * pData, unsigned NumBytes, unsigned Timeout);
-int            USBD_CDC_ReadOverlapped(USB_CDC_HANDLE hInst, void * pData, unsigned NumBytes);
-int            USBD_CDC_Receive(USB_CDC_HANDLE hInst, void * pData, unsigned NumBytes, int Timeout);
-int            USBD_CDC_ReceivePoll(USB_CDC_HANDLE hInst, void * pData, unsigned NumBytes, unsigned Timeout);
-void           USBD_CDC_ReadAsync(USB_CDC_HANDLE hInst, USB_ASYNC_IO_CONTEXT * pContext, int ShortRead);
-void           USBD_CDC_SetOnBreak(USB_CDC_HANDLE hInst, USB_CDC_ON_SET_BREAK * pfOnBreak);
-void           USBD_CDC_SetOnLineCoding(USB_CDC_HANDLE hInst, USB_CDC_ON_SET_LINE_CODING * pf);
-void           USBD_CDC_SetOnControlLineState(USB_CDC_HANDLE hInst, USB_CDC_ON_SET_CONTROL_LINE_STATE * pf);
-void           USBD_CDC_WriteSerialState(USB_CDC_HANDLE hInst);
-void           USBD_CDC_UpdateSerialState(USB_CDC_HANDLE hInst, const USB_CDC_SERIAL_STATE * pSerialState);
-int            USBD_CDC_WaitForRX(USB_CDC_HANDLE hInst, unsigned Timeout);
-int            USBD_CDC_PollForRX(USB_CDC_HANDLE hInst, unsigned Timeout);
-int            USBD_CDC_WaitForTX(USB_CDC_HANDLE hInst, unsigned Timeout);
-int            USBD_CDC_PollForTX(USB_CDC_HANDLE hInst, unsigned Timeout);
-int            USBD_CDC_WaitForTXReady(USB_CDC_HANDLE hInst, int Timeout);
-int            USBD_CDC_Write(USB_CDC_HANDLE hInst, const void * pData, unsigned NumBytes, int Timeout);
-void           USBD_CDC_WriteAsync(USB_CDC_HANDLE hInst, USB_ASYNC_IO_CONTEXT * pContext, I8 Send0PacketIfRequired);
-int            USBD_CDC_GetNumBytesInBuffer(USB_CDC_HANDLE hInst);
-int            USBD_CDC_GetNumBytesRemToRead(USB_CDC_HANDLE hInst);
-int            USBD_CDC_GetNumBytesRemToWrite(USB_CDC_HANDLE hInst);
-int            USBD_CDC_TxIsPending(USB_CDC_HANDLE hInst);
-void           USBD_CDC_SetOnTXEvent(USB_CDC_HANDLE hInst, USB_EVENT_CALLBACK *pEventCb, USB_EVENT_CALLBACK_FUNC *pfEventCb, void *pContext);
-void           USBD_CDC_SetOnRXEvent(USB_CDC_HANDLE hInst, USB_EVENT_CALLBACK *pEventCb, USB_EVENT_CALLBACK_FUNC *pfEventCb, void *pContext);
-void           USBD_CDC_Stall(USB_CDC_HANDLE hInst);
+void           USBD_CDC_Init                       (void);
+USB_CDC_HANDLE USBD_CDC_Add                        (const USB_CDC_INIT_DATA * pInitData);
+void           USBD_CDC_CancelRead                 (USB_CDC_HANDLE hInst);
+void           USBD_CDC_CancelWrite                (USB_CDC_HANDLE hInst);
+int            USBD_CDC_Read                       (USB_CDC_HANDLE hInst, void * pData, unsigned NumBytes, unsigned Timeout);
+int            USBD_CDC_ReadOverlapped             (USB_CDC_HANDLE hInst, void * pData, unsigned NumBytes);
+int            USBD_CDC_Receive                    (USB_CDC_HANDLE hInst, void * pData, unsigned NumBytes, int Timeout);
+int            USBD_CDC_ReceivePoll                (USB_CDC_HANDLE hInst, void * pData, unsigned NumBytes, unsigned Timeout);
+void           USBD_CDC_ReadAsync                  (USB_CDC_HANDLE hInst, USB_ASYNC_IO_CONTEXT * pContext, int ShortRead);
+void           USBD_CDC_SetOnBreak                 (USB_CDC_HANDLE hInst, USB_CDC_ON_SET_BREAK * pfOnBreak);
+void           USBD_CDC_SetOnLineCoding            (USB_CDC_HANDLE hInst, USB_CDC_ON_SET_LINE_CODING * pf);
+void           USBD_CDC_SetOnControlLineState      (USB_CDC_HANDLE hInst, USB_CDC_ON_SET_CONTROL_LINE_STATE * pf);
+void           USBD_CDC_WriteSerialState           (USB_CDC_HANDLE hInst);
+void           USBD_CDC_UpdateSerialState          (USB_CDC_HANDLE hInst, const USB_CDC_SERIAL_STATE * pSerialState);
+int            USBD_CDC_WaitForRX                  (USB_CDC_HANDLE hInst, unsigned Timeout);
+int            USBD_CDC_PollForRX                  (USB_CDC_HANDLE hInst, unsigned Timeout);
+int            USBD_CDC_WaitForTX                  (USB_CDC_HANDLE hInst, unsigned Timeout);
+int            USBD_CDC_PollForTX                  (USB_CDC_HANDLE hInst, unsigned Timeout);
+int            USBD_CDC_WaitForTXReady             (USB_CDC_HANDLE hInst, int Timeout);
+int            USBD_CDC_Write                      (USB_CDC_HANDLE hInst, const void * pData, unsigned NumBytes, int Timeout);
+int            USBD_CDC_WriteEx                    (USB_CDC_HANDLE hInst, const void * pData, unsigned NumBytes, I8 Send0PacketIfRequired, int Timeout);
+void           USBD_CDC_WriteAsync                 (USB_CDC_HANDLE hInst, USB_ASYNC_IO_CONTEXT * pContext, I8 Send0PacketIfRequired);
+int            USBD_CDC_GetNumBytesInBuffer        (USB_CDC_HANDLE hInst);
+int            USBD_CDC_GetNumBytesRemToRead       (USB_CDC_HANDLE hInst);
+int            USBD_CDC_GetNumBytesRemToWrite      (USB_CDC_HANDLE hInst);
+int            USBD_CDC_TxIsPending                (USB_CDC_HANDLE hInst);
+void           USBD_CDC_SetOnTXEvent               (USB_CDC_HANDLE hInst, USB_EVENT_CALLBACK *pEventCb, USB_EVENT_CALLBACK_FUNC *pfEventCb, void *pContext);
+void           USBD_CDC_SetOnRXEvent               (USB_CDC_HANDLE hInst, USB_EVENT_CALLBACK *pEventCb, USB_EVENT_CALLBACK_FUNC *pfEventCb, void *pContext);
+void           USBD_CDC_Stall                      (USB_CDC_HANDLE hInst);
 
 /*********************************************************************
 *
@@ -265,7 +262,7 @@ void           USBD_CDC_Stall(USB_CDC_HANDLE hInst);
 */
 
 #if defined(__cplusplus)
-}              /* Make sure we have C-declarations in C++ programs */
+  }              /* Make sure we have C-declarations in C++ programs */
 #endif
 
 #endif                 /* Avoid multiple inclusion */

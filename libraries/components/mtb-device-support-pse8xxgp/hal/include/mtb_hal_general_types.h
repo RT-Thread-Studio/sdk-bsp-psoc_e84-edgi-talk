@@ -71,7 +71,7 @@ enum mtb_hal_rslt_module_chip
     MTB_HAL_RSLT_MODULE_GPIO          = (0x06),  //!< An error occurred in GPIO module
     MTB_HAL_RSLT_MODULE_I2C           = (0x07),  //!< An error occurred in I2C module
     MTB_HAL_RSLT_MODULE_IPC           = (0x08),  //!< An error occurred in IPC module
-    //!< module
+                                                 //!< module
     MTB_HAL_RSLT_MODULE_LPTIMER       = (0x09),  //!< An error occurred in LPTimer module
     MTB_HAL_RSLT_MODULE_MEMORYSPI     = (0x0A),  //!< An error occurred in MEMORYSPI module
     MTB_HAL_RSLT_MODULE_NPNZ          = (0x0B),  //!< An error occurred in Filter module

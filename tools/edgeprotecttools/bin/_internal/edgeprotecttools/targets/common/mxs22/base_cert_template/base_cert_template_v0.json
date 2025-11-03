@@ -16,16 +16,6 @@
     "mandatory": false,
     "present": ["DEVICE_CERT"]
   },
-  "ROM_BOOT_VERSION": {
-    "type": "VERSION",
-    "mandatory": false,
-    "present": ["DEVICE_CERT"]
-  },
-  "RRAM_BOOT_VERSION": {
-    "type": "VERSION",
-    "mandatory": false,
-    "present": ["DEVICE_CSR", "DEVICE_CERT"]
-  },
   "FAMILY_ID": {
     "type": "INT",
     "mandatory": false,
@@ -35,6 +25,16 @@
     "type": "INT",
     "mandatory": false,
     "present": ["DEVICE_CERT"]
+  },
+  "ROM_BOOT_VERSION": {
+    "type": "VERSION",
+    "mandatory": false,
+    "present": ["DEVICE_CERT"]
+  },
+  "RRAM_BOOT_VERSION": {
+    "type": "VERSION",
+    "mandatory": false,
+    "present": ["DEVICE_CSR", "DEVICE_CERT"]
   },
   "ALIAS_PUBLIC_KEY": {
     "description": "Use the path to the ECDSA P-256 public key or a 65-byte hex string",

@@ -30,57 +30,57 @@
 #include "cy_syslib.h"
 
 #if defined (CY_IP_M33SYSCPUSS) && defined(CY_IP_MXEFUSE)
-    #include "cy_efuse.h"
+#include "cy_efuse.h"
 #endif
 
 #ifdef CY_IP_M4CPUSS
-    #include "cy_ipc_drv.h"
+#include "cy_ipc_drv.h"
 #endif
 #if !defined(NDEBUG)
     #include <string.h>
 #endif /* NDEBUG */
 
 #if defined (CY_DEVICE_SECURE)
-    #include "cy_pra.h"
+#include "cy_pra.h"
 #endif /* defined (CY_DEVICE_SECURE) */
 
 #ifdef CY_IP_M4CPUSS
-    /* Flash wait states (ULP mode at 0.9v) */
-    #define CY_SYSLIB_FLASH_ULP_WS_0_FREQ_MAX    ( 16UL)
-    #define CY_SYSLIB_FLASH_ULP_WS_1_FREQ_MAX    ( 33UL)
-    #define CY_SYSLIB_FLASH_ULP_WS_2_FREQ_MAX    ( 50UL)
+/* Flash wait states (ULP mode at 0.9v) */
+#define CY_SYSLIB_FLASH_ULP_WS_0_FREQ_MAX    ( 16UL)
+#define CY_SYSLIB_FLASH_ULP_WS_1_FREQ_MAX    ( 33UL)
+#define CY_SYSLIB_FLASH_ULP_WS_2_FREQ_MAX    ( 50UL)
 
-    /* ROM and SRAM wait states for the slow clock domain (LP mode at 1.1v) */
-    #define CY_SYSLIB_LP_SLOW_WS_0_FREQ_MAX      (100UL)
-    #define CY_SYSLIB_LP_SLOW_WS_1_FREQ_MAX      (120UL)
+/* ROM and SRAM wait states for the slow clock domain (LP mode at 1.1v) */
+#define CY_SYSLIB_LP_SLOW_WS_0_FREQ_MAX      (100UL)
+#define CY_SYSLIB_LP_SLOW_WS_1_FREQ_MAX      (120UL)
 
-    /* ROM and SRAM wait states for the slow clock domain (ULP mode at 0.9v) */
-    #define CY_SYSLIB_ULP_SLOW_WS_0_FREQ_MAX     ( 25UL)
-    #define CY_SYSLIB_ULP_SLOW_WS_1_FREQ_MAX     ( 50UL)
+/* ROM and SRAM wait states for the slow clock domain (ULP mode at 0.9v) */
+#define CY_SYSLIB_ULP_SLOW_WS_0_FREQ_MAX     ( 25UL)
+#define CY_SYSLIB_ULP_SLOW_WS_1_FREQ_MAX     ( 50UL)
 #elif (defined(CY_IP_M33SYSCPUSS) && (CY_IP_M33SYSCPUSS))
-    /* These definitions can be removed once SystemCorClockUpdate() function is implemented */
-    #define CY_SYSCLK_IMO_FREQ          (8000000UL) /* Hz */
-    #define CY_DELAY_1K_THRESHOLD           (1000u)
-    #define CY_DELAY_1K_MINUS_1_THRESHOLD   (CY_DELAY_1K_THRESHOLD - 1u)
-    #define CY_DELAY_1M_THRESHOLD           (1000000u)
-    #define CY_DELAY_1M_MINUS_1_THRESHOLD   (CY_DELAY_1M_THRESHOLD - 1u)
+/* These definitions can be removed once SystemCorClockUpdate() function is implemented */
+#define CY_SYSCLK_IMO_FREQ          (8000000UL) /* Hz */
+#define CY_DELAY_1K_THRESHOLD           (1000u)
+#define CY_DELAY_1K_MINUS_1_THRESHOLD   (CY_DELAY_1K_THRESHOLD - 1u)
+#define CY_DELAY_1M_THRESHOLD           (1000000u)
+#define CY_DELAY_1M_MINUS_1_THRESHOLD   (CY_DELAY_1M_THRESHOLD - 1u)
 
 #elif defined(CY_IP_M7CPUSS)
-    #define CY_SYSLIB_LP_SLOW_WS_0_FREQ_MAX      (100UL)
+#define CY_SYSLIB_LP_SLOW_WS_0_FREQ_MAX      (100UL)
 
 #endif
 
 
 #if  defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS28SRSS) || defined(CY_IP_MXS22SRSS)
-    #define CY_SRSS_RES_CAUSE2_CSV_LOSS_Msk    (SRSS_RES_CAUSE2_RESET_CSV_HF_Msk)
-    #define CY_SRSS_RES_CAUSE2_CSV_LOSS_Pos    (SRSS_RES_CAUSE2_RESET_CSV_HF_Pos)
-    #define CY_SRSS_RES_CAUSE2_CSV_ERROR_Msk    (SRSS_RES_CAUSE2_RESET_CSV_REF_Msk)
-    #define CY_SRSS_RES_CAUSE2_CSV_ERROR_Pos    (SRSS_RES_CAUSE2_RESET_CSV_REF_Pos)
+#define CY_SRSS_RES_CAUSE2_CSV_LOSS_Msk    (SRSS_RES_CAUSE2_RESET_CSV_HF_Msk)
+#define CY_SRSS_RES_CAUSE2_CSV_LOSS_Pos    (SRSS_RES_CAUSE2_RESET_CSV_HF_Pos)
+#define CY_SRSS_RES_CAUSE2_CSV_ERROR_Msk    (SRSS_RES_CAUSE2_RESET_CSV_REF_Msk)
+#define CY_SRSS_RES_CAUSE2_CSV_ERROR_Pos    (SRSS_RES_CAUSE2_RESET_CSV_REF_Pos)
 #endif
 
 #if defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS)
-    /** Holds the flag to indicate if the System woke up from Warm Boot or not */
-    bool cy_WakeupFromWarmBootStatus = false;
+/** Holds the flag to indicate if the System woke up from Warm Boot or not */
+bool cy_WakeupFromWarmBootStatus = false;
 #endif /* defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS) */
 
 #if !defined(NDEBUG)
@@ -93,27 +93,19 @@
 #endif /* (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED) */
 
 #if defined(__ARMCC_VERSION)
-#if (__ARMCC_VERSION >= 6010050)
-static void Cy_SysLib_AsmInfiniteLoop(void)
-{
-    __ASM(" b . ");
-}
-#else
-static __ASM void Cy_SysLib_AsmInfiniteLoop(void)
-{
-    b .
-}
-#endif /* (__ARMCC_VERSION >= 6010050) */
+        #if (__ARMCC_VERSION >= 6010050)
+            static void Cy_SysLib_AsmInfiniteLoop(void) { __ASM (" b . "); }
+        #else
+            static __ASM void Cy_SysLib_AsmInfiniteLoop(void) { b . }
+        #endif /* (__ARMCC_VERSION >= 6010050) */
 #endif  /* (__ARMCC_VERSION) */
 
-#if defined(CY_INIT_CODECOPY_ENABLE)
-    CY_SECTION_INIT_CODECOPY_BEGIN
-#endif
+CY_SECTION_INIT_CODECOPY_BEGIN
 void Cy_SysLib_Delay(uint32_t milliseconds)
 {
     uint32_t max_delay_ms = 0xFFFFFFFFU / (cy_delayFreqKhz * CY_SYSLIB_DELAY_CALIBRATION_FACTOR);
 
-    while (milliseconds > max_delay_ms)
+    while(milliseconds > max_delay_ms)
     {
         /* This loop prevents an overflow in value passed to Cy_SysLib_DelayCycles() API. */
         Cy_SysLib_DelayCycles(max_delay_ms * cy_delayFreqKhz * CY_SYSLIB_DELAY_CALIBRATION_FACTOR);
@@ -141,22 +133,22 @@ __WEAK void Cy_SysLib_Rtos_DelayUs(uint16_t microseconds)
 
 __NO_RETURN void Cy_SysLib_Halt(uint32_t reason)
 {
-    if (0U != reason)
+    if(0U != reason)
     {
         /* To remove an unreferenced local variable warning */
     }
 
-#if defined (__ARMCC_VERSION)
-    __BKPT(0x0);
-#elif defined(__GNUC__)
-    CY_HALT();
-#elif defined (__ICCARM__)
-    CY_HALT();
-#else
-#error "An unsupported toolchain"
-#endif  /* (__ARMCC_VERSION) */
+    #if defined (__ARMCC_VERSION)
+        __BKPT(0x0);
+    #elif defined(__GNUC__)
+        CY_HALT();
+    #elif defined (__ICCARM__)
+        CY_HALT();
+    #else
+        #error "An unsupported toolchain"
+    #endif  /* (__ARMCC_VERSION) */
 
-    while (true) {}
+    while(true) {}
 }
 
 
@@ -177,11 +169,11 @@ __WEAK void Cy_SysLib_AssertFailed(const char_t * file, uint32_t line)
 
 void Cy_SysLib_ClearFlashCacheAndBuffer(void)
 {
-#if CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE)
-    CY_PRA_REG32_SET(CY_PRA_INDX_FLASHC_FLASH_CMD, FLASHC_FLASH_CMD_INV_Msk);
-#else
-    FLASHC_FLASH_CMD = FLASHC_FLASH_CMD_INV_Msk;
-#endif /* CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE) */
+    #if CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE)
+        CY_PRA_REG32_SET(CY_PRA_INDX_FLASHC_FLASH_CMD, FLASHC_FLASH_CMD_INV_Msk);
+    #else
+        FLASHC_FLASH_CMD = FLASHC_FLASH_CMD_INV_Msk;
+    #endif /* CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE) */
 }
 #endif
 
@@ -194,22 +186,107 @@ cy_en_syslib_status_t Cy_SysLib_ResetBackupDomain(void)
 
 uint32_t Cy_SysLib_GetResetReason(void)
 {
-    uint32_t retVal = SRSS_RES_CAUSE;
+    uint32_t retVal = 0UL;
 
-    if (0U != _FLD2VAL(SRSS_PWR_HIBERNATE_TOKEN, SRSS_PWR_HIBERNATE))
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_WDT, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_HWWDT;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_ACT_FAULT, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_ACT_FAULT;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_DPSLP_FAULT, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_DPSLP_FAULT;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_TC_DBGRESET, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_TC_DBGRESET;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_SOFT, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_SOFT0;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_SOFT1, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_SOFT1;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_SOFT2, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_SOFT2;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_MCWDT0, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_SWWDT0;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_MCWDT1, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_SWWDT1;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_MCWDT2, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_SWWDT2;
+    }
+    if(0 != _FLD2VAL(SRSS_RES_CAUSE_RESET_MCWDT3, SRSS_RES_CAUSE))
+    {
+        retVal |= CY_SYSLIB_RESET_SWWDT3;
+    }
+
+    if(CY_SYSLIB_HIBERNATE_TOKEN == _FLD2VAL(SRSS_PWR_HIBERNATE_TOKEN, SRSS_PWR_HIBERNATE))
     {
         retVal |= CY_SYSLIB_RESET_HIB_WAKEUP;
     }
+    if (CY_SYSLIB_DEEP_SLEEP_OFF_TOKEN == _FLD2VAL(SRSS_PWR_HIBERNATE_TOKEN, SRSS_PWR_HIBERNATE))
+    {
+        retVal |= CY_SYSLIB_RESET_DS_OFF_WAKEUP;
+    }
+
 
 #if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS40SRSS) || (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION >= 2)) ||  defined(CY_IP_MXS22SRSS)
-    if (0U != _FLD2VAL(CY_SRSS_RES_CAUSE2_CSV_LOSS, SRSS_RES_CAUSE2))
+    if(0U != _FLD2VAL(CY_SRSS_RES_CAUSE2_CSV_LOSS, SRSS_RES_CAUSE2))
     {
         retVal |= CY_SYSLIB_RESET_CSV_LOSS_WAKEUP;
     }
 
-    if (0U != _FLD2VAL(CY_SRSS_RES_CAUSE2_CSV_ERROR, SRSS_RES_CAUSE2))
+    if(0U != _FLD2VAL(CY_SRSS_RES_CAUSE2_CSV_ERROR, SRSS_RES_CAUSE2))
     {
         retVal |= CY_SYSLIB_RESET_CSV_ERROR_WAKEUP;
+    }
+#endif
+
+#if defined(CY_IP_MXS22SRSS) && (SRSS_POR_PRESENT)
+    if (0U != _FLD2VAL(SRSS_RES_CAUSE_EXTEND_RESET_XRES, SRSS_RES_CAUSE_EXTEND))
+    {
+        retVal |= CY_SYSLIB_RESET_XRES;
+    }
+    if (0U != _FLD2VAL(SRSS_RES_CAUSE_EXTEND_RESET_BODVDDD, SRSS_RES_CAUSE_EXTEND))
+    {
+        retVal |= CY_SYSLIB_RESET_BODVDDD;
+    }
+    if (0U != _FLD2VAL(SRSS_RES_CAUSE_EXTEND_RESET_BODVCCD, SRSS_RES_CAUSE_EXTEND))
+    {
+        retVal |= CY_SYSLIB_RESET_BODVCCD;
+    }
+    if (0U != _FLD2VAL(SRSS_RES_CAUSE_EXTEND_RESET_BODVBAT, SRSS_RES_CAUSE_EXTEND))
+    {
+        retVal |= CY_SYSLIB_RESET_BODVBAT;
+    }
+    if (0U != _FLD2VAL(SRSS_RES_CAUSE_EXTEND_RESET_OVDVCCD, SRSS_RES_CAUSE_EXTEND))
+    {
+        retVal |= CY_SYSLIB_RESET_OVDVCCD;
+    }
+    if (0U != _FLD2VAL(SRSS_RES_CAUSE_EXTEND_RESET_PXRES, SRSS_RES_CAUSE_EXTEND))
+    {
+        retVal |= CY_SYSLIB_RESET_PXRES;
+    }
+    if (0U != _FLD2VAL(SRSS_RES_CAUSE_EXTEND_RESET_STRUCT_XRES, SRSS_RES_CAUSE_EXTEND))
+    {
+        retVal |= CY_SYSLIB_RESET_STRUCT_XRES;
+    }
+    if (0U != _FLD2VAL(SRSS_RES_CAUSE_EXTEND_RESET_PORVDDD, SRSS_RES_CAUSE_EXTEND))
+    {
+        retVal |= CY_SYSLIB_RESET_PORVDDD;
     }
 #endif
     return (retVal);
@@ -224,7 +301,14 @@ void Cy_SysLib_ClearResetReason(void)
     SRSS_RES_CAUSE  = 0xFFFFFFFFU;
     SRSS_RES_CAUSE2 = 0xFFFFFFFFU;
 
-    if (0U != _FLD2VAL(SRSS_PWR_HIBERNATE_TOKEN, SRSS_PWR_HIBERNATE))
+    /* RES_CAUSE_EXTEND register bits are RW1C (every bit is cleared upon writing 1),
+     * so write all ones to clear all the reset reasons.
+     */
+#if defined(CY_IP_MXS22SRSS) && (SRSS_POR_PRESENT)
+    SRSS_RES_CAUSE_EXTEND = 0xFFFFFFFFU;
+#endif /* defined(CY_IP_MXS22SRSS) && (SRSS_POR_PRESENT) */
+
+    if(0U != _FLD2VAL(SRSS_PWR_HIBERNATE_TOKEN, SRSS_PWR_HIBERNATE))
     {
         /* Clears PWR_HIBERNATE token */
 #if CY_CPU_CORTEX_M4 && defined (CY_DEVICE_SECURE)
@@ -251,12 +335,12 @@ void Cy_SysLib_SoftResetCM4(void)
     *   notifyEvent_Intr: 1U - IPC Interrupt Structure 1 is used for Releasing IPC 0 (M0+ NMI Handler).
     *   msgPtr: &msg - The address of SRAM with the API's parameters.
     */
-    if (CY_IPC_DRV_SUCCESS != Cy_IPC_Drv_SendMsgPtr(Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_SYSCALL_CM0), 1U, (void *) &msg))
+    if(CY_IPC_DRV_SUCCESS != Cy_IPC_Drv_SendMsgPtr(Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_SYSCALL_CM0), 1U, (void *) &msg))
     {
         CY_ASSERT(0U != 0U);
     }
 
-    while (Cy_IPC_Drv_IsLockAcquired(Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_SYSCALL_CM0)))
+    while(Cy_IPC_Drv_IsLockAcquired(Cy_IPC_Drv_GetIpcBaseAddress(CY_IPC_CHAN_SYSCALL_CM0)))
     {
         /* Waits until SROM API runs the command (sent over the IPC channel) and releases the IPC0 structure. */
     }
@@ -288,24 +372,24 @@ uint64_t Cy_SysLib_GetUniqueId(void)
 #endif
 
 
-#if ((defined (CY_IP_M33SYSCPUSS) && defined(CY_IP_MXEFUSE)) && defined (CY_UNIQE_DEVICE_ID_PRESENT_SFLASH))
+#if ((defined (CY_IP_M33SYSCPUSS) && defined(CY_IP_MXEFUSE)) && defined (CY_UNIQUE_DEVICE_ID_PRESENT_SFLASH))
 #define CY_DIE_REG_EFUSE_OFFSET    0x74
 #define CY_DIE_REG_COUNT           3U
 
 uint64_t Cy_SysLib_GetUniqueId(void)
 {
-#if (!CY_UNIQE_DEVICE_ID_PRESENT_SFLASH)
+#if (!CY_UNIQUE_DEVICE_ID_PRESENT_SFLASH)
     uint32_t uniqueIdHi;
     uint32_t uniqueIdLo;
     uint32_t dieRead[3];
     cy_en_efuse_status_t status = CY_EFUSE_ERR_UNC;
 
-    if (Cy_EFUSE_IsEnabled(EFUSE))
+    if(Cy_EFUSE_IsEnabled(EFUSE))
     {
 
         status = Cy_EFUSE_ReadWordArray(EFUSE, dieRead, CY_DIE_REG_EFUSE_OFFSET, CY_DIE_REG_COUNT);
 
-        if (status == CY_EFUSE_SUCCESS)
+        if(status == CY_EFUSE_SUCCESS)
         {
             uniqueIdHi = ((uint32_t)  _FLD2VAL(EFUSE_DATA_DIE_2_YEAR, dieRead[2])              << (CY_UNIQUE_ID_DIE_YEAR_Pos  - CY_UNIQUE_ID_DIE_X_Pos)) |
                          (((uint32_t)_FLD2VAL(EFUSE_DATA_DIE_2_REVISION_ID, dieRead[2]) & 1U)  << (CY_UNIQUE_ID_DIE_MINOR_Pos - CY_UNIQUE_ID_DIE_X_Pos)) |
@@ -314,7 +398,7 @@ uint64_t Cy_SysLib_GetUniqueId(void)
                          ((uint32_t)  _FLD2VAL(EFUSE_DATA_DIE_1_X, dieRead[1]));
 
             uniqueIdLo = (((uint32_t) _FLD2VAL(EFUSE_DATA_DIE_0_WAFER, dieRead[0])       << CY_UNIQUE_ID_DIE_WAFER_Pos) |
-                          ((uint32_t) _FLD2VAL(EFUSE_DATA_DIE_0_LOT, dieRead[0])));
+                         ((uint32_t) _FLD2VAL(EFUSE_DATA_DIE_0_LOT, dieRead[0])));
 
             return (((uint64_t) uniqueIdHi << CY_UNIQUE_ID_DIE_X_Pos) | uniqueIdLo);
         }
@@ -379,9 +463,7 @@ uint64_t Cy_SysLib_GetUniqueId(void)
 }
 #endif
 
-#if defined(CY_INIT_CODECOPY_ENABLE)
-    CY_SECTION_INIT_CODECOPY_END
-#endif
+CY_SECTION_INIT_CODECOPY_END
 
 #if (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED)
 
@@ -415,7 +497,7 @@ void Cy_SysLib_FaultHandler(uint32_t const *faultStackAddr)
 #if ((defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
      (defined (__FPU_USED   ) && (__FPU_USED    == 1U)))
     /* Checks cumulative exception bits for floating-point exceptions */
-    if (0U != (__get_FPSCR() & (CY_FPSCR_IXC_Msk | CY_FPSCR_IDC_Msk)))
+    if(0U != (__get_FPSCR() & (CY_FPSCR_IXC_Msk | CY_FPSCR_IDC_Msk)))
     {
         cy_faultFrame.s0    = faultStackAddr[CY_S0_Pos];
         cy_faultFrame.s1    = faultStackAddr[CY_S1_Pos];
@@ -444,23 +526,20 @@ void Cy_SysLib_FaultHandler(uint32_t const *faultStackAddr)
 
 __WEAK void Cy_SysLib_ProcessingFault(void)
 {
-#if defined(__ARMCC_VERSION)
-    /* Assembly implementation of an infinite loop
-     * is used for the armcc compiler to preserve the call stack.
-     * Otherwise, the compiler destroys the call stack,
-     * because treats this API as a no return function.
-     */
-    Cy_SysLib_AsmInfiniteLoop();
-#else
-    while (true) {}
-#endif  /* (__ARMCC_VERSION) */
+    #if defined(__ARMCC_VERSION)
+        /* Assembly implementation of an infinite loop
+         * is used for the armcc compiler to preserve the call stack.
+         * Otherwise, the compiler destroys the call stack,
+         * because treats this API as a no return function.
+         */
+        Cy_SysLib_AsmInfiniteLoop();
+    #else
+        while(true) {}
+    #endif  /* (__ARMCC_VERSION) */
 }
 #endif /* (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED) || defined(CY_DOXYGEN) */
 
-#if defined(CY_INIT_CODECOPY_ENABLE)
-    CY_SECTION_INIT_CODECOPY_BEGIN
-#endif
-
+CY_SECTION_INIT_CODECOPY_BEGIN
 void Cy_SysLib_SetWaitStates(bool ulpMode, uint32_t clkHfMHz)
 {
 #if defined(CY_IP_M4CPUSS) || defined(CY_IP_M7CPUSS)
@@ -486,14 +565,14 @@ void Cy_SysLib_SetWaitStates(bool ulpMode, uint32_t clkHfMHz)
     /* SRAM */
     CPUSS_RAM0_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM0_CTL0, CPUSS_RAM0_CTL0_SLOW_WS, waitStates);
     CPUSS_RAM0_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM0_CTL0, CPUSS_RAM0_CTL0_FAST_WS, 0UL);
-#if defined (RAMC1_PRESENT) && (RAMC1_PRESENT == 1UL)
-    CPUSS_RAM1_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM1_CTL0, CPUSS_RAM1_CTL0_SLOW_WS, waitStates);
-    CPUSS_RAM1_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM1_CTL0, CPUSS_RAM1_CTL0_FAST_WS, 0UL);
-#endif /* defined (RAMC1_PRESENT) && (RAMC1_PRESENT == 1UL) */
-#if defined (RAMC2_PRESENT) && (RAMC2_PRESENT == 1UL)
-    CPUSS_RAM2_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM2_CTL0, CPUSS_RAM2_CTL0_SLOW_WS, waitStates);
-    CPUSS_RAM2_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM2_CTL0, CPUSS_RAM2_CTL0_FAST_WS, 0UL);
-#endif /* defined (RAMC2_PRESENT) && (RAMC2_PRESENT == 1UL) */
+    #if defined (RAMC1_PRESENT) && (RAMC1_PRESENT == 1UL)
+        CPUSS_RAM1_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM1_CTL0, CPUSS_RAM1_CTL0_SLOW_WS, waitStates);
+        CPUSS_RAM1_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM1_CTL0, CPUSS_RAM1_CTL0_FAST_WS, 0UL);
+    #endif /* defined (RAMC1_PRESENT) && (RAMC1_PRESENT == 1UL) */
+    #if defined (RAMC2_PRESENT) && (RAMC2_PRESENT == 1UL)
+        CPUSS_RAM2_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM2_CTL0, CPUSS_RAM2_CTL0_SLOW_WS, waitStates);
+        CPUSS_RAM2_CTL0 = _CLR_SET_FLD32U(CPUSS_RAM2_CTL0, CPUSS_RAM2_CTL0_FAST_WS, 0UL);
+    #endif /* defined (RAMC2_PRESENT) && (RAMC2_PRESENT == 1UL) */
 
     /* Flash */
 #if defined(CY_IP_M7CPUSS)
@@ -511,16 +590,16 @@ void Cy_SysLib_SetWaitStates(bool ulpMode, uint32_t clkHfMHz)
 #else
     if (ulpMode)
     {
-        waitStates = (clkHfMHz <= CY_SYSLIB_FLASH_ULP_WS_0_FREQ_MAX) ? 0UL :
+        waitStates =  (clkHfMHz <= CY_SYSLIB_FLASH_ULP_WS_0_FREQ_MAX) ? 0UL :
                      ((clkHfMHz <= CY_SYSLIB_FLASH_ULP_WS_1_FREQ_MAX) ? 1UL : 2UL);
     }
     else
     {
-        waitStates = (clkHfMHz <= cy_device->flashCtlMainWs0Freq) ? 0UL :
+        waitStates =  (clkHfMHz <= cy_device->flashCtlMainWs0Freq) ? 0UL :
                      ((clkHfMHz <= cy_device->flashCtlMainWs1Freq) ? 1UL :
-                      ((clkHfMHz <= cy_device->flashCtlMainWs2Freq) ? 2UL :
-                       ((clkHfMHz <= cy_device->flashCtlMainWs3Freq) ? 3UL :
-                        ((clkHfMHz <= cy_device->flashCtlMainWs4Freq) ? 4UL : 5UL))));
+                     ((clkHfMHz <= cy_device->flashCtlMainWs2Freq) ? 2UL :
+                     ((clkHfMHz <= cy_device->flashCtlMainWs3Freq) ? 3UL :
+                     ((clkHfMHz <= cy_device->flashCtlMainWs4Freq) ? 4UL : 5UL))));
     }
 
     FLASHC_FLASH_CTL = _CLR_SET_FLD32U(FLASHC_FLASH_CTL, FLASHC_FLASH_CTL_MAIN_WS, waitStates);
@@ -536,14 +615,14 @@ void Cy_SysLib_SetWaitStates(bool ulpMode, uint32_t clkHfMHz)
 
     if (ulpMode)
     {
-        waitStates = ((CY_SYSLIB_COEFFICIENT_ULP * clkHfMHz) / 1000U) + 1U;
+        waitStates =  ((CY_SYSLIB_COEFFICIENT_ULP*clkHfMHz)/1000U)+1U;
     }
     else
     {
-        waitStates = ((CY_SYSLIB_COEFFICIENT * clkHfMHz) / 1000U) + 1U;
+        waitStates =  ((CY_SYSLIB_COEFFICIENT*clkHfMHz)/1000U)+1U;
     }
 
-    FLASHC_FLASH_CTL = _CLR_SET_FLD32U(FLASHC_FLASH_CTL, FLASHC_FLASH_CTL_RBUS_WS, waitStates);
+    FLASHC_FLASH_CTL =_CLR_SET_FLD32U(FLASHC_FLASH_CTL, FLASHC_FLASH_CTL_RBUS_WS, waitStates);
 #else
     (void) ulpMode;
     (void) clkHfMHz;
@@ -608,17 +687,17 @@ cy_en_syslib_lcs_mode_t Cy_SysLib_GetDeviceLCS(cy_syslib_lcs_data_t *base)
 
     switch (lcsMode)
     {
-    case CY_SYSLIB_LCS_VIRGIN:
-    case CY_SYSLIB_LCS_SORT:
-    case CY_SYSLIB_LCS_PROVISIONED:
-    case CY_SYSLIB_LCS_NORMAL_PROVISIONED:
-    case CY_SYSLIB_LCS_NORMAL:
-    case CY_SYSLIB_LCS_SECURE:
-    case CY_SYSLIB_LCS_NORMAL_NO_SECURE:
-    case CY_SYSLIB_LCS_RMA:
+        case CY_SYSLIB_LCS_VIRGIN:
+        case CY_SYSLIB_LCS_SORT:
+        case CY_SYSLIB_LCS_PROVISIONED:
+        case CY_SYSLIB_LCS_NORMAL_PROVISIONED:
+        case CY_SYSLIB_LCS_NORMAL:
+        case CY_SYSLIB_LCS_SECURE:
+        case CY_SYSLIB_LCS_NORMAL_NO_SECURE:
+        case CY_SYSLIB_LCS_RMA:
         break;
-    default:
-        lcsMode = CY_SYSLIB_LCS_CORRUPTED;
+        default:
+            lcsMode = CY_SYSLIB_LCS_CORRUPTED;
         break;
     }
 
@@ -673,20 +752,19 @@ bool Cy_Syslib_IsMemCacheable(MPU_Type* mpu, uint32_t addr, uint32_t size)
             pos = ((attrIdx % 4U) * 8U);
             mask = (uint32_t)((uint32_t)0x000000FFU << pos);
 
-            if (reg >= (sizeof(mpu->MAIR) / sizeof(mpu->MAIR[0])))
-            {
+            if (reg >= (sizeof(mpu->MAIR) / sizeof(mpu->MAIR[0]))) {
                 return ret; // invalid index
             }
             attribute = (uint8_t)((mpu->MAIR[reg] & mask) >> pos);
             startAddr = (uint32_t)(mpu->RBAR & MPU_RBAR_BASE_Msk);
-            endAddr = (uint32_t)(mpu->RLAR & MPU_RLAR_LIMIT_Msk);
+            endAddr =  (uint32_t)(mpu->RLAR & MPU_RLAR_LIMIT_Msk);
 
             /*
                 Check bit7:4 of outer attribute for non-cacheable region (0b0100 or 0x4)
                 Check bit3:0 of inner attribute for non-cacheable region (0b0100 or 0x4)
                 Thus the attribute is checked for 0x44
             */
-            if ((attribute == (uint32_t)0x44) && (addr >= startAddr) && ((addr + size) <= endAddr))
+            if ((attribute == (uint32_t)0x44) && (addr >= startAddr) && ((addr+size) <= endAddr))
             {
                 ret = false;
                 break;
@@ -704,7 +782,7 @@ bool Cy_Syslib_IsMemCacheable(MPU_Type* mpu, uint32_t addr, uint32_t size)
                 Check Bufferable bit16 for 0b0
             */
             if ((TEX == 1U) && (C == 0U) && (B == 0U) && (addr >= startAddr) && \
-                    ((addr + size) <= (startAddr + (1UL << (SIZE + 1UL)))))
+                ((addr+size) <= (startAddr + (1UL << (SIZE+1UL)))))
             {
                 ret = false;
                 break;
@@ -720,9 +798,7 @@ bool Cy_Syslib_IsMemCacheable(MPU_Type* mpu, uint32_t addr, uint32_t size)
 }
 #endif // (((defined (CY_CPU_CORTEX_M7) && CY_CPU_CORTEX_M7) || (defined (CY_CPU_CORTEX_M55) && CY_CPU_CORTEX_M55)) && (defined (__MPU_PRESENT) && (__MPU_PRESENT == 1U)))
 
-#if defined(CY_INIT_CODECOPY_ENABLE)
-    CY_SECTION_INIT_CODECOPY_END
-#endif
+CY_SECTION_INIT_CODECOPY_END
 
 #endif /* CY_IP_M33SYSCPUSS, CY_IP_M4CPUSS */
 

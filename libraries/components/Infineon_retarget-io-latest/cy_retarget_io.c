@@ -7,7 +7,7 @@
 *
 ********************************************************************************
 * \copyright
-* Copyright 2018-2022 Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2018-2025 Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation
 *
 * SPDX-License-Identifier: Apache-2.0
@@ -30,13 +30,13 @@
 #include <stdlib.h>
 #include "cy_utils.h"
 #if defined(COMPONENT_MTB_HAL)
-    #include "mtb_hal_hw_types.h"
-    #include "mtb_hal_uart.h"
-    #include "mtb_hal_system.h"
+#include "mtb_hal_hw_types.h"
+#include "mtb_hal_uart.h"
+#include "mtb_hal_system.h"
 #elif defined (CY_USING_HAL)
-    #include "cyhal_hw_types.h"
-    #include "cyhal_uart.h"
-    #include "cyhal_system.h"
+#include "cyhal_hw_types.h"
+#include "cyhal_uart.h"
+#include "cyhal_system.h"
 #endif //defined(COMPONENT_MTB_HAL)
 
 
@@ -117,8 +117,8 @@ static void cy_retarget_io_mutex_deinit(void)
 #else // if (defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)) && defined(__GNUC__) &&
 // !defined(__ARMCC_VERSION) && !defined(__clang__)
 #ifdef __ICCARM__
-    // Ignore unused functions
-    #pragma diag_suppress=Pe177
+// Ignore unused functions
+#pragma diag_suppress=Pe177
 #endif
 //--------------------------------------------------------------------------------------------------
 // cy_retarget_io_mutex_init
@@ -130,7 +130,7 @@ static inline cy_rslt_t cy_retarget_io_mutex_init(void)
 
 
 #if defined(__ARMCC_VERSION) || defined(__llvm__) // ARM-MDK or LLVM ARM
-    __attribute__((unused))
+__attribute__((unused))
 #endif
 //--------------------------------------------------------------------------------------------------
 // cy_retarget_io_mutex_acquire
@@ -141,7 +141,7 @@ static inline void cy_retarget_io_mutex_acquire(void)
 
 
 #if defined(__ARMCC_VERSION) || defined(__llvm__) // ARM-MDK or LLVM ARM
-    __attribute__((unused))
+__attribute__((unused))
 #endif
 //--------------------------------------------------------------------------------------------------
 // cy_retarget_io_mutex_release
@@ -152,7 +152,7 @@ static inline void cy_retarget_io_mutex_release(void)
 
 
 #if defined(__ARMCC_VERSION) || defined(__llvm__) // ARM-MDK or LLVM ARM
-    __attribute__((unused))
+__attribute__((unused))
 #endif
 //--------------------------------------------------------------------------------------------------
 // cy_retarget_io_mutex_deinit
@@ -171,13 +171,13 @@ extern "C" {
 
 #if defined(COMPONENT_MTB_HAL)
 // UART HAL object used by BSP for Debug UART port
-static mtb_hal_uart_t *cy_retarget_io_uart_obj = NULL;
+static mtb_hal_uart_t* cy_retarget_io_uart_obj = NULL;
 #elif defined(CY_USING_HAL)
 // UART HAL object used by BSP for Debug UART port
 cyhal_uart_t cy_retarget_io_uart_obj;
 #else
 // SCB address that will be used for retarget-io UART
-static CySCB_Type *cy_retarget_io_uart = NULL;
+static CySCB_Type* cy_retarget_io_uart = NULL;
 #endif
 
 
@@ -191,12 +191,12 @@ static char cy_retarget_io_stdout_prev_char = 0;
 //--------------------------------------------------------------------------------------------------
 static inline cy_rslt_t cy_retarget_io_getchar(char* c)
 {
-#if defined(COMPONENT_MTB_HAL)
+    #if defined(COMPONENT_MTB_HAL)
     CY_ASSERT(NULL != cy_retarget_io_uart_obj);
     return mtb_hal_uart_get(cy_retarget_io_uart_obj, (uint8_t*)c, 0);
-#elif defined(CY_USING_HAL)
+    #elif defined(CY_USING_HAL)
     return cyhal_uart_getc(&cy_retarget_io_uart_obj, (uint8_t*)c, 0);
-#else
+    #else
     uint32_t read_value = Cy_SCB_UART_Get(cy_retarget_io_uart);
     //Wait until the character is received
     while (CY_SCB_UART_RX_NO_DATA == read_value)
@@ -205,7 +205,7 @@ static inline cy_rslt_t cy_retarget_io_getchar(char* c)
     }
     *c = (uint8_t)read_value;
     return CY_RSLT_SUCCESS;
-#endif // if defined(COMPONENT_MTB_HAL)
+    #endif // if defined(COMPONENT_MTB_HAL)
 }
 
 
@@ -214,19 +214,19 @@ static inline cy_rslt_t cy_retarget_io_getchar(char* c)
 //--------------------------------------------------------------------------------------------------
 static inline cy_rslt_t cy_retarget_io_putchar(char c)
 {
-#if defined(COMPONENT_MTB_HAL)
+    #if defined(COMPONENT_MTB_HAL)
     CY_ASSERT(NULL != cy_retarget_io_uart_obj);
     return mtb_hal_uart_put(cy_retarget_io_uart_obj, (uint8_t)c);
-#elif defined(CY_USING_HAL)
+    #elif defined(CY_USING_HAL)
     return cyhal_uart_putc(&cy_retarget_io_uart_obj, (uint8_t)c);
-#else
+    #else
     uint32_t count = 0UL;
     while (count == 0UL)
     {
         count = Cy_SCB_UART_Put(cy_retarget_io_uart, c);
     }
     return CY_RSLT_SUCCESS;
-#endif //defined(COMPONENT_MTB_HAL)
+    #endif //defined(COMPONENT_MTB_HAL)
 }
 
 
@@ -245,24 +245,24 @@ __attribute__((weak)) int fputc(int ch, FILE* f)
 {
     (void)f;
     cy_rslt_t rslt = CY_RSLT_SUCCESS;
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
     if (((char)ch == '\n') && (cy_retarget_io_stdout_prev_char != '\r'))
     {
         rslt = cy_retarget_io_putchar('\r');
     }
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
 
     if (CY_RSLT_SUCCESS == rslt)
     {
         rslt = cy_retarget_io_putchar(ch);
     }
 
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
     if (CY_RSLT_SUCCESS == rslt)
     {
         cy_retarget_io_stdout_prev_char = (char)ch;
     }
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
 
     return (CY_RSLT_SUCCESS == rslt) ? ch : EOF;
 }
@@ -282,12 +282,12 @@ __attribute__((weak)) int _fputc$unlocked(int ch, FILE* f)
 {
     (void)f;
     cy_rslt_t rslt = CY_RSLT_SUCCESS;
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
     if (((char)ch == '\n') && (cy_retarget_io_stdout_prev_char != '\r'))
     {
         rslt = cy_retarget_io_putchar('\r');
     }
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
 
 
     if (CY_RSLT_SUCCESS == rslt)
@@ -296,12 +296,12 @@ __attribute__((weak)) int _fputc$unlocked(int ch, FILE* f)
     }
 
 
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
     if (CY_RSLT_SUCCESS == rslt)
     {
         cy_retarget_io_stdout_prev_char = (char)ch;
     }
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
 
 
     return (CY_RSLT_SUCCESS == rslt) ? ch : EOF;
@@ -317,22 +317,22 @@ static int uart_putc(char c, FILE* file)
 {
     (void)file;
     cy_rslt_t rslt = CY_RSLT_SUCCESS;
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
     if (((c == '\n') && (cy_retarget_io_stdout_prev_char != '\r')))
     {
         rslt = cy_retarget_io_putchar('\r');
     }
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
     if (CY_RSLT_SUCCESS == rslt)
     {
         cy_retarget_io_putchar(c);
     }
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
     if (CY_RSLT_SUCCESS == rslt)
     {
         cy_retarget_io_stdout_prev_char = c;
     }
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+    #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
 
     return (CY_RSLT_SUCCESS == rslt) ? c : EOF;
 }
@@ -355,14 +355,14 @@ static FILE __stdio = FDEV_SETUP_STREAM(uart_putc,
                                         NULL,
                                         _FDEV_SETUP_RW);
 
-FILE *const stdin = &__stdio;
+FILE* const stdin = &__stdio;
 
 __strong_reference(stdin, stdout);
 
 __strong_reference(stdin, stderr);
 
 #elif defined (__ICCARM__) // IAR
-#include <yfuns.h>
+    #include <yfuns.h>
 
 //--------------------------------------------------------------------------------------------------
 // __write
@@ -380,12 +380,12 @@ __weak size_t __write(int handle, const unsigned char* buffer, size_t size)
         cy_rslt_t rslt = CY_RSLT_SUCCESS;
         for (; nChars < size; ++nChars)
         {
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+            #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
             if ((*buffer == '\n') && (cy_retarget_io_stdout_prev_char != '\r'))
             {
                 rslt = cy_retarget_io_putchar('\r');
             }
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+            #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
 
             if (rslt == CY_RSLT_SUCCESS)
             {
@@ -397,9 +397,9 @@ __weak size_t __write(int handle, const unsigned char* buffer, size_t size)
                 break;
             }
 
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+            #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
             cy_retarget_io_stdout_prev_char = *buffer;
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+            #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
             ++buffer;
         }
     }
@@ -416,7 +416,7 @@ __asm(".global _printf_float");
 //--------------------------------------------------------------------------------------------------
 // _write
 //--------------------------------------------------------------------------------------------------
-__attribute__((weak)) int32_t _write(int32_t fd, const cy_char8_t* ptr, int32_t len)
+int32_t _write(int32_t fd, const cy_char8_t* ptr, int32_t len)
 {
     int32_t nChars = 0;
     (void)fd;
@@ -426,16 +426,16 @@ __attribute__((weak)) int32_t _write(int32_t fd, const cy_char8_t* ptr, int32_t 
         cy_retarget_io_mutex_acquire();
         for (; nChars < len; ++nChars)
         {
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+            #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
             if ((*ptr == '\n') && (cy_retarget_io_stdout_prev_char != '\r'))
             {
                 rslt = cy_retarget_io_putchar('\r');
             }
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+            #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
 
             if (CY_RSLT_SUCCESS == rslt)
             {
-                rslt = cy_retarget_io_putchar((uint32_t) * ptr);
+                rslt = cy_retarget_io_putchar((uint32_t)*ptr);
             }
 
             if (CY_RSLT_SUCCESS != rslt)
@@ -443,9 +443,9 @@ __attribute__((weak)) int32_t _write(int32_t fd, const cy_char8_t* ptr, int32_t 
                 break;
             }
 
-#ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+            #ifdef CY_RETARGET_IO_CONVERT_LF_TO_CRLF
             cy_retarget_io_stdout_prev_char = *ptr;
-#endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
+            #endif // CY_RETARGET_IO_CONVERT_LF_TO_CRLF
             ++ptr;
         }
         cy_retarget_io_mutex_release();
@@ -527,7 +527,7 @@ __asm(".global _scanf_float");
 //--------------------------------------------------------------------------------------------------
 // _read
 //--------------------------------------------------------------------------------------------------
-__attribute__((weak)) int32_t _read(int32_t fd, cy_char8_t* ptr, int32_t len)
+int32_t _read(int32_t fd, cy_char8_t* ptr, int32_t len)
 {
     (void)fd;
 
@@ -547,8 +547,7 @@ __attribute__((weak)) int32_t _read(int32_t fd, cy_char8_t* ptr, int32_t len)
                 }
                 ptr++;
             }
-        }
-        while ((rslt == CY_RSLT_SUCCESS) && (nChars < len));
+        } while ((rslt == CY_RSLT_SUCCESS) && (nChars < len));
     }
 
     return (nChars);
@@ -559,7 +558,7 @@ __attribute__((weak)) int32_t _read(int32_t fd, cy_char8_t* ptr, int32_t len)
 
 #if defined(__ARMCC_VERSION) // ARM-MDK
 // Include _sys_* prototypes provided by ARM Compiler runtime library
-#include <rt_sys.h>
+    #include <rt_sys.h>
 
 // Prevent linkage of library functions that use semihosting calls
 __asm(".global __use_no_semihosting\n\t");
@@ -735,16 +734,16 @@ cy_rslt_t cy_retarget_io_init_fc(cyhal_gpio_t tx, cyhal_gpio_t rx, cyhal_gpio_t 
         .rx_buffer_size     = 0
     };
 
-#if (CYHAL_API_VERSION >= 2)
+    #if (CYHAL_API_VERSION >= 2)
     cy_rslt_t result = cyhal_uart_init(&cy_retarget_io_uart_obj, tx, rx, cts, rts, NULL,
                                        &uart_config);
-#else // HAL API before version 2
+    #else // HAL API before version 2
     cy_rslt_t result = cyhal_uart_init(&cy_retarget_io_uart_obj, tx, rx, NULL, &uart_config);
     if (result == CY_RSLT_SUCCESS)
     {
         result = cyhal_uart_set_flow_control(&cy_retarget_io_uart_obj, cts, rts);
     }
-#endif
+    #endif
 
     if (result == CY_RSLT_SUCCESS)
     {
@@ -800,14 +799,14 @@ cy_rslt_t cy_retarget_io_init(CySCB_Type* uart)
 //--------------------------------------------------------------------------------------------------
 bool cy_retarget_io_is_tx_active(void)
 {
-#if defined(COMPONENT_MTB_HAL)
+    #if defined(COMPONENT_MTB_HAL)
     CY_ASSERT(NULL != cy_retarget_io_uart_obj);
     return mtb_hal_uart_is_tx_active(cy_retarget_io_uart_obj);
-#elif defined (CY_USING_HAL)
+    #elif defined (CY_USING_HAL)
     return cyhal_uart_is_tx_active(&cy_retarget_io_uart_obj);
-#else
+    #else
     return !Cy_SCB_IsTxComplete(cy_retarget_io_uart);
-#endif
+    #endif
 }
 
 
@@ -826,23 +825,23 @@ void cy_retarget_io_deinit(void)
         {
             break;
         }
-#if defined(COMPONENT_MTB_HAL)
+        #if defined(COMPONENT_MTB_HAL)
         mtb_hal_system_delay_ms(1);
-#elif defined(CY_USING_HAL)
+        #elif defined(CY_USING_HAL)
         cyhal_system_delay_ms(1);
-#else
+        #else
         Cy_SysLib_Delay(1);
-#endif //defined(COMPONENT_MTB_HAL)
+        #endif //defined(COMPONENT_MTB_HAL)
         timeout_remaining_ms--;
     }
     CY_ASSERT(timeout_remaining_ms != 0);
-#if defined(COMPONENT_MTB_HAL)
+    #if defined(COMPONENT_MTB_HAL)
     cy_retarget_io_uart_obj = NULL;
-#elif defined(CY_USING_HAL)
+    #elif defined(CY_USING_HAL)
     cyhal_uart_free(&cy_retarget_io_uart_obj);
-#else
+    #else
     cy_retarget_io_uart = NULL;
-#endif //defined(COMPONENT_MTB_HAL)
+    #endif //defined(COMPONENT_MTB_HAL)
     cy_retarget_io_mutex_deinit();
 }
 

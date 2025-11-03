@@ -4,9 +4,9 @@
  * Description:
  * Connectivity BT configuration
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.50.0
- * device-db 4.5.30.8214
- * mtb-device-support-pse8xxgp 1.0.200.195
+ * Configurator Backend 3.60.0
+ * device-db 4.33.0.9315
+ * mtb-dsl-pse8xxgp 1.1.1.824
  *
  *******************************************************************************
  * Copyright 2025 Cypress Semiconductor Corporation (an Infineon company) or

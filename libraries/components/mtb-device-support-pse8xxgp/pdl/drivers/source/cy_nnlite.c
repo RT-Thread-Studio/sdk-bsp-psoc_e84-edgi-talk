@@ -29,7 +29,7 @@
 #include "cy_nnlite.h"
 
 #if defined(IFX_USE_MXNNLITE_STREAM_EMU)
-    #include "cy_nnlite_pdl_emu.h"
+#include "cy_nnlite_pdl_emu.h"
 #endif
 
 #if defined(__cplusplus)
@@ -39,17 +39,19 @@ extern "C" {
 
 #if CY_IP_MXNNLITE_VERSION==1
 #define   STATUS_REG_MASK (MXNNLITE_1_0_STATUS_BUSY_STATUS_Msk | \
-           MXNNLITE_1_0_STATUS_ACTIVATIONSTREAMERDONE_Msk)
+       MXNNLITE_1_0_STATUS_ACTIVATIONSTREAMERDONE_Msk)
 
 #define NNLITE_VAL2FLD(field, value) _VAL2FLD(MXNNLITE_1_0_##field, value)
-#define MXNNLITE_REGS      ((MXNNLITE_1_0_Type*) MXNNLITE_1_0_BASE)
+ #define MXNNLITE_REGS      ((MXNNLITE_1_0_Type*) MXNNLITE_1_0_BASE)
 #else
 #define   STATUS_REG_MASK (MXNNLITE_2_0_STATUS_BUSY_STATUS_Msk | \
-           MXNNLITE_2_0_STATUS_ACTIVATIONSTREAMERDONE_Msk)
+       MXNNLITE_2_0_STATUS_ACTIVATIONSTREAMERDONE_Msk)
 
 #define NNLITE_VAL2FLD(field, value) _VAL2FLD(MXNNLITE_2_0_##field, value)
 #define MXNNLITE_REGS        ((MXNNLITE_2_0_Type*) MXNNLITE_2_0_BASE)
 #endif
+#define NNLITE_MIN_FFT_STAGES          4u
+#define NNLITE_MAX_FFT_STAGES          10u
 
 /*****************************************************************************/
 /* Function implementation - global ('extern') and local ('static')       */
@@ -65,24 +67,18 @@ extern "C" {
 cy_en_nnlite_status_t
 Cy_NNLite_Init(NNLITE_Type *nnlite, cy_nnlite_context_t *context)
 {
+  if ((NULL == nnlite) || (NULL == context))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    cy_en_nnlite_status_t status;
+  if (context->nnliteState != CY_NNLITE_DEINIT)
+  {
+    return CY_NNLITE_BAD_STATE;
+  }
 
-    if ((NULL == nnlite) || (NULL == context))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else if (context->nnliteState != CY_NNLITE_DEINIT)
-    {
-        status = CY_NNLITE_BAD_STATE;
-    }
-    else
-    {
-        context->nnliteState = CY_NNLITE_INIT;
-        status = CY_NNLITE_SUCCESS;
-    }
-
-    return status;
+  context->nnliteState = CY_NNLITE_INIT;
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -98,23 +94,19 @@ Cy_NNLite_Init(NNLITE_Type *nnlite, cy_nnlite_context_t *context)
 cy_en_nnlite_status_t
 Cy_NNLite_DeInit(NNLITE_Type *nnlite, cy_nnlite_context_t *context)
 {
-    cy_en_nnlite_status_t status;
-    if ((NULL == nnlite) || (NULL == context))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else if ((context->nnliteState == CY_NNLITE_OP_STARTED) ||
-             (context->nnliteState == CY_NNLITE_DEINIT))
-    {
-        /* operation is going on, can not deinit*/
-        status = CY_NNLITE_BAD_STATE;
-    }
-    else
-    {
-        context->nnliteState = CY_NNLITE_DEINIT;
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  if ((NULL == nnlite) || (NULL == context))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+
+  if ((context->nnliteState == CY_NNLITE_OP_STARTED) ||
+      (context->nnliteState == CY_NNLITE_DEINIT))
+  {
+    return CY_NNLITE_BAD_STATE;
+  }
+
+  context->nnliteState = CY_NNLITE_DEINIT;
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -130,41 +122,38 @@ Cy_NNLite_DeInit(NNLITE_Type *nnlite, cy_nnlite_context_t *context)
 cy_en_nnlite_status_t
 Cy_NNLite_Start(NNLITE_Type *nnlite, cy_nnlite_context_t *context)
 {
-    cy_en_nnlite_status_t status;
+  if ((NULL == nnlite) || (NULL == context))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if ((NULL == nnlite) || (NULL == context))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else if ((context->nnliteState != CY_NNLITE_CONFIG_STATE &&
-              context->nnliteState != CY_NNLITE_OP_DONE)
+  bool is_valid_state = (context->nnliteState == CY_NNLITE_CONFIG_STATE ||
+                         context->nnliteState == CY_NNLITE_OP_DONE);
 #if !defined(IFX_USE_MXNNLITE_STREAM_EMU)
-             && (nnlite == MXNNLITE_REGS)
+  bool is_memio_instance = (nnlite == MXNNLITE_REGS);
+  if (!is_valid_state && is_memio_instance)
+#else
+  if (!is_valid_state)
 #endif
-            )
-    {
-        status = CY_NNLITE_BAD_STATE;
-    }
-    else
-    {
-        context->opStatus = CY_NNLITE_SUCCESS;
-#if !defined(IFX_USE_MXNNLITE_STREAM_EMU)
-        if (nnlite == MXNNLITE_REGS)
-        {
-            context->nnliteState = CY_NNLITE_OP_STARTED;
-        }
-#endif
-        nnlite->CMD |= NNLITE_VAL2FLD(CMD_START_CMD, 1);
+  {
+    return CY_NNLITE_BAD_STATE;
+  }
 
+  context->opStatus = CY_NNLITE_SUCCESS;
+#if !defined(IFX_USE_MXNNLITE_STREAM_EMU)
+  if (nnlite == MXNNLITE_REGS)
+  {
+    context->nnliteState = CY_NNLITE_OP_STARTED;
+  }
+#endif
+  nnlite->CMD = NNLITE_VAL2FLD(CMD_START_CMD, 1);
 
 #if defined(IFX_USE_MXNNLITE_STREAM_EMU)
-        // Emulate execution on NNlite immediately,
-        // includes triggering of ISR
-        NNLite_Emu_Run(nnlite);
+  // Emulate execution on NNlite immediately,
+  // includes triggering of ISR
+  NNLite_Emu_Run(nnlite);
 #endif
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -180,19 +169,14 @@ Cy_NNLite_Start(NNLITE_Type *nnlite, cy_nnlite_context_t *context)
 cy_en_nnlite_status_t
 Cy_NNLite_Stop(NNLITE_Type *nnlite, cy_nnlite_context_t *context)
 {
-    cy_en_nnlite_status_t status;
-    if ((NULL == nnlite) || (NULL == context))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        nnlite->CMD |= NNLITE_VAL2FLD(CMD_ABORT_CMD, 1);
-        context->nnliteState = CY_NNLITE_INIT;
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  if ((NULL == nnlite) || (NULL == context))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
+  nnlite->CMD |= NNLITE_VAL2FLD(CMD_ABORT_CMD, 1);
+  context->nnliteState = CY_NNLITE_INIT;
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -206,17 +190,13 @@ Cy_NNLite_Stop(NNLITE_Type *nnlite, cy_nnlite_context_t *context)
 cy_en_nnlite_status_t
 Cy_NNLite_GetOperationStatus(NNLITE_Type *nnlite, uint32_t *opStatus)
 {
-    cy_en_nnlite_status_t status = CY_NNLITE_SUCCESS;
-    if ((NULL == nnlite) || (NULL == opStatus))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        *opStatus = (nnlite->STATUS & STATUS_REG_MASK);
-    }
+  if ((NULL == nnlite) || (NULL == opStatus))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    return status;
+  *opStatus = (nnlite->STATUS & STATUS_REG_MASK);
+  return CY_NNLITE_SUCCESS;
 }
 
 #if CY_IP_MXNNLITE_VERSION==1
@@ -236,32 +216,26 @@ Cy_NNLite_GetOperationStatus(NNLITE_Type *nnlite, uint32_t *opStatus)
  *****************************************************************************/
 cy_en_nnlite_status_t
 Cy_NNLite_ActivationTypeCtrl(NNLITE_Type *nnlite,
-
                              cy_en_nnlite_layer_t nnLayer,
                              bool actEn,
-                             cy_en_nnlite_activation_size_t actDataSize
-                            )
+                             cy_en_nnlite_activation_size_t actDataSize)
 {
-    cy_en_nnlite_status_t status;
-    if ((NULL == nnlite))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else if (nnLayer > CY_NNLITE_LAST_LAYER_CODE)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        nnlite->NNLAYER_ACTIVATION_TYPE_CTL =
-            NNLITE_VAL2FLD(NNLAYER_ACTIVATION_TYPE_CTL_NNLAYER_TYPE_CTL, nnLayer) |
-            NNLITE_VAL2FLD(NNLAYER_ACTIVATION_TYPE_CTL_ACTIVATION_FUNC_EN, actEn) |
-            NNLITE_VAL2FLD(NNLAYER_ACTIVATION_TYPE_CTL_ACTIVATION_SIZE_CTL, actDataSize);
-        status = CY_NNLITE_SUCCESS;
-    }
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    return status;
+  if (nnLayer > CY_NNLITE_LAST_LAYER_CODE)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
+  nnlite->NNLAYER_ACTIVATION_TYPE_CTL =
+    NNLITE_VAL2FLD(NNLAYER_ACTIVATION_TYPE_CTL_NNLAYER_TYPE_CTL, nnLayer) |
+    NNLITE_VAL2FLD(NNLAYER_ACTIVATION_TYPE_CTL_ACTIVATION_FUNC_EN, actEn) |
+    NNLITE_VAL2FLD(NNLAYER_ACTIVATION_TYPE_CTL_ACTIVATION_SIZE_CTL, actDataSize);
+
+  return CY_NNLITE_SUCCESS;
 }
 #endif
 
@@ -278,50 +252,48 @@ Cy_NNLite_ActivationTypeCtrl(NNLITE_Type *nnlite,
  *****************************************************************************/
 cy_en_nnlite_status_t
 Cy_NNLite_StreamerBaseAddrSet(NNLITE_Type *nnlite,
-                              cy_en_nnlite_streamer_id_t strmId, const void *baseAddr)
+                              cy_en_nnlite_streamer_id_t strmId,
+                              const void *baseAddr)
 {
-    cy_en_nnlite_status_t status = CY_NNLITE_SUCCESS;
-    if ((NULL == nnlite) || (NULL == baseAddr))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        switch (strmId)
-        {
-        // Agents connected via RW bus-master connected to "EXP" (aka Ahb) bus on Explorer.
-        case CY_NNLITE_ACTIVATION_STREAMER:
-            nnlite->ACTIVATIONSTREAMERBASEADDR = (uintptr_t)cy_AhbRemapAddr(baseAddr);
-            break;
-        case CY_NNLITE_OUT_STREAMER:
-            nnlite->OUTSTREAMERBASEADDR = (uintptr_t)cy_AhbRemapAddr(baseAddr);
-            break;
+  if ((NULL == nnlite) || (NULL == baseAddr))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-        // Agents connected via (RO bus-master) connected to "CODE" bus on Explorer.
-        case CY_NNLITE_WEIGHT_STREAMER:
-            nnlite->WEIGHTSTREAMERBASEADDR = (uintptr_t)cy_CbusRemapAddr(baseAddr);
-            break;
-        case CY_NNLITE_BIAS_STREAMER:
-            nnlite->BIASBASEADDR = (uintptr_t)cy_CbusRemapAddr(baseAddr);
-            break;
+  cy_en_nnlite_status_t status = CY_NNLITE_SUCCESS;
+  switch(strmId)
+  {
+     // Agents connected via RW bus-master connected to "EXP" (aka Ahb) bus.
+    case CY_NNLITE_ACTIVATION_STREAMER:
+      nnlite->ACTIVATIONSTREAMERBASEADDR = (uintptr_t)cy_AhbRemapAddr(baseAddr);
+      break;
+    case CY_NNLITE_OUT_STREAMER:
+      nnlite->OUTSTREAMERBASEADDR = (uintptr_t)cy_AhbRemapAddr(baseAddr);
+      break;
+    // Agents connected via (RO bus-master) connected to "CODE" bus.
+    case CY_NNLITE_WEIGHT_STREAMER:
+      nnlite->WEIGHTSTREAMERBASEADDR = (uintptr_t)cy_CbusRemapAddr(baseAddr);
+      break;
+    case CY_NNLITE_BIAS_STREAMER:
+      nnlite->BIASBASEADDR = (uintptr_t)cy_CbusRemapAddr(baseAddr);
+      break;
 #if CY_IP_MXNNLITE_VERSION==2
-        case CY_NNLITE_SCALE_STREAMER:
-            nnlite->SCALINGFACTORBASEADDR = (uintptr_t)cy_CbusRemapAddr(baseAddr);
-            break;
-        case CY_NNLITE_WEIGHT_COUNT_STREAMER:
-            nnlite->NONZEROWEIGHTSPOINTER = (uintptr_t)cy_CbusRemapAddr(baseAddr);
-            break;
-        case CY_NNLITE_SPARSITY_MAP_STREAMER:
-            nnlite->ACTIVATIONSTREAMERSPARSITYMAPBASEADDR = (uintptr_t)cy_CbusRemapAddr(baseAddr);
-            break;
+    case CY_NNLITE_SCALE_STREAMER:
+      nnlite->SCALINGFACTORBASEADDR = (uintptr_t)cy_CbusRemapAddr(baseAddr);
+      break;
+    case CY_NNLITE_WEIGHT_COUNT_STREAMER:
+      nnlite->NONZEROWEIGHTSPOINTER = (uintptr_t)cy_CbusRemapAddr(baseAddr);
+      break;
+    case CY_NNLITE_SPARSITY_MAP_STREAMER:
+      nnlite->ACTIVATIONSTREAMERSPARSITYMAPBASEADDR = (uintptr_t)cy_CbusRemapAddr(baseAddr);
+      break;
 #endif
-        default:
-            status = CY_NNLITE_BAD_PARAM;
-            break;
-        }
-    }
+    default:
+      status = CY_NNLITE_BAD_PARAM;
+      break;
+  }
 
-    return status;
+  return status;
 }
 
 #if CY_IP_MXNNLITE_VERSION==1
@@ -341,30 +313,23 @@ Cy_NNLite_StreamerBaseAddrSet(NNLITE_Type *nnlite,
  *****************************************************************************/
 cy_en_nnlite_status_t
 Cy_NNLite_ParseSparsity(NNLITE_Type *nnlite, const void *sparsitybaseAddr,
-                        uint32_t activationRepeats, uint32_t sparseBitMapLen, cy_nnlite_sparsity_cfg_t *sparCfg)
+                        uint32_t activationRepeats, uint32_t sparseBitMapLen,
+                        cy_nnlite_sparsity_cfg_t *sparCfg)
 {
-    cy_en_nnlite_status_t status;
-    uint32_t nonZeroWtLen;
+  if ((NULL == nnlite) || (NULL == sparCfg) || (NULL == sparsitybaseAddr))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+  /* nonzero wt pointer each of length 2 bytes */
+  uint32_t nonZeroWtLen = activationRepeats * 2UL;
+  sparCfg->nonZeroWtAddr = (uintptr_t)sparsitybaseAddr;
+  sparCfg->sparsityBitMapAddr = (uintptr_t)sparsitybaseAddr + nonZeroWtLen;
+  /* wt pointer == sparsebase + non zero wt pointer len +
+   * len of sparse bit map
+   * */
+  sparCfg->wtAddr = (uintptr_t)sparsitybaseAddr + nonZeroWtLen + sparseBitMapLen;
 
-    if ((NULL == nnlite) || (NULL == sparCfg) || (NULL == sparsitybaseAddr))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        /* nonzero wt pointer each of length 2 bytes */
-        nonZeroWtLen =  activationRepeats * 2UL;
-        sparCfg->nonZeroWtAddr = (uintptr_t)sparsitybaseAddr;
-        sparCfg->sparsityBitMapAddr = (uintptr_t)sparsitybaseAddr + nonZeroWtLen;
-
-        /* wt pointer == sparsebase + non zero wt pointer len +
-         * len of sparse bit map
-         * */
-        sparCfg->wtAddr = (uintptr_t)sparsitybaseAddr + nonZeroWtLen + sparseBitMapLen;
-        status = CY_NNLITE_SUCCESS;
-    }
-
-    return status;
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -380,19 +345,15 @@ Cy_NNLite_ParseSparsity(NNLITE_Type *nnlite, const void *sparsitybaseAddr,
 cy_en_nnlite_status_t
 Cy_NNLite_SparsityCfg(NNLITE_Type *nnlite, cy_nnlite_sparsity_cfg_t *sparCfg)
 {
-    cy_en_nnlite_status_t status;
+  if ((NULL == nnlite) || (NULL == sparCfg))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if ((NULL == nnlite) || (NULL == sparCfg))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        nnlite->NONZEROWEIGHTSPOINTER = cy_CbusRemapAddr((uint32_t *)sparCfg->nonZeroWtAddr);
-        nnlite->ACTIVATIONSTREAMERSPARSITYMAPBASEADDR = cy_CbusRemapAddr((uint32_t *)sparCfg->sparsityBitMapAddr);
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  nnlite->NONZEROWEIGHTSPOINTER = cy_CbusRemapAddr((uint32_t *)sparCfg->nonZeroWtAddr);
+  nnlite->ACTIVATIONSTREAMERSPARSITYMAPBASEADDR = cy_CbusRemapAddr((uint32_t *)sparCfg->sparsityBitMapAddr);
+
+  return CY_NNLITE_SUCCESS;
 }
 
 
@@ -407,26 +368,21 @@ Cy_NNLite_SparsityCfg(NNLITE_Type *nnlite, cy_nnlite_sparsity_cfg_t *sparCfg)
 cy_en_nnlite_status_t
 Cy_NNLite_SparsityEnable(NNLITE_Type *nnlite, bool sparsityEn)
 {
-    cy_en_nnlite_status_t status;
-    if (NULL == nnlite)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        if (sparsityEn)
-        {
-            nnlite->STREAMERMODES |=
-                NNLITE_VAL2FLD(STREAMERMODES_ACTIVATIONSTREAMERSPARSEEN, 1);
-        }
-        else
-        {
-            nnlite->STREAMERMODES &=
-                ~(NNLITE_VAL2FLD(STREAMERMODES_ACTIVATIONSTREAMERSPARSEEN, 1));
-        }
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+
+  if (sparsityEn)
+  {
+    nnlite->STREAMERMODES |= NNLITE_VAL2FLD(STREAMERMODES_ACTIVATIONSTREAMERSPARSEEN, 1);
+  }
+  else
+  {
+    nnlite->STREAMERMODES &= ~(NNLITE_VAL2FLD(STREAMERMODES_ACTIVATIONSTREAMERSPARSEEN, 1));
+  }
+
+  return CY_NNLITE_SUCCESS;
 }
 #endif
 
@@ -515,55 +471,47 @@ Cy_NNLite_ActivationStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *contex
                                 uint8_t strideCol, uint8_t strideRow,
                                 int32_t inputOffset)
 {
-    cy_en_nnlite_status_t status;
-    uint32_t startColChannelTimesPadWidth;
-    uint32_t startRowPadHeight;
-    uint32_t padWidthTimesChannel;
+  if ((NULL == nnlite) || (NULL == context))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if ((NULL == nnlite) || (NULL == context))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else if ((context->nnliteState == CY_NNLITE_INIT) ||
-             (context->nnliteState ==  CY_NNLITE_OP_DONE))
-    {
+  if ((context->nnliteState != CY_NNLITE_INIT) &&
+      (context->nnliteState != CY_NNLITE_OP_DONE))
+  {
+    return CY_NNLITE_BAD_STATE;
+  }
+
 #if CY_IP_MXNNLITE_VERSION!=1
-        static const int32_t startCol = 0;
-        static const int32_t startRow = 0;
+  static const int32_t startCol = 0;
+  static const int32_t startRow = 0;
 #endif
-        padWidthTimesChannel = padWidth * inputChannel;
-        startColChannelTimesPadWidth = startCol - padWidthTimesChannel;
-        startRowPadHeight = startRow - padHeight;
 
-        nnlite->ACTIVATIONSTREAMEROFFSET = (uint32_t)inputOffset;
-        /* weights dims*/
-        nnlite->ACTIVATIONSTREAMERKERNELCHANNELTIMESWIDTH = (filterWidth * inputChannel);
-        nnlite->ACTIVATIONSTREAMERKERNELHEIGHT = filterHeight;
+  uint32_t padWidthTimesChannel = padWidth * inputChannel;
+  uint32_t startColChannelTimesPadWidth = startCol - padWidthTimesChannel;
+  uint32_t startRowPadHeight = startRow - padHeight;
 
-        /* is equal to number of filters for conv or equal to filer 2nd dimension for fc layer */
-        nnlite->ACTIVATIONSTREAMERREPEATS = activationRepeats;
-
-        /* input dims */
-        nnlite->ACTIVATIONSTREAMERCHANNELTIMESWIDTH = (inputWidth * inputChannel);
-        nnlite->ACTIVATIONSTREAMERHEIGHT = inputHeight;
-        nnlite->ACTIVATIONSTREAMERSTARTCOL =  startColChannelTimesPadWidth;
-        nnlite->ACTIVATIONSTREAMERSTARTROW = startRowPadHeight;
-        nnlite->ACTIVATIONSTREAMERPADDING =
-            NNLITE_VAL2FLD(ACTIVATIONSTREAMERPADDING_ACTIVATIONSTREAMERPADVALUE, padVal);
-
-        nnlite->STRIDE =
-            NNLITE_VAL2FLD(STRIDE_STRIDECHANNELTIMESCOLUMN, strideCol * inputChannel) |
-            NNLITE_VAL2FLD(STRIDE_STRIDEROW, strideRow);
+  nnlite->ACTIVATIONSTREAMEROFFSET = (uint32_t)inputOffset;
+  /* weights dims*/
+  nnlite->ACTIVATIONSTREAMERKERNELCHANNELTIMESWIDTH = (filterWidth * inputChannel);
+  nnlite->ACTIVATIONSTREAMERKERNELHEIGHT = filterHeight;
+  /* is equal to number of filters for conv or equal to filer 2nd dimension for fc layer */
+  nnlite->ACTIVATIONSTREAMERREPEATS = activationRepeats;
+  /* input dims */
+  nnlite->ACTIVATIONSTREAMERCHANNELTIMESWIDTH = (inputWidth * inputChannel);
+  nnlite->ACTIVATIONSTREAMERHEIGHT = inputHeight;
+  nnlite->ACTIVATIONSTREAMERSTARTCOL = startColChannelTimesPadWidth;
+  nnlite->ACTIVATIONSTREAMERSTARTROW = startRowPadHeight;
+  nnlite->ACTIVATIONSTREAMERPADDING =
+    NNLITE_VAL2FLD(ACTIVATIONSTREAMERPADDING_ACTIVATIONSTREAMERPADVALUE, padVal);
+  nnlite->STRIDE =
+    NNLITE_VAL2FLD(STRIDE_STRIDECHANNELTIMESCOLUMN, strideCol * inputChannel) |
+    NNLITE_VAL2FLD(STRIDE_STRIDEROW, strideRow);
 #if CY_IP_MXNNLITE_VERSION!=1
-        nnlite->ACTIVATIONSTREAMERCHANNEL = inputChannel;
+  nnlite->ACTIVATIONSTREAMERCHANNEL = inputChannel;
 #endif
-        status = CY_NNLITE_SUCCESS;
-    }
-    else
-    {
-        status = CY_NNLITE_BAD_STATE;
-    }
-    return status;
+
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -583,18 +531,15 @@ cy_en_nnlite_status_t
 Cy_NNLite_WeightStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *context,
                             uint32_t weightPerNeuron, int32_t filterOffset)
 {
-    cy_en_nnlite_status_t status;
-    if ((NULL == nnlite) || (NULL == context))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        nnlite->WEIGHTSTREAMERKERNELCHANNELTIMESHEIGHTTIMESWIDTH = weightPerNeuron;
-        nnlite->WEIGHTSTREAMEROFFSET = (uint32_t)filterOffset;
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  if ((NULL == nnlite) || (NULL == context))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+
+  nnlite->WEIGHTSTREAMERKERNELCHANNELTIMESHEIGHTTIMESWIDTH = weightPerNeuron;
+  nnlite->WEIGHTSTREAMEROFFSET = (uint32_t)filterOffset;
+
+  return CY_NNLITE_SUCCESS;
 }
 #if CY_IP_MXNNLITE_VERSION==1
 /**
@@ -640,71 +585,63 @@ Cy_NNLite_OutputStreamerCfg(NNLITE_Type *nnlite, cy_nnlite_context_t *context,
 #else
                             uint32_t outputChannels
 #endif
-                           )
+                            )
 {
-    cy_en_nnlite_status_t status;
-    if ((NULL == nnlite) || (NULL == context))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
+  if ((NULL == nnlite) || (NULL == context))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+
 #if CY_IP_MXNNLITE_VERSION==1
-        void *scalingFactorPtr = (void *)&outputScalingFactor;
-        nnlite->OUTSTREAMERCLIPPINGMASK = clipping;
-        // Raw bits of the IEEE 32-bit f.p. value
-        nnlite->OUTSTREAMERSCALINGFACTOR = *(uint32_t *)scalingFactorPtr;
+  // Improved float handling using union instead of pointer casting
+  union {
+    float f_val;
+    uint32_t u32_val;
+  } scaling_factor_union;
+  scaling_factor_union.f_val = outputScalingFactor;
+
+  nnlite->OUTSTREAMERCLIPPINGMASK = clipping;
+  nnlite->OUTSTREAMERSCALINGFACTOR = scaling_factor_union.u32_val;
 #else
-        nnlite->OUTSTREAMERCLIPPING =
-            NNLITE_VAL2FLD(OUTSTREAMERCLIPPING_OUTSTREAMERCLIPPINGVALUEMIN, clipping.min) |
-            NNLITE_VAL2FLD(OUTSTREAMERCLIPPING_OUTSTREAMERCLIPPINGVALUEMAX, clipping.max);
-        nnlite->OUTPUTCHANNELS = outputChannels;
+  nnlite->OUTSTREAMERCLIPPING =
+    NNLITE_VAL2FLD(OUTSTREAMERCLIPPING_OUTSTREAMERCLIPPINGVALUEMIN, clipping.min) |
+    NNLITE_VAL2FLD(OUTSTREAMERCLIPPING_OUTSTREAMERCLIPPINGVALUEMAX, clipping.max);
+  nnlite->OUTPUTCHANNELS = outputChannels;
 #endif
-        nnlite->OUTPUTWIDTH = outputWidth;
-        nnlite->OUTPUTHEIGHT = outputHeight;
-        nnlite->OUTSTREAMEROUTPUTOFFSET = (uint32_t)outputOffset;
+  nnlite->OUTPUTWIDTH = outputWidth;
+  nnlite->OUTPUTHEIGHT = outputHeight;
+  nnlite->OUTSTREAMEROUTPUTOFFSET = (uint32_t)outputOffset;
+
 #if !defined(IFX_USE_MXNNLITE_STREAM_EMU)
-        if (nnlite == MXNNLITE_REGS)
-        {
-            context->nnliteState = CY_NNLITE_CONFIG_STATE;
-        }
+  if (nnlite == MXNNLITE_REGS)
+  {
+    context->nnliteState = CY_NNLITE_CONFIG_STATE;
+  }
 #endif
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+
+  return CY_NNLITE_SUCCESS;
 }
 
 #if CY_IP_MXNNLITE_VERSION==1
-/**
- *****************************************************************************
- **   nnlite bias streamer enable
- **
- **   [in]  nnlite   base pointer of register map.
- **
- **   [in]  biasEn   bias streamer enable
- *****************************************************************************/
+// Fix Cy_NNLite_BiasStreamerEnable function - convert to early return
 cy_en_nnlite_status_t
 Cy_NNLite_BiasStreamerEnable(NNLITE_Type *nnlite, bool biasEn)
 {
-    cy_en_nnlite_status_t status;
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if (NULL == nnlite)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        status = CY_NNLITE_SUCCESS;
-        if (biasEn)
-        {
-            nnlite->STREAMERMODES |= NNLITE_VAL2FLD(STREAMERMODES_BIASEN, 1);
-        }
-        else
-        {
-            nnlite->STREAMERMODES &= ~(NNLITE_VAL2FLD(STREAMERMODES_BIASEN, 1));
-        }
-    }
-    return status;
+  if (biasEn)
+  {
+    nnlite->STREAMERMODES |= NNLITE_VAL2FLD(STREAMERMODES_BIASEN, 1);
+  }
+  else
+  {
+    nnlite->STREAMERMODES &= ~(NNLITE_VAL2FLD(STREAMERMODES_BIASEN, 1));
+  }
+
+  return CY_NNLITE_SUCCESS;
 }
 
 
@@ -721,24 +658,13 @@ Cy_NNLite_BiasStreamerEnable(NNLITE_Type *nnlite, bool biasEn)
 cy_en_nnlite_status_t
 Cy_NNLite_SetInterpolationLUTAddr(NNLITE_Type *nnlite, bool lut)
 {
-    cy_en_nnlite_status_t status;
-    if (NULL == nnlite)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        if (lut)
-        {
-            nnlite->INTERPOLATIONLUTADDR = 1U;
-        }
-        else
-        {
-            nnlite->INTERPOLATIONLUTADDR = 0U;
-        }
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+
+  nnlite->INTERPOLATIONLUTADDR = lut ? 1U : 0U;
+  return CY_NNLITE_SUCCESS;
 }
 
 
@@ -756,26 +682,22 @@ cy_en_nnlite_status_t
 Cy_NNLite_SetInterpolationParam(NNLITE_Type *nnlite,
                                 uint16_t slope, uint16_t intercept)
 {
-    cy_en_nnlite_status_t status;
-    if (NULL == nnlite)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-#if defined(IFX_USE_MXNNLITE_STREAM_EMU)
-        nnlite->INTERPOLATIONLUTWDATA[nnlite->INTERPOLATIONLUTADDR] =
-            NNLITE_VAL2FLD(INTERPOLATIONLUTWDATA_INTERPOLATIONSLOPE, slope) |
-            NNLITE_VAL2FLD(INTERPOLATIONLUTWDATA_INTERPOLATIONYINTERCEPT, intercept);
-#else
-        nnlite->INTERPOLATIONLUTWDATA =
-            NNLITE_VAL2FLD(INTERPOLATIONLUTWDATA_INTERPOLATIONSLOPE, slope) |
-            NNLITE_VAL2FLD(INTERPOLATIONLUTWDATA_INTERPOLATIONYINTERCEPT, intercept);
-#endif
-        status = CY_NNLITE_SUCCESS;
-    }
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    return status;
+#if defined(IFX_USE_MXNNLITE_STREAM_EMU)
+  nnlite->INTERPOLATIONLUTWDATA[nnlite->INTERPOLATIONLUTADDR] =
+    NNLITE_VAL2FLD(INTERPOLATIONLUTWDATA_INTERPOLATIONSLOPE, slope) |
+    NNLITE_VAL2FLD(INTERPOLATIONLUTWDATA_INTERPOLATIONYINTERCEPT, intercept);
+#else
+  nnlite->INTERPOLATIONLUTWDATA =
+    NNLITE_VAL2FLD(INTERPOLATIONLUTWDATA_INTERPOLATIONSLOPE, slope) |
+    NNLITE_VAL2FLD(INTERPOLATIONLUTWDATA_INTERPOLATIONYINTERCEPT, intercept);
+#endif
+
+  return CY_NNLITE_SUCCESS;
 }
 
 #else
@@ -786,15 +708,10 @@ Cy_NNLite_SetInterpolationParam(NNLITE_Type *nnlite,
  * @param x
  * @return raw bits representation of input.
  */
-static inline uint32_t Cy_NNLite_Float_Rawbits(float x)
-{
-    union float_bits
-    {
-        float fval;
-        uint32_t rawbits;
-    }   mush;
+static inline uint32_t Cy_NNLite_Float_Rawbits(float x) {
+  union float_bits { float fval;  uint32_t rawbits; }   mush;
     mush.fval = x;
-    return mush.rawbits;
+  return mush.rawbits;
 }
 
 /**
@@ -818,18 +735,15 @@ static inline uint32_t Cy_NNLite_Float_Rawbits(float x)
 cy_en_nnlite_status_t
 Cy_NNLite_SetPrePostScaling(NNLITE_Type *nnlite, float preScalingFactor, const float *postScalingFactors)
 {
-    cy_en_nnlite_status_t status;
-    if (NULL == nnlite)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        nnlite->SCALINGFACTORBASEADDR = (uintptr_t)cy_CbusRemapAddr((void *)postScalingFactors);
-        nnlite->INPUTRESCALINGFACTOR = Cy_NNLite_Float_Rawbits(preScalingFactor);
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+
+  nnlite->SCALINGFACTORBASEADDR = (uintptr_t)cy_CbusRemapAddr((void *)postScalingFactors);
+  nnlite->INPUTRESCALINGFACTOR = Cy_NNLite_Float_Rawbits(preScalingFactor);
+
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -852,20 +766,16 @@ Cy_NNLite_SetInterpolationParam(NNLITE_Type *nnlite,
                                 uint32_t segment,
                                 float gradient)
 {
-    cy_en_nnlite_status_t status;
-    if (NULL == nnlite || segment > 1)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        uint32_t *lut_regs_base = (uint32_t*)&nnlite->INTERPOLATIONLUTDATA0;
-        uint32_t slope_bits = Cy_NNLite_Float_Rawbits(gradient);
-        lut_regs_base[segment] = slope_bits;
-        status = CY_NNLITE_SUCCESS;
-    }
+  if ((NULL == nnlite) || (segment > 1))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    return status;
+  uint32_t *lut_regs_base = (uint32_t*)&nnlite->INTERPOLATIONLUTDATA0;
+  uint32_t slope_bits = Cy_NNLite_Float_Rawbits(gradient);
+  lut_regs_base[segment] = slope_bits;
+
+  return CY_NNLITE_SUCCESS;
 
 }
 
@@ -893,57 +803,59 @@ Cy_NNLite_FFTCfg(NNLITE_Type *nnlite,
                  void *ppBuf0, void *ppBuf1,
                  unsigned int fftStages)
 {
-    cy_en_nnlite_status_t status;
+  if ((NULL == ppBuf0) || (NULL == ppBuf1))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if ((NULL == ppBuf0) || (NULL == ppBuf1))
-    {
-        return CY_NNLITE_BAD_PARAM;
-    }
-    if (fftStages < 4u || fftStages > 10u)
-    {
-        return CY_NNLITE_BAD_PARAM;
-    }
-    status = Cy_NNLite_StreamerBaseAddrSet(nnlite, CY_NNLITE_ACTIVATION_STREAMER, ppBuf0);
-    if (status != CY_NNLITE_SUCCESS)
-    {
-        return status;
-    }
-    status = Cy_NNLite_StreamerBaseAddrSet(nnlite, CY_NNLITE_WEIGHT_STREAMER, ppBuf0);
-    if (status != CY_NNLITE_SUCCESS)
-    {
-        return status;
-    }
-    status = Cy_NNLite_StreamerBaseAddrSet(nnlite, CY_NNLITE_OUT_STREAMER, ppBuf1);
-    if (status != CY_NNLITE_SUCCESS)
-    {
-        return status;
-    }
-    status = Cy_NNLite_StreamerBaseAddrSet(nnlite, CY_NNLITE_BIAS_STREAMER, ppBuf1);
-    if (status != CY_NNLITE_SUCCESS)
-    {
-        return status;
-    }
+  if ((fftStages < NNLITE_MIN_FFT_STAGES) || (fftStages > NNLITE_MAX_FFT_STAGES))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    // 2* length FFT = 2 * 2^(# FFT stages)
-    nnlite->WEIGHTSTREAMERKERNELCHANNELTIMESHEIGHTTIMESWIDTH =
-        1 << (1 + fftStages);
-    nnlite->OUTPUTWIDTH = fftStages;
-    nnlite->NNLAYER_CTL =
-        _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_INPUT_SIZE_CTL, CY_NNLITE_ACTIVATION_16BIT) |
-        _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_WEIGHT_SIZE_CTL, CY_NNLITE_ACTIVATION_16BIT) |
-        _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_OUTPUT_SIZE_CTL, CY_NNLITE_OUTPUT_32BIT) |
-        _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_FETCH_MODE, CY_NNLITE_ACT_WGT) |
-        _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_WPREFETCH_LEN, CY_NNLITE_PREFETCH_WORD_4x128) |
-        _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_FFT_EN, 1);
-#if !defined(IFX_USE_MXNNLITE_STREAM_EMU)
-    if (nnlite == MXNNLITE_REGS)
-    {
-        context->nnliteState = CY_NNLITE_CONFIG_STATE;
-    }
-#endif
+  cy_en_nnlite_status_t status = Cy_NNLite_StreamerBaseAddrSet(nnlite, CY_NNLITE_ACTIVATION_STREAMER, ppBuf0);
+  if (status != CY_NNLITE_SUCCESS)
+  {
     return status;
-}
+  }
 
+  status = Cy_NNLite_StreamerBaseAddrSet(nnlite, CY_NNLITE_WEIGHT_STREAMER, ppBuf0);
+  if (status != CY_NNLITE_SUCCESS)
+  {
+    return status;
+  }
+
+  status = Cy_NNLite_StreamerBaseAddrSet(nnlite, CY_NNLITE_OUT_STREAMER, ppBuf1);
+  if (status != CY_NNLITE_SUCCESS)
+  {
+    return status;
+  }
+
+  status = Cy_NNLite_StreamerBaseAddrSet(nnlite, CY_NNLITE_BIAS_STREAMER, ppBuf1);
+  if (status != CY_NNLITE_SUCCESS)
+  {
+    return status;
+  }
+
+  nnlite->WEIGHTSTREAMERKERNELCHANNELTIMESHEIGHTTIMESWIDTH = 1<<(1+fftStages);
+  nnlite->OUTPUTWIDTH = fftStages;
+  nnlite->NNLAYER_CTL =
+    _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_INPUT_SIZE_CTL, CY_NNLITE_ACTIVATION_16BIT) |
+    _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_WEIGHT_SIZE_CTL, CY_NNLITE_ACTIVATION_16BIT) |
+    _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_OUTPUT_SIZE_CTL, CY_NNLITE_OUTPUT_32BIT) |
+    _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_FETCH_MODE, CY_NNLITE_ACT_WGT) |
+    _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_WPREFETCH_LEN, CY_NNLITE_PREFETCH_WORD_4x128) |
+    _VAL2FLD(MXNNLITE_2_0_NNLAYER_CTL_FFT_EN, 1);
+
+#if !defined(IFX_USE_MXNNLITE_STREAM_EMU)
+  if (nnlite == MXNNLITE_REGS)
+  {
+    context->nnliteState = CY_NNLITE_CONFIG_STATE;
+  }
+#endif
+
+  return CY_NNLITE_SUCCESS;
+}
 #endif
 
 /**
@@ -957,20 +869,13 @@ Cy_NNLite_FFTCfg(NNLITE_Type *nnlite,
 cy_en_nnlite_status_t
 Cy_NNLite_GetInterruptStatus(NNLITE_Type *nnlite, uint32_t *intrStatus)
 {
-    cy_en_nnlite_status_t status;
+  if ((NULL == nnlite) || (NULL == intrStatus))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if ((NULL == nnlite) || (NULL == intrStatus))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        *intrStatus   = nnlite->INTR;
-        status = CY_NNLITE_SUCCESS;
-    }
-
-    return status;
-
+  *intrStatus = nnlite->INTR;
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -984,44 +889,36 @@ Cy_NNLite_GetInterruptStatus(NNLITE_Type *nnlite, uint32_t *intrStatus)
 cy_en_nnlite_status_t
 Cy_NNLite_GetInterruptMask(NNLITE_Type *nnlite, uint32_t *intrMask)
 {
-    cy_en_nnlite_status_t status;
+  if ((NULL == nnlite) || (NULL == intrMask))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if ((NULL == nnlite) || (NULL == intrMask))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        *intrMask = nnlite->INTR_MASK;
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
-
+  *intrMask = nnlite->INTR_MASK;
+  return CY_NNLITE_SUCCESS;
 }
 
 /*****************************************************************************
-**   nnlite get driver state
-**
-**   [in]  nnlite base pointer of register map.
-**
-**   [in]  context    pointer to the driver context structure
-**
-**   [out]  nnliteState nnlite driver state
-*****************************************************************************/
-cy_en_nnlite_status_t Cy_NNLite_GetDriverState(NNLITE_Type *nnlite,
-        cy_nnlite_context_t *context,
-        cy_en_nnlite_state_t *nnliteState)
+ **   nnlite get driver state
+ **
+ **   [in]  nnlite base pointer of register map.
+ **
+ **   [in]  context    pointer to the driver context structure
+ **
+ **   [out]  nnliteState nnlite driver state
+ *****************************************************************************/
+cy_en_nnlite_status_t
+Cy_NNLite_GetDriverState(NNLITE_Type *nnlite,
+                         cy_nnlite_context_t *context,
+                         cy_en_nnlite_state_t *nnliteState)
 {
-    cy_en_nnlite_status_t status = CY_NNLITE_SUCCESS;
-    if ((NULL == nnlite) || (NULL == nnliteState))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        *nnliteState = context->nnliteState;
-    }
-    return status;
+  if ((NULL == nnlite) || (NULL == nnliteState))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+
+  *nnliteState = context->nnliteState;
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -1036,18 +933,13 @@ cy_en_nnlite_status_t Cy_NNLite_GetDriverState(NNLITE_Type *nnlite,
 cy_en_nnlite_status_t
 Cy_NNLite_DatawireTriggerEnable(NNLITE_Type *nnlite, bool trigEn)
 {
-    cy_en_nnlite_status_t status;
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if (NULL == nnlite)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        nnlite->TRIG_MASK = (uint32_t)trigEn;
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  nnlite->TRIG_MASK = (uint32_t)trigEn;
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -1062,19 +954,13 @@ Cy_NNLite_DatawireTriggerEnable(NNLITE_Type *nnlite, bool trigEn)
 cy_en_nnlite_status_t
 Cy_NNLite_SetInterruptMask(NNLITE_Type *nnlite, uint32_t intrMask)
 {
-    cy_en_nnlite_status_t status;
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if (NULL == nnlite)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        nnlite->INTR_MASK = (intrMask & 0x7FUL);
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
-
+  nnlite->INTR_MASK = (intrMask & NNLITE_INTR_MASK);
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -1088,25 +974,18 @@ Cy_NNLite_SetInterruptMask(NNLITE_Type *nnlite, uint32_t intrMask)
 cy_en_nnlite_status_t
 Cy_NNLite_InterruptClear(NNLITE_Type *nnlite, uint32_t intrMask)
 {
-    cy_en_nnlite_status_t status;
+  if (NULL == nnlite)
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
 
-    if (NULL == nnlite)
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        // INTR is a write-1-to-clear register ...
 #if defined(IFX_USE_MXNNLITE_STREAM_EMU)
-        // Emulate RW1C behaviour....
-        nnlite->INTR &= ~(intrMask & 0x7Fu);
+  nnlite->INTR &= ~(intrMask & NNLITE_INTR_MASK);
 #else
-        nnlite->INTR &= (intrMask & 0x3FFu);
+  nnlite->INTR &= (intrMask & NNLITE_INTR_MASK);
 #endif
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
 
+  return CY_NNLITE_SUCCESS;
 }
 
 /**
@@ -1120,60 +999,53 @@ Cy_NNLite_InterruptClear(NNLITE_Type *nnlite, uint32_t intrMask)
 static cy_en_nnlite_status_t
 Cy_NNLite_InterruptStatusToErrMap(uint32_t intrStatus)
 {
-    cy_en_nnlite_status_t status;
-    switch (intrStatus)
-    {
-    case MXNNLITE_1_0_INTR_INTR_DONE_Msk:
-        status = CY_NNLITE_SUCCESS;
-        break;
-    case MXNNLITE_1_0_INTR_INTR_MEM_ERR_SPARSITY_Msk:
-        status = CY_NNLITE_MEM_ERR_SPARSITY;
-        break;
-    case MXNNLITE_1_0_INTR_INTR_MEM_ERR_ACTIVATIONSTREAMER_Msk:
-        status = CY_NNLITE_MEM_ERR_ACTIVATION_STREAMER;
-        break;
-    case MXNNLITE_1_0_INTR_INTR_MEM_ERR_WEIGHTSTREAMER_Msk:
-        status = CY_NNLITE_MEM_ERR_WEIGHT_STREAMER;
-        break;
-    case MXNNLITE_1_0_INTR_INTR_MEM_ERR_BIASSTREAMER_Msk:
-        status = CY_NNLITE_MEM_ERR_BIAS_STREAMER;
-        break;
-    case MXNNLITE_1_0_INTR_INTR_MEM_ERR_OUTPUTSTREAMER_Msk:
-        status = CY_NNLITE_MEM_ERR_OUTPUT_STREAMER;
-        break;
-    case MXNNLITE_1_0_INTR_INTR_SATURATION_Msk:/* fall through for saturation */
-    case (MXNNLITE_1_0_INTR_INTR_DONE_Msk | MXNNLITE_1_0_INTR_INTR_SATURATION_Msk) :
-        status = CY_NNLITE_SATURATION;
-        break;
-    default :
-        status = CY_NNLITE_SUCCESS;
-        break;
+  cy_en_nnlite_status_t status;
+  switch(intrStatus)
+  {
+  case MXNNLITE_1_0_INTR_INTR_DONE_Msk:
+    status = CY_NNLITE_SUCCESS;
+    break;
+  case MXNNLITE_1_0_INTR_INTR_MEM_ERR_SPARSITY_Msk:
+    status = CY_NNLITE_MEM_ERR_SPARSITY;
+    break;
+  case MXNNLITE_1_0_INTR_INTR_MEM_ERR_ACTIVATIONSTREAMER_Msk:
+    status = CY_NNLITE_MEM_ERR_ACTIVATION_STREAMER;
+    break;
+  case MXNNLITE_1_0_INTR_INTR_MEM_ERR_WEIGHTSTREAMER_Msk:
+    status = CY_NNLITE_MEM_ERR_WEIGHT_STREAMER;
+    break;
+  case MXNNLITE_1_0_INTR_INTR_MEM_ERR_BIASSTREAMER_Msk:
+    status = CY_NNLITE_MEM_ERR_BIAS_STREAMER;
+    break;
+  case MXNNLITE_1_0_INTR_INTR_MEM_ERR_OUTPUTSTREAMER_Msk:
+    status = CY_NNLITE_MEM_ERR_OUTPUT_STREAMER;
+    break;
+  case MXNNLITE_1_0_INTR_INTR_SATURATION_Msk:/* fall through for saturation */
+  case (MXNNLITE_1_0_INTR_INTR_DONE_Msk | MXNNLITE_1_0_INTR_INTR_SATURATION_Msk) :
+    status = CY_NNLITE_SATURATION;
+    break;
+  default :
+    status = CY_NNLITE_SUCCESS;
+    break;
 
-    }
-    return status;
+  }
+  return status;
 }
 #else
 static cy_en_nnlite_status_t
 Cy_NNLite_InterruptStatusToErrMap(uint32_t intrStatus)
 {
-    cy_en_nnlite_status_t status;
-    if (intrStatus & NNLITE_INTR_READ_ERRORS_MASK)
-    {
-        status = CY_NNLITE_MEM_READ_ERR;
-    }
-    else if (intrStatus & NNLITE_INTR_WRITE_ERRORS_MASK)
-    {
-        status = CY_NNLITE_MEM_WRITE_ERR;
-    }
-    else if (intrStatus & NNLITE_SATURATION_MASK)
-    {
-        status = CY_NNLITE_SATURATION_EVENT;
-    }
-    else
-    {
-        status = CY_NNLITE_SUCCESS;
-    }
-    return status;
+  cy_en_nnlite_status_t status;
+  if (intrStatus & NNLITE_INTR_READ_ERRORS_MASK) {
+    status = CY_NNLITE_MEM_READ_ERR;
+    } else if (intrStatus & NNLITE_INTR_WRITE_ERRORS_MASK) {
+    status = CY_NNLITE_MEM_WRITE_ERR;
+    } else if (intrStatus & NNLITE_SATURATION_MASK) {
+    status = CY_NNLITE_SATURATION_EVENT;
+    } else {
+    status = CY_NNLITE_SUCCESS;
+  }
+  return status;
 }
 #endif
 
@@ -1186,33 +1058,30 @@ Cy_NNLite_InterruptStatusToErrMap(uint32_t intrStatus)
  **
  ** [in]  context    pointer to the driver context structure
 *****************************************************************************/
-cy_en_nnlite_status_t Cy_NNLite_WaitForCompletion(NNLITE_Type *nnlite,
-        cy_nnlite_context_t *context)
+cy_en_nnlite_status_t
+Cy_NNLite_WaitForCompletion(NNLITE_Type *nnlite,
+    cy_nnlite_context_t *context)
 {
-    cy_en_nnlite_status_t status;
-    uint32_t interruptStatus;
-    if ((NULL == nnlite) || (NULL == context))
-    {
-        status = CY_NNLITE_BAD_PARAM;
-    }
-    else
-    {
-        /* poll for Busy bit */
-        do
-        {
-        }
-        while (1U == (nnlite->STATUS & STATUS_REG_MASK));
+  if ((NULL == nnlite) || (NULL == context))
+  {
+    return CY_NNLITE_BAD_PARAM;
+  }
+  uint32_t interruptStatus;
+  cy_en_nnlite_status_t status;
+  /* poll for Busy bit */
+  do {
+  } while (1U == (nnlite->STATUS & STATUS_REG_MASK));
 
-        (void)Cy_NNLite_GetInterruptStatus(nnlite, &interruptStatus);
-        status = Cy_NNLite_InterruptStatusToErrMap(interruptStatus);
-        (void)Cy_NNLite_InterruptClear(nnlite, interruptStatus);
+  (void)Cy_NNLite_GetInterruptStatus(nnlite, &interruptStatus);
+  status = Cy_NNLite_InterruptStatusToErrMap(interruptStatus);
+  (void)Cy_NNLite_InterruptClear(nnlite, interruptStatus);
 
-        if (context->nnliteState == CY_NNLITE_OP_STARTED)
-        {
-            context->nnliteState = CY_NNLITE_OP_DONE;
-        }
-    }
-    return status;
+  if (context->nnliteState == CY_NNLITE_OP_STARTED)
+  {
+    context->nnliteState = CY_NNLITE_OP_DONE;
+  }
+
+  return status;
 }
 
 /**
@@ -1224,19 +1093,19 @@ cy_en_nnlite_status_t Cy_NNLite_WaitForCompletion(NNLITE_Type *nnlite,
  **   [in]  context    nnlite context structure pointer
  *****************************************************************************/
 void Cy_NNLite_InterruptHandler(NNLITE_Type *nnlite,
-                                cy_nnlite_context_t *context)
+              cy_nnlite_context_t *context)
 {
-    uint32_t intrStatus = 0;
+  uint32_t intrStatus = 0;
 
-    (void)Cy_NNLite_GetInterruptStatus(nnlite, &intrStatus);
-    if (context->nnliteState == CY_NNLITE_OP_STARTED)
-    {
-        context->opStatus = Cy_NNLite_InterruptStatusToErrMap(intrStatus);
-        context->opIntrStatus = intrStatus;
-        context->nnliteState = CY_NNLITE_OP_DONE;
-    }
+  (void)Cy_NNLite_GetInterruptStatus(nnlite, &intrStatus);
+  if (context->nnliteState == CY_NNLITE_OP_STARTED)
+  {
+    context->opStatus = Cy_NNLite_InterruptStatusToErrMap(intrStatus);
+    context->opIntrStatus = intrStatus;
+    context->nnliteState = CY_NNLITE_OP_DONE;
+  }
 
-    (void)Cy_NNLite_InterruptClear(nnlite, intrStatus);
+  (void)Cy_NNLite_InterruptClear(nnlite, intrStatus);
 }
 
 

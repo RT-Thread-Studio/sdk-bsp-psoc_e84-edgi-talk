@@ -21,37 +21,37 @@
 #define ETHOSU85_INTERFACE_H
 
 #ifdef __KERNEL__
-    #include <linux/types.h>
+#include <linux/types.h>
 #else
-    #include <stdint.h>
+#include <stdint.h>
 #endif
 
 #if !defined(__cplusplus) || __cplusplus < 201402L
-    #define CONSTEXPR
+#define CONSTEXPR
 #else
-    #define CONSTEXPR constexpr
+#define CONSTEXPR constexpr
 #endif
 
 #ifndef __cplusplus
-    #define STRUCT struct
+#define STRUCT struct
 #else
-    #define STRUCT
+#define STRUCT
 #endif
 
 #if defined(__cplusplus) && defined(NPU_DISASSEMBLE)
-    #include <iomanip>
-    #include <vector>
-    #include <sstream>
+#include <iomanip>
+#include <vector>
+#include <sstream>
 #endif
 
 #if defined(__cplusplus) && !defined(NPU_NAMESPACE)
-    #define NPU_NAMESPACE npu
+#define NPU_NAMESPACE npu
 #endif
 
 #ifdef __cplusplus
-    #include <cassert>
-    #include <cstring>
-    #include <limits>
+#include <cassert>
+#include <cstring>
+#include <limits>
 #endif
 
 #ifdef __cplusplus
@@ -1720,38 +1720,38 @@ enum weight_sparsity
 
 #ifdef NPU_DISASSEMBLE
 
-static const char *acc_format_str[] =
+static const char* acc_format_str[] =
 {
     "ACC_FORMAT_I32",
     "ACC_FORMAT_I48",
 };
 
-static const char *acc_input_str[] =
+static const char* acc_input_str[] =
 {
     "ACC_INPUT_RESET",
     "ACC_INPUT_KEEP",
     "ACC_INPUT_IFM2",
 };
 
-static const char *acc_output_str[] =
+static const char* acc_output_str[] =
 {
     "ACC_OUTPUT_ENABLE",
     "ACC_OUTPUT_DISABLE",
 };
 
-static const char *activation_clip_range_str[] =
+static const char* activation_clip_range_str[] =
 {
     "ACTIVATION_CLIP_RANGE_B16",
     "ACTIVATION_CLIP_RANGE_NONE",
 };
 
-static const char *activation_format_str[] =
+static const char* activation_format_str[] =
 {
     "ACTIVATION_FORMAT_NHWC",
     "ACTIVATION_FORMAT_NHCWB16",
 };
 
-static const char *activation_function_str[] =
+static const char* activation_function_str[] =
 {
     "ACTIVATION_FUNCTION_LUT_NONE",
     "ACTIVATION_FUNCTION_LUT_U8_U8",
@@ -1767,7 +1767,7 @@ static const char *activation_function_str[] =
     "ACTIVATION_FUNCTION_LUT_SIGMOID",
 };
 
-static const char *activation_precision_str[] =
+static const char* activation_precision_str[] =
 {
     "ACTIVATION_PRECISION_B8",
     "ACTIVATION_PRECISION_B16",
@@ -1775,7 +1775,7 @@ static const char *activation_precision_str[] =
     "ACTIVATION_PRECISION_B64",
 };
 
-static const char *activation_reverse_str[] =
+static const char* activation_reverse_str[] =
 {
     "ACTIVATION_REVERSE_NONE",
     "ACTIVATION_REVERSE_H",
@@ -1783,7 +1783,7 @@ static const char *activation_reverse_str[] =
     "ACTIVATION_REVERSE_C",
 };
 
-static const char *activation_storage_str[] =
+static const char* activation_storage_str[] =
 {
     "ACTIVATION_STORAGE_TILE2X2",
     "ACTIVATION_STORAGE_TILE3X1",
@@ -1791,7 +1791,7 @@ static const char *activation_storage_str[] =
     "ACTIVATION_STORAGE_NONE",
 };
 
-static const char *activation_transpose_str[] =
+static const char* activation_transpose_str[] =
 {
     "ACTIVATION_TRANSPOSE_HWC",
     "ACTIVATION_TRANSPOSE_WHC",
@@ -1803,13 +1803,13 @@ static const char *activation_transpose_str[] =
     "ACTIVATION_TRANSPOSE_CWH",
 };
 
-static const char *activation_type_str[] =
+static const char* activation_type_str[] =
 {
     "ACTIVATION_TYPE_UNSIGNED",
     "ACTIVATION_TYPE_SIGNED",
 };
 
-static const char *axi_mem_domain_str[] =
+static const char* axi_mem_domain_str[] =
 {
     "AXI_MEM_DOMAIN_NON_SHARABLE",
     "AXI_MEM_DOMAIN_INNER_SHARABLE",
@@ -1817,7 +1817,7 @@ static const char *axi_mem_domain_str[] =
     "AXI_MEM_DOMAIN_SYSTEM",
 };
 
-static const char *axi_mem_encoding_str[] =
+static const char* axi_mem_encoding_str[] =
 {
     "AXI_MEM_ENCODING_DEVICE_NON_BUFFERABLE",
     "AXI_MEM_ENCODING_DEVICE_BUFFERABLE",
@@ -1833,19 +1833,19 @@ static const char *axi_mem_encoding_str[] =
     "AXI_MEM_ENCODING_WRITE_BACK_READ_AND_WRITE_ALLOCATE",
 };
 
-static const char *axi_port_str[] =
+static const char* axi_port_str[] =
 {
     "AXI_PORT_SRAM",
     "AXI_PORT_EXT",
 };
 
-static const char *branch_cond_str[] =
+static const char* branch_cond_str[] =
 {
     "BRANCH_COND_ALWAYS",
     "BRANCH_COND_RF_TRUE",
 };
 
-static const char *broadcast_mode_str[] =
+static const char* broadcast_mode_str[] =
 {
     "BROADCAST_MODE_NONE",
     "BROADCAST_MODE_H",
@@ -1858,7 +1858,7 @@ static const char *broadcast_mode_str[] =
     "BROADCAST_MODE_SCALAR",
 };
 
-static const char *cmd0_opcode_str[] =
+static const char* cmd0_opcode_str[] =
 {
     "CMD0_OPCODE_NPU_OP_STOP",
     "CMD0_OPCODE_NPU_OP_IRQ",
@@ -2262,7 +2262,7 @@ static const char *cmd0_opcode_str[] =
     "CMD0_OPCODE_NPU_SET_IFM2_REGION",
 };
 
-static const char *cmd1_opcode_str[] =
+static const char* cmd1_opcode_str[] =
 {
     "CMD1_OPCODE_NPU_SET_IFM_BASE0",
     "CMD1_OPCODE_NPU_SET_IFM_BASE1",
@@ -2523,19 +2523,19 @@ static const char *cmd1_opcode_str[] =
     "CMD1_OPCODE_NPU_OP_BRANCH",
 };
 
-static const char *cmd_ctrl_str[] =
+static const char* cmd_ctrl_str[] =
 {
     "CMD_CTRL_CMD0_CTRL",
     "CMD_CTRL_CMD1_CTRL",
 };
 
-static const char *custom_dma_str[] =
+static const char* custom_dma_str[] =
 {
     "CUSTOM_DMA_NOT_IMPLEMENTED",
     "CUSTOM_DMA_IMPLEMENTED",
 };
 
-static const char *dma_fault_channel_str[] =
+static const char* dma_fault_channel_str[] =
 {
     "DMA_FAULT_CHANNEL_CMD_READ",
     "DMA_FAULT_CHANNEL_IFM_READ",
@@ -2549,32 +2549,32 @@ static const char *dma_fault_channel_str[] =
     "DMA_FAULT_CHANNEL_MEM2MEM_WRITE",
 };
 
-static const char *dma_fault_src_str[] =
+static const char* dma_fault_src_str[] =
 {
     "DMA_FAULT_SRC_SRAM",
     "DMA_FAULT_SRC_EXT",
 };
 
-static const char *dma_idx_mode_str[] =
+static const char* dma_idx_mode_str[] =
 {
     "DMA_IDX_MODE_DISABLED",
     "DMA_IDX_MODE_ENABLED",
 };
 
-static const char *dma_region_mode_str[] =
+static const char* dma_region_mode_str[] =
 {
     "DMA_REGION_MODE_EXTERNAL",
     "DMA_REGION_MODE_INTERNAL",
 };
 
-static const char *dma_stride_mode_str[] =
+static const char* dma_stride_mode_str[] =
 {
     "DMA_STRIDE_MODE_D1",
     "DMA_STRIDE_MODE_D2",
     "DMA_STRIDE_MODE_D3",
 };
 
-static const char *elementwise_mode_str[] =
+static const char* elementwise_mode_str[] =
 {
     "ELEMENTWISE_MODE_MUL",
     "ELEMENTWISE_MODE_ADD",
@@ -2621,33 +2621,33 @@ static const char *elementwise_mode_str[] =
     "ELEMENTWISE_MODE_AND_NOT",
 };
 
-static const char *ifm_upscale_mode_str[] =
+static const char* ifm_upscale_mode_str[] =
 {
     "IFM_UPSCALE_MODE_NONE",
     "IFM_UPSCALE_MODE_NEAREST",
     "IFM_UPSCALE_MODE_ZEROS",
 };
 
-static const char *kernel_decomposition_str[] =
+static const char* kernel_decomposition_str[] =
 {
     "KERNEL_DECOMPOSITION_D8X8",
     "KERNEL_DECOMPOSITION_D4X4",
 };
 
-static const char *kernel_dilation_str[] =
+static const char* kernel_dilation_str[] =
 {
     "KERNEL_DILATION_NONE",
     "KERNEL_DILATION_X2",
 };
 
-static const char *max_beats_str[] =
+static const char* max_beats_str[] =
 {
     "MAX_BEATS_B64",
     "MAX_BEATS_B128",
     "MAX_BEATS_B256",
 };
 
-static const char *microblock_str[] =
+static const char* microblock_str[] =
 {
     "MICROBLOCK_U1X1",
     "MICROBLOCK_U1X2",
@@ -2657,13 +2657,13 @@ static const char *microblock_str[] =
     "MICROBLOCK_U4X4",
 };
 
-static const char *ofm_scale_mode_str[] =
+static const char* ofm_scale_mode_str[] =
 {
     "OFM_SCALE_MODE_PER_CHANNEL",
     "OFM_SCALE_MODE_GLOBAL",
 };
 
-static const char *pmu_axi_channel_str[] =
+static const char* pmu_axi_channel_str[] =
 {
     "PMU_AXI_CHANNEL_RD_CMD",
     "PMU_AXI_CHANNEL_RD_IFM",
@@ -2677,7 +2677,7 @@ static const char *pmu_axi_channel_str[] =
     "PMU_AXI_CHANNEL_WR_MEM2MEM",
 };
 
-static const char *pmu_event_str[] =
+static const char* pmu_event_str[] =
 {
     "PMU_EVENT_NO_EVENT",
     "****",
@@ -3353,13 +3353,13 @@ static const char *pmu_event_str[] =
     "PMU_EVENT_EXT1_WR_STALL_LIMIT",
 };
 
-static const char *pmu_port_disable_str[] =
+static const char* pmu_port_disable_str[] =
 {
     "PMU_PORT_DISABLE_ENABLE",
     "PMU_PORT_DISABLE_DISABLE",
 };
 
-static const char *pooling_mode_str[] =
+static const char* pooling_mode_str[] =
 {
     "POOLING_MODE_MAX",
     "POOLING_MODE_AVERAGE",
@@ -3371,13 +3371,13 @@ static const char *pooling_mode_str[] =
     "POOLING_MODE_ARGMAX_Y",
 };
 
-static const char *privilege_level_str[] =
+static const char* privilege_level_str[] =
 {
     "PRIVILEGE_LEVEL_USER",
     "PRIVILEGE_LEVEL_PRIVILEGED",
 };
 
-static const char *ram_id_str[] =
+static const char* ram_id_str[] =
 {
     "RAM_ID_LUT",
     "RAM_ID_IB",
@@ -3386,20 +3386,20 @@ static const char *ram_id_str[] =
     "RAM_ID_OB",
 };
 
-static const char *resize_mode_str[] =
+static const char* resize_mode_str[] =
 {
     "RESIZE_MODE_BILINEAR",
     "RESIZE_MODE_REPLICATE",
     "RESIZE_MODE_NEAREST",
 };
 
-static const char *round_mode_ifm_str[] =
+static const char* round_mode_ifm_str[] =
 {
     "ROUND_MODE_IFM_DOUBLE_SYMMETRIC",
     "ROUND_MODE_IFM_NATURAL",
 };
 
-static const char *round_mode_ofm_str[] =
+static const char* round_mode_ofm_str[] =
 {
     "ROUND_MODE_OFM_DOUBLE_SYMMETRIC",
     "ROUND_MODE_OFM_NATURAL",
@@ -3409,19 +3409,19 @@ static const char *round_mode_ofm_str[] =
     "ROUND_MODE_OFM_TRUNCATE_TO_LOWER",
 };
 
-static const char *security_level_str[] =
+static const char* security_level_str[] =
 {
     "SECURITY_LEVEL_SECURE",
     "SECURITY_LEVEL_NON_SECURE",
 };
 
-static const char *state_str[] =
+static const char* state_str[] =
 {
     "STATE_STOPPED",
     "STATE_RUNNING",
 };
 
-static const char *wd_active_core_str[] =
+static const char* wd_active_core_str[] =
 {
     "WD_ACTIVE_CORE_NONE",
     "WD_ACTIVE_CORE_STANDARD",
@@ -3429,19 +3429,19 @@ static const char *wd_active_core_str[] =
     "WD_ACTIVE_CORE_TENSOR",
 };
 
-static const char *weight_format_str[] =
+static const char* weight_format_str[] =
 {
     "WEIGHT_FORMAT_SWD",
     "WEIGHT_FORMAT_FWD",
 };
 
-static const char *weight_order_str[] =
+static const char* weight_order_str[] =
 {
     "WEIGHT_ORDER_DEPTH_FIRST",
     "WEIGHT_ORDER_PART_KERNEL_FIRST",
 };
 
-static const char *weight_sparsity_str[] =
+static const char* weight_sparsity_str[] =
 {
     "WEIGHT_SPARSITY_NONE",
     "WEIGHT_SPARSITY_SPARSE_2_4",
@@ -3495,9 +3495,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR id_r &set_version_status(uint32_t value)
+    CONSTEXPR id_r& set_version_status(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 0) & word0) | ((((1U << 4) - 1) & value) << 0);
+        word0 = (~(((1U << 4) - 1)<<0) & word0) | ((((1U << 4) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_version_minor() const
@@ -3505,9 +3505,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR id_r &set_version_minor(uint32_t value)
+    CONSTEXPR id_r& set_version_minor(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 4) & word0) | ((((1U << 4) - 1) & value) << 4);
+        word0 = (~(((1U << 4) - 1)<<4) & word0) | ((((1U << 4) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_version_major() const
@@ -3515,9 +3515,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR id_r &set_version_major(uint32_t value)
+    CONSTEXPR id_r& set_version_major(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 8) & word0) | ((((1U << 4) - 1) & value) << 8);
+        word0 = (~(((1U << 4) - 1)<<8) & word0) | ((((1U << 4) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR uint32_t get_product_major() const
@@ -3525,9 +3525,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 12);
         return v;
     }
-    CONSTEXPR id_r &set_product_major(uint32_t value)
+    CONSTEXPR id_r& set_product_major(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 12) & word0) | ((((1U << 4) - 1) & value) << 12);
+        word0 = (~(((1U << 4) - 1)<<12) & word0) | ((((1U << 4) - 1) & value) << 12);
         return *this;
     }
     CONSTEXPR uint32_t get_arch_patch_rev() const
@@ -3535,9 +3535,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 16);
         return v;
     }
-    CONSTEXPR id_r &set_arch_patch_rev(uint32_t value)
+    CONSTEXPR id_r& set_arch_patch_rev(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 16) & word0) | ((((1U << 4) - 1) & value) << 16);
+        word0 = (~(((1U << 4) - 1)<<16) & word0) | ((((1U << 4) - 1) & value) << 16);
         return *this;
     }
     CONSTEXPR uint32_t get_arch_minor_rev() const
@@ -3545,9 +3545,9 @@ public:
         auto v = ((1U << 8) - 1) & (word0 >> 20);
         return v;
     }
-    CONSTEXPR id_r &set_arch_minor_rev(uint32_t value)
+    CONSTEXPR id_r& set_arch_minor_rev(uint32_t value)
     {
-        word0 = (~(((1U << 8) - 1) << 20) & word0) | ((((1U << 8) - 1) & value) << 20);
+        word0 = (~(((1U << 8) - 1)<<20) & word0) | ((((1U << 8) - 1) & value) << 20);
         return *this;
     }
     CONSTEXPR uint32_t get_arch_major_rev() const
@@ -3555,9 +3555,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 28);
         return v;
     }
-    CONSTEXPR id_r &set_arch_major_rev(uint32_t value)
+    CONSTEXPR id_r& set_arch_major_rev(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 28) & word0) | ((((1U << 4) - 1) & value) << 28);
+        word0 = (~(((1U << 4) - 1)<<28) & word0) | ((((1U << 4) - 1) & value) << 28);
         return *this;
     }
 #endif
@@ -3616,9 +3616,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::state>(v);
     }
-    CONSTEXPR status_r &set_state(NPU_NAMESPACE::state value)
+    CONSTEXPR status_r& set_state(NPU_NAMESPACE::state value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_irq_raised() const
@@ -3626,9 +3626,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR status_r &set_irq_raised(uint32_t value)
+    CONSTEXPR status_r& set_irq_raised(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_bus_status() const
@@ -3636,9 +3636,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR status_r &set_bus_status(uint32_t value)
+    CONSTEXPR status_r& set_bus_status(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_reset_status() const
@@ -3646,9 +3646,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR status_r &set_reset_status(uint32_t value)
+    CONSTEXPR status_r& set_reset_status(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_cmd_parse_error() const
@@ -3656,9 +3656,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR status_r &set_cmd_parse_error(uint32_t value)
+    CONSTEXPR status_r& set_cmd_parse_error(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_cmd_end_reached() const
@@ -3666,9 +3666,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR status_r &set_cmd_end_reached(uint32_t value)
+    CONSTEXPR status_r& set_cmd_end_reached(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_pmu_irq_raised() const
@@ -3676,9 +3676,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR status_r &set_pmu_irq_raised(uint32_t value)
+    CONSTEXPR status_r& set_pmu_irq_raised(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_ecc_fault() const
@@ -3686,9 +3686,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR status_r &set_ecc_fault(uint32_t value)
+    CONSTEXPR status_r& set_ecc_fault(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 8) & word0) | ((((1U << 1) - 1) & value) << 8);
+        word0 = (~(((1U << 1) - 1)<<8) & word0) | ((((1U << 1) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR uint32_t get_branch_fault() const
@@ -3696,9 +3696,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 9);
         return v;
     }
-    CONSTEXPR status_r &set_branch_fault(uint32_t value)
+    CONSTEXPR status_r& set_branch_fault(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 9) & word0) | ((((1U << 1) - 1) & value) << 9);
+        word0 = (~(((1U << 1) - 1)<<9) & word0) | ((((1U << 1) - 1) & value) << 9);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::dma_fault_src get_faulting_interface() const
@@ -3707,9 +3707,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::dma_fault_src>(v);
     }
-    CONSTEXPR status_r &set_faulting_interface(NPU_NAMESPACE::dma_fault_src value)
+    CONSTEXPR status_r& set_faulting_interface(NPU_NAMESPACE::dma_fault_src value)
     {
-        word0 = (~(((1U << 1) - 1) << 11) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 11);
+        word0 = (~(((1U << 1) - 1)<<11) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 11);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::dma_fault_channel get_faulting_channel() const
@@ -3718,9 +3718,9 @@ public:
         assert(v <= 9);
         return static_cast<NPU_NAMESPACE::dma_fault_channel>(v);
     }
-    CONSTEXPR status_r &set_faulting_channel(NPU_NAMESPACE::dma_fault_channel value)
+    CONSTEXPR status_r& set_faulting_channel(NPU_NAMESPACE::dma_fault_channel value)
     {
-        word0 = (~(((1U << 4) - 1) << 12) & word0) | ((((1U << 4) - 1) & static_cast<uint32_t>(value)) << 12);
+        word0 = (~(((1U << 4) - 1)<<12) & word0) | ((((1U << 4) - 1) & static_cast<uint32_t>(value)) << 12);
         return *this;
     }
     CONSTEXPR uint32_t get_irq_history_mask() const
@@ -3728,9 +3728,9 @@ public:
         auto v = ((1U << 16) - 1) & (word0 >> 16);
         return v;
     }
-    CONSTEXPR status_r &set_irq_history_mask(uint32_t value)
+    CONSTEXPR status_r& set_irq_history_mask(uint32_t value)
     {
-        word0 = (~(((1U << 16) - 1) << 16) & word0) | ((((1U << 16) - 1) & value) << 16);
+        word0 = (~(((1U << 16) - 1)<<16) & word0) | ((((1U << 16) - 1) & value) << 16);
         return *this;
     }
 #endif
@@ -3781,9 +3781,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR cmd_r &set_transition_to_running_state(uint32_t value)
+    CONSTEXPR cmd_r& set_transition_to_running_state(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_clear_irq() const
@@ -3791,9 +3791,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR cmd_r &set_clear_irq(uint32_t value)
+    CONSTEXPR cmd_r& set_clear_irq(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_clock_q_enable() const
@@ -3801,9 +3801,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR cmd_r &set_clock_q_enable(uint32_t value)
+    CONSTEXPR cmd_r& set_clock_q_enable(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_power_q_enable() const
@@ -3811,9 +3811,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR cmd_r &set_power_q_enable(uint32_t value)
+    CONSTEXPR cmd_r& set_power_q_enable(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_stop_request() const
@@ -3821,9 +3821,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR cmd_r &set_stop_request(uint32_t value)
+    CONSTEXPR cmd_r& set_stop_request(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_clear_irq_history() const
@@ -3831,9 +3831,9 @@ public:
         auto v = ((1U << 16) - 1) & (word0 >> 16);
         return v;
     }
-    CONSTEXPR cmd_r &set_clear_irq_history(uint32_t value)
+    CONSTEXPR cmd_r& set_clear_irq_history(uint32_t value)
     {
-        word0 = (~(((1U << 16) - 1) << 16) & word0) | ((((1U << 16) - 1) & value) << 16);
+        word0 = (~(((1U << 16) - 1)<<16) & word0) | ((((1U << 16) - 1) & value) << 16);
         return *this;
     }
 #endif
@@ -3881,9 +3881,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::privilege_level>(v);
     }
-    CONSTEXPR reset_r &set_pending_CPL(NPU_NAMESPACE::privilege_level value)
+    CONSTEXPR reset_r& set_pending_CPL(NPU_NAMESPACE::privilege_level value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 0);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::security_level get_pending_CSL() const
@@ -3892,9 +3892,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::security_level>(v);
     }
-    CONSTEXPR reset_r &set_pending_CSL(NPU_NAMESPACE::security_level value)
+    CONSTEXPR reset_r& set_pending_CSL(NPU_NAMESPACE::security_level value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 1);
         return *this;
     }
 #endif
@@ -3929,8 +3929,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -3982,7 +3981,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR qread_r &set_QREAD(uint32_t value)
+    CONSTEXPR qread_r& set_QREAD(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -4030,9 +4029,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR qconfig_r &set_cmd_region0(uint32_t value)
+    CONSTEXPR qconfig_r& set_cmd_region0(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 0) & word0) | ((((1U << 2) - 1) & value) << 0);
+        word0 = (~(((1U << 2) - 1)<<0) & word0) | ((((1U << 2) - 1) & value) << 0);
         return *this;
     }
 #endif
@@ -4077,7 +4076,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR qsize_r &set_QSIZE(uint32_t value)
+    CONSTEXPR qsize_r& set_QSIZE(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -4127,9 +4126,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::privilege_level>(v);
     }
-    CONSTEXPR prot_r &set_active_CPL(NPU_NAMESPACE::privilege_level value)
+    CONSTEXPR prot_r& set_active_CPL(NPU_NAMESPACE::privilege_level value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 0);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::security_level get_active_CSL() const
@@ -4138,9 +4137,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::security_level>(v);
     }
-    CONSTEXPR prot_r &set_active_CSL(NPU_NAMESPACE::security_level value)
+    CONSTEXPR prot_r& set_active_CSL(NPU_NAMESPACE::security_level value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 1);
         return *this;
     }
 #endif
@@ -4193,9 +4192,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR config_r &set_macs_per_cc(uint32_t value)
+    CONSTEXPR config_r& set_macs_per_cc(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 0) & word0) | ((((1U << 4) - 1) & value) << 0);
+        word0 = (~(((1U << 4) - 1)<<0) & word0) | ((((1U << 4) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_cmd_stream_version() const
@@ -4203,9 +4202,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR config_r &set_cmd_stream_version(uint32_t value)
+    CONSTEXPR config_r& set_cmd_stream_version(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 4) & word0) | ((((1U << 4) - 1) & value) << 4);
+        word0 = (~(((1U << 4) - 1)<<4) & word0) | ((((1U << 4) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_num_axi_sram() const
@@ -4213,9 +4212,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR config_r &set_num_axi_sram(uint32_t value)
+    CONSTEXPR config_r& set_num_axi_sram(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 8) & word0) | ((((1U << 2) - 1) & value) << 8);
+        word0 = (~(((1U << 2) - 1)<<8) & word0) | ((((1U << 2) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR uint32_t get_num_axi_ext() const
@@ -4223,9 +4222,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 10);
         return v;
     }
-    CONSTEXPR config_r &set_num_axi_ext(uint32_t value)
+    CONSTEXPR config_r& set_num_axi_ext(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 10) & word0) | ((((1U << 1) - 1) & value) << 10);
+        word0 = (~(((1U << 1) - 1)<<10) & word0) | ((((1U << 1) - 1) & value) << 10);
         return *this;
     }
     CONSTEXPR uint32_t get_num_wd() const
@@ -4233,9 +4232,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 12);
         return v;
     }
-    CONSTEXPR config_r &set_num_wd(uint32_t value)
+    CONSTEXPR config_r& set_num_wd(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 12) & word0) | ((((1U << 2) - 1) & value) << 12);
+        word0 = (~(((1U << 2) - 1)<<12) & word0) | ((((1U << 2) - 1) & value) << 12);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::custom_dma get_custom_dma() const
@@ -4244,9 +4243,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::custom_dma>(v);
     }
-    CONSTEXPR config_r &set_custom_dma(NPU_NAMESPACE::custom_dma value)
+    CONSTEXPR config_r& set_custom_dma(NPU_NAMESPACE::custom_dma value)
     {
-        word0 = (~(((1U << 1) - 1) << 27) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 27);
+        word0 = (~(((1U << 1) - 1)<<27) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 27);
         return *this;
     }
     CONSTEXPR uint32_t get_product() const
@@ -4254,9 +4253,9 @@ public:
         auto v = ((1U << 4) - 1) & (word0 >> 28);
         return v;
     }
-    CONSTEXPR config_r &set_product(uint32_t value)
+    CONSTEXPR config_r& set_product(uint32_t value)
     {
-        word0 = (~(((1U << 4) - 1) << 28) & word0) | ((((1U << 4) - 1) & value) << 28);
+        word0 = (~(((1U << 4) - 1)<<28) & word0) | ((((1U << 4) - 1) & value) << 28);
         return *this;
     }
 #endif
@@ -4302,9 +4301,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR cond_status_r &set_result_flag(uint32_t value)
+    CONSTEXPR cond_status_r& set_result_flag(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
 #endif
@@ -4350,9 +4349,9 @@ public:
         auto v = ((1U << 6) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR power_ctrl_r &set_mac_step_cycles(uint32_t value)
+    CONSTEXPR power_ctrl_r& set_mac_step_cycles(uint32_t value)
     {
-        word0 = (~(((1U << 6) - 1) << 0) & word0) | ((((1U << 6) - 1) & value) << 0);
+        word0 = (~(((1U << 6) - 1)<<0) & word0) | ((((1U << 6) - 1) & value) << 0);
         return *this;
     }
 #endif
@@ -4405,9 +4404,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR regioncfg_r &set_region0(uint32_t value)
+    CONSTEXPR regioncfg_r& set_region0(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 0) & word0) | ((((1U << 2) - 1) & value) << 0);
+        word0 = (~(((1U << 2) - 1)<<0) & word0) | ((((1U << 2) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_region1() const
@@ -4415,9 +4414,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR regioncfg_r &set_region1(uint32_t value)
+    CONSTEXPR regioncfg_r& set_region1(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 2) & word0) | ((((1U << 2) - 1) & value) << 2);
+        word0 = (~(((1U << 2) - 1)<<2) & word0) | ((((1U << 2) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_region2() const
@@ -4425,9 +4424,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR regioncfg_r &set_region2(uint32_t value)
+    CONSTEXPR regioncfg_r& set_region2(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 4) & word0) | ((((1U << 2) - 1) & value) << 4);
+        word0 = (~(((1U << 2) - 1)<<4) & word0) | ((((1U << 2) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_region3() const
@@ -4435,9 +4434,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR regioncfg_r &set_region3(uint32_t value)
+    CONSTEXPR regioncfg_r& set_region3(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 6) & word0) | ((((1U << 2) - 1) & value) << 6);
+        word0 = (~(((1U << 2) - 1)<<6) & word0) | ((((1U << 2) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_region4() const
@@ -4445,9 +4444,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR regioncfg_r &set_region4(uint32_t value)
+    CONSTEXPR regioncfg_r& set_region4(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 8) & word0) | ((((1U << 2) - 1) & value) << 8);
+        word0 = (~(((1U << 2) - 1)<<8) & word0) | ((((1U << 2) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR uint32_t get_region5() const
@@ -4455,9 +4454,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 10);
         return v;
     }
-    CONSTEXPR regioncfg_r &set_region5(uint32_t value)
+    CONSTEXPR regioncfg_r& set_region5(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 10) & word0) | ((((1U << 2) - 1) & value) << 10);
+        word0 = (~(((1U << 2) - 1)<<10) & word0) | ((((1U << 2) - 1) & value) << 10);
         return *this;
     }
     CONSTEXPR uint32_t get_region6() const
@@ -4465,9 +4464,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 12);
         return v;
     }
-    CONSTEXPR regioncfg_r &set_region6(uint32_t value)
+    CONSTEXPR regioncfg_r& set_region6(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 12) & word0) | ((((1U << 2) - 1) & value) << 12);
+        word0 = (~(((1U << 2) - 1)<<12) & word0) | ((((1U << 2) - 1) & value) << 12);
         return *this;
     }
     CONSTEXPR uint32_t get_region7() const
@@ -4475,9 +4474,9 @@ public:
         auto v = ((1U << 2) - 1) & (word0 >> 14);
         return v;
     }
-    CONSTEXPR regioncfg_r &set_region7(uint32_t value)
+    CONSTEXPR regioncfg_r& set_region7(uint32_t value)
     {
-        word0 = (~(((1U << 2) - 1) << 14) & word0) | ((((1U << 2) - 1) & value) << 14);
+        word0 = (~(((1U << 2) - 1)<<14) & word0) | ((((1U << 2) - 1) & value) << 14);
         return *this;
     }
 #endif
@@ -4527,9 +4526,9 @@ public:
         assert(v <= 3);
         return static_cast<NPU_NAMESPACE::axi_mem_domain>(v);
     }
-    CONSTEXPR mem_attr_r &set_mem_domain(NPU_NAMESPACE::axi_mem_domain value)
+    CONSTEXPR mem_attr_r& set_mem_domain(NPU_NAMESPACE::axi_mem_domain value)
     {
-        word0 = (~(((1U << 2) - 1) << 0) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 0);
+        word0 = (~(((1U << 2) - 1)<<0) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 0);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::axi_port get_axi_port() const
@@ -4538,9 +4537,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::axi_port>(v);
     }
-    CONSTEXPR mem_attr_r &set_axi_port(NPU_NAMESPACE::axi_port value)
+    CONSTEXPR mem_attr_r& set_axi_port(NPU_NAMESPACE::axi_port value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 2);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::axi_mem_encoding get_memtype() const
@@ -4549,9 +4548,9 @@ public:
         assert(v <= 11);
         return static_cast<NPU_NAMESPACE::axi_mem_encoding>(v);
     }
-    CONSTEXPR mem_attr_r &set_memtype(NPU_NAMESPACE::axi_mem_encoding value)
+    CONSTEXPR mem_attr_r& set_memtype(NPU_NAMESPACE::axi_mem_encoding value)
     {
-        word0 = (~(((1U << 4) - 1) << 4) & word0) | ((((1U << 4) - 1) & static_cast<uint32_t>(value)) << 4);
+        word0 = (~(((1U << 4) - 1)<<4) & word0) | ((((1U << 4) - 1) & static_cast<uint32_t>(value)) << 4);
         return *this;
     }
 #endif
@@ -4601,9 +4600,9 @@ public:
         auto v = ((1U << 6) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR axi_sram_r &set_max_outstanding_read_m1(uint32_t value)
+    CONSTEXPR axi_sram_r& set_max_outstanding_read_m1(uint32_t value)
     {
-        word0 = (~(((1U << 6) - 1) << 0) & word0) | ((((1U << 6) - 1) & value) << 0);
+        word0 = (~(((1U << 6) - 1)<<0) & word0) | ((((1U << 6) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_max_outstanding_write_m1() const
@@ -4611,9 +4610,9 @@ public:
         auto v = ((1U << 5) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR axi_sram_r &set_max_outstanding_write_m1(uint32_t value)
+    CONSTEXPR axi_sram_r& set_max_outstanding_write_m1(uint32_t value)
     {
-        word0 = (~(((1U << 5) - 1) << 8) & word0) | ((((1U << 5) - 1) & value) << 8);
+        word0 = (~(((1U << 5) - 1)<<8) & word0) | ((((1U << 5) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::max_beats get_max_beats() const
@@ -4622,9 +4621,9 @@ public:
         assert(v <= 2);
         return static_cast<NPU_NAMESPACE::max_beats>(v);
     }
-    CONSTEXPR axi_sram_r &set_max_beats(NPU_NAMESPACE::max_beats value)
+    CONSTEXPR axi_sram_r& set_max_beats(NPU_NAMESPACE::max_beats value)
     {
-        word0 = (~(((1U << 2) - 1) << 16) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 16);
+        word0 = (~(((1U << 2) - 1)<<16) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 16);
         return *this;
     }
 #endif
@@ -4674,9 +4673,9 @@ public:
         auto v = ((1U << 6) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR axi_ext_r &set_max_outstanding_read_m1(uint32_t value)
+    CONSTEXPR axi_ext_r& set_max_outstanding_read_m1(uint32_t value)
     {
-        word0 = (~(((1U << 6) - 1) << 0) & word0) | ((((1U << 6) - 1) & value) << 0);
+        word0 = (~(((1U << 6) - 1)<<0) & word0) | ((((1U << 6) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_max_outstanding_write_m1() const
@@ -4684,9 +4683,9 @@ public:
         auto v = ((1U << 5) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR axi_ext_r &set_max_outstanding_write_m1(uint32_t value)
+    CONSTEXPR axi_ext_r& set_max_outstanding_write_m1(uint32_t value)
     {
-        word0 = (~(((1U << 5) - 1) << 8) & word0) | ((((1U << 5) - 1) & value) << 8);
+        word0 = (~(((1U << 5) - 1)<<8) & word0) | ((((1U << 5) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::max_beats get_max_beats() const
@@ -4695,9 +4694,9 @@ public:
         assert(v <= 2);
         return static_cast<NPU_NAMESPACE::max_beats>(v);
     }
-    CONSTEXPR axi_ext_r &set_max_beats(NPU_NAMESPACE::max_beats value)
+    CONSTEXPR axi_ext_r& set_max_beats(NPU_NAMESPACE::max_beats value)
     {
-        word0 = (~(((1U << 2) - 1) << 16) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 16);
+        word0 = (~(((1U << 2) - 1)<<16) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 16);
         return *this;
     }
 #endif
@@ -4747,9 +4746,9 @@ public:
         auto v = ((1U << 6) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR cfg_sram_cap_r &set_max_outstanding_read_m1(uint32_t value)
+    CONSTEXPR cfg_sram_cap_r& set_max_outstanding_read_m1(uint32_t value)
     {
-        word0 = (~(((1U << 6) - 1) << 0) & word0) | ((((1U << 6) - 1) & value) << 0);
+        word0 = (~(((1U << 6) - 1)<<0) & word0) | ((((1U << 6) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_max_outstanding_write_m1() const
@@ -4757,9 +4756,9 @@ public:
         auto v = ((1U << 5) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR cfg_sram_cap_r &set_max_outstanding_write_m1(uint32_t value)
+    CONSTEXPR cfg_sram_cap_r& set_max_outstanding_write_m1(uint32_t value)
     {
-        word0 = (~(((1U << 5) - 1) << 8) & word0) | ((((1U << 5) - 1) & value) << 8);
+        word0 = (~(((1U << 5) - 1)<<8) & word0) | ((((1U << 5) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::max_beats get_max_beats() const
@@ -4768,9 +4767,9 @@ public:
         assert(v <= 2);
         return static_cast<NPU_NAMESPACE::max_beats>(v);
     }
-    CONSTEXPR cfg_sram_cap_r &set_max_beats(NPU_NAMESPACE::max_beats value)
+    CONSTEXPR cfg_sram_cap_r& set_max_beats(NPU_NAMESPACE::max_beats value)
     {
-        word0 = (~(((1U << 2) - 1) << 16) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 16);
+        word0 = (~(((1U << 2) - 1)<<16) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 16);
         return *this;
     }
 #endif
@@ -4820,9 +4819,9 @@ public:
         auto v = ((1U << 6) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR cfg_ext_cap_r &set_max_outstanding_read_m1(uint32_t value)
+    CONSTEXPR cfg_ext_cap_r& set_max_outstanding_read_m1(uint32_t value)
     {
-        word0 = (~(((1U << 6) - 1) << 0) & word0) | ((((1U << 6) - 1) & value) << 0);
+        word0 = (~(((1U << 6) - 1)<<0) & word0) | ((((1U << 6) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_max_outstanding_write_m1() const
@@ -4830,9 +4829,9 @@ public:
         auto v = ((1U << 5) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR cfg_ext_cap_r &set_max_outstanding_write_m1(uint32_t value)
+    CONSTEXPR cfg_ext_cap_r& set_max_outstanding_write_m1(uint32_t value)
     {
-        word0 = (~(((1U << 5) - 1) << 8) & word0) | ((((1U << 5) - 1) & value) << 8);
+        word0 = (~(((1U << 5) - 1)<<8) & word0) | ((((1U << 5) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::max_beats get_max_beats() const
@@ -4841,9 +4840,9 @@ public:
         assert(v <= 2);
         return static_cast<NPU_NAMESPACE::max_beats>(v);
     }
-    CONSTEXPR cfg_ext_cap_r &set_max_beats(NPU_NAMESPACE::max_beats value)
+    CONSTEXPR cfg_ext_cap_r& set_max_beats(NPU_NAMESPACE::max_beats value)
     {
-        word0 = (~(((1U << 2) - 1) << 16) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 16);
+        word0 = (~(((1U << 2) - 1)<<16) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 16);
         return *this;
     }
 #endif
@@ -4879,8 +4878,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -4923,8 +4921,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -4967,8 +4964,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5010,8 +5006,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5069,9 +5064,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR clkforce_r &set_top_level_clk(uint32_t value)
+    CONSTEXPR clkforce_r& set_top_level_clk(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_cc_clk() const
@@ -5079,9 +5074,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR clkforce_r &set_cc_clk(uint32_t value)
+    CONSTEXPR clkforce_r& set_cc_clk(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_dma_clk() const
@@ -5089,9 +5084,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR clkforce_r &set_dma_clk(uint32_t value)
+    CONSTEXPR clkforce_r& set_dma_clk(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_mac_clk() const
@@ -5099,9 +5094,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR clkforce_r &set_mac_clk(uint32_t value)
+    CONSTEXPR clkforce_r& set_mac_clk(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_ao_clk() const
@@ -5109,9 +5104,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR clkforce_r &set_ao_clk(uint32_t value)
+    CONSTEXPR clkforce_r& set_ao_clk(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_wd_clk() const
@@ -5119,9 +5114,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR clkforce_r &set_wd_clk(uint32_t value)
+    CONSTEXPR clkforce_r& set_wd_clk(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
 #endif
@@ -5167,9 +5162,9 @@ public:
         auto v = ((1U << 28) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR debug_address_r &set_addr(uint32_t value)
+    CONSTEXPR debug_address_r& set_addr(uint32_t value)
     {
-        word0 = (~(((1U << 28) - 1) << 0) & word0) | ((((1U << 28) - 1) & value) << 0);
+        word0 = (~(((1U << 28) - 1)<<0) & word0) | ((((1U << 28) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::ram_id get_ram_id() const
@@ -5178,9 +5173,9 @@ public:
         assert(v <= 4);
         return static_cast<NPU_NAMESPACE::ram_id>(v);
     }
-    CONSTEXPR debug_address_r &set_ram_id(NPU_NAMESPACE::ram_id value)
+    CONSTEXPR debug_address_r& set_ram_id(NPU_NAMESPACE::ram_id value)
     {
-        word0 = (~(((1U << 4) - 1) << 28) & word0) | ((((1U << 4) - 1) & static_cast<uint32_t>(value)) << 28);
+        word0 = (~(((1U << 4) - 1)<<28) & word0) | ((((1U << 4) - 1) & static_cast<uint32_t>(value)) << 28);
         return *this;
     }
 #endif
@@ -5225,7 +5220,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR debug_misc_r &set_misc(uint32_t value)
+    CONSTEXPR debug_misc_r& set_misc(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -5262,8 +5257,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5315,7 +5309,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR dma_ifm_dst_r &set_value(uint32_t value)
+    CONSTEXPR dma_ifm_dst_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -5362,7 +5356,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR dma_ofm_src_r &set_value(uint32_t value)
+    CONSTEXPR dma_ofm_src_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -5399,8 +5393,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5442,8 +5435,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5485,8 +5477,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5538,7 +5529,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR dma_cmd_size_r &set_value(uint32_t value)
+    CONSTEXPR dma_cmd_size_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -5575,8 +5566,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5618,8 +5608,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5671,7 +5660,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR current_qread_r &set_value(uint32_t value)
+    CONSTEXPR current_qread_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -5708,8 +5697,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5751,8 +5739,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5794,8 +5781,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5837,8 +5823,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -5890,7 +5875,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR current_op_r &set_value(uint32_t value)
+    CONSTEXPR current_op_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -5937,7 +5922,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR current_cmd_r &set_value(uint32_t value)
+    CONSTEXPR current_cmd_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -5984,7 +5969,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR internal_memory_r &set_mem_word(uint32_t value)
+    CONSTEXPR internal_memory_r& set_mem_word(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6031,7 +6016,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_pad_top_r &set_value(uint32_t value)
+    CONSTEXPR ifm_pad_top_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6078,7 +6063,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_pad_left_r &set_value(uint32_t value)
+    CONSTEXPR ifm_pad_left_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6125,7 +6110,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_pad_right_r &set_value(uint32_t value)
+    CONSTEXPR ifm_pad_right_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6172,7 +6157,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_pad_bottom_r &set_value(uint32_t value)
+    CONSTEXPR ifm_pad_bottom_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6219,7 +6204,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_depth_m1_r &set_value(uint32_t value)
+    CONSTEXPR ifm_depth_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6266,7 +6251,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_precision_r &set_value(uint32_t value)
+    CONSTEXPR ifm_precision_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6313,7 +6298,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_upscale_r &set_value(uint32_t value)
+    CONSTEXPR ifm_upscale_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6360,7 +6345,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_broadcast_r &set_value(uint32_t value)
+    CONSTEXPR ifm_broadcast_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6407,7 +6392,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_zero_point_r &set_value(uint32_t value)
+    CONSTEXPR ifm_zero_point_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6454,7 +6439,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_width0_m1_r &set_value(uint32_t value)
+    CONSTEXPR ifm_width0_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6501,7 +6486,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_height0_m1_r &set_value(uint32_t value)
+    CONSTEXPR ifm_height0_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6548,7 +6533,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_height1_m1_r &set_value(uint32_t value)
+    CONSTEXPR ifm_height1_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6595,7 +6580,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm_region_r &set_value(uint32_t value)
+    CONSTEXPR ifm_region_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6642,7 +6627,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_width_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_width_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6689,7 +6674,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_height_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_height_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6736,7 +6721,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_depth_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_depth_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6783,7 +6768,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_precision_r &set_value(uint32_t value)
+    CONSTEXPR ofm_precision_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6830,7 +6815,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_blk_width_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_blk_width_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6877,7 +6862,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_blk_height_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_blk_height_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6924,7 +6909,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_blk_depth_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_blk_depth_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -6971,7 +6956,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_zero_point_r &set_value(uint32_t value)
+    CONSTEXPR ofm_zero_point_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7018,7 +7003,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_width0_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_width0_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7065,7 +7050,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_height0_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_height0_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7112,7 +7097,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_height1_m1_r &set_value(uint32_t value)
+    CONSTEXPR ofm_height1_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7159,7 +7144,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ofm_region_r &set_value(uint32_t value)
+    CONSTEXPR ofm_region_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7206,7 +7191,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR kernel_width_m1_r &set_value(uint32_t value)
+    CONSTEXPR kernel_width_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7253,7 +7238,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR kernel_height_m1_r &set_value(uint32_t value)
+    CONSTEXPR kernel_height_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7300,7 +7285,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR kernel_stride_r &set_value(uint32_t value)
+    CONSTEXPR kernel_stride_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7347,7 +7332,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR acc_format_r &set_value(uint32_t value)
+    CONSTEXPR acc_format_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7394,7 +7379,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR activation_r &set_value(uint32_t value)
+    CONSTEXPR activation_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7441,7 +7426,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR activation_min_r &set_value(uint32_t value)
+    CONSTEXPR activation_min_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7488,7 +7473,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR activation_max_r &set_value(uint32_t value)
+    CONSTEXPR activation_max_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7535,7 +7520,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR weight_region_r &set_value(uint32_t value)
+    CONSTEXPR weight_region_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7582,7 +7567,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR scale_region_r &set_value(uint32_t value)
+    CONSTEXPR scale_region_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7629,7 +7614,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR resize_x_scale_n_m1_r &set_value(uint32_t value)
+    CONSTEXPR resize_x_scale_n_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7676,7 +7661,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR resize_y_scale_n_m1_r &set_value(uint32_t value)
+    CONSTEXPR resize_y_scale_n_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7723,7 +7708,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR resize_x_offset_r &set_value(uint32_t value)
+    CONSTEXPR resize_x_offset_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7770,7 +7755,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR resize_y_offset_r &set_value(uint32_t value)
+    CONSTEXPR resize_y_offset_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7817,7 +7802,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR weight_format_r &set_value(uint32_t value)
+    CONSTEXPR weight_format_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7864,7 +7849,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR blockdep_r &set_value(uint32_t value)
+    CONSTEXPR blockdep_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7911,7 +7896,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR dma0_src_region_r &set_value(uint32_t value)
+    CONSTEXPR dma0_src_region_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -7958,7 +7943,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR dma0_dst_region_r &set_value(uint32_t value)
+    CONSTEXPR dma0_dst_region_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8005,7 +7990,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR dma0_size0_r &set_value(uint32_t value)
+    CONSTEXPR dma0_size0_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8052,7 +8037,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR dma0_size1_r &set_value(uint32_t value)
+    CONSTEXPR dma0_size1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8099,7 +8084,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR dma0_idx_region_r &set_value(uint32_t value)
+    CONSTEXPR dma0_idx_region_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8146,7 +8131,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm2_broadcast_r &set_value(uint32_t value)
+    CONSTEXPR ifm2_broadcast_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8193,7 +8178,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm2_precision_r &set_value(uint32_t value)
+    CONSTEXPR ifm2_precision_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8240,7 +8225,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm2_zero_point_r &set_value(uint32_t value)
+    CONSTEXPR ifm2_zero_point_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8287,7 +8272,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm2_width0_m1_r &set_value(uint32_t value)
+    CONSTEXPR ifm2_width0_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8334,7 +8319,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm2_height0_m1_r &set_value(uint32_t value)
+    CONSTEXPR ifm2_height0_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8381,7 +8366,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm2_height1_m1_r &set_value(uint32_t value)
+    CONSTEXPR ifm2_height1_m1_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8428,7 +8413,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR ifm2_region_r &set_value(uint32_t value)
+    CONSTEXPR ifm2_region_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -8464,8 +8449,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8506,8 +8490,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8548,8 +8531,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8590,8 +8572,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8632,8 +8613,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8674,8 +8654,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8716,8 +8695,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8758,8 +8736,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8800,8 +8777,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8842,8 +8818,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8884,8 +8859,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8926,8 +8900,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -8968,8 +8941,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9010,8 +8982,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9052,8 +9023,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9094,8 +9064,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9136,8 +9105,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9178,8 +9146,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9220,8 +9187,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9262,8 +9228,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9304,8 +9269,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9346,8 +9310,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9388,8 +9351,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9430,8 +9392,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9472,8 +9433,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9514,8 +9474,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9556,8 +9515,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9598,8 +9556,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9640,8 +9597,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9682,8 +9638,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9724,8 +9679,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9766,8 +9720,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9808,8 +9761,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9850,8 +9802,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9892,8 +9843,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9934,8 +9884,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -9976,8 +9925,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10018,8 +9966,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10060,8 +10007,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10102,8 +10048,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10144,8 +10089,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10186,8 +10130,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10228,8 +10171,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10270,8 +10212,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10312,8 +10253,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10354,8 +10294,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10396,8 +10335,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -10449,7 +10387,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR revision_r &set_value(uint32_t value)
+    CONSTEXPR revision_r& set_value(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10496,7 +10434,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pid4_r &set_PID4(uint32_t value)
+    CONSTEXPR pid4_r& set_PID4(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10543,7 +10481,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pid5_r &set_PID5(uint32_t value)
+    CONSTEXPR pid5_r& set_PID5(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10590,7 +10528,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pid6_r &set_PID6(uint32_t value)
+    CONSTEXPR pid6_r& set_PID6(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10637,7 +10575,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pid7_r &set_PID7(uint32_t value)
+    CONSTEXPR pid7_r& set_PID7(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10684,7 +10622,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pid0_r &set_PID0(uint32_t value)
+    CONSTEXPR pid0_r& set_PID0(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10731,7 +10669,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pid1_r &set_PID1(uint32_t value)
+    CONSTEXPR pid1_r& set_PID1(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10778,7 +10716,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pid2_r &set_PID2(uint32_t value)
+    CONSTEXPR pid2_r& set_PID2(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10825,7 +10763,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pid3_r &set_PID3(uint32_t value)
+    CONSTEXPR pid3_r& set_PID3(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10872,7 +10810,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR cid0_r &set_CID0(uint32_t value)
+    CONSTEXPR cid0_r& set_CID0(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10919,7 +10857,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR cid1_r &set_CID1(uint32_t value)
+    CONSTEXPR cid1_r& set_CID1(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -10966,7 +10904,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR cid2_r &set_CID2(uint32_t value)
+    CONSTEXPR cid2_r& set_CID2(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -11013,7 +10951,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR cid3_r &set_CID3(uint32_t value)
+    CONSTEXPR cid3_r& set_CID3(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -11085,9 +11023,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR wd_status_r &set_ctrl_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_ctrl_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::wd_active_core get_active_core() const
@@ -11096,9 +11034,9 @@ public:
         assert(v <= 3);
         return static_cast<NPU_NAMESPACE::wd_active_core>(v);
     }
-    CONSTEXPR wd_status_r &set_active_core(NPU_NAMESPACE::wd_active_core value)
+    CONSTEXPR wd_status_r& set_active_core(NPU_NAMESPACE::wd_active_core value)
     {
-        word0 = (~(((1U << 2) - 1) << 2) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 2);
+        word0 = (~(((1U << 2) - 1)<<2) & word0) | ((((1U << 2) - 1) & static_cast<uint32_t>(value)) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_sc0_idle() const
@@ -11106,9 +11044,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR wd_status_r &set_sc0_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_sc0_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_sc1_idle() const
@@ -11116,9 +11054,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR wd_status_r &set_sc1_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_sc1_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_sc2_idle() const
@@ -11126,9 +11064,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR wd_status_r &set_sc2_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_sc2_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_sc3_idle() const
@@ -11136,9 +11074,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR wd_status_r &set_sc3_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_sc3_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_fc_idle() const
@@ -11146,9 +11084,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR wd_status_r &set_fc_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_fc_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 8) & word0) | ((((1U << 1) - 1) & value) << 8);
+        word0 = (~(((1U << 1) - 1)<<8) & word0) | ((((1U << 1) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR uint32_t get_tc_idle() const
@@ -11156,9 +11094,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 9);
         return v;
     }
-    CONSTEXPR wd_status_r &set_tc_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_tc_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 9) & word0) | ((((1U << 1) - 1) & value) << 9);
+        word0 = (~(((1U << 1) - 1)<<9) & word0) | ((((1U << 1) - 1) & value) << 9);
         return *this;
     }
     CONSTEXPR uint32_t get_wbuf0_valid() const
@@ -11166,9 +11104,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 16);
         return v;
     }
-    CONSTEXPR wd_status_r &set_wbuf0_valid(uint32_t value)
+    CONSTEXPR wd_status_r& set_wbuf0_valid(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 16) & word0) | ((((1U << 1) - 1) & value) << 16);
+        word0 = (~(((1U << 1) - 1)<<16) & word0) | ((((1U << 1) - 1) & value) << 16);
         return *this;
     }
     CONSTEXPR uint32_t get_wbuf0_idle() const
@@ -11176,9 +11114,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 17);
         return v;
     }
-    CONSTEXPR wd_status_r &set_wbuf0_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_wbuf0_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 17) & word0) | ((((1U << 1) - 1) & value) << 17);
+        word0 = (~(((1U << 1) - 1)<<17) & word0) | ((((1U << 1) - 1) & value) << 17);
         return *this;
     }
     CONSTEXPR uint32_t get_wbuf1_valid() const
@@ -11186,9 +11124,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 18);
         return v;
     }
-    CONSTEXPR wd_status_r &set_wbuf1_valid(uint32_t value)
+    CONSTEXPR wd_status_r& set_wbuf1_valid(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 18) & word0) | ((((1U << 1) - 1) & value) << 18);
+        word0 = (~(((1U << 1) - 1)<<18) & word0) | ((((1U << 1) - 1) & value) << 18);
         return *this;
     }
     CONSTEXPR uint32_t get_wbuf1_idle() const
@@ -11196,9 +11134,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 19);
         return v;
     }
-    CONSTEXPR wd_status_r &set_wbuf1_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_wbuf1_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 19) & word0) | ((((1U << 1) - 1) & value) << 19);
+        word0 = (~(((1U << 1) - 1)<<19) & word0) | ((((1U << 1) - 1) & value) << 19);
         return *this;
     }
     CONSTEXPR uint32_t get_wbuf2_valid() const
@@ -11206,9 +11144,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 20);
         return v;
     }
-    CONSTEXPR wd_status_r &set_wbuf2_valid(uint32_t value)
+    CONSTEXPR wd_status_r& set_wbuf2_valid(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 20) & word0) | ((((1U << 1) - 1) & value) << 20);
+        word0 = (~(((1U << 1) - 1)<<20) & word0) | ((((1U << 1) - 1) & value) << 20);
         return *this;
     }
     CONSTEXPR uint32_t get_wbuf2_idle() const
@@ -11216,9 +11154,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 21);
         return v;
     }
-    CONSTEXPR wd_status_r &set_wbuf2_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_wbuf2_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 21) & word0) | ((((1U << 1) - 1) & value) << 21);
+        word0 = (~(((1U << 1) - 1)<<21) & word0) | ((((1U << 1) - 1) & value) << 21);
         return *this;
     }
     CONSTEXPR uint32_t get_wbuf3_valid() const
@@ -11226,9 +11164,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 22);
         return v;
     }
-    CONSTEXPR wd_status_r &set_wbuf3_valid(uint32_t value)
+    CONSTEXPR wd_status_r& set_wbuf3_valid(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 22) & word0) | ((((1U << 1) - 1) & value) << 22);
+        word0 = (~(((1U << 1) - 1)<<22) & word0) | ((((1U << 1) - 1) & value) << 22);
         return *this;
     }
     CONSTEXPR uint32_t get_wbuf3_idle() const
@@ -11236,9 +11174,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 23);
         return v;
     }
-    CONSTEXPR wd_status_r &set_wbuf3_idle(uint32_t value)
+    CONSTEXPR wd_status_r& set_wbuf3_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 23) & word0) | ((((1U << 1) - 1) & value) << 23);
+        word0 = (~(((1U << 1) - 1)<<23) & word0) | ((((1U << 1) - 1) & value) << 23);
         return *this;
     }
     CONSTEXPR uint32_t get_stalled_by_ws_sc0() const
@@ -11246,9 +11184,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 24);
         return v;
     }
-    CONSTEXPR wd_status_r &set_stalled_by_ws_sc0(uint32_t value)
+    CONSTEXPR wd_status_r& set_stalled_by_ws_sc0(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 24) & word0) | ((((1U << 1) - 1) & value) << 24);
+        word0 = (~(((1U << 1) - 1)<<24) & word0) | ((((1U << 1) - 1) & value) << 24);
         return *this;
     }
     CONSTEXPR uint32_t get_stalled_by_ws_sc1() const
@@ -11256,9 +11194,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 25);
         return v;
     }
-    CONSTEXPR wd_status_r &set_stalled_by_ws_sc1(uint32_t value)
+    CONSTEXPR wd_status_r& set_stalled_by_ws_sc1(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 25) & word0) | ((((1U << 1) - 1) & value) << 25);
+        word0 = (~(((1U << 1) - 1)<<25) & word0) | ((((1U << 1) - 1) & value) << 25);
         return *this;
     }
     CONSTEXPR uint32_t get_stalled_by_ws_sc2() const
@@ -11266,9 +11204,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 26);
         return v;
     }
-    CONSTEXPR wd_status_r &set_stalled_by_ws_sc2(uint32_t value)
+    CONSTEXPR wd_status_r& set_stalled_by_ws_sc2(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 26) & word0) | ((((1U << 1) - 1) & value) << 26);
+        word0 = (~(((1U << 1) - 1)<<26) & word0) | ((((1U << 1) - 1) & value) << 26);
         return *this;
     }
     CONSTEXPR uint32_t get_stalled_by_ws_sc3() const
@@ -11276,9 +11214,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 27);
         return v;
     }
-    CONSTEXPR wd_status_r &set_stalled_by_ws_sc3(uint32_t value)
+    CONSTEXPR wd_status_r& set_stalled_by_ws_sc3(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 27) & word0) | ((((1U << 1) - 1) & value) << 27);
+        word0 = (~(((1U << 1) - 1)<<27) & word0) | ((((1U << 1) - 1) & value) << 27);
         return *this;
     }
     CONSTEXPR uint32_t get_stalled_by_ws_fc() const
@@ -11286,9 +11224,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 28);
         return v;
     }
-    CONSTEXPR wd_status_r &set_stalled_by_ws_fc(uint32_t value)
+    CONSTEXPR wd_status_r& set_stalled_by_ws_fc(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 28) & word0) | ((((1U << 1) - 1) & value) << 28);
+        word0 = (~(((1U << 1) - 1)<<28) & word0) | ((((1U << 1) - 1) & value) << 28);
         return *this;
     }
     CONSTEXPR uint32_t get_stalled_by_ws_tc() const
@@ -11296,9 +11234,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 29);
         return v;
     }
-    CONSTEXPR wd_status_r &set_stalled_by_ws_tc(uint32_t value)
+    CONSTEXPR wd_status_r& set_stalled_by_ws_tc(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 29) & word0) | ((((1U << 1) - 1) & value) << 29);
+        word0 = (~(((1U << 1) - 1)<<29) & word0) | ((((1U << 1) - 1) & value) << 29);
         return *this;
     }
     CONSTEXPR uint32_t get_stalled_by_wd_buf() const
@@ -11306,9 +11244,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 30);
         return v;
     }
-    CONSTEXPR wd_status_r &set_stalled_by_wd_buf(uint32_t value)
+    CONSTEXPR wd_status_r& set_stalled_by_wd_buf(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 30) & word0) | ((((1U << 1) - 1) & value) << 30);
+        word0 = (~(((1U << 1) - 1)<<30) & word0) | ((((1U << 1) - 1) & value) << 30);
         return *this;
     }
 #endif
@@ -11360,9 +11298,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR mac_status_r &set_mac_active(uint32_t value)
+    CONSTEXPR mac_status_r& set_mac_active(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_mac_dpu_active() const
@@ -11370,9 +11308,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR mac_status_r &set_mac_dpu_active(uint32_t value)
+    CONSTEXPR mac_status_r& set_mac_dpu_active(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_mac_stalled_by_w_or_acc() const
@@ -11380,9 +11318,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR mac_status_r &set_mac_stalled_by_w_or_acc(uint32_t value)
+    CONSTEXPR mac_status_r& set_mac_stalled_by_w_or_acc(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_mac_stalled_by_w() const
@@ -11390,9 +11328,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR mac_status_r &set_mac_stalled_by_w(uint32_t value)
+    CONSTEXPR mac_status_r& set_mac_stalled_by_w(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_mac_stalled_by_acc() const
@@ -11400,9 +11338,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR mac_status_r &set_mac_stalled_by_acc(uint32_t value)
+    CONSTEXPR mac_status_r& set_mac_stalled_by_acc(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_mac_stalled_by_ib() const
@@ -11410,9 +11348,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR mac_status_r &set_mac_stalled_by_ib(uint32_t value)
+    CONSTEXPR mac_status_r& set_mac_stalled_by_ib(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
 #endif
@@ -11465,9 +11403,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR ao_status_r &set_ao_active(uint32_t value)
+    CONSTEXPR ao_status_r& set_ao_active(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_ao_stalled_by_bs_or_ob() const
@@ -11475,9 +11413,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR ao_status_r &set_ao_stalled_by_bs_or_ob(uint32_t value)
+    CONSTEXPR ao_status_r& set_ao_stalled_by_bs_or_ob(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_ao_stalled_by_bs() const
@@ -11485,9 +11423,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR ao_status_r &set_ao_stalled_by_bs(uint32_t value)
+    CONSTEXPR ao_status_r& set_ao_stalled_by_bs(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_ao_stalled_by_ob() const
@@ -11495,9 +11433,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR ao_status_r &set_ao_stalled_by_ob(uint32_t value)
+    CONSTEXPR ao_status_r& set_ao_stalled_by_ob(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_ao_stalled_by_ab_or_cb() const
@@ -11505,9 +11443,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR ao_status_r &set_ao_stalled_by_ab_or_cb(uint32_t value)
+    CONSTEXPR ao_status_r& set_ao_stalled_by_ab_or_cb(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_ao_stalled_by_ab() const
@@ -11515,9 +11453,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR ao_status_r &set_ao_stalled_by_ab(uint32_t value)
+    CONSTEXPR ao_status_r& set_ao_stalled_by_ab(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_ao_stalled_by_cb() const
@@ -11525,9 +11463,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR ao_status_r &set_ao_stalled_by_cb(uint32_t value)
+    CONSTEXPR ao_status_r& set_ao_stalled_by_cb(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 8) & word0) | ((((1U << 1) - 1) & value) << 8);
+        word0 = (~(((1U << 1) - 1)<<8) & word0) | ((((1U << 1) - 1) & value) << 8);
         return *this;
     }
 #endif
@@ -11597,9 +11535,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_cmd_ch_idle(uint32_t value)
+    CONSTEXPR dma_status0_r& set_cmd_ch_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_ifm0_ch_idle() const
@@ -11607,9 +11545,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_ifm0_ch_idle(uint32_t value)
+    CONSTEXPR dma_status0_r& set_ifm0_ch_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_ifm1_ch_idle() const
@@ -11617,9 +11555,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_ifm1_ch_idle(uint32_t value)
+    CONSTEXPR dma_status0_r& set_ifm1_ch_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_wgt_ch_idle() const
@@ -11627,9 +11565,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_wgt_ch_idle(uint32_t value)
+    CONSTEXPR dma_status0_r& set_wgt_ch_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_bas_ch_idle() const
@@ -11637,9 +11575,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_bas_ch_idle(uint32_t value)
+    CONSTEXPR dma_status0_r& set_bas_ch_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_m2m_ch_idle() const
@@ -11647,9 +11585,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_m2m_ch_idle(uint32_t value)
+    CONSTEXPR dma_status0_r& set_m2m_ch_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_ofm_ch_idle() const
@@ -11657,9 +11595,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_ofm_ch_idle(uint32_t value)
+    CONSTEXPR dma_status0_r& set_ofm_ch_idle(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_halt_req() const
@@ -11667,9 +11605,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_axi_halt_req(uint32_t value)
+    CONSTEXPR dma_status0_r& set_axi_halt_req(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_halt_ack() const
@@ -11677,9 +11615,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_axi_halt_ack(uint32_t value)
+    CONSTEXPR dma_status0_r& set_axi_halt_ack(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 8) & word0) | ((((1U << 1) - 1) & value) << 8);
+        word0 = (~(((1U << 1) - 1)<<8) & word0) | ((((1U << 1) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_pause_req() const
@@ -11687,9 +11625,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 9);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_axi_pause_req(uint32_t value)
+    CONSTEXPR dma_status0_r& set_axi_pause_req(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 9) & word0) | ((((1U << 1) - 1) & value) << 9);
+        word0 = (~(((1U << 1) - 1)<<9) & word0) | ((((1U << 1) - 1) & value) << 9);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_pause_ack() const
@@ -11697,9 +11635,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 10);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_axi_pause_ack(uint32_t value)
+    CONSTEXPR dma_status0_r& set_axi_pause_ack(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 10) & word0) | ((((1U << 1) - 1) & value) << 10);
+        word0 = (~(((1U << 1) - 1)<<10) & word0) | ((((1U << 1) - 1) & value) << 10);
         return *this;
     }
     CONSTEXPR uint32_t get_cmd_abort_ack() const
@@ -11707,9 +11645,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 11);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_cmd_abort_ack(uint32_t value)
+    CONSTEXPR dma_status0_r& set_cmd_abort_ack(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 11) & word0) | ((((1U << 1) - 1) & value) << 11);
+        word0 = (~(((1U << 1) - 1)<<11) & word0) | ((((1U << 1) - 1) & value) << 11);
         return *this;
     }
     CONSTEXPR uint32_t get_cmd_abort_req() const
@@ -11717,9 +11655,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 12);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_cmd_abort_req(uint32_t value)
+    CONSTEXPR dma_status0_r& set_cmd_abort_req(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 12) & word0) | ((((1U << 1) - 1) & value) << 12);
+        word0 = (~(((1U << 1) - 1)<<12) & word0) | ((((1U << 1) - 1) & value) << 12);
         return *this;
     }
     CONSTEXPR uint32_t get_ifm_mac_if_stall() const
@@ -11727,9 +11665,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 13);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_ifm_mac_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_ifm_mac_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 13) & word0) | ((((1U << 1) - 1) & value) << 13);
+        word0 = (~(((1U << 1) - 1)<<13) & word0) | ((((1U << 1) - 1) & value) << 13);
         return *this;
     }
     CONSTEXPR uint32_t get_ifm_tc_if_stall() const
@@ -11737,9 +11675,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 14);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_ifm_tc_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_ifm_tc_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 14) & word0) | ((((1U << 1) - 1) & value) << 14);
+        word0 = (~(((1U << 1) - 1)<<14) & word0) | ((((1U << 1) - 1) & value) << 14);
         return *this;
     }
     CONSTEXPR uint32_t get_ifm_ao_if_stall() const
@@ -11747,9 +11685,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 15);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_ifm_ao_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_ifm_ao_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 15) & word0) | ((((1U << 1) - 1) & value) << 15);
+        word0 = (~(((1U << 1) - 1)<<15) & word0) | ((((1U << 1) - 1) & value) << 15);
         return *this;
     }
     CONSTEXPR uint32_t get_ofm_if_stall() const
@@ -11757,9 +11695,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 16);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_ofm_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_ofm_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 16) & word0) | ((((1U << 1) - 1) & value) << 16);
+        word0 = (~(((1U << 1) - 1)<<16) & word0) | ((((1U << 1) - 1) & value) << 16);
         return *this;
     }
     CONSTEXPR uint32_t get_cmd_if_stall() const
@@ -11767,9 +11705,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 17);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_cmd_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_cmd_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 17) & word0) | ((((1U << 1) - 1) & value) << 17);
+        word0 = (~(((1U << 1) - 1)<<17) & word0) | ((((1U << 1) - 1) & value) << 17);
         return *this;
     }
     CONSTEXPR uint32_t get_wd_sc0_if_stall() const
@@ -11777,9 +11715,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 18);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_wd_sc0_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_wd_sc0_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 18) & word0) | ((((1U << 1) - 1) & value) << 18);
+        word0 = (~(((1U << 1) - 1)<<18) & word0) | ((((1U << 1) - 1) & value) << 18);
         return *this;
     }
     CONSTEXPR uint32_t get_wd_sc1_if_stall() const
@@ -11787,9 +11725,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 19);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_wd_sc1_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_wd_sc1_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 19) & word0) | ((((1U << 1) - 1) & value) << 19);
+        word0 = (~(((1U << 1) - 1)<<19) & word0) | ((((1U << 1) - 1) & value) << 19);
         return *this;
     }
     CONSTEXPR uint32_t get_wd_sc2_if_stall() const
@@ -11797,9 +11735,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 20);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_wd_sc2_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_wd_sc2_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 20) & word0) | ((((1U << 1) - 1) & value) << 20);
+        word0 = (~(((1U << 1) - 1)<<20) & word0) | ((((1U << 1) - 1) & value) << 20);
         return *this;
     }
     CONSTEXPR uint32_t get_wd_sc3_if_stall() const
@@ -11807,9 +11745,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 21);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_wd_sc3_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_wd_sc3_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 21) & word0) | ((((1U << 1) - 1) & value) << 21);
+        word0 = (~(((1U << 1) - 1)<<21) & word0) | ((((1U << 1) - 1) & value) << 21);
         return *this;
     }
     CONSTEXPR uint32_t get_wd_fc_if_stall() const
@@ -11817,9 +11755,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 22);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_wd_fc_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_wd_fc_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 22) & word0) | ((((1U << 1) - 1) & value) << 22);
+        word0 = (~(((1U << 1) - 1)<<22) & word0) | ((((1U << 1) - 1) & value) << 22);
         return *this;
     }
     CONSTEXPR uint32_t get_bs_if_stall() const
@@ -11827,9 +11765,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 23);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_bs_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_bs_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 23) & word0) | ((((1U << 1) - 1) & value) << 23);
+        word0 = (~(((1U << 1) - 1)<<23) & word0) | ((((1U << 1) - 1) & value) << 23);
         return *this;
     }
     CONSTEXPR uint32_t get_lutcfg_if_stall() const
@@ -11837,9 +11775,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 24);
         return v;
     }
-    CONSTEXPR dma_status0_r &set_lutcfg_if_stall(uint32_t value)
+    CONSTEXPR dma_status0_r& set_lutcfg_if_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 24) & word0) | ((((1U << 1) - 1) & value) << 24);
+        word0 = (~(((1U << 1) - 1)<<24) & word0) | ((((1U << 1) - 1) & value) << 24);
         return *this;
     }
 #endif
@@ -11914,9 +11852,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram0_ar_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram0_ar_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram0_rd_limit_stall() const
@@ -11924,9 +11862,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram0_rd_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram0_rd_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram0_aw_stalled() const
@@ -11934,9 +11872,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram0_aw_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram0_aw_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram0_w_stalled() const
@@ -11944,9 +11882,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram0_w_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram0_w_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram0_wr_limit_stall() const
@@ -11954,9 +11892,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram0_wr_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram0_wr_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram1_ar_stalled() const
@@ -11964,9 +11902,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram1_ar_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram1_ar_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram1_rd_limit_stall() const
@@ -11974,9 +11912,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram1_rd_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram1_rd_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram1_aw_stalled() const
@@ -11984,9 +11922,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram1_aw_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram1_aw_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram1_w_stalled() const
@@ -11994,9 +11932,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 8);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram1_w_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram1_w_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 8) & word0) | ((((1U << 1) - 1) & value) << 8);
+        word0 = (~(((1U << 1) - 1)<<8) & word0) | ((((1U << 1) - 1) & value) << 8);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram1_wr_limit_stall() const
@@ -12004,9 +11942,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 9);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram1_wr_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram1_wr_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 9) & word0) | ((((1U << 1) - 1) & value) << 9);
+        word0 = (~(((1U << 1) - 1)<<9) & word0) | ((((1U << 1) - 1) & value) << 9);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram2_ar_stalled() const
@@ -12014,9 +11952,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 10);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram2_ar_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram2_ar_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 10) & word0) | ((((1U << 1) - 1) & value) << 10);
+        word0 = (~(((1U << 1) - 1)<<10) & word0) | ((((1U << 1) - 1) & value) << 10);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram2_rd_limit_stall() const
@@ -12024,9 +11962,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 11);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram2_rd_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram2_rd_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 11) & word0) | ((((1U << 1) - 1) & value) << 11);
+        word0 = (~(((1U << 1) - 1)<<11) & word0) | ((((1U << 1) - 1) & value) << 11);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram2_aw_stalled() const
@@ -12034,9 +11972,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 12);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram2_aw_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram2_aw_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 12) & word0) | ((((1U << 1) - 1) & value) << 12);
+        word0 = (~(((1U << 1) - 1)<<12) & word0) | ((((1U << 1) - 1) & value) << 12);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram2_w_stalled() const
@@ -12044,9 +11982,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 13);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram2_w_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram2_w_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 13) & word0) | ((((1U << 1) - 1) & value) << 13);
+        word0 = (~(((1U << 1) - 1)<<13) & word0) | ((((1U << 1) - 1) & value) << 13);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram2_wr_limit_stall() const
@@ -12054,9 +11992,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 14);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram2_wr_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram2_wr_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 14) & word0) | ((((1U << 1) - 1) & value) << 14);
+        word0 = (~(((1U << 1) - 1)<<14) & word0) | ((((1U << 1) - 1) & value) << 14);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram3_ar_stalled() const
@@ -12064,9 +12002,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 15);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram3_ar_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram3_ar_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 15) & word0) | ((((1U << 1) - 1) & value) << 15);
+        word0 = (~(((1U << 1) - 1)<<15) & word0) | ((((1U << 1) - 1) & value) << 15);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram3_rd_limit_stall() const
@@ -12074,9 +12012,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 16);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram3_rd_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram3_rd_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 16) & word0) | ((((1U << 1) - 1) & value) << 16);
+        word0 = (~(((1U << 1) - 1)<<16) & word0) | ((((1U << 1) - 1) & value) << 16);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram3_aw_stalled() const
@@ -12084,9 +12022,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 17);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram3_aw_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram3_aw_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 17) & word0) | ((((1U << 1) - 1) & value) << 17);
+        word0 = (~(((1U << 1) - 1)<<17) & word0) | ((((1U << 1) - 1) & value) << 17);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram3_w_stalled() const
@@ -12094,9 +12032,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 18);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram3_w_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram3_w_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 18) & word0) | ((((1U << 1) - 1) & value) << 18);
+        word0 = (~(((1U << 1) - 1)<<18) & word0) | ((((1U << 1) - 1) & value) << 18);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_sram3_wr_limit_stall() const
@@ -12104,9 +12042,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 19);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_sram3_wr_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_sram3_wr_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 19) & word0) | ((((1U << 1) - 1) & value) << 19);
+        word0 = (~(((1U << 1) - 1)<<19) & word0) | ((((1U << 1) - 1) & value) << 19);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext0_ar_stalled() const
@@ -12114,9 +12052,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 20);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext0_ar_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext0_ar_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 20) & word0) | ((((1U << 1) - 1) & value) << 20);
+        word0 = (~(((1U << 1) - 1)<<20) & word0) | ((((1U << 1) - 1) & value) << 20);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext0_rd_limit_stall() const
@@ -12124,9 +12062,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 21);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext0_rd_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext0_rd_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 21) & word0) | ((((1U << 1) - 1) & value) << 21);
+        word0 = (~(((1U << 1) - 1)<<21) & word0) | ((((1U << 1) - 1) & value) << 21);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext0_aw_stalled() const
@@ -12134,9 +12072,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 22);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext0_aw_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext0_aw_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 22) & word0) | ((((1U << 1) - 1) & value) << 22);
+        word0 = (~(((1U << 1) - 1)<<22) & word0) | ((((1U << 1) - 1) & value) << 22);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext0_w_stalled() const
@@ -12144,9 +12082,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 23);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext0_w_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext0_w_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 23) & word0) | ((((1U << 1) - 1) & value) << 23);
+        word0 = (~(((1U << 1) - 1)<<23) & word0) | ((((1U << 1) - 1) & value) << 23);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext0_wr_limit_stall() const
@@ -12154,9 +12092,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 24);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext0_wr_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext0_wr_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 24) & word0) | ((((1U << 1) - 1) & value) << 24);
+        word0 = (~(((1U << 1) - 1)<<24) & word0) | ((((1U << 1) - 1) & value) << 24);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext1_ar_stalled() const
@@ -12164,9 +12102,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 25);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext1_ar_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext1_ar_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 25) & word0) | ((((1U << 1) - 1) & value) << 25);
+        word0 = (~(((1U << 1) - 1)<<25) & word0) | ((((1U << 1) - 1) & value) << 25);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext1_rd_limit_stall() const
@@ -12174,9 +12112,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 26);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext1_rd_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext1_rd_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 26) & word0) | ((((1U << 1) - 1) & value) << 26);
+        word0 = (~(((1U << 1) - 1)<<26) & word0) | ((((1U << 1) - 1) & value) << 26);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext1_aw_stalled() const
@@ -12184,9 +12122,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 27);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext1_aw_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext1_aw_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 27) & word0) | ((((1U << 1) - 1) & value) << 27);
+        word0 = (~(((1U << 1) - 1)<<27) & word0) | ((((1U << 1) - 1) & value) << 27);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext1_w_stalled() const
@@ -12194,9 +12132,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 28);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext1_w_stalled(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext1_w_stalled(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 28) & word0) | ((((1U << 1) - 1) & value) << 28);
+        word0 = (~(((1U << 1) - 1)<<28) & word0) | ((((1U << 1) - 1) & value) << 28);
         return *this;
     }
     CONSTEXPR uint32_t get_axi_ext1_wr_limit_stall() const
@@ -12204,9 +12142,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 29);
         return v;
     }
-    CONSTEXPR dma_status1_r &set_axi_ext1_wr_limit_stall(uint32_t value)
+    CONSTEXPR dma_status1_r& set_axi_ext1_wr_limit_stall(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 29) & word0) | ((((1U << 1) - 1) & value) << 29);
+        word0 = (~(((1U << 1) - 1)<<29) & word0) | ((((1U << 1) - 1) & value) << 29);
         return *this;
     }
 #endif
@@ -12257,9 +12195,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR pmcr_r &set_cnt_en(uint32_t value)
+    CONSTEXPR pmcr_r& set_cnt_en(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_event_cnt_rst() const
@@ -12267,9 +12205,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR pmcr_r &set_event_cnt_rst(uint32_t value)
+    CONSTEXPR pmcr_r& set_event_cnt_rst(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_cycle_cnt_rst() const
@@ -12277,9 +12215,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR pmcr_r &set_cycle_cnt_rst(uint32_t value)
+    CONSTEXPR pmcr_r& set_cycle_cnt_rst(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_mask_en() const
@@ -12287,9 +12225,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR pmcr_r &set_mask_en(uint32_t value)
+    CONSTEXPR pmcr_r& set_mask_en(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_num_event_cnt() const
@@ -12297,9 +12235,9 @@ public:
         auto v = ((1U << 5) - 1) & (word0 >> 11);
         return v;
     }
-    CONSTEXPR pmcr_r &set_num_event_cnt(uint32_t value)
+    CONSTEXPR pmcr_r& set_num_event_cnt(uint32_t value)
     {
-        word0 = (~(((1U << 5) - 1) << 11) & word0) | ((((1U << 5) - 1) & value) << 11);
+        word0 = (~(((1U << 5) - 1)<<11) & word0) | ((((1U << 5) - 1) & value) << 11);
         return *this;
     }
 #endif
@@ -12353,9 +12291,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_EVENT_CNT_0(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_EVENT_CNT_0(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_1() const
@@ -12363,9 +12301,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_EVENT_CNT_1(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_EVENT_CNT_1(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_2() const
@@ -12373,9 +12311,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_EVENT_CNT_2(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_EVENT_CNT_2(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_3() const
@@ -12383,9 +12321,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_EVENT_CNT_3(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_EVENT_CNT_3(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_4() const
@@ -12393,9 +12331,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_EVENT_CNT_4(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_EVENT_CNT_4(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_5() const
@@ -12403,9 +12341,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_EVENT_CNT_5(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_EVENT_CNT_5(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_6() const
@@ -12413,9 +12351,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_EVENT_CNT_6(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_EVENT_CNT_6(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_7() const
@@ -12423,9 +12361,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_EVENT_CNT_7(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_EVENT_CNT_7(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_CYCLE_CNT() const
@@ -12433,9 +12371,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 31);
         return v;
     }
-    CONSTEXPR pmcntenset_r &set_CYCLE_CNT(uint32_t value)
+    CONSTEXPR pmcntenset_r& set_CYCLE_CNT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 31) & word0) | ((((1U << 1) - 1) & value) << 31);
+        word0 = (~(((1U << 1) - 1)<<31) & word0) | ((((1U << 1) - 1) & value) << 31);
         return *this;
     }
 #endif
@@ -12489,9 +12427,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_EVENT_CNT_0(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_EVENT_CNT_0(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_1() const
@@ -12499,9 +12437,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_EVENT_CNT_1(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_EVENT_CNT_1(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_2() const
@@ -12509,9 +12447,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_EVENT_CNT_2(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_EVENT_CNT_2(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_3() const
@@ -12519,9 +12457,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_EVENT_CNT_3(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_EVENT_CNT_3(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_4() const
@@ -12529,9 +12467,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_EVENT_CNT_4(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_EVENT_CNT_4(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_5() const
@@ -12539,9 +12477,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_EVENT_CNT_5(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_EVENT_CNT_5(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_6() const
@@ -12549,9 +12487,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_EVENT_CNT_6(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_EVENT_CNT_6(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_7() const
@@ -12559,9 +12497,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_EVENT_CNT_7(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_EVENT_CNT_7(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_CYCLE_CNT() const
@@ -12569,9 +12507,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 31);
         return v;
     }
-    CONSTEXPR pmcntenclr_r &set_CYCLE_CNT(uint32_t value)
+    CONSTEXPR pmcntenclr_r& set_CYCLE_CNT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 31) & word0) | ((((1U << 1) - 1) & value) << 31);
+        word0 = (~(((1U << 1) - 1)<<31) & word0) | ((((1U << 1) - 1) & value) << 31);
         return *this;
     }
 #endif
@@ -12625,9 +12563,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_EVENT_CNT_0_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_EVENT_CNT_0_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_1_OVF() const
@@ -12635,9 +12573,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_EVENT_CNT_1_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_EVENT_CNT_1_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_2_OVF() const
@@ -12645,9 +12583,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_EVENT_CNT_2_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_EVENT_CNT_2_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_3_OVF() const
@@ -12655,9 +12593,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_EVENT_CNT_3_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_EVENT_CNT_3_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_4_OVF() const
@@ -12665,9 +12603,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_EVENT_CNT_4_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_EVENT_CNT_4_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_5_OVF() const
@@ -12675,9 +12613,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_EVENT_CNT_5_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_EVENT_CNT_5_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_6_OVF() const
@@ -12685,9 +12623,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_EVENT_CNT_6_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_EVENT_CNT_6_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_7_OVF() const
@@ -12695,9 +12633,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_EVENT_CNT_7_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_EVENT_CNT_7_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_CYCLE_CNT_OVF() const
@@ -12705,9 +12643,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 31);
         return v;
     }
-    CONSTEXPR pmovsset_r &set_CYCLE_CNT_OVF(uint32_t value)
+    CONSTEXPR pmovsset_r& set_CYCLE_CNT_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 31) & word0) | ((((1U << 1) - 1) & value) << 31);
+        word0 = (~(((1U << 1) - 1)<<31) & word0) | ((((1U << 1) - 1) & value) << 31);
         return *this;
     }
 #endif
@@ -12761,9 +12699,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_EVENT_CNT_0_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_EVENT_CNT_0_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_1_OVF() const
@@ -12771,9 +12709,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_EVENT_CNT_1_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_EVENT_CNT_1_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_2_OVF() const
@@ -12781,9 +12719,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_EVENT_CNT_2_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_EVENT_CNT_2_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_3_OVF() const
@@ -12791,9 +12729,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_EVENT_CNT_3_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_EVENT_CNT_3_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_4_OVF() const
@@ -12801,9 +12739,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_EVENT_CNT_4_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_EVENT_CNT_4_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_5_OVF() const
@@ -12811,9 +12749,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_EVENT_CNT_5_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_EVENT_CNT_5_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_6_OVF() const
@@ -12821,9 +12759,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_EVENT_CNT_6_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_EVENT_CNT_6_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_7_OVF() const
@@ -12831,9 +12769,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_EVENT_CNT_7_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_EVENT_CNT_7_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_CYCLE_CNT_OVF() const
@@ -12841,9 +12779,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 31);
         return v;
     }
-    CONSTEXPR pmovsclr_r &set_CYCLE_CNT_OVF(uint32_t value)
+    CONSTEXPR pmovsclr_r& set_CYCLE_CNT_OVF(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 31) & word0) | ((((1U << 1) - 1) & value) << 31);
+        word0 = (~(((1U << 1) - 1)<<31) & word0) | ((((1U << 1) - 1) & value) << 31);
         return *this;
     }
 #endif
@@ -12897,9 +12835,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR pmintset_r &set_EVENT_CNT_0_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_EVENT_CNT_0_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_1_INT() const
@@ -12907,9 +12845,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR pmintset_r &set_EVENT_CNT_1_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_EVENT_CNT_1_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_2_INT() const
@@ -12917,9 +12855,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR pmintset_r &set_EVENT_CNT_2_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_EVENT_CNT_2_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_3_INT() const
@@ -12927,9 +12865,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR pmintset_r &set_EVENT_CNT_3_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_EVENT_CNT_3_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_4_INT() const
@@ -12937,9 +12875,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR pmintset_r &set_EVENT_CNT_4_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_EVENT_CNT_4_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_5_INT() const
@@ -12947,9 +12885,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR pmintset_r &set_EVENT_CNT_5_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_EVENT_CNT_5_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_6_INT() const
@@ -12957,9 +12895,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR pmintset_r &set_EVENT_CNT_6_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_EVENT_CNT_6_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_7_INT() const
@@ -12967,9 +12905,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR pmintset_r &set_EVENT_CNT_7_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_EVENT_CNT_7_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_CYCLE_CNT_INT() const
@@ -12977,9 +12915,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 31);
         return v;
     }
-    CONSTEXPR pmintset_r &set_CYCLE_CNT_INT(uint32_t value)
+    CONSTEXPR pmintset_r& set_CYCLE_CNT_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 31) & word0) | ((((1U << 1) - 1) & value) << 31);
+        word0 = (~(((1U << 1) - 1)<<31) & word0) | ((((1U << 1) - 1) & value) << 31);
         return *this;
     }
 #endif
@@ -13033,9 +12971,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_EVENT_CNT_0_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_EVENT_CNT_0_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_1_INT() const
@@ -13043,9 +12981,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 1);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_EVENT_CNT_1_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_EVENT_CNT_1_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 1) & word0) | ((((1U << 1) - 1) & value) << 1);
+        word0 = (~(((1U << 1) - 1)<<1) & word0) | ((((1U << 1) - 1) & value) << 1);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_2_INT() const
@@ -13053,9 +12991,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 2);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_EVENT_CNT_2_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_EVENT_CNT_2_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 2) & word0) | ((((1U << 1) - 1) & value) << 2);
+        word0 = (~(((1U << 1) - 1)<<2) & word0) | ((((1U << 1) - 1) & value) << 2);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_3_INT() const
@@ -13063,9 +13001,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 3);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_EVENT_CNT_3_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_EVENT_CNT_3_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 3) & word0) | ((((1U << 1) - 1) & value) << 3);
+        word0 = (~(((1U << 1) - 1)<<3) & word0) | ((((1U << 1) - 1) & value) << 3);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_4_INT() const
@@ -13073,9 +13011,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 4);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_EVENT_CNT_4_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_EVENT_CNT_4_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 4) & word0) | ((((1U << 1) - 1) & value) << 4);
+        word0 = (~(((1U << 1) - 1)<<4) & word0) | ((((1U << 1) - 1) & value) << 4);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_5_INT() const
@@ -13083,9 +13021,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 5);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_EVENT_CNT_5_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_EVENT_CNT_5_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 5) & word0) | ((((1U << 1) - 1) & value) << 5);
+        word0 = (~(((1U << 1) - 1)<<5) & word0) | ((((1U << 1) - 1) & value) << 5);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_6_INT() const
@@ -13093,9 +13031,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 6);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_EVENT_CNT_6_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_EVENT_CNT_6_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 6) & word0) | ((((1U << 1) - 1) & value) << 6);
+        word0 = (~(((1U << 1) - 1)<<6) & word0) | ((((1U << 1) - 1) & value) << 6);
         return *this;
     }
     CONSTEXPR uint32_t get_EVENT_CNT_7_INT() const
@@ -13103,9 +13041,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 7);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_EVENT_CNT_7_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_EVENT_CNT_7_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 7) & word0) | ((((1U << 1) - 1) & value) << 7);
+        word0 = (~(((1U << 1) - 1)<<7) & word0) | ((((1U << 1) - 1) & value) << 7);
         return *this;
     }
     CONSTEXPR uint32_t get_CYCLE_CNT_INT() const
@@ -13113,9 +13051,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 31);
         return v;
     }
-    CONSTEXPR pmintclr_r &set_CYCLE_CNT_INT(uint32_t value)
+    CONSTEXPR pmintclr_r& set_CYCLE_CNT_INT(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 31) & word0) | ((((1U << 1) - 1) & value) << 31);
+        word0 = (~(((1U << 1) - 1)<<31) & word0) | ((((1U << 1) - 1) & value) << 31);
         return *this;
     }
 #endif
@@ -13150,8 +13088,7 @@ public:
     {}
     CONSTEXPR void operator=(uint64_t value)
     {
-        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-        word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        word0 = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); word1 = static_cast<uint32_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
     }
     CONSTEXPR operator uint64_t()
     {
@@ -13215,9 +13152,9 @@ public:
         assert(v <= 671);
         return static_cast<NPU_NAMESPACE::pmu_event>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_CYCLE_CNT_CFG_START(NPU_NAMESPACE::pmu_event value)
+    CONSTEXPR pmccntr_cfg_r& set_CYCLE_CNT_CFG_START(NPU_NAMESPACE::pmu_event value)
     {
-        word0 = (~(((1U << 10) - 1) << 0) & word0) | ((((1U << 10) - 1) & static_cast<uint32_t>(value)) << 0);
+        word0 = (~(((1U << 10) - 1)<<0) & word0) | ((((1U << 10) - 1) & static_cast<uint32_t>(value)) << 0);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_S0() const
@@ -13226,9 +13163,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_S0(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmccntr_cfg_r& set_S0(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 12) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 12);
+        word0 = (~(((1U << 1) - 1)<<12) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 12);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_S1() const
@@ -13237,9 +13174,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_S1(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmccntr_cfg_r& set_S1(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 13) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 13);
+        word0 = (~(((1U << 1) - 1)<<13) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 13);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_S2() const
@@ -13248,9 +13185,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_S2(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmccntr_cfg_r& set_S2(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 14) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 14);
+        word0 = (~(((1U << 1) - 1)<<14) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 14);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_S3() const
@@ -13259,9 +13196,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_S3(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmccntr_cfg_r& set_S3(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 15) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 15);
+        word0 = (~(((1U << 1) - 1)<<15) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 15);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_event get_CYCLE_CNT_CFG_STOP() const
@@ -13270,9 +13207,9 @@ public:
         assert(v <= 671);
         return static_cast<NPU_NAMESPACE::pmu_event>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_CYCLE_CNT_CFG_STOP(NPU_NAMESPACE::pmu_event value)
+    CONSTEXPR pmccntr_cfg_r& set_CYCLE_CNT_CFG_STOP(NPU_NAMESPACE::pmu_event value)
     {
-        word0 = (~(((1U << 10) - 1) << 16) & word0) | ((((1U << 10) - 1) & static_cast<uint32_t>(value)) << 16);
+        word0 = (~(((1U << 10) - 1)<<16) & word0) | ((((1U << 10) - 1) & static_cast<uint32_t>(value)) << 16);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_E0() const
@@ -13281,9 +13218,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_E0(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmccntr_cfg_r& set_E0(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 28) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 28);
+        word0 = (~(((1U << 1) - 1)<<28) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 28);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_E1() const
@@ -13292,9 +13229,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_E1(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmccntr_cfg_r& set_E1(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 29) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 29);
+        word0 = (~(((1U << 1) - 1)<<29) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 29);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_E2() const
@@ -13303,9 +13240,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_E2(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmccntr_cfg_r& set_E2(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 30) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 30);
+        word0 = (~(((1U << 1) - 1)<<30) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 30);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_E3() const
@@ -13314,9 +13251,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmccntr_cfg_r &set_E3(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmccntr_cfg_r& set_E3(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 31) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 31);
+        word0 = (~(((1U << 1) - 1)<<31) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 31);
         return *this;
     }
 #endif
@@ -13367,9 +13304,9 @@ public:
         assert(v <= 9);
         return static_cast<NPU_NAMESPACE::pmu_axi_channel>(v);
     }
-    CONSTEXPR pmcaxi_chan_r &set_CH_SEL(NPU_NAMESPACE::pmu_axi_channel value)
+    CONSTEXPR pmcaxi_chan_r& set_CH_SEL(NPU_NAMESPACE::pmu_axi_channel value)
     {
-        word0 = (~(((1U << 4) - 1) << 0) & word0) | ((((1U << 4) - 1) & static_cast<uint32_t>(value)) << 0);
+        word0 = (~(((1U << 4) - 1)<<0) & word0) | ((((1U << 4) - 1) & static_cast<uint32_t>(value)) << 0);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::axi_port get_AXI_SEL() const
@@ -13378,9 +13315,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::axi_port>(v);
     }
-    CONSTEXPR pmcaxi_chan_r &set_AXI_SEL(NPU_NAMESPACE::axi_port value)
+    CONSTEXPR pmcaxi_chan_r& set_AXI_SEL(NPU_NAMESPACE::axi_port value)
     {
-        word0 = (~(((1U << 1) - 1) << 8) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 8);
+        word0 = (~(((1U << 1) - 1)<<8) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 8);
         return *this;
     }
     CONSTEXPR uint32_t get_BW_CH_SEL_EN() const
@@ -13388,9 +13325,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 10);
         return v;
     }
-    CONSTEXPR pmcaxi_chan_r &set_BW_CH_SEL_EN(uint32_t value)
+    CONSTEXPR pmcaxi_chan_r& set_BW_CH_SEL_EN(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 10) & word0) | ((((1U << 1) - 1) & value) << 10);
+        word0 = (~(((1U << 1) - 1)<<10) & word0) | ((((1U << 1) - 1) & value) << 10);
         return *this;
     }
 #endif
@@ -13437,9 +13374,9 @@ public:
         auto v = ((1U << 1) - 1) & (word0 >> 0);
         return v;
     }
-    CONSTEXPR pmclut_r &set_PCM_LUT_EN_0(uint32_t value)
+    CONSTEXPR pmclut_r& set_PCM_LUT_EN_0(uint32_t value)
     {
-        word0 = (~(((1U << 1) - 1) << 0) & word0) | ((((1U << 1) - 1) & value) << 0);
+        word0 = (~(((1U << 1) - 1)<<0) & word0) | ((((1U << 1) - 1) & value) << 0);
         return *this;
     }
     CONSTEXPR uint32_t get_PMC_LUT_0() const
@@ -13447,9 +13384,9 @@ public:
         auto v = ((1U << 16) - 1) & (word0 >> 16);
         return v;
     }
-    CONSTEXPR pmclut_r &set_PMC_LUT_0(uint32_t value)
+    CONSTEXPR pmclut_r& set_PMC_LUT_0(uint32_t value)
     {
-        word0 = (~(((1U << 16) - 1) << 16) & word0) | ((((1U << 16) - 1) & value) << 16);
+        word0 = (~(((1U << 16) - 1)<<16) & word0) | ((((1U << 16) - 1) & value) << 16);
         return *this;
     }
 #endif
@@ -13494,7 +13431,7 @@ public:
         auto v = word0;
         return v;
     }
-    CONSTEXPR pmevcntr_r &set_count(uint32_t value)
+    CONSTEXPR pmevcntr_r& set_count(uint32_t value)
     {
         word0 = value;
         return *this;
@@ -13548,9 +13485,9 @@ public:
         assert(v <= 671);
         return static_cast<NPU_NAMESPACE::pmu_event>(v);
     }
-    CONSTEXPR pmevtyper_r &set_EV_TYPE(NPU_NAMESPACE::pmu_event value)
+    CONSTEXPR pmevtyper_r& set_EV_TYPE(NPU_NAMESPACE::pmu_event value)
     {
-        word0 = (~(((1U << 10) - 1) << 0) & word0) | ((((1U << 10) - 1) & static_cast<uint32_t>(value)) << 0);
+        word0 = (~(((1U << 10) - 1)<<0) & word0) | ((((1U << 10) - 1) & static_cast<uint32_t>(value)) << 0);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_D0() const
@@ -13559,9 +13496,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmevtyper_r &set_D0(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmevtyper_r& set_D0(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 12) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 12);
+        word0 = (~(((1U << 1) - 1)<<12) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 12);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_D1() const
@@ -13570,9 +13507,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmevtyper_r &set_D1(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmevtyper_r& set_D1(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 13) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 13);
+        word0 = (~(((1U << 1) - 1)<<13) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 13);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_D2() const
@@ -13581,9 +13518,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmevtyper_r &set_D2(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmevtyper_r& set_D2(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 14) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 14);
+        word0 = (~(((1U << 1) - 1)<<14) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 14);
         return *this;
     }
     CONSTEXPR NPU_NAMESPACE::pmu_port_disable get_D3() const
@@ -13592,9 +13529,9 @@ public:
         assert(v <= 1);
         return static_cast<NPU_NAMESPACE::pmu_port_disable>(v);
     }
-    CONSTEXPR pmevtyper_r &set_D3(NPU_NAMESPACE::pmu_port_disable value)
+    CONSTEXPR pmevtyper_r& set_D3(NPU_NAMESPACE::pmu_port_disable value)
     {
-        word0 = (~(((1U << 1) - 1) << 15) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 15);
+        word0 = (~(((1U << 1) - 1)<<15) & word0) | ((((1U << 1) - 1) & static_cast<uint32_t>(value)) << 15);
         return *this;
     }
 #endif
@@ -13991,7 +13928,7 @@ struct NPU_REG
         for (size_t i = 0; i < (sizeof(PMEVTYPER) / sizeof(PMEVTYPER[0])); ++i)
             PMEVTYPER[i] = 0;
     }
-    uint32_t &operator[](const int addr_offset)
+    uint32_t& operator[](const int addr_offset)
     {
         return reinterpret_cast<uint32_t *>(this)[addr_offset / 4];
     }
@@ -13999,910 +13936,458 @@ struct NPU_REG
     {
         switch (offset)
         {
-        case 0:
-            return access_type_t::RO;
-        case 4:
-            return access_type_t::RO;
-        case 8:
-            return access_type_t::RW;
-        case 12:
-            return access_type_t::RW;
-        case 16:
-            return access_type_t::RW;
-        case 24:
-            return access_type_t::RO;
-        case 28:
-            return access_type_t::RW;
-        case 32:
-            return access_type_t::RW;
-        case 36:
-            return access_type_t::RO;
-        case 40:
-            return access_type_t::RO;
-        case 48:
-            return access_type_t::RW;
-        case 56:
-            return access_type_t::RW;
-        case 60:
-            return access_type_t::RW;
-        case 64:
-            return access_type_t::RW;
-        case 68:
-            return access_type_t::RW;
-        case 72:
-            return access_type_t::RW;
-        case 76:
-            return access_type_t::RW;
-        case 80:
-            return access_type_t::RW;
-        case 84:
-            return access_type_t::RW;
-        case 96:
-            return access_type_t::RO;
-        case 100:
-            return access_type_t::RO;
-        case 104:
-            return access_type_t::RO;
-        case 112:
-            return access_type_t::RO;
-        case 120:
-            return access_type_t::RO;
-        case 128:
-            return access_type_t::RW;
-        case 136:
-            return access_type_t::RW;
-        case 144:
-            return access_type_t::RW;
-        case 152:
-            return access_type_t::RW;
-        case 160:
-            return access_type_t::RW;
-        case 168:
-            return access_type_t::RW;
-        case 176:
-            return access_type_t::RW;
-        case 184:
-            return access_type_t::RW;
-        case 320:
-            return access_type_t::RW;
-        case 324:
-            return access_type_t::RW;
-        case 328:
-            return access_type_t::RW;
-        case 576:
-            return access_type_t::RO;
-        case 584:
-            return access_type_t::RO;
-        case 588:
-            return access_type_t::RO;
-        case 592:
-            return access_type_t::RO;
-        case 600:
-            return access_type_t::RO;
-        case 608:
-            return access_type_t::RO;
-        case 616:
-            return access_type_t::RO;
-        case 620:
-            return access_type_t::RO;
-        case 628:
-            return access_type_t::RO;
-        case 636:
-            return access_type_t::RO;
-        case 640:
-            return access_type_t::RO;
-        case 648:
-            return access_type_t::RO;
-        case 656:
-            return access_type_t::RO;
-        case 664:
-            return access_type_t::RO;
-        case 696:
-            return access_type_t::RO;
-        case 700:
-            return access_type_t::RO;
-        case 1024:
-            return access_type_t::RW;
-        case 1028:
-            return access_type_t::RW;
-        case 1032:
-            return access_type_t::RW;
-        case 1036:
-            return access_type_t::RW;
-        case 1040:
-            return access_type_t::RW;
-        case 1044:
-            return access_type_t::RW;
-        case 1048:
-            return access_type_t::RW;
-        case 1052:
-            return access_type_t::RW;
-        case 1056:
-            return access_type_t::RW;
-        case 1060:
-            return access_type_t::RW;
-        case 1064:
-            return access_type_t::RW;
-        case 1068:
-            return access_type_t::RW;
-        case 1072:
-            return access_type_t::RW;
-        case 1076:
-            return access_type_t::RW;
-        case 1080:
-            return access_type_t::RW;
-        case 1084:
-            return access_type_t::RW;
-        case 1088:
-            return access_type_t::RW;
-        case 1092:
-            return access_type_t::RW;
-        case 1096:
-            return access_type_t::RW;
-        case 1100:
-            return access_type_t::RW;
-        case 1104:
-            return access_type_t::RW;
-        case 1108:
-            return access_type_t::RW;
-        case 1112:
-            return access_type_t::RW;
-        case 1116:
-            return access_type_t::RW;
-        case 1120:
-            return access_type_t::RW;
-        case 1124:
-            return access_type_t::RW;
-        case 1128:
-            return access_type_t::RW;
-        case 1132:
-            return access_type_t::RW;
-        case 1136:
-            return access_type_t::RW;
-        case 1140:
-            return access_type_t::RW;
-        case 1144:
-            return access_type_t::RW;
-        case 1148:
-            return access_type_t::RW;
-        case 1152:
-            return access_type_t::RW;
-        case 1156:
-            return access_type_t::RW;
-        case 1160:
-            return access_type_t::RW;
-        case 1164:
-            return access_type_t::RW;
-        case 1168:
-            return access_type_t::RW;
-        case 1172:
-            return access_type_t::RW;
-        case 1176:
-            return access_type_t::RW;
-        case 1180:
-            return access_type_t::RW;
-        case 1184:
-            return access_type_t::RW;
-        case 1188:
-            return access_type_t::RW;
-        case 1192:
-            return access_type_t::RW;
-        case 1196:
-            return access_type_t::RW;
-        case 1200:
-            return access_type_t::RW;
-        case 1204:
-            return access_type_t::RW;
-        case 1208:
-            return access_type_t::RW;
-        case 1212:
-            return access_type_t::RW;
-        case 1216:
-            return access_type_t::RW;
-        case 1220:
-            return access_type_t::RW;
-        case 1224:
-            return access_type_t::RW;
-        case 1228:
-            return access_type_t::RW;
-        case 1232:
-            return access_type_t::RW;
-        case 1236:
-            return access_type_t::RW;
-        case 1240:
-            return access_type_t::RW;
-        case 1244:
-            return access_type_t::RW;
-        case 1248:
-            return access_type_t::RW;
-        case 1252:
-            return access_type_t::RW;
-        case 1256:
-            return access_type_t::RW;
-        case 1260:
-            return access_type_t::RW;
-        case 1264:
-            return access_type_t::RW;
-        case 1268:
-            return access_type_t::RW;
-        case 1272:
-            return access_type_t::RW;
-        case 1276:
-            return access_type_t::RW;
-        case 1280:
-            return access_type_t::RW;
-        case 1284:
-            return access_type_t::RW;
-        case 1288:
-            return access_type_t::RW;
-        case 1292:
-            return access_type_t::RW;
-        case 1296:
-            return access_type_t::RW;
-        case 1300:
-            return access_type_t::RW;
-        case 1304:
-            return access_type_t::RW;
-        case 1308:
-            return access_type_t::RW;
-        case 1312:
-            return access_type_t::RW;
-        case 1316:
-            return access_type_t::RW;
-        case 1320:
-            return access_type_t::RW;
-        case 1324:
-            return access_type_t::RW;
-        case 1328:
-            return access_type_t::RW;
-        case 1332:
-            return access_type_t::RW;
-        case 1336:
-            return access_type_t::RW;
-        case 1340:
-            return access_type_t::RW;
-        case 1344:
-            return access_type_t::RW;
-        case 1348:
-            return access_type_t::RW;
-        case 1352:
-            return access_type_t::RW;
-        case 1356:
-            return access_type_t::RW;
-        case 1360:
-            return access_type_t::RW;
-        case 1364:
-            return access_type_t::RW;
-        case 1368:
-            return access_type_t::RW;
-        case 1372:
-            return access_type_t::RW;
-        case 1376:
-            return access_type_t::RW;
-        case 1380:
-            return access_type_t::RW;
-        case 1384:
-            return access_type_t::RW;
-        case 1388:
-            return access_type_t::RW;
-        case 1392:
-            return access_type_t::RW;
-        case 1396:
-            return access_type_t::RW;
-        case 1400:
-            return access_type_t::RW;
-        case 1404:
-            return access_type_t::RW;
-        case 1408:
-            return access_type_t::RW;
-        case 1412:
-            return access_type_t::RW;
-        case 1416:
-            return access_type_t::RW;
-        case 1420:
-            return access_type_t::RW;
-        case 1424:
-            return access_type_t::RW;
-        case 1428:
-            return access_type_t::RW;
-        case 1432:
-            return access_type_t::RW;
-        case 1436:
-            return access_type_t::RW;
-        case 1440:
-            return access_type_t::RW;
-        case 1444:
-            return access_type_t::RW;
-        case 1448:
-            return access_type_t::RW;
-        case 1452:
-            return access_type_t::RW;
-        case 1456:
-            return access_type_t::RW;
-        case 1460:
-            return access_type_t::RW;
-        case 1464:
-            return access_type_t::RW;
-        case 1468:
-            return access_type_t::RW;
-        case 1472:
-            return access_type_t::RW;
-        case 1476:
-            return access_type_t::RW;
-        case 1480:
-            return access_type_t::RW;
-        case 1484:
-            return access_type_t::RW;
-        case 1488:
-            return access_type_t::RW;
-        case 1492:
-            return access_type_t::RW;
-        case 1496:
-            return access_type_t::RW;
-        case 1500:
-            return access_type_t::RW;
-        case 1504:
-            return access_type_t::RW;
-        case 1508:
-            return access_type_t::RW;
-        case 1512:
-            return access_type_t::RW;
-        case 1516:
-            return access_type_t::RW;
-        case 1520:
-            return access_type_t::RW;
-        case 1524:
-            return access_type_t::RW;
-        case 1528:
-            return access_type_t::RW;
-        case 1532:
-            return access_type_t::RW;
-        case 1536:
-            return access_type_t::RW;
-        case 1540:
-            return access_type_t::RW;
-        case 1544:
-            return access_type_t::RW;
-        case 1548:
-            return access_type_t::RW;
-        case 1552:
-            return access_type_t::RW;
-        case 1556:
-            return access_type_t::RW;
-        case 1560:
-            return access_type_t::RW;
-        case 1564:
-            return access_type_t::RW;
-        case 1568:
-            return access_type_t::RW;
-        case 1572:
-            return access_type_t::RW;
-        case 1576:
-            return access_type_t::RW;
-        case 1580:
-            return access_type_t::RW;
-        case 1584:
-            return access_type_t::RW;
-        case 1588:
-            return access_type_t::RW;
-        case 1592:
-            return access_type_t::RW;
-        case 1596:
-            return access_type_t::RW;
-        case 1600:
-            return access_type_t::RW;
-        case 1604:
-            return access_type_t::RW;
-        case 1608:
-            return access_type_t::RW;
-        case 1612:
-            return access_type_t::RW;
-        case 1616:
-            return access_type_t::RW;
-        case 1620:
-            return access_type_t::RW;
-        case 1624:
-            return access_type_t::RW;
-        case 1628:
-            return access_type_t::RW;
-        case 1632:
-            return access_type_t::RW;
-        case 1636:
-            return access_type_t::RW;
-        case 1640:
-            return access_type_t::RW;
-        case 1644:
-            return access_type_t::RW;
-        case 1648:
-            return access_type_t::RW;
-        case 1652:
-            return access_type_t::RW;
-        case 1656:
-            return access_type_t::RW;
-        case 1660:
-            return access_type_t::RW;
-        case 1664:
-            return access_type_t::RW;
-        case 1668:
-            return access_type_t::RW;
-        case 1672:
-            return access_type_t::RW;
-        case 1676:
-            return access_type_t::RW;
-        case 1680:
-            return access_type_t::RW;
-        case 1684:
-            return access_type_t::RW;
-        case 1688:
-            return access_type_t::RW;
-        case 1692:
-            return access_type_t::RW;
-        case 1696:
-            return access_type_t::RW;
-        case 1700:
-            return access_type_t::RW;
-        case 1704:
-            return access_type_t::RW;
-        case 1708:
-            return access_type_t::RW;
-        case 1712:
-            return access_type_t::RW;
-        case 1716:
-            return access_type_t::RW;
-        case 1720:
-            return access_type_t::RW;
-        case 1724:
-            return access_type_t::RW;
-        case 1728:
-            return access_type_t::RW;
-        case 1732:
-            return access_type_t::RW;
-        case 1736:
-            return access_type_t::RW;
-        case 1740:
-            return access_type_t::RW;
-        case 1744:
-            return access_type_t::RW;
-        case 1748:
-            return access_type_t::RW;
-        case 1752:
-            return access_type_t::RW;
-        case 1756:
-            return access_type_t::RW;
-        case 1760:
-            return access_type_t::RW;
-        case 1764:
-            return access_type_t::RW;
-        case 1768:
-            return access_type_t::RW;
-        case 1772:
-            return access_type_t::RW;
-        case 1776:
-            return access_type_t::RW;
-        case 1780:
-            return access_type_t::RW;
-        case 1784:
-            return access_type_t::RW;
-        case 1788:
-            return access_type_t::RW;
-        case 1792:
-            return access_type_t::RW;
-        case 1796:
-            return access_type_t::RW;
-        case 1800:
-            return access_type_t::RW;
-        case 1804:
-            return access_type_t::RW;
-        case 1808:
-            return access_type_t::RW;
-        case 1812:
-            return access_type_t::RW;
-        case 1816:
-            return access_type_t::RW;
-        case 1820:
-            return access_type_t::RW;
-        case 1824:
-            return access_type_t::RW;
-        case 1828:
-            return access_type_t::RW;
-        case 1832:
-            return access_type_t::RW;
-        case 1836:
-            return access_type_t::RW;
-        case 1840:
-            return access_type_t::RW;
-        case 1844:
-            return access_type_t::RW;
-        case 1848:
-            return access_type_t::RW;
-        case 1852:
-            return access_type_t::RW;
-        case 1856:
-            return access_type_t::RW;
-        case 1860:
-            return access_type_t::RW;
-        case 1864:
-            return access_type_t::RW;
-        case 1868:
-            return access_type_t::RW;
-        case 1872:
-            return access_type_t::RW;
-        case 1876:
-            return access_type_t::RW;
-        case 1880:
-            return access_type_t::RW;
-        case 1884:
-            return access_type_t::RW;
-        case 1888:
-            return access_type_t::RW;
-        case 1892:
-            return access_type_t::RW;
-        case 1896:
-            return access_type_t::RW;
-        case 1900:
-            return access_type_t::RW;
-        case 1904:
-            return access_type_t::RW;
-        case 1908:
-            return access_type_t::RW;
-        case 1912:
-            return access_type_t::RW;
-        case 1916:
-            return access_type_t::RW;
-        case 1920:
-            return access_type_t::RW;
-        case 1924:
-            return access_type_t::RW;
-        case 1928:
-            return access_type_t::RW;
-        case 1932:
-            return access_type_t::RW;
-        case 1936:
-            return access_type_t::RW;
-        case 1940:
-            return access_type_t::RW;
-        case 1944:
-            return access_type_t::RW;
-        case 1948:
-            return access_type_t::RW;
-        case 1952:
-            return access_type_t::RW;
-        case 1956:
-            return access_type_t::RW;
-        case 1960:
-            return access_type_t::RW;
-        case 1964:
-            return access_type_t::RW;
-        case 1968:
-            return access_type_t::RW;
-        case 1972:
-            return access_type_t::RW;
-        case 1976:
-            return access_type_t::RW;
-        case 1980:
-            return access_type_t::RW;
-        case 1984:
-            return access_type_t::RW;
-        case 1988:
-            return access_type_t::RW;
-        case 1992:
-            return access_type_t::RW;
-        case 1996:
-            return access_type_t::RW;
-        case 2000:
-            return access_type_t::RW;
-        case 2004:
-            return access_type_t::RW;
-        case 2008:
-            return access_type_t::RW;
-        case 2012:
-            return access_type_t::RW;
-        case 2016:
-            return access_type_t::RW;
-        case 2020:
-            return access_type_t::RW;
-        case 2024:
-            return access_type_t::RW;
-        case 2028:
-            return access_type_t::RW;
-        case 2032:
-            return access_type_t::RW;
-        case 2036:
-            return access_type_t::RW;
-        case 2040:
-            return access_type_t::RW;
-        case 2044:
-            return access_type_t::RW;
-        case 2048:
-            return access_type_t::RW;
-        case 2052:
-            return access_type_t::RW;
-        case 2056:
-            return access_type_t::RW;
-        case 2060:
-            return access_type_t::RW;
-        case 2064:
-            return access_type_t::RW;
-        case 2068:
-            return access_type_t::RW;
-        case 2076:
-            return access_type_t::RW;
-        case 2080:
-            return access_type_t::RW;
-        case 2084:
-            return access_type_t::RW;
-        case 2088:
-            return access_type_t::RW;
-        case 2092:
-            return access_type_t::RW;
-        case 2096:
-            return access_type_t::RW;
-        case 2108:
-            return access_type_t::RW;
-        case 2116:
-            return access_type_t::RW;
-        case 2120:
-            return access_type_t::RW;
-        case 2124:
-            return access_type_t::RW;
-        case 2128:
-            return access_type_t::RW;
-        case 2132:
-            return access_type_t::RW;
-        case 2136:
-            return access_type_t::RW;
-        case 2140:
-            return access_type_t::RW;
-        case 2144:
-            return access_type_t::RW;
-        case 2152:
-            return access_type_t::RW;
-        case 2156:
-            return access_type_t::RW;
-        case 2160:
-            return access_type_t::RW;
-        case 2172:
-            return access_type_t::RW;
-        case 2176:
-            return access_type_t::RW;
-        case 2180:
-            return access_type_t::RW;
-        case 2184:
-            return access_type_t::RW;
-        case 2192:
-            return access_type_t::RW;
-        case 2196:
-            return access_type_t::RW;
-        case 2200:
-            return access_type_t::RW;
-        case 2204:
-            return access_type_t::RW;
-        case 2208:
-            return access_type_t::RW;
-        case 2212:
-            return access_type_t::RW;
-        case 2216:
-            return access_type_t::RW;
-        case 2220:
-            return access_type_t::RW;
-        case 2224:
-            return access_type_t::RW;
-        case 2228:
-            return access_type_t::RW;
-        case 2232:
-            return access_type_t::RW;
-        case 2236:
-            return access_type_t::RW;
-        case 2240:
-            return access_type_t::RW;
-        case 2244:
-            return access_type_t::RW;
-        case 2248:
-            return access_type_t::RW;
-        case 2252:
-            return access_type_t::RW;
-        case 2256:
-            return access_type_t::RW;
-        case 2304:
-            return access_type_t::RW;
-        case 2324:
-            return access_type_t::RW;
-        case 2340:
-            return access_type_t::RW;
-        case 2344:
-            return access_type_t::RW;
-        case 2348:
-            return access_type_t::RW;
-        case 2352:
-            return access_type_t::RW;
-        case 2364:
-            return access_type_t::RW;
-        case 2560:
-            return access_type_t::RW;
-        case 2568:
-            return access_type_t::RW;
-        case 2576:
-            return access_type_t::RW;
-        case 2584:
-            return access_type_t::RW;
-        case 2592:
-            return access_type_t::RW;
-        case 2600:
-            return access_type_t::RW;
-        case 2608:
-            return access_type_t::RW;
-        case 2624:
-            return access_type_t::RW;
-        case 2632:
-            return access_type_t::RW;
-        case 2640:
-            return access_type_t::RW;
-        case 2648:
-            return access_type_t::RW;
-        case 2656:
-            return access_type_t::RW;
-        case 2664:
-            return access_type_t::RW;
-        case 2672:
-            return access_type_t::RW;
-        case 2688:
-            return access_type_t::RW;
-        case 2696:
-            return access_type_t::RW;
-        case 2704:
-            return access_type_t::RW;
-        case 2712:
-            return access_type_t::RW;
-        case 2720:
-            return access_type_t::RW;
-        case 2728:
-            return access_type_t::RW;
-        case 2736:
-            return access_type_t::RW;
-        case 2744:
-            return access_type_t::RW;
-        case 2752:
-            return access_type_t::RW;
-        case 2760:
-            return access_type_t::RW;
-        case 2768:
-            return access_type_t::RW;
-        case 2776:
-            return access_type_t::RW;
-        case 2784:
-            return access_type_t::RW;
-        case 2792:
-            return access_type_t::RW;
-        case 2800:
-            return access_type_t::RW;
-        case 2808:
-            return access_type_t::RW;
-        case 2816:
-            return access_type_t::RW;
-        case 2824:
-            return access_type_t::RW;
-        case 2832:
-            return access_type_t::RW;
-        case 2840:
-            return access_type_t::RW;
-        case 2848:
-            return access_type_t::RW;
-        case 2856:
-            return access_type_t::RW;
-        case 2864:
-            return access_type_t::RW;
-        case 2880:
-            return access_type_t::RW;
-        case 2888:
-            return access_type_t::RW;
-        case 2896:
-            return access_type_t::RW;
-        case 2904:
-            return access_type_t::RW;
-        case 2912:
-            return access_type_t::RW;
-        case 2920:
-            return access_type_t::RW;
-        case 2928:
-            return access_type_t::RW;
-        case 2936:
-            return access_type_t::RW;
-        case 3008:
-            return access_type_t::RW;
-        case 3016:
-            return access_type_t::RW;
-        case 4032:
-            return access_type_t::RO;
-        case 4048:
-            return access_type_t::RO;
-        case 4052:
-            return access_type_t::RO;
-        case 4056:
-            return access_type_t::RO;
-        case 4060:
-            return access_type_t::RO;
-        case 4064:
-            return access_type_t::RO;
-        case 4068:
-            return access_type_t::RO;
-        case 4072:
-            return access_type_t::RO;
-        case 4076:
-            return access_type_t::RO;
-        case 4080:
-            return access_type_t::RO;
-        case 4084:
-            return access_type_t::RO;
-        case 4088:
-            return access_type_t::RO;
-        case 4092:
-            return access_type_t::RO;
-        case 4352:
-            return access_type_t::RO;
-        case 4356:
-            return access_type_t::RO;
-        case 4360:
-            return access_type_t::RO;
-        case 4368:
-            return access_type_t::RO;
-        case 4372:
-            return access_type_t::RO;
-        case 4480:
-            return access_type_t::RW;
-        case 4484:
-            return access_type_t::RW;
-        case 4488:
-            return access_type_t::RW;
-        case 4492:
-            return access_type_t::RW;
-        case 4496:
-            return access_type_t::RW;
-        case 4500:
-            return access_type_t::RW;
-        case 4504:
-            return access_type_t::RW;
-        case 4512:
-            return access_type_t::RW;
-        case 4520:
-            return access_type_t::RW;
-        case 4524:
-            return access_type_t::RW;
-        case 4528:
-            return access_type_t::RW;
-        case 4864:
-            return access_type_t::RW;
-        case 4868:
-            return access_type_t::RW;
-        case 4872:
-            return access_type_t::RW;
-        case 4876:
-            return access_type_t::RW;
-        case 4880:
-            return access_type_t::RW;
-        case 4884:
-            return access_type_t::RW;
-        case 4888:
-            return access_type_t::RW;
-        case 4892:
-            return access_type_t::RW;
-        case 4992:
-            return access_type_t::RW;
-        case 4996:
-            return access_type_t::RW;
-        case 5000:
-            return access_type_t::RW;
-        case 5004:
-            return access_type_t::RW;
-        case 5008:
-            return access_type_t::RW;
-        case 5012:
-            return access_type_t::RW;
-        case 5016:
-            return access_type_t::RW;
-        case 5020:
-            return access_type_t::RW;
-        default:
-            return access_type_t::RO;
+            case 0: return access_type_t::RO;
+            case 4: return access_type_t::RO;
+            case 8: return access_type_t::RW;
+            case 12: return access_type_t::RW;
+            case 16: return access_type_t::RW;
+            case 24: return access_type_t::RO;
+            case 28: return access_type_t::RW;
+            case 32: return access_type_t::RW;
+            case 36: return access_type_t::RO;
+            case 40: return access_type_t::RO;
+            case 48: return access_type_t::RW;
+            case 56: return access_type_t::RW;
+            case 60: return access_type_t::RW;
+            case 64: return access_type_t::RW;
+            case 68: return access_type_t::RW;
+            case 72: return access_type_t::RW;
+            case 76: return access_type_t::RW;
+            case 80: return access_type_t::RW;
+            case 84: return access_type_t::RW;
+            case 96: return access_type_t::RO;
+            case 100: return access_type_t::RO;
+            case 104: return access_type_t::RO;
+            case 112: return access_type_t::RO;
+            case 120: return access_type_t::RO;
+            case 128: return access_type_t::RW;
+            case 136: return access_type_t::RW;
+            case 144: return access_type_t::RW;
+            case 152: return access_type_t::RW;
+            case 160: return access_type_t::RW;
+            case 168: return access_type_t::RW;
+            case 176: return access_type_t::RW;
+            case 184: return access_type_t::RW;
+            case 320: return access_type_t::RW;
+            case 324: return access_type_t::RW;
+            case 328: return access_type_t::RW;
+            case 576: return access_type_t::RO;
+            case 584: return access_type_t::RO;
+            case 588: return access_type_t::RO;
+            case 592: return access_type_t::RO;
+            case 600: return access_type_t::RO;
+            case 608: return access_type_t::RO;
+            case 616: return access_type_t::RO;
+            case 620: return access_type_t::RO;
+            case 628: return access_type_t::RO;
+            case 636: return access_type_t::RO;
+            case 640: return access_type_t::RO;
+            case 648: return access_type_t::RO;
+            case 656: return access_type_t::RO;
+            case 664: return access_type_t::RO;
+            case 696: return access_type_t::RO;
+            case 700: return access_type_t::RO;
+            case 1024: return access_type_t::RW;
+            case 1028: return access_type_t::RW;
+            case 1032: return access_type_t::RW;
+            case 1036: return access_type_t::RW;
+            case 1040: return access_type_t::RW;
+            case 1044: return access_type_t::RW;
+            case 1048: return access_type_t::RW;
+            case 1052: return access_type_t::RW;
+            case 1056: return access_type_t::RW;
+            case 1060: return access_type_t::RW;
+            case 1064: return access_type_t::RW;
+            case 1068: return access_type_t::RW;
+            case 1072: return access_type_t::RW;
+            case 1076: return access_type_t::RW;
+            case 1080: return access_type_t::RW;
+            case 1084: return access_type_t::RW;
+            case 1088: return access_type_t::RW;
+            case 1092: return access_type_t::RW;
+            case 1096: return access_type_t::RW;
+            case 1100: return access_type_t::RW;
+            case 1104: return access_type_t::RW;
+            case 1108: return access_type_t::RW;
+            case 1112: return access_type_t::RW;
+            case 1116: return access_type_t::RW;
+            case 1120: return access_type_t::RW;
+            case 1124: return access_type_t::RW;
+            case 1128: return access_type_t::RW;
+            case 1132: return access_type_t::RW;
+            case 1136: return access_type_t::RW;
+            case 1140: return access_type_t::RW;
+            case 1144: return access_type_t::RW;
+            case 1148: return access_type_t::RW;
+            case 1152: return access_type_t::RW;
+            case 1156: return access_type_t::RW;
+            case 1160: return access_type_t::RW;
+            case 1164: return access_type_t::RW;
+            case 1168: return access_type_t::RW;
+            case 1172: return access_type_t::RW;
+            case 1176: return access_type_t::RW;
+            case 1180: return access_type_t::RW;
+            case 1184: return access_type_t::RW;
+            case 1188: return access_type_t::RW;
+            case 1192: return access_type_t::RW;
+            case 1196: return access_type_t::RW;
+            case 1200: return access_type_t::RW;
+            case 1204: return access_type_t::RW;
+            case 1208: return access_type_t::RW;
+            case 1212: return access_type_t::RW;
+            case 1216: return access_type_t::RW;
+            case 1220: return access_type_t::RW;
+            case 1224: return access_type_t::RW;
+            case 1228: return access_type_t::RW;
+            case 1232: return access_type_t::RW;
+            case 1236: return access_type_t::RW;
+            case 1240: return access_type_t::RW;
+            case 1244: return access_type_t::RW;
+            case 1248: return access_type_t::RW;
+            case 1252: return access_type_t::RW;
+            case 1256: return access_type_t::RW;
+            case 1260: return access_type_t::RW;
+            case 1264: return access_type_t::RW;
+            case 1268: return access_type_t::RW;
+            case 1272: return access_type_t::RW;
+            case 1276: return access_type_t::RW;
+            case 1280: return access_type_t::RW;
+            case 1284: return access_type_t::RW;
+            case 1288: return access_type_t::RW;
+            case 1292: return access_type_t::RW;
+            case 1296: return access_type_t::RW;
+            case 1300: return access_type_t::RW;
+            case 1304: return access_type_t::RW;
+            case 1308: return access_type_t::RW;
+            case 1312: return access_type_t::RW;
+            case 1316: return access_type_t::RW;
+            case 1320: return access_type_t::RW;
+            case 1324: return access_type_t::RW;
+            case 1328: return access_type_t::RW;
+            case 1332: return access_type_t::RW;
+            case 1336: return access_type_t::RW;
+            case 1340: return access_type_t::RW;
+            case 1344: return access_type_t::RW;
+            case 1348: return access_type_t::RW;
+            case 1352: return access_type_t::RW;
+            case 1356: return access_type_t::RW;
+            case 1360: return access_type_t::RW;
+            case 1364: return access_type_t::RW;
+            case 1368: return access_type_t::RW;
+            case 1372: return access_type_t::RW;
+            case 1376: return access_type_t::RW;
+            case 1380: return access_type_t::RW;
+            case 1384: return access_type_t::RW;
+            case 1388: return access_type_t::RW;
+            case 1392: return access_type_t::RW;
+            case 1396: return access_type_t::RW;
+            case 1400: return access_type_t::RW;
+            case 1404: return access_type_t::RW;
+            case 1408: return access_type_t::RW;
+            case 1412: return access_type_t::RW;
+            case 1416: return access_type_t::RW;
+            case 1420: return access_type_t::RW;
+            case 1424: return access_type_t::RW;
+            case 1428: return access_type_t::RW;
+            case 1432: return access_type_t::RW;
+            case 1436: return access_type_t::RW;
+            case 1440: return access_type_t::RW;
+            case 1444: return access_type_t::RW;
+            case 1448: return access_type_t::RW;
+            case 1452: return access_type_t::RW;
+            case 1456: return access_type_t::RW;
+            case 1460: return access_type_t::RW;
+            case 1464: return access_type_t::RW;
+            case 1468: return access_type_t::RW;
+            case 1472: return access_type_t::RW;
+            case 1476: return access_type_t::RW;
+            case 1480: return access_type_t::RW;
+            case 1484: return access_type_t::RW;
+            case 1488: return access_type_t::RW;
+            case 1492: return access_type_t::RW;
+            case 1496: return access_type_t::RW;
+            case 1500: return access_type_t::RW;
+            case 1504: return access_type_t::RW;
+            case 1508: return access_type_t::RW;
+            case 1512: return access_type_t::RW;
+            case 1516: return access_type_t::RW;
+            case 1520: return access_type_t::RW;
+            case 1524: return access_type_t::RW;
+            case 1528: return access_type_t::RW;
+            case 1532: return access_type_t::RW;
+            case 1536: return access_type_t::RW;
+            case 1540: return access_type_t::RW;
+            case 1544: return access_type_t::RW;
+            case 1548: return access_type_t::RW;
+            case 1552: return access_type_t::RW;
+            case 1556: return access_type_t::RW;
+            case 1560: return access_type_t::RW;
+            case 1564: return access_type_t::RW;
+            case 1568: return access_type_t::RW;
+            case 1572: return access_type_t::RW;
+            case 1576: return access_type_t::RW;
+            case 1580: return access_type_t::RW;
+            case 1584: return access_type_t::RW;
+            case 1588: return access_type_t::RW;
+            case 1592: return access_type_t::RW;
+            case 1596: return access_type_t::RW;
+            case 1600: return access_type_t::RW;
+            case 1604: return access_type_t::RW;
+            case 1608: return access_type_t::RW;
+            case 1612: return access_type_t::RW;
+            case 1616: return access_type_t::RW;
+            case 1620: return access_type_t::RW;
+            case 1624: return access_type_t::RW;
+            case 1628: return access_type_t::RW;
+            case 1632: return access_type_t::RW;
+            case 1636: return access_type_t::RW;
+            case 1640: return access_type_t::RW;
+            case 1644: return access_type_t::RW;
+            case 1648: return access_type_t::RW;
+            case 1652: return access_type_t::RW;
+            case 1656: return access_type_t::RW;
+            case 1660: return access_type_t::RW;
+            case 1664: return access_type_t::RW;
+            case 1668: return access_type_t::RW;
+            case 1672: return access_type_t::RW;
+            case 1676: return access_type_t::RW;
+            case 1680: return access_type_t::RW;
+            case 1684: return access_type_t::RW;
+            case 1688: return access_type_t::RW;
+            case 1692: return access_type_t::RW;
+            case 1696: return access_type_t::RW;
+            case 1700: return access_type_t::RW;
+            case 1704: return access_type_t::RW;
+            case 1708: return access_type_t::RW;
+            case 1712: return access_type_t::RW;
+            case 1716: return access_type_t::RW;
+            case 1720: return access_type_t::RW;
+            case 1724: return access_type_t::RW;
+            case 1728: return access_type_t::RW;
+            case 1732: return access_type_t::RW;
+            case 1736: return access_type_t::RW;
+            case 1740: return access_type_t::RW;
+            case 1744: return access_type_t::RW;
+            case 1748: return access_type_t::RW;
+            case 1752: return access_type_t::RW;
+            case 1756: return access_type_t::RW;
+            case 1760: return access_type_t::RW;
+            case 1764: return access_type_t::RW;
+            case 1768: return access_type_t::RW;
+            case 1772: return access_type_t::RW;
+            case 1776: return access_type_t::RW;
+            case 1780: return access_type_t::RW;
+            case 1784: return access_type_t::RW;
+            case 1788: return access_type_t::RW;
+            case 1792: return access_type_t::RW;
+            case 1796: return access_type_t::RW;
+            case 1800: return access_type_t::RW;
+            case 1804: return access_type_t::RW;
+            case 1808: return access_type_t::RW;
+            case 1812: return access_type_t::RW;
+            case 1816: return access_type_t::RW;
+            case 1820: return access_type_t::RW;
+            case 1824: return access_type_t::RW;
+            case 1828: return access_type_t::RW;
+            case 1832: return access_type_t::RW;
+            case 1836: return access_type_t::RW;
+            case 1840: return access_type_t::RW;
+            case 1844: return access_type_t::RW;
+            case 1848: return access_type_t::RW;
+            case 1852: return access_type_t::RW;
+            case 1856: return access_type_t::RW;
+            case 1860: return access_type_t::RW;
+            case 1864: return access_type_t::RW;
+            case 1868: return access_type_t::RW;
+            case 1872: return access_type_t::RW;
+            case 1876: return access_type_t::RW;
+            case 1880: return access_type_t::RW;
+            case 1884: return access_type_t::RW;
+            case 1888: return access_type_t::RW;
+            case 1892: return access_type_t::RW;
+            case 1896: return access_type_t::RW;
+            case 1900: return access_type_t::RW;
+            case 1904: return access_type_t::RW;
+            case 1908: return access_type_t::RW;
+            case 1912: return access_type_t::RW;
+            case 1916: return access_type_t::RW;
+            case 1920: return access_type_t::RW;
+            case 1924: return access_type_t::RW;
+            case 1928: return access_type_t::RW;
+            case 1932: return access_type_t::RW;
+            case 1936: return access_type_t::RW;
+            case 1940: return access_type_t::RW;
+            case 1944: return access_type_t::RW;
+            case 1948: return access_type_t::RW;
+            case 1952: return access_type_t::RW;
+            case 1956: return access_type_t::RW;
+            case 1960: return access_type_t::RW;
+            case 1964: return access_type_t::RW;
+            case 1968: return access_type_t::RW;
+            case 1972: return access_type_t::RW;
+            case 1976: return access_type_t::RW;
+            case 1980: return access_type_t::RW;
+            case 1984: return access_type_t::RW;
+            case 1988: return access_type_t::RW;
+            case 1992: return access_type_t::RW;
+            case 1996: return access_type_t::RW;
+            case 2000: return access_type_t::RW;
+            case 2004: return access_type_t::RW;
+            case 2008: return access_type_t::RW;
+            case 2012: return access_type_t::RW;
+            case 2016: return access_type_t::RW;
+            case 2020: return access_type_t::RW;
+            case 2024: return access_type_t::RW;
+            case 2028: return access_type_t::RW;
+            case 2032: return access_type_t::RW;
+            case 2036: return access_type_t::RW;
+            case 2040: return access_type_t::RW;
+            case 2044: return access_type_t::RW;
+            case 2048: return access_type_t::RW;
+            case 2052: return access_type_t::RW;
+            case 2056: return access_type_t::RW;
+            case 2060: return access_type_t::RW;
+            case 2064: return access_type_t::RW;
+            case 2068: return access_type_t::RW;
+            case 2076: return access_type_t::RW;
+            case 2080: return access_type_t::RW;
+            case 2084: return access_type_t::RW;
+            case 2088: return access_type_t::RW;
+            case 2092: return access_type_t::RW;
+            case 2096: return access_type_t::RW;
+            case 2108: return access_type_t::RW;
+            case 2116: return access_type_t::RW;
+            case 2120: return access_type_t::RW;
+            case 2124: return access_type_t::RW;
+            case 2128: return access_type_t::RW;
+            case 2132: return access_type_t::RW;
+            case 2136: return access_type_t::RW;
+            case 2140: return access_type_t::RW;
+            case 2144: return access_type_t::RW;
+            case 2152: return access_type_t::RW;
+            case 2156: return access_type_t::RW;
+            case 2160: return access_type_t::RW;
+            case 2172: return access_type_t::RW;
+            case 2176: return access_type_t::RW;
+            case 2180: return access_type_t::RW;
+            case 2184: return access_type_t::RW;
+            case 2192: return access_type_t::RW;
+            case 2196: return access_type_t::RW;
+            case 2200: return access_type_t::RW;
+            case 2204: return access_type_t::RW;
+            case 2208: return access_type_t::RW;
+            case 2212: return access_type_t::RW;
+            case 2216: return access_type_t::RW;
+            case 2220: return access_type_t::RW;
+            case 2224: return access_type_t::RW;
+            case 2228: return access_type_t::RW;
+            case 2232: return access_type_t::RW;
+            case 2236: return access_type_t::RW;
+            case 2240: return access_type_t::RW;
+            case 2244: return access_type_t::RW;
+            case 2248: return access_type_t::RW;
+            case 2252: return access_type_t::RW;
+            case 2256: return access_type_t::RW;
+            case 2304: return access_type_t::RW;
+            case 2324: return access_type_t::RW;
+            case 2340: return access_type_t::RW;
+            case 2344: return access_type_t::RW;
+            case 2348: return access_type_t::RW;
+            case 2352: return access_type_t::RW;
+            case 2364: return access_type_t::RW;
+            case 2560: return access_type_t::RW;
+            case 2568: return access_type_t::RW;
+            case 2576: return access_type_t::RW;
+            case 2584: return access_type_t::RW;
+            case 2592: return access_type_t::RW;
+            case 2600: return access_type_t::RW;
+            case 2608: return access_type_t::RW;
+            case 2624: return access_type_t::RW;
+            case 2632: return access_type_t::RW;
+            case 2640: return access_type_t::RW;
+            case 2648: return access_type_t::RW;
+            case 2656: return access_type_t::RW;
+            case 2664: return access_type_t::RW;
+            case 2672: return access_type_t::RW;
+            case 2688: return access_type_t::RW;
+            case 2696: return access_type_t::RW;
+            case 2704: return access_type_t::RW;
+            case 2712: return access_type_t::RW;
+            case 2720: return access_type_t::RW;
+            case 2728: return access_type_t::RW;
+            case 2736: return access_type_t::RW;
+            case 2744: return access_type_t::RW;
+            case 2752: return access_type_t::RW;
+            case 2760: return access_type_t::RW;
+            case 2768: return access_type_t::RW;
+            case 2776: return access_type_t::RW;
+            case 2784: return access_type_t::RW;
+            case 2792: return access_type_t::RW;
+            case 2800: return access_type_t::RW;
+            case 2808: return access_type_t::RW;
+            case 2816: return access_type_t::RW;
+            case 2824: return access_type_t::RW;
+            case 2832: return access_type_t::RW;
+            case 2840: return access_type_t::RW;
+            case 2848: return access_type_t::RW;
+            case 2856: return access_type_t::RW;
+            case 2864: return access_type_t::RW;
+            case 2880: return access_type_t::RW;
+            case 2888: return access_type_t::RW;
+            case 2896: return access_type_t::RW;
+            case 2904: return access_type_t::RW;
+            case 2912: return access_type_t::RW;
+            case 2920: return access_type_t::RW;
+            case 2928: return access_type_t::RW;
+            case 2936: return access_type_t::RW;
+            case 3008: return access_type_t::RW;
+            case 3016: return access_type_t::RW;
+            case 4032: return access_type_t::RO;
+            case 4048: return access_type_t::RO;
+            case 4052: return access_type_t::RO;
+            case 4056: return access_type_t::RO;
+            case 4060: return access_type_t::RO;
+            case 4064: return access_type_t::RO;
+            case 4068: return access_type_t::RO;
+            case 4072: return access_type_t::RO;
+            case 4076: return access_type_t::RO;
+            case 4080: return access_type_t::RO;
+            case 4084: return access_type_t::RO;
+            case 4088: return access_type_t::RO;
+            case 4092: return access_type_t::RO;
+            case 4352: return access_type_t::RO;
+            case 4356: return access_type_t::RO;
+            case 4360: return access_type_t::RO;
+            case 4368: return access_type_t::RO;
+            case 4372: return access_type_t::RO;
+            case 4480: return access_type_t::RW;
+            case 4484: return access_type_t::RW;
+            case 4488: return access_type_t::RW;
+            case 4492: return access_type_t::RW;
+            case 4496: return access_type_t::RW;
+            case 4500: return access_type_t::RW;
+            case 4504: return access_type_t::RW;
+            case 4512: return access_type_t::RW;
+            case 4520: return access_type_t::RW;
+            case 4524: return access_type_t::RW;
+            case 4528: return access_type_t::RW;
+            case 4864: return access_type_t::RW;
+            case 4868: return access_type_t::RW;
+            case 4872: return access_type_t::RW;
+            case 4876: return access_type_t::RW;
+            case 4880: return access_type_t::RW;
+            case 4884: return access_type_t::RW;
+            case 4888: return access_type_t::RW;
+            case 4892: return access_type_t::RW;
+            case 4992: return access_type_t::RW;
+            case 4996: return access_type_t::RW;
+            case 5000: return access_type_t::RW;
+            case 5004: return access_type_t::RW;
+            case 5008: return access_type_t::RW;
+            case 5012: return access_type_t::RW;
+            case 5016: return access_type_t::RW;
+            case 5020: return access_type_t::RW;
+            default: return access_type_t::RO;
         }
     }
 #endif
@@ -14912,9851 +14397,9634 @@ struct NPU_REG
 struct isa
 {
 #ifdef NPU_DISASSEMBLE
-    static int disassemble(const uint32_t* in, std::string& op, std::vector<std::pair<std::string, std::string>> &fields)
+static int disassemble(const uint32_t* in, std::string& op, std::vector<std::pair<std::string, std::string>>& fields)
+{
+    switch (*in & 0xffff)
     {
-        switch (*in & 0xffff)
-        {
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP):
         {
-            const npu_op_stop_t &v = *reinterpret_cast<const npu_op_stop_t *>(in);
+            const npu_op_stop_t& v = *reinterpret_cast<const npu_op_stop_t*>(in);
             op = "NPU_OP_STOP";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ):
         {
-            const npu_op_irq_t &v = *reinterpret_cast<const npu_op_irq_t *>(in);
+            const npu_op_irq_t& v = *reinterpret_cast<const npu_op_irq_t*>(in);
             op = "NPU_OP_IRQ";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV):
         {
-            const npu_op_conv_t &v = *reinterpret_cast<const npu_op_conv_t *>(in);
+            const npu_op_conv_t& v = *reinterpret_cast<const npu_op_conv_t*>(in);
             op = "NPU_OP_CONV";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DEPTHWISE):
         {
-            const npu_op_depthwise_t &v = *reinterpret_cast<const npu_op_depthwise_t *>(in);
+            const npu_op_depthwise_t& v = *reinterpret_cast<const npu_op_depthwise_t*>(in);
             op = "NPU_OP_DEPTHWISE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL):
         {
-            const npu_op_pool_t &v = *reinterpret_cast<const npu_op_pool_t *>(in);
+            const npu_op_pool_t& v = *reinterpret_cast<const npu_op_pool_t*>(in);
             op = "NPU_OP_POOL";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE):
         {
-            const npu_op_elementwise_t &v = *reinterpret_cast<const npu_op_elementwise_t *>(in);
+            const npu_op_elementwise_t& v = *reinterpret_cast<const npu_op_elementwise_t*>(in);
             op = "NPU_OP_ELEMENTWISE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE):
         {
-            const npu_op_resize_t &v = *reinterpret_cast<const npu_op_resize_t *>(in);
+            const npu_op_resize_t& v = *reinterpret_cast<const npu_op_resize_t*>(in);
             op = "NPU_OP_RESIZE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_START):
         {
-            const npu_op_dma_start_t &v = *reinterpret_cast<const npu_op_dma_start_t *>(in);
+            const npu_op_dma_start_t& v = *reinterpret_cast<const npu_op_dma_start_t*>(in);
             op = "NPU_OP_DMA_START";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT):
         {
-            const npu_op_dma_wait_t &v = *reinterpret_cast<const npu_op_dma_wait_t *>(in);
+            const npu_op_dma_wait_t& v = *reinterpret_cast<const npu_op_dma_wait_t*>(in);
             op = "NPU_OP_DMA_WAIT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT):
         {
-            const npu_op_kernel_wait_t &v = *reinterpret_cast<const npu_op_kernel_wait_t *>(in);
+            const npu_op_kernel_wait_t& v = *reinterpret_cast<const npu_op_kernel_wait_t*>(in);
             op = "NPU_OP_KERNEL_WAIT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK):
         {
-            const npu_op_pmu_mask_t &v = *reinterpret_cast<const npu_op_pmu_mask_t *>(in);
+            const npu_op_pmu_mask_t& v = *reinterpret_cast<const npu_op_pmu_mask_t*>(in);
             op = "NPU_OP_PMU_MASK";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP):
         {
-            const npu_set_ifm_pad_top_t &v = *reinterpret_cast<const npu_set_ifm_pad_top_t *>(in);
+            const npu_set_ifm_pad_top_t& v = *reinterpret_cast<const npu_set_ifm_pad_top_t*>(in);
             op = "NPU_SET_IFM_PAD_TOP";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT):
         {
-            const npu_set_ifm_pad_left_t &v = *reinterpret_cast<const npu_set_ifm_pad_left_t *>(in);
+            const npu_set_ifm_pad_left_t& v = *reinterpret_cast<const npu_set_ifm_pad_left_t*>(in);
             op = "NPU_SET_IFM_PAD_LEFT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT):
         {
-            const npu_set_ifm_pad_right_t &v = *reinterpret_cast<const npu_set_ifm_pad_right_t *>(in);
+            const npu_set_ifm_pad_right_t& v = *reinterpret_cast<const npu_set_ifm_pad_right_t*>(in);
             op = "NPU_SET_IFM_PAD_RIGHT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM):
         {
-            const npu_set_ifm_pad_bottom_t &v = *reinterpret_cast<const npu_set_ifm_pad_bottom_t *>(in);
+            const npu_set_ifm_pad_bottom_t& v = *reinterpret_cast<const npu_set_ifm_pad_bottom_t*>(in);
             op = "NPU_SET_IFM_PAD_BOTTOM";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1):
         {
-            const npu_set_ifm_depth_m1_t &v = *reinterpret_cast<const npu_set_ifm_depth_m1_t *>(in);
+            const npu_set_ifm_depth_m1_t& v = *reinterpret_cast<const npu_set_ifm_depth_m1_t*>(in);
             op = "NPU_SET_IFM_DEPTH_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION):
         {
-            const npu_set_ifm_precision_t &v = *reinterpret_cast<const npu_set_ifm_precision_t *>(in);
+            const npu_set_ifm_precision_t& v = *reinterpret_cast<const npu_set_ifm_precision_t*>(in);
             op = "NPU_SET_IFM_PRECISION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE):
         {
-            const npu_set_ifm_upscale_t &v = *reinterpret_cast<const npu_set_ifm_upscale_t *>(in);
+            const npu_set_ifm_upscale_t& v = *reinterpret_cast<const npu_set_ifm_upscale_t*>(in);
             op = "NPU_SET_IFM_UPSCALE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT):
         {
-            const npu_set_ifm_zero_point_t &v = *reinterpret_cast<const npu_set_ifm_zero_point_t *>(in);
+            const npu_set_ifm_zero_point_t& v = *reinterpret_cast<const npu_set_ifm_zero_point_t*>(in);
             op = "NPU_SET_IFM_ZERO_POINT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1):
         {
-            const npu_set_ifm_width0_m1_t &v = *reinterpret_cast<const npu_set_ifm_width0_m1_t *>(in);
+            const npu_set_ifm_width0_m1_t& v = *reinterpret_cast<const npu_set_ifm_width0_m1_t*>(in);
             op = "NPU_SET_IFM_WIDTH0_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1):
         {
-            const npu_set_ifm_height0_m1_t &v = *reinterpret_cast<const npu_set_ifm_height0_m1_t *>(in);
+            const npu_set_ifm_height0_m1_t& v = *reinterpret_cast<const npu_set_ifm_height0_m1_t*>(in);
             op = "NPU_SET_IFM_HEIGHT0_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1):
         {
-            const npu_set_ifm_height1_m1_t &v = *reinterpret_cast<const npu_set_ifm_height1_m1_t *>(in);
+            const npu_set_ifm_height1_m1_t& v = *reinterpret_cast<const npu_set_ifm_height1_m1_t*>(in);
             op = "NPU_SET_IFM_HEIGHT1_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION):
         {
-            const npu_set_ifm_region_t &v = *reinterpret_cast<const npu_set_ifm_region_t *>(in);
+            const npu_set_ifm_region_t& v = *reinterpret_cast<const npu_set_ifm_region_t*>(in);
             op = "NPU_SET_IFM_REGION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST):
         {
-            const npu_set_ifm_broadcast_t &v = *reinterpret_cast<const npu_set_ifm_broadcast_t *>(in);
+            const npu_set_ifm_broadcast_t& v = *reinterpret_cast<const npu_set_ifm_broadcast_t*>(in);
             op = "NPU_SET_IFM_BROADCAST";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1):
         {
-            const npu_set_ofm_width_m1_t &v = *reinterpret_cast<const npu_set_ofm_width_m1_t *>(in);
+            const npu_set_ofm_width_m1_t& v = *reinterpret_cast<const npu_set_ofm_width_m1_t*>(in);
             op = "NPU_SET_OFM_WIDTH_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1):
         {
-            const npu_set_ofm_height_m1_t &v = *reinterpret_cast<const npu_set_ofm_height_m1_t *>(in);
+            const npu_set_ofm_height_m1_t& v = *reinterpret_cast<const npu_set_ofm_height_m1_t*>(in);
             op = "NPU_SET_OFM_HEIGHT_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1):
         {
-            const npu_set_ofm_depth_m1_t &v = *reinterpret_cast<const npu_set_ofm_depth_m1_t *>(in);
+            const npu_set_ofm_depth_m1_t& v = *reinterpret_cast<const npu_set_ofm_depth_m1_t*>(in);
             op = "NPU_SET_OFM_DEPTH_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION):
         {
-            const npu_set_ofm_precision_t &v = *reinterpret_cast<const npu_set_ofm_precision_t *>(in);
+            const npu_set_ofm_precision_t& v = *reinterpret_cast<const npu_set_ofm_precision_t*>(in);
             op = "NPU_SET_OFM_PRECISION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1):
         {
-            const npu_set_ofm_blk_width_m1_t &v = *reinterpret_cast<const npu_set_ofm_blk_width_m1_t *>(in);
+            const npu_set_ofm_blk_width_m1_t& v = *reinterpret_cast<const npu_set_ofm_blk_width_m1_t*>(in);
             op = "NPU_SET_OFM_BLK_WIDTH_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1):
         {
-            const npu_set_ofm_blk_height_m1_t &v = *reinterpret_cast<const npu_set_ofm_blk_height_m1_t *>(in);
+            const npu_set_ofm_blk_height_m1_t& v = *reinterpret_cast<const npu_set_ofm_blk_height_m1_t*>(in);
             op = "NPU_SET_OFM_BLK_HEIGHT_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1):
         {
-            const npu_set_ofm_blk_depth_m1_t &v = *reinterpret_cast<const npu_set_ofm_blk_depth_m1_t *>(in);
+            const npu_set_ofm_blk_depth_m1_t& v = *reinterpret_cast<const npu_set_ofm_blk_depth_m1_t*>(in);
             op = "NPU_SET_OFM_BLK_DEPTH_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT):
         {
-            const npu_set_ofm_zero_point_t &v = *reinterpret_cast<const npu_set_ofm_zero_point_t *>(in);
+            const npu_set_ofm_zero_point_t& v = *reinterpret_cast<const npu_set_ofm_zero_point_t*>(in);
             op = "NPU_SET_OFM_ZERO_POINT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1):
         {
-            const npu_set_ofm_width0_m1_t &v = *reinterpret_cast<const npu_set_ofm_width0_m1_t *>(in);
+            const npu_set_ofm_width0_m1_t& v = *reinterpret_cast<const npu_set_ofm_width0_m1_t*>(in);
             op = "NPU_SET_OFM_WIDTH0_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1):
         {
-            const npu_set_ofm_height0_m1_t &v = *reinterpret_cast<const npu_set_ofm_height0_m1_t *>(in);
+            const npu_set_ofm_height0_m1_t& v = *reinterpret_cast<const npu_set_ofm_height0_m1_t*>(in);
             op = "NPU_SET_OFM_HEIGHT0_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1):
         {
-            const npu_set_ofm_height1_m1_t &v = *reinterpret_cast<const npu_set_ofm_height1_m1_t *>(in);
+            const npu_set_ofm_height1_m1_t& v = *reinterpret_cast<const npu_set_ofm_height1_m1_t*>(in);
             op = "NPU_SET_OFM_HEIGHT1_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION):
         {
-            const npu_set_ofm_region_t &v = *reinterpret_cast<const npu_set_ofm_region_t *>(in);
+            const npu_set_ofm_region_t& v = *reinterpret_cast<const npu_set_ofm_region_t*>(in);
             op = "NPU_SET_OFM_REGION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1):
         {
-            const npu_set_kernel_width_m1_t &v = *reinterpret_cast<const npu_set_kernel_width_m1_t *>(in);
+            const npu_set_kernel_width_m1_t& v = *reinterpret_cast<const npu_set_kernel_width_m1_t*>(in);
             op = "NPU_SET_KERNEL_WIDTH_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1):
         {
-            const npu_set_kernel_height_m1_t &v = *reinterpret_cast<const npu_set_kernel_height_m1_t *>(in);
+            const npu_set_kernel_height_m1_t& v = *reinterpret_cast<const npu_set_kernel_height_m1_t*>(in);
             op = "NPU_SET_KERNEL_HEIGHT_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE):
         {
-            const npu_set_kernel_stride_t &v = *reinterpret_cast<const npu_set_kernel_stride_t *>(in);
+            const npu_set_kernel_stride_t& v = *reinterpret_cast<const npu_set_kernel_stride_t*>(in);
             op = "NPU_SET_KERNEL_STRIDE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT):
         {
-            const npu_set_acc_format_t &v = *reinterpret_cast<const npu_set_acc_format_t *>(in);
+            const npu_set_acc_format_t& v = *reinterpret_cast<const npu_set_acc_format_t*>(in);
             op = "NPU_SET_ACC_FORMAT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION):
         {
-            const npu_set_activation_t &v = *reinterpret_cast<const npu_set_activation_t *>(in);
+            const npu_set_activation_t& v = *reinterpret_cast<const npu_set_activation_t*>(in);
             op = "NPU_SET_ACTIVATION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN):
         {
-            const npu_set_activation_min_t &v = *reinterpret_cast<const npu_set_activation_min_t *>(in);
+            const npu_set_activation_min_t& v = *reinterpret_cast<const npu_set_activation_min_t*>(in);
             op = "NPU_SET_ACTIVATION_MIN";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX):
         {
-            const npu_set_activation_max_t &v = *reinterpret_cast<const npu_set_activation_max_t *>(in);
+            const npu_set_activation_max_t& v = *reinterpret_cast<const npu_set_activation_max_t*>(in);
             op = "NPU_SET_ACTIVATION_MAX";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION):
         {
-            const npu_set_weight_region_t &v = *reinterpret_cast<const npu_set_weight_region_t *>(in);
+            const npu_set_weight_region_t& v = *reinterpret_cast<const npu_set_weight_region_t*>(in);
             op = "NPU_SET_WEIGHT_REGION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION):
         {
-            const npu_set_scale_region_t &v = *reinterpret_cast<const npu_set_scale_region_t *>(in);
+            const npu_set_scale_region_t& v = *reinterpret_cast<const npu_set_scale_region_t*>(in);
             op = "NPU_SET_SCALE_REGION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT):
         {
-            const npu_set_weight_format_t &v = *reinterpret_cast<const npu_set_weight_format_t *>(in);
+            const npu_set_weight_format_t& v = *reinterpret_cast<const npu_set_weight_format_t*>(in);
             op = "NPU_SET_WEIGHT_FORMAT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP):
         {
-            const npu_set_blockdep_t &v = *reinterpret_cast<const npu_set_blockdep_t *>(in);
+            const npu_set_blockdep_t& v = *reinterpret_cast<const npu_set_blockdep_t*>(in);
             op = "NPU_SET_BLOCKDEP";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1):
         {
-            const npu_set_resize_x_scale_n_m1_t &v = *reinterpret_cast<const npu_set_resize_x_scale_n_m1_t *>(in);
+            const npu_set_resize_x_scale_n_m1_t& v = *reinterpret_cast<const npu_set_resize_x_scale_n_m1_t*>(in);
             op = "NPU_SET_RESIZE_X_SCALE_N_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1):
         {
-            const npu_set_resize_y_scale_n_m1_t &v = *reinterpret_cast<const npu_set_resize_y_scale_n_m1_t *>(in);
+            const npu_set_resize_y_scale_n_m1_t& v = *reinterpret_cast<const npu_set_resize_y_scale_n_m1_t*>(in);
             op = "NPU_SET_RESIZE_Y_SCALE_N_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET):
         {
-            const npu_set_resize_x_offset_t &v = *reinterpret_cast<const npu_set_resize_x_offset_t *>(in);
+            const npu_set_resize_x_offset_t& v = *reinterpret_cast<const npu_set_resize_x_offset_t*>(in);
             op = "NPU_SET_RESIZE_X_OFFSET";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET):
         {
-            const npu_set_resize_y_offset_t &v = *reinterpret_cast<const npu_set_resize_y_offset_t *>(in);
+            const npu_set_resize_y_offset_t& v = *reinterpret_cast<const npu_set_resize_y_offset_t*>(in);
             op = "NPU_SET_RESIZE_Y_OFFSET";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION):
         {
-            const npu_set_dma0_src_region_t &v = *reinterpret_cast<const npu_set_dma0_src_region_t *>(in);
+            const npu_set_dma0_src_region_t& v = *reinterpret_cast<const npu_set_dma0_src_region_t*>(in);
             op = "NPU_SET_DMA0_SRC_REGION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION):
         {
-            const npu_set_dma0_dst_region_t &v = *reinterpret_cast<const npu_set_dma0_dst_region_t *>(in);
+            const npu_set_dma0_dst_region_t& v = *reinterpret_cast<const npu_set_dma0_dst_region_t*>(in);
             op = "NPU_SET_DMA0_DST_REGION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0):
         {
-            const npu_set_dma0_size0_t &v = *reinterpret_cast<const npu_set_dma0_size0_t *>(in);
+            const npu_set_dma0_size0_t& v = *reinterpret_cast<const npu_set_dma0_size0_t*>(in);
             op = "NPU_SET_DMA0_SIZE0";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1):
         {
-            const npu_set_dma0_size1_t &v = *reinterpret_cast<const npu_set_dma0_size1_t *>(in);
+            const npu_set_dma0_size1_t& v = *reinterpret_cast<const npu_set_dma0_size1_t*>(in);
             op = "NPU_SET_DMA0_SIZE1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION):
         {
-            const npu_set_dma0_idx_region_t &v = *reinterpret_cast<const npu_set_dma0_idx_region_t *>(in);
+            const npu_set_dma0_idx_region_t& v = *reinterpret_cast<const npu_set_dma0_idx_region_t*>(in);
             op = "NPU_SET_DMA0_IDX_REGION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST):
         {
-            const npu_set_ifm2_broadcast_t &v = *reinterpret_cast<const npu_set_ifm2_broadcast_t *>(in);
+            const npu_set_ifm2_broadcast_t& v = *reinterpret_cast<const npu_set_ifm2_broadcast_t*>(in);
             op = "NPU_SET_IFM2_BROADCAST";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION):
         {
-            const npu_set_ifm2_precision_t &v = *reinterpret_cast<const npu_set_ifm2_precision_t *>(in);
+            const npu_set_ifm2_precision_t& v = *reinterpret_cast<const npu_set_ifm2_precision_t*>(in);
             op = "NPU_SET_IFM2_PRECISION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT):
         {
-            const npu_set_ifm2_zero_point_t &v = *reinterpret_cast<const npu_set_ifm2_zero_point_t *>(in);
+            const npu_set_ifm2_zero_point_t& v = *reinterpret_cast<const npu_set_ifm2_zero_point_t*>(in);
             op = "NPU_SET_IFM2_ZERO_POINT";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1):
         {
-            const npu_set_ifm2_width0_m1_t &v = *reinterpret_cast<const npu_set_ifm2_width0_m1_t *>(in);
+            const npu_set_ifm2_width0_m1_t& v = *reinterpret_cast<const npu_set_ifm2_width0_m1_t*>(in);
             op = "NPU_SET_IFM2_WIDTH0_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1):
         {
-            const npu_set_ifm2_height0_m1_t &v = *reinterpret_cast<const npu_set_ifm2_height0_m1_t *>(in);
+            const npu_set_ifm2_height0_m1_t& v = *reinterpret_cast<const npu_set_ifm2_height0_m1_t*>(in);
             op = "NPU_SET_IFM2_HEIGHT0_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1):
         {
-            const npu_set_ifm2_height1_m1_t &v = *reinterpret_cast<const npu_set_ifm2_height1_m1_t *>(in);
+            const npu_set_ifm2_height1_m1_t& v = *reinterpret_cast<const npu_set_ifm2_height1_m1_t*>(in);
             op = "NPU_SET_IFM2_HEIGHT1_M1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION):
         {
-            const npu_set_ifm2_region_t &v = *reinterpret_cast<const npu_set_ifm2_region_t *>(in);
+            const npu_set_ifm2_region_t& v = *reinterpret_cast<const npu_set_ifm2_region_t*>(in);
             op = "NPU_SET_IFM2_REGION";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0):
         {
-            const npu_set_ifm_base0_t &v = *reinterpret_cast<const npu_set_ifm_base0_t *>(in);
+            const npu_set_ifm_base0_t& v = *reinterpret_cast<const npu_set_ifm_base0_t*>(in);
             op = "NPU_SET_IFM_BASE0";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1):
         {
-            const npu_set_ifm_base1_t &v = *reinterpret_cast<const npu_set_ifm_base1_t *>(in);
+            const npu_set_ifm_base1_t& v = *reinterpret_cast<const npu_set_ifm_base1_t*>(in);
             op = "NPU_SET_IFM_BASE1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2):
         {
-            const npu_set_ifm_base2_t &v = *reinterpret_cast<const npu_set_ifm_base2_t *>(in);
+            const npu_set_ifm_base2_t& v = *reinterpret_cast<const npu_set_ifm_base2_t*>(in);
             op = "NPU_SET_IFM_BASE2";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3):
         {
-            const npu_set_ifm_base3_t &v = *reinterpret_cast<const npu_set_ifm_base3_t *>(in);
+            const npu_set_ifm_base3_t& v = *reinterpret_cast<const npu_set_ifm_base3_t*>(in);
             op = "NPU_SET_IFM_BASE3";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X):
         {
-            const npu_set_ifm_stride_x_t &v = *reinterpret_cast<const npu_set_ifm_stride_x_t *>(in);
+            const npu_set_ifm_stride_x_t& v = *reinterpret_cast<const npu_set_ifm_stride_x_t*>(in);
             op = "NPU_SET_IFM_STRIDE_X";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y):
         {
-            const npu_set_ifm_stride_y_t &v = *reinterpret_cast<const npu_set_ifm_stride_y_t *>(in);
+            const npu_set_ifm_stride_y_t& v = *reinterpret_cast<const npu_set_ifm_stride_y_t*>(in);
             op = "NPU_SET_IFM_STRIDE_Y";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C):
         {
-            const npu_set_ifm_stride_c_t &v = *reinterpret_cast<const npu_set_ifm_stride_c_t *>(in);
+            const npu_set_ifm_stride_c_t& v = *reinterpret_cast<const npu_set_ifm_stride_c_t*>(in);
             op = "NPU_SET_IFM_STRIDE_C";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0):
         {
-            const npu_set_ofm_base0_t &v = *reinterpret_cast<const npu_set_ofm_base0_t *>(in);
+            const npu_set_ofm_base0_t& v = *reinterpret_cast<const npu_set_ofm_base0_t*>(in);
             op = "NPU_SET_OFM_BASE0";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1):
         {
-            const npu_set_ofm_base1_t &v = *reinterpret_cast<const npu_set_ofm_base1_t *>(in);
+            const npu_set_ofm_base1_t& v = *reinterpret_cast<const npu_set_ofm_base1_t*>(in);
             op = "NPU_SET_OFM_BASE1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2):
         {
-            const npu_set_ofm_base2_t &v = *reinterpret_cast<const npu_set_ofm_base2_t *>(in);
+            const npu_set_ofm_base2_t& v = *reinterpret_cast<const npu_set_ofm_base2_t*>(in);
             op = "NPU_SET_OFM_BASE2";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3):
         {
-            const npu_set_ofm_base3_t &v = *reinterpret_cast<const npu_set_ofm_base3_t *>(in);
+            const npu_set_ofm_base3_t& v = *reinterpret_cast<const npu_set_ofm_base3_t*>(in);
             op = "NPU_SET_OFM_BASE3";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X):
         {
-            const npu_set_ofm_stride_x_t &v = *reinterpret_cast<const npu_set_ofm_stride_x_t *>(in);
+            const npu_set_ofm_stride_x_t& v = *reinterpret_cast<const npu_set_ofm_stride_x_t*>(in);
             op = "NPU_SET_OFM_STRIDE_X";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y):
         {
-            const npu_set_ofm_stride_y_t &v = *reinterpret_cast<const npu_set_ofm_stride_y_t *>(in);
+            const npu_set_ofm_stride_y_t& v = *reinterpret_cast<const npu_set_ofm_stride_y_t*>(in);
             op = "NPU_SET_OFM_STRIDE_Y";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C):
         {
-            const npu_set_ofm_stride_c_t &v = *reinterpret_cast<const npu_set_ofm_stride_c_t *>(in);
+            const npu_set_ofm_stride_c_t& v = *reinterpret_cast<const npu_set_ofm_stride_c_t*>(in);
             op = "NPU_SET_OFM_STRIDE_C";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE):
         {
-            const npu_set_weight_base_t &v = *reinterpret_cast<const npu_set_weight_base_t *>(in);
+            const npu_set_weight_base_t& v = *reinterpret_cast<const npu_set_weight_base_t*>(in);
             op = "NPU_SET_WEIGHT_BASE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH):
         {
-            const npu_set_weight_length_t &v = *reinterpret_cast<const npu_set_weight_length_t *>(in);
+            const npu_set_weight_length_t& v = *reinterpret_cast<const npu_set_weight_length_t*>(in);
             op = "NPU_SET_WEIGHT_LENGTH";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE):
         {
-            const npu_set_scale_base_t &v = *reinterpret_cast<const npu_set_scale_base_t *>(in);
+            const npu_set_scale_base_t& v = *reinterpret_cast<const npu_set_scale_base_t*>(in);
             op = "NPU_SET_SCALE_BASE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH):
         {
-            const npu_set_scale_length_t &v = *reinterpret_cast<const npu_set_scale_length_t *>(in);
+            const npu_set_scale_length_t& v = *reinterpret_cast<const npu_set_scale_length_t*>(in);
             op = "NPU_SET_SCALE_LENGTH";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE):
         {
-            const npu_set_ofm_scale_t &v = *reinterpret_cast<const npu_set_ofm_scale_t *>(in);
+            const npu_set_ofm_scale_t& v = *reinterpret_cast<const npu_set_ofm_scale_t*>(in);
             op = "NPU_SET_OFM_SCALE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE):
         {
-            const npu_set_ifm_scale_t &v = *reinterpret_cast<const npu_set_ifm_scale_t *>(in);
+            const npu_set_ifm_scale_t& v = *reinterpret_cast<const npu_set_ifm_scale_t*>(in);
             op = "NPU_SET_IFM_SCALE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE):
         {
-            const npu_set_ifm2_scale_t &v = *reinterpret_cast<const npu_set_ifm2_scale_t *>(in);
+            const npu_set_ifm2_scale_t& v = *reinterpret_cast<const npu_set_ifm2_scale_t*>(in);
             op = "NPU_SET_IFM2_SCALE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR):
         {
-            const npu_set_op_scalar_t &v = *reinterpret_cast<const npu_set_op_scalar_t *>(in);
+            const npu_set_op_scalar_t& v = *reinterpret_cast<const npu_set_op_scalar_t*>(in);
             op = "NPU_SET_OP_SCALAR";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC):
         {
-            const npu_set_dma0_src_t &v = *reinterpret_cast<const npu_set_dma0_src_t *>(in);
+            const npu_set_dma0_src_t& v = *reinterpret_cast<const npu_set_dma0_src_t*>(in);
             op = "NPU_SET_DMA0_SRC";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST):
         {
-            const npu_set_dma0_dst_t &v = *reinterpret_cast<const npu_set_dma0_dst_t *>(in);
+            const npu_set_dma0_dst_t& v = *reinterpret_cast<const npu_set_dma0_dst_t*>(in);
             op = "NPU_SET_DMA0_DST";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN):
         {
-            const npu_set_dma0_len_t &v = *reinterpret_cast<const npu_set_dma0_len_t *>(in);
+            const npu_set_dma0_len_t& v = *reinterpret_cast<const npu_set_dma0_len_t*>(in);
             op = "NPU_SET_DMA0_LEN";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0):
         {
-            const npu_set_dma0_src_stride0_t &v = *reinterpret_cast<const npu_set_dma0_src_stride0_t *>(in);
+            const npu_set_dma0_src_stride0_t& v = *reinterpret_cast<const npu_set_dma0_src_stride0_t*>(in);
             op = "NPU_SET_DMA0_SRC_STRIDE0";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1):
         {
-            const npu_set_dma0_src_stride1_t &v = *reinterpret_cast<const npu_set_dma0_src_stride1_t *>(in);
+            const npu_set_dma0_src_stride1_t& v = *reinterpret_cast<const npu_set_dma0_src_stride1_t*>(in);
             op = "NPU_SET_DMA0_SRC_STRIDE1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0):
         {
-            const npu_set_dma0_dst_stride0_t &v = *reinterpret_cast<const npu_set_dma0_dst_stride0_t *>(in);
+            const npu_set_dma0_dst_stride0_t& v = *reinterpret_cast<const npu_set_dma0_dst_stride0_t*>(in);
             op = "NPU_SET_DMA0_DST_STRIDE0";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1):
         {
-            const npu_set_dma0_dst_stride1_t &v = *reinterpret_cast<const npu_set_dma0_dst_stride1_t *>(in);
+            const npu_set_dma0_dst_stride1_t& v = *reinterpret_cast<const npu_set_dma0_dst_stride1_t*>(in);
             op = "NPU_SET_DMA0_DST_STRIDE1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX):
         {
-            const npu_set_dma0_idx_t &v = *reinterpret_cast<const npu_set_dma0_idx_t *>(in);
+            const npu_set_dma0_idx_t& v = *reinterpret_cast<const npu_set_dma0_idx_t*>(in);
             op = "NPU_SET_DMA0_IDX";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX):
         {
-            const npu_set_dma0_idx_max_t &v = *reinterpret_cast<const npu_set_dma0_idx_max_t *>(in);
+            const npu_set_dma0_idx_max_t& v = *reinterpret_cast<const npu_set_dma0_idx_max_t*>(in);
             op = "NPU_SET_DMA0_IDX_MAX";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1):
         {
-            const npu_set_dma0_idx_skip1_t &v = *reinterpret_cast<const npu_set_dma0_idx_skip1_t *>(in);
+            const npu_set_dma0_idx_skip1_t& v = *reinterpret_cast<const npu_set_dma0_idx_skip1_t*>(in);
             op = "NPU_SET_DMA0_IDX_SKIP1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0):
         {
-            const npu_set_ifm2_base0_t &v = *reinterpret_cast<const npu_set_ifm2_base0_t *>(in);
+            const npu_set_ifm2_base0_t& v = *reinterpret_cast<const npu_set_ifm2_base0_t*>(in);
             op = "NPU_SET_IFM2_BASE0";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1):
         {
-            const npu_set_ifm2_base1_t &v = *reinterpret_cast<const npu_set_ifm2_base1_t *>(in);
+            const npu_set_ifm2_base1_t& v = *reinterpret_cast<const npu_set_ifm2_base1_t*>(in);
             op = "NPU_SET_IFM2_BASE1";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2):
         {
-            const npu_set_ifm2_base2_t &v = *reinterpret_cast<const npu_set_ifm2_base2_t *>(in);
+            const npu_set_ifm2_base2_t& v = *reinterpret_cast<const npu_set_ifm2_base2_t*>(in);
             op = "NPU_SET_IFM2_BASE2";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3):
         {
-            const npu_set_ifm2_base3_t &v = *reinterpret_cast<const npu_set_ifm2_base3_t *>(in);
+            const npu_set_ifm2_base3_t& v = *reinterpret_cast<const npu_set_ifm2_base3_t*>(in);
             op = "NPU_SET_IFM2_BASE3";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X):
         {
-            const npu_set_ifm2_stride_x_t &v = *reinterpret_cast<const npu_set_ifm2_stride_x_t *>(in);
+            const npu_set_ifm2_stride_x_t& v = *reinterpret_cast<const npu_set_ifm2_stride_x_t*>(in);
             op = "NPU_SET_IFM2_STRIDE_X";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y):
         {
-            const npu_set_ifm2_stride_y_t &v = *reinterpret_cast<const npu_set_ifm2_stride_y_t *>(in);
+            const npu_set_ifm2_stride_y_t& v = *reinterpret_cast<const npu_set_ifm2_stride_y_t*>(in);
             op = "NPU_SET_IFM2_STRIDE_Y";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C):
         {
-            const npu_set_ifm2_stride_c_t &v = *reinterpret_cast<const npu_set_ifm2_stride_c_t *>(in);
+            const npu_set_ifm2_stride_c_t& v = *reinterpret_cast<const npu_set_ifm2_stride_c_t*>(in);
             op = "NPU_SET_IFM2_STRIDE_C";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE):
         {
-            const npu_set_weight1_base_t &v = *reinterpret_cast<const npu_set_weight1_base_t *>(in);
+            const npu_set_weight1_base_t& v = *reinterpret_cast<const npu_set_weight1_base_t*>(in);
             op = "NPU_SET_WEIGHT1_BASE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH):
         {
-            const npu_set_weight1_length_t &v = *reinterpret_cast<const npu_set_weight1_length_t *>(in);
+            const npu_set_weight1_length_t& v = *reinterpret_cast<const npu_set_weight1_length_t*>(in);
             op = "NPU_SET_WEIGHT1_LENGTH";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE):
         {
-            const npu_set_weight2_base_t &v = *reinterpret_cast<const npu_set_weight2_base_t *>(in);
+            const npu_set_weight2_base_t& v = *reinterpret_cast<const npu_set_weight2_base_t*>(in);
             op = "NPU_SET_WEIGHT2_BASE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH):
         {
-            const npu_set_weight2_length_t &v = *reinterpret_cast<const npu_set_weight2_length_t *>(in);
+            const npu_set_weight2_length_t& v = *reinterpret_cast<const npu_set_weight2_length_t*>(in);
             op = "NPU_SET_WEIGHT2_LENGTH";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE):
         {
-            const npu_set_weight3_base_t &v = *reinterpret_cast<const npu_set_weight3_base_t *>(in);
+            const npu_set_weight3_base_t& v = *reinterpret_cast<const npu_set_weight3_base_t*>(in);
             op = "NPU_SET_WEIGHT3_BASE";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH):
         {
-            const npu_set_weight3_length_t &v = *reinterpret_cast<const npu_set_weight3_length_t *>(in);
+            const npu_set_weight3_length_t& v = *reinterpret_cast<const npu_set_weight3_length_t*>(in);
             op = "NPU_SET_WEIGHT3_LENGTH";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X):
         {
-            const npu_set_resize_x_step_t &v = *reinterpret_cast<const npu_set_resize_x_step_t *>(in);
+            const npu_set_resize_x_step_t& v = *reinterpret_cast<const npu_set_resize_x_step_t*>(in);
             op = "NPU_SET_RESIZE_X_STEP";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y):
         {
-            const npu_set_resize_y_step_t &v = *reinterpret_cast<const npu_set_resize_y_step_t *>(in);
+            const npu_set_resize_y_step_t& v = *reinterpret_cast<const npu_set_resize_y_step_t*>(in);
             op = "NPU_SET_RESIZE_Y_STEP";
             v.disassemble(fields);
             break;
         }
         case (static_cast<uint32_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL) << 14) | static_cast<uint32_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH):
         {
-            const npu_op_branch_t &v = *reinterpret_cast<const npu_op_branch_t *>(in);
+            const npu_op_branch_t& v = *reinterpret_cast<const npu_op_branch_t*>(in);
             op = "NPU_OP_BRANCH";
             v.disassemble(fields);
             break;
         }
-        default:
-            break;
-        }
-        return (*in & (3 << 14)) != 0 ? 2 : 1;
+        default: break;
     }
+    return (*in & (3<<14)) != 0 ? 2 : 1;
+}
 #endif
 #endif
 // Signal the end of command stream
-    struct npu_op_stop_t
+struct npu_op_stop_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t mask:16; //  Encoding for 16-bit mask value
+#ifdef __cplusplus
+public:
+    npu_op_stop_t(uint32_t _mask) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        mask(_mask & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_op_stop_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        mask(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t mask: 16; //  Encoding for 16-bit mask value
-#ifdef __cplusplus
-    public:
-        npu_op_stop_t(uint32_t _mask) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            mask(_mask & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_op_stop_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            mask(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(mask) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_stop_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_stop_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_mask() const
-        {
-            return static_cast<uint32_t>(mask);
-        }
-        CONSTEXPR npu_op_stop_t &set_mask(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            mask = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_STOP); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(mask) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_stop_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_stop_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_mask() const
+    {
+        return static_cast<uint32_t>(mask);
+    }
+    CONSTEXPR npu_op_stop_t& set_mask(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        mask = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("mask", std::to_string(mask)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("mask", std::to_string(mask)));
+    }
 #endif
 #endif
-    };
+};
 // Raises an IRQ to the host
-    struct npu_op_irq_t
+struct npu_op_irq_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t mask:16; //  Encoding for 16-bit mask value
+#ifdef __cplusplus
+public:
+    npu_op_irq_t(uint32_t _mask) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        mask(_mask & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_op_irq_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        mask(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t mask: 16; //  Encoding for 16-bit mask value
-#ifdef __cplusplus
-    public:
-        npu_op_irq_t(uint32_t _mask) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            mask(_mask & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_op_irq_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            mask(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(mask) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_irq_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_irq_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_mask() const
-        {
-            return static_cast<uint32_t>(mask);
-        }
-        CONSTEXPR npu_op_irq_t &set_mask(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            mask = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_IRQ); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(mask) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_irq_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_irq_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_mask() const
+    {
+        return static_cast<uint32_t>(mask);
+    }
+    CONSTEXPR npu_op_irq_t& set_mask(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        mask = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("mask", std::to_string(mask)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("mask", std::to_string(mask)));
+    }
 #endif
 #endif
-    };
+};
 // 2D convolution
-    struct npu_op_conv_t
+struct npu_op_conv_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t weights_ifm2:1; //  Read weights from IFM2 rather than a static compressed stream
+    uint32_t reserved1:15;
+#ifdef __cplusplus
+public:
+    npu_op_conv_t(uint32_t _weights_ifm2) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        weights_ifm2(_weights_ifm2 & ((1U << 1)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_op_conv_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        weights_ifm2(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t weights_ifm2: 1; //  Read weights from IFM2 rather than a static compressed stream
-        uint32_t reserved1: 15;
-#ifdef __cplusplus
-    public:
-        npu_op_conv_t(uint32_t _weights_ifm2) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            weights_ifm2(_weights_ifm2 & ((1U << 1) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_op_conv_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            weights_ifm2(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(weights_ifm2) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_conv_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_conv_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_weights_ifm2() const
-        {
-            return static_cast<uint32_t>(weights_ifm2);
-        }
-        CONSTEXPR npu_op_conv_t &set_weights_ifm2(uint32_t value)
-        {
-            assert((value >> 1) == 0);
-            weights_ifm2 = static_cast<uint8_t>(value & ((1U << 1) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_CONV); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(weights_ifm2) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_conv_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_conv_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_weights_ifm2() const
+    {
+        return static_cast<uint32_t>(weights_ifm2);
+    }
+    CONSTEXPR npu_op_conv_t& set_weights_ifm2(uint32_t value)
+    {
+        assert((value >> 1) == 0);
+        weights_ifm2 = static_cast<uint8_t>(value & ((1U << 1)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("weights_ifm2", std::to_string(weights_ifm2)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("weights_ifm2", std::to_string(weights_ifm2)));
+    }
 #endif
 #endif
-    };
+};
 // Depth-wise 2D convolution
-    struct npu_op_depthwise_t
+struct npu_op_depthwise_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+#ifdef __cplusplus
+public:
+    CONSTEXPR npu_op_depthwise_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DEPTHWISE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-#ifdef __cplusplus
-    public:
-        CONSTEXPR npu_op_depthwise_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DEPTHWISE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DEPTHWISE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DEPTHWISE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_depthwise_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_depthwise_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DEPTHWISE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DEPTHWISE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_depthwise_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_depthwise_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &) const
-        {
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>&) const
+    {
+    }
 #endif
 #endif
-    };
+};
 // Pooling
-    struct npu_op_pool_t
+struct npu_op_pool_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t pooling_mode:3; //  Pooling mode
+    uint32_t reserved1:13;
+#ifdef __cplusplus
+public:
+    npu_op_pool_t(NPU_NAMESPACE::pooling_mode _pooling_mode) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pooling_mode(static_cast<uint8_t>(_pooling_mode) & ((1U << 3)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_op_pool_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pooling_mode(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t pooling_mode: 3; //  Pooling mode
-        uint32_t reserved1: 13;
-#ifdef __cplusplus
-    public:
-        npu_op_pool_t(NPU_NAMESPACE::pooling_mode _pooling_mode) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pooling_mode(static_cast<uint8_t>(_pooling_mode) & ((1U << 3) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_op_pool_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pooling_mode(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(pooling_mode) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_pool_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_pool_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::pooling_mode get_pooling_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::pooling_mode>(pooling_mode);
-        }
-        CONSTEXPR npu_op_pool_t &set_pooling_mode(NPU_NAMESPACE::pooling_mode value)
-        {
-            pooling_mode = static_cast<uint8_t>(value) & ((1U << 3) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_POOL); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(pooling_mode) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_pool_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_pool_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::pooling_mode get_pooling_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::pooling_mode>(pooling_mode);
+    }
+    CONSTEXPR npu_op_pool_t& set_pooling_mode(NPU_NAMESPACE::pooling_mode value)
+    {
+        pooling_mode = static_cast<uint8_t>(value) & ((1U << 3)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("pooling_mode", (pooling_mode < (sizeof(pooling_mode_str) / sizeof(pooling_mode_str[0])) ? pooling_mode_str[pooling_mode] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("pooling_mode", (pooling_mode < (sizeof(pooling_mode_str)/sizeof(pooling_mode_str[0])) ? pooling_mode_str[pooling_mode] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // Elementwise operation
-    struct npu_op_elementwise_t
+struct npu_op_elementwise_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t elementwise_mode:6; //  Elementwise mode
+    uint32_t reserved1:10;
+#ifdef __cplusplus
+public:
+    npu_op_elementwise_t(NPU_NAMESPACE::elementwise_mode _elementwise_mode) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        elementwise_mode(static_cast<uint8_t>(_elementwise_mode) & ((1U << 6)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_op_elementwise_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        elementwise_mode(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t elementwise_mode: 6; //  Elementwise mode
-        uint32_t reserved1: 10;
-#ifdef __cplusplus
-    public:
-        npu_op_elementwise_t(NPU_NAMESPACE::elementwise_mode _elementwise_mode) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            elementwise_mode(static_cast<uint8_t>(_elementwise_mode) & ((1U << 6) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_op_elementwise_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            elementwise_mode(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(elementwise_mode) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_elementwise_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_elementwise_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::elementwise_mode get_elementwise_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::elementwise_mode>(elementwise_mode);
-        }
-        CONSTEXPR npu_op_elementwise_t &set_elementwise_mode(NPU_NAMESPACE::elementwise_mode value)
-        {
-            elementwise_mode = static_cast<uint8_t>(value) & ((1U << 6) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_ELEMENTWISE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(elementwise_mode) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_elementwise_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_elementwise_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::elementwise_mode get_elementwise_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::elementwise_mode>(elementwise_mode);
+    }
+    CONSTEXPR npu_op_elementwise_t& set_elementwise_mode(NPU_NAMESPACE::elementwise_mode value)
+    {
+        elementwise_mode = static_cast<uint8_t>(value) & ((1U << 6)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("elementwise_mode", (elementwise_mode < (sizeof(elementwise_mode_str) / sizeof(elementwise_mode_str[0])) ? elementwise_mode_str[elementwise_mode] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("elementwise_mode", (elementwise_mode < (sizeof(elementwise_mode_str)/sizeof(elementwise_mode_str[0])) ? elementwise_mode_str[elementwise_mode] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // Resize operation
-    struct npu_op_resize_t
+struct npu_op_resize_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t resize_mode:2; //  Resize mode
+    uint32_t reserved1:14;
+#ifdef __cplusplus
+public:
+    npu_op_resize_t(NPU_NAMESPACE::resize_mode _resize_mode) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_mode(static_cast<uint8_t>(_resize_mode) & ((1U << 2)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_op_resize_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_mode(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t resize_mode: 2; //  Resize mode
-        uint32_t reserved1: 14;
-#ifdef __cplusplus
-    public:
-        npu_op_resize_t(NPU_NAMESPACE::resize_mode _resize_mode) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_mode(static_cast<uint8_t>(_resize_mode) & ((1U << 2) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_op_resize_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_mode(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(resize_mode) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_resize_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_resize_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::resize_mode get_resize_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::resize_mode>(resize_mode);
-        }
-        CONSTEXPR npu_op_resize_t &set_resize_mode(NPU_NAMESPACE::resize_mode value)
-        {
-            resize_mode = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_RESIZE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(resize_mode) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_resize_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_resize_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::resize_mode get_resize_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::resize_mode>(resize_mode);
+    }
+    CONSTEXPR npu_op_resize_t& set_resize_mode(NPU_NAMESPACE::resize_mode value)
+    {
+        resize_mode = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("resize_mode", (resize_mode < (sizeof(resize_mode_str) / sizeof(resize_mode_str[0])) ? resize_mode_str[resize_mode] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("resize_mode", (resize_mode < (sizeof(resize_mode_str)/sizeof(resize_mode_str[0])) ? resize_mode_str[resize_mode] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // Queue new DMA for the given channel
-    struct npu_op_dma_start_t
+struct npu_op_dma_start_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+#ifdef __cplusplus
+public:
+    CONSTEXPR npu_op_dma_start_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_START)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-#ifdef __cplusplus
-    public:
-        CONSTEXPR npu_op_dma_start_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_START)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_START) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_START);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_dma_start_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_dma_start_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_START) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_START); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_dma_start_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_dma_start_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &) const
-        {
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>&) const
+    {
+    }
 #endif
 #endif
-    };
+};
 // Wait for the mem2mem DMA channel to have k or fewer active descriptors outstanding
-    struct npu_op_dma_wait_t
+struct npu_op_dma_wait_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t k:2; //  Number of outstanding descriptors
+    uint32_t reserved1:14;
+#ifdef __cplusplus
+public:
+    npu_op_dma_wait_t(uint32_t _k) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        k(_k & ((1U << 2)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_op_dma_wait_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        k(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t k: 2; //  Number of outstanding descriptors
-        uint32_t reserved1: 14;
-#ifdef __cplusplus
-    public:
-        npu_op_dma_wait_t(uint32_t _k) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            k(_k & ((1U << 2) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_op_dma_wait_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            k(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(k) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_dma_wait_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_dma_wait_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_k() const
-        {
-            return static_cast<uint32_t>(k);
-        }
-        CONSTEXPR npu_op_dma_wait_t &set_k(uint32_t value)
-        {
-            assert((value >> 2) == 0);
-            k = static_cast<uint8_t>(value & ((1U << 2) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_DMA_WAIT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(k) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_dma_wait_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_dma_wait_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_k() const
+    {
+        return static_cast<uint32_t>(k);
+    }
+    CONSTEXPR npu_op_dma_wait_t& set_k(uint32_t value)
+    {
+        assert((value >> 2) == 0);
+        k = static_cast<uint8_t>(value & ((1U << 2)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("k", std::to_string(k)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("k", std::to_string(k)));
+    }
 #endif
 #endif
-    };
+};
 // Wait for kernel operations to complete
-    struct npu_op_kernel_wait_t
+struct npu_op_kernel_wait_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t n:1; //  Number of kernel operations
+    uint32_t reserved1:15;
+#ifdef __cplusplus
+public:
+    npu_op_kernel_wait_t(uint32_t _n) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        n(_n & ((1U << 1)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_op_kernel_wait_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        n(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t n: 1; //  Number of kernel operations
-        uint32_t reserved1: 15;
-#ifdef __cplusplus
-    public:
-        npu_op_kernel_wait_t(uint32_t _n) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            n(_n & ((1U << 1) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_op_kernel_wait_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            n(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(n) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_kernel_wait_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_kernel_wait_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_n() const
-        {
-            return static_cast<uint32_t>(n);
-        }
-        CONSTEXPR npu_op_kernel_wait_t &set_n(uint32_t value)
-        {
-            assert((value >> 1) == 0);
-            n = static_cast<uint8_t>(value & ((1U << 1) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_KERNEL_WAIT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(n) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_kernel_wait_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_kernel_wait_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_n() const
+    {
+        return static_cast<uint32_t>(n);
+    }
+    CONSTEXPR npu_op_kernel_wait_t& set_n(uint32_t value)
+    {
+        assert((value >> 1) == 0);
+        n = static_cast<uint8_t>(value & ((1U << 1)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("n", std::to_string(n)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("n", std::to_string(n)));
+    }
 #endif
 #endif
-    };
+};
 // Enable or disable PMU counting (debug feature only)
-    struct npu_op_pmu_mask_t
+struct npu_op_pmu_mask_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t enable:1; //  Enable or disable PMU mask
+    uint32_t reserved1:15;
+#ifdef __cplusplus
+public:
+    npu_op_pmu_mask_t(uint32_t _enable) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        enable(_enable & ((1U << 1)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_op_pmu_mask_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        enable(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t enable: 1; //  Enable or disable PMU mask
-        uint32_t reserved1: 15;
-#ifdef __cplusplus
-    public:
-        npu_op_pmu_mask_t(uint32_t _enable) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            enable(_enable & ((1U << 1) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_op_pmu_mask_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            enable(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(enable) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_pmu_mask_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_pmu_mask_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_enable() const
-        {
-            return static_cast<uint32_t>(enable);
-        }
-        CONSTEXPR npu_op_pmu_mask_t &set_enable(uint32_t value)
-        {
-            assert((value >> 1) == 0);
-            enable = static_cast<uint8_t>(value & ((1U << 1) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_OP_PMU_MASK); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(enable) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_pmu_mask_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_pmu_mask_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_enable() const
+    {
+        return static_cast<uint32_t>(enable);
+    }
+    CONSTEXPR npu_op_pmu_mask_t& set_enable(uint32_t value)
+    {
+        assert((value >> 1) == 0);
+        enable = static_cast<uint8_t>(value & ((1U << 1)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("enable", std::to_string(enable)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("enable", std::to_string(enable)));
+    }
 #endif
 #endif
-    };
+};
 // IFM top pad
-    struct npu_set_ifm_pad_top_t
+struct npu_set_ifm_pad_top_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t pad:7; //  IFM top pad
+    uint32_t reserved1:9;
+#ifdef __cplusplus
+public:
+    npu_set_ifm_pad_top_t(uint32_t _pad) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pad(_pad & ((1U << 7)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm_pad_top_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pad(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t pad: 7; //  IFM top pad
-        uint32_t reserved1: 9;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_pad_top_t(uint32_t _pad) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pad(_pad & ((1U << 7) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm_pad_top_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pad(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(pad) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_pad_top_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_pad_top_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_pad() const
-        {
-            return static_cast<uint32_t>(pad);
-        }
-        CONSTEXPR npu_set_ifm_pad_top_t &set_pad(uint32_t value)
-        {
-            assert((value >> 7) == 0);
-            pad = static_cast<uint8_t>(value & ((1U << 7) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_TOP); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(pad) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_pad_top_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_pad_top_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_pad() const
+    {
+        return static_cast<uint32_t>(pad);
+    }
+    CONSTEXPR npu_set_ifm_pad_top_t& set_pad(uint32_t value)
+    {
+        assert((value >> 7) == 0);
+        pad = static_cast<uint8_t>(value & ((1U << 7)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("pad", std::to_string(pad)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("pad", std::to_string(pad)));
+    }
 #endif
 #endif
-    };
+};
 // IFM left pad
-    struct npu_set_ifm_pad_left_t
+struct npu_set_ifm_pad_left_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t pad:7; //  IFM left pad
+    uint32_t reserved1:9;
+#ifdef __cplusplus
+public:
+    npu_set_ifm_pad_left_t(uint32_t _pad) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pad(_pad & ((1U << 7)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm_pad_left_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pad(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t pad: 7; //  IFM left pad
-        uint32_t reserved1: 9;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_pad_left_t(uint32_t _pad) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pad(_pad & ((1U << 7) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm_pad_left_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pad(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(pad) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_pad_left_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_pad_left_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_pad() const
-        {
-            return static_cast<uint32_t>(pad);
-        }
-        CONSTEXPR npu_set_ifm_pad_left_t &set_pad(uint32_t value)
-        {
-            assert((value >> 7) == 0);
-            pad = static_cast<uint8_t>(value & ((1U << 7) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_LEFT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(pad) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_pad_left_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_pad_left_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_pad() const
+    {
+        return static_cast<uint32_t>(pad);
+    }
+    CONSTEXPR npu_set_ifm_pad_left_t& set_pad(uint32_t value)
+    {
+        assert((value >> 7) == 0);
+        pad = static_cast<uint8_t>(value & ((1U << 7)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("pad", std::to_string(pad)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("pad", std::to_string(pad)));
+    }
 #endif
 #endif
-    };
+};
 // IFM right pad
-    struct npu_set_ifm_pad_right_t
+struct npu_set_ifm_pad_right_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t pad:8; //  IFM right pad. Max value is 128
+    uint32_t reserved1:8;
+#ifdef __cplusplus
+public:
+    npu_set_ifm_pad_right_t(uint32_t _pad) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pad(_pad & ((1U << 8)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm_pad_right_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pad(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t pad: 8; //  IFM right pad. Max value is 128
-        uint32_t reserved1: 8;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_pad_right_t(uint32_t _pad) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pad(_pad & ((1U << 8) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm_pad_right_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pad(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(pad) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_pad_right_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_pad_right_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_pad() const
-        {
-            return static_cast<uint32_t>(pad);
-        }
-        CONSTEXPR npu_set_ifm_pad_right_t &set_pad(uint32_t value)
-        {
-            assert((value >> 8) == 0);
-            pad = static_cast<uint8_t>(value & ((1U << 8) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_RIGHT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(pad) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_pad_right_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_pad_right_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_pad() const
+    {
+        return static_cast<uint32_t>(pad);
+    }
+    CONSTEXPR npu_set_ifm_pad_right_t& set_pad(uint32_t value)
+    {
+        assert((value >> 8) == 0);
+        pad = static_cast<uint8_t>(value & ((1U << 8)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("pad", std::to_string(pad)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("pad", std::to_string(pad)));
+    }
 #endif
 #endif
-    };
+};
 // IFM bottom pad
-    struct npu_set_ifm_pad_bottom_t
+struct npu_set_ifm_pad_bottom_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t pad:8; //  IFM bottom pad. Max value is 128
+    uint32_t reserved1:8;
+#ifdef __cplusplus
+public:
+    npu_set_ifm_pad_bottom_t(uint32_t _pad) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pad(_pad & ((1U << 8)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm_pad_bottom_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        pad(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t pad: 8; //  IFM bottom pad. Max value is 128
-        uint32_t reserved1: 8;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_pad_bottom_t(uint32_t _pad) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pad(_pad & ((1U << 8) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm_pad_bottom_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            pad(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(pad) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_pad_bottom_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_pad_bottom_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_pad() const
-        {
-            return static_cast<uint32_t>(pad);
-        }
-        CONSTEXPR npu_set_ifm_pad_bottom_t &set_pad(uint32_t value)
-        {
-            assert((value >> 8) == 0);
-            pad = static_cast<uint8_t>(value & ((1U << 8) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PAD_BOTTOM); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(pad) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_pad_bottom_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_pad_bottom_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_pad() const
+    {
+        return static_cast<uint32_t>(pad);
+    }
+    CONSTEXPR npu_set_ifm_pad_bottom_t& set_pad(uint32_t value)
+    {
+        assert((value >> 8) == 0);
+        pad = static_cast<uint8_t>(value & ((1U << 8)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("pad", std::to_string(pad)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("pad", std::to_string(pad)));
+    }
 #endif
 #endif
-    };
+};
 // Number of input channels for convolution
-    struct npu_set_ifm_depth_m1_t
+struct npu_set_ifm_depth_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t depth_m1:16; //  Number of input channels for convolution
+#ifdef __cplusplus
+public:
+    npu_set_ifm_depth_m1_t(uint32_t _depth_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        depth_m1(_depth_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm_depth_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        depth_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t depth_m1: 16; //  Number of input channels for convolution
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_depth_m1_t(uint32_t _depth_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            depth_m1(_depth_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm_depth_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            depth_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(depth_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_depth_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_depth_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_depth_m1() const
-        {
-            return static_cast<uint32_t>(depth_m1);
-        }
-        CONSTEXPR npu_set_ifm_depth_m1_t &set_depth_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            depth_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_DEPTH_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(depth_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_depth_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_depth_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_depth_m1() const
+    {
+        return static_cast<uint32_t>(depth_m1);
+    }
+    CONSTEXPR npu_set_ifm_depth_m1_t& set_depth_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        depth_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("depth_m1", std::to_string(depth_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("depth_m1", std::to_string(depth_m1)));
+    }
 #endif
 #endif
-    };
+};
 // IFM Precision
-    struct npu_set_ifm_precision_t
+struct npu_set_ifm_precision_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t activation_type:1; //  IFM type
+    uint32_t reserved1:1;
+    uint32_t activation_precision:2; //  IFM precision
+    uint32_t reserved2:2;
+    uint32_t activation_format:2; //  IFM format
+    uint32_t reserved3:6;
+    uint32_t activation_storage:2; //  IFM storage mode
+#ifdef __cplusplus
+public:
+    npu_set_ifm_precision_t(NPU_NAMESPACE::activation_type _activation_type, NPU_NAMESPACE::activation_precision _activation_precision, NPU_NAMESPACE::activation_format _activation_format, NPU_NAMESPACE::activation_storage _activation_storage) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        activation_type(static_cast<uint8_t>(_activation_type) & ((1U << 1)-1)),
+        reserved1(0),
+        activation_precision(static_cast<uint8_t>(_activation_precision) & ((1U << 2)-1)),
+        reserved2(0),
+        activation_format(static_cast<uint8_t>(_activation_format) & ((1U << 2)-1)),
+        reserved3(0),
+        activation_storage(static_cast<uint8_t>(_activation_storage) & ((1U << 2)-1))
+    {}
+    CONSTEXPR npu_set_ifm_precision_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        activation_type(0),
+        reserved1(0),
+        activation_precision(0),
+        reserved2(0),
+        activation_format(0),
+        reserved3(0),
+        activation_storage(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t activation_type: 1; //  IFM type
-        uint32_t reserved1: 1;
-        uint32_t activation_precision: 2; //  IFM precision
-        uint32_t reserved2: 2;
-        uint32_t activation_format: 2; //  IFM format
-        uint32_t reserved3: 6;
-        uint32_t activation_storage: 2; //  IFM storage mode
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_precision_t(NPU_NAMESPACE::activation_type _activation_type, NPU_NAMESPACE::activation_precision _activation_precision, NPU_NAMESPACE::activation_format _activation_format, NPU_NAMESPACE::activation_storage _activation_storage) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            activation_type(static_cast<uint8_t>(_activation_type) & ((1U << 1) - 1)),
-            reserved1(0),
-            activation_precision(static_cast<uint8_t>(_activation_precision) & ((1U << 2) - 1)),
-            reserved2(0),
-            activation_format(static_cast<uint8_t>(_activation_format) & ((1U << 2) - 1)),
-            reserved3(0),
-            activation_storage(static_cast<uint8_t>(_activation_storage) & ((1U << 2) - 1))
-        {}
-        CONSTEXPR npu_set_ifm_precision_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            activation_type(0),
-            reserved1(0),
-            activation_precision(0),
-            reserved2(0),
-            activation_format(0),
-            reserved3(0),
-            activation_storage(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(activation_type) << 16;
-            word |= uint32_t(activation_precision) << 18;
-            word |= uint32_t(activation_format) << 22;
-            word |= uint32_t(activation_storage) << 30;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_precision_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_precision_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_type get_activation_type() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_type>(activation_type);
-        }
-        CONSTEXPR npu_set_ifm_precision_t &set_activation_type(NPU_NAMESPACE::activation_type value)
-        {
-            activation_type = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_precision get_activation_precision() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_precision>(activation_precision);
-        }
-        CONSTEXPR npu_set_ifm_precision_t &set_activation_precision(NPU_NAMESPACE::activation_precision value)
-        {
-            activation_precision = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_format get_activation_format() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_format>(activation_format);
-        }
-        CONSTEXPR npu_set_ifm_precision_t &set_activation_format(NPU_NAMESPACE::activation_format value)
-        {
-            activation_format = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_storage get_activation_storage() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_storage>(activation_storage);
-        }
-        CONSTEXPR npu_set_ifm_precision_t &set_activation_storage(NPU_NAMESPACE::activation_storage value)
-        {
-            activation_storage = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_PRECISION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(activation_type) << 16;
+        word |= uint32_t(activation_precision) << 18;
+        word |= uint32_t(activation_format) << 22;
+        word |= uint32_t(activation_storage) << 30;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_precision_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_precision_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_type get_activation_type() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_type>(activation_type);
+    }
+    CONSTEXPR npu_set_ifm_precision_t& set_activation_type(NPU_NAMESPACE::activation_type value)
+    {
+        activation_type = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_precision get_activation_precision() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_precision>(activation_precision);
+    }
+    CONSTEXPR npu_set_ifm_precision_t& set_activation_precision(NPU_NAMESPACE::activation_precision value)
+    {
+        activation_precision = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_format get_activation_format() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_format>(activation_format);
+    }
+    CONSTEXPR npu_set_ifm_precision_t& set_activation_format(NPU_NAMESPACE::activation_format value)
+    {
+        activation_format = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_storage get_activation_storage() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_storage>(activation_storage);
+    }
+    CONSTEXPR npu_set_ifm_precision_t& set_activation_storage(NPU_NAMESPACE::activation_storage value)
+    {
+        activation_storage = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("activation_type", (activation_type < (sizeof(activation_type_str) / sizeof(activation_type_str[0])) ? activation_type_str[activation_type] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_precision", (activation_precision < (sizeof(activation_precision_str) / sizeof(activation_precision_str[0])) ? activation_precision_str[activation_precision] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_format", (activation_format < (sizeof(activation_format_str) / sizeof(activation_format_str[0])) ? activation_format_str[activation_format] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_storage", (activation_storage < (sizeof(activation_storage_str) / sizeof(activation_storage_str[0])) ? activation_storage_str[activation_storage] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("activation_type", (activation_type < (sizeof(activation_type_str)/sizeof(activation_type_str[0])) ? activation_type_str[activation_type] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_precision", (activation_precision < (sizeof(activation_precision_str)/sizeof(activation_precision_str[0])) ? activation_precision_str[activation_precision] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_format", (activation_format < (sizeof(activation_format_str)/sizeof(activation_format_str[0])) ? activation_format_str[activation_format] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_storage", (activation_storage < (sizeof(activation_storage_str)/sizeof(activation_storage_str[0])) ? activation_storage_str[activation_storage] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // IFM upscale mode
-    struct npu_set_ifm_upscale_t
+struct npu_set_ifm_upscale_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t mode:2; //  IFM upscale mode
+    uint32_t reserved1:14;
+#ifdef __cplusplus
+public:
+    npu_set_ifm_upscale_t(NPU_NAMESPACE::ifm_upscale_mode _mode) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        mode(static_cast<uint8_t>(_mode) & ((1U << 2)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm_upscale_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        mode(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t mode: 2; //  IFM upscale mode
-        uint32_t reserved1: 14;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_upscale_t(NPU_NAMESPACE::ifm_upscale_mode _mode) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            mode(static_cast<uint8_t>(_mode) & ((1U << 2) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm_upscale_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            mode(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(mode) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_upscale_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_upscale_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::ifm_upscale_mode get_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::ifm_upscale_mode>(mode);
-        }
-        CONSTEXPR npu_set_ifm_upscale_t &set_mode(NPU_NAMESPACE::ifm_upscale_mode value)
-        {
-            mode = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_UPSCALE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(mode) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_upscale_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_upscale_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::ifm_upscale_mode get_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::ifm_upscale_mode>(mode);
+    }
+    CONSTEXPR npu_set_ifm_upscale_t& set_mode(NPU_NAMESPACE::ifm_upscale_mode value)
+    {
+        mode = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("mode", (mode < (sizeof(ifm_upscale_mode_str) / sizeof(ifm_upscale_mode_str[0])) ? ifm_upscale_mode_str[mode] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("mode", (mode < (sizeof(ifm_upscale_mode_str)/sizeof(ifm_upscale_mode_str[0])) ? ifm_upscale_mode_str[mode] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // IFM zero point
-    struct npu_set_ifm_zero_point_t
+struct npu_set_ifm_zero_point_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t zero_point:16; //  Zero point offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm_zero_point_t(uint32_t _zero_point) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        zero_point(_zero_point & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm_zero_point_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        zero_point(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t zero_point: 16; //  Zero point offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_zero_point_t(uint32_t _zero_point) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            zero_point(_zero_point & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm_zero_point_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            zero_point(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(zero_point) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_zero_point_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_zero_point_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_zero_point() const
-        {
-            return static_cast<uint32_t>(zero_point);
-        }
-        CONSTEXPR npu_set_ifm_zero_point_t &set_zero_point(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            zero_point = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_ZERO_POINT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(zero_point) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_zero_point_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_zero_point_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_zero_point() const
+    {
+        return static_cast<uint32_t>(zero_point);
+    }
+    CONSTEXPR npu_set_ifm_zero_point_t& set_zero_point(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        zero_point = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("zero_point", std::to_string(zero_point)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("zero_point", std::to_string(zero_point)));
+    }
 #endif
 #endif
-    };
+};
 // IFM Tile 0 and Tile 2 width
-    struct npu_set_ifm_width0_m1_t
+struct npu_set_ifm_width0_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t width_m1:16; //  IFM Tile 0 and tile 2 width
+#ifdef __cplusplus
+public:
+    npu_set_ifm_width0_m1_t(uint32_t _width_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(_width_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm_width0_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t width_m1: 16; //  IFM Tile 0 and tile 2 width
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_width0_m1_t(uint32_t _width_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(_width_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm_width0_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(width_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_width0_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_width0_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_width_m1() const
-        {
-            return static_cast<uint32_t>(width_m1);
-        }
-        CONSTEXPR npu_set_ifm_width0_m1_t &set_width_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            width_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_WIDTH0_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(width_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_width0_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_width0_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_width_m1() const
+    {
+        return static_cast<uint32_t>(width_m1);
+    }
+    CONSTEXPR npu_set_ifm_width0_m1_t& set_width_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        width_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
+    }
 #endif
 #endif
-    };
+};
 // IFM Tile 0 height
-    struct npu_set_ifm_height0_m1_t
+struct npu_set_ifm_height0_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:16; //  IFM Tile 0 height
+#ifdef __cplusplus
+public:
+    npu_set_ifm_height0_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm_height0_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 16; //  IFM Tile 0 height
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_height0_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm_height0_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_height0_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_height0_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_ifm_height0_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            height_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT0_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_height0_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_height0_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_ifm_height0_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        height_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // IFM Tile 1 height
-    struct npu_set_ifm_height1_m1_t
+struct npu_set_ifm_height1_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:16; //  IFM Tile 1 height
+#ifdef __cplusplus
+public:
+    npu_set_ifm_height1_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm_height1_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 16; //  IFM Tile 1 height
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_height1_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm_height1_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_height1_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_height1_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_ifm_height1_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            height_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_HEIGHT1_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_height1_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_height1_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_ifm_height1_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        height_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Index n for IFM access
-    struct npu_set_ifm_region_t
+struct npu_set_ifm_region_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t region:3; //  Region number for external memory accesses
+    uint32_t reserved1:13;
+#ifdef __cplusplus
+public:
+    npu_set_ifm_region_t(uint32_t _region) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(_region & ((1U << 3)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm_region_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t region: 3; //  Region number for external memory accesses
-        uint32_t reserved1: 13;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_region_t(uint32_t _region) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(_region & ((1U << 3) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm_region_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(region) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_region_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_region_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_region() const
-        {
-            return static_cast<uint32_t>(region);
-        }
-        CONSTEXPR npu_set_ifm_region_t &set_region(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            region = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_REGION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(region) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_region_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_region_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_region() const
+    {
+        return static_cast<uint32_t>(region);
+    }
+    CONSTEXPR npu_set_ifm_region_t& set_region(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        region = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
+    }
 #endif
 #endif
-    };
+};
 // IFM broadcast configuration
-    struct npu_set_ifm_broadcast_t
+struct npu_set_ifm_broadcast_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t broadcast_mode:4; //  Broadcast mode for IFM1. When not using broadcast_mode_scalar, accesses to IFM1 sets corresponding axes to 0 and corresponding IFM1 H/W/C to 1)
+    uint32_t reserved1:12;
+#ifdef __cplusplus
+public:
+    npu_set_ifm_broadcast_t(NPU_NAMESPACE::broadcast_mode _broadcast_mode) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        broadcast_mode(static_cast<uint8_t>(_broadcast_mode) & ((1U << 4)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm_broadcast_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        broadcast_mode(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t broadcast_mode: 4; //  Broadcast mode for IFM1. When not using broadcast_mode_scalar, accesses to IFM1 sets corresponding axes to 0 and corresponding IFM1 H/W/C to 1)
-        uint32_t reserved1: 12;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_broadcast_t(NPU_NAMESPACE::broadcast_mode _broadcast_mode) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            broadcast_mode(static_cast<uint8_t>(_broadcast_mode) & ((1U << 4) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm_broadcast_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            broadcast_mode(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(broadcast_mode) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_broadcast_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_broadcast_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::broadcast_mode get_broadcast_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::broadcast_mode>(broadcast_mode);
-        }
-        CONSTEXPR npu_set_ifm_broadcast_t &set_broadcast_mode(NPU_NAMESPACE::broadcast_mode value)
-        {
-            broadcast_mode = static_cast<uint8_t>(value) & ((1U << 4) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM_BROADCAST); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(broadcast_mode) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_broadcast_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_broadcast_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::broadcast_mode get_broadcast_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::broadcast_mode>(broadcast_mode);
+    }
+    CONSTEXPR npu_set_ifm_broadcast_t& set_broadcast_mode(NPU_NAMESPACE::broadcast_mode value)
+    {
+        broadcast_mode = static_cast<uint8_t>(value) & ((1U << 4)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("broadcast_mode", (broadcast_mode < (sizeof(broadcast_mode_str) / sizeof(broadcast_mode_str[0])) ? broadcast_mode_str[broadcast_mode] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("broadcast_mode", (broadcast_mode < (sizeof(broadcast_mode_str)/sizeof(broadcast_mode_str[0])) ? broadcast_mode_str[broadcast_mode] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // Output feature map width
-    struct npu_set_ofm_width_m1_t
+struct npu_set_ofm_width_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t width_m1:16; //  Output feature map width
+#ifdef __cplusplus
+public:
+    npu_set_ofm_width_m1_t(uint32_t _width_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(_width_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ofm_width_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t width_m1: 16; //  Output feature map width
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_width_m1_t(uint32_t _width_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(_width_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ofm_width_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(width_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_width_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_width_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_width_m1() const
-        {
-            return static_cast<uint32_t>(width_m1);
-        }
-        CONSTEXPR npu_set_ofm_width_m1_t &set_width_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            width_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(width_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_width_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_width_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_width_m1() const
+    {
+        return static_cast<uint32_t>(width_m1);
+    }
+    CONSTEXPR npu_set_ofm_width_m1_t& set_width_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        width_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Output feature map height
-    struct npu_set_ofm_height_m1_t
+struct npu_set_ofm_height_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:16; //  Output feature map height
+#ifdef __cplusplus
+public:
+    npu_set_ofm_height_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ofm_height_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 16; //  Output feature map height
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_height_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ofm_height_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_height_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_height_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_ofm_height_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            height_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_height_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_height_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_ofm_height_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        height_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Output feature map depth
-    struct npu_set_ofm_depth_m1_t
+struct npu_set_ofm_depth_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t depth_m1:16; //  Output feature map depth
+#ifdef __cplusplus
+public:
+    npu_set_ofm_depth_m1_t(uint32_t _depth_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        depth_m1(_depth_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ofm_depth_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        depth_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t depth_m1: 16; //  Output feature map depth
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_depth_m1_t(uint32_t _depth_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            depth_m1(_depth_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ofm_depth_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            depth_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(depth_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_depth_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_depth_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_depth_m1() const
-        {
-            return static_cast<uint32_t>(depth_m1);
-        }
-        CONSTEXPR npu_set_ofm_depth_m1_t &set_depth_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            depth_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_DEPTH_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(depth_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_depth_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_depth_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_depth_m1() const
+    {
+        return static_cast<uint32_t>(depth_m1);
+    }
+    CONSTEXPR npu_set_ofm_depth_m1_t& set_depth_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        depth_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("depth_m1", std::to_string(depth_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("depth_m1", std::to_string(depth_m1)));
+    }
 #endif
 #endif
-    };
+};
 // OFM Precision
-    struct npu_set_ofm_precision_t
+struct npu_set_ofm_precision_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t activation_type:1; //  OFM type
+    uint32_t activation_precision:2; //  OFM precision
+    uint32_t reserved1:3;
+    uint32_t activation_format:2; //  OFM format
+    uint32_t scale_mode:1; //  OFM scale mode
+    uint32_t activation_reverse:2; //  OFM reverse
+    uint32_t activation_transpose:3; //  OFM transpose
+    uint32_t activation_storage:2; //  OFM storage mode
+#ifdef __cplusplus
+public:
+    npu_set_ofm_precision_t(NPU_NAMESPACE::activation_type _activation_type, NPU_NAMESPACE::activation_precision _activation_precision, NPU_NAMESPACE::activation_format _activation_format, NPU_NAMESPACE::ofm_scale_mode _scale_mode, NPU_NAMESPACE::activation_reverse _activation_reverse, NPU_NAMESPACE::activation_transpose _activation_transpose, NPU_NAMESPACE::activation_storage _activation_storage) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        activation_type(static_cast<uint8_t>(_activation_type) & ((1U << 1)-1)),
+        activation_precision(static_cast<uint8_t>(_activation_precision) & ((1U << 2)-1)),
+        reserved1(0),
+        activation_format(static_cast<uint8_t>(_activation_format) & ((1U << 2)-1)),
+        scale_mode(static_cast<uint8_t>(_scale_mode) & ((1U << 1)-1)),
+        activation_reverse(static_cast<uint8_t>(_activation_reverse) & ((1U << 2)-1)),
+        activation_transpose(static_cast<uint8_t>(_activation_transpose) & ((1U << 3)-1)),
+        activation_storage(static_cast<uint8_t>(_activation_storage) & ((1U << 2)-1))
+    {}
+    CONSTEXPR npu_set_ofm_precision_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        activation_type(0),
+        activation_precision(0),
+        reserved1(0),
+        activation_format(0),
+        scale_mode(0),
+        activation_reverse(0),
+        activation_transpose(0),
+        activation_storage(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t activation_type: 1; //  OFM type
-        uint32_t activation_precision: 2; //  OFM precision
-        uint32_t reserved1: 3;
-        uint32_t activation_format: 2; //  OFM format
-        uint32_t scale_mode: 1; //  OFM scale mode
-        uint32_t activation_reverse: 2; //  OFM reverse
-        uint32_t activation_transpose: 3; //  OFM transpose
-        uint32_t activation_storage: 2; //  OFM storage mode
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_precision_t(NPU_NAMESPACE::activation_type _activation_type, NPU_NAMESPACE::activation_precision _activation_precision, NPU_NAMESPACE::activation_format _activation_format, NPU_NAMESPACE::ofm_scale_mode _scale_mode, NPU_NAMESPACE::activation_reverse _activation_reverse, NPU_NAMESPACE::activation_transpose _activation_transpose, NPU_NAMESPACE::activation_storage _activation_storage) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            activation_type(static_cast<uint8_t>(_activation_type) & ((1U << 1) - 1)),
-            activation_precision(static_cast<uint8_t>(_activation_precision) & ((1U << 2) - 1)),
-            reserved1(0),
-            activation_format(static_cast<uint8_t>(_activation_format) & ((1U << 2) - 1)),
-            scale_mode(static_cast<uint8_t>(_scale_mode) & ((1U << 1) - 1)),
-            activation_reverse(static_cast<uint8_t>(_activation_reverse) & ((1U << 2) - 1)),
-            activation_transpose(static_cast<uint8_t>(_activation_transpose) & ((1U << 3) - 1)),
-            activation_storage(static_cast<uint8_t>(_activation_storage) & ((1U << 2) - 1))
-        {}
-        CONSTEXPR npu_set_ofm_precision_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            activation_type(0),
-            activation_precision(0),
-            reserved1(0),
-            activation_format(0),
-            scale_mode(0),
-            activation_reverse(0),
-            activation_transpose(0),
-            activation_storage(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(activation_type) << 16;
-            word |= uint32_t(activation_precision) << 17;
-            word |= uint32_t(activation_format) << 22;
-            word |= uint32_t(scale_mode) << 24;
-            word |= uint32_t(activation_reverse) << 25;
-            word |= uint32_t(activation_transpose) << 27;
-            word |= uint32_t(activation_storage) << 30;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_type get_activation_type() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_type>(activation_type);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_activation_type(NPU_NAMESPACE::activation_type value)
-        {
-            activation_type = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_precision get_activation_precision() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_precision>(activation_precision);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_activation_precision(NPU_NAMESPACE::activation_precision value)
-        {
-            activation_precision = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_format get_activation_format() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_format>(activation_format);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_activation_format(NPU_NAMESPACE::activation_format value)
-        {
-            activation_format = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::ofm_scale_mode get_scale_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::ofm_scale_mode>(scale_mode);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_scale_mode(NPU_NAMESPACE::ofm_scale_mode value)
-        {
-            scale_mode = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_reverse get_activation_reverse() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_reverse>(activation_reverse);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_activation_reverse(NPU_NAMESPACE::activation_reverse value)
-        {
-            activation_reverse = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_transpose get_activation_transpose() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_transpose>(activation_transpose);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_activation_transpose(NPU_NAMESPACE::activation_transpose value)
-        {
-            activation_transpose = static_cast<uint8_t>(value) & ((1U << 3) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_storage get_activation_storage() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_storage>(activation_storage);
-        }
-        CONSTEXPR npu_set_ofm_precision_t &set_activation_storage(NPU_NAMESPACE::activation_storage value)
-        {
-            activation_storage = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_PRECISION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(activation_type) << 16;
+        word |= uint32_t(activation_precision) << 17;
+        word |= uint32_t(activation_format) << 22;
+        word |= uint32_t(scale_mode) << 24;
+        word |= uint32_t(activation_reverse) << 25;
+        word |= uint32_t(activation_transpose) << 27;
+        word |= uint32_t(activation_storage) << 30;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_type get_activation_type() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_type>(activation_type);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_activation_type(NPU_NAMESPACE::activation_type value)
+    {
+        activation_type = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_precision get_activation_precision() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_precision>(activation_precision);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_activation_precision(NPU_NAMESPACE::activation_precision value)
+    {
+        activation_precision = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_format get_activation_format() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_format>(activation_format);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_activation_format(NPU_NAMESPACE::activation_format value)
+    {
+        activation_format = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::ofm_scale_mode get_scale_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::ofm_scale_mode>(scale_mode);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_scale_mode(NPU_NAMESPACE::ofm_scale_mode value)
+    {
+        scale_mode = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_reverse get_activation_reverse() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_reverse>(activation_reverse);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_activation_reverse(NPU_NAMESPACE::activation_reverse value)
+    {
+        activation_reverse = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_transpose get_activation_transpose() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_transpose>(activation_transpose);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_activation_transpose(NPU_NAMESPACE::activation_transpose value)
+    {
+        activation_transpose = static_cast<uint8_t>(value) & ((1U << 3)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_storage get_activation_storage() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_storage>(activation_storage);
+    }
+    CONSTEXPR npu_set_ofm_precision_t& set_activation_storage(NPU_NAMESPACE::activation_storage value)
+    {
+        activation_storage = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("activation_type", (activation_type < (sizeof(activation_type_str) / sizeof(activation_type_str[0])) ? activation_type_str[activation_type] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_precision", (activation_precision < (sizeof(activation_precision_str) / sizeof(activation_precision_str[0])) ? activation_precision_str[activation_precision] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_format", (activation_format < (sizeof(activation_format_str) / sizeof(activation_format_str[0])) ? activation_format_str[activation_format] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("scale_mode", (scale_mode < (sizeof(ofm_scale_mode_str) / sizeof(ofm_scale_mode_str[0])) ? ofm_scale_mode_str[scale_mode] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_reverse", (activation_reverse < (sizeof(activation_reverse_str) / sizeof(activation_reverse_str[0])) ? activation_reverse_str[activation_reverse] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_transpose", (activation_transpose < (sizeof(activation_transpose_str) / sizeof(activation_transpose_str[0])) ? activation_transpose_str[activation_transpose] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_storage", (activation_storage < (sizeof(activation_storage_str) / sizeof(activation_storage_str[0])) ? activation_storage_str[activation_storage] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("activation_type", (activation_type < (sizeof(activation_type_str)/sizeof(activation_type_str[0])) ? activation_type_str[activation_type] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_precision", (activation_precision < (sizeof(activation_precision_str)/sizeof(activation_precision_str[0])) ? activation_precision_str[activation_precision] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_format", (activation_format < (sizeof(activation_format_str)/sizeof(activation_format_str[0])) ? activation_format_str[activation_format] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("scale_mode", (scale_mode < (sizeof(ofm_scale_mode_str)/sizeof(ofm_scale_mode_str[0])) ? ofm_scale_mode_str[scale_mode] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_reverse", (activation_reverse < (sizeof(activation_reverse_str)/sizeof(activation_reverse_str[0])) ? activation_reverse_str[activation_reverse] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_transpose", (activation_transpose < (sizeof(activation_transpose_str)/sizeof(activation_transpose_str[0])) ? activation_transpose_str[activation_transpose] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_storage", (activation_storage < (sizeof(activation_storage_str)/sizeof(activation_storage_str[0])) ? activation_storage_str[activation_storage] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // OFM block width
-    struct npu_set_ofm_blk_width_m1_t
+struct npu_set_ofm_blk_width_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t width_m1:7; //  OFM block width
+    uint32_t reserved1:9;
+#ifdef __cplusplus
+public:
+    npu_set_ofm_blk_width_m1_t(uint32_t _width_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(_width_m1 & ((1U << 7)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ofm_blk_width_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t width_m1: 7; //  OFM block width
-        uint32_t reserved1: 9;
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_blk_width_m1_t(uint32_t _width_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(_width_m1 & ((1U << 7) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ofm_blk_width_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(width_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_blk_width_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_blk_width_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_width_m1() const
-        {
-            return static_cast<uint32_t>(width_m1);
-        }
-        CONSTEXPR npu_set_ofm_blk_width_m1_t &set_width_m1(uint32_t value)
-        {
-            assert((value >> 7) == 0);
-            width_m1 = static_cast<uint8_t>(value & ((1U << 7) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_WIDTH_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(width_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_blk_width_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_blk_width_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_width_m1() const
+    {
+        return static_cast<uint32_t>(width_m1);
+    }
+    CONSTEXPR npu_set_ofm_blk_width_m1_t& set_width_m1(uint32_t value)
+    {
+        assert((value >> 7) == 0);
+        width_m1 = static_cast<uint8_t>(value & ((1U << 7)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
+    }
 #endif
 #endif
-    };
+};
 // OFM block height
-    struct npu_set_ofm_blk_height_m1_t
+struct npu_set_ofm_blk_height_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:7; //  OFM block height
+    uint32_t reserved1:9;
+#ifdef __cplusplus
+public:
+    npu_set_ofm_blk_height_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 7)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ofm_blk_height_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 7; //  OFM block height
-        uint32_t reserved1: 9;
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_blk_height_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 7) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ofm_blk_height_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_blk_height_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_blk_height_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_ofm_blk_height_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 7) == 0);
-            height_m1 = static_cast<uint8_t>(value & ((1U << 7) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_HEIGHT_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_blk_height_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_blk_height_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_ofm_blk_height_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 7) == 0);
+        height_m1 = static_cast<uint8_t>(value & ((1U << 7)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // OFM block depth
-    struct npu_set_ofm_blk_depth_m1_t
+struct npu_set_ofm_blk_depth_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t depth_m1:10; //  OFM block depth
+    uint32_t reserved1:6;
+#ifdef __cplusplus
+public:
+    npu_set_ofm_blk_depth_m1_t(uint32_t _depth_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        depth_m1(_depth_m1 & ((1U << 10)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ofm_blk_depth_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        depth_m1(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t depth_m1: 10; //  OFM block depth
-        uint32_t reserved1: 6;
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_blk_depth_m1_t(uint32_t _depth_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            depth_m1(_depth_m1 & ((1U << 10) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ofm_blk_depth_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            depth_m1(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(depth_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_blk_depth_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_blk_depth_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_depth_m1() const
-        {
-            return static_cast<uint32_t>(depth_m1);
-        }
-        CONSTEXPR npu_set_ofm_blk_depth_m1_t &set_depth_m1(uint32_t value)
-        {
-            assert((value >> 10) == 0);
-            depth_m1 = static_cast<uint16_t>(value & ((1U << 10) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_BLK_DEPTH_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(depth_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_blk_depth_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_blk_depth_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_depth_m1() const
+    {
+        return static_cast<uint32_t>(depth_m1);
+    }
+    CONSTEXPR npu_set_ofm_blk_depth_m1_t& set_depth_m1(uint32_t value)
+    {
+        assert((value >> 10) == 0);
+        depth_m1 = static_cast<uint16_t>(value & ((1U << 10)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("depth_m1", std::to_string(depth_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("depth_m1", std::to_string(depth_m1)));
+    }
 #endif
 #endif
-    };
+};
 // OFM zero point
-    struct npu_set_ofm_zero_point_t
+struct npu_set_ofm_zero_point_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t zero_point:16; //  Zero point offset
+#ifdef __cplusplus
+public:
+    npu_set_ofm_zero_point_t(uint32_t _zero_point) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        zero_point(_zero_point & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ofm_zero_point_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        zero_point(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t zero_point: 16; //  Zero point offset
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_zero_point_t(uint32_t _zero_point) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            zero_point(_zero_point & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ofm_zero_point_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            zero_point(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(zero_point) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_zero_point_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_zero_point_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_zero_point() const
-        {
-            return static_cast<uint32_t>(zero_point);
-        }
-        CONSTEXPR npu_set_ofm_zero_point_t &set_zero_point(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            zero_point = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_ZERO_POINT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(zero_point) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_zero_point_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_zero_point_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_zero_point() const
+    {
+        return static_cast<uint32_t>(zero_point);
+    }
+    CONSTEXPR npu_set_ofm_zero_point_t& set_zero_point(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        zero_point = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("zero_point", std::to_string(zero_point)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("zero_point", std::to_string(zero_point)));
+    }
 #endif
 #endif
-    };
+};
 // OFM Tile 0 and tile 2 width
-    struct npu_set_ofm_width0_m1_t
+struct npu_set_ofm_width0_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t width_m1:16; //  OFM Tile 0 and tile 2 width
+#ifdef __cplusplus
+public:
+    npu_set_ofm_width0_m1_t(uint32_t _width_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(_width_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ofm_width0_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t width_m1: 16; //  OFM Tile 0 and tile 2 width
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_width0_m1_t(uint32_t _width_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(_width_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ofm_width0_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(width_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_width0_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_width0_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_width_m1() const
-        {
-            return static_cast<uint32_t>(width_m1);
-        }
-        CONSTEXPR npu_set_ofm_width0_m1_t &set_width_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            width_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_WIDTH0_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(width_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_width0_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_width0_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_width_m1() const
+    {
+        return static_cast<uint32_t>(width_m1);
+    }
+    CONSTEXPR npu_set_ofm_width0_m1_t& set_width_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        width_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
+    }
 #endif
 #endif
-    };
+};
 // OFM Tile 0 height
-    struct npu_set_ofm_height0_m1_t
+struct npu_set_ofm_height0_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:16; //  OFM Tile 0 height
+#ifdef __cplusplus
+public:
+    npu_set_ofm_height0_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ofm_height0_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 16; //  OFM Tile 0 height
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_height0_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ofm_height0_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_height0_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_height0_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_ofm_height0_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            height_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT0_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_height0_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_height0_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_ofm_height0_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        height_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // OFM Tile 1 height
-    struct npu_set_ofm_height1_m1_t
+struct npu_set_ofm_height1_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:16; //  OFM Tile 1 height
+#ifdef __cplusplus
+public:
+    npu_set_ofm_height1_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ofm_height1_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 16; //  OFM Tile 1 height
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_height1_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ofm_height1_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_height1_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_height1_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_ofm_height1_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            height_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_HEIGHT1_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_height1_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_height1_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_ofm_height1_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        height_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Index n for OFM access
-    struct npu_set_ofm_region_t
+struct npu_set_ofm_region_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t region:3; //  Region number for external memory accesses
+    uint32_t reserved1:13;
+#ifdef __cplusplus
+public:
+    npu_set_ofm_region_t(uint32_t _region) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(_region & ((1U << 3)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ofm_region_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t region: 3; //  Region number for external memory accesses
-        uint32_t reserved1: 13;
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_region_t(uint32_t _region) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(_region & ((1U << 3) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ofm_region_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(region) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_region_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_region_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_region() const
-        {
-            return static_cast<uint32_t>(region);
-        }
-        CONSTEXPR npu_set_ofm_region_t &set_region(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            region = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_OFM_REGION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(region) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_region_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_region_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_region() const
+    {
+        return static_cast<uint32_t>(region);
+    }
+    CONSTEXPR npu_set_ofm_region_t& set_region(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        region = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
+    }
 #endif
 #endif
-    };
+};
 // Kernel width
-    struct npu_set_kernel_width_m1_t
+struct npu_set_kernel_width_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t width_m1:16; //  Kernel width
+#ifdef __cplusplus
+public:
+    npu_set_kernel_width_m1_t(uint32_t _width_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(_width_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_kernel_width_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t width_m1: 16; //  Kernel width
-#ifdef __cplusplus
-    public:
-        npu_set_kernel_width_m1_t(uint32_t _width_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(_width_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_kernel_width_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(width_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_kernel_width_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_kernel_width_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_width_m1() const
-        {
-            return static_cast<uint32_t>(width_m1);
-        }
-        CONSTEXPR npu_set_kernel_width_m1_t &set_width_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            width_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_WIDTH_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(width_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_kernel_width_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_kernel_width_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_width_m1() const
+    {
+        return static_cast<uint32_t>(width_m1);
+    }
+    CONSTEXPR npu_set_kernel_width_m1_t& set_width_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        width_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Kernel height
-    struct npu_set_kernel_height_m1_t
+struct npu_set_kernel_height_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:16; //  Kernel height
+#ifdef __cplusplus
+public:
+    npu_set_kernel_height_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_kernel_height_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 16; //  Kernel height
-#ifdef __cplusplus
-    public:
-        npu_set_kernel_height_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_kernel_height_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_kernel_height_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_kernel_height_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_kernel_height_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            height_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_HEIGHT_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_kernel_height_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_kernel_height_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_kernel_height_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        height_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Kernel stride
-    struct npu_set_kernel_stride_t
+struct npu_set_kernel_stride_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t stride_x_lsb:1; //  Stride x LSB. (kernel_x_stride - 1)[0]
+    uint32_t stride_y_lsb:1; //  Stride y LSB. (kernel_y_stride - 1)[0]
+    uint32_t weight_order:1; //  Weight ordering mode
+    uint32_t dilation_x:1; //  Kernel x dilation
+    uint32_t dilation_y:1; //  Kernel y dilation
+    uint32_t decomposition:1; //  Kernel decomposition
+    uint32_t stride_x_msb:1; //  Stride x MSB. (kernel_x_stride - 1) >> 1
+    uint32_t reserved1:2;
+    uint32_t stride_y_msb:1; //  Stride y MSB. (kernel_y_stride - 1) >> 1
+    uint32_t reserved2:6;
+#ifdef __cplusplus
+public:
+    npu_set_kernel_stride_t(uint32_t _stride_x_lsb, uint32_t _stride_y_lsb, NPU_NAMESPACE::weight_order _weight_order, NPU_NAMESPACE::kernel_dilation _dilation_x, NPU_NAMESPACE::kernel_dilation _dilation_y, NPU_NAMESPACE::kernel_decomposition _decomposition, uint32_t _stride_x_msb, uint32_t _stride_y_msb) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        stride_x_lsb(_stride_x_lsb & ((1U << 1)-1)),
+        stride_y_lsb(_stride_y_lsb & ((1U << 1)-1)),
+        weight_order(static_cast<uint8_t>(_weight_order) & ((1U << 1)-1)),
+        dilation_x(static_cast<uint8_t>(_dilation_x) & ((1U << 1)-1)),
+        dilation_y(static_cast<uint8_t>(_dilation_y) & ((1U << 1)-1)),
+        decomposition(static_cast<uint8_t>(_decomposition) & ((1U << 1)-1)),
+        stride_x_msb(_stride_x_msb & ((1U << 1)-1)),
+        reserved1(0),
+        stride_y_msb(_stride_y_msb & ((1U << 1)-1)),
+        reserved2(0)
+    {}
+    CONSTEXPR npu_set_kernel_stride_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        stride_x_lsb(0),
+        stride_y_lsb(0),
+        weight_order(0),
+        dilation_x(0),
+        dilation_y(0),
+        decomposition(0),
+        stride_x_msb(0),
+        reserved1(0),
+        stride_y_msb(0),
+        reserved2(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t stride_x_lsb: 1; //  Stride x LSB. (kernel_x_stride - 1)[0]
-        uint32_t stride_y_lsb: 1; //  Stride y LSB. (kernel_y_stride - 1)[0]
-        uint32_t weight_order: 1; //  Weight ordering mode
-        uint32_t dilation_x: 1; //  Kernel x dilation
-        uint32_t dilation_y: 1; //  Kernel y dilation
-        uint32_t decomposition: 1; //  Kernel decomposition
-        uint32_t stride_x_msb: 1; //  Stride x MSB. (kernel_x_stride - 1) >> 1
-        uint32_t reserved1: 2;
-        uint32_t stride_y_msb: 1; //  Stride y MSB. (kernel_y_stride - 1) >> 1
-        uint32_t reserved2: 6;
-#ifdef __cplusplus
-    public:
-        npu_set_kernel_stride_t(uint32_t _stride_x_lsb, uint32_t _stride_y_lsb, NPU_NAMESPACE::weight_order _weight_order, NPU_NAMESPACE::kernel_dilation _dilation_x, NPU_NAMESPACE::kernel_dilation _dilation_y, NPU_NAMESPACE::kernel_decomposition _decomposition, uint32_t _stride_x_msb, uint32_t _stride_y_msb) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            stride_x_lsb(_stride_x_lsb & ((1U << 1) - 1)),
-            stride_y_lsb(_stride_y_lsb & ((1U << 1) - 1)),
-            weight_order(static_cast<uint8_t>(_weight_order) & ((1U << 1) - 1)),
-            dilation_x(static_cast<uint8_t>(_dilation_x) & ((1U << 1) - 1)),
-            dilation_y(static_cast<uint8_t>(_dilation_y) & ((1U << 1) - 1)),
-            decomposition(static_cast<uint8_t>(_decomposition) & ((1U << 1) - 1)),
-            stride_x_msb(_stride_x_msb & ((1U << 1) - 1)),
-            reserved1(0),
-            stride_y_msb(_stride_y_msb & ((1U << 1) - 1)),
-            reserved2(0)
-        {}
-        CONSTEXPR npu_set_kernel_stride_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            stride_x_lsb(0),
-            stride_y_lsb(0),
-            weight_order(0),
-            dilation_x(0),
-            dilation_y(0),
-            decomposition(0),
-            stride_x_msb(0),
-            reserved1(0),
-            stride_y_msb(0),
-            reserved2(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(stride_x_lsb) << 16;
-            word |= uint32_t(stride_y_lsb) << 17;
-            word |= uint32_t(weight_order) << 18;
-            word |= uint32_t(dilation_x) << 19;
-            word |= uint32_t(dilation_y) << 20;
-            word |= uint32_t(decomposition) << 21;
-            word |= uint32_t(stride_x_msb) << 22;
-            word |= uint32_t(stride_y_msb) << 25;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_stride_x_lsb() const
-        {
-            return static_cast<uint32_t>(stride_x_lsb);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_stride_x_lsb(uint32_t value)
-        {
-            assert((value >> 1) == 0);
-            stride_x_lsb = static_cast<uint8_t>(value & ((1U << 1) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_stride_y_lsb() const
-        {
-            return static_cast<uint32_t>(stride_y_lsb);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_stride_y_lsb(uint32_t value)
-        {
-            assert((value >> 1) == 0);
-            stride_y_lsb = static_cast<uint8_t>(value & ((1U << 1) - 1));
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::weight_order get_weight_order() const
-        {
-            return static_cast<NPU_NAMESPACE::weight_order>(weight_order);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_weight_order(NPU_NAMESPACE::weight_order value)
-        {
-            weight_order = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::kernel_dilation get_dilation_x() const
-        {
-            return static_cast<NPU_NAMESPACE::kernel_dilation>(dilation_x);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_dilation_x(NPU_NAMESPACE::kernel_dilation value)
-        {
-            dilation_x = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::kernel_dilation get_dilation_y() const
-        {
-            return static_cast<NPU_NAMESPACE::kernel_dilation>(dilation_y);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_dilation_y(NPU_NAMESPACE::kernel_dilation value)
-        {
-            dilation_y = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::kernel_decomposition get_decomposition() const
-        {
-            return static_cast<NPU_NAMESPACE::kernel_decomposition>(decomposition);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_decomposition(NPU_NAMESPACE::kernel_decomposition value)
-        {
-            decomposition = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_stride_x_msb() const
-        {
-            return static_cast<uint32_t>(stride_x_msb);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_stride_x_msb(uint32_t value)
-        {
-            assert((value >> 1) == 0);
-            stride_x_msb = static_cast<uint8_t>(value & ((1U << 1) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_stride_y_msb() const
-        {
-            return static_cast<uint32_t>(stride_y_msb);
-        }
-        CONSTEXPR npu_set_kernel_stride_t &set_stride_y_msb(uint32_t value)
-        {
-            assert((value >> 1) == 0);
-            stride_y_msb = static_cast<uint8_t>(value & ((1U << 1) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_KERNEL_STRIDE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(stride_x_lsb) << 16;
+        word |= uint32_t(stride_y_lsb) << 17;
+        word |= uint32_t(weight_order) << 18;
+        word |= uint32_t(dilation_x) << 19;
+        word |= uint32_t(dilation_y) << 20;
+        word |= uint32_t(decomposition) << 21;
+        word |= uint32_t(stride_x_msb) << 22;
+        word |= uint32_t(stride_y_msb) << 25;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_stride_x_lsb() const
+    {
+        return static_cast<uint32_t>(stride_x_lsb);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_stride_x_lsb(uint32_t value)
+    {
+        assert((value >> 1) == 0);
+        stride_x_lsb = static_cast<uint8_t>(value & ((1U << 1)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_stride_y_lsb() const
+    {
+        return static_cast<uint32_t>(stride_y_lsb);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_stride_y_lsb(uint32_t value)
+    {
+        assert((value >> 1) == 0);
+        stride_y_lsb = static_cast<uint8_t>(value & ((1U << 1)-1));
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::weight_order get_weight_order() const
+    {
+        return static_cast<NPU_NAMESPACE::weight_order>(weight_order);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_weight_order(NPU_NAMESPACE::weight_order value)
+    {
+        weight_order = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::kernel_dilation get_dilation_x() const
+    {
+        return static_cast<NPU_NAMESPACE::kernel_dilation>(dilation_x);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_dilation_x(NPU_NAMESPACE::kernel_dilation value)
+    {
+        dilation_x = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::kernel_dilation get_dilation_y() const
+    {
+        return static_cast<NPU_NAMESPACE::kernel_dilation>(dilation_y);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_dilation_y(NPU_NAMESPACE::kernel_dilation value)
+    {
+        dilation_y = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::kernel_decomposition get_decomposition() const
+    {
+        return static_cast<NPU_NAMESPACE::kernel_decomposition>(decomposition);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_decomposition(NPU_NAMESPACE::kernel_decomposition value)
+    {
+        decomposition = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_stride_x_msb() const
+    {
+        return static_cast<uint32_t>(stride_x_msb);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_stride_x_msb(uint32_t value)
+    {
+        assert((value >> 1) == 0);
+        stride_x_msb = static_cast<uint8_t>(value & ((1U << 1)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_stride_y_msb() const
+    {
+        return static_cast<uint32_t>(stride_y_msb);
+    }
+    CONSTEXPR npu_set_kernel_stride_t& set_stride_y_msb(uint32_t value)
+    {
+        assert((value >> 1) == 0);
+        stride_y_msb = static_cast<uint8_t>(value & ((1U << 1)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("stride_x_lsb", std::to_string(stride_x_lsb)));
-            fields.push_back(std::make_pair<std::string, std::string>("stride_y_lsb", std::to_string(stride_y_lsb)));
-            fields.push_back(std::make_pair<std::string, std::string>("weight_order", (weight_order < (sizeof(weight_order_str) / sizeof(weight_order_str[0])) ? weight_order_str[weight_order] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("dilation_x", (dilation_x < (sizeof(kernel_dilation_str) / sizeof(kernel_dilation_str[0])) ? kernel_dilation_str[dilation_x] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("dilation_y", (dilation_y < (sizeof(kernel_dilation_str) / sizeof(kernel_dilation_str[0])) ? kernel_dilation_str[dilation_y] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("decomposition", (decomposition < (sizeof(kernel_decomposition_str) / sizeof(kernel_decomposition_str[0])) ? kernel_decomposition_str[decomposition] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("stride_x_msb", std::to_string(stride_x_msb)));
-            fields.push_back(std::make_pair<std::string, std::string>("stride_y_msb", std::to_string(stride_y_msb)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("stride_x_lsb", std::to_string(stride_x_lsb)));
+        fields.push_back(std::make_pair<std::string, std::string>("stride_y_lsb", std::to_string(stride_y_lsb)));
+        fields.push_back(std::make_pair<std::string, std::string>("weight_order", (weight_order < (sizeof(weight_order_str)/sizeof(weight_order_str[0])) ? weight_order_str[weight_order] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("dilation_x", (dilation_x < (sizeof(kernel_dilation_str)/sizeof(kernel_dilation_str[0])) ? kernel_dilation_str[dilation_x] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("dilation_y", (dilation_y < (sizeof(kernel_dilation_str)/sizeof(kernel_dilation_str[0])) ? kernel_dilation_str[dilation_y] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("decomposition", (decomposition < (sizeof(kernel_decomposition_str)/sizeof(kernel_decomposition_str[0])) ? kernel_decomposition_str[decomposition] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("stride_x_msb", std::to_string(stride_x_msb)));
+        fields.push_back(std::make_pair<std::string, std::string>("stride_y_msb", std::to_string(stride_y_msb)));
+    }
 #endif
 #endif
-    };
+};
 // Accumulator format
-    struct npu_set_acc_format_t
+struct npu_set_acc_format_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t acc_format:2; //  Accumulator format
+    uint32_t reserved1:2;
+    uint32_t acc_input:2; //  Accumulator input
+    uint32_t acc_output:1; //  Accumulator output
+    uint32_t reserved2:1;
+    uint32_t microblock:3; //  Accumulator microblock size
+    uint32_t reserved3:5;
+#ifdef __cplusplus
+public:
+    npu_set_acc_format_t(NPU_NAMESPACE::acc_format _acc_format, NPU_NAMESPACE::acc_input _acc_input, NPU_NAMESPACE::acc_output _acc_output, NPU_NAMESPACE::microblock _microblock) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        acc_format(static_cast<uint8_t>(_acc_format) & ((1U << 2)-1)),
+        reserved1(0),
+        acc_input(static_cast<uint8_t>(_acc_input) & ((1U << 2)-1)),
+        acc_output(static_cast<uint8_t>(_acc_output) & ((1U << 1)-1)),
+        reserved2(0),
+        microblock(static_cast<uint8_t>(_microblock) & ((1U << 3)-1)),
+        reserved3(0)
+    {}
+    CONSTEXPR npu_set_acc_format_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        acc_format(0),
+        reserved1(0),
+        acc_input(0),
+        acc_output(0),
+        reserved2(0),
+        microblock(0),
+        reserved3(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t acc_format: 2; //  Accumulator format
-        uint32_t reserved1: 2;
-        uint32_t acc_input: 2; //  Accumulator input
-        uint32_t acc_output: 1; //  Accumulator output
-        uint32_t reserved2: 1;
-        uint32_t microblock: 3; //  Accumulator microblock size
-        uint32_t reserved3: 5;
-#ifdef __cplusplus
-    public:
-        npu_set_acc_format_t(NPU_NAMESPACE::acc_format _acc_format, NPU_NAMESPACE::acc_input _acc_input, NPU_NAMESPACE::acc_output _acc_output, NPU_NAMESPACE::microblock _microblock) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            acc_format(static_cast<uint8_t>(_acc_format) & ((1U << 2) - 1)),
-            reserved1(0),
-            acc_input(static_cast<uint8_t>(_acc_input) & ((1U << 2) - 1)),
-            acc_output(static_cast<uint8_t>(_acc_output) & ((1U << 1) - 1)),
-            reserved2(0),
-            microblock(static_cast<uint8_t>(_microblock) & ((1U << 3) - 1)),
-            reserved3(0)
-        {}
-        CONSTEXPR npu_set_acc_format_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            acc_format(0),
-            reserved1(0),
-            acc_input(0),
-            acc_output(0),
-            reserved2(0),
-            microblock(0),
-            reserved3(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(acc_format) << 16;
-            word |= uint32_t(acc_input) << 20;
-            word |= uint32_t(acc_output) << 22;
-            word |= uint32_t(microblock) << 24;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_acc_format_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_acc_format_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::acc_format get_acc_format() const
-        {
-            return static_cast<NPU_NAMESPACE::acc_format>(acc_format);
-        }
-        CONSTEXPR npu_set_acc_format_t &set_acc_format(NPU_NAMESPACE::acc_format value)
-        {
-            acc_format = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::acc_input get_acc_input() const
-        {
-            return static_cast<NPU_NAMESPACE::acc_input>(acc_input);
-        }
-        CONSTEXPR npu_set_acc_format_t &set_acc_input(NPU_NAMESPACE::acc_input value)
-        {
-            acc_input = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::acc_output get_acc_output() const
-        {
-            return static_cast<NPU_NAMESPACE::acc_output>(acc_output);
-        }
-        CONSTEXPR npu_set_acc_format_t &set_acc_output(NPU_NAMESPACE::acc_output value)
-        {
-            acc_output = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::microblock get_microblock() const
-        {
-            return static_cast<NPU_NAMESPACE::microblock>(microblock);
-        }
-        CONSTEXPR npu_set_acc_format_t &set_microblock(NPU_NAMESPACE::microblock value)
-        {
-            microblock = static_cast<uint8_t>(value) & ((1U << 3) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACC_FORMAT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(acc_format) << 16;
+        word |= uint32_t(acc_input) << 20;
+        word |= uint32_t(acc_output) << 22;
+        word |= uint32_t(microblock) << 24;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_acc_format_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_acc_format_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::acc_format get_acc_format() const
+    {
+        return static_cast<NPU_NAMESPACE::acc_format>(acc_format);
+    }
+    CONSTEXPR npu_set_acc_format_t& set_acc_format(NPU_NAMESPACE::acc_format value)
+    {
+        acc_format = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::acc_input get_acc_input() const
+    {
+        return static_cast<NPU_NAMESPACE::acc_input>(acc_input);
+    }
+    CONSTEXPR npu_set_acc_format_t& set_acc_input(NPU_NAMESPACE::acc_input value)
+    {
+        acc_input = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::acc_output get_acc_output() const
+    {
+        return static_cast<NPU_NAMESPACE::acc_output>(acc_output);
+    }
+    CONSTEXPR npu_set_acc_format_t& set_acc_output(NPU_NAMESPACE::acc_output value)
+    {
+        acc_output = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::microblock get_microblock() const
+    {
+        return static_cast<NPU_NAMESPACE::microblock>(microblock);
+    }
+    CONSTEXPR npu_set_acc_format_t& set_microblock(NPU_NAMESPACE::microblock value)
+    {
+        microblock = static_cast<uint8_t>(value) & ((1U << 3)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("acc_format", (acc_format < (sizeof(acc_format_str) / sizeof(acc_format_str[0])) ? acc_format_str[acc_format] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("acc_input", (acc_input < (sizeof(acc_input_str) / sizeof(acc_input_str[0])) ? acc_input_str[acc_input] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("acc_output", (acc_output < (sizeof(acc_output_str) / sizeof(acc_output_str[0])) ? acc_output_str[acc_output] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("microblock", (microblock < (sizeof(microblock_str) / sizeof(microblock_str[0])) ? microblock_str[microblock] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("acc_format", (acc_format < (sizeof(acc_format_str)/sizeof(acc_format_str[0])) ? acc_format_str[acc_format] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("acc_input", (acc_input < (sizeof(acc_input_str)/sizeof(acc_input_str[0])) ? acc_input_str[acc_input] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("acc_output", (acc_output < (sizeof(acc_output_str)/sizeof(acc_output_str[0])) ? acc_output_str[acc_output] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("microblock", (microblock < (sizeof(microblock_str)/sizeof(microblock_str[0])) ? microblock_str[microblock] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // Activation function and clip range
-    struct npu_set_activation_t
+struct npu_set_activation_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t activation_function:5; //  Activation function to apply
+    uint32_t table:3; //  Table number to use for LUT
+    uint32_t reserved1:4;
+    uint32_t activation_clip_range:1; //  Activation clip to apply
+    uint32_t reserved2:3;
+#ifdef __cplusplus
+public:
+    npu_set_activation_t(NPU_NAMESPACE::activation_function _activation_function, uint32_t _table, NPU_NAMESPACE::activation_clip_range _activation_clip_range) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        activation_function(static_cast<uint8_t>(_activation_function) & ((1U << 5)-1)),
+        table(_table & ((1U << 3)-1)),
+        reserved1(0),
+        activation_clip_range(static_cast<uint8_t>(_activation_clip_range) & ((1U << 1)-1)),
+        reserved2(0)
+    {}
+    CONSTEXPR npu_set_activation_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        activation_function(0),
+        table(0),
+        reserved1(0),
+        activation_clip_range(0),
+        reserved2(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t activation_function: 5; //  Activation function to apply
-        uint32_t table: 3; //  Table number to use for LUT
-        uint32_t reserved1: 4;
-        uint32_t activation_clip_range: 1; //  Activation clip to apply
-        uint32_t reserved2: 3;
-#ifdef __cplusplus
-    public:
-        npu_set_activation_t(NPU_NAMESPACE::activation_function _activation_function, uint32_t _table, NPU_NAMESPACE::activation_clip_range _activation_clip_range) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            activation_function(static_cast<uint8_t>(_activation_function) & ((1U << 5) - 1)),
-            table(_table & ((1U << 3) - 1)),
-            reserved1(0),
-            activation_clip_range(static_cast<uint8_t>(_activation_clip_range) & ((1U << 1) - 1)),
-            reserved2(0)
-        {}
-        CONSTEXPR npu_set_activation_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            activation_function(0),
-            table(0),
-            reserved1(0),
-            activation_clip_range(0),
-            reserved2(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(activation_function) << 16;
-            word |= uint32_t(table) << 21;
-            word |= uint32_t(activation_clip_range) << 28;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_activation_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_activation_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_function get_activation_function() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_function>(activation_function);
-        }
-        CONSTEXPR npu_set_activation_t &set_activation_function(NPU_NAMESPACE::activation_function value)
-        {
-            activation_function = static_cast<uint8_t>(value) & ((1U << 5) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_table() const
-        {
-            return static_cast<uint32_t>(table);
-        }
-        CONSTEXPR npu_set_activation_t &set_table(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            table = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_clip_range get_activation_clip_range() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_clip_range>(activation_clip_range);
-        }
-        CONSTEXPR npu_set_activation_t &set_activation_clip_range(NPU_NAMESPACE::activation_clip_range value)
-        {
-            activation_clip_range = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(activation_function) << 16;
+        word |= uint32_t(table) << 21;
+        word |= uint32_t(activation_clip_range) << 28;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_activation_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_activation_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_function get_activation_function() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_function>(activation_function);
+    }
+    CONSTEXPR npu_set_activation_t& set_activation_function(NPU_NAMESPACE::activation_function value)
+    {
+        activation_function = static_cast<uint8_t>(value) & ((1U << 5)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_table() const
+    {
+        return static_cast<uint32_t>(table);
+    }
+    CONSTEXPR npu_set_activation_t& set_table(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        table = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_clip_range get_activation_clip_range() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_clip_range>(activation_clip_range);
+    }
+    CONSTEXPR npu_set_activation_t& set_activation_clip_range(NPU_NAMESPACE::activation_clip_range value)
+    {
+        activation_clip_range = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("activation_function", (activation_function < (sizeof(activation_function_str) / sizeof(activation_function_str[0])) ? activation_function_str[activation_function] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("table", std::to_string(table)));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_clip_range", (activation_clip_range < (sizeof(activation_clip_range_str) / sizeof(activation_clip_range_str[0])) ? activation_clip_range_str[activation_clip_range] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("activation_function", (activation_function < (sizeof(activation_function_str)/sizeof(activation_function_str[0])) ? activation_function_str[activation_function] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("table", std::to_string(table)));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_clip_range", (activation_clip_range < (sizeof(activation_clip_range_str)/sizeof(activation_clip_range_str[0])) ? activation_clip_range_str[activation_clip_range] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // Lower bound clip
-    struct npu_set_activation_min_t
+struct npu_set_activation_min_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t clip_boundary:16; //  Clip boundary for OFM activations
+#ifdef __cplusplus
+public:
+    npu_set_activation_min_t(uint32_t _clip_boundary) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        clip_boundary(_clip_boundary & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_activation_min_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        clip_boundary(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t clip_boundary: 16; //  Clip boundary for OFM activations
-#ifdef __cplusplus
-    public:
-        npu_set_activation_min_t(uint32_t _clip_boundary) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            clip_boundary(_clip_boundary & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_activation_min_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            clip_boundary(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(clip_boundary) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_activation_min_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_activation_min_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_clip_boundary() const
-        {
-            return static_cast<uint32_t>(clip_boundary);
-        }
-        CONSTEXPR npu_set_activation_min_t &set_clip_boundary(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            clip_boundary = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MIN); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(clip_boundary) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_activation_min_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_activation_min_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_clip_boundary() const
+    {
+        return static_cast<uint32_t>(clip_boundary);
+    }
+    CONSTEXPR npu_set_activation_min_t& set_clip_boundary(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        clip_boundary = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("clip_boundary", std::to_string(clip_boundary)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("clip_boundary", std::to_string(clip_boundary)));
+    }
 #endif
 #endif
-    };
+};
 // Upper bound clip
-    struct npu_set_activation_max_t
+struct npu_set_activation_max_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t clip_boundary:16; //  Clip boundary for OFM activations
+#ifdef __cplusplus
+public:
+    npu_set_activation_max_t(uint32_t _clip_boundary) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        clip_boundary(_clip_boundary & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_activation_max_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        clip_boundary(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t clip_boundary: 16; //  Clip boundary for OFM activations
-#ifdef __cplusplus
-    public:
-        npu_set_activation_max_t(uint32_t _clip_boundary) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            clip_boundary(_clip_boundary & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_activation_max_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            clip_boundary(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(clip_boundary) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_activation_max_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_activation_max_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_clip_boundary() const
-        {
-            return static_cast<uint32_t>(clip_boundary);
-        }
-        CONSTEXPR npu_set_activation_max_t &set_clip_boundary(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            clip_boundary = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_ACTIVATION_MAX); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(clip_boundary) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_activation_max_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_activation_max_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_clip_boundary() const
+    {
+        return static_cast<uint32_t>(clip_boundary);
+    }
+    CONSTEXPR npu_set_activation_max_t& set_clip_boundary(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        clip_boundary = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("clip_boundary", std::to_string(clip_boundary)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("clip_boundary", std::to_string(clip_boundary)));
+    }
 #endif
 #endif
-    };
+};
 // Index n for weight stream access
-    struct npu_set_weight_region_t
+struct npu_set_weight_region_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t region:3; //  Index n for weight stream access
+    uint32_t reserved1:13;
+#ifdef __cplusplus
+public:
+    npu_set_weight_region_t(uint32_t _region) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(_region & ((1U << 3)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_weight_region_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t region: 3; //  Index n for weight stream access
-        uint32_t reserved1: 13;
-#ifdef __cplusplus
-    public:
-        npu_set_weight_region_t(uint32_t _region) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(_region & ((1U << 3) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_weight_region_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(region) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_weight_region_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_weight_region_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_region() const
-        {
-            return static_cast<uint32_t>(region);
-        }
-        CONSTEXPR npu_set_weight_region_t &set_region(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            region = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_REGION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(region) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_weight_region_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_weight_region_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_region() const
+    {
+        return static_cast<uint32_t>(region);
+    }
+    CONSTEXPR npu_set_weight_region_t& set_region(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        region = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
+    }
 #endif
 #endif
-    };
+};
 // Index n for scale stream access
-    struct npu_set_scale_region_t
+struct npu_set_scale_region_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t region:3; //  Index n for scale stream access
+    uint32_t reserved1:13;
+#ifdef __cplusplus
+public:
+    npu_set_scale_region_t(uint32_t _region) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(_region & ((1U << 3)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_scale_region_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t region: 3; //  Index n for scale stream access
-        uint32_t reserved1: 13;
-#ifdef __cplusplus
-    public:
-        npu_set_scale_region_t(uint32_t _region) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(_region & ((1U << 3) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_scale_region_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(region) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_scale_region_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_scale_region_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_region() const
-        {
-            return static_cast<uint32_t>(region);
-        }
-        CONSTEXPR npu_set_scale_region_t &set_region(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            region = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_SCALE_REGION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(region) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_scale_region_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_scale_region_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_region() const
+    {
+        return static_cast<uint32_t>(region);
+    }
+    CONSTEXPR npu_set_scale_region_t& set_region(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        region = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
+    }
 #endif
 #endif
-    };
+};
 // Set weight stream format
-    struct npu_set_weight_format_t
+struct npu_set_weight_format_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t weight_format:1; //  Weight stream format
+    uint32_t reserved1:3;
+    uint32_t weight_sparsity:1; //  Weight sparsity type
+    uint32_t reserved2:11;
+#ifdef __cplusplus
+public:
+    npu_set_weight_format_t(NPU_NAMESPACE::weight_format _weight_format, NPU_NAMESPACE::weight_sparsity _weight_sparsity) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        weight_format(static_cast<uint8_t>(_weight_format) & ((1U << 1)-1)),
+        reserved1(0),
+        weight_sparsity(static_cast<uint8_t>(_weight_sparsity) & ((1U << 1)-1)),
+        reserved2(0)
+    {}
+    CONSTEXPR npu_set_weight_format_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        weight_format(0),
+        reserved1(0),
+        weight_sparsity(0),
+        reserved2(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t weight_format: 1; //  Weight stream format
-        uint32_t reserved1: 3;
-        uint32_t weight_sparsity: 1; //  Weight sparsity type
-        uint32_t reserved2: 11;
-#ifdef __cplusplus
-    public:
-        npu_set_weight_format_t(NPU_NAMESPACE::weight_format _weight_format, NPU_NAMESPACE::weight_sparsity _weight_sparsity) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            weight_format(static_cast<uint8_t>(_weight_format) & ((1U << 1) - 1)),
-            reserved1(0),
-            weight_sparsity(static_cast<uint8_t>(_weight_sparsity) & ((1U << 1) - 1)),
-            reserved2(0)
-        {}
-        CONSTEXPR npu_set_weight_format_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            weight_format(0),
-            reserved1(0),
-            weight_sparsity(0),
-            reserved2(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(weight_format) << 16;
-            word |= uint32_t(weight_sparsity) << 20;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_weight_format_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_weight_format_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::weight_format get_weight_format() const
-        {
-            return static_cast<NPU_NAMESPACE::weight_format>(weight_format);
-        }
-        CONSTEXPR npu_set_weight_format_t &set_weight_format(NPU_NAMESPACE::weight_format value)
-        {
-            weight_format = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::weight_sparsity get_weight_sparsity() const
-        {
-            return static_cast<NPU_NAMESPACE::weight_sparsity>(weight_sparsity);
-        }
-        CONSTEXPR npu_set_weight_format_t &set_weight_sparsity(NPU_NAMESPACE::weight_sparsity value)
-        {
-            weight_sparsity = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_WEIGHT_FORMAT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(weight_format) << 16;
+        word |= uint32_t(weight_sparsity) << 20;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_weight_format_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_weight_format_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::weight_format get_weight_format() const
+    {
+        return static_cast<NPU_NAMESPACE::weight_format>(weight_format);
+    }
+    CONSTEXPR npu_set_weight_format_t& set_weight_format(NPU_NAMESPACE::weight_format value)
+    {
+        weight_format = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::weight_sparsity get_weight_sparsity() const
+    {
+        return static_cast<NPU_NAMESPACE::weight_sparsity>(weight_sparsity);
+    }
+    CONSTEXPR npu_set_weight_format_t& set_weight_sparsity(NPU_NAMESPACE::weight_sparsity value)
+    {
+        weight_sparsity = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("weight_format", (weight_format < (sizeof(weight_format_str) / sizeof(weight_format_str[0])) ? weight_format_str[weight_format] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("weight_sparsity", (weight_sparsity < (sizeof(weight_sparsity_str) / sizeof(weight_sparsity_str[0])) ? weight_sparsity_str[weight_sparsity] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("weight_format", (weight_format < (sizeof(weight_format_str)/sizeof(weight_format_str[0])) ? weight_format_str[weight_format] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("weight_sparsity", (weight_sparsity < (sizeof(weight_sparsity_str)/sizeof(weight_sparsity_str[0])) ? weight_sparsity_str[weight_sparsity] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // Block number of blocks dependency
-    struct npu_set_blockdep_t
+struct npu_set_blockdep_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t blockdep:3; //  Block number of blocks dependency between kernel operations
+    uint32_t reserved1:13;
+#ifdef __cplusplus
+public:
+    npu_set_blockdep_t(uint32_t _blockdep) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        blockdep(_blockdep & ((1U << 3)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_blockdep_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        blockdep(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t blockdep: 3; //  Block number of blocks dependency between kernel operations
-        uint32_t reserved1: 13;
-#ifdef __cplusplus
-    public:
-        npu_set_blockdep_t(uint32_t _blockdep) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            blockdep(_blockdep & ((1U << 3) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_blockdep_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            blockdep(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(blockdep) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_blockdep_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_blockdep_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_blockdep() const
-        {
-            return static_cast<uint32_t>(blockdep);
-        }
-        CONSTEXPR npu_set_blockdep_t &set_blockdep(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            blockdep = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_BLOCKDEP); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(blockdep) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_blockdep_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_blockdep_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_blockdep() const
+    {
+        return static_cast<uint32_t>(blockdep);
+    }
+    CONSTEXPR npu_set_blockdep_t& set_blockdep(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        blockdep = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("blockdep", std::to_string(blockdep)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("blockdep", std::to_string(blockdep)));
+    }
 #endif
 #endif
-    };
+};
 // Set resize scale X numerator
-    struct npu_set_resize_x_scale_n_m1_t
+struct npu_set_resize_x_scale_n_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t resize_x_scale_n_m1:11; //  Resize X scale numerator
+    uint32_t reserved1:5;
+#ifdef __cplusplus
+public:
+    npu_set_resize_x_scale_n_m1_t(uint32_t _resize_x_scale_n_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_x_scale_n_m1(_resize_x_scale_n_m1 & ((1U << 11)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_resize_x_scale_n_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_x_scale_n_m1(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t resize_x_scale_n_m1: 11; //  Resize X scale numerator
-        uint32_t reserved1: 5;
-#ifdef __cplusplus
-    public:
-        npu_set_resize_x_scale_n_m1_t(uint32_t _resize_x_scale_n_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_x_scale_n_m1(_resize_x_scale_n_m1 & ((1U << 11) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_resize_x_scale_n_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_x_scale_n_m1(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(resize_x_scale_n_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_resize_x_scale_n_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_resize_x_scale_n_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_resize_x_scale_n_m1() const
-        {
-            return static_cast<uint32_t>(resize_x_scale_n_m1);
-        }
-        CONSTEXPR npu_set_resize_x_scale_n_m1_t &set_resize_x_scale_n_m1(uint32_t value)
-        {
-            assert((value >> 11) == 0);
-            resize_x_scale_n_m1 = static_cast<uint16_t>(value & ((1U << 11) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_SCALE_N_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(resize_x_scale_n_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_resize_x_scale_n_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_resize_x_scale_n_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_resize_x_scale_n_m1() const
+    {
+        return static_cast<uint32_t>(resize_x_scale_n_m1);
+    }
+    CONSTEXPR npu_set_resize_x_scale_n_m1_t& set_resize_x_scale_n_m1(uint32_t value)
+    {
+        assert((value >> 11) == 0);
+        resize_x_scale_n_m1 = static_cast<uint16_t>(value & ((1U << 11)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("resize_x_scale_n_m1", std::to_string(resize_x_scale_n_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("resize_x_scale_n_m1", std::to_string(resize_x_scale_n_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Set resize scale Y numerator
-    struct npu_set_resize_y_scale_n_m1_t
+struct npu_set_resize_y_scale_n_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t resize_y_scale_n_m1:11; //  Resize Y scale numerator
+    uint32_t reserved1:5;
+#ifdef __cplusplus
+public:
+    npu_set_resize_y_scale_n_m1_t(uint32_t _resize_y_scale_n_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_y_scale_n_m1(_resize_y_scale_n_m1 & ((1U << 11)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_resize_y_scale_n_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_y_scale_n_m1(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t resize_y_scale_n_m1: 11; //  Resize Y scale numerator
-        uint32_t reserved1: 5;
-#ifdef __cplusplus
-    public:
-        npu_set_resize_y_scale_n_m1_t(uint32_t _resize_y_scale_n_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_y_scale_n_m1(_resize_y_scale_n_m1 & ((1U << 11) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_resize_y_scale_n_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_y_scale_n_m1(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(resize_y_scale_n_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_resize_y_scale_n_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_resize_y_scale_n_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_resize_y_scale_n_m1() const
-        {
-            return static_cast<uint32_t>(resize_y_scale_n_m1);
-        }
-        CONSTEXPR npu_set_resize_y_scale_n_m1_t &set_resize_y_scale_n_m1(uint32_t value)
-        {
-            assert((value >> 11) == 0);
-            resize_y_scale_n_m1 = static_cast<uint16_t>(value & ((1U << 11) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_SCALE_N_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(resize_y_scale_n_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_resize_y_scale_n_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_resize_y_scale_n_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_resize_y_scale_n_m1() const
+    {
+        return static_cast<uint32_t>(resize_y_scale_n_m1);
+    }
+    CONSTEXPR npu_set_resize_y_scale_n_m1_t& set_resize_y_scale_n_m1(uint32_t value)
+    {
+        assert((value >> 11) == 0);
+        resize_y_scale_n_m1 = static_cast<uint16_t>(value & ((1U << 11)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("resize_y_scale_n_m1", std::to_string(resize_y_scale_n_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("resize_y_scale_n_m1", std::to_string(resize_y_scale_n_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Set resize offset X
-    struct npu_set_resize_x_offset_t
+struct npu_set_resize_x_offset_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t resize_x_offset:12; //  Resize X offset
+    uint32_t reserved1:4;
+#ifdef __cplusplus
+public:
+    npu_set_resize_x_offset_t(uint32_t _resize_x_offset) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_x_offset(_resize_x_offset & ((1U << 12)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_resize_x_offset_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_x_offset(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t resize_x_offset: 12; //  Resize X offset
-        uint32_t reserved1: 4;
-#ifdef __cplusplus
-    public:
-        npu_set_resize_x_offset_t(uint32_t _resize_x_offset) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_x_offset(_resize_x_offset & ((1U << 12) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_resize_x_offset_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_x_offset(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(resize_x_offset) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_resize_x_offset_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_resize_x_offset_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_resize_x_offset() const
-        {
-            return static_cast<uint32_t>(resize_x_offset);
-        }
-        CONSTEXPR npu_set_resize_x_offset_t &set_resize_x_offset(uint32_t value)
-        {
-            assert((value >> 12) == 0);
-            resize_x_offset = static_cast<uint16_t>(value & ((1U << 12) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_X_OFFSET); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(resize_x_offset) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_resize_x_offset_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_resize_x_offset_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_resize_x_offset() const
+    {
+        return static_cast<uint32_t>(resize_x_offset);
+    }
+    CONSTEXPR npu_set_resize_x_offset_t& set_resize_x_offset(uint32_t value)
+    {
+        assert((value >> 12) == 0);
+        resize_x_offset = static_cast<uint16_t>(value & ((1U << 12)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("resize_x_offset", std::to_string(((resize_x_offset <= std::numeric_limits<int>::max() ? static_cast<int>(resize_x_offset) : resize_x_offset - std::numeric_limits<int>::min() + std::numeric_limits<int>::max()) << 20) >> 20)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("resize_x_offset", std::to_string(((resize_x_offset <= std::numeric_limits<int>::max() ? static_cast<int>(resize_x_offset) : resize_x_offset - std::numeric_limits<int>::min() + std::numeric_limits<int>::max()) << 20) >> 20)));
+    }
 #endif
 #endif
-    };
+};
 // Set resize offset Y
-    struct npu_set_resize_y_offset_t
+struct npu_set_resize_y_offset_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t resize_y_offset:12; //  Resize Y offset
+    uint32_t reserved1:4;
+#ifdef __cplusplus
+public:
+    npu_set_resize_y_offset_t(uint32_t _resize_y_offset) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_y_offset(_resize_y_offset & ((1U << 12)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_resize_y_offset_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        resize_y_offset(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t resize_y_offset: 12; //  Resize Y offset
-        uint32_t reserved1: 4;
-#ifdef __cplusplus
-    public:
-        npu_set_resize_y_offset_t(uint32_t _resize_y_offset) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_y_offset(_resize_y_offset & ((1U << 12) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_resize_y_offset_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            resize_y_offset(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(resize_y_offset) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_resize_y_offset_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_resize_y_offset_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_resize_y_offset() const
-        {
-            return static_cast<uint32_t>(resize_y_offset);
-        }
-        CONSTEXPR npu_set_resize_y_offset_t &set_resize_y_offset(uint32_t value)
-        {
-            assert((value >> 12) == 0);
-            resize_y_offset = static_cast<uint16_t>(value & ((1U << 12) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_RESIZE_Y_OFFSET); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(resize_y_offset) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_resize_y_offset_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_resize_y_offset_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_resize_y_offset() const
+    {
+        return static_cast<uint32_t>(resize_y_offset);
+    }
+    CONSTEXPR npu_set_resize_y_offset_t& set_resize_y_offset(uint32_t value)
+    {
+        assert((value >> 12) == 0);
+        resize_y_offset = static_cast<uint16_t>(value & ((1U << 12)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("resize_y_offset", std::to_string(((resize_y_offset <= std::numeric_limits<int>::max() ? static_cast<int>(resize_y_offset) : resize_y_offset - std::numeric_limits<int>::min() + std::numeric_limits<int>::max()) << 20) >> 20)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("resize_y_offset", std::to_string(((resize_y_offset <= std::numeric_limits<int>::max() ? static_cast<int>(resize_y_offset) : resize_y_offset - std::numeric_limits<int>::min() + std::numeric_limits<int>::max()) << 20) >> 20)));
+    }
 #endif
 #endif
-    };
+};
 // DMA0 source region
-    struct npu_set_dma0_src_region_t
+struct npu_set_dma0_src_region_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t region:3; //  Region number for external memory accesses
+    uint32_t reserved1:5;
+    uint32_t region_mode:1; //  Region mode
+    uint32_t stride_mode:2; //  Stride mode
+    uint32_t idx_mode:1; //  Index mode for gather or scatter
+    uint32_t reserved2:4;
+#ifdef __cplusplus
+public:
+    npu_set_dma0_src_region_t(uint32_t _region, NPU_NAMESPACE::dma_region_mode _region_mode, NPU_NAMESPACE::dma_stride_mode _stride_mode, NPU_NAMESPACE::dma_idx_mode _idx_mode) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(_region & ((1U << 3)-1)),
+        reserved1(0),
+        region_mode(static_cast<uint8_t>(_region_mode) & ((1U << 1)-1)),
+        stride_mode(static_cast<uint8_t>(_stride_mode) & ((1U << 2)-1)),
+        idx_mode(static_cast<uint8_t>(_idx_mode) & ((1U << 1)-1)),
+        reserved2(0)
+    {}
+    CONSTEXPR npu_set_dma0_src_region_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(0),
+        reserved1(0),
+        region_mode(0),
+        stride_mode(0),
+        idx_mode(0),
+        reserved2(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t region: 3; //  Region number for external memory accesses
-        uint32_t reserved1: 5;
-        uint32_t region_mode: 1; //  Region mode
-        uint32_t stride_mode: 2; //  Stride mode
-        uint32_t idx_mode: 1; //  Index mode for gather or scatter
-        uint32_t reserved2: 4;
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_src_region_t(uint32_t _region, NPU_NAMESPACE::dma_region_mode _region_mode, NPU_NAMESPACE::dma_stride_mode _stride_mode, NPU_NAMESPACE::dma_idx_mode _idx_mode) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(_region & ((1U << 3) - 1)),
-            reserved1(0),
-            region_mode(static_cast<uint8_t>(_region_mode) & ((1U << 1) - 1)),
-            stride_mode(static_cast<uint8_t>(_stride_mode) & ((1U << 2) - 1)),
-            idx_mode(static_cast<uint8_t>(_idx_mode) & ((1U << 1) - 1)),
-            reserved2(0)
-        {}
-        CONSTEXPR npu_set_dma0_src_region_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(0),
-            reserved1(0),
-            region_mode(0),
-            stride_mode(0),
-            idx_mode(0),
-            reserved2(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(region) << 16;
-            word |= uint32_t(region_mode) << 24;
-            word |= uint32_t(stride_mode) << 25;
-            word |= uint32_t(idx_mode) << 27;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_dma0_src_region_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_dma0_src_region_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_region() const
-        {
-            return static_cast<uint32_t>(region);
-        }
-        CONSTEXPR npu_set_dma0_src_region_t &set_region(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            region = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::dma_region_mode get_region_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::dma_region_mode>(region_mode);
-        }
-        CONSTEXPR npu_set_dma0_src_region_t &set_region_mode(NPU_NAMESPACE::dma_region_mode value)
-        {
-            region_mode = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::dma_stride_mode get_stride_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::dma_stride_mode>(stride_mode);
-        }
-        CONSTEXPR npu_set_dma0_src_region_t &set_stride_mode(NPU_NAMESPACE::dma_stride_mode value)
-        {
-            stride_mode = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::dma_idx_mode get_idx_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::dma_idx_mode>(idx_mode);
-        }
-        CONSTEXPR npu_set_dma0_src_region_t &set_idx_mode(NPU_NAMESPACE::dma_idx_mode value)
-        {
-            idx_mode = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SRC_REGION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(region) << 16;
+        word |= uint32_t(region_mode) << 24;
+        word |= uint32_t(stride_mode) << 25;
+        word |= uint32_t(idx_mode) << 27;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_dma0_src_region_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_dma0_src_region_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_region() const
+    {
+        return static_cast<uint32_t>(region);
+    }
+    CONSTEXPR npu_set_dma0_src_region_t& set_region(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        region = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::dma_region_mode get_region_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::dma_region_mode>(region_mode);
+    }
+    CONSTEXPR npu_set_dma0_src_region_t& set_region_mode(NPU_NAMESPACE::dma_region_mode value)
+    {
+        region_mode = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::dma_stride_mode get_stride_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::dma_stride_mode>(stride_mode);
+    }
+    CONSTEXPR npu_set_dma0_src_region_t& set_stride_mode(NPU_NAMESPACE::dma_stride_mode value)
+    {
+        stride_mode = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::dma_idx_mode get_idx_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::dma_idx_mode>(idx_mode);
+    }
+    CONSTEXPR npu_set_dma0_src_region_t& set_idx_mode(NPU_NAMESPACE::dma_idx_mode value)
+    {
+        idx_mode = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
-            fields.push_back(std::make_pair<std::string, std::string>("region_mode", (region_mode < (sizeof(dma_region_mode_str) / sizeof(dma_region_mode_str[0])) ? dma_region_mode_str[region_mode] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("stride_mode", (stride_mode < (sizeof(dma_stride_mode_str) / sizeof(dma_stride_mode_str[0])) ? dma_stride_mode_str[stride_mode] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("idx_mode", (idx_mode < (sizeof(dma_idx_mode_str) / sizeof(dma_idx_mode_str[0])) ? dma_idx_mode_str[idx_mode] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
+        fields.push_back(std::make_pair<std::string, std::string>("region_mode", (region_mode < (sizeof(dma_region_mode_str)/sizeof(dma_region_mode_str[0])) ? dma_region_mode_str[region_mode] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("stride_mode", (stride_mode < (sizeof(dma_stride_mode_str)/sizeof(dma_stride_mode_str[0])) ? dma_stride_mode_str[stride_mode] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("idx_mode", (idx_mode < (sizeof(dma_idx_mode_str)/sizeof(dma_idx_mode_str[0])) ? dma_idx_mode_str[idx_mode] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // DMA0 destination region
-    struct npu_set_dma0_dst_region_t
+struct npu_set_dma0_dst_region_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t region:3; //  Region number for memory accesses
+    uint32_t reserved1:5;
+    uint32_t region_mode:1; //  Region mode
+    uint32_t reserved2:2;
+    uint32_t idx_mode:1; //  Index mode for gather or scatter
+    uint32_t reserved3:4;
+#ifdef __cplusplus
+public:
+    npu_set_dma0_dst_region_t(uint32_t _region, NPU_NAMESPACE::dma_region_mode _region_mode, NPU_NAMESPACE::dma_idx_mode _idx_mode) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(_region & ((1U << 3)-1)),
+        reserved1(0),
+        region_mode(static_cast<uint8_t>(_region_mode) & ((1U << 1)-1)),
+        reserved2(0),
+        idx_mode(static_cast<uint8_t>(_idx_mode) & ((1U << 1)-1)),
+        reserved3(0)
+    {}
+    CONSTEXPR npu_set_dma0_dst_region_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(0),
+        reserved1(0),
+        region_mode(0),
+        reserved2(0),
+        idx_mode(0),
+        reserved3(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t region: 3; //  Region number for memory accesses
-        uint32_t reserved1: 5;
-        uint32_t region_mode: 1; //  Region mode
-        uint32_t reserved2: 2;
-        uint32_t idx_mode: 1; //  Index mode for gather or scatter
-        uint32_t reserved3: 4;
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_dst_region_t(uint32_t _region, NPU_NAMESPACE::dma_region_mode _region_mode, NPU_NAMESPACE::dma_idx_mode _idx_mode) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(_region & ((1U << 3) - 1)),
-            reserved1(0),
-            region_mode(static_cast<uint8_t>(_region_mode) & ((1U << 1) - 1)),
-            reserved2(0),
-            idx_mode(static_cast<uint8_t>(_idx_mode) & ((1U << 1) - 1)),
-            reserved3(0)
-        {}
-        CONSTEXPR npu_set_dma0_dst_region_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(0),
-            reserved1(0),
-            region_mode(0),
-            reserved2(0),
-            idx_mode(0),
-            reserved3(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(region) << 16;
-            word |= uint32_t(region_mode) << 24;
-            word |= uint32_t(idx_mode) << 27;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_dma0_dst_region_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_dma0_dst_region_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_region() const
-        {
-            return static_cast<uint32_t>(region);
-        }
-        CONSTEXPR npu_set_dma0_dst_region_t &set_region(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            region = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::dma_region_mode get_region_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::dma_region_mode>(region_mode);
-        }
-        CONSTEXPR npu_set_dma0_dst_region_t &set_region_mode(NPU_NAMESPACE::dma_region_mode value)
-        {
-            region_mode = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::dma_idx_mode get_idx_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::dma_idx_mode>(idx_mode);
-        }
-        CONSTEXPR npu_set_dma0_dst_region_t &set_idx_mode(NPU_NAMESPACE::dma_idx_mode value)
-        {
-            idx_mode = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_DST_REGION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(region) << 16;
+        word |= uint32_t(region_mode) << 24;
+        word |= uint32_t(idx_mode) << 27;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_dma0_dst_region_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_dma0_dst_region_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_region() const
+    {
+        return static_cast<uint32_t>(region);
+    }
+    CONSTEXPR npu_set_dma0_dst_region_t& set_region(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        region = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::dma_region_mode get_region_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::dma_region_mode>(region_mode);
+    }
+    CONSTEXPR npu_set_dma0_dst_region_t& set_region_mode(NPU_NAMESPACE::dma_region_mode value)
+    {
+        region_mode = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::dma_idx_mode get_idx_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::dma_idx_mode>(idx_mode);
+    }
+    CONSTEXPR npu_set_dma0_dst_region_t& set_idx_mode(NPU_NAMESPACE::dma_idx_mode value)
+    {
+        idx_mode = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
-            fields.push_back(std::make_pair<std::string, std::string>("region_mode", (region_mode < (sizeof(dma_region_mode_str) / sizeof(dma_region_mode_str[0])) ? dma_region_mode_str[region_mode] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("idx_mode", (idx_mode < (sizeof(dma_idx_mode_str) / sizeof(dma_idx_mode_str[0])) ? dma_idx_mode_str[idx_mode] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
+        fields.push_back(std::make_pair<std::string, std::string>("region_mode", (region_mode < (sizeof(dma_region_mode_str)/sizeof(dma_region_mode_str[0])) ? dma_region_mode_str[region_mode] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("idx_mode", (idx_mode < (sizeof(dma_idx_mode_str)/sizeof(dma_idx_mode_str[0])) ? dma_idx_mode_str[idx_mode] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // Size of second dimension for 2D/3D transfers
-    struct npu_set_dma0_size0_t
+struct npu_set_dma0_size0_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t size:16; //  Size of second dimension for 2D/3D transfers
+#ifdef __cplusplus
+public:
+    npu_set_dma0_size0_t(uint32_t _size) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        size(_size & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_dma0_size0_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        size(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t size: 16; //  Size of second dimension for 2D/3D transfers
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_size0_t(uint32_t _size) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            size(_size & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_dma0_size0_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            size(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(size) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_dma0_size0_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_dma0_size0_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_size() const
-        {
-            return static_cast<uint32_t>(size);
-        }
-        CONSTEXPR npu_set_dma0_size0_t &set_size(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            size = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE0); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(size) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_dma0_size0_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_dma0_size0_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_size() const
+    {
+        return static_cast<uint32_t>(size);
+    }
+    CONSTEXPR npu_set_dma0_size0_t& set_size(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        size = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("size", std::to_string(size)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("size", std::to_string(size)));
+    }
 #endif
 #endif
-    };
+};
 // Size of third dimension for 3D transfers
-    struct npu_set_dma0_size1_t
+struct npu_set_dma0_size1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t size:16; //  Size of third dimension for 3D transfers
+#ifdef __cplusplus
+public:
+    npu_set_dma0_size1_t(uint32_t _size) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        size(_size & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_dma0_size1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        size(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t size: 16; //  Size of third dimension for 3D transfers
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_size1_t(uint32_t _size) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            size(_size & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_dma0_size1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            size(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(size) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_dma0_size1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_dma0_size1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_size() const
-        {
-            return static_cast<uint32_t>(size);
-        }
-        CONSTEXPR npu_set_dma0_size1_t &set_size(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            size = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_SIZE1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(size) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_dma0_size1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_dma0_size1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_size() const
+    {
+        return static_cast<uint32_t>(size);
+    }
+    CONSTEXPR npu_set_dma0_size1_t& set_size(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        size = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("size", std::to_string(size)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("size", std::to_string(size)));
+    }
 #endif
 #endif
-    };
+};
 // DMA0 index region
-    struct npu_set_dma0_idx_region_t
+struct npu_set_dma0_idx_region_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t region:3; //  Region number for external memory accesses
+    uint32_t reserved1:13;
+#ifdef __cplusplus
+public:
+    npu_set_dma0_idx_region_t(uint32_t _region) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(_region & ((1U << 3)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_dma0_idx_region_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t region: 3; //  Region number for external memory accesses
-        uint32_t reserved1: 13;
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_idx_region_t(uint32_t _region) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(_region & ((1U << 3) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_dma0_idx_region_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(region) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_dma0_idx_region_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_dma0_idx_region_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_region() const
-        {
-            return static_cast<uint32_t>(region);
-        }
-        CONSTEXPR npu_set_dma0_idx_region_t &set_region(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            region = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_DMA0_IDX_REGION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(region) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_dma0_idx_region_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_dma0_idx_region_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_region() const
+    {
+        return static_cast<uint32_t>(region);
+    }
+    CONSTEXPR npu_set_dma0_idx_region_t& set_region(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        region = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 broadcast configuration
-    struct npu_set_ifm2_broadcast_t
+struct npu_set_ifm2_broadcast_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t broadcast_mode:4; //  Broadcast mode for IFM2. When not using broadcast_mode_scalar, accesses to IFM2 sets corresponding axes to 0 and corresponding IFM2 H/W/C to 1)
+    uint32_t reserved1:12;
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_broadcast_t(NPU_NAMESPACE::broadcast_mode _broadcast_mode) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        broadcast_mode(static_cast<uint8_t>(_broadcast_mode) & ((1U << 4)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm2_broadcast_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        broadcast_mode(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t broadcast_mode: 4; //  Broadcast mode for IFM2. When not using broadcast_mode_scalar, accesses to IFM2 sets corresponding axes to 0 and corresponding IFM2 H/W/C to 1)
-        uint32_t reserved1: 12;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_broadcast_t(NPU_NAMESPACE::broadcast_mode _broadcast_mode) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            broadcast_mode(static_cast<uint8_t>(_broadcast_mode) & ((1U << 4) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm2_broadcast_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            broadcast_mode(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(broadcast_mode) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm2_broadcast_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm2_broadcast_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::broadcast_mode get_broadcast_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::broadcast_mode>(broadcast_mode);
-        }
-        CONSTEXPR npu_set_ifm2_broadcast_t &set_broadcast_mode(NPU_NAMESPACE::broadcast_mode value)
-        {
-            broadcast_mode = static_cast<uint8_t>(value) & ((1U << 4) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_BROADCAST); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(broadcast_mode) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm2_broadcast_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm2_broadcast_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::broadcast_mode get_broadcast_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::broadcast_mode>(broadcast_mode);
+    }
+    CONSTEXPR npu_set_ifm2_broadcast_t& set_broadcast_mode(NPU_NAMESPACE::broadcast_mode value)
+    {
+        broadcast_mode = static_cast<uint8_t>(value) & ((1U << 4)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("broadcast_mode", (broadcast_mode < (sizeof(broadcast_mode_str) / sizeof(broadcast_mode_str[0])) ? broadcast_mode_str[broadcast_mode] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("broadcast_mode", (broadcast_mode < (sizeof(broadcast_mode_str)/sizeof(broadcast_mode_str[0])) ? broadcast_mode_str[broadcast_mode] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 Precision
-    struct npu_set_ifm2_precision_t
+struct npu_set_ifm2_precision_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t activation_type:1; //  IFM type
+    uint32_t reserved1:1;
+    uint32_t activation_precision:2; //  IFM precision
+    uint32_t reserved2:2;
+    uint32_t activation_format:2; //  IFM format
+    uint32_t reserved3:6;
+    uint32_t activation_storage:2; //  IFM storage mode
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_precision_t(NPU_NAMESPACE::activation_type _activation_type, NPU_NAMESPACE::activation_precision _activation_precision, NPU_NAMESPACE::activation_format _activation_format, NPU_NAMESPACE::activation_storage _activation_storage) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        activation_type(static_cast<uint8_t>(_activation_type) & ((1U << 1)-1)),
+        reserved1(0),
+        activation_precision(static_cast<uint8_t>(_activation_precision) & ((1U << 2)-1)),
+        reserved2(0),
+        activation_format(static_cast<uint8_t>(_activation_format) & ((1U << 2)-1)),
+        reserved3(0),
+        activation_storage(static_cast<uint8_t>(_activation_storage) & ((1U << 2)-1))
+    {}
+    CONSTEXPR npu_set_ifm2_precision_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        activation_type(0),
+        reserved1(0),
+        activation_precision(0),
+        reserved2(0),
+        activation_format(0),
+        reserved3(0),
+        activation_storage(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t activation_type: 1; //  IFM type
-        uint32_t reserved1: 1;
-        uint32_t activation_precision: 2; //  IFM precision
-        uint32_t reserved2: 2;
-        uint32_t activation_format: 2; //  IFM format
-        uint32_t reserved3: 6;
-        uint32_t activation_storage: 2; //  IFM storage mode
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_precision_t(NPU_NAMESPACE::activation_type _activation_type, NPU_NAMESPACE::activation_precision _activation_precision, NPU_NAMESPACE::activation_format _activation_format, NPU_NAMESPACE::activation_storage _activation_storage) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            activation_type(static_cast<uint8_t>(_activation_type) & ((1U << 1) - 1)),
-            reserved1(0),
-            activation_precision(static_cast<uint8_t>(_activation_precision) & ((1U << 2) - 1)),
-            reserved2(0),
-            activation_format(static_cast<uint8_t>(_activation_format) & ((1U << 2) - 1)),
-            reserved3(0),
-            activation_storage(static_cast<uint8_t>(_activation_storage) & ((1U << 2) - 1))
-        {}
-        CONSTEXPR npu_set_ifm2_precision_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            activation_type(0),
-            reserved1(0),
-            activation_precision(0),
-            reserved2(0),
-            activation_format(0),
-            reserved3(0),
-            activation_storage(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(activation_type) << 16;
-            word |= uint32_t(activation_precision) << 18;
-            word |= uint32_t(activation_format) << 22;
-            word |= uint32_t(activation_storage) << 30;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm2_precision_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm2_precision_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_type get_activation_type() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_type>(activation_type);
-        }
-        CONSTEXPR npu_set_ifm2_precision_t &set_activation_type(NPU_NAMESPACE::activation_type value)
-        {
-            activation_type = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_precision get_activation_precision() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_precision>(activation_precision);
-        }
-        CONSTEXPR npu_set_ifm2_precision_t &set_activation_precision(NPU_NAMESPACE::activation_precision value)
-        {
-            activation_precision = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_format get_activation_format() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_format>(activation_format);
-        }
-        CONSTEXPR npu_set_ifm2_precision_t &set_activation_format(NPU_NAMESPACE::activation_format value)
-        {
-            activation_format = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::activation_storage get_activation_storage() const
-        {
-            return static_cast<NPU_NAMESPACE::activation_storage>(activation_storage);
-        }
-        CONSTEXPR npu_set_ifm2_precision_t &set_activation_storage(NPU_NAMESPACE::activation_storage value)
-        {
-            activation_storage = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_PRECISION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(activation_type) << 16;
+        word |= uint32_t(activation_precision) << 18;
+        word |= uint32_t(activation_format) << 22;
+        word |= uint32_t(activation_storage) << 30;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm2_precision_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm2_precision_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_type get_activation_type() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_type>(activation_type);
+    }
+    CONSTEXPR npu_set_ifm2_precision_t& set_activation_type(NPU_NAMESPACE::activation_type value)
+    {
+        activation_type = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_precision get_activation_precision() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_precision>(activation_precision);
+    }
+    CONSTEXPR npu_set_ifm2_precision_t& set_activation_precision(NPU_NAMESPACE::activation_precision value)
+    {
+        activation_precision = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_format get_activation_format() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_format>(activation_format);
+    }
+    CONSTEXPR npu_set_ifm2_precision_t& set_activation_format(NPU_NAMESPACE::activation_format value)
+    {
+        activation_format = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::activation_storage get_activation_storage() const
+    {
+        return static_cast<NPU_NAMESPACE::activation_storage>(activation_storage);
+    }
+    CONSTEXPR npu_set_ifm2_precision_t& set_activation_storage(NPU_NAMESPACE::activation_storage value)
+    {
+        activation_storage = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("activation_type", (activation_type < (sizeof(activation_type_str) / sizeof(activation_type_str[0])) ? activation_type_str[activation_type] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_precision", (activation_precision < (sizeof(activation_precision_str) / sizeof(activation_precision_str[0])) ? activation_precision_str[activation_precision] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_format", (activation_format < (sizeof(activation_format_str) / sizeof(activation_format_str[0])) ? activation_format_str[activation_format] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("activation_storage", (activation_storage < (sizeof(activation_storage_str) / sizeof(activation_storage_str[0])) ? activation_storage_str[activation_storage] : "****")));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("activation_type", (activation_type < (sizeof(activation_type_str)/sizeof(activation_type_str[0])) ? activation_type_str[activation_type] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_precision", (activation_precision < (sizeof(activation_precision_str)/sizeof(activation_precision_str[0])) ? activation_precision_str[activation_precision] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_format", (activation_format < (sizeof(activation_format_str)/sizeof(activation_format_str[0])) ? activation_format_str[activation_format] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("activation_storage", (activation_storage < (sizeof(activation_storage_str)/sizeof(activation_storage_str[0])) ? activation_storage_str[activation_storage] : "****")));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 zero point
-    struct npu_set_ifm2_zero_point_t
+struct npu_set_ifm2_zero_point_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t zero_point:16; //  Zero point offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_zero_point_t(uint32_t _zero_point) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        zero_point(_zero_point & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm2_zero_point_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        zero_point(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t zero_point: 16; //  Zero point offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_zero_point_t(uint32_t _zero_point) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            zero_point(_zero_point & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm2_zero_point_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            zero_point(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(zero_point) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm2_zero_point_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm2_zero_point_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_zero_point() const
-        {
-            return static_cast<uint32_t>(zero_point);
-        }
-        CONSTEXPR npu_set_ifm2_zero_point_t &set_zero_point(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            zero_point = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_ZERO_POINT); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(zero_point) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm2_zero_point_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm2_zero_point_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_zero_point() const
+    {
+        return static_cast<uint32_t>(zero_point);
+    }
+    CONSTEXPR npu_set_ifm2_zero_point_t& set_zero_point(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        zero_point = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("zero_point", std::to_string(zero_point)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("zero_point", std::to_string(zero_point)));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 Tile 0 and Tile 2 width
-    struct npu_set_ifm2_width0_m1_t
+struct npu_set_ifm2_width0_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t width_m1:16; //  IFM2 Tile 0 and tile 2 width
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_width0_m1_t(uint32_t _width_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(_width_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm2_width0_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        width_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t width_m1: 16; //  IFM2 Tile 0 and tile 2 width
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_width0_m1_t(uint32_t _width_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(_width_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm2_width0_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            width_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(width_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm2_width0_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm2_width0_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_width_m1() const
-        {
-            return static_cast<uint32_t>(width_m1);
-        }
-        CONSTEXPR npu_set_ifm2_width0_m1_t &set_width_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            width_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_WIDTH0_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(width_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm2_width0_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm2_width0_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_width_m1() const
+    {
+        return static_cast<uint32_t>(width_m1);
+    }
+    CONSTEXPR npu_set_ifm2_width0_m1_t& set_width_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        width_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("width_m1", std::to_string(width_m1)));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 Tile 0 height
-    struct npu_set_ifm2_height0_m1_t
+struct npu_set_ifm2_height0_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:16; //  IFM2 Tile 0 height
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_height0_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm2_height0_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 16; //  IFM2 Tile 0 height
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_height0_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm2_height0_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm2_height0_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm2_height0_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_ifm2_height0_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            height_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT0_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm2_height0_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm2_height0_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_ifm2_height0_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        height_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 Tile 1 height
-    struct npu_set_ifm2_height1_m1_t
+struct npu_set_ifm2_height1_m1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t height_m1:16; //  IFM2 Tile 1 height
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_height1_m1_t(uint32_t _height_m1) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(_height_m1 & ((1U << 16)-1))
+    {}
+    CONSTEXPR npu_set_ifm2_height1_m1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        height_m1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t height_m1: 16; //  IFM2 Tile 1 height
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_height1_m1_t(uint32_t _height_m1) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(_height_m1 & ((1U << 16) - 1))
-        {}
-        CONSTEXPR npu_set_ifm2_height1_m1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            height_m1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(height_m1) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm2_height1_m1_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm2_height1_m1_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_height_m1() const
-        {
-            return static_cast<uint32_t>(height_m1);
-        }
-        CONSTEXPR npu_set_ifm2_height1_m1_t &set_height_m1(uint32_t value)
-        {
-            assert((value >> 16) == 0);
-            height_m1 = static_cast<uint16_t>(value & ((1U << 16) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_HEIGHT1_M1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(height_m1) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm2_height1_m1_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm2_height1_m1_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_height_m1() const
+    {
+        return static_cast<uint32_t>(height_m1);
+    }
+    CONSTEXPR npu_set_ifm2_height1_m1_t& set_height_m1(uint32_t value)
+    {
+        assert((value >> 16) == 0);
+        height_m1 = static_cast<uint16_t>(value & ((1U << 16)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("height_m1", std::to_string(height_m1)));
+    }
 #endif
 #endif
-    };
+};
 // Index n for IFM2 access
-    struct npu_set_ifm2_region_t
+struct npu_set_ifm2_region_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t region:3; //  Region number for external memory accesses
+    uint32_t reserved1:13;
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_region_t(uint32_t _region) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(_region & ((1U << 3)-1)),
+        reserved1(0)
+    {}
+    CONSTEXPR npu_set_ifm2_region_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
+        region(0),
+        reserved1(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t region: 3; //  Region number for external memory accesses
-        uint32_t reserved1: 13;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_region_t(uint32_t _region) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(_region & ((1U << 3) - 1)),
-            reserved1(0)
-        {}
-        CONSTEXPR npu_set_ifm2_region_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL)),
-            region(0),
-            reserved1(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
-        }
-        operator uint32_t()
-        {
-            uint32_t word = 0;
-            word |= uint32_t(opcode) << 0;
-            word |= uint32_t(control) << 14;
-            word |= uint32_t(region) << 16;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm2_region_t &set_opcode(NPU_NAMESPACE::cmd0_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm2_region_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_region() const
-        {
-            return static_cast<uint32_t>(region);
-        }
-        CONSTEXPR npu_set_ifm2_region_t &set_region(uint32_t value)
-        {
-            assert((value >> 3) == 0);
-            region = static_cast<uint8_t>(value & ((1U << 3) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION) && control == static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd0_opcode::NPU_SET_IFM2_REGION); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD0_CTRL);
+    }
+    operator uint32_t()
+    {
+        uint32_t word = 0;
+        word |= uint32_t(opcode) << 0;
+        word |= uint32_t(control) << 14;
+        word |= uint32_t(region) << 16;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd0_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd0_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm2_region_t& set_opcode(NPU_NAMESPACE::cmd0_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm2_region_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_region() const
+    {
+        return static_cast<uint32_t>(region);
+    }
+    CONSTEXPR npu_set_ifm2_region_t& set_region(uint32_t value)
+    {
+        assert((value >> 3) == 0);
+        region = static_cast<uint8_t>(value & ((1U << 3)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("region", std::to_string(region)));
+    }
 #endif
 #endif
-    };
+};
 // IFM Tile 0 address
-    struct npu_set_ifm_base0_t
+struct npu_set_ifm_base0_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm_base0_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm_base0_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_base0_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm_base0_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm_base0_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE0); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm_base0_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM Tile 1 address
-    struct npu_set_ifm_base1_t
+struct npu_set_ifm_base1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm_base1_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm_base1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_base1_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm_base1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm_base1_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm_base1_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM Tile 2 address
-    struct npu_set_ifm_base2_t
+struct npu_set_ifm_base2_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm_base2_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm_base2_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_base2_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm_base2_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm_base2_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE2); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm_base2_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM Tile 3 address
-    struct npu_set_ifm_base3_t
+struct npu_set_ifm_base3_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm_base3_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm_base3_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_base3_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm_base3_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm_base3_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_BASE3); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm_base3_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM byte stride between horizontal values
-    struct npu_set_ifm_stride_x_t
+struct npu_set_ifm_stride_x_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm_stride_x_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm_stride_x_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_stride_x_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm_stride_x_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm_stride_x_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_X); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm_stride_x_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM byte stride between vertical values
-    struct npu_set_ifm_stride_y_t
+struct npu_set_ifm_stride_y_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm_stride_y_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm_stride_y_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_stride_y_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm_stride_y_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm_stride_y_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_Y); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm_stride_y_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM byte stride between channel blocks
-    struct npu_set_ifm_stride_c_t
+struct npu_set_ifm_stride_c_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm_stride_c_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm_stride_c_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_stride_c_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm_stride_c_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm_stride_c_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_STRIDE_C); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm_stride_c_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // OFM Tile 0 address
-    struct npu_set_ofm_base0_t
+struct npu_set_ofm_base0_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ofm_base0_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ofm_base0_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_base0_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ofm_base0_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ofm_base0_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE0); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ofm_base0_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // OFM Tile 1 address
-    struct npu_set_ofm_base1_t
+struct npu_set_ofm_base1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ofm_base1_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ofm_base1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_base1_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ofm_base1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ofm_base1_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ofm_base1_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // OFM Tile 2 address
-    struct npu_set_ofm_base2_t
+struct npu_set_ofm_base2_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ofm_base2_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ofm_base2_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_base2_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ofm_base2_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ofm_base2_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE2); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ofm_base2_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // OFM Tile 3 address
-    struct npu_set_ofm_base3_t
+struct npu_set_ofm_base3_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ofm_base3_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ofm_base3_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_base3_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ofm_base3_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ofm_base3_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_BASE3); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ofm_base3_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // OFM byte stride between horizontal values
-    struct npu_set_ofm_stride_x_t
+struct npu_set_ofm_stride_x_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ofm_stride_x_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ofm_stride_x_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_stride_x_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ofm_stride_x_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ofm_stride_x_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_X); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ofm_stride_x_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // OFM byte stride between vertical values
-    struct npu_set_ofm_stride_y_t
+struct npu_set_ofm_stride_y_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ofm_stride_y_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ofm_stride_y_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_stride_y_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ofm_stride_y_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ofm_stride_y_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_Y); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ofm_stride_y_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // OFM byte stride between channel blocks
-    struct npu_set_ofm_stride_c_t
+struct npu_set_ofm_stride_c_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ofm_stride_c_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ofm_stride_c_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_stride_c_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ofm_stride_c_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ofm_stride_c_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_STRIDE_C); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ofm_stride_c_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Weight stream byte offset in WEIGHT_REGION
-    struct npu_set_weight_base_t
+struct npu_set_weight_base_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_weight_base_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_weight_base_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_weight_base_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_weight_base_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_weight_base_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_BASE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_weight_base_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Weight stream byte length
-    struct npu_set_weight_length_t
+struct npu_set_weight_length_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+    uint32_t length:32; //  Weight stream byte length
+#ifdef __cplusplus
+public:
+    npu_set_weight_length_t(uint32_t _length) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(_length)
+    {}
+    CONSTEXPR npu_set_weight_length_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-        uint32_t length: 32; //  Weight stream byte length
-#ifdef __cplusplus
-    public:
-        npu_set_weight_length_t(uint32_t _length) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(_length)
-        {}
-        CONSTEXPR npu_set_weight_length_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(length) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_weight_length_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_weight_length_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_length() const
-        {
-            return static_cast<uint32_t>(length);
-        }
-        CONSTEXPR npu_set_weight_length_t &set_length(uint32_t value)
-        {
-            length = value;
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT_LENGTH); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(length) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_weight_length_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_weight_length_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_length() const
+    {
+        return static_cast<uint32_t>(length);
+    }
+    CONSTEXPR npu_set_weight_length_t& set_length(uint32_t value)
+    {
+        length = value;
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
+    }
 #endif
 #endif
-    };
+};
 // Scale and bias stream input byte offset from SCALE_REGION
-    struct npu_set_scale_base_t
+struct npu_set_scale_base_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_scale_base_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_scale_base_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_scale_base_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_scale_base_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_scale_base_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_BASE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_scale_base_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Scale and bias stream input byte length
-    struct npu_set_scale_length_t
+struct npu_set_scale_length_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+    uint32_t length:20; //  Scale and bias stream byte length
+    uint32_t reserved2:12;
+#ifdef __cplusplus
+public:
+    npu_set_scale_length_t(uint32_t _length) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(_length & ((1U << 20)-1)),
+        reserved2(0)
+    {}
+    CONSTEXPR npu_set_scale_length_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(0),
+        reserved2(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-        uint32_t length: 20; //  Scale and bias stream byte length
-        uint32_t reserved2: 12;
-#ifdef __cplusplus
-    public:
-        npu_set_scale_length_t(uint32_t _length) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(_length & ((1U << 20) - 1)),
-            reserved2(0)
-        {}
-        CONSTEXPR npu_set_scale_length_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(0),
-            reserved2(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(length) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_scale_length_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_scale_length_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_length() const
-        {
-            return static_cast<uint32_t>(length);
-        }
-        CONSTEXPR npu_set_scale_length_t &set_length(uint32_t value)
-        {
-            assert((value >> 20) == 0);
-            length = value & ((1U << 20) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_SCALE_LENGTH); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(length) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_scale_length_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_scale_length_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_length() const
+    {
+        return static_cast<uint32_t>(length);
+    }
+    CONSTEXPR npu_set_scale_length_t& set_length(uint32_t value)
+    {
+        assert((value >> 20) == 0);
+        length = value & ((1U << 20)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
+    }
 #endif
 #endif
-    };
+};
 // OFM scale
-    struct npu_set_ofm_scale_t
+struct npu_set_ofm_scale_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t shift:6; //  Right shift (0 to 63)
+    uint32_t dbl_rnd:5; //  Double rounding shift (0 to 30)
+    uint32_t reserved1:2;
+    uint32_t round_mode:3; //  Rounding mode
+    uint32_t scale:31; //  Scale value (uint31 = non-negative int32)
+    uint32_t reserved2:1;
+#ifdef __cplusplus
+public:
+    npu_set_ofm_scale_t(uint32_t _shift, uint32_t _dbl_rnd, NPU_NAMESPACE::round_mode_ofm _round_mode, uint32_t _scale) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        shift(_shift & ((1U << 6)-1)),
+        dbl_rnd(_dbl_rnd & ((1U << 5)-1)),
+        reserved1(0),
+        round_mode(static_cast<uint8_t>(_round_mode) & ((1U << 3)-1)),
+        scale(_scale & ((1U << 31)-1)),
+        reserved2(0)
+    {}
+    CONSTEXPR npu_set_ofm_scale_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        shift(0),
+        dbl_rnd(0),
+        reserved1(0),
+        round_mode(0),
+        scale(0),
+        reserved2(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t shift: 6; //  Right shift (0 to 63)
-        uint32_t dbl_rnd: 5; //  Double rounding shift (0 to 30)
-        uint32_t reserved1: 2;
-        uint32_t round_mode: 3; //  Rounding mode
-        uint32_t scale: 31; //  Scale value (uint31 = non-negative int32)
-        uint32_t reserved2: 1;
-#ifdef __cplusplus
-    public:
-        npu_set_ofm_scale_t(uint32_t _shift, uint32_t _dbl_rnd, NPU_NAMESPACE::round_mode_ofm _round_mode, uint32_t _scale) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            shift(_shift & ((1U << 6) - 1)),
-            dbl_rnd(_dbl_rnd & ((1U << 5) - 1)),
-            reserved1(0),
-            round_mode(static_cast<uint8_t>(_round_mode) & ((1U << 3) - 1)),
-            scale(_scale & ((1U << 31) - 1)),
-            reserved2(0)
-        {}
-        CONSTEXPR npu_set_ofm_scale_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            shift(0),
-            dbl_rnd(0),
-            reserved1(0),
-            round_mode(0),
-            scale(0),
-            reserved2(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(shift) << 16;
-            word |= uint64_t(dbl_rnd) << 22;
-            word |= uint64_t(round_mode) << 29;
-            word |= uint64_t(scale) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ofm_scale_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ofm_scale_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_shift() const
-        {
-            return static_cast<uint32_t>(shift);
-        }
-        CONSTEXPR npu_set_ofm_scale_t &set_shift(uint32_t value)
-        {
-            assert((value >> 6) == 0);
-            shift = static_cast<uint8_t>(value & ((1U << 6) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_dbl_rnd() const
-        {
-            return static_cast<uint32_t>(dbl_rnd);
-        }
-        CONSTEXPR npu_set_ofm_scale_t &set_dbl_rnd(uint32_t value)
-        {
-            assert((value >> 5) == 0);
-            dbl_rnd = static_cast<uint8_t>(value & ((1U << 5) - 1));
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::round_mode_ofm get_round_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::round_mode_ofm>(round_mode);
-        }
-        CONSTEXPR npu_set_ofm_scale_t &set_round_mode(NPU_NAMESPACE::round_mode_ofm value)
-        {
-            round_mode = static_cast<uint8_t>(value) & ((1U << 3) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_scale() const
-        {
-            return static_cast<uint32_t>(scale);
-        }
-        CONSTEXPR npu_set_ofm_scale_t &set_scale(uint32_t value)
-        {
-            assert((value >> 31) == 0);
-            scale = value & ((1U << 31) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OFM_SCALE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(shift) << 16;
+        word |= uint64_t(dbl_rnd) << 22;
+        word |= uint64_t(round_mode) << 29;
+        word |= uint64_t(scale) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ofm_scale_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ofm_scale_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_shift() const
+    {
+        return static_cast<uint32_t>(shift);
+    }
+    CONSTEXPR npu_set_ofm_scale_t& set_shift(uint32_t value)
+    {
+        assert((value >> 6) == 0);
+        shift = static_cast<uint8_t>(value & ((1U << 6)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_dbl_rnd() const
+    {
+        return static_cast<uint32_t>(dbl_rnd);
+    }
+    CONSTEXPR npu_set_ofm_scale_t& set_dbl_rnd(uint32_t value)
+    {
+        assert((value >> 5) == 0);
+        dbl_rnd = static_cast<uint8_t>(value & ((1U << 5)-1));
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::round_mode_ofm get_round_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::round_mode_ofm>(round_mode);
+    }
+    CONSTEXPR npu_set_ofm_scale_t& set_round_mode(NPU_NAMESPACE::round_mode_ofm value)
+    {
+        round_mode = static_cast<uint8_t>(value) & ((1U << 3)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_scale() const
+    {
+        return static_cast<uint32_t>(scale);
+    }
+    CONSTEXPR npu_set_ofm_scale_t& set_scale(uint32_t value)
+    {
+        assert((value >> 31) == 0);
+        scale = value & ((1U << 31)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("shift", std::to_string(shift)));
-            fields.push_back(std::make_pair<std::string, std::string>("dbl_rnd", std::to_string(dbl_rnd)));
-            fields.push_back(std::make_pair<std::string, std::string>("round_mode", (round_mode < (sizeof(round_mode_ofm_str) / sizeof(round_mode_ofm_str[0])) ? round_mode_ofm_str[round_mode] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("scale", std::to_string(scale)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("shift", std::to_string(shift)));
+        fields.push_back(std::make_pair<std::string, std::string>("dbl_rnd", std::to_string(dbl_rnd)));
+        fields.push_back(std::make_pair<std::string, std::string>("round_mode", (round_mode < (sizeof(round_mode_ofm_str)/sizeof(round_mode_ofm_str[0])) ? round_mode_ofm_str[round_mode] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("scale", std::to_string(scale)));
+    }
 #endif
 #endif
-    };
+};
 // IFM input scale
-    struct npu_set_ifm_scale_t
+struct npu_set_ifm_scale_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t shift:6; //  Right shift (0 to 63)
+    uint32_t dbl_rnd:5; //  Double rounding shift (0 to 30)
+    uint32_t reserved1:2;
+    uint32_t round_mode:1; //  Rounding mode
+    uint32_t reserved2:2;
+    uint32_t scale:31; //  Scale value (uint31 = non-negative int32)
+    uint32_t reserved3:1;
+#ifdef __cplusplus
+public:
+    npu_set_ifm_scale_t(uint32_t _shift, uint32_t _dbl_rnd, NPU_NAMESPACE::round_mode_ifm _round_mode, uint32_t _scale) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        shift(_shift & ((1U << 6)-1)),
+        dbl_rnd(_dbl_rnd & ((1U << 5)-1)),
+        reserved1(0),
+        round_mode(static_cast<uint8_t>(_round_mode) & ((1U << 1)-1)),
+        reserved2(0),
+        scale(_scale & ((1U << 31)-1)),
+        reserved3(0)
+    {}
+    CONSTEXPR npu_set_ifm_scale_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        shift(0),
+        dbl_rnd(0),
+        reserved1(0),
+        round_mode(0),
+        reserved2(0),
+        scale(0),
+        reserved3(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t shift: 6; //  Right shift (0 to 63)
-        uint32_t dbl_rnd: 5; //  Double rounding shift (0 to 30)
-        uint32_t reserved1: 2;
-        uint32_t round_mode: 1; //  Rounding mode
-        uint32_t reserved2: 2;
-        uint32_t scale: 31; //  Scale value (uint31 = non-negative int32)
-        uint32_t reserved3: 1;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm_scale_t(uint32_t _shift, uint32_t _dbl_rnd, NPU_NAMESPACE::round_mode_ifm _round_mode, uint32_t _scale) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            shift(_shift & ((1U << 6) - 1)),
-            dbl_rnd(_dbl_rnd & ((1U << 5) - 1)),
-            reserved1(0),
-            round_mode(static_cast<uint8_t>(_round_mode) & ((1U << 1) - 1)),
-            reserved2(0),
-            scale(_scale & ((1U << 31) - 1)),
-            reserved3(0)
-        {}
-        CONSTEXPR npu_set_ifm_scale_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            shift(0),
-            dbl_rnd(0),
-            reserved1(0),
-            round_mode(0),
-            reserved2(0),
-            scale(0),
-            reserved3(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(shift) << 16;
-            word |= uint64_t(dbl_rnd) << 22;
-            word |= uint64_t(round_mode) << 29;
-            word |= uint64_t(scale) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm_scale_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm_scale_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_shift() const
-        {
-            return static_cast<uint32_t>(shift);
-        }
-        CONSTEXPR npu_set_ifm_scale_t &set_shift(uint32_t value)
-        {
-            assert((value >> 6) == 0);
-            shift = static_cast<uint8_t>(value & ((1U << 6) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_dbl_rnd() const
-        {
-            return static_cast<uint32_t>(dbl_rnd);
-        }
-        CONSTEXPR npu_set_ifm_scale_t &set_dbl_rnd(uint32_t value)
-        {
-            assert((value >> 5) == 0);
-            dbl_rnd = static_cast<uint8_t>(value & ((1U << 5) - 1));
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::round_mode_ifm get_round_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::round_mode_ifm>(round_mode);
-        }
-        CONSTEXPR npu_set_ifm_scale_t &set_round_mode(NPU_NAMESPACE::round_mode_ifm value)
-        {
-            round_mode = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_scale() const
-        {
-            return static_cast<uint32_t>(scale);
-        }
-        CONSTEXPR npu_set_ifm_scale_t &set_scale(uint32_t value)
-        {
-            assert((value >> 31) == 0);
-            scale = value & ((1U << 31) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM_SCALE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(shift) << 16;
+        word |= uint64_t(dbl_rnd) << 22;
+        word |= uint64_t(round_mode) << 29;
+        word |= uint64_t(scale) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm_scale_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm_scale_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_shift() const
+    {
+        return static_cast<uint32_t>(shift);
+    }
+    CONSTEXPR npu_set_ifm_scale_t& set_shift(uint32_t value)
+    {
+        assert((value >> 6) == 0);
+        shift = static_cast<uint8_t>(value & ((1U << 6)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_dbl_rnd() const
+    {
+        return static_cast<uint32_t>(dbl_rnd);
+    }
+    CONSTEXPR npu_set_ifm_scale_t& set_dbl_rnd(uint32_t value)
+    {
+        assert((value >> 5) == 0);
+        dbl_rnd = static_cast<uint8_t>(value & ((1U << 5)-1));
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::round_mode_ifm get_round_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::round_mode_ifm>(round_mode);
+    }
+    CONSTEXPR npu_set_ifm_scale_t& set_round_mode(NPU_NAMESPACE::round_mode_ifm value)
+    {
+        round_mode = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_scale() const
+    {
+        return static_cast<uint32_t>(scale);
+    }
+    CONSTEXPR npu_set_ifm_scale_t& set_scale(uint32_t value)
+    {
+        assert((value >> 31) == 0);
+        scale = value & ((1U << 31)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("shift", std::to_string(shift)));
-            fields.push_back(std::make_pair<std::string, std::string>("dbl_rnd", std::to_string(dbl_rnd)));
-            fields.push_back(std::make_pair<std::string, std::string>("round_mode", (round_mode < (sizeof(round_mode_ifm_str) / sizeof(round_mode_ifm_str[0])) ? round_mode_ifm_str[round_mode] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("scale", std::to_string(scale)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("shift", std::to_string(shift)));
+        fields.push_back(std::make_pair<std::string, std::string>("dbl_rnd", std::to_string(dbl_rnd)));
+        fields.push_back(std::make_pair<std::string, std::string>("round_mode", (round_mode < (sizeof(round_mode_ifm_str)/sizeof(round_mode_ifm_str[0])) ? round_mode_ifm_str[round_mode] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("scale", std::to_string(scale)));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 input scale
-    struct npu_set_ifm2_scale_t
+struct npu_set_ifm2_scale_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t shift:6; //  Right shift (0 to 63)
+    uint32_t dbl_rnd:5; //  Double rounding shift (0 to 30)
+    uint32_t reserved1:2;
+    uint32_t round_mode:1; //  Rounding mode
+    uint32_t reserved2:2;
+    uint32_t scale:31; //  Scale value (uint31 = non-negative int32)
+    uint32_t reserved3:1;
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_scale_t(uint32_t _shift, uint32_t _dbl_rnd, NPU_NAMESPACE::round_mode_ifm _round_mode, uint32_t _scale) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        shift(_shift & ((1U << 6)-1)),
+        dbl_rnd(_dbl_rnd & ((1U << 5)-1)),
+        reserved1(0),
+        round_mode(static_cast<uint8_t>(_round_mode) & ((1U << 1)-1)),
+        reserved2(0),
+        scale(_scale & ((1U << 31)-1)),
+        reserved3(0)
+    {}
+    CONSTEXPR npu_set_ifm2_scale_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        shift(0),
+        dbl_rnd(0),
+        reserved1(0),
+        round_mode(0),
+        reserved2(0),
+        scale(0),
+        reserved3(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t shift: 6; //  Right shift (0 to 63)
-        uint32_t dbl_rnd: 5; //  Double rounding shift (0 to 30)
-        uint32_t reserved1: 2;
-        uint32_t round_mode: 1; //  Rounding mode
-        uint32_t reserved2: 2;
-        uint32_t scale: 31; //  Scale value (uint31 = non-negative int32)
-        uint32_t reserved3: 1;
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_scale_t(uint32_t _shift, uint32_t _dbl_rnd, NPU_NAMESPACE::round_mode_ifm _round_mode, uint32_t _scale) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            shift(_shift & ((1U << 6) - 1)),
-            dbl_rnd(_dbl_rnd & ((1U << 5) - 1)),
-            reserved1(0),
-            round_mode(static_cast<uint8_t>(_round_mode) & ((1U << 1) - 1)),
-            reserved2(0),
-            scale(_scale & ((1U << 31) - 1)),
-            reserved3(0)
-        {}
-        CONSTEXPR npu_set_ifm2_scale_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            shift(0),
-            dbl_rnd(0),
-            reserved1(0),
-            round_mode(0),
-            reserved2(0),
-            scale(0),
-            reserved3(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(shift) << 16;
-            word |= uint64_t(dbl_rnd) << 22;
-            word |= uint64_t(round_mode) << 29;
-            word |= uint64_t(scale) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_ifm2_scale_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_ifm2_scale_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_shift() const
-        {
-            return static_cast<uint32_t>(shift);
-        }
-        CONSTEXPR npu_set_ifm2_scale_t &set_shift(uint32_t value)
-        {
-            assert((value >> 6) == 0);
-            shift = static_cast<uint8_t>(value & ((1U << 6) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_dbl_rnd() const
-        {
-            return static_cast<uint32_t>(dbl_rnd);
-        }
-        CONSTEXPR npu_set_ifm2_scale_t &set_dbl_rnd(uint32_t value)
-        {
-            assert((value >> 5) == 0);
-            dbl_rnd = static_cast<uint8_t>(value & ((1U << 5) - 1));
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::round_mode_ifm get_round_mode() const
-        {
-            return static_cast<NPU_NAMESPACE::round_mode_ifm>(round_mode);
-        }
-        CONSTEXPR npu_set_ifm2_scale_t &set_round_mode(NPU_NAMESPACE::round_mode_ifm value)
-        {
-            round_mode = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_scale() const
-        {
-            return static_cast<uint32_t>(scale);
-        }
-        CONSTEXPR npu_set_ifm2_scale_t &set_scale(uint32_t value)
-        {
-            assert((value >> 31) == 0);
-            scale = value & ((1U << 31) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_SCALE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(shift) << 16;
+        word |= uint64_t(dbl_rnd) << 22;
+        word |= uint64_t(round_mode) << 29;
+        word |= uint64_t(scale) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_ifm2_scale_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_ifm2_scale_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_shift() const
+    {
+        return static_cast<uint32_t>(shift);
+    }
+    CONSTEXPR npu_set_ifm2_scale_t& set_shift(uint32_t value)
+    {
+        assert((value >> 6) == 0);
+        shift = static_cast<uint8_t>(value & ((1U << 6)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_dbl_rnd() const
+    {
+        return static_cast<uint32_t>(dbl_rnd);
+    }
+    CONSTEXPR npu_set_ifm2_scale_t& set_dbl_rnd(uint32_t value)
+    {
+        assert((value >> 5) == 0);
+        dbl_rnd = static_cast<uint8_t>(value & ((1U << 5)-1));
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::round_mode_ifm get_round_mode() const
+    {
+        return static_cast<NPU_NAMESPACE::round_mode_ifm>(round_mode);
+    }
+    CONSTEXPR npu_set_ifm2_scale_t& set_round_mode(NPU_NAMESPACE::round_mode_ifm value)
+    {
+        round_mode = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_scale() const
+    {
+        return static_cast<uint32_t>(scale);
+    }
+    CONSTEXPR npu_set_ifm2_scale_t& set_scale(uint32_t value)
+    {
+        assert((value >> 31) == 0);
+        scale = value & ((1U << 31)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("shift", std::to_string(shift)));
-            fields.push_back(std::make_pair<std::string, std::string>("dbl_rnd", std::to_string(dbl_rnd)));
-            fields.push_back(std::make_pair<std::string, std::string>("round_mode", (round_mode < (sizeof(round_mode_ifm_str) / sizeof(round_mode_ifm_str[0])) ? round_mode_ifm_str[round_mode] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("scale", std::to_string(scale)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("shift", std::to_string(shift)));
+        fields.push_back(std::make_pair<std::string, std::string>("dbl_rnd", std::to_string(dbl_rnd)));
+        fields.push_back(std::make_pair<std::string, std::string>("round_mode", (round_mode < (sizeof(round_mode_ifm_str)/sizeof(round_mode_ifm_str[0])) ? round_mode_ifm_str[round_mode] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("scale", std::to_string(scale)));
+    }
 #endif
 #endif
-    };
+};
 // Operation scalar value
-    struct npu_set_op_scalar_t
+struct npu_set_op_scalar_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+    uint32_t scalar:32; //  Scalar value (int32)
+#ifdef __cplusplus
+public:
+    npu_set_op_scalar_t(uint32_t _scalar) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        scalar(_scalar)
+    {}
+    CONSTEXPR npu_set_op_scalar_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        scalar(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-        uint32_t scalar: 32; //  Scalar value (int32)
-#ifdef __cplusplus
-    public:
-        npu_set_op_scalar_t(uint32_t _scalar) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            scalar(_scalar)
-        {}
-        CONSTEXPR npu_set_op_scalar_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            scalar(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(scalar) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_op_scalar_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_op_scalar_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_scalar() const
-        {
-            return static_cast<uint32_t>(scalar);
-        }
-        CONSTEXPR npu_set_op_scalar_t &set_scalar(uint32_t value)
-        {
-            scalar = value;
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_OP_SCALAR); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(scalar) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_op_scalar_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_op_scalar_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_scalar() const
+    {
+        return static_cast<uint32_t>(scalar);
+    }
+    CONSTEXPR npu_set_op_scalar_t& set_scalar(uint32_t value)
+    {
+        scalar = value;
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("scalar", std::to_string(((scalar <= std::numeric_limits<int>::max() ? static_cast<int>(scalar) : scalar - std::numeric_limits<int>::min() + std::numeric_limits<int>::max()) << 0) >> 0)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("scalar", std::to_string(((scalar <= std::numeric_limits<int>::max() ? static_cast<int>(scalar) : scalar - std::numeric_limits<int>::min() + std::numeric_limits<int>::max()) << 0) >> 0)));
+    }
 #endif
 #endif
-    };
+};
 // DMA user channel 0 source byte offset from DMA0_SRC_REGION
-    struct npu_set_dma0_src_t
+struct npu_set_dma0_src_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_src_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_src_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_src_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_src_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_src_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_src_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // DMA user channel 0 destination byte offset from DMA0_DST_REGION
-    struct npu_set_dma0_dst_t
+struct npu_set_dma0_dst_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_dst_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_dst_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_dst_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_dst_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_dst_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_dst_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // DMA user channel 0 transfer length in bytes for each 1D transfer
-    struct npu_set_dma0_len_t
+struct npu_set_dma0_len_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_len_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_len_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_len_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_len_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_len_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_LEN); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_len_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Source byte stride after each 1D transfer
-    struct npu_set_dma0_src_stride0_t
+struct npu_set_dma0_src_stride0_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_src_stride0_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_src_stride0_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_src_stride0_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_src_stride0_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_src_stride0_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE0); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_src_stride0_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Source byte stride after each 2D transfer
-    struct npu_set_dma0_src_stride1_t
+struct npu_set_dma0_src_stride1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_src_stride1_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_src_stride1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_src_stride1_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_src_stride1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_src_stride1_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_SRC_STRIDE1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_src_stride1_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Destination byte stride after each 1D transfer
-    struct npu_set_dma0_dst_stride0_t
+struct npu_set_dma0_dst_stride0_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_dst_stride0_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_dst_stride0_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_dst_stride0_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_dst_stride0_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_dst_stride0_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE0); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_dst_stride0_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Destination byte stride after 2D transfer
-    struct npu_set_dma0_dst_stride1_t
+struct npu_set_dma0_dst_stride1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_dst_stride1_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_dst_stride1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_dst_stride1_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_dst_stride1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_dst_stride1_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_DST_STRIDE1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_dst_stride1_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // DMA channel 0 index array address
-    struct npu_set_dma0_idx_t
+struct npu_set_dma0_idx_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_idx_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_idx_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_idx_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_idx_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_idx_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_idx_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // DMA channel 0 index maximum value
-    struct npu_set_dma0_idx_max_t
+struct npu_set_dma0_idx_max_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+    uint32_t idx_max:31; //  maximum permitted index
+    uint32_t reserved2:1;
+#ifdef __cplusplus
+public:
+    npu_set_dma0_idx_max_t(uint32_t _idx_max) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        idx_max(_idx_max & ((1U << 31)-1)),
+        reserved2(0)
+    {}
+    CONSTEXPR npu_set_dma0_idx_max_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        idx_max(0),
+        reserved2(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-        uint32_t idx_max: 31; //  maximum permitted index
-        uint32_t reserved2: 1;
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_idx_max_t(uint32_t _idx_max) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            idx_max(_idx_max & ((1U << 31) - 1)),
-            reserved2(0)
-        {}
-        CONSTEXPR npu_set_dma0_idx_max_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            idx_max(0),
-            reserved2(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(idx_max) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_dma0_idx_max_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_dma0_idx_max_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_idx_max() const
-        {
-            return static_cast<uint32_t>(idx_max);
-        }
-        CONSTEXPR npu_set_dma0_idx_max_t &set_idx_max(uint32_t value)
-        {
-            assert((value >> 31) == 0);
-            idx_max = value & ((1U << 31) - 1);
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_MAX); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(idx_max) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_dma0_idx_max_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_dma0_idx_max_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_idx_max() const
+    {
+        return static_cast<uint32_t>(idx_max);
+    }
+    CONSTEXPR npu_set_dma0_idx_max_t& set_idx_max(uint32_t value)
+    {
+        assert((value >> 31) == 0);
+        idx_max = value & ((1U << 31)-1);
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("idx_max", std::to_string(idx_max)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("idx_max", std::to_string(idx_max)));
+    }
 #endif
 #endif
-    };
+};
 // Index byte distance to skip in index after each 2D transfer
-    struct npu_set_dma0_idx_skip1_t
+struct npu_set_dma0_idx_skip1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_dma0_idx_skip1_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_dma0_idx_skip1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_dma0_idx_skip1_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_dma0_idx_skip1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_dma0_idx_skip1_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_DMA0_IDX_SKIP1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_dma0_idx_skip1_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 Tile 0 address
-    struct npu_set_ifm2_base0_t
+struct npu_set_ifm2_base0_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_base0_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm2_base0_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_base0_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm2_base0_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm2_base0_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE0); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm2_base0_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 Tile 1 address
-    struct npu_set_ifm2_base1_t
+struct npu_set_ifm2_base1_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_base1_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm2_base1_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_base1_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm2_base1_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm2_base1_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE1); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm2_base1_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 Tile 2 address
-    struct npu_set_ifm2_base2_t
+struct npu_set_ifm2_base2_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_base2_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm2_base2_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_base2_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm2_base2_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm2_base2_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE2); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm2_base2_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 Tile 3 address
-    struct npu_set_ifm2_base3_t
+struct npu_set_ifm2_base3_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_base3_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm2_base3_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_base3_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm2_base3_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm2_base3_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_BASE3); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm2_base3_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 byte stride between horizontal values
-    struct npu_set_ifm2_stride_x_t
+struct npu_set_ifm2_stride_x_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_stride_x_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm2_stride_x_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_stride_x_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm2_stride_x_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm2_stride_x_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_X); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm2_stride_x_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 byte stride between vertical values
-    struct npu_set_ifm2_stride_y_t
+struct npu_set_ifm2_stride_y_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_stride_y_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm2_stride_y_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_stride_y_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm2_stride_y_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm2_stride_y_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_Y); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm2_stride_y_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // IFM2 byte stride between channel blocks
-    struct npu_set_ifm2_stride_c_t
+struct npu_set_ifm2_stride_c_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_ifm2_stride_c_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_ifm2_stride_c_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_ifm2_stride_c_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_ifm2_stride_c_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_ifm2_stride_c_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_IFM2_STRIDE_C); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_ifm2_stride_c_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Weight stream byte offset in WEIGHT_REGION for weight decoder 1
-    struct npu_set_weight1_base_t
+struct npu_set_weight1_base_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_weight1_base_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_weight1_base_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_weight1_base_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_weight1_base_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_weight1_base_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_BASE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_weight1_base_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Weight stream byte length for weight decoder 1
-    struct npu_set_weight1_length_t
+struct npu_set_weight1_length_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+    uint32_t length:32; //  Weight stream byte length
+#ifdef __cplusplus
+public:
+    npu_set_weight1_length_t(uint32_t _length) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(_length)
+    {}
+    CONSTEXPR npu_set_weight1_length_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-        uint32_t length: 32; //  Weight stream byte length
-#ifdef __cplusplus
-    public:
-        npu_set_weight1_length_t(uint32_t _length) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(_length)
-        {}
-        CONSTEXPR npu_set_weight1_length_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(length) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_weight1_length_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_weight1_length_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_length() const
-        {
-            return static_cast<uint32_t>(length);
-        }
-        CONSTEXPR npu_set_weight1_length_t &set_length(uint32_t value)
-        {
-            length = value;
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT1_LENGTH); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(length) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_weight1_length_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_weight1_length_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_length() const
+    {
+        return static_cast<uint32_t>(length);
+    }
+    CONSTEXPR npu_set_weight1_length_t& set_length(uint32_t value)
+    {
+        length = value;
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
+    }
 #endif
 #endif
-    };
+};
 // Weight stream byte offset in WEIGHT_REGION for weight decoder 2
-    struct npu_set_weight2_base_t
+struct npu_set_weight2_base_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_weight2_base_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_weight2_base_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_weight2_base_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_weight2_base_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_weight2_base_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_BASE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_weight2_base_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Weight stream byte length for weight decoder 2
-    struct npu_set_weight2_length_t
+struct npu_set_weight2_length_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+    uint32_t length:32; //  Weight stream byte length
+#ifdef __cplusplus
+public:
+    npu_set_weight2_length_t(uint32_t _length) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(_length)
+    {}
+    CONSTEXPR npu_set_weight2_length_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-        uint32_t length: 32; //  Weight stream byte length
-#ifdef __cplusplus
-    public:
-        npu_set_weight2_length_t(uint32_t _length) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(_length)
-        {}
-        CONSTEXPR npu_set_weight2_length_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(length) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_weight2_length_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_weight2_length_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_length() const
-        {
-            return static_cast<uint32_t>(length);
-        }
-        CONSTEXPR npu_set_weight2_length_t &set_length(uint32_t value)
-        {
-            length = value;
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT2_LENGTH); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(length) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_weight2_length_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_weight2_length_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_length() const
+    {
+        return static_cast<uint32_t>(length);
+    }
+    CONSTEXPR npu_set_weight2_length_t& set_length(uint32_t value)
+    {
+        length = value;
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
+    }
 #endif
 #endif
-    };
+};
 // Weight stream byte offset in WEIGHT_REGION for weight decoder 3
-    struct npu_set_weight3_base_t
+struct npu_set_weight3_base_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t addr_hi:8; //  address extension
+    uint32_t reserved1:8;
+    uint32_t addr_lo:32; //  address offset
+#ifdef __cplusplus
+public:
+    npu_set_weight3_base_t(uint64_t _addr) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
+        reserved1(0),
+        addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
+    {}
+    CONSTEXPR npu_set_weight3_base_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        addr_hi(0),
+        reserved1(0),
+        addr_lo(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t addr_hi: 8; //  address extension
-        uint32_t reserved1: 8;
-        uint32_t addr_lo: 32; //  address offset
-#ifdef __cplusplus
-    public:
-        npu_set_weight3_base_t(uint64_t _addr) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(static_cast<uint8_t>((_addr >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()))),
-            reserved1(0),
-            addr_lo(static_cast<uint32_t>((_addr) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())))
-        {}
-        CONSTEXPR npu_set_weight3_base_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            addr_hi(0),
-            reserved1(0),
-            addr_lo(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(addr_hi) << 16;
-            word |= uint64_t(addr_lo) << 32;
-            return word;
-        }
-        CONSTEXPR uint64_t get_addr() const
-        {
-            return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
-        }
-        CONSTEXPR npu_set_weight3_base_t &set_addr(uint64_t value)
-        {
-            addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
-            addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max()));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_BASE); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(addr_hi) << 16;
+        word |= uint64_t(addr_lo) << 32;
+        return word;
+    }
+    CONSTEXPR uint64_t get_addr() const
+    {
+        return (static_cast<uint64_t>(addr_hi) << 32) | addr_lo;
+    }
+    CONSTEXPR npu_set_weight3_base_t& set_addr(uint64_t value)
+    {
+        addr_lo = static_cast<uint32_t>((value) & static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())); addr_hi = static_cast<uint8_t>((value >> 32) & static_cast<uint64_t>(std::numeric_limits<uint8_t>::max())); return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            std::stringstream saddr;
-            saddr << std::hex << "0x" << get_addr();
-            fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        std::stringstream saddr; saddr << std::hex << "0x" << get_addr();
+        fields.push_back(std::make_pair<std::string, std::string>("addr", saddr.str()));
+    }
 #endif
 #endif
-    };
+};
 // Weight stream byte length for weight decoder 3
-    struct npu_set_weight3_length_t
+struct npu_set_weight3_length_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t reserved1:16;
+    uint32_t length:32; //  Weight stream byte length
+#ifdef __cplusplus
+public:
+    npu_set_weight3_length_t(uint32_t _length) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(_length)
+    {}
+    CONSTEXPR npu_set_weight3_length_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        reserved1(0),
+        length(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t reserved1: 16;
-        uint32_t length: 32; //  Weight stream byte length
-#ifdef __cplusplus
-    public:
-        npu_set_weight3_length_t(uint32_t _length) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(_length)
-        {}
-        CONSTEXPR npu_set_weight3_length_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            reserved1(0),
-            length(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(length) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_weight3_length_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_weight3_length_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_length() const
-        {
-            return static_cast<uint32_t>(length);
-        }
-        CONSTEXPR npu_set_weight3_length_t &set_length(uint32_t value)
-        {
-            length = value;
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_WEIGHT3_LENGTH); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(length) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_weight3_length_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_weight3_length_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_length() const
+    {
+        return static_cast<uint32_t>(length);
+    }
+    CONSTEXPR npu_set_weight3_length_t& set_length(uint32_t value)
+    {
+        length = value;
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("length", std::to_string(length)));
+    }
 #endif
 #endif
-    };
+};
 // Resize X axis step parameters
-    struct npu_set_resize_x_step_t
+struct npu_set_resize_x_step_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t one_step_int:4; //  (1*scale_d) / scale_n
+    uint32_t blk_step_int:11; //  ((ofm_block_size-1)*scale_d) / scale_n
+    uint32_t reserved1:1;
+    uint32_t one_step_mod:11; //  (1*scale_d) % scale_n
+    uint32_t reserved2:5;
+    uint32_t blk_step_mod:11; //  ((ofm_block_size-1)*scale_d) % scale_n
+    uint32_t reserved3:5;
+#ifdef __cplusplus
+public:
+    npu_set_resize_x_step_t(uint32_t _one_step_int, uint32_t _blk_step_int, uint32_t _one_step_mod, uint32_t _blk_step_mod) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        one_step_int(_one_step_int & ((1U << 4)-1)),
+        blk_step_int(_blk_step_int & ((1U << 11)-1)),
+        reserved1(0),
+        one_step_mod(_one_step_mod & ((1U << 11)-1)),
+        reserved2(0),
+        blk_step_mod(_blk_step_mod & ((1U << 11)-1)),
+        reserved3(0)
+    {}
+    CONSTEXPR npu_set_resize_x_step_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        one_step_int(0),
+        blk_step_int(0),
+        reserved1(0),
+        one_step_mod(0),
+        reserved2(0),
+        blk_step_mod(0),
+        reserved3(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t one_step_int: 4; //  (1*scale_d) / scale_n
-        uint32_t blk_step_int: 11; //  ((ofm_block_size-1)*scale_d) / scale_n
-        uint32_t reserved1: 1;
-        uint32_t one_step_mod: 11; //  (1*scale_d) % scale_n
-        uint32_t reserved2: 5;
-        uint32_t blk_step_mod: 11; //  ((ofm_block_size-1)*scale_d) % scale_n
-        uint32_t reserved3: 5;
-#ifdef __cplusplus
-    public:
-        npu_set_resize_x_step_t(uint32_t _one_step_int, uint32_t _blk_step_int, uint32_t _one_step_mod, uint32_t _blk_step_mod) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            one_step_int(_one_step_int & ((1U << 4) - 1)),
-            blk_step_int(_blk_step_int & ((1U << 11) - 1)),
-            reserved1(0),
-            one_step_mod(_one_step_mod & ((1U << 11) - 1)),
-            reserved2(0),
-            blk_step_mod(_blk_step_mod & ((1U << 11) - 1)),
-            reserved3(0)
-        {}
-        CONSTEXPR npu_set_resize_x_step_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            one_step_int(0),
-            blk_step_int(0),
-            reserved1(0),
-            one_step_mod(0),
-            reserved2(0),
-            blk_step_mod(0),
-            reserved3(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(one_step_int) << 16;
-            word |= uint64_t(blk_step_int) << 20;
-            word |= uint64_t(one_step_mod) << 32;
-            word |= uint64_t(blk_step_mod) << 48;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_resize_x_step_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_resize_x_step_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_one_step_int() const
-        {
-            return static_cast<uint32_t>(one_step_int);
-        }
-        CONSTEXPR npu_set_resize_x_step_t &set_one_step_int(uint32_t value)
-        {
-            assert((value >> 4) == 0);
-            one_step_int = static_cast<uint8_t>(value & ((1U << 4) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_blk_step_int() const
-        {
-            return static_cast<uint32_t>(blk_step_int);
-        }
-        CONSTEXPR npu_set_resize_x_step_t &set_blk_step_int(uint32_t value)
-        {
-            assert((value >> 11) == 0);
-            blk_step_int = static_cast<uint16_t>(value & ((1U << 11) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_one_step_mod() const
-        {
-            return static_cast<uint32_t>(one_step_mod);
-        }
-        CONSTEXPR npu_set_resize_x_step_t &set_one_step_mod(uint32_t value)
-        {
-            assert((value >> 11) == 0);
-            one_step_mod = static_cast<uint16_t>(value & ((1U << 11) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_blk_step_mod() const
-        {
-            return static_cast<uint32_t>(blk_step_mod);
-        }
-        CONSTEXPR npu_set_resize_x_step_t &set_blk_step_mod(uint32_t value)
-        {
-            assert((value >> 11) == 0);
-            blk_step_mod = static_cast<uint16_t>(value & ((1U << 11) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_X); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(one_step_int) << 16;
+        word |= uint64_t(blk_step_int) << 20;
+        word |= uint64_t(one_step_mod) << 32;
+        word |= uint64_t(blk_step_mod) << 48;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_resize_x_step_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_resize_x_step_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_one_step_int() const
+    {
+        return static_cast<uint32_t>(one_step_int);
+    }
+    CONSTEXPR npu_set_resize_x_step_t& set_one_step_int(uint32_t value)
+    {
+        assert((value >> 4) == 0);
+        one_step_int = static_cast<uint8_t>(value & ((1U << 4)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_blk_step_int() const
+    {
+        return static_cast<uint32_t>(blk_step_int);
+    }
+    CONSTEXPR npu_set_resize_x_step_t& set_blk_step_int(uint32_t value)
+    {
+        assert((value >> 11) == 0);
+        blk_step_int = static_cast<uint16_t>(value & ((1U << 11)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_one_step_mod() const
+    {
+        return static_cast<uint32_t>(one_step_mod);
+    }
+    CONSTEXPR npu_set_resize_x_step_t& set_one_step_mod(uint32_t value)
+    {
+        assert((value >> 11) == 0);
+        one_step_mod = static_cast<uint16_t>(value & ((1U << 11)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_blk_step_mod() const
+    {
+        return static_cast<uint32_t>(blk_step_mod);
+    }
+    CONSTEXPR npu_set_resize_x_step_t& set_blk_step_mod(uint32_t value)
+    {
+        assert((value >> 11) == 0);
+        blk_step_mod = static_cast<uint16_t>(value & ((1U << 11)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("one_step_int", std::to_string(one_step_int)));
-            fields.push_back(std::make_pair<std::string, std::string>("blk_step_int", std::to_string(blk_step_int)));
-            fields.push_back(std::make_pair<std::string, std::string>("one_step_mod", std::to_string(one_step_mod)));
-            fields.push_back(std::make_pair<std::string, std::string>("blk_step_mod", std::to_string(blk_step_mod)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("one_step_int", std::to_string(one_step_int)));
+        fields.push_back(std::make_pair<std::string, std::string>("blk_step_int", std::to_string(blk_step_int)));
+        fields.push_back(std::make_pair<std::string, std::string>("one_step_mod", std::to_string(one_step_mod)));
+        fields.push_back(std::make_pair<std::string, std::string>("blk_step_mod", std::to_string(blk_step_mod)));
+    }
 #endif
 #endif
-    };
+};
 // Resize Y axis step parameters
-    struct npu_set_resize_y_step_t
+struct npu_set_resize_y_step_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t one_step_int:4; //  (1*scale_d) / scale_n
+    uint32_t blk_step_int:11; //  ((ofm_block_size-1)*scale_d) / scale_n
+    uint32_t reserved1:1;
+    uint32_t one_step_mod:11; //  (1*scale_d) % scale_n
+    uint32_t reserved2:5;
+    uint32_t blk_step_mod:11; //  ((ofm_block_size-1)*scale_d) % scale_n
+    uint32_t reserved3:5;
+#ifdef __cplusplus
+public:
+    npu_set_resize_y_step_t(uint32_t _one_step_int, uint32_t _blk_step_int, uint32_t _one_step_mod, uint32_t _blk_step_mod) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        one_step_int(_one_step_int & ((1U << 4)-1)),
+        blk_step_int(_blk_step_int & ((1U << 11)-1)),
+        reserved1(0),
+        one_step_mod(_one_step_mod & ((1U << 11)-1)),
+        reserved2(0),
+        blk_step_mod(_blk_step_mod & ((1U << 11)-1)),
+        reserved3(0)
+    {}
+    CONSTEXPR npu_set_resize_y_step_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        one_step_int(0),
+        blk_step_int(0),
+        reserved1(0),
+        one_step_mod(0),
+        reserved2(0),
+        blk_step_mod(0),
+        reserved3(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t one_step_int: 4; //  (1*scale_d) / scale_n
-        uint32_t blk_step_int: 11; //  ((ofm_block_size-1)*scale_d) / scale_n
-        uint32_t reserved1: 1;
-        uint32_t one_step_mod: 11; //  (1*scale_d) % scale_n
-        uint32_t reserved2: 5;
-        uint32_t blk_step_mod: 11; //  ((ofm_block_size-1)*scale_d) % scale_n
-        uint32_t reserved3: 5;
-#ifdef __cplusplus
-    public:
-        npu_set_resize_y_step_t(uint32_t _one_step_int, uint32_t _blk_step_int, uint32_t _one_step_mod, uint32_t _blk_step_mod) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            one_step_int(_one_step_int & ((1U << 4) - 1)),
-            blk_step_int(_blk_step_int & ((1U << 11) - 1)),
-            reserved1(0),
-            one_step_mod(_one_step_mod & ((1U << 11) - 1)),
-            reserved2(0),
-            blk_step_mod(_blk_step_mod & ((1U << 11) - 1)),
-            reserved3(0)
-        {}
-        CONSTEXPR npu_set_resize_y_step_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            one_step_int(0),
-            blk_step_int(0),
-            reserved1(0),
-            one_step_mod(0),
-            reserved2(0),
-            blk_step_mod(0),
-            reserved3(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(one_step_int) << 16;
-            word |= uint64_t(blk_step_int) << 20;
-            word |= uint64_t(one_step_mod) << 32;
-            word |= uint64_t(blk_step_mod) << 48;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_set_resize_y_step_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_set_resize_y_step_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_one_step_int() const
-        {
-            return static_cast<uint32_t>(one_step_int);
-        }
-        CONSTEXPR npu_set_resize_y_step_t &set_one_step_int(uint32_t value)
-        {
-            assert((value >> 4) == 0);
-            one_step_int = static_cast<uint8_t>(value & ((1U << 4) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_blk_step_int() const
-        {
-            return static_cast<uint32_t>(blk_step_int);
-        }
-        CONSTEXPR npu_set_resize_y_step_t &set_blk_step_int(uint32_t value)
-        {
-            assert((value >> 11) == 0);
-            blk_step_int = static_cast<uint16_t>(value & ((1U << 11) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_one_step_mod() const
-        {
-            return static_cast<uint32_t>(one_step_mod);
-        }
-        CONSTEXPR npu_set_resize_y_step_t &set_one_step_mod(uint32_t value)
-        {
-            assert((value >> 11) == 0);
-            one_step_mod = static_cast<uint16_t>(value & ((1U << 11) - 1));
-            return *this;
-        }
-        CONSTEXPR uint32_t get_blk_step_mod() const
-        {
-            return static_cast<uint32_t>(blk_step_mod);
-        }
-        CONSTEXPR npu_set_resize_y_step_t &set_blk_step_mod(uint32_t value)
-        {
-            assert((value >> 11) == 0);
-            blk_step_mod = static_cast<uint16_t>(value & ((1U << 11) - 1));
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_SET_RESIZE_Y); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(one_step_int) << 16;
+        word |= uint64_t(blk_step_int) << 20;
+        word |= uint64_t(one_step_mod) << 32;
+        word |= uint64_t(blk_step_mod) << 48;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_set_resize_y_step_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_set_resize_y_step_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_one_step_int() const
+    {
+        return static_cast<uint32_t>(one_step_int);
+    }
+    CONSTEXPR npu_set_resize_y_step_t& set_one_step_int(uint32_t value)
+    {
+        assert((value >> 4) == 0);
+        one_step_int = static_cast<uint8_t>(value & ((1U << 4)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_blk_step_int() const
+    {
+        return static_cast<uint32_t>(blk_step_int);
+    }
+    CONSTEXPR npu_set_resize_y_step_t& set_blk_step_int(uint32_t value)
+    {
+        assert((value >> 11) == 0);
+        blk_step_int = static_cast<uint16_t>(value & ((1U << 11)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_one_step_mod() const
+    {
+        return static_cast<uint32_t>(one_step_mod);
+    }
+    CONSTEXPR npu_set_resize_y_step_t& set_one_step_mod(uint32_t value)
+    {
+        assert((value >> 11) == 0);
+        one_step_mod = static_cast<uint16_t>(value & ((1U << 11)-1));
+        return *this;
+    }
+    CONSTEXPR uint32_t get_blk_step_mod() const
+    {
+        return static_cast<uint32_t>(blk_step_mod);
+    }
+    CONSTEXPR npu_set_resize_y_step_t& set_blk_step_mod(uint32_t value)
+    {
+        assert((value >> 11) == 0);
+        blk_step_mod = static_cast<uint16_t>(value & ((1U << 11)-1));
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("one_step_int", std::to_string(one_step_int)));
-            fields.push_back(std::make_pair<std::string, std::string>("blk_step_int", std::to_string(blk_step_int)));
-            fields.push_back(std::make_pair<std::string, std::string>("one_step_mod", std::to_string(one_step_mod)));
-            fields.push_back(std::make_pair<std::string, std::string>("blk_step_mod", std::to_string(blk_step_mod)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("one_step_int", std::to_string(one_step_int)));
+        fields.push_back(std::make_pair<std::string, std::string>("blk_step_int", std::to_string(blk_step_int)));
+        fields.push_back(std::make_pair<std::string, std::string>("one_step_mod", std::to_string(one_step_mod)));
+        fields.push_back(std::make_pair<std::string, std::string>("blk_step_mod", std::to_string(blk_step_mod)));
+    }
 #endif
 #endif
-    };
+};
 // Branch to new location
-    struct npu_op_branch_t
+struct npu_op_branch_t
+{
+#ifdef __cplusplus
+private:
+#endif
+    uint32_t opcode:10; //  opcode
+    uint32_t reserved0:4;
+    uint32_t control:2; //  control
+    uint32_t branch_cond:1; //  Branch condition
+    uint32_t reserved1:15;
+    uint32_t branch_target:32; //  Branch target in bytes
+#ifdef __cplusplus
+public:
+    npu_op_branch_t(NPU_NAMESPACE::branch_cond _branch_cond, uint32_t _branch_target) :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        branch_cond(static_cast<uint8_t>(_branch_cond) & ((1U << 1)-1)),
+        reserved1(0),
+        branch_target(_branch_target)
+    {}
+    CONSTEXPR npu_op_branch_t() :
+        opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH)),
+        reserved0(0),
+        control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
+        branch_cond(0),
+        reserved1(0),
+        branch_target(0)
+    {}
+    CONSTEXPR bool valid() const
     {
-#ifdef __cplusplus
-    private:
-#endif
-        uint32_t opcode: 10; //  opcode
-        uint32_t reserved0: 4;
-        uint32_t control: 2; //  control
-        uint32_t branch_cond: 1; //  Branch condition
-        uint32_t reserved1: 15;
-        uint32_t branch_target: 32; //  Branch target in bytes
-#ifdef __cplusplus
-    public:
-        npu_op_branch_t(NPU_NAMESPACE::branch_cond _branch_cond, uint32_t _branch_target) :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            branch_cond(static_cast<uint8_t>(_branch_cond) & ((1U << 1) - 1)),
-            reserved1(0),
-            branch_target(_branch_target)
-        {}
-        CONSTEXPR npu_op_branch_t() :
-            opcode(static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH)),
-            reserved0(0),
-            control(static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL)),
-            branch_cond(0),
-            reserved1(0),
-            branch_target(0)
-        {}
-        CONSTEXPR bool valid() const
-        {
-            return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH) && control >= 1 && control <= 2;
-        }
-        CONSTEXPR void init()
-        {
-            opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH);
-            control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
-        }
-        operator uint64_t()
-        {
-            uint64_t word = 0;
-            word |= uint64_t(opcode) << 0;
-            word |= uint64_t(control) << 14;
-            word |= uint64_t(branch_cond) << 16;
-            word |= uint64_t(branch_target) << 32;
-            return word;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
-        }
-        CONSTEXPR npu_op_branch_t &set_opcode(NPU_NAMESPACE::cmd1_opcode value)
-        {
-            opcode = static_cast<uint16_t>(value) & ((1U << 10) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
-        {
-            return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
-        }
-        CONSTEXPR npu_op_branch_t &set_control(NPU_NAMESPACE::cmd_ctrl value)
-        {
-            control = static_cast<uint8_t>(value) & ((1U << 2) - 1);
-            return *this;
-        }
-        CONSTEXPR NPU_NAMESPACE::branch_cond get_branch_cond() const
-        {
-            return static_cast<NPU_NAMESPACE::branch_cond>(branch_cond);
-        }
-        CONSTEXPR npu_op_branch_t &set_branch_cond(NPU_NAMESPACE::branch_cond value)
-        {
-            branch_cond = static_cast<uint8_t>(value) & ((1U << 1) - 1);
-            return *this;
-        }
-        CONSTEXPR uint32_t get_branch_target() const
-        {
-            return static_cast<uint32_t>(branch_target);
-        }
-        CONSTEXPR npu_op_branch_t &set_branch_target(uint32_t value)
-        {
-            branch_target = value;
-            return *this;
-        }
+        return opcode == static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH) && control >= 1 && control <= 2;
+    }
+    CONSTEXPR void init()
+    {
+        opcode = static_cast<uint16_t>(NPU_NAMESPACE::cmd1_opcode::NPU_OP_BRANCH); control = static_cast<uint8_t>(NPU_NAMESPACE::cmd_ctrl::CMD1_CTRL);
+    }
+    operator uint64_t()
+    {
+        uint64_t word = 0;
+        word |= uint64_t(opcode) << 0;
+        word |= uint64_t(control) << 14;
+        word |= uint64_t(branch_cond) << 16;
+        word |= uint64_t(branch_target) << 32;
+        return word;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd1_opcode get_opcode() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd1_opcode>(opcode);
+    }
+    CONSTEXPR npu_op_branch_t& set_opcode(NPU_NAMESPACE::cmd1_opcode value)
+    {
+        opcode = static_cast<uint16_t>(value) & ((1U << 10)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::cmd_ctrl get_control() const
+    {
+        return static_cast<NPU_NAMESPACE::cmd_ctrl>(control);
+    }
+    CONSTEXPR npu_op_branch_t& set_control(NPU_NAMESPACE::cmd_ctrl value)
+    {
+        control = static_cast<uint8_t>(value) & ((1U << 2)-1);
+        return *this;
+    }
+    CONSTEXPR NPU_NAMESPACE::branch_cond get_branch_cond() const
+    {
+        return static_cast<NPU_NAMESPACE::branch_cond>(branch_cond);
+    }
+    CONSTEXPR npu_op_branch_t& set_branch_cond(NPU_NAMESPACE::branch_cond value)
+    {
+        branch_cond = static_cast<uint8_t>(value) & ((1U << 1)-1);
+        return *this;
+    }
+    CONSTEXPR uint32_t get_branch_target() const
+    {
+        return static_cast<uint32_t>(branch_target);
+    }
+    CONSTEXPR npu_op_branch_t& set_branch_target(uint32_t value)
+    {
+        branch_target = value;
+        return *this;
+    }
 #ifdef NPU_DISASSEMBLE
-        void disassemble(std::vector<std::pair<std::string, std::string>> &fields) const
-        {
-            fields.push_back(std::make_pair<std::string, std::string>("branch_cond", (branch_cond < (sizeof(branch_cond_str) / sizeof(branch_cond_str[0])) ? branch_cond_str[branch_cond] : "****")));
-            fields.push_back(std::make_pair<std::string, std::string>("branch_target", std::to_string(branch_target)));
-        }
+    void disassemble(std::vector<std::pair<std::string, std::string>>& fields) const
+    {
+        fields.push_back(std::make_pair<std::string, std::string>("branch_cond", (branch_cond < (sizeof(branch_cond_str)/sizeof(branch_cond_str[0])) ? branch_cond_str[branch_cond] : "****")));
+        fields.push_back(std::make_pair<std::string, std::string>("branch_target", std::to_string(branch_target)));
+    }
 #endif
 #endif
-    };
+};
 #ifdef __cplusplus
 };
 #endif

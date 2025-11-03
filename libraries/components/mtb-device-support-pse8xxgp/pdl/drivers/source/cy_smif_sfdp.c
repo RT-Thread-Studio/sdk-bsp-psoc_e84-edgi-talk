@@ -188,7 +188,6 @@ typedef enum
     PROTOCOL_MODE_1S_4S_4S        = 5U,     /**< One DQ signal used during command transfer, four DQ signals used
                                             * during address transfer, and data transfer. All phases are SDR.
                                             */
-#if (CY_IP_MXSMIF_VERSION>=2)
     PROTOCOL_MODE_1S_4D_4D          = 6U,        /**< One DQ signal used during command transfer in single data rate,
                                         * four DQ signals used during address transfer and data transfer in
                                         * double data rate.
@@ -204,7 +203,6 @@ typedef enum
     PROTOCOL_MODE_8D_8D_8D          = 9U,   /**< eight DQ signal used during command, address and data transfer in
                                               * double data rate.
                                              */
-#endif /* CY_IP_MXSMIF_VERSION */
     PROTOCOL_MODE_WRONG           = 0xFFU   /**< Unknown or unsupported mode */
 } cy_en_smif_protocol_mode_t;
 /** \endcond */
@@ -229,36 +227,38 @@ typedef struct
 *     Internal Function Prototypes
 ***************************************/
 static cy_en_smif_status_t SfdpReadBuffer(SMIF_Type *base,
-        cy_stc_smif_mem_cmd_t const *cmdSfdp,
-        uint8_t const sfdpAddress[],
-        cy_en_smif_slave_select_t  slaveSelect,
-        uint32_t size,
-        uint8_t sfdpBuffer[],
-        cy_stc_smif_context_t *context);
+                                         cy_stc_smif_mem_cmd_t const *cmdSfdp,
+                                         uint8_t const sfdpAddress[],
+                                         cy_en_smif_slave_select_t  slaveSelect,
+                                         uint32_t size,
+                                         uint8_t sfdpBuffer[],
+                                         cy_stc_smif_context_t *context);
 static uint32_t SfdpFindParameterHeader(uint32_t id, uint8_t const sfdpBuffer[]);
 static void SfdpFindParameterTableAddress(uint32_t id,
-        uint8_t const sfdpBuffer[],
-        uint8_t address[],
-        uint8_t *tableLength);
+                                          uint8_t const sfdpBuffer[],
+                                          uint8_t address[],
+                                          uint8_t *tableLength);
 static uint32_t SfdpGetNumOfAddrBytes(uint8_t const sfdpBuffer[], uint32_t memorySize);
 static uint32_t SfdpGetMemoryDensity(uint8_t const sfdpBuffer[]);
 static void SfdpGetReadCmd_1_4_4(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead);
+                             cy_stc_smif_mem_cmd_t* cmdRead);
 static void SfdpGetReadCmd_1_1_4(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead);
+                             cy_stc_smif_mem_cmd_t* cmdRead);
 static void SfdpGetReadCmd_1_2_2(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead);
+                             cy_stc_smif_mem_cmd_t* cmdRead);
 static void SfdpGetReadCmd_1_1_2(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead);
+                             cy_stc_smif_mem_cmd_t* cmdRead);
 static void SfdpGetReadCmd_1_1_1(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead);
+                             cy_stc_smif_mem_cmd_t* cmdRead);
 static cy_en_smif_protocol_mode_t SfdpGetReadCmdParams(uint8_t const sfdpBuffer[],
-        cy_en_smif_data_select_t dataSelect,
-        cy_en_smif_txfr_width_t maxDataWidth,
-        cy_stc_smif_mem_cmd_t *cmdRead);
+                                                       cy_en_smif_data_select_t dataSelect,
+                                                       cy_en_smif_txfr_width_t maxDataWidth,
+                                                       cy_stc_smif_mem_cmd_t* cmdRead,
+													   uint8_t sfdp_minor_revision,
+                                                       uint32_t flags);
 static void SfdpGetReadFourBytesCmd(uint8_t const sfdpBuffer[],
                                     cy_en_smif_protocol_mode_t protocolMode,
-                                    cy_stc_smif_mem_cmd_t *cmdRead);
+                                    cy_stc_smif_mem_cmd_t* cmdRead);
 static uint32_t SfdpGetPageSize(uint8_t const sfdpBuffer[]);
 static uint32_t SfdpGetEraseTime(uint32_t const eraseOffset, uint8_t const sfdpBuffer[], cy_stc_smif_erase_type_t eraseType[]);
 static uint32_t SfdpGetChipEraseTime(uint8_t const sfdpBuffer[]);
@@ -271,20 +271,20 @@ static void SfdpSetProgramCommandFourBytes_1_1_4(cy_stc_smif_mem_cmd_t* cmdProgr
 static void SfdpSetProgramCommandFourBytes_1_4_4(cy_stc_smif_mem_cmd_t* cmdProgram);
 static void SfdpGetProgramFourBytesCmd(uint8_t const sfdpBuffer[],
                                        cy_en_smif_protocol_mode_t protocolMode,
-                                       cy_stc_smif_mem_cmd_t *cmdProgram);
+                                       cy_stc_smif_mem_cmd_t* cmdProgram);
 static void SfdpSetChipEraseCommand(cy_stc_smif_mem_cmd_t* cmdChipErase);
 static uint32_t SfdpGetSectorEraseCommand(cy_stc_smif_mem_device_cfg_t *device,
-        uint8_t const sfdpBuffer[],
-        cy_stc_smif_erase_type_t eraseTypeStc[]);
+                                          uint8_t const sfdpBuffer[],
+                                          cy_stc_smif_erase_type_t eraseTypeStc[]);
 static cy_en_smif_status_t SfdpEnterFourByteAddressing(SMIF_Type *base, uint8_t entryMethodByte,
-        cy_stc_smif_mem_device_cfg_t *device,
-        cy_en_smif_slave_select_t slaveSelect,
-        cy_stc_smif_context_t const *context);
+                                                              cy_stc_smif_mem_device_cfg_t *device,
+                                                              cy_en_smif_slave_select_t slaveSelect,
+                                                              cy_stc_smif_context_t const *context);
 static void SfdpGetEraseSizeAndCmd(uint8_t const sfdpBuffer[], cy_stc_smif_erase_type_t eraseType[]);
 static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base, uint8_t const sectorMapBuff[],
-        uint32_t const buffLength, cy_stc_smif_mem_device_cfg_t *device,
-        cy_en_smif_slave_select_t slaveSelect, const cy_stc_smif_context_t *context,
-        cy_stc_smif_erase_type_t eraseType[]);
+                                   uint32_t const buffLength, cy_stc_smif_mem_device_cfg_t *device,
+                                    cy_en_smif_slave_select_t slaveSelect, const cy_stc_smif_context_t *context,
+                                    cy_stc_smif_erase_type_t eraseType[]);
 static void SfdpSetWipStatusRegisterCommand(cy_stc_smif_mem_cmd_t* readStsRegWipCmd);
 
 /*******************************************************************************
@@ -332,67 +332,46 @@ static void SfdpSetWipStatusRegisterCommand(cy_stc_smif_mem_cmd_t* readStsRegWip
 *
 *******************************************************************************/
 static cy_en_smif_status_t SfdpReadBuffer(SMIF_Type *base,
-        cy_stc_smif_mem_cmd_t const *cmdSfdp,
-        uint8_t const sfdpAddress[],
-        cy_en_smif_slave_select_t  slaveSelect,
-        uint32_t size,
-        uint8_t sfdpBuffer[],
-        cy_stc_smif_context_t *context)
+                                         cy_stc_smif_mem_cmd_t const *cmdSfdp,
+                                         uint8_t const sfdpAddress[],
+                                         cy_en_smif_slave_select_t  slaveSelect,
+                                         uint32_t size,
+                                         uint8_t sfdpBuffer[],
+                                         cy_stc_smif_context_t *context)
 {
     cy_en_smif_status_t result = CY_SMIF_NO_SFDP_SUPPORT;
 
-#if (CY_IP_MXSMIF_VERSION ==  1U)
-    result = Cy_SMIF_TransmitCommand(base, (uint8_t)cmdSfdp->command,
-                                     cmdSfdp->cmdWidth, sfdpAddress, CY_SMIF_SFDP_ADDRESS_LENGTH,
-                                     cmdSfdp->addrWidth, slaveSelect, CY_SMIF_TX_NOT_LAST_BYTE,
-                                     context);
-
-    if (CY_SMIF_SUCCESS == result)
-    {
-        result = Cy_SMIF_SendDummyCycles(base, cmdSfdp->dummyCycles);
-
-        if (CY_SMIF_SUCCESS == result)
-        {
-            result = Cy_SMIF_ReceiveDataBlocking(base,
-                                                 sfdpBuffer,
-                                                 size,
-                                                 cmdSfdp->dataWidth,
-                                                 context);
-        }
-    }
-#else
     bool is2byte_command = ((cmdSfdp->cmdWidth == CY_SMIF_WIDTH_OCTAL) && (cmdSfdp->cmdRate ==  CY_SMIF_DDR));
     uint8_t sfdpAddr_4byte[4];
 
     sfdpAddr_4byte[0] = 0U;
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i<3; i++)
     {
-        sfdpAddr_4byte[i + 1] = sfdpAddress[i];
+        sfdpAddr_4byte[i+1] = sfdpAddress[i];
     }
 
     result = Cy_SMIF_TransmitCommand_Ext(base,
                                          (uint16_t)(cmdSfdp->command | (uint16_t)(cmdSfdp->commandH << 8U)),
                                          is2byte_command, cmdSfdp->cmdWidth, cmdSfdp->cmdRate,
-                                         is2byte_command ? sfdpAddr_4byte : sfdpAddress,
-                                         is2byte_command ? CY_SMIF_SFDP_ADDRESS_LENGTH + 1U : CY_SMIF_SFDP_ADDRESS_LENGTH,
+                                         is2byte_command? sfdpAddr_4byte : sfdpAddress,
+                                         is2byte_command? CY_SMIF_SFDP_ADDRESS_LENGTH + 1U: CY_SMIF_SFDP_ADDRESS_LENGTH,
                                          cmdSfdp->addrWidth, cmdSfdp->addrRate, slaveSelect,
                                          CY_SMIF_TX_NOT_LAST_BYTE, context);
 
-    if (CY_SMIF_SUCCESS == result)
+    if(CY_SMIF_SUCCESS == result)
     {
         result = Cy_SMIF_SendDummyCycles_Ext(base, cmdSfdp->addrWidth, cmdSfdp->addrRate, cmdSfdp->dummyCycles);
 
-        if (CY_SMIF_SUCCESS == result)
+        if(CY_SMIF_SUCCESS == result)
         {
             result = Cy_SMIF_ReceiveDataBlocking_Ext(base, sfdpBuffer, size,
-                     cmdSfdp->dataWidth, cmdSfdp->dataRate,
-                     context);
+                                                cmdSfdp->dataWidth, cmdSfdp->dataRate,
+                                                context);
         }
     }
 
-#endif
-    return (result);
+      return(result);
 }
 
 
@@ -415,25 +394,25 @@ static cy_en_smif_status_t SfdpReadBuffer(SMIF_Type *base,
 static uint32_t SfdpFindParameterHeader(uint32_t id, uint8_t const sfdpBuffer[])
 {
     uint32_t headerOffset = PARAMETER_IS_NOT_FOUND;
-    uint32_t maxMinorRevison = 0UL;
+    uint32_t maxMinorRevision = 0UL;
     uint32_t sfdpAddress = FIRST_HEADER_OFFSET; /* Begin from 1st Parameter Header */
 
     while (sfdpAddress <= (((uint32_t)sfdpBuffer[PARAM_HEADERS_NUM] *
-                            HEADER_LENGTH) +
-                           FIRST_HEADER_OFFSET))
+                                        HEADER_LENGTH) +
+                                        FIRST_HEADER_OFFSET))
     {
         /* Check parameter ID */
         if (((id & PARAM_ID_LSB_MASK) == sfdpBuffer[sfdpAddress]) &&  /* Parameter ID LSB */
-                (((id >> PARAM_ID_MSB_OFFSET) & PARAM_ID_LSB_MASK) ==
-                 sfdpBuffer[sfdpAddress +  /* Parameter ID MSB */
-                            PARAM_ID_MSB_REL_OFFSET]))
+            (((id >> PARAM_ID_MSB_OFFSET) & PARAM_ID_LSB_MASK) ==
+                    sfdpBuffer[sfdpAddress +  /* Parameter ID MSB */
+                    PARAM_ID_MSB_REL_OFFSET]))
         {
             /* Check parameter major and minor revisions */
-            if ((sfdpBuffer[sfdpAddress + PARAM_MINOR_REV_REL_OFFSET] >= maxMinorRevison) &&
-                    (sfdpBuffer[sfdpAddress + PARAM_MAJOR_REV_REL_OFFSET] == CY_SMIF_SFDP_MAJOR_REV_1))
+            if ((sfdpBuffer[sfdpAddress + PARAM_MINOR_REV_REL_OFFSET] >= maxMinorRevision) &&
+                (sfdpBuffer[sfdpAddress + PARAM_MAJOR_REV_REL_OFFSET] == CY_SMIF_SFDP_MAJOR_REV_1))
             {
                 /* Get the maximum minor revision */
-                maxMinorRevison = sfdpBuffer[sfdpAddress + PARAM_MINOR_REV_REL_OFFSET];
+                maxMinorRevision = sfdpBuffer[sfdpAddress + PARAM_MINOR_REV_REL_OFFSET];
 
                 /* Save the the Parameter Header offset with the maximum minor revision */
                 headerOffset = sfdpAddress;
@@ -443,7 +422,7 @@ static uint32_t SfdpFindParameterHeader(uint32_t id, uint8_t const sfdpBuffer[])
         sfdpAddress += HEADER_LENGTH;
     }
 
-    return (headerOffset);
+    return(headerOffset);
 }
 
 
@@ -468,9 +447,9 @@ static uint32_t SfdpFindParameterHeader(uint32_t id, uint8_t const sfdpBuffer[])
 *
 *******************************************************************************/
 static void SfdpFindParameterTableAddress(uint32_t id,
-        uint8_t const sfdpBuffer[],
-        uint8_t address[],
-        uint8_t *tableLength)
+                                                    uint8_t const sfdpBuffer[],
+                                                    uint8_t address[],
+                                                    uint8_t *tableLength)
 {
     uint32_t headerOffset;
 
@@ -520,32 +499,32 @@ static uint32_t SfdpGetNumOfAddrBytes(uint8_t const sfdpBuffer[], uint32_t memor
 {
     uint32_t addrBytesNum = 0UL;
     uint32_t sfdpAddrCode = _FLD2VAL(CY_SMIF_SFDP_ADDRESS_BYTES,
-                                     (uint32_t)sfdpBuffer
-                                     [CY_SMIF_SFDP_BFPT_BYTE_02]);
-    switch (sfdpAddrCode)
+                                        (uint32_t)sfdpBuffer
+                                        [CY_SMIF_SFDP_BFPT_BYTE_02]);
+    switch(sfdpAddrCode)
     {
-    case CY_SMIF_SFDP_THREE_BYTES_ADDR_CODE:
-        addrBytesNum = CY_SMIF_THREE_BYTES_ADDR;
-        break;
-    case CY_SMIF_SFDP_THREE_OR_FOUR_BYTES_ADDR_CODE:
-        if (memorySize > MEMORY_SIZE_16MB)
-        {
-            addrBytesNum = CY_SMIF_FOUR_BYTES_ADDR;
-        }
-        else
-        {
+        case CY_SMIF_SFDP_THREE_BYTES_ADDR_CODE:
             addrBytesNum = CY_SMIF_THREE_BYTES_ADDR;
-        }
-        break;
-    case CY_SMIF_SFDP_FOUR_BYTES_ADDR_CODE:
-        addrBytesNum = CY_SMIF_FOUR_BYTES_ADDR;
-        break;
-    default:
-        /* Invalid Address code */
-        break;
+            break;
+        case CY_SMIF_SFDP_THREE_OR_FOUR_BYTES_ADDR_CODE:
+            if (memorySize > MEMORY_SIZE_16MB)
+            {
+                addrBytesNum = CY_SMIF_FOUR_BYTES_ADDR;
+            }
+            else
+            {
+                addrBytesNum = CY_SMIF_THREE_BYTES_ADDR;
+            }
+            break;
+        case CY_SMIF_SFDP_FOUR_BYTES_ADDR_CODE:
+            addrBytesNum = CY_SMIF_FOUR_BYTES_ADDR;
+            break;
+        default:
+            /* Invalid Address code */
+            break;
     }
 
-    return (addrBytesNum);
+    return(addrBytesNum);
 }
 
 
@@ -573,18 +552,18 @@ static uint32_t SfdpGetMemoryDensity(uint8_t const sfdpBuffer[])
 
     if (0UL == (locSize & CY_SMIF_SFDP_SIZE_ABOVE_4GB_Msk))
     {
-        memorySize = (locSize + 1UL) / BITS_IN_BYTE;
+        memorySize = (locSize + 1UL)/BITS_IN_BYTE;
     }
     else
     {
         memorySize = (locSize - BITS_IN_BYTE_ABOVE_4GB) |
-                     CY_SMIF_SFDP_SIZE_ABOVE_4GB_Msk;
+                CY_SMIF_SFDP_SIZE_ABOVE_4GB_Msk;
     }
 
-    return (memorySize);
+    return(memorySize);
 }
 
-#if (CY_IP_MXSMIF_VERSION>=2) && defined (SMIF_OCTAL_SFDP_SUPPORT)
+#if defined (SMIF_OCTAL_SFDP_SUPPORT)
 /*******************************************************************************
 * Function Name: SfdpGetReadCmd_1_8_8
 ****************************************************************************//**
@@ -600,7 +579,7 @@ static uint32_t SfdpGetMemoryDensity(uint8_t const sfdpBuffer[])
 *
 *******************************************************************************/
 static void SfdpGetReadCmd_1_8_8(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead)
+                             cy_stc_smif_mem_cmd_t* cmdRead)
 {
     /* 8-bit command. 8 x I/O Read command */
     cmdRead->command = sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_41];
@@ -616,7 +595,7 @@ static void SfdpGetReadCmd_1_8_8(uint8_t const sfdpBuffer[],
 
     /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
     if (0U == (_FLD2VAL(CY_SMIF_SFDP_1_8_8_MODE_CYCLES,
-                        (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_40])))
+               (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_40])))
     {
         cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
     }
@@ -629,12 +608,12 @@ static void SfdpGetReadCmd_1_8_8(uint8_t const sfdpBuffer[],
 
     /* The dummy cycles number. A zero value suggests no dummy cycles */
     cmdRead->dummyCycles = _FLD2VAL(CY_SMIF_SFDP_1_8_8_DUMMY_CYCLES,
-                                    (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_40]);
+                           (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_40]);
 
     /* dummy cycles present - 1 byte transfer */
-    if (cmdRead->dummyCycles > 0U)
+    if(cmdRead->dummyCycles > 0U)
     {
-        cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
+            cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
     }
 
     /* The data transfer width */
@@ -656,7 +635,7 @@ static void SfdpGetReadCmd_1_8_8(uint8_t const sfdpBuffer[],
 *
 *******************************************************************************/
 static void SfdpGetReadCmd_1_1_8(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead)
+                             cy_stc_smif_mem_cmd_t* cmdRead)
 {
     /* 8-bit command. 8 x I/O Read command */
     cmdRead->command = sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_43];
@@ -672,7 +651,7 @@ static void SfdpGetReadCmd_1_1_8(uint8_t const sfdpBuffer[],
 
     /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
     if (0U == (_FLD2VAL(CY_SMIF_SFDP_1_1_8_MODE_CYCLES,
-                        (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_42])))
+               (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_42])))
     {
         cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
     }
@@ -685,10 +664,10 @@ static void SfdpGetReadCmd_1_1_8(uint8_t const sfdpBuffer[],
 
     /* The dummy cycles number. A zero value suggests no dummy cycles */
     cmdRead->dummyCycles = _FLD2VAL(CY_SMIF_SFDP_1_1_8_DUMMY_CYCLES,
-                                    (uint32_t)sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_42]);
+                           (uint32_t)sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_42]);
 
     /* dummy cycles present - 1 byte transfer */
-    if (cmdRead->dummyCycles > 0U)
+    if(cmdRead->dummyCycles > 0U)
     {
         cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
     }
@@ -697,8 +676,7 @@ static void SfdpGetReadCmd_1_1_8(uint8_t const sfdpBuffer[],
     cmdRead->dataWidth = CY_SMIF_WIDTH_OCTAL;
 }
 #endif
-
-#if (CY_IP_MXSMIF_VERSION>=2)
+ 
 /*******************************************************************************
 * Function Name: SfdpGetReadCmd_1S_4D_4D
 ****************************************************************************//**
@@ -714,10 +692,10 @@ static void SfdpGetReadCmd_1_1_8(uint8_t const sfdpBuffer[],
 *
 *******************************************************************************/
 static void SfdpGetReadCmd_1S_4D_4D(uint8_t const sfdpBuffer[],
-                                    cy_stc_smif_mem_cmd_t *cmdRead)
+                             cy_stc_smif_mem_cmd_t* cmdRead)
 {
     /* 8-bit command. 4 x I/O Read command */
-    cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_4D_4D;
+    cmdRead->command = sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_89];
 
     /* command transfer rate */
     cmdRead->cmdRate = CY_SMIF_SDR;
@@ -734,7 +712,7 @@ static void SfdpGetReadCmd_1S_4D_4D(uint8_t const sfdpBuffer[],
 
     /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
     if (0U == (_FLD2VAL(CY_SMIF_SFDP_1_4_4_MODE_CYCLES,
-                        (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_08])))
+               (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_88])))
     {
         cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
     }
@@ -748,7 +726,7 @@ static void SfdpGetReadCmd_1S_4D_4D(uint8_t const sfdpBuffer[],
 
     /* The dummy cycles number. A zero value suggests no dummy cycles */
     cmdRead->dummyCycles = _FLD2VAL(CY_SMIF_SFDP_1_4_4_DUMMY_CYCLES,
-                                    (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_08]);
+                           (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_88]);
 
     /* dummy cycles present - 1 byte transfer */
     cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
@@ -761,8 +739,7 @@ static void SfdpGetReadCmd_1S_4D_4D(uint8_t const sfdpBuffer[],
 
 
 }
-#endif /* CY_IP_MXSMIF_VERSION */
-
+ 
 /*******************************************************************************
 * Function Name: SfdpGetReadCmd_1_4_4
 ****************************************************************************//**
@@ -778,15 +755,13 @@ static void SfdpGetReadCmd_1S_4D_4D(uint8_t const sfdpBuffer[],
 *
 *******************************************************************************/
 static void SfdpGetReadCmd_1_4_4(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead)
+                             cy_stc_smif_mem_cmd_t* cmdRead)
 {
     /* 8-bit command. 4 x I/O Read command */
     cmdRead->command = sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_09];
 
-#if (CY_IP_MXSMIF_VERSION>=2)
     /* command presence - 1 byte transfer */
     cmdRead->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
 
     /* The command transfer width */
     cmdRead->cmdWidth = CY_SMIF_WIDTH_SINGLE;
@@ -796,7 +771,7 @@ static void SfdpGetReadCmd_1_4_4(uint8_t const sfdpBuffer[],
 
     /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
     if (0U == (_FLD2VAL(CY_SMIF_SFDP_1_4_4_MODE_CYCLES,
-                        (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_08])))
+               (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_08])))
     {
         cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
     }
@@ -804,22 +779,18 @@ static void SfdpGetReadCmd_1_4_4(uint8_t const sfdpBuffer[],
     {
         cmdRead->mode = READ_ENHANCED_MODE_DISABLED;
         cmdRead->modeWidth = CY_SMIF_WIDTH_QUAD;
-#if (CY_IP_MXSMIF_VERSION>=2)
         cmdRead->modePresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
     }
 
     /* The dummy cycles number. A zero value suggests no dummy cycles */
     cmdRead->dummyCycles = _FLD2VAL(CY_SMIF_SFDP_1_4_4_DUMMY_CYCLES,
-                                    (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_08]);
+                           (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_08]);
 
-#if (CY_IP_MXSMIF_VERSION>=2)
     /* dummy cycles present - 1 byte transfer */
-    if (cmdRead->dummyCycles > 0UL)
+    if(cmdRead->dummyCycles > 0UL)
     {
-        cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
+            cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
     }
-#endif /* CY_IP_MXSMIF_VERSION */
 
     /* The data transfer width */
     cmdRead->dataWidth = CY_SMIF_WIDTH_QUAD;
@@ -841,7 +812,7 @@ static void SfdpGetReadCmd_1_4_4(uint8_t const sfdpBuffer[],
 *
 *******************************************************************************/
 static void SfdpGetReadCmd_1_1_4(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead)
+                             cy_stc_smif_mem_cmd_t* cmdRead)
 {
     /* 8-bit command. 4 x I/O Read command */
     cmdRead->command = sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0B];
@@ -854,7 +825,7 @@ static void SfdpGetReadCmd_1_1_4(uint8_t const sfdpBuffer[],
 
     /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
     if ((0U == _FLD2VAL(CY_SMIF_SFDP_1_1_4_MODE_CYCLES, (uint32_t) sfdpBuffer
-                        [CY_SMIF_SFDP_BFPT_BYTE_0A])))
+                    [CY_SMIF_SFDP_BFPT_BYTE_0A])))
     {
         cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
     }
@@ -862,22 +833,18 @@ static void SfdpGetReadCmd_1_1_4(uint8_t const sfdpBuffer[],
     {
         cmdRead->mode = READ_ENHANCED_MODE_DISABLED;
         cmdRead->modeWidth = CY_SMIF_WIDTH_SINGLE;
-#if (CY_IP_MXSMIF_VERSION>=2)
         cmdRead->modePresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
     }
 
     /* The dummy cycles number. A zero value suggests no dummy cycles */
     cmdRead->dummyCycles = _FLD2VAL(CY_SMIF_SFDP_1_1_4_DUMMY_CYCLES,
-                                    (uint32_t)sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0A]);
+                          (uint32_t)sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0A]);
 
-#if (CY_IP_MXSMIF_VERSION>=2)
     /* dummy cycles present - 1 byte transfer */
-    if (cmdRead->dummyCycles > 0UL)
+    if(cmdRead->dummyCycles > 0UL)
     {
-        cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
+            cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
     }
-#endif /* CY_IP_MXSMIF_VERSION */
 
     /* The data transfer width */
     cmdRead->dataWidth = CY_SMIF_WIDTH_QUAD;
@@ -899,7 +866,7 @@ static void SfdpGetReadCmd_1_1_4(uint8_t const sfdpBuffer[],
 *
 *******************************************************************************/
 static void SfdpGetReadCmd_1_2_2(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead)
+                             cy_stc_smif_mem_cmd_t* cmdRead)
 {
     /* 8-bit command. 2 x I/O Read command */
     cmdRead->command  = sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0F];
@@ -912,7 +879,7 @@ static void SfdpGetReadCmd_1_2_2(uint8_t const sfdpBuffer[],
 
     /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
     if (0U == _FLD2VAL(CY_SMIF_SFDP_1_2_2_MODE_CYCLES, (uint32_t)
-                       sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0E]))
+              sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0E]))
     {
         cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
     }
@@ -920,22 +887,18 @@ static void SfdpGetReadCmd_1_2_2(uint8_t const sfdpBuffer[],
     {
         cmdRead->mode = READ_ENHANCED_MODE_DISABLED;
         cmdRead->modeWidth = CY_SMIF_WIDTH_DUAL;
-#if (CY_IP_MXSMIF_VERSION>=2)
         cmdRead->modePresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
     }
 
     /* The dummy cycles number. A zero value suggests no dummy cycles. */
     cmdRead->dummyCycles = _FLD2VAL(CY_SMIF_SFDP_1_2_2_DUMMY_CYCLES,
-                                    (uint32_t) sfdpBuffer [CY_SMIF_SFDP_BFPT_BYTE_0E]);
+                            (uint32_t) sfdpBuffer [CY_SMIF_SFDP_BFPT_BYTE_0E]);
 
-#if (CY_IP_MXSMIF_VERSION>=2)
     /* dummy cycles present - 1 byte transfer */
-    if (cmdRead->dummyCycles > 0UL)
+    if(cmdRead->dummyCycles > 0UL)
     {
-        cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
+            cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
     }
-#endif /* CY_IP_MXSMIF_VERSION */
 
     /* The data transfer width */
     cmdRead->dataWidth = CY_SMIF_WIDTH_DUAL;
@@ -957,7 +920,7 @@ static void SfdpGetReadCmd_1_2_2(uint8_t const sfdpBuffer[],
 *
 *******************************************************************************/
 static void SfdpGetReadCmd_1_1_2(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead)
+                             cy_stc_smif_mem_cmd_t* cmdRead)
 {
     /* 8-bit command. 2 x I/O Read command */
     cmdRead->command  = sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0D];
@@ -970,7 +933,7 @@ static void SfdpGetReadCmd_1_1_2(uint8_t const sfdpBuffer[],
 
     /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
     if (0U == (_FLD2VAL(CY_SMIF_SFDP_1_1_2_MODE_CYCLES, (uint32_t)
-                        sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0C])))
+        sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0C])))
     {
         cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
     }
@@ -978,22 +941,18 @@ static void SfdpGetReadCmd_1_1_2(uint8_t const sfdpBuffer[],
     {
         cmdRead->mode = READ_ENHANCED_MODE_DISABLED;
         cmdRead->modeWidth = CY_SMIF_WIDTH_SINGLE;
-#if (CY_IP_MXSMIF_VERSION>=2)
         cmdRead->modePresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
     }
 
     /* The dummy cycles number. A zero value suggests no dummy cycles. */
     cmdRead->dummyCycles = _FLD2VAL(CY_SMIF_SFDP_1_1_2_DUMMY_CYCLES,
-                                    (uint32_t)sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0C]);
+            (uint32_t)sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_0C]);
 
-#if (CY_IP_MXSMIF_VERSION>=2)
     /* dummy cycles present - 1 byte transfer */
-    if (cmdRead->dummyCycles > 0UL)
+    if(cmdRead->dummyCycles > 0UL)
     {
         cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
     }
-#endif /* CY_IP_MXSMIF_VERSION */
 
     /* The data transfer width */
     cmdRead->dataWidth = CY_SMIF_WIDTH_DUAL;
@@ -1015,7 +974,7 @@ static void SfdpGetReadCmd_1_1_2(uint8_t const sfdpBuffer[],
 *
 *******************************************************************************/
 static void SfdpGetReadCmd_1_1_1(uint8_t const sfdpBuffer[],
-                                 cy_stc_smif_mem_cmd_t *cmdRead)
+                             cy_stc_smif_mem_cmd_t* cmdRead)
 {
     (void)sfdpBuffer; /* Suppress warning */
 
@@ -1024,10 +983,8 @@ static void SfdpGetReadCmd_1_1_1(uint8_t const sfdpBuffer[],
 
     /* The command transfer width */
     cmdRead->cmdWidth = CY_SMIF_WIDTH_SINGLE;
-#if (CY_IP_MXSMIF_VERSION>=2)
-    /* command presence - 1 byte transfer */
-    cmdRead->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
+            /* command presence - 1 byte transfer */
+            cmdRead->cmdPresence = CY_SMIF_PRESENT_1BYTE;
 
     /* The address transfer width */
     cmdRead->addrWidth = CY_SMIF_WIDTH_SINGLE;
@@ -1061,13 +1018,21 @@ static void SfdpGetReadCmd_1_1_1(uint8_t const sfdpBuffer[],
 * \param cmdRead
 * The pointer to the read command parameters structure.
 *
+* \param sfdp_minor_revision
+* sfdp minor version to check support for DDR support.
+*
+* \param flags
+* flags to indicate preference from user memory configuration.
+*
 * \return Protocol Mode.
 *
 *******************************************************************************/
 static cy_en_smif_protocol_mode_t SfdpGetReadCmdParams(uint8_t const sfdpBuffer[],
-        cy_en_smif_data_select_t dataSelect,
-        cy_en_smif_txfr_width_t maxDataWidth,
-        cy_stc_smif_mem_cmd_t *cmdRead)
+                                     cy_en_smif_data_select_t dataSelect,
+                                     cy_en_smif_txfr_width_t maxDataWidth,
+                                     cy_stc_smif_mem_cmd_t* cmdRead,
+                                     uint8_t sfdp_minor_revision,
+                                     uint32_t flags)
 {
     cy_en_smif_protocol_mode_t protocolMode = PROTOCOL_MODE_WRONG;
     uint32_t sfdpDataIndex = CY_SMIF_SFDP_BFPT_BYTE_02;
@@ -1080,8 +1045,9 @@ static cy_en_smif_protocol_mode_t SfdpGetReadCmdParams(uint8_t const sfdpBuffer[
         if (_FLD2BOOL(CY_SMIF_SFDP_FAST_READ_1_4_4,
                       ((uint32_t) sfdpBuffer[sfdpDataIndex])))
         {
-#if (CY_IP_MXSMIF_VERSION>=2)
-            if (_FLD2BOOL(CY_SMIF_SFDP_DTR_SUPPORT, (uint32_t) sfdpBuffer[sfdpDataIndex]))
+            if (_FLD2BOOL(CY_SMIF_SFDP_DTR_SUPPORT, (uint32_t) sfdpBuffer[sfdpDataIndex]) && \
+			((flags & CY_SMIF_FLAG_DETECT_SFDP_SDR_ONLY) != CY_SMIF_FLAG_DETECT_SFDP_SDR_ONLY) \
+			&& (sfdp_minor_revision >= CY_SMIF_SFDP_JEDEC_REV_D))
             {
                 SfdpGetReadCmd_1S_4D_4D(sfdpBuffer, cmdRead);
                 protocolMode = PROTOCOL_MODE_1S_4D_4D;
@@ -1091,13 +1057,9 @@ static cy_en_smif_protocol_mode_t SfdpGetReadCmdParams(uint8_t const sfdpBuffer[
                 SfdpGetReadCmd_1_4_4(sfdpBuffer, cmdRead);
                 protocolMode = PROTOCOL_MODE_1S_4S_4S;
             }
-#else
-            SfdpGetReadCmd_1_4_4(sfdpBuffer, cmdRead);
-            protocolMode = PROTOCOL_MODE_1S_4S_4S;
-#endif /* CY_IP_MXSMIF_VERSION */
         }
         else if (_FLD2BOOL(CY_SMIF_SFDP_FAST_READ_1_1_4,
-                           ((uint32_t)sfdpBuffer[sfdpDataIndex])))
+                            ((uint32_t)sfdpBuffer[sfdpDataIndex])))
         {
             SfdpGetReadCmd_1_1_4(sfdpBuffer, cmdRead);
             protocolMode = PROTOCOL_MODE_1S_1S_4S;
@@ -1113,7 +1075,7 @@ static cy_en_smif_protocol_mode_t SfdpGetReadCmdParams(uint8_t const sfdpBuffer[
     {
         if ((_FLD2BOOL(CY_SMIF_SFDP_FAST_READ_1_2_2,
                        (uint32_t)sfdpBuffer[sfdpDataIndex])) &&
-                (maxDataWidth >= CY_SMIF_WIDTH_DUAL))
+            (maxDataWidth >= CY_SMIF_WIDTH_DUAL))
         {
             SfdpGetReadCmd_1_2_2(sfdpBuffer, cmdRead);
             protocolMode = PROTOCOL_MODE_1S_2S_2S;
@@ -1122,7 +1084,7 @@ static cy_en_smif_protocol_mode_t SfdpGetReadCmdParams(uint8_t const sfdpBuffer[
         {
             if (_FLD2BOOL(CY_SMIF_SFDP_FAST_READ_1_1_2,
                           (uint32_t)sfdpBuffer[sfdpDataIndex]) &&
-                    (maxDataWidth >= CY_SMIF_WIDTH_DUAL))
+               (maxDataWidth >= CY_SMIF_WIDTH_DUAL))
             {
                 SfdpGetReadCmd_1_1_2(sfdpBuffer, cmdRead);
                 protocolMode = PROTOCOL_MODE_1S_1S_2S;
@@ -1137,12 +1099,12 @@ static cy_en_smif_protocol_mode_t SfdpGetReadCmdParams(uint8_t const sfdpBuffer[
 
     return protocolMode;
 }
-#if (CY_IP_MXSMIF_VERSION>=2) && defined (SMIF_OCTAL_SFDP_SUPPORT)
+#if defined (SMIF_OCTAL_SFDP_SUPPORT)
 static void SfdpSetVariableLatencyCmd(SMIF_Type *base,
-                                      cy_stc_smif_mem_device_cfg_t *device,
-                                      cy_en_smif_slave_select_t slaveSelect,
-                                      uint8_t *sccrMapAddr,
-                                      cy_stc_smif_context_t *context)
+                                    cy_stc_smif_mem_device_cfg_t *device,
+                                    cy_en_smif_slave_select_t slaveSelect,
+                                    uint8_t *sccrMapAddr,
+                                    cy_stc_smif_context_t *context)
 {
     cy_en_smif_status_t result = CY_SMIF_CMD_NOT_FOUND;
     cy_stc_smif_mem_cmd_t *cmdReadLatency = device->readLatencyCmd;
@@ -1172,13 +1134,13 @@ static void SfdpSetVariableLatencyCmd(SMIF_Type *base,
 
         /* Get the JEDEC SCCR Map Table content into sfdpBuffer[] */
         result = SfdpReadBuffer(base, device->readSfdpCmd, sccrMapDW9_Address, slaveSelect,
-                                4U, sccrMapDWord9Value, context);
+                            4U, sccrMapDWord9Value, context);
 
         /* Check if variable latency is supported */
         if ((result == CY_SMIF_SUCCESS) && ((sccrMapDWord9Value[3] & 0x80U) == 0x80U))
         {
-            uint32_t latencyMaskoffset = (uint32_t)(sccrMapDWord9Value[3] & 0x7U);
-            uint8_t latencyBits = (uint8_t)(((sccrMapDWord9Value[3] >> 5U) & 0x3U));
+            uint32_t latencyMaskoffset = (uint32_t) (sccrMapDWord9Value[3] & 0x7U);
+            uint8_t latencyBits = (uint8_t) (((sccrMapDWord9Value[3] >> 5U) & 0x3U));
 
             cmdReadLatency->command = sccrMapDWord9Value[1];
             cmdWriteLatency->command = sccrMapDWord9Value[0];
@@ -1204,19 +1166,19 @@ static void SfdpSetVariableLatencyCmd(SMIF_Type *base,
 
         /* Get the JEDEC SCCR Map Table content into sfdpBuffer[] */
         result = SfdpReadBuffer(base, device->readSfdpCmd, sccrMapDW3_Address, slaveSelect,
-                                4U, sccrMapDWord3Value, context);
+                            4U, sccrMapDWord3Value, context);
 
         if ((result == CY_SMIF_SUCCESS) && ((sccrMapDWord3Value[3] & 0x80U) == 0x80U))
         {
             /* Bits 6:9 => Byte 0 (MSB 3 bits) + Byte 1 (LSB 1 bit) */
-            device->readStsRegWipCmd->dummyCycles = (uint8_t)(((sccrMapDWord3Value[0] & 0xC0U) >> 6U) | ((sccrMapDWord3Value[1] & 0x1U) << 3U));
+            device->readStsRegWipCmd->dummyCycles = (uint8_t) (((sccrMapDWord3Value[0] & 0xC0U) >> 6U) | ((sccrMapDWord3Value[1] & 0x1U) << 3U));
         }
 
     }
     CY_MISRA_BLOCK_END('MISRA C-2012 Rule 10.8')
 }
 #endif
-/*******************************************************************************
+ /*******************************************************************************
 * Function Name: SfdpGetReadFourBytesCmd
 ****************************************************************************//**
 *
@@ -1234,11 +1196,11 @@ static void SfdpSetVariableLatencyCmd(SMIF_Type *base,
 *
 *******************************************************************************/
 static void SfdpGetReadFourBytesCmd(uint8_t const sfdpBuffer[],
-                                    cy_en_smif_protocol_mode_t protocolMode,
-                                    cy_stc_smif_mem_cmd_t *cmdRead)
+                                      cy_en_smif_protocol_mode_t protocolMode,
+                                      cy_stc_smif_mem_cmd_t* cmdRead)
 {
     CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 7, \
-                                 'Pointer type conversion is intentional.')
+'Pointer type conversion is intentional.')
     /* Get the mask which contains the Support for Fast Read Commands
      * from 4-byte Address Instruction Table, DWORD 1
      */
@@ -1246,39 +1208,39 @@ static void SfdpGetReadFourBytesCmd(uint8_t const sfdpBuffer[],
 
     switch (protocolMode)
     {
-    case PROTOCOL_MODE_1S_4S_4S:
-        if (_FLD2BOOL(SUPPORT_FAST_READ_1S_4S_4S_CMD, sfdpForBytesTableDword1))
-        {
-            cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_4S_4S;
-        }
-        break;
-    case PROTOCOL_MODE_1S_1S_4S:
-        if (_FLD2BOOL(SUPPORT_FAST_READ_1S_1S_4S_CMD, sfdpForBytesTableDword1))
-        {
-            cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_1S_4S;
-        }
-        break;
-    case PROTOCOL_MODE_1S_2S_2S:
-        if (_FLD2BOOL(SUPPORT_FAST_READ_1S_2S_2S_CMD, sfdpForBytesTableDword1))
-        {
-            cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_2S_2S;
-        }
-        break;
-    case PROTOCOL_MODE_1S_1S_2S:
-        if (_FLD2BOOL(SUPPORT_FAST_READ_1S_1S_2S_CMD, sfdpForBytesTableDword1))
-        {
-            cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_1S_2S;
-        }
-        break;
-    case PROTOCOL_MODE_1S_1S_1S:
-        if (_FLD2BOOL(SUPPORT_FAST_READ_1S_1S_1S_CMD, sfdpForBytesTableDword1))
-        {
-            cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_1S_1S;
-        }
-        break;
-    default:
-        /* There are no instructions for 4-byte mode. Use instruction for 3-byte mode */
-        break;
+        case PROTOCOL_MODE_1S_4S_4S:
+            if (_FLD2BOOL(SUPPORT_FAST_READ_1S_4S_4S_CMD, sfdpForBytesTableDword1))
+            {
+                cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_4S_4S;
+            }
+            break;
+        case PROTOCOL_MODE_1S_1S_4S:
+            if (_FLD2BOOL(SUPPORT_FAST_READ_1S_1S_4S_CMD, sfdpForBytesTableDword1))
+            {
+                cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_1S_4S;
+            }
+            break;
+        case PROTOCOL_MODE_1S_2S_2S:
+            if (_FLD2BOOL(SUPPORT_FAST_READ_1S_2S_2S_CMD, sfdpForBytesTableDword1))
+            {
+                cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_2S_2S;
+            }
+            break;
+        case PROTOCOL_MODE_1S_1S_2S:
+            if (_FLD2BOOL(SUPPORT_FAST_READ_1S_1S_2S_CMD, sfdpForBytesTableDword1))
+            {
+                cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_1S_2S;
+            }
+            break;
+        case PROTOCOL_MODE_1S_1S_1S:
+            if (_FLD2BOOL(SUPPORT_FAST_READ_1S_1S_1S_CMD, sfdpForBytesTableDword1))
+            {
+                cmdRead->command = CY_SMIF_FAST_READ_4_BYTES_CMD_1S_1S_1S;
+            }
+            break;
+        default:
+            /* There are no instructions for 4-byte mode. Use instruction for 3-byte mode */
+            break;
     }
 }
 
@@ -1301,9 +1263,9 @@ static uint32_t SfdpGetPageSize(uint8_t const sfdpBuffer[])
 
     /* The page size */
     size = 0x01UL << _FLD2VAL(CY_SMIF_SFDP_PAGE_SIZE,
-                              (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_28]);
+        (uint32_t) sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_28]);
 
-    return (size);
+    return(size);
 }
 
 
@@ -1339,7 +1301,7 @@ static uint32_t SfdpGetEraseTime(uint32_t const eraseOffset, uint8_t const sfdpB
 
     for (uint32_t idx = 0UL; idx < ERASE_TYPE_COUNT; idx++)
     {
-        eraseTypeTypicalTime = (readEraseTime >> (idx * ERASE_T_LENGTH)) >> ERASE_T_COUNT_OFFSET;
+        eraseTypeTypicalTime = (readEraseTime >> (idx * ERASE_T_LENGTH))>> ERASE_T_COUNT_OFFSET;
         eraseUnits = _FLD2VAL(ERASE_T_UNITS, eraseTypeTypicalTime);
         eraseCount = _FLD2VAL(ERASE_T_COUNT, eraseTypeTypicalTime);
 
@@ -1353,11 +1315,11 @@ static uint32_t SfdpGetEraseTime(uint32_t const eraseOffset, uint8_t const sfdpB
         }
         else if (eraseUnits == CY_SMIF_SFDP_UNIT_2)
         {
-            eraseMs = CY_SMIF_SFDP_ERASE_TIME_128MS;
+           eraseMs = CY_SMIF_SFDP_ERASE_TIME_128MS;
         }
         else if (eraseUnits == CY_SMIF_SFDP_UNIT_3)
         {
-            eraseMs = CY_SMIF_SFDP_ERASE_TIME_1S;
+           eraseMs = CY_SMIF_SFDP_ERASE_TIME_1S;
         }
         else
         {
@@ -1368,7 +1330,7 @@ static uint32_t SfdpGetEraseTime(uint32_t const eraseOffset, uint8_t const sfdpB
         eraseType[idx].eraseTime = ((eraseCount + 1UL) * eraseMs) * (2UL * (eraseMul + 1UL));
     }
 
-    return (eraseType[eraseTimeDefaultIndex - 1UL].eraseTime);
+    return(eraseType[eraseTimeDefaultIndex - 1UL].eraseTime);
 }
 
 
@@ -1420,9 +1382,9 @@ static uint32_t SfdpGetChipEraseTime(uint8_t const sfdpBuffer[])
     }
 
     /* Convert typical time to max time */
-    chipEraseTimeMax = ((chipEraseCount + 1UL) * chipEraseMs) * (2UL * (eraseMul + 1UL));
+    chipEraseTimeMax = ((chipEraseCount + 1UL)*chipEraseMs) * (2UL *(eraseMul + 1UL));
 
-    return (chipEraseTimeMax);
+    return(chipEraseTimeMax);
 }
 
 
@@ -1460,7 +1422,7 @@ static uint32_t SfdpGetPageProgramTime(uint8_t const sfdpBuffer[])
     /* Convert typical time to max time */
     programTimeMax = ((programTimeCount + 1UL) * progUs) * (2UL * (progMul + 1UL));
 
-    return (programTimeMax);
+    return(programTimeMax);
 }
 
 
@@ -1482,10 +1444,8 @@ static void SfdpSetWriteEnableCommand(cy_stc_smif_mem_cmd_t* cmdWriteEnable)
     /* The width of the command transfer */
     cmdWriteEnable->cmdWidth = CY_SMIF_WIDTH_SINGLE;
 
-#if (CY_IP_MXSMIF_VERSION>=2)
     cmdWriteEnable->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
-}
+ }
 
 
 /*******************************************************************************
@@ -1523,11 +1483,9 @@ static void SfdpSetProgramCommand_1_1_1(cy_stc_smif_mem_cmd_t* cmdProgram)
 {
     /* 8-bit command. 1 x I/O Program command */
     cmdProgram->command = CY_SMIF_SINGLE_PROGRAM_CMD;
-#if (CY_IP_MXSMIF_VERSION>=2)
     /* command presence - 1 byte */
     cmdProgram->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
-    /* The command transfer width */
+     /* The command transfer width */
     cmdProgram->cmdWidth = CY_SMIF_WIDTH_SINGLE;
     /* The address transfer width */
     cmdProgram->addrWidth = CY_SMIF_WIDTH_SINGLE;
@@ -1557,11 +1515,9 @@ static void SfdpSetProgramCommandFourBytes_1_1_1(cy_stc_smif_mem_cmd_t* cmdProgr
 {
     /* 8-bit command. 1 x I/O Program command */
     cmdProgram->command = CY_SMIF_PAGE_PROGRAM_4_BYTES_CMD_1S_1S_1S;
-#if (CY_IP_MXSMIF_VERSION>=2)
     /* command presence - 1 byte */
     cmdProgram->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
-    /* The command transfer width */
+     /* The command transfer width */
     cmdProgram->cmdWidth = CY_SMIF_WIDTH_SINGLE;
     /* The address transfer width */
     cmdProgram->addrWidth = CY_SMIF_WIDTH_SINGLE;
@@ -1591,11 +1547,9 @@ static void SfdpSetProgramCommandFourBytes_1_1_4(cy_stc_smif_mem_cmd_t* cmdProgr
 {
     /* 8-bit command. 1 x I/O Program command */
     cmdProgram->command = CY_SMIF_PAGE_PROGRAM_4_BYTES_CMD_1S_1S_4S;
-#if (CY_IP_MXSMIF_VERSION>=2)
     /* command presence - 1 byte */
     cmdProgram->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
-    /* The command transfer width */
+     /* The command transfer width */
     cmdProgram->cmdWidth = CY_SMIF_WIDTH_SINGLE;
     /* The address transfer width */
     cmdProgram->addrWidth = CY_SMIF_WIDTH_SINGLE;
@@ -1625,10 +1579,8 @@ static void SfdpSetProgramCommandFourBytes_1_4_4(cy_stc_smif_mem_cmd_t* cmdProgr
 {
     /* 8-bit command. 1 x I/O Program command */
     cmdProgram->command = CY_SMIF_PAGE_PROGRAM_4_BYTES_CMD_1S_4S_4S;
-#if (CY_IP_MXSMIF_VERSION>=2)
     cmdProgram->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
-    /* The command transfer width */
+     /* The command transfer width */
     cmdProgram->cmdWidth = CY_SMIF_WIDTH_SINGLE;
     /* The address transfer width */
     cmdProgram->addrWidth = CY_SMIF_WIDTH_QUAD;
@@ -1665,7 +1617,7 @@ static void SfdpSetProgramCommandFourBytes_1_4_4(cy_stc_smif_mem_cmd_t* cmdProgr
 *******************************************************************************/
 static void SfdpGetProgramFourBytesCmd(uint8_t const sfdpBuffer[],
                                        cy_en_smif_protocol_mode_t protocolMode,
-                                       cy_stc_smif_mem_cmd_t *cmdProgram)
+                                       cy_stc_smif_mem_cmd_t* cmdProgram)
 {
     /* Get the mask which contains the Support for Page Program Commands
      * from 4-byte Address Instruction Table, DWORD 1
@@ -1674,61 +1626,59 @@ static void SfdpGetProgramFourBytesCmd(uint8_t const sfdpBuffer[],
 
     switch (protocolMode)
     {
-    case PROTOCOL_MODE_1S_4S_4S:
-#if (CY_IP_MXSMIF_VERSION>=2)
-    case PROTOCOL_MODE_1S_4D_4D:
-    case PROTOCOL_MODE_8D_8D_8D:
-#endif /* CY_IP_MXSMIF_VERSION */
-        if (_FLD2BOOL(SUPPORT_PP_1S_4S_4S_CMD, sfdpForBytesTableDword1))
-        {
-            SfdpSetProgramCommandFourBytes_1_4_4(cmdProgram);
-        }
-        else if (_FLD2BOOL(SUPPORT_PP_1S_1S_4S_CMD, sfdpForBytesTableDword1))
-        {
-            SfdpSetProgramCommandFourBytes_1_1_4(cmdProgram);
-        }
-        else if (_FLD2BOOL(SUPPORT_PP_1S_1S_1S_CMD, sfdpForBytesTableDword1))
-        {
-            SfdpSetProgramCommandFourBytes_1_1_1(cmdProgram);
-        }
-        else
-        {
-            /* There are no instructions for 4-byte mode. Use the instruction for 3-byte mode */
-            SfdpSetProgramCommand_1_1_1(cmdProgram);
-        }
-        break;
-    case PROTOCOL_MODE_1S_1S_4S:
-        if (_FLD2BOOL(SUPPORT_PP_1S_1S_4S_CMD, sfdpForBytesTableDword1))
-        {
-            SfdpSetProgramCommandFourBytes_1_1_4(cmdProgram);
-        }
-        else if (_FLD2BOOL(SUPPORT_PP_1S_1S_1S_CMD, sfdpForBytesTableDword1))
-        {
-            SfdpSetProgramCommandFourBytes_1_1_1(cmdProgram);
-        }
-        else
-        {
-            /* There are no instructions for 4-byte mode. Use the instruction for 3-byte mode */
-            SfdpSetProgramCommand_1_1_1(cmdProgram);
-        }
-        break;
-    case PROTOCOL_MODE_1S_2S_2S:
-    case PROTOCOL_MODE_1S_1S_2S:
-    case PROTOCOL_MODE_1S_1S_1S:
-        if (_FLD2BOOL(SUPPORT_PP_1S_1S_1S_CMD, sfdpForBytesTableDword1))
-        {
-            SfdpSetProgramCommandFourBytes_1_1_1(cmdProgram);
-        }
-        else
-        {
-            /* There are no instructions for 4-byte mode. Use the instruction for 3-byte mode */
-            SfdpSetProgramCommand_1_1_1(cmdProgram);
-        }
-        break;
-    default:
-        /* Wrong mode */
-        CY_ASSERT_L2(true);
-        break;
+        case PROTOCOL_MODE_1S_4S_4S:
+        case PROTOCOL_MODE_1S_4D_4D:
+        case PROTOCOL_MODE_8D_8D_8D:
+             if (_FLD2BOOL(SUPPORT_PP_1S_4S_4S_CMD, sfdpForBytesTableDword1))
+            {
+                SfdpSetProgramCommandFourBytes_1_4_4(cmdProgram);
+            }
+            else if (_FLD2BOOL(SUPPORT_PP_1S_1S_4S_CMD, sfdpForBytesTableDword1))
+            {
+                SfdpSetProgramCommandFourBytes_1_1_4(cmdProgram);
+            }
+            else if (_FLD2BOOL(SUPPORT_PP_1S_1S_1S_CMD, sfdpForBytesTableDword1))
+            {
+                SfdpSetProgramCommandFourBytes_1_1_1(cmdProgram);
+            }
+            else
+            {
+                /* There are no instructions for 4-byte mode. Use the instruction for 3-byte mode */
+                SfdpSetProgramCommand_1_1_1(cmdProgram);
+            }
+            break;
+        case PROTOCOL_MODE_1S_1S_4S:
+            if (_FLD2BOOL(SUPPORT_PP_1S_1S_4S_CMD, sfdpForBytesTableDword1))
+            {
+                SfdpSetProgramCommandFourBytes_1_1_4(cmdProgram);
+            }
+            else if (_FLD2BOOL(SUPPORT_PP_1S_1S_1S_CMD, sfdpForBytesTableDword1))
+            {
+                SfdpSetProgramCommandFourBytes_1_1_1(cmdProgram);
+            }
+            else
+            {
+                /* There are no instructions for 4-byte mode. Use the instruction for 3-byte mode */
+                SfdpSetProgramCommand_1_1_1(cmdProgram);
+            }
+            break;
+        case PROTOCOL_MODE_1S_2S_2S:
+        case PROTOCOL_MODE_1S_1S_2S:
+        case PROTOCOL_MODE_1S_1S_1S:
+            if (_FLD2BOOL(SUPPORT_PP_1S_1S_1S_CMD, sfdpForBytesTableDword1))
+            {
+                SfdpSetProgramCommandFourBytes_1_1_1(cmdProgram);
+            }
+            else
+            {
+                /* There are no instructions for 4-byte mode. Use the instruction for 3-byte mode */
+                SfdpSetProgramCommand_1_1_1(cmdProgram);
+            }
+            break;
+        default:
+            /* Wrong mode */
+            CY_ASSERT_L2(true);
+            break;
     }
 }
 
@@ -1796,8 +1746,8 @@ static void SfdpSetChipEraseCommand(cy_stc_smif_mem_cmd_t* cmdChipErase)
 *
 *******************************************************************************/
 static uint32_t SfdpGetSectorEraseCommand(cy_stc_smif_mem_device_cfg_t *device,
-        uint8_t const sfdpBuffer[],
-        cy_stc_smif_erase_type_t eraseTypeStc[])
+                                          uint8_t const sfdpBuffer[],
+                                          cy_stc_smif_erase_type_t eraseTypeStc[])
 {
     uint32_t eraseOffset;
     if (FOUR_BYTE_ADDRESS == device->numOfAddrBytes)
@@ -1829,7 +1779,7 @@ static uint32_t SfdpGetSectorEraseCommand(cy_stc_smif_mem_device_cfg_t *device,
             eraseOffset = FOUR_BYTE_ADDR_ERASE_TYPE_1 + eraseType;
 
             /* Update all erase commands for 4-bytes */
-            for (uint32_t i = 0UL; i < ERASE_TYPE_COUNT; i++)
+            for(uint32_t i = 0UL; i< ERASE_TYPE_COUNT; i++)
             {
                 eraseTypeStc[i].eraseCmd = sfdpBuffer[FOUR_BYTE_ADDR_ERASE_TYPE_1 + i];
             }
@@ -1837,10 +1787,8 @@ static uint32_t SfdpGetSectorEraseCommand(cy_stc_smif_mem_device_cfg_t *device,
              * from the 4-byte Address Instruction Table, DWORD 2
              */
             device->eraseCmd->command = sfdpBuffer[eraseOffset];
-#if (CY_IP_MXSMIF_VERSION>=2)
             device->eraseCmd->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
-
+ 
             /* Recalculate eraseOffset for the 3-byte Address Instruction Table
              * to find the device->eraseSize and device->eraseTime parameters based on Erase Type.
              */
@@ -1865,10 +1813,8 @@ static uint32_t SfdpGetSectorEraseCommand(cy_stc_smif_mem_device_cfg_t *device,
         {
             /* Get the sector Erase command from the JEDEC basic flash parameter table */
             device->eraseCmd->command = sfdpBuffer[eraseOffset];
-#if (CY_IP_MXSMIF_VERSION>=2)
             device->eraseCmd->cmdPresence = CY_SMIF_PRESENT_1BYTE;
-#endif /* CY_IP_MXSMIF_VERSION */
-        }
+         }
     }
 
     if (COMMAND_IS_NOT_FOUND != eraseOffset)
@@ -1884,7 +1830,7 @@ static uint32_t SfdpGetSectorEraseCommand(cy_stc_smif_mem_device_cfg_t *device,
         device->eraseCmd->cmdWidth = CY_SMIF_WIDTH_NA;
     }
 
-    return (eraseOffset);
+    return(eraseOffset);
 }
 
 /*******************************************************************************
@@ -1922,9 +1868,9 @@ static uint32_t SfdpGetSectorEraseCommand(cy_stc_smif_mem_device_cfg_t *device,
 *       - \ref CY_SMIF_CMD_NOT_FOUND
 *******************************************************************************/
 static cy_en_smif_status_t SfdpEnterFourByteAddressing(SMIF_Type *base, uint8_t entryMethodByte,
-        cy_stc_smif_mem_device_cfg_t *device,
-        cy_en_smif_slave_select_t slaveSelect,
-        cy_stc_smif_context_t const *context)
+                                                       cy_stc_smif_mem_device_cfg_t *device,
+                                                       cy_en_smif_slave_select_t slaveSelect,
+                                                       cy_stc_smif_context_t const *context)
 {
     cy_en_smif_status_t result = CY_SMIF_CMD_NOT_FOUND;
 
@@ -1936,25 +1882,25 @@ static cy_en_smif_status_t SfdpEnterFourByteAddressing(SMIF_Type *base, uint8_t 
         if ((entryMethodByte & CY_SMIF_SFDP_ENTER_4_BYTE_METHOD_WR_EN_B7) != 0U)
         {
             /* To enter a 4-byte addressing write enable is required */
-            cy_stc_smif_mem_cmd_t *writeEn = device->writeEnCmd;
+            cy_stc_smif_mem_cmd_t* writeEn = device->writeEnCmd;
 
-            if (NULL != writeEn)
+            if(NULL != writeEn)
             {
                 result = Cy_SMIF_TransmitCommand(base,
-                                                 (uint8_t) writeEn->command,
-                                                 writeEn->cmdWidth,
-                                                 NULL,
-                                                 CY_SMIF_CMD_WITHOUT_PARAM,
-                                                 CY_SMIF_WIDTH_NA,
-                                                 slaveSelect,
-                                                 CY_SMIF_TX_LAST_BYTE,
-                                                 context);
+                                                (uint8_t) writeEn->command,
+                                                writeEn->cmdWidth,
+                                                NULL,
+                                                CY_SMIF_CMD_WITHOUT_PARAM,
+                                                CY_SMIF_WIDTH_NA,
+                                                slaveSelect,
+                                                CY_SMIF_TX_LAST_BYTE,
+                                                context);
             }
         }
 
-        if ((((entryMethodByte & CY_SMIF_SFDP_ENTER_4_BYTE_METHOD_B7) != 0U) ||
-                ((entryMethodByte & CY_SMIF_SFDP_ENTER_4_BYTE_METHOD_WR_EN_B7) != 0U)) &&
-                (result == CY_SMIF_SUCCESS))
+        if ( (((entryMethodByte & CY_SMIF_SFDP_ENTER_4_BYTE_METHOD_B7) != 0U) ||
+             ((entryMethodByte & CY_SMIF_SFDP_ENTER_4_BYTE_METHOD_WR_EN_B7) != 0U)) &&
+             (result == CY_SMIF_SUCCESS))
         {
             /* To enter a 4-byte addressing B7 instruction is required */
             result = Cy_SMIF_TransmitCommand(base,
@@ -2038,12 +1984,12 @@ static void SfdpGetEraseSizeAndCmd(uint8_t const sfdpBuffer[],
 *
 *******************************************************************************/
 static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
-        uint8_t const sectorMapBuff[],
-        uint32_t const buffLength,
-        cy_stc_smif_mem_device_cfg_t *device,
-        cy_en_smif_slave_select_t slaveSelect,
-        const cy_stc_smif_context_t *context,
-        cy_stc_smif_erase_type_t eraseType[])
+                                   uint8_t const sectorMapBuff[],
+                                   uint32_t const buffLength,
+                                   cy_stc_smif_mem_device_cfg_t *device,
+                                   cy_en_smif_slave_select_t slaveSelect,
+                                   const cy_stc_smif_context_t *context,
+                                   cy_stc_smif_erase_type_t eraseType[])
 {
     uint8_t currCmd;
     uint8_t dummyCycles;
@@ -2063,7 +2009,7 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
     }
 
     /* Loop across all command descriptors to find current configuration */
-    while (SECTOR_MAP_COMAND_DESCRIPTOR_TYPE == (sectorMapBuff[currTableIdx] & SECTOR_MAP_DESCRIPTOR_MASK))
+    while(SECTOR_MAP_COMAND_DESCRIPTOR_TYPE == (sectorMapBuff[currTableIdx] & SECTOR_MAP_DESCRIPTOR_MASK))
     {
         currCmd = sectorMapBuff[currTableIdx + CY_SMIF_SFDP_SECTOR_MAP_CMD_OFFSET];
         regMask = sectorMapBuff[currTableIdx + CY_SMIF_SFDP_SECTOR_MAP_REG_MSK_OFFSET];
@@ -2071,26 +2017,26 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
 
         /* Get the address length for configuration detection */
         addrCode = _FLD2VAL(CY_SMIF_SFDP_SECTOR_MAP_ADDR_BYTES, sectorMapBuff[currTableIdx + CY_SMIF_SFDP_SECTOR_MAP_ADDR_LEN_OFFSET]);
-        switch (addrCode)
+        switch(addrCode)
         {
-        case CY_SMIF_SFDP_THREE_BYTES_ADDR_CODE:
-            /* No address cycle */
-            addrBytesNum = 0UL;
-            break;
-        case CY_SMIF_SFDP_THREE_OR_FOUR_BYTES_ADDR_CODE:
-            addrBytesNum = CY_SMIF_THREE_BYTES_ADDR;
-            break;
-        case CY_SMIF_SFDP_FOUR_BYTES_ADDR_CODE:
-            addrBytesNum = CY_SMIF_FOUR_BYTES_ADDR;
-            break;
-        default:
-            /* Use the current settings */
-            addrBytesNum = device->numOfAddrBytes;
-            break;
+            case CY_SMIF_SFDP_THREE_BYTES_ADDR_CODE:
+                /* No address cycle */
+                addrBytesNum = 0UL;
+                break;
+            case CY_SMIF_SFDP_THREE_OR_FOUR_BYTES_ADDR_CODE:
+                addrBytesNum = CY_SMIF_THREE_BYTES_ADDR;
+                break;
+            case CY_SMIF_SFDP_FOUR_BYTES_ADDR_CODE:
+                addrBytesNum = CY_SMIF_FOUR_BYTES_ADDR;
+                break;
+            default:
+                /* Use the current settings */
+                addrBytesNum = device->numOfAddrBytes;
+                break;
         }
 
         /* Get the control register address */
-        for (uint8_t i = 0U; i < addrBytesNum; i++)
+        for(uint8_t i = 0U; i < addrBytesNum; i++)
         {
             /* Offset for control register in SFDP has little-endian byte order, need to swap it */
             currRegisterAddr[i] = sectorMapBuff[(currTableIdx + CY_SMIF_SFDP_SECTOR_MAP_REG_ADDR_OFFSET + addrBytesNum) - i - 1UL];
@@ -2111,7 +2057,7 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
         if (CY_SMIF_SUCCESS == result)
         {
             /* Set the bit of the region idx to 1 if the config matches */
-            regionInfoIdx = ((uint8_t)(regionInfoIdx << 1U)) | (((regValue & regMask) == 0U) ? (0U) : (1U));
+            regionInfoIdx = ((uint8_t)(regionInfoIdx << 1U)) | (((regValue & regMask) == 0U)?(0U):(1U));
         }
 
         currTableIdx += HEADER_LENGTH;
@@ -2125,7 +2071,7 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
     if (CY_SMIF_SUCCESS == result)
     {
         /* Find the matching configuration map descriptor */
-        while (regionInfoIdx != sectorMapBuff[currTableIdx + 1UL])
+        while(regionInfoIdx != sectorMapBuff[currTableIdx + 1UL])
         {
             /* Increment the table index to the next map */
             currTableIdx += (sectorMapBuff[currTableIdx + CY_SMIF_SFDP_SECTOR_MAP_CONFIG_ID_OFFSET] + 2UL) * BYTES_IN_DWORD;
@@ -2143,7 +2089,7 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
         uint8_t numOfRegions = sectorMapBuff[currTableIdx + CY_SMIF_SFDP_SECTOR_MAP_REGION_COUNT_OFFSET] + 1U;
         device->hybridRegionCount = (uint32_t) numOfRegions;
 
-        if (numOfRegions < 1U)
+        if(numOfRegions < 1U)
         {
             result = CY_SMIF_NOT_HYBRID_MEM;
         }
@@ -2155,7 +2101,7 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
             uint8_t supportedEraseType;
             uint8_t eraseTypeMask;
             cy_stc_smif_hybrid_region_info_t *currRegionPtr;
-            for (uint8_t currRegion = 0U; currRegion < numOfRegions; currRegion++)
+            for(uint8_t currRegion = 0U; currRegion< numOfRegions; currRegion++)
             {
                 currRegionAddr = currRegionAddr + regionSize;
                 currTableIdx += BYTES_IN_DWORD;
@@ -2163,12 +2109,12 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
                 supportedEraseType = 0U;
                 eraseTypeMask = 1U;
                 eraseTypeCode = sectorMapBuff[currTableIdx] & CY_SMIF_SFDP_SECTOR_MAP_SUPPORTED_ET_MASK;
-                while (0U == (eraseTypeCode & eraseTypeMask))
+                while(0U == (eraseTypeCode & eraseTypeMask))
                 {
                     /* Erase type number defined as a bit position */
                     eraseTypeMask = eraseTypeMask << 1;
                     supportedEraseType++;
-                    if (supportedEraseType > ERASE_TYPE_COUNT)
+                    if(supportedEraseType > ERASE_TYPE_COUNT)
                     {
                         result = CY_SMIF_SFDP_CORRUPTED_TABLE;
                         break;
@@ -2176,14 +2122,14 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
                 }
 
                 /* The region size as a zero-based count of 256 byte units */
-                regionSize = ((*((uint32_t*) &sectorMapBuff[currTableIdx]) >> BITS_IN_BYTE) + 1UL) * SECTOR_MAP_REGION_SIZE_MULTIPLIER;
+                regionSize = ((*( (uint32_t*) &sectorMapBuff[currTableIdx]) >> BITS_IN_BYTE) + 1UL) * SECTOR_MAP_REGION_SIZE_MULTIPLIER;
                 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 11.3')
                 currRegionPtr = device->hybridRegionInfo[currRegion];
 
                 currRegionPtr->regionAddress = currRegionAddr;
                 currRegionPtr->eraseCmd = (uint32_t)eraseType[supportedEraseType].eraseCmd;
                 currRegionPtr->eraseTime = eraseType[supportedEraseType].eraseTime;
-                if (regionSize < eraseType[supportedEraseType].eraseSize)
+                if(regionSize < eraseType[supportedEraseType].eraseSize)
                 {
                     /* One region with a single sector */
                     currRegionPtr->eraseSize = regionSize;
@@ -2200,15 +2146,15 @@ static cy_en_smif_status_t SfdpPopulateRegionInfo(SMIF_Type *base,
     return result;
 }
 
-#if (CY_IP_MXSMIF_VERSION>=2) && defined(SMIF_OCTAL_SFDP_SUPPORT)
+#if defined(SMIF_OCTAL_SFDP_SUPPORT)
 static cy_en_smif_protocol_mode_t GetOctalSDRParams(SMIF_Type *base,
-        uint8_t sfdpBuffer[],
-        cy_stc_smif_mem_device_cfg_t *device,
-        cy_en_smif_slave_select_t slaveSelect,
-        uint32_t sfdpForBytesTableDword1,
-        uint8_t *sccrMapAddr,
-        uint8_t  sccrMapTableLength,
-        cy_stc_smif_context_t *context)
+                                    uint8_t sfdpBuffer[],
+                                    cy_stc_smif_mem_device_cfg_t *device,
+                                    cy_en_smif_slave_select_t slaveSelect,
+                                    uint32_t sfdpForBytesTableDword1,
+                                    uint8_t *sccrMapAddr,
+                                    uint8_t  sccrMapTableLength,
+                                    cy_stc_smif_context_t *context)
 {
     cy_en_smif_protocol_mode_t protocol = PROTOCOL_MODE_WRONG;
     cy_en_smif_status_t result = CY_SMIF_NO_OE_BIT;
@@ -2218,13 +2164,13 @@ static cy_en_smif_protocol_mode_t GetOctalSDRParams(SMIF_Type *base,
     CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Pointer type conversion is intentional.');
 
     if (_FLD2BOOL(SUPPORT_FAST_READ_1S_8S_8S_CMD,
-                  sfdpForBytesTableDword1))
+              sfdpForBytesTableDword1))
     {
-        SfdpGetReadCmd_1_8_8(sfdpBuffer, cmdRead);
-        protocol = PROTOCOL_MODE_1S_8S_8S;
+         SfdpGetReadCmd_1_8_8(sfdpBuffer, cmdRead);
+         protocol = PROTOCOL_MODE_1S_8S_8S;
     }
     else if (_FLD2BOOL(SUPPORT_FAST_READ_1S_1S_8S_CMD,
-                       sfdpForBytesTableDword1))
+                        sfdpForBytesTableDword1))
     {
         SfdpGetReadCmd_1_1_8(sfdpBuffer, cmdRead);
         protocol = PROTOCOL_MODE_1S_1S_8S;
@@ -2241,7 +2187,7 @@ static cy_en_smif_protocol_mode_t GetOctalSDRParams(SMIF_Type *base,
 
         /* Get the JEDEC SCCR Map Table content into sfdpBuffer[] */
         result = SfdpReadBuffer(base, cmdSfdp, sccrMapAddr, slaveSelect,
-                                sccrMapTableLength, sccrMapAddrBuffer, context);
+                            sccrMapTableLength, sccrMapAddrBuffer, context);
 
         if (result == CY_SMIF_SUCCESS)
         {
@@ -2254,20 +2200,20 @@ static cy_en_smif_protocol_mode_t GetOctalSDRParams(SMIF_Type *base,
             /* Read DWORD-16 to fill read and write Octal Enable commands */
             if (_FLD2BOOL(CY_SMIF_SFDP_OCTAL_ENABLE_BIT_SUPPORT, sccrMapAddrBufferDword16))
             {
-                device->stsRegOctalEnableMask = _FLD2VAL(CY_SMIF_SFDP_OCTAL_ENABLE_BIT, sccrMapAddrBufferDword16);
-                device->writeStsRegOeCmd->command  = _FLD2VAL(CY_SMIF_SFDP_OCTAL_ENABLE_WRITE_CMD, sccrMapAddrBufferDword16);
-                device->readStsRegOeCmd->command  = _FLD2VAL(CY_SMIF_SFDP_OCTAL_ENABLE_READ_CMD, sccrMapAddrBufferDword16);
+                    device->stsRegOctalEnableMask = _FLD2VAL(CY_SMIF_SFDP_OCTAL_ENABLE_BIT, sccrMapAddrBufferDword16);
+                    device->writeStsRegOeCmd->command  = _FLD2VAL(CY_SMIF_SFDP_OCTAL_ENABLE_WRITE_CMD, sccrMapAddrBufferDword16);
+                    device->readStsRegOeCmd->command  = _FLD2VAL(CY_SMIF_SFDP_OCTAL_ENABLE_READ_CMD, sccrMapAddrBufferDword16);
 
-                if (_FLD2BOOL(CY_SMIF_SFDP_OCTAL_ENABLE_USE_ADDRESS, sccrMapAddrBufferDword16))
-                {
-                    device->octalEnableRegAddr = _FLD2VAL(CY_SMIF_SFDP_OCTAL_ENABLE_REG_ADDR, sccrMapAddrBufferDword16);
-                }
-                else
-                {
-                    device->octalEnableRegAddr = CY_SMIF_NO_COMMAND_OR_MODE;
-                }
-                device->writeStsRegOeCmd->cmdPresence  = CY_SMIF_PRESENT_1BYTE;
-                device->readStsRegOeCmd->cmdPresence  = CY_SMIF_PRESENT_1BYTE;
+                    if (_FLD2BOOL(CY_SMIF_SFDP_OCTAL_ENABLE_USE_ADDRESS, sccrMapAddrBufferDword16))
+                    {
+                       device->octalEnableRegAddr = _FLD2VAL(CY_SMIF_SFDP_OCTAL_ENABLE_REG_ADDR, sccrMapAddrBufferDword16);
+                    }
+                    else
+                    {
+                       device->octalEnableRegAddr = CY_SMIF_NO_COMMAND_OR_MODE;
+                    }
+                    device->writeStsRegOeCmd->cmdPresence  = CY_SMIF_PRESENT_1BYTE;
+                    device->readStsRegOeCmd->cmdPresence  = CY_SMIF_PRESENT_1BYTE;
             }
         }
     }
@@ -2275,15 +2221,15 @@ static cy_en_smif_protocol_mode_t GetOctalSDRParams(SMIF_Type *base,
     return protocol;
 }
 static cy_en_smif_protocol_mode_t GetOctalDDRParams(SMIF_Type *base,
-        cy_stc_smif_mem_device_cfg_t *device,
-        cy_en_smif_slave_select_t slaveSelect,
-        uint8_t *cmdSeqODDRAddr,
-        uint8_t cmdSeqODDRTableLength,
-        uint8_t *xSPiProfile1Addr,
-        uint8_t xSPIProfile1TableLength,
-        uint8_t *sccrMapAddr,
-        uint8_t sccrMapTableLength,
-        cy_stc_smif_context_t *context)
+                                    cy_stc_smif_mem_device_cfg_t *device,
+                                    cy_en_smif_slave_select_t slaveSelect,
+                                    uint8_t* cmdSeqODDRAddr,
+                                    uint8_t cmdSeqODDRTableLength,
+                                    uint8_t* xSPiProfile1Addr,
+                                    uint8_t xSPIProfile1TableLength,
+                                    uint8_t* sccrMapAddr,
+                                    uint8_t sccrMapTableLength,
+                                    cy_stc_smif_context_t *context)
 {
     uint8_t xSPiProfile1AddrBuffer[CY_SMIF_SFDP_LENGTH];
     cy_en_smif_status_t result = CY_SMIF_NO_OE_BIT;
@@ -2307,67 +2253,67 @@ static cy_en_smif_protocol_mode_t GetOctalDDRParams(SMIF_Type *base,
         /* If found Octal DDR read is supported */
         if (xSPiProfile1AddrBuffer[XSPI_PROFILE_1_TABLE_BYTE_1] != 0U)
         {
-            cmdRead->command = xSPiProfile1AddrBuffer[XSPI_PROFILE_1_TABLE_BYTE_1];
-            cmdRead->commandH = cmdRead->command;
+             cmdRead->command = xSPiProfile1AddrBuffer[XSPI_PROFILE_1_TABLE_BYTE_1];
+             cmdRead->commandH = cmdRead->command;
 
-            /* command presence - 2 byte transfer */
-            cmdRead->cmdPresence = CY_SMIF_PRESENT_2BYTE;
+             /* command presence - 2 byte transfer */
+             cmdRead->cmdPresence = CY_SMIF_PRESENT_2BYTE;
 
-            /* The command transfer width */
-            cmdRead->cmdWidth = CY_SMIF_WIDTH_OCTAL;
+             /* The command transfer width */
+             cmdRead->cmdWidth = CY_SMIF_WIDTH_OCTAL;
 
-            /* DDR rate for all phases */
-            cmdRead->cmdRate = CY_SMIF_DDR;
-            cmdRead->dataRate = CY_SMIF_DDR;
-            cmdRead->modeRate = CY_SMIF_DDR;
-            cmdRead->addrRate = CY_SMIF_DDR;
+             /* DDR rate for all phases */
+             cmdRead->cmdRate = CY_SMIF_DDR;
+             cmdRead->dataRate = CY_SMIF_DDR;
+             cmdRead->modeRate = CY_SMIF_DDR;
+             cmdRead->addrRate = CY_SMIF_DDR;
 
-            /* The address transfer width */
-            cmdRead->addrWidth = CY_SMIF_WIDTH_OCTAL;
+             /* The address transfer width */
+             cmdRead->addrWidth = CY_SMIF_WIDTH_OCTAL;
 
-            /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
-            cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
+             /* The 8-bit mode byte. This value is 0xFFFFFFFF when there is no mode present */
+              cmdRead->mode = CY_SMIF_NO_COMMAND_OR_MODE;
 
-            /* Variable latency configuration command */
-            if (sccrMapTableLength > 0U)
-            {
+             /* Variable latency configuration command */
+             if (sccrMapTableLength > 0U)
+             {
                 SfdpSetVariableLatencyCmd(base, device, slaveSelect, sccrMapAddr, context);
-            }
+             }
 
-            /* As per SFDP SPEC JEDEC standard 216D.01, to keep host controller
-             * enumeration simple, number of dummy cycles for fast read set to 20
-             */
-            cmdRead->dummyCycles = 20U;
-            cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
-            cmdRead->dataWidth = CY_SMIF_WIDTH_OCTAL;
+             /* As per SFDP SPEC JEDEC standard 216D.01, to keep host controller
+              * enumeration simple, number of dummy cycles for fast read set to 20
+              */
+             cmdRead->dummyCycles = 20U;
+             cmdRead->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
+             cmdRead->dataWidth = CY_SMIF_WIDTH_OCTAL;
 
-            pMode = PROTOCOL_MODE_8D_8D_8D;
+             pMode = PROTOCOL_MODE_8D_8D_8D;
 
-            /* Update Write Enable command to use Octal DDR mode */
-            device->writeEnCmd->commandH = device->writeEnCmd->command;
-            device->writeEnCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
-            device->writeEnCmd->cmdRate = CY_SMIF_DDR;
-            device->writeEnCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
+             /* Update Write Enable command to use Octal DDR mode */
+             device->writeEnCmd->commandH = device->writeEnCmd->command;
+             device->writeEnCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
+             device->writeEnCmd->cmdRate = CY_SMIF_DDR;
+             device->writeEnCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
 
-            /* Update readStsRegWipCmd command to use Octal DDR mode */
-            device->readStsRegWipCmd->commandH = device->readStsRegWipCmd->command;
-            device->readStsRegWipCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
-            device->readStsRegWipCmd->cmdRate = CY_SMIF_DDR;
-            device->readStsRegWipCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
-            device->readStsRegWipCmd->dataWidth = CY_SMIF_WIDTH_OCTAL;
-            device->readStsRegWipCmd->dataRate = CY_SMIF_DDR;
-            device->readStsRegWipCmd->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
-            device->readStsRegWipCmd->addrWidth = CY_SMIF_WIDTH_OCTAL;
-            device->readStsRegWipCmd->addrRate = CY_SMIF_DDR;
+             /* Update readStsRegWipCmd command to use Octal DDR mode */
+             device->readStsRegWipCmd->commandH = device->readStsRegWipCmd->command;
+             device->readStsRegWipCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
+             device->readStsRegWipCmd->cmdRate = CY_SMIF_DDR;
+             device->readStsRegWipCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
+             device->readStsRegWipCmd->dataWidth = CY_SMIF_WIDTH_OCTAL;
+             device->readStsRegWipCmd->dataRate = CY_SMIF_DDR;
+             device->readStsRegWipCmd->dummyCyclesPresence = CY_SMIF_PRESENT_1BYTE;
+             device->readStsRegWipCmd->addrWidth = CY_SMIF_WIDTH_OCTAL;
+             device->readStsRegWipCmd->addrRate = CY_SMIF_DDR;
 
-            /* Update Erase chip command to use Octal DDR mode */
-            device->chipEraseCmd->commandH = device->chipEraseCmd->command;
-            device->chipEraseCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
-            device->chipEraseCmd->cmdRate = CY_SMIF_DDR;
-            device->chipEraseCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
+             /* Update Erase chip command to use Octal DDR mode */
+             device->chipEraseCmd->commandH = device->chipEraseCmd->command;
+             device->chipEraseCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
+             device->chipEraseCmd->cmdRate = CY_SMIF_DDR;
+             device->chipEraseCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
 
-            /* Fill command sequence to switch to Octal DDR mode */
-            uint8_t cmdSeqODDRAddrBuffer[CY_SMIF_SFDP_LENGTH];
+             /* Fill command sequence to switch to Octal DDR mode */
+             uint8_t cmdSeqODDRAddrBuffer[CY_SMIF_SFDP_LENGTH];
 
             /* Initialize SFDP Buffer */
             for (uint32_t i = 0U; i < CY_SMIF_SFDP_LENGTH; i++)
@@ -2377,11 +2323,11 @@ static cy_en_smif_protocol_mode_t GetOctalDDRParams(SMIF_Type *base,
 
             /* Get the command sequence to change to Octal DDR mode content into cmdSeqODDRAddrBuffer[] */
             result = SfdpReadBuffer(base, cmdSfdp, cmdSeqODDRAddr, slaveSelect,
-                                    cmdSeqODDRTableLength, cmdSeqODDRAddrBuffer, context);
+                                cmdSeqODDRTableLength, cmdSeqODDRAddrBuffer, context);
 
             if (result == CY_SMIF_SUCCESS)
             {
-                cy_stc_smif_octal_ddr_en_seq_t *oDDREnSeq = device->octalDDREnableSeq;
+                cy_stc_smif_octal_ddr_en_seq_t* oDDREnSeq = device->octalDDREnableSeq;
 
                 oDDREnSeq->cmdSeq1Len = cmdSeqODDRAddrBuffer[CMD_SEQ_OCTAL_DDR_CMD1_LEN_BYTE_OFFSET];
                 oDDREnSeq->cmdSeq2Len = cmdSeqODDRAddrBuffer[CMD_SEQ_OCTAL_DDR_CMD2_LEN_BYTE_OFFSET];
@@ -2416,6 +2362,7 @@ static cy_en_smif_protocol_mode_t GetOctalDDRParams(SMIF_Type *base,
     return pMode;
 }
 #endif
+ 
 #ifndef SMIF_JEDEC_STANDARD_DEVICE_RESET_SUPPORT
 /*******************************************************************************
 * Function Name: Cy_SMIF_Reset_Memory
@@ -2473,10 +2420,10 @@ __WEAK void Cy_SMIF_Reset_Memory(SMIF_Type *base, cy_en_smif_slave_select_t slav
 *******************************************************************************/
 
 cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
-        const cy_stc_smif_mem_config_t *memCfg,
-        cy_en_smif_txfr_width_t maxdataWidth,
-        cy_en_smif_qer_t qer_id,
-        cy_stc_smif_context_t *context)
+                                    const cy_stc_smif_mem_config_t *memCfg,
+                                    cy_en_smif_txfr_width_t maxdataWidth,
+                                    cy_en_smif_qer_t qer_id,
+                                    cy_stc_smif_context_t *context)
 {
     /* Check the input parameters */
     CY_ASSERT_L1(NULL != memCfg);
@@ -2486,7 +2433,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
     uint8_t sfdpAddress[CY_SMIF_SFDP_ADDRESS_LENGTH];
     uint8_t addr4ByteAddress[CY_SMIF_SFDP_ADDRESS_LENGTH];
     uint8_t sectorMapAddr[CY_SMIF_SFDP_ADDRESS_LENGTH];
-#if (CY_IP_MXSMIF_VERSION>=2) && defined (SMIF_OCTAL_SFDP_SUPPORT)
+#if defined (SMIF_OCTAL_SFDP_SUPPORT)
     uint8_t sccrMapAddr[CY_SMIF_SFDP_ADDRESS_LENGTH];
     uint8_t xSPiProfile1Addr[CY_SMIF_SFDP_ADDRESS_LENGTH];
     uint8_t cmdSeqODDRAddr[CY_SMIF_SFDP_ADDRESS_LENGTH];
@@ -2515,7 +2462,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
         sfdpAddress[i] = 0U;
         addr4ByteAddress[i] = 0U;
         sectorMapAddr[i] = 0U;
-#if (CY_IP_MXSMIF_VERSION>=2) && defined (SMIF_OCTAL_SFDP_SUPPORT)
+#if defined (SMIF_OCTAL_SFDP_SUPPORT)
         sccrMapAddr[i] = 0U;
         xSPiProfile1Addr[i] = 0U;
         cmdSeqODDRAddr[i] = 0U;
@@ -2537,12 +2484,12 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
         result = CY_SMIF_NO_SFDP_SUPPORT;
     }
 
-    if ((CY_SMIF_SUCCESS == result) &&
-            (sfdpBuffer[CY_SMIF_SFDP_SIGNATURE_BYTE_00] == (uint8_t)'S') &&
-            (sfdpBuffer[CY_SMIF_SFDP_SIGNATURE_BYTE_01] == (uint8_t)'F') &&
-            (sfdpBuffer[CY_SMIF_SFDP_SIGNATURE_BYTE_02] == (uint8_t)'D') &&
-            (sfdpBuffer[CY_SMIF_SFDP_SIGNATURE_BYTE_03] == (uint8_t)'P') &&
-            (sfdpBuffer[CY_SMIF_SFDP_MAJOR_REV] == CY_SMIF_SFDP_MAJOR_REV_1))
+    if((CY_SMIF_SUCCESS == result) &&
+       (sfdpBuffer[CY_SMIF_SFDP_SIGNATURE_BYTE_00] == (uint8_t)'S') &&
+       (sfdpBuffer[CY_SMIF_SFDP_SIGNATURE_BYTE_01] == (uint8_t)'F') &&
+       (sfdpBuffer[CY_SMIF_SFDP_SIGNATURE_BYTE_02] == (uint8_t)'D') &&
+       (sfdpBuffer[CY_SMIF_SFDP_SIGNATURE_BYTE_03] == (uint8_t)'P') &&
+       (sfdpBuffer[CY_SMIF_SFDP_MAJOR_REV] == CY_SMIF_SFDP_MAJOR_REV_1))
     {
         uint8_t sfdp_minor_revision = sfdpBuffer[CY_SMIF_SFDP_MINOR_REV];
 
@@ -2554,7 +2501,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
             SfdpFindParameterTableAddress(FOUR_BYTE_ADDR_ID, sfdpBuffer, addr4ByteAddress, &addr4ByteTableLength);
             SfdpFindParameterTableAddress(SECTOR_MAP_ID, sfdpBuffer, sectorMapAddr, &sectorMapTableLength);
 
-#if (CY_IP_MXSMIF_VERSION>=2) && defined (SMIF_OCTAL_SFDP_SUPPORT)
+#if defined (SMIF_OCTAL_SFDP_SUPPORT)
             SfdpFindParameterTableAddress(SCCR_MAP_SPI_ID, sfdpBuffer, sccrMapAddr, &sccrMapTableLength);
             SfdpFindParameterTableAddress(XSPI_PROFILE_1_0_ID, sfdpBuffer, xSPiProfile1Addr, &xSPIProfile1TableLength);
             SfdpFindParameterTableAddress(CMD_SEQ_FOR_ODDR_ID, sfdpBuffer, cmdSeqODDRAddr, &cmdSeqODDRTableLength);
@@ -2568,7 +2515,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
 
             /* Check if any of the parameter table size is more than SFDP Buffer length reserved */
             if ((basicSpiTableLength     > CY_SMIF_SFDP_LENGTH) ||
-                    (sectorMapTableLength    > CY_SMIF_SFDP_LENGTH))
+                (sectorMapTableLength    > CY_SMIF_SFDP_LENGTH))
             {
                 result = CY_SMIF_SFDP_BUFFER_INSUFFICIENT;
             }
@@ -2602,13 +2549,13 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
 
                 if (maxdataWidth >= CY_SMIF_WIDTH_QUAD)
                 {
-                    if (sfdp_minor_revision != CY_SMIF_SFDP_JEDEC_REV_0)
+                    if(sfdp_minor_revision != CY_SMIF_SFDP_JEDEC_REV_0)
                     {
                         /* The command to write into the QE-containing status register */
                         CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 1, 'integer to enum conversion intentional.')
                         SfdpGetQuadEnableParameters(device,
                                                     (cy_en_smif_qer_t)(_FLD2VAL(CY_SMIF_SFDP_QE_REQUIREMENTS,
-                                                            (uint32_t)sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_3A])));
+                                                    (uint32_t)sfdpBuffer[CY_SMIF_SFDP_BFPT_BYTE_3A])));
                         CY_MISRA_BLOCK_END('MISRA C-2012 Rule 10.8')
                     }
                     else
@@ -2624,7 +2571,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                 cy_stc_smif_mem_cmd_t *cmdRead = device->readCmd;
                 cy_en_smif_protocol_mode_t pMode = PROTOCOL_MODE_WRONG;
 
-                if (sfdp_minor_revision != CY_SMIF_SFDP_JEDEC_REV_0)
+                if(sfdp_minor_revision != CY_SMIF_SFDP_JEDEC_REV_0)
                 {
                     /* The page size */
                     device->programSize = SfdpGetPageSize(sfdpBuffer);
@@ -2660,7 +2607,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                     }
                 }
 
-                pMode = SfdpGetReadCmdParams(sfdpBuffer, dataSelect, maxdataWidth, cmdRead);
+                pMode = SfdpGetReadCmdParams(sfdpBuffer, dataSelect, maxdataWidth, cmdRead, sfdp_minor_revision, memCfg->flags);
 
                 /* Read, Erase, and Program commands */
                 uint32_t eraseTypeOffset = 1UL;
@@ -2687,7 +2634,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                         result = SfdpReadBuffer(base, cmdSfdp, addr4ByteAddress, slaveSelect,
                                                 addr4ByteTableLength, fourByteAddressBuffer, context);
                     }
-#if (CY_IP_MXSMIF_VERSION>=2) && defined (SMIF_OCTAL_SFDP_SUPPORT)
+#if defined (SMIF_OCTAL_SFDP_SUPPORT)
                     /* Check if Octal mode related is supported first */
                     if ((device->readStsRegOeCmd != NULL) && (device->writeStsRegOeCmd != NULL))
                     {
@@ -2696,7 +2643,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                         {
                             cy_en_smif_protocol_mode_t octalProtocolMode = PROTOCOL_MODE_WRONG;
 
-                            if ((cmdSeqODDRTableLength > 0U) && (xSPIProfile1TableLength > 0U) && (device->octalDDREnableSeq != NULL))
+                            if ((cmdSeqODDRTableLength > 0U) && (xSPIProfile1TableLength > 0U) && (device->octalDDREnableSeq != NULL) && ((memCfg->flags & CY_SMIF_FLAG_DETECT_SFDP_SDR_ONLY) != CY_SMIF_FLAG_DETECT_SFDP_SDR_ONLY))
                             {
                                 octalProtocolMode = GetOctalDDRParams(base, device, slaveSelect,
                                                                       cmdSeqODDRAddr, cmdSeqODDRTableLength,
@@ -2707,11 +2654,11 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                                 /* Initialize other params here */
                             }
 
-                            if (octalProtocolMode != PROTOCOL_MODE_8D_8D_8D) /* Check for Octal SDR if Octal DDR was not supported */
+                            if(octalProtocolMode != PROTOCOL_MODE_8D_8D_8D) /* Check for Octal SDR if Octal DDR was not supported or user specified SDR only mode enumeration */
                             {
                                 uint32_t octal_sdr_param = Cy_SMIF_PackBytesArray(fourByteAddressBuffer, true);
                                 octalProtocolMode = GetOctalSDRParams(base, sfdpBuffer, device, slaveSelect, octal_sdr_param,
-                                                                      sccrMapAddr, sccrMapTableLength, context);
+                                                             sccrMapAddr, sccrMapTableLength, context);
                             }
 
                             if (octalProtocolMode != PROTOCOL_MODE_WRONG)
@@ -2721,16 +2668,16 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                         }
                         else
                         {
-                            device->writeStsRegOeCmd->command  = CY_SMIF_NO_COMMAND_OR_MODE;
-                            device->readStsRegOeCmd->command  = CY_SMIF_NO_COMMAND_OR_MODE;
-                            device->octalEnableRegAddr = CY_SMIF_NO_COMMAND_OR_MODE;
-                            device->stsRegOctalEnableMask = 0UL;
-                            device->writeStsRegOeCmd->cmdPresence  = CY_SMIF_NOT_PRESENT;
-                            device->readStsRegOeCmd->cmdPresence  = CY_SMIF_NOT_PRESENT;
+                           device->writeStsRegOeCmd->command  = CY_SMIF_NO_COMMAND_OR_MODE;
+                           device->readStsRegOeCmd->command  = CY_SMIF_NO_COMMAND_OR_MODE;
+                           device->octalEnableRegAddr = CY_SMIF_NO_COMMAND_OR_MODE;
+                           device->stsRegOctalEnableMask = 0UL;
+                           device->writeStsRegOeCmd->cmdPresence  = CY_SMIF_NOT_PRESENT;
+                           device->readStsRegOeCmd->cmdPresence  = CY_SMIF_NOT_PRESENT;
                         }
                     }
-#endif
-                    if (CY_SMIF_SUCCESS == result)
+#endif /* SMIF_OCTAL_SFDP_SUPPORT */
+                     if (CY_SMIF_SUCCESS == result)
                     {
                         /* Rewrite the Read command instruction for 4-byte addressing mode */
                         SfdpGetReadFourBytesCmd(fourByteAddressBuffer, pMode, cmdRead);
@@ -2741,27 +2688,29 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                         /* Find the sector Erase command type with 4-byte addressing */
                         eraseTypeOffset = SfdpGetSectorEraseCommand(device, fourByteAddressBuffer, eraseType);
 
-#if (CY_IP_MXSMIF_VERSION>=2) && defined (SMIF_OCTAL_SFDP_SUPPORT)
-                        if (pMode == PROTOCOL_MODE_8D_8D_8D)
-                        {
-                            /* Update Erase command to use Octal DDR mode */
-                            device->eraseCmd->commandH = device->eraseCmd->command;
-                            device->eraseCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
-                            device->eraseCmd->cmdRate = CY_SMIF_DDR;
-                            device->eraseCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
-                            device->eraseCmd->addrWidth = CY_SMIF_WIDTH_OCTAL;
-                            device->eraseCmd->addrRate = CY_SMIF_DDR;
 
-                            device->programCmd->commandH = device->programCmd->command;
-                            device->programCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
-                            device->programCmd->cmdRate = CY_SMIF_DDR;
-                            device->programCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
-                            device->programCmd->addrWidth = CY_SMIF_WIDTH_OCTAL;
-                            device->programCmd->addrRate = CY_SMIF_DDR;
-                            device->programCmd->dataWidth = CY_SMIF_WIDTH_OCTAL;
-                            device->programCmd->dataRate = CY_SMIF_DDR;
+#if defined (SMIF_OCTAL_SFDP_SUPPORT)
+                        if(pMode == PROTOCOL_MODE_8D_8D_8D)
+                        {
+                             /* Update Erase command to use Octal DDR mode */
+                             device->eraseCmd->commandH = device->eraseCmd->command;
+                             device->eraseCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
+                             device->eraseCmd->cmdRate = CY_SMIF_DDR;
+                             device->eraseCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
+                             device->eraseCmd->addrWidth = CY_SMIF_WIDTH_OCTAL;
+                             device->eraseCmd->addrRate = CY_SMIF_DDR;
+
+                             device->programCmd->commandH = device->programCmd->command;
+                             device->programCmd->cmdWidth = CY_SMIF_WIDTH_OCTAL;
+                             device->programCmd->cmdRate = CY_SMIF_DDR;
+                             device->programCmd->cmdPresence = CY_SMIF_PRESENT_2BYTE;
+                             device->programCmd->addrWidth = CY_SMIF_WIDTH_OCTAL;
+                             device->programCmd->addrRate = CY_SMIF_DDR;
+                             device->programCmd->dataWidth = CY_SMIF_WIDTH_OCTAL;
+                             device->programCmd->dataRate = CY_SMIF_DDR;
                         }
 #endif
+
                     }
                 }
                 else /* Four Byte addressing not supported by the part */
@@ -2778,7 +2727,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                     /* The Erase sector size (from the JEDEC basic flash parameter table) */
                     device->eraseSize = 0x01UL << sfdpBuffer[eraseTypeOffset - 1UL];
 
-                    if (sfdp_minor_revision != CY_SMIF_SFDP_JEDEC_REV_0)
+                    if(sfdp_minor_revision != CY_SMIF_SFDP_JEDEC_REV_0)
                     {
                         /* Erase Time Type (from the JEDEC basic flash parameter table) */
                         device->eraseTime = SfdpGetEraseTime(eraseTypeOffset, sfdpBuffer, eraseType);
@@ -2797,7 +2746,7 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
                     if (CY_SMIF_SUCCESS == result)
                     {
                         result = SfdpPopulateRegionInfo(base, sfdpBuffer, sectorMapTableLength, device, slaveSelect, context, eraseType);
-                        if (result == CY_SMIF_NOT_HYBRID_MEM)
+                        if(result == CY_SMIF_NOT_HYBRID_MEM)
                         {
                             device->hybridRegionCount = 0UL;
                             device->hybridRegionInfo = NULL;
@@ -2819,37 +2768,33 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
 
     /* XIP and Device Register initialization */
     if ((CY_SMIF_SUCCESS == result) &&
-            (0U != (memCfg->flags & CY_SMIF_FLAG_MEMORY_MAPPED)) &&
-            (_FLD2VAL(SMIF_CTL_XIP_MODE, SMIF_CTL(base)) != 1U))
+        (0U != (memCfg->flags & CY_SMIF_FLAG_MEMORY_MAPPED)) &&
+        (_FLD2VAL(SMIF_CTL_XIP_MODE, SMIF_CTL(base)) != 1U))
     {
         /* Check valid parameters for XIP */
-        CY_ASSERT_L3(MEM_ADDR_VALID(memCfg->baseAddress, memCfg->memMappedSize));
-        CY_ASSERT_L3(MEM_MAPPED_SIZE_VALID(memCfg->memMappedSize));
+        CY_ASSERT_L3(MEM_ADDR_VALID( memCfg->baseAddress, memCfg->memMappedSize));
+        CY_ASSERT_L3(MEM_MAPPED_SIZE_VALID( memCfg->memMappedSize));
         SMIF_DEVICE_Type volatile * device_base = Cy_SMIF_GetDeviceBySlot(base, slaveSelect);
 
         if (device_base != NULL)
         {
             XipRegInit(device_base, memCfg);
 
-#if(CY_IP_MXSMIF_VERSION>=2)
             context->preXIPDataRate = memCfg->deviceCfg->readCmd->dataRate;
-#endif /* CY_IP_MXSMIF_VERSION */
         }
 
         /* The device control register initialization */
-        SMIF_DEVICE_CTL(device_base) = _VAL2FLD(SMIF_DEVICE_CTL_WR_EN, ((bool)(memCfg->flags & CY_SMIF_FLAG_WRITE_ENABLE)) ? 1U : 0U) |
-                                       _VAL2FLD(SMIF_DEVICE_CTL_CRYPTO_EN, ((bool)(memCfg->flags & CY_SMIF_FLAG_CRYPTO_ENABLE)) ? 1U : 0U) |
-                                       _VAL2FLD(SMIF_DEVICE_CTL_DATA_SEL, (uint32_t)memCfg->dataSelect) |
-#if(CY_IP_MXSMIF_VERSION>=2)
-                                       _VAL2FLD(SMIF_DEVICE_CTL_MERGE_EN, ((bool)(memCfg->flags & CY_SMIF_FLAG_MERGE_ENABLE)) ? 1U : 0U)  |
-                                       _VAL2FLD(SMIF_DEVICE_CTL_MERGE_TIMEOUT, (uint32_t)memCfg->mergeTimeout) |
-#endif /* CY_IP_MXSMIF_VERSION */
-                                       SMIF_DEVICE_CTL_ENABLED_Msk;
+        SMIF_DEVICE_CTL(device_base) = _VAL2FLD(SMIF_DEVICE_CTL_WR_EN, ((bool)(memCfg->flags & CY_SMIF_FLAG_WRITE_ENABLE))? 1U : 0U) |
+                      _VAL2FLD(SMIF_DEVICE_CTL_CRYPTO_EN, ((bool)(memCfg->flags & CY_SMIF_FLAG_CRYPTO_ENABLE))? 1U : 0U) |
+                      _VAL2FLD(SMIF_DEVICE_CTL_DATA_SEL,  (uint32_t)memCfg->dataSelect) |
+                       _VAL2FLD(SMIF_DEVICE_CTL_MERGE_EN,  ((bool)(memCfg->flags & CY_SMIF_FLAG_MERGE_ENABLE))? 1U : 0U)  |
+                       _VAL2FLD(SMIF_DEVICE_CTL_MERGE_TIMEOUT,  (uint32_t)memCfg->mergeTimeout) |
+                       SMIF_DEVICE_CTL_ENABLED_Msk;
     }
 
     Cy_SysLib_ExitCriticalSection(interruptState);
 
-    return (result);
+    return(result);
 }
 /*******************************************************************************
 * Function Name: Cy_SMIF_MemSfdpDetect
@@ -2909,10 +2854,10 @@ cy_en_smif_status_t Cy_SMIF_MemInitSfdpMode(SMIF_Type *base,
 *
 *******************************************************************************/
 cy_en_smif_status_t Cy_SMIF_MemSfdpDetect(SMIF_Type *base,
-        cy_stc_smif_mem_device_cfg_t *device,
-        cy_en_smif_slave_select_t slaveSelect,
-        cy_en_smif_data_select_t dataSelect,
-        cy_stc_smif_context_t *context)
+                                    cy_stc_smif_mem_device_cfg_t *device,
+                                    cy_en_smif_slave_select_t slaveSelect,
+                                    cy_en_smif_data_select_t dataSelect,
+                                    cy_stc_smif_context_t *context)
 {
 
     /* Check the input parameters */
@@ -2921,15 +2866,13 @@ cy_en_smif_status_t Cy_SMIF_MemSfdpDetect(SMIF_Type *base,
     cy_stc_smif_mem_config_t memSfdpDetect =
     {
         .slaveSelect = slaveSelect,
-        .flags = 0,
         .dataSelect = dataSelect,
         .baseAddress = 0U,
         .memMappedSize = 0U,
         .dualQuadSlots = 0,
         .deviceCfg = device,
-#if (CY_IP_MXSMIF_VERSION >= 3)
-        .mergeTimeout = CY_SMIF_MERGE_TIMEOUT_1_CYCLE
-#endif /* CY_IP_MXSMIF_VERSION */
+        .mergeTimeout = CY_SMIF_MERGE_TIMEOUT_1_CYCLE,
+        .flags = context->flags
     };
 
     return Cy_SMIF_MemInitSfdpMode(base, &memSfdpDetect, CY_SMIF_WIDTH_OCTAL, CY_SMIF_SFDP_QER_0, context);

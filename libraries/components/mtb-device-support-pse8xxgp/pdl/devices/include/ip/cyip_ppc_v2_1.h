@@ -40,37 +40,34 @@
 /**
   * \brief Region Address (PPC_R_ADDR)
   */
-typedef struct
-{
-    __IM uint32_t R_ADDR;                        /*!< 0x00000000 Region Address */
+typedef struct {
+   __IM uint32_t R_ADDR;                        /*!< 0x00000000 Region Address */
 } PPC_R_ADDR_Type;                              /*!< Size = 4 (0x4) */
 
 /**
   * \brief Region Attribute (PPC_R_ATT)
   */
-typedef struct
-{
-    __IM uint32_t R_ATT;                         /*!< 0x00000000 Region Attribute */
+typedef struct {
+   __IM uint32_t R_ATT;                         /*!< 0x00000000 Region Attribute */
 } PPC_R_ATT_Type;                               /*!< Size = 4 (0x4) */
 
 /**
   * \brief Peripheral Protection Controller (PPC)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 PPC Control Registers */
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t LOCK_MASK;                     /*!< 0x0000000C Locked Mask */
-    __IM uint32_t RESERVED1[1020];
-    __IOM uint32_t PC_MASK[1024];                 /*!< 0x00001000 Protection Context Mask */
-    __IOM uint32_t NS_ATT[32];                    /*!< 0x00002000 Non-secure attribute */
-    __IM uint32_t RESERVED2[224];
-    __IOM uint32_t S_P_ATT[32];                   /*!< 0x00002400 Secure Privilege Attribute */
-    __IM uint32_t RESERVED3[1760];
-    __IOM uint32_t NS_P_ATT[32];                  /*!< 0x00004000 Non-secure Privilege Attribute */
-    __IM uint32_t RESERVED4[992];
-    PPC_R_ADDR_Type R_ADDR[1024];           /*!< 0x00005000 Region Address */
-    PPC_R_ATT_Type R_ATT[1024];             /*!< 0x00006000 Region Attribute */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 PPC Control Registers */
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t LOCK_MASK;                     /*!< 0x0000000C Locked Mask */
+   __IM uint32_t RESERVED1[1020];
+  __IOM uint32_t PC_MASK[1024];                 /*!< 0x00001000 Protection Context Mask */
+  __IOM uint32_t NS_ATT[32];                    /*!< 0x00002000 Non-secure attribute */
+   __IM uint32_t RESERVED2[224];
+  __IOM uint32_t S_P_ATT[32];                   /*!< 0x00002400 Secure Privilege Attribute */
+   __IM uint32_t RESERVED3[1760];
+  __IOM uint32_t NS_P_ATT[32];                  /*!< 0x00004000 Non-secure Privilege Attribute */
+   __IM uint32_t RESERVED4[992];
+        PPC_R_ADDR_Type R_ADDR[1024];           /*!< 0x00005000 Region Address */
+        PPC_R_ATT_Type R_ATT[1024];             /*!< 0x00006000 Region Attribute */
 } PPC_Type;                                     /*!< Size = 28672 (0x7000) */
 
 

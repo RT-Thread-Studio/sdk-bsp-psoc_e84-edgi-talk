@@ -27,50 +27,40 @@
 #define _SYSTEM_PSE84_H_
 
 /**
-* \addtogroup group_system_config_psoc_edge
+* \addtogroup group_system_config_psoc_edge Startup/System
 * \{
 * Provides device startup, system configuration, and linker script files.
 * The system startup provides the followings features:
-* - \ref group_system_config_device_memory_definition_1d
-* - \ref group_system_config_device_initialization_1d
-* - \ref group_system_config_heap_stack_config_1d
-* - \ref group_system_config_default_handlers_1d
-* - \ref group_system_config_device_vector_table_1d
+* - \ref group_system_config_device_memory_definition_edge
+* - \ref group_system_config_device_initialization_edge
+* - \ref group_system_config_heap_stack_config_edge
+* - \ref group_system_config_default_handlers_edge
+* - \ref group_system_config_device_vector_table_edge
 *
-* \section group_system_config_configuration_1d Configuration Considerations
+* \section group_system_config_configuration_edge Configuration Considerations
 *
-* \subsection group_system_config_device_memory_definition_1d Device Memory Definition
-* Allocation of different types of memory such as the ROM, flash and RAM etc. for the CPU is defined by the linker scripts.
+* \subsection group_system_config_device_memory_definition_edge Device Memory Definition
+* Allocation of different types of memory such as the RRAM and RAM etc. for the CPU is defined
+* by the linker scripts.
 *
-* \note The linker files provided with the PDL are generic and handle all common
+* \note The linker files provided with the templates are generic and handle all common
 * use cases. Your project may not use every section defined in the linker files.
 * In that case you may see warnings during the build process. To eliminate build
 * warnings in your project, you can simply comment out or remove the relevant
 * section in the linker file.
 *
-* <b>ARM GCC</b>\n
-* The flash and RAM sections for the CPU are defined in the linker files:
-* 'xx_yy_zz.ld', where 'xx' is the device group, 'yy' is the secure or non secure,
-* and zz is the memory type; for example, 'pse84_ns_ram.ld' and 'pse84_s_flash.ld'.
-* \note If the start of the Cortex-M33 application image is changed, the value
-* of the \ref CY_CORTEX_M33_SEC_APPL_ADDR should also be changed. The
-* \ref CY_CORTEX_M33_SEC_APPL_ADDR macro should be used as the parameter for the
-* Cy_SysEnableCM33() function call.
+* \note If the start of the Cortex-M33 non-secure application image is changed, the value
+* of the \ref CY_CORTEX_M33_NS_APPL_ADDR should also be changed. The
+* \ref CY_CORTEX_M33_NS_APPL_ADDR macro should be used as the parameter fo the __TZ_set_MSP_NS
+* function call.
 *
 * \note If the start of the Cortex-M55 application image is changed, the value
 * of the \ref CY_CORTEX_M55_APPL_ADDR should also be changed. The
 * \ref CY_CORTEX_M55_APPL_ADDR macro should be used as the parameter for the
 * Cy_SysEnableCM55() function call.
 *
-* Change the code and data sizes by editing the macros values in the
-* linker files for both CM33 and CM55 CPUs:
-* - 'pse84_ns_zz.ld', where 'zz' is the device memory type:
-* \code
-*   code       (rx)     : ORIGIN = CODE_VMA, LENGTH = CODE_SIZE
-*   data       (rwx)    : ORIGIN = DATA_VMA, LENGTH = DATA_SIZE
-* \endcode
 *
-* \subsection group_system_config_device_initialization_1d Device Initialization
+* \subsection group_system_config_device_initialization_edge Device Initialization
 * After a power-on-reset (POR), the boot process is handled by the boot code
 * from the on-chip ROM that is always executed by the Cortex-M0+ core. The boot
 * code passes the control to the Cortex-M33 startup code and Cortex-M33 boots the Cortex-M55 core.
@@ -102,14 +92,13 @@
 * Below sequence diagram captures the initialization process in the startup code.
 * ![](cm33_bootup_sequence.png)
 *
-* \subsection group_system_config_heap_stack_config_1d Heap and Stack Configuration
-* By default, the stack size is set to 0x00001000 and the entire remaining ram is used for the heap
+* \subsection group_system_config_heap_stack_config_edge Heap and Stack Configuration
+* By default, the stack size is set to 0x00001000 for non-secure applications and 0x00000800 for the CM33 secure
+* application. The remaining ram is used for the heap
 *
-* \subsubsection group_system_config_heap_stack_config_gcc_1d ARM GCC
-* - <b>Editing source code</b>\n
-* The stack and heap sizes are defined in the linker script file: 'pse84_ns_ram.ld'.
-* Change the stack size by modifying the following line:\n
-* \code STACK_SIZE = 0x00001000; \endcode
+* \subsubsection group_system_config_heap_stack_config_gcc_edge ARM GCC
+* The stack and heap sizes are defined in the linker script file: 'pse84_s_cm33.ld', 'pse84_ns_cm33.ld' and 'pse84_ns_cm55.ld'
+* To set stack size in application add makefile ldflags: -Wl,--defsym=APP_MSP_STACK_SIZE=< CUSTOM_VALUE >
 * Remaining free RAM is used as heap.
 *
 * \note Correct operation of malloc and related functions depends on the working
@@ -118,27 +107,50 @@
 * doesn't check for heap and stack collisions during excessive memory allocations.
 * To ensure the heap always remains within the range defined by __HeapBase and
 * __HeapLimit linker symbols, provide a strong override for the 'sbrk' function:
-* \snippet startup/snippet/main.c snippet_sbrk_cm33
+* ```C
+* void * _sbrk(uint32_t incr)
+* {
+*     extern uint8_t __HeapBase, __HeapLimit;
+*     static uint8_t *heapBrk = &__HeapBase;
+*     uint8_t *prevBrk = heapBrk;
+*     if (incr > (uint32_t)(&__HeapLimit - heapBrk))
+*     {
+*         errno = ENOMEM;
+*         CY_HALT();
+*     }
+*     heapBrk += incr;
+*     return prevBrk;
+* }
+* ```
 * For FreeRTOS-enabled multi-threaded applications, it is sufficient to include
 * clib-support library that provides newlib-compatible implementations of
 * 'sbrk', '__malloc_lock' and '__malloc_unlock':
 * <br>
 * https://github.com/Infineon/clib-support.
 *
-* \subsubsection group_system_config_heap_stack_config_arm_1d ARM Compiler
-* Currently Not Supported
+* \subsubsection group_system_config_heap_stack_config_arm_edge ARM Compiler
+* The stack and heap sizes are defined in the linker script file: 'pse84_s_cm33.sct', 'pse84_ns_cm33.sct' and 'pse84_ns_cm55.sct'
+* To set stack size in application add makefile ldflags: --predefine="-DAPP_MSP_STACK_SIZE=< CUSTOM_VALUE >"
+* Remaining free RAM is used as heap.
 *
-* \subsubsection group_system_config_heap_stack_config_iar_1d IAR
-* Currently Not Supported
+* \subsubsection group_system_config_heap_stack_config_iar_edge IAR
+* The stack and heap sizes are defined in the linker script file: 'pse84_s_cm33.icf', 'pse84_ns_cm33.icf' and 'pse84_ns_cm55.icf'
+* To set stack size in application add makefile ldflags: --config_def APP_MSP_STACK_SIZE=< CUSTOM_VALUE >
+* Remaining free RAM is used as heap.
 *
-* \subsection group_system_config_default_handlers_1d Default Interrupt Handlers Definition
+* \subsubsection group_system_config_heap_stack_config_llvm_edge LLVM ARM
+* The stack and heap sizes are defined in the linker script file: 'pse84_s_cm33.ld', 'pse84_ns_cm33.ld' and 'pse84_ns_cm55.ld'
+* To set stack size in application add makefile ldflags: -Wl,--defsym=APP_MSP_STACK_SIZE=< CUSTOM_VALUE >
+* Remaining free RAM is used as heap.
+*
+* \subsection group_system_config_default_handlers_edge Default Interrupt Handlers Definition
 * The default interrupt handler functions are dummy handler in the startup file.\n
 * Below is the default handler for the non-secure interrupts:\n
 * \code interrupt_type void InterruptHandler(void) {
 *    while(1);
 * } \endcode
 *
-* \subsection group_system_config_device_vector_table_1d Vectors Table Copy from Flash to RAM
+* \subsection group_system_config_device_vector_table_edge Vectors Table Copy from Flash to RAM
 * This process uses memory sections defined in the linker script. The startup code copies the
 * default vector table contents to the non-secure SRAM region specified by the linker script.
 * APIs are provided in the sysint driver to hook user implemented handler replacing the default
@@ -146,40 +158,31 @@
 *
 * Following tables provide the address of the default and non-secure SRAM interrupt vector
 * table for different supported compilers.
-* \subsubsection group_system_config_device_vector_table_gcc_1d ARM GCC
-* The linker script file is 'pse84_ns_ram.ld'.
+* The linker script file is 'pse84_ns_cm33.ld'.
 * For non-secure world, it uses the following variable.\n
 *       Copy interrupt vectors from ROM/flash to RAM: \n
 *       From: \code __ns_vector_table \endcode
 *       To:   \code __ns_vector_table_rw \endcode
 * The vector table address (and the vector table itself) are defined in the
 * ns_start_<device>.c startup file corresponding to non-secure world.
-* The code in these files copies the vector table from ROM/Flash to RAM.
+* The code in these files copies the vector table from Flash to RAM.
 *
-* \subsubsection group_system_config_device_vector_table_mdk_1d ARM Compiler
-* Currently Not Supported
-*
-* \subsubsection group_system_config_device_vector_table_iar_1d IAR
-* Currently Not Supported
-*
-* \defgroup group_system_config_macro_1d Macros
+* \defgroup group_system_config_macro_edge Macros
 * \{
-*   \defgroup group_system_config_system_macro_1d System Macros
-*   \defgroup group_system_config_core_status_macro_1d Core Status Macros
-*   \defgroup group_system_config_user_settings_macro_1d User Settings Macros
+*   \defgroup group_system_config_system_macro_edge System Macros
+*   \defgroup group_system_config_core_status_macro_edge Core Status Macros
+*   \defgroup group_system_config_user_settings_macro_edge User Settings Macros
 * \}
-* \defgroup group_system_config_enum_1d Enumerated Types
+* \defgroup group_system_config_enum_edge Enumerated Types
 * \{
 *   \defgroup group_system_enums APPCPU Debug mode Enumerated Types
 * \}
-* \defgroup group_system_config_functions_1d Functions
+* \defgroup group_system_config_functions_edge Functions
 * \{
-*   \defgroup group_system_config_cm33_functions_1d Cortex-M33 Control Functions
-*   \defgroup group_system_config_cm55_functions_1d Cortex-M55 Control Functions
+*   \defgroup group_system_config_cm33_functions_edge Cortex-M33 Control Functions
+*   \defgroup group_system_config_cm55_functions_edge Cortex-M55 Control Functions
 * \}
-* \defgroup group_system_config_globals_1d Global Variables
-*
-* \}
+* \defgroup group_system_config_globals_edge Global Variables
 */
 
 #ifdef __cplusplus
@@ -196,71 +199,106 @@ extern "C" {
 /*******************************************************************************
 * Global preprocessor symbols/macros ('define')
 *******************************************************************************/
-
-/*******************************************************************************
-*
-*                      START OF USER SETTINGS HERE
-*                      ===========================
-*
-*                 All lines with '<<<' can be set by user.
-*
-*******************************************************************************/
-
 /**
-* \addtogroup group_system_config_system_macro_1d
+* \addtogroup group_system_config_system_macro_edge
 * \{
 */
 #if (CY_SYSTEM_CPU_CM33 == 1UL) || defined(CY_DOXYGEN)
-/** The Cortex-M33 startup driver identifier */
-#define CY_STARTUP_M33_ID               ((uint32_t)((uint32_t)((0x10U) & 0x3FFFU) << 18U))
+    /** The Cortex-M33 startup driver identifier */
+    #define CY_STARTUP_M33_ID               ((uint32_t)((uint32_t)((0x10U) & 0x3FFFU) << 18U))
 #endif /* (CY_SYSTEM_CPU_CM33 == 1UL) */
 
 
 #if (CY_SYSTEM_CPU_CM55 == 1UL) || defined(CY_DOXYGEN)
-/** The Cortex-M55 startup driver identifier */
-#define CY_STARTUP_M55_ID               ((uint32_t)((uint32_t)((0x11U) & 0x3FFFU) << 18U))
+    /** The Cortex-M55 startup driver identifier */
+    #define CY_STARTUP_M55_ID               ((uint32_t)((uint32_t)((0x11U) & 0x3FFFU) << 18U))
 #endif /* (CY_SYSTEM_CPU_CM55 == 1UL) */
-/** \} group_system_config_system_macro_1d */
+/** \} group_system_config_system_macro_edge */
 
+/**
+* \addtogroup group_system_config_functions_edge
+* \{
+*/
 
-
+/** Initializes the system.
+  *
+  * Custom steps can be added to this process by overrding the weak Cy_SystemInit() function.
+  */
 extern void SystemInit(void);
 
+/** Update information about system clocks.
+ *
+ * Gets core clock frequency and updates \ref SystemCoreClock,
+ * and \ref cy_AhbFreqHz.
+ *
+ * Updates global variables used by the Cy_SysLib_Delay(),
+ * Cy_SysLib_DelayUs(), and Cy_SysLib_DelayCycles().
+ */
 extern void SystemCoreClockUpdate(void);
 
-extern void     Cy_SystemInit(void);
+/** Populates system clock frequency variables with the provided values.
+ * Sets the startup clock frequencies of \ref SystemCoreClock,
+ * and \ref cy_AhbFreqHz variables.
+ *
+ * \param systemCoreClk_freq_hz
+ * Frequency in Hz for the System Core Clock (e.g. Cortex-M33)
+ *
+ * \param ahb_freq_hz
+ * Frequency in Hz of the AHB source
+ *
+ * \note This API does not take into account any run-time clock frequency updates.
+ * Should any updates occur, \ref SystemCoreClockUpdate must be called afterwards
+ * on the CM33_NS and CM55.
+ */
+extern void SystemCoreClockSetup (uint32_t systemCoreClk_freq_hz, uint32_t ahb_freq_hz);
 
+/** Performs custom system initialization.
+  *
+  * The function is called during device startup. This is a weak function that
+  * by default does nothing. It can be overridden to add custom steps to SystemInit
+  */
+extern void Cy_SystemInit(void);
+
+/** \} group_system_config_functions_edge */
+
+/** \cond INTERNAL */
 extern uint32_t cy_delayFreqHz;
 extern uint32_t cy_delayFreqKhz;
-extern uint32_t  cy_delayFreqMhz;
+extern uint32_t cy_delayFreqMhz;
+/** \endcond */
 
 
-#if (CY_SYSTEM_CPU_CM33 == 1UL) || defined(CY_DOXYGEN)
-/** \addtogroup group_system_config_globals_1d
+/** \addtogroup group_system_config_globals_edge
 * \{
 */
-#elif (CY_SYSTEM_CPU_CM55 == 1UL) || defined(CY_DOXYGEN)
-/** \addtogroup group_system_config_globals_1d
-* \{
-*/
-#endif
+/**
+* Holds the system core clock, which is the system clock frequency supplied
+* to the SysTick timer and the processor core clock.
+* This variable implements the CMSIS Core global variable.
+* Refer to the [CMSIS documentation]
+* (http://www.keil.com/pack/doc/CMSIS/Core/html/group__system__init__gr.html "System and Clock Configuration")
+* for more details.
+* This variable can be used by debuggers to query the frequency
+* of the debug timer or to configure the trace clock speed.
+*
+* \attention Compilers must be configured to avoid removing this variable in case
+* the application program is not using it. Debugging systems require the variable
+* to be physically present in memory so that it can be examined to configure the debugger. */
 extern uint32_t SystemCoreClock;
-extern uint32_t cy_Hfclk0FreqHz;
-extern uint32_t cy_PeriClkFreqHz;
+
+/** Holds the AHB frequency. Updated by \ref SystemCoreClockUpdate(). */
 extern uint32_t cy_AhbFreqHz;
+
+/** Holds the flag to indicate if the System woke up from Warm Boot or not */
 extern bool cy_WakeupFromWarmBootStatus;
 
-#if (CY_SYSTEM_CPU_CM33 == 1UL) || defined(CY_DOXYGEN)
-/** \} group_system_config_globals_1d */
-#elif (CY_SYSTEM_CPU_CM55 == 1UL) || defined(CY_DOXYGEN)
-/** \} group_system_config_globals_1d */
-#endif
+/** \} group_system_config_globals_edge */
+
+/** \} group_system_config_psoc_edge */
 
 #ifdef __cplusplus
 }
 #endif
-
-/** \endcond */
 
 #endif /* _SYSTEM_PSE84_H_ */
 

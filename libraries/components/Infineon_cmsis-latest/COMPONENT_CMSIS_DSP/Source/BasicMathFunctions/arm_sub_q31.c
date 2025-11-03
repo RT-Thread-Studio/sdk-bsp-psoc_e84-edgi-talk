@@ -43,7 +43,6 @@
   @param[in]     pSrcB      points to the second input vector
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function uses saturating arithmetic.
@@ -54,13 +53,13 @@
 
 #include "arm_helium_utils.h"
 
-void arm_sub_q31(
-    const q31_t * pSrcA,
-    const q31_t * pSrcB,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_sub_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;
+    uint32_t blkCnt;   
     q31x4_t vecA;
     q31x4_t vecB;
 
@@ -100,56 +99,56 @@ void arm_sub_q31(
 }
 
 #else
-void arm_sub_q31(
-    const q31_t * pSrcA,
-    const q31_t * pSrcB,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_sub_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A - B */
+  while (blkCnt > 0U)
+  {
+    /* C = A - B */
 
-        /* Subtract and store result in destination buffer. */
-        *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
+    /* Subtract and store result in destination buffer. */
+    *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
 
-        *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
+    *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
 
-        *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
+    *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
 
-        *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
+    *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A - B */
+  while (blkCnt > 0U)
+  {
+    /* C = A - B */
 
-        /* Subtract and store result in destination buffer. */
-        *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
+    /* Subtract and store result in destination buffer. */
+    *pDst++ = __QSUB(*pSrcA++, *pSrcB++);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

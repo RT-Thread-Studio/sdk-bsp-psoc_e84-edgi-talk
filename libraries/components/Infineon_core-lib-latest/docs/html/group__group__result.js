@@ -76,6 +76,7 @@ var group__group__result =
       [ "CY_RSLT_MODULE_DRIVER_SAR2", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a556f94e44063eedd35902918290b3e8b", null ],
       [ "CY_RSLT_MODULE_DRIVER_DSADC", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a0b33e680efd06ffa12c109a70ee184f3", null ],
       [ "CY_RSLT_MODULE_DRIVER_CAN2B", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a1b8a6dcc775844139fa2bf0b47999e8e", null ],
+      [ "CY_RSLT_MODULE_DRIVER_ISOUART", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a0be0a3224c3a676d0244de7d8c794b3b", null ],
       [ "CY_RSLT_MODULE_DRIVER_KEYSCAN", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0ac3fe5c1390bd3da0a397af4f1fac8a96", null ],
       [ "CY_RSLT_MODULE_DRIVER_PDM_PCM2", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a8108e24a01c2130c03f018293573b30f", null ],
       [ "CY_RSLT_MODULE_DRIVER_CRYPTOLITE", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0ab8047a8ce963ee7e66e98863a99b083e", null ],
@@ -138,6 +139,8 @@ var group__group__result =
       [ "CY_RSLT_MODULE_MIDDLEWARE_PWRCONV", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0af67fbcae1e502cbfb6f59e200fd0d143", null ],
       [ "CY_RSLT_MODULE_MIDDLEWARE_ASYNC_TRANSFER", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0aefc58a4e4e2f1503a394ce1c3691474a", null ],
       [ "CY_RSLT_MODULE_MIDDLEWARE_IPC", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0ae720c840296c9a7bf97e721ef7c13f69", null ],
-      [ "CY_RSLT_MODULE_MIDDLEWARE_AFX", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0abc2a0632ca12e2ebd82d3b0a4326a451", null ]
+      [ "CY_RSLT_MODULE_MIDDLEWARE_AFX", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0abc2a0632ca12e2ebd82d3b0a4326a451", null ],
+      [ "CY_RSLT_MODULE_MIDDLEWARE_SRF", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0a5d8e414ca6181903c3211561c9516585", null ],
+      [ "CY_RSLT_MODULE_MIDDLEWARE_PMBUS", "group__group__result.html#gga9008565cba0207520330a1cb8509a8d0ac80960b324e25a6f6eb31515ba5eca78", null ]
     ] ]
 ];

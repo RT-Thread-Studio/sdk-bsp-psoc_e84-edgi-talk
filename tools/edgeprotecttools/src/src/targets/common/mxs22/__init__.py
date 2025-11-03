@@ -22,6 +22,5 @@ from .provisioning import ProvisioningMXS22, RamAppLoaderMXS22
 from .provisioning_packet_mxs22 import ProvisioningPacketMXS22
 from .project_init_mxs22 import ProjectInitializerMXS22
 from .ram_app_pkg_mxs22 import RamAppPackageMXS22
-from .silicon_data_reader_mxs22 import SiliconDataReaderMXS22
 from .version_provider_mxs22 import VersionProviderMXS22
 from .image_verification_mxs22 import ImageVerificationMXS22

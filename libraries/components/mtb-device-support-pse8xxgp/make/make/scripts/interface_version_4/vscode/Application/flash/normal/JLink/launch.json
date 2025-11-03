@@ -66,7 +66,7 @@
                 "launches": [                               // Array of launches. Order is respected
                     {
                         "name": "Attach PSOCE84 CM55 (JLink)",     // Name of another configuration
-                        "folder": "./&&_MTB_RECIPE__SECOND_APP_NAME&&",
+                        "folder": "./&&_MTB_RECIPE__CM55_PRJ_DIR&&",
                         "overrides": {
                             "overrideRestartCommands": [
                                 "monitor halt"

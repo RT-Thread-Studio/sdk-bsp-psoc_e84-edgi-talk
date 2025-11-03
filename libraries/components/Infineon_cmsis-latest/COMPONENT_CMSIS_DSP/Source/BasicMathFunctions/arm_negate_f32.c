@@ -56,17 +56,16 @@
   @param[in]     pSrc       points to input vector.
   @param[out]    pDst       points to output vector.
   @param[in]     blockSize  number of samples in each vector.
-  @return        none
  */
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
-void arm_negate_f32(
-    const float32_t *pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_negate_f32(
+  const float32_t * pSrc,
+        float32_t * pDst,
+        uint32_t blockSize)
 {
     uint32_t blkCnt;                               /* Loop counter */
     f32x4_t vec1;
@@ -87,7 +86,7 @@ void arm_negate_f32(
         /* Increment pointers */
         pSrc += 4;
         pDst += 4;
-
+        
         /* Decrement the loop counter */
         blkCnt--;
     }
@@ -96,21 +95,21 @@ void arm_negate_f32(
     blkCnt = blockSize & 0x3;
     if (blkCnt > 0U)
     {
-        /* C = |A| */
-        mve_pred16_t p0 = vctp32q(blkCnt);
-        vec1 = vld1q((float32_t const *) pSrc);
-        vstrwq_p(pDst, vnegq(vec1), p0);
+      /* C = |A| */
+      mve_pred16_t p0 = vctp32q(blkCnt);
+      vec1 = vld1q((float32_t const *) pSrc);
+      vstrwq_p(pDst, vnegq(vec1), p0);
     }
 
 }
 
 #else
-void arm_negate_f32(
-    const float32_t *pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_negate_f32(
+  const float32_t * pSrc,
+        float32_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 #if defined(ARM_MATH_NEON_EXPERIMENTAL) && !defined(ARM_MATH_AUTOVECTORIZE)
     f32x4_t vec1;
@@ -123,7 +122,7 @@ void arm_negate_f32(
     {
         /* C = -A */
 
-        /* Negate and then store the results in the destination buffer. */
+    	/* Negate and then store the results in the destination buffer. */
         vec1 = vld1q_f32(pSrc);
         res = vnegq_f32(vec1);
         vst1q_f32(pDst, res);
@@ -131,7 +130,7 @@ void arm_negate_f32(
         /* Increment pointers */
         pSrc += 4;
         pDst += 4;
-
+        
         /* Decrement the loop counter */
         blkCnt--;
     }
@@ -142,47 +141,47 @@ void arm_negate_f32(
 #else
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
-        /* Negate and store result in destination buffer. */
-        *pDst++ = -*pSrc++;
+    /* Negate and store result in destination buffer. */
+    *pDst++ = -*pSrc++;
 
-        *pDst++ = -*pSrc++;
+    *pDst++ = -*pSrc++;
 
-        *pDst++ = -*pSrc++;
+    *pDst++ = -*pSrc++;
 
-        *pDst++ = -*pSrc++;
+    *pDst++ = -*pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 #endif /* #if defined(ARM_MATH_NEON_EXPERIMENTAL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = -A */
+  while (blkCnt > 0U)
+  {
+    /* C = -A */
 
-        /* Negate and store result in destination buffer. */
-        *pDst++ = -*pSrc++;
+    /* Negate and store result in destination buffer. */
+    *pDst++ = -*pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

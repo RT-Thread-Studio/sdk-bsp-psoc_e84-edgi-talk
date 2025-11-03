@@ -66,12 +66,12 @@
 #include "arm_helium_utils.h"
 #include "arm_vec_math.h"
 
-float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
 {
     float32_t       maxVal;
     const float32_t *pIn;
     int32_t         blkCnt;
-    float32_t       accum = 0.0f;
+    float32_t       accum=0.0f;
     float32_t       tmp;
 
 
@@ -84,7 +84,7 @@ float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
 
     f32x4_t         vSum = vdupq_n_f32(0.0f);
     blkCnt = blockSize >> 2;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
         f32x4_t         vecIn = vld1q(pIn);
         f32x4_t         vecExp;
@@ -105,12 +105,12 @@ float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
     accum = vecAddAcrossF32Mve(vSum);
 
     blkCnt = blockSize & 0x3;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        tmp = *pIn++;
-        accum += expf(tmp - maxVal);
-        blkCnt--;
-
+       tmp = *pIn++;
+       accum += expf(tmp - maxVal);
+       blkCnt--;
+    
     }
 
     accum = maxVal + logf(accum);
@@ -122,7 +122,7 @@ float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
 #if defined(ARM_MATH_NEON) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "NEMath.h"
-float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
 {
     float32_t maxVal;
     float32_t tmp;
@@ -135,64 +135,64 @@ float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
     const float32_t *pIn;
     uint32_t blkCnt;
     float32_t accum;
-
+ 
     pIn = in;
 
     blkCnt = blockSize;
 
     if (blockSize <= 3)
     {
-        maxVal = *pIn++;
-        blkCnt--;
+      maxVal = *pIn++;
+      blkCnt--;
 
-        while (blkCnt > 0)
-        {
-            tmp = *pIn++;
-
-            if (tmp > maxVal)
-            {
-                maxVal = tmp;
-            }
-            blkCnt--;
-        }
+      while(blkCnt > 0)
+      {
+         tmp = *pIn++;
+  
+         if (tmp > maxVal)
+         {
+            maxVal = tmp;
+         }
+         blkCnt--;
+      }
     }
     else
     {
-        maxValV = vld1q_f32(pIn);
-        pIn += 4;
-        blkCnt = (blockSize - 4) >> 2;
+      maxValV = vld1q_f32(pIn);
+      pIn += 4;
+      blkCnt = (blockSize - 4) >> 2;
 
-        while (blkCnt > 0)
-        {
-            tmpVb = vld1q_f32(pIn);
-            pIn += 4;
+      while(blkCnt > 0)
+      {
+         tmpVb = vld1q_f32(pIn);
+         pIn += 4;
+  
+         idxV = vcgtq_f32(tmpVb, maxValV);
+         maxValV = vbslq_f32(idxV, tmpVb, maxValV );
 
-            idxV = vcgtq_f32(tmpVb, maxValV);
-            maxValV = vbslq_f32(idxV, tmpVb, maxValV);
+         blkCnt--;
+      }
 
-            blkCnt--;
-        }
+      accumV2 = vpmax_f32(vget_low_f32(maxValV),vget_high_f32(maxValV));
+      accumV2 = vpmax_f32(accumV2,accumV2);
+      maxVal = vget_lane_f32(accumV2, 0) ;
 
-        accumV2 = vpmax_f32(vget_low_f32(maxValV), vget_high_f32(maxValV));
-        accumV2 = vpmax_f32(accumV2, accumV2);
-        maxVal = vget_lane_f32(accumV2, 0) ;
+      blkCnt = (blockSize - 4) & 3;
 
-        blkCnt = (blockSize - 4) & 3;
-
-        while (blkCnt > 0)
-        {
-            tmp = *pIn++;
-
-            if (tmp > maxVal)
-            {
-                maxVal = tmp;
-            }
-            blkCnt--;
-        }
+      while(blkCnt > 0)
+      {
+         tmp = *pIn++;
+  
+         if (tmp > maxVal)
+         {
+            maxVal = tmp;
+         }
+         blkCnt--;
+      }
 
     }
 
-
+    
 
     maxValV = vdupq_n_f32(maxVal);
     pIn = in;
@@ -201,73 +201,73 @@ float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
 
     blkCnt = blockSize >> 2;
 
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        tmpV = vld1q_f32(pIn);
-        pIn += 4;
-        tmpV = vsubq_f32(tmpV, maxValV);
-        tmpV = vexpq_f32(tmpV);
-        accumV = vaddq_f32(accumV, tmpV);
+       tmpV = vld1q_f32(pIn);
+       pIn += 4;
+       tmpV = vsubq_f32(tmpV, maxValV);
+       tmpV = vexpq_f32(tmpV);
+       accumV = vaddq_f32(accumV, tmpV);
 
-        blkCnt--;
-
+       blkCnt--;
+    
     }
-    accumV2 = vpadd_f32(vget_low_f32(accumV), vget_high_f32(accumV));
+    accumV2 = vpadd_f32(vget_low_f32(accumV),vget_high_f32(accumV));
     accum = vget_lane_f32(accumV2, 0) + vget_lane_f32(accumV2, 1);
 
     blkCnt = blockSize & 0x3;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        tmp = *pIn++;
-        accum += expf(tmp - maxVal);
-        blkCnt--;
-
+       tmp = *pIn++;
+       accum += expf(tmp - maxVal);
+       blkCnt--;
+    
     }
 
     accum = maxVal + logf(accum);
 
-    return (accum);
+    return(accum);
 }
 #else
-float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_logsumexp_f32(const float32_t *in, uint32_t blockSize)
 {
     float32_t maxVal;
     float32_t tmp;
     const float32_t *pIn;
     uint32_t blkCnt;
     float32_t accum;
-
+ 
     pIn = in;
     blkCnt = blockSize;
 
     maxVal = *pIn++;
     blkCnt--;
 
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        tmp = *pIn++;
+       tmp = *pIn++;
 
-        if (tmp > maxVal)
-        {
-            maxVal = tmp;
-        }
-        blkCnt--;
-
+       if (tmp > maxVal)
+       {
+          maxVal = tmp;
+       }
+       blkCnt--;
+    
     }
 
     blkCnt = blockSize;
     pIn = in;
     accum = 0;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        tmp = *pIn++;
-        accum += expf(tmp - maxVal);
-        blkCnt--;
-
+       tmp = *pIn++;
+       accum += expf(tmp - maxVal);
+       blkCnt--;
+    
     }
     accum = maxVal + logf(accum);
 
-    return (accum);
+    return(accum);
 }
 #endif
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

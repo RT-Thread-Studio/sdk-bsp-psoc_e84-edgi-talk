@@ -4,14 +4,11 @@ Please refer to the [README.md](./README.md) and the [emUSB-Device API Reference
 
 ## What's Included?
 
-Migrated to HAL-Next.
-Added support of LLVM compiler.
-
 To view the full list of changes, refer to [Changelog section](https://infineon.github.io/emusb-device/html/index.html#section_emusb_device_changelog).
 
 ## Known Issues and Limitations
 
-N/A
+
 
 ## Supported Software and Tools
 
@@ -19,11 +16,11 @@ This version of the emUSB-Device was validated for the compatibility with the fo
 
 | Software and Tools                                      | Version |
 | :---                                                    | :----:  |
-| ModusToolbox Software Environment                       | 3.5     |
-| MTB Device Support package for PSE84                    | 1.0.200 |
-| RTOS Abstraction                                        | 1.10.200|
-| Retarget IO                                             | 2.0.200 |
-| GCC Compiler                                            | 11.3.1  |
+| ModusToolbox Software Environment                       | 3.6     |
+| MTB Device Support Library for PSE84                    | 1.0.0   |
+| RTOS Abstraction                                        | 1.11.0  |
+| Retarget IO                                             | 1.8.0   |
+| GCC Compiler                                            | 14.2.1  |
 | IAR Compiler                                            | 9.50.2  |
 | ARM Compiler 6                                          | 6.22    |
 | LLVM ARM Compiler                                       | 19.1.5  |

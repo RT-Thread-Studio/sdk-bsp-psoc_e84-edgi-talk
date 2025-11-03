@@ -42,19 +42,18 @@
  * @param[in]    S          Pointer to an instance of the linear SVM structure.
  * @param[in]    in         Pointer to input vector
  * @param[out]   pResult    Decision value
- * @return none.
  *
  */
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
-void arm_svm_linear_predict_f32(
+ARM_DSP_ATTRIBUTE void arm_svm_linear_predict_f32(
     const arm_svm_linear_instance_f32 *S,
-    const float32_t *in,
-    int32_t *pResult)
+    const float32_t * in,
+    int32_t * pResult)
 {
-    /* inlined Matrix x Vector function interleaved with dot prod */
+        /* inlined Matrix x Vector function interleaved with dot prod */
     uint32_t        numRows = S->nbOfSupportVectors;
     uint32_t        numCols = S->vectorDimension;
     const float32_t *pSupport = S->supportVectors;
@@ -70,7 +69,7 @@ void arm_svm_linear_predict_f32(
     /*
      * compute 4 rows in parrallel
      */
-    while (row >= 4)
+    while (row >= 4) 
     {
         const float32_t *pInA2, *pInA3;
         float32_t const *pSrcA0Vec, *pSrcA1Vec, *pSrcA2Vec, *pSrcA3Vec, *pInVec;
@@ -102,8 +101,7 @@ void arm_svm_linear_predict_f32(
         pSrcA3Vec = pInA3;
 
         blkCnt = numCols >> 2;
-        while (blkCnt > 0U)
-        {
+        while (blkCnt > 0U) {
             f32x4_t         vecA;
 
             vecIn = vld1q(pInVec);
@@ -128,8 +126,7 @@ void arm_svm_linear_predict_f32(
          * (will be merged thru tail predication)
          */
         blkCnt = numCols & 3;
-        if (blkCnt > 0U)
-        {
+        if (blkCnt > 0U) {
             mve_pred16_t    p0 = vctp32q(blkCnt);
             f32x4_t         vecA;
 
@@ -147,10 +144,10 @@ void arm_svm_linear_predict_f32(
          * Sum the partial parts
          */
 
-        acc0 = vmulq_n_f32(acc0, *pDualCoef++);
-        acc0 = vfmaq_n_f32(acc0, acc1, *pDualCoef++);
-        acc0 = vfmaq_n_f32(acc0, acc2, *pDualCoef++);
-        acc0 = vfmaq_n_f32(acc0, acc3, *pDualCoef++);
+        acc0 = vmulq_n_f32(acc0,*pDualCoef++);
+        acc0 = vfmaq_n_f32(acc0,acc1,*pDualCoef++);
+        acc0 = vfmaq_n_f32(acc0,acc2,*pDualCoef++);
+        acc0 = vfmaq_n_f32(acc0,acc3,*pDualCoef++);
 
         sum += vecAddAcrossF32Mve(acc0);
 
@@ -164,8 +161,7 @@ void arm_svm_linear_predict_f32(
     /*
      * compute 2 rows in parallel
      */
-    if (row >= 2)
-    {
+    if (row >= 2) {
         float32_t const *pSrcA0Vec, *pSrcA1Vec, *pInVec;
         f32x4_t         vecIn, acc0, acc1;
         float32_t const *pSrcVecPtr = in;
@@ -188,8 +184,7 @@ void arm_svm_linear_predict_f32(
         pSrcA1Vec = pInA1;
 
         blkCnt = numCols >> 2;
-        while (blkCnt > 0U)
-        {
+        while (blkCnt > 0U) {
             f32x4_t         vecA;
 
             vecIn = vld1q(pInVec);
@@ -208,8 +203,7 @@ void arm_svm_linear_predict_f32(
          * (will be merged thru tail predication)
          */
         blkCnt = numCols & 3;
-        if (blkCnt > 0U)
-        {
+        if (blkCnt > 0U) {
             mve_pred16_t    p0 = vctp32q(blkCnt);
             f32x4_t         vecA;
 
@@ -222,8 +216,8 @@ void arm_svm_linear_predict_f32(
         /*
          * Sum the partial parts
          */
-        acc0 = vmulq_n_f32(acc0, *pDualCoef++);
-        acc0 = vfmaq_n_f32(acc0, acc1, *pDualCoef++);
+        acc0 = vmulq_n_f32(acc0,*pDualCoef++);
+        acc0 = vfmaq_n_f32(acc0,acc1,*pDualCoef++);
 
         sum += vecAddAcrossF32Mve(acc0);
 
@@ -232,8 +226,7 @@ void arm_svm_linear_predict_f32(
         row -= 2;
     }
 
-    if (row >= 1)
-    {
+    if (row >= 1) {
         f32x4_t         vecIn, acc0;
         float32_t const *pSrcA0Vec, *pInVec;
         float32_t const *pSrcVecPtr = in;
@@ -253,8 +246,7 @@ void arm_svm_linear_predict_f32(
         pSrcA0Vec = pInA0;
 
         blkCnt = numCols >> 2;
-        while (blkCnt > 0U)
-        {
+        while (blkCnt > 0U) {
             f32x4_t         vecA;
 
             vecIn = vld1q(pInVec);
@@ -270,8 +262,7 @@ void arm_svm_linear_predict_f32(
          * (will be merged thru tail predication)
          */
         blkCnt = numCols & 3;
-        if (blkCnt > 0U)
-        {
+        if (blkCnt > 0U) {
             mve_pred16_t    p0 = vctp32q(blkCnt);
             f32x4_t         vecA;
 
@@ -291,24 +282,24 @@ void arm_svm_linear_predict_f32(
 
 #else
 #if defined(ARM_MATH_NEON)
-void arm_svm_linear_predict_f32(
+ARM_DSP_ATTRIBUTE void arm_svm_linear_predict_f32(
     const arm_svm_linear_instance_f32 *S,
-    const float32_t *in,
-    int32_t *pResult)
+    const float32_t * in,
+    int32_t * pResult)
 {
     float32_t sum = S->intercept;
-
+   
     float32_t dot;
-    float32x4_t dotV;
+    float32x4_t dotV; 
 
-    float32x4_t accuma, accumb, accumc, accumd, accum;
+    float32x4_t accuma,accumb,accumc,accumd,accum;
     float32x2_t accum2;
     float32x4_t vec1;
 
-    float32x4_t vec2, vec2a, vec2b, vec2c, vec2d;
+    float32x4_t vec2,vec2a,vec2b,vec2c,vec2d;
 
-    uint32_t blkCnt;
-    uint32_t vectorBlkCnt;
+    uint32_t blkCnt;   
+    uint32_t vectorBlkCnt;   
 
     const float32_t *pIn = in;
 
@@ -339,7 +330,7 @@ void arm_svm_linear_predict_f32(
         blkCnt = S->vectorDimension >> 2;
         while (blkCnt > 0U)
         {
-
+        
             vec1 = vld1q_f32(pIn);
             vec2a = vld1q_f32(pSupporta);
             vec2b = vld1q_f32(pSupportb);
@@ -352,33 +343,33 @@ void arm_svm_linear_predict_f32(
             pSupportc += 4;
             pSupportd += 4;
 
-            accuma = vmlaq_f32(accuma, vec1, vec2a);
-            accumb = vmlaq_f32(accumb, vec1, vec2b);
-            accumc = vmlaq_f32(accumc, vec1, vec2c);
-            accumd = vmlaq_f32(accumd, vec1, vec2d);
+            accuma = vmlaq_f32(accuma, vec1,vec2a);
+            accumb = vmlaq_f32(accumb, vec1,vec2b);
+            accumc = vmlaq_f32(accumc, vec1,vec2c);
+            accumd = vmlaq_f32(accumd, vec1,vec2d);
 
             blkCnt -- ;
         }
-        accum2 = vpadd_f32(vget_low_f32(accuma), vget_high_f32(accuma));
-        dotV = vsetq_lane_f32(vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1), dotV, 0);
+        accum2 = vpadd_f32(vget_low_f32(accuma),vget_high_f32(accuma));
+        dotV = vsetq_lane_f32(vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1),dotV,0);
 
-        accum2 = vpadd_f32(vget_low_f32(accumb), vget_high_f32(accumb));
-        dotV = vsetq_lane_f32(vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1), dotV, 1);
+        accum2 = vpadd_f32(vget_low_f32(accumb),vget_high_f32(accumb));
+        dotV = vsetq_lane_f32(vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1),dotV,1);
 
-        accum2 = vpadd_f32(vget_low_f32(accumc), vget_high_f32(accumc));
-        dotV = vsetq_lane_f32(vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1), dotV, 2);
+        accum2 = vpadd_f32(vget_low_f32(accumc),vget_high_f32(accumc));
+        dotV = vsetq_lane_f32(vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1),dotV,2);
 
-        accum2 = vpadd_f32(vget_low_f32(accumd), vget_high_f32(accumd));
-        dotV = vsetq_lane_f32(vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1), dotV, 3);
+        accum2 = vpadd_f32(vget_low_f32(accumd),vget_high_f32(accumd));
+        dotV = vsetq_lane_f32(vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1),dotV,3);
 
 
         blkCnt = S->vectorDimension & 3;
         while (blkCnt > 0U)
         {
-            dotV = vsetq_lane_f32(vgetq_lane_f32(dotV, 0) + *pIn * *pSupporta++, dotV, 0);
-            dotV = vsetq_lane_f32(vgetq_lane_f32(dotV, 1) + *pIn * *pSupportb++, dotV, 1);
-            dotV = vsetq_lane_f32(vgetq_lane_f32(dotV, 2) + *pIn * *pSupportc++, dotV, 2);
-            dotV = vsetq_lane_f32(vgetq_lane_f32(dotV, 3) + *pIn * *pSupportd++, dotV, 3);
+            dotV = vsetq_lane_f32(vgetq_lane_f32(dotV,0) + *pIn * *pSupporta++, dotV,0);
+            dotV = vsetq_lane_f32(vgetq_lane_f32(dotV,1) + *pIn * *pSupportb++, dotV,1);
+            dotV = vsetq_lane_f32(vgetq_lane_f32(dotV,2) + *pIn * *pSupportc++, dotV,2);
+            dotV = vsetq_lane_f32(vgetq_lane_f32(dotV,3) + *pIn * *pSupportd++, dotV,3);
 
             pIn++;
 
@@ -386,16 +377,16 @@ void arm_svm_linear_predict_f32(
         }
 
         vec1 = vld1q_f32(pDualCoefs);
-        pDualCoefs += 4;
+        pDualCoefs += 4; 
 
-        accum = vmulq_f32(vec1, dotV);
-        accum2 = vpadd_f32(vget_low_f32(accum), vget_high_f32(accum));
+        accum = vmulq_f32(vec1,dotV);
+        accum2 = vpadd_f32(vget_low_f32(accum),vget_high_f32(accum));
         sum += vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1);
 
-        pSupporta += 3 * S->vectorDimension;
-        pSupportb += 3 * S->vectorDimension;
-        pSupportc += 3 * S->vectorDimension;
-        pSupportd += 3 * S->vectorDimension;
+        pSupporta += 3*S->vectorDimension;
+        pSupportb += 3*S->vectorDimension;
+        pSupportc += 3*S->vectorDimension;
+        pSupportd += 3*S->vectorDimension;
 
         vectorBlkCnt -- ;
     }
@@ -411,17 +402,17 @@ void arm_svm_linear_predict_f32(
         blkCnt = S->vectorDimension >> 2;
         while (blkCnt > 0U)
         {
-
+        
             vec1 = vld1q_f32(pIn);
             vec2 = vld1q_f32(pSupport);
             pIn += 4;
             pSupport += 4;
 
-            accum = vmlaq_f32(accum, vec1, vec2);
+            accum = vmlaq_f32(accum, vec1,vec2);
 
             blkCnt -- ;
         }
-        accum2 = vpadd_f32(vget_low_f32(accum), vget_high_f32(accum));
+        accum2 = vpadd_f32(vget_low_f32(accum),vget_high_f32(accum));
         dot = vget_lane_f32(accum2, 0) + vget_lane_f32(accum2, 1);
 
 
@@ -437,29 +428,29 @@ void arm_svm_linear_predict_f32(
         vectorBlkCnt -- ;
     }
 
-    *pResult = S->classes[STEP(sum)];
+    *pResult=S->classes[STEP(sum)];
 }
 #else
-void arm_svm_linear_predict_f32(
+ARM_DSP_ATTRIBUTE void arm_svm_linear_predict_f32(
     const arm_svm_linear_instance_f32 *S,
-    const float32_t *in,
-    int32_t *pResult)
+    const float32_t * in,
+    int32_t * pResult)
 {
-    float32_t sum = S->intercept;
-    float32_t dot = 0;
-    uint32_t i, j;
+    float32_t sum=S->intercept;
+    float32_t dot=0;
+    uint32_t i,j;
     const float32_t *pSupport = S->supportVectors;
 
-    for (i = 0; i < S->nbOfSupportVectors; i++)
+    for(i=0; i < S->nbOfSupportVectors; i++)
     {
-        dot = 0;
-        for (j = 0; j < S->vectorDimension; j++)
+        dot=0;
+        for(j=0; j < S->vectorDimension; j++)
         {
-            dot = dot + in[j] * *pSupport++;
+            dot = dot + in[j]* *pSupport++;
         }
         sum += S->dualCoefficients[i] * dot;
     }
-    *pResult = S->classes[STEP(sum)];
+    *pResult=S->classes[STEP(sum)];
 }
 #endif
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

@@ -75,10 +75,13 @@
 * \image html axidmac.png
 *
 * <B>NOTE:</B> Even if a AXIDMAC channel is enabled, it is not operational until
-* the AXIDMAC block is enabled using function \ref Cy_AXIDMAC_Enable.\n
+* the AXIDMAC block is enabled using function \ref Cy_AXIDMAC_Enable .\n
 * <B>NOTE:</B> If the AXIDMAC descriptor is configured to generate an interrupt,
 * the interrupt must be enabled using the \ref Cy_AXIDMAC_Channel_SetInterruptMask
 * function for each AXIDMAC channel.
+* <B>NOTE:</B> When DCache is enabled it is critical to clean the DCache right before calling \ref Cy_AXIDMAC_Channel_Enable
+* .Cleaning the cache too early or too late may result in a \ref CY_AXIDMAC_INTR_SRC_BUS_ERROR interrupt.\n
+* Ensure cache maintenance operations are performed at the correct point in the sequence to avoid data coherency issues.
 *
 * <B>Scenario</B>: AXIDMAC with DMA descriptors, DMA config descriptors, source and destination buffer stored in memory
 * <B>other then DTCM</B>(CM55 private MEMORY)  such as SOCMEM or FLASH
@@ -89,18 +92,6 @@
 *
 * \section group_axidmac_more_information More Information.
 * See the AXIDMAC chapter of the device technical reference manual (TRM).
-*
-* \section group_axidmac_changelog Changelog
-*
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>The initial version.</td>
-*     <td></td>
-*   </tr>
-* </table>
-
 *
 * \defgroup group_axidmac_macros Macros
 * \defgroup group_axidmac_macros_interrupt_masks Interrupt Masks
@@ -130,13 +121,13 @@
 extern "C" {
 #endif
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.1', 5, \
-                             'The operand "" to the operator "&" does not have an essentially unsigned type.')
+'The operand "" to the operator "&" does not have an essentially unsigned type.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.3', 5, \
-                             'Implicit conversion from essential type "unsigned 32-bit int" to different or narrower essential type "signed 16-bit int".')
+'Implicit conversion from essential type "unsigned 32-bit int" to different or narrower essential type "signed 16-bit int".')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.4', 5, \
-                             'Essential type of the left hand operand (signed) is not the same as that of the right operand (unsigned).')
+'Essential type of the left hand operand (signed) is not the same as that of the right operand (unsigned).')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 5, \
-                             'Value extracted from _VAL2FLD macro will not exceed enum range.')
+'Value extracted from _VAL2FLD macro will not exceed enum range.')
 
 /******************************************************************************
  * Macro definitions                                                          *
@@ -350,8 +341,8 @@ typedef struct
                                                      *   and there is space available in the channel's data FIFO.
                                                      */
     cy_en_axidmac_descriptor_type_t descriptorType;  /**< The type of the descriptor. See \ref cy_en_axidmac_descriptor_type_t. */
-    void                           *srcAddress;      /**< The source address of the transfer. */
-    void                           *dstAddress;      /**< The destination address of the transfer. */
+    void *                          srcAddress;      /**< The source address of the transfer. */
+    void *                          dstAddress;      /**< The destination address of the transfer. */
     uint32_t                        mCount;          /**< The number of bytes transfers in an M-loop */
     int16_t                         srcXincrement;   /**< The address increment of the source after each X-loop transfer. Valid range is -32768...32767. */
     int16_t                         dstXincrement;   /**< The address increment of the destination after each X-loop transfer. Valid range is -32768...32767. */
@@ -362,13 +353,13 @@ typedef struct
     int16_t                         srcYincrement;   /**< The address increment of the source after each Y-loop transfer. Valid range is -32768...32767. */
     int16_t                         dstYincrement;   /**< The address increment of the destination after each Y-loop transfer. Valid range is -32768...32767. */
     uint32_t                        yCount;          /**< The number of X-loops in the Y-loop. Valid range is 1...65536. */
-    cy_stc_axidmac_descriptor_t    *nextDescriptor;  /**< The next descriptor to chain after completion. A NULL value will signify no chaining. */
+    cy_stc_axidmac_descriptor_t *   nextDescriptor;  /**< The next descriptor to chain after completion. A NULL value will signify no chaining. */
 } cy_stc_axidmac_descriptor_config_t;
 
 /** This structure holds the initialization values for the AXIDMAC channel */
 typedef struct
 {
-    cy_stc_axidmac_descriptor_t *descriptor;      /**< The AXIDMAC descriptor associated with the channel being initialized.           */
+    cy_stc_axidmac_descriptor_t * descriptor;     /**< The AXIDMAC descriptor associated with the channel being initialized.           */
     uint32_t priority;                         /**< This parameter specifies the channel's priority.                            */
     bool     enable;                           /**< This parameter specifies if the channel is enabled after initializing.      */
     bool     bufferable;                       /**< This parameter specifies whether a write transaction can complete.
@@ -384,14 +375,14 @@ typedef struct
 * \{
 */
 
-__STATIC_INLINE void     Cy_AXIDMAC_Enable(AXI_DMAC_Type * base);
-__STATIC_INLINE void     Cy_AXIDMAC_Disable(AXI_DMAC_Type * base);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_GetAllChannelStatus(AXI_DMAC_Type * base);
+__STATIC_INLINE void     Cy_AXIDMAC_Enable              (AXI_DMAC_Type * base);
+__STATIC_INLINE void     Cy_AXIDMAC_Disable             (AXI_DMAC_Type * base);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_GetAllChannelStatus (AXI_DMAC_Type * base);
 #if defined (CY_IP_MXSAXIDMAC)
-__STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveChannel(AXI_DMAC_Type const * base);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveChannel    (AXI_DMAC_Type const * base);
 #elif defined (CY_IP_MXAXIDMAC)
-__STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveSecureChannel(AXI_DMAC_Type const * base);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveNonSecureChannel(AXI_DMAC_Type const * base);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveSecureChannel      (AXI_DMAC_Type const * base);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveNonSecureChannel   (AXI_DMAC_Type const * base);
 #endif
 
 /**
@@ -416,13 +407,13 @@ __STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveNonSecureChannel(AXI_DMAC_Type cons
 * channel.
 *
 * \return
-* The status /ref cy_en_axidmac_status_t.
+* The status \ref cy_en_axidmac_status_t.
 *
 * \funcusage
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Enable
 *
 *******************************************************************************/
-cy_en_axidmac_status_t Cy_AXIDMAC_Channel_Init(AXI_DMAC_Type       * base, uint32_t channel, cy_stc_axidmac_channel_config_t const * config);
+cy_en_axidmac_status_t Cy_AXIDMAC_Channel_Init                    (AXI_DMAC_Type       * base, uint32_t channel, cy_stc_axidmac_channel_config_t const * config);
 
 
 /*******************************************************************************
@@ -441,29 +432,29 @@ cy_en_axidmac_status_t Cy_AXIDMAC_Channel_Init(AXI_DMAC_Type       * base, uint3
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Disable
 *
 *******************************************************************************/
-void     Cy_AXIDMAC_Channel_DeInit(AXI_DMAC_Type       * base, uint32_t channel);
+void     Cy_AXIDMAC_Channel_DeInit                   (AXI_DMAC_Type       * base, uint32_t channel);
 
 
-__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetDescriptor(AXI_DMAC_Type       * base, uint32_t channel, cy_stc_axidmac_descriptor_t const * descriptor);
-__STATIC_INLINE void     Cy_AXIDMAC_Channel_Enable(AXI_DMAC_Type       * base, uint32_t channel);
-__STATIC_INLINE void     Cy_AXIDMAC_Channel_Disable(AXI_DMAC_Type       * base, uint32_t channel);
-__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetPriority(AXI_DMAC_Type       * base, uint32_t channel, uint32_t priority);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetPriority(AXI_DMAC_Type const * base, uint32_t channel);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetStatus(AXI_DMAC_Type const * base, uint32_t channel);
-__STATIC_INLINE   void *Cy_AXIDMAC_Channel_GetCurrentSrcAddress(AXI_DMAC_Type           const * base, uint32_t channel);
-__STATIC_INLINE   void *Cy_AXIDMAC_Channel_GetCurrentDstAddress(AXI_DMAC_Type           const * base, uint32_t channel);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetCurrentXloopIndex(AXI_DMAC_Type const * base, uint32_t channel);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetCurrentYloopIndex(AXI_DMAC_Type const * base, uint32_t channel);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetCurrentMloopIndex(AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetDescriptor            (AXI_DMAC_Type       * base, uint32_t channel, cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE void     Cy_AXIDMAC_Channel_Enable                   (AXI_DMAC_Type       * base, uint32_t channel);
+__STATIC_INLINE void     Cy_AXIDMAC_Channel_Disable                  (AXI_DMAC_Type       * base, uint32_t channel);
+__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetPriority              (AXI_DMAC_Type       * base, uint32_t channel, uint32_t priority);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetPriority              (AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetStatus                (AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE   void * Cy_AXIDMAC_Channel_GetCurrentSrcAddress     (AXI_DMAC_Type           const * base, uint32_t channel);
+__STATIC_INLINE   void * Cy_AXIDMAC_Channel_GetCurrentDstAddress     (AXI_DMAC_Type           const * base, uint32_t channel);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetCurrentXloopIndex     (AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetCurrentYloopIndex     (AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetCurrentMloopIndex     (AXI_DMAC_Type const * base, uint32_t channel);
 __STATIC_INLINE cy_stc_axidmac_descriptor_t *
-Cy_AXIDMAC_Channel_GetCurrentDescriptor(AXI_DMAC_Type const * base, uint32_t channel);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetInterruptStatus(AXI_DMAC_Type const * base, uint32_t channel);
-__STATIC_INLINE void     Cy_AXIDMAC_Channel_ClearInterrupt(AXI_DMAC_Type       * base, uint32_t channel, uint32_t interrupt);
-__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetInterrupt(AXI_DMAC_Type       * base, uint32_t channel, uint32_t interrupt);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetInterruptMask(AXI_DMAC_Type const * base, uint32_t channel);
-__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetInterruptMask(AXI_DMAC_Type       * base, uint32_t channel, uint32_t interrupt);
-__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetInterruptStatusMasked(AXI_DMAC_Type const * base, uint32_t channel);
-__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetSwTrigger(AXI_DMAC_Type   * base, uint32_t channel);
+                         Cy_AXIDMAC_Channel_GetCurrentDescriptor     (AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetInterruptStatus       (AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE void     Cy_AXIDMAC_Channel_ClearInterrupt           (AXI_DMAC_Type       * base, uint32_t channel, uint32_t interrupt);
+__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetInterrupt             (AXI_DMAC_Type       * base, uint32_t channel, uint32_t interrupt);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetInterruptMask         (AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetInterruptMask         (AXI_DMAC_Type       * base, uint32_t channel, uint32_t interrupt);
+__STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetInterruptStatusMasked (AXI_DMAC_Type const * base, uint32_t channel);
+__STATIC_INLINE void     Cy_AXIDMAC_Channel_SetSwTrigger             (AXI_DMAC_Type   * base, uint32_t channel);
 
 
 /** \} group_axidmac_channel_functions */
@@ -474,29 +465,29 @@ __STATIC_INLINE void     Cy_AXIDMAC_Channel_SetSwTrigger(AXI_DMAC_Type   * base,
 * \{
 */
 
-/*******************************************************************************
-* Function Name: Cy_AXIDMAC_Descriptor_Init
-****************************************************************************//**
-*
-* Initializes the descriptor structure in SRAM from a pre-initialized
-* configuration structure.
-* This function initializes only the descriptor and not the channel.
-*
-* \param descriptor
-* The descriptor structure instance.
-*
-* \param config
-* This is a configuration structure that has all initialization information for
-* the descriptor.
-*
-* \return
-* The status /ref cy_en_axidmac_status_t.
-*
-* \funcusage
-* \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Enable
-*
-*******************************************************************************/
-cy_en_axidmac_status_t Cy_AXIDMAC_Descriptor_Init(cy_stc_axidmac_descriptor_t * descriptor, cy_stc_axidmac_descriptor_config_t const * config);
+ /*******************************************************************************
+ * Function Name: Cy_AXIDMAC_Descriptor_Init
+ ****************************************************************************//**
+ *
+ * Initializes the descriptor structure in SRAM from a pre-initialized
+ * configuration structure.
+ * This function initializes only the descriptor and not the channel.
+ *
+ * \param descriptor
+ * The descriptor structure instance.
+ *
+ * \param config
+ * This is a configuration structure that has all initialization information for
+ * the descriptor.
+ *
+ * \return
+ * The status \ref cy_en_axidmac_status_t.
+ *
+ * \funcusage
+ * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Enable
+ *
+ *******************************************************************************/
+ cy_en_axidmac_status_t Cy_AXIDMAC_Descriptor_Init  (cy_stc_axidmac_descriptor_t * descriptor, cy_stc_axidmac_descriptor_config_t const * config);
 
 
 /*******************************************************************************
@@ -537,7 +528,7 @@ void Cy_AXIDMAC_Descriptor_DeInit(cy_stc_axidmac_descriptor_t * descriptor);
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Descriptor_SetterFunctions
 *
 *******************************************************************************/
-void Cy_AXIDMAC_Descriptor_SetNextDescriptor(cy_stc_axidmac_descriptor_t * descriptor, cy_stc_axidmac_descriptor_t const * nextDescriptor);
+void Cy_AXIDMAC_Descriptor_SetNextDescriptor   (cy_stc_axidmac_descriptor_t * descriptor, cy_stc_axidmac_descriptor_t const * nextDescriptor);
 
 
 /*******************************************************************************
@@ -564,11 +555,11 @@ void Cy_AXIDMAC_Descriptor_SetNextDescriptor(cy_stc_axidmac_descriptor_t * descr
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Descriptor_SetterFunctions
 *
 *******************************************************************************/
-void Cy_AXIDMAC_Descriptor_SetDescriptorType(cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_descriptor_type_t descriptorType);
+void Cy_AXIDMAC_Descriptor_SetDescriptorType   (cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_descriptor_type_t descriptorType);
 
 
-__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetSrcAddress(cy_stc_axidmac_descriptor_t * descriptor, void const * srcAddress);
-__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetDstAddress(cy_stc_axidmac_descriptor_t * descriptor, void const * dstAddress);
+__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetSrcAddress       (cy_stc_axidmac_descriptor_t * descriptor, void const * srcAddress);
+__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetDstAddress       (cy_stc_axidmac_descriptor_t * descriptor, void const * dstAddress);
 __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetMloopDataCount(cy_stc_axidmac_descriptor_t * descriptor, uint32_t mCount);
 
 
@@ -591,7 +582,7 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetMloopDataCount(cy_stc_axidmac_desc
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Descriptor_SetterFunctions
 *
 *******************************************************************************/
-void Cy_AXIDMAC_Descriptor_SetXloopDataCount(cy_stc_axidmac_descriptor_t * descriptor, uint32_t xCount);
+void Cy_AXIDMAC_Descriptor_SetXloopDataCount   (cy_stc_axidmac_descriptor_t * descriptor, uint32_t xCount);
 
 
 __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetYloopDataCount(cy_stc_axidmac_descriptor_t * descriptor, uint32_t yCount);
@@ -599,11 +590,11 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetXloopSrcIncrement(cy_stc_axidmac_d
 __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetXloopDstIncrement(cy_stc_axidmac_descriptor_t * descriptor, int16_t dstXincrement);
 __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetYloopSrcIncrement(cy_stc_axidmac_descriptor_t * descriptor, int16_t srcYincrement);
 __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetYloopDstIncrement(cy_stc_axidmac_descriptor_t * descriptor, int16_t dstYincrement);
-__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetInterruptType(cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_trigger_type_t interruptType);
-__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetTriggerInType(cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_trigger_type_t triggerInType);
+__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetInterruptType    (cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_trigger_type_t interruptType);
+__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetTriggerInType    (cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_trigger_type_t triggerInType);
 __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetTriggerOutType(cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_trigger_type_t triggerOutType);
-__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetRetrigger(cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_retrigger_t retrigger);
-__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetChannelState(cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_channel_state_t channelState);
+__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetRetrigger        (cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_retrigger_t retrigger);
+__STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetChannelState     (cy_stc_axidmac_descriptor_t * descriptor, cy_en_axidmac_channel_state_t channelState);
 
 
 /*******************************************************************************
@@ -628,12 +619,12 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetChannelState(cy_stc_axidmac_descri
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Descriptor_GetterFunctions
 *
 *******************************************************************************/
-cy_stc_axidmac_descriptor_t     *Cy_AXIDMAC_Descriptor_GetNextDescriptor(cy_stc_axidmac_descriptor_t const * descriptor);
+ cy_stc_axidmac_descriptor_t *    Cy_AXIDMAC_Descriptor_GetNextDescriptor   (cy_stc_axidmac_descriptor_t const * descriptor);
 
 
 __STATIC_INLINE cy_en_axidmac_descriptor_type_t Cy_AXIDMAC_Descriptor_GetDescriptorType(cy_stc_axidmac_descriptor_t const * descriptor);
-__STATIC_INLINE void                           *Cy_AXIDMAC_Descriptor_GetSrcAddress(cy_stc_axidmac_descriptor_t const * descriptor);
-__STATIC_INLINE void                           *Cy_AXIDMAC_Descriptor_GetDstAddress(cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE void *                          Cy_AXIDMAC_Descriptor_GetSrcAddress       (cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE void *                          Cy_AXIDMAC_Descriptor_GetDstAddress       (cy_stc_axidmac_descriptor_t const * descriptor);
 __STATIC_INLINE uint32_t                        Cy_AXIDMAC_Descriptor_GetMloopDataCount(cy_stc_axidmac_descriptor_t const * descriptor);
 
 
@@ -655,19 +646,19 @@ __STATIC_INLINE uint32_t                        Cy_AXIDMAC_Descriptor_GetMloopDa
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Descriptor_GetterFunctions
 *
 *******************************************************************************/
-uint32_t                        Cy_AXIDMAC_Descriptor_GetXloopDataCount(cy_stc_axidmac_descriptor_t const * descriptor);
+uint32_t                        Cy_AXIDMAC_Descriptor_GetXloopDataCount   (cy_stc_axidmac_descriptor_t const * descriptor);
 
 
-__STATIC_INLINE uint32_t                        Cy_AXIDMAC_Descriptor_GetYloopDataCount(cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE uint32_t                        Cy_AXIDMAC_Descriptor_GetYloopDataCount   (cy_stc_axidmac_descriptor_t const * descriptor);
 __STATIC_INLINE int16_t                        Cy_AXIDMAC_Descriptor_GetXloopSrcIncrement(cy_stc_axidmac_descriptor_t const * descriptor);
 __STATIC_INLINE int16_t                        Cy_AXIDMAC_Descriptor_GetXloopDstIncrement(cy_stc_axidmac_descriptor_t const * descriptor);
 __STATIC_INLINE int16_t                        Cy_AXIDMAC_Descriptor_GetYloopSrcIncrement(cy_stc_axidmac_descriptor_t const * descriptor);
 __STATIC_INLINE int16_t                        Cy_AXIDMAC_Descriptor_GetYloopDstIncrement(cy_stc_axidmac_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_axidmac_trigger_type_t    Cy_AXIDMAC_Descriptor_GetInterruptType(cy_stc_axidmac_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_axidmac_trigger_type_t    Cy_AXIDMAC_Descriptor_GetTriggerInType(cy_stc_axidmac_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_axidmac_trigger_type_t    Cy_AXIDMAC_Descriptor_GetTriggerOutType(cy_stc_axidmac_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_axidmac_retrigger_t       Cy_AXIDMAC_Descriptor_GetRetrigger(cy_stc_axidmac_descriptor_t const * descriptor);
-__STATIC_INLINE cy_en_axidmac_channel_state_t   Cy_AXIDMAC_Descriptor_GetChannelState(cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_axidmac_trigger_type_t    Cy_AXIDMAC_Descriptor_GetInterruptType    (cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_axidmac_trigger_type_t    Cy_AXIDMAC_Descriptor_GetTriggerInType    (cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_axidmac_trigger_type_t    Cy_AXIDMAC_Descriptor_GetTriggerOutType   (cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_axidmac_retrigger_t       Cy_AXIDMAC_Descriptor_GetRetrigger        (cy_stc_axidmac_descriptor_t const * descriptor);
+__STATIC_INLINE cy_en_axidmac_channel_state_t   Cy_AXIDMAC_Descriptor_GetChannelState     (cy_stc_axidmac_descriptor_t const * descriptor);
 
 /** \} group_axidmac_descriptor_functions */
 
@@ -740,7 +731,7 @@ __STATIC_INLINE void Cy_AXIDMAC_Disable(AXI_DMAC_Type * base)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_AXIDMAC_GetAllChannelStatus(AXI_DMAC_Type * base)
 {
-    return (_FLD2VAL(AXI_DMAC_STATUS_CH_EN, AXIDMAC_STATUS(base)));
+    return(_FLD2VAL(AXI_DMAC_STATUS_CH_EN, AXIDMAC_STATUS(base)));
 }
 
 #if defined (CY_IP_MXSAXIDMAC)
@@ -763,7 +754,7 @@ __STATIC_INLINE uint32_t Cy_AXIDMAC_GetAllChannelStatus(AXI_DMAC_Type * base)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveChannel(AXI_DMAC_Type const * base)
 {
-    return (_FLD2VAL(AXI_DMAC_ACTIVE_ACTIVE, AXIDMAC_ACTIVE(base)));
+    return(_FLD2VAL(AXI_DMAC_ACTIVE_ACTIVE, AXIDMAC_ACTIVE(base)));
 }
 
 #elif defined (CY_IP_MXAXIDMAC)
@@ -786,7 +777,7 @@ __STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveChannel(AXI_DMAC_Type const * base)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveSecureChannel(AXI_DMAC_Type const * base)
 {
-    return (_FLD2VAL(AXI_DMAC_ACTIVE_SEC_ACTIVE, AXIDMAC_ACTIVE_SEC(base)));
+    return(_FLD2VAL(AXI_DMAC_ACTIVE_SEC_ACTIVE, AXIDMAC_ACTIVE_SEC(base)));
 }
 
 /*******************************************************************************
@@ -808,7 +799,7 @@ __STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveSecureChannel(AXI_DMAC_Type const *
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_AXIDMAC_GetActiveNonSecureChannel(AXI_DMAC_Type const * base)
 {
-    return (_FLD2VAL(AXI_DMAC_ACTIVE_NONSEC_ACTIVE, AXIDMAC_ACTIVE_NONSEC(base)));
+    return(_FLD2VAL(AXI_DMAC_ACTIVE_NONSEC_ACTIVE, AXIDMAC_ACTIVE_NONSEC(base)));
 }
 #endif
 
@@ -860,7 +851,7 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetSrcAddress(cy_stc_axidmac_descript
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Descriptor_GetterFunctions
 *
 *******************************************************************************/
-__STATIC_INLINE void *Cy_AXIDMAC_Descriptor_GetSrcAddress(cy_stc_axidmac_descriptor_t const * descriptor)
+__STATIC_INLINE void * Cy_AXIDMAC_Descriptor_GetSrcAddress(cy_stc_axidmac_descriptor_t const * descriptor)
 {
     return ((void *) descriptor->src);
 }
@@ -904,7 +895,7 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetDstAddress(cy_stc_axidmac_descript
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Descriptor_GetterFunctions
 *
 *******************************************************************************/
-__STATIC_INLINE void *Cy_AXIDMAC_Descriptor_GetDstAddress(cy_stc_axidmac_descriptor_t const * descriptor)
+__STATIC_INLINE void * Cy_AXIDMAC_Descriptor_GetDstAddress(cy_stc_axidmac_descriptor_t const * descriptor)
 {
     return ((void *) descriptor->dst);
 }
@@ -952,8 +943,8 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetInterruptType(cy_stc_axidmac_descr
 *******************************************************************************/
 __STATIC_INLINE cy_en_axidmac_trigger_type_t Cy_AXIDMAC_Descriptor_GetInterruptType(cy_stc_axidmac_descriptor_t const * descriptor)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_axidmac_trigger_type_t enum.');
-    return ((cy_en_axidmac_trigger_type_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_INTR_TYPE, descriptor->ctl));
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_axidmac_trigger_type_t enum.');
+    return((cy_en_axidmac_trigger_type_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_INTR_TYPE, descriptor->ctl));
 }
 
 
@@ -999,8 +990,8 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetTriggerInType(cy_stc_axidmac_descr
 *******************************************************************************/
 __STATIC_INLINE cy_en_axidmac_trigger_type_t Cy_AXIDMAC_Descriptor_GetTriggerInType(cy_stc_axidmac_descriptor_t const * descriptor)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_axidmac_trigger_type_t enum.');
-    return ((cy_en_axidmac_trigger_type_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_TR_IN_TYPE, descriptor->ctl));
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_axidmac_trigger_type_t enum.');
+    return((cy_en_axidmac_trigger_type_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_TR_IN_TYPE, descriptor->ctl));
 }
 
 
@@ -1046,8 +1037,8 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetTriggerOutType(cy_stc_axidmac_desc
 *******************************************************************************/
 __STATIC_INLINE cy_en_axidmac_trigger_type_t Cy_AXIDMAC_Descriptor_GetTriggerOutType(cy_stc_axidmac_descriptor_t const * descriptor)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_axidmac_trigger_type_t enum.');
-    return ((cy_en_axidmac_trigger_type_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_TR_OUT_TYPE, descriptor->ctl));
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_axidmac_trigger_type_t enum.');
+    return((cy_en_axidmac_trigger_type_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_TR_OUT_TYPE, descriptor->ctl));
 }
 
 
@@ -1096,8 +1087,8 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetRetrigger(cy_stc_axidmac_descripto
 *******************************************************************************/
 __STATIC_INLINE cy_en_axidmac_retrigger_t Cy_AXIDMAC_Descriptor_GetRetrigger(cy_stc_axidmac_descriptor_t const * descriptor)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_axidmac_retrigger_t enum.');
-    return ((cy_en_axidmac_retrigger_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_WAIT_FOR_DEACT, descriptor->ctl));
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_axidmac_retrigger_t enum.');
+    return((cy_en_axidmac_retrigger_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_WAIT_FOR_DEACT, descriptor->ctl));
 }
 
 
@@ -1119,8 +1110,8 @@ __STATIC_INLINE cy_en_axidmac_retrigger_t Cy_AXIDMAC_Descriptor_GetRetrigger(cy_
 *******************************************************************************/
 __STATIC_INLINE cy_en_axidmac_descriptor_type_t Cy_AXIDMAC_Descriptor_GetDescriptorType(cy_stc_axidmac_descriptor_t const * descriptor)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_axidmac_descriptor_type_t enum.');
-    return ((cy_en_axidmac_descriptor_type_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_DESCR_TYPE, descriptor->ctl));
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_axidmac_descriptor_type_t enum.');
+    return((cy_en_axidmac_descriptor_type_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_DESCR_TYPE, descriptor->ctl));
 }
 
 
@@ -1166,8 +1157,8 @@ __STATIC_INLINE void Cy_AXIDMAC_Descriptor_SetChannelState(cy_stc_axidmac_descri
 *******************************************************************************/
 __STATIC_INLINE cy_en_axidmac_channel_state_t Cy_AXIDMAC_Descriptor_GetChannelState(cy_stc_axidmac_descriptor_t const * descriptor)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_axidmac_channel_state_t enum.');
-    return ((cy_en_axidmac_channel_state_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_CH_DISABLE, descriptor->ctl));
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_axidmac_channel_state_t enum.');
+    return((cy_en_axidmac_channel_state_t) _FLD2VAL(AXI_DMAC_CH_DESCR_CTL_CH_DISABLE, descriptor->ctl));
 }
 
 
@@ -1658,7 +1649,7 @@ __STATIC_INLINE uint32_t Cy_AXIDMAC_Channel_GetStatus(AXI_DMAC_Type const * base
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Channel_GetCurrentSrcAddress
 *
 *******************************************************************************/
-__STATIC_INLINE void *Cy_AXIDMAC_Channel_GetCurrentSrcAddress(AXI_DMAC_Type const * base, uint32_t channel)
+__STATIC_INLINE void * Cy_AXIDMAC_Channel_GetCurrentSrcAddress(AXI_DMAC_Type const * base, uint32_t channel)
 {
     CY_ASSERT_L1(CY_AXIDMAC_IS_CH_NR_VALID(channel));
 
@@ -1685,7 +1676,7 @@ __STATIC_INLINE void *Cy_AXIDMAC_Channel_GetCurrentSrcAddress(AXI_DMAC_Type cons
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Channel_GetCurrentSrcAddress
 *
 *******************************************************************************/
-__STATIC_INLINE void *Cy_AXIDMAC_Channel_GetCurrentDstAddress(AXI_DMAC_Type const * base, uint32_t channel)
+__STATIC_INLINE void * Cy_AXIDMAC_Channel_GetCurrentDstAddress(AXI_DMAC_Type const * base, uint32_t channel)
 {
     CY_ASSERT_L1(CY_AXIDMAC_IS_CH_NR_VALID(channel));
 
@@ -1818,7 +1809,7 @@ __STATIC_INLINE void Cy_AXIDMAC_Channel_SetSwTrigger(AXI_DMAC_Type * base, uint3
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_Descriptor_Deinit
 *
 *******************************************************************************/
-__STATIC_INLINE cy_stc_axidmac_descriptor_t *Cy_AXIDMAC_Channel_GetCurrentDescriptor(AXI_DMAC_Type const * base, uint32_t channel)
+__STATIC_INLINE cy_stc_axidmac_descriptor_t * Cy_AXIDMAC_Channel_GetCurrentDescriptor(AXI_DMAC_Type const * base, uint32_t channel)
 {
     CY_ASSERT_L1(CY_AXIDMAC_IS_CH_NR_VALID(channel));
 
@@ -1924,7 +1915,7 @@ __STATIC_INLINE void Cy_AXIDMAC_Channel_SetInterrupt(AXI_DMAC_Type * base, uint3
 * The channel number.
 *
 * \return
-* The interrupt mask value. See \ref group_dmac_macros_interrupt_masks.
+* The interrupt mask value. See \ref group_axidmac_macros_interrupt_masks.
 *
 * \funcusage
 * \snippet axidmac/snippet/main.c snippet_Cy_AXIDMAC_SetInterruptMask

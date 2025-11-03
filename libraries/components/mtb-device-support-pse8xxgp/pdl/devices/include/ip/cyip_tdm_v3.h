@@ -41,68 +41,64 @@
 /**
   * \brief TDM TX structure (TDM_TDM_STRUCT_TDM_TX_STRUCT)
   */
-typedef struct
-{
-    __IOM uint32_t TX_CTL;                        /*!< 0x00000000 TX control */
-    __IM uint32_t RESERVED[3];
-    __IOM uint32_t TX_IF_CTL;                     /*!< 0x00000010 TX interface control */
-    __IOM uint32_t TX_CH_CTL;                     /*!< 0x00000014 TX channel control */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t TX_TEST_CTL;                   /*!< 0x00000020 TX test control */
-    __IOM uint32_t TX_ROUTE_CTL;                  /*!< 0x00000024 TX route control */
-    __IM uint32_t RESERVED2[22];
-    __IOM uint32_t TX_FIFO_CTL;                   /*!< 0x00000080 TX FIFO control */
-    __IM uint32_t TX_FIFO_STATUS;                /*!< 0x00000084 TX FIFO status */
-    __OM uint32_t TX_FIFO_WR;                    /*!< 0x00000088 TX FIFO write */
-    __IM uint32_t RESERVED3[13];
-    __IOM uint32_t INTR_TX;                       /*!< 0x000000C0 Interrupt */
-    __IOM uint32_t INTR_TX_SET;                   /*!< 0x000000C4 Interrupt set */
-    __IOM uint32_t INTR_TX_MASK;                  /*!< 0x000000C8 Interrupt mask */
-    __IM uint32_t INTR_TX_MASKED;                /*!< 0x000000CC Interrupt masked */
-    __IM uint32_t RESERVED4[12];
+typedef struct {
+  __IOM uint32_t TX_CTL;                        /*!< 0x00000000 TX control */
+   __IM uint32_t RESERVED[3];
+  __IOM uint32_t TX_IF_CTL;                     /*!< 0x00000010 TX interface control */
+  __IOM uint32_t TX_CH_CTL;                     /*!< 0x00000014 TX channel control */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t TX_TEST_CTL;                   /*!< 0x00000020 TX test control */
+  __IOM uint32_t TX_ROUTE_CTL;                  /*!< 0x00000024 TX route control */
+   __IM uint32_t RESERVED2[22];
+  __IOM uint32_t TX_FIFO_CTL;                   /*!< 0x00000080 TX FIFO control */
+   __IM uint32_t TX_FIFO_STATUS;                /*!< 0x00000084 TX FIFO status */
+   __OM uint32_t TX_FIFO_WR;                    /*!< 0x00000088 TX FIFO write */
+   __IM uint32_t RESERVED3[13];
+  __IOM uint32_t INTR_TX;                       /*!< 0x000000C0 Interrupt */
+  __IOM uint32_t INTR_TX_SET;                   /*!< 0x000000C4 Interrupt set */
+  __IOM uint32_t INTR_TX_MASK;                  /*!< 0x000000C8 Interrupt mask */
+   __IM uint32_t INTR_TX_MASKED;                /*!< 0x000000CC Interrupt masked */
+   __IM uint32_t RESERVED4[12];
 } TDM_TDM_STRUCT_TDM_TX_STRUCT_Type;            /*!< Size = 256 (0x100) */
 
 /**
   * \brief TDM RX structure (TDM_TDM_STRUCT_TDM_RX_STRUCT)
   */
-typedef struct
-{
-    __IOM uint32_t RX_CTL;                        /*!< 0x00000000 RX control */
-    __IM uint32_t RESERVED[3];
-    __IOM uint32_t RX_IF_CTL;                     /*!< 0x00000010 RX interface control */
-    __IOM uint32_t RX_CH_CTL;                     /*!< 0x00000014 RX channel control */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t RX_TEST_CTL;                   /*!< 0x00000020 RX test control */
-    __IOM uint32_t RX_ROUTE_CTL;                  /*!< 0x00000024 RX route control */
-    __IM uint32_t RESERVED2[22];
-    __IOM uint32_t RX_FIFO_CTL;                   /*!< 0x00000080 RX FIFO control */
-    __IM uint32_t RX_FIFO_STATUS;                /*!< 0x00000084 RX FIFO status */
-    __IM uint32_t RX_FIFO_RD;                    /*!< 0x00000088 RX FIFO read */
-    __IM uint32_t RX_FIFO_RD_SILENT;             /*!< 0x0000008C RX FIFO silent read */
-    __IM uint32_t RESERVED3[12];
-    __IOM uint32_t INTR_RX;                       /*!< 0x000000C0 Interrupt */
-    __IOM uint32_t INTR_RX_SET;                   /*!< 0x000000C4 Interrupt set */
-    __IOM uint32_t INTR_RX_MASK;                  /*!< 0x000000C8 Interrupt mask */
-    __IM uint32_t INTR_RX_MASKED;                /*!< 0x000000CC Interrupt masked */
-    __IM uint32_t RESERVED4[12];
+typedef struct {
+  __IOM uint32_t RX_CTL;                        /*!< 0x00000000 RX control */
+   __IM uint32_t RESERVED[3];
+  __IOM uint32_t RX_IF_CTL;                     /*!< 0x00000010 RX interface control */
+  __IOM uint32_t RX_CH_CTL;                     /*!< 0x00000014 RX channel control */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t RX_TEST_CTL;                   /*!< 0x00000020 RX test control */
+  __IOM uint32_t RX_ROUTE_CTL;                  /*!< 0x00000024 RX route control */
+   __IM uint32_t RESERVED2[22];
+  __IOM uint32_t RX_FIFO_CTL;                   /*!< 0x00000080 RX FIFO control */
+   __IM uint32_t RX_FIFO_STATUS;                /*!< 0x00000084 RX FIFO status */
+   __IM uint32_t RX_FIFO_RD;                    /*!< 0x00000088 RX FIFO read */
+   __IM uint32_t RX_FIFO_RD_SILENT;             /*!< 0x0000008C RX FIFO silent read */
+   __IM uint32_t RESERVED3[12];
+  __IOM uint32_t INTR_RX;                       /*!< 0x000000C0 Interrupt */
+  __IOM uint32_t INTR_RX_SET;                   /*!< 0x000000C4 Interrupt set */
+  __IOM uint32_t INTR_RX_MASK;                  /*!< 0x000000C8 Interrupt mask */
+   __IM uint32_t INTR_RX_MASKED;                /*!< 0x000000CC Interrupt masked */
+   __IM uint32_t RESERVED4[12];
 } TDM_TDM_STRUCT_TDM_RX_STRUCT_Type;            /*!< Size = 256 (0x100) */
 
 /**
   * \brief TDM structure (TDM_TDM_STRUCT)
   */
-typedef struct
-{
-    TDM_TDM_STRUCT_TDM_TX_STRUCT_Type TDM_TX_STRUCT; /*!< 0x00000000 TDM TX structure */
-    TDM_TDM_STRUCT_TDM_RX_STRUCT_Type TDM_RX_STRUCT; /*!< 0x00000100 TDM RX structure */
+typedef struct {
+        TDM_TDM_STRUCT_TDM_TX_STRUCT_Type TDM_TX_STRUCT; /*!< 0x00000000 TDM TX structure */
+        TDM_TDM_STRUCT_TDM_RX_STRUCT_Type TDM_RX_STRUCT; /*!< 0x00000100 TDM RX structure */
 } TDM_TDM_STRUCT_Type;                          /*!< Size = 512 (0x200) */
 
 /**
   * \brief TDM (TDM)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[8192];
-    TDM_TDM_STRUCT_Type TDM_STRUCT[4];      /*!< 0x00008000 TDM structure */
+typedef struct {
+   __IM uint32_t RESERVED[8192];
+        TDM_TDM_STRUCT_Type TDM_STRUCT[4];      /*!< 0x00008000 TDM structure */
 } TDM_Type;                                     /*!< Size = 34816 (0x8800) */
 
 

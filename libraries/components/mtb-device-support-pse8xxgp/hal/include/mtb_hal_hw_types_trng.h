@@ -51,7 +51,7 @@ extern "C" {
  * specific, the contents of this struct is subject to change between platforms
  * and/or HAL releases.
  */
-typedef void *mtb_hal_trng_configurator_t;
+typedef void* mtb_hal_trng_configurator_t;
 
 #endif
 

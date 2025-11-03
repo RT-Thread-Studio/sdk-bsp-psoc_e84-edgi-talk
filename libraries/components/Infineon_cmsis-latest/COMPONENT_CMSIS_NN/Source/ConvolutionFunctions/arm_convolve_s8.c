@@ -102,14 +102,14 @@ arm_status arm_convolve_s8(const cmsis_nn_context *ctx,
             for (int i_out_x = 0; i_out_x < output_x; i_out_x++)
             {
                 for (int i_ker_y = i_out_y * stride_y - pad_y; i_ker_y < i_out_y * stride_y - pad_y + kernel_y;
-                        i_ker_y++)
+                     i_ker_y++)
                 {
                     for (int i_ker_x = i_out_x * stride_x - pad_x; i_ker_x < i_out_x * stride_x - pad_x + kernel_x;
-                            i_ker_x++)
+                         i_ker_x++)
                     {
                         if (i_ker_y < 0 || i_ker_y >= input_y || i_ker_x < 0 || i_ker_x >= input_x)
                         {
-                            memset(im2col_buf, (int8_t) - input_offset, sizeof(q7_t) * input_ch);
+                            memset(im2col_buf, (int8_t)-input_offset, sizeof(q7_t) * input_ch);
                             padded = 1;
                         }
                         else
@@ -212,7 +212,7 @@ arm_status arm_convolve_s8(const cmsis_nn_context *ctx,
                 for (i_ker_y = i_out_y * stride_y - pad_y; i_ker_y < i_out_y * stride_y - pad_y + kernel_y; i_ker_y++)
                 {
                     for (i_ker_x = i_out_x * stride_x - pad_x; i_ker_x < i_out_x * stride_x - pad_x + kernel_x;
-                            i_ker_x++)
+                         i_ker_x++)
                     {
                         if (i_ker_y < 0 || i_ker_y >= input_y || i_ker_x < 0 || i_ker_x >= input_x)
                         {

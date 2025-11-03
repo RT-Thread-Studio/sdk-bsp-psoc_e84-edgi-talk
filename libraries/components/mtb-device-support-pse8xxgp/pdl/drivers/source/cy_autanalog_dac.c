@@ -84,11 +84,11 @@ cy_en_autanalog_status_t Cy_AutAnalog_DAC_LoadConfig(uint8_t dacIdx, const cy_st
                         }
 
                         regVal =
-                            _VAL2FLD(DAC_SRAM_WAVEFORM, ((uint32_t)(dacCfg->waveform->waveformData[sampleIdx]) &
-                                                         DAC_STA_FW_DAC_VAL_VALUE_Msk)) |
-                            ((dacCfg->waveform->isDriveModeArray) ?
-                             _VAL2FLD(DAC_SRAM_OUT_DM, dacCfg->waveform->driveMode[sampleIdx]) :
-                             _VAL2FLD(DAC_SRAM_OUT_DM, *dacCfg->waveform->driveMode));
+                                _VAL2FLD(DAC_SRAM_WAVEFORM, ((uint32_t)(dacCfg->waveform->waveformData[sampleIdx]) &
+                                    DAC_STA_FW_DAC_VAL_VALUE_Msk)) |
+                                ((dacCfg->waveform->isDriveModeArray) ?
+                                _VAL2FLD(DAC_SRAM_OUT_DM, dacCfg->waveform->driveMode[sampleIdx]) :
+                                _VAL2FLD(DAC_SRAM_OUT_DM, *dacCfg->waveform->driveMode));
 
                         AUTANALOG_DAC_LUT(baseAddr, sampleIdx) = regVal;
                     }
@@ -135,15 +135,15 @@ cy_en_autanalog_status_t Cy_AutAnalog_DAC_LoadStaticConfig(uint8_t dacIdx, const
 
             /* Configure CTRL value */
             regVal =
-                _VAL2FLD(DAC_STA_CTRL_TOPO, dacStaCfg->topology) |
-                _VAL2FLD(DAC_STA_CTRL_VREF_SEL, dacStaCfg->vrefSel) |
-                _VAL2FLD(DAC_STA_CTRL_DEGLITCH_EN, dacStaCfg->deGlitch) |
-                _VAL2FLD(DAC_STA_CTRL_BOT_SEL, dacStaCfg->bottomSel) |
-                _VAL2FLD(DAC_STA_CTRL_DISABLED_MODE, dacStaCfg->disabledMode) |
-                _VAL2FLD(DAC_STA_CTRL_REFBUF_PWR_MODE, dacStaCfg->refBuffPwr) |
-                _VAL2FLD(DAC_STA_CTRL_OUTBUF_PWR_MODE, dacStaCfg->outBuffPwr) |
-                _VAL2FLD(DAC_STA_CTRL_FORMAT, dacStaCfg->sign) |
-                _VAL2FLD(DAC_STA_CTRL_REF_MUX_SEL, dacStaCfg->vrefMux);
+                    _VAL2FLD(DAC_STA_CTRL_TOPO, dacStaCfg->topology) |
+                    _VAL2FLD(DAC_STA_CTRL_VREF_SEL, dacStaCfg->vrefSel) |
+                    _VAL2FLD(DAC_STA_CTRL_DEGLITCH_EN, dacStaCfg->deGlitch) |
+                    _VAL2FLD(DAC_STA_CTRL_BOT_SEL, dacStaCfg->bottomSel) |
+                    _VAL2FLD(DAC_STA_CTRL_DISABLED_MODE, dacStaCfg->disabledMode) |
+                    _VAL2FLD(DAC_STA_CTRL_REFBUF_PWR_MODE, dacStaCfg->refBuffPwr) |
+                    _VAL2FLD(DAC_STA_CTRL_OUTBUF_PWR_MODE, dacStaCfg->outBuffPwr) |
+                    _VAL2FLD(DAC_STA_CTRL_FORMAT, dacStaCfg->sign) |
+                    _VAL2FLD(DAC_STA_CTRL_REF_MUX_SEL, dacStaCfg->vrefMux);
 
             /* Update CTRL register */
             AUTANALOG_DAC_CTRL(baseAddr) = regVal;
@@ -174,12 +174,12 @@ cy_en_autanalog_status_t Cy_AutAnalog_DAC_LoadStaticConfig(uint8_t dacIdx, const
 
                     /* Configure CHAN_CFG[idx] value */
                     regVal =
-                        _VAL2FLD(DAC_STA_CHAN_CFG_START_ADDR, ((uint32_t)dacStaCfg->chCfg[cfgIdx]->startAddr) * 4U) | /* in bytes */
-                        _VAL2FLD(DAC_STA_CHAN_CFG_END_ADDR, ((uint32_t)dacStaCfg->chCfg[cfgIdx]->endAddr) * 4U) | /* in bytes */
-                        _VAL2FLD(DAC_STA_CHAN_CFG_MODE, dacStaCfg->chCfg[cfgIdx]->operMode) |
-                        _VAL2FLD(DAC_STA_CHAN_CFG_SAMPLE_AND_HOLD_EN, dacStaCfg->chCfg[cfgIdx]->sampleAndHold) |
-                        _VAL2FLD(DAC_STA_CHAN_CFG_STEP_VAL_SEL, dacStaCfg->chCfg[cfgIdx]->stepSel) |
-                        _VAL2FLD(DAC_STA_CHAN_CFG_STATUS_SEL, dacStaCfg->chCfg[cfgIdx]->statSel);
+                            _VAL2FLD(DAC_STA_CHAN_CFG_START_ADDR, ((uint32_t)dacStaCfg->chCfg[cfgIdx]->startAddr) * 4U) | /* in bytes */
+                            _VAL2FLD(DAC_STA_CHAN_CFG_END_ADDR, ((uint32_t)dacStaCfg->chCfg[cfgIdx]->endAddr) * 4U)| /* in bytes */
+                            _VAL2FLD(DAC_STA_CHAN_CFG_MODE, dacStaCfg->chCfg[cfgIdx]->operMode) |
+                            _VAL2FLD(DAC_STA_CHAN_CFG_SAMPLE_AND_HOLD_EN, dacStaCfg->chCfg[cfgIdx]->sampleAndHold) |
+                            _VAL2FLD(DAC_STA_CHAN_CFG_STEP_VAL_SEL, dacStaCfg->chCfg[cfgIdx]->stepSel) |
+                            _VAL2FLD(DAC_STA_CHAN_CFG_STATUS_SEL, dacStaCfg->chCfg[cfgIdx]->statSel);
 
                     /* Update CHAN_CFG register[idx] */
                     AUTANALOG_DAC_CHAN_CFG(baseAddr, cfgIdx) = regVal;
@@ -196,11 +196,11 @@ cy_en_autanalog_status_t Cy_AutAnalog_DAC_LoadStaticConfig(uint8_t dacIdx, const
 
                     /* Configure CHAN_STATUS_CFG[idx] value */
                     regVal =
-                        _VAL2FLD(DAC_STA_CHAN_STATUS_CFG_RANGE_COND, dacStaCfg->chLimitCfg[cfgIdx]->cond) |
-                        _VAL2FLD(DAC_STA_CHAN_STATUS_CFG_RANGE_LOW, ((uint32_t)(dacStaCfg->chLimitCfg[cfgIdx]->low) &
-                                 DAC_STA_FW_DAC_VAL_VALUE_Msk)) |
-                        _VAL2FLD(DAC_STA_CHAN_STATUS_CFG_RANGE_HIGH, ((uint32_t)(dacStaCfg->chLimitCfg[cfgIdx]->high) &
-                                 DAC_STA_FW_DAC_VAL_VALUE_Msk));
+                            _VAL2FLD(DAC_STA_CHAN_STATUS_CFG_RANGE_COND, dacStaCfg->chLimitCfg[cfgIdx]->cond) |
+                            _VAL2FLD(DAC_STA_CHAN_STATUS_CFG_RANGE_LOW, ((uint32_t)(dacStaCfg->chLimitCfg[cfgIdx]->low) &
+                                DAC_STA_FW_DAC_VAL_VALUE_Msk)) |
+                            _VAL2FLD(DAC_STA_CHAN_STATUS_CFG_RANGE_HIGH, ((uint32_t)(dacStaCfg->chLimitCfg[cfgIdx]->high) &
+                                DAC_STA_FW_DAC_VAL_VALUE_Msk));
 
                     /* Update CHAN_STATUS_CFG register[idx] */
                     AUTANALOG_DAC_CHAN_STATUS_CFG(baseAddr, cfgIdx) = regVal;
@@ -212,8 +212,8 @@ cy_en_autanalog_status_t Cy_AutAnalog_DAC_LoadStaticConfig(uint8_t dacIdx, const
              */
             /* Internal Vref and used buffers */
             if ((CY_AUTANALOG_DAC_VREF_VDDA != dacStaCfg->vrefSel) &&
-                    ((CY_AUTANALOG_DAC_REF_BUF_PWR_OFF != dacStaCfg->refBuffPwr) ||
-                     (CY_AUTANALOG_DAC_OUT_BUF_PWR_OFF != dacStaCfg->outBuffPwr)))
+                ((CY_AUTANALOG_DAC_REF_BUF_PWR_OFF != dacStaCfg->refBuffPwr) ||
+                 (CY_AUTANALOG_DAC_OUT_BUF_PWR_OFF != dacStaCfg->outBuffPwr)))
             {
                 AUTANALOG_INFRA_PRIO_CFG(INFRA_BASE, CY_AUTANALOG_PRIORITY_GROUP2) |=
                     (0U == dacIdx) ? INFRA_PRIO_CFG_DAC0_READY_Msk : INFRA_PRIO_CFG_DAC1_READY_Msk;
@@ -262,7 +262,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_DAC_Data_ReadWaveform(uint8_t dacIdx, uint
         {
             for (sampleIdx = 0U; sampleIdx < numSamples; sampleIdx++)
             {
-                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that type conversion from uint32_t to int32_t does not have any negative drawbacks');
+                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that type conversion from uint32_t to int32_t does not have any negative drawbacks');
                 waveform[sampleIdx] = _FLD2VAL(DAC_SRAM_WAVEFORM, AUTANALOG_DAC_LUT(baseAddr, dataIdx++));
             }
         }
@@ -288,7 +288,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_DAC_Data_GetDriveModeArray(uint8_t dacIdx,
         {
             for (sampleIdx = 0U; sampleIdx < numSamples; sampleIdx++)
             {
-                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Review shows that type conversion from uint32_t to enum does not have any negative drawbacks');
+                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Review shows that type conversion from uint32_t to enum does not have any negative drawbacks');
                 driveModeArray[sampleIdx] = (cy_en_autanalog_dac_out_drive_mode_t)_FLD2VAL(DAC_SRAM_OUT_DM, AUTANALOG_DAC_LUT(baseAddr, dataIdx++));
             }
         }

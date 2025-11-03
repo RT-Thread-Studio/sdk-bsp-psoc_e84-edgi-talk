@@ -28,10 +28,7 @@ void cy_bsp_all_init(void)
     {
         CY_ASSERT(0);
     }
-
-    Cy_SysClk_ClkHfSetSource(0, CY_SYSCLK_CLKHF_IN_CLKPATH3);
-    Cy_SysClk_ClkHfSetDivider(0, CY_SYSCLK_CLKHF_DIVIDE_BY_16);
-
+    
 }
 
 void _start(void)

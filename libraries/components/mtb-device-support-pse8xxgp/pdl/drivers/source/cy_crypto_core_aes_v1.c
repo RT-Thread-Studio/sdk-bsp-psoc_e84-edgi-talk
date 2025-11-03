@@ -69,10 +69,10 @@ static void Cy_Crypto_Core_V1_Aes_InvKey(CRYPTO_Type *base, cy_stc_crypto_aes_st
 *
 *******************************************************************************/
 void Cy_Crypto_Core_V1_Aes_ProcessBlock(CRYPTO_Type *base,
-                                        cy_stc_crypto_aes_state_t const *aesState,
-                                        cy_en_crypto_dir_mode_t dirMode,
-                                        uint32_t *dstBlock,
-                                        uint32_t const *srcBlock)
+                            cy_stc_crypto_aes_state_t const *aesState,
+                            cy_en_crypto_dir_mode_t dirMode,
+                            uint32_t *dstBlock,
+                            uint32_t const *srcBlock)
 {
     /* Set the key mode: 128, 192 or 256 Bit */
     REG_CRYPTO_AES_CTL(base) = (uint32_t)(_VAL2FLD(CRYPTO_AES_CTL_KEY_SIZE, (uint32_t)(aesState->keyLength)));
@@ -83,10 +83,10 @@ void Cy_Crypto_Core_V1_Aes_ProcessBlock(CRYPTO_Type *base,
                            (uint32_t)dstBlock);
 
     Cy_Crypto_Run3ParamInstr(base,
-                             (CY_CRYPTO_DECRYPT == dirMode) ? CY_CRYPTO_V1_AES_BLOCK_INV_OPC : CY_CRYPTO_V1_AES_BLOCK_OPC,
-                             CY_CRYPTO_RSRC0_SHIFT,
-                             CY_CRYPTO_RSRC4_SHIFT,
-                             CY_CRYPTO_RSRC12_SHIFT);
+                            (CY_CRYPTO_DECRYPT == dirMode) ? CY_CRYPTO_V1_AES_BLOCK_INV_OPC : CY_CRYPTO_V1_AES_BLOCK_OPC,
+                            CY_CRYPTO_RSRC0_SHIFT,
+                            CY_CRYPTO_RSRC4_SHIFT,
+                            CY_CRYPTO_RSRC12_SHIFT);
 
     /* Wait until the AES instruction is complete */
     while (0uL != _FLD2VAL(CRYPTO_STATUS_AES_BUSY, REG_CRYPTO_STATUS(base)))
@@ -119,10 +119,10 @@ void Cy_Crypto_Core_V1_Aes_ProcessBlock(CRYPTO_Type *base,
 *
 *******************************************************************************/
 void Cy_Crypto_Core_V1_Aes_Xor(CRYPTO_Type *base,
-                               cy_stc_crypto_aes_state_t const *aesState,
-                               uint32_t *dstBlock,
-                               uint32_t const *src0Block,
-                               uint32_t const *src1Block)
+                            cy_stc_crypto_aes_state_t const *aesState,
+                            uint32_t *dstBlock,
+                            uint32_t const *src0Block,
+                            uint32_t const *src1Block)
 {
     /* Set the key mode: 128, 192 or 256 Bit */
     REG_CRYPTO_AES_CTL(base) = (uint32_t)(_VAL2FLD(CRYPTO_AES_CTL_KEY_SIZE, (uint32_t)(aesState->keyLength)));
@@ -140,7 +140,7 @@ void Cy_Crypto_Core_V1_Aes_Xor(CRYPTO_Type *base,
                              CY_CRYPTO_RSRC8_SHIFT);
 
     /* Wait until the AES instruction is complete */
-    while (0uL != _FLD2VAL(CRYPTO_STATUS_AES_BUSY, REG_CRYPTO_STATUS(base)))
+    while(0uL != _FLD2VAL(CRYPTO_STATUS_AES_BUSY, REG_CRYPTO_STATUS(base)))
     {
     }
 }
@@ -173,7 +173,7 @@ static void Cy_Crypto_Core_V1_Aes_InvKey(CRYPTO_Type *base, cy_stc_crypto_aes_st
                              CY_CRYPTO_RSRC8_SHIFT);
 
     /* Wait until the AES instruction is complete */
-    while (0uL != _FLD2VAL(CRYPTO_STATUS_AES_BUSY, REG_CRYPTO_STATUS(base)))
+    while(0uL != _FLD2VAL(CRYPTO_STATUS_AES_BUSY, REG_CRYPTO_STATUS(base)))
     {
     }
 }
@@ -205,10 +205,10 @@ static void Cy_Crypto_Core_V1_Aes_InvKey(CRYPTO_Type *base, cy_stc_crypto_aes_st
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Init(CRYPTO_Type *base,
-        uint8_t const *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        cy_stc_crypto_aes_state_t *aesState,
-        cy_stc_crypto_aes_buffers_t *aesBuffers)
+                                                 uint8_t const *key,
+                                                 cy_en_crypto_aes_key_length_t keyLength,
+                                                 cy_stc_crypto_aes_state_t *aesState,
+                                                 cy_stc_crypto_aes_buffers_t *aesBuffers)
 {
     uint16_t keySize = CY_CRYPTO_AES_128_KEY_SIZE + ((uint16_t)keyLength * 8u);
 
@@ -275,10 +275,10 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Free(CRYPTO_Type *base, cy_stc_crypt
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Ecb(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            cy_en_crypto_dir_mode_t dirMode,
+                                            uint8_t *dst,
+                                            uint8_t const *src,
+                                            cy_stc_crypto_aes_state_t *aesState)
 {
     cy_stc_crypto_aes_buffers_t *aesBuffers = (cy_stc_crypto_aes_buffers_t*)aesState->buffers;
 
@@ -326,12 +326,12 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Ecb(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Cbc(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint8_t *ivPtr,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            cy_en_crypto_dir_mode_t dirMode,
+                                            uint32_t srcSize,
+                                            uint8_t *ivPtr,
+                                            uint8_t *dst,
+                                            uint8_t const *src,
+                                            cy_stc_crypto_aes_state_t *aesState)
 {
     uint32_t size = srcSize;
 
@@ -436,12 +436,12 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Cbc(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Cfb(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint8_t *ivPtr,
-        uint8_t *dst,
-        uint8_t const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                             cy_en_crypto_dir_mode_t dirMode,
+                                             uint32_t srcSize,
+                                             uint8_t *ivPtr,
+                                             uint8_t *dst,
+                                             uint8_t const *src,
+                                             cy_stc_crypto_aes_state_t *aesState)
 {
     uint32_t size = srcSize;
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_SIZE_NOT_X16;
@@ -532,13 +532,13 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Cfb(CRYPTO_Type *base,
 *******************************************************************************/
 #define CY_CRYPTO_AES_CTR_CNT_POS          (0x02U)
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Ctr(CRYPTO_Type *base,
-        uint32_t srcSize,
-        uint32_t *srcOffset,
-        uint8_t  *ivPtr,
-        uint8_t  *streamBlock,
-        uint8_t  *dst,
-        uint8_t  const *src,
-        cy_stc_crypto_aes_state_t *aesState)
+                                            uint32_t srcSize,
+                                            uint32_t *srcOffset,
+                                            uint8_t  *ivPtr,
+                                            uint8_t  *streamBlock,
+                                            uint8_t  *dst,
+                                            uint8_t  const *src,
+                                            cy_stc_crypto_aes_state_t *aesState)
 {
     uint32_t i;
     uint32_t cnt;
@@ -554,7 +554,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Ctr(CRYPTO_Type *base,
 
     Cy_Crypto_Core_V1_MemCpy(base, blockCounter, ivPtr, CY_CRYPTO_AES_BLOCK_SIZE);
 
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional pointer type conversion');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional pointer type conversion');
     counter = CY_SWAP_ENDIAN64(*(uint64_t*)(blockCounter + CY_CRYPTO_AES_CTR_CNT_POS));
 
     cnt = (uint32_t)(srcSize / CY_CRYPTO_AES_BLOCK_SIZE);
@@ -569,7 +569,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Aes_Ctr(CRYPTO_Type *base,
 
         /* Increment the block counter, at least 64Bits (from 128) is the counter part */
         counter++;
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional pointer type conversion');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional pointer type conversion');
         *(uint64_t*)(blockCounter + CY_CRYPTO_AES_CTR_CNT_POS) = CY_SWAP_ENDIAN64(counter);
 
         Cy_Crypto_Core_V1_Aes_Xor(base, aesState, dstBuff, srcBuff, streamBuff);

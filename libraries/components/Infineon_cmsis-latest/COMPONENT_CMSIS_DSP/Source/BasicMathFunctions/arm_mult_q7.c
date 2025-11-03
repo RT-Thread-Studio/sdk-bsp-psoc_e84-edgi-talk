@@ -43,7 +43,6 @@
   @param[in]     pSrcB      points to the second input vector
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function uses saturating arithmetic.
@@ -53,7 +52,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_mult_q7(
+ARM_DSP_ATTRIBUTE void arm_mult_q7(
     const q7_t * pSrcA,
     const q7_t * pSrcB,
     q7_t * pDst,
@@ -98,67 +97,67 @@ void arm_mult_q7(
 }
 
 #else
-void arm_mult_q7(
-    const q7_t * pSrcA,
-    const q7_t * pSrcB,
-    q7_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_mult_q7(
+  const q7_t * pSrcA,
+  const q7_t * pSrcB,
+        q7_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
 #if defined (ARM_MATH_DSP)
-    q7_t out1, out2, out3, out4;                   /* Temporary output variables */
+  q7_t out1, out2, out3, out4;                   /* Temporary output variables */
 #endif
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A * B */
+  while (blkCnt > 0U)
+  {
+    /* C = A * B */
 
 #if defined (ARM_MATH_DSP)
-        /* Multiply inputs and store results in temporary variables */
-        out1 = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
-        out2 = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
-        out3 = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
-        out4 = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    /* Multiply inputs and store results in temporary variables */
+    out1 = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    out2 = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    out3 = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    out4 = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
 
-        /* Pack and store result in destination buffer (in single write) */
-        write_q7x4_ia(&pDst, __PACKq7(out1, out2, out3, out4));
+    /* Pack and store result in destination buffer (in single write) */
+    write_q7x4_ia (&pDst, __PACKq7(out1, out2, out3, out4));
 #else
-        *pDst++ = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
-        *pDst++ = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
-        *pDst++ = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
-        *pDst++ = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    *pDst++ = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    *pDst++ = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    *pDst++ = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    *pDst++ = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A * B */
+  while (blkCnt > 0U)
+  {
+    /* C = A * B */
 
-        /* Multiply input and store result in destination buffer. */
-        *pDst++ = (q7_t) __SSAT((((q15_t)(*pSrcA++) * (*pSrcB++)) >> 7), 8);
+    /* Multiply input and store result in destination buffer. */
+    *pDst++ = (q7_t) __SSAT((((q15_t) (*pSrcA++) * (*pSrcB++)) >> 7), 8);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

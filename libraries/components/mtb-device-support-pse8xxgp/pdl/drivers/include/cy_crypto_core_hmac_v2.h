@@ -66,33 +66,33 @@ typedef struct
 /** \endcond */
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hmac_Init(CRYPTO_Type *base,
-        cy_stc_crypto_hmac_state_t *hmacState,
-        cy_en_crypto_sha_mode_t mode, cy_stc_crypto_v2_hmac_buffers_t *hmacBuffer);
+                                                cy_stc_crypto_hmac_state_t *hmacState,
+                                                cy_en_crypto_sha_mode_t mode, cy_stc_crypto_v2_hmac_buffers_t *hmacBuffer);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hmac_Start(CRYPTO_Type *base,
-        cy_stc_crypto_hmac_state_t *hmacState,
-        uint8_t const *key,
-        uint32_t keyLength);
+                                                cy_stc_crypto_hmac_state_t *hmacState,
+                                                uint8_t const *key,
+                                                uint32_t keyLength);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hmac_Update(CRYPTO_Type *base,
-        cy_stc_crypto_hmac_state_t  *hmacState,
-        uint8_t   const *message,
-        uint32_t  messageSize);
+                                                cy_stc_crypto_hmac_state_t  *hmacState,
+                                                uint8_t   const *message,
+                                                uint32_t  messageSize);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hmac_Finish(CRYPTO_Type *base,
-        cy_stc_crypto_hmac_state_t *hmacState,
-        uint8_t *hmac);
+                                                cy_stc_crypto_hmac_state_t *hmacState,
+                                                uint8_t *hmac);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hmac_Free(CRYPTO_Type *base,
-        cy_stc_crypto_hmac_state_t *hmacState);
+                                                cy_stc_crypto_hmac_state_t *hmacState);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Hmac(CRYPTO_Type *base,
-        uint8_t *hmac,
-        uint8_t  const *message,
-        uint32_t messageSize,
-        uint8_t  const *key,
-        uint32_t keyLength,
-        cy_en_crypto_sha_mode_t mode);
+                                          uint8_t *hmac,
+                                          uint8_t  const *message,
+                                          uint32_t messageSize,
+                                          uint8_t  const *key,
+                                          uint32_t keyLength,
+                                          cy_en_crypto_sha_mode_t mode);
 
 
 #endif /* (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_HMAC_C) */

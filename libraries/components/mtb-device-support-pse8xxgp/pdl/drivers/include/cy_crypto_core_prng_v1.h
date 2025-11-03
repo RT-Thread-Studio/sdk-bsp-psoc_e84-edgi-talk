@@ -40,13 +40,13 @@ extern "C" {
 #if (CPUSS_CRYPTO_PR == 1) && defined(CY_CRYPTO_CFG_PRNG_C)
 
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Prng_Init(CRYPTO_Type *base,
-        uint32_t lfsr32InitState,
-        uint32_t lfsr31InitState,
-        uint32_t lfsr29InitState);
+                                                  uint32_t lfsr32InitState,
+                                                  uint32_t lfsr31InitState,
+                                                  uint32_t lfsr29InitState);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Prng(CRYPTO_Type *base,
-        uint32_t max,
-        uint32_t *randomNum);
+                                             uint32_t max,
+                                             uint32_t *randomNum);
 
 #endif /* (CPUSS_CRYPTO_PR == 1) && defined(CY_CRYPTO_CFG_PRNG_C) */
 

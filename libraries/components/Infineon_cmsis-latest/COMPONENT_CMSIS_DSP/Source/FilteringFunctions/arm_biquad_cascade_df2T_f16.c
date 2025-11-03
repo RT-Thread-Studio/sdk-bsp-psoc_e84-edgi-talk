@@ -44,15 +44,14 @@
   @param[in]     pSrc      points to the block of input data
   @param[out]    pDst      points to the block of output data
   @param[in]     blockSize number of samples to process
-  @return        none
  */
 
 #if (defined(ARM_MATH_MVE_FLOAT16) && defined(ARM_MATH_HELIUM_EXPERIMENTAL)) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_biquad_cascade_df2T_f16(
-    const arm_biquad_cascade_df2T_instance_f16 * S,
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_biquad_cascade_df2T_f16(
+  const arm_biquad_cascade_df2T_instance_f16 * S,
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
     float16_t *pIn = (float16_t *)pSrc;                  /*  source pointer            */
     float16_t Xn0, Xn1;
@@ -61,7 +60,7 @@ void arm_biquad_cascade_df2T_f16(
     float16_t *pState = S->pState;          /*  State pointer             */
     uint32_t  sample, stage = S->numStages; /*  loop counters             */
     float16_t const *pCurCoeffs =          /*  coefficient pointer       */
-        (float16_t const *) S->pCoeffs;
+                (float16_t const *) S->pCoeffs;
     f16x8_t b0Coeffs, a0Coeffs;           /*  Coefficients vector       */
     f16x8_t b1Coeffs, a1Coeffs;           /*  Modified coef. vector     */
     f16x8_t state;                        /*  State vector              */
@@ -77,10 +76,8 @@ void arm_biquad_cascade_df2T_f16(
          * b0Coeffs = {b0, b1, b2, x, x, x, x, x}
          * a0Coeffs = { x, a1, a2, x, x, x, x, x}
          */
-        b0Coeffs = vld1q(pCurCoeffs);
-        pCurCoeffs += 2;
-        a0Coeffs = vld1q(pCurCoeffs);
-        pCurCoeffs += 3;
+        b0Coeffs = vld1q(pCurCoeffs);   pCurCoeffs += 2;
+        a0Coeffs = vld1q(pCurCoeffs);   pCurCoeffs += 3;
         /*
          * Reading the state values
          * state = {d1, d2, 0, 0, x, x, x, x}
@@ -189,306 +186,303 @@ void arm_biquad_cascade_df2T_f16(
 }
 #else
 
-void arm_biquad_cascade_df2T_f16(
-    const arm_biquad_cascade_df2T_instance_f16 * S,
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_biquad_cascade_df2T_f16(
+  const arm_biquad_cascade_df2T_instance_f16 * S,
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
-    const float16_t *pIn = pSrc;                         /* Source pointer */
-    float16_t *pOut = pDst;                        /* Destination pointer */
-    float16_t *pState = S->pState;                 /* State pointer */
-    const float16_t *pCoeffs = S->pCoeffs;               /* Coefficient pointer */
-    _Float16 acc1;                                /* Accumulator */
-    _Float16 b0, b1, b2, a1, a2;                  /* Filter coefficients */
-    _Float16 Xn1;                                 /* Temporary input */
-    _Float16 d1, d2;                              /* State variables */
-    uint32_t sample, stage = S->numStages;         /* Loop counters */
+  const float16_t *pIn = pSrc;                         /* Source pointer */
+        float16_t *pOut = pDst;                        /* Destination pointer */
+        float16_t *pState = S->pState;                 /* State pointer */
+  const float16_t *pCoeffs = S->pCoeffs;               /* Coefficient pointer */
+        _Float16 acc1;                                /* Accumulator */
+        _Float16 b0, b1, b2, a1, a2;                  /* Filter coefficients */
+        _Float16 Xn1;                                 /* Temporary input */
+        _Float16 d1, d2;                              /* State variables */
+        uint32_t sample, stage = S->numStages;         /* Loop counters */
 
-    do
-    {
-        /* Reading the coefficients */
-        b0 = pCoeffs[0];
-        b1 = pCoeffs[1];
-        b2 = pCoeffs[2];
-        a1 = pCoeffs[3];
-        a2 = pCoeffs[4];
+  do
+  {
+     /* Reading the coefficients */
+     b0 = pCoeffs[0];
+     b1 = pCoeffs[1];
+     b2 = pCoeffs[2];
+     a1 = pCoeffs[3];
+     a2 = pCoeffs[4];
 
-        /* Reading the state values */
-        d1 = pState[0];
-        d2 = pState[1];
+     /* Reading the state values */
+     d1 = pState[0];
+     d2 = pState[1];
 
-        pCoeffs += 5U;
+     pCoeffs += 5U;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-        /* Loop unrolling: Compute 16 outputs at a time */
-        sample = blockSize >> 4U;
+     /* Loop unrolling: Compute 16 outputs at a time */
+     sample = blockSize >> 4U;
 
-        while (sample > 0U)
-        {
+     while (sample > 0U) {
 
-            /* y[n] = b0 * x[n] + d1 */
-            /* d1 = b1 * x[n] + a1 * y[n] + d2 */
-            /* d2 = b2 * x[n] + a2 * y[n] */
+       /* y[n] = b0 * x[n] + d1 */
+       /* d1 = b1 * x[n] + a1 * y[n] + d2 */
+       /* d2 = b2 * x[n] + a2 * y[n] */
 
-            /*  1 */
-            Xn1 = *pIn++;
+/*  1 */
+       Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+       acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+       d1 = b1 * Xn1 + d2;
+       d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+       d2 = b2 * Xn1;
+       d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+       *pOut++ = acc1;
 
-            /*  2 */
-            Xn1 = *pIn++;
+/*  2 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /*  3 */
-            Xn1 = *pIn++;
+/*  3 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /*  4 */
-            Xn1 = *pIn++;
+/*  4 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /*  5 */
-            Xn1 = *pIn++;
+/*  5 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /*  6 */
-            Xn1 = *pIn++;
+/*  6 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /*  7 */
-            Xn1 = *pIn++;
+/*  7 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /*  8 */
-            Xn1 = *pIn++;
+/*  8 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /*  9 */
-            Xn1 = *pIn++;
+/*  9 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /* 10 */
-            Xn1 = *pIn++;
+/* 10 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /* 11 */
-            Xn1 = *pIn++;
+/* 11 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /* 12 */
-            Xn1 = *pIn++;
+/* 12 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /* 13 */
-            Xn1 = *pIn++;
+/* 13 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /* 14 */
-            Xn1 = *pIn++;
+/* 14 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /* 15 */
-            Xn1 = *pIn++;
+/* 15 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /* 16 */
-            Xn1 = *pIn++;
+/* 16 */
+         Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
+        *pOut++ = acc1;
 
-            /* decrement loop counter */
-            sample--;
-        }
+        /* decrement loop counter */
+        sample--;
+      }
 
-        /* Loop unrolling: Compute remaining outputs */
-        sample = blockSize & 0xFU;
+      /* Loop unrolling: Compute remaining outputs */
+      sample = blockSize & 0xFU;
 
 #else
 
-        /* Initialize blkCnt with number of samples */
-        sample = blockSize;
+      /* Initialize blkCnt with number of samples */
+      sample = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-        while (sample > 0U)
-        {
-            Xn1 = *pIn++;
+      while (sample > 0U) {
+        Xn1 = *pIn++;
 
-            acc1 = b0 * Xn1 + d1;
+        acc1 = b0 * Xn1 + d1;
 
-            d1 = b1 * Xn1 + d2;
-            d1 += a1 * acc1;
+        d1 = b1 * Xn1 + d2;
+        d1 += a1 * acc1;
 
-            d2 = b2 * Xn1;
-            d2 += a2 * acc1;
+        d2 = b2 * Xn1;
+        d2 += a2 * acc1;
 
-            *pOut++ = acc1;
-
-            /* decrement loop counter */
-            sample--;
-        }
-
-        /* Store the updated state variables back into the state array */
-        pState[0] = d1;
-        pState[1] = d2;
-
-        pState += 2U;
-
-        /* The current stage output is given as the input to the next stage */
-        pIn = pDst;
-
-        /* Reset the output working pointer */
-        pOut = pDst;
+        *pOut++ = acc1;
 
         /* decrement loop counter */
-        stage--;
+        sample--;
+      }
 
-    }
-    while (stage > 0U);
+      /* Store the updated state variables back into the state array */
+      pState[0] = d1;
+      pState[1] = d2;
+
+      pState += 2U;
+
+      /* The current stage output is given as the input to the next stage */
+      pIn = pDst;
+
+      /* Reset the output working pointer */
+      pOut = pDst;
+
+      /* decrement loop counter */
+      stage--;
+
+   } while (stage > 0U);
 
 }
 #endif /* #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

@@ -51,113 +51,113 @@ extern "C" {
 
 static const mtb_hal_nvm_region_info_t _mtb_hal_nvm_mem_regions[_MTB_HAL_NVM_MEMORY_BLOCKS_COUNT] =
 {
-#if (_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM)
-#if (CY_RRAM_MAIN_REGION_SIZE > 0)
+    #if (_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM)
+    #if (CY_RRAM_MAIN_REGION_SIZE > 0)
     // Main RRAM region, 8KB sectors
     {
         .nvm_type = MTB_HAL_NVM_TYPE_RRAM,
         .start_address =
-#if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
-        CY_RRAM_MAIN_HOST_S_START_ADDRESS,
-#else
-        CY_RRAM_MAIN_HOST_NS_START_ADDRESS,
-#endif
+            #if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
+            CY_RRAM_MAIN_HOST_S_START_ADDRESS,
+            #else
+            CY_RRAM_MAIN_HOST_NS_START_ADDRESS,
+        #endif
         .size = CY_RRAM_MAIN_REGION_SIZE,
         .sector_size = CY_RRAM_SECTOR_SIZE_KB * 1024,
         .block_size = CY_RRAM_BLOCK_SIZE_BYTES,
         .is_erase_required = false,
         .erase_value = 0x00U,
     },
-#endif /* (CY_RRAM_MAIN_REGION_SIZE > 0) */
-#if (CY_RRAM_WORK_REGION_SIZE > 0)
+    #endif /* (CY_RRAM_MAIN_REGION_SIZE > 0) */
+    #if (CY_RRAM_WORK_REGION_SIZE > 0)
     // Work RRAM region, 8KB sectors
     {
         .nvm_type = MTB_HAL_NVM_TYPE_RRAM,
         .start_address =
-#if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
-        CY_RRAM_WORK_HOST_S_START_ADDRESS,
-#else
-        CY_RRAM_WORK_HOST_NS_START_ADDRESS,
-#endif
+            #if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
+            CY_RRAM_WORK_HOST_S_START_ADDRESS,
+            #else
+            CY_RRAM_WORK_HOST_NS_START_ADDRESS,
+        #endif
         .size = CY_RRAM_WORK_REGION_SIZE,
         .sector_size = CY_RRAM_SECTOR_SIZE_KB * 1024,
         .block_size = CY_RRAM_BLOCK_SIZE_BYTES,
         .is_erase_required = false,
         .erase_value = 0x00U,
     },
-#endif /* (CY_RRAM_WORK_REGION_SIZE > 0) */
-#if (CY_RRAM_SFLASH_REGION_SIZE > 0)
+    #endif /* (CY_RRAM_WORK_REGION_SIZE > 0) */
+    #if (CY_RRAM_SFLASH_REGION_SIZE > 0)
     // SFALSH RRAM region, 8KB sectors
     {
         .nvm_type = MTB_HAL_NVM_TYPE_RRAM,
         .start_address =
-#if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
-        CY_RRAM_SFLASH_HOST_S_START_ADDRESS,
-#else
-        CY_RRAM_SFLASH_HOST_NS_START_ADDRESS,
-#endif
+            #if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
+            CY_RRAM_SFLASH_HOST_S_START_ADDRESS,
+            #else
+            CY_RRAM_SFLASH_HOST_NS_START_ADDRESS,
+        #endif
         .size = CY_RRAM_SFLASH_REGION_SIZE,
         .sector_size = CY_RRAM_SECTOR_SIZE_KB * 1024,
         .block_size = CY_RRAM_BLOCK_SIZE_BYTES,
         .is_erase_required = false,
         .erase_value = 0x00U,
     },
-#endif /* (CY_RRAM_SFLASH_REGION_SIZE > 0) */
-#if (CY_RRAM_PROTECTED_REGION_SIZE > 0)
+    #endif /* (CY_RRAM_SFLASH_REGION_SIZE > 0) */
+    #if (CY_RRAM_PROTECTED_REGION_SIZE > 0)
     // SFALSH RRAM region, 8KB sectors
     {
         .nvm_type = MTB_HAL_NVM_TYPE_RRAM,
         .start_address =
-#if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
-        CY_RRAM_PROTECTED_HOST_S_START_ADDRESS,
-#else
-        CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS,
-#endif
+            #if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
+            CY_RRAM_PROTECTED_HOST_S_START_ADDRESS,
+            #else
+            CY_RRAM_PROTECTED_HOST_NS_START_ADDRESS,
+        #endif
         .size = CY_RRAM_PROTECTED_REGION_SIZE,
         .sector_size = CY_RRAM_SECTOR_SIZE_KB * 1024,
         .block_size = CY_RRAM_BLOCK_SIZE_BYTES,
         .is_erase_required = false,
         .erase_value = 0x00U,
     },
-#endif /* (CY_RRAM_PROTECTED_REGION_SIZE > 0) */
-#endif /* (_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM) */
+    #endif /* (CY_RRAM_PROTECTED_REGION_SIZE > 0) */
+    #endif /* (_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM) */
 
-#if (_MTB_HAL_DRIVER_AVAILABLE_NVM_OTP)
-#if (CY_RRAM_GENERAL_OTP_SIZE > 0)
+    #if (_MTB_HAL_DRIVER_AVAILABLE_NVM_OTP)
+    #if (CY_RRAM_GENERAL_OTP_SIZE > 0)
     // General RRAM OTP region, 5.5KB sector
     {
         .nvm_type = MTB_HAL_NVM_TYPE_OTP,
         .start_address =
-#if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
-        CY_RRAM_GENERAL_OTP_MMIO_S_START_ADDRESS,
-#else
-        CY_RRAM_GENERAL_OTP_MMIO_NS_START_ADDRESS,
-#endif
+            #if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
+            CY_RRAM_GENERAL_OTP_MMIO_S_START_ADDRESS,
+            #else
+            CY_RRAM_GENERAL_OTP_MMIO_NS_START_ADDRESS,
+        #endif
         .size = CY_RRAM_GENERAL_OTP_SIZE,
         .sector_size = CY_RRAM_GENERAL_OTP_SIZE,
         .block_size = CY_RRAM_BLOCK_SIZE_BYTES,
         .is_erase_required = false,
         .erase_value = 0xFFU,
     },
-#endif /* (CY_RRAM_GENERAL_OTP_SIZE > 0) */
-#if (CY_RRAM_PROTECTED_OTP_SIZE > 0)
+    #endif /* (CY_RRAM_GENERAL_OTP_SIZE > 0) */
+    #if (CY_RRAM_PROTECTED_OTP_SIZE > 0)
     // Protected RRAM OTP region, 8KB sector
     {
         .nvm_type = MTB_HAL_NVM_TYPE_OTP,
         .start_address =
-#if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
-        CY_RRAM_PROTECTED_OTP_PROTECTED_S_START_ADDRESS,
-#else
-        CY_RRAM_PROTECTED_OTP_PROTECTED_NS_START_ADDRESS,
-#endif
+            #if defined(_MTB_HAL_IMAGE_TYPE_SECURE)
+            CY_RRAM_PROTECTED_OTP_PROTECTED_S_START_ADDRESS,
+            #else
+            CY_RRAM_PROTECTED_OTP_PROTECTED_NS_START_ADDRESS,
+        #endif
         .size = CY_RRAM_PROTECTED_OTP_SIZE,
         .sector_size = CY_RRAM_SECTOR_SIZE_KB * 1024,
         .block_size = CY_RRAM_BLOCK_SIZE_BYTES,
         .is_erase_required = false,
         .erase_value = 0xFFU,
     },
-#endif /* (CY_RRAM_PROTECTED_OTP_SIZE > 0) */
-#endif /* (_MTB_HAL_DRIVER_AVAILABLE_NVM_OTP) */
+    #endif /* (CY_RRAM_PROTECTED_OTP_SIZE > 0) */
+    #endif /* (_MTB_HAL_DRIVER_AVAILABLE_NVM_OTP) */
 };
 
 /*******************************************************************************
@@ -176,7 +176,7 @@ uint8_t _mtb_hal_flash_get_mem_region_count(void)
 //--------------------------------------------------------------------------------------------------
 // _mtb_hal_flash_get_mem_region
 //--------------------------------------------------------------------------------------------------
-const mtb_hal_nvm_region_info_t *_mtb_hal_flash_get_mem_region(void)
+const mtb_hal_nvm_region_info_t* _mtb_hal_flash_get_mem_region(void)
 {
     return &_mtb_hal_nvm_mem_regions[0];
 }

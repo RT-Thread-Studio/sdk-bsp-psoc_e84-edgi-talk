@@ -91,11 +91,6 @@
     "mandatory": false,
     "present": ["DEVICE_CSR", "DEVICE_CERT"]
   },
-  "SILICON_ID": {
-    "type": "INT",
-    "mandatory": false,
-    "present": []
-  },
   "ROM_BOOT_VERSION": {
     "type": "STRING",
     "mandatory": false,
@@ -120,6 +115,11 @@
     "type": "STRING",
     "mandatory": false,
     "present": ["ALIAS_CERT"]
+  },
+  "SILICON_ID": {
+    "type": "INT",
+    "mandatory": false,
+    "present": []
   },
   "OEM": {
     "value": "",

@@ -43,15 +43,9 @@
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    maximum value returned here
   @param[out]    pIndex     index of maximum value returned here
-  @return        none
  */
 
-#if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE) && defined(__CMSIS_GCC_H)
-    #pragma GCC warning "Scalar version of arm_absmax_q7 built. Helium version has build issues with gcc."
-#endif
-
-
-#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE) &&  !defined(__CMSIS_GCC_H)
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include <stdint.h>
 #include "arm_helium_utils.h"
@@ -62,7 +56,7 @@ static void arm_small_blk_absmax_q7(
     const q7_t * pSrc,
     uint16_t blockSize,
     q7_t * pResult,
-    uint32_t *pIndex)
+    uint32_t * pIndex)
 {
     int32_t        blkCnt;     /* loop counters */
     q7x16_t        extremValVec = vdupq_n_s8(Q7_ABSMIN);
@@ -75,8 +69,7 @@ static void arm_small_blk_absmax_q7(
     indexVec = vidupq_u8(0U, 1);
 
     blkCnt = blockSize;
-    do
-    {
+    do {
         mve_pred16_t    p = vctp8q(blkCnt);
         q7x16_t         extremIdxVal = vld1q_z_s8(pSrc, p);
 
@@ -110,11 +103,11 @@ static void arm_small_blk_absmax_q7(
     *pResult = maxValue;
 }
 
-void arm_absmax_q7(
-    const q7_t * pSrc,
-    uint32_t blockSize,
-    q7_t * pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_absmax_q7(
+  const q7_t * pSrc,
+        uint32_t blockSize,
+        q7_t * pResult,
+        uint32_t * pIndex)
 {
     int32_t   totalSize = blockSize;
 
@@ -165,170 +158,133 @@ void arm_absmax_q7(
 }
 #else
 #if defined(ARM_MATH_DSP)
-void arm_absmax_q7(
-    const q7_t * pSrc,
-    uint32_t blockSize,
-    q7_t * pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_absmax_q7(
+  const q7_t * pSrc,
+        uint32_t blockSize,
+        q7_t * pResult,
+        uint32_t * pIndex)
 {
-    q7_t cur_absmax, out;                     /* Temporary variables to store the output value. */\
-    uint32_t blkCnt, outIndex;                     /* Loop counter */                                   \
-    uint32_t index;                                /* index of maximum value */                         \
-    \
-    /* Initialize index value to zero. */                                                                     \
-    outIndex = 0U;
-    \
-    /* Load first input value that act as reference value for comparision */                                  \
-    out = *pSrc++;
-    \
-    out = (out > 0) ? out : (q7_t)__QSUB8(0, out);
-    \
-    /* Initialize index of extrema value. */                                                                  \
-    index = 0U;
-    \
-    \
-    /* Loop unrolling: Compute 4 outputs at a time */                                                         \
-    blkCnt = (blockSize - 1U) >> 2U;
-    \
-    \
-    while (blkCnt > 0U)                                                                                       \
-    {
-        \
-        /* Initialize cur_absmax to next consecutive values one by one */                                         \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);
-        \
-        /* compare for the extrema value */                                                                     \
-        if (cur_absmax > out)                                                                         \
-        {
-            \
-            /* Update the extrema value and it's index */                                                         \
-            out = cur_absmax;
-            \
-            outIndex = index + 1U;
-            \
-        }                                                                                                       \
-        \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);
-        \
-        if (cur_absmax > out)                                                                         \
-        {
-            \
-            out = cur_absmax;
-            \
-            outIndex = index + 2U;
-            \
-        }                                                                                                       \
-        \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);
-        \
-        if (cur_absmax > out)                                                                          \
-        {
-            \
-            out = cur_absmax;
-            \
-            outIndex = index + 3U;
-            \
-        }                                                                                                       \
-        \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);
-        \
-        if (cur_absmax > out)                                                                          \
-        {
-            \
-            out = cur_absmax;
-            \
-            outIndex = index + 4U;
-            \
-        }                                                                                                       \
-        \
-        index += 4U;
-        \
-        \
-        /* Decrement loop counter */                                                                            \
-        blkCnt--;
-        \
-    }                                                                                                         \
-    \
-    /* Loop unrolling: Compute remaining outputs */                                                           \
-    blkCnt = (blockSize - 1U) % 4U;
-    \
-    \
-    \
-    while (blkCnt > 0U)                                                                                       \
-    {
-        \
-        cur_absmax = *pSrc++;
-        \
-        cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);
-        \
-        if (cur_absmax > out)                                                                         \
-        {
-            \
-            out = cur_absmax;
-            \
-            outIndex = blockSize - blkCnt;
-            \
-        }                                                                                                       \
-        \
-        /* Decrement loop counter */                                                                            \
-        blkCnt--;
-        \
-    }                                                                                                         \
-    \
-    /* Store the extrema value and it's index into destination pointers */                                    \
-    *pResult = out;
-    \
-    *pIndex = outIndex;
+        q7_t cur_absmax, out;                     /* Temporary variables to store the output value. */\
+        uint32_t blkCnt, outIndex;                     /* Loop counter */                                   \
+        uint32_t index;                                /* index of maximum value */                         \
+                                                                                                            \
+  /* Initialize index value to zero. */                                                                     \
+  outIndex = 0U;                                                                                            \
+  /* Load first input value that act as reference value for comparision */                                  \
+  out = *pSrc++;                                                                                            \
+  out = (out > 0) ? out : (q7_t)__QSUB8(0, out);                                                                           \
+  /* Initialize index of extrema value. */                                                                  \
+  index = 0U;                                                                                               \
+                                                                                                            \
+  /* Loop unrolling: Compute 4 outputs at a time */                                                         \
+  blkCnt = (blockSize - 1U) >> 2U;                                                                          \
+                                                                                                            \
+  while (blkCnt > 0U)                                                                                       \
+  {                                                                                                         \
+    /* Initialize cur_absmax to next consecutive values one by one */                                         \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);                                                                \
+    /* compare for the extrema value */                                                                     \
+    if (cur_absmax > out)                                                                         \
+    {                                                                                                       \
+      /* Update the extrema value and it's index */                                                         \
+      out = cur_absmax;                                                                                       \
+      outIndex = index + 1U;                                                                                \
+    }                                                                                                       \
+                                                                                                            \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);                                                                \
+    if (cur_absmax > out)                                                                         \
+    {                                                                                                       \
+      out = cur_absmax;                                                                                       \
+      outIndex = index + 2U;                                                                                \
+    }                                                                                                       \
+                                                                                                            \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);                                                                \
+    if (cur_absmax > out)                                                                          \
+    {                                                                                                       \
+      out = cur_absmax;                                                                                       \
+      outIndex = index + 3U;                                                                                \
+    }                                                                                                       \
+                                                                                                            \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);                                                                 \
+    if (cur_absmax > out)                                                                          \
+    {                                                                                                       \
+      out = cur_absmax;                                                                                       \
+      outIndex = index + 4U;                                                                                \
+    }                                                                                                       \
+                                                                                                            \
+    index += 4U;                                                                                            \
+                                                                                                            \
+    /* Decrement loop counter */                                                                            \
+    blkCnt--;                                                                                               \
+  }                                                                                                         \
+                                                                                                            \
+  /* Loop unrolling: Compute remaining outputs */                                                           \
+  blkCnt = (blockSize - 1U) % 4U;                                                                           \
+                                                                                                            \
+                                                                                                            \
+  while (blkCnt > 0U)                                                                                       \
+  {                                                                                                         \
+    cur_absmax = *pSrc++;                                                                                     \
+    cur_absmax = (cur_absmax > 0) ? cur_absmax : (q7_t)__QSUB8(0, cur_absmax);                                                                 \
+    if (cur_absmax > out)                                                                         \
+    {                                                                                                       \
+      out = cur_absmax;                                                                                       \
+      outIndex = blockSize - blkCnt;                                                                        \
+    }                                                                                                       \
+                                                                                                            \
+    /* Decrement loop counter */                                                                            \
+    blkCnt--;                                                                                               \
+  }                                                                                                         \
+                                                                                                            \
+  /* Store the extrema value and it's index into destination pointers */                                    \
+  *pResult = out;                                                                                           \
+  *pIndex = outIndex;  
 }
 #else
-void arm_absmax_q7(
-    const q7_t * pSrc,
-    uint32_t blockSize,
-    q7_t * pResult,
-    uint32_t *pIndex)
+ARM_DSP_ATTRIBUTE void arm_absmax_q7(
+  const q7_t * pSrc,
+        uint32_t blockSize,
+        q7_t * pResult,
+        uint32_t * pIndex)
 {
-    q7_t maxVal, out;                              /* Temporary variables to store the output value. */
-    uint32_t blkCnt, outIndex;                     /* Loop counter */
+       q7_t maxVal, out;                              /* Temporary variables to store the output value. */
+        uint32_t blkCnt, outIndex;                     /* Loop counter */
 
 
-    /* Initialise index value to zero. */
-    outIndex = 0U;
-    /* Load first input value that act as reference value for comparision */
-    out = (*pSrc > 0) ? *pSrc : ((*pSrc == (q7_t) 0x80) ? (q7_t) 0x7f : -*pSrc);
+  /* Initialise index value to zero. */
+  outIndex = 0U;
+  /* Load first input value that act as reference value for comparision */
+  out = (*pSrc > 0) ? *pSrc : ((*pSrc == (q7_t) 0x80) ? (q7_t) 0x7f : -*pSrc);
+  pSrc++;
+
+  /* Initialize blkCnt with number of samples */
+  blkCnt = (blockSize - 1U);
+
+  while (blkCnt > 0U)
+  {
+    /* Initialize maxVal to the next consecutive values one by one */
+    maxVal = (*pSrc > 0) ? *pSrc : ((*pSrc == (q7_t) 0x80) ? (q7_t) 0x7f : -*pSrc);
     pSrc++;
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = (blockSize - 1U);
-
-    while (blkCnt > 0U)
+    /* compare for the maximum value */
+    if (out < maxVal)
     {
-        /* Initialize maxVal to the next consecutive values one by one */
-        maxVal = (*pSrc > 0) ? *pSrc : ((*pSrc == (q7_t) 0x80) ? (q7_t) 0x7f : -*pSrc);
-        pSrc++;
-
-        /* compare for the maximum value */
-        if (out < maxVal)
-        {
-            /* Update the maximum value and it's index */
-            out = maxVal;
-            outIndex = blockSize - blkCnt;
-        }
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* Update the maximum value and it's index */
+      out = maxVal;
+      outIndex = blockSize - blkCnt;
     }
 
-    /* Store the maximum value and it's index into destination pointers */
-    *pResult = out;
-    *pIndex = outIndex;
+    /* Decrement loop counter */
+    blkCnt--;
+  }
+
+  /* Store the maximum value and it's index into destination pointers */
+  *pResult = out;
+  *pIndex = outIndex;
 }
 #endif /* defined(ARM_MATH_DSP) */
 #endif /* defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE) */

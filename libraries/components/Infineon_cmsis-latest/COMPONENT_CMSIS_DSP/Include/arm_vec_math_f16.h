@@ -23,8 +23,8 @@
  * limitations under the License.
  */
 
-#ifndef _ARM_VEC_MATH_F16_H
-#define _ARM_VEC_MATH_F16_H
+#ifndef ARM_VEC_MATH_F16_H
+#define ARM_VEC_MATH_F16_H
 
 #include "arm_math_types_f16.h"
 #include "arm_common_tables_f16.h"
@@ -41,7 +41,7 @@ extern "C"
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 
-static const float16_t __logf_rng_f16 = 0.693147180f16;
+static const float16_t __logf_rng_f16=0.693147180f16;
 
 /* fast inverse approximation (3x newton) */
 __STATIC_INLINE f16x8_t vrecip_medprec_f16(
@@ -129,8 +129,8 @@ __STATIC_INLINE f16x8_t vdiv_f16(
  */
 
 __STATIC_INLINE float16x8_t vtaylor_polyq_f16(
-    float16x8_t           x,
-    const float16_t *coeffs)
+        float16x8_t           x,
+        const float16_t * coeffs)
 {
     float16x8_t         A = vfmasq(vdupq_n_f16(coeffs[4]), x, coeffs[0]);
     float16x8_t         B = vfmasq(vdupq_n_f16(coeffs[6]), x, coeffs[2]);
@@ -226,7 +226,7 @@ __STATIC_INLINE float16x8_t vexpq_f16(
     float16x8_t         poly = vtaylor_polyq_f16(val, exp_tab_f16);
 
     // Reconstruct
-    poly = (float16x8_t)(vqaddq_s16((int16x8_t)(poly), vqshlq_n_s16(m, 10)));
+    poly = (float16x8_t) (vqaddq_s16((int16x8_t) (poly), vqshlq_n_s16(m, 10)));
 
     poly = vdupq_m_n_f16(poly, 0.0f16, vcmpltq_n_s16(m, -14));
     return poly;
@@ -236,8 +236,7 @@ __STATIC_INLINE float16x8_t arm_vec_exponent_f16(float16x8_t x, int16_t nb)
 {
     float16x8_t         r = x;
     nb--;
-    while (nb > 0)
-    {
+    while (nb > 0) {
         r = vmulq(r, x);
         nb--;
     }

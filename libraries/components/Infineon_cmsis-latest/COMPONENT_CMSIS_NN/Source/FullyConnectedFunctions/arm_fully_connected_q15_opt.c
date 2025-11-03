@@ -168,11 +168,11 @@ arm_status arm_fully_connected_q15_opt(const q15_t *pV,
                      "subs %[colCnt], #1\n"
                      "bne COL_LOOP_%=\n"
                      : [ sum ] "+r"(sum),
-                     [ sum2 ] "+r"(sum2),
-                     [ sum3 ] "+r"(sum3),
-                     [ sum4 ] "+r"(sum4),
-                     [ pB ] "+r"(pB),
-                     [ pA ] "+r"(pA)
+                       [ sum2 ] "+r"(sum2),
+                       [ sum3 ] "+r"(sum3),
+                       [ sum4 ] "+r"(sum4),
+                       [ pB ] "+r"(pB),
+                       [ pA ] "+r"(pA)
                      : [ colCnt ] "r"(colCnt)
                      : "r0", "r1", "r2", "r3", "r4");
 

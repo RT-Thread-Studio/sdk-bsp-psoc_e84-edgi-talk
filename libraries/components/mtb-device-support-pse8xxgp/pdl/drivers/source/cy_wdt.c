@@ -236,11 +236,11 @@ void Cy_WDT_SetMatchBits(uint32_t bitPos)
 *******************************************************************************/
 void Cy_WDT_ClearInterrupt(void)
 {
-#if CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE)
-    CY_PRA_REG32_SET(CY_PRA_INDX_SRSS_SRSS_INTR, _VAL2FLD(SRSS_SRSS_INTR_WDT_MATCH, 1U));
-#else
-    SRSS_SRSS_INTR = _VAL2FLD(SRSS_SRSS_INTR_WDT_MATCH, 1U);
-#endif
+    #if CY_CPU_CORTEX_M4 && defined(CY_DEVICE_SECURE)
+        CY_PRA_REG32_SET(CY_PRA_INDX_SRSS_SRSS_INTR, _VAL2FLD(SRSS_SRSS_INTR_WDT_MATCH, 1U));
+    #else
+        SRSS_SRSS_INTR = _VAL2FLD(SRSS_SRSS_INTR_WDT_MATCH, 1U);
+    #endif
 
     /* Read the interrupt register to ensure that the initial clearing write has
     * been flushed out to the hardware.

@@ -28,7 +28,7 @@
 #define _vg_lite_type_h_
 
 #if __KERNEL__
-    #include <asm/bitsperlong.h>
+#include <asm/bitsperlong.h>
 #endif
 #include "vg_lite_kernel.h"
 
@@ -53,8 +53,8 @@ typedef unsigned long long  vg_lite_uint64_t;
 typedef float               vg_lite_float_t;
 typedef double              vg_lite_double_t;
 typedef char                vg_lite_char;
-typedef char               *vg_lite_string;
-typedef void               *vg_lite_pointer;
+typedef char*               vg_lite_string;
+typedef void*               vg_lite_pointer;
 typedef void                vg_lite_void;
 typedef unsigned int        vg_lite_color_t;
 typedef unsigned long       vg_lite_flag_t;
@@ -62,9 +62,9 @@ typedef unsigned long       vg_lite_long_t;
 
 #if __KERNEL__
 # if BITS_PER_LONG == 64
-typedef unsigned long long vg_lite_uintptr_t;
+    typedef unsigned long long vg_lite_uintptr_t;
 # else
-typedef unsigned int       vg_lite_uintptr_t;
+    typedef unsigned int       vg_lite_uintptr_t;
 # endif
 #endif
 

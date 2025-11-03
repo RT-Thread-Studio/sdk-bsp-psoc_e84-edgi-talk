@@ -27,6 +27,7 @@ from .pkg_globals import PkgData
 from . import ProvisioningPackage
 
 from .api_common import CommonAPI
+from .core.certificate_strategy import CertificateStrategyV1
 from .core.version_provider import VersionProvider
 from .core.target_director import TargetDirector
 from .core.logging_configurator import LoggingConfigurator
@@ -129,7 +130,7 @@ def process_pipeline(processors, **_):
     for func in processors:
         res = func()
         if not res:
-            sys.stderr.write('Failed processing!')
+            sys.stderr.write('Failed processing!\n')
             sys.exit(2)
 
 
@@ -161,20 +162,205 @@ def cmd_build_ramapp_package(ctx, app, output, inparams, key, hex_addr,
     return process
 
 
+@main.command('create-cert', hidden=True,
+              help='Creates certificate from template')
+@click.option('--template', type=click.Path(), required=True,
+              help='CSR or Certificate template path')
+@click.option('-o', '--output', type=click.Path(), required=True,
+              help='The path where to save the CSR or Certificate')
+@click.option('--json-cert', type=click.Path(),
+              help='The path where to save CSR or certificate JSON data')
+@click.option('--csr', type=click.Path(), help='The CSR path')
+@click.option('--key', '--key-path', 'key', type=click.Path(),
+              help='The key to sign the certificate')
+@click.option('--sign-key-0', type=click.Path(),
+              help='Primary key used to sign the CSR')
+@click.option('--sign-key-1', type=click.Path(),
+              help='Secondary key used to sign the CSR')
+@click.pass_context
+def cmd_create_cert(
+        ctx, template, output, json_cert, csr, key, sign_key_0, sign_key_1):
+    """Creates certificate"""
+    @process_handler()
+    def process():
+        validate_args()
+        if 'TOOL' not in ctx.obj:
+            return False
+        key_path = key if key else (sign_key_0, sign_key_1)
+        result = ctx.obj['TOOL'].create_cert(output, template=template,
+                                             key_path=key_path, csr=csr,
+                                             json_cert=json_cert)
+        return result
+
+    def validate_args():
+        if key and (sign_key_0 or sign_key_1):
+            sys.stderr.write("Error: The '--key' and '--sign-key-0/"
+                             "--sign-key-1' options are mutually exclusive.\n")
+            sys.exit(2)
+
+        if sign_key_1 and not sign_key_0:
+            sys.stderr.write("Error: Missing option '--sign-key-0'.\n")
+            sys.exit(2)
+
+        cert_data = CertificateStrategyV1.load_cert_template(template)
+        if cert_data.get('TEMPLATE_TYPE') == 'OEM_CSR' and key:
+            sys.stderr.write("Error: The '--key' option is not applicable for "
+                             "OEM CSR. Use '--sign-key-0' and '--sign-key-1' "
+                             "options.\n")
+            sys.exit(2)
+
+    return process
+
+
+@main.command('oem-csr', help='Creates OEM CSR')
+@click.option('--certificate-name', help='The certificate name')
+@click.option('--oem', required=True, help='The OEM name')
+@click.option('--project', required=True,
+              help='The OEM project name')
+@click.option('--project-number', required=True,
+              help='The OEM project number')
+@click.option('--issuer', help='The issuer name')
+@click.option('--signer-id', help='The signer ID')
+@click.option('--public-key-0', type=click.Path(), required=True,
+              help='Primary public key path')
+@click.option('--public-key-1', type=click.Path(),
+              help='Secondary public key path')
+@click.option('--cert-type', type=click.Choice(['development', 'production'],
+              case_sensitive=False), required=True,
+              help='Defines the "LCS" of the project')
+@click.option('--date', help='The CSR creation date. The date-time string of '
+                             'the following format: YYYY-MM-DD HH:MM:SS. '
+                             'Example: 2025-03-12 15:59:23')
+@click.option('--id', 'cert_id', help='The certificate ID')
+@click.option('-o', '--output', type=click.Path(), required=True,
+              help='CSR path')
+@click.option('--sign-key-0', type=click.Path(),
+              help='Primary key used to sign the CSR')
+@click.option('--sign-key-1', type=click.Path(),
+              help='Secondary key used to sign the CSR')
+@click.option('--algorithm-0',
+              type=click.Choice(['ES256', 'ES384', 'ES512', 'RS256', 'RS384'],
+                                case_sensitive=False),
+              hidden=True, help='Primary signature algorithm')
+@click.option('--algorithm-1',
+              type=click.Choice(['ES256', 'ES384', 'ES512', 'RS256', 'RS384'],
+                                case_sensitive=False),
+              hidden=True, help='Secondary signature algorithm')
+@click.pass_context
+def cmd_create_oem_csr(
+        ctx, certificate_name, oem, project, project_number, issuer, signer_id,
+        public_key_0, public_key_1, cert_type, date, cert_id, output,
+        sign_key_0, sign_key_1, algorithm_0, algorithm_1):
+    """Creates OEM CSR"""
+    @process_handler()
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        sign_keys = (sign_key_0, sign_key_1)
+        algorithms = (algorithm_0, algorithm_1)
+        validate()
+        result = ctx.obj['TOOL'].oem_csr(certificate_name=certificate_name,
+                                         oem=oem, project=project,
+                                         project_number=project_number,
+                                         issuer=issuer, signer_id=signer_id,
+                                         public_key_0=public_key_0,
+                                         public_key_1=public_key_1,
+                                         cert_type=cert_type, date=date,
+                                         cert_id=cert_id, output=output,
+                                         key_path=sign_keys,
+                                         algorithms=algorithms,
+                                         use_adapter=True)
+        return result
+
+    def validate():
+        if all((sign_key_0, sign_key_1)) and all((algorithm_0, algorithm_1)):
+            sys.stderr.write("Error: The options '--sign-key-0' and "
+                             "'--sign-key-1' are mutually exclusive "
+                             "with the options '--algorithm-0' and "
+                             "'--algorithm-1'.\n")
+            sys.exit(2)
+
+        if all((algorithm_0, algorithm_1)) and algorithm_0 != algorithm_1:
+            sys.stderr.write("Error: The options '--algorithm-0' and "
+                             "'--algorithm-1' must be the same.\n")
+            sys.exit(2)
+
+    return process
+
+
+@main.command('ifx-oem-cert', help='Creates IFX OEM certificate')
+@click.option('--certificate-name', help='The certificate name')
+@click.option('--issuer', help='The issuer name')
+@click.option('--signer-id', required=True,
+              help='The unique ID of the certificate that corresponds to the '
+                   'signing key')
+@click.option('--date', help='The date of the OEM certificate creation '
+                             '(YYYY-MM-DDTHH:MM:SS)')
+@click.option('--id', 'cert_id', required=True,
+              help='The unique serial number for the certificate')
+@click.option('--csr', '--csr-path', 'csr', type=click.Path(), required=True,
+              help='The path to the OEM CSR')
+@click.option('-o', '--output', type=click.Path(), required=True,
+              help='The certificate path')
+@click.option('--key', '--key-path', 'key', type=click.Path(),
+              help='The key to sign the certificate')
+@click.option('--algorithm',
+              type=click.Choice(['ES256', 'ES384', 'ES512', 'RS256', 'RS384'],
+                                case_sensitive=False),
+              help='The signature algorithm')
+@click.pass_context
+def cmd_ifx_oem_cert(
+        ctx, certificate_name, issuer, signer_id, date, cert_id, csr, output,
+        key, algorithm):
+    """Creates IFX OEM certificate"""
+    @process_handler()
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        validate()
+        result = ctx.obj['TOOL'].ifx_oem_cert(
+            certificate_name=certificate_name, issuer=issuer, output=output,
+            signer_id=signer_id, date=date, cert_id=cert_id, csr=csr,
+            key_path=key, algorithm=algorithm, use_adapter=True)
+        return result
+
+    def validate():
+        if not algorithm and not key:
+            sys.stderr.write("Error: The '--algorithm' or '--key' option "
+                             "must be specified.\n")
+            sys.exit(2)
+
+        if algorithm and key:
+            sys.stderr.write("Error: The '--algorithm' and '--key' options "
+                             "are mutually exclusive.\n")
+            sys.exit(2)
+
+    return process
+
+
 @main.command('run-config', help='Executes commands specified in JSON file')
 @click.option('-i', '--input', 'infile', type=click.Path(), required=True,
               help='Input file')
 @click.option('-s', '--set', 'variable', required=False, nargs=2, default=[],
               multiple=True, metavar='[variable] [value]',
               help='Sets a value for variable interpolation')
+@click.option('--symbol-search', type=click.Path(), required=False,
+              help='Directory to search for symbol files')
+@click.option('--symbol', type=click.Path(), required=False, multiple=True,
+              help='Path to a symbol file (can be specified multiple times)')
 @click.pass_context
-def cmd_run_config(ctx, infile, variable):
+def cmd_run_config(ctx, infile, variable, symbol, symbol_search):
     """Executes commands specified in JSON file"""
     @process_handler()
     def process():
         if 'TOOL' not in ctx.obj:
             return False
-        return ctx.obj['TOOL'].run_config(infile, variable)
+        return ctx.obj['TOOL'].run_config(
+            infile,
+            variable=variable,
+            symbol=symbol,
+            symbol_search=symbol_search
+        )
 
     return process
 
@@ -740,6 +926,33 @@ def cmd_export_public_key(_ctx, key_path, output, fmt):
     return process
 
 
+@main.command('create-key-lms', help='Creates LMS private and public key pair')
+@click.option('--lms-type', type=click.Choice(
+    ['LMS-SHA256-M24-H5', 'LMS-SHA256-M24-H10', 'LMS-SHA256-M24-H15',
+     'LMS-SHA256-M32-H5', 'LMS-SHA256-M32-H10', 'LMS-SHA256-M32-H15'
+     ],
+    case_sensitive=False), required=True, help='LM-OTS key type')
+@click.option('--lmots-type', type=click.Choice(
+    ['LMOTS-SHA256-N24-W1', 'LMOTS-SHA256-N24-W2', 'LMOTS-SHA256-N24-W4',
+     'LMOTS-SHA256-N24-W8', 'LMOTS-SHA256-N32-W1', 'LMOTS-SHA256-N32-W2',
+     'LMOTS-SHA256-N32-W4', 'LMOTS-SHA256-N32-W8'
+     ],
+    case_sensitive=False), required=True, help='Key LMS type')
+@click.option('-o', '--output', type=click.Path(), nargs=2,
+              metavar='[private] [public]',
+              required=True,
+              help='Private and public key paths')
+@click.pass_context
+def cmd_create_lms_key(ctx, lms_type, lmots_type, output):
+    """Creates LMS key pair"""
+    @process_handler()
+    def process():
+        if 'TOOL' not in ctx.obj:
+            return False
+        return ctx.obj['TOOL'].create_keys_lms(lms_type, lmots_type, output)
+    return process
+
+
 @main.command('merge-hex', help='Merges different hex files into one')
 @click.option('--image', type=click.Path(), multiple=True, required=True,
               help='The hex file to merge. Specify the option multiple '
@@ -1018,9 +1231,15 @@ def cmd_encrypt_aes(_ctx, cbor_input, output, key, iv, nonce, add_iv, iv_output,
 @click.option('--remove-tlv', required=False, multiple=True,
               help='Removes TLV with the specified ID')
 @click.option('--enckey', type=click.Path(), help='Encryption key')
+@click.option('--enckey-role', default="XIP",
+              type=click.Choice(['XIP', 'AES-KW'], case_sensitive=False),
+              help='Encryption key role')
 @click.option('--encrypt-addr', help='Starting address for data encryption')
 @click.option('--nonce-output', type=click.Path(),
               help='The path to a file where to save the nonce')
+@click.option('--kdf', default='HKDF',
+              type=click.Choice(['HKDF', 'KBKDFCMAC'], case_sensitive=False),
+              help='Key derivation function name')
 @click.pass_context
 def cmd_sign_image(ctx, image, output, key, image_config, erased_val,
                    header_size, slot_size, min_erase_size, image_version,
@@ -1028,8 +1247,8 @@ def cmd_sign_image(ctx, image, output, key, image_config, erased_val,
                    signature_encoding, pad, confirm, overwrite_only,
                    boot_record, hex_addr, load_addr, rom_fixed, max_sectors,
                    save_enctlv, dependencies, encrypt,
-                   protected_tlv, tlv, remove_tlv, enckey, encrypt_addr,
-                   nonce_output):
+                   protected_tlv, tlv, remove_tlv, enckey, enckey_role,
+                   encrypt_addr, nonce_output, kdf):
     """Signs application image"""
     @process_handler()
     def process():
@@ -1065,8 +1284,10 @@ def cmd_sign_image(ctx, image, output, key, image_config, erased_val,
             tlv=tlv,
             remove_tlv=remove_tlv,
             enckey=enckey,
+            enckey_role=enckey_role,
             encrypt_addr=encrypt_addr,
-            nonce_output=nonce_output
+            nonce_output=nonce_output,
+            kdf=kdf
         )
         return result is not None
 
@@ -1149,9 +1370,15 @@ def cmd_sign_image(ctx, image, output, key, image_config, erased_val,
 @click.option('--remove-tlv', required=False, multiple=True,
               help='Removes TLV with the specified ID')
 @click.option('--enckey', type=click.Path(), help='Encryption key')
+@click.option('--enckey-role', default="XIP",
+              type=click.Choice(['XIP', 'AES-KW'], case_sensitive=False),
+              help='Encryption key role')
 @click.option('--encrypt-addr', help='Starting address for data encryption')
 @click.option('--nonce-output', type=click.Path(),
               help='The path to a file where to save the nonce')
+@click.option('--kdf', default='HKDF',
+              type=click.Choice(['HKDF', 'KBKDFCMAC'], case_sensitive=False),
+              help='Key derivation function name')
 @click.pass_context
 def cmd_image_metadata(ctx, image, output, decrypted, pubkey, image_config,
                        erased_val, header_size, slot_size, min_erase_size,
@@ -1160,7 +1387,7 @@ def cmd_image_metadata(ctx, image, output, decrypted, pubkey, image_config,
                        pad, confirm, overwrite_only, boot_record, hex_addr,
                        load_addr, rom_fixed, max_sectors, save_enctlv,
                        dependencies, encrypt, protected_tlv, tlv, remove_tlv,
-                       enckey, encrypt_addr, nonce_output):
+                       enckey, enckey_role, encrypt_addr, nonce_output, kdf):
     """Adds MCUboot metadata to a firmware image"""
     @process_handler()
     def process():
@@ -1197,8 +1424,10 @@ def cmd_image_metadata(ctx, image, output, decrypted, pubkey, image_config,
             tlv=tlv,
             remove_tlv=remove_tlv,
             enckey=enckey,
+            enckey_role=enckey_role,
             encrypt_addr=encrypt_addr,
-            nonce_output=nonce_output
+            nonce_output=nonce_output,
+            kdf=kdf
         )
         return result is not None
 
@@ -1319,6 +1548,44 @@ def cmd_verify_x509_cert(ctx, cert, verifier):
             return False
         return ctx.obj['TOOL'].verify_x509_certificate(cert, verifier)
 
+    return process
+
+
+@main.command('hex-relocate',
+              help='Relocate regions in a hex file to new address spaces')
+@click.option(
+    '--region',
+    type=(str, str, str),
+    multiple=True,
+    required=True,
+    metavar='[START] [SIZE] [DEST]',
+    help='Region to relocate: provide start, size, dest as hex values '
+         '(e.g. --region 0x08000000 0x04000000 0x60000000). '
+         'Can be specified multiple times'
+)
+@click.option('-i', '--input', 'input_file', type=click.Path(exists=True),
+              required=True, help='Input HEX file')
+@click.option('-o', '--output', type=click.Path(), required=True,
+              help='Output HEX file')
+@click.pass_context
+def cmd_hex_relocate(_ctx, region, input_file, output):
+    """Relocates regions in a hex file to new address spaces"""
+    @process_handler()
+    def process():
+        regions = []
+        for idx, (start, size, dest) in enumerate(region):
+            try:
+                start_int = int(start, 16)
+                size_int = int(size, 16)
+                dest_int = int(dest, 16)
+            except ValueError:
+                sys.stderr.write(
+                    f"Region #{idx+1}: All values must be hexadecimal numbers. "
+                    f"Got: start='{start}', size='{size}', dest='{dest}'\n"
+                )
+                sys.exit(2)
+            regions.append((start_int, size_int, dest_int))
+        return CommonAPI.hex_relocate(input_file, output, regions)
     return process
 
 

@@ -4,9 +4,9 @@
  * Description:
  * Establishes all necessary connections between hardware elements.
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.50.0
- * device-db 4.5.30.8214
- * mtb-device-support-pse8xxgp 1.0.200.195
+ * Configurator Backend 3.60.0
+ * device-db 4.33.0.9315
+ * mtb-dsl-pse8xxgp 1.1.1.824
  *
  *******************************************************************************
  * Copyright 2025 Cypress Semiconductor Corporation (an Infineon company) or
@@ -41,6 +41,8 @@ extern "C" {
 #define ioss_0_port_1_pin_2_AUX SMIF0_SPIHB_DATA2_SMIF0_SMIF0_SPIHB_DATA2_PAD
 #define ioss_0_port_1_pin_3_AUX SMIF0_SPIHB_DATA3_SMIF0_SMIF0_SPIHB_DATA3_PAD
 #define ioss_0_port_2_pin_0_HSIOM P2_0_SMIF0_SMIF0_SPIHB_SELECT1
+#define ioss_0_port_3_pin_0_HSIOM P3_0_I3C_I3C_SCL
+#define ioss_0_port_3_pin_1_HSIOM P3_1_I3C_I3C_SDA
 #define ioss_0_port_4_pin_0_AUX SMIF1_SPIHB_DATA0_SMIF1_SMIF0_SPIHB_DATA0_PAD
 #define ioss_0_port_4_pin_1_AUX SMIF1_SPIHB_DATA1_SMIF1_SMIF0_SPIHB_DATA1_PAD
 #define ioss_0_port_4_pin_2_AUX SMIF1_SPIHB_DATA2_SMIF1_SMIF0_SPIHB_DATA2_PAD
@@ -59,9 +61,10 @@ extern "C" {
 #define ioss_0_port_7_pin_7_HSIOM P7_7_SDHC1_CARD_DAT_3TO03
 #define ioss_0_port_8_pin_0_HSIOM P8_0_SCB0_I2C_SCL
 #define ioss_0_port_8_pin_1_HSIOM P8_1_SCB0_I2C_SDA
-#define ioss_0_port_8_pin_3_HV P8_3_SRSS_HIBERNATE_WAKEUP1
 #define ioss_0_port_8_pin_5_HSIOM P8_5_PDM_PDM_CLK3
 #define ioss_0_port_8_pin_6_HSIOM P8_6_PDM_PDM_DATA3
+#define ioss_0_port_9_pin_0_HSIOM P9_0_TCPWM0_LINE7
+#define ioss_0_port_9_pin_2_HSIOM P9_2_TCPWM0_LINE_COMPL7
 #define ioss_0_port_10_pin_0_HSIOM P10_0_SCB4_UART_RX
 #define ioss_0_port_10_pin_1_HSIOM P10_1_SCB4_UART_TX
 #define ioss_0_port_10_pin_2_HSIOM P10_2_SCB4_UART_CTS
@@ -74,6 +77,10 @@ extern "C" {
 #define ioss_0_port_12_pin_4_HSIOM P12_4_SDHC0_CARD_DAT_3TO02
 #define ioss_0_port_12_pin_5_HSIOM P12_5_SDHC0_CARD_DAT_3TO03
 #define ioss_0_port_15_pin_1_ANALOG P15_1_IOSS_ADFT1_NET0
+#define ioss_0_port_16_pin_0_HSIOM P16_0_SCB10_SPI_CLK
+#define ioss_0_port_16_pin_1_HSIOM P16_1_SCB10_SPI_MOSI
+#define ioss_0_port_16_pin_2_HSIOM P16_2_SCB10_SPI_MISO
+#define ioss_0_port_16_pin_3_HSIOM P16_3_SCB10_SPI_SELECT0
 #define ioss_0_port_16_pin_5_HSIOM P16_5_TCPWM0_LINE5
 #define ioss_0_port_17_pin_0_HSIOM P17_0_SCB5_UART_RX
 #define ioss_0_port_17_pin_1_HSIOM P17_1_SCB5_UART_TX
@@ -85,8 +92,10 @@ extern "C" {
 #define ioss_0_port_21_pin_1_HSIOM P21_1_TDM_TDM_TX_SD0
 #define ioss_0_port_21_pin_2_HSIOM P21_2_TDM_TDM_TX_SCK0
 #define ioss_0_port_21_pin_3_HSIOM P21_3_TDM_TDM_TX_MCK0
+#define CYBSP_DMA_TX_SPI_CONTROLLER_tr_in_0_TRIGGER_OUT PERI_0_TRIG_OUT_MUX_0_PDMA0_TR_IN1
+#define CYBSP_SPI_CONTROLLER_tr_tx_req_0_TRIGGER_IN PERI_0_TRIG_IN_MUX_0_SCB_TX_TR_OUT10
 
-static inline void init_cycfg_routing(void) {}
+void init_cycfg_routing(void);
 
 #if defined(__cplusplus)
 }

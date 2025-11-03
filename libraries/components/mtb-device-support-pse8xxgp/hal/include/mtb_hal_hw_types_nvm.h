@@ -53,7 +53,7 @@ extern "C" {
  */
 typedef struct
 {
-    void *empty;
+    void* empty;
 } mtb_hal_nvm_configurator_t;
 
 /**
@@ -65,7 +65,7 @@ typedef struct
  */
 typedef struct
 {
-    void *empty;
+    void* empty;
 } mtb_hal_nvm_t;
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_NVM)

@@ -58,12 +58,12 @@
 * \snippet ipc/snippet/main.c snippet_Cy_IPC_Drv_ReadMsgPtr
 *
 *******************************************************************************/
-cy_en_ipcdrv_status_t Cy_IPC_Drv_LockRelease(IPC_STRUCT_Type* base, uint32_t releaseEventIntr)
+cy_en_ipcdrv_status_t Cy_IPC_Drv_LockRelease (IPC_STRUCT_Type* base, uint32_t releaseEventIntr)
 {
     cy_en_ipcdrv_status_t retStatus;
 
     /* Check to make sure the IPC is Acquired */
-    if (Cy_IPC_Drv_IsLockAcquired(base))
+    if( Cy_IPC_Drv_IsLockAcquired(base) )
     {
         /* The IPC was acquired, release the IPC channel */
         Cy_IPC_Drv_ReleaseNotify(base, releaseEventIntr);
@@ -111,11 +111,11 @@ cy_en_ipcdrv_status_t Cy_IPC_Drv_LockRelease(IPC_STRUCT_Type* base, uint32_t rel
 * \snippet ipc/snippet/main.c snippet_Cy_IPC_Drv_SendMsgWord
 *
 *******************************************************************************/
-cy_en_ipcdrv_status_t  Cy_IPC_Drv_SendMsgWord(IPC_STRUCT_Type* base, uint32_t notifyEventIntr, uint32_t message)
+cy_en_ipcdrv_status_t  Cy_IPC_Drv_SendMsgWord (IPC_STRUCT_Type* base, uint32_t notifyEventIntr, uint32_t message)
 {
     cy_en_ipcdrv_status_t retStatus;
 
-    if (CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire(base))
+    if( CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire(base) )
     {
         /* If the channel was acquired, send the message. */
         Cy_IPC_Drv_WriteDataValue(base, message);
@@ -163,13 +163,13 @@ cy_en_ipcdrv_status_t  Cy_IPC_Drv_SendMsgWord(IPC_STRUCT_Type* base, uint32_t no
 * \snippet ipc/snippet/main.c snippet_Cy_IPC_Drv_ReadMsgWord
 *
 *******************************************************************************/
-cy_en_ipcdrv_status_t  Cy_IPC_Drv_ReadMsgWord(IPC_STRUCT_Type const * base, uint32_t * message)
+cy_en_ipcdrv_status_t  Cy_IPC_Drv_ReadMsgWord (IPC_STRUCT_Type const * base, uint32_t * message)
 {
     cy_en_ipcdrv_status_t retStatus;
 
     CY_ASSERT_L1(NULL != message);
 
-    if (Cy_IPC_Drv_IsLockAcquired(base))
+    if ( Cy_IPC_Drv_IsLockAcquired(base) )
     {
         /* The channel is locked; message is valid. */
         *message = Cy_IPC_Drv_ReadDataValue(base);
@@ -181,7 +181,7 @@ cy_en_ipcdrv_status_t  Cy_IPC_Drv_ReadMsgWord(IPC_STRUCT_Type const * base, uint
         /* The channel is not locked so channel is invalid. */
         retStatus = CY_IPC_DRV_ERROR;
     }
-    return (retStatus);
+    return(retStatus);
 }
 
 #if defined (CY_IP_M33SYSCPUSS_VERSION) || defined (CY_IP_M7CPUSS) || ( defined (CY_IP_M4CPUSS) && (CY_IP_M4CPUSS_VERSION > 1)) || defined (CY_DOXYGEN)
@@ -218,13 +218,13 @@ cy_en_ipcdrv_status_t  Cy_IPC_Drv_ReadMsgWord(IPC_STRUCT_Type const * base, uint
 *
 *******************************************************************************/
 CY_IPC_SECTION_BEGIN
-cy_en_ipcdrv_status_t  Cy_IPC_Drv_SendMsgDWord(IPC_STRUCT_Type* base, uint32_t notifyEventIntr, uint32_t* message)
+cy_en_ipcdrv_status_t  Cy_IPC_Drv_SendMsgDWord (IPC_STRUCT_Type* base, uint32_t notifyEventIntr, uint32_t* message)
 {
     cy_en_ipcdrv_status_t retStatus = CY_IPC_DRV_ERROR;
 
     CY_ASSERT_L1(NULL != message);
 
-    if (CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire(base))
+    if( CY_IPC_DRV_SUCCESS == Cy_IPC_Drv_LockAcquire(base) )
     {
         /* If the channel was acquired, send the message. */
         Cy_IPC_Drv_WriteDDataValue(base, message);
@@ -270,13 +270,13 @@ CY_IPC_SECTION_END
 * \snippet ipc/snippet/main.c snippet_Cy_IPC_Drv_ReadMsgWord
 *
 *******************************************************************************/
-cy_en_ipcdrv_status_t  Cy_IPC_Drv_ReadMsgDWord(IPC_STRUCT_Type const* base, uint32_t* message)
+cy_en_ipcdrv_status_t  Cy_IPC_Drv_ReadMsgDWord (IPC_STRUCT_Type const* base, uint32_t* message)
 {
     cy_en_ipcdrv_status_t retStatus;
 
     CY_ASSERT_L1(NULL != message);
 
-    if (Cy_IPC_Drv_IsLockAcquired(base))
+    if ( Cy_IPC_Drv_IsLockAcquired(base) )
     {
         /* The channel is locked; message is valid. */
         Cy_IPC_Drv_ReadDDataValue(base, message);
@@ -287,7 +287,7 @@ cy_en_ipcdrv_status_t  Cy_IPC_Drv_ReadMsgDWord(IPC_STRUCT_Type const* base, uint
         /* The channel is not locked so channel is invalid. */
         retStatus = CY_IPC_DRV_ERROR;
     }
-    return (retStatus);
+    return(retStatus);
 }
 #endif /* CY_IP_M33SYSCPUSS_VERSION, CY_IP_M4CPUSS, CY_IP_M4CPUSS_VERSION,  CY_IP_M7CPUSS*/
 

@@ -24,7 +24,9 @@ class KeyValidator:
     """Key validator base class"""
 
     key_algorithms = (
-            KeyAlgorithm.ECDSA_P256, KeyAlgorithm.ECDSA_P384,
+            KeyAlgorithm.ECDSA_P256,
+            KeyAlgorithm.ECDSA_P384,
+            KeyAlgorithm.ECDSA_P521,
             KeyAlgorithm.RSA2048, KeyAlgorithm.RSA3072, KeyAlgorithm.RSA4096,
             KeyAlgorithm.AES128, KeyAlgorithm.AES256
         )
@@ -122,7 +124,8 @@ class KeyValidator:
     def _ec_algorithm_by_key(key):
         algorithms = {
             ec.SECP256R1.name: KeyAlgorithm.ECDSA_P256,
-            ec.SECP384R1.name: KeyAlgorithm.ECDSA_P384
+            ec.SECP384R1.name: KeyAlgorithm.ECDSA_P384,
+            ec.SECP521R1.name: KeyAlgorithm.ECDSA_P521
         }
         if isinstance(
                 key, (ec.EllipticCurvePrivateKey, ec.EllipticCurvePublicKey)

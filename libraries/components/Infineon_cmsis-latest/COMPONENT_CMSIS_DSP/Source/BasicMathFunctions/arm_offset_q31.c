@@ -43,7 +43,6 @@
   @param[in]     offset     is the offset to be added
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function uses saturating arithmetic.
@@ -54,7 +53,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_offset_q31(
+ARM_DSP_ATTRIBUTE void arm_offset_q31(
     const q31_t * pSrc,
     q31_t   offset,
     q31_t * pDst,
@@ -96,60 +95,60 @@ void arm_offset_q31(
 }
 
 #else
-void arm_offset_q31(
-    const q31_t * pSrc,
-    q31_t offset,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_offset_q31(
+  const q31_t * pSrc,
+        q31_t offset,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A + offset */
+  while (blkCnt > 0U)
+  {
+    /* C = A + offset */
 
-        /* Add offset and store result in destination buffer. */
-        *pDst++ = __QADD(*pSrc++, offset);
+    /* Add offset and store result in destination buffer. */
+    *pDst++ = __QADD(*pSrc++, offset);
+    
+    *pDst++ = __QADD(*pSrc++, offset);
+    
+    *pDst++ = __QADD(*pSrc++, offset);
+    
+    *pDst++ = __QADD(*pSrc++, offset);
 
-        *pDst++ = __QADD(*pSrc++, offset);
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-        *pDst++ = __QADD(*pSrc++, offset);
-
-        *pDst++ = __QADD(*pSrc++, offset);
-
-        /* Decrement loop counter */
-        blkCnt--;
-    }
-
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A + offset */
+  while (blkCnt > 0U)
+  {
+    /* C = A + offset */
 
-        /* Add offset and store result in destination buffer. */
+    /* Add offset and store result in destination buffer. */
 #if defined (ARM_MATH_DSP)
-        *pDst++ = __QADD(*pSrc++, offset);
+    *pDst++ = __QADD(*pSrc++, offset);
 #else
-        *pDst++ = (q31_t) clip_q63_to_q31((q63_t) * pSrc++ + offset);
+    *pDst++ = (q31_t) clip_q63_to_q31((q63_t) * pSrc++ + offset);
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

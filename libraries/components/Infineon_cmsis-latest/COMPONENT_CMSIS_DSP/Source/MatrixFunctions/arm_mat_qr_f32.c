@@ -31,9 +31,9 @@
 
 
 #if !defined(ARM_MATH_AUTOVECTORIZE)
-    #if defined(ARM_MATH_MVEF)
-        #include "arm_helium_utils.h"
-    #endif
+#if defined(ARM_MATH_MVEF)
+#include "arm_helium_utils.h"
+#endif
 #endif
 
 /**
@@ -54,7 +54,7 @@
 
     The returned value for R is using a format a bit similar
     to LAPACK : it is not just containing the matrix R but
-    also the Householder reflectors.
+    also the Householder reflectors. 
 
     The function is also returning a vector \f$\tau\f$
     that is containing the scaling factor for the reflectors.
@@ -71,10 +71,10 @@
     \end{pmatrix}
     \f]
 
-    where
+    where 
 
     \f[
-    v_1 =
+    v_1 = 
     \begin{pmatrix}
     1       \\
     v_{12}  \\
@@ -84,7 +84,7 @@
     \f]
 
     is the first householder reflector.
-
+    
     The Householder Matrix is given by \f$H_1\f$
 
     \f[
@@ -92,7 +92,7 @@
     \f]
 
     The Matrix Q is the product of the Householder matrices:
-
+    
     \f[
     Q = H_1 H_2 \dots H_n
     \f]
@@ -124,7 +124,7 @@
 /**
   @brief         QR decomposition of a m x n floating point matrix with m >= n.
   @param[in]     pSrc      points to input matrix structure. The source matrix is modified by the function.
-  @param[in]     threshold norm2 threshold.
+  @param[in]     threshold norm2 threshold.    
   @param[out]    pOutR     points to output R matrix structure of dimension m x n
   @param[out]    pOutQ     points to output Q matrix structure of dimension m x m (can be NULL)
   @param[out]    pOutTau   points to Householder scaling factors of dimension n
@@ -133,15 +133,15 @@
   @return        execution status
                    - \ref ARM_MATH_SUCCESS       : Operation successful
                    - \ref ARM_MATH_SIZE_MISMATCH : Matrix size check failed
-
+  
   @par           pOutQ is optional:
                  pOutQ can be a NULL pointer.
                  In this case, the argument will be ignored
                  and the output Q matrix won't be computed.
 
 
-  @par           Norm2 threshold
-                 For the meaning of this argument please
+  @par           Norm2 threshold 
+                 For the meaning of this argument please 
                  refer to the \ref MatrixHouseholder documentation
 
  */
@@ -149,457 +149,457 @@
 #if !defined(ARM_MATH_AUTOVECTORIZE)
 #if defined(ARM_MATH_MVEF)
 
-arm_status arm_mat_qr_f32(
+ARM_DSP_ATTRIBUTE arm_status arm_mat_qr_f32(
     const arm_matrix_instance_f32 * pSrc,
     const float32_t threshold,
     arm_matrix_instance_f32 * pOutR,
     arm_matrix_instance_f32 * pOutQ,
-    float32_t *pOutTau,
+    float32_t * pOutTau,
     float32_t *pTmpA,
     float32_t *pTmpB
-)
+    )
 
 {
-    int32_t col = 0;
-    int32_t nb, pos;
-    float32_t *pa, *pc;
-    float32_t beta;
-    float32_t *pv;
-    float32_t *pdst;
-    float32_t *p;
+  int32_t col=0;
+  int32_t nb,pos;
+  float32_t *pa,*pc;
+  float32_t beta;
+  float32_t *pv;
+  float32_t *pdst;
+  float32_t *p;
 
-    if (pSrc->numRows < pSrc->numCols)
-    {
-        return (ARM_MATH_SIZE_MISMATCH);
-    }
+  if (pSrc->numRows < pSrc->numCols)
+  {
+    return(ARM_MATH_SIZE_MISMATCH);
+  }
 
-    memcpy(pOutR->pData, pSrc->pData, pSrc->numCols * pSrc->numRows * sizeof(float32_t));
-    pOutR->numCols = pSrc->numCols;
-    pOutR->numRows = pSrc->numRows;
+  memcpy(pOutR->pData,pSrc->pData,pSrc->numCols * pSrc->numRows*sizeof(float32_t));
+  pOutR->numCols = pSrc->numCols;
+  pOutR->numRows = pSrc->numRows;
+  
+  p = pOutR->pData;
+  
+  pc = pOutTau;
+  for(col=0 ; col < pSrc->numCols; col++)
+  {
+      int32_t j,k,blkCnt,blkCnt2;
+      float32_t *pa0,*pa1,*pa2,*pa3,*ptemp;
+      float32_t temp;
+      float32x4_t v1,v2,vtemp;
 
-    p = pOutR->pData;
+      COPY_COL_F32(pOutR,col,col,pTmpA);
 
-    pc = pOutTau;
-    for (col = 0 ; col < pSrc->numCols; col++)
-    {
-        int32_t j, k, blkCnt, blkCnt2;
-        float32_t *pa0, *pa1, *pa2, *pa3, *ptemp;
-        float32_t temp;
-        float32x4_t v1, v2, vtemp;
+      beta = arm_householder_f32(pTmpA,threshold,pSrc->numRows - col,pTmpA);
+      *pc++ = beta;
+    
+      pdst = pTmpB;
 
-        COPY_COL_F32(pOutR, col, col, pTmpA);
+      /* v.T A(col:,col:) -> tmpb */
+      pv = pTmpA;
+      pa = p;
 
-        beta = arm_householder_f32(pTmpA, threshold, pSrc->numRows - col, pTmpA);
-        *pc++ = beta;
+      temp = *pv;
+      blkCnt = (pSrc->numCols-col) >> 2;
+      while (blkCnt > 0)
+      {
+          v1 = vld1q_f32(pa);
+          v2 = vmulq_n_f32(v1,temp);
+          vst1q_f32(pdst,v2);
 
-        pdst = pTmpB;
+          pa += 4;
+          pdst += 4;
+          blkCnt--;
+      }
+      blkCnt = (pSrc->numCols-col) & 3;
+      if (blkCnt > 0)
+      {
+          mve_pred16_t p0 = vctp32q(blkCnt);
+          v1 = vld1q_f32(pa);
+          v2 = vmulq_n_f32(v1,temp);
+          vst1q_p_f32(pdst,v2,p0);
 
-        /* v.T A(col:,col:) -> tmpb */
-        pv = pTmpA;
-        pa = p;
+          pa += blkCnt;
+      }
 
-        temp = *pv;
-        blkCnt = (pSrc->numCols - col) >> 2;
-        while (blkCnt > 0)
+      pa += col;
+      pv++;
+      pdst = pTmpB;
+
+      pa0 = pa;
+      pa1 = pa0 + pSrc->numCols;
+      pa2 = pa1 + pSrc->numCols;
+      pa3 = pa2 + pSrc->numCols;
+
+      /* Unrolled loop */
+      blkCnt = (pSrc->numRows-col - 1) >> 2;
+      k=1;
+      while(blkCnt > 0)
+      {
+          vtemp=vld1q_f32(pv);
+
+          blkCnt2 = (pSrc->numCols-col) >> 2;
+          while (blkCnt2 > 0)
+          {
+              v1 = vld1q_f32(pdst);
+
+              v2 = vld1q_f32(pa0);
+              v1 = vfmaq_n_f32(v1,v2,vgetq_lane(vtemp,0));
+
+              v2 = vld1q_f32(pa1);
+              v1 = vfmaq_n_f32(v1,v2,vgetq_lane(vtemp,1));
+
+              v2 = vld1q_f32(pa2);
+              v1 = vfmaq_n_f32(v1,v2,vgetq_lane(vtemp,2));
+
+              v2 = vld1q_f32(pa3);
+              v1 = vfmaq_n_f32(v1,v2,vgetq_lane(vtemp,3));
+
+              vst1q_f32(pdst,v1);
+
+              pdst += 4;
+              pa0 += 4;
+              pa1 += 4;
+              pa2 += 4;
+              pa3 += 4;
+              blkCnt2--;
+          }
+          blkCnt2 = (pSrc->numCols-col) & 3;
+          if (blkCnt2 > 0)
+          {
+              mve_pred16_t p0 = vctp32q(blkCnt2);
+
+              v1 = vld1q_f32(pdst);
+
+              v2 = vld1q_f32(pa0);
+              v1 = vfmaq_n_f32(v1,v2,vgetq_lane(vtemp,0));
+
+              v2 = vld1q_f32(pa1);
+              v1 = vfmaq_n_f32(v1,v2,vgetq_lane(vtemp,1));
+
+              v2 = vld1q_f32(pa2);
+              v1 = vfmaq_n_f32(v1,v2,vgetq_lane(vtemp,2));
+
+              v2 = vld1q_f32(pa3);
+              v1 = vfmaq_n_f32(v1,v2,vgetq_lane(vtemp,3));
+
+              vst1q_p_f32(pdst,v1,p0);
+
+              pa0 += blkCnt2;
+              pa1 += blkCnt2;
+              pa2 += blkCnt2;
+              pa3 += blkCnt2;
+          }
+              
+          pa0 += col + 3*pSrc->numCols;
+          pa1 += col + 3*pSrc->numCols;
+          pa2 += col + 3*pSrc->numCols;
+          pa3 += col + 3*pSrc->numCols;
+          pv  += 4;
+          pdst = pTmpB;
+          k += 4;
+          blkCnt--;
+      }
+
+      pa = pa0;
+      for(;k<pSrc->numRows-col; k++)
+      {
+          temp = *pv;
+          blkCnt2 = (pSrc->numCols-col) >> 2;
+          while (blkCnt2 > 0)
+          {
+              v1 = vld1q_f32(pa);
+              v2 = vld1q_f32(pdst);
+              v2 = vfmaq_n_f32(v2,v1,temp);
+              vst1q_f32(pdst,v2);
+
+              pa += 4;
+              pdst += 4;
+              blkCnt2--;
+          }
+          blkCnt2 = (pSrc->numCols-col) & 3;
+          if (blkCnt2 > 0)
+          {
+              mve_pred16_t p0 = vctp32q(blkCnt2);
+              v1 = vld1q_f32(pa);
+              v2 = vld1q_f32(pdst);
+              v2 = vfmaq_n_f32(v2,v1,temp);
+              vst1q_p_f32(pdst,v2,p0);
+
+              pa += blkCnt2;
+          }
+          
+          pa += col;
+          pv++;
+          pdst = pTmpB;
+      }
+
+      /* A(col:,col:) - beta v tmpb */
+      pa = p;
+      for(j=0;j<pSrc->numRows-col; j++)
+      {
+        float32_t f = -beta * pTmpA[j];
+        ptemp = pTmpB; 
+
+        blkCnt2 = (pSrc->numCols-col) >> 2;
+        while (blkCnt2 > 0)
         {
             v1 = vld1q_f32(pa);
-            v2 = vmulq_n_f32(v1, temp);
-            vst1q_f32(pdst, v2);
+            v2 = vld1q_f32(ptemp);
+            v1 = vfmaq_n_f32(v1,v2,f);
+            vst1q_f32(pa,v1);
 
             pa += 4;
-            pdst += 4;
-            blkCnt--;
+            ptemp += 4;
+
+            blkCnt2--;
         }
-        blkCnt = (pSrc->numCols - col) & 3;
-        if (blkCnt > 0)
+        blkCnt2 = (pSrc->numCols-col) & 3;
+        if (blkCnt2 > 0)
         {
-            mve_pred16_t p0 = vctp32q(blkCnt);
+            mve_pred16_t p0 = vctp32q(blkCnt2);
+
             v1 = vld1q_f32(pa);
-            v2 = vmulq_n_f32(v1, temp);
-            vst1q_p_f32(pdst, v2, p0);
+            v2 = vld1q_f32(ptemp);
+            v1 = vfmaq_n_f32(v1,v2,f);
+            vst1q_p_f32(pa,v1,p0);
 
-            pa += blkCnt;
+            pa += blkCnt2;
         }
-
+            
         pa += col;
-        pv++;
-        pdst = pTmpB;
-
-        pa0 = pa;
-        pa1 = pa0 + pSrc->numCols;
-        pa2 = pa1 + pSrc->numCols;
-        pa3 = pa2 + pSrc->numCols;
-
-        /* Unrolled loop */
-        blkCnt = (pSrc->numRows - col - 1) >> 2;
-        k = 1;
-        while (blkCnt > 0)
-        {
-            vtemp = vld1q_f32(pv);
-
-            blkCnt2 = (pSrc->numCols - col) >> 2;
-            while (blkCnt2 > 0)
-            {
-                v1 = vld1q_f32(pdst);
-
-                v2 = vld1q_f32(pa0);
-                v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 0));
-
-                v2 = vld1q_f32(pa1);
-                v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 1));
-
-                v2 = vld1q_f32(pa2);
-                v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 2));
-
-                v2 = vld1q_f32(pa3);
-                v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 3));
-
-                vst1q_f32(pdst, v1);
-
-                pdst += 4;
-                pa0 += 4;
-                pa1 += 4;
-                pa2 += 4;
-                pa3 += 4;
-                blkCnt2--;
-            }
-            blkCnt2 = (pSrc->numCols - col) & 3;
-            if (blkCnt2 > 0)
-            {
-                mve_pred16_t p0 = vctp32q(blkCnt2);
-
-                v1 = vld1q_f32(pdst);
-
-                v2 = vld1q_f32(pa0);
-                v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 0));
-
-                v2 = vld1q_f32(pa1);
-                v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 1));
-
-                v2 = vld1q_f32(pa2);
-                v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 2));
-
-                v2 = vld1q_f32(pa3);
-                v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 3));
-
-                vst1q_p_f32(pdst, v1, p0);
-
-                pa0 += blkCnt2;
-                pa1 += blkCnt2;
-                pa2 += blkCnt2;
-                pa3 += blkCnt2;
-            }
-
-            pa0 += col + 3 * pSrc->numCols;
-            pa1 += col + 3 * pSrc->numCols;
-            pa2 += col + 3 * pSrc->numCols;
-            pa3 += col + 3 * pSrc->numCols;
-            pv  += 4;
-            pdst = pTmpB;
-            k += 4;
-            blkCnt--;
-        }
-
-        pa = pa0;
-        for (; k < pSrc->numRows - col; k++)
-        {
-            temp = *pv;
-            blkCnt2 = (pSrc->numCols - col) >> 2;
-            while (blkCnt2 > 0)
-            {
-                v1 = vld1q_f32(pa);
-                v2 = vld1q_f32(pdst);
-                v2 = vfmaq_n_f32(v2, v1, temp);
-                vst1q_f32(pdst, v2);
-
-                pa += 4;
-                pdst += 4;
-                blkCnt2--;
-            }
-            blkCnt2 = (pSrc->numCols - col) & 3;
-            if (blkCnt2 > 0)
-            {
-                mve_pred16_t p0 = vctp32q(blkCnt2);
-                v1 = vld1q_f32(pa);
-                v2 = vld1q_f32(pdst);
-                v2 = vfmaq_n_f32(v2, v1, temp);
-                vst1q_p_f32(pdst, v2, p0);
-
-                pa += blkCnt2;
-            }
-
-            pa += col;
-            pv++;
-            pdst = pTmpB;
-        }
-
-        /* A(col:,col:) - beta v tmpb */
-        pa = p;
-        for (j = 0; j < pSrc->numRows - col; j++)
-        {
-            float32_t f = -beta * pTmpA[j];
-            ptemp = pTmpB;
-
-            blkCnt2 = (pSrc->numCols - col) >> 2;
-            while (blkCnt2 > 0)
-            {
-                v1 = vld1q_f32(pa);
-                v2 = vld1q_f32(ptemp);
-                v1 = vfmaq_n_f32(v1, v2, f);
-                vst1q_f32(pa, v1);
-
-                pa += 4;
-                ptemp += 4;
-
-                blkCnt2--;
-            }
-            blkCnt2 = (pSrc->numCols - col) & 3;
-            if (blkCnt2 > 0)
-            {
-                mve_pred16_t p0 = vctp32q(blkCnt2);
-
-                v1 = vld1q_f32(pa);
-                v2 = vld1q_f32(ptemp);
-                v1 = vfmaq_n_f32(v1, v2, f);
-                vst1q_p_f32(pa, v1, p0);
-
-                pa += blkCnt2;
-            }
-
-            pa += col;
-        }
-
-        /* Copy Householder reflectors into R matrix */
-        pa = p + pOutR->numCols;
-        for (k = 0; k < pSrc->numRows - col - 1; k++)
-        {
-            *pa = pTmpA[k + 1];
-            pa += pOutR->numCols;
-        }
-
-        p += 1 + pOutR->numCols;
-    }
-
-    /* Generate Q if requested by user matrix */
-
-    if (pOutQ != NULL)
-    {
-        /* Initialize Q matrix to identity */
-        memset(pOutQ->pData, 0, sizeof(float32_t)*pOutQ->numRows * pOutQ->numRows);
-
-        pa = pOutQ->pData;
-        for (col = 0 ; col < pOutQ->numCols; col++)
-        {
-            *pa = 1.0f;
-            pa += pOutQ->numCols + 1;
-        }
-
-        nb = pOutQ->numRows - pOutQ->numCols + 1;
-
-        pc = pOutTau + pOutQ->numCols - 1;
-        for (col = 0 ; col < pOutQ->numCols; col++)
-        {
-            int32_t j, k, blkCnt, blkCnt2;
-            float32_t *pa0, *pa1, *pa2, *pa3, *ptemp;
-            float32_t temp;
-            float32x4_t v1, v2, vtemp;
-
-            pos = pSrc->numRows - nb;
-            p = pOutQ->pData + pos + pOutQ->numCols * pos ;
-
-
-            COPY_COL_F32(pOutR, pos, pos, pTmpA);
-            pTmpA[0] = 1.0f;
-            pdst = pTmpB;
-
-            /* v.T A(col:,col:) -> tmpb */
-
-            pv = pTmpA;
-            pa = p;
-
-            temp = *pv;
-            blkCnt2 = (pOutQ->numRows - pos) >> 2;
-            while (blkCnt2 > 0)
-            {
-                v1 = vld1q_f32(pa);
-                v1 = vmulq_n_f32(v1, temp);
-                vst1q_f32(pdst, v1);
-
-                pa += 4;
-                pdst += 4;
-
-                blkCnt2--;
-            }
-            blkCnt2 = (pOutQ->numRows - pos) & 3;
-            if (blkCnt2 > 0)
-            {
-                mve_pred16_t p0 = vctp32q(blkCnt2);
-
-                v1 = vld1q_f32(pa);
-                v1 = vmulq_n_f32(v1, temp);
-                vst1q_p_f32(pdst, v1, p0);
-
-                pa += blkCnt2;
-            }
-
-            pa += pos;
-            pv++;
-            pdst = pTmpB;
-            pa0 = pa;
-            pa1 = pa0 + pOutQ->numRows;
-            pa2 = pa1 + pOutQ->numRows;
-            pa3 = pa2 + pOutQ->numRows;
-
-            /* Unrolled loop */
-            blkCnt = (pOutQ->numRows - pos - 1) >> 2;
-            k = 1;
-            while (blkCnt > 0)
-            {
-
-                vtemp = vld1q_f32(pv);
-                blkCnt2 = (pOutQ->numRows - pos) >> 2;
-                while (blkCnt2 > 0)
-                {
-                    v1 = vld1q_f32(pdst);
-
-                    v2 = vld1q_f32(pa0);
-                    v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 0));
-
-                    v2 = vld1q_f32(pa1);
-                    v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 1));
-
-                    v2 = vld1q_f32(pa2);
-                    v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 2));
-
-                    v2 = vld1q_f32(pa3);
-                    v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 3));
-
-                    vst1q_f32(pdst, v1);
-
-                    pa0 += 4;
-                    pa1 += 4;
-                    pa2 += 4;
-                    pa3 += 4;
-                    pdst += 4;
-
-                    blkCnt2--;
-                }
-                blkCnt2 = (pOutQ->numRows - pos) & 3;
-                if (blkCnt2 > 0)
-                {
-                    mve_pred16_t p0 = vctp32q(blkCnt2);
-
-                    v1 = vld1q_f32(pdst);
-
-                    v2 = vld1q_f32(pa0);
-                    v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 0));
-
-                    v2 = vld1q_f32(pa1);
-                    v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 1));
-
-                    v2 = vld1q_f32(pa2);
-                    v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 2));
-
-                    v2 = vld1q_f32(pa3);
-                    v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp, 3));
-
-                    vst1q_p_f32(pdst, v1, p0);
-
-                    pa0 += blkCnt2;
-                    pa1 += blkCnt2;
-                    pa2 += blkCnt2;
-                    pa3 += blkCnt2;
-
-                }
-
-                pa0 += pos + 3 * pOutQ->numRows;
-                pa1 += pos + 3 * pOutQ->numRows;
-                pa2 += pos + 3 * pOutQ->numRows;
-                pa3 += pos + 3 * pOutQ->numRows;
-                pv  += 4;
-                pdst = pTmpB;
-                k += 4;
-                blkCnt--;
-            }
-
-            pa = pa0;
-            for (; k < pOutQ->numRows - pos; k++)
-            {
-                temp = *pv;
-                blkCnt2 = (pOutQ->numRows - pos) >> 2;
-                while (blkCnt2 > 0)
-                {
-                    v1 = vld1q_f32(pdst);
-                    v2 = vld1q_f32(pa);
-                    v1 = vfmaq_n_f32(v1, v2, temp);
-                    vst1q_f32(pdst, v1);
-
-                    pdst += 4;
-                    pa += 4;
-
-                    blkCnt2--;
-                }
-                blkCnt2 = (pOutQ->numRows - pos) & 3;
-                if (blkCnt2 > 0)
-                {
-                    mve_pred16_t p0 = vctp32q(blkCnt2);
-                    v1 = vld1q_f32(pdst);
-                    v2 = vld1q_f32(pa);
-                    v1 = vfmaq_n_f32(v1, v2, temp);
-                    vst1q_p_f32(pdst, v1, p0);
-
-                    pa += blkCnt2;
-                }
-
-                pa += pos;
-                pv++;
-                pdst = pTmpB;
-            }
-
-            pa = p;
-            beta = *pc--;
-            for (j = 0; j < pOutQ->numRows - pos; j++)
-            {
-                float32_t f = -beta * pTmpA[j];
-                ptemp = pTmpB;
-
-                blkCnt2 = (pOutQ->numCols - pos) >> 2;
-                while (blkCnt2 > 0)
-                {
-                    v1 = vld1q_f32(pa);
-                    v2 = vld1q_f32(ptemp);
-                    v1 = vfmaq_n_f32(v1, v2, f);
-                    vst1q_f32(pa, v1);
-
-                    pa += 4;
-                    ptemp += 4;
-
-                    blkCnt2--;
-                }
-                blkCnt2 = (pOutQ->numCols - pos) & 3;
-                if (blkCnt2 > 0)
-                {
-                    mve_pred16_t p0 = vctp32q(blkCnt2);
-
-                    v1 = vld1q_f32(pa);
-                    v2 = vld1q_f32(ptemp);
-                    v1 = vfmaq_n_f32(v1, v2, f);
-                    vst1q_p_f32(pa, v1, p0);
-
-                    pa += blkCnt2;
-                }
-
-                pa += pos;
-            }
-
-
-            nb++;
-        }
-    }
-
-    arm_status status = ARM_MATH_SUCCESS;
-    /* Return to application */
-    return (status);
+      } 
+
+      /* Copy Householder reflectors into R matrix */
+      pa = p + pOutR->numCols;
+      for(k=0;k<pSrc->numRows-col-1; k++)
+      {
+         *pa = pTmpA[k+1];
+         pa += pOutR->numCols;
+      }
+
+      p += 1 + pOutR->numCols;
+  }
+
+  /* Generate Q if requested by user matrix */
+
+  if (pOutQ != NULL)
+  {
+     /* Initialize Q matrix to identity */
+     memset(pOutQ->pData,0,sizeof(float32_t)*pOutQ->numRows*pOutQ->numRows);
+     
+     pa = pOutQ->pData;
+     for(col=0 ; col < pOutQ->numCols; col++)
+     {
+        *pa = 1.0f;
+        pa += pOutQ->numCols+1;
+     }
+   
+     nb = pOutQ->numRows - pOutQ->numCols + 1;
+   
+     pc = pOutTau + pOutQ->numCols - 1;
+     for(col=0 ; col < pOutQ->numCols; col++)
+     {
+       int32_t j,k, blkCnt, blkCnt2;
+       float32_t *pa0,*pa1,*pa2,*pa3,*ptemp;
+       float32_t temp;
+       float32x4_t v1,v2,vtemp;
+
+       pos = pSrc->numRows - nb;
+       p = pOutQ->pData + pos + pOutQ->numCols*pos ;
+   
+       
+       COPY_COL_F32(pOutR,pos,pos,pTmpA);
+       pTmpA[0] = 1.0f;
+       pdst = pTmpB;
+      
+       /* v.T A(col:,col:) -> tmpb */
+       
+       pv = pTmpA;
+       pa = p;
+
+       temp = *pv;
+       blkCnt2 = (pOutQ->numRows-pos) >> 2;
+       while (blkCnt2 > 0)
+       {
+           v1 = vld1q_f32(pa);
+           v1 = vmulq_n_f32(v1, temp);
+           vst1q_f32(pdst,v1);
+
+           pa += 4;
+           pdst += 4;
+
+           blkCnt2--;
+       }
+       blkCnt2 = (pOutQ->numRows-pos) & 3;
+       if (blkCnt2 > 0)
+       {
+           mve_pred16_t p0 = vctp32q(blkCnt2);
+
+           v1 = vld1q_f32(pa);
+           v1 = vmulq_n_f32(v1, temp);
+           vst1q_p_f32(pdst,v1,p0);
+
+           pa += blkCnt2;
+       }
+           
+       pa += pos;
+       pv++;
+       pdst = pTmpB;
+       pa0 = pa;
+       pa1 = pa0 + pOutQ->numRows;
+       pa2 = pa1 + pOutQ->numRows;
+       pa3 = pa2 + pOutQ->numRows;
+
+       /* Unrolled loop */
+       blkCnt = (pOutQ->numRows-pos - 1) >> 2;
+       k=1;
+       while(blkCnt > 0)
+       {
+
+           vtemp = vld1q_f32(pv);
+           blkCnt2 = (pOutQ->numRows-pos) >> 2;
+           while (blkCnt2 > 0)
+           {
+               v1 = vld1q_f32(pdst);
+
+               v2 = vld1q_f32(pa0);
+               v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp,0));
+
+               v2 = vld1q_f32(pa1);
+               v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp,1));
+
+               v2 = vld1q_f32(pa2);
+               v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp,2));
+
+               v2 = vld1q_f32(pa3);
+               v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp,3));
+
+               vst1q_f32(pdst,v1);
+
+               pa0 += 4;
+               pa1 += 4;
+               pa2 += 4;
+               pa3 += 4;
+               pdst += 4;
+
+               blkCnt2--;
+           }
+           blkCnt2 = (pOutQ->numRows-pos) & 3;
+           if (blkCnt2 > 0)
+           {
+               mve_pred16_t p0 = vctp32q(blkCnt2);
+
+               v1 = vld1q_f32(pdst);
+
+               v2 = vld1q_f32(pa0);
+               v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp,0));
+
+               v2 = vld1q_f32(pa1);
+               v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp,1));
+
+               v2 = vld1q_f32(pa2);
+               v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp,2));
+
+               v2 = vld1q_f32(pa3);
+               v1 = vfmaq_n_f32(v1, v2, vgetq_lane(vtemp,3));
+
+               vst1q_p_f32(pdst,v1,p0);
+
+               pa0 += blkCnt2;
+               pa1 += blkCnt2;
+               pa2 += blkCnt2;
+               pa3 += blkCnt2;
+
+           }
+               
+           pa0 += pos + 3*pOutQ->numRows;
+           pa1 += pos + 3*pOutQ->numRows;
+           pa2 += pos + 3*pOutQ->numRows;
+           pa3 += pos + 3*pOutQ->numRows;
+           pv  += 4;
+           pdst = pTmpB;
+           k += 4;
+           blkCnt--;
+       }
+
+       pa = pa0;
+       for(;k<pOutQ->numRows-pos; k++)
+       {
+           temp = *pv;
+           blkCnt2 = (pOutQ->numRows-pos) >> 2;
+           while (blkCnt2 > 0)
+           {
+               v1 = vld1q_f32(pdst);
+               v2 = vld1q_f32(pa);
+               v1 = vfmaq_n_f32(v1, v2, temp);
+               vst1q_f32(pdst,v1);
+
+               pdst += 4;
+               pa += 4;
+
+               blkCnt2--;
+           }
+           blkCnt2 = (pOutQ->numRows-pos) & 3;
+           if (blkCnt2 > 0)
+           {
+               mve_pred16_t p0 = vctp32q(blkCnt2);
+               v1 = vld1q_f32(pdst);
+               v2 = vld1q_f32(pa);
+               v1 = vfmaq_n_f32(v1, v2, temp);
+               vst1q_p_f32(pdst,v1,p0);
+
+               pa += blkCnt2;
+           }
+               
+           pa += pos;
+           pv++;
+           pdst = pTmpB;
+       }
+   
+       pa = p;
+       beta = *pc--;
+       for(j=0;j<pOutQ->numRows-pos; j++)
+       {
+           float32_t f = -beta * pTmpA[j];
+           ptemp = pTmpB;
+
+           blkCnt2 = (pOutQ->numCols-pos) >> 2;
+           while (blkCnt2 > 0)
+           {
+               v1 = vld1q_f32(pa);
+               v2 = vld1q_f32(ptemp);
+               v1 = vfmaq_n_f32(v1,v2,f);
+               vst1q_f32(pa,v1);
+
+               pa += 4;
+               ptemp += 4;
+
+               blkCnt2--;
+           }
+           blkCnt2 = (pOutQ->numCols-pos) & 3;
+           if (blkCnt2 > 0)
+           {
+               mve_pred16_t p0 = vctp32q(blkCnt2);
+
+               v1 = vld1q_f32(pa);
+               v2 = vld1q_f32(ptemp);
+               v1 = vfmaq_n_f32(v1,v2,f);
+               vst1q_p_f32(pa,v1,p0);
+
+               pa += blkCnt2;
+           }
+               
+           pa += pos;
+       } 
+   
+   
+       nb++;
+     }
+  }
+
+  arm_status status = ARM_MATH_SUCCESS;
+  /* Return to application */
+  return (status);
 }
 
 #endif /*#if !defined(ARM_MATH_MVEF)*/
@@ -611,236 +611,236 @@ arm_status arm_mat_qr_f32(
 
 #if (!defined(ARM_MATH_MVEF)) || defined(ARM_MATH_AUTOVECTORIZE)
 
-arm_status arm_mat_qr_f32(
+ARM_DSP_ATTRIBUTE arm_status arm_mat_qr_f32(
     const arm_matrix_instance_f32 * pSrc,
     const float32_t threshold,
     arm_matrix_instance_f32 * pOutR,
     arm_matrix_instance_f32 * pOutQ,
-    float32_t *pOutTau,
+    float32_t * pOutTau,
     float32_t *pTmpA,
     float32_t *pTmpB
-)
+    )
 
 {
-    int32_t col = 0;
-    int32_t nb, pos;
-    float32_t *pa, *pc;
-    float32_t beta;
-    float32_t *pv;
-    float32_t *pdst;
-    float32_t *p;
+  int32_t col=0;
+  int32_t nb,pos;
+  float32_t *pa,*pc;
+  float32_t beta;
+  float32_t *pv;
+  float32_t *pdst;
+  float32_t *p;
 
-    if (pSrc->numRows < pSrc->numCols)
-    {
-        return (ARM_MATH_SIZE_MISMATCH);
-    }
+  if (pSrc->numRows < pSrc->numCols)
+  {
+    return(ARM_MATH_SIZE_MISMATCH);
+  }
 
-    memcpy(pOutR->pData, pSrc->pData, pSrc->numCols * pSrc->numRows * sizeof(float32_t));
-    pOutR->numCols = pSrc->numCols;
-    pOutR->numRows = pSrc->numRows;
+  memcpy(pOutR->pData,pSrc->pData,pSrc->numCols * pSrc->numRows*sizeof(float32_t));
+  pOutR->numCols = pSrc->numCols;
+  pOutR->numRows = pSrc->numRows;
+  
+  p = pOutR->pData;
+  
+  pc = pOutTau;
+  for(col=0 ; col < pSrc->numCols; col++)
+  {
+      int32_t i,j,k,blkCnt;
+      float32_t *pa0,*pa1,*pa2,*pa3;
+      COPY_COL_F32(pOutR,col,col,pTmpA);
 
-    p = pOutR->pData;
+      beta = arm_householder_f32(pTmpA,threshold,pSrc->numRows - col,pTmpA);
+      *pc++ = beta;
+    
+      pdst = pTmpB;
 
-    pc = pOutTau;
-    for (col = 0 ; col < pSrc->numCols; col++)
-    {
-        int32_t i, j, k, blkCnt;
-        float32_t *pa0, *pa1, *pa2, *pa3;
-        COPY_COL_F32(pOutR, col, col, pTmpA);
+      /* v.T A(col:,col:) -> tmpb */
+      pv = pTmpA;
+      pa = p;
+      for(j=0;j<pSrc->numCols-col; j++)
+      {
+              *pdst++ = *pv * *pa++; 
+      }
+      pa += col;
+      pv++;
+      pdst = pTmpB;
 
-        beta = arm_householder_f32(pTmpA, threshold, pSrc->numRows - col, pTmpA);
-        *pc++ = beta;
+      pa0 = pa;
+      pa1 = pa0 + pSrc->numCols;
+      pa2 = pa1 + pSrc->numCols;
+      pa3 = pa2 + pSrc->numCols;
 
-        pdst = pTmpB;
+      /* Unrolled loop */
+      blkCnt = (pSrc->numRows-col - 1) >> 2;
+      k=1;
+      while(blkCnt > 0)
+      {
+          float32_t sum;
 
-        /* v.T A(col:,col:) -> tmpb */
-        pv = pTmpA;
-        pa = p;
-        for (j = 0; j < pSrc->numCols - col; j++)
+          for(j=0;j<pSrc->numCols-col; j++)
+          {
+              sum = *pdst;
+
+              sum += pv[0] * *pa0++;
+              sum += pv[1] * *pa1++;
+              sum += pv[2] * *pa2++;
+              sum += pv[3] * *pa3++;
+              
+              *pdst++ = sum; 
+          }
+          pa0 += col + 3*pSrc->numCols;
+          pa1 += col + 3*pSrc->numCols;
+          pa2 += col + 3*pSrc->numCols;
+          pa3 += col + 3*pSrc->numCols;
+          pv  += 4;
+          pdst = pTmpB;
+          k += 4;
+          blkCnt--;
+      }
+
+      pa = pa0;
+      for(;k<pSrc->numRows-col; k++)
+      {
+          for(j=0;j<pSrc->numCols-col; j++)
+          {
+              *pdst++ += *pv * *pa++; 
+          }
+          pa += col;
+          pv++;
+          pdst = pTmpB;
+      }
+
+      /* A(col:,col:) - beta v tmpb */
+      pa = p;
+      for(j=0;j<pSrc->numRows-col; j++)
+      {
+        float32_t f = beta * pTmpA[j];
+
+        for(i=0;i<pSrc->numCols-col; i++)
         {
-            *pdst++ = *pv * *pa++;
+          *pa = *pa - f * pTmpB[i] ;
+          pa++;
         }
         pa += col;
-        pv++;
-        pdst = pTmpB;
+      } 
 
-        pa0 = pa;
-        pa1 = pa0 + pSrc->numCols;
-        pa2 = pa1 + pSrc->numCols;
-        pa3 = pa2 + pSrc->numCols;
+      /* Copy Householder reflectors into R matrix */
+      pa = p + pOutR->numCols;
+      for(k=0;k<pSrc->numRows-col-1; k++)
+      {
+         *pa = pTmpA[k+1];
+         pa += pOutR->numCols;
+      }
 
-        /* Unrolled loop */
-        blkCnt = (pSrc->numRows - col - 1) >> 2;
-        k = 1;
-        while (blkCnt > 0)
-        {
-            float32_t sum;
+      p += 1 + pOutR->numCols;
+  }
 
-            for (j = 0; j < pSrc->numCols - col; j++)
-            {
-                sum = *pdst;
+  /* Generate Q if requested by user matrix */
 
-                sum += pv[0] * *pa0++;
-                sum += pv[1] * *pa1++;
-                sum += pv[2] * *pa2++;
-                sum += pv[3] * *pa3++;
+  if (pOutQ != NULL)
+  {
+     /* Initialize Q matrix to identity */
+     memset(pOutQ->pData,0,sizeof(float32_t)*pOutQ->numRows*pOutQ->numRows);
+     
+     pa = pOutQ->pData;
+     for(col=0 ; col < pOutQ->numCols; col++)
+     {
+        *pa = 1.0f;
+        pa += pOutQ->numCols+1;
+     }
+   
+     nb = pOutQ->numRows - pOutQ->numCols + 1;
+   
+     pc = pOutTau + pOutQ->numCols - 1;
+     for(col=0 ; col < pOutQ->numCols; col++)
+     {
+       int32_t i,j,k, blkCnt;
+       float32_t *pa0,*pa1,*pa2,*pa3;
+       pos = pSrc->numRows - nb;
+       p = pOutQ->pData + pos + pOutQ->numCols*pos ;
+   
+       
+       COPY_COL_F32(pOutR,pos,pos,pTmpA);
+       pTmpA[0] = 1.0f;
+       pdst = pTmpB;
+      
+       /* v.T A(col:,col:) -> tmpb */
+       
+       pv = pTmpA;
+       pa = p;
+       for(j=0;j<pOutQ->numRows-pos; j++)
+       {
+               *pdst++ = *pv * *pa++; 
+       }
+       pa += pos;
+       pv++;
+       pdst = pTmpB;
+       pa0 = pa;
+       pa1 = pa0 + pOutQ->numRows;
+       pa2 = pa1 + pOutQ->numRows;
+       pa3 = pa2 + pOutQ->numRows;
 
-                *pdst++ = sum;
-            }
-            pa0 += col + 3 * pSrc->numCols;
-            pa1 += col + 3 * pSrc->numCols;
-            pa2 += col + 3 * pSrc->numCols;
-            pa3 += col + 3 * pSrc->numCols;
-            pv  += 4;
-            pdst = pTmpB;
-            k += 4;
-            blkCnt--;
-        }
+       /* Unrolled loop */
+       blkCnt = (pOutQ->numRows-pos - 1) >> 2;
+       k=1;
+       while(blkCnt > 0)
+       {
+           float32_t sum;
 
-        pa = pa0;
-        for (; k < pSrc->numRows - col; k++)
-        {
-            for (j = 0; j < pSrc->numCols - col; j++)
-            {
-                *pdst++ += *pv * *pa++;
-            }
-            pa += col;
-            pv++;
-            pdst = pTmpB;
-        }
+           for(j=0;j<pOutQ->numRows-pos; j++)
+           {
+              sum = *pdst;
 
-        /* A(col:,col:) - beta v tmpb */
-        pa = p;
-        for (j = 0; j < pSrc->numRows - col; j++)
-        {
-            float32_t f = beta * pTmpA[j];
+              sum += pv[0] * *pa0++;
+              sum += pv[1] * *pa1++;
+              sum += pv[2] * *pa2++;
+              sum += pv[3] * *pa3++;
+              
+              *pdst++ = sum; 
+           }
+           pa0 += pos + 3*pOutQ->numRows;
+           pa1 += pos + 3*pOutQ->numRows;
+           pa2 += pos + 3*pOutQ->numRows;
+           pa3 += pos + 3*pOutQ->numRows;
+           pv  += 4;
+           pdst = pTmpB;
+           k += 4;
+           blkCnt--;
+       }
 
-            for (i = 0; i < pSrc->numCols - col; i++)
-            {
-                *pa = *pa - f * pTmpB[i] ;
-                pa++;
-            }
-            pa += col;
-        }
+       pa = pa0;
+       for(;k<pOutQ->numRows-pos; k++)
+       {
+           for(j=0;j<pOutQ->numRows-pos; j++)
+           {
+               *pdst++ += *pv * *pa++; 
+           }
+           pa += pos;
+           pv++;
+           pdst = pTmpB;
+       }
+   
+       pa = p;
+       beta = *pc--;
+       for(j=0;j<pOutQ->numRows-pos; j++)
+       {
+           float32_t f = beta * pTmpA[j];
 
-        /* Copy Householder reflectors into R matrix */
-        pa = p + pOutR->numCols;
-        for (k = 0; k < pSrc->numRows - col - 1; k++)
-        {
-            *pa = pTmpA[k + 1];
-            pa += pOutR->numCols;
-        }
+           for(i=0;i<pOutQ->numCols-pos; i++)
+           {
+             *pa = *pa - f * pTmpB[i] ;
+             pa++;
+           }
+           pa += pos;
+       } 
+   
+   
+       nb++;
+     }
+  }
 
-        p += 1 + pOutR->numCols;
-    }
-
-    /* Generate Q if requested by user matrix */
-
-    if (pOutQ != NULL)
-    {
-        /* Initialize Q matrix to identity */
-        memset(pOutQ->pData, 0, sizeof(float32_t)*pOutQ->numRows * pOutQ->numRows);
-
-        pa = pOutQ->pData;
-        for (col = 0 ; col < pOutQ->numCols; col++)
-        {
-            *pa = 1.0f;
-            pa += pOutQ->numCols + 1;
-        }
-
-        nb = pOutQ->numRows - pOutQ->numCols + 1;
-
-        pc = pOutTau + pOutQ->numCols - 1;
-        for (col = 0 ; col < pOutQ->numCols; col++)
-        {
-            int32_t i, j, k, blkCnt;
-            float32_t *pa0, *pa1, *pa2, *pa3;
-            pos = pSrc->numRows - nb;
-            p = pOutQ->pData + pos + pOutQ->numCols * pos ;
-
-
-            COPY_COL_F32(pOutR, pos, pos, pTmpA);
-            pTmpA[0] = 1.0f;
-            pdst = pTmpB;
-
-            /* v.T A(col:,col:) -> tmpb */
-
-            pv = pTmpA;
-            pa = p;
-            for (j = 0; j < pOutQ->numRows - pos; j++)
-            {
-                *pdst++ = *pv * *pa++;
-            }
-            pa += pos;
-            pv++;
-            pdst = pTmpB;
-            pa0 = pa;
-            pa1 = pa0 + pOutQ->numRows;
-            pa2 = pa1 + pOutQ->numRows;
-            pa3 = pa2 + pOutQ->numRows;
-
-            /* Unrolled loop */
-            blkCnt = (pOutQ->numRows - pos - 1) >> 2;
-            k = 1;
-            while (blkCnt > 0)
-            {
-                float32_t sum;
-
-                for (j = 0; j < pOutQ->numRows - pos; j++)
-                {
-                    sum = *pdst;
-
-                    sum += pv[0] * *pa0++;
-                    sum += pv[1] * *pa1++;
-                    sum += pv[2] * *pa2++;
-                    sum += pv[3] * *pa3++;
-
-                    *pdst++ = sum;
-                }
-                pa0 += pos + 3 * pOutQ->numRows;
-                pa1 += pos + 3 * pOutQ->numRows;
-                pa2 += pos + 3 * pOutQ->numRows;
-                pa3 += pos + 3 * pOutQ->numRows;
-                pv  += 4;
-                pdst = pTmpB;
-                k += 4;
-                blkCnt--;
-            }
-
-            pa = pa0;
-            for (; k < pOutQ->numRows - pos; k++)
-            {
-                for (j = 0; j < pOutQ->numRows - pos; j++)
-                {
-                    *pdst++ += *pv * *pa++;
-                }
-                pa += pos;
-                pv++;
-                pdst = pTmpB;
-            }
-
-            pa = p;
-            beta = *pc--;
-            for (j = 0; j < pOutQ->numRows - pos; j++)
-            {
-                float32_t f = beta * pTmpA[j];
-
-                for (i = 0; i < pOutQ->numCols - pos; i++)
-                {
-                    *pa = *pa - f * pTmpB[i] ;
-                    pa++;
-                }
-                pa += pos;
-            }
-
-
-            nb++;
-        }
-    }
-
-    arm_status status = ARM_MATH_SUCCESS;
-    /* Return to application */
-    return (status);
+  arm_status status = ARM_MATH_SUCCESS;
+  /* Return to application */
+  return (status);
 }
 
 #endif /* end of test for Helium or Neon availability */

@@ -95,12 +95,14 @@ recipe_text_replacement_data_file:
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__DBG_CERTIFICATE_PATH&&=$(CY_DBG_CERTIFICATE_PATH))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__DBG_CERTIFICATE_APPLICATION_PATH&&=$(CY_DBG_CERTIFICATE_PATH_APPLICATION))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__OPENOCD_RESET_TARGET&&=$(_MTB_RECIPE__OPENOCD_RESET_TARGET))
+	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__OPENOCD_PROBE_FREQUENCY_CMD&&=$(_MTB_RECIPE__OPENOCD_PROBE_FREQUENCY))
 ifeq ($(MTB_RECIPE__CORE),CM33)
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__TARGET_PROCESSOR_NUMBER&&=0)
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__TARGET_PROCESSOR_NAME_LOWERCASE&&=cm33)
 else
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__TARGET_PROCESSOR_NUMBER&&=1)
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__TARGET_PROCESSOR_NAME_LOWERCASE&&=cm55)
+	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__CM55_PRJ_DIR&&=$(_MTB_RECIPE__IDE_PRJ_DIR_NAME))
 endif
 
 ##############################################
@@ -136,6 +138,8 @@ ifneq (,$(_MTB_RECIPE__IS_FIRST_PRJ))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEMPLATE_META_DATA_FILE),TEMPLATE_REPLACE=$(_MTB_RECIPE__IDE_RECIPE_DIR)/App/internal=../.mtbLaunchConfigs)
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEMPLATE_META_DATA_FILE),TEMPLATE_REPLACE=$(_MTB_RECIPE__IDE_RECIPE_DIR)/App/external=../.mtbLaunchConfigs)
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEMPLATE_META_DATA_FILE),UPDATE_APPLICATION_PREF_FILE=1)
+else
+	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEMPLATE_META_DATA_FILE),TEMPLATE_REPLACE=../.mtbLaunchConfigs=../.mtbLaunchConfigs)
 endif #(,$(_MTB_RECIPE__IS_FIRST_PRJ))
 else #(,$(_MTB_RECIPE__IS_MULTI_CORE_APPLICATION))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEMPLATE_META_DATA_FILE),TEMPLATE_REPLACE=$(_MTB_RECIPE__IDE_RECIPE_DIR)/Proj/single/external=.mtbLaunchConfigs)
@@ -143,9 +147,6 @@ else #(,$(_MTB_RECIPE__IS_MULTI_CORE_APPLICATION))
 endif #(,$(_MTB_RECIPE__IS_MULTI_CORE_APPLICATION))
 ifeq ($(MTB_COMBINE_SIGN_$(_MTB_RECIPE__IDE_PRJ_DIR_NAME)_HEX_FILES),)
 ifneq (,$(_MTB_RECIPE__IS_MULTI_CORE_APPLICATION))
-ifeq (,$(_MTB_RECIPE__IS_FIRST_PRJ))
-	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEMPLATE_META_DATA_FILE),TEMPLATE_REPLACE=../.mtbLaunchConfigs=../.mtbLaunchConfigs)
-endif
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEMPLATE_META_DATA_FILE),TEMPLATE_REPLACE=$(_MTB_RECIPE__IDE_TEMPLATE_DIR)/eclipse/$(MTB_RECIPE__CORE)/$(_MTB_RECIPE__IDE_TEMPLATE_SUBDIR)/multi=.mtbLaunchConfigs/)
 endif
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEMPLATE_META_DATA_FILE),TEMPLATE_REPLACE=$(_MTB_RECIPE__IDE_TEMPLATE_DIR)/eclipse/$(MTB_RECIPE__CORE)/$(_MTB_RECIPE__IDE_TEMPLATE_SUBDIR)/any=.mtbLaunchConfigs)
@@ -173,6 +174,7 @@ recipe_vscode_text_replacement_data_file: recipe_text_replacement_data_file
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__QSPI_FLASHLOADER_APPLICATION&&=$(_MTB_RECIPE__OPENOCD_QSPI_FLASHLOADER_APPLICATION))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_PRJ_NAME&&=$(APPNAME))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__OPENOCD_BOARD&&=$(_MTB_RECIPE__OPENOCD_BOARD))
+	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__VSCODE_OPENOCD_PROBE_FREQUENCY&&=$(_MTB_RECIPE__OPENOCD_PROBE_FREQUENCY))
 ifeq ($(MTB_RECIPE__CORE),CM33)
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__PROG_FILE_CM33&&=$(subst $(MTB_RECIPE__SUFFIX_TARGET),hex,$(_MTB_RECIPE__VSCODE_ELF_FILE)))
 	$(call mtb__file_append,$(_MTB_RECIPE__IDE_TEXT_DATA_FILE),&&_MTB_RECIPE__PROG_FILE_CM33_APPLICATION&&=$(subst $(MTB_RECIPE__SUFFIX_TARGET),hex,$(_MTB_RECIPE__VSCODE_ELF_FILE_APPLICATION)))
@@ -220,7 +222,7 @@ recipe_ide_build_data_file:
 ##############################################
 # UV
 ##############################################
-_MTB_RECIPE__CMSIS_ARCH_NAME:=CAT1D_DFP
+_MTB_RECIPE__CMSIS_ARCH_NAME:=PSE8xxx_DFP
 _MTB_RECIPE__CMSIS_VENDOR_NAME:=Infineon
 _MTB_RECIPE__CMSIS_VENDOR_ID:=7
 

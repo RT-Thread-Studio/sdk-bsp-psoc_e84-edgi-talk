@@ -47,28 +47,27 @@
   @param[in]     nRows     number of rows in the matrix
   @param[in]     nColumns  number of columns in the matrix
   @param[in]     pData     points to the matrix data array
-  @return        none
  */
 
-void arm_mat_init_f16(
-    arm_matrix_instance_f16 * S,
-    uint16_t nRows,
-    uint16_t nColumns,
-    float16_t *pData)
+ARM_DSP_ATTRIBUTE void arm_mat_init_f16(
+  arm_matrix_instance_f16 * S,
+  uint16_t nRows,
+  uint16_t nColumns,
+  float16_t * pData)
 {
-    /* Assign Number of Rows */
-    S->numRows = nRows;
+  /* Assign Number of Rows */
+  S->numRows = nRows;
 
-    /* Assign Number of Columns */
-    S->numCols = nColumns;
+  /* Assign Number of Columns */
+  S->numCols = nColumns;
 
-    /* Assign Data pointer */
-    S->pData = pData;
+  /* Assign Data pointer */
+  S->pData = pData;
 }
 
 /**
   @} end of MatrixInit group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

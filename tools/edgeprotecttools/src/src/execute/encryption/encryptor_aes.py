@@ -91,7 +91,7 @@ class EncryptorAES:
         encryptor = cipher.encryptor()
         chunk_size = 16
         counter = 0
-        ciphertext = bytes()
+        ciphertext = bytearray(len(data))
         for i in range(0, len(data), chunk_size):
             indata = struct.pack(
                 '<I', initial_counter + counter
@@ -99,9 +99,10 @@ class EncryptorAES:
             counter += chunk_size
             cipher_block = encryptor.update(indata)
             chunk = data[i:i + chunk_size]
-            ciphertext += bytes(a ^ b for a, b in zip(chunk, cipher_block))
+            for j in range(len(chunk)):
+                ciphertext[i + j] = chunk[j] ^ cipher_block[j]
         encryptor.finalize()
-        return ciphertext
+        return bytes(ciphertext)
 
     @staticmethod
     def _mode(mode):

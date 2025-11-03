@@ -66,8 +66,7 @@ typedef gctUINT   gceSURF_FORMAT;
 
 #pragma pack(1)
 /**** BMP file header structure ****/
-typedef struct BMPFILEHEADER
-{
+typedef struct BMPFILEHEADER {
     unsigned short bfType;           /* Magic number for file */
     unsigned int   bfSize;           /* Size of file */
     unsigned short bfReserved1;      /* Reserved */
@@ -76,8 +75,7 @@ typedef struct BMPFILEHEADER
 } BMPFILEHEADER;
 
 /**** BMP file info structure ****/
-typedef struct BMPINFOHEADER
-{
+typedef struct BMPINFOHEADER {
     unsigned int   biSize;           /* Size of info header */
     int            biWidth;          /* Width of image */
     int            biHeight;         /* Height of image */
@@ -101,8 +99,7 @@ typedef struct BMPINFOHEADER
 #define BIT_BITFIELDS 3             /* RGB bitmap with RGB masks */
 
 /**** Colormap entry structure ****/
-typedef struct RGB
-{
+typedef struct RGB {
     unsigned char   rgbBlue;          /* Blue value */
     unsigned char   rgbGreen;         /* Green value */
     unsigned char   rgbRed;           /* Red value */
@@ -110,13 +107,11 @@ typedef struct RGB
 } RGB;
 
 /**** Bitmap information structure ****/
-typedef struct _BMPINFO
-{
+typedef struct _BMPINFO {
     BMPINFOHEADER   bmiHeader;      /* Image header */
-    union
-    {
-        RGB             bmiColors[256]; /* Image colormap */
-        gctUINT         mask[3];        /* RGB masks */
+    union {
+    RGB             bmiColors[256]; /* Image colormap */
+    gctUINT         mask[3];        /* RGB masks */
     };
 } BMPINFO;
 #pragma pack()
@@ -295,7 +290,7 @@ typedef struct _gcsFILTER_BLIT_ARRAY
 }
 gcsFILTER_BLIT_ARRAY;
 
-typedef gcsFILTER_BLIT_ARRAY *gcsFILTER_BLIT_ARRAY_PTR;
+typedef gcsFILTER_BLIT_ARRAY * gcsFILTER_BLIT_ARRAY_PTR;
 
 /******************************/
 /*      General Function      */
@@ -307,49 +302,49 @@ gctINT viv_util_get_channel(
     gctUINT16* r,
     gctUINT16* g,
     gctUINT16* b
-);
+    );
 
-gctUINT8 *viv_util_output_string(
+gctUINT8* viv_util_output_string(
     gctUINT32 output
-);
+    );
 
 gctINT viv_util_free_hwcursor(
     Cursor *cursor
-);
+    );
 
 gctINT viv_util_prepare_cursor_config(
     Cursor* cursor
-);
+    );
 
 gctVOID viv_util_prepare_gamma_config(
     Gamma* gamma
-);
+    );
 
 gctFLOAT viv_util_dc_to_gamma(
     gctFLOAT  x
-);
+    );
 
 #if vivENABLE_DISPLAY_NEWGMMA
 gctVOID viv_util_prepare_new_gamma(
     Gamma* new_gamma
-);
+    );
 #endif
 
 #if vivENABLE_LAYER_DEGAMMA
 gctFLOAT viv_util_dc_to_degamma(
     gctFLOAT  x
-);
+    );
 
 gctVOID viv_util_prepare_degamma(
     Degamma*  de_gamma,
     gctBOOL   BT709
-);
+    );
 #endif
 
 #if vivENABLE_DISPLAY_3DLUT
 vivSTATUS viv_util_prepare_threed_lut(
     gctUINT32* threed_lut
-);
+    );
 #endif
 
 gctINT viv_util_load_bmp_subarea(
@@ -361,10 +356,10 @@ gctINT viv_util_load_bmp_subarea(
     gctUINT8 *lut,
     gctUINT32 *ret_width,
     gctUINT32 *ret_height
-);
+    );
 
 gctINT viv_util_load_raw_area(
-    gctUINT8 **plane_addr,
+    gctUINT8** plane_addr,
     gctUINT32*  plane_stride,
     gctUINT32*  align_height,
     gctUINT32*  align_width,
@@ -372,7 +367,7 @@ gctINT viv_util_load_raw_area(
     gctUINT32   format,
     gctUINT32   plane_num,
     gctUINT8*   filename
-);
+    );
 
 gctINT viv_source_capture_dump(
     gctPOINTER logical,
@@ -380,16 +375,16 @@ gctINT viv_source_capture_dump(
     gctADDRESS  phys_addr,
     gctBOOL    video,
     gctBOOL    final_plane
-);
+    );
 
 vivSTATUS viv_cursor_clear(
     Cursor* cursor,
     gctUINT32 color
-);
+    );
 
 vivSTATUS viv_util_free_layer_buffer(
     Layer *layer
-);
+    );
 
 gctINT viv_util_load_bmp_area(
     gctUINT8* file_name,
@@ -405,13 +400,13 @@ gctINT viv_util_load_bmp_area(
     gctUINT32 *ret_buf_height,
     gctUINT32 *ret_img_width,
     gctUINT32 *ret_img_height
-);
+    );
 
 gctINT viv_util_load_raw(
     gctUINT8* Buffer,
     gctUINT32 Size,
     gctUINT8* filename
-);
+    );
 
 gctBOOL GalSaveDIB(
     gctPOINTER bits,
@@ -425,7 +420,7 @@ vivSTATUS viv_util_prepare_layer_config(
     Layer *layer,
     gctUINT id,
     gctADDRESS physical
-);
+    );
 
 #if vivENABLE_WRITEBACK
 vivSTATUS viv_util_prepare_wb_config(
@@ -434,7 +429,7 @@ vivSTATUS viv_util_prepare_wb_config(
     gctUINT *buffer_size,
     gctUINT width,
     gctUINT height
-);
+    );
 #endif
 #if 0 //Unused API - Resolve compiler warning
 gctINT viv_util_load_vimg(
@@ -452,7 +447,7 @@ gctINT viv_util_load_vimg(
     gctUINT32 *ret_buf_height,
     gctUINT32 *ret_img_width,
     gctUINT32 *ret_img_height
-);
+    );
 #endif
 #define viv_print   viv_os_print
 #define viv_sprint  viv_os_sprint

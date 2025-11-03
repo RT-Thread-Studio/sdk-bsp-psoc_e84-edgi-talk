@@ -12,4 +12,5 @@ gdb_breakpoint_override hard
 if {$::ENABLE_ACQUIRE} {
     init
     reset init
+    &&_MTB_RECIPE__OPENOCD_PROBE_FREQUENCY_CMD&&
 }

@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 Purpose : USB stack API
@@ -74,7 +74,7 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 */
 
 /* USB system version */
-#define USB_VERSION  36600uL // Format: Mmmrr Example: 35601uL is 3.56.1
+#define USB_VERSION  36605uL // Format: Mmmrr Example: 35601uL is 3.56.1
 
 
 /*********************************************************************
@@ -83,11 +83,11 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 *
 */
 #ifndef   USB_MAX_PACKET_SIZE
-#if USB_SUPPORT_HIGH_SPEED
-#define USB_MAX_PACKET_SIZE   512u
-#else
-#define USB_MAX_PACKET_SIZE    64u
-#endif
+  #if USB_SUPPORT_HIGH_SPEED
+    #define USB_MAX_PACKET_SIZE   512u
+  #else
+    #define USB_MAX_PACKET_SIZE    64u
+  #endif
 #endif
 
 //
@@ -119,34 +119,34 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #define USB_STATUS_INVALID_HANDLE  (-5)
 
 #if USB_DEBUG_LEVEL > 0 || defined(__clang_analyzer__)
-#define USB_PANIC(ErrMsg)      USB_OS_Panic(ErrMsg)
+  #define USB_PANIC(ErrMsg)      USB_OS_Panic(ErrMsg)
 #else
-#ifdef _lint
-//lint -emacro({9036}, USB_PANIC)  N:100
-#define USB_PANIC(ErrMsg)  do {} while(0)
-#else
-#define USB_PANIC(ErrMsg)
-#endif
+  #ifdef _lint
+    //lint -emacro({9036}, USB_PANIC)  N:100
+    #define USB_PANIC(ErrMsg)  do {} while(0)
+  #else
+    #define USB_PANIC(ErrMsg)
+  #endif
 #endif
 
 #if USB_SUPPORT_LOG
-#define USB_LOG(p) USBD_Logf p
+  #define USB_LOG(p) USBD_Logf p
 #else
-#ifdef _lint
-#define USB_LOG(p)  /*lint -save -e9036 N:102 */do {} while(0) /*lint -restore*/
-#else
-#define USB_LOG(p)
-#endif
+  #ifdef _lint
+    #define USB_LOG(p)  /*lint -save -e9036 N:102 */do {} while(0) /*lint -restore*/
+  #else
+    #define USB_LOG(p)
+  #endif
 #endif
 
 #if USB_SUPPORT_WARN
-#define USB_WARN(p) USBD_Warnf p
+  #define USB_WARN(p) USBD_Warnf p
 #else
-#ifdef _lint
-#define USB_WARN(p)  /*lint -save -e9036 N:102 */do {} while(0) /*lint -restore*/
-#else
-#define USB_WARN(p)
-#endif
+  #ifdef _lint
+    #define USB_WARN(p)  /*lint -save -e9036 N:102 */do {} while(0) /*lint -restore*/
+  #else
+    #define USB_WARN(p)
+  #endif
 #endif
 
 /*********************************************************************
@@ -198,8 +198,8 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 *
 *       Endpoint read mode
 */
- #define USB_READ_MODE_CONTINUOUS    (1uL << 0)   // Always accept RX data independent of USB_Read...() calls,
-// as long as there is enough free space in the buffer.
+#define USB_READ_MODE_CONTINUOUS    (1uL << 0)   // Always accept RX data independent of USB_Read...() calls,
+                                                 // as long as there is enough free space in the buffer.
 
 /*********************************************************************
 *
@@ -300,14 +300,13 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 *  Description
 *    USB port types that can result from a Charging Port Detection.
 */
-typedef enum
-{
-    USB_PORT_TYPE_NOT_CONNECTED         = 0,  // Not connected.
-    USB_PORT_TYPE_STANDARD_DOWNSTREAM   = 1,  // Connected to Standard Downstream Port.
-    USB_PORT_TYPE_CHARGING_DOWNSTREAM   = 2,  // Connected to Charging Downstream Port.
-    USB_PORT_TYPE_DEDICATED_CHARGING    = 3,  // Connected to Dedicated Charging Port.
-    USB_PORT_TYPE_NON_STANDARD_CHARGING = 4,  // Connected to proprietary charger.
-    USB_PORT_TYPE_ERROR                 = 99  // Charger detection failed.
+typedef enum {
+  USB_PORT_TYPE_NOT_CONNECTED         = 0,  // Not connected.
+  USB_PORT_TYPE_STANDARD_DOWNSTREAM   = 1,  // Connected to Standard Downstream Port.
+  USB_PORT_TYPE_CHARGING_DOWNSTREAM   = 2,  // Connected to Charging Downstream Port.
+  USB_PORT_TYPE_DEDICATED_CHARGING    = 3,  // Connected to Dedicated Charging Port.
+  USB_PORT_TYPE_NON_STANDARD_CHARGING = 4,  // Connected to proprietary charger.
+  USB_PORT_TYPE_ERROR                 = 99  // Charger detection failed.
 } USB_PORT_TYPE;
 
 /*********************************************************************
@@ -319,14 +318,13 @@ typedef enum
 *    USBD_SetDeviceInfo() before the USB stack is started using USBD_Start().
 *    Is used during enumeration of the device by the host.
 */
-typedef struct
-{
-    U16  VendorId;                // Vendor ID. Uniquely identifies the vendor on a USB device.
-    U16  ProductId;               // Product ID. Uniquely identifies all USB devices of a vendor.
-    const char *sVendorName;      // Vendor name. ASCII string of up to 126 characters.
-    const char *sProductName;     // Description of the USB device. ASCII string of up to 126 characters.
-    const char *sSerialNumber;    // Serial number of the USB device (ASCII string).
-    // May be NULL if no serial number should be provided.
+typedef struct {
+  U16  VendorId;                // Vendor ID. Uniquely identifies the vendor on a USB device.
+  U16  ProductId;               // Product ID. Uniquely identifies all USB devices of a vendor.
+  const char *sVendorName;      // Vendor name. ASCII string of up to 126 characters.
+  const char *sProductName;     // Description of the USB device. ASCII string of up to 126 characters.
+  const char *sSerialNumber;    // Serial number of the USB device (ASCII string).
+                                // May be NULL if no serial number should be provided.
 } USB_DEVICE_INFO;
 
 /*********************************************************************
@@ -336,16 +334,15 @@ typedef struct
 *  Description
 *    Structure containing a USB setup packet received from the host.
 */
-typedef struct
-{
-    U8 bmRequestType;     // Setup request type.
-    U8 bRequest;          // Setup request number.
-    U8 wValueLow;         // Low byte of the value field.
-    U8 wValueHigh;        // High byte of the value field.
-    U8 wIndexLow;         // Low byte of the index field.
-    U8 wIndexHigh;        // High byte of the index field.
-    U8 wLengthLow;        // Low byte of the length field.
-    U8 wLengthHigh;       // High byte of the length field.
+typedef struct {
+  U8 bmRequestType;     // Setup request type.
+  U8 bRequest;          // Setup request number.
+  U8 wValueLow;         // Low byte of the value field.
+  U8 wValueHigh;        // High byte of the value field.
+  U8 wIndexLow;         // Low byte of the index field.
+  U8 wIndexHigh;        // High byte of the index field.
+  U8 wLengthLow;        // Low byte of the length field.
+  U8 wLengthHigh;       // High byte of the length field.
 } USB_SETUP_PACKET;
 
 /*********************************************************************
@@ -357,50 +354,47 @@ typedef struct
 *    Can be set via the function USBD_SetWebUSBInfo() before the USB stack is started using USBD_Start().
 *    Is used during enumeration of the device by the host.
 */
-typedef struct
-{
-    U8  VendorCode;               // Vendor code used for the setup request.
-    U8  DescIndex;                // Descriptor index of the descriptor containing the URL of the
-    // landing page.
-    U8  URLPrefix;                // Prefix of the URL: 0 = "http://", 1 = "https://", 255 = none.
-    const char *sURL;             // URL of the landing page. UTF-8 string.
+typedef struct {
+  U8  VendorCode;               // Vendor code used for the setup request.
+  U8  DescIndex;                // Descriptor index of the descriptor containing the URL of the
+                                // landing page.
+  U8  URLPrefix;                // Prefix of the URL: 0 = "http://", 1 = "https://", 255 = none.
+  const char *sURL;             // URL of the landing page. UTF-8 string.
 } USB_WEBUSB_INFO;
 
 typedef struct _EP_STAT EP_STAT;
 typedef struct _USB_ASYNC_IO_CONTEXT *USB_ASYNC_IO_CONTEXT_POI;
 
-typedef struct
-{
-    const U8 *pData;
-    U32        NumBytesRem;
+typedef struct {
+  const U8 * pData;
+  U32        NumBytesRem;
 } USB_DATA_PART;
 
 typedef union USB_IOCTL_PARA_t USB_IOCTL_PARA;
 
-typedef struct _USB_HW_DRIVER
-{
-    void (*pfStart)(void);
-    U8(*pfAllocEP)(U8 InDir, U8 TransferType);
-    void (*pfUpdateEP)(EP_STAT * pEPStat);
-    void (*pfEnable)(void);
-    void (*pfAttach)(void);
-    unsigned(*pfGetMaxPacketSize)(unsigned EPIndex);
-    int (*pfGetSpeedInfo)(void);
-    void (*pfSetAddress)(U8  Addr);
-    void (*pfSetClrStallEP)(unsigned EPIndex, int OnOnff);
-    void (*pfStallEP0)(void);
-    void (*pfDisableRxInterruptEP)(unsigned EPIndex);
-    void (*pfEnableRxInterruptEP)(unsigned EPIndex, U8 *pData, U32 NumBytesRequested);
-    void (*pfStartTx)(unsigned EPIndex);
-    void (*pfSendEP)(unsigned EPIndex, const U8 * p, unsigned NumBytes);
-    void (*pfDisableTx)(unsigned EPIndex);
-    void (*pfResetEP)(unsigned EPIndex);
-    int (*pfControl)(int Cmd, USB_IOCTL_PARA * p);
-    int (*pfDeInit)(void);
-    int (*pfDetach)(void);
-    U8(*pfAllocEPEx)(U8 InDir, U8 TransferType, unsigned MaxPacketSize);
-    int (*pfSendEPEx)(unsigned EPIndex, unsigned NumParts, const USB_DATA_PART *pParts, unsigned *pNumOfFullPackets);
-    void (*pfInit)(void);
+typedef struct _USB_HW_DRIVER {
+  void     (*pfStart)               (void);
+  U8       (*pfAllocEP)             (U8 InDir, U8 TransferType);
+  void     (*pfUpdateEP)            (EP_STAT * pEPStat);
+  void     (*pfEnable)              (void);
+  void     (*pfAttach)              (void);
+  unsigned (*pfGetMaxPacketSize)    (unsigned EPIndex);
+  int      (*pfGetSpeedInfo)        (void);
+  void     (*pfSetAddress)          (U8  Addr);
+  void     (*pfSetClrStallEP)       (unsigned EPIndex, int OnOnff);
+  void     (*pfStallEP0)            (void);
+  void     (*pfDisableRxInterruptEP)(unsigned EPIndex);
+  void     (*pfEnableRxInterruptEP) (unsigned EPIndex, U8 *pData, U32 NumBytesRequested);
+  void     (*pfStartTx)             (unsigned EPIndex);
+  void     (*pfSendEP)              (unsigned EPIndex, const U8 * p, unsigned NumBytes);
+  void     (*pfDisableTx)           (unsigned EPIndex);
+  void     (*pfResetEP)             (unsigned EPIndex);
+  int      (*pfControl)             (int Cmd, USB_IOCTL_PARA * p);
+  int      (*pfDeInit)              (void);
+  int      (*pfDetach)              (void);
+  U8       (*pfAllocEPEx)           (U8 InDir, U8 TransferType, unsigned MaxPacketSize);
+  int      (*pfSendEPEx)            (unsigned EPIndex, unsigned NumParts, const USB_DATA_PART *pParts, unsigned *pNumOfFullPackets);
+  void     (*pfInit)                (void);
 } USB_HW_DRIVER;
 
 /*********************************************************************
@@ -424,7 +418,7 @@ typedef struct _USB_HW_DRIVER
 *    In this case the USB stacks tries to process the packet and will send a STALL
 *    if that fails.
 */
-typedef int          USB_ON_CLASS_REQUEST(const USB_SETUP_PACKET * pSetupPacket);
+typedef int          USB_ON_CLASS_REQUEST     (const USB_SETUP_PACKET * pSetupPacket);
 
 /*********************************************************************
 *
@@ -446,7 +440,7 @@ typedef int          USB_ON_CLASS_REQUEST(const USB_SETUP_PACKET * pSetupPacket)
 *    In this case the USB stacks tries to process the packet and will send a STALL
 *    if that fails.
 */
-typedef int          USB_ON_SETUP(const USB_SETUP_PACKET * pSetupPacket);
+typedef int          USB_ON_SETUP             (const USB_SETUP_PACKET * pSetupPacket);
 
 /*********************************************************************
 *
@@ -466,7 +460,7 @@ typedef int          USB_ON_SETUP(const USB_SETUP_PACKET * pSetupPacket);
 *            see "Errata for USB 2.0 ECN: Link Power Management (LPM) - 7/2007" from usb.org for
 *            an explanation of these values.
 */
-typedef void         USB_ON_LPM_CHANGE(int State, unsigned BESL);
+typedef void         USB_ON_LPM_CHANGE        (int State, unsigned BESL);
 
 /*********************************************************************
 *
@@ -483,62 +477,56 @@ typedef void         USB_ON_LPM_CHANGE(int State, unsigned BESL);
 *    If the function is able to provide a string for the given index, it should return a pointer to
 *    an ASCII string. Otherwise it should return a NULL pointer.
 */
-typedef const char *USB_GET_STRING_FUNC(int Index);
+typedef const char * USB_GET_STRING_FUNC      (int Index);
 
-typedef void         USB_ON_RX_FUNC(const U8 * pData, unsigned NumBytes);
-typedef void         USB_ISR_HANDLER(void);
-typedef void         USB_DETACH_FUNC(void);
-typedef U16          USB_ON_BCD_VERSION_FUNC(void);
-typedef const char *USB_ON_STRING_REQUEST(void);
-typedef void         USB_ON_SET_IF_FUNC(U16 wIndex, U16 wValue, void * pContext);
-typedef void         USB_ON_GET_IF_FUNC(U16 wIndex, void * pContext);
-typedef void         USB_EVENT_CALLBACK_FUNC(unsigned Events, void * pContext);
-typedef void         USB_ATTACH_FUNC(void);
-typedef void         USB_ENABLE_ISR_FUNC(USB_ISR_HANDLER * pfISRHandler);
-typedef void         USB_STATE_CALLBACK_FUNC(void * pContext, U8 NewState);
-typedef void         USB_ASYNC_CALLBACK_FUNC(USB_ASYNC_IO_CONTEXT_POI pContext);
+typedef void         USB_ON_RX_FUNC           (const U8 * pData, unsigned NumBytes);
+typedef void         USB_ISR_HANDLER          (void);
+typedef void         USB_DETACH_FUNC          (void);
+typedef U16          USB_ON_BCD_VERSION_FUNC  (void);
+typedef const char * USB_ON_STRING_REQUEST    (void);
+typedef void         USB_ON_SET_IF_FUNC       (U16 wIndex, U16 wValue, void * pContext);
+typedef void         USB_ON_GET_IF_FUNC       (U16 wIndex, void * pContext);
+typedef void         USB_EVENT_CALLBACK_FUNC  (unsigned Events, void * pContext);
+typedef void         USB_ATTACH_FUNC          (void);
+typedef void         USB_ENABLE_ISR_FUNC      (USB_ISR_HANDLER * pfISRHandler);
+typedef void         USB_STATE_CALLBACK_FUNC  (void * pContext, U8 NewState);
+typedef void         USB_ASYNC_CALLBACK_FUNC  (USB_ASYNC_IO_CONTEXT_POI pContext);
 
-typedef struct _USB_EVENT_CALLBACK
-{
-    struct _USB_EVENT_CALLBACK  *pNext;
-    USB_EVENT_CALLBACK_FUNC     *pfEventCb;
-    void                        *pContext;
+typedef struct _USB_EVENT_CALLBACK {
+  struct _USB_EVENT_CALLBACK  *pNext;
+  USB_EVENT_CALLBACK_FUNC     *pfEventCb;
+  void                        *pContext;
 } USB_EVENT_CALLBACK;
 
-typedef struct _USB_HOOK
-{
-    struct _USB_HOOK         *pNext;
-    USB_STATE_CALLBACK_FUNC *cb;
-    void                     *pContext;
+typedef struct _USB_HOOK {
+  struct _USB_HOOK        * pNext;
+  USB_STATE_CALLBACK_FUNC * cb;
+  void                    * pContext;
 } USB_HOOK;
 
-typedef struct _USB_SETUP_HOOK
-{
-    struct _USB_SETUP_HOOK *pNext;
-    USB_ON_SETUP            *cb;
+typedef struct _USB_SETUP_HOOK {
+  struct _USB_SETUP_HOOK * pNext;
+  USB_ON_SETUP           * cb;
 } USB_SETUP_HOOK;
 
-typedef struct _USB_SOF_CALLBACK_HOOK
-{
-    struct _USB_SOF_CALLBACK_HOOK *pNext;
-    U16                            Interval;
-    U16                            Count;
-    void (*cb)(void *pContext);
-    void                          *pContext;
+typedef struct _USB_SOF_CALLBACK_HOOK {
+  struct _USB_SOF_CALLBACK_HOOK *pNext;
+  U16                            Interval;
+  U16                            Count;
+  void                         (*cb)(void *pContext);
+  void                          *pContext;
 } USB_SOF_CALLBACK_HOOK;
 
-typedef struct _USB_MS_OS_EXT_PROP
-{
-    U32          PropType;
-    const char *sPropName;
-    const void *pProp;
-    U32          PropSize;
+typedef struct _USB_MS_OS_EXT_PROP {
+  U32          PropType;
+  const char * sPropName;
+  const void * pProp;
+  U32          PropSize;
 } USB_MS_OS_EXT_PROP;
 
-typedef struct _USB_GET_STRING_DESC_HOOK
-{
-    struct _USB_GET_STRING_DESC_HOOK *pNext;
-    USB_GET_STRING_FUNC               *pfGetString;
+typedef struct _USB_GET_STRING_DESC_HOOK {
+  struct _USB_GET_STRING_DESC_HOOK * pNext;
+  USB_GET_STRING_FUNC              * pfGetString;
 } USB_GET_STRING_DESC_HOOK;
 
 /*********************************************************************
@@ -563,28 +551,27 @@ typedef struct _USB_GET_STRING_DESC_HOOK
 *    For SuperSpeed bulk endpoints, MaxPacketSize can be N * 1024, where N = 1...16.
 *    Values of N > 1 enables the usage of burst transfers.
 */
-typedef struct _USB_ADD_EP_INFO
-{
-    unsigned  MaxPacketSize;    // Maximum packet size for the endpoint.
-    U16       Interval;         // Specifies the interval measured in units of 125us (microframes).
-    // This value should be zero for a bulk endpoint.
-    U8        Flags;            // Specifies whether optional parameters are used.
-    // * 0x00 - Ignore optional parameters.
-    // * USB_ADD_EP_FLAG_USE_ISO_SYNC_TYPES - Use ISO_Type. If not set the endpoint will have the sync type USB_ISO_SYNC_TYPE_NONE.
-    U8        InDir;            // Specifies the direction of the desired endpoint.
-    // * USB_DIR_IN
-    // * USB_DIR_OUT
-    U8        TransferType;     // Specifies the transfer type of the endpoint.
-    // The following values are allowed:
-    // * USB_TRANSFER_TYPE_BULK
-    // * USB_TRANSFER_TYPE_ISO
-    // * USB_TRANSFER_TYPE_INT
-    U8        ISO_Type;         // Allows to set the synchronization type for isochronous endpoints.
-    // The following types are supported:
-    // * USB_ISO_SYNC_TYPE_NONE (default)
-    // * USB_ISO_SYNC_TYPE_ASYNCHRONOUS
-    // * USB_ISO_SYNC_TYPE_ADAPTIVE
-    // * USB_ISO_SYNC_TYPE_SYNCHRONOUS
+typedef struct _USB_ADD_EP_INFO {
+  unsigned  MaxPacketSize;    // Maximum packet size for the endpoint.
+  U16       Interval;         // Specifies the interval measured in units of 125us (microframes).
+                              // This value should be zero for a bulk endpoint.
+  U8        Flags;            // Specifies whether optional parameters are used.
+                              // * 0x00 - Ignore optional parameters.
+                              // * USB_ADD_EP_FLAG_USE_ISO_SYNC_TYPES - Use ISO_Type. If not set the endpoint will have the sync type USB_ISO_SYNC_TYPE_NONE.
+  U8        InDir;            // Specifies the direction of the desired endpoint.
+                              // * USB_DIR_IN
+                              // * USB_DIR_OUT
+  U8        TransferType;     // Specifies the transfer type of the endpoint.
+                              // The following values are allowed:
+                              // * USB_TRANSFER_TYPE_BULK
+                              // * USB_TRANSFER_TYPE_ISO
+                              // * USB_TRANSFER_TYPE_INT
+  U8        ISO_Type;         // Allows to set the synchronization type for isochronous endpoints.
+                              // The following types are supported:
+                              // * USB_ISO_SYNC_TYPE_NONE (default)
+                              // * USB_ISO_SYNC_TYPE_ASYNCHRONOUS
+                              // * USB_ISO_SYNC_TYPE_ADAPTIVE
+                              // * USB_ISO_SYNC_TYPE_SYNCHRONOUS
 } USB_ADD_EP_INFO;
 
 
@@ -595,99 +582,98 @@ typedef struct _USB_ADD_EP_INFO
 *  Description
 *    Contains information for asynchronous transfers.
 */
-typedef struct _USB_ASYNC_IO_CONTEXT
-{
-    unsigned                  NumBytesToTransfer;     // Number of bytes to transfer.
-    // Must be set by the application.
-    void                     *pData;                  // Pointer to the buffer for read operations, pointer to the data for write operations.
-    // Must be set by the application.
-    USB_ASYNC_CALLBACK_FUNC *pfOnComplete;            // Pointer to the function called on completion of the transfer.
-    // Must be set by the application.
-    void                     *pContext;               // Pointer to a user context. Can be arbitrarily used by the application.
-    int                       Status;                 // Result status of the asynchronous transfer. Set by the USB stack before calling pfOnComplete.
-    unsigned                  NumBytesTransferred;    // Number of bytes transferred. Set by the USB stack before calling pfOnComplete.
+typedef struct _USB_ASYNC_IO_CONTEXT {
+  unsigned                  NumBytesToTransfer;     // Number of bytes to transfer.
+                                                    // Must be set by the application.
+  void                    * pData;                  // Pointer to the buffer for read operations, pointer to the data for write operations.
+                                                    // Must be set by the application.
+  USB_ASYNC_CALLBACK_FUNC * pfOnComplete;           // Pointer to the function called on completion of the transfer.
+                                                    // Must be set by the application.
+  void                    * pContext;               // Pointer to a user context. Can be arbitrarily used by the application.
+  int                       Status;                 // Result status of the asynchronous transfer. Set by the USB stack before calling pfOnComplete.
+  unsigned                  NumBytesTransferred;    // Number of bytes transferred. Set by the USB stack before calling pfOnComplete.
 } USB_ASYNC_IO_CONTEXT;
 
 /*********************************************************************
 *
 *       Public API functions
 */
-unsigned USBD_AddEP(U8 InDir, U8 TransferType, U16 Interval, U8 * pBuffer, unsigned BufferSize);
-unsigned USBD_AddEPEx(const USB_ADD_EP_INFO * pInfo, U8 * pBuffer, unsigned BufferSize);
-void     USBD_DeInit(void);
-void     USBD_EnableIAD(void);
-void     USBD_EnableSuperSpeed(void);
-unsigned USBD_GetState(void);
-unsigned USBD_GetDeviceState(void);
-int      USBD_GetSpeed(void);
-void     USBD_Init(void);
-U32      USBD_GetVersion(void);
-char     USBD_IsConfigured(void);
-void     USBD_SetMaxPower(unsigned MaxPower);
-void     USBD_Start(void);
-void     USBD_Stop(void);
-int      USBD_RegisterSCHook(USB_HOOK * pHook, USB_STATE_CALLBACK_FUNC *pfStateCb, void * pContext);
-int      USBD_UnregisterSCHook(USB_HOOK * pHook);
+unsigned USBD_AddEP                     (U8 InDir, U8 TransferType, U16 Interval, U8 * pBuffer, unsigned BufferSize);
+unsigned USBD_AddEPEx                   (const USB_ADD_EP_INFO * pInfo, U8 * pBuffer, unsigned BufferSize);
+void     USBD_DeInit                    (void);
+void     USBD_EnableIAD                 (void);
+void     USBD_EnableSuperSpeed          (void);
+unsigned USBD_GetState                  (void);
+unsigned USBD_GetDeviceState            (void);
+int      USBD_GetSpeed                  (void);
+void     USBD_Init                      (void);
+U32      USBD_GetVersion                (void);
+char     USBD_IsConfigured              (void);
+void     USBD_SetMaxPower               (unsigned MaxPower);
+void     USBD_Start                     (void);
+void     USBD_Stop                      (void);
+int      USBD_RegisterSCHook            (USB_HOOK * pHook, USB_STATE_CALLBACK_FUNC *pfStateCb, void * pContext);
+int      USBD_UnregisterSCHook          (USB_HOOK * pHook);
 
-int      USBD_Read(unsigned EPOut, void* pData, unsigned NumBytesReq, unsigned Timeout);
-int      USBD_Receive(unsigned EPOut, void* pData, unsigned NumBytesReq, int Timeout);
-int      USBD_ReceivePoll(unsigned EPOut, void* pData, unsigned NumBytesReq, unsigned Timeout);
-int      USBD_ReadOverlapped(unsigned EPOut, void* pData, unsigned NumBytesReq);
-int      USBD_Write(unsigned EPIndex, const void* pData, unsigned NumBytes, I8 Send0PacketIfRequired, int ms);
-int      USBD_WriteOverlapped(unsigned EPIndex, const void* pData, unsigned NumBytes, I8 Send0PacketIfRequired);
-void     USBD_CancelIO(unsigned EPIndex);
-void     USBD_ReadAsync(unsigned EPIndex, USB_ASYNC_IO_CONTEXT * pContext, int ShortRead);
-void     USBD_WriteAsync(unsigned EPIndex, USB_ASYNC_IO_CONTEXT * pContext, I8 Send0PacketIfRequired);
-unsigned USBD_GetNumBytesInBuffer(unsigned EPIndex);
-unsigned USBD_GetNumBytesRemToWrite(unsigned EPIndex);
-unsigned USBD_GetNumBytesRemToRead(unsigned EPIndex);
-void     USBD_SetOnRXHookEP(unsigned EPIndex, USB_ON_RX_FUNC * pfOnRx);
-void     USBD_SetClrStallEP(unsigned EPIndex, int OnOff);
-void     USBD_StallEP(unsigned EPIndex);
-int      USBD_WaitForEndOfTransfer(unsigned EPIndex, unsigned Timeout);
-int      USBD_WaitForEndOfTransferEx(unsigned EPIndex, unsigned Timeout, int AbortOnTimeout);
-int      USBD_WaitForTXReady(unsigned EPIndex, int Timeout);
-unsigned USBD_GetReadMode(unsigned EPIndex);
-void     USBD_SetReadMode(unsigned EPIndex, unsigned Mode);
-unsigned USBD_GetWriteMode(unsigned EPIndex);
-void     USBD_SetWriteMode(unsigned EPIndex, unsigned Mode);
-void     USBD_SetOnEvent(unsigned EPIndex, USB_EVENT_CALLBACK *pEventCb, USB_EVENT_CALLBACK_FUNC *pfEventCb, void *pContext);
-void     USBD_RemoveOnEvent(unsigned EPIndex, const USB_EVENT_CALLBACK *pEventCb);
-int      USBD_IsNULLPacketRequired(unsigned EPIndex);
+int      USBD_Read                      (unsigned EPOut, void* pData, unsigned NumBytesReq, unsigned Timeout);
+int      USBD_Receive                   (unsigned EPOut, void* pData, unsigned NumBytesReq, int Timeout);
+int      USBD_ReceivePoll               (unsigned EPOut, void* pData, unsigned NumBytesReq, unsigned Timeout);
+int      USBD_ReadOverlapped            (unsigned EPOut, void* pData, unsigned NumBytesReq);
+int      USBD_Write                     (unsigned EPIndex, const void* pData, unsigned NumBytes, I8 Send0PacketIfRequired, int ms);
+int      USBD_WriteOverlapped           (unsigned EPIndex, const void* pData, unsigned NumBytes, I8 Send0PacketIfRequired);
+void     USBD_CancelIO                  (unsigned EPIndex);
+void     USBD_ReadAsync                 (unsigned EPIndex, USB_ASYNC_IO_CONTEXT * pContext, int ShortRead);
+void     USBD_WriteAsync                (unsigned EPIndex, USB_ASYNC_IO_CONTEXT * pContext, I8 Send0PacketIfRequired);
+unsigned USBD_GetNumBytesInBuffer       (unsigned EPIndex);
+unsigned USBD_GetNumBytesRemToWrite     (unsigned EPIndex);
+unsigned USBD_GetNumBytesRemToRead      (unsigned EPIndex);
+void     USBD_SetOnRXHookEP             (unsigned EPIndex, USB_ON_RX_FUNC * pfOnRx);
+void     USBD_SetClrStallEP             (unsigned EPIndex, int OnOff);
+void     USBD_StallEP                   (unsigned EPIndex);
+int      USBD_WaitForEndOfTransfer      (unsigned EPIndex, unsigned Timeout);
+int      USBD_WaitForEndOfTransferEx    (unsigned EPIndex, unsigned Timeout, int AbortOnTimeout);
+int      USBD_WaitForTXReady            (unsigned EPIndex, int Timeout);
+unsigned USBD_GetReadMode               (unsigned EPIndex);
+void     USBD_SetReadMode               (unsigned EPIndex, unsigned Mode);
+unsigned USBD_GetWriteMode              (unsigned EPIndex);
+void     USBD_SetWriteMode              (unsigned EPIndex, unsigned Mode);
+void     USBD_SetOnEvent                (unsigned EPIndex, USB_EVENT_CALLBACK *pEventCb, USB_EVENT_CALLBACK_FUNC *pfEventCb, void *pContext);
+void     USBD_RemoveOnEvent             (unsigned EPIndex, const USB_EVENT_CALLBACK *pEventCb);
+int      USBD_IsNULLPacketRequired      (unsigned EPIndex);
 
-void     USBD_SetClassRequestHook(unsigned InterfaceNum, USB_ON_CLASS_REQUEST * pfOnClassRequest);
-void     USBD_SetVendorRequestHook(unsigned InterfaceNum, USB_ON_CLASS_REQUEST * pfOnVendorRequest);
-void     USBD_SetOnSetupHook(unsigned InterfaceNum, USB_ON_SETUP         * pfOnSetup);
-void     USBD_SetOnSetInterfaceHook(unsigned InterfaceNum, USB_ON_SET_IF_FUNC   * pfOnSetInterface, void * pContext);
-void     USBD_SetOnGetInterfaceHook(unsigned InterfaceNum, USB_ON_GET_IF_FUNC   * pfOnSetInterface, void * pContext);
-void     USBD_SetOnSetup(USB_SETUP_HOOK * pHook, USB_ON_SETUP        * pfOnSetup);
+void     USBD_SetClassRequestHook       (unsigned InterfaceNum, USB_ON_CLASS_REQUEST * pfOnClassRequest);
+void     USBD_SetVendorRequestHook      (unsigned InterfaceNum, USB_ON_CLASS_REQUEST * pfOnVendorRequest);
+void     USBD_SetOnSetupHook            (unsigned InterfaceNum, USB_ON_SETUP         * pfOnSetup);
+void     USBD_SetOnSetInterfaceHook     (unsigned InterfaceNum, USB_ON_SET_IF_FUNC   * pfOnSetInterface, void * pContext);
+void     USBD_SetOnGetInterfaceHook     (unsigned InterfaceNum, USB_ON_GET_IF_FUNC   * pfOnSetInterface, void * pContext);
+void     USBD_SetOnSetup                (USB_SETUP_HOOK * pHook, USB_ON_SETUP        * pfOnSetup);
 
-void     USBD_SetOnRxEP0(USB_ON_RX_FUNC       * pfOnRx);
-void     USBD_SetDetachFunc(USB_DETACH_FUNC * pfDetach);
-void     USBD_SetGetStringFunc(USB_GET_STRING_FUNC * pfOnGetString);
-void     USBD_SetGetStringHook(USB_GET_STRING_DESC_HOOK * pHook, USB_GET_STRING_FUNC * pfOnGetString);
-void     USBD_SetOnBCDVersionFunc(USB_ON_BCD_VERSION_FUNC * pfOnBCDVersion);
+void     USBD_SetOnRxEP0                (USB_ON_RX_FUNC       * pfOnRx);
+void     USBD_SetDetachFunc             (USB_DETACH_FUNC * pfDetach);
+void     USBD_SetGetStringFunc          (USB_GET_STRING_FUNC * pfOnGetString);
+void     USBD_SetGetStringHook          (USB_GET_STRING_DESC_HOOK * pHook, USB_GET_STRING_FUNC * pfOnGetString);
+void     USBD_SetOnBCDVersionFunc       (USB_ON_BCD_VERSION_FUNC * pfOnBCDVersion);
 
-void     USBD_DoRemoteWakeup(void);
-void     USBD_SetIsSelfPowered(U8 IsSelfPowered);
-void     USBD_SetAllowRemoteWakeUp(U8 AllowRemoteWakeup);
-void     USBD_UseV210(void);
-void     USBD_SetBESLValues(int BaselineBESL, int DeepBESL);
-void     USBD_SetOnLPMChange(USB_ON_LPM_CHANGE * pfOnLPMChange);
-void     USBD_SetLPMResponse(U8 Response);
-int      USBD_TxIsPending(unsigned EPIndex);
+void     USBD_DoRemoteWakeup            (void);
+void     USBD_SetIsSelfPowered          (U8 IsSelfPowered);
+void     USBD_SetAllowRemoteWakeUp      (U8 AllowRemoteWakeup);
+void     USBD_UseV210                   (void);
+void     USBD_SetBESLValues             (int BaselineBESL, int DeepBESL);
+void     USBD_SetOnLPMChange            (USB_ON_LPM_CHANGE * pfOnLPMChange);
+void     USBD_SetLPMResponse            (U8 Response);
+int      USBD_TxIsPending               (unsigned EPIndex);
 
-unsigned USBD_GetMaxPacketSize(unsigned EPIndex);
-unsigned USBD_GetInternalBufferSize(unsigned EPIndex);
+unsigned USBD_GetMaxPacketSize          (unsigned EPIndex);
+unsigned USBD_GetInternalBufferSize     (unsigned EPIndex);
 
-void     USBD_SetMSDescInfo(U8 InterfaceNum, const char * sCompatibleID, const char * sSubCompatibleID, const USB_MS_OS_EXT_PROP * pProperties, U32 NumProperties);
-void     USBD_SetMSVendorCode(U8 VendorCode);
-void     USBD_MSOSD_Init(void);
+void     USBD_SetMSDescInfo             (U8 InterfaceNum, const char * sCompatibleID, const char * sSubCompatibleID, const USB_MS_OS_EXT_PROP * pProperties, U32 NumProperties);
+void     USBD_SetMSVendorCode           (U8 VendorCode);
+void     USBD_MSOSD_Init                (void);
 
-unsigned USBD_GetUSBAddr(void);
-void     USBD_WriteEP0FromISR(const void* pData, unsigned NumBytes, I8 Send0PacketIfRequired);
-int      USBD_SetOnSOF(void (*pfSOFCallback)(void *pContext), U16 Interval, void *pContext, USB_SOF_CALLBACK_HOOK *pHook);
-void     USBD_RemoveOnSOF(const USB_SOF_CALLBACK_HOOK *pHook);
+unsigned USBD_GetUSBAddr                (void);
+void     USBD_WriteEP0FromISR           (const void* pData, unsigned NumBytes, I8 Send0PacketIfRequired);
+int      USBD_SetOnSOF                  (void (*pfSOFCallback)(void *pContext), U16 Interval, void *pContext, USB_SOF_CALLBACK_HOOK *pHook);
+void     USBD_RemoveOnSOF               (const USB_SOF_CALLBACK_HOOK *pHook);
 
 /*********************************************************************
 *
@@ -710,16 +696,16 @@ void     USBD_RemoveOnSOF(const USB_SOF_CALLBACK_HOOK *pHook);
 #define USB_CancelIO                           USBD_CancelIO
 #define USB_GetNumBytesInBuffer                USBD_GetNumBytesInBuffer
 
-int     USB_ReadEP(unsigned EPIndex, void * pData, unsigned NumBytesReq);
-int     USB_ReadEPOverlapped(unsigned EPIndex, void * pData, unsigned NumBytesReq);
-int     USB_ReadEPTimed(unsigned EPIndex, void * pData, unsigned NumBytesReq, unsigned ms);
-int     USB_ReceiveEP(unsigned EPIndex, void * pData, unsigned NumBytesReq);
-int     USB_ReceiveEPTimed(unsigned EPIndex, void * pData, unsigned NumBytesReq, unsigned ms);
+int     USB_ReadEP                             (unsigned EPIndex, void * pData, unsigned NumBytesReq);
+int     USB_ReadEPOverlapped                   (unsigned EPIndex, void * pData, unsigned NumBytesReq);
+int     USB_ReadEPTimed                        (unsigned EPIndex, void * pData, unsigned NumBytesReq, unsigned ms);
+int     USB_ReceiveEP                          (unsigned EPIndex, void * pData, unsigned NumBytesReq);
+int     USB_ReceiveEPTimed                     (unsigned EPIndex, void * pData, unsigned NumBytesReq, unsigned ms);
 #define USB_WriteEP(h, p, n, s)                USBD_Write(h, p, n, s, 0)
 #define USB_WriteEPOverlapped(h, p, n, s)      USBD_WriteOverlapped(h, p, n, s)
 #define USB_WriteEPTimed(h, p, n, s, t)        USBD_Write(h, p, n, s, t)
-void    USB_StartReadTransfer(unsigned EPIndex);
-int     USB_IsStartReadTransferActive(unsigned EPIndex);
+void    USB_StartReadTransfer                  (unsigned EPIndex);
+int     USB_IsStartReadTransferActive          (unsigned EPIndex);
 
 #define USB_SetOnRXHookEP                      USBD_SetOnRXHookEP
 #define USB_SetClrStallEP                      USBD_SetClrStallEP
@@ -746,45 +732,45 @@ int     USB_IsStartReadTransferActive(unsigned EPIndex);
 *
 *       Kernel interface routines      (also for polled mode without kernel)
 */
-void     USB_OS_Init(void);
-void     USB_OS_Delay(int ms);
-void     USB_OS_DecRI(void);
-U32      USB_OS_GetTickCnt(void);
-void     USB_OS_IncDI(void);
+void     USB_OS_Init                   (void);
+void     USB_OS_Delay                  (int ms);
+void     USB_OS_DecRI                  (void);
+U32      USB_OS_GetTickCnt             (void);
+void     USB_OS_IncDI                  (void);
 #if USBD_OS_LAYER_EX > 0
-void     USB_OS_Signal(unsigned EPIndex, unsigned TransactCnt);
-void     USB_OS_Wait(unsigned EPIndex, unsigned TransactCnt);
-int      USB_OS_WaitTimed(unsigned EPIndex, unsigned ms, unsigned TransactCnt);
-void     USB_OS_DeInit(void);
+void     USB_OS_Signal                 (unsigned EPIndex, unsigned TransactCnt);
+void     USB_OS_Wait                   (unsigned EPIndex, unsigned TransactCnt);
+int      USB_OS_WaitTimed              (unsigned EPIndex, unsigned ms, unsigned TransactCnt);
+void     USB_OS_DeInit                 (void);
 #else
-#error "Legacy OS layer API is no longer supported"
+  #error "Legacy OS layer API is no longer supported"
 #endif
-int      USB_OS_MutexAlloc(void);
-void     USB_OS_MutexFree(void);
-void     USB_OS_MutexLock(int Idx);
-void     USB_OS_MutexUnlock(int Idx);
+int      USB_OS_MutexAlloc             (void);
+void     USB_OS_MutexFree              (void);
+void     USB_OS_MutexLock              (int Idx);
+void     USB_OS_MutexUnlock            (int Idx);
 #ifdef __clang_analyzer__
-void   USB_OS_Panic(const char *pErrMsg) __attribute__((analyzer_noreturn));
+  void   USB_OS_Panic                  (const char *pErrMsg) __attribute__((analyzer_noreturn));
 #else
-void   USB_OS_Panic(const char *pErrMsg);
+  void   USB_OS_Panic                  (const char *pErrMsg);
 #endif
 #if USBD_OS_USE_ISR_FLAG
-extern volatile I8                   USBD_IsInInterrupt;
+  extern volatile I8                   USBD_IsInInterrupt;
 #endif
 
 /*********************************************************************
 *
 *       Log/Warn functions
 */
-void USBD_SetLogFilter(U32 FilterMask);
-void USBD_SetWarnFilter(U32 FilterMask);
-void USBD_AddLogFilter(U32 FilterMask);
-void USBD_AddWarnFilter(U32 FilterMask);
-void USBD_Logf(U32 Type,       const char * sFormat, ...);
-void USBD_Warnf(U32 Type,       const char * sFormat, ...);
-void USBD_Logf_Application(const char * sFormat, ...);
-void USBD_LogHexDump(U32 Type, U32 Len, const void *pvData);
-void USBD_Puts(const char * s);
+void USBD_SetLogFilter                  (U32 FilterMask);
+void USBD_SetWarnFilter                 (U32 FilterMask);
+void USBD_AddLogFilter                  (U32 FilterMask);
+void USBD_AddWarnFilter                 (U32 FilterMask);
+void USBD_Logf                          (U32 Type,       const char * sFormat, ...);
+void USBD_Warnf                         (U32 Type,       const char * sFormat, ...);
+void USBD_Logf_Application              (const char * sFormat, ...);
+void USBD_LogHexDump                    (U32 Type, U32 Len, const void *pvData);
+void USBD_Puts                          (const char * s);
 
 #if USB_V2_V3_MIGRATION_API > 0
 //
@@ -798,20 +784,20 @@ void USBD_Puts(const char * s);
 #define USB_AddWarnFilter(FilterMask)   USBD_AddWarnFilter(FilterMask)
 #endif
 
-void USBD_SetWarnFunc(void (*pfWarn)(const char *s));
-void USBD_SetLogFunc(void (*pfLog)(const char *s));
+void USBD_SetWarnFunc                   (void (*pfWarn)(const char *s));
+void USBD_SetLogFunc                    (void (*pfLog) (const char *s));
 
 /*********************************************************************
 *
 *       USB configuration functions, to be called in USB_X_Config()
 */
-void USBD_AddDriver(const USB_HW_DRIVER * pDriver);
-void USBD_SetAttachFunc(USB_ATTACH_FUNC *pfAttach);
-void USBD_SetISREnableFunc(USB_ENABLE_ISR_FUNC *pfEnableISR);
-void USBD_SetDeviceInfo(const USB_DEVICE_INFO *pDeviceInfo);
-void USBD_SetCacheConfig(const SEGGER_CACHE_CONFIG *pConfig, unsigned ConfSize);
-void USBD_AssignMemory(void *pMem, U32 MemSize);
-void USBD_SetWebUSBInfo(const USB_WEBUSB_INFO * pWebUSBInfo);
+void USBD_AddDriver                     (const USB_HW_DRIVER * pDriver);
+void USBD_SetAttachFunc                 (USB_ATTACH_FUNC *pfAttach);
+void USBD_SetISREnableFunc              (USB_ENABLE_ISR_FUNC *pfEnableISR);
+void USBD_SetDeviceInfo                 (const USB_DEVICE_INFO *pDeviceInfo);
+void USBD_SetCacheConfig                (const SEGGER_CACHE_CONFIG *pConfig, unsigned ConfSize);
+void USBD_AssignMemory                  (void *pMem, U32 MemSize);
+void USBD_SetWebUSBInfo                 (const USB_WEBUSB_INFO * pWebUSBInfo);
 
 #define USBD_SetISRMgmFuncs(pf,a,b)     USBD_SetISREnableFunc(pf)
 
@@ -819,9 +805,9 @@ void USBD_SetWebUSBInfo(const USB_WEBUSB_INFO * pWebUSBInfo);
 *
 *       Functions that have to be supplied by the customer
 */
-void USBD_X_Config(void);
-void USBD_X_EnableInterrupt(void);                // optional function, activate with USBD_OS_USE_USBD_X_INTERRUPT
-void USBD_X_DisableInterrupt(void);               // optional function, activate with USBD_OS_USE_USBD_X_INTERRUPT
+void USBD_X_Config                      (void);
+void USBD_X_EnableInterrupt             (void);   // optional function, activate with USBD_OS_USE_USBD_X_INTERRUPT
+void USBD_X_DisableInterrupt            (void);   // optional function, activate with USBD_OS_USE_USBD_X_INTERRUPT
 
 /*********************************************************************
 *
@@ -835,8 +821,8 @@ void USBD_X_DisableInterrupt(void);               // optional function, activate
 *         USBD_SetWarnFunc              ()
 *         USBD_SetLogFunc               ()
 */
-void USB_X_Warn(const char * s);
-void USB_X_Log(const char * s);
+void USB_X_Warn                        (const char * s);
+void USB_X_Log                         (const char * s);
 
 /*********************************************************************
 *
@@ -848,20 +834,20 @@ void USBD_SYSVIEW_Init(void);
 *
 *       Utility functions
 */
-U16      USBD_GetU16BE(const U8 * p);
-U16      USBD_GetU16LE(const U8 * p);
-U32      USBD_GetU24BE(const U8 * p);
-U32      USBD_GetU24LE(const U8 * p);
-U32      USBD_GetU32BE(const U8 * p);
-U32      USBD_GetU32LE(const U8 * p);
-void     USBD_StoreU16BE(U8 * p, unsigned v);
-void     USBD_StoreU16LE(U8 * p, unsigned v);
-void     USBD_StoreU24BE(U8 * p, U32 v);
-void     USBD_StoreU24LE(U8 * p, U32 v);
-void     USBD_StoreU32LE(U8 * p, U32 v);
-void     USBD_StoreU32BE(U8 * p, U32 v);
-U32      USBD_SwapU32(U32 v);
-unsigned USBD_CalcBitsSet(unsigned int x);
+U16      USBD_GetU16BE                  (const U8 * p);
+U16      USBD_GetU16LE                  (const U8 * p);
+U32      USBD_GetU24BE                  (const U8 * p);
+U32      USBD_GetU24LE                  (const U8 * p);
+U32      USBD_GetU32BE                  (const U8 * p);
+U32      USBD_GetU32LE                  (const U8 * p);
+void     USBD_StoreU16BE                (U8 * p, unsigned v);
+void     USBD_StoreU16LE                (U8 * p, unsigned v);
+void     USBD_StoreU24BE                (U8 * p, U32 v);
+void     USBD_StoreU24LE                (U8 * p, U32 v);
+void     USBD_StoreU32LE                (U8 * p, U32 v);
+void     USBD_StoreU32BE                (U8 * p, U32 v);
+U32      USBD_SwapU32                   (U32 v);
+unsigned USBD_CalcBitsSet               (unsigned int x);
 
 /*********************************************************************
 *
@@ -883,7 +869,7 @@ unsigned USBD_CalcBitsSet(unsigned int x);
 *    == 0: Memory can be used for DMA access.
 *    != 0: DMA access not allowed for the given address.
 */
-typedef int  USB_CHECK_ADDRESS_FUNC(const void * pMem);
+typedef int  USB_CHECK_ADDRESS_FUNC    (const void * pMem);
 void USBD_SetCheckAddress(USB_CHECK_ADDRESS_FUNC * pfCheckValidDMAAddress);
 
 /*********************************************************************
@@ -899,7 +885,7 @@ void USBD_SetCheckAddress(USB_CHECK_ADDRESS_FUNC * pfCheckValidDMAAddress);
 *  Return value
 *    Physical address.
 */
-typedef PTR_ADDR(USBD_V2P_FUNC)(const void * pVirtAddr);
+typedef PTR_ADDR (USBD_V2P_FUNC)(const void * pVirtAddr);
 
 /*********************************************************************
 *
@@ -907,16 +893,16 @@ typedef PTR_ADDR(USBD_V2P_FUNC)(const void * pVirtAddr);
 *
 */
 #if USB_V2_V3_MIGRATION_DEVINFO > 0
-const char *USB_GetVendorName(void);
-const char *USB_GetProductName(void);
-const char *USB_GetSerialNumber(void);
-U16          USB_GetVendorId(void);
-U16          USB_GetProductId(void);
+const char * USB_GetVendorName         (void);
+const char * USB_GetProductName        (void);
+const char * USB_GetSerialNumber       (void);
+U16          USB_GetVendorId           (void);
+U16          USB_GetProductId          (void);
 #endif
 #if USB_V2_V3_MIGRATION_CONFIG > 0
-void         USB_X_AddDriver(void);
-void         USB_X_HWAttach(void);
-void         USB_X_EnableISR(USB_ISR_HANDLER * pfISRHandler);
+void         USB_X_AddDriver           (void);
+void         USB_X_HWAttach            (void);
+void         USB_X_EnableISR           (USB_ISR_HANDLER * pfISRHandler);
 #endif
 
 /*********************************************************************
@@ -924,23 +910,23 @@ void         USB_X_EnableISR(USB_ISR_HANDLER * pfISRHandler);
 *       Individual driver configuration functions
 *
 */
-void USB_DRIVER_LPC17xx_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_LPC18xx_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_LPC43xx_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_P1020_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_RX_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_RZ_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_RZA2_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_R8A66597_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_SH726A_ConfigAddr(U32 BaseAddr);
+void USB_DRIVER_LPC17xx_ConfigAddr    (U32 BaseAddr);
+void USB_DRIVER_LPC18xx_ConfigAddr    (U32 BaseAddr);
+void USB_DRIVER_LPC43xx_ConfigAddr    (U32 BaseAddr);
+void USB_DRIVER_P1020_ConfigAddr      (U32 BaseAddr);
+void USB_DRIVER_RX_ConfigAddr         (U32 BaseAddr);
+void USB_DRIVER_RZ_ConfigAddr         (U32 BaseAddr);
+void USB_DRIVER_RZA2_ConfigAddr       (U32 BaseAddr);
+void USB_DRIVER_R8A66597_ConfigAddr   (U32 BaseAddr);
+void USB_DRIVER_SH726A_ConfigAddr     (U32 BaseAddr);
 void USB_DRIVER_KinetisEHCI_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_iMXRT10xx_ConfigAddr(U32 BaseAddr);
-void USB_DRIVER_Zynq7010_ConfigAddr(U32 BaseAddr);
+void USB_DRIVER_iMXRT10xx_ConfigAddr  (U32 BaseAddr);
+void USB_DRIVER_Zynq7010_ConfigAddr   (U32 BaseAddr);
 
 void USB_DRIVER_STM32F7xxHS_ConfigPHY(U8 UsePHY);
 void USB_DRIVER_STM32F4xxHS_ConfigPHY(U8 UsePHY);
 void USB_DRIVER_STM32U5xx_ConfigAddr(U32 RegBaseAddr, U32 RamBaseAddr);
-void USB_DRIVER_STM32H5xx_ConfigAddr(U32 RegBaseAddr, U32 RamBaseAddr);
+void USB_DRIVER_STM32H5xx_ConfigAddr  (U32 RegBaseAddr, U32 RamBaseAddr);
 
 void USB_DRIVER_LPC546xx_Workaround(void);
 void USB_DRIVER_SYNERGYHS_ConfigPara(U16 PhySetVal, U16 BusWaitVal);
@@ -963,6 +949,7 @@ void USBD_DRIVER_ALIFE1_SetV2PHandler(USBD_V2P_FUNC * pfV2PHandler);
 #define USB_DRIVER_RX71M_HS_ConfigPara(x, y)         USB_DRIVER_SYNERGYHS_ConfigPara(x, y)
 #define USB_DRIVER_RA_HS_ConfigAddr(x)               USB_DRIVER_SYNERGYHS_ConfigAddr(x)
 #define USB_DRIVER_RX71M_HS_ConfigAddr(x)            USB_DRIVER_SYNERGYHS_ConfigAddr(x)
+#define USB_DRIVER_RA_FS_ConfigAddr(x)               USB_DRIVER_SYNERGYFS_ConfigAddr(x)
 
 /*********************************************************************
 *
@@ -1012,6 +999,8 @@ void USBD_DRIVER_ALIFE1_SetV2PHandler(USBD_V2P_FUNC * pfV2PHandler);
 #define USB_Driver_Infineon_XMC42xx        USB_Driver_Infineon_XMC45xx
 #define USB_Driver_ST_STM32U5xx_FS_DynMem  USB_Driver_ST_STM32U5xx_FS
 #define USB_Driver_ST_STM32WB55            USB_Driver_ST_STM32L4x2
+#define USB_Driver_Renesas_RA4M2           USB_Driver_Renesas_SynergyFS
+
 
 extern const USB_HW_DRIVER USB_Driver_AlifSemi_E1;
 extern const USB_HW_DRIVER USB_Driver_Ambiq_Apollo4;
@@ -1119,7 +1108,7 @@ extern const USB_HW_DRIVER USB_Driver_Xilinx_Ultrascale0_R5;
 extern const USB_HW_DRIVER USB_Driver_Xilinx_Ultrascale1_R5;
 
 #if defined(__cplusplus)
-}              /* Make sure we have C-declarations in C++ programs */
+  }              /* Make sure we have C-declarations in C++ programs */
 #endif
 
 #endif

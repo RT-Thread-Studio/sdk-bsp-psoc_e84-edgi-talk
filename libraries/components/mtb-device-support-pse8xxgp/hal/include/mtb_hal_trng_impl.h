@@ -31,13 +31,13 @@
 #include "mtb_hal_trng.h"
 
 #if defined(CY_IP_MXCRYPTO)
-    #include "mtb_hal_trng_mxcrypto.h"
+#include "mtb_hal_trng_mxcrypto.h"
 #elif defined(CY_IP_M0S8CRYPTO) || defined(CY_IP_M0S8CRYPTOLITE)
-    #include "mtb_hal_trng_m0s8crypto.h"
+#include "mtb_hal_trng_m0s8crypto.h"
 #elif defined(CY_IP_MXCRYPTOLITE)
-    #include "mtb_hal_trng_mxcryptolite.h"
+#include "mtb_hal_trng_mxcryptolite.h"
 #else
-    #error Unknown TRNG hardware
+#error Unknown TRNG hardware
 #endif
 
 #if defined(__cplusplus)
@@ -61,7 +61,7 @@ extern "C" {
  * @return the status of the HAL setup
  */
 __STATIC_INLINE cy_rslt_t mtb_hal_trng_setup(mtb_hal_trng_t* obj,
-        const mtb_hal_trng_configurator_t *config)
+                                             const mtb_hal_trng_configurator_t* config)
 {
     CY_UNUSED_PARAMETER(config);
     CY_ASSERT(NULL != obj);

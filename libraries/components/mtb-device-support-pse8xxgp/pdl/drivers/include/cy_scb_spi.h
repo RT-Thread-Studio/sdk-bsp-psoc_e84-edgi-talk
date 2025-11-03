@@ -193,7 +193,7 @@
 *   \ref Cy_SCB_SPI_IsBusBusy, \ref Cy_SCB_SPI_IsTxComplete,
 *   \ref Cy_SCB_SPI_GetNumInRxFifo and \ref Cy_SCB_SPI_GetNumInTxFifo.
 *
-* \snippet scb/spi_snippet/main.c SPI_TRANFER_DATA_LL
+* \snippet scb/spi_snippet/main.c SPI_TRANSFER_DATA_LL
 *
 ********************************************************************************
 * \subsection group_scb_spi_hl High-Level API
@@ -209,7 +209,7 @@
 * Alternatively, use \ref Cy_SCB_SPI_RegisterCallback to register a callback
 * function to be notified about \ref group_scb_spi_macros_callback_events.
 *
-* \snippet scb/spi_snippet/main.c SPI_TRANFER_DATA
+* \snippet scb/spi_snippet/main.c SPI_TRANSFER_DATA
 *
 ********************************************************************************
 * \section group_scb_spi_dma_trig DMA Trigger
@@ -271,12 +271,6 @@
 * Alternately, external pull-up or pull-down resistors can be connected
 * to the appropriate SPI lines to keep them inactive during Deep-Sleep or
 * Hibernate.
-*
-* \note
-* Only applicable for <b>rev-08 of the CY8CKIT-062-BLE</b>.
-* For proper operation, when the SPI slave is configured to be a wakeup
-* source from Deep Sleep mode, the \ref Cy_SCB_SPI_DeepSleepCallback must be
-* copied and modified. Refer to the function description to get the details.
 *
 * \defgroup group_scb_spi_macros Macros
 * \defgroup group_scb_spi_functions Functions
@@ -501,7 +495,7 @@ typedef struct cy_stc_scb_spi_config
     * de-assertion of the slave select line (only applicable for the master
     * mode)
     */
-    bool        enableTransferSeperation;
+    bool        enableTransferSeparation;
 
     /**
     * Sets active polarity of each SS line.
@@ -597,7 +591,7 @@ typedef struct cy_stc_scb_spi_config
     */
     uint32_t    masterSlaveIntEnableMask;
 
-} cy_stc_scb_spi_config_t;
+}cy_stc_scb_spi_config_t;
 
 /** SPI context structure.
 * All fields for the context structure are internal. Firmware never reads or
@@ -648,15 +642,15 @@ typedef struct cy_stc_scb_spi_context
 */
 cy_en_scb_spi_status_t Cy_SCB_SPI_Init(CySCB_Type *base, cy_stc_scb_spi_config_t const *config,
                                        cy_stc_scb_spi_context_t *context);
-void Cy_SCB_SPI_DeInit(CySCB_Type *base);
+void Cy_SCB_SPI_DeInit (CySCB_Type *base);
 __STATIC_INLINE void Cy_SCB_SPI_Enable(CySCB_Type *base);
 void Cy_SCB_SPI_Disable(CySCB_Type *base, cy_stc_scb_spi_context_t *context);
 
 __STATIC_INLINE void Cy_SCB_SPI_SetActiveSlaveSelect(CySCB_Type *base,
-        cy_en_scb_spi_slave_select_t slaveSelect);
+                                    cy_en_scb_spi_slave_select_t slaveSelect);
 __STATIC_INLINE void Cy_SCB_SPI_SetActiveSlaveSelectPolarity(CySCB_Type *base,
-        cy_en_scb_spi_slave_select_t slaveSelect,
-        cy_en_scb_spi_polarity_t polarity);
+                                    cy_en_scb_spi_slave_select_t slaveSelect,
+                                    cy_en_scb_spi_polarity_t polarity);
 
 __STATIC_INLINE bool Cy_SCB_SPI_IsBusBusy(CySCB_Type const *base);
 /** \} group_scb_spi_general_functions */
@@ -666,37 +660,37 @@ __STATIC_INLINE bool Cy_SCB_SPI_IsBusBusy(CySCB_Type const *base);
 * \{
 */
 cy_en_scb_spi_status_t Cy_SCB_SPI_Transfer(CySCB_Type *base, void *txBuffer, void *rxBuffer, uint32_t size,
-        cy_stc_scb_spi_context_t *context);
+                                           cy_stc_scb_spi_context_t *context);
 cy_en_scb_spi_status_t Cy_SCB_SPI_Transfer_Buffer(CySCB_Type *base, void *txBuffer, void *rxBuffer,
-        uint32_t txSize, uint32_t rxSize, uint32_t writeFill,
-        cy_stc_scb_spi_context_t *context);
-void     Cy_SCB_SPI_AbortTransfer(CySCB_Type *base, cy_stc_scb_spi_context_t *context);
+                                                               uint32_t txSize, uint32_t rxSize, uint32_t writeFill,
+                                                               cy_stc_scb_spi_context_t *context);
+void     Cy_SCB_SPI_AbortTransfer    (CySCB_Type *base, cy_stc_scb_spi_context_t *context);
 uint32_t Cy_SCB_SPI_GetTransferStatus(CySCB_Type const *base, cy_stc_scb_spi_context_t const *context);
-uint32_t Cy_SCB_SPI_GetNumTransfered(CySCB_Type const *base, cy_stc_scb_spi_context_t const *context);
+uint32_t Cy_SCB_SPI_GetNumTransferred (CySCB_Type const *base, cy_stc_scb_spi_context_t const *context);
 /** \} group_scb_spi_high_level_functions */
 
 /**
 * \addtogroup group_scb_spi_low_level_functions
 * \{
 */
-__STATIC_INLINE uint32_t Cy_SCB_SPI_Read(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_SPI_Read     (CySCB_Type const *base);
 __STATIC_INLINE uint32_t Cy_SCB_SPI_ReadArray(CySCB_Type const *base, void *buffer, uint32_t size);
 
-__STATIC_INLINE uint32_t Cy_SCB_SPI_Write(CySCB_Type *base, uint32_t data);
+__STATIC_INLINE uint32_t Cy_SCB_SPI_Write     (CySCB_Type *base, uint32_t data);
 __STATIC_INLINE uint32_t Cy_SCB_SPI_WriteArray(CySCB_Type *base, void *buffer, uint32_t size);
 __STATIC_INLINE void     Cy_SCB_SPI_WriteArrayBlocking(CySCB_Type *base, void *buffer, uint32_t size);
 
-__STATIC_INLINE uint32_t Cy_SCB_SPI_GetTxFifoStatus(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_SPI_GetTxFifoStatus  (CySCB_Type const *base);
 __STATIC_INLINE void     Cy_SCB_SPI_ClearTxFifoStatus(CySCB_Type *base, uint32_t clearMask);
 
-__STATIC_INLINE uint32_t Cy_SCB_SPI_GetRxFifoStatus(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_SPI_GetRxFifoStatus  (CySCB_Type const *base);
 __STATIC_INLINE void     Cy_SCB_SPI_ClearRxFifoStatus(CySCB_Type *base, uint32_t clearMask);
 
-__STATIC_INLINE uint32_t Cy_SCB_SPI_GetSlaveMasterStatus(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_SPI_GetSlaveMasterStatus  (CySCB_Type const *base);
 __STATIC_INLINE void     Cy_SCB_SPI_ClearSlaveMasterStatus(CySCB_Type *base, uint32_t clearMask);
 
 __STATIC_INLINE uint32_t Cy_SCB_SPI_GetNumInTxFifo(CySCB_Type const *base);
-__STATIC_INLINE bool     Cy_SCB_SPI_IsTxComplete(CySCB_Type const *base);
+__STATIC_INLINE bool     Cy_SCB_SPI_IsTxComplete  (CySCB_Type const *base);
 
 __STATIC_INLINE uint32_t Cy_SCB_SPI_GetNumInRxFifo(CySCB_Type const *base);
 
@@ -711,7 +705,7 @@ __STATIC_INLINE void Cy_SCB_SPI_ClearTxFifo(CySCB_Type *base);
 void Cy_SCB_SPI_Interrupt(CySCB_Type *base, cy_stc_scb_spi_context_t *context);
 
 __STATIC_INLINE void Cy_SCB_SPI_RegisterCallback(CySCB_Type const *base, cy_cb_scb_spi_handle_events_t callback,
-        cy_stc_scb_spi_context_t *context);
+                                                 cy_stc_scb_spi_context_t *context);
 /** \} group_scb_spi_interrupt_functions */
 
 /**
@@ -1036,13 +1030,13 @@ __STATIC_INLINE void Cy_SCB_SPI_SetActiveSlaveSelect(CySCB_Type *base, cy_en_scb
 *
 *******************************************************************************/
 __STATIC_INLINE void Cy_SCB_SPI_SetActiveSlaveSelectPolarity(CySCB_Type *base,
-        cy_en_scb_spi_slave_select_t slaveSelect,
-        cy_en_scb_spi_polarity_t polarity)
+                                cy_en_scb_spi_slave_select_t slaveSelect,
+                                cy_en_scb_spi_polarity_t polarity)
 {
     uint32_t mask = _VAL2FLD(CY_SCB_SPI_CTRL_SSEL_POLARITY, (0x01UL << ((uint32_t)slaveSelect)));
 
     CY_ASSERT_L3(CY_SCB_SPI_IS_SLAVE_SEL_VALID(slaveSelect));
-    CY_ASSERT_L3(CY_SCB_SPI_IS_POLARITY_VALID(polarity));
+    CY_ASSERT_L3(CY_SCB_SPI_IS_POLARITY_VALID (polarity));
 
     if (CY_SCB_SPI_ACTIVE_HIGH == polarity)
     {
@@ -1533,7 +1527,7 @@ __STATIC_INLINE void Cy_SCB_SPI_WriteArrayBlocking(CySCB_Type *base, void *buffe
 *
 *******************************************************************************/
 __STATIC_INLINE void Cy_SCB_SPI_RegisterCallback(CySCB_Type const *base,
-        cy_cb_scb_spi_handle_events_t callback, cy_stc_scb_spi_context_t *context)
+            cy_cb_scb_spi_handle_events_t callback, cy_stc_scb_spi_context_t *context)
 {
     /* Suppress a compiler warning about unused variables */
     (void) base;
@@ -1558,24 +1552,24 @@ __STATIC_INLINE void Cy_SCB_SPI_RegisterCallback(CySCB_Type const *base,
 * \ref cy_en_scb_spi_sclk_mode_t
 *
 *******************************************************************************/
-__STATIC_INLINE uint32_t CY_SCB_SPI_GetSclkMode(cy_en_scb_spi_sub_mode_t subMode, cy_en_scb_spi_sclk_mode_t sclkMode)
+__STATIC_INLINE uint32_t CY_SCB_SPI_GetSclkMode(cy_en_scb_spi_sub_mode_t subMode , cy_en_scb_spi_sclk_mode_t sclkMode)
 {
     uint32_t retVal;
     switch (subMode)
     {
-    case CY_SCB_SPI_TI_PRECEDES:
-    case CY_SCB_SPI_TI_COINCIDES:
-        retVal = (uint32_t) CY_SCB_SPI_CPHA1_CPOL0;
-        break;
-    case CY_SCB_SPI_NATIONAL:
-        retVal = (uint32_t) CY_SCB_SPI_CPHA0_CPOL0;
-        break;
-    case CY_SCB_SPI_MOTOROLA:
-        retVal = (uint32_t) sclkMode;
-        break;
-    default:
-        retVal = (uint32_t) sclkMode;
-        break;
+        case CY_SCB_SPI_TI_PRECEDES:
+        case CY_SCB_SPI_TI_COINCIDES:
+            retVal = (uint32_t) CY_SCB_SPI_CPHA1_CPOL0;
+            break;
+        case CY_SCB_SPI_NATIONAL:
+            retVal = (uint32_t) CY_SCB_SPI_CPHA0_CPOL0;
+            break;
+        case CY_SCB_SPI_MOTOROLA:
+            retVal = (uint32_t) sclkMode;
+            break;
+        default:
+            retVal = (uint32_t) sclkMode;
+            break;
     }
     return retVal;
 }

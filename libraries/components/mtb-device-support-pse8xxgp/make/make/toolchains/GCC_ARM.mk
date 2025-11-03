@@ -49,11 +49,11 @@ ifneq ($(_MTB_TOOLCHAIN_GCC_ARM__USER_2_DIR),)
 MTB_TOOLCHAIN_GCC_ARM__BASE_DIR:=$(call mtb_core__escaped_path,$(CY_COMPILER_GCC_ARM_DIR))
 endif
 
+check_toolchain_install:
 ifeq ($(MTB_TOOLCHAIN_GCC_ARM__BASE_DIR),)
-$(info CY_TOOL_gcc_BASE_ABS=$(CY_TOOL_gcc_BASE_ABS) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_TOOL_gcc_BASE_ABS))),exists,absent)])
-$(info CY_COMPILER_PATH=$(CY_COMPILER_PATH) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_COMPILER_PATH))),exists,absent)])
-$(info CY_COMPILER_GCC_ARM_DIR=$(CY_COMPILER_GCC_ARM_DIR) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_COMPILER_GCC_ARM_DIR))),exists,absent)])
-#$(error Unable to find GCC_ARM base directory.)
+	$(info CY_TOOL_gcc_BASE_ABS=$(CY_TOOL_gcc_BASE_ABS) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_TOOL_gcc_BASE_ABS))),exists,absent)])
+	$(info CY_COMPILER_PATH=$(CY_COMPILER_PATH) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_COMPILER_PATH))),exists,absent)])
+	$(info CY_COMPILER_GCC_ARM_DIR=$(CY_COMPILER_GCC_ARM_DIR) [$(if $(wildcard $(call mtb_core__escaped_path,$(CY_COMPILER_GCC_ARM_DIR))),exists,absent)])
 endif
 
 # Elf to bin conversion tool
@@ -219,7 +219,7 @@ else
 _MTB_TOOLCHAIN_GCC_ARM__MVE_FLAGS=+nomve.fp
 endif
 endif
-else 
+else
 ifeq ($(filter $(MTB_RECIPE__CORE_NAME)_FPU_PRESENT,$(DEVICE_$(DEVICE)_FEATURES)),)
 $(info INFO: MVE_SELECT=MVE-F is set but FPU is not available on $(MTB_RECIPE__CORE) core. Valid options for $(MTB_RECIPE__CORE) core are MVE_SELECT=MVE-I or MVE_SELECT=NO_MVE.)
 else ifeq ($(VFP_SELECT),softfloat)

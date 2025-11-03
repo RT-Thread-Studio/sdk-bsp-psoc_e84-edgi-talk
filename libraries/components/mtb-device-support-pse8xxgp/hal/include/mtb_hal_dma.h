@@ -158,12 +158,12 @@ typedef enum
     MTB_HAL_DMA_DST_BUS_ERROR       = 1 << 3, //!< Indicates that there is a destination bus error
     MTB_HAL_DMA_SRC_MISAL           = 1 << 4, //!< Indicates that the source address is not aligned
     MTB_HAL_DMA_DST_MISAL           = 1 << 5, //!< Indicates that the destination address is not
-    //!< aligned
+                                              //!< aligned
     MTB_HAL_DMA_CURR_PTR_NULL       = 1 << 6, //!< Indicates that the current descriptor pointer is
-    //!< null
+                                              //!< null
     MTB_HAL_DMA_ACTIVE_CH_DISABLED  = 1 << 7, //!< Indicates that the active channel is disabled
     MTB_HAL_DMA_DESCR_BUS_ERROR     = 1 << 8, //!< Indicates that there has been a descriptor bus
-    //!< error
+                                              //!< error
     MTB_HAL_DMA_GENERIC_ERROR       = 1 << 9  /**< Indicates that there has been a generic error
                                                  during
                                                  the DMA transfer */
@@ -273,7 +273,7 @@ cy_rslt_t mtb_hal_dma_process_interrupt(mtb_hal_dma_t* obj);
  * @param[in] callback_arg Generic argument that will be provided to the callback when called
  */
 void mtb_hal_dma_register_callback(mtb_hal_dma_t* obj, mtb_hal_dma_event_callback_t callback,
-                                   void *callback_arg);
+                                   void* callback_arg);
 
 /** Configure DMA event enablement.
  *
@@ -299,7 +299,7 @@ uint32_t mtb_hal_dma_get_max_elements_per_burst(mtb_hal_dma_t* obj);
 #endif
 
 #ifdef MTB_HAL_DMA_IMPL_HEADER
-    #include MTB_HAL_DMA_IMPL_HEADER
+#include MTB_HAL_DMA_IMPL_HEADER
 #endif /* MTB_HAL_DMA_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_DMA)

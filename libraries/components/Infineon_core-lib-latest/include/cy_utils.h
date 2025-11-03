@@ -77,26 +77,26 @@ void CY_ASSERT_HANDLER(void);
    false, trigger a breakpoint */
 #if defined(NDEBUG) || defined(CY_NO_ASSERT)
 /** Assert an argument is true, else call assert handler */
-#define CY_ASSERT(x)    do {                        \
+    #define CY_ASSERT(x)    do {                        \
                             } while(false)
 /** Assert an argument is true, else call assert handler and return a value */
-#define CY_ASSERT_AND_RETURN(condition, value)      \
+    #define CY_ASSERT_AND_RETURN(condition, value)      \
                             do {                        \
                             } while(false)
 /** Assert an argument is true, else call assert handler and return */
-#define CY_ASSERT_AND_RETURN_VOID(condition)        \
+    #define CY_ASSERT_AND_RETURN_VOID(condition)        \
                             do {                        \
                             } while(false)
 #else // if defined(NDEBUG) || defined(CY_NO_ASSERT)
 /** Assert an argument is true, else call assert handler */
-#define CY_ASSERT(x)    do {                        \
+    #define CY_ASSERT(x)    do {                        \
                                 if(!(x))                \
                                 {                       \
                                     CY_ASSERT_HANDLER();\
                                 }                       \
                             } while (false)
 /** Assert an argument is true, else call assert handler and return a value */
-#define CY_ASSERT_AND_RETURN(condition, value)      \
+    #define CY_ASSERT_AND_RETURN(condition, value)      \
                             do {                        \
                                 if(!(condition))        \
                                 {                       \
@@ -105,7 +105,7 @@ void CY_ASSERT_HANDLER(void);
                                 }                       \
                             } while (false)
 /** Assert an argument is true, else call assert handler and return */
-#define CY_ASSERT_AND_RETURN_VOID(condition)        \
+    #define CY_ASSERT_AND_RETURN_VOID(condition)        \
                             do {                        \
                                 if(!(condition))        \
                                 {                       \
@@ -153,60 +153,60 @@ void CY_ASSERT_HANDLER(void);
  * attributes at the first place of declaration/definition.
  * For example: CY_NOINIT uint32_t noinitVar;
  */
-#if (__ARMCC_VERSION >= 6160001)
-#define CY_NOINIT           __attribute__ ((section(".bss.noinit")))
-#elif (__ARMCC_VERSION >= 6010050)
-#define CY_NOINIT           __attribute__ ((section(".noinit")))
-#else
-#define CY_NOINIT           __attribute__ ((section(".noinit"), zero_init))
-#endif // (__ARMCC_VERSION >= 6010050)
-#define CY_SECTION(name)    __attribute__ ((section(name)))
-#define CY_UNUSED           __attribute__ ((unused))
-#define CY_NOINLINE         __attribute__ ((noinline))
+    #if (__ARMCC_VERSION >= 6160001)
+        #define CY_NOINIT           __attribute__ ((section(".bss.noinit")))
+    #elif (__ARMCC_VERSION >= 6010050)
+        #define CY_NOINIT           __attribute__ ((section(".noinit")))
+    #else
+        #define CY_NOINIT           __attribute__ ((section(".noinit"), zero_init))
+    #endif // (__ARMCC_VERSION >= 6010050)
+    #define CY_SECTION(name)    __attribute__ ((section(name)))
+    #define CY_UNUSED           __attribute__ ((unused))
+    #define CY_NOINLINE         __attribute__ ((noinline))
 // Specifies the minimum alignment (in bytes) for variables of the specified type.
-#define CY_ALIGN(align)     __ALIGNED(align)
-#define CY_RAMFUNC_BEGIN    __attribute__ ((section(".cy_ramfunc")))
-#define CY_RAMFUNC_END
+    #define CY_ALIGN(align)     __ALIGNED(align)
+    #define CY_RAMFUNC_BEGIN    __attribute__ ((section(".cy_ramfunc")))
+    #define CY_RAMFUNC_END
 #elif defined (__GNUC__)
-#if defined (__clang__)
-#if defined(__llvm__)
+    #if defined (__clang__)
+        #if defined(__llvm__)
 /* LLVM Embedded for ARM */
-#define CY_NOINIT           __attribute__ ((section(".noinit")))
-#define CY_SECTION(name)    __attribute__ ((section(name)))
-#define CY_RAMFUNC_BEGIN    __attribute__ ((section(".cy_ramfunc")))
-#define CY_RAMFUNC_END
-#else // if defined(__llvm__)
+            #define CY_NOINIT           __attribute__ ((section(".noinit")))
+            #define CY_SECTION(name)    __attribute__ ((section(name)))
+            #define CY_RAMFUNC_BEGIN    __attribute__ ((section(".cy_ramfunc")))
+            #define CY_RAMFUNC_END
+        #else // if defined(__llvm__)
 /* A_Clang */
-#define CY_NOINIT           __attribute__ ((section("__DATA, __noinit")))
-#define CY_SECTION(name)    __attribute__ ((section("__DATA, "name)))
-#define CY_RAMFUNC_BEGIN    __attribute__ ((section("__DATA, .cy_ramfunc")))
-#define CY_RAMFUNC_END
-#endif // if defined(__llvm__)
-#else // if defined (__clang__)
-#define CY_NOINIT           __attribute__ ((section(".noinit")))
-#define CY_SECTION(name)    __attribute__ ((section(name)))
-#define CY_RAMFUNC_BEGIN    __attribute__ ((section(".cy_ramfunc")))
-#define CY_RAMFUNC_END
-#endif // if defined (__clang__)
+            #define CY_NOINIT           __attribute__ ((section("__DATA, __noinit")))
+            #define CY_SECTION(name)    __attribute__ ((section("__DATA, "name)))
+            #define CY_RAMFUNC_BEGIN    __attribute__ ((section("__DATA, .cy_ramfunc")))
+            #define CY_RAMFUNC_END
+        #endif // if defined(__llvm__)
+    #else // if defined (__clang__)
+        #define CY_NOINIT           __attribute__ ((section(".noinit")))
+        #define CY_SECTION(name)    __attribute__ ((section(name)))
+        #define CY_RAMFUNC_BEGIN    __attribute__ ((section(".cy_ramfunc")))
+        #define CY_RAMFUNC_END
+    #endif // if defined (__clang__)
 
-#define CY_UNUSED           __attribute__ ((unused))
-#define CY_NOINLINE         __attribute__ ((noinline))
-#define CY_ALIGN(align)     __ALIGNED(align)
+    #define CY_UNUSED           __attribute__ ((unused))
+    #define CY_NOINLINE         __attribute__ ((noinline))
+    #define CY_ALIGN(align)     __ALIGNED(align)
 #elif defined (__ICCARM__)
-#define CY_PRAGMA(x)        _Pragma(#x)
-#define CY_NOINIT           __no_init
-#define CY_SECTION(name)    CY_PRAGMA(location = name)
-#define CY_UNUSED
-#define CY_NOINLINE         CY_PRAGMA(optimize = no_inline)
-#define CY_RAMFUNC_BEGIN    CY_PRAGMA(diag_suppress = Ta023) __ramfunc
-#define CY_RAMFUNC_END      CY_PRAGMA(diag_default = Ta023)
-#if (__VER__ < 8010001)
-#define CY_ALIGN(align) CY_PRAGMA(data_alignment = align)
-#else
-#define CY_ALIGN(align) __ALIGNED(align)
-#endif // (__VER__ < 8010001)
+    #define CY_PRAGMA(x)        _Pragma(#x)
+    #define CY_NOINIT           __no_init
+    #define CY_SECTION(name)    CY_PRAGMA(location = name)
+    #define CY_UNUSED
+    #define CY_NOINLINE         CY_PRAGMA(optimize = no_inline)
+    #define CY_RAMFUNC_BEGIN    CY_PRAGMA(diag_suppress = Ta023) __ramfunc
+    #define CY_RAMFUNC_END      CY_PRAGMA(diag_default = Ta023)
+    #if (__VER__ < 8010001)
+        #define CY_ALIGN(align) CY_PRAGMA(data_alignment = align)
+    #else
+        #define CY_ALIGN(align) __ALIGNED(align)
+    #endif // (__VER__ < 8010001)
 #else // if defined(__ARMCC_VERSION)
-#error "An unsupported toolchain"
+    #error "An unsupported toolchain"
 #endif // (__ARMCC_VERSION)
 
 

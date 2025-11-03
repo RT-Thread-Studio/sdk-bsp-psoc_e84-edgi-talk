@@ -56,7 +56,7 @@ $ edgeprotecttools set-ocd --name openocd --path /Users/username/tools/openocd
 ```
 
 ## 2. Define a target
-There are two parts in this family, the EPC 2 and the EPC 4. Use pse8xs2 for the EPC 2 device and pse8xs4 for the EPC 4 device.
+There are two parts in this family, the EPC2 and the EPC4. Use pse8xs2 for the EPC2 device and pse8xs4 for the EPC4 device.
 
 Run the following command and find the name of your target in the list of supported targets.
 ```bash
@@ -87,12 +87,12 @@ Create CSR with public keys and provide it to [Infineon Edge Protect Signing Ser
 ```bash
 $ edgeprotecttools -t pse8xs2 oem-csr --public-key-0 keys/public0.pem --public-key-1 keys/public1.pem --sign-key-0 keys/private0.pem --sign-key-1 keys/private1.pem --oem "Company Name" --project "Project Name" --project-number 12345678 --cert-type development --output oem_csr.bin
 ```
-In the `ifx_oem_cert` property of the _policy/policy_oem_provisioning.json_ specify the path to the development certificate received from Infineon.
-
 
 ## 7. Provision the device
+In the `--ifx-oem-cert` CLI argument specify the path to the development certificate received from Infineon.
+
 ```bash
-$ edgeprotecttools -t pse8xs2 provision-device -p policy/policy_oem_provisioning.json --key keys/private0.pem
+$ edgeprotecttools -t pse8xs2 provision-device -p policy/policy_oem_provisioning.json --key keys/private0.pem --ifx-oem-cert oem_cert.bin 
 ```
 
 ## 8. Sign the image
@@ -117,13 +117,13 @@ $ edgeprotecttools -t pse8xs2 <COMMAND> --help
 ## Common options
 The interface provides common options. These options are common for all commands and must precede them:
 
-| Name           | Description                 |
-| -------------- | --------------------------- |
-| -t, --target   | Device name or family       |
-| -v, --verbose  | Provides debug-level log    |
-| -q, --quiet    | Quiet display option        |
-| --logfile-off  | Disabling logging to a file |
-| --timestamps   | Enable displaying timestamps in log messages |
+| Name          | Description                                  |
+|---------------|----------------------------------------------|
+| -t, --target  | Device name or family                        |
+| -v, --verbose | Provides debug-level log                     |
+| -q, --quiet   | Quiet display option                         |
+| --logfile-off | Disabling logging to a file                  |
+| --timestamps  | Enable displaying timestamps in log messages |
 
 
 ## Create project
@@ -205,42 +205,20 @@ $ edgeprotecttools -t pse8xs2 create-cert --template packets/template_oem_cert.j
 ```
 
 
-## Create CSR or Certificate from template
-Creates a CSR or certificate from a template. The template is a JSON file that contains the data required to create a CSR or certificate.
-### Command: `create-cert`
-### Parameters
-| Name              | Optional/Required | Description                                          |
-|-------------------|:-----------------:|------------------------------------------------------|
-| --template        |     required      | The CSR or Certificate template path.                |
-| --output          |     required      | The path where to save the CSR or Certificate.       |
-| --json-cert       |     optional      | The path where to save CSR or certificate JSON data. |
-| --csr             |     optional      | The CSR path.                                        |
-| --key, --key-path |     optional      | The key to sign the certificate.                     |
-| --sign-key-0      |     optional      | The primary key used to sign the CSR.                |
-| --sign-key-1      |     optional      | The secondary key used to sign the CSR.              |
-### Usage example
-```bash
-# Create a CSR
-$ edgeprotecttools -t pse8xs2 create-cert --template packets/template_oem_csr.json --output oem_csr.bin --sign-key-0 keys/oem_private_key_0.pem --sign-key-1 keys/oem_private_key_1.pem
-# Create a certificate
-$ edgeprotecttools -t pse8xs2 create-cert --template packets/template_oem_cert.json --output oem_cert.bin --csr oem_csr.bin --key keys/ifx_private_key_0.pem 
-```
-
-
 ## Device Integrity Exam
 The device integrity exam ensures that this is a genuine Infineon device and it is in a known state.
 The integrity exam is implemented as a combination of a RAM application collecting device measurements and a host component validating device measurements.
 The tool gets the RAM application output and compares it with the device integrity certificate data. This acceptance test is recommended before the device OEM provisioning and determines that there are no modifications of fuses or flash bits.
 ### Command: `integrity-exam`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| --custom-regions  | optional           | The path to OEM custom regions template. The custom regions used to provide OEM alternative asset hashes. |
-| --alias-cert      | optional           | The path where to save the alias certificate. |
-| --device-cert     | optional           | The path where to save the device certificate. |
-| --chain-of-trust  | optional           | The path where to save the IFX chain of trust. |
-| --key, --key-path | optional           | The key to sign DLM. |
-| --probe-id        | optional           | Probe serial number. |
+| Name              | Optional/Required | Description                                                                                               |
+|-------------------|:-----------------:|-----------------------------------------------------------------------------------------------------------|
+| --custom-regions  |     optional      | The path to OEM custom regions template. The custom regions used to provide OEM alternative asset hashes. |
+| --alias-cert      |     optional      | The path where to save the alias certificate.                                                             |
+| --device-cert     |     optional      | The path where to save the device certificate.                                                            |
+| --chain-of-trust  |     optional      | The path where to save the IFX chain of trust.                                                            |
+| --key, --key-path |     optional      | The key to sign DLM.                                                                                      |
+| --probe-id        |     optional      | Probe serial number.                                                                                      |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 integrity-exam --custom-regions packets/integrity_exam_custom_regions.json --alias-cert alias_cert.cbor --device-cert device_cert.cbor --chain-of-trust chain_of_trust_cert.cbor --key keys/oem_rot_private_key_0.pem --display-ifx --display-oem --probe-id 061003B803260400
@@ -266,15 +244,15 @@ $ edgeprotecttools -t pse8xs2 integrity-exam-hashes --cert integrity_exam_custom
 Configuring a device with a set of keys and policies.
 ### Command: `provision-device`
 ### Parameters
-| Name              | Optional/Required | Description                                                                                                                                                                                    |
-|-------------------|:-----------------:|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -p, --policy      |     required      | The path to the provisioning policy. |
-| --key, --key-path |     optional      | Path to the private key used to sign provisioning packet(s).
-| --kid             |     optional      | Key ID.                                                                                                                                                                                        |
-| --probe-id        |     optional      | Probe serial number.                                                                                                                                                                           |
-| --existing-packet |     optional      | Skip provisioning packet creation and use the existing packet. This may be useful when a packet with a RAM application package already exists and the tool does not have to generate it again. |
-| --ifx-oem-cert    |     optional      | The path to OEM certificate.                                                                                                                                                                   |
-| --revoke              |     optional      | The path to key revocation token. Depending on the configuration of the token template, the token allows to revoke the following active keys: IFX_ROT_KEY, IFX_RMA_MASTER_KEY, IFX_FW_INTEGRITY_KEY, IFX_FW_ENCRYPTION_KEY.|
+| Name              | Optional/Required | Description                                                                                                                                                                                                                 |
+|-------------------|:-----------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -p, --policy      |     required      | The path to the provisioning policy.                                                                                                                                                                                        |
+| --key, --key-path |     optional      | Path to the private key used to sign provisioning packet(s).                                                                                                                                                                |
+| --kid             |     optional      | Key ID.                                                                                                                                                                                                                     |
+| --probe-id        |     optional      | Probe serial number.                                                                                                                                                                                                        |
+| --existing-packet |     optional      | Skip provisioning packet creation and use the existing packet. This may be useful when a packet with a RAM application package already exists and the tool does not have to generate it again.                              |
+| --ifx-oem-cert    |     optional      | The path to OEM certificate.                                                                                                                                                                                                |
+| --revoke          |     optional      | The path to key revocation token. Depending on the configuration of the token template, the token allows to revoke the following active keys: IFX_ROT_KEY, IFX_RMA_MASTER_KEY, IFX_FW_INTEGRITY_KEY, IFX_FW_ENCRYPTION_KEY. |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 provision-device -p policy/policy_oem_provisioning.json --key private.key -–ifx-oem-cert keys/ifx_oem_cert.bin
@@ -285,14 +263,14 @@ $ edgeprotecttools -t pse8xs2 provision-device -p policy/policy_oem_provisioning
 Reconfiguring a device with the updated policies.
 ### Command: `reprovision-device`
 ### Parameters
-| Name              | Optional/Required | Description                                                                                                                                                                                    |
-|-------------------|:-----------------:|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -p, --policy      |     required      | The path to the reprovisioning policy. |
-| --key, --key-path |     optional      | Path to the private key used to sign provisioning packet(s).
-| --kid             |     optional      | Key ID.                                                                                                                                                                                        |
-| --revoke              |     optional      | The path to key revocation token. Depending on the configuration of the token template, the token allows to revoke the following active keys: IFX_ROT_KEY, IFX_RMA_MASTER_KEY, IFX_FW_INTEGRITY_KEY, IFX_FW_ENCRYPTION_KEY.|
-| --probe-id        |     optional      | Probe serial number.                                                                                                                                                                           |
-| --existing-packet |     optional      | Skip provisioning packet creation and use the existing packet. This may be useful when a packet with a RAM application package already exists and the tool does not have to generate it again. |
+| Name              | Optional/Required | Description                                                                                                                                                                                                                 |
+|-------------------|:-----------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -p, --policy      |     required      | The path to the reprovisioning policy.                                                                                                                                                                                      |
+| --key, --key-path |     optional      | Path to the private key used to sign provisioning packet(s).                                                                                                                                                                |                                                                                                                                                         
+| --kid             |     optional      | Key ID.                                                                                                                                                                                                                     |
+| --revoke          |     optional      | The path to key revocation token. Depending on the configuration of the token template, the token allows to revoke the following active keys: IFX_ROT_KEY, IFX_RMA_MASTER_KEY, IFX_FW_INTEGRITY_KEY, IFX_FW_ENCRYPTION_KEY. |
+| --probe-id        |     optional      | Probe serial number.                                                                                                                                                                                                        |
+| --existing-packet |     optional      | Skip provisioning packet creation and use the existing packet. This may be useful when a packet with a RAM application package already exists and the tool does not have to generate it again.                              |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 reprovision-device -p policy/policy_oem_provisioning.json --key private.key
@@ -303,15 +281,15 @@ $ edgeprotecttools -t pse8xs2 reprovision-device -p policy/policy_oem_provisioni
 Creates a provisioning/reprovisioning data packet without starting the device provisioning process.
 ### Command: `create-provisioning-packet`
 ### Parameters
-| Name                  | Optional/Required  | Description                                                                                                                                                                                                                     |
-|-----------------------|:------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -p, --policy          | required           | The path to the provisioning policy. |
-| -k, --key, --key-path | optional           | The path to the key used to sign the provisioning packet. If not specified, an unsigned packet will be created, containing only the data required for signing (the protected part).                                             |
-| --signature           | optional           | The path to the file containing the signature to add to the provisioning packet. Used to sign the reprovisioning packet with HSM ([Signing reprovisioning data packet with HSM](#signing-reprovisioning-data-packet-with-HSM)). |
-| --kid                 | optional           | The ID of the key used to verify the packet.                                                                                                                                                                                    |
-| -o, --output          | optional           | The path where to save the packet - applicable with the '--signature' option only.                                                                                                                                              |
-| --revoke              | optional           | The path to key revocation token. Depending on the configuration of the token template, the token allows to revoke the following active keys: IFX_ROT_KEY, IFX_RMA_MASTER_KEY, IFX_FW_INTEGRITY_KEY, IFX_FW_ENCRYPTION_KEY.|
-| --ifx-oem-cert        | optional           | The path to OEM certificate.                                                                                                                                                                                                    |
+| Name                  | Optional/Required | Description                                                                                                                                                                                                                 |
+|-----------------------|:-----------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -p, --policy          |     required      | The path to the provisioning policy.                                                                                                                                                                                        |
+| -k, --key, --key-path |     optional      | The path to the key used to sign the provisioning packet. If not specified, an unsigned packet will be created, containing only the data required for signing (the protected part).                                         |
+| --signature           |     optional      | The path to the file containing the signature to add to the provisioning packet. Used to sign the reprovisioning packet with HSM ([Signing provisioning packet with HSM](#signing-provisioning-packet-with-HSM)).           |
+| --kid                 |     optional      | The ID of the key used to verify the packet.                                                                                                                                                                                |
+| -o, --output          |     optional      | The path where to save the packet - applicable with the '--signature' option only.                                                                                                                                          |
+| --revoke              |     optional      | The path to key revocation token. Depending on the configuration of the token template, the token allows to revoke the following active keys: IFX_ROT_KEY, IFX_RMA_MASTER_KEY, IFX_FW_INTEGRITY_KEY, IFX_FW_ENCRYPTION_KEY. |
+| --ifx-oem-cert        |     optional      | The path to OEM certificate.                                                                                                                                                                                                |
 ### Usage example
 #### Signed
 ```bash
@@ -328,11 +306,11 @@ $ edgeprotecttools -t pse8xs2 create-provisioning-packet -p policy/policy_oem_pr
 Verifies the provisioning packet signature with a key.
 ### Command: `verify-packet`
 ### Parameters
-| Name              | Optional/Required  | Description  |
-| ----------------  |:------------------:| -------------|
-| --packet          | required           | Path to the packet. |
-| --key, --key-path | required           | Path to public key. |
-| --kid             | optional           | Key ID. |
+| Name              | Optional/Required | Description         |
+|-------------------|:-----------------:|---------------------|
+| --packet          |     required      | Path to the packet. |
+| --key, --key-path |     required      | Path to public key. |
+| --kid             |     optional      | Key ID.             |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 verify-packet --packet in_params.bin --key keys/public0.pem
@@ -343,12 +321,12 @@ $ edgeprotecttools -t pse8xs2 verify-packet --packet in_params.bin --key keys/pu
 Verifies an image with a key or IFX OEM certificate.
 ### Command: `verify-image`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| --image           | required           | The path to the image. |
-| --cert            | optional           | The path to the IFX OEM certificate. Can be used instead of a key. |
-| --key, --key-path | optional           | The path to the public key. |
-| --kid             | optional           | The key ID to select the key from the certificate (0 or 1).
+| Name               | Optional/Required  | Description                                                        |
+|--------------------|:------------------:|--------------------------------------------------------------------|
+| --image            |      required      | The path to the image.                                             |
+| --cert             |      optional      | The path to the IFX OEM certificate. Can be used instead of a key. |
+| --key, --key-path  |      optional      | The path to the public key.                                        |
+| --kid              |      optional      | The key ID to select the key from the certificate (0 or 1).        |
 ### Usage example
 ```bash
 # Using a key
@@ -361,15 +339,15 @@ $ edgeprotecttools -t pse8xs2 verify-image --image image.bin --cert ifx_oem_cert
 ## Create debug token
 The debug token is used to enable CM33 or the system access port when it is temporarily disabled. Note that the token cannot enable an access port that is permanently disabled by the access restrictions. Also, the debug token can be used to enable/disable invasive or non-invasive debugging for CM33-AP.
 
-The command creates a signed debug token binary based on the template. By default, the template is configured to be applicable for any die ID. See the [Read die id](#read-die-id) section to the find die ID of your device. See the [Get device info](#get-a-device-info) section to find the silicon ID, family ID, and revision ID needed to create a certificate.
+The command creates a signed debug token binary based on the template. By default, the template is configured to be applicable for any die ID. See the [Read die id](#read-die-id) section to the find die ID of your device. See the [Get device info](#get-device-info) section to find the silicon ID, family ID, and revision ID needed to create a certificate.
 ### Command: `debug-token`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| -t, --template    | optional           | The path to the token template. The template can be found in the _packets_ directory of the project (_debug_token.json_). |
-| --key, --key-path | optional           | The path to the private key to sign the token. If the token to be signed by HSM, do not specify the option. |
-| --signature       | optional           | The option for signing an existing certificate using an existing signature file. Used to add a signature generated by HSM. The format is `[token] [signature]`. |
-| -o, --output      | required           | The file where to save the debug token. |
+| Name               | Optional/Required  | Description                                                                                                                                                     |
+|--------------------|:------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -t, --template     |      optional      | The path to the token template. The template can be found in the _packets_ directory of the project (_debug_token.json_).                                       |
+| --key, --key-path  |      optional      | The path to the private key to sign the token. If the token to be signed by HSM, do not specify the option.                                                     |
+| --signature        |      optional      | The option for signing an existing certificate using an existing signature file. Used to add a signature generated by HSM. The format is `[token] [signature]`. |
+| -o, --output       |      required      | The file where to save the debug token.                                                                                                                         |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 debug-token --template packets/debug_token.json -o packets/debug_token.bin --key keys/private0.pem
@@ -380,10 +358,10 @@ $ edgeprotecttools -t pse8xs2 debug-token --template packets/debug_token.json -o
 Reads the die ID from a device.
 ### Command: `read-die-id`
 ### Parameters
-| Name           | Optional/Required  | Description   |
-| -------------- |:------------------:| ------------- |
-| -o, --out-file | optional           | The name of the file where to save the die ID. If not specified, the information will be displayed in the console. |
-| --probe-id     | optional           | Probe serial number. |
+| Name           | Optional/Required | Description                                                                                                        |
+|----------------|:-----------------:|--------------------------------------------------------------------------------------------------------------------|
+| -o, --out-file |     optional      | The name of the file where to save the die ID. If not specified, the information will be displayed in the console. |
+| --probe-id     |     optional      | Probe serial number.                                                                                               |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 read-die-id
@@ -394,9 +372,9 @@ $ edgeprotecttools -t pse8xs2 read-die-id
 Outputs version of ROM_BOOT, RRAM_SE_BOOT, BASE_SE_RT_SERVICES, SE_RT_SERVICES and CM33_L1_BOOT.
 ### Command: `version`
 ### Parameters
-| Name           | Optional/Required  | Description   |
-| -------------- |:------------------:| ------------- |
-| --probe-id     | optional           | Probe serial number. |
+| Name       | Optional/Required | Description          |
+|------------|:-----------------:|----------------------|
+| --probe-id |     optional      | Probe serial number. |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 -p version
@@ -407,10 +385,10 @@ $ edgeprotecttools -t pse8xs2 -p version
 Gets device information - silicon ID, silicon revision, and family ID.
 ### Command: `device-info`
 ### Parameters
-| Name           | Optional/Required  | Description   |
-| -------------- |:------------------:| ------------- |
-| --probe-id     | optional           | Probe serial number. |
-| --ap           | optional           | The access port used to read the data - "cm33" or "sysap". The default value is "sysap". |
+| Name       | Optional/Required | Description                                                                              |
+|------------|:-----------------:|------------------------------------------------------------------------------------------|
+| --probe-id |     optional      | Probe serial number.                                                                     |
+| --ap       |     optional      | The access port used to read the data - "cm33" or "sysap". The default value is "sysap". |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 device-info
@@ -421,13 +399,13 @@ $ edgeprotecttools -t pse8xs2 device-info
 Builds the RAM application and its input parameters into a single signed package.
 ### Command: `build-ramapp-package`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| -a, --app         | required           | The path to the RAM application binary. |
-| -o, --output      | required           | The path where to save the RAM application package. |
-| --inparams        | optional           | The path to the application input parameters. |
-| --key, --key-path | optional           | The path to the ECDSA private key used to sign the package. |
-| --hex-addr        | optional           | Adjusts the address in the hex output file. The default value is 0x34000000. |
+| Name              | Optional/Required | Description                                                                  |
+|-------------------|:-----------------:|------------------------------------------------------------------------------|
+| -a, --app         |     required      | The path to the RAM application binary.                                      |
+| -o, --output      |     required      | The path where to save the RAM application package.                          |
+| --inparams        |     optional      | The path to the application input parameters.                                |
+| --key, --key-path |     optional      | The path to the ECDSA private key used to sign the package.                  |
+| --hex-addr        |     optional      | Adjusts the address in the hex output file. The default value is 0x34000000. |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 build-ramapp-package --app packets/apps/prov_oem/cyapp_prov_oem_signed.bin --inparams packets/apps/prov_oem/in_params.bin --key keys/private0.pem --output packets/apps/prov_oem/cyapp_prov_oem_dlm.hex
@@ -438,15 +416,15 @@ $ edgeprotecttools -t pse8xs2 build-ramapp-package --app packets/apps/prov_oem/c
 Updates SE_RT_SERVICES using the provided update image
 ### Command: `se-rt-services-update`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| --image           | optional           | The path to se_rt_services image. |
-| --key             | optional           | The key to sign se_rt_services package.  |
-| --probe-id        | optional           | Probe serial number. |
-| --existing-packet | optional           | Skip provisioning packet creation and use existing. |
+| Name              | Optional/Required | Description                                         |
+|-------------------|:-----------------:|-----------------------------------------------------|
+| --image           |     optional      | The path to se_rt_services image.                   |
+| --key             |     optional      | The key to sign se_rt_services package.             |
+| --probe-id        |     optional      | Probe serial number.                                |
+| --existing-packet |     optional      | Skip provisioning packet creation and use existing. |
 ### Usage example
 ```bash
-$ edgeprotecttools -t pse8xs2 se-rt-services-update --image packets/apps/se_rt_services_update/se_rt_services_1.1.0.1594.cbor --key keys/oem_rot_private_key_0.pem --probe-id 061003B803260400
+$ edgeprotecttools -t pse8xs4 se-rt-services-update --image packets/apps/se_rt_services_update/se_rt_services_update-1.1.0.2735.img --key keys/oem_rot_private_key_0.pem --probe-id 061003B803260400
 ```
 
 
@@ -554,13 +532,13 @@ The token template is located in the _packets_ directory of the project. _rma_to
 The command creates "Transit to RMA" or "Open RMA" token binary based on a template. The "Transit to RMA" token is used to transit the device to the RMA LCS. The "Open RMA" is used to debug the device which is in the RMA LCS.
 ### Command: `rma-token`
 ### Parameters
-| Name              | Optional/Required  | Description   |
-| ----------------- |:------------------:| ------------- |
-| -t, --template    | optional           | The path to the token template. The template can be found in the _packets_ directory of the project (_rma_token.json_). |
-| --key, --key-path | optional           | The path to the private key used to sign the token. If the token has to be signed by HSM, do not specify the option. |
-| --signature       | optional           | The option for signing an existing certificate using an existing signature file. Used to add a signature generated by HSM. The format is `[token] [signature]`. |
-| -o, --output      | required           | The file where to save the debug token. |
-| --open-rma        | optional           | Indicates whether to create "Open RMA" token. If the flag is not specified the "Transit to RMA" will be generated.
+| Name               | Optional/Required | Description                                                                                                                                                     |
+|--------------------|:-----------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -t, --template     |     optional      | The path to the token template. The template can be found in the _packets_ directory of the project (_rma_token.json_).                                         |
+| --key, --key-path  |     optional      | The path to the private key used to sign the token. If the token has to be signed by HSM, do not specify the option.                                            |
+| --signature        |     optional      | The option for signing an existing certificate using an existing signature file. Used to add a signature generated by HSM. The format is `[token] [signature]`. |
+| -o, --output       |     required      | The file where to save the debug token.                                                                                                                         |
+| --open-rma         |     optional      | Indicates whether to create "Open RMA" token. If the flag is not specified the "Transit to RMA" will be generated.                                              |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 rma-token --template packets/rma_token.json -o packets/rma_token.bin --key keys/private0.pem
@@ -569,10 +547,10 @@ $ edgeprotecttools -t pse8xs2 rma-token --template packets/rma_token.json -o pac
 The command advances the device lifecycle stage to RMA. The certificate must be signed with the OEM key.
 ### Command: `transit-to-rma`
 ### Parameters
-| Name          | Optional/Required  | Description   |
-| ------------- |:------------------:| ------------- |
-| --probe-id    | optional           | Probe serial number. |
-| --token       | optional           | Path to the "Transit to RMA" token. |
+| Name       | Optional/Required | Description                         |
+|------------|:-----------------:|-------------------------------------|
+| --probe-id |     optional      | Probe serial number.                |
+| --token    |     optional      | Path to the "Transit to RMA" token. |
 ### Usage example
 ```bash
 $ edgeprotecttools -t pse8xs2 transit-to-rma --token packets/rma_token.bin

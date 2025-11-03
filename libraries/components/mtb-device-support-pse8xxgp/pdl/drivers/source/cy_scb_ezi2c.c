@@ -37,13 +37,13 @@ extern "C" {
 *        Function Prototypes
 ***************************************/
 
-static void HandleErrors(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
-static void HandleAddress(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
-static void UpdateRxFifoLevel(CySCB_Type *base, uint32_t bufSize);
-static void HandleDataReceive(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
+static void HandleErrors      (CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
+static void HandleAddress     (CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
+static void UpdateRxFifoLevel (CySCB_Type *base, uint32_t bufSize);
+static void HandleDataReceive (CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
 static void HandleDataTransmit(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
-static void HandleStop(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
-static void UpdateAddressMask(CySCB_Type *base, cy_stc_scb_ezi2c_context_t const *context);
+static void HandleStop        (CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context);
+static void UpdateAddressMask (CySCB_Type *base, cy_stc_scb_ezi2c_context_t const *context);
 
 
 /*******************************************************************************
@@ -72,7 +72,7 @@ static void UpdateAddressMask(CySCB_Type *base, cy_stc_scb_ezi2c_context_t const
 *
 *******************************************************************************/
 cy_en_scb_ezi2c_status_t Cy_SCB_EZI2C_Init(CySCB_Type *base, cy_stc_scb_ezi2c_config_t const *config,
-        cy_stc_scb_ezi2c_context_t *context)
+                                           cy_stc_scb_ezi2c_context_t *context)
 {
     /* Input parameters verification */
     if ((NULL == base) || (NULL == config) || (NULL == context))
@@ -83,12 +83,12 @@ cy_en_scb_ezi2c_status_t Cy_SCB_EZI2C_Init(CySCB_Type *base, cy_stc_scb_ezi2c_co
     CY_ASSERT_L2(CY_SCB_IS_I2C_ADDR_VALID(config->slaveAddress1));
     CY_ASSERT_L2(CY_SCB_IS_I2C_ADDR_VALID(config->slaveAddress2));
     CY_ASSERT_L2(config->slaveAddress1 != config->slaveAddress2);
-    CY_ASSERT_L3(CY_SCB_EZI2C_IS_NUM_OF_ADDR_VALID(config->numberOfAddresses));
+    CY_ASSERT_L3(CY_SCB_EZI2C_IS_NUM_OF_ADDR_VALID  (config->numberOfAddresses));
     CY_ASSERT_L3(CY_SCB_EZI2C_IS_SUB_ADDR_SIZE_VALID(config->subAddressSize));
 
     /* Configure the EZI2C interface */
     SCB_CTRL(base) = _BOOL2FLD(SCB_CTRL_ADDR_ACCEPT, (config->numberOfAddresses == CY_SCB_EZI2C_TWO_ADDRESSES)) |
-                     _BOOL2FLD(SCB_CTRL_EC_AM_MODE, config->enableWakeFromSleep);
+                 _BOOL2FLD(SCB_CTRL_EC_AM_MODE, config->enableWakeFromSleep);
 #if ((defined (CY_IP_MXSCB_VERSION) && CY_IP_MXSCB_VERSION==1))
     SCB_CTRL(base) |= SCB_CTRL_BYTE_MODE_Msk;
 #endif /* CY_IP_MXSCB_VERSION */
@@ -129,11 +129,11 @@ cy_en_scb_ezi2c_status_t Cy_SCB_EZI2C_Init(CySCB_Type *base, cy_stc_scb_ezi2c_co
     context->subAddrSize = config->subAddressSize;
 
     context->buf1Size      = 0UL;
-    context->buf1rwBondary = 0UL;
+    context->buf1rwBoundary = 0UL;
     context->baseAddr1     = 0UL;
 
     context->buf2Size      = 0UL;
-    context->buf2rwBondary = 0UL;
+    context->buf2rwBoundary = 0UL;
     context->baseAddr2     = 0UL;
 
     return CY_SCB_EZI2C_SUCCESS;
@@ -243,13 +243,6 @@ void Cy_SCB_EZI2C_Disable(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context)
 * \return
 * \ref cy_en_syspm_status_t
 *
-* \note
-* Only applicable for <b>rev-08 of the CY8CKIT-062-BLE</b>.
-* For proper operation, when the EZI2C slave is configured to be a wakeup source
-* from Deep Sleep mode, this function must be copied and modified by the user.
-* The EZI2C clock disable code must be inserted in the
-* \ref CY_SYSPM_BEFORE_TRANSITION and clock enable code in the
-* \ref CY_SYSPM_AFTER_TRANSITION mode processing.
 *
 *******************************************************************************/
 cy_en_syspm_status_t Cy_SCB_EZI2C_DeepSleepCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
@@ -261,137 +254,137 @@ cy_en_syspm_status_t Cy_SCB_EZI2C_DeepSleepCallback(cy_stc_syspm_callback_params
 
     switch (mode)
     {
-    case CY_SYSPM_CHECK_READY:
-    {
-        /* Disable the slave interrupt sources to protect the state */
-        Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_CLEAR_ALL_INTR_SRC);
-
-        /* If the EZI2C is in the IDLE state, it is ready for Deep Sleep
-        *  mode. Otherwise, it returns fail and restores the slave interrupt
-        * sources.
-        */
-        if (CY_SCB_EZI2C_STATE_IDLE == locContext->state)
+        case CY_SYSPM_CHECK_READY:
         {
-            if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+            /* Disable the slave interrupt sources to protect the state */
+            Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_CLEAR_ALL_INTR_SRC);
+
+            /* If the EZI2C is in the IDLE state, it is ready for Deep Sleep
+            *  mode. Otherwise, it returns fail and restores the slave interrupt
+            * sources.
+            */
+            if (CY_SCB_EZI2C_STATE_IDLE == locContext->state)
             {
-                /* The SCB is wakeup-capable: do not restore the address
-                * match interrupt source. The next transaction intended
-                * for the slave will be paused (the SCL is stretched) before
-                * the address is ACKed because the corresponding interrupt
-                * source is disabled.
-                */
-                Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR_NO_ADDR);
+                if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+                {
+                    /* The SCB is wakeup-capable: do not restore the address
+                    * match interrupt source. The next transaction intended
+                    * for the slave will be paused (the SCL is stretched) before
+                    * the address is ACKed because the corresponding interrupt
+                    * source is disabled.
+                    */
+                    Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR_NO_ADDR);
+                }
+                else
+                {
+                    /* The SCB is NOT wakeup-capable: disable the EZI2C.
+                    * The slave stops responding to the master until the
+                    * EZI2C is enabled. This happens when the device fails
+                    * to enter Deep Sleep mode or it is woken from Deep Sleep
+                    * mode.
+                    */
+                    Cy_SCB_EZI2C_Disable(locBase, locContext);
+                    Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
+                }
+
+                retStatus = CY_SYSPM_SUCCESS;
             }
             else
             {
-                /* The SCB is NOT wakeup-capable: disable the EZI2C.
-                * The slave stops responding to the master until the
-                * EZI2C is enabled. This happens when the device fails
-                * to enter Deep Sleep mode or it is woken from Deep Sleep
-                * mode.
-                */
-                Cy_SCB_EZI2C_Disable(locBase, locContext);
+                /* Restore the slave interrupt sources */
                 Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
+            }
+        }
+        break;
+
+        case CY_SYSPM_CHECK_FAIL:
+        {
+            /* The other driver is not ready for Deep Sleep mode. Restore
+            * Active mode configuration.
+            */
+
+            if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+            {
+                /* The SCB is wakeup-capable: restore the slave interrupt
+                * sources.
+                */
+                Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
+            }
+            else
+            {
+                /* The SCB is NOT wakeup-capable: enable the slave to operate. */
+                Cy_SCB_EZI2C_Enable(locBase);
             }
 
             retStatus = CY_SYSPM_SUCCESS;
         }
-        else
-        {
-            /* Restore the slave interrupt sources */
-            Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
-        }
-    }
-    break;
-
-    case CY_SYSPM_CHECK_FAIL:
-    {
-        /* The other driver is not ready for Deep Sleep mode. Restore
-        * Active mode configuration.
-        */
-
-        if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
-        {
-            /* The SCB is wakeup-capable: restore the slave interrupt
-            * sources.
-            */
-            Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
-        }
-        else
-        {
-            /* The SCB is NOT wakeup-capable: enable the slave to operate. */
-            Cy_SCB_EZI2C_Enable(locBase);
-        }
-
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_BEFORE_TRANSITION:
-    {
-        /* This code executes inside the critical section and enabling the
-        * active interrupt source makes the interrupt pending in the NVIC.
-        * However, the interrupt processing is delayed until the code exists
-        * the critical section. The pending interrupt force WFI instruction
-        * does nothing and the device remains in Active mode.
-        */
-
-        if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
-        {
-            /* The SCB is wakeup-capable: enable the I2C wakeup interrupt
-            * source. If any transaction was paused the the EZI2C interrupt
-            * becomes pending and prevents entering Deep Sleep mode.
-            * The transaction continues as soon as the global interrupts
-            * are enabled.
-            */
-            Cy_SCB_SetI2CInterruptMask(locBase, CY_SCB_I2C_INTR_WAKEUP);
-
-            /* Disable SCB clock */
-            SCB_I2C_CFG(locBase) &= (uint32_t) ~CY_SCB_I2C_CFG_CLK_ENABLE_Msk;
-
-            /* IMPORTANT (replace line above for the CY8CKIT-062 rev-08):
-            * for proper entering Deep Sleep mode the I2C clock must be disabled.
-            * This code must be inserted by the user because the driver
-            * does not have access to the clock.
-            */
-        }
-
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_AFTER_TRANSITION:
-    {
-        if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
-        {
-            /* Enable SCB clock */
-            SCB_I2C_CFG(locBase) |= CY_SCB_I2C_CFG_CLK_ENABLE_Msk;
-
-            /* IMPORTANT (replace line above for the CY8CKIT-062 rev-08):
-            * for proper exiting Deep Sleep mode, the I2C clock must be enabled.
-            * This code must be inserted by the user because the driver
-            * does not have access to the clock.
-            */
-
-            /* The SCB is wakeup-capable: disable the I2C wakeup interrupt
-            * source and restore slave interrupt sources.
-            */
-            Cy_SCB_SetI2CInterruptMask(locBase, CY_SCB_CLEAR_ALL_INTR_SRC);
-            Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
-        }
-        else
-        {
-            /* The SCB is NOT wakeup-capable: enable the slave to operate */
-            Cy_SCB_EZI2C_Enable(locBase);
-        }
-
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    default:
-        /* Unknown state */
         break;
+
+        case CY_SYSPM_BEFORE_TRANSITION:
+        {
+            /* This code executes inside the critical section and enabling the
+            * active interrupt source makes the interrupt pending in the NVIC.
+            * However, the interrupt processing is delayed until the code exists
+            * the critical section. The pending interrupt force WFI instruction
+            * does nothing and the device remains in Active mode.
+            */
+
+            if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+            {
+                /* The SCB is wakeup-capable: enable the I2C wakeup interrupt
+                * source. If any transaction was paused the the EZI2C interrupt
+                * becomes pending and prevents entering Deep Sleep mode.
+                * The transaction continues as soon as the global interrupts
+                * are enabled.
+                */
+                Cy_SCB_SetI2CInterruptMask(locBase, CY_SCB_I2C_INTR_WAKEUP);
+
+                /* Disable SCB clock */
+                SCB_I2C_CFG(locBase) &= (uint32_t) ~CY_SCB_I2C_CFG_CLK_ENABLE_Msk;
+
+                /* IMPORTANT (replace line above for the CY8CKIT-062 rev-08):
+                * for proper entering Deep Sleep mode the I2C clock must be disabled.
+                * This code must be inserted by the user because the driver
+                * does not have access to the clock.
+                */
+            }
+
+            retStatus = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        case CY_SYSPM_AFTER_TRANSITION:
+        {
+            if (_FLD2BOOL(SCB_CTRL_EC_AM_MODE, SCB_CTRL(locBase)))
+            {
+                /* Enable SCB clock */
+                SCB_I2C_CFG(locBase) |= CY_SCB_I2C_CFG_CLK_ENABLE_Msk;
+
+                /* IMPORTANT (replace line above for the CY8CKIT-062 rev-08):
+                * for proper exiting Deep Sleep mode, the I2C clock must be enabled.
+                * This code must be inserted by the user because the driver
+                * does not have access to the clock.
+                */
+
+                /* The SCB is wakeup-capable: disable the I2C wakeup interrupt
+                * source and restore slave interrupt sources.
+                */
+                Cy_SCB_SetI2CInterruptMask  (locBase, CY_SCB_CLEAR_ALL_INTR_SRC);
+                Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
+            }
+            else
+            {
+                /* The SCB is NOT wakeup-capable: enable the slave to operate */
+                Cy_SCB_EZI2C_Enable(locBase);
+            }
+
+            retStatus = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        default:
+            /* Unknown state */
+            break;
     }
 
     return (retStatus);
@@ -435,52 +428,52 @@ cy_en_syspm_status_t Cy_SCB_EZI2C_HibernateCallback(cy_stc_syspm_callback_params
 
     switch (mode)
     {
-    case CY_SYSPM_CHECK_READY:
-    {
-        /* Disable the slave interrupt sources to protect the state */
-        Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_CLEAR_ALL_INTR_SRC);
-
-        /* If the EZI2C is in the IDLE state, it is ready for Hibernate mode.
-        * Otherwise, returns fail and restores the slave interrupt sources.
-        */
-        if (CY_SCB_EZI2C_STATE_IDLE == locContext->state)
+        case CY_SYSPM_CHECK_READY:
         {
-            /* Disable the EZI2C. It stops responding to the master until
-            * the EZI2C is enabled. This happens if the device fails to
-            * enter Hibernate mode.
+            /* Disable the slave interrupt sources to protect the state */
+            Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_CLEAR_ALL_INTR_SRC);
+
+            /* If the EZI2C is in the IDLE state, it is ready for Hibernate mode.
+            * Otherwise, returns fail and restores the slave interrupt sources.
             */
-            Cy_SCB_EZI2C_Disable(locBase, locContext);
+            if (CY_SCB_EZI2C_STATE_IDLE == locContext->state)
+            {
+                /* Disable the EZI2C. It stops responding to the master until
+                * the EZI2C is enabled. This happens if the device fails to
+                * enter Hibernate mode.
+                */
+                Cy_SCB_EZI2C_Disable(locBase, locContext);
+
+                retStatus = CY_SYSPM_SUCCESS;
+            }
+
+            /* Restore the slave interrupt sources */
+            Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
+        }
+        break;
+
+        case CY_SYSPM_CHECK_FAIL:
+        {
+            /* The other driver is not ready for Hibernate mode. Restore the
+            * Active mode configuration.
+            */
+
+            /* Enable the slave to operate */
+            Cy_SCB_EZI2C_Enable(locBase);
 
             retStatus = CY_SYSPM_SUCCESS;
         }
+        break;
 
-        /* Restore the slave interrupt sources */
-        Cy_SCB_SetSlaveInterruptMask(locBase, CY_SCB_EZI2C_SLAVE_INTR);
-    }
-    break;
+        case CY_SYSPM_BEFORE_TRANSITION:
+        case CY_SYSPM_AFTER_TRANSITION:
+        {
+            /* The SCB is not capable of waking up from Hibernate mode: do nothing */
+            retStatus = CY_SYSPM_SUCCESS;
+        }
+        break;
 
-    case CY_SYSPM_CHECK_FAIL:
-    {
-        /* The other driver is not ready for Hibernate mode. Restore the
-        * Active mode configuration.
-        */
-
-        /* Enable the slave to operate */
-        Cy_SCB_EZI2C_Enable(locBase);
-
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_BEFORE_TRANSITION:
-    case CY_SYSPM_AFTER_TRANSITION:
-    {
-        /* The SCB is not capable of waking up from Hibernate mode: do nothing */
-        retStatus = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    default:
+        default:
         /* Unknown state */
         break;
     }
@@ -634,7 +627,7 @@ void Cy_SCB_EZI2C_SetBuffer1(CySCB_Type const *base, uint8_t *buffer, uint32_t s
 
     context->buf1          = buffer;
     context->buf1Size      = size;
-    context->buf1rwBondary = rwBoundary;
+    context->buf1rwBoundary = rwBoundary;
 }
 
 
@@ -754,7 +747,7 @@ void Cy_SCB_EZI2C_SetBuffer2(CySCB_Type const *base, uint8_t *buffer, uint32_t s
 
     context->buf2          = buffer;
     context->buf2Size      = size;
-    context->buf2rwBondary = rwBoundary;
+    context->buf2rwBoundary = rwBoundary;
 }
 
 
@@ -807,10 +800,10 @@ void Cy_SCB_EZI2C_Interrupt(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *contex
     else
     {
         if ((CY_SCB_EZI2C_STATE_RX_DATA1 == context->state) &&
-                (0UL != (CY_SCB_SLAVE_INTR_I2C_STOP & slaveIntrStatus)))
+            (0UL != (CY_SCB_SLAVE_INTR_I2C_STOP & slaveIntrStatus)))
         {
             /* Get data from the RX FIFO after Stop is generated */
-            Cy_SCB_SetRxInterrupt(base, CY_SCB_RX_INTR_LEVEL);
+            Cy_SCB_SetRxInterrupt    (base, CY_SCB_RX_INTR_LEVEL);
             Cy_SCB_SetRxInterruptMask(base, CY_SCB_RX_INTR_LEVEL);
         }
     }
@@ -839,7 +832,7 @@ void Cy_SCB_EZI2C_Interrupt(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *contex
     {
         HandleAddress(base, context);
 
-        Cy_SCB_ClearI2CInterrupt(base, CY_SCB_I2C_INTR_WAKEUP);
+        Cy_SCB_ClearI2CInterrupt  (base, CY_SCB_I2C_INTR_WAKEUP);
         Cy_SCB_ClearSlaveInterrupt(base, CY_SCB_SLAVE_INTR_I2C_ADDR_MATCH);
     }
 
@@ -922,7 +915,7 @@ static void HandleAddress(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context)
             }
 
             /* Clear and enable the stop interrupt source */
-            Cy_SCB_ClearSlaveInterrupt(base, CY_SCB_SLAVE_INTR_I2C_STOP);
+            Cy_SCB_ClearSlaveInterrupt  (base, CY_SCB_SLAVE_INTR_I2C_STOP);
             Cy_SCB_SetSlaveInterruptMask(base, CY_SCB_EZI2C_SLAVE_INTR);
         }
         else
@@ -972,7 +965,7 @@ static void HandleAddress(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context)
 
             context->bufSize = ((context->addr1Active) ? context->buf1Size : context->buf2Size);
 
-            Cy_SCB_SetRxFifoLevel(base, 0UL);
+            Cy_SCB_SetRxFifoLevel    (base, 0UL);
             Cy_SCB_SetRxInterruptMask(base, CY_SCB_RX_INTR_LEVEL);
         }
     }
@@ -1037,152 +1030,152 @@ static void UpdateRxFifoLevel(CySCB_Type *base, uint32_t bufSize)
 *******************************************************************************/
 static void HandleDataReceive(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context)
 {
-    switch (context->state)
+    switch(context->state)
     {
-    case CY_SCB_EZI2C_STATE_RX_OFFSET_MSB:
-    case CY_SCB_EZI2C_STATE_RX_OFFSET_LSB:
-    {
-        /* Default actions: compare the base address and ACK it */
-        bool checkBaseAddr = true;
-
-        /* Get the base address from the RX FIFO */
-        uint32_t baseAddr = Cy_SCB_ReadRxFifo(base);
-
-        if (context->subAddrSize == CY_SCB_EZI2C_SUB_ADDR16_BITS)
+        case CY_SCB_EZI2C_STATE_RX_OFFSET_MSB:
+        case CY_SCB_EZI2C_STATE_RX_OFFSET_LSB:
         {
-            if (context->state == CY_SCB_EZI2C_STATE_RX_OFFSET_MSB)
+            /* Default actions: compare the base address and ACK it */
+            bool checkBaseAddr = true;
+
+            /* Get the base address from the RX FIFO */
+            uint32_t baseAddr = Cy_SCB_ReadRxFifo(base);
+
+            if (context->subAddrSize == CY_SCB_EZI2C_SUB_ADDR16_BITS)
             {
-                /* ACK base address MSB */
+                if (context->state == CY_SCB_EZI2C_STATE_RX_OFFSET_MSB)
+                {
+                    /* ACK base address MSB */
+                    SCB_I2C_S_CMD(base) = SCB_I2C_S_CMD_S_ACK_Msk;
+
+                    /* Temporary store base address MSB */
+                    context->idx = (uint32_t) (baseAddr << 8UL);
+
+                    /* Do not compare until 16 bits are received */
+                    checkBaseAddr = false;
+                    context->state = CY_SCB_EZI2C_STATE_RX_OFFSET_LSB;
+                }
+                else
+                {
+                    /* Get the base address (MSB | LSB) */
+                    baseAddr |= context->idx;
+                }
+            }
+
+            /* Check whether the received base address is valid */
+            if (checkBaseAddr)
+            {
+                uint32_t cmd = SCB_I2C_S_CMD_S_ACK_Msk;
+
+                /* Decide whether the base address within the buffer range */
+                if (baseAddr < context->bufSize)
+                {
+                    /* Accept the new base address */
+                    if (context->addr1Active)
+                    {
+                        context->baseAddr1 = baseAddr;
+                    }
+                    else
+                    {
+                        context->baseAddr2 = baseAddr;
+                    }
+
+                    /* Store the base address to use it later */
+                    context->idx = baseAddr;
+                }
+                else
+                {
+                    /* Restore the valid base address */
+                    context->idx = ((context->addr1Active) ? context->baseAddr1 : context->baseAddr2);
+
+                    /* The base address is out of range - NACK it */
+                    cmd = SCB_I2C_S_CMD_S_NACK_Msk;
+                }
+
+                /* Set the command to an ACK or NACK address */
+                SCB_I2C_S_CMD(base) = cmd;
+
+                if (cmd == SCB_I2C_S_CMD_S_ACK_Msk)
+                {
+                    /* Prepare the buffer for a write */
+                    if (context->addr1Active)
+                    {
+                        context->curBuf  = &context->buf1[context->baseAddr1];
+                        context->bufSize = ((context->baseAddr1 < context->buf1rwBoundary) ?
+                                                    (context->buf1rwBoundary - context->baseAddr1) : (0UL));
+                    }
+                    else
+                    {
+                        context->curBuf  = &context->buf2[context->baseAddr2];
+                        context->bufSize = ((context->baseAddr2 < context->buf2rwBoundary) ?
+                                                    (context->buf2rwBoundary - context->baseAddr2) : (0UL));
+                    }
+
+                    /* Choice receive scheme  */
+                    if ((0U != context->address2) || (context->bufSize < CY_SCB_EZI2C_FIFO_SIZE))
+                    {
+                        /* Handle each byte separately */
+                        context->state = CY_SCB_EZI2C_STATE_RX_DATA0;
+                    }
+                    else
+                    {
+                        /* Use the RX FIFO and the auto-ACK/NACK features */
+                        SCB_I2C_CTRL(base) |= SCB_I2C_CTRL_S_READY_DATA_ACK_Msk;
+                        UpdateRxFifoLevel(base, context->bufSize);
+
+                        context->state = CY_SCB_EZI2C_STATE_RX_DATA1;
+                    }
+                }
+            }
+        }
+        break;
+
+        case CY_SCB_EZI2C_STATE_RX_DATA0:
+        {
+            uint32_t byte = Cy_SCB_ReadRxFifo(base);
+
+            /* Check whether there is space to store the byte */
+            if (context->bufSize > 0UL)
+            {
+                /* Continue the transfer: send an ACK */
                 SCB_I2C_S_CMD(base) = SCB_I2C_S_CMD_S_ACK_Msk;
 
-                /* Temporary store base address MSB */
-                context->idx = (uint32_t)(baseAddr << 8UL);
+                /* Store the byte in the buffer */
+                context->curBuf[0UL] = (uint8_t) byte;
+                context->bufSize--;
+                context->curBuf++;
 
-                /* Do not compare until 16 bits are received */
-                checkBaseAddr = false;
-                context->state = CY_SCB_EZI2C_STATE_RX_OFFSET_LSB;
+                /* Update the base address to notice that the buffer is modified */
+                context->idx++;
             }
             else
             {
-                /* Get the base address (MSB | LSB) */
-                baseAddr |= context->idx;
+                /* Finish the transfer: send a NACK. Drop the received byte */
+                SCB_I2C_S_CMD(base) = SCB_I2C_S_CMD_S_NACK_Msk;
+                Cy_SCB_SetRxInterruptMask(base, CY_SCB_CLEAR_ALL_INTR_SRC);
             }
         }
+        break;
 
-        /* Check whether the received base address is valid */
-        if (checkBaseAddr)
+        case CY_SCB_EZI2C_STATE_RX_DATA1:
         {
-            uint32_t cmd = SCB_I2C_S_CMD_S_ACK_Msk;
+            /* Get the number of bytes to read from the RX FIFO */
+            uint32_t numToCopy = Cy_SCB_GetRxFifoLevel(base) + 1UL;
 
-            /* Decide whether the base address within the buffer range */
-            if (baseAddr < context->bufSize)
-            {
-                /* Accept the new base address */
-                if (context->addr1Active)
-                {
-                    context->baseAddr1 = baseAddr;
-                }
-                else
-                {
-                    context->baseAddr2 = baseAddr;
-                }
+            /* Get data from the RX FIFO */
+            numToCopy = Cy_SCB_ReadArray(base, context->curBuf, numToCopy);
+            context->bufSize -= numToCopy;
+            context->curBuf  += numToCopy;
 
-                /* Store the base address to use it later */
-                context->idx = baseAddr;
-            }
-            else
-            {
-                /* Restore the valid base address */
-                context->idx = ((context->addr1Active) ? context->baseAddr1 : context->baseAddr2);
-
-                /* The base address is out of range - NACK it */
-                cmd = SCB_I2C_S_CMD_S_NACK_Msk;
-            }
-
-            /* Set the command to an ACK or NACK address */
-            SCB_I2C_S_CMD(base) = cmd;
-
-            if (cmd == SCB_I2C_S_CMD_S_ACK_Msk)
-            {
-                /* Prepare the buffer for a write */
-                if (context->addr1Active)
-                {
-                    context->curBuf  = &context->buf1[context->baseAddr1];
-                    context->bufSize = ((context->baseAddr1 < context->buf1rwBondary) ?
-                                        (context->buf1rwBondary - context->baseAddr1) : (0UL));
-                }
-                else
-                {
-                    context->curBuf  = &context->buf2[context->baseAddr2];
-                    context->bufSize = ((context->baseAddr2 < context->buf2rwBondary) ?
-                                        (context->buf2rwBondary - context->baseAddr2) : (0UL));
-                }
-
-                /* Choice receive scheme  */
-                if ((0U != context->address2) || (context->bufSize < CY_SCB_EZI2C_FIFO_SIZE))
-                {
-                    /* Handle each byte separately */
-                    context->state = CY_SCB_EZI2C_STATE_RX_DATA0;
-                }
-                else
-                {
-                    /* Use the RX FIFO and the auto-ACK/NACK features */
-                    SCB_I2C_CTRL(base) |= SCB_I2C_CTRL_S_READY_DATA_ACK_Msk;
-                    UpdateRxFifoLevel(base, context->bufSize);
-
-                    context->state = CY_SCB_EZI2C_STATE_RX_DATA1;
-                }
-            }
-        }
-    }
-    break;
-
-    case CY_SCB_EZI2C_STATE_RX_DATA0:
-    {
-        uint32_t byte = Cy_SCB_ReadRxFifo(base);
-
-        /* Check whether there is space to store the byte */
-        if (context->bufSize > 0UL)
-        {
-            /* Continue the transfer: send an ACK */
-            SCB_I2C_S_CMD(base) = SCB_I2C_S_CMD_S_ACK_Msk;
-
-            /* Store the byte in the buffer */
-            context->curBuf[0UL] = (uint8_t) byte;
-            context->bufSize--;
-            context->curBuf++;
+            /* Configure the next RX FIFO read event */
+            UpdateRxFifoLevel(base, context->bufSize);
 
             /* Update the base address to notice that the buffer is modified */
             context->idx++;
         }
-        else
-        {
-            /* Finish the transfer: send a NACK. Drop the received byte */
-            SCB_I2C_S_CMD(base) = SCB_I2C_S_CMD_S_NACK_Msk;
-            Cy_SCB_SetRxInterruptMask(base, CY_SCB_CLEAR_ALL_INTR_SRC);
-        }
-    }
-    break;
+        break;
 
-    case CY_SCB_EZI2C_STATE_RX_DATA1:
-    {
-        /* Get the number of bytes to read from the RX FIFO */
-        uint32_t numToCopy = Cy_SCB_GetRxFifoLevel(base) + 1UL;
-
-        /* Get data from the RX FIFO */
-        numToCopy = Cy_SCB_ReadArray(base, context->curBuf, numToCopy);
-        context->bufSize -= numToCopy;
-        context->curBuf  += numToCopy;
-
-        /* Configure the next RX FIFO read event */
-        UpdateRxFifoLevel(base, context->bufSize);
-
-        /* Update the base address to notice that the buffer is modified */
-        context->idx++;
-    }
-    break;
-
-    default:
+        default:
         /* Unknown state */
         break;
     }
@@ -1268,12 +1261,12 @@ static void HandleStop(CySCB_Type *base, cy_stc_scb_ezi2c_context_t *context)
     if (context->addr1Active)
     {
         context->status |= ((CY_SCB_EZI2C_STATE_TX_DATA == context->state) ? CY_SCB_EZI2C_STATUS_READ1 :
-                            ((context->baseAddr1 != context->idx) ?  CY_SCB_EZI2C_STATUS_WRITE1 : 0UL));
+                             ((context->baseAddr1 != context->idx) ?  CY_SCB_EZI2C_STATUS_WRITE1 : 0UL));
     }
     else
     {
         context->status |= ((CY_SCB_EZI2C_STATE_TX_DATA == context->state) ? CY_SCB_EZI2C_STATUS_READ2 :
-                            ((context->baseAddr2 != context->idx) ? CY_SCB_EZI2C_STATUS_WRITE2 : 0UL));
+                             ((context->baseAddr2 != context->idx) ? CY_SCB_EZI2C_STATUS_WRITE2 : 0UL));
     }
 
     /* Back to the idle state */

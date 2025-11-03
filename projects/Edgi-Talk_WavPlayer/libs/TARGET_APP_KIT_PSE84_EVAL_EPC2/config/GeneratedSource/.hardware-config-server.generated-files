@@ -1,3 +1,6 @@
+cycfg.c
+cycfg.h
+cycfg_clock_types.h
 cycfg_clocks.c
 cycfg_clocks.h
 cycfg_connectivity_bt.h
@@ -5,15 +8,18 @@ cycfg_connectivity_wifi.h
 cycfg_dmas.c
 cycfg_dmas.h
 cycfg_memory.h
-cycfg_mpc.h
 cycfg_notices.h
+cycfg_peripheral_clocks.c
+cycfg_peripheral_clocks.h
 cycfg_peripherals.c
 cycfg_peripherals.h
 cycfg_pins.c
 cycfg_pins.h
+cycfg_ppc.h
+cycfg_protection.c
+cycfg_protection.h
 cycfg_routing.c
 cycfg_routing.h
-cycfg_security.h
 cycfg_system.c
 cycfg_system.h
 cymem_CM33_0.h
@@ -25,9 +31,6 @@ cymem_armlink_CM55_0.sct
 cymem_gnu_CM33_0.ld
 cymem_gnu_CM33_0_S.ld
 cymem_gnu_CM55_0.ld
-cymem_gnu_regions_CM33_0.ld
-cymem_gnu_regions_CM33_0_S.ld
-cymem_gnu_regions_CM55_0.ld
 cymem_ilinkarm_CM33_0.icf
 cymem_ilinkarm_CM33_0_S.icf
 cymem_ilinkarm_CM55_0.icf
@@ -36,3 +39,4 @@ cymem_ilinkarm_regions_CM33_0_S.icf
 cymem_ilinkarm_regions_CM55_0.icf
 cymem_memory_locations.h
 cymem_memory_types.h
+edgeproctectsymbols.json

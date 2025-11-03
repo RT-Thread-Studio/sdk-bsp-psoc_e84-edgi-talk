@@ -56,9 +56,8 @@
   @param[in]     pSrc points to the input samples in Q15
   @param[out]     pDst  points to the output MFCC values in q8.7 format
   @param[inout]     pTmp  points to a temporary buffer of complex
-
-  @return        none
-
+  @return        error status
+  
   @par           Description
                    The number of input samples is the FFT length used
                    when initializing the instance data structure.
@@ -72,49 +71,49 @@
                    point computations may saturate.
 
  */
-arm_status arm_mfcc_q15(
-    const arm_mfcc_instance_q15 * S,
-    q15_t *pSrc,
-    q15_t *pDst,
-    q31_t *pTmp
-)
+ARM_DSP_ATTRIBUTE arm_status arm_mfcc_q15(
+  const arm_mfcc_instance_q15 * S,
+  q15_t *pSrc,
+  q15_t *pDst,
+  q31_t *pTmp
+  )
 {
     q15_t m;
     uint32_t index;
-    uint32_t fftShift = 0;
+    uint32_t fftShift=0;
     q31_t logExponent;
     q63_t result;
     arm_matrix_instance_q15 pDctMat;
     uint32_t i;
     uint32_t coefsPos;
     uint32_t filterLimit;
-    q15_t *pTmp2 = (q15_t*)pTmp;
+    q15_t *pTmp2=(q15_t*)pTmp;
 
     arm_status status = ARM_MATH_SUCCESS;
-
+    
     // q15
-    arm_absmax_q15(pSrc, S->fftLen, &m, &index);
+    arm_absmax_q15(pSrc,S->fftLen,&m,&index);
 
     if ((m != 0) && (m != 0x7FFF))
     {
-        q15_t quotient;
-        int16_t shift;
+       q15_t quotient;
+       int16_t shift;
 
-        status = arm_divide_q15(0x7FFF, m, &quotient, &shift);
-        if (status != ARM_MATH_SUCCESS)
-        {
-            return (status);
-        }
-
-        arm_scale_q15(pSrc, quotient, shift, pSrc, S->fftLen);
+       status = arm_divide_q15(0x7FFF,m,&quotient,&shift);
+       if (status != ARM_MATH_SUCCESS)
+       {
+          return(status);
+       }
+ 
+       arm_scale_q15(pSrc,quotient,shift,pSrc,S->fftLen);
     }
 
 
     // q15
-    arm_mult_q15(pSrc, S->windowCoefs, pSrc, S->fftLen);
+    arm_mult_q15(pSrc,S->windowCoefs, pSrc, S->fftLen);
 
 
-    /* Compute spectrum magnitude
+    /* Compute spectrum magnitude 
     */
     fftShift = 31 - __CLZ(S->fftLen);
 #if defined(ARM_MFCC_CFFT_BASED)
@@ -122,79 +121,79 @@ arm_status arm_mfcc_q15(
        are only providing acceleration for CFFT.
        With ARM_MFCC_CFFT_BASED enabled, CFFT is used and the MFCC
        will be accelerated on those boards.
-
+ 
        The default is to use RFFT
     */
     /* Convert from real to complex */
-    for (i = 0; i < S->fftLen ; i++)
+    for(i=0; i < S->fftLen ; i++)
     {
-        pTmp2[2 * i] = pSrc[i];
-        pTmp2[2 * i + 1] = 0;
+      pTmp2[2*i] = pSrc[i];
+      pTmp2[2*i+1] = 0;
     }
-    arm_cfft_q15(&(S->cfft), pTmp2, 0, 1);
+    arm_cfft_q15(&(S->cfft),pTmp2,0,1);
 #else
     /* Default RFFT based implementation */
-    arm_rfft_q15(&(S->rfft), pSrc, pTmp2);
+    arm_rfft_q15(&(S->rfft),pSrc,pTmp2);
 #endif
     filterLimit = 1 + (S->fftLen >> 1);
 
 
     // q15 - fftShift
-    arm_cmplx_mag_q15(pTmp2, pSrc, filterLimit);
+    arm_cmplx_mag_q15(pTmp2,pSrc,filterLimit);
     // q14 - fftShift
 
     /* Apply MEL filters */
     coefsPos = 0;
-    for (i = 0; i < S->nbMelFilters; i++)
+    for(i=0; i<S->nbMelFilters; i++)
     {
-        arm_dot_prod_q15(pSrc + S->filterPos[i],
-                         &(S->filterCoefs[coefsPos]),
-                         S->filterLengths[i],
-                         &result);
+      arm_dot_prod_q15(pSrc+S->filterPos[i],
+        &(S->filterCoefs[coefsPos]),
+        S->filterLengths[i],
+        &result);
 
-        coefsPos += S->filterLengths[i];
+      coefsPos += S->filterLengths[i];
 
-        // q34.29 - fftShift
-        result += MICRO_Q15;
-        result >>= SHIFT_MELFILTER_SATURATION_Q15;
-        // q34.29 - fftShift - satShift
-        pTmp[i] = __SSAT(result, 31) ;
+      // q34.29 - fftShift
+      result += MICRO_Q15;
+      result >>= SHIFT_MELFILTER_SATURATION_Q15;
+      // q34.29 - fftShift - satShift
+      pTmp[i] = __SSAT(result,31) ;
 
     }
 
     if ((m != 0) && (m != 0x7FFF))
     {
-        arm_scale_q31(pTmp, m << 16, 0, pTmp, S->nbMelFilters);
+      arm_scale_q31(pTmp,m<<16,0,pTmp,S->nbMelFilters);
     }
-
+   
     // q34.29 - fftShift - satShift
     /* Compute the log */
-    arm_vlog_q31(pTmp, pTmp, S->nbMelFilters);
+    arm_vlog_q31(pTmp,pTmp,S->nbMelFilters);
 
 
     // q5.26
-
+   
     logExponent = fftShift + 2 + SHIFT_MELFILTER_SATURATION_Q15;
     logExponent = logExponent * LOG2TOLOG_Q15;
 
 
     // q8.26
-    arm_offset_q31(pTmp, logExponent, pTmp, S->nbMelFilters);
-    arm_shift_q31(pTmp, -19, pTmp, S->nbMelFilters);
-    for (i = 0; i < S->nbMelFilters; i++)
-    {
-        pSrc[i] = __SSAT((q15_t)pTmp[i], 16);
+    arm_offset_q31(pTmp,logExponent,pTmp,S->nbMelFilters);
+    arm_shift_q31(pTmp,-19,pTmp,S->nbMelFilters);
+    for(i=0; i<S->nbMelFilters; i++)
+    { 
+      pSrc[i] = __SSAT((q15_t)pTmp[i],16);
     }
 
     // q8.7
 
-    pDctMat.numRows = S->nbDctOutputs;
-    pDctMat.numCols = S->nbMelFilters;
-    pDctMat.pData = (q15_t*)S->dctCoefs;
+    pDctMat.numRows=S->nbDctOutputs;
+    pDctMat.numCols=S->nbMelFilters;
+    pDctMat.pData=(q15_t*)S->dctCoefs;
 
     arm_mat_vec_mult_q15(&pDctMat, pSrc, pDst);
 
-    return (status);
+    return(status);
 }
 
 /**

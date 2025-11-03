@@ -34,19 +34,19 @@ extern "C" {
 
 #if defined(CY_IP_MXPERI) || defined(CY_IP_M0S8PERI)
 
-#define _MTB_HAL_PCLK_GROUP(clkdst)       0
-#define _MTB_HAL_TCPWM0_PCLK_CLOCK0       PCLK_TCPWM0_CLOCKS0
-#define _MTB_HAL_TCPWM1_PCLK_CLOCK0       PCLK_TCPWM1_CLOCKS0
-#define _MTB_HAL_SCB0_PCLK_CLOCK          PCLK_SCB0_CLOCK
+    #define _MTB_HAL_PCLK_GROUP(clkdst)       0
+    #define _MTB_HAL_TCPWM0_PCLK_CLOCK0       PCLK_TCPWM0_CLOCKS0
+    #define _MTB_HAL_TCPWM1_PCLK_CLOCK0       PCLK_TCPWM1_CLOCKS0
+    #define _MTB_HAL_SCB0_PCLK_CLOCK          PCLK_SCB0_CLOCK
 
 #elif defined(CY_IP_MXSPERI)
 
-#define _MTB_HAL_PCLK_GROUP(clkdst)       ((uint8_t)((uint32_t)(clkdst) >> 8))
-#define _MTB_HAL_TCPWM0_PCLK_CLOCK0       PCLK_TCPWM0_CLOCK_COUNTER_EN0
-#define _MTB_HAL_TCPWM1_PCLK_CLOCK0       PCLK_TCPWM1_CLOCK_COUNTER_EN0
-#define _MTB_HAL_SCB0_PCLK_CLOCK          PCLK_SCB0_CLOCK_SCB_EN
-#define _MTB_HAL_SCB1_PCLK_CLOCK          PCLK_SCB1_CLOCK_SCB_EN
-#define _MTB_HAL_SCB5_PCLK_CLOCK          PCLK_SCB5_CLOCK_SCB_EN
+    #define _MTB_HAL_PCLK_GROUP(clkdst)       ((uint8_t)((uint32_t)(clkdst) >> 8))
+    #define _MTB_HAL_TCPWM0_PCLK_CLOCK0       PCLK_TCPWM0_CLOCK_COUNTER_EN0
+    #define _MTB_HAL_TCPWM1_PCLK_CLOCK0       PCLK_TCPWM1_CLOCK_COUNTER_EN0
+    #define _MTB_HAL_SCB0_PCLK_CLOCK          PCLK_SCB0_CLOCK_SCB_EN
+    #define _MTB_HAL_SCB1_PCLK_CLOCK          PCLK_SCB1_CLOCK_SCB_EN
+    #define _MTB_HAL_SCB5_PCLK_CLOCK          PCLK_SCB5_CLOCK_SCB_EN
 #endif // if defined(CY_IP_MXPERI) || defined(CY_IP_M0S8PERI)
 
 #if defined(__cplusplus)

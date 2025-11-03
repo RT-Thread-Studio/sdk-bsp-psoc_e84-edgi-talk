@@ -52,11 +52,11 @@
                    These are multiplied to yield a 2.62 intermediate result which is shifted with saturation to 1.31 format.
  */
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-arm_status arm_mat_scale_q31(
-    const arm_matrix_instance_q31 * pSrc,
-    q31_t                     scaleFract,
-    int32_t                   shift,
-    arm_matrix_instance_q31 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_scale_q31(
+  const arm_matrix_instance_q31 * pSrc,
+        q31_t                     scaleFract,
+        int32_t                   shift,
+        arm_matrix_instance_q31 * pDst)
 {
     q31_t *pIn = pSrc->pData;       /* input data matrix pointer */
     q31_t *pOut = pDst->pData;      /* output data matrix pointer */
@@ -68,172 +68,172 @@ arm_status arm_mat_scale_q31(
     arm_status status;                             /* Status of matrix scaling */
 
     pInVec = (q31_t const *) pIn;
-#ifdef ARM_MATH_MATRIX_CHECK
+  #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numRows) ||
-            (pSrc->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numRows) ||
+      (pSrc->numCols != pDst->numCols)   )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
+  {
+
+     /*
+     * Total number of samples in the input matrix
+     */
+    numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
+    blkCnt = numSamples >> 2;
+    while (blkCnt > 0U)
     {
-
         /*
-        * Total number of samples in the input matrix
-        */
-        numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
-        blkCnt = numSamples >> 2;
-        while (blkCnt > 0U)
-        {
-            /*
-             * C(m,n) = A(m,n) * scale
-             * Scaling and results are stored in the destination buffer.
-             */
-            vecIn = vld1q(pInVec);
-            pInVec += 4;
-            /* multiply input with scaler value */
-            vecOut = vmulhq(vecIn, vdupq_n_s32(scaleFract));
-            /* apply shifting */
-            vecOut = vqshlq_r(vecOut, totShift);
-
-            vst1q(pOut, vecOut);
-            pOut += 4;
-            /*
-             * Decrement the blockSize loop counter
-             */
-            blkCnt--;
-        }
-        /*
-         * tail
+         * C(m,n) = A(m,n) * scale
+         * Scaling and results are stored in the destination buffer.
          */
-        blkCnt = numSamples & 3;
-        if (blkCnt > 0U)
-        {
-            mve_pred16_t p0 = vctp32q(blkCnt);
-            vecIn = vld1q(pInVec);
-            pInVec += 4;
-            vecOut = vmulhq(vecIn, vdupq_n_s32(scaleFract));
-            vecOut = vqshlq_r(vecOut, totShift);
-            vstrwq_p(pOut, vecOut, p0);
-        }
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
-    }
+        vecIn = vld1q(pInVec); 
+        pInVec += 4;
+        /* multiply input with scaler value */
+        vecOut = vmulhq(vecIn, vdupq_n_s32(scaleFract));
+        /* apply shifting */
+        vecOut = vqshlq_r(vecOut, totShift);
 
-    /* Return to application */
-    return (status);
+        vst1q(pOut, vecOut); 
+        pOut += 4;
+        /*
+         * Decrement the blockSize loop counter
+         */
+        blkCnt--;
+    }
+    /*
+     * tail
+     */
+    blkCnt = numSamples & 3;
+    if (blkCnt > 0U)
+    {
+        mve_pred16_t p0 = vctp32q(blkCnt);
+        vecIn = vld1q(pInVec); 
+        pInVec += 4;
+        vecOut = vmulhq(vecIn, vdupq_n_s32(scaleFract));
+        vecOut = vqshlq_r(vecOut, totShift);
+        vstrwq_p(pOut, vecOut, p0);
+    }
+     /* Set status as ARM_MATH_SUCCESS */
+     status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 
 #else
-arm_status arm_mat_scale_q31(
-    const arm_matrix_instance_q31 * pSrc,
-    q31_t                     scaleFract,
-    int32_t                   shift,
-    arm_matrix_instance_q31 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_scale_q31(
+  const arm_matrix_instance_q31 * pSrc,
+        q31_t                     scaleFract,
+        int32_t                   shift,
+        arm_matrix_instance_q31 * pDst)
 {
-    q31_t *pIn = pSrc->pData;                      /* Input data matrix pointer */
-    q31_t *pOut = pDst->pData;                     /* Output data matrix pointer */
-    uint32_t numSamples;                           /* Total number of elements in the matrix */
-    uint32_t blkCnt;                               /* Loop counter */
-    arm_status status;                             /* Status of matrix scaling */
-    int32_t kShift = shift + 1;                    /* Shift to apply after scaling */
-    q31_t in, out;                                 /* Temporary variabels */
+  q31_t *pIn = pSrc->pData;                      /* Input data matrix pointer */
+  q31_t *pOut = pDst->pData;                     /* Output data matrix pointer */
+  uint32_t numSamples;                           /* Total number of elements in the matrix */
+  uint32_t blkCnt;                               /* Loop counter */
+  arm_status status;                             /* Status of matrix scaling */
+  int32_t kShift = shift + 1;                    /* Shift to apply after scaling */
+  q31_t in, out;                                 /* Temporary variabels */
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numRows) ||
-            (pSrc->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numRows) ||
+      (pSrc->numCols != pDst->numCols)   )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
 
-    {
-        /* Total number of samples in input matrix */
-        numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
+  {
+    /* Total number of samples in input matrix */
+    numSamples = (uint32_t) pSrc->numRows * pSrc->numCols;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-        /* Loop unrolling: Compute 4 outputs at a time */
-        blkCnt = numSamples >> 2U;
+    /* Loop unrolling: Compute 4 outputs at a time */
+    blkCnt = numSamples >> 2U;
 
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) * k */
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) * k */
 
-            /* Scale, saturate and store result in destination buffer. */
-            in = *pIn++;                                 /* read four inputs from source */
-            in = ((q63_t) in * scaleFract) >> 32;        /* multiply input with scaler value */
-            out = in << kShift;                          /* apply shifting */
-            if (in != (out >> kShift))                   /* saturate the results. */
-                out = 0x7FFFFFFF ^ (in >> 31);
-            *pOut++ = out;                               /* Store result destination */
+      /* Scale, saturate and store result in destination buffer. */
+      in = *pIn++;                                 /* read four inputs from source */
+      in = ((q63_t) in * scaleFract) >> 32;        /* multiply input with scaler value */
+      out = in << kShift;                          /* apply shifting */
+      if (in != (out >> kShift))                   /* saturate the results. */
+        out = 0x7FFFFFFF ^ (in >> 31);
+      *pOut++ = out;                               /* Store result destination */
 
-            in = *pIn++;
-            in = ((q63_t) in * scaleFract) >> 32;
-            out = in << kShift;
-            if (in != (out >> kShift))
-                out = 0x7FFFFFFF ^ (in >> 31);
-            *pOut++ = out;
+      in = *pIn++;
+      in = ((q63_t) in * scaleFract) >> 32;
+      out = in << kShift;
+      if (in != (out >> kShift))
+        out = 0x7FFFFFFF ^ (in >> 31);
+      *pOut++ = out;
 
-            in = *pIn++;
-            in = ((q63_t) in * scaleFract) >> 32;
-            out = in << kShift;
-            if (in != (out >> kShift))
-                out = 0x7FFFFFFF ^ (in >> 31);
-            *pOut++ = out;
+      in = *pIn++;
+      in = ((q63_t) in * scaleFract) >> 32;
+      out = in << kShift;
+      if (in != (out >> kShift))
+        out = 0x7FFFFFFF ^ (in >> 31);
+      *pOut++ = out;
 
-            in = *pIn++;
-            in = ((q63_t) in * scaleFract) >> 32;
-            out = in << kShift;
-            if (in != (out >> kShift))
-                out = 0x7FFFFFFF ^ (in >> 31);
-            *pOut++ = out;
+      in = *pIn++;
+      in = ((q63_t) in * scaleFract) >> 32;
+      out = in << kShift;
+      if (in != (out >> kShift))
+        out = 0x7FFFFFFF ^ (in >> 31);
+      *pOut++ = out;
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
+      /* Decrement loop counter */
+      blkCnt--;
+    }
 
-        /* Loop unrolling: Compute remaining outputs */
-        blkCnt = numSamples % 0x4U;
+    /* Loop unrolling: Compute remaining outputs */
+    blkCnt = numSamples % 0x4U;
 
 #else
 
-        /* Initialize blkCnt with number of samples */
-        blkCnt = numSamples;
+    /* Initialize blkCnt with number of samples */
+    blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) * k */
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) * k */
 
-            /* Scale, saturate and store result in destination buffer. */
-            in = *pIn++;
-            in = ((q63_t) in * scaleFract) >> 32;
-            out = in << kShift;
-            if (in != (out >> kShift))
-                out = 0x7FFFFFFF ^ (in >> 31);
-            *pOut++ = out;
+      /* Scale, saturate and store result in destination buffer. */
+      in = *pIn++;
+      in = ((q63_t) in * scaleFract) >> 32;
+      out = in << kShift;
+      if (in != (out >> kShift))
+        out = 0x7FFFFFFF ^ (in >> 31);
+      *pOut++ = out;
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
-
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+      /* Decrement loop counter */
+      blkCnt--;
     }
 
-    /* Return to application */
-    return (status);
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

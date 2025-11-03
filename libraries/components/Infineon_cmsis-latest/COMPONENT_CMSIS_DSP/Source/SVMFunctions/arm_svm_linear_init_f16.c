@@ -58,25 +58,24 @@
  * @param[in]    dualCoefficients       Array of dual coefficients
  * @param[in]    supportVectors         Array of support vectors
  * @param[in]    classes                Array of 2 classes ID
- * @return none.
  *
  */
 
 
-void arm_svm_linear_init_f16(arm_svm_linear_instance_f16 *S,
-                             uint32_t nbOfSupportVectors,
-                             uint32_t vectorDimension,
-                             float16_t intercept,
-                             const float16_t *dualCoefficients,
-                             const float16_t *supportVectors,
-                             const int32_t *classes)
+ARM_DSP_ATTRIBUTE void arm_svm_linear_init_f16(arm_svm_linear_instance_f16 *S, 
+  uint32_t nbOfSupportVectors,
+  uint32_t vectorDimension,
+  float16_t intercept,
+  const float16_t *dualCoefficients,
+  const float16_t *supportVectors,
+  const int32_t *classes)
 {
-    S->nbOfSupportVectors = nbOfSupportVectors;
-    S->vectorDimension = vectorDimension;
-    S->intercept = intercept;
-    S->dualCoefficients = dualCoefficients;
-    S->supportVectors = supportVectors;
-    S->classes = classes;
+   S->nbOfSupportVectors = nbOfSupportVectors;
+   S->vectorDimension = vectorDimension;
+   S->intercept = intercept;
+   S->dualCoefficients = dualCoefficients;
+   S->supportVectors = supportVectors;
+   S->classes = classes;
 }
 
 
@@ -85,5 +84,5 @@ void arm_svm_linear_init_f16(arm_svm_linear_instance_f16 *S,
  * @} end of linearsvm group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

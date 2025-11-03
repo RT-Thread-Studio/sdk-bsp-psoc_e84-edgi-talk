@@ -1,4 +1,4 @@
-############################################################################### 
+###############################################################################
 # \file IAR_cmse.mk
 #
 # \brief
@@ -35,7 +35,7 @@ MTB_TOOLCHAIN_IAR__CXXFLAGS+=--cmse
 
 ifneq ($(NSC_VENEER),)
 ifeq ($(NSC_VENEER),$(filter $(NSC_VENEER),$(wildcard $(NSC_VENEER))))
-MTB_TOOLCHAIN_IAR__LDFLAGS+=--import_cmse_lib_in$(NSC_VENEER)
+MTB_TOOLCHAIN_IAR__LDFLAGS+=--import_cmse_lib_in $(NSC_VENEER)
 endif
 MTB_TOOLCHAIN_IAR__LDFLAGS+=--import_cmse_lib_out $(NSC_VENEER).tmp
 endif

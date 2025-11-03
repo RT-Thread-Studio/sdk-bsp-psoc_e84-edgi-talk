@@ -2,7 +2,7 @@
     "core": {
         "id": "9009a3a8-dde8-44a4-858d-480772f85490",
         "name": "device-configurator",
-        "version": "5.30.0.3186",
+        "version": "5.50.0.3824",
         "schema-version": "1"
     },
     "opt": {
@@ -17,7 +17,7 @@
                 "short-name": "device-configurator",
                 "exe": "device-configurator",
                 "icon": "device-configurator.png",
-                "display-name": "Device Configurator 5.30",
+                "display-name": "Device Configurator 5.50",
                 "priority-extensions": [
                     ".modus"
                 ],

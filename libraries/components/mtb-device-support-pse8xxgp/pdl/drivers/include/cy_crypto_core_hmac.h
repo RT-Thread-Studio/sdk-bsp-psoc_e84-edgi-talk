@@ -45,12 +45,12 @@ extern "C" {
 #include "cy_crypto_core_hmac_v2.h"
 
 typedef cy_en_crypto_status_t (*cy_crypto_hmac_func_t)(CRYPTO_Type *base,
-        uint8_t *hmac,
-        uint8_t  const *message,
-        uint32_t messageSize,
-        uint8_t  const *key,
-        uint32_t keyLength,
-        cy_en_crypto_sha_mode_t mode);
+                                          uint8_t *hmac,
+                                          uint8_t  const *message,
+                                          uint32_t messageSize,
+                                          uint8_t  const *key,
+                                          uint32_t keyLength,
+                                          cy_en_crypto_sha_mode_t mode);
 
 /**
 * \addtogroup group_crypto_lld_mac_functions
@@ -92,26 +92,26 @@ typedef cy_en_crypto_status_t (*cy_crypto_hmac_func_t)(CRYPTO_Type *base,
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac(CRYPTO_Type *base,
-        uint8_t *hmac,
-        uint8_t const *message,
-        uint32_t messageSize,
-        uint8_t const *key,
-        uint32_t keyLength,
-        cy_en_crypto_sha_mode_t mode)
+                                          uint8_t *hmac,
+                                          uint8_t const *message,
+                                          uint32_t messageSize,
+                                          uint8_t const *key,
+                                          uint32_t keyLength,
+                                          cy_en_crypto_sha_mode_t mode)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = Cy_Crypto_Core_V1_Hmac(base, hmac, message, messageSize, key, keyLength, mode);
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hmac(base, hmac, message, messageSize, key, keyLength, mode);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -149,15 +149,15 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac_Init(CRYPTO_Type *base
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hmac_Init(base, hmacState, mode, (cy_stc_crypto_v2_hmac_buffers_t *)hmacBuffer);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     (void)base; /* Suppress a compiler warning about unused variables */
@@ -194,23 +194,23 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac_Init(CRYPTO_Type *base
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac_Start(CRYPTO_Type *base, cy_stc_crypto_hmac_state_t *hmacState,
-        uint8_t const *key,
-        uint32_t keyLength
-                                                               )
+                                        uint8_t const *key,
+                                        uint32_t keyLength
+                                        )
 {
     cy_en_crypto_status_t tmpResult;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hmac_Start(base, hmacState,  key,  keyLength);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     (void)base; /* Suppress a compiler warning about unused variables */
@@ -245,23 +245,23 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac_Start(CRYPTO_Type *bas
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac_Update(CRYPTO_Type *base, cy_stc_crypto_hmac_state_t  *hmacState,
-        uint8_t   const *message,
-        uint32_t  messageSize
-                                                                )
+                                   uint8_t   const *message,
+                                   uint32_t  messageSize
+                                   )
 {
     cy_en_crypto_status_t tmpResult;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hmac_Update(base, hmacState, message, messageSize);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     (void)base; /* Suppress a compiler warning about unused variables */
@@ -294,21 +294,21 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac_Update(CRYPTO_Type *ba
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac_Finish(CRYPTO_Type *base, cy_stc_crypto_hmac_state_t *hmacState,
-        uint8_t *hmac)
+                                                    uint8_t *hmac)
 {
     cy_en_crypto_status_t tmpResult;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hmac_Finish(base, hmacState, hmac);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     (void)base; /* Suppress a compiler warning about unused variables */
@@ -343,15 +343,15 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hmac_Free(CRYPTO_Type *base
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hmac_Free(base, hmacState);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     (void)base; /* Suppress a compiler warning about unused variables */

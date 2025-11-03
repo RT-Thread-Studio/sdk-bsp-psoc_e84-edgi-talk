@@ -47,30 +47,28 @@
 /**
   * \brief Platform IP standard configuration for GPU. (GFXSS_GPU_MXGPU)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 IP control. */
-    __IM uint32_t RESERVED[2];
-    __IM uint32_t STATUS;                        /*!< 0x0000000C IP status. */
-    __IOM uint32_t INTR;                          /*!< 0x00000010 Interrupt status bits. */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000014 Interrupt set bits. */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Interrupt mask bits. */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Interrupt masked bits. */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 IP control. */
+   __IM uint32_t RESERVED[2];
+   __IM uint32_t STATUS;                        /*!< 0x0000000C IP status. */
+  __IOM uint32_t INTR;                          /*!< 0x00000010 Interrupt status bits. */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000014 Interrupt set bits. */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Interrupt mask bits. */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Interrupt masked bits. */
 } GFXSS_GPU_MXGPU_Type;                         /*!< Size = 32 (0x20) */
 
 /**
   * \brief Host Interface Registers (GFXSS_GPU_GCNANO)
   */
-typedef struct
-{
-    __IOM uint32_t AQHICLOCKCONTROL;              /*!< 0x00000000 Clock Control Register. */
-    __IM uint32_t AQHIIDLE;                      /*!< 0x00000004 Idle Status Register. */
-    __IOM uint32_t AQAXICONFIG;                   /*!< 0x00000008 AXI Configuration Register. */
-    __IM uint32_t AQAXISTATUS;                   /*!< 0x0000000C AXI Status Register. READ ONLY. Back-to-back read is forbidden
+typedef struct {
+  __IOM uint32_t AQHICLOCKCONTROL;              /*!< 0x00000000 Clock Control Register. */
+   __IM uint32_t AQHIIDLE;                      /*!< 0x00000004 Idle Status Register. */
+  __IOM uint32_t AQAXICONFIG;                   /*!< 0x00000008 AXI Configuration Register. */
+   __IM uint32_t AQAXISTATUS;                   /*!< 0x0000000C AXI Status Register. READ ONLY. Back-to-back read is forbidden
                                                                 to this register and can cause system hang. Please insert delay
                                                                 (nop operation) between two consecutive reads while accessing
                                                                 this register outside of VSI drivers. */
-    __IM uint32_t AQINTRACKNOWLEDGE;             /*!< 0x00000010 Interrupt Acknowledge Register. Each bit represents a
+   __IM uint32_t AQINTRACKNOWLEDGE;             /*!< 0x00000010 Interrupt Acknowledge Register. Each bit represents a
                                                                 corresponding event being triggered. Reading from this register
                                                                 clears the outstanding interrupt. READ ONLY. When the access
                                                                 comes from a debugger (HMASTER[0] == 1), the clear by read
@@ -78,492 +76,484 @@ typedef struct
                                                                 register and can cause system hang. Please insert delay (nop
                                                                 operation) between two consecutive reads while accessing this
                                                                 register outside of VSI drivers. */
-    __IOM uint32_t AQINTRENBL;                    /*!< 0x00000014 Interrupt Enable Register. Each bit enables a corresponding
+  __IOM uint32_t AQINTRENBL;                    /*!< 0x00000014 Interrupt Enable Register. Each bit enables a corresponding
                                                                 event. */
-    __IM uint32_t RESERVED[3];
-    __IM uint32_t GCCHIPREV;                     /*!< 0x00000024 Chip Revsion Register. Shows the revision for the chip in BCD.
+   __IM uint32_t RESERVED[3];
+   __IM uint32_t GCCHIPREV;                     /*!< 0x00000024 Chip Revsion Register. Shows the revision for the chip in BCD.
                                                                 This register has no set reset value. It varies with the
                                                                 implementation. READ ONLY. */
-    __IM uint32_t GCCHIPDATE;                    /*!< 0x00000028 Chip Date Register. Shows the release date for the IP in
+   __IM uint32_t GCCHIPDATE;                    /*!< 0x00000028 Chip Date Register. Shows the release date for the IP in
                                                                 YYYYMMDD (year/month/day) format. This register has no set reset
                                                                 value. It varies with the implementation. READ ONLY. */
-    __IM uint32_t RESERVED1[27];
-    __IM uint32_t GCREGHICHIPPATCHREV;           /*!< 0x00000098 Chip Patch Revision Register. Patch revision level for the
+   __IM uint32_t RESERVED1[27];
+   __IM uint32_t GCREGHICHIPPATCHREV;           /*!< 0x00000098 Chip Patch Revision Register. Patch revision level for the
                                                                 chip. It varies per release. READ ONLY */
-    __IM uint32_t RESERVED2[3];
-    __IM uint32_t GCPRODUCTID;                   /*!< 0x000000A8 Product Identification Register. Shows Product ID. READ ONLY. */
-    __IM uint32_t RESERVED3[21];
-    __IOM uint32_t GCMODULEPOWERCONTROLS;         /*!< 0x00000100 Module Power Control Register. Control register for module
+   __IM uint32_t RESERVED2[3];
+   __IM uint32_t GCPRODUCTID;                   /*!< 0x000000A8 Product Identification Register. Shows Product ID. READ ONLY. */
+   __IM uint32_t RESERVED3[21];
+  __IOM uint32_t GCMODULEPOWERCONTROLS;         /*!< 0x00000100 Module Power Control Register. Control register for module
                                                                 level power controls. */
-    __IOM uint32_t GCMODULEPOWERMODULECONTROL;    /*!< 0x00000104 Module Power Module Control Register. Module level control
+  __IOM uint32_t GCMODULEPOWERMODULECONTROL;    /*!< 0x00000104 Module Power Module Control Register. Module level control
                                                                 register. */
-    __IM uint32_t GCMODULEPOWERMODULESTATUS;     /*!< 0x00000108 Module Power Module Status Register. Module level control
+   __IM uint32_t GCMODULEPOWERMODULESTATUS;     /*!< 0x00000108 Module Power Module Status Register. Module level control
                                                                 status. */
-    __IM uint32_t RESERVED4[194];
-    __IOM uint32_t AQMEMORYDEBUG;                 /*!< 0x00000414 Memory Debug Register. */
-    __IM uint32_t RESERVED5[5];
-    __IOM uint32_t AQREGISTERTIMINGCONTROL;       /*!< 0x0000042C Timing Control Register. */
-    __IM uint32_t RESERVED6[52];
-    __IOM uint32_t GCREGFETCHADDRESS;             /*!< 0x00000500 Fetch Command Buffer Base Address Register. Address of the
+   __IM uint32_t RESERVED4[194];
+  __IOM uint32_t AQMEMORYDEBUG;                 /*!< 0x00000414 Memory Debug Register. */
+   __IM uint32_t RESERVED5[5];
+  __IOM uint32_t AQREGISTERTIMINGCONTROL;       /*!< 0x0000042C Timing Control Register. */
+   __IM uint32_t RESERVED6[52];
+  __IOM uint32_t GCREGFETCHADDRESS;             /*!< 0x00000500 Fetch Command Buffer Base Address Register. Address of the
                                                                 command buffer. The address must be 64-byte aligned. */
-    __IOM uint32_t GCREGFETCHCONTROL;             /*!< 0x00000504 Fetch Control Register. Writing a non-zero value to this
+  __IOM uint32_t GCREGFETCHCONTROL;             /*!< 0x00000504 Fetch Control Register. Writing a non-zero value to this
                                                                 register starts the fetch engine. The FE will start fetching
                                                                 64-bit commands and data starting at the address specified by
                                                                 the gcregFetchAddress register. Make sure this count is large
                                                                 enough to fetch the END command, otherwise the FE will wait
                                                                 until more data is coming. */
-    __IM uint32_t GCREGCURRENTFETCHADDRESS;      /*!< 0x00000508 Current Fetch Command Address Register. Debugging register that
+   __IM uint32_t GCREGCURRENTFETCHADDRESS;      /*!< 0x00000508 Current Fetch Command Address Register. Debugging register that
                                                                 defines the current address the FE is fetching data from. READ
                                                                 ONLY. */
-    __IM uint32_t RESERVED7[189];
+   __IM uint32_t RESERVED7[189];
 } GFXSS_GPU_GCNANO_Type;                        /*!< Size = 2048 (0x800) */
 
 /**
   * \brief Graphics Processing Unit. (GFXSS_GPU)
   */
-typedef struct
-{
-    GFXSS_GPU_MXGPU_Type MXGPU;             /*!< 0x00000000 Platform IP standard configuration for GPU. */
-    __IM uint32_t RESERVED[504];
-    GFXSS_GPU_GCNANO_Type GCNANO;           /*!< 0x00000800 Host Interface Registers */
+typedef struct {
+        GFXSS_GPU_MXGPU_Type MXGPU;             /*!< 0x00000000 Platform IP standard configuration for GPU. */
+   __IM uint32_t RESERVED[504];
+        GFXSS_GPU_GCNANO_Type GCNANO;           /*!< 0x00000800 Host Interface Registers */
 } GFXSS_GPU_Type;                               /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Platform IP standard configuration for DC. (GFXSS_DC_MXDC)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 IP control. */
-    __IOM uint32_t CLK_CTL;                       /*!< 0x00000004 Clock control. */
-    __IOM uint32_t IO_CTL;                        /*!< 0x00000008 IO enable control. */
-    __IM uint32_t STATUS;                        /*!< 0x0000000C IP status. */
-    __IOM uint32_t INTR;                          /*!< 0x00000010 Interrupt status. */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000014 Interrupt set bits. */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Interrupt mask bits. */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Interrupt masked bits. */
-    __IOM uint32_t ADDR0_INT;                     /*!< 0x00000020 Address 0 for interrupt generation. */
-    __IOM uint32_t ADDR1_INT;                     /*!< 0x00000024 Address 1 for interrupt generation. */
-    __IOM uint32_t ADDR2_INT;                     /*!< 0x00000028 Address 2 for interrupt generation. */
-    __IOM uint32_t ADDR3_INT;                     /*!< 0x0000002C Address 3 for interrupt generation. */
-    __IM uint32_t RESERVED[4];
-    __IOM uint32_t RLAD_CTL;                      /*!< 0x00000040 Control options for the RLAD decoder. */
-    __IOM uint32_t RLAD_IMG;                      /*!< 0x00000044 Properties of the uncompressed image. */
-    __IOM uint32_t RLAD_ENC;                      /*!< 0x00000048 Configuration of the encoder that compressed the image. */
-    __IOM uint32_t RLAD_BUF0;                     /*!< 0x0000004C Properties of the compressed image data buffer. */
-    __IOM uint32_t RLAD_BUF1;                     /*!< 0x00000050 Properties of the compressed image data buffer. */
-    __IM uint32_t RLAD_STATUS;                   /*!< 0x00000054 RLAD decoder status. */
-    __IM uint32_t RESERVED1[6];
-    __IM uint32_t IPIDENTIFIER;                  /*!< 0x00000070 GFXSS IP and desig release identification (with DC, GPU and
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 IP control. */
+  __IOM uint32_t CLK_CTL;                       /*!< 0x00000004 Clock control. */
+  __IOM uint32_t IO_CTL;                        /*!< 0x00000008 IO enable control. */
+   __IM uint32_t STATUS;                        /*!< 0x0000000C IP status. */
+  __IOM uint32_t INTR;                          /*!< 0x00000010 Interrupt status. */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000014 Interrupt set bits. */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Interrupt mask bits. */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Interrupt masked bits. */
+  __IOM uint32_t ADDR0_INT;                     /*!< 0x00000020 Address 0 for interrupt generation. */
+  __IOM uint32_t ADDR1_INT;                     /*!< 0x00000024 Address 1 for interrupt generation. */
+  __IOM uint32_t ADDR2_INT;                     /*!< 0x00000028 Address 2 for interrupt generation. */
+  __IOM uint32_t ADDR3_INT;                     /*!< 0x0000002C Address 3 for interrupt generation. */
+   __IM uint32_t RESERVED[4];
+  __IOM uint32_t RLAD_CTL;                      /*!< 0x00000040 Control options for the RLAD decoder. */
+  __IOM uint32_t RLAD_IMG;                      /*!< 0x00000044 Properties of the uncompressed image. */
+  __IOM uint32_t RLAD_ENC;                      /*!< 0x00000048 Configuration of the encoder that compressed the image. */
+  __IOM uint32_t RLAD_BUF0;                     /*!< 0x0000004C Properties of the compressed image data buffer. */
+  __IOM uint32_t RLAD_BUF1;                     /*!< 0x00000050 Properties of the compressed image data buffer. */
+   __IM uint32_t RLAD_STATUS;                   /*!< 0x00000054 RLAD decoder status. */
+   __IM uint32_t RESERVED1[6];
+   __IM uint32_t IPIDENTIFIER;                  /*!< 0x00000070 GFXSS IP and desig release identification (with DC, GPU and
                                                                 MIPIDSI). */
-    __IM uint32_t RESERVED2[3];
+   __IM uint32_t RESERVED2[3];
 } GFXSS_DC_MXDC_Type;                           /*!< Size = 128 (0x80) */
 
 /**
   * \brief Host Interface Registers (GFXSS_DC_DCNANO)
   */
-typedef struct
-{
-    __IM uint32_t GCREGDCCHIPREV;                /*!< 0x00000000 Chip Revision Register. Shows the revision for the chip in BCD.
+typedef struct {
+   __IM uint32_t GCREGDCCHIPREV;                /*!< 0x00000000 Chip Revision Register. Shows the revision for the chip in BCD.
                                                                 This register has no set reset value. It varies with the
                                                                 implementation. READ ONLY. */
-    __IM uint32_t GCREGDCCHIPDATE;               /*!< 0x00000004 Chip Date Register. Shows the release date for the IP in
+   __IM uint32_t GCREGDCCHIPDATE;               /*!< 0x00000004 Chip Date Register. Shows the release date for the IP in
                                                                 YYYYMMDD (year, month. day) format. This register has no set
                                                                 reset value. It varies with the implementation. READ ONLY. */
-    __IM uint32_t GCREGDCCHIPPATCHREV;           /*!< 0x00000008 Patch Revision Register. Patch revision level for the chip.
+   __IM uint32_t GCREGDCCHIPPATCHREV;           /*!< 0x00000008 Patch Revision Register. Patch revision level for the chip.
                                                                 READ ONLY. */
-    __IM uint32_t GCREGDCPRODUCTID;              /*!< 0x0000000C Product Identification Register. READ ONLY. */
-    __IM uint32_t RESERVED[5];
-    __IOM uint32_t GCREGFRAMEBUFFERCONFIG;        /*!< 0x00000024 Frame Buffer Configuration Register. Frame Buffer and Timing
+   __IM uint32_t GCREGDCPRODUCTID;              /*!< 0x0000000C Product Identification Register. READ ONLY. */
+   __IM uint32_t RESERVED[5];
+  __IOM uint32_t GCREGFRAMEBUFFERCONFIG;        /*!< 0x00000024 Frame Buffer Configuration Register. Frame Buffer and Timing
                                                                 control. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGFRAMEBUFFERADDRESS;       /*!< 0x00000028 Frame Buffer Base Address Register. Starting address of the
+  __IOM uint32_t GCREGFRAMEBUFFERADDRESS;       /*!< 0x00000028 Frame Buffer Base Address Register. Starting address of the
                                                                 frame buffer. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGFRAMEBUFFERSTRIDE;        /*!< 0x0000002C Frame Buffer Stride Register. Stride of the frame buffer in
+  __IOM uint32_t GCREGFRAMEBUFFERSTRIDE;        /*!< 0x0000002C Frame Buffer Stride Register. Stride of the frame buffer in
                                                                 bytes. NOTE.. This register is double buffered. */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t GCREGDCTILEINCFG;              /*!< 0x00000034 Tile Input Configuration Register. Tile input configuration.
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t GCREGDCTILEINCFG;              /*!< 0x00000034 Tile Input Configuration Register. Tile input configuration.
                                                                 NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGDCTILEUVFRAMEBUFFERADR;   /*!< 0x00000038 Frame Buffer Tiled UV Base Address Register. UV frame buffer
+  __IOM uint32_t GCREGDCTILEUVFRAMEBUFFERADR;   /*!< 0x00000038 Frame Buffer Tiled UV Base Address Register. UV frame buffer
                                                                 address when tile input. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGDCTILEUVFRAMEBUFFERSTR;   /*!< 0x0000003C Frame Buffer Tiled UV Stride Register. UV frame buffer stride
+  __IOM uint32_t GCREGDCTILEUVFRAMEBUFFERSTR;   /*!< 0x0000003C Frame Buffer Tiled UV Stride Register. UV frame buffer stride
                                                                 when tile input NOTE.. This register is double buffered. */
-    __IM uint32_t RESERVED2[6];
-    __IOM uint32_t GCREGFRAMEBUFFERBACKGROUND;    /*!< 0x00000058 Framebuffer background color. NOTE.. This register is double
+   __IM uint32_t RESERVED2[6];
+  __IOM uint32_t GCREGFRAMEBUFFERBACKGROUND;    /*!< 0x00000058 Framebuffer background color. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGFRAMEBUFFERCOLORKEY;      /*!< 0x0000005C Framebuffer Color Key Start Address Register. Start of color
+  __IOM uint32_t GCREGFRAMEBUFFERCOLORKEY;      /*!< 0x0000005C Framebuffer Color Key Start Address Register. Start of color
                                                                 key range of framebuffer. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGFRAMEBUFFERCOLORKEYHIGH;  /*!< 0x00000060 Framebuffer Color Key End Address Register. End of color key
+  __IOM uint32_t GCREGFRAMEBUFFERCOLORKEYHIGH;  /*!< 0x00000060 Framebuffer Color Key End Address Register. End of color key
                                                                 range of framebuffer. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGFRAMEBUFFERCLEARVALUE;    /*!< 0x00000064 Framebuffer Clear Value Register. Clear value used when
+  __IOM uint32_t GCREGFRAMEBUFFERCLEARVALUE;    /*!< 0x00000064 Framebuffer Clear Value Register. Clear value used when
                                                                 dcregFrameBufferConfig.Clear is enabled, format is A8R8G8B8.
                                                                 NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGVIDEOTL;                  /*!< 0x00000068 Top left coordinate of panel pixel where the video should
+  __IOM uint32_t GCREGVIDEOTL;                  /*!< 0x00000068 Top left coordinate of panel pixel where the video should
                                                                 start. Be aware there is no panning inside the video. NOTE..
                                                                 This register is double buffered. */
-    __IOM uint32_t GCREGFRAMEBUFFERSIZE;          /*!< 0x0000006C video size information. NOTE.. This register is double
+  __IOM uint32_t GCREGFRAMEBUFFERSIZE;          /*!< 0x0000006C video size information. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGVIDEOGLOBALALPHA;         /*!< 0x00000070 Global alpha for the video. NOTE.. This register is double
+  __IOM uint32_t GCREGVIDEOGLOBALALPHA;         /*!< 0x00000070 Global alpha for the video. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGBLENDSTACKORDER;          /*!< 0x00000074 Set the video, overlay0, overlay1 order for blend. The 1st is
+  __IOM uint32_t GCREGBLENDSTACKORDER;          /*!< 0x00000074 Set the video, overlay0, overlay1 order for blend. The 1st is
                                                                 the lowest layer, the 2nd is the middle layer, the 3rd is the
                                                                 highest layer. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGVIDEOALPHABLENDCONFIG;    /*!< 0x00000078 Alpha Blending Configuration Register. NOTE.. This register is
+  __IOM uint32_t GCREGVIDEOALPHABLENDCONFIG;    /*!< 0x00000078 Alpha Blending Configuration Register. NOTE.. This register is
                                                                 double buffered. */
-    __IOM uint32_t GCREGOVERLAYCONFIG;            /*!< 0x0000007C Overlay Configuration Register. Overlay control. NOTE.. This
+  __IOM uint32_t GCREGOVERLAYCONFIG;            /*!< 0x0000007C Overlay Configuration Register. Overlay control. NOTE.. This
                                                                 register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYADDRESS;           /*!< 0x00000080 Starting address of the overlay. NOTE.. This register is double
+  __IOM uint32_t GCREGOVERLAYADDRESS;           /*!< 0x00000080 Starting address of the overlay. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGOVERLAYSTRIDE;            /*!< 0x00000084 Stride of the overlay in bytes. NOTE.. This register is double
+  __IOM uint32_t GCREGOVERLAYSTRIDE;            /*!< 0x00000084 Stride of the overlay in bytes. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGDCOVERLAYTILEINCFG;       /*!< 0x00000088 Tile Input Configuration Register. Tile input configuration.
+  __IOM uint32_t GCREGDCOVERLAYTILEINCFG;       /*!< 0x00000088 Tile Input Configuration Register. Tile input configuration.
                                                                 NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGDCTILEUVOVERLAYADR;       /*!< 0x0000008C Starting address of the overlay UV. NOTE.. This register is
+  __IOM uint32_t GCREGDCTILEUVOVERLAYADR;       /*!< 0x0000008C Starting address of the overlay UV. NOTE.. This register is
                                                                 double buffered. */
-    __IOM uint32_t GCREGDCTILEUVOVERLAYSTR;       /*!< 0x00000090 Stride of the overlay UV in bytes. NOTE.. This register is
+  __IOM uint32_t GCREGDCTILEUVOVERLAYSTR;       /*!< 0x00000090 Stride of the overlay UV in bytes. NOTE.. This register is
                                                                 double buffered. */
-    __IOM uint32_t GCREGOVERLAYTL;                /*!< 0x00000094 Top left coordinate of panel pixel where the overlay should
+  __IOM uint32_t GCREGOVERLAYTL;                /*!< 0x00000094 Top left coordinate of panel pixel where the overlay should
                                                                 start. Be aware there is no panning inside the overlay. NOTE..
                                                                 This register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYSIZE;              /*!< 0x00000098 overlay size information. NOTE.. This register is double
+  __IOM uint32_t GCREGOVERLAYSIZE;              /*!< 0x00000098 overlay size information. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGOVERLAYCOLORKEY;          /*!< 0x0000009C Overlay Color Key Start Address Register. Start of color key
+  __IOM uint32_t GCREGOVERLAYCOLORKEY;          /*!< 0x0000009C Overlay Color Key Start Address Register. Start of color key
                                                                 range for overlay. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYCOLORKEYHIGH;      /*!< 0x000000A0 Overlay Color Key End Address Register. End of color key range
+  __IOM uint32_t GCREGOVERLAYCOLORKEYHIGH;      /*!< 0x000000A0 Overlay Color Key End Address Register. End of color key range
                                                                 for overlay. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYALPHABLENDCONFIG;  /*!< 0x000000A4 Alpha Blending Configuration Register. NOTE.. This register is
+  __IOM uint32_t GCREGOVERLAYALPHABLENDCONFIG;  /*!< 0x000000A4 Alpha Blending Configuration Register. NOTE.. This register is
                                                                 double buffered. */
-    __IOM uint32_t GCREGOVERLAYGLOBALALPHA;       /*!< 0x000000A8 Overlay global alpha value. NOTE.. This register is double
+  __IOM uint32_t GCREGOVERLAYGLOBALALPHA;       /*!< 0x000000A8 Overlay global alpha value. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGOVERLAYCLEARVALUE;        /*!< 0x000000AC Overlay Clear Value Register. Clear value used when
+  __IOM uint32_t GCREGOVERLAYCLEARVALUE;        /*!< 0x000000AC Overlay Clear Value Register. Clear value used when
                                                                 dcregOverlayConfig.Clear is enabled, Format is A8R8G8B8. NOTE..
                                                                 This register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYCONFIG1;           /*!< 0x000000B0 Overlay Configuration Register. Overlay control. NOTE.. This
+  __IOM uint32_t GCREGOVERLAYCONFIG1;           /*!< 0x000000B0 Overlay Configuration Register. Overlay control. NOTE.. This
                                                                 register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYADDRESS1;          /*!< 0x000000B4 Starting address of the overlay. NOTE.. This register is double
+  __IOM uint32_t GCREGOVERLAYADDRESS1;          /*!< 0x000000B4 Starting address of the overlay. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGOVERLAYSTRIDE1;           /*!< 0x000000B8 Stride of the overlay in bytes. NOTE.. This register is double
+  __IOM uint32_t GCREGOVERLAYSTRIDE1;           /*!< 0x000000B8 Stride of the overlay in bytes. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGOVERLAYTL1;               /*!< 0x000000BC Top left coordinate of panel pixel where the overlay should
+  __IOM uint32_t GCREGOVERLAYTL1;               /*!< 0x000000BC Top left coordinate of panel pixel where the overlay should
                                                                 start. Be aware there is no panning inside the overlay. NOTE..
                                                                 This register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYSIZE1;             /*!< 0x000000C0 overlay1 size information. NOTE.. This register is double
+  __IOM uint32_t GCREGOVERLAYSIZE1;             /*!< 0x000000C0 overlay1 size information. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGOVERLAYCOLORKEY1;         /*!< 0x000000C4 Overlay Color Key Start Address Register. Start of color key
+  __IOM uint32_t GCREGOVERLAYCOLORKEY1;         /*!< 0x000000C4 Overlay Color Key Start Address Register. Start of color key
                                                                 range for overlay. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYCOLORKEYHIGH1;     /*!< 0x000000C8 Overlay Color Key End Address Register. End of color key range
+  __IOM uint32_t GCREGOVERLAYCOLORKEYHIGH1;     /*!< 0x000000C8 Overlay Color Key End Address Register. End of color key range
                                                                 for overlay. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGOVERLAYALPHABLENDCONFIG1; /*!< 0x000000CC Alpha Blending Configuration Register. NOTE.. This register is
+  __IOM uint32_t GCREGOVERLAYALPHABLENDCONFIG1; /*!< 0x000000CC Alpha Blending Configuration Register. NOTE.. This register is
                                                                 double buffered. */
-    __IOM uint32_t GCREGOVERLAYGLOBALALPHA1;      /*!< 0x000000D0 Overlay global alpha value. NOTE.. This register is double
+  __IOM uint32_t GCREGOVERLAYGLOBALALPHA1;      /*!< 0x000000D0 Overlay global alpha value. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGOVERLAYCLEARVALUE1;       /*!< 0x000000D4 Overlay Clear Value Register. Clear value used when
+  __IOM uint32_t GCREGOVERLAYCLEARVALUE1;       /*!< 0x000000D4 Overlay Clear Value Register. Clear value used when
                                                                 dcregOverlayConfig.Clear is enabled, Format is A8R8G8B8. NOTE..
                                                                 This register is double buffered. */
-    __IM uint32_t RESERVED3[2];
-    __IOM uint32_t GCREGDISPLAYDITHERTABLELOW;    /*!< 0x000000E0 Dither Threshold Table Register. */
-    __IOM uint32_t GCREGDISPLAYDITHERTABLEHIGH;   /*!< 0x000000E4 Dither Threshold Table Register. */
-    __IOM uint32_t GCREGPANELCONFIG;              /*!< 0x000000E8 Panel Configuration Register. */
-    __IOM uint32_t GCREGPANELCONTROL;             /*!< 0x000000EC Panel control Register. */
-    __IOM uint32_t GCREGPANELFUNCTION;            /*!< 0x000000F0 Panel function Register. NOTE.. This register is double
+   __IM uint32_t RESERVED3[2];
+  __IOM uint32_t GCREGDISPLAYDITHERTABLELOW;    /*!< 0x000000E0 Dither Threshold Table Register. */
+  __IOM uint32_t GCREGDISPLAYDITHERTABLEHIGH;   /*!< 0x000000E4 Dither Threshold Table Register. */
+  __IOM uint32_t GCREGPANELCONFIG;              /*!< 0x000000E8 Panel Configuration Register. */
+  __IOM uint32_t GCREGPANELCONTROL;             /*!< 0x000000EC Panel control Register. */
+  __IOM uint32_t GCREGPANELFUNCTION;            /*!< 0x000000F0 Panel function Register. NOTE.. This register is double
                                                                 buffered. */
-    __OM uint32_t GCREGPANELWORKING;             /*!< 0x000000F4 Register to trigger Display Controller. */
-    __IM uint32_t GCREGPANELSTATE;               /*!< 0x000000F8 Register representing the Display Controller status. READ ONLY. */
-    __IM uint32_t RESERVED4;
-    __IOM uint32_t GCREGHDISPLAY;                 /*!< 0x00000100 Horizontal Display Total and Visible Pixel Count Register.
+   __OM uint32_t GCREGPANELWORKING;             /*!< 0x000000F4 Register to trigger Display Controller. */
+   __IM uint32_t GCREGPANELSTATE;               /*!< 0x000000F8 Register representing the Display Controller status. READ ONLY. */
+   __IM uint32_t RESERVED4;
+  __IOM uint32_t GCREGHDISPLAY;                 /*!< 0x00000100 Horizontal Display Total and Visible Pixel Count Register.
                                                                 Horizontal Total and Display End counters. NOTE.. This register
                                                                 is double buffered. */
-    __IOM uint32_t GCREGHSYNC;                    /*!< 0x00000104 Horizontal Sync Counter Register. Horizontal Sync counters.
+  __IOM uint32_t GCREGHSYNC;                    /*!< 0x00000104 Horizontal Sync Counter Register. Horizontal Sync counters.
                                                                 NOTE.. This register is double buffered. */
-    __IM uint32_t RESERVED5[2];
-    __IOM uint32_t GCREGVDISPLAY;                 /*!< 0x00000110 Vertical Total and Visible Pixel Count Register. Vertical Total
+   __IM uint32_t RESERVED5[2];
+  __IOM uint32_t GCREGVDISPLAY;                 /*!< 0x00000110 Vertical Total and Visible Pixel Count Register. Vertical Total
                                                                 and Display End counters. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGVSYNC;                    /*!< 0x00000114 Vertical Sync Counter Register. Vertical Sync counters. NOTE..
+  __IOM uint32_t GCREGVSYNC;                    /*!< 0x00000114 Vertical Sync Counter Register. Vertical Sync counters. NOTE..
                                                                 This register is double buffered. */
-    __IM uint32_t GCREGDISPLAYCURRENTLOCATION;   /*!< 0x00000118 Display Current Location Register. Current x,y location of
+   __IM uint32_t GCREGDISPLAYCURRENTLOCATION;   /*!< 0x00000118 Display Current Location Register. Current x,y location of
                                                                 display controller. READ ONLY. */
-    __OM uint32_t GCREGGAMMAINDEX;               /*!< 0x0000011C Gamma Index Register. Index into gamma table. See
+   __OM uint32_t GCREGGAMMAINDEX;               /*!< 0x0000011C Gamma Index Register. Index into gamma table. See
                                                                 gcregGammaData for more information. */
-    __OM uint32_t GCREGGAMMADATA;                /*!< 0x00000120 Gamma Data Register. Translation values for the gamma table.
+   __OM uint32_t GCREGGAMMADATA;                /*!< 0x00000120 Gamma Data Register. Translation values for the gamma table.
                                                                 When this register gets written, the data gets stored in the
                                                                 gamma table at the index specified by the gcregGammaIndex
                                                                 register. After the register is written, the index gets
                                                                 incremented. */
-    __IOM uint32_t GCREGCURSORCONFIG;             /*!< 0x00000124 Cursor Configuration Register. Configuration register for the
+  __IOM uint32_t GCREGCURSORCONFIG;             /*!< 0x00000124 Cursor Configuration Register. Configuration register for the
                                                                 cursor. Double-buffered values in this register cannot be read
                                                                 while a flip is in progress. NOTE.. This register is double
                                                                 buffered. */
-    __IOM uint32_t GCREGCURSORADDRESS;            /*!< 0x00000128 Cursor Base Address Register. Address of the cursor shape.
+  __IOM uint32_t GCREGCURSORADDRESS;            /*!< 0x00000128 Cursor Base Address Register. Address of the cursor shape.
                                                                 NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGCURSORLOCATION;           /*!< 0x0000012C Cursor Location Register. Location of the cursor on the owning
+  __IOM uint32_t GCREGCURSORLOCATION;           /*!< 0x0000012C Cursor Location Register. Location of the cursor on the owning
                                                                 display. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGCURSORBACKGROUND;         /*!< 0x00000130 Cursor Background Color Register. The background color for
+  __IOM uint32_t GCREGCURSORBACKGROUND;         /*!< 0x00000130 Cursor Background Color Register. The background color for
                                                                 Masked cursors. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGCURSORFOREGROUND;         /*!< 0x00000134 Cursor Foreground Color Register. The foreground color for
+  __IOM uint32_t GCREGCURSORFOREGROUND;         /*!< 0x00000134 Cursor Foreground Color Register. The foreground color for
                                                                 Masked cursors. NOTE.. This register is double buffered. */
-    __IM uint32_t GCREGDISPLAYINTR;              /*!< 0x00000138 Display Interrupt Register. This is the interrupt register for
+   __IM uint32_t GCREGDISPLAYINTR;              /*!< 0x00000138 Display Interrupt Register. This is the interrupt register for
                                                                 the Display. This register will automatically clear after a
                                                                 read. The interrupt bit is set when the current frame buffer is
                                                                 used up. The interrupt signal will be pulled up only when the
                                                                 interrupt enable bit in register gcregDisplayIntrEnable is
                                                                 enabled. READ ONLY. When the access comes from a debugger
                                                                 (HMASTER[0] == 1), the clear by read function is disabled. */
-    __IOM uint32_t GCREGDISPLAYINTRENABLE;        /*!< 0x0000013C Display Interrupt Enable Register. The interrupt enable
+  __IOM uint32_t GCREGDISPLAYINTRENABLE;        /*!< 0x0000013C Display Interrupt Enable Register. The interrupt enable
                                                                 register for display_0 (and display_1 if present). NOTE..
                                                                 Interrupt enable for register gcregDisplayIntr. NOTE.. This
                                                                 register is double buffered. */
-    __IOM uint32_t GCREGDBICONFIG;                /*!< 0x00000140 DBI Configuration Register. Configuration register for DBI
+  __IOM uint32_t GCREGDBICONFIG;                /*!< 0x00000140 DBI Configuration Register. Configuration register for DBI
                                                                 output. */
-    __OM uint32_t GCREGDBIIFRESET;               /*!< 0x00000144 DBI Reset Register. Reset DBI interface to idle state. WRITE
+   __OM uint32_t GCREGDBIIFRESET;               /*!< 0x00000144 DBI Reset Register. Reset DBI interface to idle state. WRITE
                                                                 ONLY. */
-    __IOM uint32_t GCREGDBIWRCHAR1;               /*!< 0x00000148 DBI Write AC Characteristics 1 Register. DBI write AC
+  __IOM uint32_t GCREGDBIWRCHAR1;               /*!< 0x00000148 DBI Write AC Characteristics 1 Register. DBI write AC
                                                                 characteristics definition register 1 */
-    __IOM uint32_t GCREGDBIWRCHAR2;               /*!< 0x0000014C DBI Write AC Characteristics 2 Register. DBI write AC
+  __IOM uint32_t GCREGDBIWRCHAR2;               /*!< 0x0000014C DBI Write AC Characteristics 2 Register. DBI write AC
                                                                 characteristics definition register 2 */
-    __OM uint32_t GCREGDBICMD;                   /*!< 0x00000150 DBI Command Control Register. DBI Command in/out port. Writes
+   __OM uint32_t GCREGDBICMD;                   /*!< 0x00000150 DBI Command Control Register. DBI Command in/out port. Writes
                                                                 to this register will send command/data to the DBI port. WRITE
                                                                 ONLY. */
-    __IOM uint32_t GCREGDPICONFIG;                /*!< 0x00000154 DPI Configuration Register. The configuration register for DPI
+  __IOM uint32_t GCREGDPICONFIG;                /*!< 0x00000154 DPI Configuration Register. The configuration register for DPI
                                                                 output. NOTE.. This register is double buffered. */
-    __IOM uint32_t GCREGDBITYPECCFG;              /*!< 0x00000158 DBI Type C Timing Control Register. DBI Type C write timing
+  __IOM uint32_t GCREGDBITYPECCFG;              /*!< 0x00000158 DBI Type C Timing Control Register. DBI Type C write timing
                                                                 definition. */
-    __IM uint32_t GCREGDCSTATUS;                 /*!< 0x0000015C Display Controller Status Register. READ ONLY. */
-    __IOM uint32_t GCREGSRCCONFIGENDIAN;          /*!< 0x00000160 Endian control. */
-    __OM uint32_t GCREGSOFTRESET;                /*!< 0x00000164 Soft reset. WRITE ONLY. */
-    __IOM uint32_t GCREGDCCONTROL;                /*!< 0x00000168 Control register. */
-    __IOM uint32_t GCREGREGISTERTIMINGCONTROL;    /*!< 0x0000016C Timing control register. */
-    __IOM uint32_t GCREGDEBUGCOUNTERSELECT;       /*!< 0x00000170 Debug Counter Select Register. */
-    __IM uint32_t GCREGDEBUGCOUNTERVALUE;        /*!< 0x00000174 Debug Counter Value Register. Debug Counter Value as specified
+   __IM uint32_t GCREGDCSTATUS;                 /*!< 0x0000015C Display Controller Status Register. READ ONLY. */
+  __IOM uint32_t GCREGSRCCONFIGENDIAN;          /*!< 0x00000160 Endian control. */
+   __OM uint32_t GCREGSOFTRESET;                /*!< 0x00000164 Soft reset. WRITE ONLY. */
+  __IOM uint32_t GCREGDCCONTROL;                /*!< 0x00000168 Control register. */
+  __IOM uint32_t GCREGREGISTERTIMINGCONTROL;    /*!< 0x0000016C Timing control register. */
+  __IOM uint32_t GCREGDEBUGCOUNTERSELECT;       /*!< 0x00000170 Debug Counter Select Register. */
+   __IM uint32_t GCREGDEBUGCOUNTERVALUE;        /*!< 0x00000174 Debug Counter Value Register. Debug Counter Value as specified
                                                                 in gcregDebugCounterSelect. READ ONLY */
-    __IM uint32_t RESERVED6[10];
-    __IOM uint32_t GCREGLAYERCLOCKGATE;           /*!< 0x000001A0 Layer clock gater Register. disable video/overlay0/overlay1
+   __IM uint32_t RESERVED6[10];
+  __IOM uint32_t GCREGLAYERCLOCKGATE;           /*!< 0x000001A0 Layer clock gater Register. disable video/overlay0/overlay1
                                                                 clock gater */
-    __IM uint32_t GCREGDEBUGTOTVIDEOREQ;         /*!< 0x000001A4 debug registers.. count video current frame number of requested
+   __IM uint32_t GCREGDEBUGTOTVIDEOREQ;         /*!< 0x000001A4 debug registers.. count video current frame number of requested
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTVIDEOREQ;         /*!< 0x000001A8 debug registers.. count video last frame number of requested
+   __IM uint32_t GCREGDEBUGLSTVIDEOREQ;         /*!< 0x000001A8 debug registers.. count video last frame number of requested
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTVIDEORRB;         /*!< 0x000001AC debug registers.. count video current frame number of returned
+   __IM uint32_t GCREGDEBUGTOTVIDEORRB;         /*!< 0x000001AC debug registers.. count video current frame number of returned
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTVIDEORRB;         /*!< 0x000001B0 debug registers.. count video last frame number of returned
+   __IM uint32_t GCREGDEBUGLSTVIDEORRB;         /*!< 0x000001B0 debug registers.. count video last frame number of returned
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTOVERLAY0REQ;      /*!< 0x000001B4 debug registers.. count overlay0 current frame number of
+   __IM uint32_t GCREGDEBUGTOTOVERLAY0REQ;      /*!< 0x000001B4 debug registers.. count overlay0 current frame number of
                                                                 requested burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTOVERLAY0REQ;      /*!< 0x000001B8 debug registers.. count overlay0 last frame number of requested
+   __IM uint32_t GCREGDEBUGLSTOVERLAY0REQ;      /*!< 0x000001B8 debug registers.. count overlay0 last frame number of requested
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTOVERLAY0RRB;      /*!< 0x000001BC debug registers.. count overlay0 current frame number of
+   __IM uint32_t GCREGDEBUGTOTOVERLAY0RRB;      /*!< 0x000001BC debug registers.. count overlay0 current frame number of
                                                                 returned burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTOVERLAY0RRB;      /*!< 0x000001C0 debug registers.. count overlay0 last frame number of returned
+   __IM uint32_t GCREGDEBUGLSTOVERLAY0RRB;      /*!< 0x000001C0 debug registers.. count overlay0 last frame number of returned
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTOVERLAY1REQ;      /*!< 0x000001C4 debug registers.. count overlay1 current frame number of
+   __IM uint32_t GCREGDEBUGTOTOVERLAY1REQ;      /*!< 0x000001C4 debug registers.. count overlay1 current frame number of
                                                                 requested burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTOVERLAY1REQ;      /*!< 0x000001C8 debug registers.. count overlay1 last frame number of requested
+   __IM uint32_t GCREGDEBUGLSTOVERLAY1REQ;      /*!< 0x000001C8 debug registers.. count overlay1 last frame number of requested
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTOVERLAY1RRB;      /*!< 0x000001CC debug registers.. count overlay1 current frame number of
+   __IM uint32_t GCREGDEBUGTOTOVERLAY1RRB;      /*!< 0x000001CC debug registers.. count overlay1 current frame number of
                                                                 returned burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTOVERLAY1RRB;      /*!< 0x000001D0 debug registers.. count overlay1 last frame number of returned
+   __IM uint32_t GCREGDEBUGLSTOVERLAY1RRB;      /*!< 0x000001D0 debug registers.. count overlay1 last frame number of returned
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTCURSORREQ;        /*!< 0x000001D4 debug registers.. count cursor current frame number of
+   __IM uint32_t GCREGDEBUGTOTCURSORREQ;        /*!< 0x000001D4 debug registers.. count cursor current frame number of
                                                                 requested burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTCURSORREQ;        /*!< 0x000001D8 debug registers.. count cursor last frame number of requested
+   __IM uint32_t GCREGDEBUGLSTCURSORREQ;        /*!< 0x000001D8 debug registers.. count cursor last frame number of requested
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTCURSORRRB;        /*!< 0x000001DC debug registers.. count cursor current frame number of returned
+   __IM uint32_t GCREGDEBUGTOTCURSORRRB;        /*!< 0x000001DC debug registers.. count cursor current frame number of returned
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTCURSORRRB;        /*!< 0x000001E0 debug registers.. count cursor last frame number of returned
+   __IM uint32_t GCREGDEBUGLSTCURSORRRB;        /*!< 0x000001E0 debug registers.. count cursor last frame number of returned
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTDCREQ;            /*!< 0x000001E4 debug registers.. count DC current frame number of requested
+   __IM uint32_t GCREGDEBUGTOTDCREQ;            /*!< 0x000001E4 debug registers.. count DC current frame number of requested
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTDCREQ;            /*!< 0x000001E8 debug registers.. count DC last frame number of requested
+   __IM uint32_t GCREGDEBUGLSTDCREQ;            /*!< 0x000001E8 debug registers.. count DC last frame number of requested
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGTOTDCRRB;            /*!< 0x000001EC debug registers.. count DC current frame number of returned
+   __IM uint32_t GCREGDEBUGTOTDCRRB;            /*!< 0x000001EC debug registers.. count DC current frame number of returned
                                                                 burst. READ ONLY */
-    __IM uint32_t GCREGDEBUGLSTDCRRB;            /*!< 0x000001F0 debug registers.. count DC last frame number of returned burst.
+   __IM uint32_t GCREGDEBUGLSTDCRRB;            /*!< 0x000001F0 debug registers.. count DC last frame number of returned burst.
                                                                 READ ONLY */
-    __IM uint32_t GCREGDEBUGFRAMEANDMISFLAG;     /*!< 0x000001F4 debug registers. READ ONLY */
-    __IM uint32_t RESERVED7[2];
+   __IM uint32_t GCREGDEBUGFRAMEANDMISFLAG;     /*!< 0x000001F4 debug registers. READ ONLY */
+   __IM uint32_t RESERVED7[2];
 } GFXSS_DC_DCNANO_Type;                         /*!< Size = 512 (0x200) */
 
 /**
   * \brief Display Controller. (GFXSS_DC)
   */
-typedef struct
-{
-    GFXSS_DC_MXDC_Type MXDC;                /*!< 0x00000000 Platform IP standard configuration for DC. */
-    __IM uint32_t RESERVED[480];
-    GFXSS_DC_DCNANO_Type DCNANO;            /*!< 0x00000800 Host Interface Registers */
-    __IM uint32_t RESERVED1[384];
+typedef struct {
+        GFXSS_DC_MXDC_Type MXDC;                /*!< 0x00000000 Platform IP standard configuration for DC. */
+   __IM uint32_t RESERVED[480];
+        GFXSS_DC_DCNANO_Type DCNANO;            /*!< 0x00000800 Host Interface Registers */
+   __IM uint32_t RESERVED1[384];
 } GFXSS_DC_Type;                                /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Platform IP standard configuration for MIPI-DSI. (GFXSS_MIPIDSI_MXMIPIDSI)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 IP control. */
-    __IOM uint32_t CLK_CTL;                       /*!< 0x00000004 Clock control. */
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t INTR;                          /*!< 0x00000010 Interrupt status bits. */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000014 Interrupt set bits. */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Interrupt mask bits. */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Interrupt masked bits. */
-    __IOM uint32_t DPI_CMD;                       /*!< 0x00000020 DPI command control. */
-    __IOM uint32_t DBI_CMD;                       /*!< 0x00000024 DBI command control. */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t PHY_FREQ_RANGE;                /*!< 0x00000030 PHY frequency range selection. */
-    __IOM uint32_t BIST;                          /*!< 0x00000034 BIST control. */
-    __IOM uint32_t IO_CONTINUITY_TEST;            /*!< 0x00000038 IO continuity test control. */
-    __IOM uint32_t PLL_TEST_CONFIG1;              /*!< 0x0000003C PLL-SoC interface configuration for Test. */
-    __IOM uint32_t PLL_TEST_CONFIG2;              /*!< 0x00000040 PLL-SoC interface configuration for Test. */
-    __IM uint32_t PLL_TEST_OBS1;                 /*!< 0x00000044 PLL Test Observation bits. */
-    __IM uint32_t PLL_TEST_OBS2;                 /*!< 0x00000048 PLL Test Observation bits. */
-    __IM uint32_t LP_INTERNAL_LOOPBACK_TEST;     /*!< 0x0000004C Low Power internal Loopback Test */
-    __IM uint32_t RESERVED2[1004];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 IP control. */
+  __IOM uint32_t CLK_CTL;                       /*!< 0x00000004 Clock control. */
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t INTR;                          /*!< 0x00000010 Interrupt status bits. */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000014 Interrupt set bits. */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Interrupt mask bits. */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Interrupt masked bits. */
+  __IOM uint32_t DPI_CMD;                       /*!< 0x00000020 DPI command control. */
+  __IOM uint32_t DBI_CMD;                       /*!< 0x00000024 DBI command control. */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t PHY_FREQ_RANGE;                /*!< 0x00000030 PHY frequency range selection. */
+  __IOM uint32_t BIST;                          /*!< 0x00000034 BIST control. */
+  __IOM uint32_t IO_CONTINUITY_TEST;            /*!< 0x00000038 IO continuity test control. */
+  __IOM uint32_t PLL_TEST_CONFIG1;              /*!< 0x0000003C PLL-SoC interface configuration for Test. */
+  __IOM uint32_t PLL_TEST_CONFIG2;              /*!< 0x00000040 PLL-SoC interface configuration for Test. */
+   __IM uint32_t PLL_TEST_OBS1;                 /*!< 0x00000044 PLL Test Observation bits. */
+   __IM uint32_t PLL_TEST_OBS2;                 /*!< 0x00000048 PLL Test Observation bits. */
+   __IM uint32_t LP_INTERNAL_LOOPBACK_TEST;     /*!< 0x0000004C Low Power internal Loopback Test */
+   __IM uint32_t RESERVED2[1004];
 } GFXSS_MIPIDSI_MXMIPIDSI_Type;                 /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief DSI Registers (GFXSS_MIPIDSI_DWCMIPIDSI)
   */
-typedef struct
-{
-    __IM uint32_t VERSION;                       /*!< 0x00000000 Contains the version of the DSI host controller. */
-    __IOM uint32_t PWR_UP;                        /*!< 0x00000004 Controls the power up of the controller. */
-    __IOM uint32_t CLKMGR_CFG;                    /*!< 0x00000008 Configures the factor for internal dividers to divide
+typedef struct {
+   __IM uint32_t VERSION;                       /*!< 0x00000000 Contains the version of the DSI host controller. */
+  __IOM uint32_t PWR_UP;                        /*!< 0x00000004 Controls the power up of the controller. */
+  __IOM uint32_t CLKMGR_CFG;                    /*!< 0x00000008 Configures the factor for internal dividers to divide
                                                                 lanebyteclk for timeout purposes. */
-    __IOM uint32_t DPI_VCID;                      /*!< 0x0000000C Configures the Virtual Channel ID for DPI traffic. */
-    __IOM uint32_t DPI_COLOR_CODING;              /*!< 0x00000010 Configures DPI color coding. */
-    __IOM uint32_t DPI_CFG_POL;                   /*!< 0x00000014 Configures the polarity of DPI signals. */
-    __IOM uint32_t DPI_LP_CMD_TIM;                /*!< 0x00000018 Configures the timing for low-power commands sent while in
+  __IOM uint32_t DPI_VCID;                      /*!< 0x0000000C Configures the Virtual Channel ID for DPI traffic. */
+  __IOM uint32_t DPI_COLOR_CODING;              /*!< 0x00000010 Configures DPI color coding. */
+  __IOM uint32_t DPI_CFG_POL;                   /*!< 0x00000014 Configures the polarity of DPI signals. */
+  __IOM uint32_t DPI_LP_CMD_TIM;                /*!< 0x00000018 Configures the timing for low-power commands sent while in
                                                                 video mode. */
-    __IOM uint32_t DBI_VCID;                      /*!< 0x0000001C Configures Virtual Channel ID for DBI traffic. */
-    __IOM uint32_t DBI_CFG;                       /*!< 0x00000020 Configures the bit width of pixels for DBI. */
-    __IOM uint32_t DBI_PARTITIONING_EN;           /*!< 0x00000024 Configures whether DWC_mipi_dsi_host is to partition DBI
+  __IOM uint32_t DBI_VCID;                      /*!< 0x0000001C Configures Virtual Channel ID for DBI traffic. */
+  __IOM uint32_t DBI_CFG;                       /*!< 0x00000020 Configures the bit width of pixels for DBI. */
+  __IOM uint32_t DBI_PARTITIONING_EN;           /*!< 0x00000024 Configures whether DWC_mipi_dsi_host is to partition DBI
                                                                 traffic automatically. */
-    __IOM uint32_t DBI_CMDSIZE;                   /*!< 0x00000028 Configures the command size and the size for automatic
+  __IOM uint32_t DBI_CMDSIZE;                   /*!< 0x00000028 Configures the command size and the size for automatic
                                                                 partitioning of DBI packets. */
-    __IOM uint32_t PCKHDL_CFG;                    /*!< 0x0000002C Configures how EoTp, BTA, CRC and ECC are to be used, to meet
+  __IOM uint32_t PCKHDL_CFG;                    /*!< 0x0000002C Configures how EoTp, BTA, CRC and ECC are to be used, to meet
                                                                 peripherals characteristics */
-    __IOM uint32_t GEN_VCID;                      /*!< 0x00000030 Configures the Virtual Channel ID of READ responses to store
+  __IOM uint32_t GEN_VCID;                      /*!< 0x00000030 Configures the Virtual Channel ID of READ responses to store
                                                                 and return to Generic interface. */
-    __IOM uint32_t MODE_CFG;                      /*!< 0x00000034 Configures the mode of operation between Video or Command Mode.
+  __IOM uint32_t MODE_CFG;                      /*!< 0x00000034 Configures the mode of operation between Video or Command Mode.
                                                                 (Commands can still be sent while in video mode.) */
-    __IOM uint32_t VID_MODE_CFG;                  /*!< 0x00000038 Configures several aspects of Video mode operation, the
+  __IOM uint32_t VID_MODE_CFG;                  /*!< 0x00000038 Configures several aspects of Video mode operation, the
                                                                 transmission mode, switching to low-power in the middle of a
                                                                 frame, enabling acknowledge and whether to send commands in
                                                                 low-power. */
-    __IOM uint32_t VID_PKT_SIZE;                  /*!< 0x0000003C Configures the video packet size. */
-    __IOM uint32_t VID_NUM_CHUNKS;                /*!< 0x00000040 Configures the number of chunks to use. The data in each chunk
+  __IOM uint32_t VID_PKT_SIZE;                  /*!< 0x0000003C Configures the video packet size. */
+  __IOM uint32_t VID_NUM_CHUNKS;                /*!< 0x00000040 Configures the number of chunks to use. The data in each chunk
                                                                 has the size provided by VID_PKT_SIZE. */
-    __IOM uint32_t VID_NULL_SIZE;                 /*!< 0x00000044 Configures the size of null packets. */
-    __IOM uint32_t VID_HSA_TIME;                  /*!< 0x00000048 Configures the video HSA time. */
-    __IOM uint32_t VID_HBP_TIME;                  /*!< 0x0000004C Configures the video HBP time. */
-    __IOM uint32_t VID_HLINE_TIME;                /*!< 0x00000050 Configures the overall time for each video line. */
-    __IOM uint32_t VID_VSA_LINES;                 /*!< 0x00000054 Configures the VSA period. */
-    __IOM uint32_t VID_VBP_LINES;                 /*!< 0x00000058 Configures the VBP period. */
-    __IOM uint32_t VID_VFP_LINES;                 /*!< 0x0000005C Configures the VFP period. */
-    __IOM uint32_t VID_VACTIVE_LINES;             /*!< 0x00000060 Configures the vertical resolution of video. */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t CMD_MODE_CFG;                  /*!< 0x00000068 Configures several aspect of command mode operation, tearing
+  __IOM uint32_t VID_NULL_SIZE;                 /*!< 0x00000044 Configures the size of null packets. */
+  __IOM uint32_t VID_HSA_TIME;                  /*!< 0x00000048 Configures the video HSA time. */
+  __IOM uint32_t VID_HBP_TIME;                  /*!< 0x0000004C Configures the video HBP time. */
+  __IOM uint32_t VID_HLINE_TIME;                /*!< 0x00000050 Configures the overall time for each video line. */
+  __IOM uint32_t VID_VSA_LINES;                 /*!< 0x00000054 Configures the VSA period. */
+  __IOM uint32_t VID_VBP_LINES;                 /*!< 0x00000058 Configures the VBP period. */
+  __IOM uint32_t VID_VFP_LINES;                 /*!< 0x0000005C Configures the VFP period. */
+  __IOM uint32_t VID_VACTIVE_LINES;             /*!< 0x00000060 Configures the vertical resolution of video. */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t CMD_MODE_CFG;                  /*!< 0x00000068 Configures several aspect of command mode operation, tearing
                                                                 effect, acknowledge for each packet and the speed mode to
                                                                 transmit each Data Type related to commands. */
-    __IOM uint32_t GEN_HDR;                       /*!< 0x0000006C Sets the header for new packets sent using the Generic
+  __IOM uint32_t GEN_HDR;                       /*!< 0x0000006C Sets the header for new packets sent using the Generic
                                                                 interface. */
-    __IOM uint32_t GEN_PLD_DATA;                  /*!< 0x00000070 Sets the payload for packets sent using the Generic interface
+  __IOM uint32_t GEN_PLD_DATA;                  /*!< 0x00000070 Sets the payload for packets sent using the Generic interface
                                                                 and, when read returns the contents of READ responses from the
                                                                 peripheral. */
-    __IM uint32_t CMD_PKT_STATUS;                /*!< 0x00000074 Contains information about the status of FIFOs related to DBI
+   __IM uint32_t CMD_PKT_STATUS;                /*!< 0x00000074 Contains information about the status of FIFOs related to DBI
                                                                 and Generic interface. */
-    __IOM uint32_t TO_CNT_CFG;                    /*!< 0x00000078 Configures counters that trigger timeout errors. These are used
+  __IOM uint32_t TO_CNT_CFG;                    /*!< 0x00000078 Configures counters that trigger timeout errors. These are used
                                                                 to warn the system of a failure, through an interrupt, and
                                                                 restart the controller in case of unexpected situations that
                                                                 cause deadlock conditions. */
-    __IOM uint32_t HS_RD_TO_CNT;                  /*!< 0x0000007C Configures the Peripheral Response timeout after high-speed
+  __IOM uint32_t HS_RD_TO_CNT;                  /*!< 0x0000007C Configures the Peripheral Response timeout after high-speed
                                                                 Read operations. */
-    __IOM uint32_t LP_RD_TO_CNT;                  /*!< 0x00000080 Configures the Peripheral Response timeout after low-power Read
+  __IOM uint32_t LP_RD_TO_CNT;                  /*!< 0x00000080 Configures the Peripheral Response timeout after low-power Read
                                                                 operations. */
-    __IOM uint32_t HS_WR_TO_CNT;                  /*!< 0x00000084 Configures the Peripheral Response timeout after high-speed
+  __IOM uint32_t HS_WR_TO_CNT;                  /*!< 0x00000084 Configures the Peripheral Response timeout after high-speed
                                                                 Write operations. */
-    __IOM uint32_t LP_WR_TO_CNT;                  /*!< 0x00000088 Configures the Peripheral Response timeout after low-power
+  __IOM uint32_t LP_WR_TO_CNT;                  /*!< 0x00000088 Configures the Peripheral Response timeout after low-power
                                                                 Write operations. */
-    __IOM uint32_t BTA_TO_CNT;                    /*!< 0x0000008C Configures the Peripheral Response timeout after Bus Turnaround
+  __IOM uint32_t BTA_TO_CNT;                    /*!< 0x0000008C Configures the Peripheral Response timeout after Bus Turnaround
                                                                 completion. */
-    __IOM uint32_t SDF_3D;                        /*!< 0x00000090 Stores 3D control information for VSS packets in video mode. */
-    __IOM uint32_t LPCLK_CTRL;                    /*!< 0x00000094 Configures the possibility for using non continuous clock in
+  __IOM uint32_t SDF_3D;                        /*!< 0x00000090 Stores 3D control information for VSS packets in video mode. */
+  __IOM uint32_t LPCLK_CTRL;                    /*!< 0x00000094 Configures the possibility for using non continuous clock in
                                                                 the clock lane. */
-    __IOM uint32_t PHY_TMR_LPCLK_CFG;             /*!< 0x00000098 Sets the time that DWC_mipi_dsi_host assumes in calculations
+  __IOM uint32_t PHY_TMR_LPCLK_CFG;             /*!< 0x00000098 Sets the time that DWC_mipi_dsi_host assumes in calculations
                                                                 for the clock lane to switch between high-speed and low-power. */
-    __IOM uint32_t PHY_TMR_CFG;                   /*!< 0x0000009C Sets the time that DWC_mipi_dsi_host assumes in calculations
+  __IOM uint32_t PHY_TMR_CFG;                   /*!< 0x0000009C Sets the time that DWC_mipi_dsi_host assumes in calculations
                                                                 for the data lanes to switch between high-speed and low-power. */
-    __IOM uint32_t PHY_RSTZ;                      /*!< 0x000000A0 Controls resets and the PLL of the D-PHY. */
-    __IOM uint32_t PHY_IF_CFG;                    /*!< 0x000000A4 Configures the number of active lanes and the minimum time to
+  __IOM uint32_t PHY_RSTZ;                      /*!< 0x000000A0 Controls resets and the PLL of the D-PHY. */
+  __IOM uint32_t PHY_IF_CFG;                    /*!< 0x000000A4 Configures the number of active lanes and the minimum time to
                                                                 remain in stop state. */
-    __IOM uint32_t PHY_ULPS_CTRL;                 /*!< 0x000000A8 Configures entering and leaving ULPS in the D-PHY. */
-    __IOM uint32_t PHY_TX_TRIGGERS;               /*!< 0x000000AC Configures the pins that activate triggers in the D-PHY. */
-    __IM uint32_t PHY_STATUS;                    /*!< 0x000000B0 Contains information about the status of the D-PHY. */
-    __IOM uint32_t PHY_TST_CTRL0;                 /*!< 0x000000B4 Controls clock and clear pins of the D-PHY vendor specific
+  __IOM uint32_t PHY_ULPS_CTRL;                 /*!< 0x000000A8 Configures entering and leaving ULPS in the D-PHY. */
+  __IOM uint32_t PHY_TX_TRIGGERS;               /*!< 0x000000AC Configures the pins that activate triggers in the D-PHY. */
+   __IM uint32_t PHY_STATUS;                    /*!< 0x000000B0 Contains information about the status of the D-PHY. */
+  __IOM uint32_t PHY_TST_CTRL0;                 /*!< 0x000000B4 Controls clock and clear pins of the D-PHY vendor specific
                                                                 interface. */
-    __IOM uint32_t PHY_TST_CTRL1;                 /*!< 0x000000B8 Controls data and enable pins of the D-PHY vendor specific
+  __IOM uint32_t PHY_TST_CTRL1;                 /*!< 0x000000B8 Controls data and enable pins of the D-PHY vendor specific
                                                                 interface. */
-    __IM uint32_t INT_ST0;                       /*!< 0x000000BC Contains the status of interrupt sources from acknowledge
+   __IM uint32_t INT_ST0;                       /*!< 0x000000BC Contains the status of interrupt sources from acknowledge
                                                                 reports and the D-PHY. */
-    __IM uint32_t INT_ST1;                       /*!< 0x000000C0 Contains the status of interrupt sources related to timeouts,
+   __IM uint32_t INT_ST1;                       /*!< 0x000000C0 Contains the status of interrupt sources related to timeouts,
                                                                 ECC, CRC, packet size, EoTp, Generic and DBI interfaces. */
-    __IOM uint32_t INT_MSK0;                      /*!< 0x000000C4 Configures masks for the sources of interrupts that affect the
+  __IOM uint32_t INT_MSK0;                      /*!< 0x000000C4 Configures masks for the sources of interrupts that affect the
                                                                 INT_ST0 register. Write 1 to un-mask each error report. */
-    __IOM uint32_t INT_MSK1;                      /*!< 0x000000C8 Configures masks for the sources of interrupts that affect the
+  __IOM uint32_t INT_MSK1;                      /*!< 0x000000C8 Configures masks for the sources of interrupts that affect the
                                                                 INT_ST1 register. */
-    __IOM uint32_t PHY_CAL;                       /*!< 0x000000CC Controls the skew calibration of D-PHY. */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t INT_FORCE0;                    /*!< 0x000000D8 Forces interrupt that affect the INT_ST0 register. */
-    __IOM uint32_t INT_FORCE1;                    /*!< 0x000000DC Forces interrupts that affect the INT_ST1 register. */
-    __IM uint32_t RESERVED2[4];
-    __IOM uint32_t DSC_PARAMETER;                 /*!< 0x000000F0 Configures Display Stream Compression. */
-    __IOM uint32_t PHY_TMR_RD_CFG;                /*!< 0x000000F4 Configures times related to PHY to perform some operations in
+  __IOM uint32_t PHY_CAL;                       /*!< 0x000000CC Controls the skew calibration of D-PHY. */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t INT_FORCE0;                    /*!< 0x000000D8 Forces interrupt that affect the INT_ST0 register. */
+  __IOM uint32_t INT_FORCE1;                    /*!< 0x000000DC Forces interrupts that affect the INT_ST1 register. */
+   __IM uint32_t RESERVED2[4];
+  __IOM uint32_t DSC_PARAMETER;                 /*!< 0x000000F0 Configures Display Stream Compression. */
+  __IOM uint32_t PHY_TMR_RD_CFG;                /*!< 0x000000F4 Configures times related to PHY to perform some operations in
                                                                 lane byte clock cycles. */
-    __IM uint32_t RESERVED3[2];
-    __IOM uint32_t VID_SHADOW_CTRL;               /*!< 0x00000100 Controls dpi shadow feature */
-    __IM uint32_t RESERVED4[2];
-    __IM uint32_t DPI_VCID_ACT;                  /*!< 0x0000010C Holds the value that controller is using for DPI_VCID. */
-    __IM uint32_t DPI_COLOR_CODING_ACT;          /*!< 0x00000110 Holds the value that controller is using for DPI_COLOR_CODING. */
-    __IM uint32_t RESERVED5;
-    __IM uint32_t DPI_LP_CMD_TIM_ACT;            /*!< 0x00000118 Holds the value that controller is using for DPI_LP_CMD_TIM. */
-    __IM uint32_t RESERVED6[7];
-    __IM uint32_t VID_MODE_CFG_ACT;              /*!< 0x00000138 Holds the value that controller is using for VID_MODE_CFG. */
-    __IM uint32_t VID_PKT_SIZE_ACT;              /*!< 0x0000013C Holds the value that controller is using for VID_PKT_SIZE. */
-    __IM uint32_t VID_NUM_CHUNKS_ACT;            /*!< 0x00000140 This register holds the value that controller is using for
+   __IM uint32_t RESERVED3[2];
+  __IOM uint32_t VID_SHADOW_CTRL;               /*!< 0x00000100 Controls dpi shadow feature */
+   __IM uint32_t RESERVED4[2];
+   __IM uint32_t DPI_VCID_ACT;                  /*!< 0x0000010C Holds the value that controller is using for DPI_VCID. */
+   __IM uint32_t DPI_COLOR_CODING_ACT;          /*!< 0x00000110 Holds the value that controller is using for DPI_COLOR_CODING. */
+   __IM uint32_t RESERVED5;
+   __IM uint32_t DPI_LP_CMD_TIM_ACT;            /*!< 0x00000118 Holds the value that controller is using for DPI_LP_CMD_TIM. */
+   __IM uint32_t RESERVED6[7];
+   __IM uint32_t VID_MODE_CFG_ACT;              /*!< 0x00000138 Holds the value that controller is using for VID_MODE_CFG. */
+   __IM uint32_t VID_PKT_SIZE_ACT;              /*!< 0x0000013C Holds the value that controller is using for VID_PKT_SIZE. */
+   __IM uint32_t VID_NUM_CHUNKS_ACT;            /*!< 0x00000140 This register holds the value that controller is using for
                                                                 VID_NUM_CHUNKS. */
-    __IM uint32_t VID_NULL_SIZE_ACT;             /*!< 0x00000144 Holds the value that controller is using for VID_NULL_SIZE. */
-    __IM uint32_t VID_HSA_TIME_ACT;              /*!< 0x00000148 Holds the value that controller is using for VID_HSA_TIME. */
-    __IM uint32_t VID_HBP_TIME_ACT;              /*!< 0x0000014C Holds the value that controller is using for VID_HBP_TIME. */
-    __IM uint32_t VID_HLINE_TIME_ACT;            /*!< 0x00000150 Holds the value that controller is using for VID_HLINE_TIME. */
-    __IM uint32_t VID_VSA_LINES_ACT;             /*!< 0x00000154 Holds the value that controller is using for VID_VSA_LINES. */
-    __IM uint32_t VID_VBP_LINES_ACT;             /*!< 0x00000158 Holds the value that controller is using for VID_VBP_LINES. */
-    __IM uint32_t VID_VFP_LINES_ACT;             /*!< 0x0000015C Holds the value that controller is using for VID_VFP_LINES. */
-    __IM uint32_t VID_VACTIVE_LINES_ACT;         /*!< 0x00000160 Holds the value that controller is using for VID_VACTIVE_LINES. */
-    __IM uint32_t RESERVED7;
-    __IM uint32_t VID_PKT_STATUS;                /*!< 0x00000168 Contains information about the status of FIFOs related to DPI
+   __IM uint32_t VID_NULL_SIZE_ACT;             /*!< 0x00000144 Holds the value that controller is using for VID_NULL_SIZE. */
+   __IM uint32_t VID_HSA_TIME_ACT;              /*!< 0x00000148 Holds the value that controller is using for VID_HSA_TIME. */
+   __IM uint32_t VID_HBP_TIME_ACT;              /*!< 0x0000014C Holds the value that controller is using for VID_HBP_TIME. */
+   __IM uint32_t VID_HLINE_TIME_ACT;            /*!< 0x00000150 Holds the value that controller is using for VID_HLINE_TIME. */
+   __IM uint32_t VID_VSA_LINES_ACT;             /*!< 0x00000154 Holds the value that controller is using for VID_VSA_LINES. */
+   __IM uint32_t VID_VBP_LINES_ACT;             /*!< 0x00000158 Holds the value that controller is using for VID_VBP_LINES. */
+   __IM uint32_t VID_VFP_LINES_ACT;             /*!< 0x0000015C Holds the value that controller is using for VID_VFP_LINES. */
+   __IM uint32_t VID_VACTIVE_LINES_ACT;         /*!< 0x00000160 Holds the value that controller is using for VID_VACTIVE_LINES. */
+   __IM uint32_t RESERVED7;
+   __IM uint32_t VID_PKT_STATUS;                /*!< 0x00000168 Contains information about the status of FIFOs related to DPI
                                                                 and eDPI interfaces. */
-    __IM uint32_t RESERVED8[9];
-    __IM uint32_t SDF_3D_ACT;                    /*!< 0x00000190 Holds the value that controller is using for SDF_3D. */
-    __IM uint32_t RESERVED9[923];
+   __IM uint32_t RESERVED8[9];
+   __IM uint32_t SDF_3D_ACT;                    /*!< 0x00000190 Holds the value that controller is using for SDF_3D. */
+   __IM uint32_t RESERVED9[923];
 } GFXSS_MIPIDSI_DWCMIPIDSI_Type;                /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief MIPI-DSI Host Controller. (GFXSS_MIPIDSI)
   */
-typedef struct
-{
-    GFXSS_MIPIDSI_MXMIPIDSI_Type MXMIPIDSI; /*!< 0x00000000 Platform IP standard configuration for MIPI-DSI. */
-    GFXSS_MIPIDSI_DWCMIPIDSI_Type DWCMIPIDSI; /*!< 0x00001000 DSI Registers */
+typedef struct {
+        GFXSS_MIPIDSI_MXMIPIDSI_Type MXMIPIDSI; /*!< 0x00000000 Platform IP standard configuration for MIPI-DSI. */
+        GFXSS_MIPIDSI_DWCMIPIDSI_Type DWCMIPIDSI; /*!< 0x00001000 DSI Registers */
 } GFXSS_MIPIDSI_Type;                           /*!< Size = 8192 (0x2000) */
 
 /**
   * \brief GFXSS
   */
-typedef struct
-{
-    GFXSS_GPU_Type GFXSS_GPU;               /*!< 0x00000000 Graphics Processing Unit. */
-    GFXSS_DC_Type GFXSS_DC;                 /*!< 0x00001000 Display Controller. */
-    GFXSS_MIPIDSI_Type GFXSS_MIPIDSI;       /*!< 0x00002000 MIPI-DSI Host Controller. */
+typedef struct {
+        GFXSS_GPU_Type GFXSS_GPU;               /*!< 0x00000000 Graphics Processing Unit. */
+        GFXSS_DC_Type GFXSS_DC;                 /*!< 0x00001000 Display Controller. */
+        GFXSS_MIPIDSI_Type GFXSS_MIPIDSI;       /*!< 0x00002000 MIPI-DSI Host Controller. */
 } GFXSS_Type;                                   /*!< Size = 16384 (0x4000) */
 
 

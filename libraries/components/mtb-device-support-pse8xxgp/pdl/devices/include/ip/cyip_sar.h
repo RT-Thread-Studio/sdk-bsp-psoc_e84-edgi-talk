@@ -44,128 +44,121 @@
 /**
   * \brief SAR static configuration registers (SAR_STA)
   */
-typedef struct
-{
-    __IOM uint32_t CTRL;                          /*!< 0x00000000 SAR Control register (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t HS_SAMP_CFG;                   /*!< 0x00000004 SAR HS Sampler Configuration register (only accessible if
+typedef struct {
+  __IOM uint32_t CTRL;                          /*!< 0x00000000 SAR Control register (only accessible if ACTRLR.STATUS.MODE=0) */
+  __IOM uint32_t HS_SAMP_CFG;                   /*!< 0x00000004 SAR HS Sampler Configuration register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t FIR_CFG[2];                    /*!< 0x00000008 FIR Configuration register (only accessible if
+  __IOM uint32_t FIR_CFG[2];                    /*!< 0x00000008 FIR Configuration register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t TR_SAMPLE_TIME;                /*!< 0x00000018 SAR Trigger Sample Time (Risk Mitigation Only) */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t SAMPLE_TIME[4];                /*!< 0x00000020 Sample control register (only accessible if
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t TR_SAMPLE_TIME;                /*!< 0x00000018 SAR Trigger Sample Time (Risk Mitigation Only) */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t SAMPLE_TIME[4];                /*!< 0x00000020 Sample control register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t GPIO_CHAN_CFG[8];              /*!< 0x00000030 SAR HS Sampler Configuration register */
-    __IOM uint32_t MUX_CHAN_CFG[16];              /*!< 0x00000050 High Speed / Low Power Muxed Channel configuration register
+  __IOM uint32_t GPIO_CHAN_CFG[8];              /*!< 0x00000030 SAR HS Sampler Configuration register */
+  __IOM uint32_t MUX_CHAN_CFG[16];              /*!< 0x00000050 High Speed / Low Power Muxed Channel configuration register
                                                                 (Channel 0 routing is used for default routing (i.e. when the
                                                                 SAR gets enabled) (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t STATUS_CFG[4];                 /*!< 0x00000090 Global range detect mode register (only accessible if
+  __IOM uint32_t STATUS_CFG[4];                 /*!< 0x00000090 Global range detect mode register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t STATUS_RANGE_LOW[4];           /*!< 0x000000A0 Global range detect low value register (only accessible if
+  __IOM uint32_t STATUS_RANGE_LOW[4];           /*!< 0x000000A0 Global range detect low value register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t STATUS_RANGE_HIGH[4];          /*!< 0x000000B0 Global range detect high value register (only accessible if
+  __IOM uint32_t STATUS_RANGE_HIGH[4];          /*!< 0x000000B0 Global range detect high value register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t GPIO_CHAN_RESULT[8];           /*!< 0x000000C0 High Speed GPIO Channel result register */
-    __IM uint32_t MUX_CHAN_RESULT[16];           /*!< 0x000000E0 High Speed / Low Power Muxed Channel result register */
-    __IM uint32_t FIR_RESULT[2];                 /*!< 0x00000120 FIR result register */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t CHAN_RESULT_MASK;              /*!< 0x00000130 Channel result mask (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t FIR_RESULT_MASK;               /*!< 0x00000134 FIR result mask (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t CHAN_RESULT_UPDATED;           /*!< 0x00000138 Channel result register status */
-    __IOM uint32_t FIR_RESULT_UPDATED;            /*!< 0x0000013C FIR result register status */
-    __IM uint32_t STATUS;                        /*!< 0x00000140 Current status of internal SAR registers (mostly for debug) */
-    __IOM uint32_t RANGE_STATUS;                  /*!< 0x00000144 Range status register */
-    __IM uint32_t RESERVED3[2];
-    __IOM uint32_t CHAN_COEFF[8];                 /*!< 0x00000150 Channel correction coefficients (only accessible if
+   __IM uint32_t GPIO_CHAN_RESULT[8];           /*!< 0x000000C0 High Speed GPIO Channel result register */
+   __IM uint32_t MUX_CHAN_RESULT[16];           /*!< 0x000000E0 High Speed / Low Power Muxed Channel result register */
+   __IM uint32_t FIR_RESULT[2];                 /*!< 0x00000120 FIR result register */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t CHAN_RESULT_MASK;              /*!< 0x00000130 Channel result mask (only accessible if ACTRLR.STATUS.MODE=0) */
+  __IOM uint32_t FIR_RESULT_MASK;               /*!< 0x00000134 FIR result mask (only accessible if ACTRLR.STATUS.MODE=0) */
+  __IOM uint32_t CHAN_RESULT_UPDATED;           /*!< 0x00000138 Channel result register status */
+  __IOM uint32_t FIR_RESULT_UPDATED;            /*!< 0x0000013C FIR result register status */
+   __IM uint32_t STATUS;                        /*!< 0x00000140 Current status of internal SAR registers (mostly for debug) */
+  __IOM uint32_t RANGE_STATUS;                  /*!< 0x00000144 Range status register */
+   __IM uint32_t RESERVED3[2];
+  __IOM uint32_t CHAN_COEFF[8];                 /*!< 0x00000150 Channel correction coefficients (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED4[36];
+   __IM uint32_t RESERVED4[36];
 } SAR_STA_Type;                                 /*!< Size = 512 (0x200) */
 
 /**
   * \brief SAR FIR0 registers (only accessible if ACTRLR.STATUS.MODE=0) (SAR_FIR0)
   */
-typedef struct
-{
-    __IOM uint32_t COEF;                          /*!< 0x00000000 Coefficient Value */
-    __IOM uint32_t TAP;                           /*!< 0x00000004 Tap Value */
+typedef struct {
+  __IOM uint32_t COEF;                          /*!< 0x00000000 Coefficient Value */
+  __IOM uint32_t TAP;                           /*!< 0x00000004 Tap Value */
 } SAR_FIR0_Type;                                /*!< Size = 8 (0x8) */
 
 /**
   * \brief SAR FIR1 registers (only accessible if ACTRLR.STATUS.MODE=0) (SAR_FIR1)
   */
-typedef struct
-{
-    __IOM uint32_t COEF;                          /*!< 0x00000000 Coefficient Value */
-    __IOM uint32_t TAP;                           /*!< 0x00000004 Tap Value */
+typedef struct {
+  __IOM uint32_t COEF;                          /*!< 0x00000000 Coefficient Value */
+  __IOM uint32_t TAP;                           /*!< 0x00000004 Tap Value */
 } SAR_FIR1_Type;                                /*!< Size = 8 (0x8) */
 
 /**
   * \brief SAR HS Core Calibration Memory (only accessible when the SAR is disabled (AC.SAR_EN=0) and ACTRLR.STATUS.MODE=0) (SAR_HS_CAL_MEM)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[5];
-    __IOM uint32_t CALCTRL;                       /*!< 0x00000014 SAR HS Core Calibration Control Register */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t CONVCTRL;                      /*!< 0x0000001C SAR HS Core Conversion Control Register */
-    __IOM uint32_t ADFTMUX;                       /*!< 0x00000020 SAR HS Core Analog DFT Multiplexer Control Register */
-    __IM uint32_t RESERVED2[7];
-    __IOM uint32_t CALMEM0[10];                   /*!< 0x00000040 SAR HS Core Channel Calibration Values */
-    __IM uint32_t RESERVED3[6];
+typedef struct {
+   __IM uint32_t RESERVED[5];
+  __IOM uint32_t CALCTRL;                       /*!< 0x00000014 SAR HS Core Calibration Control Register */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t CONVCTRL;                      /*!< 0x0000001C SAR HS Core Conversion Control Register */
+  __IOM uint32_t ADFTMUX;                       /*!< 0x00000020 SAR HS Core Analog DFT Multiplexer Control Register */
+   __IM uint32_t RESERVED2[7];
+  __IOM uint32_t CALMEM0[10];                   /*!< 0x00000040 SAR HS Core Channel Calibration Values */
+   __IM uint32_t RESERVED3[6];
 } SAR_HS_CAL_MEM_Type;                          /*!< Size = 128 (0x80) */
 
 /**
   * \brief SAR LP Core Calibration Memory (only accessible when the SAR is disabled (AC.SAR_EN=0) and ACTRLR.STATUS.MODE=0) (SAR_LP_CAL_MEM)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[5];
-    __IOM uint32_t CALCTRL;                       /*!< 0x00000014 SAR LP Core Calibration Control Register */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t CONVCTRL;                      /*!< 0x0000001C SAR LP Core Conversion Control Register */
-    __IOM uint32_t ADFTMUX;                       /*!< 0x00000020 SAR LP Core Analog DFT Multiplexer Control Register */
-    __IM uint32_t RESERVED2[7];
-    __IOM uint32_t CALMEM0;                       /*!< 0x00000040 SAR LP Core Channel Calibration Values */
-    __IM uint32_t RESERVED3[15];
+typedef struct {
+   __IM uint32_t RESERVED[5];
+  __IOM uint32_t CALCTRL;                       /*!< 0x00000014 SAR LP Core Calibration Control Register */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t CONVCTRL;                      /*!< 0x0000001C SAR LP Core Conversion Control Register */
+  __IOM uint32_t ADFTMUX;                       /*!< 0x00000020 SAR LP Core Analog DFT Multiplexer Control Register */
+   __IM uint32_t RESERVED2[7];
+  __IOM uint32_t CALMEM0;                       /*!< 0x00000040 SAR LP Core Channel Calibration Values */
+   __IM uint32_t RESERVED3[15];
 } SAR_LP_CAL_MEM_Type;                          /*!< Size = 128 (0x80) */
 
 /**
   * \brief SAR Trim registers (only accessible if ACTRLR.STATUS.MODE=0) (SAR_TRIM)
   */
-typedef struct
-{
-    __IOM uint32_t BUF0_OFFSET_TRIM;              /*!< 0x00000000 Buffer zero trim control */
-    __IOM uint32_t BUF0_SLOPE_OFFSET_TRIM;        /*!< 0x00000004 Buffer zero trim control */
-    __IOM uint32_t BUF0_COMP_TRIM;                /*!< 0x00000008 Buffer zero trim control */
-    __IOM uint32_t BUF1_OFFSET_TRIM;              /*!< 0x0000000C Buffer one trim control */
-    __IOM uint32_t BUF1_SLOPE_OFFSET_TRIM;        /*!< 0x00000010 Buffer one trim control */
-    __IOM uint32_t BUF1_COMP_TRIM;                /*!< 0x00000014 Buffer one trim control */
-    __IOM uint32_t RMP_TRIM;                      /*!< 0x00000018 Risk Mitigation bits */
-    __IM uint32_t RESERVED;
+typedef struct {
+  __IOM uint32_t BUF0_OFFSET_TRIM;              /*!< 0x00000000 Buffer zero trim control */
+  __IOM uint32_t BUF0_SLOPE_OFFSET_TRIM;        /*!< 0x00000004 Buffer zero trim control */
+  __IOM uint32_t BUF0_COMP_TRIM;                /*!< 0x00000008 Buffer zero trim control */
+  __IOM uint32_t BUF1_OFFSET_TRIM;              /*!< 0x0000000C Buffer one trim control */
+  __IOM uint32_t BUF1_SLOPE_OFFSET_TRIM;        /*!< 0x00000010 Buffer one trim control */
+  __IOM uint32_t BUF1_COMP_TRIM;                /*!< 0x00000014 Buffer one trim control */
+  __IOM uint32_t RMP_TRIM;                      /*!< 0x00000018 Risk Mitigation bits */
+   __IM uint32_t RESERVED;
 } SAR_TRIM_Type;                                /*!< Size = 32 (0x20) */
 
 /**
   * \brief SAR (SAR)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[64];
-    __IOM uint32_t SEQ_HS_DATA[32];               /*!< 0x00000100 SAR Sequencer High Speed Data (only accessible if
+typedef struct {
+   __IM uint32_t RESERVED[64];
+  __IOM uint32_t SEQ_HS_DATA[32];               /*!< 0x00000100 SAR Sequencer High Speed Data (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t SEQ_LP_DATA[32];               /*!< 0x00000180 SAR Sequencer Low Power Data (only accessible if
+  __IOM uint32_t SEQ_LP_DATA[32];               /*!< 0x00000180 SAR Sequencer Low Power Data (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED1[128];
-    SAR_STA_Type STA;                       /*!< 0x00000400 SAR static configuration registers */
-    SAR_FIR0_Type FIR0[64];                 /*!< 0x00000600 SAR FIR0 registers (only accessible if ACTRLR.STATUS.MODE=0) */
-    SAR_FIR1_Type FIR1[64];                 /*!< 0x00000800 SAR FIR1 registers (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED2[128];
-    SAR_HS_CAL_MEM_Type HS_CAL_MEM;         /*!< 0x00000C00 SAR HS Core Calibration Memory (only accessible when the SAR is
+   __IM uint32_t RESERVED1[128];
+        SAR_STA_Type STA;                       /*!< 0x00000400 SAR static configuration registers */
+        SAR_FIR0_Type FIR0[64];                 /*!< 0x00000600 SAR FIR0 registers (only accessible if ACTRLR.STATUS.MODE=0) */
+        SAR_FIR1_Type FIR1[64];                 /*!< 0x00000800 SAR FIR1 registers (only accessible if ACTRLR.STATUS.MODE=0) */
+   __IM uint32_t RESERVED2[128];
+        SAR_HS_CAL_MEM_Type HS_CAL_MEM;         /*!< 0x00000C00 SAR HS Core Calibration Memory (only accessible when the SAR is
                                                                 disabled (AC.SAR_EN=0) and ACTRLR.STATUS.MODE=0) */
-    SAR_LP_CAL_MEM_Type LP_CAL_MEM;         /*!< 0x00000C80 SAR LP Core Calibration Memory (only accessible when the SAR is
+        SAR_LP_CAL_MEM_Type LP_CAL_MEM;         /*!< 0x00000C80 SAR LP Core Calibration Memory (only accessible when the SAR is
                                                                 disabled (AC.SAR_EN=0) and ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED3[128];
-    SAR_TRIM_Type TRIM;                     /*!< 0x00000F00 SAR Trim registers (only accessible if ACTRLR.STATUS.MODE=0) */
+   __IM uint32_t RESERVED3[128];
+        SAR_TRIM_Type TRIM;                     /*!< 0x00000F00 SAR Trim registers (only accessible if ACTRLR.STATUS.MODE=0) */
 } SAR_Type;                                     /*!< Size = 3872 (0xF20) */
 
 

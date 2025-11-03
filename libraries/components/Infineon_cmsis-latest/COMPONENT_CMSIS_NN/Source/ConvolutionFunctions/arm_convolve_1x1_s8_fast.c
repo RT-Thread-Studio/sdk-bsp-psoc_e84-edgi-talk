@@ -63,7 +63,7 @@ arm_status arm_convolve_1x1_s8_fast(const cmsis_nn_context *ctx,
                                     q7_t *output_data)
 {
     if (input_dims->c % 4 != 0 || conv_params->padding.w != 0 || conv_params->padding.h != 0 ||
-            conv_params->stride.w != 1 || conv_params->stride.h != 1)
+        conv_params->stride.w != 1 || conv_params->stride.h != 1)
     {
         return ARM_MATH_SIZE_MISMATCH;
     }
@@ -110,10 +110,8 @@ arm_status arm_convolve_1x1_s8_fast(const cmsis_nn_context *ctx,
             res = vmaxq_s32(res, vdupq_n_s32(out_activation_min));
             res = vminq_s32(res, vdupq_n_s32(out_activation_max));
 
-            const uint32x4_t scatter_offset =
-            {
-                0, (uint32_t)output_ch, (uint32_t)output_ch * 2, (uint32_t)output_ch * 3
-            };
+            const uint32x4_t scatter_offset = {
+                0, (uint32_t)output_ch, (uint32_t)output_ch * 2, (uint32_t)output_ch * 3};
             vstrbq_scatter_offset_s32(output_data, scatter_offset, res);
             output_data++;
         }

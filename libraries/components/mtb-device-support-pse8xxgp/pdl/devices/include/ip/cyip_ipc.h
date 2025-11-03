@@ -40,37 +40,34 @@
 /**
   * \brief IPC structure (IPC_STRUCT)
   */
-typedef struct
-{
-    __IM uint32_t ACQUIRE;                       /*!< 0x00000000 IPC acquire */
-    __OM uint32_t RELEASE;                       /*!< 0x00000004 IPC release */
-    __OM uint32_t NOTIFY;                        /*!< 0x00000008 IPC notification */
-    __IOM uint32_t DATA0;                         /*!< 0x0000000C IPC data 0 */
-    __IOM uint32_t DATA1;                         /*!< 0x00000010 IPC data 1 */
-    __IM uint32_t RESERVED[2];
-    __IM uint32_t LOCK_STATUS;                   /*!< 0x0000001C IPC lock status */
+typedef struct {
+   __IM uint32_t ACQUIRE;                       /*!< 0x00000000 IPC acquire */
+   __OM uint32_t RELEASE;                       /*!< 0x00000004 IPC release */
+   __OM uint32_t NOTIFY;                        /*!< 0x00000008 IPC notification */
+  __IOM uint32_t DATA0;                         /*!< 0x0000000C IPC data 0 */
+  __IOM uint32_t DATA1;                         /*!< 0x00000010 IPC data 1 */
+   __IM uint32_t RESERVED[2];
+   __IM uint32_t LOCK_STATUS;                   /*!< 0x0000001C IPC lock status */
 } IPC_STRUCT_Type;                              /*!< Size = 32 (0x20) */
 
 /**
   * \brief IPC interrupt structure (IPC_INTR_STRUCT)
   */
-typedef struct
-{
-    __IOM uint32_t INTR;                          /*!< 0x00000000 Interrupt */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000004 Interrupt set */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000008 Interrupt mask */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000000C Interrupt masked */
-    __IM uint32_t RESERVED[4];
+typedef struct {
+  __IOM uint32_t INTR;                          /*!< 0x00000000 Interrupt */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000004 Interrupt set */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000008 Interrupt mask */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000000C Interrupt masked */
+   __IM uint32_t RESERVED[4];
 } IPC_INTR_STRUCT_Type;                         /*!< Size = 32 (0x20) */
 
 /**
   * \brief IPC (IPC)
   */
-typedef struct
-{
-    IPC_STRUCT_Type STRUCT[16];             /*!< 0x00000000 IPC structure */
-    __IM uint32_t RESERVED[896];
-    IPC_INTR_STRUCT_Type INTR_STRUCT[16];   /*!< 0x00001000 IPC interrupt structure */
+typedef struct {
+        IPC_STRUCT_Type STRUCT[16];             /*!< 0x00000000 IPC structure */
+   __IM uint32_t RESERVED[896];
+        IPC_INTR_STRUCT_Type INTR_STRUCT[16];   /*!< 0x00001000 IPC interrupt structure */
 } IPC_Type;                                     /*!< Size = 4608 (0x1200) */
 
 

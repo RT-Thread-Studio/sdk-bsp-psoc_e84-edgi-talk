@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>(serial-memory)</title>
+<title>Serial Memory</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -27,7 +27,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><a href="http://www.cypress.com/"><img alt="Logo" src="logo.png"/></a></td>
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">(serial-memory)</div>
+   <div id="projectname">Serial Memory</div>
   </td>
  </tr>
  </tbody>
@@ -127,6 +127,10 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>CY_IP_MXSMIF</b></td></tr>
 <tr class="memdesc:gaba152cdbee6337a0535daa88d8f071ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">The MXSMIF IP is available. <br /></td></tr>
 <tr class="separator:gaba152cdbee6337a0535daa88d8f071ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga418565657338984e1d750aa07f7d54d0"><td class="memItemLeft" align="right" valign="top"><a id="ga418565657338984e1d750aa07f7d54d0" name="ga418565657338984e1d750aa07f7d54d0"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MTB_SERIAL_MEMORY_VERSION_MAJOR</b>&#160;&#160;&#160;(3U)</td></tr>
+<tr class="memdesc:ga418565657338984e1d750aa07f7d54d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The major version of the serial memory asset. <br /></td></tr>
+<tr class="separator:ga418565657338984e1d750aa07f7d54d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9670db76ab45eb5283ab8c9579a29537"><td class="memItemLeft" align="right" valign="top"><a id="ga9670db76ab45eb5283ab8c9579a29537" name="ga9670db76ab45eb5283ab8c9579a29537"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>MTB_RSLT_SERIAL_MEMORY_ERR_UNSUPPORTED</b>&#160;&#160;&#160;    (CY_RSLT_CREATE(CY_RSLT_TYPE_ERROR, CY_RSLT_MODULE_BOARD_LIB_SERIAL_MEMORY, 1))</td></tr>
 <tr class="memdesc:ga9670db76ab45eb5283ab8c9579a29537"><td class="mdescLeft">&#160;</td><td class="mdescRight">The function or operation is not supported on the target or the memory. <br /></td></tr>
@@ -165,9 +169,12 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gac0fa5fb0a61f10b3bdfe281c66a9caf8"><td class="memItemLeft" align="right" valign="top">cy_rslt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__board__libs.html#gac0fa5fb0a61f10b3bdfe281c66a9caf8">mtb_serial_memory_setup</a> (<a class="el" href="group__group__board__libs.html#structmtb__serial__memory__t">mtb_serial_memory_t</a> *obj, <a class="el" href="group__group__board__libs.html#ga7c7e310e48ba18be1ff7a56bd99ecdb4">mtb_serial_memory_chip_select_t</a> smif_active_chip, SMIF_Type *base, const mtb_hal_clock_t *clock, cy_stc_smif_context_t *context, const cy_stc_smif_block_config_t *block_config)</td></tr>
-<tr class="memdesc:gac0fa5fb0a61f10b3bdfe281c66a9caf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up the serial memory.  <a href="group__group__board__libs.html#gac0fa5fb0a61f10b3bdfe281c66a9caf8">More...</a><br /></td></tr>
-<tr class="separator:gac0fa5fb0a61f10b3bdfe281c66a9caf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa916861ee691d2d27ca8373eb439286a"><td class="memItemLeft" align="right" valign="top">cy_rslt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__board__libs.html#gaa916861ee691d2d27ca8373eb439286a">mtb_serial_memory_setup</a> (<a class="el" href="group__group__board__libs.html#structmtb__serial__memory__t">mtb_serial_memory_t</a> *obj, <a class="el" href="group__group__board__libs.html#ga7c7e310e48ba18be1ff7a56bd99ecdb4">mtb_serial_memory_chip_select_t</a> smif_active_chip, SMIF_Type *base, const mtb_hal_clock_t *clock, cy_stc_smif_mem_context_t *mem_context, cy_stc_smif_mem_info_t *mem_info, const cy_stc_smif_block_config_t *block_config)</td></tr>
+<tr class="memdesc:gaa916861ee691d2d27ca8373eb439286a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up the serial memory.  <a href="group__group__board__libs.html#gaa916861ee691d2d27ca8373eb439286a">More...</a><br /></td></tr>
+<tr class="separator:gaa916861ee691d2d27ca8373eb439286a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga731249a579cd924b8dba4510fa19520f"><td class="memItemLeft" align="right" valign="top">cy_rslt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__board__libs.html#ga731249a579cd924b8dba4510fa19520f">mtb_serial_memory_setup_nonsecure</a> (<a class="el" href="group__group__board__libs.html#structmtb__serial__memory__t">mtb_serial_memory_t</a> *obj, <a class="el" href="group__group__board__libs.html#ga7c7e310e48ba18be1ff7a56bd99ecdb4">mtb_serial_memory_chip_select_t</a> smif_active_chip, SMIF_Type *base, cy_stc_smif_mem_context_t *mem_context, cy_stc_smif_mem_info_t *mem_info)</td></tr>
+<tr class="memdesc:ga731249a579cd924b8dba4510fa19520f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up the serial memory on non-secure world if the peripheral is secure.  <a href="group__group__board__libs.html#ga731249a579cd924b8dba4510fa19520f">More...</a><br /></td></tr>
+<tr class="separator:ga731249a579cd924b8dba4510fa19520f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga226540e2b77f0873e6fc84a56490f142"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__board__libs.html#ga226540e2b77f0873e6fc84a56490f142">mtb_serial_memory_get_size</a> (<a class="el" href="group__group__board__libs.html#structmtb__serial__memory__t">mtb_serial_memory_t</a> *obj)</td></tr>
 <tr class="memdesc:ga226540e2b77f0873e6fc84a56490f142"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of the serial memory in bytes.  <a href="group__group__board__libs.html#ga226540e2b77f0873e6fc84a56490f142">More...</a><br /></td></tr>
 <tr class="separator:ga226540e2b77f0873e6fc84a56490f142"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,12 +227,6 @@ Functions</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="3">Data Fields</th></tr>
 <tr><td class="fieldtype">
-<a id="a647b23728de1c551b786ebc5053680dd" name="a647b23728de1c551b786ebc5053680dd"></a>uint32_t</td>
-<td class="fieldname">
-smif_instance</td>
-<td class="fielddoc">
-</td></tr>
-<tr><td class="fieldtype">
 <a id="ac2dce6ace3bbbaa1a106efe8a03c4998" name="ac2dce6ace3bbbaa1a106efe8a03c4998"></a>uint32_t</td>
 <td class="fieldname">
 smif_active_slot</td>
@@ -244,12 +245,6 @@ clock</td>
 <td class="fielddoc">
 </td></tr>
 <tr><td class="fieldtype">
-<a id="ab05518d8903441b96dbe7411b0c02d6c" name="ab05518d8903441b96dbe7411b0c02d6c"></a>cy_stc_smif_context_t *</td>
-<td class="fieldname">
-context</td>
-<td class="fielddoc">
-</td></tr>
-<tr><td class="fieldtype">
 <a id="af496e91a2e7faf4f3b45ca11b4aec854" name="af496e91a2e7faf4f3b45ca11b4aec854"></a>uint32_t</td>
 <td class="fieldname">
 configured_csel</td>
@@ -262,15 +257,21 @@ chip_select</td>
 <td class="fielddoc">
 </td></tr>
 <tr><td class="fieldtype">
-<a id="aa98d5b106e0ff7fa84bda76f72b94ae8" name="aa98d5b106e0ff7fa84bda76f72b94ae8"></a>const cy_stc_smif_block_config_t *</td>
-<td class="fieldname">
-smif_block_config</td>
-<td class="fielddoc">
-</td></tr>
-<tr><td class="fieldtype">
 <a id="a6bef17cc1af859964013dee88f9d304a" name="a6bef17cc1af859964013dee88f9d304a"></a>uint32_t</td>
 <td class="fieldname">
 status_flags</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="a4ffe2276130e5b5c940e2ed7afd1fa72" name="a4ffe2276130e5b5c940e2ed7afd1fa72"></a>cy_stc_smif_mem_context_t *</td>
+<td class="fieldname">
+mem_context</td>
+<td class="fielddoc">
+</td></tr>
+<tr><td class="fieldtype">
+<a id="ac13ffa49ad80fbf649508c4ef38a3371" name="ac13ffa49ad80fbf649508c4ef38a3371"></a>cy_stc_smif_mem_info_t *</td>
+<td class="fieldname">
+mem_info</td>
 <td class="fielddoc">
 </td></tr>
 <tr><td class="fieldtype">
@@ -315,8 +316,8 @@ mutex</td>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="gac0fa5fb0a61f10b3bdfe281c66a9caf8" name="gac0fa5fb0a61f10b3bdfe281c66a9caf8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac0fa5fb0a61f10b3bdfe281c66a9caf8">&#9670;&nbsp;</a></span>mtb_serial_memory_setup()</h2>
+<a id="gaa916861ee691d2d27ca8373eb439286a" name="gaa916861ee691d2d27ca8373eb439286a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa916861ee691d2d27ca8373eb439286a">&#9670;&nbsp;</a></span>mtb_serial_memory_setup()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -348,8 +349,14 @@ mutex</td>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">cy_stc_smif_context_t *&#160;</td>
-          <td class="paramname"><em>context</em>, </td>
+          <td class="paramtype">cy_stc_smif_mem_context_t *&#160;</td>
+          <td class="paramname"><em>mem_context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cy_stc_smif_mem_info_t *&#160;</td>
+          <td class="paramname"><em>mem_info</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -366,15 +373,76 @@ mutex</td>
 </div><div class="memdoc">
 
 <p>Sets up the serial memory. </p>
-<dl class="section note"><dt>Note</dt><dd>The function will reset the memory controller when "Auto Detect SFDP" is chosen in the "Memory Part Number" section of the QSPI Configurator. However, if a specific part number is specified in the QSPI Configurator, the responsibility falls to the application to reset the memory controller using the Cy_SMIF_Reset_Memory() PDL function. This approach is adopted because the <a class="el" href="group__group__board__libs.html#gac0fa5fb0a61f10b3bdfe281c66a9caf8" title="Sets up the serial memory.">mtb_serial_memory_setup()</a> function might be executed from the external memory itself, and resetting the memory controller could disrupt the communication with the memory.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The function will reset the memory controller when "Auto Detect SFDP" is chosen in the "Memory Part Number" section of the QSPI Configurator. However, if a specific part number is specified in the QSPI Configurator, the responsibility falls to the application to reset the memory controller using the Cy_SMIF_Reset_Memory() PDL function. This approach is adopted because the <a class="el" href="group__group__board__libs.html#gaa916861ee691d2d27ca8373eb439286a" title="Sets up the serial memory.">mtb_serial_memory_setup()</a> function might be executed from the external memory itself, and resetting the memory controller could disrupt the communication with the memory. This function initializes the slots of the memory device in the SMIF configuration. It's security aware and is a wrapper around Cy_SMIF_MemNumInit, and gather all information about the memory size, erase and program size to be used in subsequent serial memory calls. It can either be called in a secure partition or in the non-secure partition if the peripheral itself is not secured.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">obj</td><td>Pointer to the <a class="el" href="group__group__board__libs.html#structmtb__serial__memory__t" title="Serial memory object.">mtb_serial_memory_t</a> object to setup </td></tr>
     <tr><td class="paramname">smif_active_chip</td><td>The slave select line to configure as active </td></tr>
     <tr><td class="paramname">base</td><td>Pointer to the SMIf base address </td></tr>
     <tr><td class="paramname">clock</td><td>Pointer to the clock object </td></tr>
-    <tr><td class="paramname">context</td><td>Pointer to the SMIF ip context structure </td></tr>
+    <tr><td class="paramname">mem_context</td><td>Pointer to the SMIF Device internal context data </td></tr>
+    <tr><td class="paramname">mem_info</td><td>Pointer to the SMIF memory info structure </td></tr>
     <tr><td class="paramname">block_config</td><td>Pointer to the SMIF block configuration structure </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>CY_RSLT_SUCCESS if the setup was successful, an error code otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="ga731249a579cd924b8dba4510fa19520f" name="ga731249a579cd924b8dba4510fa19520f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga731249a579cd924b8dba4510fa19520f">&#9670;&nbsp;</a></span>mtb_serial_memory_setup_nonsecure()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cy_rslt_t mtb_serial_memory_setup_nonsecure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__group__board__libs.html#structmtb__serial__memory__t">mtb_serial_memory_t</a> *&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__group__board__libs.html#ga7c7e310e48ba18be1ff7a56bd99ecdb4">mtb_serial_memory_chip_select_t</a>&#160;</td>
+          <td class="paramname"><em>smif_active_chip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SMIF_Type *&#160;</td>
+          <td class="paramname"><em>base</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cy_stc_smif_mem_context_t *&#160;</td>
+          <td class="paramname"><em>mem_context</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">cy_stc_smif_mem_info_t *&#160;</td>
+          <td class="paramname"><em>mem_info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets up the serial memory on non-secure world if the peripheral is secure. </p>
+<dl class="section note"><dt>Note</dt><dd>This function is to be called from the non secure partition in trustzone devices (after the secure one has successfully called <a class="el" href="group__group__board__libs.html#gaa916861ee691d2d27ca8373eb439286a">mtb_serial_memory_setup</a> ) to set up the context and gather all information about the memory size, erase and program size to be used in subsequent serial memory calls.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">obj</td><td>Pointer to the <a class="el" href="group__group__board__libs.html#structmtb__serial__memory__t" title="Serial memory object.">mtb_serial_memory_t</a> object to setup </td></tr>
+    <tr><td class="paramname">smif_active_chip</td><td>The slave select line to configure as active </td></tr>
+    <tr><td class="paramname">base</td><td>Pointer to the SMIf base address </td></tr>
+    <tr><td class="paramname">mem_context</td><td>Pointer to the SMIF Device internal context data </td></tr>
+    <tr><td class="paramname">mem_info</td><td>Pointer to the SMIF memory info structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -745,7 +813,7 @@ mutex</td>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The function will return an error if the device had not been setup with <a class="el" href="group__group__board__libs.html#gac0fa5fb0a61f10b3bdfe281c66a9caf8">mtb_serial_memory_setup</a> . </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The function will return an error if the device had not been setup with <a class="el" href="group__group__board__libs.html#gaa916861ee691d2d27ca8373eb439286a">mtb_serial_memory_setup</a> . </dd></dl>
 
 </div>
 </div>
@@ -847,7 +915,7 @@ mutex</td>
 <div id="nav-path" class="navpath">
     <ul>
         <li class="footer">
-            Generated for <b>(serial-memory)</b> by <b>Cypress Semiconductor Corporation</b>.
+            Generated for <b>Serial Memory</b> by <b>Cypress Semiconductor Corporation</b>.
             All rights reserved.
         </li>
     </ul>

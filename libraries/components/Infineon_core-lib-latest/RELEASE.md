@@ -43,6 +43,8 @@ The Core Library provides basic types and utilities that can be used between dif
 
 ### What Changed?
 
+#### v1.6.0
+* Documentation Update
 #### v1.5.0
 * Added new module identifiers to cy_result.h
 * Added CY_RSLT_GET_EX_SUBMODULE and CY_RSLT_GET_EX_CODE macros for extracting extended result information.

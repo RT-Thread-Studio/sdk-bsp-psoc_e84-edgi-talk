@@ -58,17 +58,15 @@ static void multiply(vg_lite_matrix_t * matrix, vg_lite_matrix_t * mult)
 {
     vg_lite_matrix_t temp;
     int row, column;
-
+    
     /* Process all rows. */
-    for (row = 0; row < 3; row++)
-    {
+    for (row = 0; row < 3; row++) {
         /* Process all columns. */
-        for (column = 0; column < 3; column++)
-        {
+        for (column = 0; column < 3; column++) {
             /* Compute matrix entry. */
-            temp.m[row][column] = (matrix->m[row][0] * mult->m[0][column])
-                                  + (matrix->m[row][1] * mult->m[1][column])
-                                  + (matrix->m[row][2] * mult->m[2][column]);
+            temp.m[row][column] =  (matrix->m[row][0] * mult->m[0][column])
+            + (matrix->m[row][1] * mult->m[1][column])
+            + (matrix->m[row][2] * mult->m[2][column]);
         }
     }
 
@@ -83,8 +81,7 @@ vg_lite_error_t vg_lite_translate(vg_lite_float_t x, vg_lite_float_t y, vg_lite_
 #endif
 
     /* Set translation matrix. */
-    vg_lite_matrix_t t =
-    {
+    vg_lite_matrix_t t = {
         {
             { 1.0f, 0.0f, x },
             { 0.0f, 1.0f, y },
@@ -106,8 +103,7 @@ vg_lite_error_t vg_lite_scale(vg_lite_float_t scale_x, vg_lite_float_t scale_y, 
 #endif
 
     /* Set scale matrix. */
-    vg_lite_matrix_t s =
-    {
+    vg_lite_matrix_t s = {
         {
             { scale_x, 0.0f, 0.0f },
             { 0.0f, scale_y, 0.0f },
@@ -139,10 +135,9 @@ vg_lite_error_t vg_lite_rotate(vg_lite_float_t degrees, vg_lite_matrix_t * matri
     /* Compuet cosine and sine values. */
     vg_lite_float_t cos_angle = cosf(angle);
     vg_lite_float_t sin_angle = sinf(angle);
-
+    
     /* Set rotation matrix. */
-    vg_lite_matrix_t r =
-    {
+    vg_lite_matrix_t r = {
         {
             { cos_angle, -sin_angle, 0.0f },
             { sin_angle, cos_angle, 0.0f },
@@ -156,8 +151,7 @@ vg_lite_error_t vg_lite_rotate(vg_lite_float_t degrees, vg_lite_matrix_t * matri
 
 #if VG_SW_BLIT_PRECISION_OPT
     matrix->angle = matrix->angle + degrees;
-    if (matrix->angle >= 360)
-    {
+    if (matrix->angle >= 360) {
         vg_lite_uint32_t count = (vg_lite_uint32_t)matrix->angle / 360;
         matrix->angle = matrix->angle - count * 360;
     }

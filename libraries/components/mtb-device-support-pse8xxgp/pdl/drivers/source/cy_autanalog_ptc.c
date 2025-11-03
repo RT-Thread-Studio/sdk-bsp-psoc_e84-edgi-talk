@@ -104,14 +104,14 @@ cy_en_autanalog_status_t Cy_AutAnalog_PTComp_LoadStaticConfig(uint8_t ptcompIdx,
             CY_ASSERT_L3(AUTANALOG_PTCOMP_INT(ptcompStaCfg->compEdgeComp1));
 
             regVal =
-                /* Static configuration for Comp0 */
-                _VAL2FLD(PTC_STA_CFG_COMP0_MODE, ptcompStaCfg->powerModeComp0) |
-                _VAL2FLD(PTC_STA_CFG_COMP0_HYST, ptcompStaCfg->compHystComp0) |
-                _VAL2FLD(PTC_STA_CFG_COMP0_OUT, ptcompStaCfg->compEdgeComp0) |
-                /* Static configuration for Comp1 */
-                _VAL2FLD(PTC_STA_CFG_COMP1_MODE, ptcompStaCfg->powerModeComp1) |
-                _VAL2FLD(PTC_STA_CFG_COMP1_HYST, ptcompStaCfg->compHystComp1) |
-                _VAL2FLD(PTC_STA_CFG_COMP1_OUT, ptcompStaCfg->compEdgeComp1);
+                    /* Static configuration for Comp0 */
+                    _VAL2FLD(PTC_STA_CFG_COMP0_MODE, ptcompStaCfg->powerModeComp0) |
+                    _VAL2FLD(PTC_STA_CFG_COMP0_HYST, ptcompStaCfg->compHystComp0) |
+                    _VAL2FLD(PTC_STA_CFG_COMP0_OUT, ptcompStaCfg->compEdgeComp0) |
+                    /* Static configuration for Comp1 */
+                    _VAL2FLD(PTC_STA_CFG_COMP1_MODE, ptcompStaCfg->powerModeComp1) |
+                    _VAL2FLD(PTC_STA_CFG_COMP1_HYST, ptcompStaCfg->compHystComp1) |
+                    _VAL2FLD(PTC_STA_CFG_COMP1_OUT, ptcompStaCfg->compEdgeComp1);
 
             AUTANALOG_PTC_STA_CFG(baseAddr) = regVal;
 
@@ -178,27 +178,27 @@ cy_en_autanalog_status_t Cy_AutAnalog_PTComp_LoadStaticConfig(uint8_t ptcompIdx,
                         CY_ASSERT_L3(AUTANALOG_PTCOMP_PP_COND_RANGE(ptcompStaCfg->compPpCfgArr[cfgIdx].limitCondition));
 
                         regVal =
-                            _VAL2FLD(PTC_STA_PP_CFG_INPUT_SEL, ptcompStaCfg->compPpCfgArr[cfgIdx].inpSrc);
+                                _VAL2FLD(PTC_STA_PP_CFG_INPUT_SEL, ptcompStaCfg->compPpCfgArr[cfgIdx].inpSrc);
                         AUTANALOG_PTC_STA_PP_CFG(baseAddr, cfgIdx) = regVal;
 
                         regVal =
-                            _VAL2FLD(PTC_PP_CFG_INPUT_TYPE, ptcompStaCfg->compPpCfgArr[cfgIdx].inputType) |
-                            _VAL2FLD(PTC_PP_CFG_MODE, ptcompStaCfg->compPpCfgArr[cfgIdx].cntMode) |
-                            _VAL2FLD(PTC_PP_CFG_LUT, ptcompStaCfg->compPpCfgArr[cfgIdx].dataFunction);
+                                _VAL2FLD(PTC_PP_CFG_INPUT_TYPE, ptcompStaCfg->compPpCfgArr[cfgIdx].inputType) |
+                                _VAL2FLD(PTC_PP_CFG_MODE, ptcompStaCfg->compPpCfgArr[cfgIdx].cntMode) |
+                                _VAL2FLD(PTC_PP_CFG_LUT, ptcompStaCfg->compPpCfgArr[cfgIdx].dataFunction);
                         AUTANALOG_PTC_PP_CFG(baseAddr, cfgIdx) = regVal;
 
                         regVal =
-                            _VAL2FLD(PTC_PP_WINDOW_SIZE, ptcompStaCfg->compPpCfgArr[cfgIdx].windowSize);
+                                _VAL2FLD(PTC_PP_WINDOW_SIZE, ptcompStaCfg->compPpCfgArr[cfgIdx].windowSize);
                         AUTANALOG_PTC_PP_WINDOW(baseAddr, cfgIdx) = regVal;
 
                         regVal =
-                            _VAL2FLD(PTC_PP_FRAME_PERIOD, ptcompStaCfg->compPpCfgArr[cfgIdx].period);
+                                _VAL2FLD(PTC_PP_FRAME_PERIOD, ptcompStaCfg->compPpCfgArr[cfgIdx].period);
                         AUTANALOG_PTC_PP_FRAME(baseAddr, cfgIdx) = regVal;
 
                         regVal =
-                            _VAL2FLD(PTC_PP_THRESHOLD_LOW, ptcompStaCfg->compPpCfgArr[cfgIdx].thresholdLow) |
-                            _VAL2FLD(PTC_PP_THRESHOLD_HIGH, ptcompStaCfg->compPpCfgArr[cfgIdx].thresholdHigh) |
-                            _VAL2FLD(PTC_PP_THRESHOLD_COND, ptcompStaCfg->compPpCfgArr[cfgIdx].limitCondition);
+                                _VAL2FLD(PTC_PP_THRESHOLD_LOW, ptcompStaCfg->compPpCfgArr[cfgIdx].thresholdLow) |
+                                _VAL2FLD(PTC_PP_THRESHOLD_HIGH, ptcompStaCfg->compPpCfgArr[cfgIdx].thresholdHigh) |
+                                _VAL2FLD(PTC_PP_THRESHOLD_COND, ptcompStaCfg->compPpCfgArr[cfgIdx].limitCondition);
                         AUTANALOG_PTC_PP_THRESHOLD(baseAddr, cfgIdx) = regVal;
                     }
                 }
@@ -237,8 +237,8 @@ cy_en_autanalog_status_t Cy_AutAnalog_PTComp_LoadDynamicConfig(uint8_t ptcompIdx
                 CY_ASSERT_L3(AUTANALOG_PTCOMP_INPUT(ptcompDynCfgArr[cfgIdx].invInpMux));
 
                 regVal =
-                    _VAL2FLD(PTC_DYN_MUX_CFG_INP_MUX_SEL, ptcompDynCfgArr[cfgIdx].ninvInpMux) |
-                    _VAL2FLD(PTC_DYN_MUX_CFG_INN_MUX_SEL, ptcompDynCfgArr[cfgIdx].invInpMux);
+                        _VAL2FLD(PTC_DYN_MUX_CFG_INP_MUX_SEL, ptcompDynCfgArr[cfgIdx].ninvInpMux) |
+                        _VAL2FLD(PTC_DYN_MUX_CFG_INN_MUX_SEL, ptcompDynCfgArr[cfgIdx].invInpMux);
 
                 AUTANALOG_PTC_DYN_CFG(baseAddr, cfgIdx) = regVal;
             }

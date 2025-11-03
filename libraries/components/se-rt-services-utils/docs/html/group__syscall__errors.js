@@ -32,5 +32,9 @@ var group__syscall__errors =
     [ "IFX_SE_SYSCALL_INSUFFICIENT_COUNTER", "group__syscall__errors.html#gab501d142304138f96200d6ed07093b5f", null ],
     [ "IFX_SE_SYSCALL_TIMEOUT_ERROR", "group__syscall__errors.html#gaa0481277e7ab4f35957e94d34dc1d010", null ],
     [ "IFX_SE_SYSCALL_INVALID_MEM_ALLOC", "group__syscall__errors.html#ga469d4a3c3efae8c44609956891549ff3", null ],
+    [ "IFX_SE_SYSCALL_SS_ON", "group__syscall__errors.html#gaf4abfce9bc77da93a0974d24f2a4197b", null ],
+    [ "IFX_SE_SYSCALL_SS_POWERON_FAIL", "group__syscall__errors.html#ga0ab02c3d3d5d1de4e98fcc7d4976a543", null ],
+    [ "IFX_SE_SYSCALL_SS_RESET_FAIL", "group__syscall__errors.html#ga4476a30e29976f2b0de6e8f6b357b143", null ],
+    [ "IFX_SE_SYSCALL_SS_INVALID_STATE", "group__syscall__errors.html#gad436632b295bbf1c0b471fa63ca1eee2", null ],
     [ "IFX_SE_SYSCALL_CORRUPTION_DETECTED", "group__syscall__errors.html#gace002d8bcdf057103b2ffc48ecb3aa55", null ]
 ];

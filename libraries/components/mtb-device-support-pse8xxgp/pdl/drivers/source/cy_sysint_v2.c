@@ -31,15 +31,15 @@
 #include "cy_sysint.h"
 
 #if (CY_CPU_CORTEX_M0P) || defined(CY_PDL_TZ_ENABLED)
-    static uint32_t *__vector_table_rw_ptr = (uint32_t*) &__s_vector_table_rw;
+static uint32_t *__vector_table_rw_ptr = (uint32_t*)&__s_vector_table_rw;
 #else
-    static uint32_t *__vector_table_rw_ptr = (uint32_t*) &__ns_vector_table_rw;
+static uint32_t *__vector_table_rw_ptr = (uint32_t*)&__ns_vector_table_rw;
 #endif
 
 #if ((defined(CY_CPU_CORTEX_M0P) && (CY_CPU_CORTEX_M0P)) && !defined(CY_IP_M0SECCPUSS))
-    void Cy_SysInt_SetNmiSource(cy_en_sysint_nmi_t nmiNum, cy_en_intr_t intrSrc)
+void Cy_SysInt_SetNmiSource(cy_en_sysint_nmi_t nmiNum, cy_en_intr_t intrSrc)
 #else
-    void Cy_SysInt_SetNmiSource(cy_en_sysint_nmi_t nmiNum, IRQn_Type intrSrc)
+void Cy_SysInt_SetNmiSource(cy_en_sysint_nmi_t nmiNum, IRQn_Type intrSrc)
 #endif
 {
 #if ((defined(CY_CPU_CORTEX_M0P) && (CY_CPU_CORTEX_M0P)) && !defined(CY_IP_M0SECCPUSS))
@@ -58,9 +58,9 @@
 
 
 #if ((defined(CY_CPU_CORTEX_M0P) && (CY_CPU_CORTEX_M0P)) && !defined(CY_IP_M0SECCPUSS))
-    cy_en_intr_t Cy_SysInt_GetNmiSource(cy_en_sysint_nmi_t nmiNum)
+cy_en_intr_t Cy_SysInt_GetNmiSource(cy_en_sysint_nmi_t nmiNum)
 #else
-    IRQn_Type Cy_SysInt_GetNmiSource(cy_en_sysint_nmi_t nmiNum)
+IRQn_Type Cy_SysInt_GetNmiSource(cy_en_sysint_nmi_t nmiNum)
 #endif
 {
     CY_ASSERT_L3(CY_SYSINT_IS_NMI_NUM_VALID(nmiNum));
@@ -81,7 +81,7 @@ cy_en_sysint_status_t Cy_SysInt_Init(const cy_stc_sysint_t* config, cy_israddres
 {
     cy_en_sysint_status_t status = CY_SYSINT_SUCCESS;
 
-    if (NULL != config)
+    if(NULL != config)
     {
         CY_ASSERT_L3(CY_SYSINT_IS_PRIORITY_VALID(config->intrPriority));
 
@@ -97,11 +97,11 @@ cy_en_sysint_status_t Cy_SysInt_Init(const cy_stc_sysint_t* config, cy_israddres
         status = CY_SYSINT_BAD_PARAM;
     }
 
-    return (status);
+    return(status);
 }
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.1', 2, \
-                             'IRQn of essential type enum is used as an operand to the arithmetic operator +')
+'IRQn of essential type enum is used as an operand to the arithmetic operator +')
 cy_israddress Cy_SysInt_SetVector(IRQn_Type IRQn, cy_israddress userIsr)
 {
     cy_israddress prevIsr;
@@ -109,7 +109,7 @@ cy_israddress Cy_SysInt_SetVector(IRQn_Type IRQn, cy_israddress userIsr)
     if (SCB->VTOR == (uint32_t)__vector_table_rw_ptr)
     {
         CY_ASSERT_L1(CY_SYSINT_IS_VECTOR_VALID(userIsr));
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.4', 'left hand operand 16U is not the same as that of the right operand IRQn(enum)');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.4','left hand operand 16U is not the same as that of the right operand IRQn(enum)');
         prevIsr = (cy_israddress)__vector_table_rw_ptr[CY_INT_IRQ_BASE + (uint32_t)IRQn];
         __vector_table_rw_ptr[CY_INT_IRQ_BASE + (uint32_t)IRQn] = (uint32_t)userIsr;
     }

@@ -7,6 +7,7 @@
   - [Command](#command)
 - [Commands description](#commands-description)
   - [Shift](#shift)
+  - [Hex relocate](#hex-relocate)
   - [Hex segment](#hex-segment)
   - [Merge](#merge)
   - [Sign image](#sign-image)
@@ -29,10 +30,12 @@ Signer/Combiner is a feature that brings a new experience in signing and manipul
 Executes commands specified in JSON file.
 ### Command: `run-config`
 ### Parameters
-| Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Optional/Required | Description                                                                                                                                                                                                                                                                                |
-|------------------------------------------------|:-----------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -i, --input                                    |     required      | Path to the JSON file containing commands.                                                                                                                                                                                                                                                 |
-| -s, --set                                      |     optional      | Value for variable interpolation. Must be specified as `[variable] [value]`. Every `[variable]` in the provided JSON file will be interpolated with `[value]`. The parameter may be specified more than once. Only alphanumeric and underscore characters may be in the `[variable]` name. | 
+| Name            | Optional/Required | Description                                                                                                                                                                                                                                                                                |
+|-----------------|:-----------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -i, --input     |     required      | Path to the JSON file containing commands.                                                                                                                                                                                                                                                 |
+| -s, --set       |     optional      | Value for variable interpolation. Must be specified as `[variable] [value]`. Every `[variable]` in the provided JSON file will be interpolated with `[value]`. The parameter may be specified more than once. Only alphanumeric and underscore characters may be in the `[variable]` name. |
+| --symbol        |     optional      | Path to a symbol file containing variable definitions. May be specified multiple times. Each file should provide a mapping of variable names to values.                                                                                                                                    |
+| --symbol-search |     optional      | Path to a directory to search for symbol files. May be specified multiple times. All valid symbol files found in the specified directories will be used for variable interpolation.                                                                                                        |
 ### Usage example
 ```bash
 # Run config from file commands.json
@@ -46,7 +49,7 @@ $ edgeprotecttools run-config --input commands.json --set VARIABLE_1 0x12345678 
 
 Variable interpolation is a technique used to dynamically insert the value of variables into strings or text.
 
-The `variable` name in the JSON file must adhere to the string format, enclosed by double curly braces, and consist solely of alphanumeric and underscore characters (e.g. `"{{ VARIABLE_1 }}"`). 
+The `variable` name in the JSON file must adhere to the string format, enclosed by double curly braces, and consist solely of alphanumeric and underscore characters (e.g. `"{{ VARIABLE_1 }}"`).
 
 ```json
 {
@@ -54,8 +57,9 @@ The `variable` name in the JSON file must adhere to the string format, enclosed 
 }
 ```
 
-The `variable` name in the CLI command must correspond to the `variable` name specified in the JSON file. 
-The `value` may contain any printable characters, however, the usage of quotes shall be cautious.
+### Setting variables via CLI
+
+Variables can be set directly from the command line using the `--set` option. The `variable` name in the CLI command must correspond to the `variable` name specified in the JSON file. The `value` may contain any printable characters; however, the usage of quotes should be cautious.
 
 ```bash
 $ edgeprotecttools run-config --input commands.json --set VARIABLE_1 0x12345678
@@ -69,7 +73,53 @@ The interpolation will result in the following:
 }
 ```
 
-Note that variable interpolation does not modify the input JSON file. It will interpolate the variables only in the runtime.
+Note that variable interpolation does not modify the input JSON file. It will interpolate the variables only at runtime.
+
+### Using symbol files for variable interpolation
+
+In addition to the `--set` option, variables can be provided via symbol files using the `--symbol` and `--symbol-search` options:
+
+- `--symbol <file>`: Specify one or more symbol files containing variable definitions. Each file should provide a mapping of variable names to values.
+- `--symbol-search <directory>`: Specify one or more directories to search for symbol files. All valid symbol files found in the specified directories will be used for variable interpolation.
+
+You can specify one or more symbol files using the `--symbol` option, or provide a directory containing multiple symbol files using the `--symbol-search` option. All variables from all discovered symbol files will be used for interpolation, provided their names are unique across all sources.
+
+#### Symbol file structure
+
+A symbol file is a JSON file that defines a mapping of variable names to their values. Each key in the file represents a variable name, and its value is the string to be interpolated. Variable names must consist only of alphanumeric characters and underscores.
+
+Example symbol file:
+```json
+{
+    "version" : 1,
+    "symbolInformation" : [
+        {
+            "name" : "CYMEM_CM33_0_S_extended_boot_reserved_START",
+            "value": "0x22000000"
+        },
+        {
+            "name" : "CYMEM_CM33_0_S_extended_boot_reserved_C_START",
+            "value": "0x02000000"
+        }
+    ]
+}
+```
+
+#### Example usage
+
+```bash
+# Set variables from a symbol file
+$ edgeprotecttools run-config --input commands.json --symbol symbols.json
+
+# Set variables from all symbol files in a directory
+$ edgeprotecttools run-config --input commands.json --symbol-search ./symbols_dir
+```
+
+### Combining variable sources
+
+You may use `--set`, `--symbol`, and `--symbol-search` options simultaneously. All variables from these sources are merged for interpolation. Variable names must be unique across all sources.
+
+This flexible approach allows you to manage variable interpolation efficiently, whether you prefer to define variables inline, in files, or by searching directories for symbol definitions.
 
 
 ## JSON description
@@ -255,6 +305,62 @@ Example:
 ```
 
 
+### Hex relocate
+
+Relocates regions in the hex file to new address spaces. Relocates regions in the hex file to new address spaces. All segments within the specified region (from `start` to `start` + `size`) will be relocated to the new address (`dest`).
+
+Inputs:
+
+| Name        |  Type  | Optional/Required | Description                                                                                   |
+|-------------|:------:|:-----------------:|-----------------------------------------------------------------------------------------------|
+| file        | string |     required      | Input hex file containing the segment(s) to relocate.                                         |
+| regions     | array  |     required      | Regions to relocate. An array of objects, each containing `start`, `size`, and `dest` fields. |
+| description | string |     optional      | Description for this field.                                                                   |
+
+Outputs:
+
+| Name        |  Type  | Optional/Required | Description                  |
+|-------------|:------:|:-----------------:|------------------------------|
+| file        | string |     required      | Path to the output hex file. |
+| description | string |     optional      | Description for this field.  |
+
+Example:
+```json
+{
+    "schema-version": 1.0,
+    "content": [
+        {
+            "name": "hex-relocate command example",
+            "description": "Relocates regions in hex file to new address spaces",
+            "enabled": true,
+            "commands": [
+                {
+                    "command": "hex-relocate",
+                    "inputs": [
+                        {
+                            "file": "input.hex",
+                            "regions": [
+                                {
+                                    "start": "0x08000000",
+                                    "size": "0x04000000",
+                                    "dest": "0x60000000"
+                                }
+                            ]
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "file": "output.hex"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+
 ### Hex segment
 
 Extracts a segment from the hex file.
@@ -383,36 +489,39 @@ All the numeric values can be provided in a decimal (e.g. `fill-value: 255`) or 
 
 Inputs:
 
-| Name                  |      Type       | Optional/Required | Description                                                                                                                                                                                                                                                                                     |
-|-----------------------|:---------------:|:-----------------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| file                  |     string      |     required      | Path to the file to be signed or converted into MCUboot format.                                                                                                                                                                                                                                 |
-| description           |     string      |     optional      | Description for this field.                                                                                                                                                                                                                                                                     |
-| signing-key           |     string      |     optional      | ECDSA or RSA private key used to sign the image.                                                                                                                                                                                                                                                |
-| header-size           | string, integer |     required      | MCUboot header size.                                                                                                                                                                                                                                                                            |
-| slot-size             | string, integer |     required      | Maximum slot size.                                                                                                                                                                                                                                                                              |
-| fill-value            | string, integer |     optional      | Value read back from erased flash. Default: `0`. Available values: `0`, `0xFF`.                                                                                                                                                                                                                 |
-| min-erase-size        | string, integer |     optional      | Minimum erase size. Default: `0x8000`.                                                                                                                                                                                                                                                          |
-| image-version         |     string      |     optional      | Image version in the image header. Default: `0.0.0`.                                                                                                                                                                                                                                            |
-| security-counter      | string, integer |     optional      | Value of security counter. Use the `auto` keyword to automatically generate it from the image version. Default: `auto`.                                                                                                                                                                         |
-| align                 | string, integer |     optional      | Flash alignment. Default: `8`. Available values: `1`, `2`, `4`, `8`.                                                                                                                                                                                                                            |
-| pubkey-format         |     string      |     optional      | Public key format in the image TLV: full key or hash of the key. Available values: `hash` or `full`. Default: `hash`.                                                                                                                                                                           |
-| pubkey-encoding       |     string      |     optional      | Public key encoding in the image TLV. Applicable values: `der`, or `raw`. Default: `der`.                                                                                                                                                                                                       |
-| signature-encoding    |     string      |     optional      | Image signature encoding. Applicable values: `asn1`, or `raw`. Default: `asn1`.                                                                                                                                                                                                                 |
-| pad                   |     boolean     |     optional      | Adds padding to the image trailer. Pads the image from the end of the TLV area up to the slot size. boot_magic is always at the very end after the padding.                                                                                                                                     |
-| confirm               |     boolean     |     optional      | Adds image OK status to the trailer. Pads the image from the end of the TLV area up to the slot size and sets the image OK byte to 0x01 (the eighth byte from the end). The padding is required for this feature and is always applied. boot_magic is always at the very end after the padding. |
-| overwrite-only        |     boolean     |     optional      | Use overwrite mode instead of swap.                                                                                                                                                                                                                                                             |
-| boot-record           |     string      |     optional      | Create CBOR encoded boot record TLV. Represents the role of the software component (e.g. CoFM for coprocessor firmware). Maximum 12 characters.                                                                                                                                                 |
-| hex-address           | string, integer |     optional      | Adjust the address in the hex output file.                                                                                                                                                                                                                                                      |
-| load-address          | string, integer |     optional      | Load address for image when it should run from RAM.                                                                                                                                                                                                                                             |
-| rom-fixed             | string, integer |     optional      | Set flash address the image is built for.                                                                                                                                                                                                                                                       |
-| max-sectors           | string, integer |     optional      | When padding allow for this amount of sectors. Default: `128`.                                                                                                                                                                                                                                  |
-| save-enctlv           |     boolean     |     optional      | When upgrading, save encrypted key TLVs instead of plain keys. Enable when BOOT_SWAP_SAVE_ENCTLV config option was set.                                                                                                                                                                         |
-| dependencies          |     string      |     optional      | Add dependency on another image. Format: `(<image_ID>,<image_version>), ... `.                                                                                                                                                                                                                  |
-| encryption-public-key |     string      |     optional      | ECDSA public key used to generate the symmetric key for image encryption (ECIES schema). It must be the receiver's public key.                                                                                                                                                                  |
-| encryption-secret-key |     string      |     optional      | Symmetric key used to encrypt the image (AES).                                                                                                                                                                                                                                                  |
-| encryption-address    |     string      |     optional      | Starting address for data encryption.                                                                                                                                                                                                                                                           |
-| protected-tlv         |      list       |     optional      | The custom TLV to be placed into a protected area (the signed part). Add the `0x` prefix for the value to be interpreted as an `integer`, otherwise it will be interpreted as a `string`.                                                                                                       |
-| tlv                   |      list       |     optional      | The custom TLV to be placed into a non-protected area. Add the `0x` prefix for the value to be interpreted as an `integer`, otherwise it will be interpreted as a `string`.                                                                                                                     |
+| Name                  |      Type       | Optional/Required | Description                                                                                                                                                                                                                                                                                                        |
+|-----------------------|:---------------:|:-----------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| file                  |     string      |     required      | Path to the file to be signed or converted into MCUboot format.                                                                                                                                                                                                                                                    |
+| description           |     string      |     optional      | Description for this field.                                                                                                                                                                                                                                                                                        |
+| signing-key           |     string      |     optional      | ECDSA or RSA private key used to sign the image.                                                                                                                                                                                                                                                                   |
+| header-size           | string, integer |     required      | MCUboot header size.                                                                                                                                                                                                                                                                                               |
+| slot-size             | string, integer |     required      | Maximum slot size.                                                                                                                                                                                                                                                                                                 |
+| fill-value            | string, integer |     optional      | Value read back from erased flash. Default: `0`. Available values: `0`, `0xFF`.                                                                                                                                                                                                                                    |
+| min-erase-size        | string, integer |     optional      | Minimum erase size. Default: `0x8000`.                                                                                                                                                                                                                                                                             |
+| image-version         |     string      |     optional      | Image version in the image header. Default: `0.0.0`.                                                                                                                                                                                                                                                               |
+| security-counter      | string, integer |     optional      | Value of security counter. Use the `auto` keyword to automatically generate it from the image version. Default: `auto`.                                                                                                                                                                                            |
+| align                 | string, integer |     optional      | Flash alignment. Default: `8`. Available values: `1`, `2`, `4`, `8`.                                                                                                                                                                                                                                               |
+| pubkey-format         |     string      |     optional      | Public key format in the image TLV: full key or hash of the key. Available values: `hash` or `full`. Default: `hash`.                                                                                                                                                                                              |
+| pubkey-encoding       |     string      |     optional      | Public key encoding in the image TLV. Applicable values: `der`, or `raw`. Default: `der`.                                                                                                                                                                                                                          |
+| signature-encoding    |     string      |     optional      | Image signature encoding. Applicable values: `asn1`, or `raw`. Default: `asn1`.                                                                                                                                                                                                                                    |
+| pad                   |     boolean     |     optional      | Adds padding to the image trailer. Pads the image from the end of the TLV area up to the slot size. boot_magic is always at the very end after the padding.                                                                                                                                                        |
+| confirm               |     boolean     |     optional      | Adds image OK status to the trailer. Pads the image from the end of the TLV area up to the slot size and sets the image OK byte to 0x01 (the eighth byte from the end). The padding is required for this feature and is always applied. boot_magic is always at the very end after the padding.                    |
+| overwrite-only        |     boolean     |     optional      | Use overwrite mode instead of swap.                                                                                                                                                                                                                                                                                |
+| boot-record           |     string      |     optional      | Create CBOR encoded boot record TLV. Represents the role of the software component (e.g. CoFM for coprocessor firmware). Maximum 12 characters.                                                                                                                                                                    |
+| hex-address           | string, integer |     optional      | Adjust the address in the hex output file.                                                                                                                                                                                                                                                                         |
+| load-address          | string, integer |     optional      | Load address for image when it should run from RAM.                                                                                                                                                                                                                                                                |
+| rom-fixed             | string, integer |     optional      | Set flash address the image is built for.                                                                                                                                                                                                                                                                          |
+| max-sectors           | string, integer |     optional      | When padding allow for this amount of sectors. Default: `128`.                                                                                                                                                                                                                                                     |
+| save-enctlv           |     boolean     |     optional      | When upgrading, save encrypted key TLVs instead of plain keys. Enable when BOOT_SWAP_SAVE_ENCTLV config option was set.                                                                                                                                                                                            |
+| dependencies          |     string      |     optional      | Add dependency on another image. Format: `(<image_ID>,<image_version>), ... `.                                                                                                                                                                                                                                     |
+| encryption-public-key |     string      |     optional      | ECDSA public key used to generate the symmetric key for image encryption (ECIES schema). It must be the receiver's public key.                                                                                                                                                                                     |
+| encryption-secret-key |     string      |     optional      | An encryption key.                                                                                                                                                                                                                                                                                                 |
+| encryption-key-role   |     string      |     optional      | An encryption key role. Specifies what the key is used for: <br/>* Image Encryption: Encrypts images for decryption in the XIP mode.<br/>* Key Wrapping: Acts as a Key Encryption Key (KEK) for AES Key Wrapping (AES-KW), ensuring secure key management. <br/>Available values: `XIP`, `AES-KW`. Default: `XIP`. |
+| encryption-address    |     string      |     optional      | Starting address for data encryption.                                                                                                                                                                                                                                                                              |
+| protected-tlv         |      list       |     optional      | The custom TLV to be placed into a protected area (the signed part). Add the `0x` prefix for the value to be interpreted as an `integer`, otherwise it will be interpreted as a `string`.                                                                                                                          |
+| tlv                   |      list       |     optional      | The custom TLV to be placed into a non-protected area. Add the `0x` prefix for the value to be interpreted as an `integer`, otherwise it will be interpreted as a `string`.                                                                                                                                        |
+| kdf                   |     string      |     optional      | Key derivation function name. Default: `HKDF`. Available values: `HKDF`, `KBKDFCMAC`.                                                                                                                                                                                                                              |
+| remove-tlv            |      list       |     optional      | Removes TLV with the specified ID.                                                                                                                                                                                                                                                                                 |
 
 
 Outputs:
@@ -1183,6 +1292,7 @@ Following JSON shows how to split the segments, sign each of them, and then comb
 }
 ```
 
+
 ### Use case 3: Signing hex containing EEPROM segment
 
 There are two segments - the internal flash segment and the EEPROM segment. 
@@ -1275,6 +1385,7 @@ We need to sign the internal flash application only.
     ]
 }
 ```
+
 
 ### Use case 4: Signing encrypted image with HSM
 

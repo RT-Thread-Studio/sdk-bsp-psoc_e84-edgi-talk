@@ -48,7 +48,7 @@ extern "C" {
 #include "cy_syslib.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 2, \
-                             'Pointer type conversion is intentional')
+'Pointer type conversion is intentional')
 
 static void Cy_Crypto_Core_V1_Cmac_CalcSubKey(uint8_t *srcDstPtr);
 
@@ -105,9 +105,9 @@ static void Cy_Crypto_Core_V1_Cmac_CalcSubKey(uint8_t *srcDstPtr)
 
 *******************************************************************************/
 void Cy_Crypto_Core_V1_Cmac_Init(cy_stc_crypto_v1_cmac_state_t* cmacState,
-                                 uint32_t *temp,
-                                 uint32_t *block,
-                                 uint32_t *k)
+                                uint32_t* temp,
+                                uint32_t* block,
+                                uint32_t* k)
 {
     cmacState->block = block;
     cmacState->temp  = temp;
@@ -131,8 +131,8 @@ void Cy_Crypto_Core_V1_Cmac_Init(cy_stc_crypto_v1_cmac_state_t* cmacState,
 *
 *******************************************************************************/
 void Cy_Crypto_Core_V1_Cmac_Start(CRYPTO_Type *base,
-                                  cy_stc_crypto_aes_state_t  *aesState,
-                                  cy_stc_crypto_v1_cmac_state_t *cmacState)
+                               cy_stc_crypto_aes_state_t  *aesState,
+                               cy_stc_crypto_v1_cmac_state_t *cmacState)
 {
     uint32_t *kTmp    = cmacState->k;
     uint32_t *tempTmp = cmacState->temp;
@@ -168,16 +168,16 @@ void Cy_Crypto_Core_V1_Cmac_Start(CRYPTO_Type *base,
 *
 *******************************************************************************/
 void Cy_Crypto_Core_V1_Cmac_Update(CRYPTO_Type *base,
-                                   cy_stc_crypto_aes_state_t  *aesState,
-                                   cy_stc_crypto_v1_cmac_state_t *cmacState,
-                                   uint8_t  const *message,
-                                   uint32_t messageSize)
+                                cy_stc_crypto_aes_state_t  *aesState,
+                                cy_stc_crypto_v1_cmac_state_t *cmacState,
+                                uint8_t  const *message,
+                                uint32_t messageSize)
 {
     uint32_t *blockBuff = cmacState->block;
     uint32_t *tempBuff  = cmacState->temp;
 
     /* Clear the argument for XOR for the first block */
-    Cy_Crypto_Core_V1_MemSet(base, (void*)tempBuff, 0x00U, CY_CRYPTO_AES_BLOCK_SIZE);
+    Cy_Crypto_Core_V1_MemSet(base, (void* )tempBuff, 0x00U, CY_CRYPTO_AES_BLOCK_SIZE);
 
     /* Process all blocks except last */
     while (messageSize > CY_CRYPTO_AES_BLOCK_SIZE)
@@ -187,7 +187,7 @@ void Cy_Crypto_Core_V1_Cmac_Update(CRYPTO_Type *base,
 
         Cy_Crypto_Core_V1_Aes_Xor(base, aesState, blockBuff, blockBuff, tempBuff);
         Cy_Crypto_Core_V1_Aes_ProcessBlock(base,
-                                           aesState, CY_CRYPTO_ENCRYPT, tempBuff, blockBuff);
+                                        aesState, CY_CRYPTO_ENCRYPT, tempBuff, blockBuff);
 
         /* in bytes */
         message     += CY_CRYPTO_AES_BLOCK_SIZE;
@@ -221,9 +221,9 @@ void Cy_Crypto_Core_V1_Cmac_Update(CRYPTO_Type *base,
 *
 *******************************************************************************/
 void Cy_Crypto_Core_V1_Cmac_Finish(CRYPTO_Type *base,
-                                   cy_stc_crypto_aes_state_t  *aesState,
-                                   cy_stc_crypto_v1_cmac_state_t *cmacState,
-                                   uint8_t *cmac)
+                                cy_stc_crypto_aes_state_t  *aesState,
+                                cy_stc_crypto_v1_cmac_state_t *cmacState,
+                                uint8_t* cmac)
 {
     uint32_t *blockBuff   = cmacState->block;
     uint32_t *tempBuff    = cmacState->temp;
@@ -234,14 +234,14 @@ void Cy_Crypto_Core_V1_Cmac_Finish(CRYPTO_Type *base,
     if (blockIdxTmp < CY_CRYPTO_AES_BLOCK_SIZE)
     {
         /* Calculate the K2 sub-key */
-        Cy_Crypto_Core_V1_Cmac_CalcSubKey((uint8_t*)kPtrTmp);
+        Cy_Crypto_Core_V1_Cmac_CalcSubKey((uint8_t* )kPtrTmp);
 
         /* Appended '1' bit to the end of message, followed by '0' */
-        *((uint8_t*)blockBuff + blockIdxTmp) = 0x80U;
+        *((uint8_t* )blockBuff + blockIdxTmp) = 0x80U;
 
         /* Write zeros into the rest of the message */
         copySize = CY_CRYPTO_AES_BLOCK_SIZE - 1u - blockIdxTmp;
-        Cy_Crypto_Core_V1_MemSet(base, ((uint8_t*)blockBuff + blockIdxTmp + 1), 0x00U, (uint16_t)copySize);
+        Cy_Crypto_Core_V1_MemSet(base, ((uint8_t* )blockBuff + blockIdxTmp + 1), 0x00U, (uint16_t)copySize);
     }
 
     Cy_Crypto_Core_V1_Aes_Xor(base, aesState, blockBuff, blockBuff, tempBuff);
@@ -287,12 +287,12 @@ void Cy_Crypto_Core_V1_Cmac_Finish(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Cmac(CRYPTO_Type *base,
-        uint8_t  const *message,
-        uint32_t messageSize,
-        uint8_t  const *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        uint8_t *cmac,
-        cy_stc_crypto_aes_state_t *aesState)
+                                          uint8_t  const *message,
+                                          uint32_t messageSize,
+                                          uint8_t  const *key,
+                                          cy_en_crypto_aes_key_length_t keyLength,
+                                          uint8_t *cmac,
+                                          cy_stc_crypto_aes_state_t *aesState)
 {
     cy_stc_crypto_aes_buffers_t  *aesBuffers = (cy_stc_crypto_aes_buffers_t *)(Cy_Crypto_Core_GetVuMemoryAddress(base));
     cy_stc_crypto_v1_cmac_buffers_t *cmacBuffers =
@@ -305,8 +305,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Cmac(CRYPTO_Type *base,
 
     (void)Cy_Crypto_Core_V1_Aes_Init(base, key, keyLength, aesState, aesBuffers);
 
-    Cy_Crypto_Core_V1_Cmac_Init(myCmacState, myTemp, myBlock, myK);
-    Cy_Crypto_Core_V1_Cmac_Start(base, aesState, myCmacState);
+    Cy_Crypto_Core_V1_Cmac_Init  (myCmacState, myTemp, myBlock, myK);
+    Cy_Crypto_Core_V1_Cmac_Start (base, aesState, myCmacState);
     Cy_Crypto_Core_V1_Cmac_Update(base, aesState, myCmacState, message, messageSize);
     Cy_Crypto_Core_V1_Cmac_Finish(base, aesState, myCmacState, cmac);
 

@@ -22,11 +22,26 @@ HAL support is required for retarget-io in an RTOS environment.  If your project
 ### Quick Start (with MTB-HAL(COMPONENT_MTB_HAL) Support)
 1. Configure the UART using the device configurator generated structures or through manually written config structures. Configuration includes the UART TX and RX pins, CTS/RTS pins if flow control is desired, Baud Rate and other UART config parameters
 2. Set up the clock source to the UART peripheral. This could be done using the device configurator or manually. Set up the clock divider value depending on the desired baud rate.
-3. Initialize the UART Hardware.
+3. Initialize the UART Hardware using PDL function calls. For example, if using a device where UART is provided by an SCB:
+```
+    result = Cy_SCB_UART_Init(DEBUG_UART_HW, &DEBUG_UART_config, &DEBUG_UART_context);
+    // Check for correct result
+```
 4. Set up the HAL UART object.
-5. Add `#include "cy_retarget_io.h"`.
-6. Call `cy_retarget_io_init(&hal_uart_obj);`.
-7. Start printing using `printf()`.
+```
+    result = mtb_hal_uart_setup(&DEBUG_UART_hal_obj,
+                                &CYBSP_DEBUG_UART_hal_config,
+                                &DEBUG_UART_context, NULL);
+    // Check for correct result
+```
+5. Enable the UART peripheral
+```
+    Cy_SCB_UART_Enable(DEBUG_UART_HW);
+```
+6. Add `#include "cy_retarget_io.h"`.
+7. Call `cy_retarget_io_init(&DEBUG_UART_hal_obj);`.
+8. Start printing using `printf()`.
+9. If needed, register a callback to handle the transitions to deepsleep (it's automatically registered in CY-HAL case). This can be done by registering with `Cy_SysPm_RegisterCallback` either the predefined mtb_syspm_scb_uart_deepsleep_callback from the syspm-callbacks asset or a new callback function specific to the needs of the user. For more info refer to `Cy_SysPm_RegisterCallback` in PDL documentation.
 
 ### Quick Start (with CY-HAL(CY_USING_HAL) Support)
 1. Add `#include "cy_retarget_io.h"`
@@ -57,12 +72,11 @@ By default, floating point support is enabled in printf. If floating point value
 ### More information
 
 * [API Reference Guide](https://infineon.github.io/retarget-io/html/index.html)
-* [Cypress Semiconductor, an Infineon Technologies Company](http://www.cypress.com)
+* [Infineon](http://www.infineon.com)
 * [Infineon GitHub](https://github.com/infineon)
-* [ModusToolbox™](https://www.cypress.com/products/modustoolbox-software-environment)
+* [ModusToolbox Software Environment, Quick Start Guide, Documentation, and Videos](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/)
 * [PSoC™ 6 Code Examples using ModusToolbox™ IDE](https://github.com/infineon/Code-Examples-for-ModusToolbox-Software)
 * [ModusToolbox™ Software](https://github.com/Infineon/modustoolbox-software)
-* [PSoC™ 6 Resources - KBA223067](https://community.cypress.com/docs/DOC-14644)
 
 ---
-© Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation, 2019-2024.
+© Cypress Semiconductor Corporation (an Infineon company) or an affiliate of Cypress Semiconductor Corporation, 2019-2025.

@@ -27,15 +27,15 @@
 
 #if defined(CY_IP_MXSAXIDMAC)
 
-    #if !defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
-        #define _MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC (1u)
-    #endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
+#if !defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
+#define _MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC (1u)
+#endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
 
 
-    typedef cy_stc_axidmac_descriptor_t _mtb_hal_dmac_descriptor_t;
-    typedef AXI_DMAC_Type               _mtb_hal_dmac_base_t;
+typedef cy_stc_axidmac_descriptor_t _mtb_hal_dmac_descriptor_t;
+typedef AXI_DMAC_Type               _mtb_hal_dmac_base_t;
 
-    /* AXI DMA controller has a 64-bit AXI master interface */
-    #define _MTB_HAL_DMA_ALIGN_DMAC CY_ALIGN(8)
+/* AXI DMA controller has a 64-bit AXI master interface */
+#define _MTB_HAL_DMA_ALIGN_DMAC CY_ALIGN(8)
 
 #endif // defined(CY_IP_MXSAXIDMAC)

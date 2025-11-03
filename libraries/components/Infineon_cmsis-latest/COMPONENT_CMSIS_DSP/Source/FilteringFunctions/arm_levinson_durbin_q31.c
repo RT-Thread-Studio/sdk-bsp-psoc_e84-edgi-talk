@@ -38,55 +38,55 @@
 
 __STATIC_FORCEINLINE q31_t mul32x16(q31_t a, q15_t b)
 {
-    q31_t r = ((q63_t)a * (q63_t)b) >> 15;
+  q31_t r = ((q63_t)a * (q63_t)b) >> 15;
 
-    return (r);
-
+  return(r);
+  
 }
 
 __STATIC_FORCEINLINE q31_t mul32x32(q31_t a, q31_t b)
 {
-    //q31_t r = __SSAT(((q63_t)a * b) >> 31,31);
-    q31_t r = ((q63_t)a * b) >> 31;
+  //q31_t r = __SSAT(((q63_t)a * b) >> 31,31);
+  q31_t r = ((q63_t)a * b) >> 31;
 
-    return (r);
-
+  return(r);
+  
 }
 
 __STATIC_FORCEINLINE q31_t divide(q31_t n, q31_t d)
 {
-    arm_status status;
-    int16_t shift;
-    q15_t inverse;
-    q31_t r;
-    // We are computing:
-    // n / d = n / (h + l) where h and l are the high end and low end part.
-    // 1 / (h + l) = 1 / h (1 - l / h)
-    // Our division algorithm has a shift. So it is returning a scaled value sh.
-    // So we need a << shift to convert 1/ sh to 1/h.
-    // In below code, we are organizing the computation differently. Instead of computing:
-    // 1 / h (1 - l / h)
-    // we are computing
-    // 1 / h (2 - (l + h) / h)
-    // 1 / h (2 - d / h)
-    // Also, we are not computing 1/h in Q15 but in Q14.
-    // 2 is expressed in Q30.
-    // So at the end of all computation we need a << 2
+  arm_status status;
+  int16_t shift;
+  q15_t inverse;
+  q31_t r;
+  // We are computing:
+  // n / d = n / (h + l) where h and l are the high end and low end part.
+  // 1 / (h + l) = 1 / h (1 - l / h)
+  // Our division algorithm has a shift. So it is returning a scaled value sh.
+  // So we need a << shift to convert 1/ sh to 1/h.
+  // In below code, we are organizing the computation differently. Instead of computing:
+  // 1 / h (1 - l / h) 
+  // we are computing
+  // 1 / h (2 - (l + h) / h) 
+  // 1 / h (2 - d / h)
+  // Also, we are not computing 1/h in Q15 but in Q14.
+  // 2 is expressed in Q30.
+  // So at the end of all computation we need a << 2
 
-    // Result is in Q14 because of use of HALF_Q15 instead of ONE_Q15.
-    status = arm_divide_q15(HALF_Q15, d >> 16, &inverse, &shift);
-    (void)status;
-
-    // d is used instead of l
-    // So we will need to substract to 2 instead of 1.
-    r = mul32x16(d, inverse);
-    r = TWO_Q30 - (r << shift);
-    r = mul32x16(r, inverse);
-    r = mul32x32(r, n) ;
-    r = r << (shift + 2);
-
-    return (r);
-
+  // Result is in Q14 because of use of HALF_Q15 instead of ONE_Q15.
+  status=arm_divide_q15(HALF_Q15,d>>16,&inverse,&shift);
+  (void)status;
+  
+  // d is used instead of l
+  // So we will need to substract to 2 instead of 1.
+  r = mul32x16(d,inverse);
+  r = TWO_Q30 - (r << shift);
+  r = mul32x16(r, inverse);
+  r = mul32x32(r,n) ;
+  r = r << (shift + 2);
+  
+  return(r);
+  
 }
 
 /**
@@ -106,268 +106,267 @@ __STATIC_FORCEINLINE q31_t divide(q31_t n, q31_t d)
   @param[out]    a        autoregressive coefficients
   @param[out]    err      prediction error (variance)
   @param[in]     nbCoefs  number of autoregressive coefficients
-  @return        none
  */
 
-#if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE) && defined(__CMSIS_GCC_H)
-    #pragma GCC warning "Scalar version of arm_levinson_durbin_q31 built. Helium version has build issues with gcc."
-#endif
+#if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE) && defined(ARM_DSP_BUILT_WITH_GCC)
+#pragma GCC warning "Scalar version of arm_levinson_durbin_q31 built. Helium version has build issues with gcc."
+#endif 
 
-#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE) &&  !defined(__CMSIS_GCC_H)
+#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE) &&  !defined(ARM_DSP_BUILT_WITH_GCC)
 
 #define LANE23_MASK 0xFF00
 
 #include "arm_helium_utils.h"
-void arm_levinson_durbin_q31(const q31_t *phi,
-                             q31_t *a,
-                             q31_t *err,
-                             int nbCoefs)
+ARM_DSP_ATTRIBUTE void arm_levinson_durbin_q31(const q31_t *phi,
+  q31_t *a, 
+  q31_t *err,
+  int nbCoefs)
 {
     q31_t e;
 
-    static const uint32_t revOffsetArray[4] = {3, 2, 1, 0};
+    static const uint32_t revOffsetArray[4] = {3,2,1,0};
 
-    //a[0] = phi[1] / phi[0];
-    a[0] = divide(phi[1], phi[0]);
+   //a[0] = phi[1] / phi[0];
+   a[0] = divide(phi[1], phi[0]);
+   
 
+   //e = phi[0] - phi[1] * a[0];
+   e = phi[0] - mul32x32(phi[1],a[0]);
 
-    //e = phi[0] - phi[1] * a[0];
-    e = phi[0] - mul32x32(phi[1], a[0]);
+   for(int p=1; p < nbCoefs; p++)
+   {
+      q63_t suma=0;
+      q63_t sumb=0;
+      q31x4_t vecA,vecRevPhi,vecPhi;
+      q31_t k;
+      uint32_t blkCnt; 
+      const q31_t *pPhi,*pRevPhi,*pA;
+      uint32x4_t revOffset;
 
-    for (int p = 1; p < nbCoefs; p++)
-    {
-        q63_t suma = 0;
-        q63_t sumb = 0;
-        q31x4_t vecA, vecRevPhi, vecPhi;
-        q31_t k;
-        uint32_t blkCnt;
-        const q31_t *pPhi, *pRevPhi, *pA;
-        uint32x4_t revOffset;
+      
+      int nb,j,i;
 
+      revOffset = vld1q(revOffsetArray);
 
-        int nb, j, i;
+      pRevPhi = &phi[p-3];
+      pPhi = &phi[1];
+      pA = a;
 
-        revOffset = vld1q(revOffsetArray);
+      i = 0;
+      blkCnt = p >> 2;
+      while(blkCnt > 0)
+      {
+         vecA = vld1q(pA);
+         pA += 4;
 
-        pRevPhi = &phi[p - 3];
-        pPhi = &phi[1];
-        pA = a;
+         vecPhi = vld1q(pPhi);
+         pPhi += 4;
 
-        i = 0;
-        blkCnt = p >> 2;
-        while (blkCnt > 0)
-        {
-            vecA = vld1q(pA);
-            pA += 4;
+         vecRevPhi = vldrwq_gather_shifted_offset_s32(pRevPhi,revOffset);
+         pRevPhi -= 4;
 
-            vecPhi = vld1q(pPhi);
-            pPhi += 4;
+         suma = vmlaldavaq(suma,vecA,vecRevPhi);
+         sumb = vmlaldavaq(sumb,vecA,vecPhi); 
 
-            vecRevPhi = vldrwq_gather_shifted_offset_s32(pRevPhi, revOffset);
-            pRevPhi -= 4;
-
-            suma = vmlaldavaq(suma, vecA, vecRevPhi);
-            sumb = vmlaldavaq(sumb, vecA, vecPhi);
-
-            i += 4;
-            blkCnt--;
-        }
-
-
-        blkCnt = p & 3;
-        while (blkCnt > 0)
-        {
-            suma += ((q63_t)a[i] * phi[p - i]);
-            sumb += ((q63_t)a[i] * phi[i + 1]);
-
-            i++;
-            blkCnt--;
-        }
-
-        suma = asrl(suma, 31);
-        sumb = asrl(sumb, 31);
+         i += 4;
+         blkCnt--;
+      }
 
 
+      blkCnt = p & 3;
+      while(blkCnt > 0)
+      {
+         suma += ((q63_t)a[i] * phi[p - i]);
+         sumb += ((q63_t)a[i] * phi[i + 1]);
 
-        //k = (phi[p+1]-suma)/(phi[0] - sumb);
-        k = divide(phi[p + 1] - (q31_t)suma, phi[0] - (q31_t)sumb);
+         i++;
+         blkCnt--;
+      }
 
-        q31x4_t vecRevA, tmp;
-        static int32_t orgOffsetArray[4] = {0, 1, -1, -2};
-        static const int32_t offsetIncArray[4] = {2, 2, -2, -2};
-
-        uint32x4_t offset, offsetInc, vecTmp;
-
-
-        offset = vld1q_u32((uint32_t*)orgOffsetArray);
-        vecTmp = vdupq_n_u32(p);
-
-        offset = vaddq_m_u32(offset, offset, vecTmp, LANE23_MASK);
-        offsetInc = vld1q_u32((uint32_t*)offsetIncArray);
+      suma = asrl(suma, 31);
+      sumb = asrl(sumb, 31);
 
 
-        nb = p >> 2;
-        j = 0;
-        for (int i = 0; i < nb ; i++)
-        {
-            /*
-              q31_t x0,x1,x2,x3;
 
-              //x = a[j] - k * a[p-1-j];
-              x0 = a[j] - mul32x32(k,a[p-1-j]);
-              x1 = a[j+1] - mul32x32(k,a[p-2-j]);
+      //k = (phi[p+1]-suma)/(phi[0] - sumb);
+      k = divide(phi[p+1]-(q31_t)suma,phi[0] - (q31_t)sumb);
 
-              //y = a[p-1-j] - k * a[j];
-              x2 = a[p-1-j] - mul32x32(k , a[j]);
-              x3 = a[p-2-j] - mul32x32(k , a[j+1]);
+      q31x4_t vecRevA,tmp;
+      static int32_t orgOffsetArray[4]={0,1,-1,-2};
+      static const int32_t offsetIncArray[4]={2,2,-2,-2};
 
-              a[j] = x0;
-              a[j+1] = x1;
-              a[p-1-j] = x2;
-              a[p-2-j] = x3;
-            */
-
-            uint64_t tmpa, tmpb;
-            vecA = vldrwq_gather_shifted_offset_s32(a, offset);
+      uint32x4_t offset,offsetInc,vecTmp;
 
 
-            tmpa = vgetq_lane_u64((uint64x2_t)vecA, 0);
-            tmpb = vgetq_lane_u64((uint64x2_t)vecA, 1);
-            vecRevA = (q31x4_t) vsetq_lane_u64(tmpb, (uint64x2_t)vecRevA, 0);
-            vecRevA = (q31x4_t) vsetq_lane_u64(tmpa, (uint64x2_t)vecRevA, 1);
+      offset = vld1q_u32((uint32_t*)orgOffsetArray);
+      vecTmp = vdupq_n_u32(p);
+
+      offset = vaddq_m_u32(offset,offset,vecTmp,LANE23_MASK);
+      offsetInc = vld1q_u32((uint32_t*)offsetIncArray);
 
 
-            tmp = vsubq(vecA, vqdmulhq_n_s32(vecRevA, k));
-            vstrwq_scatter_shifted_offset_s32(a, offset, tmp);
+      nb = p >> 2;
+      j=0;
+      for(int i =0;i < nb ; i++)
+      {
+        /*
+          q31_t x0,x1,x2,x3;
 
-            offset = vaddq(offset, offsetInc);
+          //x = a[j] - k * a[p-1-j];
+          x0 = a[j] - mul32x32(k,a[p-1-j]);
+          x1 = a[j+1] - mul32x32(k,a[p-2-j]);
 
-            j += 2;
-        }
+          //y = a[p-1-j] - k * a[j];
+          x2 = a[p-1-j] - mul32x32(k , a[j]);
+          x3 = a[p-2-j] - mul32x32(k , a[j+1]);
 
-        switch (p & 3)
-        {
-        case 3:
-        {
-            q31_t x, y;
+          a[j] = x0;
+          a[j+1] = x1;
+          a[p-1-j] = x2;
+          a[p-2-j] = x3;
+        */
 
-            //x = a[j] - k * a[p-1-j];
-            x = a[j] - mul32x32(k, a[p - 1 - j]);
+          uint64_t tmpa,tmpb;
+          vecA = vldrwq_gather_shifted_offset_s32(a,offset);
 
-            //y = a[p-1-j] - k * a[j];
-            y = a[p - 1 - j] - mul32x32(k, a[j]);
+          
+          tmpa = vgetq_lane_u64((uint64x2_t)vecA,0);
+          tmpb = vgetq_lane_u64((uint64x2_t)vecA,1);
+          vecRevA = (q31x4_t) vsetq_lane_u64(tmpb,(uint64x2_t)vecRevA,0);
+          vecRevA = (q31x4_t) vsetq_lane_u64(tmpa,(uint64x2_t)vecRevA,1);
+          
 
-            a[j] = x;
-            a[p - 1 - j] = y;
+          tmp = vsubq(vecA,vqdmulhq_n_s32(vecRevA,k));
+          vstrwq_scatter_shifted_offset_s32(a, offset, tmp);
 
+          offset = vaddq(offset,offsetInc);
+
+          j+=2;
+      }
+
+      switch(p & 3)
+      {
+         case 3:
+         {
+          q31_t x,y;
+
+          //x = a[j] - k * a[p-1-j];
+          x = a[j] - mul32x32(k,a[p-1-j]);
+
+          //y = a[p-1-j] - k * a[j];
+          y = a[p-1-j] - mul32x32(k , a[j]);
+
+          a[j] = x;
+          a[p-1-j] = y;
+
+          //a[j] = a[j]- k * a[p-1-j];
+          a[j+1] = a[j+1] - mul32x32(k,a[p-2-j]);
+         }
+         break;
+
+         case 2:
+         {
+          q31_t x,y;
+
+          //x = a[j] - k * a[p-1-j];
+          x = a[j] - mul32x32(k,a[p-1-j]);
+
+          //y = a[p-1-j] - k * a[j];
+          y = a[p-1-j] - mul32x32(k , a[j]);
+
+          a[j] = x;
+          a[p-1-j] = y;
+         }
+         break;
+
+         case 1:
             //a[j] = a[j]- k * a[p-1-j];
-            a[j + 1] = a[j + 1] - mul32x32(k, a[p - 2 - j]);
-        }
-        break;
+            a[j] = a[j] - mul32x32(k,a[p-1-j]);
+         break;
+      }
 
-        case 2:
-        {
-            q31_t x, y;
+      a[p] = k;
 
-            //x = a[j] - k * a[p-1-j];
-            x = a[j] - mul32x32(k, a[p - 1 - j]);
-
-            //y = a[p-1-j] - k * a[j];
-            y = a[p - 1 - j] - mul32x32(k, a[j]);
-
-            a[j] = x;
-            a[p - 1 - j] = y;
-        }
-        break;
-
-        case 1:
-            //a[j] = a[j]- k * a[p-1-j];
-            a[j] = a[j] - mul32x32(k, a[p - 1 - j]);
-            break;
-        }
-
-        a[p] = k;
-
-        // e = e * (1 - k*k);
-        e = mul32x32(e, ONE_Q31 - mul32x32(k, k));
+      // e = e * (1 - k*k);
+      e = mul32x32(e,ONE_Q31 - mul32x32(k,k));
 
 
-    }
-    *err = e;
+   }
+   *err = e;
 }
 
 #else
 
-void arm_levinson_durbin_q31(const q31_t *phi,
-                             q31_t *a,
-                             q31_t *err,
-                             int nbCoefs)
+ARM_DSP_ATTRIBUTE void arm_levinson_durbin_q31(const q31_t *phi,
+  q31_t *a, 
+  q31_t *err,
+  int nbCoefs)
 {
-    q31_t e;
-    int p;
+   q31_t e;
+   int p;
 
-    //a[0] = phi[1] / phi[0];
-    a[0] = divide(phi[1], phi[0]);
+   //a[0] = phi[1] / phi[0];
+   a[0] = divide(phi[1], phi[0]);
+   
 
+   //e = phi[0] - phi[1] * a[0];
+   e = phi[0] - mul32x32(phi[1],a[0]);
 
-    //e = phi[0] - phi[1] * a[0];
-    e = phi[0] - mul32x32(phi[1], a[0]);
+   for(p=1; p < nbCoefs; p++)
+   {
+      q63_t suma=0;
+      q63_t sumb=0;
+      q31_t k;
+      int nb,j,i;
 
-    for (p = 1; p < nbCoefs; p++)
-    {
-        q63_t suma = 0;
-        q63_t sumb = 0;
-        q31_t k;
-        int nb, j, i;
+      for(i=0; i < p; i++)
+      {
+         suma += ((q63_t)a[i] * phi[p - i]);
+         sumb += ((q63_t)a[i] * phi[i + 1]);
+      }
 
-        for (i = 0; i < p; i++)
-        {
-            suma += ((q63_t)a[i] * phi[p - i]);
-            sumb += ((q63_t)a[i] * phi[i + 1]);
-        }
-
-        suma = suma >> 31;
-        sumb = sumb >> 31;
-
-
-
-        //k = (phi[p+1]-suma)/(phi[0] - sumb);
-        k = divide(phi[p + 1] - (q31_t)suma, phi[0] - (q31_t)sumb);
+      suma = suma >> 31;
+      sumb = sumb >> 31;
 
 
-        nb = p >> 1;
-        j = 0;
-        for (i = 0; i < nb ; i++)
-        {
-            q31_t x, y;
 
-            //x = a[j] - k * a[p-1-j];
-            x = a[j] - mul32x32(k, a[p - 1 - j]);
+      //k = (phi[p+1]-suma)/(phi[0] - sumb);
+      k = divide(phi[p+1]-(q31_t)suma,phi[0] - (q31_t)sumb);
 
-            //y = a[p-1-j] - k * a[j];
-            y = a[p - 1 - j] - mul32x32(k, a[j]);
 
-            a[j] = x;
-            a[p - 1 - j] = y;
+      nb = p >> 1;
+      j=0;
+      for(i =0;i < nb ; i++)
+      {
+          q31_t x,y;
 
-            j++;
-        }
+          //x = a[j] - k * a[p-1-j];
+          x = a[j] - mul32x32(k,a[p-1-j]);
 
-        nb = p & 1;
-        if (nb)
-        {
+          //y = a[p-1-j] - k * a[j];
+          y = a[p-1-j] - mul32x32(k , a[j]);
+
+          a[j] = x;
+          a[p-1-j] = y;
+
+          j++;
+      }
+
+      nb = p & 1;
+      if (nb)
+      {
             //a[j] = a[j]- k * a[p-1-j];
-            a[j] = a[j] - mul32x32(k, a[p - 1 - j]);
-        }
+            a[j] = a[j] - mul32x32(k,a[p-1-j]);
+      }
 
-        a[p] = k;
+      a[p] = k;
 
-        // e = e * (1 - k*k);
-        e = mul32x32(e, ONE_Q31 - mul32x32(k, k));
+      // e = e * (1 - k*k);
+      e = mul32x32(e,ONE_Q31 - mul32x32(k,k));
 
 
-    }
-    *err = e;
+   }
+   *err = e;
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

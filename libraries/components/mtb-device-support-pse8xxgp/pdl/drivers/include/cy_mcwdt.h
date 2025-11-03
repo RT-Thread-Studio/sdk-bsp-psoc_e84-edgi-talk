@@ -99,121 +99,6 @@
 * For more information on the MCWDT peripheral, refer to
 * the technical reference manual (TRM).
 *
-* \section group_mcwdt_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.90</td>
-*     <td>Documentation update</td>
-*   </tr>
-*   <tr>
-*     <td>1.80</td>
-*     <td>Added support for TRAVEO&trade; II Body Entry devices.<br>
-*          Pre-processor check for MXS40SRSS version now groups ver. 2 with ver. 3. Previously ver. 2 was grouped with ver. 1.</td>
-*     <td>Code enhancement and support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>1.70</td>
-*     <td>Added MCWDT_B type support required for CAT1C devices.<br>Newly added APIs:
-*         \n Cy_MCWDT_SetLowerAction(),
-*         \n Cy_MCWDT_SetUpperAction(),
-*         \n Cy_MCWDT_SetWarnAction(),
-*         \n Cy_MCWDT_SetSubCounter2Action(),
-*         \n Cy_MCWDT_GetLowerAction(),
-*         \n Cy_MCWDT_GetUpperAction(),
-*         \n Cy_MCWDT_GetWarnAction(),
-*         \n Cy_MCWDT_GetSubCounter2Action(),
-*         \n Cy_MCWDT_SetAutoService(),
-*         \n Cy_MCWDT_GetAutoService(),
-*         \n Cy_MCWDT_SetSleepDeepPause(),
-*         \n Cy_MCWDT_GetSleepDeepPause(),
-*         \n Cy_MCWDT_SetDebugRun(),
-*         \n Cy_MCWDT_GetDebugRun(),
-*         \n Cy_MCWDT_SetLowerLimit(),
-*         \n Cy_MCWDT_SetUpperLimit(),
-*         \n Cy_MCWDT_SetWarnLimit(),
-*         \n Cy_MCWDT_GetLowerLimit(),
-*         \n Cy_MCWDT_GetUpperLimit(),
-*         \n Cy_MCWDT_GetWarnLimit(),
-*         \n Cy_MCWDT_WaitForCounterReset(),
-*         \n Cy_MCWDT_CpuSelectForDpSlpPauseAction(),
-*         \n Cy_MCWDT_GetCascadeMatchCombined().</td>
-*     <td>Support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>1.60</td>
-*     <td>CAT1B, CAT1C devices support.<br>Newly added APIs:
-*         \n Cy_MCWDT_GetLowerLimit() to get the lower limit value of the specified counter,
-*         \n Cy_MCWDT_SetLowerLimit() to set the the lower limit value of the specified counter,
-*         \n Cy_MCWDT_GetLowerLimitMode() to get the lower limit mode of the specified counter,
-*         \n Cy_MCWDT_SetLowerLimitMode() to set the lower limit mode of the specified counter,
-*         \n Cy_MCWDT_GetLowerLimitCascaded() to get the lower limit registers cascaded value,
-*         \n Cy_MCWDT_SetCascadeCarryOutRollOver() to enable the Rollover mode for carryout,
-*         \n Cy_MCWDT_GetCascadeCarryOutRollOver() to check if Rollover mode enabled for carryout or not,
-*         \n Cy_MCWDT_SetCascadeMatchCombined() to set the match to combined cascade counters,
-*         \n Cy_MCWDT_GetCascadeMatchCombined() to report if match is enabled with combined cascade counters or not.</td>
-*     <td>Support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>1.50.1</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.50</td>
-*     <td>Added support for new family of devices.</td>
-*     <td>New device support.</td>
-*   </tr>
-*   <tr>
-*     <td>1.40</td>
-*     <td>Fixed/documented MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>1.30.1</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.30</td>
-*     <td>In version 1.20 the Cy_MCWDT_GetCountCascaded() function
-*         returned the wrong value when counter#1 overflowed.
-*         This bug is corrected in version 1.30.
-*     </td>
-*     <td>Defect fixes.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">1.20</td>
-*     <td>Flattened the organization of the driver source code into the single
-*         source directory and the single include directory.
-*     </td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Added register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>1.10.1</td>
-*     <td>Updated description of the \ref cy_stc_mcwdt_config_t structure type</td>
-*     <td>Documentation update and clarification</td>
-*   </tr>
-*   <tr>
-*     <td>1.10</td>
-*     <td>Added input parameter validation to the API functions.<br>
-*     Added API function GetCountCascaded()</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_mcwdt_macros Macros
 * \defgroup group_mcwdt_functions Functions
 * \defgroup group_mcwdt_data_structures Data Structures
@@ -347,7 +232,7 @@ typedef enum
     CY_MCWDT_LOWER_LIMIT_MODE_RESET,         /**< Assert WDT Reset. */
 } cy_en_mcwdtlowerlimitmode_t;
 #endif /* CY_IP_MXS28SRSS, CY_IP_MXS40SSRSS, CY_IP_MXS22SRSS*/
-
+ 
 /** The MCWDT error codes. */
 typedef enum
 {
@@ -355,7 +240,7 @@ typedef enum
     CY_MCWDT_BAD_PARAM = CY_MCWDT_ID | CY_PDL_STATUS_ERROR | 0x01u,     /**< One or more invalid parameters */
 } cy_en_mcwdt_status_t;
 
-
+ 
 /** \} group_mcwdt_enums */
 
 /**
@@ -363,9 +248,10 @@ typedef enum
 * \{
 */
 
-
+ 
 
 #if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION < 2)) || defined (CY_IP_MXS22SRSS)
+/** The MCWDT component configuration structure. */
 typedef struct
 {
     uint16_t c0Match;        /**< The sub-counter#0 match comparison value, for interrupt or watchdog timeout.
@@ -392,26 +278,26 @@ typedef struct
                                   Range: 0 - 2., 0 - Do nothing, 1 - Assert WDT_INTx, 2 - Assert WDT Reset. */
 #endif /* CY_IP_MXS28SRSS, CY_IP_MXS40SSRSS, CY_IP_MXS22SRSS */
 
-    /**
-    * \note
-    * This parameter is available for devices having MXS40SSRSS or MXS22SRSS IP.
-    **/
+/**
+* \note
+* This parameter is available for devices having MXS40SSRSS or MXS22SRSS IP.
+**/
 
-#if defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS) || defined (CY_DOXYGEN)
+#if defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS)
     bool  c0c1carryoutconfig;      /**< Carryout behaviour that applies when counter 0 and 1 are cascaded
                                       false: carry out on counter 0 match, true: carry out on counter 0 roll-over.
-                                      Only for CAT1B devices */
+                                    */
     bool  c0c1matchconfig;         /**< Matching behaviour that applies when counter 0 and 1 are cascaded
                                       false: Match based on counter 1 alone, true: Match based on counter 1 and 0 simultaneously.
-                                      Only for CAT1B devices */
+                                    */
     bool  c1c2carryoutconfig;      /**< Carryout behaviour that applies when counter 1 and 2 are cascaded
                                       false: carry out on counter 1 match, true: carry out on counter 1 roll-over.
-                                      Only for CAT1B devices */
+                                    */
     bool  c1c2matchconfig;         /**< Matching behaviour that applies when counter 1 and 2 are cascaded
                                       false: Match based on counter 1 alone, true: Match based on counter 2 and 1 simultaneously.
-                                      Only for CAT1B devices */
+                                    */
 #endif /* CY_IP_MXS40SSRSS, CY_IP_MXS22SRSS */
-
+ 
     bool     c0ClearOnMatch; /**< The sub-counter#0 Clear On Match parameter enabled/disabled. */
     bool     c1ClearOnMatch; /**< The sub-counter#1 Clear On Match parameter enabled/disabled. */
     bool     c0c1Cascade;    /**< The sub-counter#1 is clocked by LFCLK or from sub-counter#0 cascade. */
@@ -473,7 +359,7 @@ typedef struct
 * \{
 */
 cy_en_mcwdt_status_t     Cy_MCWDT_Init(MCWDT_STRUCT_Type *base, cy_stc_mcwdt_config_t const *config);
-void     Cy_MCWDT_DeInit(MCWDT_STRUCT_Type *base);
+                void     Cy_MCWDT_DeInit(MCWDT_STRUCT_Type *base);
 __STATIC_INLINE void     Cy_MCWDT_Enable(MCWDT_STRUCT_Type *base, uint32_t counters, uint16_t waitUs);
 __STATIC_INLINE void     Cy_MCWDT_Disable(MCWDT_STRUCT_Type *base, uint32_t counters, uint16_t waitUs);
 __STATIC_INLINE uint32_t Cy_MCWDT_GetEnabledStatus(MCWDT_STRUCT_Type const *base, cy_en_mcwdtctr_t counter);
@@ -491,7 +377,7 @@ __STATIC_INLINE void     Cy_MCWDT_SetMatch(MCWDT_STRUCT_Type *base, cy_en_mcwdtc
 __STATIC_INLINE uint32_t Cy_MCWDT_GetMatch(MCWDT_STRUCT_Type const *base, cy_en_mcwdtctr_t counter);
 uint32_t Cy_MCWDT_GetCountCascaded(MCWDT_STRUCT_Type const *base);
 #endif
-__STATIC_INLINE void     Cy_MCWDT_SetToggleBit(MCWDT_STRUCT_Type *base, uint32_t bit);
+ __STATIC_INLINE void     Cy_MCWDT_SetToggleBit(MCWDT_STRUCT_Type *base, uint32_t bit);
 __STATIC_INLINE uint32_t Cy_MCWDT_GetToggleBit(MCWDT_STRUCT_Type const *base);
 __STATIC_INLINE uint32_t Cy_MCWDT_GetCount(MCWDT_STRUCT_Type const *base, cy_en_mcwdtctr_t counter);
 __STATIC_INLINE void     Cy_MCWDT_ResetCounters(MCWDT_STRUCT_Type *base, uint32_t counters, uint16_t waitUs);
@@ -630,18 +516,18 @@ __STATIC_INLINE uint32_t Cy_MCWDT_GetEnabledStatus(MCWDT_STRUCT_Type const *base
 #if !defined(CY_IP_MXS40SRSS) || (CY_IP_MXS40SRSS_VERSION < 2)
     switch (counter)
     {
-    case CY_MCWDT_COUNTER0:
-        status = _FLD2VAL(MCWDT_STRUCT_MCWDT_CTL_WDT_ENABLED0, MCWDT_CTL(base));
-        break;
-    case CY_MCWDT_COUNTER1:
-        status = _FLD2VAL(MCWDT_STRUCT_MCWDT_CTL_WDT_ENABLED1, MCWDT_CTL(base));
-        break;
-    case CY_MCWDT_COUNTER2:
-        status = _FLD2VAL(MCWDT_STRUCT_MCWDT_CTL_WDT_ENABLED2, MCWDT_CTL(base));
-        break;
+        case CY_MCWDT_COUNTER0:
+            status = _FLD2VAL(MCWDT_STRUCT_MCWDT_CTL_WDT_ENABLED0, MCWDT_CTL(base));
+            break;
+        case CY_MCWDT_COUNTER1:
+            status = _FLD2VAL(MCWDT_STRUCT_MCWDT_CTL_WDT_ENABLED1, MCWDT_CTL(base));
+            break;
+        case CY_MCWDT_COUNTER2:
+            status = _FLD2VAL(MCWDT_STRUCT_MCWDT_CTL_WDT_ENABLED2, MCWDT_CTL(base));
+            break;
 
-    default:
-        CY_ASSERT(0u != 0u);
+        default:
+            CY_ASSERT(0u != 0u);
         break;
     }
 #endif
@@ -885,9 +771,9 @@ __STATIC_INLINE void Cy_MCWDT_SetCascade(MCWDT_STRUCT_Type *base, cy_en_mcwdtcas
     CY_ASSERT_L3(CY_MCWDT_IS_CASCADE_VALID(cascade));
 
     MCWDT_CONFIG(base) = _CLR_SET_FLD32U(MCWDT_CONFIG(base), MCWDT_STRUCT_MCWDT_CONFIG_WDT_CASCADE0_1,
-                                         (uint32_t) cascade);
+                                             (uint32_t) cascade);
     MCWDT_CONFIG(base) = _CLR_SET_FLD32U(MCWDT_CONFIG(base), MCWDT_STRUCT_MCWDT_CONFIG_WDT_CASCADE1_2,
-                                         ((uint32_t) cascade >> 1u));
+                                             ((uint32_t) cascade >> 1u));
 }
 
 /*******************************************************************************
@@ -908,7 +794,7 @@ __STATIC_INLINE cy_en_mcwdtcascade_t Cy_MCWDT_GetCascade(MCWDT_STRUCT_Type const
     uint32_t cascade;
 
     cascade = (_FLD2VAL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_CASCADE1_2, MCWDT_CONFIG(base)) << 1u) |
-              _FLD2VAL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_CASCADE0_1, MCWDT_CONFIG(base));
+               _FLD2VAL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_CASCADE0_1, MCWDT_CONFIG(base));
 
     return ((cy_en_mcwdtcascade_t) cascade);
 }
@@ -951,14 +837,14 @@ __STATIC_INLINE void Cy_MCWDT_SetMatch(MCWDT_STRUCT_Type *base, cy_en_mcwdtctr_t
     CY_ASSERT_L3(CY_MCWDT_IS_CNT_NUM_VALID(counter));
     CY_ASSERT_L2(CY_MCWDT_IS_MATCH_VALID((CY_MCWDT_COUNTER0 == counter) ?                                                       \
                                          ((MCWDT_CONFIG(base) & MCWDT_STRUCT_MCWDT_CONFIG_WDT_CLEAR0_Msk) > 0U) :  \
-                                         ((MCWDT_CONFIG(base) & MCWDT_STRUCT_MCWDT_CONFIG_WDT_CLEAR1_Msk) > 0U), \
-                                         match));
+                                         ((MCWDT_CONFIG(base) & MCWDT_STRUCT_MCWDT_CONFIG_WDT_CLEAR1_Msk) > 0U),   \
+                                          match));
 
     MCWDT_MATCH(base) = (counter == CY_MCWDT_COUNTER0) ?
-                        _CLR_SET_FLD32U(MCWDT_MATCH(base), MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH0,
-                                        (match & MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH0_Msk)) :
-                        _CLR_SET_FLD32U(MCWDT_MATCH(base), MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH1,
-                                        (match & MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH0_Msk));
+        _CLR_SET_FLD32U(MCWDT_MATCH(base), MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH0,
+                        (match & MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH0_Msk)) :
+        _CLR_SET_FLD32U(MCWDT_MATCH(base), MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH1,
+                        (match & MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH0_Msk));
 
     Cy_SysLib_DelayUs(waitUs);
 }
@@ -990,7 +876,7 @@ __STATIC_INLINE uint32_t Cy_MCWDT_GetMatch(MCWDT_STRUCT_Type const *base, cy_en_
     CY_ASSERT_L3(CY_MCWDT_IS_CNT_NUM_VALID(counter));
 
     match = (counter == CY_MCWDT_COUNTER0) ? _FLD2VAL(MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH0, MCWDT_MATCH(base)) :
-            _FLD2VAL(MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH1, MCWDT_MATCH(base));
+                                          _FLD2VAL(MCWDT_STRUCT_MCWDT_MATCH_WDT_MATCH1, MCWDT_MATCH(base));
 
     return (match);
 }
@@ -1070,18 +956,18 @@ __STATIC_INLINE uint32_t Cy_MCWDT_GetCount(MCWDT_STRUCT_Type const *base, cy_en_
 
     switch (counter)
     {
-    case CY_MCWDT_COUNTER0:
-        countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_CNTLOW_WDT_CTR0, MCWDT_CNTLOW(base));
-        break;
-    case CY_MCWDT_COUNTER1:
-        countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_CNTLOW_WDT_CTR1, MCWDT_CNTLOW(base));
-        break;
-    case CY_MCWDT_COUNTER2:
-        countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_CNTHIGH_WDT_CTR2, MCWDT_CNTHIGH(base));
-        break;
-    default:
-        CY_ASSERT(0u != 0u);
-        break;
+        case CY_MCWDT_COUNTER0:
+            countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_CNTLOW_WDT_CTR0, MCWDT_CNTLOW(base));
+            break;
+        case CY_MCWDT_COUNTER1:
+            countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_CNTLOW_WDT_CTR1, MCWDT_CNTLOW(base));
+            break;
+        case CY_MCWDT_COUNTER2:
+            countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_CNTHIGH_WDT_CTR2, MCWDT_CNTHIGH(base));
+            break;
+        default:
+            CY_ASSERT(0u != 0u);
+            break;
     }
 #endif
 
@@ -1218,7 +1104,7 @@ __STATIC_INLINE void Cy_MCWDT_SetInterrupt(MCWDT_STRUCT_Type *base, uint32_t cou
 * Function Name: Cy_MCWDT_GetInterruptMask
 ****************************************************************************//**
 *
-* Returns the CWDT interrupt mask register. This register specifies which bits
+* Returns the MCWDT interrupt mask register. This register specifies which bits
 * from the MCWDT interrupt request register will trigger an interrupt event.
 *
 *  \param base
@@ -1319,10 +1205,10 @@ __STATIC_INLINE void Cy_MCWDT_SetLowerLimit(MCWDT_STRUCT_Type *base, cy_en_mcwdt
     CY_ASSERT_L3(CY_MCWDT_IS_LOWER_LIMIT_VALID(counter));
 
     MCWDT_LOWER_LIMIT(base) = (counter == CY_MCWDT_LOWER_LIMIT0) ?
-                              _CLR_SET_FLD32U(MCWDT_LOWER_LIMIT(base), MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT0,
-                                  (lowerLimit & MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT0_Msk)) :
-                              _CLR_SET_FLD32U(MCWDT_LOWER_LIMIT(base), MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT1,
-                                  (lowerLimit & MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT0_Msk));
+        _CLR_SET_FLD32U(MCWDT_LOWER_LIMIT(base), MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT0,
+                        (lowerLimit & MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT0_Msk)) :
+        _CLR_SET_FLD32U(MCWDT_LOWER_LIMIT(base), MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT1,
+                        (lowerLimit & MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT0_Msk));
 
     Cy_SysLib_DelayUs(waitUs);
 }
@@ -1351,14 +1237,14 @@ __STATIC_INLINE uint32_t Cy_MCWDT_GetLowerLimit(MCWDT_STRUCT_Type const *base, c
 
     switch (counter)
     {
-    case CY_MCWDT_LOWER_LIMIT0:
-        countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT0, MCWDT_LOWER_LIMIT(base));
-        break;
-    case CY_MCWDT_LOWER_LIMIT1:
-        countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT1, MCWDT_LOWER_LIMIT(base));
-        break;
-    default:
-        CY_ASSERT(0u != 0u);
+        case CY_MCWDT_LOWER_LIMIT0:
+            countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT0, MCWDT_LOWER_LIMIT(base));
+            break;
+        case CY_MCWDT_LOWER_LIMIT1:
+            countVal = _FLD2VAL(MCWDT_STRUCT_MCWDT_LOWER_LIMIT_WDT_LOWER_LIMIT1, MCWDT_LOWER_LIMIT(base));
+            break;
+        default:
+            CY_ASSERT(0u != 0u);
         break;
     }
 
@@ -1460,7 +1346,7 @@ __STATIC_INLINE uint32_t Cy_MCWDT_GetLowerLimitCascaded(MCWDT_STRUCT_Type const 
 }
 #endif /* CY_IP_MXS28SRSS, CY_IP_MXS40SSRSS ,CY_IP_MXS22SRSS*/
 
-#if defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS) || defined (CY_DOXYGEN)
+#if defined (CY_IP_MXS40SSRSS) || defined (CY_IP_MXS22SRSS)
 
 /*******************************************************************************
 * Function Name: Cy_MCWDT_SetCascadeCarryOutRollOver
@@ -1522,14 +1408,14 @@ __STATIC_INLINE bool Cy_MCWDT_GetCascadeCarryOutRollOver(MCWDT_STRUCT_Type const
 
     switch (counter)
     {
-    case CY_MCWDT_CASCADE_C0C1:
-        countVal = _FLD2BOOL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_CARRY0_1, MCWDT_CONFIG(base));
-        break;
-    case CY_MCWDT_CASCADE_C1C2:
-        countVal = _FLD2BOOL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_CARRY1_2, MCWDT_CONFIG(base));
-        break;
-    default:
-        CY_ASSERT(0u != 0u);
+        case CY_MCWDT_CASCADE_C0C1:
+            countVal = _FLD2BOOL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_CARRY0_1, MCWDT_CONFIG(base));
+            break;
+        case CY_MCWDT_CASCADE_C1C2:
+            countVal = _FLD2BOOL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_CARRY1_2, MCWDT_CONFIG(base));
+            break;
+        default:
+            CY_ASSERT(0u != 0u);
         break;
     }
 
@@ -1592,14 +1478,14 @@ __STATIC_INLINE bool Cy_MCWDT_GetCascadeMatchCombined(MCWDT_STRUCT_Type const *b
 
     switch (counter)
     {
-    case CY_MCWDT_CASCADE_C0C1:
-        countVal = _FLD2BOOL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_MATCH0_1, MCWDT_CONFIG(base));
-        break;
-    case CY_MCWDT_CASCADE_C1C2:
-        countVal = _FLD2BOOL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_MATCH1_2, MCWDT_CONFIG(base));
-        break;
-    default:
-        CY_ASSERT(0u != 0u);
+        case CY_MCWDT_CASCADE_C0C1:
+            countVal = _FLD2BOOL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_MATCH0_1, MCWDT_CONFIG(base));
+            break;
+        case CY_MCWDT_CASCADE_C1C2:
+            countVal = _FLD2BOOL(MCWDT_STRUCT_MCWDT_CONFIG_WDT_MATCH1_2, MCWDT_CONFIG(base));
+            break;
+        default:
+            CY_ASSERT(0u != 0u);
         break;
     }
 

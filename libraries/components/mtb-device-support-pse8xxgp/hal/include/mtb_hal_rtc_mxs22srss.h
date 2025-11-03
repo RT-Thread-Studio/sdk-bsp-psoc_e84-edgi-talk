@@ -37,17 +37,17 @@ extern "C" {
 /*******************************************************************************
 *                           Defines
 *******************************************************************************/
-#if defined(SRSS_RTC_NUM_BREG3) && (SRSS_RTC_NUM_BREG3 > 0)
-#define _MTB_HAL_RTC_BREG (RTC->BREG_SET3[SRSS_RTC_NUM_BREG3-1])
-#elif defined(SRSS_RTC_NUM_BREG2) && (SRSS_RTC_NUM_BREG2 > 0)
-#define _MTB_HAL_RTC_BREG (RTC->BREG_SET2[SRSS_RTC_NUM_BREG2-1])
-#elif defined(SRSS_RTC_NUM_BREG1) && (SRSS_RTC_NUM_BREG1 > 0)
-#define _MTB_HAL_RTC_BREG (RTC->BREG_SET1[SRSS_RTC_NUM_BREG1-1])
-#elif defined(SRSS_RTC_NUM_BREG0) && (SRSS_RTC_NUM_BREG0 > 0)
-#define _MTB_HAL_RTC_BREG (RTC->BREG_SET0[SRSS_RTC_NUM_BREG0-1])
-#elif defined(SRSS_NUM_HIBDATA) && ((SRSS_NUM_HIBDATA) > 0)
-#define _MTB_HAL_RTC_BREG (SRSS->PWR_HIB_DATA[SRSS_NUM_HIBDATA-1])
-#endif
+    #if defined(SRSS_RTC_NUM_BREG3) && (SRSS_RTC_NUM_BREG3 > 0)
+    #define _MTB_HAL_RTC_BREG (RTC->BREG_SET3[SRSS_RTC_NUM_BREG3-1])
+    #elif defined(SRSS_RTC_NUM_BREG2) && (SRSS_RTC_NUM_BREG2 > 0)
+    #define _MTB_HAL_RTC_BREG (RTC->BREG_SET2[SRSS_RTC_NUM_BREG2-1])
+    #elif defined(SRSS_RTC_NUM_BREG1) && (SRSS_RTC_NUM_BREG1 > 0)
+    #define _MTB_HAL_RTC_BREG (RTC->BREG_SET1[SRSS_RTC_NUM_BREG1-1])
+    #elif defined(SRSS_RTC_NUM_BREG0) && (SRSS_RTC_NUM_BREG0 > 0)
+    #define _MTB_HAL_RTC_BREG (RTC->BREG_SET0[SRSS_RTC_NUM_BREG0-1])
+    #elif defined(SRSS_NUM_HIBDATA) && ((SRSS_NUM_HIBDATA) > 0)
+    #define _MTB_HAL_RTC_BREG (SRSS->PWR_HIB_DATA[SRSS_NUM_HIBDATA-1])
+    #endif
 
 
 /*******************************************************************************

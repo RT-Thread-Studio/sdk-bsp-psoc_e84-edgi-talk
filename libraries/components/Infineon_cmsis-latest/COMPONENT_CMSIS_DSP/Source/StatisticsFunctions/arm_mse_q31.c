@@ -44,31 +44,30 @@
   @param[in]     pSrcB       points to the second input vector
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    mean square error
-  @return        none
  */
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_mse_q31(
-    const q31_t * pSrcA,
-    const q31_t * pSrcB,
-    uint32_t blockSize,
-    q31_t * pResult)
+ARM_DSP_ATTRIBUTE void arm_mse_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        uint32_t blockSize,
+        q31_t * pResult)
 {
     uint32_t  blkCnt;           /* loop counters */
-    q31x4_t vecSrcA, vecSrcB;
+    q31x4_t vecSrcA,vecSrcB;
     q63_t   sum = 0LL;
 
-    /* Compute 4 outputs at a time */
+   /* Compute 4 outputs at a time */
     blkCnt = blockSize >> 2U;
     while (blkCnt > 0U)
     {
         vecSrcA = vld1q(pSrcA);
         vecSrcB = vld1q(pSrcB);
 
-        vecSrcA = vshrq(vecSrcA, 1);
-        vecSrcB = vshrq(vecSrcB, 1);
+        vecSrcA = vshrq(vecSrcA,1);
+        vecSrcB = vshrq(vecSrcB,1);
 
 
-        vecSrcA = vqsubq(vecSrcA, vecSrcB);
+        vecSrcA = vqsubq(vecSrcA,vecSrcB);
         /*
          * sum lanes
          */
@@ -89,85 +88,85 @@ void arm_mse_q31(
         vecSrcA = vld1q(pSrcA);
         vecSrcB = vld1q(pSrcB);
 
-        vecSrcA = vshrq(vecSrcA, 1);
-        vecSrcB = vshrq(vecSrcB, 1);
+        vecSrcA = vshrq(vecSrcA,1);
+        vecSrcB = vshrq(vecSrcB,1);
 
-        vecSrcA = vqsubq(vecSrcA, vecSrcB);
+        vecSrcA = vqsubq(vecSrcA,vecSrcB);
 
         sum = vrmlaldavhaq_p(sum, vecSrcA, vecSrcA, p0);
     }
 
-
-    *pResult = (q31_t)((sum / blockSize) >> 21);
+    
+    *pResult = (q31_t) ((sum / blockSize)>>21);
 
 }
 #else
-void arm_mse_q31(
-    const q31_t * pSrcA,
-    const q31_t * pSrcB,
-    uint32_t blockSize,
-    q31_t * pResult)
+ARM_DSP_ATTRIBUTE void arm_mse_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        uint32_t blockSize,
+        q31_t * pResult)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q63_t sum = 0;                                 /* Temporary result storage */
+        uint32_t blkCnt;                               /* Loop counter */
+        q63_t sum = 0;                                 /* Temporary result storage */
 
-    q31_t inA32, inB32;                                   /* Temporary variable to store packed input value */
+        q31_t inA32,inB32;                                    /* Temporary variable to store packed input value */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        inA32 = *pSrcA++ >> 1;
-        inB32 = *pSrcB++ >> 1;
-        inA32 = __QSUB(inA32, inB32);
-        sum += ((q63_t) inA32 * inA32) >> 14U;
+  while (blkCnt > 0U)
+  {
+    inA32 = *pSrcA++ >> 1;
+    inB32 = *pSrcB++ >> 1;
+    inA32 = __QSUB(inA32, inB32);
+    sum += ((q63_t) inA32 * inA32) >> 14U;
 
-        inA32 = *pSrcA++ >> 1;
-        inB32 = *pSrcB++ >> 1;
-        inA32 = __QSUB(inA32, inB32);
-        sum += ((q63_t) inA32 * inA32) >> 14U;
+    inA32 = *pSrcA++ >> 1;
+    inB32 = *pSrcB++ >> 1;
+    inA32 = __QSUB(inA32, inB32);
+    sum += ((q63_t) inA32 * inA32) >> 14U;
 
-        inA32 = *pSrcA++ >> 1;
-        inB32 = *pSrcB++ >> 1;
-        inA32 = __QSUB(inA32, inB32);
-        sum += ((q63_t) inA32 * inA32) >> 14U;
+    inA32 = *pSrcA++ >> 1;
+    inB32 = *pSrcB++ >> 1;
+    inA32 = __QSUB(inA32, inB32);
+    sum += ((q63_t) inA32 * inA32) >> 14U;
 
-        inA32 = *pSrcA++ >> 1;
-        inB32 = *pSrcB++ >> 1;
-        inA32 = __QSUB(inA32, inB32);
-        sum += ((q63_t) inA32 * inA32) >> 14U;
+    inA32 = *pSrcA++ >> 1;
+    inB32 = *pSrcB++ >> 1;
+    inA32 = __QSUB(inA32, inB32);
+    sum += ((q63_t) inA32 * inA32) >> 14U;
 
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        inA32 = *pSrcA++ >> 1;
-        inB32 = *pSrcB++ >> 1;
-        inA32 = __QSUB(inA32, inB32);
-        sum += ((q63_t) inA32 * inA32) >> 14U;
+  while (blkCnt > 0U)
+  {
+    inA32 = *pSrcA++ >> 1;
+    inB32 = *pSrcB++ >> 1;
+    inA32 = __QSUB(inA32, inB32);
+    sum += ((q63_t) inA32 * inA32) >> 14U;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Store result in q31 format */
-    *pResult = (q31_t)((sum / blockSize) >> 15);
+  /* Store result in q31 format */
+  *pResult = (q31_t) ((sum / blockSize)>>15);
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

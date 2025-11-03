@@ -271,11 +271,11 @@ MTB_TOOLCHAIN_A_Clang__SUFFIX_PROGRAM:=hex
 # Toolchain specific flags
 MTB_TOOLCHAIN_A_Clang__OUTPUT_OPTION:=-o
 MTB_TOOLCHAIN_A_Clang__ARCHIVE_LIB_OUTPUT_OPTION:=-o
-MTB_TOOLCHAIN_A_Clang__MAPFILE:=-map 
+MTB_TOOLCHAIN_A_Clang__MAPFILE:=-map$(MTB__SPACE)
 MTB_TOOLCHAIN_A_Clang__LSFLAGS:=
 MTB_TOOLCHAIN_A_Clang__INCRSPFILE:=@
 MTB_TOOLCHAIN_A_Clang__INCRSPFILE_ASM:=@
-MTB_TOOLCHAIN_A_Clang__OBJRSPFILE:=-filelist 
+MTB_TOOLCHAIN_A_Clang__OBJRSPFILE:=-filelist$(MTB__SPACE)
 
 #
 # Produce a makefile dependency rule for each input file

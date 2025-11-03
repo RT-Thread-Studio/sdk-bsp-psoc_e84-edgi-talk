@@ -1,4 +1,0 @@
-name: factory_reset
-description: This application injects default factory assets and resets device to factory state.
-type: Firmware application
-version: 1.1.0.3619

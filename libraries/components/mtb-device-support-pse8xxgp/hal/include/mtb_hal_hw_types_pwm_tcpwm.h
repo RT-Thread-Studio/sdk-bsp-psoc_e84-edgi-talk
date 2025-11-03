@@ -28,14 +28,14 @@
 #if defined(CY_IP_MXTCPWM)
 #include "mtb_hal_hw_types_tcpwm.h"
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_PWM)
-    /** Macro specifying whether the PWM driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_PWM (1u)
+/** Macro specifying whether the PWM driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_PWM (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_PWM)
 
 /** \} group_hal_availability */
@@ -63,11 +63,11 @@ typedef struct
  */
 typedef struct
 {
-    TCPWM_Type             *base;      //!< TCPWM base
+    TCPWM_Type*             base;      //!< TCPWM base
     uint32_t                group;     //!< The resource group index
     uint32_t                cntnum;    //!< The resource counter index
     uint32_t                max_count; //!< The max count for the counter
-    const mtb_hal_clock_t  *clock;     //!< The clock resource pointer
+    const mtb_hal_clock_t*  clock;     //!< The clock resource pointer
 } mtb_hal_pwm_configurator_t;
 
 #endif // defined(CY_IP_MXTCPWM)

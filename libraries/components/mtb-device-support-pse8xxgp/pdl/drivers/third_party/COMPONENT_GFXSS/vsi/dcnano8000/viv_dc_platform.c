@@ -31,9 +31,9 @@
 #include "viv_dc_interface.h"
 #include "viv_dc_hardware.h"
 #if !_BAREMETAL
-    #include "FreeRTOS.h"
+#include "FreeRTOS.h"
 #else
-    #include <stdlib.h>
+#include <stdlib.h>
 #endif
 #include "viv_dc_platform.h"
 #include "cy_device_headers.h"
@@ -42,9 +42,9 @@
 static gctUINT dcIRQLine = gfxss_interrupt_dc_IRQn;
 static gctUINT dcRegisterPhys = (gctUINT)(void *)GFXSS_GFXSS_DC_DCNANO;
 
-viv_dc_os *dcOs = vivNULL;
-viv_dc_hardware *dcHardware = vivNULL;
-viv_dc_core *dcCore = vivNULL;
+viv_dc_os* dcOs = vivNULL;
+viv_dc_hardware* dcHardware = vivNULL;
+viv_dc_core* dcCore = vivNULL;
 
 static viv_dc_device dcDevice = {0};
 static viv_interface iface = {0};
@@ -53,7 +53,7 @@ static gctBOOL dcInitialized = vivFALSE;
 static gctVOID viv_dc_irq(gctPOINTER p)
 {
 
-    if (viv_conf_interrupt_get((viv_dc_core *)p))
+    if (viv_conf_interrupt_get((viv_dc_core*)p))
     {
     }
 
@@ -79,28 +79,28 @@ static gctVOID viv_dc_show_version(viv_dc_core *core)
     gctUINT info, revision, patch, id, product, eco, customer, date, time;
 
     viv_os_print("Vivante DC version %d.%d.%d\n",
-                 VIV_DC_VERSION_MAJOR, VIV_DC_VERSION_MINOR, VIV_DC_VERSION_PATCH);
+        VIV_DC_VERSION_MAJOR, VIV_DC_VERSION_MINOR, VIV_DC_VERSION_PATCH);
 
     viv_conf_info_get(core, &id, &revision, &patch, &info, &product, &eco, &customer, &date, &time);
 
     viv_os_print(
-        "Vivante DC hardware:\n"
-        "chip id:             0x%08x\n"
-        "chip revision:       0x%08x\n"
-        "chip patch revision: 0x%08x\n"
-        "chip info:           0x%08x\n"
-        "product id:          0x%08x\n"
-        "eco id:              0x%08x\n"
-        "customer id:         0x%08x\n"
-        "release date:        0x%08x\n"
-        "release time:        0x%08x\n",
-        id, revision, patch, info, product, eco, customer, date, time);
+           "Vivante DC hardware:\n"
+           "chip id:             0x%08x\n"
+           "chip revision:       0x%08x\n"
+           "chip patch revision: 0x%08x\n"
+           "chip info:           0x%08x\n"
+           "product id:          0x%08x\n"
+           "eco id:              0x%08x\n"
+           "customer id:         0x%08x\n"
+           "release date:        0x%08x\n"
+           "release time:        0x%08x\n",
+           id, revision, patch, info, product, eco, customer, date, time);
 }
 
 
 vivSTATUS dev_init()
 {
-    if (dcInitialized)
+    if(dcInitialized)
         return vivSTATUS_OK;
 
 #if !_BAREMETAL
@@ -113,7 +113,7 @@ vivSTATUS dev_init()
     dcCore = (viv_dc_core*)malloc(sizeof(viv_dc_core));
 #endif
 
-    if (!dcOs || !dcHardware || !dcCore)
+    if(!dcOs || !dcHardware || !dcCore)
     {
         viv_os_print("%s out of memory.\n", __FUNCTION__);
         /* Out of memory. */
@@ -141,8 +141,8 @@ vivSTATUS dev_init()
 
     /* Register irq handler. */
     register_dc_irq_handler(dcIRQLine,
-                            viv_dc_irq,
-                            (gctPOINTER)dcCore);
+                           viv_dc_irq,
+                           (gctPOINTER)dcCore);
 
     viv_conf_interrupt_enable(dcCore, SET_ENABLE);
 
@@ -154,7 +154,7 @@ vivSTATUS dev_init()
 vivSTATUS dev_deinit()
 {
 
-    if (!dcOs || !dcHardware || !dcCore)
+    if(!dcOs || !dcHardware || !dcCore)
         return vivSTATUS_INVALID_ARGUMENTS;
 
     viv_conf_interrupt_enable(dcCore, SET_DISABLE);
@@ -164,9 +164,9 @@ vivSTATUS dev_deinit()
     vPortFree((void*)dcHardware);
     vPortFree((void*)dcCore);
 #else
-    free((void*)dcOs);
-    free((void*)dcHardware);
-    free((void*)dcCore);
+   free((void*)dcOs);
+   free((void*)dcHardware);
+   free((void*)dcCore);
 #endif
     dcOs = vivNULL;
     dcHardware = vivNULL;
@@ -182,8 +182,7 @@ gctINT dev_ioctl(gctUINT cmd, gctPOINTER arg)
     viv_dc_core **core = dcDevice.core;
     gctUINT touser = 0;
 
-    if (cmd != VIV_DC_INTERFACE)
-    {
+    if (cmd != VIV_DC_INTERFACE) {
         viv_os_print("dev_ioctl: invalid interface\n");
         return -1;
     }
@@ -194,8 +193,7 @@ gctINT dev_ioctl(gctUINT cmd, gctPOINTER arg)
 
     viv_conf_ioctl(core, &iface, &touser);
 
-    if (touser)
-    {
+    if (touser) {
         viv_os_memcpy(arg, &iface, sizeof(viv_interface));
     }
 

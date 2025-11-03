@@ -63,314 +63,310 @@
                    which uses 64-bit accumulation to provide higher precision.
  */
 
-arm_status arm_mat_mult_fast_q31(
-    const arm_matrix_instance_q31 * pSrcA,
-    const arm_matrix_instance_q31 * pSrcB,
-    arm_matrix_instance_q31 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_mult_fast_q31(
+  const arm_matrix_instance_q31 * pSrcA,
+  const arm_matrix_instance_q31 * pSrcB,
+        arm_matrix_instance_q31 * pDst)
 {
-    q31_t *pInA = pSrcA->pData;                    /* Input data matrix pointer A */
-    q31_t *pInB = pSrcB->pData;                    /* Input data matrix pointer B */
-    q31_t *pInA2;
-    q31_t *px;                                     /* Temporary output data matrix pointer */
-    q31_t *px2;
-    q31_t sum1, sum2, sum3, sum4;                  /* Accumulator */
-    q31_t inA1, inA2, inB1, inB2;
-    uint16_t numRowsA = pSrcA->numRows;            /* Number of rows of input matrix A */
-    uint16_t numColsB = pSrcB->numCols;            /* Number of columns of input matrix B */
-    uint16_t numColsA = pSrcA->numCols;            /* Number of columns of input matrix A */
-    uint32_t col, i = 0U, j, row = numRowsA, colCnt;  /* Loop counters */
-    arm_status status;                             /* Status of matrix multiplication */
+  q31_t *pInA = pSrcA->pData;                    /* Input data matrix pointer A */
+  q31_t *pInB = pSrcB->pData;                    /* Input data matrix pointer B */
+  q31_t *pInA2;
+  q31_t *px;                                     /* Temporary output data matrix pointer */
+  q31_t *px2;
+  q31_t sum1, sum2, sum3, sum4;                  /* Accumulator */
+  q31_t inA1, inA2, inB1, inB2;
+  uint16_t numRowsA = pSrcA->numRows;            /* Number of rows of input matrix A */
+  uint16_t numColsB = pSrcB->numCols;            /* Number of columns of input matrix B */
+  uint16_t numColsA = pSrcA->numCols;            /* Number of columns of input matrix A */
+  uint32_t col, i = 0U, j, row = numRowsA, colCnt;  /* Loop counters */
+  arm_status status;                             /* Status of matrix multiplication */
 
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrcA->numCols != pSrcB->numRows) ||
-            (pSrcA->numRows != pDst->numRows)  ||
-            (pSrcB->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrcA->numCols != pSrcB->numRows) ||
+      (pSrcA->numRows != pDst->numRows)  ||
+      (pSrcB->numCols != pDst->numCols)    )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
 
+  {
+    px = pDst->pData;
+
+    row = row >> 1U;
+    px2 = px + numColsB;
+
+    /* The following loop performs the dot-product of each row in pSrcA with each column in pSrcB */
+    /* row loop */
+    while (row > 0U)
     {
-        px = pDst->pData;
+      /* For every row wise process, column loop counter is to be initiated */
+      col = numColsB;
 
-        row = row >> 1U;
-        px2 = px + numColsB;
+      /* For every row wise process, pIn2 pointer is set to starting address of pSrcB data */
+      pInB = pSrcB->pData;
 
-        /* The following loop performs the dot-product of each row in pSrcA with each column in pSrcB */
-        /* row loop */
-        while (row > 0U)
+      j = 0U;
+
+      col = col >> 1U;
+
+      /* column loop */
+      while (col > 0U)
+      {
+        /* Set the variable sum, that acts as accumulator, to zero */
+        sum1 = 0;
+        sum2 = 0;
+        sum3 = 0;
+        sum4 = 0;
+        
+        /* Initiate data pointers */
+        pInA = pSrcA->pData + i;
+        pInB = pSrcB->pData + j;
+        pInA2 = pInA + numColsA;
+        
+        colCnt = numColsA;
+
+        /* matrix multiplication */
+        while (colCnt > 0U)
         {
-            /* For every row wise process, column loop counter is to be initiated */
-            col = numColsB;
+          /* c(m,n) = a(1,1) * b(1,1) + a(1,2) * b(2,1) + .... + a(m,p) * b(p,n) */
 
-            /* For every row wise process, pIn2 pointer is set to starting address of pSrcB data */
-            pInB = pSrcB->pData;
-
-            j = 0U;
-
-            col = col >> 1U;
-
-            /* column loop */
-            while (col > 0U)
-            {
-                /* Set the variable sum, that acts as accumulator, to zero */
-                sum1 = 0;
-                sum2 = 0;
-                sum3 = 0;
-                sum4 = 0;
-
-                /* Initiate data pointers */
-                pInA = pSrcA->pData + i;
-                pInB = pSrcB->pData + j;
-                pInA2 = pInA + numColsA;
-
-                colCnt = numColsA;
-
-                /* matrix multiplication */
-                while (colCnt > 0U)
-                {
-                    /* c(m,n) = a(1,1) * b(1,1) + a(1,2) * b(2,1) + .... + a(m,p) * b(p,n) */
-
-                    inA1 = *pInA++;
-                    inB1 = pInB[0];
-                    inA2 = *pInA2++;
-                    inB2 = pInB[1];
-                    pInB += numColsB;
+          inA1 = *pInA++;
+          inB1 = pInB[0];
+          inA2 = *pInA2++;
+          inB2 = pInB[1];
+          pInB += numColsB;
 
 #if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(inA1, inB1, sum1);
-                    sum2 = __SMMLA(inA1, inB2, sum2);
-                    sum3 = __SMMLA(inA2, inB1, sum3);
-                    sum4 = __SMMLA(inA2, inB2, sum4);
+          sum1 = __SMMLA(inA1, inB1, sum1);
+          sum2 = __SMMLA(inA1, inB2, sum2);
+          sum3 = __SMMLA(inA2, inB1, sum3);
+          sum4 = __SMMLA(inA2, inB2, sum4);
 #else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) inA1 * inB1)) >> 32);
-                    sum2 = (q31_t)((((q63_t) sum2 << 32) + ((q63_t) inA1 * inB2)) >> 32);
-                    sum3 = (q31_t)((((q63_t) sum3 << 32) + ((q63_t) inA2 * inB1)) >> 32);
-                    sum4 = (q31_t)((((q63_t) sum4 << 32) + ((q63_t) inA2 * inB2)) >> 32);
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) inA1 * inB1)) >> 32);
+          sum2 = (q31_t) ((((q63_t) sum2 << 32) + ((q63_t) inA1 * inB2)) >> 32);
+          sum3 = (q31_t) ((((q63_t) sum3 << 32) + ((q63_t) inA2 * inB1)) >> 32);
+          sum4 = (q31_t) ((((q63_t) sum4 << 32) + ((q63_t) inA2 * inB2)) >> 32);
 #endif
 
-                    /* Decrement loop counter */
-                    colCnt--;
-                }
-
-                /* Convert the result from 2.30 to 1.31 format and store in destination buffer */
-                *px++  = sum1 << 1;
-                *px++  = sum2 << 1;
-                *px2++ = sum3 << 1;
-                *px2++ = sum4 << 1;
-
-                j += 2;
-
-                /* Decrement column loop counter */
-                col--;
-            }
-
-            i = i + (numColsA << 1U);
-            px  = px2 + (numColsB & 1U);
-            px2 = px  +  numColsB;
-
-            /* Decrement row loop counter */
-            row--;
+          /* Decrement loop counter */
+          colCnt--;
         }
 
-        /* Compute any remaining odd row/column below */
+        /* Convert the result from 2.30 to 1.31 format and store in destination buffer */
+        *px++  = sum1 << 1;
+        *px++  = sum2 << 1;
+        *px2++ = sum3 << 1;
+        *px2++ = sum4 << 1;
 
-        /* Compute remaining output column */
-        if (numColsB & 1U)
-        {
+        j += 2;
 
-            /* Avoid redundant computation of last element */
-            row = numRowsA & (~1U);
+        /* Decrement column loop counter */
+        col--;
+      }
 
-            /* Point to remaining unfilled column in output matrix */
-            px = pDst->pData + numColsB - 1;
-            pInA = pSrcA->pData;
+      i = i + (numColsA << 1U);
+      px  = px2 + (numColsB & 1U);
+      px2 = px  +  numColsB;
 
-            /* row loop */
-            while (row > 0)
-            {
-
-                /* point to last column in matrix B */
-                pInB  = pSrcB->pData + numColsB - 1;
-
-                /* Set variable sum1, that acts as accumulator, to zero */
-                sum1  = 0;
-
-#if defined (ARM_MATH_LOOPUNROLL)
-
-                /* Loop unrolling: Compute 4 columns at a time. */
-                colCnt = numColsA >> 2U;
-
-                /* matrix multiplication */
-                while (colCnt > 0U)
-                {
-#if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(*pInA++, *pInB, sum1);
-#else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) * pInA++ * *pInB)) >> 32);
-#endif
-                    pInB += numColsB;
-
-#if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(*pInA++, *pInB, sum1);
-#else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) * pInA++ * *pInB)) >> 32);
-#endif
-                    pInB += numColsB;
-
-#if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(*pInA++, *pInB, sum1);
-#else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) * pInA++ * *pInB)) >> 32);
-#endif
-                    pInB += numColsB;
-
-#if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(*pInA++, *pInB, sum1);
-#else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) * pInA++ * *pInB)) >> 32);
-#endif
-                    pInB += numColsB;
-
-                    /* Decrement loop counter */
-                    colCnt--;
-                }
-
-                /* Loop unrolling: Compute remaining column */
-                colCnt = numColsA % 4U;
-
-#else
-
-                /* Initialize colCnt with number of columns */
-                colCnt = numColsA;
-
-#endif /* #if defined (ARM_MATH_LOOPUNROLL) */
-
-                while (colCnt > 0U)
-                {
-#if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(*pInA++, *pInB, sum1);
-#else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) * pInA++ * *pInB)) >> 32);
-#endif
-                    pInB += numColsB;
-
-                    colCnt--;
-                }
-
-                /* Convert the result from 2.30 to 1.31 format and store in destination buffer */
-                *px = sum1 << 1;
-                px += numColsB;
-
-                /* Decrement row loop counter */
-                row--;
-            }
-        }
-
-        /* Compute remaining output row */
-        if (numRowsA & 1U)
-        {
-
-            /* point to last row in output matrix */
-            px = pDst->pData + (numColsB) * (numRowsA - 1);
-
-            col = numColsB;
-            i = 0U;
-
-            /* col loop */
-            while (col > 0)
-            {
-
-                /* point to last row in matrix A */
-                pInA = pSrcA->pData + (numRowsA - 1) * numColsA;
-                pInB  = pSrcB->pData + i;
-
-                /* Set variable sum1, that acts as accumulator, to zero */
-                sum1  = 0;
-
-#if defined (ARM_MATH_LOOPUNROLL)
-
-                /* Loop unrolling: Compute 4 columns at a time. */
-                colCnt = numColsA >> 2U;
-
-                /* matrix multiplication */
-                while (colCnt > 0U)
-                {
-                    inA1 = *pInA++;
-                    inA2 = *pInA++;
-                    inB1 = *pInB;
-                    pInB += numColsB;
-                    inB2 = *pInB;
-                    pInB += numColsB;
-#if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(inA1, inB1, sum1);
-                    sum1 = __SMMLA(inA2, inB2, sum1);
-#else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) inA1 * inB1)) >> 32);
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) inA2 * inB2)) >> 32);
-#endif
-
-                    inA1 = *pInA++;
-                    inA2 = *pInA++;
-                    inB1 = *pInB;
-                    pInB += numColsB;
-                    inB2 = *pInB;
-                    pInB += numColsB;
-#if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(inA1, inB1, sum1);
-                    sum1 = __SMMLA(inA2, inB2, sum1);
-#else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) inA1 * inB1)) >> 32);
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) inA2 * inB2)) >> 32);
-#endif
-
-                    /* Decrement loop counter */
-                    colCnt--;
-                }
-
-                /* Loop unrolling: Compute remaining column */
-                colCnt = numColsA % 4U;
-
-#else
-
-                /* Initialize colCnt with number of columns */
-                colCnt = numColsA;
-
-#endif /* #if defined (ARM_MATH_LOOPUNROLL) */
-
-                while (colCnt > 0U)
-                {
-#if defined (ARM_MATH_DSP)
-                    sum1 = __SMMLA(*pInA++, *pInB, sum1);
-#else
-                    sum1 = (q31_t)((((q63_t) sum1 << 32) + ((q63_t) * pInA++ * *pInB)) >> 32);
-#endif
-                    pInB += numColsB;
-
-                    colCnt--;
-                }
-
-                /* Saturate and store the result in the destination buffer */
-                *px++ = sum1 << 1;
-                i++;
-
-                /* Decrement col loop counter */
-                col--;
-            }
-        }
-
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+      /* Decrement row loop counter */
+      row--;
     }
 
-    /* Return to application */
-    return (status);
+    /* Compute any remaining odd row/column below */
+
+    /* Compute remaining output column */
+    if (numColsB & 1U) {
+
+      /* Avoid redundant computation of last element */
+      row = numRowsA & (~1U);
+
+      /* Point to remaining unfilled column in output matrix */
+      px = pDst->pData + numColsB-1;
+      pInA = pSrcA->pData;
+
+      /* row loop */
+      while (row > 0)
+      {
+
+        /* point to last column in matrix B */
+        pInB  = pSrcB->pData + numColsB-1;
+
+        /* Set variable sum1, that acts as accumulator, to zero */
+        sum1  = 0;
+
+#if defined (ARM_MATH_LOOPUNROLL)
+
+        /* Loop unrolling: Compute 4 columns at a time. */
+        colCnt = numColsA >> 2U;
+
+        /* matrix multiplication */
+        while (colCnt > 0U)
+        {
+#if defined (ARM_MATH_DSP)
+          sum1 = __SMMLA(*pInA++, *pInB, sum1);
+#else
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) *pInA++ * *pInB)) >> 32);
+#endif
+          pInB += numColsB;
+
+#if defined (ARM_MATH_DSP)
+          sum1 = __SMMLA(*pInA++, *pInB, sum1);
+#else
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) *pInA++ * *pInB)) >> 32);
+#endif
+          pInB += numColsB;
+
+#if defined (ARM_MATH_DSP)
+          sum1 = __SMMLA(*pInA++, *pInB, sum1);
+#else
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) *pInA++ * *pInB)) >> 32);
+#endif
+          pInB += numColsB;
+
+#if defined (ARM_MATH_DSP)
+          sum1 = __SMMLA(*pInA++, *pInB, sum1);
+#else
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) *pInA++ * *pInB)) >> 32);
+#endif
+          pInB += numColsB;
+
+          /* Decrement loop counter */
+          colCnt--;
+        }
+
+        /* Loop unrolling: Compute remaining column */
+        colCnt = numColsA % 4U;
+
+#else
+
+        /* Initialize colCnt with number of columns */
+        colCnt = numColsA;
+
+#endif /* #if defined (ARM_MATH_LOOPUNROLL) */
+
+        while (colCnt > 0U) {
+#if defined (ARM_MATH_DSP)
+          sum1 = __SMMLA(*pInA++, *pInB, sum1);
+#else
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) *pInA++ * *pInB)) >> 32);
+#endif
+          pInB += numColsB;
+          
+          colCnt--;
+        }
+
+        /* Convert the result from 2.30 to 1.31 format and store in destination buffer */
+        *px = sum1 << 1;
+        px += numColsB;
+
+        /* Decrement row loop counter */
+        row--;
+      }
+    }
+
+    /* Compute remaining output row */
+    if (numRowsA & 1U) {
+
+      /* point to last row in output matrix */
+      px = pDst->pData + (numColsB) * (numRowsA-1);
+
+      col = numColsB;
+      i = 0U;
+
+      /* col loop */
+      while (col > 0)
+      {
+
+        /* point to last row in matrix A */
+        pInA = pSrcA->pData + (numRowsA-1) * numColsA;
+        pInB  = pSrcB->pData + i;
+
+        /* Set variable sum1, that acts as accumulator, to zero */
+        sum1  = 0;
+
+#if defined (ARM_MATH_LOOPUNROLL)
+
+        /* Loop unrolling: Compute 4 columns at a time. */
+        colCnt = numColsA >> 2U;
+
+        /* matrix multiplication */
+        while (colCnt > 0U)
+        {
+          inA1 = *pInA++;
+          inA2 = *pInA++;
+          inB1 = *pInB;
+          pInB += numColsB;
+          inB2 = *pInB;
+          pInB += numColsB;
+#if defined (ARM_MATH_DSP)
+          sum1 = __SMMLA(inA1, inB1, sum1);
+          sum1 = __SMMLA(inA2, inB2, sum1);
+#else
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) inA1 * inB1)) >> 32);
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) inA2 * inB2)) >> 32);
+#endif
+
+          inA1 = *pInA++;
+          inA2 = *pInA++;
+          inB1 = *pInB;
+          pInB += numColsB;
+          inB2 = *pInB;
+          pInB += numColsB;
+#if defined (ARM_MATH_DSP)
+          sum1 = __SMMLA(inA1, inB1, sum1);
+          sum1 = __SMMLA(inA2, inB2, sum1);
+#else
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) inA1 * inB1)) >> 32);
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) inA2 * inB2)) >> 32);
+#endif
+
+          /* Decrement loop counter */
+          colCnt--;
+        }
+
+        /* Loop unrolling: Compute remaining column */
+        colCnt = numColsA % 4U;
+
+#else
+
+        /* Initialize colCnt with number of columns */
+        colCnt = numColsA;
+
+#endif /* #if defined (ARM_MATH_LOOPUNROLL) */
+
+        while (colCnt > 0U) {
+#if defined (ARM_MATH_DSP)
+          sum1 = __SMMLA(*pInA++, *pInB, sum1);
+#else
+          sum1 = (q31_t) ((((q63_t) sum1 << 32) + ((q63_t) *pInA++ * *pInB)) >> 32);
+#endif
+          pInB += numColsB;
+
+          colCnt--;
+        }
+
+        /* Saturate and store the result in the destination buffer */
+        *px++ = sum1 << 1;
+        i++;
+
+        /* Decrement col loop counter */
+        col--;
+      }
+    }
+
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 
 /**

@@ -4,9 +4,9 @@
  * Description:
  * Memory configuration
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.50.0
- * device-db 4.5.30.8214
- * mtb-device-support-pse8xxgp 1.0.200.195
+ * Configurator Backend 3.60.0
+ * device-db 4.33.0.9315
+ * mtb-dsl-pse8xxgp 1.1.1.824
  *
  *******************************************************************************
  * Copyright 2025 Cypress Semiconductor Corporation (an Infineon company) or
@@ -35,6 +35,34 @@
 extern "C" {
 #endif /* defined(__cplusplus) */
 
+#define vres_0_memory_region_data_0_ENABLED 1U
+#define vres_0_memory_region_data_1_ENABLED 1U
+#define vres_0_memory_region_data_2_ENABLED 1U
+#define vres_0_memory_region_data_3_ENABLED 1U
+#define vres_0_memory_region_data_4_ENABLED 1U
+#define vres_0_memory_region_data_5_ENABLED 1U
+#define vres_0_memory_region_data_6_ENABLED 1U
+#define vres_0_memory_region_data_7_ENABLED 1U
+#define vres_0_memory_region_data_8_ENABLED 1U
+#define vres_0_memory_region_data_9_ENABLED 1U
+#define vres_0_memory_region_data_10_ENABLED 1U
+#define vres_0_memory_region_data_11_ENABLED 1U
+#define vres_0_memory_region_data_12_ENABLED 1U
+#define vres_0_memory_region_data_13_ENABLED 1U
+#define vres_0_memory_region_data_14_ENABLED 1U
+#define vres_0_memory_region_data_15_ENABLED 1U
+#define vres_0_memory_region_data_16_ENABLED 1U
+#define vres_0_memory_region_data_17_ENABLED 1U
+#define vres_0_memory_region_data_18_ENABLED 1U
+#define vres_0_memory_region_data_19_ENABLED 1U
+#define vres_0_memory_region_data_20_ENABLED 1U
+#define vres_0_memory_region_data_21_ENABLED 1U
+#define vres_0_memory_region_data_22_ENABLED 1U
+#define vres_0_memory_region_data_23_ENABLED 1U
+#define vres_0_memory_region_data_24_ENABLED 1U
+#define vres_0_memory_region_data_25_ENABLED 1U
+#define vres_0_memory_region_data_26_ENABLED 1U
+#define vres_0_memory_region_data_27_ENABLED 1U
 #define vres_0_memory_0_ENABLED 1U
 
 #if defined(__cplusplus)

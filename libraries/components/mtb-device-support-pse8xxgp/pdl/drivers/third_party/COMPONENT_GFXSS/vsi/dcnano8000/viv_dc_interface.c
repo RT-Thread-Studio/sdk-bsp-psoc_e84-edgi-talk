@@ -36,7 +36,7 @@
  */
 gctINT viv_dc_device_init(
     gctVOID
-)
+    )
 {
     dev_init();
     viv_os_devmem_open();
@@ -48,7 +48,7 @@ gctINT viv_dc_device_init(
  */
 gctVOID viv_dc_device_deinit(
     gctVOID
-)
+    )
 {
     viv_os_devmem_close();
     dev_deinit();
@@ -57,7 +57,7 @@ gctVOID viv_dc_device_deinit(
 
 gctINT viv_dc_device_call(
     gctPOINTER args
-)
+    )
 {
     dev_ioctl(VIV_DC_INTERFACE, args);
 
@@ -69,7 +69,7 @@ gctINT viv_dc_device_call(
  */
 gctINT viv_dc_platform_init(
     gctPOINTER args
-)
+    )
 {
     return vivSTATUS_OK;
 }
@@ -79,7 +79,7 @@ gctINT viv_dc_platform_init(
  */
 gctVOID viv_dc_platform_deinit(
     gctPOINTER args
-)
+    )
 {
     return;
 }

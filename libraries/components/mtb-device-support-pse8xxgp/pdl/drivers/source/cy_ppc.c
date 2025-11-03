@@ -27,9 +27,6 @@
 #if defined (CY_IP_M33SYSCPUSS)
 
 #include "cy_ppc.h"
-/* forward declaration */
-void prog_attribute(PPC_Type* base, cy_stc_ppc_attribute_t* attribute, uint32_t value, uint32_t offset);
-
 /*******************************************************************************
 * Function Name: Cy_Ppc_InitPpc
 ****************************************************************************//**
@@ -39,21 +36,17 @@ void prog_attribute(PPC_Type* base, cy_stc_ppc_attribute_t* attribute, uint32_t 
 * \param base
 * Base address of ppc being configured
 *
-* \param ppcInit
-* PPC initialization structure
+* \param ppcResponse
+* PPC Response type on violation
 *
 * \return
 * Initialization status
 *
 *******************************************************************************/
-cy_en_ppc_status_t Cy_Ppc_InitPpc(PPC_Type* base, const cy_stc_ppc_init_t* ppcInit)
+cy_en_ppc_status_t Cy_Ppc_InitPpc(PPC_Type* base, const cy_en_ppc_resp_cfg_t ppcResponse)
 {
-    if (ppcInit->respConfig > CY_PPC_BUS_ERR)
-    {
-        return CY_PPC_BAD_PARAM;
-    }
 
-    if (ppcInit->respConfig == CY_PPC_RZWI)
+    if (ppcResponse == CY_PPC_RZWI)
     {
         base->CTL = base->CTL & (~PPC_CTL_RESP_CFG_Msk);
     }
@@ -65,48 +58,43 @@ cy_en_ppc_status_t Cy_Ppc_InitPpc(PPC_Type* base, const cy_stc_ppc_init_t* ppcIn
     return CY_PPC_SUCCESS;
 }
 
-void prog_attribute(PPC_Type* base, cy_stc_ppc_attribute_t* attribute, uint32_t value, uint32_t offset)
+__STATIC_INLINE void prog_attribute(PPC_Type* base, const cy_stc_ppc_attribute_t* attribute, uint32_t value, uint32_t offset)
 {
-    uint32_t cValue;
     uint32_t *nsAttPtr = (uint32_t*)(base->NS_ATT);
-    uint32_t *sPrivAttPtr = (uint32_t*) base->S_P_ATT;
-    uint32_t *nsPrivAttPtr = (uint32_t*) base->NS_P_ATT;
+    uint32_t *sPrivAttPtr = (uint32_t*)(base->S_P_ATT);
+    uint32_t *nsPrivAttPtr = (uint32_t*)(base->NS_P_ATT);
 
-    if (offset < 32U)
+    /* Max supported registers are 32 for NS_ATT, S_P_ATT and NS_P_ATT */
+    if(offset < 32U)
     {
         /* Configure Security attribute */
         if (attribute->secAttribute == CY_PPC_SECURE)
         {
-            cValue = ~value;
-            *(nsAttPtr + offset) = (uint32_t)(*(nsAttPtr + offset) & cValue);
+            nsAttPtr[offset] &= ~value;
         }
         else
         {
-            *(nsAttPtr + offset) = (uint32_t)(*(nsAttPtr + offset) | value);
+            nsAttPtr[offset] |= value;
         }
-#if 1
         /* Configure Secure privilege attribute */
-        if (attribute->secPrivAttribute == CY_PPC_SEC_PRIV)
+        if (attribute->privAttribute == CY_PPC_PRIV)
         {
-            cValue = ~value;
-            *(sPrivAttPtr + offset) = *(sPrivAttPtr + offset) & cValue;
+            sPrivAttPtr[offset] &= ~value;
         }
         else
         {
-            *(sPrivAttPtr + offset) = *(sPrivAttPtr + offset) | value;
+            sPrivAttPtr[offset] |= value;
         }
 
         /* Configure Non-secure privilege attribute */
-        if (attribute->nsPrivAttribute == CY_PPC_NON_SEC_PRIV)
+        if (attribute->privAttribute == CY_PPC_PRIV)
         {
-            cValue = ~value;
-            *(nsPrivAttPtr + offset) = *(nsPrivAttPtr + offset) & cValue;
+            nsPrivAttPtr[offset] &= ~value;
         }
         else
         {
-            *(nsPrivAttPtr + offset) = *(nsPrivAttPtr + offset) | value;
+            nsPrivAttPtr[offset] |= value;
         }
-#endif
     }
 }
 
@@ -119,6 +107,9 @@ void prog_attribute(PPC_Type* base, cy_stc_ppc_attribute_t* attribute, uint32_t 
 * \param base
 * Base address of ppc being configured
 *
+* \param region
+* PPC region to configure
+*
 * \param attribute
 * PPC attribute configuration structure
 *
@@ -126,103 +117,23 @@ void prog_attribute(PPC_Type* base, cy_stc_ppc_attribute_t* attribute, uint32_t 
 * Initialization status
 *
 *******************************************************************************/
-cy_en_ppc_status_t Cy_Ppc_ConfigAttrib(PPC_Type* base, cy_stc_ppc_attribute_t* attribute)
+cy_en_ppc_status_t Cy_Ppc_ConfigAttrib(PPC_Type* base, const cy_en_prot_region_t region, const cy_stc_ppc_attribute_t* attribute)
 {
-    uint32_t startRegion, endRegion;
-    uint32_t sPriv, nsPriv, totalRegions;
-    uint32_t startBit, freeRegions, endBit;
-    uint32_t newRegions;
-    uint32_t i, partBlocks, value, blkIdx, loopCnt;
-    uint32_t secure;
-
-    startRegion = (uint32_t)attribute->startRegion;
-    endRegion = (uint32_t)attribute->endRegion;
-    secure = (uint32_t)(attribute->secAttribute);
-    nsPriv = (uint32_t)(attribute->nsPrivAttribute);
-    sPriv  = (uint32_t)(attribute->secPrivAttribute);
-
-    if (!(PPC_VALIDATE(base, startRegion)))
+    if (!(PPC_IS_VALID(base, region)))
     {
         return CY_PPC_BAD_PARAM;
     }
 
-    if (!(PPC_VALIDATE(base, endRegion)))
-    {
-        return CY_PPC_BAD_PARAM;
-    }
+    // Region can go over to the next Peripheral Instance, and this is controlled by the base address.
+    // Therefore, we need to convert the region number to the actual region within the PPC.
+    uint32_t actual_region = PPC_REGION_GET_ACTUAL(base, region);
 
-    startRegion = (uint32_t)(CY_PPC_DRV_REGION_EXTRACT(attribute->startRegion));
-    endRegion = (uint32_t)(CY_PPC_DRV_REGION_EXTRACT(attribute->endRegion));
+    // Peripheral region number (32i+j) is controlled by the j-th bit in the i-th instance of the attribute registers.
+    uint32_t regionBitValue = (1UL << (actual_region % 32U)); // j-th bit is region % 32U
+    uint32_t regionInstance = actual_region >> 5U;            // i-th Instance is region / 32U
 
-    if (secure > (uint32_t)CY_PPC_NON_SECURE)
-    {
-        return CY_PPC_BAD_PARAM;
-    }
-
-    if (sPriv > (uint32_t)CY_PPC_SEC_NONPRIV)
-    {
-        return CY_PPC_BAD_PARAM;
-    }
-
-    if (nsPriv  > (uint32_t)CY_PPC_NON_SEC_NONPRIV)
-    {
-        return CY_PPC_BAD_PARAM;
-    }
-
-    if (startRegion > endRegion)
-    {
-        return CY_PPC_BAD_PARAM;
-    }
-
-    totalRegions = endRegion - startRegion + 1U;
-    startBit = startRegion % 32U;
-    freeRegions = 32U - startBit;
-
-    blkIdx = startRegion / 32U;
-
-    value = 0UL;
-    if (totalRegions <= freeRegions)
-    {
-        endBit = (totalRegions + startBit - 1U) % 32U;
-        for (i = startBit; i <= endBit; i++)
-        {
-            value = value | (1UL << i);
-        }
-        prog_attribute(base, attribute, value, blkIdx);
-        return CY_PPC_SUCCESS;
-    }
-    else
-    {
-        endBit = 31U;
-        newRegions = totalRegions - freeRegions;
-        for (i = startBit; i <= endBit; i++)
-        {
-            value = value | (1UL << i);
-        }
-        prog_attribute(base, attribute, value, blkIdx);
-        blkIdx++;
-    }
-
-    loopCnt = newRegions / 32U;
-    partBlocks = newRegions % 32U;
-
-    for (i = 0U; i < loopCnt; i++)
-    {
-        value = 0xFFFFFFFFUL;
-        prog_attribute(base, attribute, value, blkIdx);
-        blkIdx++;
-    }
-
-    if (partBlocks > 0U)
-    {
-        value = 0UL;
-        for (i = 0U; i < partBlocks; i++)
-        {
-            value = value | (1UL << i);
-        }
-        prog_attribute(base, attribute, value, blkIdx);
-    }
-
+    prog_attribute(base, attribute, regionBitValue, regionInstance);
+    
     return CY_PPC_SUCCESS;
 }
 
@@ -230,91 +141,40 @@ cy_en_ppc_status_t Cy_Ppc_ConfigAttrib(PPC_Type* base, cy_stc_ppc_attribute_t* a
 * Function Name: Cy_Ppc_SetPcMask
 ****************************************************************************//**
 *
-* \brief Configure the PC mask for a given range of regions of referenced ppc
+* \brief Configure the PC mask for a given range of regions of referenced PPC
 *
 * \param base
 * Base address of ppc being configured
 *
-* \param pcMaskConfig
-* PPC mask configuration structure
+* \param region
+* PPC region to set PC Mask for
+*
+* \param pcMask
+* PPC mask to set to
 *
 * \return
-* Initialization status
+* Operation status
 *
 *******************************************************************************/
-cy_en_ppc_status_t Cy_Ppc_SetPcMask(PPC_Type* base, cy_stc_ppc_pc_mask_t* pcMaskConfig)
+cy_en_ppc_status_t Cy_Ppc_SetPcMask(PPC_Type* base, const cy_en_prot_region_t region, uint32_t pcMask)
 {
-    uint32_t i;
-    uint32_t startRegion, endRegion;
-
-    startRegion = (uint32_t)pcMaskConfig->startRegion;
-    endRegion = (uint32_t)pcMaskConfig->endRegion;
-
-    if (!(PPC_VALIDATE(base, startRegion)))
+    if (!(PPC_IS_VALID(base, region)))
     {
         return CY_PPC_BAD_PARAM;
     }
 
-    if (!(PPC_VALIDATE(base, endRegion)))
+    // Region can go over to the next Peripheral Instance, and this is controlled by the base address.
+    // Therefore, we need to convert the region number to the actual region within the PPC.
+    uint32_t actual_region = PPC_REGION_GET_ACTUAL(base, region);
+
+    /* Max supported registers are 1024 for PC_MASK */
+    if(actual_region < 1024U)
     {
-        return CY_PPC_BAD_PARAM;
+        /* Configure Protection Context Mask */
+        base->PC_MASK[actual_region] = pcMask;
     }
 
-    startRegion = (uint32_t)(CY_PPC_DRV_REGION_EXTRACT(pcMaskConfig->startRegion));
-    endRegion = (uint32_t)(CY_PPC_DRV_REGION_EXTRACT(pcMaskConfig->endRegion));
-
-    if (startRegion > endRegion)
-    {
-        return CY_PPC_BAD_PARAM;
-    }
-
-    for (i = startRegion; i <= endRegion; i++)
-    {
-        base->PC_MASK[i] = pcMaskConfig->pcMask;
-    }
     return CY_PPC_SUCCESS;
-}
-
-/*******************************************************************************
-* Function Name: Cy_Ppc_SetLockMask
-****************************************************************************//**
-*
-* \brief Configures the lock mask for the referenced ppc
-*
-*
-* \param base
-* Base address of ppc being configured
-*
-* \param lockMask
-* Mask value to be set
-*
-* \return
-* Initialization status
-*
-*******************************************************************************/
-cy_en_ppc_status_t Cy_Ppc_SetLockMask(PPC_Type* base, uint32_t lockMask)
-{
-    base->LOCK_MASK = lockMask;
-    return CY_PPC_SUCCESS;
-}
-
-/*******************************************************************************
-* Function Name: Cy_Ppc_GetLockMask
-****************************************************************************//**
-*
-* \brief Reads the lock mask value for the referenced ppc
-*
-*
-* \param base
-* Base address of ppc being configured
-*
-* \return
-* Mask value read
-*
-*******************************************************************************/
-uint32_t Cy_Ppc_GetLockMask(PPC_Type* base)
-{
-    return base->LOCK_MASK;
 }
 
 #endif

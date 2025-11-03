@@ -46,7 +46,6 @@
   @param[in]     pSrc       points to the Q31 input vector
   @param[out]    pDst       points to the 64 bit floating-point output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Details
                    The equation used for the conversion process is:
@@ -55,53 +54,53 @@
   </pre>
  */
 
-void arm_q31_to_f64(
-    const q31_t * pSrc,
-    float64_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_q31_to_f64(
+  const q31_t * pSrc,
+  float64_t * pDst,
+  uint32_t blockSize)
 {
-    const q31_t *pIn = pSrc;                             /* Src pointer */
-    uint32_t blkCnt;                               /* loop counter */
+  const q31_t *pIn = pSrc;                             /* Src pointer */
+  uint32_t blkCnt;                               /* loop counter */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = (float64_t) A / 2147483648 */
+  while (blkCnt > 0U)
+  {
+    /* C = (float64_t) A / 2147483648 */
 
-        /* Convert from q31 to float and store result in destination buffer */
-        *pDst++ = ((float64_t) * pIn++ / 2147483648.0);
-        *pDst++ = ((float64_t) * pIn++ / 2147483648.0);
-        *pDst++ = ((float64_t) * pIn++ / 2147483648.0);
-        *pDst++ = ((float64_t) * pIn++ / 2147483648.0);
+    /* Convert from q31 to float and store result in destination buffer */
+    *pDst++ = ((float64_t) *pIn++ / 2147483648.0);
+    *pDst++ = ((float64_t) *pIn++ / 2147483648.0);
+    *pDst++ = ((float64_t) *pIn++ / 2147483648.0);
+    *pDst++ = ((float64_t) *pIn++ / 2147483648.0);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = (float64_t) A / 2147483648 */
+  while (blkCnt > 0U)
+  {
+    /* C = (float64_t) A / 2147483648 */
 
-        /* Convert from q31 to float and store result in destination buffer */
-        *pDst++ = ((float64_t) * pIn++ / 2147483648.0);
+    /* Convert from q31 to float and store result in destination buffer */
+    *pDst++ = ((float64_t) *pIn++ / 2147483648.0);
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<View xmlns="http://cypress.com/xsd/cystudioview_v1">
-  <Profiles>
-    <Profile displayName="Connectivity" fileName="connectivity_wifi" evalPriority="1" displayPriority="4" description="Connectivity Wi-Fi configuration" 
-      resources="wifi(\[\d+\])?\..+" />
-  </Profiles>
-</View>

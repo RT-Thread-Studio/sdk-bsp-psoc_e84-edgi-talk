@@ -19,7 +19,7 @@
 /* ----------------------------------------------------------------------
  * Project:      CMSIS NN Library
  * Title:        arm_convolve_HWC_q7_basic.c
- * Description:  Q7 version of convolution
+ * Description:	 Q7 version of convolution
  *
  * $Date:        09. October 2020
  * $Revision:    V.1.0.1
@@ -129,7 +129,7 @@ arm_status arm_convolve_HWC_q7_basic(const q7_t *Im_in,
             if (pBuffer == bufferA + 2 * ch_im_in * dim_kernel * dim_kernel)
             {
                 pOut = arm_nn_mat_mult_kernel_q7_q15(
-                           wt, bufferA, ch_im_out, ch_im_in * dim_kernel * dim_kernel, bias_shift, out_shift, bias, pOut);
+                    wt, bufferA, ch_im_out, ch_im_in * dim_kernel * dim_kernel, bias_shift, out_shift, bias, pOut);
 
                 /* counter reset */
                 pBuffer = bufferA;
@@ -206,7 +206,7 @@ arm_status arm_convolve_HWC_q7_basic(const q7_t *Im_in,
                             for (l = 0; l < ch_im_in; l++)
                             {
                                 conv_out += Im_in[(in_row * dim_im_in + in_col) * ch_im_in + l] *
-                                            wt[i * ch_im_in * dim_kernel * dim_kernel + (m * dim_kernel + n) * ch_im_in + l];
+                                    wt[i * ch_im_in * dim_kernel * dim_kernel + (m * dim_kernel + n) * ch_im_in + l];
                             }
                         }
                     }

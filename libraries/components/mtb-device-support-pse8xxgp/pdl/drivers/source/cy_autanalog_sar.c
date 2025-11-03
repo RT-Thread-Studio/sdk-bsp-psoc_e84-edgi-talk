@@ -91,16 +91,16 @@
 #define AUTANALOG_SAR_TEMP_HALF                             (0x8000L)   /* 0.5 in Q16.16 format */
 
 
-/* Global variables for die temperature trimmings */
-uint32_t cyAutanalogTempMultiplierHS = 0x00016000UL;
-uint32_t cyAutanalogTempOffsetHS     = 0xFEDC6000UL;
-uint32_t cyAutanalogTempMultiplierLP = 0x00016000UL;
-uint32_t cyAutanalogTempOffsetLP     = 0xFEDC6000UL;
+/* Local variables for die temperature trimmings */
+static uint32_t dieTempMultiplierHS = 0x00016000UL;
+static uint32_t dieTempOffsetHS     = 0xFEDC6000UL;
+static uint32_t dieTempMultiplierLP = 0x00016000UL;
+static uint32_t dieTempOffsetLP     = 0xFEDC6000UL;
 
 
 /* Forward declarations */
 #if !defined (CY_AUTANALOG_FIR_DISABLE)
-    static cy_en_autanalog_status_t SAR_LoadFIR(uint8_t sarIdx, uint8_t cfgNum, const cy_stc_autanalog_sar_fir_cfg_t * firCfg);
+static cy_en_autanalog_status_t SAR_LoadFIR(uint8_t sarIdx, uint8_t cfgNum, const cy_stc_autanalog_sar_fir_cfg_t * firCfg);
 #endif
 static void SAR_LoadGpioChan(uint32_t baseAddr, uint8_t cfgNum, cy_stc_autanalog_sar_hs_chan_t * const hsGpioChan[]);
 static void SAR_LoadMuxChan(uint32_t baseAddr, uint8_t cfgNum, cy_stc_autanalog_sar_mux_chan_t * const intMuxChan[]);
@@ -108,7 +108,7 @@ static void SAR_LoadRangeCond(uint32_t baseAddr, uint8_t cfgNum, cy_stc_autanalo
 static int32_t SAR_CheckChanOffset(uint32_t baseAddr, bool sarLP, uint8_t sarSequencer, cy_en_autanalog_sar_input_t sarInput,
                                    uint8_t sarChannel, bool sarMode16);
 static int32_t SAR_GetAverageVoltCounts(uint32_t baseAddr, bool sarLP, uint8_t sarSequencer,
-                                        cy_en_autanalog_sar_input_t sarInput, uint8_t sarChannel, int32_t sarCounts, bool * sarMode16);
+               cy_en_autanalog_sar_input_t sarInput, uint8_t sarChannel, int32_t sarCounts, bool * sarMode16);
 static int32_t SAR_GetAverageTempCounts(bool avgShiftMode16, uint8_t avgCnt, int32_t sarCounts);
 static int32_t SAR_CountsToDegreeC(bool sarLP, int32_t sarCounts);
 
@@ -138,16 +138,16 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadConfig(uint8_t sarIdx, const cy_st
          */
         /* ADC is configured for operation in both modes HS and LP */
         if ((NULL != sarCfg->sarStaCfg) && (CY_AUTANALOG_SUCCESS == result) &&
-                (NULL != sarCfg->sarStaCfg->hsStaCfg) && (0U != sarCfg->hsSeqTabNum) &&
-                (NULL != sarCfg->sarStaCfg->lpStaCfg) && (0U != sarCfg->lpSeqTabNum))
+            (NULL != sarCfg->sarStaCfg->hsStaCfg) && (0U != sarCfg->hsSeqTabNum) &&
+            (NULL != sarCfg->sarStaCfg->lpStaCfg) && (0U != sarCfg->lpSeqTabNum))
         {
             /* Internal Vref used for at least one ADC core */
             if (((CY_AUTANALOG_SAR_VREF_VDDA != sarCfg->sarStaCfg->hsStaCfg->hsVref) &&
-                    (CY_AUTANALOG_SAR_VREF_VDDA_BY_2 != sarCfg->sarStaCfg->hsStaCfg->hsVref) &&
-                    (CY_AUTANALOG_SAR_VREF_EXT != sarCfg->sarStaCfg->hsStaCfg->hsVref)) ||
-                    ((CY_AUTANALOG_SAR_VREF_VDDA != sarCfg->sarStaCfg->lpStaCfg->lpVref) &&
-                     (CY_AUTANALOG_SAR_VREF_VDDA_BY_2 != sarCfg->sarStaCfg->lpStaCfg->lpVref) &&
-                     (CY_AUTANALOG_SAR_VREF_EXT != sarCfg->sarStaCfg->lpStaCfg->lpVref)))
+                 (CY_AUTANALOG_SAR_VREF_VDDA_BY_2 != sarCfg->sarStaCfg->hsStaCfg->hsVref) &&
+                 (CY_AUTANALOG_SAR_VREF_EXT != sarCfg->sarStaCfg->hsStaCfg->hsVref)) ||
+                 ((CY_AUTANALOG_SAR_VREF_VDDA != sarCfg->sarStaCfg->lpStaCfg->lpVref) &&
+                  (CY_AUTANALOG_SAR_VREF_VDDA_BY_2 != sarCfg->sarStaCfg->lpStaCfg->lpVref) &&
+                  (CY_AUTANALOG_SAR_VREF_EXT != sarCfg->sarStaCfg->lpStaCfg->lpVref)))
             {
                 AUTANALOG_INFRA_PRIO_CFG(INFRA_BASE, CY_AUTANALOG_PRIORITY_GROUP2) |= INFRA_PRIO_CFG_SAR_READY_Msk;
             }
@@ -162,8 +162,8 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadConfig(uint8_t sarIdx, const cy_st
         {
             /* Internal Vref */
             if ((CY_AUTANALOG_SAR_VREF_VDDA != sarCfg->sarStaCfg->hsStaCfg->hsVref) &&
-                    (CY_AUTANALOG_SAR_VREF_VDDA_BY_2 != sarCfg->sarStaCfg->hsStaCfg->hsVref) &&
-                    (CY_AUTANALOG_SAR_VREF_EXT != sarCfg->sarStaCfg->hsStaCfg->hsVref))
+                (CY_AUTANALOG_SAR_VREF_VDDA_BY_2 != sarCfg->sarStaCfg->hsStaCfg->hsVref) &&
+                (CY_AUTANALOG_SAR_VREF_EXT != sarCfg->sarStaCfg->hsStaCfg->hsVref))
             {
                 AUTANALOG_INFRA_PRIO_CFG(INFRA_BASE, CY_AUTANALOG_PRIORITY_GROUP2) |= INFRA_PRIO_CFG_SAR_READY_Msk;
             }
@@ -179,8 +179,8 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadConfig(uint8_t sarIdx, const cy_st
         {
             /* Internal Vref */
             if ((CY_AUTANALOG_SAR_VREF_VDDA != sarCfg->sarStaCfg->lpStaCfg->lpVref) &&
-                    (CY_AUTANALOG_SAR_VREF_VDDA_BY_2 != sarCfg->sarStaCfg->lpStaCfg->lpVref) &&
-                    (CY_AUTANALOG_SAR_VREF_EXT != sarCfg->sarStaCfg->lpStaCfg->lpVref))
+                (CY_AUTANALOG_SAR_VREF_VDDA_BY_2 != sarCfg->sarStaCfg->lpStaCfg->lpVref) &&
+                (CY_AUTANALOG_SAR_VREF_EXT != sarCfg->sarStaCfg->lpStaCfg->lpVref))
             {
                 AUTANALOG_INFRA_PRIO_CFG(INFRA_BASE, CY_AUTANALOG_PRIORITY_GROUP2) |= INFRA_PRIO_CFG_SAR_READY_Msk;
             }
@@ -231,8 +231,8 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadStaticConfig(uint8_t sarIdx, const
         if (CY_AUTANALOG_SUCCESS == result)
         {
             uint16_t hsSampleTime[CY_AUTANALOG_SAR_SAMPLE_TIME_NUM] = {0U};
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.9', 'Review shows that usage macro NULL does not have any negative drawbacks');
-            cy_stc_autanalog_sar_hs_chan_t *hsGpioChan[PASS_SAR_SAR_GPIO_CHANNELS] = {NULL};
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.9','Review shows that usage macro NULL does not have any negative drawbacks');
+            cy_stc_autanalog_sar_hs_chan_t * hsGpioChan[PASS_SAR_SAR_GPIO_CHANNELS] = {NULL};
 
             cy_en_autanalog_sar_vref_t hsVref = (NULL != sarStaCfg->hsStaCfg) ? sarStaCfg->hsStaCfg->hsVref : CY_AUTANALOG_SAR_VREF_VDDA;
             uint8_t hsGpioResultMask = (NULL != sarStaCfg->hsStaCfg) ? sarStaCfg->hsStaCfg->hsGpioResultMask : 0U;
@@ -336,10 +336,10 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadHSseqTable(uint8_t sarIdx, uint8_t
             CY_ASSERT_L3(AUTANALOG_SAR_SEQ_MUX_SEL(seqTabArr[cfgIdx].mux1Sel));
 
             regVal =
-                _VAL2FLD(SAR_SEQ_HS_DATA_HS_GPIO_CHAN_EN, seqTabArr[cfgIdx].chanEn) |
-                _VAL2FLD(SAR_SEQ_HS_DATA_HS_MUX_CHAN_EN_SEL, seqTabArr[cfgIdx].muxMode) |
-                _VAL2FLD(SAR_SEQ_HS_DATA_MUX0_CHAN_SEL, seqTabArr[cfgIdx].mux0Sel) |
-                _VAL2FLD(SAR_SEQ_HS_DATA_MUX1_CHAN_SEL, seqTabArr[cfgIdx].mux1Sel);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_HS_GPIO_CHAN_EN, seqTabArr[cfgIdx].chanEn) |
+                    _VAL2FLD(SAR_SEQ_HS_DATA_HS_MUX_CHAN_EN_SEL, seqTabArr[cfgIdx].muxMode) |
+                    _VAL2FLD(SAR_SEQ_HS_DATA_MUX0_CHAN_SEL, seqTabArr[cfgIdx].mux0Sel) |
+                    _VAL2FLD(SAR_SEQ_HS_DATA_MUX1_CHAN_SEL, seqTabArr[cfgIdx].mux1Sel);
 
             CY_ASSERT_L3(AUTANALOG_SAR_SEQ_SAMPLE_TIME(seqTabArr[cfgIdx].sampleTime));
             CY_ASSERT_L3(AUTANALOG_SAR_SEQ_AVG_CNT(seqTabArr[cfgIdx].accCount));
@@ -347,25 +347,25 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadHSseqTable(uint8_t sarIdx, uint8_t
             CY_ASSERT_L3(AUTANALOG_SAR_SEQ_NEXT_STATE(seqTabArr[cfgIdx].nextAction));
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_SAMPLE_TIME_EN, seqTabArr[cfgIdx].sampleTimeEn);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_SAMPLE_TIME_EN, seqTabArr[cfgIdx].sampleTimeEn);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_TR_SAMPLE_TIME_EN, 0U); /* Set default value */
+                    _VAL2FLD(SAR_SEQ_HS_DATA_TR_SAMPLE_TIME_EN, 0U); /* Set default value */
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_SAMPLE_TIME_SEL, seqTabArr[cfgIdx].sampleTime);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_SAMPLE_TIME_SEL, seqTabArr[cfgIdx].sampleTime);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_AVG_EN, seqTabArr[cfgIdx].accEn);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_AVG_EN, seqTabArr[cfgIdx].accEn);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_AVG_CNT, seqTabArr[cfgIdx].accCount);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_AVG_CNT, seqTabArr[cfgIdx].accCount);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_CALIBRATE, seqTabArr[cfgIdx].calReq);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_CALIBRATE, seqTabArr[cfgIdx].calReq);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_NEXT_ACTION, seqTabArr[cfgIdx].nextAction);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_NEXT_ACTION, seqTabArr[cfgIdx].nextAction);
 
             AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, cfgIdx) = regVal;
         }
@@ -398,8 +398,8 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadLPseqTable(uint8_t sarIdx, uint8_t
             CY_ASSERT_L3(AUTANALOG_SAR_SEQ_MUX_SEL(seqTabArr[cfgIdx].mux0Sel));
 
             regVal =
-                _VAL2FLD(SAR_SEQ_LP_DATA_LP_CHAN_EN, seqTabArr[cfgIdx].chanEn) |
-                _VAL2FLD(SAR_SEQ_LP_DATA_CHAN_SEL, seqTabArr[cfgIdx].mux0Sel);
+                    _VAL2FLD(SAR_SEQ_LP_DATA_LP_CHAN_EN, seqTabArr[cfgIdx].chanEn) |
+                    _VAL2FLD(SAR_SEQ_LP_DATA_CHAN_SEL, seqTabArr[cfgIdx].mux0Sel);
 
             CY_ASSERT_L3(AUTANALOG_SAR_SEQ_SAMPLE_TIME(seqTabArr[cfgIdx].sampleTime));
             CY_ASSERT_L3(AUTANALOG_SAR_SEQ_AVG_CNT(seqTabArr[cfgIdx].accCount));
@@ -407,25 +407,25 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadLPseqTable(uint8_t sarIdx, uint8_t
             CY_ASSERT_L3(AUTANALOG_SAR_SEQ_NEXT_STATE(seqTabArr[cfgIdx].nextAction));
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_SAMPLE_TIME_EN, seqTabArr[cfgIdx].sampleTimeEn);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_SAMPLE_TIME_EN, seqTabArr[cfgIdx].sampleTimeEn);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_TR_SAMPLE_TIME_EN, 0U); /* Set default value */
+                    _VAL2FLD(SAR_SEQ_HS_DATA_TR_SAMPLE_TIME_EN, 0U); /* Set default value */
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_SAMPLE_TIME_SEL, seqTabArr[cfgIdx].sampleTime);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_SAMPLE_TIME_SEL, seqTabArr[cfgIdx].sampleTime);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_AVG_EN, seqTabArr[cfgIdx].accEn);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_AVG_EN, seqTabArr[cfgIdx].accEn);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_AVG_CNT, seqTabArr[cfgIdx].accCount);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_AVG_CNT, seqTabArr[cfgIdx].accCount);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_CALIBRATE, seqTabArr[cfgIdx].calReq);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_CALIBRATE, seqTabArr[cfgIdx].calReq);
 
             regVal |=
-                _VAL2FLD(SAR_SEQ_HS_DATA_NEXT_ACTION, seqTabArr[cfgIdx].nextAction);
+                    _VAL2FLD(SAR_SEQ_HS_DATA_NEXT_ACTION, seqTabArr[cfgIdx].nextAction);
 
             AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, cfgIdx) = regVal;
         }
@@ -489,7 +489,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadFIRconfig(uint8_t sarIdx, uint8_t 
 
 
 cy_en_autanalog_status_t Cy_AutAnalog_SAR_FIRloadCoeff(uint8_t sarIdx, uint8_t firIdx, uint8_t firCoeffNum,
-        const int16_t *firCoeffArr)
+                                                        const int16_t * firCoeffArr)
 {
     cy_en_autanalog_status_t result = CY_AUTANALOG_SAR_BAD_PARAM;
 
@@ -554,7 +554,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_SAR_LoadOffsetGainCorr(uint8_t sarIdx, uin
 
 
 float32_t Cy_AutAnalog_SAR_CountsTo_Volts(uint8_t sarIdx, bool sarLP, uint8_t sarSequencer, cy_en_autanalog_sar_input_t sarInput,
-        uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts)
+                                       uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts)
 {
     uint32_t  baseAddr;
     uint32_t  sarGain;
@@ -604,7 +604,7 @@ float32_t Cy_AutAnalog_SAR_CountsTo_Volts(uint8_t sarIdx, bool sarLP, uint8_t sa
 
 
 int16_t Cy_AutAnalog_SAR_CountsTo_mVolts(uint8_t sarIdx, bool sarLP, uint8_t sarSequencer, cy_en_autanalog_sar_input_t sarInput,
-        uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts)
+                                      uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts)
 {
     uint32_t baseAddr;
     uint32_t sarGain;
@@ -664,7 +664,7 @@ int16_t Cy_AutAnalog_SAR_CountsTo_mVolts(uint8_t sarIdx, bool sarLP, uint8_t sar
 
 
 int32_t Cy_AutAnalog_SAR_CountsTo_uVolts(uint8_t sarIdx, bool sarLP, uint8_t sarSequencer, cy_en_autanalog_sar_input_t sarInput,
-        uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts)
+                                      uint8_t sarChannel, uint32_t VrefmV, int32_t sarCounts)
 {
     uint32_t baseAddr;
     uint32_t sarGain;
@@ -714,7 +714,7 @@ int32_t Cy_AutAnalog_SAR_CountsTo_uVolts(uint8_t sarIdx, bool sarLP, uint8_t sar
 
 
 int16_t Cy_AutAnalog_SAR_CountsTo_degreeC(uint8_t sarIdx, bool sarLP, uint8_t sarSequencer, uint8_t sarChannel,
-        int32_t sarCounts)
+                                          int32_t sarCounts)
 {
     uint32_t                    baseAddr;
     bool                        accEn;
@@ -732,11 +732,11 @@ int16_t Cy_AutAnalog_SAR_CountsTo_degreeC(uint8_t sarIdx, bool sarLP, uint8_t sa
     {
         /* Get AVG_EN parameter for SAR ADC sequencer */
         accEn = (sarLP == false) ?
-                _FLD2BOOL(SAR_SEQ_HS_DATA_AVG_EN, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)) :
-                _FLD2BOOL(SAR_SEQ_LP_DATA_AVG_EN, AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, sarSequencer));
+                 _FLD2BOOL(SAR_SEQ_HS_DATA_AVG_EN, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)):
+                 _FLD2BOOL(SAR_SEQ_LP_DATA_AVG_EN, AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, sarSequencer));
 
         /* Get AVG_MODE parameter for SAR ADC channel */
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Review shows that conversion from uint32_t to enum does not have any negative drawbacks');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Review shows that conversion from uint32_t to enum does not have any negative drawbacks');
         accMode = (cy_en_autanalog_sar_acc_mode_t)_FLD2VAL(SAR_STA_CTRL_AVG_MODE, AUTANALOG_SAR_CTRL(baseAddr));
 
         /* Get SHIFT_MODE parameter for SAR ADC channel */
@@ -749,10 +749,10 @@ int16_t Cy_AutAnalog_SAR_CountsTo_degreeC(uint8_t sarIdx, bool sarLP, uint8_t sa
             accShift = _FLD2BOOL(SAR_STA_MUX_CHAN_CFG_AVG_SHIFT, AUTANALOG_SAR_MUX_CHAN_CFG(baseAddr, sarChannel));
 
             /* Get AVG_CNT parameter for SAR ADC sequencer */
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that conversion from uint32_t to uint8_t does not have any negative drawbacks');
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that conversion from uint32_t to uint8_t does not have any negative drawbacks');
             avgCnt = (sarLP == false) ?
-                     _FLD2VAL(SAR_SEQ_HS_DATA_AVG_CNT, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)) :
-                     _FLD2VAL(SAR_SEQ_LP_DATA_AVG_CNT, AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, sarSequencer));
+                      _FLD2VAL(SAR_SEQ_HS_DATA_AVG_CNT, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)):
+                      _FLD2VAL(SAR_SEQ_LP_DATA_AVG_CNT, AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, sarSequencer));
 
             /* Averaging is not done in HW */
             if (!accShift || (avgShiftMode16 && (avgCnt < (uint8_t)CY_AUTANALOG_SAR_ACC_CNT32)))
@@ -765,7 +765,7 @@ int16_t Cy_AutAnalog_SAR_CountsTo_degreeC(uint8_t sarIdx, bool sarLP, uint8_t sa
         /* Shift 12b value to 16b */
         if (!avgShiftMode16)
         {
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.1', 'Review shows that operator "<<" does not have any negative drawbacks');
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.1','Review shows that operator "<<" does not have any negative drawbacks');
             sarCounts <<= 4UL;
         }
 
@@ -1057,7 +1057,7 @@ static int32_t SAR_CheckChanOffset(uint32_t baseAddr, bool sarLP, uint8_t sarSeq
 
         /* Get DIFFERENTIAL_EN parameter for MUX channel */
         diff = sarLP ? _FLD2BOOL(SAR_STA_CTRL_LP_DIFFERENTIAL_EN, AUTANALOG_SAR_CTRL(baseAddr)) :
-               (CY_AUTANALOG_SAR_CHAN_CFG_MUX0_PSEUDO_DIFF == _FLD2VAL(SAR_SEQ_HS_DATA_HS_MUX_CHAN_EN_SEL, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)));
+        (CY_AUTANALOG_SAR_CHAN_CFG_MUX0_PSEUDO_DIFF == _FLD2VAL(SAR_SEQ_HS_DATA_HS_MUX_CHAN_EN_SEL, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)));
     }
     else
     {
@@ -1088,7 +1088,7 @@ static int32_t SAR_CheckChanOffset(uint32_t baseAddr, bool sarLP, uint8_t sarSeq
 
 
 static int32_t SAR_GetAverageVoltCounts(uint32_t baseAddr, bool sarLP, uint8_t sarSequencer,
-                                        cy_en_autanalog_sar_input_t sarInput, uint8_t sarChannel, int32_t sarCounts, bool * sarMode16)
+               cy_en_autanalog_sar_input_t sarInput, uint8_t sarChannel, int32_t sarCounts, bool * sarMode16)
 {
     bool                           avgEn;
     cy_en_autanalog_sar_acc_mode_t avgMode;
@@ -1098,26 +1098,26 @@ static int32_t SAR_GetAverageVoltCounts(uint32_t baseAddr, bool sarLP, uint8_t s
 
     /* Get AVG_EN parameter for SAR ADC sequencer */
     avgEn = (sarLP == false) ?
-            _FLD2BOOL(SAR_SEQ_HS_DATA_AVG_EN, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)) :
-            _FLD2BOOL(SAR_SEQ_LP_DATA_AVG_EN, AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, sarSequencer));
+             _FLD2BOOL(SAR_SEQ_HS_DATA_AVG_EN, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)):
+             _FLD2BOOL(SAR_SEQ_LP_DATA_AVG_EN, AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, sarSequencer));
 
     /* Get AVG_MODE parameter for SAR ADC channel */
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Review shows that conversion from uint32_t to enum does not have any negative drawbacks');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Review shows that conversion from uint32_t to enum does not have any negative drawbacks');
     avgMode = (cy_en_autanalog_sar_acc_mode_t)_FLD2VAL(SAR_STA_CTRL_AVG_MODE, AUTANALOG_SAR_CTRL(baseAddr));
 
     /* Check if average is enabled */
     if (avgEn && (avgMode != CY_AUTANALOG_SAR_ACC_DISABLED))
     {
         /* Get AVG_CNT parameter for SAR ADC sequencer */
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that conversion from uint32_t to uint8_t does not have any negative drawbacks');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that conversion from uint32_t to uint8_t does not have any negative drawbacks');
         avgCnt = (sarLP == false) ?
-                 _FLD2VAL(SAR_SEQ_HS_DATA_AVG_CNT, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)) :
-                 _FLD2VAL(SAR_SEQ_LP_DATA_AVG_CNT, AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, sarSequencer));
+                  _FLD2VAL(SAR_SEQ_HS_DATA_AVG_CNT, AUTANALOG_SAR_SEQ_HS_DATA(baseAddr, sarSequencer)):
+                  _FLD2VAL(SAR_SEQ_LP_DATA_AVG_CNT, AUTANALOG_SAR_SEQ_LP_DATA(baseAddr, sarSequencer));
 
         /* Get AVG_SHIFT parameter for SAR ADC channel */
         avgShift = (sarInput == CY_AUTANALOG_SAR_INPUT_GPIO) ?
-                   _FLD2BOOL(SAR_STA_GPIO_CHAN_CFG_AVG_SHIFT, AUTANALOG_SAR_GPIO_CHAN_CFG(baseAddr, sarChannel)) :
-                   _FLD2BOOL(SAR_STA_MUX_CHAN_CFG_AVG_SHIFT, AUTANALOG_SAR_MUX_CHAN_CFG(baseAddr, sarChannel));
+                    _FLD2BOOL(SAR_STA_GPIO_CHAN_CFG_AVG_SHIFT, AUTANALOG_SAR_GPIO_CHAN_CFG(baseAddr, sarChannel)):
+                    _FLD2BOOL(SAR_STA_MUX_CHAN_CFG_AVG_SHIFT, AUTANALOG_SAR_MUX_CHAN_CFG(baseAddr, sarChannel));
 
         /* Get SHIFT_MODE parameter for SAR ADC channel */
         avgShiftMode16 = _FLD2BOOL(SAR_STA_CTRL_SHIFT_MODE, AUTANALOG_SAR_CTRL(baseAddr));
@@ -1126,7 +1126,7 @@ static int32_t SAR_GetAverageVoltCounts(uint32_t baseAddr, bool sarLP, uint8_t s
         if (!avgShift)
         {
             /* Calculate average value */
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Review shows that conversion from unsigned to signed does not have any negative drawbacks');
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Review shows that conversion from unsigned to signed does not have any negative drawbacks');
             sarCounts /= (int32_t)(1UL << (avgCnt + 1UL));
         }
 
@@ -1151,7 +1151,7 @@ static int32_t SAR_GetAverageTempCounts(bool avgShiftMode16, uint8_t avgCnt, int
     uint16_t avgDivider;
 
     /* Calculate divider value */
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3', 'Review shows that conversion from uint32_t to uint16_t does not have any negative drawbacks');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.3','Review shows that conversion from uint32_t to uint16_t does not have any negative drawbacks');
     avgDivider = (uint16_t)(1UL << (avgCnt + 1UL));
 
     /* Averaged value */
@@ -1160,7 +1160,7 @@ static int32_t SAR_GetAverageTempCounts(bool avgShiftMode16, uint8_t avgCnt, int
     /* Shift 12b value to 16b */
     if (avgShiftMode16)
     {
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.1', 'Review shows that operator "<<" does not have any negative drawbacks');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.1','Review shows that operator "<<" does not have any negative drawbacks');
         sarCounts <<= 4UL;
     }
 
@@ -1175,19 +1175,27 @@ static int32_t SAR_CountsToDegreeC(bool sarLP, int32_t sarCounts)
     /* Calculate tInitial in Q16.16 */
     if (true == sarLP)
     {
-        temp = ((int32_t)cyAutanalogTempMultiplierLP * temp) +
-               ((int32_t)cyAutanalogTempOffsetLP);
+        temp = ((int32_t)dieTempMultiplierLP * temp) +
+               ((int32_t)dieTempOffsetLP);
     }
     else
     {
-        temp = ((int32_t)cyAutanalogTempMultiplierHS * temp) +
-               ((int32_t)cyAutanalogTempOffsetHS);
+        temp = ((int32_t)dieTempMultiplierHS * temp) +
+               ((int32_t)dieTempOffsetHS);
     }
 
     /* Add tInitial + 0.5 to round to nearest int. Shift off frac bits, and return. */
     temp = (temp + AUTANALOG_SAR_TEMP_HALF) / AUTANALOG_SAR_TEMP_DIV;
 
     return temp;
+}
+
+void Cy_AutAnalog_SAR_LoadDieTempTrimmCoeff(uint32_t dieTrimmMultiplierHS, uint32_t dieTrimmOffsetHS, uint32_t dieTrimmMultiplierLP, uint32_t dieTrimmOffsetLP)
+{
+    dieTempMultiplierHS = dieTrimmMultiplierHS;
+    dieTempOffsetHS     = dieTrimmOffsetHS;
+    dieTempMultiplierLP = dieTrimmMultiplierLP;
+    dieTempOffsetLP     = dieTrimmOffsetLP;
 }
 
 #endif /* CY_IP_MXS22LPPASS_SAR */

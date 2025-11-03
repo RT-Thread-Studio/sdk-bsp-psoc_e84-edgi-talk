@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['region_5fsize_0',['region_size',['../group__platform__mpc.html#a7e08056ff1c597e1009b42e6dd8aec79',1,'ifx_se_mpc_rot_cfg_t']]]
+  ['owner_0',['owner',['../group__key__attributes.html#a64a53438f20e2b9425d535321d74837f',1,'ifx_se_svc_key_id_t']]]
 ];

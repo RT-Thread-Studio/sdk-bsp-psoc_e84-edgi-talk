@@ -1,6 +1,6 @@
 /*******************************************************************************
 * \file cy_lpcomp.c
-* \version 1.80.1
+* \version 2.0.0
 *
 * \brief
 *  This file provides the driver code to the API for the Low Power Comparator
@@ -52,11 +52,8 @@ static cy_en_lpcomp_status_t LPComp_LoadTrimmValues(LPCOMP_Type *base, cy_en_lpc
 #endif /* CY_IP_MXS22LPCOMP */
 
 /*******************************************************************************
-* Function Name: Cy_LPComp_Init_Ext
+* Function Name: Cy_LPComp_Init
 ****************************************************************************//**
-*
-* Cy_LPComp_Init_Ext() is an extended version of existing function Cy_LPComp_Init().
-* This implementation follows the thread-safe approach and is preferable for usage.
 *
 * This function initializes the low-power comparator and returns
 * the status of the initialization.
@@ -64,7 +61,7 @@ static cy_en_lpcomp_status_t LPComp_LoadTrimmValues(LPCOMP_Type *base, cy_en_lpc
 * \note Interrupt edge-detect mode and drive power mode are not written to the registers
 * during the function execution. This can result in unexpected interrupts
 * when the comparator is enabled. Instead, the configurations are saved to the
-* context and applied in the \ref Cy_LPComp_Enable_Ext() function.
+* context and applied in the \ref Cy_LPComp_Enable() function.
 *
 * \param *base
 *     The low-power comparator registers structure pointer.
@@ -85,8 +82,8 @@ static cy_en_lpcomp_status_t LPComp_LoadTrimmValues(LPCOMP_Type *base, cy_en_lpc
 *     *base checking result. If the pointer is NULL, returns an error.
 *
 *******************************************************************************/
-cy_en_lpcomp_status_t Cy_LPComp_Init_Ext(LPCOMP_Type *base, cy_en_lpcomp_channel_t channel, const cy_stc_lpcomp_config_t *config,
-        cy_stc_lpcomp_context_t *context)
+cy_en_lpcomp_status_t Cy_LPComp_Init(LPCOMP_Type *base, cy_en_lpcomp_channel_t channel, const cy_stc_lpcomp_config_t *config,
+                                        cy_stc_lpcomp_context_t *context)
 {
     cy_en_lpcomp_status_t ret = CY_LPCOMP_BAD_PARAM;
 
@@ -103,20 +100,20 @@ cy_en_lpcomp_status_t Cy_LPComp_Init_Ext(LPCOMP_Type *base, cy_en_lpcomp_channel
         if (CY_LPCOMP_CHANNEL_0 == channel)
         {
             LPCOMP_CMP0_CTRL(base) = _VAL2FLD(LPCOMP_CMP0_CTRL_HYST0, (uint32_t)config->hysteresis) |
-                                     _VAL2FLD(LPCOMP_CMP0_CTRL_DSI_BYPASS0, (uint32_t)config->outputMode) |
-                                     _VAL2FLD(LPCOMP_CMP0_CTRL_DSI_LEVEL0, (uint32_t)config->outputMode >> 1u);
+                              _VAL2FLD(LPCOMP_CMP0_CTRL_DSI_BYPASS0, (uint32_t)config->outputMode) |
+                              _VAL2FLD(LPCOMP_CMP0_CTRL_DSI_LEVEL0, (uint32_t)config->outputMode >> 1u);
         }
         else
         {
             LPCOMP_CMP1_CTRL(base) = _VAL2FLD(LPCOMP_CMP1_CTRL_HYST1, (uint32_t)config->hysteresis) |
-                                     _VAL2FLD(LPCOMP_CMP1_CTRL_DSI_BYPASS1, (uint32_t)config->outputMode) |
-                                     _VAL2FLD(LPCOMP_CMP1_CTRL_DSI_LEVEL1, (uint32_t)config->outputMode >> 1u);
+                              _VAL2FLD(LPCOMP_CMP1_CTRL_DSI_BYPASS1, (uint32_t)config->outputMode) |
+                              _VAL2FLD(LPCOMP_CMP1_CTRL_DSI_LEVEL1, (uint32_t)config->outputMode >> 1u);
         }
 
-        /* Save intType to use it in the Cy_LPComp_Enable_Ext() function */
+        /* Save intType to use it in the Cy_LPComp_Enable() function */
         context->intType[(uint8_t)channel - 1u] = config->intType;
 
-        /* Save power to use it in the Cy_LPComp_Enable_Ext() function */
+        /* Save power to use it in the Cy_LPComp_Enable() function */
         context->power[(uint8_t)channel - 1u] = config->power;
 
 #if defined (CY_IP_MXS22LPCOMP)
@@ -139,11 +136,8 @@ cy_en_lpcomp_status_t Cy_LPComp_Init_Ext(LPCOMP_Type *base, cy_en_lpcomp_channel
 
 
 /*******************************************************************************
-* Function Name: Cy_LPComp_Enable_Ext
+* Function Name: Cy_LPComp_Enable
 ****************************************************************************//**
-*
-* Cy_LPComp_Enable_Ext() is an extended version of existing function Cy_LPComp_Enable().
-* This implementation follows the thread-safe approach and is preferable for usage.
 *
 * This function enables the low-power comparator and sets
 * interrupt edge-detect and drive power modes.
@@ -163,16 +157,27 @@ cy_en_lpcomp_status_t Cy_LPComp_Init_Ext(LPCOMP_Type *base, cy_en_lpcomp_channel
 * \return None.
 *
 *******************************************************************************/
-void Cy_LPComp_Enable_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_stc_lpcomp_context_t *context)
+void Cy_LPComp_Enable(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_stc_lpcomp_context_t *context)
 {
     cy_en_lpcomp_pwr_t powerSpeed;
 
     CY_ASSERT_L3(CY_LPCOMP_IS_CHANNEL_VALID(channel));
 
-    powerSpeed = context->power[(uint8_t)channel - 1u];
+    switch (channel)
+    {
+        case CY_LPCOMP_CHANNEL_0:
+            powerSpeed = context->power[0];
+            break;
+        case CY_LPCOMP_CHANNEL_1:
+            powerSpeed = context->power[1];
+            break;
+        default:
+            powerSpeed = CY_LPCOMP_MODE_OFF;
+            break;
+    }
 
     /* Set power */
-    Cy_LPComp_SetPower_Ext(base, channel, powerSpeed, context);
+    Cy_LPComp_SetPower(base, channel, powerSpeed, context);
 
     /* Make delay before enabling the comparator interrupt to prevent false triggering */
     if (CY_LPCOMP_MODE_ULP == powerSpeed)
@@ -189,17 +194,14 @@ void Cy_LPComp_Enable_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_
     }
 
     /* Enable the comparator interrupt */
-    Cy_LPComp_SetInterruptTriggerMode_Ext(base, channel, context->intType[(uint8_t)channel - 1u], context);
+    Cy_LPComp_SetInterruptTriggerMode(base, channel, context->intType[(uint8_t)channel - 1u], context);
 }
 
 
 
 /*******************************************************************************
-* Function Name: Cy_LPComp_Disable_Ext
+* Function Name: Cy_LPComp_Disable
 ****************************************************************************//**
-*
-* Cy_LPComp_Disable_Ext() is an extended version of existing function Cy_LPComp_Disable().
-* This implementation follows the thread-safe approach and is preferable for usage.
 *
 * This function disables the low-power comparator power and sets interrupt edge-detect mode
 * to the disabled state.
@@ -209,7 +211,7 @@ void Cy_LPComp_Enable_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_
 *
 * \note Disabled states for comparator interrupt and drive power are not preserved in the context.
 * The actual configurations for interrupt edge-detect and drive power
-* are restored from the context in: \ref Cy_LPComp_Enable_Ext().
+* are restored from the context in: \ref Cy_LPComp_Enable().
 *
 * \param *base
 *     The low-power comparator register structure pointer.
@@ -226,26 +228,22 @@ void Cy_LPComp_Enable_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_
 * \return None.
 *
 *******************************************************************************/
-void Cy_LPComp_Disable_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_stc_lpcomp_context_t *context)
+void Cy_LPComp_Disable(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_stc_lpcomp_context_t *context)
 {
     CY_ASSERT_L3(CY_LPCOMP_IS_CHANNEL_VALID(channel));
 
     /* Disable the comparator interrupt */
-    Cy_LPComp_SetInterruptTriggerMode_Ext(base, channel, CY_LPCOMP_INTR_DISABLE, context);
+    Cy_LPComp_SetInterruptTriggerMode(base, channel, CY_LPCOMP_INTR_DISABLE, context);
 
     /* Set power off */
-    Cy_LPComp_SetPower_Ext(base, channel, CY_LPCOMP_MODE_OFF, context);
+    Cy_LPComp_SetPower(base, channel, CY_LPCOMP_MODE_OFF, context);
 }
 
 
 
 /*******************************************************************************
-* Function Name: Cy_LPComp_SetInterruptTriggerMode_Ext
+* Function Name: Cy_LPComp_SetInterruptTriggerMode
 ****************************************************************************//**
-*
-* Cy_LPComp_SetInterruptTriggerMode_Ext() is an extended version of existing function
-* Cy_LPComp_SetInterruptTriggerMode().
-* This implementation follows the thread-safe approach and is preferable for usage.
 *
 * This function sets the interrupt edge-detect mode and controls the value
 * provided on the output.
@@ -281,8 +279,8 @@ void Cy_LPComp_Disable_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy
 * \return None.
 *
 *******************************************************************************/
-void Cy_LPComp_SetInterruptTriggerMode_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_en_lpcomp_int_t intType,
-        cy_stc_lpcomp_context_t *context)
+void Cy_LPComp_SetInterruptTriggerMode(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_en_lpcomp_int_t intType,
+                                          cy_stc_lpcomp_context_t *context)
 {
     CY_ASSERT_L3(CY_LPCOMP_IS_CHANNEL_VALID(channel));
     CY_ASSERT_L3(CY_LPCOMP_IS_INTR_MODE_VALID(intType));
@@ -296,7 +294,7 @@ void Cy_LPComp_SetInterruptTriggerMode_Ext(LPCOMP_Type* base, cy_en_lpcomp_chann
         LPCOMP_CMP1_CTRL(base) = _CLR_SET_FLD32U(LPCOMP_CMP1_CTRL(base), LPCOMP_CMP1_CTRL_INTTYPE1, (uint32_t)intType);
     }
 
-    /* Save interrupt type to use it in the Cy_LPComp_Enable_Ext() function */
+    /* Save interrupt type to use it in the Cy_LPComp_Enable() function */
     if (intType != CY_LPCOMP_INTR_DISABLE)
     {
         context->intType[(uint8_t)channel - 1u] = intType;
@@ -306,11 +304,8 @@ void Cy_LPComp_SetInterruptTriggerMode_Ext(LPCOMP_Type* base, cy_en_lpcomp_chann
 
 
 /*******************************************************************************
-* Function Name: Cy_LPComp_SetPower_Ext
+* Function Name: Cy_LPComp_SetPower
 ****************************************************************************//**
-*
-* Cy_LPComp_SetPower_Ext() is an extended version of existing function Cy_LPComp_SetPower().
-* This implementation follows the thread-safe approach and is preferable for usage.
 *
 * This function sets the drive power and speeds to one of the four settings.
 *
@@ -346,8 +341,8 @@ void Cy_LPComp_SetInterruptTriggerMode_Ext(LPCOMP_Type* base, cy_en_lpcomp_chann
 * \return None.
 *
 *******************************************************************************/
-void Cy_LPComp_SetPower_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_en_lpcomp_pwr_t power,
-                            cy_stc_lpcomp_context_t *context)
+void Cy_LPComp_SetPower(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_en_lpcomp_pwr_t power,
+                           cy_stc_lpcomp_context_t *context)
 {
     CY_ASSERT_L3(CY_LPCOMP_IS_CHANNEL_VALID(channel));
     CY_ASSERT_L3(CY_LPCOMP_IS_POWER_VALID(power));
@@ -361,7 +356,7 @@ void Cy_LPComp_SetPower_Ext(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, c
         LPCOMP_CMP1_CTRL(base) = _CLR_SET_FLD32U(LPCOMP_CMP1_CTRL(base), LPCOMP_CMP1_CTRL_MODE1, (uint32_t)power);
     }
 
-    /* Save power to use it in the Cy_LPComp_Enable_Ext() function */
+    /* Save power to use it in the Cy_LPComp_Enable() function */
     if (power != CY_LPCOMP_MODE_OFF)
     {
         context->power[(uint8_t)channel - 1u] = power;
@@ -402,7 +397,7 @@ void Cy_LPComp_SetHysteresis(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, 
     }
     else
     {
-        LPCOMP_CMP1_CTRL(base) = _CLR_SET_FLD32U(LPCOMP_CMP1_CTRL(base), LPCOMP_CMP1_CTRL_HYST1, (uint32_t)hysteresis);
+        LPCOMP_CMP1_CTRL(base) = _CLR_SET_FLD32U(LPCOMP_CMP1_CTRL(base) , LPCOMP_CMP1_CTRL_HYST1, (uint32_t)hysteresis);
     }
 }
 
@@ -412,14 +407,9 @@ void Cy_LPComp_SetHysteresis(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, 
 ****************************************************************************//**
 *
 * Sets the comparator input sources. The comparator inputs can be connected
-* to the dedicated GPIO pins or AMUXBUSA/AMUXBUSB. Additionally, the negative
+* to the dedicated GPIO pins. Additionally, the negative
 * comparator input can be connected to the local VREF.
 * Even one unconnected input causes a comparator undefined output.
-*
-* \note Connection to AMUXBUSA/AMUXBUSB requires closing the additional
-* switches, which are part of the IO system. These switches can be configured
-* using the HSIOM->AMUX_SPLIT_CTL[3] register.
-* For details, refer to the appropriate Technical Reference Manual (TRM).
 *
 * \param *base
 *     The low-power comparator register structure pointer.
@@ -447,51 +437,21 @@ void Cy_LPComp_SetInputs(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, cy_e
     CY_ASSERT_L3(CY_LPCOMP_IS_INPUT_P_VALID(inputP));
     CY_ASSERT_L3(CY_LPCOMP_IS_INPUT_N_VALID(inputN));
 
-    switch (inputP)
-    {
-    case CY_LPCOMP_SW_AMUXBUSA:
-    {
-        input = (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_AP0_Msk : LPCOMP_CMP1_SW_CMP1_AP1_Msk;
-        HSIOM_AMUX_SPLIT_CTL(3U) = _CLR_SET_FLD32U(HSIOM_AMUX_SPLIT_CTL(3U), CY_HSIOM_AMUX_SPLIT_CTL_SWITCH_AA_SL_SR, 3u);
-        break;
-    }
-    case CY_LPCOMP_SW_AMUXBUSB:
-    {
-        input = (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_BP0_Msk : LPCOMP_CMP1_SW_CMP1_BP1_Msk;
-        HSIOM_AMUX_SPLIT_CTL(3U) = _CLR_SET_FLD32U(HSIOM_AMUX_SPLIT_CTL(3U), CY_HSIOM_AMUX_SPLIT_CTL_SWITCH_BB_SL_SR, 3u);
-        break;
-    }
-    default:
-    {
-        input = (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_IP0_Msk : LPCOMP_CMP1_SW_CMP1_IP1_Msk;
-        break;
-    }
-    }
+    (void) inputP;
+    input = (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_IP0_Msk : LPCOMP_CMP1_SW_CMP1_IP1_Msk;
 
-    switch (inputN)
+    switch(inputN)
     {
-    case CY_LPCOMP_SW_AMUXBUSA:
-    {
-        input |= (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_AN0_Msk : LPCOMP_CMP1_SW_CMP1_AN1_Msk;
-        HSIOM_AMUX_SPLIT_CTL(3U) = _CLR_SET_FLD32U(HSIOM_AMUX_SPLIT_CTL(3U), CY_HSIOM_AMUX_SPLIT_CTL_SWITCH_AA_SL_SR, 3u);
-        break;
-    }
-    case CY_LPCOMP_SW_AMUXBUSB:
-    {
-        input |= (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_BN0_Msk : LPCOMP_CMP1_SW_CMP1_BN1_Msk;
-        HSIOM_AMUX_SPLIT_CTL(3U) = _CLR_SET_FLD32U(HSIOM_AMUX_SPLIT_CTL(3U), CY_HSIOM_AMUX_SPLIT_CTL_SWITCH_BB_SL_SR, 3u);
-        break;
-    }
-    case CY_LPCOMP_SW_LOCAL_VREF:
-    {
-        input |= (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_VN0_Msk : LPCOMP_CMP1_SW_CMP1_VN1_Msk;
-        break;
-    }
-    default:
-    {
-        input |= (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_IN0_Msk : LPCOMP_CMP1_SW_CMP1_IN1_Msk;
-        break;
-    }
+        case CY_LPCOMP_SW_LOCAL_VREF:
+        {
+            input |= (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_VN0_Msk : LPCOMP_CMP1_SW_CMP1_VN1_Msk;
+            break;
+        }
+        default:
+        {
+            input |= (channel == CY_LPCOMP_CHANNEL_0) ? LPCOMP_CMP0_SW_CMP0_IN0_Msk : LPCOMP_CMP1_SW_CMP1_IN1_Msk;
+            break;
+        }
     }
 
     if (CY_LPCOMP_CHANNEL_0 == channel)
@@ -587,80 +547,80 @@ void Cy_LPComp_SetOutputMode(LPCOMP_Type* base, cy_en_lpcomp_channel_t channel, 
 cy_en_syspm_status_t Cy_LPComp_DeepSleepCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
 {
     cy_en_syspm_status_t ret = CY_SYSPM_FAIL;
-    LPCOMP_Type *locBase = (LPCOMP_Type *)(callbackParams->base);
+    LPCOMP_Type *locBase = (LPCOMP_Type *) (callbackParams->base);
     static uint32_t enabled_status;
 
-    switch (mode)
+    switch(mode)
     {
-    case CY_SYSPM_CHECK_READY:
-    {
-        ret = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_CHECK_FAIL:
-    {
-        ret = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_BEFORE_TRANSITION:
-    {
-        /* Save the low-power comparator the enabled/disabled status. */
-        enabled_status = _FLD2VAL(LPCOMP_CONFIG_ENABLED, LPCOMP_CONFIG(locBase));
-
-        if (0u != enabled_status)
+        case CY_SYSPM_CHECK_READY:
         {
-            /* Disable the low-power comparator block when there is no wake-up source from any channel. */
-            if (!(((_FLD2VAL(LPCOMP_CMP0_CTRL_MODE0, LPCOMP_CMP0_CTRL(locBase)) == (uint32_t)CY_LPCOMP_MODE_ULP) &&
-                    _FLD2BOOL(LPCOMP_INTR_MASK_COMP0_MASK, LPCOMP_INTR_MASK(locBase))) ||
-                    ((_FLD2VAL(LPCOMP_CMP1_CTRL_MODE1, LPCOMP_CMP1_CTRL(locBase)) == (uint32_t)CY_LPCOMP_MODE_ULP) &&
-                     _FLD2BOOL(LPCOMP_INTR_MASK_COMP1_MASK, LPCOMP_INTR_MASK(locBase)))))
+            ret = CY_SYSPM_SUCCESS;
+        }
+        break;
 
+        case CY_SYSPM_CHECK_FAIL:
+        {
+            ret = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        case CY_SYSPM_BEFORE_TRANSITION:
+        {
+            /* Save the low-power comparator the enabled/disabled status. */
+            enabled_status = _FLD2VAL(LPCOMP_CONFIG_ENABLED, LPCOMP_CONFIG(locBase));
+
+            if (0u != enabled_status)
             {
-                /* Disable the low-power comparator block to avoid leakage. */
-                Cy_LPComp_GlobalDisable(locBase);
+                /* Disable the low-power comparator block when there is no wake-up source from any channel. */
+                if( !(((_FLD2VAL(LPCOMP_CMP0_CTRL_MODE0, LPCOMP_CMP0_CTRL(locBase)) == (uint32_t)CY_LPCOMP_MODE_ULP) &&
+                        _FLD2BOOL(LPCOMP_INTR_MASK_COMP0_MASK, LPCOMP_INTR_MASK(locBase))) ||
+                      ((_FLD2VAL(LPCOMP_CMP1_CTRL_MODE1, LPCOMP_CMP1_CTRL(locBase)) == (uint32_t)CY_LPCOMP_MODE_ULP) &&
+                        _FLD2BOOL(LPCOMP_INTR_MASK_COMP1_MASK, LPCOMP_INTR_MASK(locBase)))))
+
+                {
+                    /* Disable the low-power comparator block to avoid leakage. */
+                    Cy_LPComp_GlobalDisable(locBase);
+                }
+                else
+                {
+                    /* Set low-power comparator the status to the not changed state. */
+                    enabled_status = 0u;
+                }
             }
             else
             {
-                /* Set low-power comparator the status to the not changed state. */
-                enabled_status = 0u;
+                /* The low-power comparator block was already disabled and
+                *  the system is allowed to go to the low power mode.
+                */
             }
-        }
-        else
-        {
-            /* The low-power comparator block was already disabled and
-            *  the system is allowed to go to the low power mode.
-            */
-        }
 
-        ret = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_AFTER_TRANSITION:
-    {
-        /* Enable the low-power comparator to operate if it was enabled
-        * before entering to the low power mode.
-        */
-        if (0u != enabled_status)
-        {
-            Cy_LPComp_GlobalEnable(locBase);
+            ret = CY_SYSPM_SUCCESS;
         }
-        else
-        {
-            /* The low-power comparator block was disabled before calling this API
-            * with mode = CY_SYSPM_CHECK_READY.
-            */
-        }
-
-        ret = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    default:
-        /* Unknown state */
         break;
+
+        case CY_SYSPM_AFTER_TRANSITION:
+        {
+            /* Enable the low-power comparator to operate if it was enabled
+            * before entering to the low power mode.
+            */
+            if (0u != enabled_status)
+            {
+                Cy_LPComp_GlobalEnable(locBase);
+            }
+            else
+            {
+                /* The low-power comparator block was disabled before calling this API
+                * with mode = CY_SYSPM_CHECK_READY.
+                */
+            }
+
+            ret = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        default:
+            /* Unknown state */
+            break;
     }
 
     return (ret);
@@ -698,68 +658,68 @@ cy_en_syspm_status_t Cy_LPComp_DeepSleepCallback(cy_stc_syspm_callback_params_t 
 cy_en_syspm_status_t Cy_LPComp_HibernateCallback(cy_stc_syspm_callback_params_t *callbackParams, cy_en_syspm_callback_mode_t mode)
 {
     cy_en_syspm_status_t ret = CY_SYSPM_FAIL;
-    LPCOMP_Type *locBase = (LPCOMP_Type *)(callbackParams->base);
+    LPCOMP_Type *locBase = (LPCOMP_Type *) (callbackParams->base);
     static uint32_t enabled_status;
 
-    switch (mode)
+    switch(mode)
     {
-    case CY_SYSPM_CHECK_READY:
-    {
-        ret = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_CHECK_FAIL:
-    {
-        ret = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    case CY_SYSPM_BEFORE_TRANSITION:
-    {
-        /* Save the low-power comparator the enabled/disabled status. */
-        enabled_status = _FLD2VAL(LPCOMP_CONFIG_ENABLED, LPCOMP_CONFIG(locBase));
-
-        if (0u != enabled_status)
+        case CY_SYSPM_CHECK_READY:
         {
-            /* Disable the low-power comparator block when there is no wake-up source from any channel. */
-            if (!(((_FLD2VAL(LPCOMP_CMP0_CTRL_MODE0, LPCOMP_CMP0_CTRL(locBase)) == (uint32_t)CY_LPCOMP_MODE_ULP) &&
-#if defined (CY_IP_MXS22LPCOMP) || defined (CY_IP_MXS40LPCOMP)
-                    _FLD2BOOL(CY_LPCOMP_WAKEUP_PIN0, SRSS_PWR_HIB_WAKE_CTL)) ||
-#else
-                    _FLD2BOOL(CY_LPCOMP_WAKEUP_PIN0, SRSS_PWR_HIBERNATE)) ||
-#endif
-                    ((_FLD2VAL(LPCOMP_CMP1_CTRL_MODE1, LPCOMP_CMP1_CTRL(locBase)) == (uint32_t)CY_LPCOMP_MODE_ULP) &&
+            ret = CY_SYSPM_SUCCESS;
+        }
+        break;
 
-#if defined (CY_IP_MXS22LPCOMP) || defined (CY_IP_MXS40LPCOMP)
-                     _FLD2BOOL(CY_LPCOMP_WAKEUP_PIN1, SRSS_PWR_HIB_WAKE_CTL))))
-#else
-                     _FLD2BOOL(CY_LPCOMP_WAKEUP_PIN1, SRSS_PWR_HIBERNATE))))
-#endif
+        case CY_SYSPM_CHECK_FAIL:
+        {
+            ret = CY_SYSPM_SUCCESS;
+        }
+        break;
+
+        case CY_SYSPM_BEFORE_TRANSITION:
+        {
+            /* Save the low-power comparator the enabled/disabled status. */
+            enabled_status = _FLD2VAL(LPCOMP_CONFIG_ENABLED, LPCOMP_CONFIG(locBase));
+
+            if (0u != enabled_status)
             {
-                /* Disable the low-power comparator block to avoid leakage. */
-                Cy_LPComp_GlobalDisable(locBase);
+                /* Disable the low-power comparator block when there is no wake-up source from any channel. */
+                if(!(((_FLD2VAL(LPCOMP_CMP0_CTRL_MODE0, LPCOMP_CMP0_CTRL(locBase)) == (uint32_t)CY_LPCOMP_MODE_ULP) &&
+                #if defined (CY_IP_MXS22LPCOMP) || defined (CY_IP_MXS40LPCOMP)
+                       _FLD2BOOL(CY_LPCOMP_WAKEUP_PIN0, SRSS_PWR_HIB_WAKE_CTL)) ||
+                #else
+                       _FLD2BOOL(CY_LPCOMP_WAKEUP_PIN0, SRSS_PWR_HIBERNATE)) ||
+                #endif
+                     ((_FLD2VAL(LPCOMP_CMP1_CTRL_MODE1, LPCOMP_CMP1_CTRL(locBase)) == (uint32_t)CY_LPCOMP_MODE_ULP) &&
+
+                #if defined (CY_IP_MXS22LPCOMP) || defined (CY_IP_MXS40LPCOMP)
+                       _FLD2BOOL(CY_LPCOMP_WAKEUP_PIN1, SRSS_PWR_HIB_WAKE_CTL))))
+                #else
+                       _FLD2BOOL(CY_LPCOMP_WAKEUP_PIN1, SRSS_PWR_HIBERNATE))))
+                #endif
+                {
+                    /* Disable the low-power comparator block to avoid leakage. */
+                    Cy_LPComp_GlobalDisable(locBase);
+                }
+                else
+                {
+                    /* Set low-power comparator the status to the not changed state. */
+                    enabled_status = 0u;
+                }
             }
             else
             {
-                /* Set low-power comparator the status to the not changed state. */
-                enabled_status = 0u;
+                /* The low-power comparator block was already disabled and
+                *  the system is allowed to go to the low power mode.
+                */
             }
-        }
-        else
-        {
-            /* The low-power comparator block was already disabled and
-            *  the system is allowed to go to the low power mode.
-            */
-        }
 
-        ret = CY_SYSPM_SUCCESS;
-    }
-    break;
-
-    default:
-        /* Unknown state */
+            ret = CY_SYSPM_SUCCESS;
+        }
         break;
+
+        default:
+            /* Unknown state */
+            break;
     }
 
     return (ret);
@@ -836,14 +796,14 @@ void Cy_LPComp_SetTrim(LPCOMP_Type * base, cy_en_lpcomp_channel_t channel, const
     if (CY_LPCOMP_CHANNEL_0 == channel)
     {
         LPCOMP_CMP0_OFFSET_TRIM(base) = _BOOL2FLD(LPCOMP_CMP0_OFFSET_TRIM_CMP0_EN,        trim->enable) |
-                                        _VAL2FLD(LPCOMP_CMP0_OFFSET_TRIM_CMP0_POLARITY,  trim->polarity) |
-                                        _VAL2FLD(LPCOMP_CMP0_OFFSET_TRIM_CMP0_MAGNITUDE, trim->magnitude);
+                                         _VAL2FLD(LPCOMP_CMP0_OFFSET_TRIM_CMP0_POLARITY,  trim->polarity) |
+                                         _VAL2FLD(LPCOMP_CMP0_OFFSET_TRIM_CMP0_MAGNITUDE, trim->magnitude);
     }
     else
     {
         LPCOMP_CMP1_OFFSET_TRIM(base) = _BOOL2FLD(LPCOMP_CMP1_OFFSET_TRIM_CMP1_EN,        trim->enable) |
-                                        _VAL2FLD(LPCOMP_CMP1_OFFSET_TRIM_CMP1_POLARITY,  trim->polarity) |
-                                        _VAL2FLD(LPCOMP_CMP1_OFFSET_TRIM_CMP1_MAGNITUDE, trim->magnitude);
+                                         _VAL2FLD(LPCOMP_CMP1_OFFSET_TRIM_CMP1_POLARITY,  trim->polarity) |
+                                         _VAL2FLD(LPCOMP_CMP1_OFFSET_TRIM_CMP1_MAGNITUDE, trim->magnitude);
     }
 }
 

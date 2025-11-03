@@ -131,7 +131,7 @@ void arm_q7_to_q15_reordered_no_shift(const q7_t *pSrc, q15_t *pDst, uint32_t bl
     {
         /* C = (q15_t) A << 8 */
         /* convert from q7 to q15 and then store the results in the destination buffer */
-        *pDst++ = (q15_t) * pIn++;
+        *pDst++ = (q15_t)*pIn++;
 
         /* Decrement the loop counter */
         blkCnt--;

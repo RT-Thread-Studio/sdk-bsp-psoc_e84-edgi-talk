@@ -78,10 +78,9 @@ __STATIC_INLINE arm_status arm_mat_cmplx_mult_q31_2x2_mve(
     q63_t            acc0, acc1, acc2, acc3;
     q31x4_t          vecB, vecA;
 
-    static const uint32_t offsetB0[4] =
-    {
+    static const uint32_t offsetB0[4] = {
         0, 1,
-        MATRIX_DIM2 * CMPLX_DIM, MATRIX_DIM2 *CMPLX_DIM + 1
+        MATRIX_DIM2 * CMPLX_DIM, MATRIX_DIM2 * CMPLX_DIM + 1
     };
 
     vecColBOffs0 = vldrwq_u32(offsetB0);
@@ -146,14 +145,12 @@ __STATIC_INLINE arm_status arm_mat_cmplx_mult_q31_3x3_mve(
      */
     mve_pred16_t p0 = vctp32q(CMPLX_DIM);
 
-    static const uint32_t offsetB0[4] =
-    {
+    static const uint32_t offsetB0[4] = {
         0, 1,
-        MATRIX_DIM3 * CMPLX_DIM, MATRIX_DIM3 *CMPLX_DIM + 1
+        MATRIX_DIM3 * CMPLX_DIM, MATRIX_DIM3 * CMPLX_DIM + 1
     };
-    static const uint32_t offsetB1[4] =
-    {
-        2 * MATRIX_DIM3 * CMPLX_DIM, 2 * MATRIX_DIM3 *CMPLX_DIM + 1,
+    static const uint32_t offsetB1[4] = {
+        2 * MATRIX_DIM3 * CMPLX_DIM, 2 * MATRIX_DIM3 * CMPLX_DIM + 1,
         INACTIVELANE, INACTIVELANE
     };
 
@@ -300,15 +297,13 @@ __STATIC_INLINE arm_status arm_mat_cmplx_mult_q31_4x4_mve(
     q63_t            acc0, acc1, acc2, acc3;
     q31x4_t        vecB, vecB1, vecA;
 
-    static const uint32_t offsetB0[4] =
-    {
+    static const uint32_t offsetB0[4] = {
         0, 1,
-        MATRIX_DIM4 * CMPLX_DIM, MATRIX_DIM4 *CMPLX_DIM + 1
+        MATRIX_DIM4 * CMPLX_DIM, MATRIX_DIM4 * CMPLX_DIM + 1
     };
-    static const uint32_t offsetB1[4] =
-    {
-        2 * MATRIX_DIM4 * CMPLX_DIM, 2 * MATRIX_DIM4 *CMPLX_DIM + 1,
-        3 * MATRIX_DIM4 * CMPLX_DIM, 3 * MATRIX_DIM4 *CMPLX_DIM + 1
+    static const uint32_t offsetB1[4] = {
+        2 * MATRIX_DIM4 * CMPLX_DIM, 2 * MATRIX_DIM4 * CMPLX_DIM + 1,
+        3 * MATRIX_DIM4 * CMPLX_DIM, 3 * MATRIX_DIM4 * CMPLX_DIM + 1
     };
 
     vecColBOffs0 = vldrwq_u32(offsetB0);
@@ -519,10 +514,10 @@ __STATIC_INLINE arm_status arm_mat_cmplx_mult_q31_4x4_mve(
 }
 
 
-arm_status arm_mat_cmplx_mult_q31(
-    const arm_matrix_instance_q31 * pSrcA,
-    const arm_matrix_instance_q31 * pSrcB,
-    arm_matrix_instance_q31 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_cmplx_mult_q31(
+  const arm_matrix_instance_q31 * pSrcA,
+  const arm_matrix_instance_q31 * pSrcB,
+        arm_matrix_instance_q31 * pDst)
 {
     q31_t const *pInB = (q31_t const *) pSrcB->pData;   /* input data matrix pointer B */
     q31_t const *pInA = (q31_t const *) pSrcA->pData;   /* input data matrix pointer A */
@@ -536,530 +531,528 @@ arm_status arm_mat_cmplx_mult_q31(
     uint32x4_t vecOffs, vecColBOffs;
     uint32_t  blkCnt, rowCnt;           /* loop counters */
 
-#ifdef ARM_MATH_MATRIX_CHECK
+  #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrcA->numCols != pSrcB->numRows) ||
-            (pSrcA->numRows != pDst->numRows) || (pSrcB->numCols != pDst->numCols))
-    {
+  /* Check for matrix mismatch condition */
+  if ((pSrcA->numCols != pSrcB->numRows) ||
+     (pSrcA->numRows != pDst->numRows) || (pSrcB->numCols != pDst->numCols))
+  {
 
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 #endif /*      #ifdef ARM_MATH_MATRIX_CHECK    */
 
+  {
+    /*
+     * small squared matrix specialized routines
+     */
+    if (numRowsA == numColsB && numColsB == numColsA)
     {
-        /*
-         * small squared matrix specialized routines
-         */
-        if (numRowsA == numColsB && numColsB == numColsA)
+        if (numRowsA == 1)
         {
-            if (numRowsA == 1)
-            {
-                q63_t sumReal = (q63_t) pInA[0] * pInB[0];
-                sumReal -= (q63_t) pInA[1] * pInB[1];
+          q63_t sumReal = (q63_t) pInA[0] * pInB[0];
+          sumReal -= (q63_t) pInA[1] * pInB[1];
 
-                q63_t sumImag = (q63_t) pInA[0] * pInB[1];
-                sumImag += (q63_t) pInA[1] * pInB[0];
-
-                /* Store result in destination buffer */
-                pOut[0] = (q31_t) clip_q63_to_q31(sumReal >> 31);
-                pOut[1] = (q31_t) clip_q63_to_q31(sumImag >> 31);
-                return (ARM_MATH_SUCCESS);
-            }
-            else if (numRowsA == 2)
-                return arm_mat_cmplx_mult_q31_2x2_mve(pSrcA, pSrcB, pDst);
-            else if (numRowsA == 3)
-                return arm_mat_cmplx_mult_q31_3x3_mve(pSrcA, pSrcB, pDst);
-            else if (numRowsA == 4)
-                return arm_mat_cmplx_mult_q31_4x4_mve(pSrcA, pSrcB, pDst);
+          q63_t sumImag = (q63_t) pInA[0] * pInB[1];
+          sumImag += (q63_t) pInA[1] * pInB[0];
+       
+          /* Store result in destination buffer */
+          pOut[0] = (q31_t) clip_q63_to_q31(sumReal >> 31);
+          pOut[1] = (q31_t) clip_q63_to_q31(sumImag >> 31);
+          return (ARM_MATH_SUCCESS);
         }
-
-        vecColBOffs[0] = 0;
-        vecColBOffs[1] = 1;
-        vecColBOffs[2] = numColsB * CMPLX_DIM;
-        vecColBOffs[3] = (numColsB * CMPLX_DIM) + 1;
-
-        /*
-         * The following loop performs the dot-product of each row in pSrcA with each column in pSrcB
-         */
-
-        /*
-         * row loop
-         */
-        rowCnt = row >> 1;
-        while (rowCnt > 0u)
-        {
-            /*
-             * Output pointer is set to starting address of the row being processed
-             */
-            px = pOut + i * CMPLX_DIM;
-            i = i + 2 * numColsB;
-            /*
-             * For every row wise process, the column loop counter is to be initiated
-             */
-            col = numColsB;
-            /*
-             * For every row wise process, the pInB pointer is set
-             * to the starting address of the pSrcB data
-             */
-            pInB = (q31_t const *) pSrcB->pData;
-            /*
-             * column loop
-             */
-            while (col > 0u)
-            {
-                /*
-                 * generate 4 columns elements
-                 */
-                /*
-                 * Matrix A columns number of MAC operations are to be performed
-                 */
-
-                q31_t const *pSrcA0Vec, *pSrcA1Vec;
-                q31_t const *pInA0 = pInA;
-                q31_t const *pInA1 = pInA0 + numColsA * CMPLX_DIM;
-                q63_t   acc0, acc1, acc2, acc3;
-
-                acc0 = 0LL;
-                acc1 = 0LL;
-                acc2 = 0LL;
-                acc3 = 0LL;
-
-                pSrcA0Vec = (q31_t const *) pInA0;
-                pSrcA1Vec = (q31_t const *) pInA1;
-
-
-                vecOffs = vecColBOffs;
-
-                /*
-                 * process 1 x 2 block output
-                 */
-                blkCnt = (numColsA * CMPLX_DIM) >> 2;
-                while (blkCnt > 0U)
-                {
-                    q31x4_t vecB, vecA;
-
-                    vecB = vldrwq_gather_shifted_offset(pInB, vecOffs);
-                    /*
-                     * move Matrix B read offsets, 2 rows down
-                     */
-                    vecOffs = vecOffs + (uint32_t)(numColsB * 2 * CMPLX_DIM);
-
-
-                    vecA = vld1q(pSrcA0Vec);
-                    pSrcA0Vec += 4;
-                    acc0 =  vmlsldavaq(acc0, vecA, vecB);
-                    acc1 =  vmlaldavaxq(acc1, vecA, vecB);
-
-
-                    vecA = vld1q(pSrcA1Vec);
-                    pSrcA1Vec += 4;
-
-                    acc2 =  vmlsldavaq(acc2, vecA, vecB);
-                    acc3 =  vmlaldavaxq(acc3, vecA, vecB);
-
-
-                    blkCnt--;
-                }
-
-
-                /*
-                 * tail
-                 */
-                blkCnt = (numColsA * CMPLX_DIM) & 3;
-                if (blkCnt > 0U)
-                {
-                    mve_pred16_t p0 = vctp32q(blkCnt);
-                    q31x4_t vecB, vecA;
-
-                    vecB = vldrwq_gather_shifted_offset_z(pInB, vecOffs, p0);
-
-                    /*
-                     * move Matrix B read offsets, 2 rows down
-                     */
-                    vecOffs = vecOffs + (uint32_t)(numColsB * 2 * CMPLX_DIM);
-
-
-                    vecA = vld1q(pSrcA0Vec);
-                    acc0 =  vmlsldavaq(acc0, vecA, vecB);
-                    acc1 =  vmlaldavaxq(acc1, vecA, vecB);
-                    vecA = vld1q(pSrcA1Vec);
-                    acc2 =  vmlsldavaq(acc2, vecA, vecB);
-                    acc3 =  vmlaldavaxq(acc3, vecA, vecB);
-
-
-                }
-
-                px[0 * CMPLX_DIM * numColsB + 0] = (q31_t) clip_q63_to_q31(acc0 >> 31);
-                px[0 * CMPLX_DIM * numColsB + 1] = (q31_t) clip_q63_to_q31(acc1 >> 31);
-                px[1 * CMPLX_DIM * numColsB + 0] = (q31_t) clip_q63_to_q31(acc2 >> 31);
-                px[1 * CMPLX_DIM * numColsB + 1] = (q31_t) clip_q63_to_q31(acc3 >> 31);
-                px += CMPLX_DIM;
-                /*
-                 * Decrement the column loop counter
-                 */
-                col--;
-                /*
-                 * Update the pointer pInB to point to the  starting address of the next column
-                 */
-                pInB = (q31_t const *) pSrcB->pData + (numColsB - col) * CMPLX_DIM;
-            }
-
-            /*
-             * Update the pointer pInA to point to the  starting address of the next row
-             */
-            pInA += (numColsA * 2) * CMPLX_DIM;
-            /*
-             * Decrement the row loop counter
-             */
-            rowCnt --;
-
-        }
-
-        rowCnt = row & 1;
-        while (rowCnt > 0u)
-        {
-            /*
-             * Output pointer is set to starting address of the row being processed
-             */
-            px = pOut + i * CMPLX_DIM;
-            i = i + numColsB;
-            /*
-             * For every row wise process, the column loop counter is to be initiated
-             */
-            col = numColsB;
-            /*
-             * For every row wise process, the pInB pointer is set
-             * to the starting address of the pSrcB data
-             */
-            pInB = (q31_t const *) pSrcB->pData;
-            /*
-             * column loop
-             */
-            while (col > 0u)
-            {
-                /*
-                 * generate 4 columns elements
-                 */
-                /*
-                 * Matrix A columns number of MAC operations are to be performed
-                 */
-
-                q31_t const *pSrcA0Vec;
-                q31_t const *pInA0 = pInA;
-                q63_t acc0, acc1;
-
-                acc0 = 0LL;
-                acc1 = 0LL;
-
-                pSrcA0Vec = (q31_t const *) pInA0;
-
-                vecOffs = vecColBOffs;
-
-                /*
-                 * process 1 x 2 block output
-                 */
-                blkCnt = (numColsA * CMPLX_DIM) >> 2;
-                while (blkCnt > 0U)
-                {
-                    q31x4_t vecB, vecA;
-
-                    vecB = vldrwq_gather_shifted_offset(pInB, vecOffs);
-                    /*
-                     * move Matrix B read offsets, 2 rows down
-                     */
-                    vecOffs = vecOffs + (uint32_t)(numColsB * 2 * CMPLX_DIM);
-
-                    vecA = vld1q(pSrcA0Vec);
-                    pSrcA0Vec += 4;
-                    acc0 =  vmlsldavaq(acc0, vecA, vecB);
-                    acc1 =  vmlaldavaxq(acc1, vecA, vecB);
-
-
-                    blkCnt--;
-                }
-
-
-                /*
-                 * tail
-                 */
-                blkCnt = (numColsA * CMPLX_DIM) & 3;
-                if (blkCnt > 0U)
-                {
-                    mve_pred16_t p0 = vctp32q(blkCnt);
-                    q31x4_t vecB, vecA;
-
-                    vecB = vldrwq_gather_shifted_offset_z(pInB, vecOffs, p0);
-
-                    /*
-                     * move Matrix B read offsets, 2 rows down
-                     */
-                    vecOffs = vecOffs + (uint32_t)(numColsB * 2 * CMPLX_DIM);
-
-                    vecA = vld1q(pSrcA0Vec);
-
-
-                    acc0 =  vmlsldavaq(acc0, vecA, vecB);
-                    acc1 =  vmlaldavaxq(acc1, vecA, vecB);
-
-
-                }
-
-                px[0] = (q31_t) clip_q63_to_q31(acc0 >> 31);
-                px[1] = (q31_t) clip_q63_to_q31(acc1 >> 31);
-
-
-                px += CMPLX_DIM;
-                /*
-                 * Decrement the column loop counter
-                 */
-                col--;
-                /*
-                 * Update the pointer pInB to point to the  starting address of the next column
-                 */
-                pInB = (q31_t const *) pSrcB->pData + (numColsB - col) * CMPLX_DIM;
-            }
-
-            /*
-             * Update the pointer pInA to point to the  starting address of the next row
-             */
-            pInA += numColsA  * CMPLX_DIM;
-            rowCnt--;
-        }
-
-
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+        else if (numRowsA == 2)
+            return arm_mat_cmplx_mult_q31_2x2_mve(pSrcA, pSrcB, pDst);
+        else if (numRowsA == 3)
+            return arm_mat_cmplx_mult_q31_3x3_mve(pSrcA, pSrcB, pDst);
+        else if (numRowsA == 4)
+            return arm_mat_cmplx_mult_q31_4x4_mve(pSrcA, pSrcB, pDst);
     }
 
-    /* Return to application */
-    return (status);
+    vecColBOffs[0] = 0;
+    vecColBOffs[1] = 1;
+    vecColBOffs[2] = numColsB * CMPLX_DIM;
+    vecColBOffs[3] = (numColsB * CMPLX_DIM) + 1;
+
+    /*
+     * The following loop performs the dot-product of each row in pSrcA with each column in pSrcB
+     */
+
+    /*
+     * row loop
+     */
+    rowCnt = row >> 1;
+    while (rowCnt > 0u)
+    {
+        /*
+         * Output pointer is set to starting address of the row being processed
+         */
+        px = pOut + i * CMPLX_DIM;
+        i = i + 2 * numColsB;
+        /*
+         * For every row wise process, the column loop counter is to be initiated
+         */
+        col = numColsB;
+        /*
+         * For every row wise process, the pInB pointer is set
+         * to the starting address of the pSrcB data
+         */
+        pInB = (q31_t const *) pSrcB->pData;
+        /*
+         * column loop
+         */
+        while (col > 0u)
+        {
+            /*
+             * generate 4 columns elements
+             */
+            /*
+             * Matrix A columns number of MAC operations are to be performed
+             */
+
+            q31_t const *pSrcA0Vec, *pSrcA1Vec;
+            q31_t const *pInA0 = pInA;
+            q31_t const *pInA1 = pInA0 + numColsA * CMPLX_DIM;
+            q63_t   acc0, acc1, acc2, acc3;
+
+            acc0 = 0LL;
+            acc1 = 0LL;
+            acc2 = 0LL;
+            acc3 = 0LL;
+
+            pSrcA0Vec = (q31_t const *) pInA0;
+            pSrcA1Vec = (q31_t const *) pInA1;
+            
+
+            vecOffs = vecColBOffs;
+
+            /*
+             * process 1 x 2 block output
+             */
+            blkCnt = (numColsA * CMPLX_DIM) >> 2;
+            while (blkCnt > 0U)
+            {
+                q31x4_t vecB, vecA;
+
+                vecB = vldrwq_gather_shifted_offset(pInB, vecOffs);
+                /*
+                 * move Matrix B read offsets, 2 rows down
+                 */
+                vecOffs = vecOffs + (uint32_t) (numColsB * 2 * CMPLX_DIM);
+
+
+                vecA = vld1q(pSrcA0Vec);  
+                pSrcA0Vec += 4;
+                acc0 =  vmlsldavaq(acc0, vecA, vecB);
+                acc1 =  vmlaldavaxq(acc1, vecA, vecB);
+
+                
+                vecA = vld1q(pSrcA1Vec); 
+                pSrcA1Vec += 4;
+               
+                acc2 =  vmlsldavaq(acc2, vecA, vecB);
+                acc3 =  vmlaldavaxq(acc3, vecA, vecB);
+
+
+                blkCnt--;
+            }
+            
+
+            /*
+             * tail
+             */
+            blkCnt = (numColsA * CMPLX_DIM) & 3;
+            if (blkCnt > 0U)
+            {
+                mve_pred16_t p0 = vctp32q(blkCnt);
+                q31x4_t vecB, vecA;
+
+                vecB = vldrwq_gather_shifted_offset_z(pInB, vecOffs, p0);
+
+                /*
+                 * move Matrix B read offsets, 2 rows down
+                 */
+                vecOffs = vecOffs + (uint32_t) (numColsB * 2 * CMPLX_DIM);
+               
+                
+                vecA = vld1q(pSrcA0Vec);
+                acc0 =  vmlsldavaq(acc0, vecA, vecB);
+                acc1 =  vmlaldavaxq(acc1, vecA, vecB);
+                vecA = vld1q(pSrcA1Vec);
+                acc2 =  vmlsldavaq(acc2, vecA, vecB);
+                acc3 =  vmlaldavaxq(acc3, vecA, vecB);
+                
+
+            }
+
+            px[0 * CMPLX_DIM * numColsB + 0] = (q31_t) clip_q63_to_q31(acc0 >> 31);
+            px[0 * CMPLX_DIM * numColsB + 1] = (q31_t) clip_q63_to_q31(acc1 >> 31);
+            px[1 * CMPLX_DIM * numColsB + 0] = (q31_t) clip_q63_to_q31(acc2 >> 31);
+            px[1 * CMPLX_DIM * numColsB + 1] = (q31_t) clip_q63_to_q31(acc3 >> 31);
+            px += CMPLX_DIM;
+            /*
+             * Decrement the column loop counter
+             */
+            col--;
+            /*
+             * Update the pointer pInB to point to the  starting address of the next column
+             */
+            pInB = (q31_t const *) pSrcB->pData + (numColsB - col) * CMPLX_DIM;
+        }
+
+        /*
+         * Update the pointer pInA to point to the  starting address of the next row
+         */
+        pInA += (numColsA * 2) * CMPLX_DIM;
+        /*
+         * Decrement the row loop counter
+         */
+        rowCnt --;
+
+    }
+
+    rowCnt = row & 1;
+    while (rowCnt > 0u)
+    {
+        /*
+         * Output pointer is set to starting address of the row being processed
+         */
+        px = pOut + i * CMPLX_DIM;
+        i = i + numColsB;
+        /*
+         * For every row wise process, the column loop counter is to be initiated
+         */
+        col = numColsB;
+        /*
+         * For every row wise process, the pInB pointer is set
+         * to the starting address of the pSrcB data
+         */
+        pInB = (q31_t const *) pSrcB->pData;
+        /*
+         * column loop
+         */
+        while (col > 0u)
+        {
+            /*
+             * generate 4 columns elements
+             */
+            /*
+             * Matrix A columns number of MAC operations are to be performed
+             */
+
+            q31_t const *pSrcA0Vec;
+            q31_t const *pInA0 = pInA;
+            q63_t acc0,acc1;
+
+            acc0 = 0LL;
+            acc1 = 0LL;
+
+            pSrcA0Vec = (q31_t const *) pInA0;
+           
+            vecOffs = vecColBOffs;
+
+            /*
+             * process 1 x 2 block output
+             */
+            blkCnt = (numColsA * CMPLX_DIM) >> 2;
+            while (blkCnt > 0U)
+            {
+                q31x4_t vecB, vecA;
+
+                vecB = vldrwq_gather_shifted_offset(pInB, vecOffs);
+                /*
+                 * move Matrix B read offsets, 2 rows down
+                 */
+                vecOffs = vecOffs + (uint32_t) (numColsB * 2 * CMPLX_DIM);
+               
+                vecA = vld1q(pSrcA0Vec);  
+                pSrcA0Vec += 4;
+                acc0 =  vmlsldavaq(acc0, vecA, vecB);
+                acc1 =  vmlaldavaxq(acc1, vecA, vecB);
+                
+
+                blkCnt--;
+            }
+
+
+            /*
+             * tail
+             */
+            blkCnt = (numColsA * CMPLX_DIM) & 3;
+            if (blkCnt > 0U)
+            {
+                mve_pred16_t p0 = vctp32q(blkCnt);
+                q31x4_t vecB, vecA;
+
+                vecB = vldrwq_gather_shifted_offset_z(pInB, vecOffs, p0);
+
+                /*
+                 * move Matrix B read offsets, 2 rows down
+                 */
+                vecOffs = vecOffs + (uint32_t) (numColsB * 2 * CMPLX_DIM);
+               
+                vecA = vld1q(pSrcA0Vec);
+               
+
+                acc0 =  vmlsldavaq(acc0, vecA, vecB);
+                acc1 =  vmlaldavaxq(acc1, vecA, vecB);
+
+
+            }
+
+            px[0] = (q31_t) clip_q63_to_q31(acc0 >> 31);
+            px[1] = (q31_t) clip_q63_to_q31(acc1 >> 31);
+
+           
+            px += CMPLX_DIM;
+            /*
+             * Decrement the column loop counter
+             */
+            col--;
+            /*
+             * Update the pointer pInB to point to the  starting address of the next column
+             */
+            pInB = (q31_t const *) pSrcB->pData + (numColsB - col) * CMPLX_DIM;
+        }
+
+        /*
+         * Update the pointer pInA to point to the  starting address of the next row
+         */
+        pInA += numColsA  * CMPLX_DIM;
+        rowCnt--;
+    }
+
+    
+      /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 
 #else
-arm_status arm_mat_cmplx_mult_q31(
-    const arm_matrix_instance_q31 * pSrcA,
-    const arm_matrix_instance_q31 * pSrcB,
-    arm_matrix_instance_q31 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_cmplx_mult_q31(
+  const arm_matrix_instance_q31 * pSrcA,
+  const arm_matrix_instance_q31 * pSrcB,
+        arm_matrix_instance_q31 * pDst)
 {
-    q31_t *pIn1 = pSrcA->pData;                    /* Input data matrix pointer A */
-    q31_t *pIn2 = pSrcB->pData;                    /* Input data matrix pointer B */
-    q31_t *pInA = pSrcA->pData;                    /* Input data matrix pointer A */
-    q31_t *pOut = pDst->pData;                     /* Output data matrix pointer */
-    q31_t *px;                                     /* Temporary output data matrix pointer */
-    uint16_t numRowsA = pSrcA->numRows;            /* Number of rows of input matrix A */
-    uint16_t numColsB = pSrcB->numCols;            /* Number of columns of input matrix B */
-    uint16_t numColsA = pSrcA->numCols;            /* Number of columns of input matrix A */
-    q63_t sumReal, sumImag;                        /* Accumulator */
-    q31_t a1, b1, c1, d1;
-    uint32_t col, i = 0U, j, row = numRowsA, colCnt; /* loop counters */
-    arm_status status;                             /* status of matrix multiplication */
+  q31_t *pIn1 = pSrcA->pData;                    /* Input data matrix pointer A */
+  q31_t *pIn2 = pSrcB->pData;                    /* Input data matrix pointer B */
+  q31_t *pInA = pSrcA->pData;                    /* Input data matrix pointer A */
+  q31_t *pOut = pDst->pData;                     /* Output data matrix pointer */
+  q31_t *px;                                     /* Temporary output data matrix pointer */
+  uint16_t numRowsA = pSrcA->numRows;            /* Number of rows of input matrix A */
+  uint16_t numColsB = pSrcB->numCols;            /* Number of columns of input matrix B */
+  uint16_t numColsA = pSrcA->numCols;            /* Number of columns of input matrix A */
+  q63_t sumReal, sumImag;                        /* Accumulator */
+  q31_t a1, b1, c1, d1;
+  uint32_t col, i = 0U, j, row = numRowsA, colCnt; /* loop counters */
+  arm_status status;                             /* status of matrix multiplication */
 
 #if defined (ARM_MATH_LOOPUNROLL)
-    q31_t a0, b0, c0, d0;
+  q31_t a0, b0, c0, d0;
 #endif
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrcA->numCols != pSrcB->numRows) ||
-            (pSrcA->numRows != pDst->numRows)  ||
-            (pSrcB->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrcA->numCols != pSrcB->numRows) ||
+      (pSrcA->numRows != pDst->numRows)  ||
+      (pSrcB->numCols != pDst->numCols)    )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
 
+  {
+    /* The following loop performs the dot-product of each row in pSrcA with each column in pSrcB */
+    /* row loop */
+    do
     {
-        /* The following loop performs the dot-product of each row in pSrcA with each column in pSrcB */
-        /* row loop */
-        do
-        {
-            /* Output pointer is set to starting address of the row being processed */
-            px = pOut + 2 * i;
+      /* Output pointer is set to starting address of the row being processed */
+      px = pOut + 2 * i;
 
-            /* For every row wise process, the column loop counter is to be initiated */
-            col = numColsB;
+      /* For every row wise process, the column loop counter is to be initiated */
+      col = numColsB;
 
-            /* For every row wise process, the pIn2 pointer is set
-             ** to the starting address of the pSrcB data */
-            pIn2 = pSrcB->pData;
+      /* For every row wise process, the pIn2 pointer is set
+       ** to the starting address of the pSrcB data */
+      pIn2 = pSrcB->pData;
 
-            j = 0U;
+      j = 0U;
 
-            /* column loop */
-            do
-            {
-                /* Set the variable sum, that acts as accumulator, to zero */
-                sumReal = 0.0;
-                sumImag = 0.0;
+      /* column loop */
+      do
+      {
+        /* Set the variable sum, that acts as accumulator, to zero */
+        sumReal = 0.0;
+        sumImag = 0.0;
 
-                /* Initiate pointer pIn1 to point to starting address of column being processed */
-                pIn1 = pInA;
+        /* Initiate pointer pIn1 to point to starting address of column being processed */
+        pIn1 = pInA;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-                /* Apply loop unrolling and compute 4 MACs simultaneously. */
-                colCnt = numColsA >> 2U;
+        /* Apply loop unrolling and compute 4 MACs simultaneously. */
+        colCnt = numColsA >> 2U;
 
-                /* matrix multiplication */
-                while (colCnt > 0U)
-                {
+        /* matrix multiplication */
+        while (colCnt > 0U)
+        {
 
-                    /* Reading real part of complex matrix A */
-                    a0 = *pIn1;
+          /* Reading real part of complex matrix A */
+          a0 = *pIn1;
 
-                    /* Reading real part of complex matrix B */
-                    c0 = *pIn2;
+          /* Reading real part of complex matrix B */
+          c0 = *pIn2;
 
-                    /* Reading imaginary part of complex matrix A */
-                    b0 = *(pIn1 + 1U);
+          /* Reading imaginary part of complex matrix A */
+          b0 = *(pIn1 + 1U);
 
-                    /* Reading imaginary part of complex matrix B */
-                    d0 = *(pIn2 + 1U);
+          /* Reading imaginary part of complex matrix B */
+          d0 = *(pIn2 + 1U);
 
-                    /* Multiply and Accumlates */
-                    sumReal += (q63_t) a0 * c0;
-                    sumImag += (q63_t) b0 * c0;
+          /* Multiply and Accumlates */
+          sumReal += (q63_t) a0 * c0;
+          sumImag += (q63_t) b0 * c0;
 
-                    /* update pointers */
-                    pIn1 += 2U;
-                    pIn2 += 2 * numColsB;
+          /* update pointers */
+          pIn1 += 2U;
+          pIn2 += 2 * numColsB;
 
-                    /* Multiply and Accumlates */
-                    sumReal -= (q63_t) b0 * d0;
-                    sumImag += (q63_t) a0 * d0;
+          /* Multiply and Accumlates */
+          sumReal -= (q63_t) b0 * d0;
+          sumImag += (q63_t) a0 * d0;
 
-                    /* c(m,n) = a(1,1) * b(1,1) + a(1,2) * b(2,1) + .... + a(m,p) * b(p,n) */
+          /* c(m,n) = a(1,1) * b(1,1) + a(1,2) * b(2,1) + .... + a(m,p) * b(p,n) */
 
-                    /* read real and imag values from pSrcA and pSrcB buffer */
-                    a1 = *(pIn1);
-                    c1 = *(pIn2);
-                    b1 = *(pIn1 + 1U);
-                    d1 = *(pIn2 + 1U);
+          /* read real and imag values from pSrcA and pSrcB buffer */
+          a1 = *(pIn1     );
+          c1 = *(pIn2     );
+          b1 = *(pIn1 + 1U);
+          d1 = *(pIn2 + 1U);
 
-                    /* Multiply and Accumlates */
-                    sumReal += (q63_t) a1 * c1;
-                    sumImag += (q63_t) b1 * c1;
+          /* Multiply and Accumlates */
+          sumReal += (q63_t) a1 * c1;
+          sumImag += (q63_t) b1 * c1;
 
-                    /* update pointers */
-                    pIn1 += 2U;
-                    pIn2 += 2 * numColsB;
+          /* update pointers */
+          pIn1 += 2U;
+          pIn2 += 2 * numColsB;
 
-                    /* Multiply and Accumlates */
-                    sumReal -= (q63_t) b1 * d1;
-                    sumImag += (q63_t) a1 * d1;
+          /* Multiply and Accumlates */
+          sumReal -= (q63_t) b1 * d1;
+          sumImag += (q63_t) a1 * d1;
 
-                    a0 = *(pIn1);
-                    c0 = *(pIn2);
-                    b0 = *(pIn1 + 1U);
-                    d0 = *(pIn2 + 1U);
+          a0 = *(pIn1     );
+          c0 = *(pIn2     );
+          b0 = *(pIn1 + 1U);
+          d0 = *(pIn2 + 1U);
 
-                    /* Multiply and Accumlates */
-                    sumReal += (q63_t) a0 * c0;
-                    sumImag += (q63_t) b0 * c0;
+          /* Multiply and Accumlates */
+          sumReal += (q63_t) a0 * c0;
+          sumImag += (q63_t) b0 * c0;
 
-                    /* update pointers */
-                    pIn1 += 2U;
-                    pIn2 += 2 * numColsB;
+          /* update pointers */
+          pIn1 += 2U;
+          pIn2 += 2 * numColsB;
 
-                    /* Multiply and Accumlates */
-                    sumReal -= (q63_t) b0 * d0;
-                    sumImag += (q63_t) a0 * d0;
+          /* Multiply and Accumlates */
+          sumReal -= (q63_t) b0 * d0;
+          sumImag += (q63_t) a0 * d0;
 
-                    /* c(m,n) = a(1,1) * b(1,1) + a(1,2) * b(2,1) + .... + a(m,p) * b(p,n) */
+          /* c(m,n) = a(1,1) * b(1,1) + a(1,2) * b(2,1) + .... + a(m,p) * b(p,n) */
 
-                    a1 = *(pIn1);
-                    c1 = *(pIn2);
-                    b1 = *(pIn1 + 1U);
-                    d1 = *(pIn2 + 1U);
+          a1 = *(pIn1     );
+          c1 = *(pIn2     );
+          b1 = *(pIn1 + 1U);
+          d1 = *(pIn2 + 1U);
 
-                    /* Multiply and Accumlates */
-                    sumReal += (q63_t) a1 * c1;
-                    sumImag += (q63_t) b1 * c1;
+          /* Multiply and Accumlates */
+          sumReal += (q63_t) a1 * c1;
+          sumImag += (q63_t) b1 * c1;
 
-                    /* update pointers */
-                    pIn1 += 2U;
-                    pIn2 += 2 * numColsB;
+          /* update pointers */
+          pIn1 += 2U;
+          pIn2 += 2 * numColsB;
 
-                    /* Multiply and Accumlates */
-                    sumReal -= (q63_t) b1 * d1;
-                    sumImag += (q63_t) a1 * d1;
+          /* Multiply and Accumlates */
+          sumReal -= (q63_t) b1 * d1;
+          sumImag += (q63_t) a1 * d1;
 
-                    /* Decrement loop count */
-                    colCnt--;
-                }
+          /* Decrement loop count */
+          colCnt--;
+        }
 
-                /* If the columns of pSrcA is not a multiple of 4, compute any remaining MACs here.
-                 ** No loop unrolling is used. */
-                colCnt = numColsA % 0x4U;
+        /* If the columns of pSrcA is not a multiple of 4, compute any remaining MACs here.
+         ** No loop unrolling is used. */
+        colCnt = numColsA % 0x4U;
 
 #else
 
-                /* Initialize blkCnt with number of samples */
-                colCnt = numColsA;
+        /* Initialize blkCnt with number of samples */
+        colCnt = numColsA;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-                while (colCnt > 0U)
-                {
-                    /* c(m,n) = a(1,1) * b(1,1) + a(1,2) * b(2,1) + .... + a(m,p) * b(p,n) */
-                    a1 = *(pIn1);
-                    c1 = *(pIn2);
-                    b1 = *(pIn1 + 1U);
-                    d1 = *(pIn2 + 1U);
+        while (colCnt > 0U)
+        {
+          /* c(m,n) = a(1,1) * b(1,1) + a(1,2) * b(2,1) + .... + a(m,p) * b(p,n) */
+          a1 = *(pIn1     );
+          c1 = *(pIn2     );
+          b1 = *(pIn1 + 1U);
+          d1 = *(pIn2 + 1U);
 
-                    /* Multiply and Accumlates */
-                    sumReal += (q63_t) a1 * c1;
-                    sumImag += (q63_t) b1 * c1;
+          /* Multiply and Accumlates */
+          sumReal += (q63_t) a1 * c1;
+          sumImag += (q63_t) b1 * c1;
 
-                    /* update pointers */
-                    pIn1 += 2U;
-                    pIn2 += 2 * numColsB;
+          /* update pointers */
+          pIn1 += 2U;
+          pIn2 += 2 * numColsB;
 
-                    /* Multiply and Accumlates */
-                    sumReal -= (q63_t) b1 * d1;
-                    sumImag += (q63_t) a1 * d1;
+          /* Multiply and Accumlates */
+          sumReal -= (q63_t) b1 * d1;
+          sumImag += (q63_t) a1 * d1;
 
-                    /* Decrement loop counter */
-                    colCnt--;
-                }
-
-                /* Store result in destination buffer */
-                *px++ = (q31_t) clip_q63_to_q31(sumReal >> 31);
-                *px++ = (q31_t) clip_q63_to_q31(sumImag >> 31);
-
-                /* Update pointer pIn2 to point to starting address of next column */
-                j++;
-                pIn2 = pSrcB->pData + 2U * j;
-
-                /* Decrement column loop counter */
-                col--;
-
-            }
-            while (col > 0U);
-
-            /* Update pointer pInA to point to starting address of next row */
-            i = i + numColsB;
-            pInA = pInA + 2 * numColsA;
-
-            /* Decrement row loop counter */
-            row--;
-
+          /* Decrement loop counter */
+          colCnt--;
         }
-        while (row > 0U);
 
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
-    }
+        /* Store result in destination buffer */
+        *px++ = (q31_t) clip_q63_to_q31(sumReal >> 31);
+        *px++ = (q31_t) clip_q63_to_q31(sumImag >> 31);
 
-    /* Return to application */
-    return (status);
+        /* Update pointer pIn2 to point to starting address of next column */
+        j++;
+        pIn2 = pSrcB->pData + 2U * j;
+
+        /* Decrement column loop counter */
+        col--;
+
+      } while (col > 0U);
+
+      /* Update pointer pInA to point to starting address of next row */
+      i = i + numColsB;
+      pInA = pInA + 2 * numColsA;
+
+      /* Decrement row loop counter */
+      row--;
+
+    } while (row > 0U);
+
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

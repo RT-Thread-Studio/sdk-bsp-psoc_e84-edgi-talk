@@ -1,13 +1,13 @@
 /***************************************************************************//**
 * \file ifx_se_platform.c
-* \version 1.1.0
+* \version 1.2.0
 *
 * \brief
 * This is the source code file for utility syscall functions.
 *
 ********************************************************************************
 * \copyright
-* Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+* Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
 * All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
@@ -21,13 +21,13 @@
 #include "cy_utils.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 5.1', 1, \
-                             'IFX SE Utilities library uses objects naming scheme with more then 32 symbols.')
+    'IFX SE Utilities library uses objects naming scheme with more then 32 symbols.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 13, \
-                             'Intentional typecast of "ipc_packet[]" to "ifx_se_fih_uint *" type.')
+    'Intentional typecast of "ipc_packet[]" to "ifx_se_fih_uint *" type.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.4', 13, \
-                             'Intentional typecast of "ipc_packet" to an integer type.')
+    'Intentional typecast of "ipc_packet" to an integer type.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Directive 4.9', 4, \
-                             'Use function-like macro as simple inline functions.')
+    'Use function-like macro as simple inline functions.')
 
 ifx_se_status_t ifx_se_get_rollback_counter(ifx_se_fih_t number, ifx_se_fih_ptr_t value, void *ctx)
 {
@@ -197,16 +197,16 @@ ifx_se_status_t ifx_se_lock_shared_data(void *ctx)
 }
 
 ifx_se_status_t ifx_se_initial_attest_get_token(const ifx_se_fih_ptr_t challenge,
-        ifx_se_fih_t challenge_size,
-        ifx_se_fih_t client_id,
-        const ifx_se_fih_ptr_t verify_svc,
-        ifx_se_fih_t verify_svc_size,
-        const ifx_se_fih_ptr_t hardware_ver,
-        ifx_se_fih_t hardware_ver_size,
-        ifx_se_fih_ptr_t token_data,
-        ifx_se_fih_t token_size,
-        ifx_se_fih_ptr_t token_length,
-        void *ctx)
+                                                ifx_se_fih_t challenge_size,
+                                                ifx_se_fih_t client_id,
+                                                const ifx_se_fih_ptr_t verify_svc,
+                                                ifx_se_fih_t verify_svc_size,
+                                                const ifx_se_fih_ptr_t hardware_ver,
+                                                ifx_se_fih_t hardware_ver_size,
+                                                ifx_se_fih_ptr_t token_data,
+                                                ifx_se_fih_t token_size,
+                                                ifx_se_fih_ptr_t token_length,
+                                                void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -234,7 +234,7 @@ ifx_se_status_t ifx_se_initial_attest_get_token(const ifx_se_fih_ptr_t challenge
 }
 
 ifx_se_status_t ifx_se_initial_attest_get_token_size(ifx_se_fih_t challenge_size,
-        ifx_se_fih_ptr_t token_size, void *ctx)
+                                                     ifx_se_fih_ptr_t token_size, void *ctx)
 {
     ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
 
@@ -306,57 +306,6 @@ ifx_se_status_t ifx_se_ppc_config(const ifx_se_ppc_config_t *ppc_config, void *c
     return status;
 }
 
-ifx_se_status_t ifx_se_enable_wifi(const uint8_t *image_addr, void *ctx)
-{
-    ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
-
-    /* 0 parameter */
-    uint32_t ipc_packet[SE_RT_PACKET_CALC_SIZE(1u)]; /* in 32-bit words (4 bytes) */
-    ifx_se_fih_uint *ipc_params = SE_RT_PARAMS_GET_PTR(ipc_packet);
-
-    ipc_params[0] = IFX_SE_SYSCALL_ENABLE_WIFI;
-    ipc_params[1] = ifx_se_fih_ptr_to_uint(ifx_se_fih_ptr_encode(image_addr));
-
-    SE_RT_PACKET_FINALIZE(ipc_packet);
-
-    status = ifx_se_syscall(ifx_se_fih_ptr_encode(ipc_packet), ifx_se_fih_uint_encode(sizeof(ipc_packet)), ctx);
-
-    return status;
-}
-
-ifx_se_status_t ifx_se_disable_wifi(void *ctx)
-{
-    ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
-
-    /* 0 parameter */
-    uint32_t ipc_packet[SE_RT_PACKET_CALC_SIZE(0u)]; /* in 32-bit words (4 bytes) */
-    ifx_se_fih_uint *ipc_params = SE_RT_PARAMS_GET_PTR(ipc_packet);
-
-    ipc_params[0] = IFX_SE_SYSCALL_DISABLE_WIFI;
-
-    SE_RT_PACKET_FINALIZE(ipc_packet);
-
-    status = ifx_se_syscall(ifx_se_fih_ptr_encode(ipc_packet), ifx_se_fih_uint_encode(sizeof(ipc_packet)), ctx);
-
-    return status;
-}
-
-ifx_se_status_t ifx_se_enable_wifi_sram_access(void *ctx)
-{
-    ifx_se_status_t status = IFX_SE_SYSCALL_CORRUPTION_DETECTED;
-
-    /* 1 parameter */
-    uint32_t ipc_packet[SE_RT_PACKET_CALC_SIZE(0u)]; /* in 32-bit words (4 bytes) */
-    ifx_se_fih_uint *ipc_params = SE_RT_PARAMS_GET_PTR(ipc_packet);
-
-    ipc_params[0] = IFX_SE_SYSCALL_ENABLE_WIFI_SRAM_ACCESS;
-
-    SE_RT_PACKET_FINALIZE(ipc_packet);
-
-    status = ifx_se_syscall(ifx_se_fih_ptr_encode(ipc_packet), ifx_se_fih_uint_encode(sizeof(ipc_packet)), ctx);
-
-    return status;
-}
 
 
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 5.1')

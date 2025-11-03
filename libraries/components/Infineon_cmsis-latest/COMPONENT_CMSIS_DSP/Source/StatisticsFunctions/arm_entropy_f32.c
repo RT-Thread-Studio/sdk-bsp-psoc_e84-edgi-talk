@@ -51,10 +51,10 @@
 #include "arm_helium_utils.h"
 #include "arm_vec_math.h"
 
-float32_t arm_entropy_f32(const float32_t * pSrcA, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_entropy_f32(const float32_t * pSrcA,uint32_t blockSize)
 {
     uint32_t        blkCnt;
-    float32_t       accum = 0.0f, p;
+    float32_t       accum=0.0f,p;
 
 
     blkCnt = blockSize;
@@ -81,13 +81,13 @@ float32_t arm_entropy_f32(const float32_t * pSrcA, uint32_t blockSize)
 
     /* Tail */
     blkCnt = blockSize & 0x3;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        p = *pSrcA++;
-        accum += p * logf(p);
-
-        blkCnt--;
-
+       p = *pSrcA++;
+       accum += p * logf(p);
+       
+       blkCnt--;
+    
     }
 
     return (-accum);
@@ -98,7 +98,7 @@ float32_t arm_entropy_f32(const float32_t * pSrcA, uint32_t blockSize)
 
 #include "NEMath.h"
 
-float32_t arm_entropy_f32(const float32_t * pSrcA, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_entropy_f32(const float32_t * pSrcA,uint32_t blockSize)
 {
     const float32_t *pIn;
     uint32_t blkCnt;
@@ -107,64 +107,64 @@ float32_t arm_entropy_f32(const float32_t * pSrcA, uint32_t blockSize)
     float32x4_t accumV;
     float32x2_t accumV2;
     float32x4_t tmpV, tmpV2;
-
+ 
     pIn = pSrcA;
 
     accum = 0.0f;
     accumV = vdupq_n_f32(0.0f);
 
     blkCnt = blockSize >> 2;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        tmpV = vld1q_f32(pIn);
-        pIn += 4;
+      tmpV = vld1q_f32(pIn);
+      pIn += 4;
 
-        tmpV2 = vlogq_f32(tmpV);
-        accumV = vmlaq_f32(accumV, tmpV, tmpV2);
-
-        blkCnt--;
-
+      tmpV2 = vlogq_f32(tmpV);
+      accumV = vmlaq_f32(accumV, tmpV, tmpV2);
+       
+      blkCnt--;
+    
     }
 
-    accumV2 = vpadd_f32(vget_low_f32(accumV), vget_high_f32(accumV));
+    accumV2 = vpadd_f32(vget_low_f32(accumV),vget_high_f32(accumV));
     accum = vget_lane_f32(accumV2, 0) + vget_lane_f32(accumV2, 1);
-
+    
 
     blkCnt = blockSize & 3;
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        p = *pIn++;
-        accum += p * logf(p);
-
-        blkCnt--;
-
+       p = *pIn++;
+       accum += p * logf(p);
+       
+       blkCnt--;
+    
     }
 
-    return (-accum);
+    return(-accum);
 }
 
 #else
-float32_t arm_entropy_f32(const float32_t * pSrcA, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float32_t arm_entropy_f32(const float32_t * pSrcA,uint32_t blockSize)
 {
     const float32_t *pIn;
     uint32_t blkCnt;
     float32_t accum, p;
-
+ 
     pIn = pSrcA;
     blkCnt = blockSize;
 
     accum = 0.0f;
 
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
-        p = *pIn++;
-        accum += p * logf(p);
-
-        blkCnt--;
-
+       p = *pIn++;
+       accum += p * logf(p);
+       
+       blkCnt--;
+    
     }
 
-    return (-accum);
+    return(-accum);
 }
 #endif
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

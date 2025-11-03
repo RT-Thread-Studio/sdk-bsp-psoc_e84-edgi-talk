@@ -43,7 +43,6 @@
   @param[in]     pSrcB      points to the second input vector
   @param[in]     blockSize  number of samples in each vector
   @param[out]    result     output result returned here
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The intermediate multiplications are in 1.7 x 1.7 = 2.14 format and these
@@ -57,7 +56,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_dot_prod_q7(
+ARM_DSP_ATTRIBUTE void arm_dot_prod_q7(
     const q7_t * pSrcA,
     const q7_t * pSrcB,
     uint32_t blockSize,
@@ -104,85 +103,85 @@ void arm_dot_prod_q7(
     *result = sum;
 }
 #else
-void arm_dot_prod_q7(
-    const q7_t * pSrcA,
-    const q7_t * pSrcB,
-    uint32_t blockSize,
-    q31_t * result)
+ARM_DSP_ATTRIBUTE void arm_dot_prod_q7(
+  const q7_t * pSrcA,
+  const q7_t * pSrcB,
+        uint32_t blockSize,
+        q31_t * result)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q31_t sum = 0;                                 /* Temporary return variable */
+        uint32_t blkCnt;                               /* Loop counter */
+        q31_t sum = 0;                                 /* Temporary return variable */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
 #if defined (ARM_MATH_DSP)
-    q31_t input1, input2;                          /* Temporary variables */
-    q31_t inA1, inA2, inB1, inB2;                  /* Temporary variables */
+  q31_t input1, input2;                          /* Temporary variables */
+  q31_t inA1, inA2, inB1, inB2;                  /* Temporary variables */
 #endif
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1] */
+  while (blkCnt > 0U)
+  {
+    /* C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1] */
 
 #if defined (ARM_MATH_DSP)
-        /* read 4 samples at a time from sourceA */
-        input1 = read_q7x4_ia(&pSrcA);
-        /* read 4 samples at a time from sourceB */
-        input2 = read_q7x4_ia(&pSrcB);
+    /* read 4 samples at a time from sourceA */
+    input1 = read_q7x4_ia (&pSrcA);
+    /* read 4 samples at a time from sourceB */
+    input2 = read_q7x4_ia (&pSrcB);
 
-        /* extract two q7_t samples to q15_t samples */
-        inA1 = __SXTB16(__ROR(input1, 8));
-        /* extract reminaing two samples */
-        inA2 = __SXTB16(input1);
-        /* extract two q7_t samples to q15_t samples */
-        inB1 = __SXTB16(__ROR(input2, 8));
-        /* extract reminaing two samples */
-        inB2 = __SXTB16(input2);
+    /* extract two q7_t samples to q15_t samples */
+    inA1 = __SXTB16(__ROR(input1, 8));
+    /* extract reminaing two samples */
+    inA2 = __SXTB16(input1);
+    /* extract two q7_t samples to q15_t samples */
+    inB1 = __SXTB16(__ROR(input2, 8));
+    /* extract reminaing two samples */
+    inB2 = __SXTB16(input2);
 
-        /* multiply and accumulate two samples at a time */
-        sum = __SMLAD(inA1, inB1, sum);
-        sum = __SMLAD(inA2, inB2, sum);
+    /* multiply and accumulate two samples at a time */
+    sum = __SMLAD(inA1, inB1, sum);
+    sum = __SMLAD(inA2, inB2, sum);
 #else
-        sum += (q31_t)((q15_t) * pSrcA++ * *pSrcB++);
-        sum += (q31_t)((q15_t) * pSrcA++ * *pSrcB++);
-        sum += (q31_t)((q15_t) * pSrcA++ * *pSrcB++);
-        sum += (q31_t)((q15_t) * pSrcA++ * *pSrcB++);
+    sum += (q31_t) ((q15_t) *pSrcA++ * *pSrcB++);
+    sum += (q31_t) ((q15_t) *pSrcA++ * *pSrcB++);
+    sum += (q31_t) ((q15_t) *pSrcA++ * *pSrcB++);
+    sum += (q31_t) ((q15_t) *pSrcA++ * *pSrcB++);
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1] */
+  while (blkCnt > 0U)
+  {
+    /* C = A[0]* B[0] + A[1]* B[1] + A[2]* B[2] + .....+ A[blockSize-1]* B[blockSize-1] */
 
-        /* Calculate dot product and store result in a temporary buffer. */
+    /* Calculate dot product and store result in a temporary buffer. */
 //#if defined (ARM_MATH_DSP)
 //    sum  = __SMLAD(*pSrcA++, *pSrcB++, sum);
 //#else
-        sum += (q31_t)((q15_t) * pSrcA++ * *pSrcB++);
+    sum += (q31_t) ((q15_t) *pSrcA++ * *pSrcB++);
 //#endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Store result in destination buffer in 18.14 format */
-    *result = sum;
+  /* Store result in destination buffer in 18.14 format */
+  *result = sum;
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

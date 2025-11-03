@@ -134,16 +134,3 @@ class PolicyParserOemProvisioning(PolicyParserPrimitives):
         else:
             key = None
         return key
-
-    def bin_file_or_hex_string_field(self, *keys):
-        """Gets a field containing path to binary file or hex string"""
-        try:
-            data = self.bin_file_field(*keys)
-        except FileNotFoundError:
-            try:
-                data = self.bytes_field(*keys)
-            except ValueError as e:
-                raise ValueError(
-                    f"Error parsing data: '{'.'.join(keys)}'"
-                ) from e
-        return data

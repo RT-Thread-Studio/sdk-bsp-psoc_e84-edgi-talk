@@ -12,5 +12,5 @@
 <booleanAttribute key="org.eclipse.debug.core.launchGroup.1.adoptIfRunning" value="false"/>
 <booleanAttribute key="org.eclipse.debug.core.launchGroup.1.enabled" value="true"/>
 <stringAttribute key="org.eclipse.debug.core.launchGroup.1.mode" value="inherit"/>
-<stringAttribute key="org.eclipse.debug.core.launchGroup.1.name" value="&&_MTB_RECIPE__APP_NAME&&.&&_MTB_RECIPE__SECOND_APP_NAME&& Add CM55 to CM33 (KitProg3_MiniProg4)"/>
+<stringAttribute key="org.eclipse.debug.core.launchGroup.1.name" value="&&_MTB_RECIPE__APP_NAME&&.&&_MTB_RECIPE__CM55_PRJ_DIR&& Add CM55 to CM33 (KitProg3_MiniProg4)"/>
 </launchConfiguration>

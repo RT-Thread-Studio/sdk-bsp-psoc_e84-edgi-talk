@@ -50,10 +50,10 @@ typedef enum
 typedef struct
 {
     bool                                  is_sdio;
-    void                                 *obj;
-    SDHC_Type                            *base;
-    cy_stc_sd_host_context_t             *context;
-    const mtb_hal_clock_t                *clock;
+    void*                                 obj;
+    SDHC_Type*                            base;
+    cy_stc_sd_host_context_t*             context;
+    const mtb_hal_clock_t*                clock;
 
     bool                                  emmc;
     cy_en_sd_host_dma_type_t              dma_type;

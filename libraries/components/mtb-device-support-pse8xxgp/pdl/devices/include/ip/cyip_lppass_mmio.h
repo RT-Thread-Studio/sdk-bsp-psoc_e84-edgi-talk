@@ -39,46 +39,44 @@
 /**
   * \brief FIFO Static configuration (LPPASS_MMIO_STA)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 FIFO configuration register. */
-    __IOM uint32_t MODE;                          /*!< 0x00000004 FIFO mode register. */
-    __IM uint32_t MODE_STATUS;                   /*!< 0x00000008 FIFO mode status register. */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t LEVEL[8];                      /*!< 0x00000010 FIFO level register. */
-    __IM uint32_t RD_DATA[8];                    /*!< 0x00000030 FIFO 32-bit read data register */
-    __IM uint32_t USED[8];                       /*!< 0x00000050 FIFO used register */
-    __IM uint32_t STATUS[8];                     /*!< 0x00000070 FIFO status register */
-    __IM uint32_t RESERVED1[28];
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 FIFO configuration register. */
+  __IOM uint32_t MODE;                          /*!< 0x00000004 FIFO mode register. */
+   __IM uint32_t MODE_STATUS;                   /*!< 0x00000008 FIFO mode status register. */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t LEVEL[8];                      /*!< 0x00000010 FIFO level register. */
+   __IM uint32_t RD_DATA[8];                    /*!< 0x00000030 FIFO 32-bit read data register */
+   __IM uint32_t USED[8];                       /*!< 0x00000050 FIFO used register */
+   __IM uint32_t STATUS[8];                     /*!< 0x00000070 FIFO status register */
+   __IM uint32_t RESERVED1[28];
 } LPPASS_MMIO_STA_Type;                         /*!< Size = 256 (0x100) */
 
 /**
   * \brief LPPASS top-level MMIO (LPPASS_MMIO)
   */
-typedef struct
-{
-    __IM uint32_t INTR_CAUSE;                    /*!< 0x00000000 Interrupt cause register */
-    __IM uint32_t FIFO_INTR_CAUSE;               /*!< 0x00000004 FIFO Interrupt cause register */
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t TR_OUT[8];                     /*!< 0x00000010 Trigger out select register */
-    __IM uint32_t RESERVED1[4];
-    __IOM uint32_t INTR;                          /*!< 0x00000040 Interrupt request register */
-    __IM uint32_t RESERVED2;
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000048 Interrupt request set register */
-    __IM uint32_t RESERVED3;
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000050 Interrupt request mask */
-    __IM uint32_t RESERVED4;
-    __IM uint32_t INTR_MASKED;                   /*!< 0x00000058 Interrupt request masked */
-    __IM uint32_t RESERVED5;
-    __IOM uint32_t FIFO_INTR;                     /*!< 0x00000060 FIFO Interrupt request register */
-    __IM uint32_t RESERVED6;
-    __IOM uint32_t FIFO_INTR_SET;                 /*!< 0x00000068 FIFO Interrupt set request register */
-    __IM uint32_t RESERVED7;
-    __IOM uint32_t FIFO_INTR_MASK;                /*!< 0x00000070 FIFO Interrupt mask register */
-    __IM uint32_t RESERVED8;
-    __IM uint32_t FIFO_INTR_MASKED;              /*!< 0x00000078 FIFO Interrupt masked request register */
-    __IM uint32_t RESERVED9[225];
-    LPPASS_MMIO_STA_Type STA;               /*!< 0x00000400 FIFO Static configuration */
+typedef struct {
+   __IM uint32_t INTR_CAUSE;                    /*!< 0x00000000 Interrupt cause register */
+   __IM uint32_t FIFO_INTR_CAUSE;               /*!< 0x00000004 FIFO Interrupt cause register */
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t TR_OUT[8];                     /*!< 0x00000010 Trigger out select register */
+   __IM uint32_t RESERVED1[4];
+  __IOM uint32_t INTR;                          /*!< 0x00000040 Interrupt request register */
+   __IM uint32_t RESERVED2;
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000048 Interrupt request set register */
+   __IM uint32_t RESERVED3;
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000050 Interrupt request mask */
+   __IM uint32_t RESERVED4;
+   __IM uint32_t INTR_MASKED;                   /*!< 0x00000058 Interrupt request masked */
+   __IM uint32_t RESERVED5;
+  __IOM uint32_t FIFO_INTR;                     /*!< 0x00000060 FIFO Interrupt request register */
+   __IM uint32_t RESERVED6;
+  __IOM uint32_t FIFO_INTR_SET;                 /*!< 0x00000068 FIFO Interrupt set request register */
+   __IM uint32_t RESERVED7;
+  __IOM uint32_t FIFO_INTR_MASK;                /*!< 0x00000070 FIFO Interrupt mask register */
+   __IM uint32_t RESERVED8;
+   __IM uint32_t FIFO_INTR_MASKED;              /*!< 0x00000078 FIFO Interrupt masked request register */
+   __IM uint32_t RESERVED9[225];
+        LPPASS_MMIO_STA_Type STA;               /*!< 0x00000400 FIFO Static configuration */
 } LPPASS_MMIO_Type;                             /*!< Size = 1280 (0x500) */
 
 

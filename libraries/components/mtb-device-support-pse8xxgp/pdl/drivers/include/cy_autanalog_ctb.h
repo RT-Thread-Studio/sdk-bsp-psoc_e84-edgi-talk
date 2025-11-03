@@ -74,8 +74,10 @@
 *    - change the connection of the inverting Opamp input to the pin;
 *    - change the connection of the bottom end of the resistor ladder to the pin or voltage reference;
 * - Adjust the Opamps gain;
+*
 * For the configuration settings, see \ref cy_stc_autanalog_ctb_dyn_t and \ref cy_stc_autanalog_stt_ctb_t.
 *
+* The gain settings for each topology are as follows:
 * <table class="doxtable">
 *    <tr>
 *       <th>Index</th>
@@ -674,11 +676,11 @@ typedef struct
 typedef struct
 {
     /* Static part of configuration */
-    cy_stc_autanalog_ctb_sta_t *ctbStaCfg;     /**< The pointer to a static part of the CTB configuration */
+    cy_stc_autanalog_ctb_sta_t * ctbStaCfg;    /**< The pointer to a static part of the CTB configuration */
 
     /* Dynamic part of configuration */
     uint8_t                      ctbDynCfgNum; /**< The number of dynamic configurations used for the CTB */
-    cy_stc_autanalog_ctb_dyn_t *ctbDynCfgArr;  /**< The array of pointers to dynamic configurations used for the CTB */
+    cy_stc_autanalog_ctb_dyn_t * ctbDynCfgArr; /**< The array of pointers to dynamic configurations used for the CTB */
 
 } cy_stc_autanalog_ctb_t;
 

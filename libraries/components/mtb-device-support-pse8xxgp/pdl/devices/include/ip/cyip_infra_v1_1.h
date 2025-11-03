@@ -42,75 +42,70 @@
 /**
   * \brief LPOSC configuration (only accessible if ACTRLR.STATUS.MODE=0) (INFRA_LPOSC)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Low Power Oscillator configuration register */
-    __IM uint32_t RESERVED[59];
-    __IOM uint32_t TRIM;                          /*!< 0x000000F0 LPOSC Trim Register */
-    __IM uint32_t RESERVED1[3];
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Low Power Oscillator configuration register */
+   __IM uint32_t RESERVED[59];
+  __IOM uint32_t TRIM;                          /*!< 0x000000F0 LPOSC Trim Register */
+   __IM uint32_t RESERVED1[3];
 } INFRA_LPOSC_Type;                             /*!< Size = 256 (0x100) */
 
 /**
   * \brief AREF configuration (only accessible if ACTRLR.STATUS.MODE=0) (INFRA_AREF)
   */
-typedef struct
-{
-    __IOM uint32_t CTRL;                          /*!< 0x00000000 AREF control */
-    __IM uint32_t RESERVED[51];
-    __IOM uint32_t VREF_TRIM0;                    /*!< 0x000000D0 VREF Trim bits */
-    __IOM uint32_t VREF_TRIM1;                    /*!< 0x000000D4 VREF Trim bits */
-    __IOM uint32_t VREF_TRIM2;                    /*!< 0x000000D8 VREF Trim bits */
-    __IOM uint32_t VREF_TRIM3;                    /*!< 0x000000DC VREF Trim bits */
-    __IOM uint32_t IZTAT_TRIM0;                   /*!< 0x000000E0 IZTAT Trim bits */
-    __IOM uint32_t IPTAT_TRIM0;                   /*!< 0x000000E4 IPTAT Trim bits */
-    __IOM uint32_t IPTAT_TRIM1;                   /*!< 0x000000E8 IPTAT Trim bits */
-    __IOM uint32_t ICTAT_TRIM0;                   /*!< 0x000000EC ICTAT Trim bits */
-    __IOM uint32_t ICTAT_TRIM1;                   /*!< 0x000000F0 ICTAT Trim bits */
-    __IOM uint32_t ICTAT_TRIM2;                   /*!< 0x000000F4 ICTAT Trim bits */
-    __IM uint32_t RESERVED1[2];
+typedef struct {
+  __IOM uint32_t CTRL;                          /*!< 0x00000000 AREF control */
+   __IM uint32_t RESERVED[51];
+  __IOM uint32_t VREF_TRIM0;                    /*!< 0x000000D0 VREF Trim bits */
+  __IOM uint32_t VREF_TRIM1;                    /*!< 0x000000D4 VREF Trim bits */
+  __IOM uint32_t VREF_TRIM2;                    /*!< 0x000000D8 VREF Trim bits */
+  __IOM uint32_t VREF_TRIM3;                    /*!< 0x000000DC VREF Trim bits */
+  __IOM uint32_t IZTAT_TRIM0;                   /*!< 0x000000E0 IZTAT Trim bits */
+  __IOM uint32_t IPTAT_TRIM0;                   /*!< 0x000000E4 IPTAT Trim bits */
+  __IOM uint32_t IPTAT_TRIM1;                   /*!< 0x000000E8 IPTAT Trim bits */
+  __IOM uint32_t ICTAT_TRIM0;                   /*!< 0x000000EC ICTAT Trim bits */
+  __IOM uint32_t ICTAT_TRIM1;                   /*!< 0x000000F0 ICTAT Trim bits */
+  __IOM uint32_t ICTAT_TRIM2;                   /*!< 0x000000F4 ICTAT Trim bits */
+   __IM uint32_t RESERVED1[2];
 } INFRA_AREF_Type;                              /*!< Size = 256 (0x100) */
 
 /**
   * \brief PRB configuration (only accessible if ACTRLR.STATUS.MODE=0) (INFRA_PRB)
   */
-typedef struct
-{
-    __IOM uint32_t VREF_CTRL[2];                  /*!< 0x00000000 PRB VREF Control */
-    __IM uint32_t RESERVED[62];
+typedef struct {
+  __IOM uint32_t VREF_CTRL[2];                  /*!< 0x00000000 PRB VREF Control */
+   __IM uint32_t RESERVED[62];
 } INFRA_PRB_Type;                               /*!< Size = 256 (0x100) */
 
 /**
   * \brief Wakeup Timer configuration (only accessible if ACTRLR.STATUS.MODE=0) (INFRA_TIMER)
   */
-typedef struct
-{
-    __IOM uint32_t CTRL;                          /*!< 0x00000000 Timer trigger control register */
-    __IOM uint32_t CFG;                           /*!< 0x00000004 Timer trigger configuration register */
-    __IOM uint32_t PERIOD;                        /*!< 0x00000008 Timer trigger period register */
-    __IM uint32_t RESERVED[61];
+typedef struct {
+  __IOM uint32_t CTRL;                          /*!< 0x00000000 Timer trigger control register */
+  __IOM uint32_t CFG;                           /*!< 0x00000004 Timer trigger configuration register */
+  __IOM uint32_t PERIOD;                        /*!< 0x00000008 Timer trigger period register */
+   __IM uint32_t RESERVED[61];
 } INFRA_TIMER_Type;                             /*!< Size = 256 (0x100) */
 
 /**
   * \brief LPPASS infrastructure (INFRA)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED;
-    __IOM uint32_t CLOCK_PTC_LP_DIV;              /*!< 0x00000004 Low Power Clock divider for PTC (only accessible if
+typedef struct {
+   __IM uint32_t RESERVED;
+  __IOM uint32_t CLOCK_PTC_LP_DIV;              /*!< 0x00000004 Low Power Clock divider for PTC (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IOM uint32_t CLOCK_DAC_LP_DIV[2];           /*!< 0x00000008 Low Power Clock divider for DAC (only accessible if
+  __IOM uint32_t CLOCK_DAC_LP_DIV[2];           /*!< 0x00000008 Low Power Clock divider for DAC (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t CLOCK_PRIO_HS_DIV;             /*!< 0x00000014 Clock enable for IP priority enabler (only accessible if
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t CLOCK_PRIO_HS_DIV;             /*!< 0x00000014 Clock enable for IP priority enabler (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t PRIO_CFG[4];                   /*!< 0x00000020 Sub IP Block IP priority enabler configuration (only accessible
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t PRIO_CFG[4];                   /*!< 0x00000020 Sub IP Block IP priority enabler configuration (only accessible
                                                                 if ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED3[52];
-    INFRA_LPOSC_Type LPOSC;                 /*!< 0x00000100 LPOSC configuration (only accessible if ACTRLR.STATUS.MODE=0) */
-    INFRA_AREF_Type AREF;                   /*!< 0x00000200 AREF configuration (only accessible if ACTRLR.STATUS.MODE=0) */
-    INFRA_PRB_Type PRB;                     /*!< 0x00000300 PRB configuration (only accessible if ACTRLR.STATUS.MODE=0) */
-    INFRA_TIMER_Type TIMER;                 /*!< 0x00000400 Wakeup Timer configuration (only accessible if
+   __IM uint32_t RESERVED3[52];
+        INFRA_LPOSC_Type LPOSC;                 /*!< 0x00000100 LPOSC configuration (only accessible if ACTRLR.STATUS.MODE=0) */
+        INFRA_AREF_Type AREF;                   /*!< 0x00000200 AREF configuration (only accessible if ACTRLR.STATUS.MODE=0) */
+        INFRA_PRB_Type PRB;                     /*!< 0x00000300 PRB configuration (only accessible if ACTRLR.STATUS.MODE=0) */
+        INFRA_TIMER_Type TIMER;                 /*!< 0x00000400 Wakeup Timer configuration (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
 } INFRA_Type;                                   /*!< Size = 1280 (0x500) */
 

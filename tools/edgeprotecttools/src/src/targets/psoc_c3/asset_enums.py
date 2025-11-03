@@ -42,7 +42,7 @@ ListenWindow = Enum(
     names=[
         ('100 ms', 0xC39D0001),
         ('20 ms', 0xC39D0002),
-        ('1 ms', 0xC39D0003),
+        ('2 ms', 0xC39D0003),
         ('0 ms', 0x151DD9BB),
         ('None', 0x151DD9BB),
     ]

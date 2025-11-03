@@ -80,17 +80,17 @@ extern "C" {
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hkdf_Extract(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t  const *salt,
-        uint32_t saltLength,
-        uint8_t  const *ikm,
-        uint32_t ikmLength,
-        uint8_t *prk)
+                                          uint8_t  const *salt,
+                                          uint32_t saltLength,
+                                          uint8_t  const *ikm,
+                                          uint32_t ikmLength,
+                                          uint8_t *prk)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
         (void)base; /* Suppress a compiler warning about unused variables */
         (void)mode; /* Suppress a compiler warning about unused variables */
@@ -99,13 +99,13 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hkdf_Extract(CRYPTO_Type *b
         (void)ikm; /* Suppress a compiler warning about unused variables */
         (void)ikmLength; /* Suppress a compiler warning about unused variables */
         (void)prk; /* Suppress a compiler warning about unused variables */
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hkdf_Extract(base, mode, salt, saltLength, ikm, ikmLength, prk);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
 
@@ -149,18 +149,18 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hkdf_Extract(CRYPTO_Type *b
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hkdf_Expand(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t  const *prk,
-        uint32_t prkLength,
-        uint8_t  const *info,
-        uint32_t infoLength,
-        uint8_t *okm,
-        uint32_t okmLength)
+                                          uint8_t  const *prk,
+                                          uint32_t prkLength,
+                                          uint8_t  const *info,
+                                          uint32_t infoLength,
+                                          uint8_t *okm,
+                                          uint32_t okmLength)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
         (void)base; /* Suppress a compiler warning about unused variables */
         (void)mode; /* Suppress a compiler warning about unused variables */
@@ -170,13 +170,13 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hkdf_Expand(CRYPTO_Type *ba
         (void)infoLength; /* Suppress a compiler warning about unused variables */
         (void)okm; /* Suppress a compiler warning about unused variables */
         (void)okmLength; /* Suppress a compiler warning about unused variables */
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hkdf_Expand(base, mode, prk, prkLength, info, infoLength, okm, okmLength);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;
@@ -223,21 +223,21 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hkdf_Expand(CRYPTO_Type *ba
 *
 *******************************************************************************/
 __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hkdf(CRYPTO_Type *base, cy_en_crypto_sha_mode_t mode,
-        uint8_t  const *salt,
-        uint32_t saltLength,
-        uint8_t  const *ikm,
-        uint32_t ikmLength,
-        uint8_t  const *info,
-        uint32_t infoLength,
-        uint8_t *okm,
-        uint32_t okmLength)
+                                          uint8_t  const *salt,
+                                          uint32_t saltLength,
+                                          uint8_t  const *ikm,
+                                          uint32_t ikmLength,
+                                          uint8_t  const *info,
+                                          uint32_t infoLength,
+                                          uint8_t *okm,
+                                          uint32_t okmLength)
 {
 
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_NOT_SUPPORTED;
 
     if (CY_CRYPTO_V1)
     {
-#if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V1_ENABLE)
         tmpResult = CY_CRYPTO_NOT_SUPPORTED;
         (void)base; /* Suppress a compiler warning about unused variables */
         (void)mode; /* Suppress a compiler warning about unused variables */
@@ -249,14 +249,14 @@ __STATIC_INLINE cy_en_crypto_status_t Cy_Crypto_Core_Hkdf(CRYPTO_Type *base, cy_
         (void)infoLength; /* Suppress a compiler warning about unused variables */
         (void)okm; /* Suppress a compiler warning about unused variables */
         (void)okmLength; /* Suppress a compiler warning about unused variables */
-#endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
+        #endif /* defined(CY_CRYPTO_CFG_HW_V1_ENABLE) */
     }
     else
     {
-#if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
+        #if defined(CY_CRYPTO_CFG_HW_V2_ENABLE)
         tmpResult = Cy_Crypto_Core_V2_Hkdf(base, mode, salt, saltLength, ikm, ikmLength, info, infoLength,
-                                           okm, okmLength);
-#endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
+                                          okm, okmLength);
+        #endif /* defined(CY_CRYPTO_CFG_HW_V2_ENABLE) */
     }
 
     return tmpResult;

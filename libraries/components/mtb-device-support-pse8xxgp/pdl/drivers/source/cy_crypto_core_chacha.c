@@ -47,7 +47,7 @@ extern "C" {
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 void Cy_Crypto_Core_V2_Chacha_execute(CRYPTO_Type *base,
-                                      cy_stc_crypto_chacha_state_t *chachaState);
+                             cy_stc_crypto_chacha_state_t *chachaState);
 
 
 
@@ -75,15 +75,15 @@ void Cy_Crypto_Core_V2_Chacha_execute(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_Init(CRYPTO_Type *base,
-        cy_stc_crypto_chacha_state_t *chachaState,
-        uint8_t rounds,
-        cy_stc_crypto_v2_chacha_buffers_t *chachaBuffers)
+                             cy_stc_crypto_chacha_state_t *chachaState,
+                             uint8_t rounds,
+                             cy_stc_crypto_v2_chacha_buffers_t * chachaBuffers)
 
 {
     (void)base; /* Suppress warning */
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
-    if ((NULL != chachaState) && (NULL != chachaBuffers))
+    if((NULL != chachaState) && (NULL != chachaBuffers))
     {
         chachaState->state = &chachaBuffers->state;
         chachaState->key = chachaBuffers->keyStream;
@@ -125,9 +125,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_Init(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_start(CRYPTO_Type *base, cy_stc_crypto_chacha_state_t *chachaState,
-        uint8_t const *key,
-        uint8_t const *nonce,
-        uint32_t counter)
+                             uint8_t const *key,
+                             uint8_t const *nonce,
+                             uint32_t counter)
 
 {
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE))  || CY_CPU_CORTEX_M55)
@@ -143,7 +143,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_start(CRYPTO_Type *base, cy_stc_c
     uint8_t *keyInRemap;
     uint8_t *nonceInRemap;
 
-    if ((NULL != chachaState) && (NULL != key) && (NULL != nonce))
+    if((NULL != chachaState) && (NULL != key) && (NULL != nonce))
     {
 
         keyRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(chachaState->state->key);
@@ -155,8 +155,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_start(CRYPTO_Type *base, cy_stc_c
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
         /* Flush the cache */
-        SCB_CleanDCache_by_Addr((volatile void *)key, (int32_t)CHACHA_KEY_SIZE);
-        SCB_CleanDCache_by_Addr((volatile void *)nonce, (int32_t)CHACHA_NONCE_SIZE);
+        SCB_CleanDCache_by_Addr((volatile void *)key,(int32_t)CHACHA_KEY_SIZE);
+        SCB_CleanDCache_by_Addr((volatile void *)nonce,(int32_t)CHACHA_NONCE_SIZE);
 #endif
         Cy_Crypto_Core_V2_MemCpy(base, keyRemap, keyInRemap, CHACHA_KEY_SIZE);
         Cy_Crypto_Core_V2_MemCpy(base, nonceRemap, nonceInRemap, CHACHA_NONCE_SIZE);
@@ -217,12 +217,12 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc
     uint8_t *inputRemap;
     uint8_t *outputRemap;
 
-
-    if ((NULL != chachaState) && (NULL != input) && (NULL != output) && (NULL != base))
+    
+    if((NULL != chachaState) && (NULL != input) && (NULL != output) && (NULL != base))
     {
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
         /* Flush the cache */
-        SCB_CleanDCache_by_Addr((volatile void *)input, (int32_t)inputSize);
+        SCB_CleanDCache_by_Addr((volatile void *)input,(int32_t)inputSize);
         SCB_InvalidateDCache_by_Addr(output, (int32_t)inputSize);
 #endif
         keyRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(chachaState->key);
@@ -230,7 +230,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc
         outputRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(output);
 
         // If a already calculated keystream is available and is not fully utilized
-        if (inputSize > 0U && chachaState->keyIndexUsed < CHACHA_KEYSTREAM_SIZE)
+        if( inputSize> 0U && chachaState->keyIndexUsed < CHACHA_KEYSTREAM_SIZE)
         {
 
             Cy_Crypto_Core_V2_RBClear(base);
@@ -261,7 +261,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc
         }
 
 
-        while (inputSize >= CHACHA_BLOCK_SIZE)
+        while(inputSize >=CHACHA_BLOCK_SIZE)
         {
 
             /* Calculate the key stream from the chacha state */
@@ -270,7 +270,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc
             chachaState->state->counter++;
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
             SCB_CleanDCache_by_Addr((volatile void *)&chachaState->state->counter, (int32_t)4u);
-
+            
 #endif
             Cy_Crypto_Core_V2_RBClear(base);
             Cy_Crypto_Core_V2_Sync(base);
@@ -294,7 +294,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc
         }
 
         // Partial block data is available for the chacha operation
-        if (inputSize > 0U)
+        if( inputSize > 0U )
         {
             /* Calculate the key stream from the chacha state */
             Cy_Crypto_Core_V2_Chacha_execute(base, chachaState);
@@ -302,7 +302,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc
             chachaState->state->counter++;
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
             SCB_CleanDCache_by_Addr((volatile void *)&chachaState->state->counter, (int32_t)4u);
-
+            
 #endif
             Cy_Crypto_Core_V2_RBClear(base);
             Cy_Crypto_Core_V2_Sync(base);
@@ -325,7 +325,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc
 
         tmpResult = CY_CRYPTO_SUCCESS;
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-        /* Flush the cache */
+                /* Flush the cache */
         SCB_InvalidateDCache_by_Addr(output, (int32_t)inputSize);
 
 #endif
@@ -357,7 +357,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_update(CRYPTO_Type *base,  cy_stc
 *******************************************************************************/
 
 void Cy_Crypto_Core_V2_Chacha_execute(CRYPTO_Type *base,
-                                      cy_stc_crypto_chacha_state_t *chachaState)
+                             cy_stc_crypto_chacha_state_t *chachaState)
 
 {
     uint8_t *keyRemap;
@@ -413,13 +413,13 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_Free(CRYPTO_Type *base, cy_stc_cr
 
         keyRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(chachaState->key);
         stateRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(chachaState->state);
-
+        
         /* Clears the context buffers */
-        if (NULL != stateRemap)
+        if(NULL != stateRemap)
         {
             Cy_Crypto_Core_V2_MemSet(base, stateRemap, 0x00U, (uint16_t)CHACHA_STATE_SIZE);
         }
-        if (NULL != keyRemap)
+        if(NULL != keyRemap)
         {
             Cy_Crypto_Core_V2_MemSet(base, keyRemap, 0x00U, (uint16_t)CHACHA_KEYSTREAM_SIZE);
         }
@@ -467,17 +467,17 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Chacha_Free(CRYPTO_Type *base, cy_stc_cr
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_Chacha20(CRYPTO_Type *base,
-        uint8_t const *key, uint8_t const *nonce, uint32_t counter, uint8_t const *input,
-        uint32_t inputSize, uint8_t *output)
+                                     uint8_t const *key, uint8_t const *nonce, uint32_t counter, uint8_t const *input,
+                                     uint32_t inputSize, uint8_t *output)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
-    uint8_t state_t[CY_CRYPTO_ALIGN_CACHE_LINE(sizeof(cy_stc_crypto_chacha_state_t)) + CY_CRYPTO_DCAHCE_PADDING_SIZE];
-    uint8_t buffer_t[CY_CRYPTO_ALIGN_CACHE_LINE(sizeof(cy_stc_crypto_v2_chacha_buffers_t)) + CY_CRYPTO_DCAHCE_PADDING_SIZE];
+    uint8_t state_t[CY_CRYPTO_ALIGN_CACHE_LINE(sizeof(cy_stc_crypto_chacha_state_t))+CY_CRYPTO_DCAHCE_PADDING_SIZE];
+    uint8_t buffer_t[CY_CRYPTO_ALIGN_CACHE_LINE(sizeof(cy_stc_crypto_v2_chacha_buffers_t))+CY_CRYPTO_DCAHCE_PADDING_SIZE];
 
     cy_stc_crypto_chacha_state_t *state = (cy_stc_crypto_chacha_state_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(state_t);
     cy_stc_crypto_v2_chacha_buffers_t *buffer = (cy_stc_crypto_v2_chacha_buffers_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(buffer_t);
 
-    if ((NULL != input) && (NULL != key) && (NULL != output) && (NULL != base) && (NULL != nonce))
+    if((NULL != input) && (NULL != key) && (NULL != output) && (NULL != base) && (NULL != nonce))
     {
         Cy_Crypto_Core_V2_MemSet(base, state, 0, (uint16_t)sizeof(cy_stc_crypto_chacha_state_t));
         Cy_Crypto_Core_V2_MemSet(base, buffer, 0, (uint16_t)sizeof(cy_stc_crypto_v2_chacha_buffers_t));

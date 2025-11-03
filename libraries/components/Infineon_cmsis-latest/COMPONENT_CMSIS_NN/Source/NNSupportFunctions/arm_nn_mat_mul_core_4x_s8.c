@@ -79,15 +79,15 @@ arm_status arm_nn_mat_mul_core_4x_s8(const int32_t row_elements,
                    "   letp            lr, 2b               \n"
                    "1:                                      \n"
                    : [col] "+r"(col_base),
-                   [sum] "+Te"(sum_tmp),
-                   [row0] "+r"(ip_row_0),
-                   [row1] "+r"(ip_row_1),
-                   [row2] "+r"(ip_row_2),
-                   [row3] "+r"(ip_row_3),
-                   [out0] "+Te"(acc_n0),
-                   [out1] "+Te"(acc_n1),
-                   [out2] "+Te"(acc_n2),
-                   [out3] "+Te"(acc_n3)
+                     [sum] "+Te"(sum_tmp),
+                     [row0] "+r"(ip_row_0),
+                     [row1] "+r"(ip_row_1),
+                     [row2] "+r"(ip_row_2),
+                     [row3] "+r"(ip_row_3),
+                     [out0] "+Te"(acc_n0),
+                     [out1] "+Te"(acc_n1),
+                     [out2] "+Te"(acc_n2),
+                     [out3] "+Te"(acc_n3)
                    : [cnt] "r"(row_elements)
                    : "q0", "q1", "q2", "q3", "q4", "memory", "r14");
 #else

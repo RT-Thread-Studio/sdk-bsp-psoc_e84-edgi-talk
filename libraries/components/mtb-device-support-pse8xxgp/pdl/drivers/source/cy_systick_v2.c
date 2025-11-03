@@ -78,7 +78,7 @@ void Cy_SysTick_Init(cy_en_systick_clock_source_t clockSource, uint32_t interval
 
     uint32_t i;
 
-    for (i = 0u; i < CY_SYS_SYST_NUM_OF_CALLBACKS; i++)
+    for (i = 0u; i<CY_SYS_SYST_NUM_OF_CALLBACKS; i++)
     {
         Cy_SysTick_Callbacks[i] = NULL;
     }
@@ -161,14 +161,14 @@ cy_en_systick_clock_source_t Cy_SysTick_GetClockSource(void)
     else
     {
 #ifdef CY_PDL_TZ_ENABLED
-        returnValue = (cy_en_systick_clock_source_t)((uint32_t) _FLD2VAL(CPUSS_SYSTICK_S_CTL_CLOCK_SOURCE, CPUSS_SYSTICK_S_CTL));
+        returnValue =  (cy_en_systick_clock_source_t) ((uint32_t) _FLD2VAL(CPUSS_SYSTICK_S_CTL_CLOCK_SOURCE, CPUSS_SYSTICK_S_CTL));
 #else
-        returnValue = (cy_en_systick_clock_source_t)((uint32_t) _FLD2VAL(CPUSS_SYSTICK_NS_CTL_CLOCK_SOURCE, CPUSS_SYSTICK_NS_CTL));
+        returnValue =  (cy_en_systick_clock_source_t) ((uint32_t) _FLD2VAL(CPUSS_SYSTICK_NS_CTL_CLOCK_SOURCE, CPUSS_SYSTICK_NS_CTL));
 #endif
 
     }
 
-    return (returnValue);
+    return(returnValue);
 }
 
 Cy_SysTick_Callback Cy_SysTick_SetCallback(uint32_t number, Cy_SysTick_Callback function)
@@ -211,7 +211,7 @@ static void Cy_SysTick_ServiceCallbacks(void)
     /* Verify that tick timer flag was set */
     if (0u != Cy_SysTick_GetCountFlag())
     {
-        for (i = 0u; i < CY_SYS_SYST_NUM_OF_CALLBACKS; i++)
+        for (i=0u; i < CY_SYS_SYST_NUM_OF_CALLBACKS; i++)
         {
             if (Cy_SysTick_Callbacks[i] != NULL)
             {

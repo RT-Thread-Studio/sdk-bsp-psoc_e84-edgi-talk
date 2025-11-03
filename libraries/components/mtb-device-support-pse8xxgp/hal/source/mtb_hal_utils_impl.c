@@ -40,22 +40,22 @@ extern "C"
 // _mtb_hal_utils_calculate_tolerance
 //--------------------------------------------------------------------------------------------------
 int32_t _mtb_hal_utils_calculate_tolerance(mtb_hal_clock_tolerance_unit_t type, uint32_t desired_hz,
-        uint32_t actual_hz)
+                                           uint32_t actual_hz)
 {
     switch (type)
     {
-    case MTB_HAL_TOLERANCE_HZ:
-        return (int32_t)(desired_hz - actual_hz);
+        case MTB_HAL_TOLERANCE_HZ:
+            return (int32_t)(desired_hz - actual_hz);
 
-    case MTB_HAL_TOLERANCE_PPM:
-        return (int32_t)(((int64_t)(desired_hz - actual_hz)) * 1000000) / ((int32_t)desired_hz);
+        case MTB_HAL_TOLERANCE_PPM:
+            return (int32_t)(((int64_t)(desired_hz - actual_hz)) * 1000000) / ((int32_t)desired_hz);
 
-    case MTB_HAL_TOLERANCE_PERCENT:
-        return (int32_t)((((int64_t)desired_hz - actual_hz) * 100) / desired_hz);
+        case MTB_HAL_TOLERANCE_PERCENT:
+            return (int32_t)((((int64_t)desired_hz - actual_hz) * 100) / desired_hz);
 
-    default:
-        CY_ASSERT(false);
-        return 0;
+        default:
+            CY_ASSERT(false);
+            return 0;
     }
 }
 

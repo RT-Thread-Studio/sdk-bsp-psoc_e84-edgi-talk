@@ -43,7 +43,6 @@
   @param[in]     pSrcB       points to second input vector
   @param[out]    pDst        points to output vector
   @param[in]     numSamples  number of samples in each vector
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function implements 1.31 by 1.31 multiplications and finally output is converted into 3.29 format.
@@ -51,11 +50,11 @@
  */
 
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_cmplx_mult_cmplx_q31(
-    const q31_t * pSrcA,
-    const q31_t * pSrcB,
-    q31_t * pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_mult_cmplx_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        q31_t * pDst,
+        uint32_t numSamples)
 {
     int32_t         blkCnt;
     q31x4_t         vecSrcA, vecSrcB;
@@ -64,16 +63,14 @@ void arm_cmplx_mult_cmplx_q31(
 
     blkCnt = numSamples >> 2;
     blkCnt -= 1;
-    if (blkCnt > 0)
-    {
+    if (blkCnt > 0) {
         /* should give more freedom to generate stall free code */
         vecSrcA = vld1q(pSrcA);
         vecSrcB = vld1q(pSrcB);
         pSrcA += 4;
         pSrcB += 4;
 
-        while (blkCnt > 0)
-        {
+        while (blkCnt > 0) {
 
             /* C[2 * i] = A[2 * i] * B[2 * i] - A[2 * i + 1] * B[2 * i + 1].  */
             vecDst = vqdmlsdhq(vuninitializedq_s32(), vecSrcA, vecSrcB);
@@ -125,8 +122,7 @@ void arm_cmplx_mult_cmplx_q31(
          * tail
          */
         blkCnt = CMPLX_DIM * (numSamples & 3);
-        do
-        {
+        do {
             mve_pred16_t    p = vctp32q(blkCnt);
 
             pSrcA += 4;
@@ -145,12 +141,9 @@ void arm_cmplx_mult_cmplx_q31(
             blkCnt -= 4;
         }
         while ((int32_t) blkCnt > 0);
-    }
-    else
-    {
+    } else {
         blkCnt = numSamples * CMPLX_DIM;
-        while (blkCnt > 0)
-        {
+        while (blkCnt > 0) {
             mve_pred16_t    p = vctp32q(blkCnt);
 
             vecSrcA = vldrwq_z_s32(pSrcA, p);
@@ -171,85 +164,85 @@ void arm_cmplx_mult_cmplx_q31(
     }
 }
 #else
-void arm_cmplx_mult_cmplx_q31(
-    const q31_t * pSrcA,
-    const q31_t * pSrcB,
-    q31_t * pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_mult_cmplx_q31(
+  const q31_t * pSrcA,
+  const q31_t * pSrcB,
+        q31_t * pDst,
+        uint32_t numSamples)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q31_t a, b, c, d;                              /* Temporary variables */
+        uint32_t blkCnt;                               /* Loop counter */
+        q31_t a, b, c, d;                              /* Temporary variables */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C[2 * i    ] = A[2 * i] * B[2 * i    ] - A[2 * i + 1] * B[2 * i + 1]. */
-        /* C[2 * i + 1] = A[2 * i] * B[2 * i + 1] + A[2 * i + 1] * B[2 * i    ]. */
+  while (blkCnt > 0U)
+  {
+    /* C[2 * i    ] = A[2 * i] * B[2 * i    ] - A[2 * i + 1] * B[2 * i + 1]. */
+    /* C[2 * i + 1] = A[2 * i] * B[2 * i + 1] + A[2 * i + 1] * B[2 * i    ]. */
 
-        a = *pSrcA++;
-        b = *pSrcA++;
-        c = *pSrcB++;
-        d = *pSrcB++;
-        /* store result in 3.29 format in destination buffer. */
-        *pDst++ = (q31_t)((((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33));
-        *pDst++ = (q31_t)((((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33));
+    a = *pSrcA++;
+    b = *pSrcA++;
+    c = *pSrcB++;
+    d = *pSrcB++;
+    /* store result in 3.29 format in destination buffer. */
+    *pDst++ = (q31_t) ( (((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33) );
+    *pDst++ = (q31_t) ( (((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33) );
 
-        a = *pSrcA++;
-        b = *pSrcA++;
-        c = *pSrcB++;
-        d = *pSrcB++;
-        *pDst++ = (q31_t)((((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33));
-        *pDst++ = (q31_t)((((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33));
+    a = *pSrcA++;
+    b = *pSrcA++;
+    c = *pSrcB++;
+    d = *pSrcB++;
+    *pDst++ = (q31_t) ( (((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33) );
+    *pDst++ = (q31_t) ( (((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33) );
 
-        a = *pSrcA++;
-        b = *pSrcA++;
-        c = *pSrcB++;
-        d = *pSrcB++;
-        *pDst++ = (q31_t)((((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33));
-        *pDst++ = (q31_t)((((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33));
+    a = *pSrcA++;
+    b = *pSrcA++;
+    c = *pSrcB++;
+    d = *pSrcB++;
+    *pDst++ = (q31_t) ( (((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33) );
+    *pDst++ = (q31_t) ( (((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33) );
 
-        a = *pSrcA++;
-        b = *pSrcA++;
-        c = *pSrcB++;
-        d = *pSrcB++;
-        *pDst++ = (q31_t)((((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33));
-        *pDst++ = (q31_t)((((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33));
+    a = *pSrcA++;
+    b = *pSrcA++;
+    c = *pSrcB++;
+    d = *pSrcB++;
+    *pDst++ = (q31_t) ( (((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33) );
+    *pDst++ = (q31_t) ( (((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33) );
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = numSamples % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = numSamples % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C[2 * i    ] = A[2 * i] * B[2 * i    ] - A[2 * i + 1] * B[2 * i + 1]. */
-        /* C[2 * i + 1] = A[2 * i] * B[2 * i + 1] + A[2 * i + 1] * B[2 * i    ]. */
+  while (blkCnt > 0U)
+  {
+    /* C[2 * i    ] = A[2 * i] * B[2 * i    ] - A[2 * i + 1] * B[2 * i + 1]. */
+    /* C[2 * i + 1] = A[2 * i] * B[2 * i + 1] + A[2 * i + 1] * B[2 * i    ]. */
 
-        a = *pSrcA++;
-        b = *pSrcA++;
-        c = *pSrcB++;
-        d = *pSrcB++;
+    a = *pSrcA++;
+    b = *pSrcA++;
+    c = *pSrcB++;
+    d = *pSrcB++;
 
-        /* store result in 3.29 format in destination buffer. */
-        *pDst++ = (q31_t)((((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33));
-        *pDst++ = (q31_t)((((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33));
+    /* store result in 3.29 format in destination buffer. */
+    *pDst++ = (q31_t) ( (((q63_t) a * c) >> 33) - (((q63_t) b * d) >> 33) );
+    *pDst++ = (q31_t) ( (((q63_t) a * d) >> 33) + (((q63_t) b * c) >> 33) );
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

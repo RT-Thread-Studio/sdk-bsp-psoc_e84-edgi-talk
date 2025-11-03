@@ -47,8 +47,7 @@ static void _arm_radix4_butterfly_q31_mve(
     uint32_t  n1, n2;
     uint32_t  stage = 0;
     int32_t  iter = 1;
-    static const int32_t strides[4] =
-    {
+    static const int32_t strides[4] = {
         (0 - 16) * (int32_t)sizeof(q31_t *), (1 - 16) * (int32_t)sizeof(q31_t *),
         (8 - 16) * (int32_t)sizeof(q31_t *), (9 - 16) * (int32_t)sizeof(q31_t *)
     };
@@ -66,12 +65,12 @@ static void _arm_radix4_butterfly_q31_mve(
     {
         q31_t const *p_rearranged_twiddle_tab_stride2 =
             &S->rearranged_twiddle_stride2[
-                S->rearranged_twiddle_tab_stride2_arr[stage]];
+            S->rearranged_twiddle_tab_stride2_arr[stage]];
         q31_t const *p_rearranged_twiddle_tab_stride3 = &S->rearranged_twiddle_stride3[
-                S->rearranged_twiddle_tab_stride3_arr[stage]];
+            S->rearranged_twiddle_tab_stride3_arr[stage]];
         q31_t const *p_rearranged_twiddle_tab_stride1 =
             &S->rearranged_twiddle_stride1[
-                S->rearranged_twiddle_tab_stride1_arr[stage]];
+            S->rearranged_twiddle_tab_stride1_arr[stage]];
 
         q31_t * pBase = pSrc;
         for (int i = 0; i < iter; i++)
@@ -258,9 +257,9 @@ static void arm_cfft_radix4by2_q31_mve(const arm_cfft_instance_q31 *S, q31_t *pS
         blkCnt--;
     }
 
-    _arm_radix4_butterfly_q31_mve(S, pSrc, n2);
+   _arm_radix4_butterfly_q31_mve(S, pSrc, n2);
 
-    _arm_radix4_butterfly_q31_mve(S, pSrc + fftLen, n2);
+   _arm_radix4_butterfly_q31_mve(S, pSrc + fftLen, n2);
 
     pIn0 = pSrc;
     blkCnt = (fftLen << 1) >> 2;
@@ -300,8 +299,7 @@ static void _arm_radix4_butterfly_inverse_q31_mve(
     uint32_t  n1, n2;
     uint32_t  stage = 0;
     int32_t  iter = 1;
-    static const int32_t strides[4] =
-    {
+    static const int32_t strides[4] = {
         (0 - 16) * (int32_t)sizeof(q31_t *), (1 - 16) * (int32_t)sizeof(q31_t *),
         (8 - 16) * (int32_t)sizeof(q31_t *), (9 - 16) * (int32_t)sizeof(q31_t *)
     };
@@ -318,12 +316,12 @@ static void _arm_radix4_butterfly_inverse_q31_mve(
     {
         q31_t const *p_rearranged_twiddle_tab_stride2 =
             &S->rearranged_twiddle_stride2[
-                S->rearranged_twiddle_tab_stride2_arr[stage]];
+            S->rearranged_twiddle_tab_stride2_arr[stage]];
         q31_t const *p_rearranged_twiddle_tab_stride3 = &S->rearranged_twiddle_stride3[
-                S->rearranged_twiddle_tab_stride3_arr[stage]];
+            S->rearranged_twiddle_tab_stride3_arr[stage]];
         q31_t const *p_rearranged_twiddle_tab_stride1 =
             &S->rearranged_twiddle_stride1[
-                S->rearranged_twiddle_tab_stride1_arr[stage]];
+            S->rearranged_twiddle_tab_stride1_arr[stage]];
 
         q31_t * pBase = pSrc;
         for (int i = 0; i < iter; i++)
@@ -561,94 +559,88 @@ static void arm_cfft_radix4by2_inverse_q31_mve(const arm_cfft_instance_q31 *S, q
   @param[in]     bitReverseFlag flag that enables / disables bit reversal of output
                    - value = 0: disables bit reversal of output
                    - value = 1: enables bit reversal of output
-  @return        none
  */
-void arm_cfft_q31(
-    const arm_cfft_instance_q31 * S,
-    q31_t * pSrc,
-    uint8_t ifftFlag,
-    uint8_t bitReverseFlag)
+ARM_DSP_ATTRIBUTE void arm_cfft_q31(
+  const arm_cfft_instance_q31 * S,
+        q31_t * pSrc,
+        uint8_t ifftFlag,
+        uint8_t bitReverseFlag)
 {
-    uint32_t fftLen = S->fftLen;
+        uint32_t fftLen = S->fftLen;
 
-    if (ifftFlag == 1U)
-    {
+        if (ifftFlag == 1U) {
 
-        switch (fftLen)
-        {
-        case 16:
-        case 64:
-        case 256:
-        case 1024:
-        case 4096:
-            _arm_radix4_butterfly_inverse_q31_mve(S, pSrc, fftLen);
-            break;
+            switch (fftLen) {
+            case 16:
+            case 64:
+            case 256:
+            case 1024:
+            case 4096:
+                _arm_radix4_butterfly_inverse_q31_mve(S, pSrc, fftLen);
+                break;
 
-        case 32:
-        case 128:
-        case 512:
-        case 2048:
-            arm_cfft_radix4by2_inverse_q31_mve(S, pSrc, fftLen);
-            break;
+            case 32:
+            case 128:
+            case 512:
+            case 2048:
+                arm_cfft_radix4by2_inverse_q31_mve(S, pSrc, fftLen);
+                break;
+            }
+        } else {
+            switch (fftLen) {
+            case 16:
+            case 64:
+            case 256:
+            case 1024:
+            case 4096:
+                _arm_radix4_butterfly_q31_mve(S, pSrc, fftLen);
+                break;
+
+            case 32:
+            case 128:
+            case 512:
+            case 2048:
+                arm_cfft_radix4by2_q31_mve(S, pSrc, fftLen);
+                break;
+            }
         }
-    }
-    else
-    {
-        switch (fftLen)
+
+
+        if (bitReverseFlag)
         {
-        case 16:
-        case 64:
-        case 256:
-        case 1024:
-        case 4096:
-            _arm_radix4_butterfly_q31_mve(S, pSrc, fftLen);
-            break;
 
-        case 32:
-        case 128:
-        case 512:
-        case 2048:
-            arm_cfft_radix4by2_q31_mve(S, pSrc, fftLen);
-            break;
+            arm_bitreversal_32_inpl_mve((uint32_t*)pSrc, S->bitRevLength, S->pBitRevTable);
+
         }
-    }
-
-
-    if (bitReverseFlag)
-    {
-
-        arm_bitreversal_32_inpl_mve((uint32_t*)pSrc, S->bitRevLength, S->pBitRevTable);
-
-    }
 }
 #else
 
 extern void arm_radix4_butterfly_q31(
-    q31_t * pSrc,
-    uint32_t fftLen,
-    const q31_t * pCoef,
-    uint32_t twidCoefModifier);
+        q31_t * pSrc,
+        uint32_t fftLen,
+  const q31_t * pCoef,
+        uint32_t twidCoefModifier);
 
 extern void arm_radix4_butterfly_inverse_q31(
-    q31_t * pSrc,
-    uint32_t fftLen,
-    const q31_t * pCoef,
-    uint32_t twidCoefModifier);
+        q31_t * pSrc,
+        uint32_t fftLen,
+  const q31_t * pCoef,
+        uint32_t twidCoefModifier);
 
 extern void arm_bitreversal_32(
-    uint32_t *pSrc,
-    const uint16_t bitRevLen,
-    const uint16_t *pBitRevTable);
+        uint32_t * pSrc,
+  const uint16_t bitRevLen,
+  const uint16_t * pBitRevTable);
 
-void arm_cfft_radix4by2_q31(
-    q31_t * pSrc,
-    uint32_t fftLen,
-    const q31_t * pCoef);
+ARM_DSP_ATTRIBUTE void arm_cfft_radix4by2_q31(
+        q31_t * pSrc,
+        uint32_t fftLen,
+  const q31_t * pCoef);
 
-void arm_cfft_radix4by2_inverse_q31(
-    q31_t * pSrc,
-    uint32_t fftLen,
-    const q31_t * pCoef);
+ARM_DSP_ATTRIBUTE void arm_cfft_radix4by2_inverse_q31(
+        q31_t * pSrc,
+        uint32_t fftLen,
+  const q31_t * pCoef);
 
 
 /**
@@ -666,182 +658,181 @@ void arm_cfft_radix4by2_inverse_q31(
   @param[in]     bitReverseFlag flag that enables / disables bit reversal of output
                    - value = 0: disables bit reversal of output
                    - value = 1: enables bit reversal of output
-  @return        none
  */
-void arm_cfft_q31(
-    const arm_cfft_instance_q31 * S,
-    q31_t * p1,
-    uint8_t ifftFlag,
-    uint8_t bitReverseFlag)
+ARM_DSP_ATTRIBUTE void arm_cfft_q31(
+  const arm_cfft_instance_q31 * S,
+        q31_t * p1,
+        uint8_t ifftFlag,
+        uint8_t bitReverseFlag)
 {
-    uint32_t L = S->fftLen;
+  uint32_t L = S->fftLen;
 
-    if (ifftFlag == 1U)
-    {
-        switch (L)
-        {
-        case 16:
-        case 64:
-        case 256:
-        case 1024:
-        case 4096:
-            arm_radix4_butterfly_inverse_q31(p1, L, (q31_t*)S->pTwiddle, 1);
-            break;
+  if (ifftFlag == 1U)
+  {
+     switch (L)
+     {
+     case 16:
+     case 64:
+     case 256:
+     case 1024:
+     case 4096:
+       arm_radix4_butterfly_inverse_q31 ( p1, L, (q31_t*)S->pTwiddle, 1 );
+       break;
 
-        case 32:
-        case 128:
-        case 512:
-        case 2048:
-            arm_cfft_radix4by2_inverse_q31(p1, L, S->pTwiddle);
-            break;
-        }
-    }
-    else
-    {
-        switch (L)
-        {
-        case 16:
-        case 64:
-        case 256:
-        case 1024:
-        case 4096:
-            arm_radix4_butterfly_q31(p1, L, (q31_t*)S->pTwiddle, 1);
-            break;
+     case 32:
+     case 128:
+     case 512:
+     case 2048:
+       arm_cfft_radix4by2_inverse_q31 ( p1, L, S->pTwiddle );
+       break;
+     }
+  }
+  else
+  {
+     switch (L)
+     {
+     case 16:
+     case 64:
+     case 256:
+     case 1024:
+     case 4096:
+       arm_radix4_butterfly_q31 ( p1, L, (q31_t*)S->pTwiddle, 1 );
+       break;
 
-        case 32:
-        case 128:
-        case 512:
-        case 2048:
-            arm_cfft_radix4by2_q31(p1, L, S->pTwiddle);
-            break;
-        }
-    }
+     case 32:
+     case 128:
+     case 512:
+     case 2048:
+       arm_cfft_radix4by2_q31 ( p1, L, S->pTwiddle );
+       break;
+     }
+  }
 
-    if (bitReverseFlag)
-        arm_bitreversal_32((uint32_t *) p1, S->bitRevLength, S->pBitRevTable);
+  if ( bitReverseFlag )
+    arm_bitreversal_32 ((uint32_t*) p1, S->bitRevLength, S->pBitRevTable);
 }
 
 /**
   @} end of ComplexFFTQ31 group
  */
 
-void arm_cfft_radix4by2_q31(
-    q31_t * pSrc,
-    uint32_t fftLen,
-    const q31_t * pCoef)
+ARM_DSP_ATTRIBUTE void arm_cfft_radix4by2_q31(
+        q31_t * pSrc,
+        uint32_t fftLen,
+  const q31_t * pCoef)
 {
-    uint32_t i, l;
-    uint32_t n2;
-    q31_t xt, yt, cosVal, sinVal;
-    q31_t p0, p1;
+        uint32_t i, l;
+        uint32_t n2;
+        q31_t xt, yt, cosVal, sinVal;
+        q31_t p0, p1;
 
-    n2 = fftLen >> 1U;
-    for (i = 0; i < n2; i++)
-    {
-        cosVal = pCoef[2 * i];
-        sinVal = pCoef[2 * i + 1];
+  n2 = fftLen >> 1U;
+  for (i = 0; i < n2; i++)
+  {
+     cosVal = pCoef[2 * i];
+     sinVal = pCoef[2 * i + 1];
 
-        l = i + n2;
+     l = i + n2;
 
-        xt = (pSrc[2 * i] >> 2U) - (pSrc[2 * l] >> 2U);
-        pSrc[2 * i] = (pSrc[2 * i] >> 2U) + (pSrc[2 * l] >> 2U);
+     xt =          (pSrc[2 * i] >> 2U) - (pSrc[2 * l] >> 2U);
+     pSrc[2 * i] = (pSrc[2 * i] >> 2U) + (pSrc[2 * l] >> 2U);
 
-        yt = (pSrc[2 * i + 1] >> 2U) - (pSrc[2 * l + 1] >> 2U);
-        pSrc[2 * i + 1] = (pSrc[2 * l + 1] >> 2U) + (pSrc[2 * i + 1] >> 2U);
+     yt =              (pSrc[2 * i + 1] >> 2U) - (pSrc[2 * l + 1] >> 2U);
+     pSrc[2 * i + 1] = (pSrc[2 * l + 1] >> 2U) + (pSrc[2 * i + 1] >> 2U);
 
-        mult_32x32_keep32_R(p0, xt, cosVal);
-        mult_32x32_keep32_R(p1, yt, cosVal);
-        multAcc_32x32_keep32_R(p0, yt, sinVal);
-        multSub_32x32_keep32_R(p1, xt, sinVal);
+     mult_32x32_keep32_R(p0, xt, cosVal);
+     mult_32x32_keep32_R(p1, yt, cosVal);
+     multAcc_32x32_keep32_R(p0, yt, sinVal);
+     multSub_32x32_keep32_R(p1, xt, sinVal);
 
-        pSrc[2 * l]     = p0 << 1;
-        pSrc[2 * l + 1] = p1 << 1;
-    }
+     pSrc[2 * l]     = p0 << 1;
+     pSrc[2 * l + 1] = p1 << 1;
+  }
 
 
-    /* first col */
-    arm_radix4_butterfly_q31(pSrc,          n2, (q31_t*)pCoef, 2U);
+  /* first col */
+  arm_radix4_butterfly_q31 (pSrc,          n2, (q31_t*)pCoef, 2U);
 
-    /* second col */
-    arm_radix4_butterfly_q31(pSrc + fftLen, n2, (q31_t*)pCoef, 2U);
+  /* second col */
+  arm_radix4_butterfly_q31 (pSrc + fftLen, n2, (q31_t*)pCoef, 2U);
 
-    n2 = fftLen >> 1U;
-    for (i = 0; i < n2; i++)
-    {
-        p0 = pSrc[4 * i + 0];
-        p1 = pSrc[4 * i + 1];
-        xt = pSrc[4 * i + 2];
-        yt = pSrc[4 * i + 3];
+  n2 = fftLen >> 1U;
+  for (i = 0; i < n2; i++)
+  {
+     p0 = pSrc[4 * i + 0];
+     p1 = pSrc[4 * i + 1];
+     xt = pSrc[4 * i + 2];
+     yt = pSrc[4 * i + 3];
 
-        p0 <<= 1U;
-        p1 <<= 1U;
-        xt <<= 1U;
-        yt <<= 1U;
+     p0 <<= 1U;
+     p1 <<= 1U;
+     xt <<= 1U;
+     yt <<= 1U;
 
-        pSrc[4 * i + 0] = p0;
-        pSrc[4 * i + 1] = p1;
-        pSrc[4 * i + 2] = xt;
-        pSrc[4 * i + 3] = yt;
-    }
+     pSrc[4 * i + 0] = p0;
+     pSrc[4 * i + 1] = p1;
+     pSrc[4 * i + 2] = xt;
+     pSrc[4 * i + 3] = yt;
+  }
 
 }
 
-void arm_cfft_radix4by2_inverse_q31(
-    q31_t * pSrc,
-    uint32_t fftLen,
-    const q31_t * pCoef)
+ARM_DSP_ATTRIBUTE void arm_cfft_radix4by2_inverse_q31(
+        q31_t * pSrc,
+        uint32_t fftLen,
+  const q31_t * pCoef)
 {
-    uint32_t i, l;
-    uint32_t n2;
-    q31_t xt, yt, cosVal, sinVal;
-    q31_t p0, p1;
+  uint32_t i, l;
+  uint32_t n2;
+  q31_t xt, yt, cosVal, sinVal;
+  q31_t p0, p1;
 
-    n2 = fftLen >> 1U;
-    for (i = 0; i < n2; i++)
-    {
-        cosVal = pCoef[2 * i];
-        sinVal = pCoef[2 * i + 1];
+  n2 = fftLen >> 1U;
+  for (i = 0; i < n2; i++)
+  {
+     cosVal = pCoef[2 * i];
+     sinVal = pCoef[2 * i + 1];
 
-        l = i + n2;
+     l = i + n2;
 
-        xt = (pSrc[2 * i] >> 2U) - (pSrc[2 * l] >> 2U);
-        pSrc[2 * i] = (pSrc[2 * i] >> 2U) + (pSrc[2 * l] >> 2U);
+     xt =          (pSrc[2 * i] >> 2U) - (pSrc[2 * l] >> 2U);
+     pSrc[2 * i] = (pSrc[2 * i] >> 2U) + (pSrc[2 * l] >> 2U);
 
-        yt = (pSrc[2 * i + 1] >> 2U) - (pSrc[2 * l + 1] >> 2U);
-        pSrc[2 * i + 1] = (pSrc[2 * l + 1] >> 2U) + (pSrc[2 * i + 1] >> 2U);
+     yt =              (pSrc[2 * i + 1] >> 2U) - (pSrc[2 * l + 1] >> 2U);
+     pSrc[2 * i + 1] = (pSrc[2 * l + 1] >> 2U) + (pSrc[2 * i + 1] >> 2U);
 
-        mult_32x32_keep32_R(p0, xt, cosVal);
-        mult_32x32_keep32_R(p1, yt, cosVal);
-        multSub_32x32_keep32_R(p0, yt, sinVal);
-        multAcc_32x32_keep32_R(p1, xt, sinVal);
+     mult_32x32_keep32_R(p0, xt, cosVal);
+     mult_32x32_keep32_R(p1, yt, cosVal);
+     multSub_32x32_keep32_R(p0, yt, sinVal);
+     multAcc_32x32_keep32_R(p1, xt, sinVal);
 
-        pSrc[2 * l]     = p0 << 1U;
-        pSrc[2 * l + 1] = p1 << 1U;
-    }
+     pSrc[2 * l]     = p0 << 1U;
+     pSrc[2 * l + 1] = p1 << 1U;
+  }
 
-    /* first col */
-    arm_radix4_butterfly_inverse_q31(pSrc,          n2, (q31_t*)pCoef, 2U);
+  /* first col */
+  arm_radix4_butterfly_inverse_q31( pSrc,          n2, (q31_t*)pCoef, 2U);
 
-    /* second col */
-    arm_radix4_butterfly_inverse_q31(pSrc + fftLen, n2, (q31_t*)pCoef, 2U);
+  /* second col */
+  arm_radix4_butterfly_inverse_q31( pSrc + fftLen, n2, (q31_t*)pCoef, 2U);
 
-    n2 = fftLen >> 1U;
-    for (i = 0; i < n2; i++)
-    {
-        p0 = pSrc[4 * i + 0];
-        p1 = pSrc[4 * i + 1];
-        xt = pSrc[4 * i + 2];
-        yt = pSrc[4 * i + 3];
+  n2 = fftLen >> 1U;
+  for (i = 0; i < n2; i++)
+  {
+     p0 = pSrc[4 * i + 0];
+     p1 = pSrc[4 * i + 1];
+     xt = pSrc[4 * i + 2];
+     yt = pSrc[4 * i + 3];
 
-        p0 <<= 1U;
-        p1 <<= 1U;
-        xt <<= 1U;
-        yt <<= 1U;
+     p0 <<= 1U;
+     p1 <<= 1U;
+     xt <<= 1U;
+     yt <<= 1U;
 
-        pSrc[4 * i + 0] = p0;
-        pSrc[4 * i + 1] = p1;
-        pSrc[4 * i + 2] = xt;
-        pSrc[4 * i + 3] = yt;
-    }
+     pSrc[4 * i + 0] = p0;
+     pSrc[4 * i + 1] = p1;
+     pSrc[4 * i + 2] = xt;
+     pSrc[4 * i + 3] = yt;
+  }
 }
 #endif /* defined(ARM_MATH_MVEI) */

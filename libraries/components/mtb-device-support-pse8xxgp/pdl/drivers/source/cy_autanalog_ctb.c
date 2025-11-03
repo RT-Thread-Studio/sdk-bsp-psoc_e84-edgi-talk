@@ -84,28 +84,28 @@ cy_en_autanalog_status_t Cy_AutAnalog_CTB_LoadStaticConfig(uint8_t ctbIdx, const
         CY_ASSERT_L3(AUTANALOG_CTB_OA_CC_CAP(ctbStaCfg->capCcOpamp1));
 
         regVal =
-            /* The static configuration for Opamp0 */
-            _VAL2FLD(CTBL_STA_CFG_OA0_PWR_MODE, ctbStaCfg->pwrOpamp0) |
-            _VAL2FLD(CTBL_STA_CFG_OA0_TOPO, ctbStaCfg->topologyOpamp0) |
-            _VAL2FLD(CTBL_STA_CFG_OA0_COMP_OUT, ctbStaCfg->intComp0) |
-            _VAL2FLD(CTBL_STA_CFG_RES0_SWAP, 0UL) | /* Set default value */
+                /* The static configuration for Opamp0 */
+                _VAL2FLD(CTBL_STA_CFG_OA0_PWR_MODE, ctbStaCfg->pwrOpamp0) |
+                _VAL2FLD(CTBL_STA_CFG_OA0_TOPO, ctbStaCfg->topologyOpamp0) |
+                _VAL2FLD(CTBL_STA_CFG_OA0_COMP_OUT, ctbStaCfg->intComp0) |
+                _VAL2FLD(CTBL_STA_CFG_RES0_SWAP, 0UL) | /* Set default value */
 #if ((CY_IP_MXS22LPPASS_VERSION == 1UL) && (CY_IP_MXS22LPPASS_VERSION_MINOR == 0UL))
-            _VAL2FLD(CTBL_STA_CFG_OA0_CC_OVERRIDE, ctbStaCfg->capCcOpamp0 == CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED ? 0UL : 1UL) |
+                _VAL2FLD(CTBL_STA_CFG_OA0_CC_OVERRIDE, ctbStaCfg->capCcOpamp0 == CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED ? 0UL : 1UL) |
 #else
-            _VAL2FLD(CTBL_STA_CFG_OA0_CC_ENABLE, ctbStaCfg->capCcOpamp0 == CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED ? 0UL : 1UL) |
+                _VAL2FLD(CTBL_STA_CFG_OA0_CC_ENABLE, ctbStaCfg->capCcOpamp0 == CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED ? 0UL : 1UL) |
 #endif
-            _VAL2FLD(CTBL_STA_CFG_C0_FB, ctbStaCfg->capFbOpamp0) |
-            /* The static configuration for Opamp1 */
-            _VAL2FLD(CTBL_STA_CFG_OA1_PWR_MODE, ctbStaCfg->pwrOpamp1) |
-            _VAL2FLD(CTBL_STA_CFG_OA1_TOPO, ctbStaCfg->topologyOpamp1) |
-            _VAL2FLD(CTBL_STA_CFG_OA1_COMP_OUT, ctbStaCfg->intComp1) |
-            _VAL2FLD(CTBL_STA_CFG_RES1_SWAP, 0UL) | /* Set default value */
+                _VAL2FLD(CTBL_STA_CFG_C0_FB, ctbStaCfg->capFbOpamp0) |
+                /* The static configuration for Opamp1 */
+                _VAL2FLD(CTBL_STA_CFG_OA1_PWR_MODE, ctbStaCfg->pwrOpamp1) |
+                _VAL2FLD(CTBL_STA_CFG_OA1_TOPO, ctbStaCfg->topologyOpamp1) |
+                _VAL2FLD(CTBL_STA_CFG_OA1_COMP_OUT, ctbStaCfg->intComp1) |
+                _VAL2FLD(CTBL_STA_CFG_RES1_SWAP, 0UL) | /* Set default value */
 #if ((CY_IP_MXS22LPPASS_VERSION == 1UL) && (CY_IP_MXS22LPPASS_VERSION_MINOR == 0UL))
-            _VAL2FLD(CTBL_STA_CFG_OA1_CC_OVERRIDE, ctbStaCfg->capCcOpamp1 == CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED ? 0UL : 1UL) |
+                _VAL2FLD(CTBL_STA_CFG_OA1_CC_OVERRIDE, ctbStaCfg->capCcOpamp1 == CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED ? 0UL : 1UL) |
 #else
-            _VAL2FLD(CTBL_STA_CFG_OA1_CC_ENABLE, ctbStaCfg->capCcOpamp1 == CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED ? 0UL : 1UL) |
+                _VAL2FLD(CTBL_STA_CFG_OA1_CC_ENABLE, ctbStaCfg->capCcOpamp1 == CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED ? 0UL : 1UL) |
 #endif
-            _VAL2FLD(CTBL_STA_CFG_C1_FB, ctbStaCfg->capFbOpamp1);
+                _VAL2FLD(CTBL_STA_CFG_C1_FB, ctbStaCfg->capFbOpamp1);
 
         if (CY_AUTANALOG_SUCCESS == Cy_AutAnalog_IdxToBaseAddr(CY_AUTANALOG_CTB, ctbIdx, &baseAddr))
         {
@@ -120,7 +120,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_CTB_LoadStaticConfig(uint8_t ctbIdx, const
                 /* Enables compensation capacitor for OpAmp0 in CTB0 */
                 CTBL0->TRIM.OA0_COMP_TRIM = (ctbStaCfg->capCcOpamp0 != CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED) ?
                                             (uint32_t)ctbStaCfg->capCcOpamp0 :
-                                            0UL;
+                                             0UL;
 
                 /* Enables the required start-up/settling delay for the enabled OpAmp1 in CTB0 */
                 if (CY_AUTANALOG_CTB_OA_PWR_OFF != ctbStaCfg->pwrOpamp1)
@@ -130,7 +130,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_CTB_LoadStaticConfig(uint8_t ctbIdx, const
                 /* Enables compensation capacitor for OpAmp1 in CTB0 */
                 CTBL0->TRIM.OA1_COMP_TRIM = (ctbStaCfg->capCcOpamp1 != CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED) ?
                                             (uint32_t)ctbStaCfg->capCcOpamp1 :
-                                            0UL;
+                                             0UL;
 #endif
             }
             else
@@ -145,7 +145,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_CTB_LoadStaticConfig(uint8_t ctbIdx, const
                 /* Enables compensation capacitor for OpAmp0 in CTB1 */
                 CTBL1->TRIM.OA0_COMP_TRIM = (ctbStaCfg->capCcOpamp0 != CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED) ?
                                             (uint32_t)ctbStaCfg->capCcOpamp0 :
-                                            0UL;
+                                             0UL;
 
                 /* Enables the required start-up/settling delay for the enabled OpAmp1 in CTB1 */
                 if (CY_AUTANALOG_CTB_OA_PWR_OFF != ctbStaCfg->pwrOpamp1)
@@ -155,7 +155,7 @@ cy_en_autanalog_status_t Cy_AutAnalog_CTB_LoadStaticConfig(uint8_t ctbIdx, const
                 /* Enables compensation capacitor for OpAmp1 in CTB1 */
                 CTBL1->TRIM.OA1_COMP_TRIM = (ctbStaCfg->capCcOpamp1 != CY_AUTANALOG_CTB_OA_CC_CAP_DISABLED) ?
                                             (uint32_t)ctbStaCfg->capCcOpamp1 :
-                                            0UL;
+                                             0UL;
 #endif
             }
 
@@ -193,18 +193,18 @@ cy_en_autanalog_status_t Cy_AutAnalog_CTB_LoadDynamicConfig(uint8_t ctbIdx, uint
             CY_ASSERT_L3(AUTANALOG_CTB_OA_CTBBUS_MUX_OUT(ctbDynCfgArr[cfgIdx].sharedMuxOut));
 
             regVal =
-                _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_INP_DIRECT, ctbDynCfgArr[cfgIdx].ninvInpPin) |
-                _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_INP_REF, ctbDynCfgArr[cfgIdx].ninvInpRef) |
-                _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_INM_DIRECT, ctbDynCfgArr[cfgIdx].invInpPin) |
-                _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_RES_DIRECT, ctbDynCfgArr[cfgIdx].resInpPin) |
-                _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_RES_REF, ctbDynCfgArr[cfgIdx].resInpRef) |
-                _VAL2FLD(CTBL_DYN_OA_MUX_CFG_CTBBUS_MUX_IN, ctbDynCfgArr[cfgIdx].sharedMuxIn) |
-                _VAL2FLD(CTBL_DYN_OA_MUX_CFG_CTBBUS_MUX_OUT, ctbDynCfgArr[cfgIdx].sharedMuxOut) |
-                _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_TO_PIN, ctbDynCfgArr[cfgIdx].outToPin ? 1UL : 0UL);
+                    _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_INP_DIRECT, ctbDynCfgArr[cfgIdx].ninvInpPin) |
+                    _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_INP_REF, ctbDynCfgArr[cfgIdx].ninvInpRef) |
+                    _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_INM_DIRECT, ctbDynCfgArr[cfgIdx].invInpPin) |
+                    _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_RES_DIRECT, ctbDynCfgArr[cfgIdx].resInpPin) |
+                    _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_RES_REF, ctbDynCfgArr[cfgIdx].resInpRef) |
+                    _VAL2FLD(CTBL_DYN_OA_MUX_CFG_CTBBUS_MUX_IN, ctbDynCfgArr[cfgIdx].sharedMuxIn) |
+                    _VAL2FLD(CTBL_DYN_OA_MUX_CFG_CTBBUS_MUX_OUT, ctbDynCfgArr[cfgIdx].sharedMuxOut) |
+                    _VAL2FLD(CTBL_DYN_OA_MUX_CFG_OA_TO_PIN, ctbDynCfgArr[cfgIdx].outToPin ? 1UL : 0UL);
 
             if (CY_AUTANALOG_SUCCESS == Cy_AutAnalog_IdxToBaseAddr(CY_AUTANALOG_CTB, ctbIdx, &baseAddr))
             {
-                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 13.5', 'Review shows that accessing of volatile object does not have any negative drawbacks');
+                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 13.5','Review shows that accessing of volatile object does not have any negative drawbacks');
                 AUTANALOG_CTBX_DYN_CFG(baseAddr, cfgIdx) = regVal;
                 result = CY_AUTANALOG_SUCCESS;
             }

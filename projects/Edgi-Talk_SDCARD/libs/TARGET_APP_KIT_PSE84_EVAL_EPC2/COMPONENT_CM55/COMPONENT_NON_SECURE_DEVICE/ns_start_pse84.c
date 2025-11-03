@@ -1,7 +1,36 @@
+/***************************************************************************//**
+* \file ns_start_pse84.c
+* \version 1.0
+*
+* The device system-startup file.
+*
+********************************************************************************/
+/*
+ * Copyright (c) 2009-2021 Arm Limited. All rights reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the License); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * CMSIS Device Startup file modified to adapt for PSOC Edge Device.
+ */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
-#include "startup_cat1d.h"
+#include "startup_edge.h"
 #include "cy_sysint.h"
 #include "cy_syspm.h"
 #include "cy_syslib.h"
@@ -10,13 +39,13 @@
 #define SCB_NS_CPACR_CP10_CP11_ENABLE      (0xFUL << 20u)
 
 CY_MISRA_FP_BLOCK_START('MISRA C-2012 Rule 8.6', 3, \
-                        'Checked manually. The definition is a part of linker script or application.')
+'Checked manually. The definition is a part of linker script or application.')
 CY_MISRA_DEVIATE_BLOCK_START('ARRAY_VS_SINGLETON', 1, \
-                             'Checked manually. Using pointer as an array will not corrupt or misinterpret adjacent memory locations.')
+'Checked manually. Using pointer as an array will not corrupt or misinterpret adjacent memory locations.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 18.1', 3, \
-                             'Checked manually. Dereferencing a pointer to one beyond the end of an array will not result in undefined behaviour.')
+'Checked manually. Dereferencing a pointer to one beyond the end of an array will not result in undefined behaviour.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 18.3', 1, \
-                             'Checked manually. Attempting to make comparisons between pointers will not result in undefined behaviour.')
+'Checked manually. Attempting to make comparisons between pointers will not result in undefined behaviour.')
 
 /*
 ** Copyright (c) 2018 Arm Limited. All rights reserved.
@@ -26,13 +55,13 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 18.3', 1, \
 //----------------------------------------------------------------
 
 #if defined (__ARMCC_VERSION)
-    extern uint32_t Region$$Table$$Base;
-    extern uint32_t Region$$Table$$Limit;
-    typedef  void(*pGenericFunction)(uint8_t *pSrc, uint8_t* pDst, uint32_t len);     /* typedef for the generic function pointers */
+extern uint32_t Region$$Table$$Base;
+extern uint32_t Region$$Table$$Limit;
+typedef  void(*pGenericFunction)(uint8_t *pSrc, uint8_t* pDst, uint32_t len);     /* typedef for the generic function pointers */
 #endif
 
-#define CY_SYSINT_EWIC_CTL            (0xE0047000U)   /**< EWIC control register */
-#define CY_SYSINT_EWIC_ENABLE_MSK     (0x1U)          /**< EWIC enable mask */
+#define CY_SYSINT_EWIC_CTL            (0xE0047000U)	  /**< EWIC control register */
+#define CY_SYSINT_EWIC_ENABLE_MSK     (0x1U) 		  /**< EWIC enable mask */
 
 __WEAK void Reset_Handler(void);
 void MemManage_Handler(void);
@@ -50,33 +79,33 @@ void SysLib_FaultHandler(uint32_t const *faultStackAddr);
 extern int main(void);
 
 #if defined (__ARMCC_VERSION)
-    void __attribute__((optnone)) Cy_RuntimeInit(void);
+void __attribute__((optnone)) Cy_RuntimeInit(void);
 #else
-    void Cy_RuntimeInit(void);
+void Cy_RuntimeInit(void);
 #endif
 
 #if defined(__llvm__) && !defined(__ARMCC_VERSION)
-    extern void _start(void);
-    extern unsigned int __stack;
-    extern uint32_t __stack_limit;
-    typedef void(* ExecFuncPtrRw)(void);
-    ExecFuncPtrRw __ns_vector_table_rw[VECTORTABLE_SIZE]   __attribute__((section(".ram_vectors"))) __attribute__((aligned(VECTORTABLE_ALIGN)));
+extern void _start(void);
+extern unsigned int __stack;
+extern uint32_t __stack_limit;
+ExecFuncPtrRw __ns_vector_table_rw[VECTORTABLE_SIZE]   __attribute__( ( section(".ram_vectors"))) __attribute__((aligned(VECTORTABLE_ALIGN)));
 #elif defined(__ARMCC_VERSION)
-    extern unsigned int Image$$ARM_LIB_STACK$$ZI$$Limit;
-    extern unsigned int Image$$ARM_LIB_STACK$$ZI$$Base;
-    extern void __main(void);
-    typedef void(* ExecFuncPtrRw)(void);
-    ExecFuncPtrRw __ns_vector_table_rw[VECTORTABLE_SIZE] __attribute__((section(".bss.noinit.RESET_RAM"))) __attribute__((aligned(VECTORTABLE_ALIGN)));
+extern unsigned int Image$$ARM_LIB_STACK$$ZI$$Limit;
+extern unsigned int Image$$ARM_LIB_STACK$$ZI$$Base;
+extern void __main(void);
+ExecFuncPtrRw __ns_vector_table_rw[VECTORTABLE_SIZE] __attribute__( ( section(".bss.noinit.RESET_RAM"))) __attribute__((aligned(VECTORTABLE_ALIGN)));
 #elif defined (__GNUC__)
-    extern unsigned int __StackTop;
-    extern uint32_t __StackLimit;
-    typedef void(* ExecFuncPtrRw)(void);
-    ExecFuncPtrRw __ns_vector_table_rw[VECTORTABLE_SIZE]   __attribute__((section(".ram_vectors"))) __attribute__((aligned(VECTORTABLE_ALIGN)));
+extern unsigned int __StackTop;
+extern uint32_t __StackLimit;
+ExecFuncPtrRw __ns_vector_table_rw[VECTORTABLE_SIZE]   __attribute__( ( section(".ram_vectors"))) __attribute__((aligned(VECTORTABLE_ALIGN)));
 #elif defined (__ICCARM__)
-    extern unsigned int CSTACK$$Limit;
-    extern unsigned int CSTACK$$Base;
-    extern void  __cmain();
-    ExecFuncPtrRw __ns_vector_table_rw[VECTORTABLE_SIZE]   __attribute__((section(".intvec_ram"))) __attribute__((aligned(VECTORTABLE_ALIGN)));
+extern unsigned int CSTACK$$Limit;
+extern unsigned int CSTACK$$Base;
+extern void  __cmain();
+// IAR (and C-SPY debugger) expect that the vector table is defined as __vector_table, so alias the definition upon compilation.
+// If the alias is not done, IAR includes its own default __vector_table definition in the compilation.
+#define __ns_vector_table __vector_table
+ExecFuncPtrRw __ns_vector_table_rw[VECTORTABLE_SIZE]   __attribute__( ( section(".intvec_ram"))) __attribute__((aligned(VECTORTABLE_ALIGN)));
 #else
     #error "An unsupported toolchain"
 #endif  /* (__ARMCC_VERSION) */
@@ -125,7 +154,7 @@ void NMIException_Handler(void)
 
 __WEAK void HardFault_Handler(void)
 {
-    __asm(
+    __asm (
         "MRS R0, CONTROL\n"
         "TST R0, #2\n"
         "ITE EQ\n"
@@ -136,34 +165,13 @@ __WEAK void HardFault_Handler(void)
     );
 }
 
-void MemManage_Handler(void)
-{
-    while (true) {}
-}
-void BusFault_Handler(void)
-{
-    while (true) {}
-}
-void UsageFault_Handler(void)
-{
-    while (true) {}
-}
-__WEAK void SVC_Handler(void)
-{
-    while (true) {}
-}
-void DebugMon_Handler(void)
-{
-    while (true) {}
-}
-__WEAK void PendSV_Handler(void)
-{
-    while (true) {}
-}
-__WEAK void SysTick_Handler(void)
-{
-    while (true) {}
-}
+void MemManage_Handler(void)        {while(true){}}
+void BusFault_Handler(void)         {while(true){}}
+void UsageFault_Handler(void)       {while(true){}}
+__WEAK void SVC_Handler(void)       {while(true){}}
+void DebugMon_Handler(void)         {while(true){}}
+__WEAK void PendSV_Handler(void)    {while(true){}}
+__WEAK void SysTick_Handler(void)   {while(true){}}
 
 void InterruptHandler(void)
 {
@@ -173,9 +181,8 @@ void InterruptHandler(void)
     );
 }
 
-ExecFuncPtr __ns_vector_table[] __VECTOR_TABLE_ATTRIBUTE =
-{
-    (ExecFuncPtr) &__INITIAL_SP,          // initial SP
+ExecFuncPtr __ns_vector_table[] __VECTOR_TABLE_ATTRIBUTE = {
+    (ExecFuncPtr)&__INITIAL_SP,           // initial SP
     (ExecFuncPtr)Reset_Handler,           // initial PC/Reset
     (ExecFuncPtr)NMIException_Handler,
     (ExecFuncPtr)HardFault_Handler,
@@ -435,68 +442,6 @@ ExecFuncPtr __ns_vector_table[] __VECTOR_TABLE_ATTRIBUTE =
     (ExecFuncPtr)InterruptHandler
 };
 
-#define MPU_SRAM1_SHARED_MEM_REG_ID     0x1
-#define MPU_SRAM1_SHARED_MEM_ATTR_IDX   0x1
-
-#define MPU_SOCMEM_SHARED_MEM_REG_ID     0x2
-#define MPU_SOCMEM_SHARED_MEM_ATTR_IDX   0x2
-
-#define MPU_GPU_BUF_MEM_ATTR_IDX        0x3
-#define MPU_GPU_BUF_MEM_REG_ID          0x3
-
-#ifndef CY_NON_CACHABLE_SRAM_ADDR
-    #define CY_NON_CACHABLE_SRAM_ADDR          (0x240FD000u)
-#endif
-
-#ifndef CY_NON_CACHABLE_SRAM_SIZE
-    #define CY_NON_CACHABLE_SRAM_SIZE          (0x00003000u)
-#endif
-
-#ifndef CY_NON_CACHABLE_SOCMEM_SHARED_ADDR
-    #define CY_NON_CACHABLE_SOCMEM_SHARED_ADDR (0x26180000u)
-#endif
-
-#ifndef CY_NON_CACHABLE_SOCMEM_SHARED_SIZE
-    #define CY_NON_CACHABLE_SOCMEM_SHARED_SIZE (0x00300000u)
-#endif
-
-#ifndef CY_NON_CACHABLE_GPU_BUF_ADDR
-    #define CY_NON_CACHABLE_GPU_BUF_ADDR       (0x26480000u)
-#endif
-
-#ifndef CY_NON_CACHABLE_GPU_BUF_SIZE
-    #define CY_NON_CACHABLE_GPU_BUF_SIZE       (0x00080000u)
-#endif
-
-void config_noncacheable_region(void)
-{
-    ARM_MPU_Disable();
-
-    /* Program MAIR0 and MAIR1 */
-    ARM_MPU_SetMemAttr(MPU_SRAM1_SHARED_MEM_ATTR_IDX,
-                       ARM_MPU_ATTR(ARM_MPU_ATTR_NON_CACHEABLE, ARM_MPU_ATTR_NON_CACHEABLE));
-
-    ARM_MPU_SetRegion(MPU_SRAM1_SHARED_MEM_REG_ID,
-                      ARM_MPU_RBAR(CY_NON_CACHABLE_SRAM_ADDR, ARM_MPU_SH_INNER, 0UL, 1UL, 1UL),
-                      ARM_MPU_RLAR((CY_NON_CACHABLE_SRAM_ADDR + CY_NON_CACHABLE_SRAM_SIZE - 1UL), MPU_SRAM1_SHARED_MEM_ATTR_IDX));
-
-    /* socmem shared mem */
-    ARM_MPU_SetMemAttr(MPU_SOCMEM_SHARED_MEM_ATTR_IDX,
-                       ARM_MPU_ATTR(ARM_MPU_ATTR_NON_CACHEABLE, ARM_MPU_ATTR_NON_CACHEABLE));
-
-    ARM_MPU_SetRegion(MPU_SOCMEM_SHARED_MEM_REG_ID,
-                      ARM_MPU_RBAR(CY_NON_CACHABLE_SOCMEM_SHARED_ADDR, ARM_MPU_SH_INNER, 0UL, 1UL, 1UL),
-                      ARM_MPU_RLAR((CY_NON_CACHABLE_SOCMEM_SHARED_ADDR + CY_NON_CACHABLE_SOCMEM_SHARED_SIZE - 1UL), MPU_SOCMEM_SHARED_MEM_ATTR_IDX));
-    ARM_MPU_SetMemAttr(MPU_GPU_BUF_MEM_ATTR_IDX,
-                       ARM_MPU_ATTR(ARM_MPU_ATTR_NON_CACHEABLE, ARM_MPU_ATTR_NON_CACHEABLE));
-
-    ARM_MPU_SetRegion(MPU_GPU_BUF_MEM_REG_ID,
-                      ARM_MPU_RBAR(CY_NON_CACHABLE_GPU_BUF_ADDR, ARM_MPU_SH_INNER, 0UL, 1UL, 1UL),
-                      ARM_MPU_RLAR((CY_NON_CACHABLE_GPU_BUF_ADDR + CY_NON_CACHABLE_GPU_BUF_SIZE - 1UL), MPU_GPU_BUF_MEM_ATTR_IDX));
-
-    ARM_MPU_Enable(4);
-}
-
 #if defined(__GNUC__) && !defined(__ARMCC_VERSION)
 /* GCC: newlib crt0 _start executes software_init_hook.
    The cy_toolchain_init hook provided by clib-support library must execute
@@ -553,11 +498,9 @@ __WEAK void Reset_Handler(void)
 
     __disable_irq();
 
-    config_noncacheable_region();
-
     for (uint32_t count = 0; count < VECTORTABLE_SIZE; count++)
     {
-        __ns_vector_table_rw[count] = __ns_vector_table[count];
+        __ns_vector_table_rw[count] =__ns_vector_table[count];
     }
 
     SCB->VTOR = (uint32_t)__ns_vector_table_rw;
@@ -571,8 +514,8 @@ __WEAK void Reset_Handler(void)
 
     /* Enable Loop and branch info cache */
     SCB->CCR |= SCB_CCR_LOB_Msk;
-    __DMB();
-    __ISB();
+     __DMB();
+     __ISB();
     SCB_EnableICache();
     SCB_EnableDCache();
 

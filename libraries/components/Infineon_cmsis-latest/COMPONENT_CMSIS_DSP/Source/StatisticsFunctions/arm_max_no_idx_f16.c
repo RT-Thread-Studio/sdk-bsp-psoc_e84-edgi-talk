@@ -31,7 +31,7 @@
 #if defined(ARM_FLOAT16_SUPPORTED)
 
 #if (defined(ARM_MATH_NEON) || defined(ARM_MATH_MVEF)) && !defined(ARM_MATH_AUTOVECTORIZE)
-    #include <limits.h>
+#include <limits.h>
 #endif
 
 /**
@@ -49,27 +49,26 @@
   @param[in]     pSrc       points to the input vector
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    maximum value returned here
-  @return        none
  */
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_max_no_idx_f16(
+ARM_DSP_ATTRIBUTE void arm_max_no_idx_f16(
     const float16_t *pSrc,
     uint32_t   blockSize,
     float16_t *pResult)
 {
-    f16x8_t     vecSrc;
-    f16x8_t     curExtremValVec = vdupq_n_f16(F16_MIN);
-    float16_t   maxValue = F16_MIN;
-    float16_t   newVal;
-    uint32_t    blkCnt;
+   f16x8_t     vecSrc;
+   f16x8_t     curExtremValVec = vdupq_n_f16(F16_MIN);
+   float16_t   maxValue = F16_MIN;
+   float16_t   newVal;
+   uint32_t    blkCnt;
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 3U;
+   /* Loop unrolling: Compute 4 outputs at a time */
+   blkCnt = blockSize >> 3U;
 
-    while (blkCnt > 0U)
-    {
+   while (blkCnt > 0U)
+   {
 
         vecSrc = vldrhq_f16(pSrc);
         /*
@@ -109,29 +108,29 @@ void arm_max_no_idx_f16(
 
 #else
 
-void arm_max_no_idx_f16(
+ARM_DSP_ATTRIBUTE void arm_max_no_idx_f16(
     const float16_t *pSrc,
     uint32_t   blockSize,
     float16_t *pResult)
 {
-    float16_t   maxValue = F16_MIN;
-    float16_t   newVal;
+   float16_t   maxValue = F16_MIN;
+   float16_t   newVal;
 
-    while (blockSize > 0U)
-    {
-        newVal = *pSrc++;
-
-        /* compare for the maximum value */
-        if ((_Float16)maxValue < (_Float16)newVal)
-        {
-            /* Update the maximum value and it's index */
-            maxValue = newVal;
-        }
-
-        blockSize --;
-    }
-
-    *pResult = maxValue;
+   while (blockSize > 0U)
+   {
+       newVal = *pSrc++;
+   
+       /* compare for the maximum value */
+       if ((_Float16)maxValue < (_Float16)newVal)
+       {
+           /* Update the maximum value and it's index */
+           maxValue = newVal;
+       }
+   
+       blockSize --;
+   }
+    
+   *pResult = maxValue;
 }
 
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
@@ -140,5 +139,5 @@ void arm_max_no_idx_f16(
   @} end of Max group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

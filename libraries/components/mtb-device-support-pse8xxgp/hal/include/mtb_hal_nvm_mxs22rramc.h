@@ -52,18 +52,18 @@ extern "C" {
 
 typedef enum
 {
-#if (CY_RRAM_WORK_REGION_SIZE > 0)
+    #if (CY_RRAM_WORK_REGION_SIZE > 0)
     _MTB_HAL_RRAM_WORK_REGION,
-#endif
-#if (CY_RRAM_SFLASH_REGION_SIZE > 0)
+    #endif
+    #if (CY_RRAM_SFLASH_REGION_SIZE > 0)
     _MTB_HAL_RRAM_SFLASH_REGION,
-#endif
-#if (CY_RRAM_PROTECTED_REGION_SIZE > 0)
+    #endif
+    #if (CY_RRAM_PROTECTED_REGION_SIZE > 0)
     _MTB_HAL_RRAM_PROTECTED_REGION,
-#endif
-#if (CY_RRAM_MAIN_REGION_SIZE > 0)
+    #endif
+    #if (CY_RRAM_MAIN_REGION_SIZE > 0)
     _MTB_HAL_RRAM_MAIN_REGION,
-#endif
+    #endif
     _MTB_HAL_RRAM_REGION_COUNT
 } _mtb_hal_rram_regions_count;
 
@@ -85,9 +85,9 @@ __STATIC_INLINE bool _mtb_hal_nvm_is_operation_complete(void)
 {
     bool complete = true;
 
-#if (_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM)
+    #if (_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM)
     complete = !(Cy_RRAM_IsBusy(RRAMC0));
-#endif /* #if (_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM) */
+    #endif /* #if (_MTB_HAL_DRIVER_AVAILABLE_NVM_RRAM) */
 
     return complete;
 }
@@ -98,7 +98,7 @@ __STATIC_INLINE bool _mtb_hal_nvm_is_operation_complete(void)
 // _mtb_hal_nvm_read_helper_rram
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE cy_rslt_t _mtb_hal_nvm_read_helper_rram(uint32_t address, uint8_t* data,
-        size_t size)
+                                                        size_t size)
 {
     return (cy_rslt_t)Cy_RRAM_TSReadByteArray(RRAMC0, address, data, size);
 }

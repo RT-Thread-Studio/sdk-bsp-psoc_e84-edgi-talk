@@ -25,7 +25,7 @@
 * limitations under the License.
 *******************************************************************************/
 /**
- * \addtogroup group_pdl_aliases PDL Aliases
+ * \addtogroup mtb_syspm_group_pdl_aliases PDL Aliases
  * \{
  * All the following deepsleep callbacks are defined in the PDL and this file only
  * reports the documentation about them as weel as the redefinition to match the
@@ -374,7 +374,7 @@ extern "C" {
 *   the device fails to enter Deep Sleep mode or it is awakened from Deep Sleep
 *   mode. While the SPI is disabled, it stops driving the outputs and ignores
 *   the inputs. Any incoming data is ignored.
-*   Refer to section  group_scb_spi_lp for more information about SPI pins
+*   Refer to section  mtb_syspm_group_scb_spi_lp for more information about SPI pins
 *   when SCB disabled.
 *
 * This function must be called during execution of  Cy_SysPm_CpuEnterDeepSleep.
@@ -509,4 +509,4 @@ extern "C" {
 }
 #endif
 
-/** \} group_pdl_aliases */
+/** \} mtb_syspm_group_pdl_aliases */

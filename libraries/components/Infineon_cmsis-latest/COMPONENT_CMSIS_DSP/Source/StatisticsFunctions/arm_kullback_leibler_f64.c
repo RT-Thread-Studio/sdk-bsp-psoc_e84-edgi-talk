@@ -46,29 +46,29 @@
  */
 
 
-float64_t arm_kullback_leibler_f64(const float64_t * pSrcA, const float64_t * pSrcB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float64_t arm_kullback_leibler_f64(const float64_t * pSrcA, const float64_t * pSrcB, uint32_t blockSize)
 {
     const float64_t *pInA, *pInB;
     uint32_t blkCnt;
-    float64_t accum, pA, pB;
-
+    float64_t accum, pA,pB;
+ 
     pInA = pSrcA;
     pInB = pSrcB;
     blkCnt = blockSize;
 
     accum = 0.0;
 
-    while (blkCnt > 0)
+    while(blkCnt > 0)
     {
         pA = *pInA++;
         pB = *pInB++;
 
         accum += pA * log(pB / pA);
-
+       
         blkCnt--;
     }
 
-    return (-accum);
+    return(-accum);
 }
 /**
  * @} end of Kullback-Leibler group

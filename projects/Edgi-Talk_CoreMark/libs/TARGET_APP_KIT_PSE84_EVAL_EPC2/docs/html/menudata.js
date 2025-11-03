@@ -24,6 +24,6 @@
 */
 var menudata={children:[
 {text:"Home",url:"index.html"},
-{text:"BSP Overview",url:"md_source_bsps_mt_bsp_user_guide.html"},
+{text:"BSP Overview",url:"md_ci_src_docs_mt_bsp_user_guide.html"},
 {text:"BSP Settings",url:"md_bsp_settings.html"},
 {text:"BSP API Reference",url:"modules.html"}]}

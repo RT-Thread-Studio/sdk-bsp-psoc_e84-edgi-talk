@@ -23,14 +23,6 @@
 # limitations under the License.
 ################################################################################
 
-# 
-# CORE
-#   - The type of ARM core used by the application.
-#   - May be set by user in Makefile or by a BSP.
-#   - If not set, assume CM0P.
-#   - Valid COREs are determined by the selected toolchain. 
-#     Currently this includes: CM0, CM0P, CM4, and CM33.
-#
 #
 # Define the default core
 #

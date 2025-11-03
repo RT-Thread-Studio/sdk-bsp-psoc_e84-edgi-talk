@@ -26,16 +26,16 @@
 #include "cy_pdl.h"
 
 #if defined(CY_IP_MXS22SRSS) || defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS)
-    /**
-    * \ingroup group_hal_availability
-    * \{
-    */
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
-    #if !defined(MTB_HAL_DRIVER_AVAILABLE_SYSTEM)
-        /** Macro specifying whether the System driver is available for the current device */
-        #define MTB_HAL_DRIVER_AVAILABLE_SYSTEM (1u)
-    #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_SYSTEM)
+#if !defined(MTB_HAL_DRIVER_AVAILABLE_SYSTEM)
+/** Macro specifying whether the System driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_SYSTEM (1u)
+#endif // !defined(MTB_HAL_DRIVER_AVAILABLE_SYSTEM)
 
-    /** \} group_hal_availability */
+/** \} group_hal_availability */
 
 #endif

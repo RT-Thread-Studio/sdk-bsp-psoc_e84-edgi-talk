@@ -1,0 +1,25 @@
+var group__mtb__syspm__group__syspm__availability =
+[
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_DMA_DW", "group__mtb__syspm__group__syspm__availability.html#ga22995d07711af74b7734f84f4bc22912", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_DMA_DMAC", "group__mtb__syspm__group__syspm__availability.html#gabeb98b680719ae4f25d03714a97c7ca1", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_DMA", "group__mtb__syspm__group__syspm__availability.html#ga4056e707b3c856a66706417830b46e70", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_TDM", "group__mtb__syspm__group__syspm__availability.html#ga73d3fc5c42b6c881ecd765309b42fb8e", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_I2S_TDM", "group__mtb__syspm__group__syspm__availability.html#gab6f1d46f766ec8e9f54cf825dcaae1a3", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_MX_PDM", "group__mtb__syspm__group__syspm__availability.html#ga2323c5f84c7bbf593f5ef4dfbb3bf878", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_PDM_PCM", "group__mtb__syspm__group__syspm__availability.html#ga2cd95dfe1693c9a3543ae9c7f97b228c", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_SCB", "group__mtb__syspm__group__syspm__availability.html#ga4b43ad2d2e417d62a930c7a87442e5cc", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_SCB_UART", "group__mtb__syspm__group__syspm__availability.html#gad9841ca0cb58262fe0de60fe64183058", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_SMIF", "group__mtb__syspm__group__syspm__availability.html#gac4b7972d52772c7d42f00cd94d013a08", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_TCPWM", "group__mtb__syspm__group__syspm__availability.html#gad0854578a36ed55299187f9615a057ed", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_NVM", "group__mtb__syspm__group__syspm__availability.html#ga8fbbf3bd3b296b34a852f6ea4fa6155c", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_AUTANALOG", "group__mtb__syspm__group__syspm__availability.html#gaee5b51a2eca7628526f9d106b61a7434", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_I3C", "group__mtb__syspm__group__syspm__availability.html#ga4e6485e45bf1109b97f9f8ba0e4af614", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_LPCOMP", "group__mtb__syspm__group__syspm__availability.html#gaba61392ba209dc047af73c7f14b9ef09", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_LVD", "group__mtb__syspm__group__syspm__availability.html#gac180a10e717556b76905419b76654f37", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_RTC", "group__mtb__syspm__group__syspm__availability.html#ga3642e40858702849199c3d5024d061b7", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_SCB_EZI2C", "group__mtb__syspm__group__syspm__availability.html#gad729b634836b9411d5cdf603d0efa5e9", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_SCB_I2C", "group__mtb__syspm__group__syspm__availability.html#gab60ac67ee167b6030dc36002d049e0fb", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_SCB_SPI", "group__mtb__syspm__group__syspm__availability.html#ga2d45818504d2e1b0dce9f60af4fa63b1", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_SD_HOST", "group__mtb__syspm__group__syspm__availability.html#gacbd8daf84b51ae5e37a62acafcf894a1", null ],
+    [ "MTB_SYSPM_CALLBACKS_AVAILABLE_SYSCLK", "group__mtb__syspm__group__syspm__availability.html#gac2df4583410cb941f8ab8c7d85f620fe", null ]
+];

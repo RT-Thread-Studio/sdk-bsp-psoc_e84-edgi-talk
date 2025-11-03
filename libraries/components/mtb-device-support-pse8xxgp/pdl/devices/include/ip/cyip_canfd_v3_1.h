@@ -40,116 +40,113 @@
 /**
   * \brief TTCAN 3PIP, includes FD (CANFD_CH_M_TTCAN)
   */
-typedef struct
-{
-    __IM uint32_t CREL;                          /*!< 0x00000000 Core Release Register */
-    __IM uint32_t ENDN;                          /*!< 0x00000004 Endian Register */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t DBTP;                          /*!< 0x0000000C Data Bit Timing & Prescaler Register */
-    __IOM uint32_t TEST;                          /*!< 0x00000010 Test Register */
-    __IOM uint32_t RWD;                           /*!< 0x00000014 RAM Watchdog */
-    __IOM uint32_t CCCR;                          /*!< 0x00000018 CC Control Register */
-    __IOM uint32_t NBTP;                          /*!< 0x0000001C Nominal Bit Timing & Prescaler Register */
-    __IOM uint32_t TSCC;                          /*!< 0x00000020 Timestamp Counter Configuration */
-    __IOM uint32_t TSCV;                          /*!< 0x00000024 Timestamp Counter Value */
-    __IOM uint32_t TOCC;                          /*!< 0x00000028 Timeout Counter Configuration */
-    __IOM uint32_t TOCV;                          /*!< 0x0000002C Timeout Counter Value */
-    __IM uint32_t RESERVED1[4];
-    __IM uint32_t ECR;                           /*!< 0x00000040 Error Counter Register */
-    __IM uint32_t PSR;                           /*!< 0x00000044 Protocol Status Register */
-    __IOM uint32_t TDCR;                          /*!< 0x00000048 Transmitter Delay Compensation Register */
-    __IM uint32_t RESERVED2;
-    __IOM uint32_t IR;                            /*!< 0x00000050 Interrupt Register */
-    __IOM uint32_t IE;                            /*!< 0x00000054 Interrupt Enable */
-    __IOM uint32_t ILS;                           /*!< 0x00000058 Interrupt Line Select */
-    __IOM uint32_t ILE;                           /*!< 0x0000005C Interrupt Line Enable */
-    __IM uint32_t RESERVED3[8];
-    __IOM uint32_t GFC;                           /*!< 0x00000080 Global Filter Configuration */
-    __IOM uint32_t SIDFC;                         /*!< 0x00000084 Standard ID Filter Configuration */
-    __IOM uint32_t XIDFC;                         /*!< 0x00000088 Extended ID Filter Configuration */
-    __IM uint32_t RESERVED4;
-    __IOM uint32_t XIDAM;                         /*!< 0x00000090 Extended ID AND Mask */
-    __IM uint32_t HPMS;                          /*!< 0x00000094 High Priority Message Status */
-    __IOM uint32_t NDAT1;                         /*!< 0x00000098 New Data 1 */
-    __IOM uint32_t NDAT2;                         /*!< 0x0000009C New Data 2 */
-    __IOM uint32_t RXF0C;                         /*!< 0x000000A0 Rx FIFO 0 Configuration */
-    __IM uint32_t RXF0S;                         /*!< 0x000000A4 Rx FIFO 0 Status */
-    __IOM uint32_t RXF0A;                         /*!< 0x000000A8 Rx FIFO 0 Acknowledge */
-    __IOM uint32_t RXBC;                          /*!< 0x000000AC Rx Buffer Configuration */
-    __IOM uint32_t RXF1C;                         /*!< 0x000000B0 Rx FIFO 1 Configuration */
-    __IM uint32_t RXF1S;                         /*!< 0x000000B4 Rx FIFO 1 Status */
-    __IOM uint32_t RXF1A;                         /*!< 0x000000B8 Rx FIFO 1 Acknowledge */
-    __IOM uint32_t RXESC;                         /*!< 0x000000BC Rx Buffer / FIFO Element Size Configuration */
-    __IOM uint32_t TXBC;                          /*!< 0x000000C0 Tx Buffer Configuration */
-    __IM uint32_t TXFQS;                         /*!< 0x000000C4 Tx FIFO/Queue Status */
-    __IOM uint32_t TXESC;                         /*!< 0x000000C8 Tx Buffer Element Size Configuration */
-    __IM uint32_t TXBRP;                         /*!< 0x000000CC Tx Buffer Request Pending */
-    __IOM uint32_t TXBAR;                         /*!< 0x000000D0 Tx Buffer Add Request */
-    __IOM uint32_t TXBCR;                         /*!< 0x000000D4 Tx Buffer Cancellation Request */
-    __IM uint32_t TXBTO;                         /*!< 0x000000D8 Tx Buffer Transmission Occurred */
-    __IM uint32_t TXBCF;                         /*!< 0x000000DC Tx Buffer Cancellation Finished */
-    __IOM uint32_t TXBTIE;                        /*!< 0x000000E0 Tx Buffer Transmission Interrupt Enable */
-    __IOM uint32_t TXBCIE;                        /*!< 0x000000E4 Tx Buffer Cancellation Finished Interrupt Enable */
-    __IM uint32_t RESERVED5[2];
-    __IOM uint32_t TXEFC;                         /*!< 0x000000F0 Tx Event FIFO Configuration */
-    __IM uint32_t TXEFS;                         /*!< 0x000000F4 Tx Event FIFO Status */
-    __IOM uint32_t TXEFA;                         /*!< 0x000000F8 Tx Event FIFO Acknowledge */
-    __IM uint32_t RESERVED6;
-    __IOM uint32_t TTTMC;                         /*!< 0x00000100 TT Trigger Memory Configuration */
-    __IOM uint32_t TTRMC;                         /*!< 0x00000104 TT Reference Message Configuration */
-    __IOM uint32_t TTOCF;                         /*!< 0x00000108 TT Operation Configuration */
-    __IOM uint32_t TTMLM;                         /*!< 0x0000010C TT Matrix Limits */
-    __IOM uint32_t TURCF;                         /*!< 0x00000110 TUR Configuration */
-    __IOM uint32_t TTOCN;                         /*!< 0x00000114 TT Operation Control */
-    __IOM uint32_t TTGTP;                         /*!< 0x00000118 TT Global Time Preset */
-    __IOM uint32_t TTTMK;                         /*!< 0x0000011C TT Time Mark */
-    __IOM uint32_t TTIR;                          /*!< 0x00000120 TT Interrupt Register */
-    __IOM uint32_t TTIE;                          /*!< 0x00000124 TT Interrupt Enable */
-    __IOM uint32_t TTILS;                         /*!< 0x00000128 TT Interrupt Line Select */
-    __IM uint32_t TTOST;                         /*!< 0x0000012C TT Operation Status */
-    __IM uint32_t TURNA;                         /*!< 0x00000130 TUR Numerator Actual */
-    __IM uint32_t TTLGT;                         /*!< 0x00000134 TT Local & Global Time */
-    __IM uint32_t TTCTC;                         /*!< 0x00000138 TT Cycle Time & Count */
-    __IM uint32_t TTCPT;                         /*!< 0x0000013C TT Capture Time */
-    __IM uint32_t TTCSM;                         /*!< 0x00000140 TT Cycle Sync Mark */
-    __IM uint32_t RESERVED7[15];
+typedef struct {
+   __IM uint32_t CREL;                          /*!< 0x00000000 Core Release Register */
+   __IM uint32_t ENDN;                          /*!< 0x00000004 Endian Register */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t DBTP;                          /*!< 0x0000000C Data Bit Timing & Prescaler Register */
+  __IOM uint32_t TEST;                          /*!< 0x00000010 Test Register */
+  __IOM uint32_t RWD;                           /*!< 0x00000014 RAM Watchdog */
+  __IOM uint32_t CCCR;                          /*!< 0x00000018 CC Control Register */
+  __IOM uint32_t NBTP;                          /*!< 0x0000001C Nominal Bit Timing & Prescaler Register */
+  __IOM uint32_t TSCC;                          /*!< 0x00000020 Timestamp Counter Configuration */
+  __IOM uint32_t TSCV;                          /*!< 0x00000024 Timestamp Counter Value */
+  __IOM uint32_t TOCC;                          /*!< 0x00000028 Timeout Counter Configuration */
+  __IOM uint32_t TOCV;                          /*!< 0x0000002C Timeout Counter Value */
+   __IM uint32_t RESERVED1[4];
+   __IM uint32_t ECR;                           /*!< 0x00000040 Error Counter Register */
+   __IM uint32_t PSR;                           /*!< 0x00000044 Protocol Status Register */
+  __IOM uint32_t TDCR;                          /*!< 0x00000048 Transmitter Delay Compensation Register */
+   __IM uint32_t RESERVED2;
+  __IOM uint32_t IR;                            /*!< 0x00000050 Interrupt Register */
+  __IOM uint32_t IE;                            /*!< 0x00000054 Interrupt Enable */
+  __IOM uint32_t ILS;                           /*!< 0x00000058 Interrupt Line Select */
+  __IOM uint32_t ILE;                           /*!< 0x0000005C Interrupt Line Enable */
+   __IM uint32_t RESERVED3[8];
+  __IOM uint32_t GFC;                           /*!< 0x00000080 Global Filter Configuration */
+  __IOM uint32_t SIDFC;                         /*!< 0x00000084 Standard ID Filter Configuration */
+  __IOM uint32_t XIDFC;                         /*!< 0x00000088 Extended ID Filter Configuration */
+   __IM uint32_t RESERVED4;
+  __IOM uint32_t XIDAM;                         /*!< 0x00000090 Extended ID AND Mask */
+   __IM uint32_t HPMS;                          /*!< 0x00000094 High Priority Message Status */
+  __IOM uint32_t NDAT1;                         /*!< 0x00000098 New Data 1 */
+  __IOM uint32_t NDAT2;                         /*!< 0x0000009C New Data 2 */
+  __IOM uint32_t RXF0C;                         /*!< 0x000000A0 Rx FIFO 0 Configuration */
+   __IM uint32_t RXF0S;                         /*!< 0x000000A4 Rx FIFO 0 Status */
+  __IOM uint32_t RXF0A;                         /*!< 0x000000A8 Rx FIFO 0 Acknowledge */
+  __IOM uint32_t RXBC;                          /*!< 0x000000AC Rx Buffer Configuration */
+  __IOM uint32_t RXF1C;                         /*!< 0x000000B0 Rx FIFO 1 Configuration */
+   __IM uint32_t RXF1S;                         /*!< 0x000000B4 Rx FIFO 1 Status */
+  __IOM uint32_t RXF1A;                         /*!< 0x000000B8 Rx FIFO 1 Acknowledge */
+  __IOM uint32_t RXESC;                         /*!< 0x000000BC Rx Buffer / FIFO Element Size Configuration */
+  __IOM uint32_t TXBC;                          /*!< 0x000000C0 Tx Buffer Configuration */
+   __IM uint32_t TXFQS;                         /*!< 0x000000C4 Tx FIFO/Queue Status */
+  __IOM uint32_t TXESC;                         /*!< 0x000000C8 Tx Buffer Element Size Configuration */
+   __IM uint32_t TXBRP;                         /*!< 0x000000CC Tx Buffer Request Pending */
+  __IOM uint32_t TXBAR;                         /*!< 0x000000D0 Tx Buffer Add Request */
+  __IOM uint32_t TXBCR;                         /*!< 0x000000D4 Tx Buffer Cancellation Request */
+   __IM uint32_t TXBTO;                         /*!< 0x000000D8 Tx Buffer Transmission Occurred */
+   __IM uint32_t TXBCF;                         /*!< 0x000000DC Tx Buffer Cancellation Finished */
+  __IOM uint32_t TXBTIE;                        /*!< 0x000000E0 Tx Buffer Transmission Interrupt Enable */
+  __IOM uint32_t TXBCIE;                        /*!< 0x000000E4 Tx Buffer Cancellation Finished Interrupt Enable */
+   __IM uint32_t RESERVED5[2];
+  __IOM uint32_t TXEFC;                         /*!< 0x000000F0 Tx Event FIFO Configuration */
+   __IM uint32_t TXEFS;                         /*!< 0x000000F4 Tx Event FIFO Status */
+  __IOM uint32_t TXEFA;                         /*!< 0x000000F8 Tx Event FIFO Acknowledge */
+   __IM uint32_t RESERVED6;
+  __IOM uint32_t TTTMC;                         /*!< 0x00000100 TT Trigger Memory Configuration */
+  __IOM uint32_t TTRMC;                         /*!< 0x00000104 TT Reference Message Configuration */
+  __IOM uint32_t TTOCF;                         /*!< 0x00000108 TT Operation Configuration */
+  __IOM uint32_t TTMLM;                         /*!< 0x0000010C TT Matrix Limits */
+  __IOM uint32_t TURCF;                         /*!< 0x00000110 TUR Configuration */
+  __IOM uint32_t TTOCN;                         /*!< 0x00000114 TT Operation Control */
+  __IOM uint32_t TTGTP;                         /*!< 0x00000118 TT Global Time Preset */
+  __IOM uint32_t TTTMK;                         /*!< 0x0000011C TT Time Mark */
+  __IOM uint32_t TTIR;                          /*!< 0x00000120 TT Interrupt Register */
+  __IOM uint32_t TTIE;                          /*!< 0x00000124 TT Interrupt Enable */
+  __IOM uint32_t TTILS;                         /*!< 0x00000128 TT Interrupt Line Select */
+   __IM uint32_t TTOST;                         /*!< 0x0000012C TT Operation Status */
+   __IM uint32_t TURNA;                         /*!< 0x00000130 TUR Numerator Actual */
+   __IM uint32_t TTLGT;                         /*!< 0x00000134 TT Local & Global Time */
+   __IM uint32_t TTCTC;                         /*!< 0x00000138 TT Cycle Time & Count */
+   __IM uint32_t TTCPT;                         /*!< 0x0000013C TT Capture Time */
+   __IM uint32_t TTCSM;                         /*!< 0x00000140 TT Cycle Sync Mark */
+   __IM uint32_t RESERVED7[15];
 } CANFD_CH_M_TTCAN_Type;                        /*!< Size = 384 (0x180) */
 
 /**
   * \brief FIFO wrapper around M_TTCAN 3PIP, to enable DMA (CANFD_CH)
   */
-typedef struct
-{
-    CANFD_CH_M_TTCAN_Type M_TTCAN;          /*!< 0x00000000 TTCAN 3PIP, includes FD */
-    __IOM uint32_t RXFTOP_CTL;                    /*!< 0x00000180 Receive FIFO Top control */
-    __IM uint32_t RESERVED[7];
-    __IM uint32_t RXFTOP0_STAT;                  /*!< 0x000001A0 Receive FIFO 0 Top Status */
-    __IM uint32_t RESERVED1;
-    __IM uint32_t RXFTOP0_DATA;                  /*!< 0x000001A8 Receive FIFO 0 Top Data */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t RXFTOP1_STAT;                  /*!< 0x000001B0 Receive FIFO 1 Top Status */
-    __IM uint32_t RESERVED3;
-    __IM uint32_t RXFTOP1_DATA;                  /*!< 0x000001B8 Receive FIFO 1 Top Data */
-    __IM uint32_t RESERVED4[17];
+typedef struct {
+        CANFD_CH_M_TTCAN_Type M_TTCAN;          /*!< 0x00000000 TTCAN 3PIP, includes FD */
+  __IOM uint32_t RXFTOP_CTL;                    /*!< 0x00000180 Receive FIFO Top control */
+   __IM uint32_t RESERVED[7];
+   __IM uint32_t RXFTOP0_STAT;                  /*!< 0x000001A0 Receive FIFO 0 Top Status */
+   __IM uint32_t RESERVED1;
+   __IM uint32_t RXFTOP0_DATA;                  /*!< 0x000001A8 Receive FIFO 0 Top Data */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t RXFTOP1_STAT;                  /*!< 0x000001B0 Receive FIFO 1 Top Status */
+   __IM uint32_t RESERVED3;
+   __IM uint32_t RXFTOP1_DATA;                  /*!< 0x000001B8 Receive FIFO 1 Top Data */
+   __IM uint32_t RESERVED4[17];
 } CANFD_CH_Type;                                /*!< Size = 512 (0x200) */
 
 /**
   * \brief CAN Controller (CANFD)
   */
-typedef struct
-{
-    CANFD_CH_Type CH[8];                    /*!< 0x00000000 FIFO wrapper around M_TTCAN 3PIP, to enable DMA */
-    __IOM uint32_t CTL;                           /*!< 0x00001000 Global CAN control register */
-    __IM uint32_t STATUS;                        /*!< 0x00001004 Global CAN status register */
-    __IM uint32_t RESERVED[2];
-    __IM uint32_t INTR0_CAUSE;                   /*!< 0x00001010 Consolidated interrupt0 cause register */
-    __IM uint32_t INTR1_CAUSE;                   /*!< 0x00001014 Consolidated interrupt1 cause register */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t TS_CTL;                        /*!< 0x00001020 Time Stamp control register */
-    __IOM uint32_t TS_CNT;                        /*!< 0x00001024 Time Stamp counter value */
-    __IM uint32_t RESERVED2[22];
-    __IOM uint32_t ECC_CTL;                       /*!< 0x00001080 ECC control */
-    __IOM uint32_t ECC_ERR_INJ;                   /*!< 0x00001084 ECC error injection */
+typedef struct {
+        CANFD_CH_Type CH[8];                    /*!< 0x00000000 FIFO wrapper around M_TTCAN 3PIP, to enable DMA */
+  __IOM uint32_t CTL;                           /*!< 0x00001000 Global CAN control register */
+   __IM uint32_t STATUS;                        /*!< 0x00001004 Global CAN status register */
+   __IM uint32_t RESERVED[2];
+   __IM uint32_t INTR0_CAUSE;                   /*!< 0x00001010 Consolidated interrupt0 cause register */
+   __IM uint32_t INTR1_CAUSE;                   /*!< 0x00001014 Consolidated interrupt1 cause register */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t TS_CTL;                        /*!< 0x00001020 Time Stamp control register */
+  __IOM uint32_t TS_CNT;                        /*!< 0x00001024 Time Stamp counter value */
+   __IM uint32_t RESERVED2[22];
+  __IOM uint32_t ECC_CTL;                       /*!< 0x00001080 ECC control */
+  __IOM uint32_t ECC_ERR_INJ;                   /*!< 0x00001084 ECC error injection */
 } CANFD_Type;                                   /*!< Size = 4232 (0x1088) */
 
 

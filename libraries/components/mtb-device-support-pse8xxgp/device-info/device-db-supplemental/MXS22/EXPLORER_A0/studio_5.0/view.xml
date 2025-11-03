@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<View xmlns="http://cypress.com/xsd/cystudioview_v1">
-  <MpcLocations location="mpc_locations.cydata" />
-</View>

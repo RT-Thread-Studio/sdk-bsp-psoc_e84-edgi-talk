@@ -133,6 +133,7 @@ figure.fig > figcaption.title {
 
 .table > thead > tr > th.entry {
   border-color: black !important;
+  text-align: left !important;
 }
 
 /* shading feature for table row */

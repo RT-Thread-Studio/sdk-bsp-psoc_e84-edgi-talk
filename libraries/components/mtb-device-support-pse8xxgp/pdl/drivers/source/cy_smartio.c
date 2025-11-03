@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 12, \
-                             'Value extracted from _FLD2VAL macro will not exceed enum range.')
+'Value extracted from _FLD2VAL macro will not exceed enum range.')
 
 /*******************************************************************************
 * Function Name: Cy_SmartIO_Init
@@ -60,7 +60,7 @@ cy_en_smartio_status_t Cy_SmartIO_Init(SMARTIO_PRT_Type* base, const cy_stc_smar
 {
     cy_en_smartio_status_t status = CY_SMARTIO_SUCCESS;
 
-    if (NULL != config)
+    if(NULL != config)
     {
         SMARTIO_PRT_CTL(base) = _VAL2FLD(SMARTIO_PRT_CTL_BYPASS, config->bypassMask)
                                 | _VAL2FLD(SMARTIO_PRT_CTL_CLOCK_SRC, config->clkSrc)
@@ -68,84 +68,84 @@ cy_en_smartio_status_t Cy_SmartIO_Init(SMARTIO_PRT_Type* base, const cy_stc_smar
                                 | _VAL2FLD(SMARTIO_PRT_CTL_PIPELINE_EN, CY_SMARTIO_ENABLE)
                                 | _VAL2FLD(SMARTIO_PRT_CTL_ENABLED, CY_SMARTIO_DISABLE);
         SMARTIO_PRT_SYNC_CTL(base) = _VAL2FLD(SMARTIO_PRT_SYNC_CTL_IO_SYNC_EN, config->ioSyncEn)
-                                     | _VAL2FLD(SMARTIO_PRT_SYNC_CTL_CHIP_SYNC_EN, config->chipSyncEn);
+                                | _VAL2FLD(SMARTIO_PRT_SYNC_CTL_CHIP_SYNC_EN, config->chipSyncEn);
 
         /* LUT configurations - skip if lutCfg is a NULL pointer */
-        if (NULL != config->lutCfg0)
+        if(NULL != config->lutCfg0)
         {
             SMARTIO_PRT_LUT_SEL(base, 0) = _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, config->lutCfg0->tr0)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg0->tr1)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg0->tr2);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg0->tr1)
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg0->tr2);
             SMARTIO_PRT_LUT_CTL(base, 0) = _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, config->lutCfg0->lutMap)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg0->opcode);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg0->opcode);
         }
-        if (NULL != config->lutCfg1)
+        if(NULL != config->lutCfg1)
         {
             SMARTIO_PRT_LUT_SEL(base, 1) = _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, config->lutCfg1->tr0)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg1->tr1)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg1->tr2);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg1->tr1)
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg1->tr2);
             SMARTIO_PRT_LUT_CTL(base, 1) = _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, config->lutCfg1->lutMap)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg1->opcode);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg1->opcode);
         }
-        if (NULL != config->lutCfg2)
+        if(NULL != config->lutCfg2)
         {
             SMARTIO_PRT_LUT_SEL(base, 2) = _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, config->lutCfg2->tr0)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg2->tr1)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg2->tr2);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg2->tr1)
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg2->tr2);
             SMARTIO_PRT_LUT_CTL(base, 2) = _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, config->lutCfg2->lutMap)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg2->opcode);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg2->opcode);
         }
-        if (NULL != config->lutCfg3)
+        if(NULL != config->lutCfg3)
         {
             SMARTIO_PRT_LUT_SEL(base, 3) = _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, config->lutCfg3->tr0)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg3->tr1)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg3->tr2);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg3->tr1)
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg3->tr2);
             SMARTIO_PRT_LUT_CTL(base, 3) = _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, config->lutCfg3->lutMap)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg3->opcode);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg3->opcode);
         }
-        if (NULL != config->lutCfg4)
+        if(NULL != config->lutCfg4)
         {
             SMARTIO_PRT_LUT_SEL(base, 4) = _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, config->lutCfg4->tr0)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg4->tr1)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg4->tr2);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg4->tr1)
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg4->tr2);
             SMARTIO_PRT_LUT_CTL(base, 4) = _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, config->lutCfg4->lutMap)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg4->opcode);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg4->opcode);
         }
-        if (NULL != config->lutCfg5)
+        if(NULL != config->lutCfg5)
         {
             SMARTIO_PRT_LUT_SEL(base, 5) = _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, config->lutCfg5->tr0)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg5->tr1)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg5->tr2);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg5->tr1)
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg5->tr2);
             SMARTIO_PRT_LUT_CTL(base, 5) = _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, config->lutCfg5->lutMap)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg5->opcode);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg5->opcode);
         }
-        if (NULL != config->lutCfg6)
+        if(NULL != config->lutCfg6)
         {
             SMARTIO_PRT_LUT_SEL(base, 6) = _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, config->lutCfg6->tr0)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg6->tr1)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg6->tr2);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg6->tr1)
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg6->tr2);
             SMARTIO_PRT_LUT_CTL(base, 6) = _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, config->lutCfg6->lutMap)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg6->opcode);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg6->opcode);
         }
-        if (NULL != config->lutCfg7)
+        if(NULL != config->lutCfg7)
         {
             SMARTIO_PRT_LUT_SEL(base, 7) = _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, config->lutCfg7->tr0)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg7->tr1)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg7->tr2);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, config->lutCfg7->tr1)
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, config->lutCfg7->tr2);
             SMARTIO_PRT_LUT_CTL(base, 7) = _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, config->lutCfg7->lutMap)
-                                           | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg7->opcode);
+                                            | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, config->lutCfg7->opcode);
         }
 
         /* DU Configuration - skip if duCfg is a NULL pointer */
-        if (NULL != config->duCfg)
+        if(NULL != config->duCfg)
         {
             SMARTIO_PRT_DU_SEL(base) = _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR0_SEL, config->duCfg->tr0)
-                                       | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR1_SEL, config->duCfg->tr1)
-                                       | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR2_SEL, config->duCfg->tr2)
-                                       | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_DATA0_SEL, config->duCfg->data0)
-                                       | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_DATA1_SEL, config->duCfg->data1);
+                                        | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR1_SEL, config->duCfg->tr1)
+                                        | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR2_SEL, config->duCfg->tr2)
+                                        | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_DATA0_SEL, config->duCfg->data0)
+                                        | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_DATA1_SEL, config->duCfg->data1);
             SMARTIO_PRT_DU_CTL(base) = _VAL2FLD(SMARTIO_PRT_DU_CTL_DU_SIZE, config->duCfg->size)
-                                       | _VAL2FLD(SMARTIO_PRT_DU_CTL_DU_OPC, config->duCfg->opcode);
+                                        | _VAL2FLD(SMARTIO_PRT_DU_CTL_DU_OPC, config->duCfg->opcode);
             SMARTIO_PRT_DATA(base) = _VAL2FLD(SMARTIO_PRT_DATA_DATA, config->duCfg->dataReg);
         }
     }
@@ -154,7 +154,7 @@ cy_en_smartio_status_t Cy_SmartIO_Init(SMARTIO_PRT_Type* base, const cy_stc_smar
         status = CY_SMARTIO_BAD_PARAM;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -178,7 +178,7 @@ void Cy_SmartIO_Deinit(SMARTIO_PRT_Type* base)
                             | _VAL2FLD(SMARTIO_PRT_CTL_PIPELINE_EN, CY_SMARTIO_ENABLE)
                             | _VAL2FLD(SMARTIO_PRT_CTL_ENABLED, CY_SMARTIO_DISABLE);
     SMARTIO_PRT_SYNC_CTL(base) = CY_SMARTIO_DEINIT;
-    for (uint8_t idx = 0u; idx < CY_SMARTIO_LUTMAX; idx++)
+    for(uint8_t idx = 0u; idx < CY_SMARTIO_LUTMAX; idx++)
     {
         SMARTIO_PRT_LUT_SEL(base, idx) = CY_SMARTIO_DEINIT;
         SMARTIO_PRT_LUT_CTL(base, idx) = CY_SMARTIO_DEINIT;
@@ -208,8 +208,8 @@ void Cy_SmartIO_Enable(SMARTIO_PRT_Type* base)
 
     tempReg = (SMARTIO_PRT_CTL(base) & (~(SMARTIO_PRT_CTL_PIPELINE_EN_Msk | SMARTIO_PRT_CTL_ENABLED_Msk)));
     SMARTIO_PRT_CTL(base) = tempReg
-                            | _VAL2FLD(SMARTIO_PRT_CTL_PIPELINE_EN, CY_SMARTIO_DISABLE)
-                            | _VAL2FLD(SMARTIO_PRT_CTL_ENABLED, CY_SMARTIO_ENABLE);
+                | _VAL2FLD(SMARTIO_PRT_CTL_PIPELINE_EN, CY_SMARTIO_DISABLE)
+                | _VAL2FLD(SMARTIO_PRT_CTL_ENABLED, CY_SMARTIO_ENABLE);
 }
 
 
@@ -232,8 +232,8 @@ void Cy_SmartIO_Disable(SMARTIO_PRT_Type* base)
 
     tempReg = (SMARTIO_PRT_CTL(base) & (~(SMARTIO_PRT_CTL_PIPELINE_EN_Msk | SMARTIO_PRT_CTL_ENABLED_Msk)));
     SMARTIO_PRT_CTL(base) = tempReg
-                            | _VAL2FLD(SMARTIO_PRT_CTL_PIPELINE_EN, CY_SMARTIO_ENABLE)
-                            | _VAL2FLD(SMARTIO_PRT_CTL_ENABLED, CY_SMARTIO_DISABLE);
+                | _VAL2FLD(SMARTIO_PRT_CTL_PIPELINE_EN, CY_SMARTIO_ENABLE)
+                | _VAL2FLD(SMARTIO_PRT_CTL_ENABLED, CY_SMARTIO_DISABLE);
 }
 
 
@@ -275,14 +275,14 @@ cy_en_smartio_status_t Cy_SmartIO_SetChBypass(SMARTIO_PRT_Type* base, uint8_t by
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_CTL(base) & (~SMARTIO_PRT_CTL_BYPASS_Msk));
         SMARTIO_PRT_CTL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_CTL_BYPASS, bypassMask);
         status = CY_SMARTIO_SUCCESS;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -312,14 +312,14 @@ cy_en_smartio_status_t Cy_SmartIO_SetClock(SMARTIO_PRT_Type* base, cy_en_smartio
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_CTL(base) & (~SMARTIO_PRT_CTL_CLOCK_SRC_Msk));
         SMARTIO_PRT_CTL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_CTL_CLOCK_SRC, clkSrc);
         status = CY_SMARTIO_SUCCESS;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -361,14 +361,14 @@ cy_en_smartio_status_t Cy_SmartIO_SetIoSync(SMARTIO_PRT_Type* base, uint8_t ioSy
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_SYNC_CTL(base) & (~SMARTIO_PRT_SYNC_CTL_IO_SYNC_EN_Msk));
         SMARTIO_PRT_SYNC_CTL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_SYNC_CTL_IO_SYNC_EN, ioSyncEn);
         status = CY_SMARTIO_SUCCESS;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -410,14 +410,14 @@ cy_en_smartio_status_t Cy_SmartIO_SetChipSync(SMARTIO_PRT_Type* base, uint8_t ch
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_SYNC_CTL(base) & (~SMARTIO_PRT_SYNC_CTL_CHIP_SYNC_EN_Msk));
         SMARTIO_PRT_SYNC_CTL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_SYNC_CTL_CHIP_SYNC_EN, chipSyncEn);
         status = CY_SMARTIO_SUCCESS;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -454,14 +454,14 @@ cy_en_smartio_status_t Cy_SmartIO_HoldOverride(SMARTIO_PRT_Type* base, bool hldO
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_CTL(base) & (~SMARTIO_PRT_CTL_HLD_OVR_Msk));
         SMARTIO_PRT_CTL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_CTL_HLD_OVR, hldOvr);
         status = CY_SMARTIO_SUCCESS;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -491,31 +491,31 @@ cy_en_smartio_luttr_t Cy_SmartIO_GetLutTr(SMARTIO_PRT_Type* base, cy_en_smartio_
 {
     cy_en_smartio_luttr_t trSrc;
 
-    switch (trNum)
+    switch(trNum)
     {
-    case (CY_SMARTIO_TR0):
-    {
-        trSrc = (cy_en_smartio_luttr_t)_FLD2VAL(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, SMARTIO_PRT_LUT_SEL(base, lutNum));
-        break;
-    }
-    case (CY_SMARTIO_TR1):
-    {
-        trSrc = (cy_en_smartio_luttr_t)_FLD2VAL(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, SMARTIO_PRT_LUT_SEL(base, lutNum));
-        break;
-    }
-    case (CY_SMARTIO_TR2):
-    {
-        trSrc = (cy_en_smartio_luttr_t)_FLD2VAL(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, SMARTIO_PRT_LUT_SEL(base, lutNum));
-        break;
-    }
-    default:
-    {
-        trSrc = CY_SMARTIO_LUTTR_INVALID;
-        break;
-    }
+        case(CY_SMARTIO_TR0):
+        {
+            trSrc = (cy_en_smartio_luttr_t)_FLD2VAL(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, SMARTIO_PRT_LUT_SEL(base, lutNum));
+            break;
+        }
+        case(CY_SMARTIO_TR1):
+        {
+            trSrc = (cy_en_smartio_luttr_t)_FLD2VAL(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, SMARTIO_PRT_LUT_SEL(base, lutNum));
+            break;
+        }
+        case(CY_SMARTIO_TR2):
+        {
+            trSrc = (cy_en_smartio_luttr_t)_FLD2VAL(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, SMARTIO_PRT_LUT_SEL(base, lutNum));
+            break;
+        }
+        default:
+        {
+            trSrc = CY_SMARTIO_LUTTR_INVALID;
+            break;
+        }
     }
 
-    return (trSrc);
+    return(trSrc);
 }
 
 
@@ -551,38 +551,38 @@ cy_en_smartio_status_t Cy_SmartIO_SetLutTr(SMARTIO_PRT_Type* base, cy_en_smartio
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         status = CY_SMARTIO_SUCCESS;
-        switch (trNum)
+        switch(trNum)
         {
-        case (CY_SMARTIO_TR0):
-        {
-            tempReg = (SMARTIO_PRT_LUT_SEL(base, lutNum) & (~SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL_Msk));
-            SMARTIO_PRT_LUT_SEL(base, lutNum) = tempReg | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, trSrc);
-            break;
-        }
-        case (CY_SMARTIO_TR1):
-        {
-            tempReg = (SMARTIO_PRT_LUT_SEL(base, lutNum) & (~SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL_Msk));
-            SMARTIO_PRT_LUT_SEL(base, lutNum) = tempReg | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, trSrc);
-            break;
-        }
-        case (CY_SMARTIO_TR2):
-        {
-            tempReg = (SMARTIO_PRT_LUT_SEL(base, lutNum) & (~SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL_Msk));
-            SMARTIO_PRT_LUT_SEL(base, lutNum) = tempReg | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, trSrc);
-            break;
-        }
-        default:
-        {
-            status = CY_SMARTIO_BAD_PARAM;
-            break;
-        }
+            case(CY_SMARTIO_TR0):
+            {
+                tempReg = (SMARTIO_PRT_LUT_SEL(base, lutNum) & (~SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL_Msk));
+                SMARTIO_PRT_LUT_SEL(base, lutNum) = tempReg | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, trSrc);
+                break;
+            }
+            case(CY_SMARTIO_TR1):
+            {
+                tempReg = (SMARTIO_PRT_LUT_SEL(base, lutNum) & (~SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL_Msk));
+                SMARTIO_PRT_LUT_SEL(base, lutNum) = tempReg | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, trSrc);
+                break;
+            }
+            case(CY_SMARTIO_TR2):
+            {
+                tempReg = (SMARTIO_PRT_LUT_SEL(base, lutNum) & (~SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL_Msk));
+                SMARTIO_PRT_LUT_SEL(base, lutNum) = tempReg | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, trSrc);
+                break;
+            }
+            default:
+            {
+                status = CY_SMARTIO_BAD_PARAM;
+                break;
+            }
         }
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -615,20 +615,20 @@ cy_en_smartio_status_t Cy_SmartIO_SetLutTrAll(SMARTIO_PRT_Type* base, cy_en_smar
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_LUT_SEL(base, lutNum)
-                   & (~(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL_Msk
+                    & (~(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL_Msk
                         | SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL_Msk
                         | SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL_Msk)));
         SMARTIO_PRT_LUT_SEL(base, lutNum) = tempReg
-                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, trSrc)
-                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, trSrc)
-                                            | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, trSrc);
+                                | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR0_SEL, trSrc)
+                                | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR1_SEL, trSrc)
+                                | _VAL2FLD(SMARTIO_PRT_LUT_SEL_LUT_TR2_SEL, trSrc);
         status = CY_SMARTIO_SUCCESS;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -661,14 +661,14 @@ cy_en_smartio_status_t Cy_SmartIO_SetLutOpcode(SMARTIO_PRT_Type* base, cy_en_sma
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_LUT_CTL(base, lutNum) & (~SMARTIO_PRT_LUT_CTL_LUT_OPC_Msk));
         SMARTIO_PRT_LUT_CTL(base, lutNum) = tempReg | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT_OPC, opcode);
         status = CY_SMARTIO_SUCCESS;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -713,14 +713,14 @@ cy_en_smartio_status_t Cy_SmartIO_SetLutMap(SMARTIO_PRT_Type* base, cy_en_smarti
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_LUT_CTL(base, lutNum) & (~SMARTIO_PRT_LUT_CTL_LUT_Msk));
         SMARTIO_PRT_LUT_CTL(base, lutNum) = tempReg | _VAL2FLD(SMARTIO_PRT_LUT_CTL_LUT, lutMap);
         status = CY_SMARTIO_SUCCESS;
     }
 
-    return (status);
+    return(status);
 }
 
 
@@ -747,31 +747,31 @@ cy_en_smartio_dutr_t Cy_SmartIO_GetDuTr(SMARTIO_PRT_Type* base, cy_en_smartio_tr
 {
     cy_en_smartio_dutr_t trSrc;
 
-    switch (trNum)
+    switch(trNum)
     {
-    case (CY_SMARTIO_TR0):
-    {
-        trSrc = (cy_en_smartio_dutr_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_TR0_SEL, SMARTIO_PRT_DU_SEL(base));
-        break;
-    }
-    case (CY_SMARTIO_TR1):
-    {
-        trSrc = (cy_en_smartio_dutr_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_TR1_SEL, SMARTIO_PRT_DU_SEL(base));
-        break;
-    }
-    case (CY_SMARTIO_TR2):
-    {
-        trSrc = (cy_en_smartio_dutr_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_TR2_SEL, SMARTIO_PRT_DU_SEL(base));
-        break;
-    }
-    default:
-    {
-        trSrc = CY_SMARTIO_DUTR_INVALID;
-        break;
-    }
+        case(CY_SMARTIO_TR0):
+        {
+            trSrc = (cy_en_smartio_dutr_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_TR0_SEL, SMARTIO_PRT_DU_SEL(base));
+            break;
+        }
+        case(CY_SMARTIO_TR1):
+        {
+            trSrc = (cy_en_smartio_dutr_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_TR1_SEL, SMARTIO_PRT_DU_SEL(base));
+            break;
+        }
+        case(CY_SMARTIO_TR2):
+        {
+            trSrc = (cy_en_smartio_dutr_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_TR2_SEL, SMARTIO_PRT_DU_SEL(base));
+            break;
+        }
+        default:
+        {
+            trSrc = CY_SMARTIO_DUTR_INVALID;
+            break;
+        }
     }
 
-    return (trSrc);
+    return(trSrc);
 }
 
 
@@ -804,34 +804,34 @@ cy_en_smartio_status_t Cy_SmartIO_SetDuTr(SMARTIO_PRT_Type* base, cy_en_smartio_
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         status = CY_SMARTIO_SUCCESS;
-        switch (trNum)
+        switch(trNum)
         {
-        case (CY_SMARTIO_TR0):
-        {
-            tempReg = (SMARTIO_PRT_DU_SEL(base) & (~SMARTIO_PRT_DU_SEL_DU_TR0_SEL_Msk));
-            SMARTIO_PRT_DU_SEL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR0_SEL, trSrc);
-            break;
-        }
-        case (CY_SMARTIO_TR1):
-        {
-            tempReg = (SMARTIO_PRT_DU_SEL(base) & (~SMARTIO_PRT_DU_SEL_DU_TR1_SEL_Msk));
-            SMARTIO_PRT_DU_SEL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR1_SEL, trSrc);
-            break;
-        }
-        case (CY_SMARTIO_TR2):
-        {
-            tempReg = (SMARTIO_PRT_DU_SEL(base) & (~SMARTIO_PRT_DU_SEL_DU_TR2_SEL_Msk));
-            SMARTIO_PRT_DU_SEL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR2_SEL, trSrc);
-            break;
-        }
-        default:
-        {
-            status = CY_SMARTIO_BAD_PARAM;
-            break;
-        }
+            case(CY_SMARTIO_TR0):
+            {
+                tempReg = (SMARTIO_PRT_DU_SEL(base) & (~SMARTIO_PRT_DU_SEL_DU_TR0_SEL_Msk));
+                SMARTIO_PRT_DU_SEL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR0_SEL, trSrc);
+                break;
+            }
+            case(CY_SMARTIO_TR1):
+            {
+                tempReg = (SMARTIO_PRT_DU_SEL(base) & (~SMARTIO_PRT_DU_SEL_DU_TR1_SEL_Msk));
+                SMARTIO_PRT_DU_SEL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR1_SEL, trSrc);
+                break;
+            }
+            case(CY_SMARTIO_TR2):
+            {
+                tempReg = (SMARTIO_PRT_DU_SEL(base) & (~SMARTIO_PRT_DU_SEL_DU_TR2_SEL_Msk));
+                SMARTIO_PRT_DU_SEL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR2_SEL, trSrc);
+                break;
+            }
+            default:
+            {
+                status = CY_SMARTIO_BAD_PARAM;
+                break;
+            }
         }
     }
 
@@ -865,16 +865,16 @@ cy_en_smartio_status_t Cy_SmartIO_SetDuTrAll(SMARTIO_PRT_Type* base, cy_en_smart
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         tempReg = (SMARTIO_PRT_DU_SEL(base)
-                   & (~(SMARTIO_PRT_DU_SEL_DU_TR0_SEL_Msk
+                    & (~(SMARTIO_PRT_DU_SEL_DU_TR0_SEL_Msk
                         | SMARTIO_PRT_DU_SEL_DU_TR1_SEL_Msk
                         | SMARTIO_PRT_DU_SEL_DU_TR2_SEL_Msk)));
         SMARTIO_PRT_DU_SEL(base) = tempReg
-                                   | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR0_SEL, trSrc)
-                                   | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR1_SEL, trSrc)
-                                   | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR2_SEL, trSrc);
+                        | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR0_SEL, trSrc)
+                        | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR1_SEL, trSrc)
+                        | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_TR2_SEL, trSrc);
         status = CY_SMARTIO_SUCCESS;
     }
 
@@ -911,9 +911,9 @@ cy_en_smartio_status_t Cy_SmartIO_SetDuData(SMARTIO_PRT_Type* base, cy_en_smarti
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
     uint32_t tempReg;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
-        if (dataNum == CY_SMARTIO_DATA0)
+        if(dataNum == CY_SMARTIO_DATA0)
         {
             tempReg = (SMARTIO_PRT_DU_SEL(base) & (~SMARTIO_PRT_DU_SEL_DU_DATA0_SEL_Msk));
             SMARTIO_PRT_DU_SEL(base) = tempReg | _VAL2FLD(SMARTIO_PRT_DU_SEL_DU_DATA0_SEL, dataSrc);
@@ -958,10 +958,10 @@ cy_en_smartio_status_t Cy_SmartIO_SetDuOperation(SMARTIO_PRT_Type* base, cy_en_s
 {
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         SMARTIO_PRT_DU_CTL(base) = _VAL2FLD(SMARTIO_PRT_DU_CTL_DU_SIZE, size)
-                                   | _VAL2FLD(SMARTIO_PRT_DU_CTL_DU_OPC, opcode);
+                                    | _VAL2FLD(SMARTIO_PRT_DU_CTL_DU_OPC, opcode);
         status = CY_SMARTIO_SUCCESS;
     }
 
@@ -994,7 +994,7 @@ cy_en_smartio_status_t Cy_SmartIO_SetDataReg(SMARTIO_PRT_Type* base, uint8_t dat
 {
     cy_en_smartio_status_t status = CY_SMARTIO_LOCKED;
 
-    if (CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
+    if(CY_SMARTIO_DISABLE == _FLD2VAL(SMARTIO_PRT_CTL_ENABLED, SMARTIO_PRT_CTL(base)))
     {
         SMARTIO_PRT_DATA(base) = dataReg;
         status = CY_SMARTIO_SUCCESS;

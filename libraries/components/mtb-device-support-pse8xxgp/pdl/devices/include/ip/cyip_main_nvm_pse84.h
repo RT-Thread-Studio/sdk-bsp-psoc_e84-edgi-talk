@@ -38,18 +38,17 @@
 /**
   * \brief Main NVM Region (256kb) (MAIN_NVM)
   */
-typedef struct
-{
-    __IOM uint8_t  UPGRADE_FLAGS[32];             /*!< 0x00000000 PSC1 and above */
-    __IM uint8_t  RESERVED_MAIN_NVM_1[4064];     /*!< 0x00000020 MAIN_NVM - Region 1 free bytes */
-    __IOM uint8_t  CM33_L1_BOOT_POLICY[256];      /*!< 0x00001000 PSC1 and above */
-    __IM uint8_t  RESERVED_MAIN_NVM_0[558];      /*!< 0x00001100 MAIN_NVM - Region 0 free bytes */
-    __IOM uint8_t  IAK_LITE_PRIVATE_KEY[36];      /*!< 0x0000132E PSC2 MPN device wounded from PSC4 */
-    __IOM uint8_t  IAK_LITE_PUBLIC_KEY[69];       /*!< 0x00001352 PSC2 MPN device wounded from PSC4 */
-    __IOM uint8_t  HUK_LITE[36];                  /*!< 0x00001397 PSC2 MPN device wounded from PSC4 */
-    __IOM uint8_t  ROTPK_LITE[69];                /*!< 0x000013BB PSC2 MPN device wounded from PSC4 */
-    __IM uint32_t RESERVED[16128];
-    __IOM uint8_t  USER_NVM[192512];              /*!< 0x00011000 PSC1 and above */
+typedef struct {
+  __IOM uint8_t  UPGRADE_FLAGS[32];             /*!< 0x00000000 PSC1 and above */
+   __IM uint8_t  RESERVED_MAIN_NVM_1[4064];     /*!< 0x00000020 MAIN_NVM - Region 1 free bytes */
+  __IOM uint8_t  CM33_L1_BOOT_POLICY[256];      /*!< 0x00001000 PSC1 and above */
+   __IM uint8_t  RESERVED_MAIN_NVM_0[558];      /*!< 0x00001100 MAIN_NVM - Region 0 free bytes */
+  __IOM uint8_t  IAK_LITE_PRIVATE_KEY[36];      /*!< 0x0000132E PSC2 MPN device wounded from PSC4 */
+  __IOM uint8_t  IAK_LITE_PUBLIC_KEY[69];       /*!< 0x00001352 PSC2 MPN device wounded from PSC4 */
+  __IOM uint8_t  HUK_LITE[36];                  /*!< 0x00001397 PSC2 MPN device wounded from PSC4 */
+  __IOM uint8_t  ROTPK_LITE[69];                /*!< 0x000013BB PSC2 MPN device wounded from PSC4 */
+   __IM uint32_t RESERVED[16128];
+  __IOM uint8_t  USER_NVM[192512];              /*!< 0x00011000 PSC1 and above */
 } MAIN_NVM_Type;                                /*!< Size = 262144 (0x40000) */
 
 

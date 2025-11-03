@@ -36,7 +36,7 @@
 #define MASK_0_31_BITS (0xFFFFFFFF)
 #define MASK_32_47_BITS (0xFFFF00000000)
 
- #define COMMA ,
+#define COMMA ,
 #define SEMICOLON ;
 
 #define EVTYPE(A, name)                                                                                                \

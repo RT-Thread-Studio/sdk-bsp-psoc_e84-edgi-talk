@@ -46,7 +46,7 @@ while (rt_wlan_connect("TEST", "88888888"));
   * **Listening** – ready for voice interaction
   * **Sleeping** – low-power sleep mode
 
-* Press the top button to enter **Listening** mode for voice interaction.
+* Hold down the top button to speak and enter the Listening state for voice interaction.
 
 ## Notes
 
@@ -98,3 +98,4 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 ```
 RT-Thread Settings --> Hardware --> select SOC Multi Core Mode --> Enable CM55 Core
 ```
+![config](figures/config.png)

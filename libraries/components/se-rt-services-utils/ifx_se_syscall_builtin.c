@@ -1,13 +1,13 @@
 /***************************************************************************//**
 * \file ifx_se_syscall_builtin.c
-* \version 1.1.0
+* \version 1.2.0
 *
 * \brief
 * This is the source code file for low-level syscall builtin functions.
 *
 ********************************************************************************
 * \copyright
-* Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+* Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
 * All rights reserved.
 * You may use this file only in accordance with the license, terms, conditions,
 * disclaimers, and limitations in the end user license agreement accompanying
@@ -24,9 +24,9 @@
 #define IFX_SE_SYSCALL_TIMEOUT_LONG       (2000000000UL)
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 4, \
-                             'User context "ctx" designed for customer implementations and currently not used.')
+    'User context "ctx" designed for customer implementations and currently not used.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Directive 4.9', 8, \
-                             'Use function-like macro as simple inline functions.')
+    'Use function-like macro as simple inline functions.')
 
 __WEAK ifx_se_status_t ifx_se_hal_syscall_lock(void *ctx)
 {
@@ -47,7 +47,7 @@ __WEAK ifx_se_status_t ifx_se_hal_syscall_start(void *ctx)
     IPC_STRUCT_Type const *ipc_struct = Cy_IPC_Drv_GetIpcBaseAddress(IFX_SE_IPC_SYSCALL);
 
     while ((timeout < IFX_SE_SYSCALL_TIMEOUT_SHORT) &&
-            (CY_IPC_DRV_SUCCESS != Cy_IPC_Drv_LockAcquire(ipc_struct)))
+           (CY_IPC_DRV_SUCCESS != Cy_IPC_Drv_LockAcquire(ipc_struct)))
     {
         ++timeout;
     }

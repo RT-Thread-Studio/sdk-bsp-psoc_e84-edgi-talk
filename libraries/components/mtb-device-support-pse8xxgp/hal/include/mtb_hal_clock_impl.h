@@ -98,7 +98,7 @@ uint32_t mtb_hal_clock_get_peri_clock_freq(const void* clk);
  * @return The result of the request to set the clock frequency.
  */
 cy_rslt_t mtb_hal_clock_set_peri_clock_freq(const void* clk, uint32_t frequency,
-        uint32_t tolerance_ppm);
+                                            uint32_t tolerance_ppm);
 
 /** Enable/Disable the peripheral clock
  *
@@ -139,7 +139,7 @@ uint32_t mtb_hal_clock_get_hf_clock_freq(const void* clk);
  * @return The result of the request to set the clock frequency.
  */
 cy_rslt_t mtb_hal_clock_set_hf_clock_freq(const void* clk, uint32_t frequency,
-        uint32_t tolerance_ppm);
+                                          uint32_t tolerance_ppm);
 
 /** Enable/Disable the high frequency clock
  *

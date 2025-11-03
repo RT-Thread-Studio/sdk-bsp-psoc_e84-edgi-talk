@@ -45,7 +45,6 @@
  * @param[in]    S         Pointer to an instance of the rbf SVM structure.
  * @param[in]    in        Pointer to input vector
  * @param[out]   pResult   decision value
- * @return none.
  *
  */
 
@@ -54,12 +53,12 @@
 #include "arm_helium_utils.h"
 #include "arm_vec_math_f16.h"
 
-void arm_svm_rbf_predict_f16(
+ARM_DSP_ATTRIBUTE void arm_svm_rbf_predict_f16(
     const arm_svm_rbf_instance_f16 *S,
-    const float16_t *in,
-    int32_t *pResult)
+    const float16_t * in,
+    int32_t * pResult)
 {
-    /* inlined Matrix x Vector function interleaved with dot prod */
+        /* inlined Matrix x Vector function interleaved with dot prod */
     uint32_t        numRows = S->nbOfSupportVectors;
     uint32_t        numCols = S->vectorDimension;
     const float16_t *pSupport = S->supportVectors;
@@ -77,8 +76,7 @@ void arm_svm_rbf_predict_f16(
     /*
      * compute 4 rows in parrallel
      */
-    while (row >= 4)
-    {
+    while (row >= 4) {
         const float16_t *pInA2, *pInA3;
         float16_t const *pSrcA0Vec, *pSrcA1Vec, *pSrcA2Vec, *pSrcA3Vec, *pInVec;
         f16x8_t         vecIn, acc0, acc1, acc2, acc3;
@@ -109,8 +107,7 @@ void arm_svm_rbf_predict_f16(
         pSrcA3Vec = pInA3;
 
         blkCnt = numCols >> 3;
-        while (blkCnt > 0U)
-        {
+        while (blkCnt > 0U) {
             f16x8_t         vecA;
             f16x8_t         vecDif;
 
@@ -140,8 +137,7 @@ void arm_svm_rbf_predict_f16(
          * (will be merged thru tail predication)
          */
         blkCnt = numCols & 7;
-        if (blkCnt > 0U)
-        {
+        if (blkCnt > 0U) {
             mve_pred16_t    p0 = vctp16q(blkCnt);
             f16x8_t         vecA;
             f16x8_t         vecDif;
@@ -173,7 +169,7 @@ void arm_svm_rbf_predict_f16(
 
         vSum =
             vfmaq_m_f16(vSum, vld1q(pDualCoef),
-                        vexpq_f16(vmulq_n_f16(vtmp, -(_Float16)S->gamma)), vctp16q(4));
+                      vexpq_f16(vmulq_n_f16(vtmp, -(_Float16)S->gamma)),vctp16q(4));
         pDualCoef += 4;
         pSrcA += numCols * 4;
         /*
@@ -185,8 +181,7 @@ void arm_svm_rbf_predict_f16(
     /*
      * compute 2 rows in parrallel
      */
-    if (row >= 2)
-    {
+    if (row >= 2) {
         float16_t const *pSrcA0Vec, *pSrcA1Vec, *pInVec;
         f16x8_t         vecIn, acc0, acc1;
         float16_t const *pSrcVecPtr = in;
@@ -209,8 +204,7 @@ void arm_svm_rbf_predict_f16(
         pSrcA1Vec = pInA1;
 
         blkCnt = numCols >> 3;
-        while (blkCnt > 0U)
-        {
+        while (blkCnt > 0U) {
             f16x8_t         vecA;
             f16x8_t         vecDif;
 
@@ -232,8 +226,7 @@ void arm_svm_rbf_predict_f16(
          * (will be merged thru tail predication)
          */
         blkCnt = numCols & 7;
-        if (blkCnt > 0U)
-        {
+        if (blkCnt > 0U) {
             mve_pred16_t    p0 = vctp16q(blkCnt);
             f16x8_t         vecA, vecDif;
 
@@ -261,8 +254,7 @@ void arm_svm_rbf_predict_f16(
         row -= 2;
     }
 
-    if (row >= 1)
-    {
+    if (row >= 1) {
         f16x8_t         vecIn, acc0;
         float16_t const *pSrcA0Vec, *pInVec;
         float16_t const *pSrcVecPtr = in;
@@ -282,8 +274,7 @@ void arm_svm_rbf_predict_f16(
         pSrcA0Vec = pInA0;
 
         blkCnt = numCols >> 3;
-        while (blkCnt > 0U)
-        {
+        while (blkCnt > 0U) {
             f16x8_t         vecA, vecDif;
 
             vecIn = vld1q(pInVec);
@@ -300,8 +291,7 @@ void arm_svm_rbf_predict_f16(
          * (will be merged thru tail predication)
          */
         blkCnt = numCols & 7;
-        if (blkCnt > 0U)
-        {
+        if (blkCnt > 0U) {
             mve_pred16_t    p0 = vctp16q(blkCnt);
             f16x8_t         vecA, vecDif;
 
@@ -328,27 +318,27 @@ void arm_svm_rbf_predict_f16(
 }
 
 #else
-void arm_svm_rbf_predict_f16(
+ARM_DSP_ATTRIBUTE void arm_svm_rbf_predict_f16(
     const arm_svm_rbf_instance_f16 *S,
-    const float16_t *in,
-    int32_t *pResult)
+    const float16_t * in,
+    int32_t * pResult)
 {
-    _Float16 sum = S->intercept;
-    _Float16 dot = 00.f16;
-    uint32_t i, j;
+    _Float16 sum=S->intercept;
+    _Float16 dot=00.f16;
+    uint32_t i,j;
     const float16_t *pSupport = S->supportVectors;
 
-    for (i = 0; i < S->nbOfSupportVectors; i++)
+    for(i=0; i < S->nbOfSupportVectors; i++)
     {
-        dot = 0.0f16;
-        for (j = 0; j < S->vectorDimension; j++)
+        dot=0.0f16;
+        for(j=0; j < S->vectorDimension; j++)
         {
-            dot = dot + SQ((_Float16)in[j] - (_Float16) * pSupport);
+            dot = dot + ARM_SQ((_Float16)in[j] - (_Float16) *pSupport);
             pSupport++;
         }
         sum += (_Float16)S->dualCoefficients[i] * (_Float16)expf((float32_t)(-(_Float16)S->gamma * (_Float16)dot));
     }
-    *pResult = S->classes[STEP(sum)];
+    *pResult=S->classes[STEP(sum)];
 }
 
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
@@ -357,5 +347,5 @@ void arm_svm_rbf_predict_f16(
  * @} end of rbfsvm group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

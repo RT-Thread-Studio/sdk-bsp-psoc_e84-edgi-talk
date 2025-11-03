@@ -4,7 +4,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Release notes for emUSB-Device V3.66.0         </title>
+  <title>Release notes for emUSB-Device V3.66.5         </title>
   <meta name="robots" content="noindex,nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style type="text/css">
@@ -208,7 +208,7 @@
         <div class="claim">The Embedded Experts</div>
         <div class="head">
           <div class="container">
-            <h1>Release notes for emUSB-Device V3.66.0         </h1>
+            <h1>Release notes for emUSB-Device V3.66.5         </h1>
           </div>
         </div>
       </div>
@@ -216,6 +216,77 @@
     <!-- ****************************************************************** -->
     <!-- History                                                            -->
     <!-- ****************************************************************** -->
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 3.66.5 [22. Apr 2025]</h2>
+        <div>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>RNDIS/CDC-ECM/CDC-NCM: Updated internal emNet driver to handle IP_DeInit() properly.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 3.66.4 [31. Mar 2025]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for STM32H7A/B devices.</li>
+            <li>Added support for STM32C071 devices.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>STM32NG (STM32H/U5) driver: When CPU was running slow or many concurrent memory transfer occurring: Handling of the EPStatus esp. EP0 register was not handled properly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 3.66.3 [24. Mar 2025]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Added support for LPC55(S)16 devices.</li>
+            <li>Added support for STM32H7RSxx devices.</li>
+            <li>MTP: Add callback function for file access control (USBD_MTP_SetWriteProtectionCb()).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 3.66.2 [22. Jan 2025]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Support for MAX32690 added.</li>
+            <li>Support for Renesas RA8M1 added.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>Renesas USB driver: Under some circumstances the FIFO was not read or written properly. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="divider-global">
+      <div class="container">
+        <h2>Version 3.66.1 [16. Dec 2024]</h2>
+        <div>
+          <h3>New Features</h3>
+          <ol>
+            <li>Driver: New driver for Renesas RA4M2 series.</li>
+          </ol>
+          <h3>Program corrections</h3>
+          <ol>
+            <li>ATSAMV7x driver: USB driver may hang after a USB disconnect during a data transfer. Fixed.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
     <div class="divider-global">
       <div class="container">
         <h2>Version 3.66.0 [16. Oct 2024]</h2>
@@ -2001,7 +2072,7 @@
   <div class="footer">
     <div class="container">
       <div>
-        <p>Copyright 2001-2024 SEGGER Microcontroller GmbH. All rights reserved.<br> For more information, please visit our website&nbsp;<a href="https://www.segger.com/" target="_blank">www.segger.com</a>&nbsp;or contact us via&nbsp;<a href="https://www.segger.com/ticket"
+        <p>Copyright 2001-2025 SEGGER Microcontroller GmbH. All rights reserved.<br> For more information, please visit our website&nbsp;<a href="https://www.segger.com/" target="_blank">www.segger.com</a>&nbsp;or contact us via&nbsp;<a href="https://www.segger.com/ticket"
             target="_blank">www.segger.com/ticket</a>&nbsp;</p>
       </div>
     </div>

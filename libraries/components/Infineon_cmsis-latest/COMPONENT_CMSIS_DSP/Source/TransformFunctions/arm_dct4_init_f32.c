@@ -37,10 +37,10 @@
   @ingroup DCT4_IDCT4
  */
 
-/**
- @addtogroup DCT4F32
- @{
-*/
+ /**
+  @addtogroup DCT4F32
+  @{
+ */
 
 /**
   @brief         Initialization function for the floating-point DCT4/IDCT4.
@@ -48,7 +48,7 @@
   @param[in,out] S          points to an instance of floating-point DCT4/IDCT4 structure
   @param[in]     S_RFFT     points to an instance of floating-point RFFT/RIFFT structure
   @param[in]     S_CFFT     points to an instance of floating-point CFFT/CIFFT structure
-  @param[in]     N          length of the DCT4
+  @param[in]     N			length of the DCT4
   @param[in]     Nby2       half of the length of the DCT4
   @param[in]     normalize  normalizing factor.
   @return        execution status
@@ -59,73 +59,73 @@
                    The normalizing factor is <code>sqrt(2/N)</code>, which depends on the size of transform <code>N</code>.
                    Floating-point normalizing factors are mentioned in the table below for different DCT sizes:
 
-
-| DCT Size  | Normalizing factor value  |
-| --------: | ------------------------: |
-| 2048      | 0.03125                   |
-| 512       | 0.0625                    |
-| 128       | 0.125                     |
+ 
+| DCT Size  | Normalizing factor value  | 
+| --------: | ------------------------: | 
+| 2048      | 0.03125                   | 
+| 512       | 0.0625                    | 
+| 128       | 0.125                     | 
 
  */
 
-arm_status arm_dct4_init_f32(
-    arm_dct4_instance_f32 * S,
-    arm_rfft_instance_f32 * S_RFFT,
-    arm_cfft_radix4_instance_f32 * S_CFFT,
-    uint16_t N,
-    uint16_t Nby2,
-    float32_t normalize)
+ARM_DSP_ATTRIBUTE arm_status arm_dct4_init_f32(
+  arm_dct4_instance_f32 * S,
+  arm_rfft_instance_f32 * S_RFFT,
+  arm_cfft_radix4_instance_f32 * S_CFFT,
+  uint16_t N,
+  uint16_t Nby2,
+  float32_t normalize)
 {
-    /* Initialize the default arm status */
-    arm_status status = ARM_MATH_SUCCESS;
+  /* Initialize the default arm status */
+  arm_status status = ARM_MATH_SUCCESS;
 
 
-    /* Initialize the DCT4 length */
-    S->N = N;
+  /* Initialize the DCT4 length */
+  S->N = N;
 
-    /* Initialize the half of DCT4 length */
-    S->Nby2 = Nby2;
+  /* Initialize the half of DCT4 length */
+  S->Nby2 = Nby2;
 
-    /* Initialize the DCT4 Normalizing factor */
-    S->normalize = normalize;
+  /* Initialize the DCT4 Normalizing factor */
+  S->normalize = normalize;
 
-    /* Initialize Real FFT Instance */
-    S->pRfft = S_RFFT;
+  /* Initialize Real FFT Instance */
+  S->pRfft = S_RFFT;
 
-    /* Initialize Complex FFT Instance */
-    S->pCfft = S_CFFT;
+  /* Initialize Complex FFT Instance */
+  S->pCfft = S_CFFT;
 
-    switch (N)
-    {
+  switch (N)
+  {
     /* Initialize the table modifier values */
-    case 8192U:
-        S->pTwiddle = Weights_8192;
-        S->pCosFactor = cos_factors_8192;
-        break;
+  case 8192U:
+    S->pTwiddle = Weights_8192;
+    S->pCosFactor = cos_factors_8192;
+    break;
 
-    case 2048U:
-        S->pTwiddle = Weights_2048;
-        S->pCosFactor = cos_factors_2048;
-        break;
+  case 2048U:
+    S->pTwiddle = Weights_2048;
+    S->pCosFactor = cos_factors_2048;
+    break;
 
-    case 512U:
-        S->pTwiddle = Weights_512;
-        S->pCosFactor = cos_factors_512;
-        break;
+  case 512U:
+    S->pTwiddle = Weights_512;
+    S->pCosFactor = cos_factors_512;
+    break;
 
-    case 128U:
-        S->pTwiddle = Weights_128;
-        S->pCosFactor = cos_factors_128;
-        break;
-    default:
-        status = ARM_MATH_ARGUMENT_ERROR;
-    }
+  case 128U:
+    S->pTwiddle = Weights_128;
+    S->pCosFactor = cos_factors_128;
+    break;
+  default:
+    status = ARM_MATH_ARGUMENT_ERROR;
+  }
 
-    /* Initialize the RFFT/RIFFT Function */
-    arm_rfft_init_f32(S->pRfft, S->pCfft, S->N, 0U, 1U);
+  /* Initialize the RFFT/RIFFT Function */
+  arm_rfft_init_f32(S->pRfft, S->pCfft, S->N, 0U, 1U);
 
-    /* return the status of DCT4 Init function */
-    return (status);
+  /* return the status of DCT4 Init function */
+  return (status);
 }
 
 /**

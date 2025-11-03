@@ -28,178 +28,181 @@
 
 #include "cy_ms_ctl.h"
 
-cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigBusMaster(en_ms_ctl_master_t busMaster, bool privileged, bool nonSecure, uint32_t pcMask)
+static void Cy_Ms_Ctl_SetMscAcgResp(uint32_t *reg, uint32_t gate_mask, uint32_t gate_pos, cy_en_ms_ctl_cfg_gate_resp_t gateResp, uint32_t sec_mask, uint32_t sec_pos, cy_en_ms_ctl_sec_resp_t secResp)
 {
-    uint32_t value;
+    uint32_t value = *reg;
+    value &= ~(gate_mask | sec_mask);
+    if (gateResp == CY_MS_CTL_GATE_RESP_ERR) 
+    {
+        value |= ((1U << gate_pos) & gate_mask);
+    }
+    if (secResp == CY_MS_CTL_SEC_RESP_ERR)
+    {
+        value |= ((1U << sec_pos) & sec_mask);
+    }
+    *reg = value;
+}
 
-    value = MS_CTL_PC_CTL_VX(busMaster);
-
+static uint32_t Cy_Ms_Ctl_SetBusMasterConfig(uint32_t value, bool privileged, bool nonSecure, uint32_t pcMask)
+{
+    uint32_t reg_value = value;
+    
     if (privileged)
     {
-        value = value | ((1U << MS_CTL_P_Pos) & MS_CTL_P_Msk);
+        reg_value |= ((1U << MS_CTL_P_Pos) & MS_CTL_P_Msk);
     }
     else
     {
-        value = value & (~((1U << MS_CTL_P_Pos) & MS_CTL_P_Msk));
+        reg_value &= (~((1U << MS_CTL_P_Pos) & MS_CTL_P_Msk));
     }
+    
     if (nonSecure)
     {
-        value = value | ((1U << MS_CTL_NS_Pos) & MS_CTL_NS_Msk);
+        reg_value |= ((1U << MS_CTL_NS_Pos) & MS_CTL_NS_Msk);
     }
     else
     {
-        value = value & (~((1U << MS_CTL_NS_Pos) & MS_CTL_NS_Msk));
+        reg_value &= (~((1U << MS_CTL_NS_Pos) & MS_CTL_NS_Msk));
     }
 
-    value &= (~MS_CTL_PC_MASK_Msk);
-    value = value | ((pcMask << MS_CTL_PC_MASK_Pos) & MS_CTL_PC_MASK_Msk);
-    MS_CTL_PC_CTL_VX(busMaster) = value;
+    reg_value &= (~MS_CTL_PC_MASK_Msk);
+    reg_value |= ((pcMask << MS_CTL_PC_MASK_Pos) & MS_CTL_PC_MASK_Msk);
+
+    return reg_value;
+}
+
+
+/*******************************************************************************
+* Function Name: Cy_Ms_Ctl_ConfigBusMaster
+****************************************************************************//**
+*
+* \brief Configures the referenced bus master by setting the privilege , non-secure
+* and protection context (PC) mask settings
+*
+* \param busMaster
+* Bus master being initialized
+*
+* \param privileged
+* privileged setting, 'false': user mode; 'true': privileged mode
+*
+* \param pcMask
+* pcMask
+*
+* \param nonSecure
+* Bus master security  setting, 'false': secure; 'true': non-secure
+*
+* \return
+* Requested operation status
+*
+*******************************************************************************/
+cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigBusMaster(en_ms_ctl_master_t busMaster, bool privileged, bool nonSecure, uint32_t pcMask)
+{
+    uint32_t value = MS_CTL_PC_CTL_VX(busMaster);
+
+    MS_CTL_PC_CTL_VX(busMaster) = Cy_Ms_Ctl_SetBusMasterConfig(value, privileged, nonSecure, pcMask);
 
     return CY_MS_CTL_SUCCESS;
 }
 
+
+/*******************************************************************************
+* Function Name: Cy_Ms_Ctl_ConfigMscAcgResp
+****************************************************************************//**
+*
+* \brief Response configuration for ACG and MSC for the referenced bus master
+*
+* \param busMaster
+* Bus master for which response is being initialized
+*
+* \param gateResp
+* Response type when the ACG is blocking the incoming transfers:
+*
+* \param secResp
+* Bust master privileged setting
+*
+* \return
+* Requested operation status
+*
+*******************************************************************************/
 cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigMscAcgResp(en_ms_ctl_master_sc_acg_t busMaster, cy_en_ms_ctl_cfg_gate_resp_t gateResp, cy_en_ms_ctl_sec_resp_t secResp)
 {
-    uint32_t value;
-    cy_en_ms_ctl_status_t ret_value = CY_MS_CTL_BAD_PARAM;
+    uint32_t *reg = NULL;
+    uint32_t gate_mask = 0, gate_pos = 0, sec_mask = 0, sec_pos = 0;
+
     switch (busMaster)
     {
-    case CODE_MS0_MSC:
-    {
-        value = MS_CTL_CODE_MS0_MSC_ACG_CTL_VX;
-        value &= (~(MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk | MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos) & MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos) & MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk);
-        }
-        MS_CTL_CODE_MS0_MSC_ACG_CTL_VX = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
+        case CODE_MS0_MSC:
+            reg = (uint32_t *)&MS_CTL_CODE_MS0_MSC_ACG_CTL_VX;
+            gate_mask = MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk;
+            gate_pos  = MS_CTL_CODE_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos;
+            sec_mask  = MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk;
+            sec_pos   = MS_CTL_CODE_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos;
+            break;
+        case SYS_MS0_MSC:
+            reg = (uint32_t *)&MS_CTL_SYS_MS0_MSC_ACG_CTL_VX;
+            gate_mask = MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk;
+            gate_pos  = MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos;
+            sec_mask  = MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk;
+            sec_pos   = MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos;
+            break;
+        case SYS_MS1_MSC:
+            reg = (uint32_t *)&MS_CTL_SYS_MS1_MSC_ACG_CTL_VX;
+            gate_mask = MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk;
+            gate_pos  = MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos;
+            sec_mask  = MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Msk;
+            sec_pos   = MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Pos;
+            break;
+        case EXP_MS_MSC:
+            reg = (uint32_t *)&MS_CTL_EXP_MS_MSC_ACG_CTL_VX;
+            gate_mask = MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk;
+            gate_pos  = MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos;
+            sec_mask  = MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Msk;
+            sec_pos   = MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Pos;
+            break;
+        case DMAC0_MSC:
+            reg = (uint32_t *)&MS_CTL_DMAC0_MSC_ACG_CTL_VX;
+            gate_mask = MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk;
+            gate_pos  = MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos;
+            sec_mask  = MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Msk;
+            sec_pos   = MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Pos;
+            break;
+        case DMAC1_MSC:
+            reg = (uint32_t *)&MS_CTL_DMAC1_MSC_ACG_CTL_VX;
+            gate_mask = MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk;
+            gate_pos  = MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos;
+            sec_mask  = MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Msk;
+            sec_pos   = MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Pos;
+            break;
+        default:
+            return CY_MS_CTL_BAD_PARAM;
     }
 
-    case SYS_MS0_MSC:
-    {
-        value = MS_CTL_SYS_MS0_MSC_ACG_CTL_VX;
-        value &= (~(MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk | MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos) & MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Pos) & MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_VX_Msk);
-        }
-        MS_CTL_SYS_MS0_MSC_ACG_CTL_VX = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
+    Cy_Ms_Ctl_SetMscAcgResp(reg, gate_mask, gate_pos, gateResp, sec_mask, sec_pos, secResp);
 
-    case SYS_MS1_MSC:
-    {
-        value = MS_CTL_SYS_MS1_MSC_ACG_CTL_VX;
-        value &= (~(MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk | MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos) & MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Pos) & MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_VX_Msk);
-        }
-        MS_CTL_SYS_MS1_MSC_ACG_CTL_VX = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case EXP_MS_MSC:
-    {
-        value = MS_CTL_EXP_MS_MSC_ACG_CTL_VX;
-        value &= (~(MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk | MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos) & MS_CTL_EXP_MS_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Pos) & MS_CTL_EXP_MS_MSC_ACG_CTL_SEC_RESP_VX_Msk);
-        }
-        MS_CTL_EXP_MS_MSC_ACG_CTL_VX = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case DMAC0_MSC:
-    {
-        value = MS_CTL_DMAC0_MSC_ACG_CTL_VX;
-        value &= (~(MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk | MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos) & MS_CTL_DMAC0_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Pos) & MS_CTL_DMAC0_MSC_ACG_CTL_SEC_RESP_VX_Msk);
-        }
-        MS_CTL_DMAC0_MSC_ACG_CTL_VX = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case DMAC1_MSC:
-    {
-        value = MS_CTL_DMAC1_MSC_ACG_CTL_VX;
-        value &= (~(MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk | MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Pos) & MS_CTL_DMAC1_MSC_ACG_CTL_CFG_GATE_RESP_VX_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Pos) & MS_CTL_DMAC1_MSC_ACG_CTL_SEC_RESP_VX_Msk);
-        }
-        MS_CTL_DMAC1_MSC_ACG_CTL_VX = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    default:
-    {
-        // default case and will return error */
-        break;
-    }
-    }
-
-    return ret_value;
-}
-
-
-cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetActivePC(en_ms_ctl_master_t busMaster, uint32_t pc)
-{
-    CY_REG32_CLR_SET(MS_CTL_PC_VAL_VX(busMaster), MS_PC_PC_PC, pc);
-    return CY_MS_CTL_SUCCESS;
-}
-
-uint32_t Cy_Ms_Ctl_GetActivePC(en_ms_ctl_master_t busMaster)
-{
-    return ((uint32_t)_FLD2VAL(MS_PC_PC_READ_MIR_PC, MS_CTL_PC_READ_MIRROR_VX(busMaster)));
-}
-
-cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetSavedPC(en_ms_ctl_master_t busMaster, uint32_t savedPc)
-{
-    CY_REG32_CLR_SET(MS_CTL_PC_VAL_VX(busMaster), MS_PC_PC_PC_SAVED, savedPc);
     return CY_MS_CTL_SUCCESS;
 }
 
 
-uint32_t Cy_Ms_Ctl_GetSavedPC(en_ms_ctl_master_t busMaster)
-{
-    return ((uint32_t)_FLD2VAL(MS_PC_PC_READ_MIR_PC_SAVED, MS_CTL_PC_READ_MIRROR_VX(busMaster)));
-}
-
+/*******************************************************************************
+* Function Name: Cy_Ms_Ctl_SetPcHandler
+****************************************************************************//**
+*
+* \brief Sets the handler address for the given PC. This is used to detect entry to
+* "trusted" code through an exception/interrupt.
+*
+* \note The function can't update the handler address for the PC lower than the current application's PC.
+* For example, if the application is running in PC2 it can't update handler address for PC0 or PC1.
+*
+* \param pc
+* Protection context for which the handler is being set
+*
+* \param handler
+* Address of the protection context  handler
+*
+* \return
+* Requested operation status
+*
+*******************************************************************************/
 cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetPcHandler(uint32_t pc, cy_israddress handler)
 {
     cy_en_ms_ctl_status_t ret = CY_MS_CTL_BAD_PARAM;
@@ -209,343 +212,234 @@ cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetPcHandler(uint32_t pc, cy_israddress handler)
 
     if (pc < 4UL)
     {
-        MXCM33->CM33_PC_CTL = (((MXCM33->CM33_PC_CTL) | (0x1UL << pc)) & (MXCM33_CM33_PC_CTL_VALID_Msk));
+        MXCM33->CM33_PC_CTL = (((MXCM33->CM33_PC_CTL)|(0x1UL << pc)) & (MXCM33_CM33_PC_CTL_VALID_Msk));
     }
 
 #endif /* (CY_IP_M33SYSCPUSS_VERSION <= 2u) && (CY_IP_M33SYSCPUSS_VERSION_MINOR < 2u) */
 
-    switch (pc)
+    switch(pc)
     {
-    case 0:
-    {
-        MXCM33->CM33_PC0_HANDLER = (uint32_t)handler;
-        ret = CY_MS_CTL_SUCCESS;
-        break;
-    }
-    case 1:
-    {
-        MXCM33->CM33_PC1_HANDLER = (uint32_t)handler;
-        ret = CY_MS_CTL_SUCCESS;
-        break;
-    }
-    case 2:
-    {
-        MXCM33->CM33_PC2_HANDLER = (uint32_t)handler;
-        ret = CY_MS_CTL_SUCCESS;
-        break;
-    }
-    case 3:
-    {
-        MXCM33->CM33_PC3_HANDLER = (uint32_t)handler;
-        ret = CY_MS_CTL_SUCCESS;
-        break;
-    }
-    default:
-    {
-        // default case and will return error */
-        break;
-    }
+        case 0:
+        {
+            MXCM33->CM33_PC0_HANDLER = (uint32_t)handler;
+            ret = CY_MS_CTL_SUCCESS;
+            break;
+        }
+        case 1:
+        {
+            MXCM33->CM33_PC1_HANDLER = (uint32_t)handler;
+            ret = CY_MS_CTL_SUCCESS;
+            break;
+        }
+        case 2:
+        {
+            MXCM33->CM33_PC2_HANDLER = (uint32_t)handler;
+            ret = CY_MS_CTL_SUCCESS;
+            break;
+        }
+        case 3:
+        {
+            MXCM33->CM33_PC3_HANDLER = (uint32_t)handler;
+            ret = CY_MS_CTL_SUCCESS;
+            break;
+        }
+        default:
+        {
+            // default case and will return error */
+            break;
+        }
     }
     return ret;
 }
 
+
 cy_israddress Cy_Ms_Ctl_GetPcHandler(uint32_t pc)
 {
     cy_israddress handler = NULL;
-    switch (pc)
+    switch(pc)
     {
-    case 0:
-    {
-        handler = (cy_israddress)MXCM33->CM33_PC0_HANDLER;
-        break;
-    }
-    case 1:
-    {
-        handler = (cy_israddress)MXCM33->CM33_PC1_HANDLER;
-        break;
-    }
-    case 2:
-    {
-        handler = (cy_israddress)MXCM33->CM33_PC2_HANDLER;
-        break;
-    }
-    case 3:
-    {
-        handler = (cy_israddress)MXCM33->CM33_PC3_HANDLER;
-        break;
-    }
-    default:
-    {
-        // default case and will return error */
-        break;
-    }
+        case 0:
+        {
+            handler = (cy_israddress)MXCM33->CM33_PC0_HANDLER;
+            break;
+        }
+        case 1:
+        {
+            handler = (cy_israddress)MXCM33->CM33_PC1_HANDLER;
+            break;
+        }
+        case 2:
+        {
+            handler = (cy_israddress)MXCM33->CM33_PC2_HANDLER;
+            break;
+        }
+        case 3:
+        {
+            handler = (cy_israddress)MXCM33->CM33_PC3_HANDLER;
+            break;
+        }
+        default:
+        {
+            // default case and will return error */
+            break;
+        }
     }
     return handler;
 }
 
 #if defined (CY_IP_M55APPCPUSS)
 
+/*******************************************************************************
+* Function Name: Cy_Ms_Ctl_ConfigBusMasterV1
+****************************************************************************//**
+*
+* \brief Configures the referenced bus master by setting the privilege, non-secure
+* and protection context (PC) mask settings in APPCPUSS.
+*
+* \param busMaster
+* Bus master being initialized
+*
+* \param privileged
+* privileged setting, 'false': user mode; 'true': privileged mode
+*
+* \param pcMask
+* pcMask
+*
+* \param nonSecure
+* Bus master security  setting, 'false': secure; 'true': non-secure
+*
+* \return
+* Requested operation status
+*
+*******************************************************************************/
 cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigBusMasterV1(en_ms_ctl_master_t busMaster, bool privileged, bool nonSecure, uint32_t pcMask)
 {
-    uint32_t value;
+    uint32_t value = MS_CTL_PC_CTL_V1(busMaster);
 
-    value = MS_CTL_PC_CTL_V1(busMaster);
-
-    if (privileged)
-    {
-        value = value | ((1U << MS_CTL_P_Pos) & MS_CTL_P_Msk);
-    }
-    else
-    {
-        value = value & (~((1U << MS_CTL_P_Pos) & MS_CTL_P_Msk));
-    }
-    if (nonSecure)
-    {
-        value = value | ((1U << MS_CTL_NS_Pos) & MS_CTL_NS_Msk);
-    }
-    else
-    {
-        value = value & (~((1U << MS_CTL_NS_Pos) & MS_CTL_NS_Msk));
-    }
-
-    value &= (~MS_CTL_PC_MASK_Msk);
-    value = value | ((pcMask << MS_CTL_PC_MASK_Pos) & MS_CTL_PC_MASK_Msk);
-    MS_CTL_PC_CTL_V1(busMaster) = value;
+    MS_CTL_PC_CTL_V1(busMaster) = Cy_Ms_Ctl_SetBusMasterConfig(value, privileged, nonSecure, pcMask);
 
     return CY_MS_CTL_SUCCESS;
 }
 
+
+/*******************************************************************************
+* Function Name: Cy_Ms_Ctl_ConfigMscAcgRespV1
+****************************************************************************//**
+*
+* \brief Response configuration for ACG and MSC for the referenced bus master in APPCPUSS
+*
+* \param busMaster
+* Bus master for which response is being initialized
+*
+* \param gateResp
+* Response type when the ACG is blocking the incoming transfers:
+*
+* \param secResp
+* Bust master privileged setting
+*
+* \return
+* Requested operation status
+*
+*******************************************************************************/
 cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigMscAcgRespV1(en_ms_ctl_master_sc_acg_v1_t busMaster, cy_en_ms_ctl_cfg_gate_resp_t gateResp, cy_en_ms_ctl_sec_resp_t secResp)
 {
-    uint32_t value;
-    cy_en_ms_ctl_status_t ret_value = CY_MS_CTL_BAD_PARAM;
+    uint32_t *reg = NULL;
+    uint32_t gate_mask = 0, gate_pos = 0, sec_mask = 0, sec_pos = 0;
+
     switch (busMaster)
     {
-    case APP_SYS_MS0_MSC:
-    {
-        value = MS_CTL_SYS_MS0_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_SYS_MS0_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
+        case APP_SYS_MS0_MSC:
+            reg = (uint32_t *)&MS_CTL_SYS_MS0_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_SYS_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_SYS_MS0_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_SYS_MS1_MSC:
+            reg = (uint32_t *)&MS_CTL_SYS_MS1_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_AXIDMAC0_MSC:
+            reg = (uint32_t *)&MS_CTL_AXIDMAC0_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_AXIDMAC0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_AXIDMAC0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_AXIDMAC0_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_AXIDMAC0_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_AXIDMAC1_MSC:
+            reg = (uint32_t *)&MS_CTL_AXIDMAC1_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_AXIDMAC1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_AXIDMAC1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_AXIDMAC1_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_AXIDMAC1_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_AXI_MS0_MSC:
+            reg = (uint32_t *)&MS_CTL_AXI_MS0_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_AXI_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_AXI_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_AXI_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_AXI_MS0_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_AXI_MS1_MSC:
+            reg = (uint32_t *)&MS_CTL_AXI_MS1_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_AXI_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_AXI_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_AXI_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_AXI_MS1_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_AXI_MS2_MSC:
+            reg = (uint32_t *)&MS_CTL_AXI_MS2_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_AXI_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_AXI_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_AXI_MS2_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_AXI_MS2_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_AXI_MS3_MSC:
+            reg = (uint32_t *)&MS_CTL_AXI_MS3_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_AXI_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_AXI_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_AXI_MS3_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_AXI_MS3_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_EXP_MS0_MSC:
+            reg = (uint32_t *)&MS_CTL_EXP_MS0_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_EXP_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_EXP_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_EXP_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_EXP_MS0_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_EXP_MS1_MSC:
+            reg = (uint32_t *)&MS_CTL_EXP_MS1_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_EXP_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_EXP_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_EXP_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_EXP_MS1_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_EXP_MS2_MSC:
+            reg = (uint32_t *)&MS_CTL_EXP_MS2_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_EXP_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_EXP_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_EXP_MS2_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_EXP_MS2_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        case APP_EXP_MS3_MSC:
+            reg = (uint32_t *)&MS_CTL_EXP_MS3_MSC_ACG_CTL_V1;
+            gate_mask = MS_CTL_EXP_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk;
+            gate_pos  = MS_CTL_EXP_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos;
+            sec_mask  = MS_CTL_EXP_MS3_MSC_ACG_CTL_SEC_RESP_V1_Msk;
+            sec_pos   = MS_CTL_EXP_MS3_MSC_ACG_CTL_SEC_RESP_V1_Pos;
+            break;
+        default:
+            return CY_MS_CTL_BAD_PARAM;
     }
 
-    case APP_SYS_MS1_MSC:
-    {
-        value = MS_CTL_SYS_MS1_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_SYS_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_SYS_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_SYS_MS1_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
+    Cy_Ms_Ctl_SetMscAcgResp(reg, gate_mask, gate_pos, gateResp, sec_mask, sec_pos, secResp);
 
-    case APP_AXIDMAC0_MSC:
-    {
-        value = MS_CTL_AXIDMAC0_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_AXIDMAC0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_AXIDMAC0_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXIDMAC0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_AXIDMAC0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXIDMAC0_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_AXIDMAC0_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_AXIDMAC0_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_AXIDMAC1_MSC:
-    {
-        value = MS_CTL_AXIDMAC1_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_AXIDMAC1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_AXIDMAC1_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXIDMAC1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_AXIDMAC1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXIDMAC1_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_AXIDMAC1_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_AXIDMAC1_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_AXI_MS0_MSC:
-    {
-        value = MS_CTL_AXI_MS0_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_AXI_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_AXI_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXI_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_AXI_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXI_MS0_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_AXI_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_AXI_MS0_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_AXI_MS1_MSC:
-    {
-        value = MS_CTL_AXI_MS1_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_AXI_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_AXI_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXI_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_AXI_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXI_MS1_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_AXI_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_AXI_MS1_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_AXI_MS2_MSC:
-    {
-        value = MS_CTL_AXI_MS2_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_AXI_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_AXI_MS2_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXI_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_AXI_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXI_MS2_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_AXI_MS2_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_AXI_MS2_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_AXI_MS3_MSC:
-    {
-        value = MS_CTL_AXI_MS3_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_AXI_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_AXI_MS3_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXI_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_AXI_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_AXI_MS3_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_AXI_MS3_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_AXI_MS3_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_EXP_MS0_MSC:
-    {
-        value = MS_CTL_EXP_MS0_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_EXP_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_EXP_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_EXP_MS0_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS0_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_EXP_MS0_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_EXP_MS0_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_EXP_MS1_MSC:
-    {
-        value = MS_CTL_EXP_MS1_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_EXP_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_EXP_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_EXP_MS1_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS1_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_EXP_MS1_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_EXP_MS1_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_EXP_MS2_MSC:
-    {
-        value = MS_CTL_EXP_MS2_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_EXP_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_EXP_MS2_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_EXP_MS2_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS2_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_EXP_MS2_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_EXP_MS2_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    case APP_EXP_MS3_MSC:
-    {
-        value = MS_CTL_EXP_MS3_MSC_ACG_CTL_V1;
-        value &= (~(MS_CTL_EXP_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk | MS_CTL_EXP_MS3_MSC_ACG_CTL_SEC_RESP_V1_Msk));
-        if (gateResp == CY_MS_CTL_GATE_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Pos) & MS_CTL_EXP_MS3_MSC_ACG_CTL_CFG_GATE_RESP_V1_Msk);
-        }
-        if (secResp == CY_MS_CTL_SEC_RESP_ERR)
-        {
-            value = value | ((1U << MS_CTL_EXP_MS3_MSC_ACG_CTL_SEC_RESP_V1_Pos) & MS_CTL_EXP_MS3_MSC_ACG_CTL_SEC_RESP_V1_Msk);
-        }
-        MS_CTL_EXP_MS3_MSC_ACG_CTL_V1 = value;
-        ret_value = CY_MS_CTL_SUCCESS;
-        break;
-    }
-
-    default:
-    {
-        // default case and will return error */
-        break;
-    }
-    }
-
-    return ret_value;
-}
-
-cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetActivePCV1(en_ms_ctl_master_t busMaster, uint32_t pc)
-{
-    CY_REG32_CLR_SET(MS_CTL_PC_VAL_V1(busMaster), MS_CTL_MS_PC_PC_PC, pc);
     return CY_MS_CTL_SUCCESS;
 }
-
-uint32_t Cy_Ms_Ctl_GetActivePCV1(en_ms_ctl_master_t busMaster)
-{
-    return ((uint32_t)_FLD2VAL(MS_CTL_MS_PC_PC_READ_MIR_PC, MS_CTL_PC_READ_MIRROR_V1(busMaster)));
-}
-
 
 #endif /* #if defined (CY_IP_M55APPCPUSS) */
 

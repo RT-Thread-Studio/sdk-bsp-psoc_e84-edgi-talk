@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 Purpose : This file contains the default values for emUSB-Device
@@ -68,9 +68,9 @@ Purpose : This file contains the default values for emUSB-Device
 // Set default debug level.
 //
 #ifndef  USB_DEBUG_LEVEL
-    #if defined(DEBUG) && DEBUG > 0
-        #define USB_DEBUG_LEVEL     2
-    #endif
+  #if defined(DEBUG) && DEBUG > 0
+    #define USB_DEBUG_LEVEL     2
+  #endif
 #endif
 
 /*********************************************************************
@@ -93,7 +93,7 @@ Purpose : This file contains the default values for emUSB-Device
 *          This significantly increases the code size.
 */
 #ifndef     USB_DEBUG_LEVEL
-    #define   USB_DEBUG_LEVEL    0
+  #define   USB_DEBUG_LEVEL    0
 #endif
 
 /*********************************************************************
@@ -104,11 +104,11 @@ Purpose : This file contains the default values for emUSB-Device
 *    Should log messages be supported?
 */
 #ifndef     USB_SUPPORT_LOG
-    #if       USB_DEBUG_LEVEL > 1
-        #define USB_SUPPORT_LOG   1
-    #else
-        #define USB_SUPPORT_LOG   0
-    #endif
+  #if       USB_DEBUG_LEVEL > 1
+    #define USB_SUPPORT_LOG   1
+  #else
+    #define USB_SUPPORT_LOG   0
+  #endif
 #endif
 
 /*********************************************************************
@@ -119,11 +119,11 @@ Purpose : This file contains the default values for emUSB-Device
 *    Should warning messages be supported?
 */
 #ifndef     USB_SUPPORT_WARN
-    #if       USB_DEBUG_LEVEL > 1
-        #define USB_SUPPORT_WARN  1
-    #else
-        #define USB_SUPPORT_WARN  0
-    #endif
+  #if       USB_DEBUG_LEVEL > 1
+    #define USB_SUPPORT_WARN  1
+  #else
+    #define USB_SUPPORT_WARN  0
+  #endif
 #endif
 
 
@@ -136,7 +136,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    A buffer of this size is created on the stack when a message is output.
 */
 #ifndef USB_LOG_BUFFER_SIZE
-    #define USB_LOG_BUFFER_SIZE  100
+  #define USB_LOG_BUFFER_SIZE  100
 #endif
 
 /*********************************************************************
@@ -150,7 +150,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    which may significantly reduce the code size of the USB stack.
 */
 #ifndef   USB_SUPPORT_TRANSFER_ISO
-    #define USB_SUPPORT_TRANSFER_ISO 0
+  #define USB_SUPPORT_TRANSFER_ISO 0
 #endif
 
 
@@ -163,7 +163,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    Default value, can be overwritten in software using USBD_SetMaxPower().
 */
 #ifndef   USB_MAX_POWER
-    #define USB_MAX_POWER  50u
+  #define USB_MAX_POWER  50u
 #endif
 
 /*********************************************************************
@@ -176,7 +176,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    of the USB stack.
 */
 #ifndef   USB_SUPPORT_TEST_MODE
-    #define USB_SUPPORT_TEST_MODE        0
+  #define USB_SUPPORT_TEST_MODE        0
 #endif
 
 /*********************************************************************
@@ -187,7 +187,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    Enables USB API instrumentation for SystemView.
 */
 #ifndef   USBD_SUPPORT_PROFILE
-    #define USBD_SUPPORT_PROFILE  0
+  #define USBD_SUPPORT_PROFILE  0
 #endif
 
 /*********************************************************************
@@ -200,7 +200,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    The functions are MCU specific and must be defined in the corresponding USB_Config_*.c file.
 */
 #ifndef USBD_OS_USE_USBD_X_INTERRUPT
-    #define USBD_OS_USE_USBD_X_INTERRUPT  0
+  #define USBD_OS_USE_USBD_X_INTERRUPT  0
 #endif
 
 /*********************************************************************
@@ -212,7 +212,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    May be needed by some RTOS layer in combination with USBD_OS_USE_USBD_X_INTERRUPT=1 (experimental).
 */
 #ifndef USBD_OS_USE_ISR_FLAG
-    #define USBD_OS_USE_ISR_FLAG          0
+  #define USBD_OS_USE_ISR_FLAG          0
 #endif
 
 /*********************************************************************
@@ -225,7 +225,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    allocates 56 bytes.
 */
 #ifndef   USB_NUM_EPS
-    #define USB_NUM_EPS 8u
+  #define USB_NUM_EPS 8u
 #endif
 
 /*********************************************************************
@@ -240,7 +240,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    allocates about USB_MAX_NUM_IF * 9 words in static memory (word = sizeof(void *)).
 */
 #ifndef   USB_MAX_NUM_IF
-    #define USB_MAX_NUM_IF 4u
+  #define USB_MAX_NUM_IF 4u
 #endif
 
 /*********************************************************************
@@ -256,7 +256,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    allocates about USB_MAX_NUM_ALT_IF * 10 words in static memory (word = sizeof(void *)).
 */
 #ifndef   USB_MAX_NUM_ALT_IF
-    #define USB_MAX_NUM_ALT_IF 2u
+  #define USB_MAX_NUM_ALT_IF 2u
 #endif
 
 /*********************************************************************
@@ -270,7 +270,7 @@ Purpose : This file contains the default values for emUSB-Device
 *    or video class it may get large and require to increase the size of this buffer.
 */
 #ifndef   USB_DESC_BUFFER_SIZE
-    #define USB_DESC_BUFFER_SIZE  256
+  #define USB_DESC_BUFFER_SIZE  256
 #endif
 
 /*********************************************************************
@@ -281,14 +281,14 @@ Purpose : This file contains the default values for emUSB-Device
 *    Maximum number of interface association descriptors.
 */
 #ifndef   USB_MAX_NUM_IAD
-    #define USB_MAX_NUM_IAD 3u
+  #define USB_MAX_NUM_IAD 3u
 #endif
 
 //
 // Maximum number of Microsoft OS descriptors.
 //
 #ifndef   USB_MAX_NUM_MS_DESC
-    #define USB_MAX_NUM_MS_DESC   USB_MAX_NUM_IF
+  #define USB_MAX_NUM_MS_DESC   USB_MAX_NUM_IF
 #endif
 
 //
@@ -296,7 +296,7 @@ Purpose : This file contains the default values for emUSB-Device
 // Normally one class component registers one EP0 receive callback.
 //
 #ifndef   USB_MAX_NUM_COMPONENTS
-    #define USB_MAX_NUM_COMPONENTS  USB_MAX_NUM_IF
+  #define USB_MAX_NUM_COMPONENTS  USB_MAX_NUM_IF
 #endif
 
 //
@@ -305,7 +305,7 @@ Purpose : This file contains the default values for emUSB-Device
 // the additional events are for the use by class modules through USB__AllocEvent().
 //
 #ifndef   USB_EXTRA_EVENTS
-    #define USB_EXTRA_EVENTS 0u
+  #define USB_EXTRA_EVENTS 0u
 #endif
 
 //
@@ -313,21 +313,21 @@ Purpose : This file contains the default values for emUSB-Device
 // Currently only used by the MTP class.
 //
 #ifndef   USB_NUM_MUTEXES
-    #define USB_NUM_MUTEXES   1
+  #define USB_NUM_MUTEXES   1
 #endif
 
 //
 // Maximum number of string descriptors.
 //
 #ifndef USB_MAX_STRING_DESC
-    #define USB_MAX_STRING_DESC   (USB_MAX_NUM_IF + USB_MAX_NUM_ALT_IF)
+  #define USB_MAX_STRING_DESC   (USB_MAX_NUM_IF + USB_MAX_NUM_ALT_IF)
 #endif
 
 //
 // For full-speed only devices, this can be set to 0 to save a few bytes of code.
 //
 #ifndef   USB_SUPPORT_HIGH_SPEED
-    #define USB_SUPPORT_HIGH_SPEED 1
+  #define USB_SUPPORT_HIGH_SPEED 1
 #endif
 
 //
@@ -335,39 +335,31 @@ Purpose : This file contains the default values for emUSB-Device
 // Only necessary if the target supports high-speed.
 //
 #ifndef   USB_OTHER_SPEED_DESC
-    #define USB_OTHER_SPEED_DESC         USB_SUPPORT_HIGH_SPEED
+  #define USB_OTHER_SPEED_DESC         USB_SUPPORT_HIGH_SPEED
 #endif
 
 //
 // Compatibility define for migration from emUSB-Device V2 DevInfo to V3 DevInfo
 //
 #ifndef USB_V2_V3_MIGRATION_DEVINFO
-    #define USB_V2_V3_MIGRATION_DEVINFO   0
+  #define USB_V2_V3_MIGRATION_DEVINFO   0
 #endif
 #ifndef USB_V2_V3_MIGRATION_API
-    #define USB_V2_V3_MIGRATION_API       USB_V2_V3_MIGRATION_DEVINFO
+  #define USB_V2_V3_MIGRATION_API       USB_V2_V3_MIGRATION_DEVINFO
 #endif
 
 //
 // Compatibility define for migration from emUSB-Device V2 config method to V3 config method.
 //
 #ifndef USB_V2_V3_MIGRATION_CONFIG
-    #define USB_V2_V3_MIGRATION_CONFIG    0
+  #define USB_V2_V3_MIGRATION_CONFIG    0
 #endif
 
 //
 // Do not change. USBD_OS_LAYER_EX != 1 is no longer supported.
 //
 #ifndef USBD_OS_LAYER_EX
-    #define USBD_OS_LAYER_EX       1
-#endif
-
-//
-// If set to 1 the deprecated BSP_CACHE_* routines can be used
-// instead of the new SEGGER_CACHE_CONFIG set via USBD_SetCacheConfig
-//
-#ifndef USBD_USE_LEGACY_CACHE_ROUTINES
-    #define USBD_USE_LEGACY_CACHE_ROUTINES 0
+  #define USBD_OS_LAYER_EX       1
 #endif
 
 //
@@ -375,7 +367,7 @@ Purpose : This file contains the default values for emUSB-Device
 // Note: setting this to 0 is not recommended and is only intended for absolutely minimal configurations.
 //
 #ifndef   USB_SUPPORT_CLASS_REQUESTS
-    #define USB_SUPPORT_CLASS_REQUESTS 1
+  #define USB_SUPPORT_CLASS_REQUESTS 1
 #endif
 
 //
@@ -383,7 +375,7 @@ Purpose : This file contains the default values for emUSB-Device
 // Note: setting this to 0 is not recommended and is only intended for absolutely minimal configurations.
 //
 #ifndef   USB_SUPPORT_VENDOR_REQUESTS
-    #define USB_SUPPORT_VENDOR_REQUESTS 1
+  #define USB_SUPPORT_VENDOR_REQUESTS 1
 #endif
 
 //
@@ -391,14 +383,14 @@ Purpose : This file contains the default values for emUSB-Device
 // Note: setting this to 0 is not recommended and is only intended for absolutely minimal configurations.
 //
 #ifndef USB_SUPPORT_STATUS
-    #define USB_SUPPORT_STATUS 1
+  #define USB_SUPPORT_STATUS 1
 #endif
 
 //
 // Support a callback functions on 'Get Interface' control requests.
 //
 #ifndef   USB_SUPPORT_GET_INTERFACE_CB
-    #define USB_SUPPORT_GET_INTERFACE_CB 0
+  #define USB_SUPPORT_GET_INTERFACE_CB 0
 #endif
 
 //
@@ -409,7 +401,7 @@ Purpose : This file contains the default values for emUSB-Device
 // always the exact size of data already read is reported to the application.
 //
 #ifndef USB_EXACT_DATASIZE_ON_CANCEL
-    #define USB_EXACT_DATASIZE_ON_CANCEL 1
+  #define USB_EXACT_DATASIZE_ON_CANCEL 1
 #endif
 
 
@@ -417,80 +409,80 @@ Purpose : This file contains the default values for emUSB-Device
 // Macro overwrite for memcpy.
 //
 #ifndef   USB_MEMCPY
-    #include <string.h>
-    #define USB_MEMCPY  memcpy                          /*lint -e{9087,9005} D:105[b] */
+  #include <string.h>
+  #define USB_MEMCPY  memcpy                          /*lint -e{9087,9005} D:105[b] */
 #endif
 
 //
 // Macro overwrite for memset.
 //
 #ifndef   USB_MEMSET
-    #include <string.h>
-    #define USB_MEMSET  memset                          /*lint -e{9087,9005} D:105[b] */
+  #include <string.h>
+  #define USB_MEMSET  memset                          /*lint -e{9087,9005} D:105[b] */
 #endif
 
 //
 // Macro overwrite for memcmp.
 //
 #ifndef   USB_MEMCMP
-    #include <string.h>
-    #define USB_MEMCMP  memcmp                          /*lint -e{9087,9005} D:105[b] */
-    //lint -sem(memcmp, pure)          N:100
+  #include <string.h>
+  #define USB_MEMCMP  memcmp                          /*lint -e{9087,9005} D:105[b] */
+  //lint -sem(memcmp, pure)          N:100
 #endif
 
 //
 // Macro overwrite for memmove
 //
 #ifndef   USB_MEMMOVE
-    #include <string.h>
-    #define USB_MEMMOVE  memmove                         /*lint -e{9087,9005} D:105[b] */
+  #include <string.h>
+  #define USB_MEMMOVE  memmove                         /*lint -e{9087,9005} D:105[b] */
 #endif
 
 //
 // Macro overwrite for strlen
 //
 #ifndef   USB_STRLEN
-    #include <string.h>
-    #define USB_STRLEN   strlen
+  #include <string.h>
+  #define USB_STRLEN   strlen
 #endif
 
 //
 // Macro overwrite for strcat
 //
 #ifndef   USB_STRCAT
-    #include <string.h>
-    #define USB_STRCAT   strcat
+  #include <string.h>
+  #define USB_STRCAT   strcat
 #endif
 
 //
 // Macro overwrite for strrchr
 //
 #ifndef   USB_STRRCHR
-    #include <string.h>
-    #define USB_STRRCHR  strrchr
+  #include <string.h>
+  #define USB_STRRCHR  strrchr
 #endif
 
 //
 // Macro overwrite for strncpy
 //
 #ifndef   USB_STRNCPY
-    #include <string.h>
-    #define USB_STRNCPY  strncpy
+  #include <string.h>
+  #define USB_STRNCPY  strncpy
 #endif
 
 //
 // Macro overwrite for strcmp
 //
 #ifndef   USB_STRCMP
-    #include <string.h>
-    #define USB_STRCMP   strcmp
+  #include <string.h>
+  #define USB_STRCMP   strcmp
 #endif
 
 //
 // Macro used in order to avoid warnings for undefined parameters
 //
 #ifndef USB_USE_PARA
-    #define USB_USE_PARA(para) (void)(para)
+  #define USB_USE_PARA(para) (void)(para)
 #endif
 
 #endif

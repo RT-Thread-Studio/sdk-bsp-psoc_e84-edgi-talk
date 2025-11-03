@@ -57,7 +57,7 @@
 
 #define VGLITE_MEM_ALIGNMENT      128
 
-#define VGLITE_EVENT_FRAME_END    2
+#define VGLITE_EVENT_FRAME_END    2  
 
 #ifdef __cplusplus
 extern "C" {
@@ -172,7 +172,7 @@ void vg_lite_hal_free_os_heap(void);
  A pointer to an opaque structure that will be used as the memory handle. NULL should be returned if there is
  not enough system resources to map the region.
  */
-void *vg_lite_hal_map(uint32_t flags, uint32_t bytes, void *logical, uint32_t physical, int32_t dma_buf_fd, uint32_t *gpu);
+void * vg_lite_hal_map(uint32_t flags, uint32_t bytes, void *logical, uint32_t physical, int32_t dma_buf_fd, uint32_t *gpu);
 
 /*!
  @brief Unmap a previously mapped region.
@@ -276,13 +276,13 @@ vg_lite_error_t vg_lite_hal_unmap_memory(vg_lite_kernel_unmap_memory_t *node);
 int32_t vg_lite_hal_wait_interrupt(uint32_t timeout, uint32_t mask, uint32_t *value);
 
 /*!
- @brief After call vg_lite_hal_map(), flush cpu cache according the direction
+ @brief After call vg_lite_hal_map(), flush cpu cache according the direction 
  spicified by parameter cache_op.
  */
 vg_lite_error_t vg_lite_hal_operation_cache(void *handle, vg_lite_cache_op_t cache_op);
 
 /*!
- @brief export memory to dma buf, and get the dma buf fd
+ @brief export memory to dma buf, and get the dma buf fd 
  */
 vg_lite_error_t vg_lite_hal_memory_export(int32_t *fd);
 
@@ -299,7 +299,7 @@ void vg_lite_hal_trace(char *format, ...);
 /*!
  @brief error number to string
  */
-const char *vg_lite_hal_Status2Name(vg_lite_error_t status);
+const char* vg_lite_hal_Status2Name(vg_lite_error_t status);
 
 /*!
  @brief allocate virtual memory from os

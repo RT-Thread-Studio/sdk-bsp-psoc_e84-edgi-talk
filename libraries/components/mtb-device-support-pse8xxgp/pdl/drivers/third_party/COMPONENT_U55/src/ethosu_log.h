@@ -37,18 +37,18 @@
 
 // Define default log severity
 #ifndef ETHOSU_LOG_SEVERITY
-    #define ETHOSU_LOG_SEVERITY ETHOSU_LOG_WARN
+#define ETHOSU_LOG_SEVERITY ETHOSU_LOG_WARN
 #endif
 
 // Logs enabled by default
 #ifndef ETHOSU_LOG_ENABLE
-    #define ETHOSU_LOG_ENABLE 1
+#define ETHOSU_LOG_ENABLE 1
 #endif
 
 #if ETHOSU_LOG_ENABLE
-    #define LOG_COMMON(s, f, ...) (void)fprintf(s, f, ##__VA_ARGS__)
+#define LOG_COMMON(s, f, ...) (void)fprintf(s, f, ##__VA_ARGS__)
 #else
-    #define LOG_COMMON(s, f, ...)
+#define LOG_COMMON(s, f, ...)
 #endif
 
 // Log formatting
@@ -62,21 +62,21 @@
 #endif
 
 #if ETHOSU_LOG_SEVERITY >= ETHOSU_LOG_WARN
-    #define LOG_WARN(f, ...) LOG_COMMON(stdout, "W: " f "\n", ##__VA_ARGS__)
+#define LOG_WARN(f, ...) LOG_COMMON(stdout, "W: " f "\n", ##__VA_ARGS__)
 #else
-    #define LOG_WARN(f, ...)
+#define LOG_WARN(f, ...)
 #endif
 
 #if ETHOSU_LOG_SEVERITY >= ETHOSU_LOG_INFO
-    #define LOG_INFO(f, ...) LOG_COMMON(stdout, "I: " f "\n", ##__VA_ARGS__)
+#define LOG_INFO(f, ...) LOG_COMMON(stdout, "I: " f "\n", ##__VA_ARGS__)
 #else
-    #define LOG_INFO(f, ...)
+#define LOG_INFO(f, ...)
 #endif
 
 #if ETHOSU_LOG_SEVERITY >= ETHOSU_LOG_DEBUG
-    #define LOG_DEBUG(f, ...) LOG_COMMON(stdout, "D: %s(): " f "\n", __FUNCTION__, ##__VA_ARGS__)
+#define LOG_DEBUG(f, ...) LOG_COMMON(stdout, "D: %s(): " f "\n", __FUNCTION__, ##__VA_ARGS__)
 #else
-    #define LOG_DEBUG(f, ...)
+#define LOG_DEBUG(f, ...)
 #endif
 
 #endif

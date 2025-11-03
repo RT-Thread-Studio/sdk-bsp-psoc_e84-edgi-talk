@@ -127,3 +127,7 @@ def is_cyw559xx(target):
     """Gets a value indicating whether the target belongs
     to cyw559xx platform"""
     return target_data(target)['platform'] == 'cyw559xx'
+
+def is_psb3xxx(target):
+    """Gets a value indicating whether the target is PSB3xxx"""
+    return target.lower() == 'psb3xxx'

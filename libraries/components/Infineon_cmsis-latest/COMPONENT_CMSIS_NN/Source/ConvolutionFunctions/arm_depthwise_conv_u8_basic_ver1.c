@@ -70,7 +70,7 @@ static void depthwise_conv_u8_mult_4(const uint8_t *input,
         for (int32_t in_w = -pad_x, out_w = 0, ker_h_start = MAX(0, -in_h); out_w < output_x; in_w += stride_x, ++out_w)
         {
             for (int32_t in_ch = 0, out_ch = 0, ker_w_start = MAX(0, -in_w); out_ch < output_ch;
-                    ++in_ch, out_ch += ch_mult)
+                 ++in_ch, out_ch += ch_mult)
             {
                 for (int mult_tile = 0; mult_tile < ch_mult; mult_tile += 4)
                 {
@@ -87,7 +87,7 @@ static void depthwise_conv_u8_mult_4(const uint8_t *input,
                         int32_t in_idx = (in_h + ker_h) * (input_ch * input_x) + in_w * input_ch + in_ch;
 
                         for (int32_t ker_w = ker_w_start; ker_w < MIN(kernel_x, input_x - in_w);
-                                ++ker_w, ker_idx += output_ch)
+                             ++ker_w, ker_idx += output_ch)
                         {
                             int32_t in_val = input[in_idx + ker_w * input_ch] + input_offset;
                             out_buff[0] += in_val * (kernel[ker_idx + 0 + mult_tile] + filter_offset);
@@ -244,30 +244,30 @@ static void depthwise_conv_u8_generic(const uint8_t *input,
  */
 
 arm_status arm_depthwise_conv_u8_basic_ver1(const uint8_t *input,
-        const uint16_t input_x,
-        const uint16_t input_y,
-        const uint16_t input_ch,
-        const uint8_t *kernel,
-        const uint16_t kernel_x,
-        const uint16_t kernel_y,
-        const int16_t ch_mult,
-        const int16_t pad_x,
-        const int16_t pad_y,
-        const int16_t stride_x,
-        const int16_t stride_y,
-        const int16_t dilation_x,
-        const int16_t dilation_y,
-        const int32_t *bias,
-        const int32_t input_offset,
-        const int32_t filter_offset,
-        const int32_t output_offset,
-        uint8_t *output,
-        const uint16_t output_x,
-        const uint16_t output_y,
-        const int32_t output_activation_min,
-        const int32_t output_activation_max,
-        const int32_t output_shift,
-        const int32_t output_mult)
+                                            const uint16_t input_x,
+                                            const uint16_t input_y,
+                                            const uint16_t input_ch,
+                                            const uint8_t *kernel,
+                                            const uint16_t kernel_x,
+                                            const uint16_t kernel_y,
+                                            const int16_t ch_mult,
+                                            const int16_t pad_x,
+                                            const int16_t pad_y,
+                                            const int16_t stride_x,
+                                            const int16_t stride_y,
+                                            const int16_t dilation_x,
+                                            const int16_t dilation_y,
+                                            const int32_t *bias,
+                                            const int32_t input_offset,
+                                            const int32_t filter_offset,
+                                            const int32_t output_offset,
+                                            uint8_t *output,
+                                            const uint16_t output_x,
+                                            const uint16_t output_y,
+                                            const int32_t output_activation_min,
+                                            const int32_t output_activation_max,
+                                            const int32_t output_shift,
+                                            const int32_t output_mult)
 {
     (void)dilation_x;
     (void)dilation_y;

@@ -97,7 +97,7 @@ cy_rslt_t mtb_hal_trng_get_uint32(const mtb_hal_trng_t* obj, uint32_t* value);
 #endif
 
 #ifdef MTB_HAL_TRNG_IMPL_HEADER
-    #include MTB_HAL_TRNG_IMPL_HEADER
+#include MTB_HAL_TRNG_IMPL_HEADER
 #endif /* MTB_HAL_TRNG_IMPL_HEADER */
 
 #endif //defined(MTB_HAL_DRIVER_AVAILABLE_TRNG)

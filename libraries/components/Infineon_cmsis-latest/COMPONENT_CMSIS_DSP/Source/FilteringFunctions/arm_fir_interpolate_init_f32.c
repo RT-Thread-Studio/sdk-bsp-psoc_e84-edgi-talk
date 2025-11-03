@@ -62,43 +62,43 @@
                    where <code>blockSize</code> is the number of input samples processed by each call to <code>arm_fir_interpolate_f32()</code>.
  */
 
-arm_status arm_fir_interpolate_init_f32(
-    arm_fir_interpolate_instance_f32 * S,
-    uint8_t L,
-    uint16_t numTaps,
-    const float32_t *pCoeffs,
-    float32_t *pState,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE arm_status arm_fir_interpolate_init_f32(
+        arm_fir_interpolate_instance_f32 * S,
+        uint8_t L,
+        uint16_t numTaps,
+  const float32_t * pCoeffs,
+        float32_t * pState,
+        uint32_t blockSize)
 {
-    arm_status status;
+  arm_status status;
 
-    /* The filter length must be a multiple of the interpolation factor */
-    if ((numTaps % L) != 0U)
-    {
-        /* Set status as ARM_MATH_LENGTH_ERROR */
-        status = ARM_MATH_LENGTH_ERROR;
-    }
-    else
-    {
-        /* Assign coefficient pointer */
-        S->pCoeffs = pCoeffs;
+  /* The filter length must be a multiple of the interpolation factor */
+  if ((numTaps % L) != 0U)
+  {
+    /* Set status as ARM_MATH_LENGTH_ERROR */
+    status = ARM_MATH_LENGTH_ERROR;
+  }
+  else
+  {
+    /* Assign coefficient pointer */
+    S->pCoeffs = pCoeffs;
 
-        /* Assign Interpolation factor */
-        S->L = L;
+    /* Assign Interpolation factor */
+    S->L = L;
 
-        /* Assign polyPhaseLength */
-        S->phaseLength = numTaps / L;
+    /* Assign polyPhaseLength */
+    S->phaseLength = numTaps / L;
 
-        /* Clear state buffer and size of buffer is always phaseLength + blockSize - 1 */
-        memset(pState, 0, (blockSize + ((uint32_t) S->phaseLength - 1U)) * sizeof(float32_t));
+    /* Clear state buffer and size of buffer is always phaseLength + blockSize - 1 */
+    memset(pState, 0, (blockSize + ((uint32_t) S->phaseLength - 1U)) * sizeof(float32_t));
 
-        /* Assign state pointer */
-        S->pState = pState;
+    /* Assign state pointer */
+    S->pState = pState;
 
-        status = ARM_MATH_SUCCESS;
-    }
+    status = ARM_MATH_SUCCESS;
+  }
 
-    return (status);
+  return (status);
 }
 
 /**

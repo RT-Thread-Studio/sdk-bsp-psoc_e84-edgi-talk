@@ -24,9 +24,9 @@
 #define ARM_MPU_ARMV7_H
 
 #if   defined ( __ICCARM__ )
-    #pragma system_include         /* treat file as system include file for MISRA check */
+  #pragma system_include         /* treat file as system include file for MISRA check */
 #elif defined (__clang__)
-    #pragma clang system_header    /* treat file as system include file */
+  #pragma clang system_header    /* treat file as system include file */
 #endif
 
 #define ARM_MPU_REGION_SIZE_32B      ((uint8_t)0x04U) ///!< MPU Region Size 32 Bytes
@@ -178,10 +178,9 @@
 /**
 * Struct for a single MPU Region
 */
-typedef struct
-{
-    uint32_t RBAR; //!< The region base address register value (RBAR)
-    uint32_t RASR; //!< The region attribute and size register value (RASR) \ref MPU_RASR
+typedef struct {
+  uint32_t RBAR; //!< The region base address register value (RBAR)
+  uint32_t RASR; //!< The region attribute and size register value (RASR) \ref MPU_RASR
 } ARM_MPU_Region_t;
 
 /** Enable the MPU.
@@ -189,26 +188,26 @@ typedef struct
 */
 __STATIC_INLINE void ARM_MPU_Enable(uint32_t MPU_Control)
 {
-    __DMB();
-    MPU->CTRL = MPU_Control | MPU_CTRL_ENABLE_Msk;
+  __DMB();
+  MPU->CTRL = MPU_Control | MPU_CTRL_ENABLE_Msk;
 #ifdef SCB_SHCSR_MEMFAULTENA_Msk
-    SCB->SHCSR |= SCB_SHCSR_MEMFAULTENA_Msk;
+  SCB->SHCSR |= SCB_SHCSR_MEMFAULTENA_Msk;
 #endif
-    __DSB();
-    __ISB();
+  __DSB();
+  __ISB();
 }
 
 /** Disable the MPU.
 */
 __STATIC_INLINE void ARM_MPU_Disable(void)
 {
-    __DMB();
+  __DMB();
 #ifdef SCB_SHCSR_MEMFAULTENA_Msk
-    SCB->SHCSR &= ~SCB_SHCSR_MEMFAULTENA_Msk;
+  SCB->SHCSR &= ~SCB_SHCSR_MEMFAULTENA_Msk;
 #endif
-    MPU->CTRL  &= ~MPU_CTRL_ENABLE_Msk;
-    __DSB();
-    __ISB();
+  MPU->CTRL  &= ~MPU_CTRL_ENABLE_Msk;
+  __DSB();
+  __ISB();
 }
 
 /** Clear and disable the given MPU region.
@@ -216,8 +215,8 @@ __STATIC_INLINE void ARM_MPU_Disable(void)
 */
 __STATIC_INLINE void ARM_MPU_ClrRegion(uint32_t rnr)
 {
-    MPU->RNR = rnr;
-    MPU->RASR = 0U;
+  MPU->RNR = rnr;
+  MPU->RASR = 0U;
 }
 
 /** Configure an MPU region.
@@ -226,8 +225,8 @@ __STATIC_INLINE void ARM_MPU_ClrRegion(uint32_t rnr)
 */
 __STATIC_INLINE void ARM_MPU_SetRegion(uint32_t rbar, uint32_t rasr)
 {
-    MPU->RBAR = rbar;
-    MPU->RASR = rasr;
+  MPU->RBAR = rbar;
+  MPU->RASR = rasr;
 }
 
 /** Configure the given MPU region.
@@ -237,9 +236,9 @@ __STATIC_INLINE void ARM_MPU_SetRegion(uint32_t rbar, uint32_t rasr)
 */
 __STATIC_INLINE void ARM_MPU_SetRegionEx(uint32_t rnr, uint32_t rbar, uint32_t rasr)
 {
-    MPU->RNR = rnr;
-    MPU->RBAR = rbar;
-    MPU->RASR = rasr;
+  MPU->RNR = rnr;
+  MPU->RBAR = rbar;
+  MPU->RASR = rasr;
 }
 
 /** Memcpy with strictly ordered memory access, e.g. used by code in ARM_MPU_Load().
@@ -249,11 +248,11 @@ __STATIC_INLINE void ARM_MPU_SetRegionEx(uint32_t rnr, uint32_t rbar, uint32_t r
 */
 __STATIC_INLINE void ARM_MPU_OrderedMemcpy(volatile uint32_t* dst, const uint32_t* __RESTRICT src, uint32_t len)
 {
-    uint32_t i;
-    for (i = 0U; i < len; ++i)
-    {
-        dst[i] = src[i];
-    }
+  uint32_t i;
+  for (i = 0U; i < len; ++i)
+  {
+    dst[i] = src[i];
+  }
 }
 
 /** Load the given number of MPU regions from a table.
@@ -262,14 +261,13 @@ __STATIC_INLINE void ARM_MPU_OrderedMemcpy(volatile uint32_t* dst, const uint32_
 */
 __STATIC_INLINE void ARM_MPU_Load(ARM_MPU_Region_t const* table, uint32_t cnt)
 {
-    const uint32_t rowWordSize = sizeof(ARM_MPU_Region_t) / 4U;
-    while (cnt > MPU_TYPE_RALIASES)
-    {
-        ARM_MPU_OrderedMemcpy(&(MPU->RBAR), &(table->RBAR), MPU_TYPE_RALIASES * rowWordSize);
-        table += MPU_TYPE_RALIASES;
-        cnt -= MPU_TYPE_RALIASES;
-    }
-    ARM_MPU_OrderedMemcpy(&(MPU->RBAR), &(table->RBAR), cnt * rowWordSize);
+  const uint32_t rowWordSize = sizeof(ARM_MPU_Region_t)/4U;
+  while (cnt > MPU_TYPE_RALIASES) {
+    ARM_MPU_OrderedMemcpy(&(MPU->RBAR), &(table->RBAR), MPU_TYPE_RALIASES*rowWordSize);
+    table += MPU_TYPE_RALIASES;
+    cnt -= MPU_TYPE_RALIASES;
+  }
+  ARM_MPU_OrderedMemcpy(&(MPU->RBAR), &(table->RBAR), cnt*rowWordSize);
 }
 
 #endif

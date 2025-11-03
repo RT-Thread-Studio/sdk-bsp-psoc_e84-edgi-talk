@@ -42,58 +42,53 @@
 /**
   * \brief PTC Static Configuration (PTC_STA)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 PTC Static Configuration */
-    __IM uint32_t COMP_STAT;                     /*!< 0x00000004 PTC Status Register */
-    __IOM uint32_t PP_CFG[2];                     /*!< 0x00000008 Post Process Configuration register (only accessible if
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 PTC Static Configuration */
+   __IM uint32_t COMP_STAT;                     /*!< 0x00000004 PTC Status Register */
+  __IOM uint32_t PP_CFG[2];                     /*!< 0x00000008 Post Process Configuration register (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED[124];
+   __IM uint32_t RESERVED[124];
 } PTC_STA_Type;                                 /*!< Size = 512 (0x200) */
 
 /**
   * \brief PTC Dynamic Configuration (only accessible if ACTRLR.STATUS.MODE=0) (PTC_DYN)
   */
-typedef struct
-{
-    __IOM uint32_t MUX_CFG;                       /*!< 0x00000000 PTC Mux Configuration */
-    __IM uint32_t RESERVED[3];
+typedef struct {
+  __IOM uint32_t MUX_CFG;                       /*!< 0x00000000 PTC Mux Configuration */
+   __IM uint32_t RESERVED[3];
 } PTC_DYN_Type;                                 /*!< Size = 16 (0x10) */
 
 /**
   * \brief PTC Post Process (only accessible if ACTRLR.STATUS.MODE=0) (PTC_PP)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Post Processing configuration */
-    __IOM uint32_t FRAME;                         /*!< 0x00000004 Post Processing frame */
-    __IOM uint32_t THRESHOLD;                     /*!< 0x00000008 Post Processing threshold */
-    __IOM uint32_t WINDOW;                        /*!< 0x0000000C Post Processing window */
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Post Processing configuration */
+  __IOM uint32_t FRAME;                         /*!< 0x00000004 Post Processing frame */
+  __IOM uint32_t THRESHOLD;                     /*!< 0x00000008 Post Processing threshold */
+  __IOM uint32_t WINDOW;                        /*!< 0x0000000C Post Processing window */
 } PTC_PP_Type;                                  /*!< Size = 16 (0x10) */
 
 /**
   * \brief PTC Trim registers (only accessible if ACTRLR.STATUS.MODE=0) (PTC_TRIM)
   */
-typedef struct
-{
-    __IOM uint32_t CMP0_OFFSET_TRIM;              /*!< 0x00000000 Comparator 0 offset trim register */
-    __IOM uint32_t CMP1_OFFSET_TRIM;              /*!< 0x00000004 Comparator 1 offset trim register */
-    __IM uint32_t RESERVED[2];
+typedef struct {
+  __IOM uint32_t CMP0_OFFSET_TRIM;              /*!< 0x00000000 Comparator 0 offset trim register */
+  __IOM uint32_t CMP1_OFFSET_TRIM;              /*!< 0x00000004 Comparator 1 offset trim register */
+   __IM uint32_t RESERVED[2];
 } PTC_TRIM_Type;                                /*!< Size = 16 (0x10) */
 
 /**
   * \brief Programmable Threshold Comparator (PTC)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[256];
-    PTC_STA_Type STA;                       /*!< 0x00000400 PTC Static Configuration */
-    PTC_DYN_Type DYN[8];                    /*!< 0x00000600 PTC Dynamic Configuration (only accessible if
+typedef struct {
+   __IM uint32_t RESERVED[256];
+        PTC_STA_Type STA;                       /*!< 0x00000400 PTC Static Configuration */
+        PTC_DYN_Type DYN[8];                    /*!< 0x00000600 PTC Dynamic Configuration (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED1[32];
-    PTC_PP_Type PP[2];                      /*!< 0x00000700 PTC Post Process (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED2[504];
-    PTC_TRIM_Type TRIM;                     /*!< 0x00000F00 PTC Trim registers (only accessible if ACTRLR.STATUS.MODE=0) */
+   __IM uint32_t RESERVED1[32];
+        PTC_PP_Type PP[2];                      /*!< 0x00000700 PTC Post Process (only accessible if ACTRLR.STATUS.MODE=0) */
+   __IM uint32_t RESERVED2[504];
+        PTC_TRIM_Type TRIM;                     /*!< 0x00000F00 PTC Trim registers (only accessible if ACTRLR.STATUS.MODE=0) */
 } PTC_Type;                                     /*!< Size = 3856 (0xF10) */
 
 

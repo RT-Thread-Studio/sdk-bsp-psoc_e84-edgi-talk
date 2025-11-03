@@ -49,20 +49,19 @@
   @param[in]     pSrc       points to the f16 input vector
   @param[out]    pDst       points to the f32 output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
  */
 
-#if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE) && defined(__CMSIS_GCC_H)
-    #pragma GCC warning "Scalar version of arm_f16_to_float built. Helium version has build issues with gcc."
-#endif
+#if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE) && defined(ARM_DSP_BUILT_WITH_GCC)
+#pragma GCC warning "Scalar version of arm_f16_to_float built. Helium version has build issues with gcc."
+#endif 
 
-#if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE) &&  !defined(__CMSIS_GCC_H)
+#if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE) &&  !defined(ARM_DSP_BUILT_WITH_GCC)
 
-void arm_f16_to_float(
-    const float16_t *pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_f16_to_float(
+  const float16_t * pSrc,
+        float32_t * pDst,
+        uint32_t blockSize)
 {
     int32_t  blkCnt;           /* loop counters */
     float16x8_t vecDst;
@@ -71,13 +70,13 @@ void arm_f16_to_float(
     blkCnt = blockSize >> 3;
     while (blkCnt > 0)
     {
-        vecDst = vldrhq_f16(pSrc);
+        vecDst = vldrhq_f16(pSrc);          
         pSrc += 8;
 
         tmp.val[0] = vcvtbq_f32_f16(vecDst);
         tmp.val[1] = vcvttq_f32_f16(vecDst);
-        vst2q(pDst, tmp);
-
+        vst2q(pDst,tmp);
+        
         pDst += 8;
         /*
          * Decrement the blockSize loop counter
@@ -92,7 +91,7 @@ void arm_f16_to_float(
     while (blkCnt > 0)
     {
 
-        *pDst++ = (float32_t) * pSrc++;
+        *pDst++ = (float32_t) *pSrc++;
         /*
          * Decrement the loop counter
          */
@@ -101,10 +100,10 @@ void arm_f16_to_float(
 }
 
 #else
-void arm_f16_to_float(
-    const float16_t *pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_f16_to_float(
+  const float16_t * pSrc,
+        float32_t * pDst,
+        uint32_t blockSize)
 {
     const float16_t *pIn = pSrc;      /* Src pointer */
     uint32_t  blkCnt;           /* loop counter */
@@ -130,5 +129,5 @@ void arm_f16_to_float(
   @} end of f16_to_x group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

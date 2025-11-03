@@ -144,7 +144,7 @@ enum ppu_v1_opmode ppu_v1_get_operating_mode(struct ppu_v1_reg *ppu)
     fwk_assert(ppu != NULL);
 
     return (enum ppu_v1_opmode)
-           ((ppu->PWSR & PPU_V1_PWSR_OP_STATUS) >> PPU_V1_PWSR_OP_STATUS_POS);
+        ((ppu->PWSR & PPU_V1_PWSR_OP_STATUS) >> PPU_V1_PWSR_OP_STATUS_POS);
 }
 
 enum ppu_v1_opmode ppu_v1_get_programmed_operating_mode(struct ppu_v1_reg *ppu)
@@ -152,7 +152,7 @@ enum ppu_v1_opmode ppu_v1_get_programmed_operating_mode(struct ppu_v1_reg *ppu)
     fwk_assert(ppu != NULL);
 
     return (enum ppu_v1_opmode)
-           ((ppu->PWPR & PPU_V1_PWPR_OP_POLICY) >> PPU_V1_PWPR_OP_POLICY_POS);
+        ((ppu->PWPR & PPU_V1_PWPR_OP_POLICY) >> PPU_V1_PWPR_OP_POLICY_POS);
 }
 
 bool ppu_v1_is_dynamic_enabled(struct ppu_v1_reg *ppu)
@@ -242,7 +242,7 @@ void ppu_v1_interrupt_unmask(struct ppu_v1_reg *ppu, unsigned int mask)
 }
 
 void ppu_v1_additional_interrupt_unmask(struct ppu_v1_reg *ppu,
-                                        unsigned int mask)
+    unsigned int mask)
 {
     fwk_assert(ppu != NULL);
 
@@ -250,7 +250,7 @@ void ppu_v1_additional_interrupt_unmask(struct ppu_v1_reg *ppu,
 }
 
 bool ppu_v1_is_additional_interrupt_pending(struct ppu_v1_reg *ppu,
-        unsigned int mask)
+    unsigned int mask)
 {
     return (ppu->AISR & (mask & PPU_V1_AISR_MASK)) != 0;
 }
@@ -270,7 +270,7 @@ void ppu_v1_ack_additional_interrupt(struct ppu_v1_reg *ppu, unsigned int mask)
 }
 
 void ppu_v1_set_input_edge_sensitivity(struct ppu_v1_reg *ppu,
-                                       enum ppu_v1_mode ppu_mode, enum ppu_v1_edge_sensitivity edge_sensitivity)
+    enum ppu_v1_mode ppu_mode, enum ppu_v1_edge_sensitivity edge_sensitivity)
 {
     fwk_assert(ppu != NULL);
     fwk_assert(ppu_mode < PPU_V1_MODE_COUNT);
@@ -292,25 +292,25 @@ enum ppu_v1_edge_sensitivity ppu_v1_get_input_edge_sensitivity(
     fwk_assert(ppu_mode < PPU_V1_MODE_COUNT);
 
     return (enum ppu_v1_edge_sensitivity)(
-               (ppu->IESR >> (ppu_mode * PPU_V1_BITS_PER_EDGE_SENSITIVITY)) &
-               PPU_V1_EDGE_SENSITIVITY_MASK);
+            (ppu->IESR >> (ppu_mode * PPU_V1_BITS_PER_EDGE_SENSITIVITY)) &
+            PPU_V1_EDGE_SENSITIVITY_MASK);
 }
 
 void ppu_v1_ack_power_active_edge_interrupt(struct ppu_v1_reg *ppu,
-        enum ppu_v1_mode ppu_mode)
+    enum ppu_v1_mode ppu_mode)
 {
     ppu->ISR = 1 << (ppu_mode + PPU_V1_ISR_ACTIVE_EDGE_POS);
 }
 
 bool ppu_v1_is_power_active_edge_interrupt(struct ppu_v1_reg *ppu,
-        enum ppu_v1_mode ppu_mode)
+    enum ppu_v1_mode ppu_mode)
 {
     return ppu->ISR & (1 << (ppu_mode + PPU_V1_ISR_ACTIVE_EDGE_POS));
 }
 
 void ppu_v1_set_op_active_edge_sensitivity(struct ppu_v1_reg *ppu,
-        enum ppu_v1_op_devactive op_devactive,
-        enum ppu_v1_edge_sensitivity edge_sensitivity)
+    enum ppu_v1_op_devactive op_devactive,
+    enum ppu_v1_edge_sensitivity edge_sensitivity)
 {
     fwk_assert(ppu != NULL);
     fwk_assert(op_devactive < PPU_V1_OP_DEVACTIVE_COUNT);
@@ -332,18 +332,18 @@ enum ppu_v1_edge_sensitivity ppu_v1_get_op_active_edge_sensitivity(
     fwk_assert(op_devactive < PPU_V1_OP_DEVACTIVE_COUNT);
 
     return (enum ppu_v1_edge_sensitivity)(
-               (ppu->OPSR >> (op_devactive * PPU_V1_BITS_PER_EDGE_SENSITIVITY)) &
-               PPU_V1_EDGE_SENSITIVITY_MASK);
+            (ppu->OPSR >> (op_devactive * PPU_V1_BITS_PER_EDGE_SENSITIVITY)) &
+            PPU_V1_EDGE_SENSITIVITY_MASK);
 }
 
 void ppu_v1_ack_op_active_edge_interrupt(struct ppu_v1_reg *ppu,
-        enum ppu_v1_op_devactive op_devactive)
+    enum ppu_v1_op_devactive op_devactive)
 {
     ppu->ISR = 1 << (op_devactive + PPU_V1_ISR_OP_ACTIVE_EDGE_POS);
 }
 
 bool ppu_v1_is_op_active_edge_interrupt(struct ppu_v1_reg *ppu,
-                                        enum ppu_v1_op_devactive op_devactive)
+    enum ppu_v1_op_devactive op_devactive)
 {
     return ppu->ISR & (1 << (op_devactive + PPU_V1_ISR_OP_ACTIVE_EDGE_POS));
 }

@@ -1,12 +1,13 @@
 /***************************************************************************//**
 * \file cy_ethif.c
-* \version 1.30
+* \version 1.40
 *
 * Provides an API implementation of the ETHIF driver
 *
 ********************************************************************************
 * \copyright
-* Copyright 2021-2024 Cypress Semiconductor Corporation
+** Copyright (c) (2021-2025), Cypress Semiconductor Corporation (an Infineon company) or
+* an affiliate of Cypress Semiconductor Corporation.
 * SPDX-License-Identifier: Apache-2.0
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,10 +57,10 @@ static CEDI_Config  cy_ethif_cfg[CY_ETH_DEFINE_NUM_IP];
 static CEDI_SysReq  cy_ethif_sysreq;
 
 /** Private data structures required for each instance of Ethernet IPs  */
-static CEDI_PrivateData *cyp_ethif_pd[CY_ETH_DEFINE_NUM_IP];
+static CEDI_PrivateData * cyp_ethif_pd[CY_ETH_DEFINE_NUM_IP];
 
 /** Variables holding Statistics register values    */
-static CEDI_Statistics   *cyp_ethif_statistic[CY_ETH_DEFINE_NUM_IP];
+static CEDI_Statistics  * cyp_ethif_statistic[CY_ETH_DEFINE_NUM_IP];
 
 /** Private data memory allocation  */
 static uint8_t cy_ethif_privatedata[CY_ETH_DEFINE_NUM_IP][1800] = {{0,},};
@@ -80,7 +81,7 @@ CY_ALIGN(32) static uint8_t cy_ethif_rx_desc_list[CY_ETH_DEFINE_NUM_IP][CY_ETH_D
 static uint8_t cy_ethif_statistic[CY_ETH_DEFINE_NUM_IP][160] = {{0,},};
 
 static cy_stc_ethif_cb_t stccallbackfunctions[CY_ETH_DEFINE_NUM_IP] = {{NULL, NULL, NULL, NULL, NULL},};
-static cy_stc_ethif_queue_disablestatus_t stcQueueDisStatus[CY_ETH_DEFINE_NUM_IP] = {{{0,}, {0,}},};
+static cy_stc_ethif_queue_disablestatus_t stcQueueDisStatus[CY_ETH_DEFINE_NUM_IP] = {{{0,},{0,}},};
 CY_SECTION_SHAREDMEM
 CY_ALIGN(32) static volatile uint8_t g_tx_bdcount[CY_ETH_DEFINE_NUM_IP] = {0,};
 
@@ -133,26 +134,25 @@ static cy_en_syspm_status_t Cy_ETHIF_DSCallbackFunc(cy_stc_syspm_callback_params
 * Local Call back function supplied to Cadence driver
 *****************************************************************************/
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.4', 1, 'Intentional definition')
-CEDI_Callbacks Cy_ETHIF_Callbacks =
-{
-    .phyManComplete = (CEDI_CbPhyManComplete)Cy_ETHIF_EventPhyManComplete,
-    .txEvent        = (CEDI_CbTxEvent)Cy_ETHIF_EventTx,
-    .txError        = (CEDI_CbTxError)Cy_ETHIF_EventTxError,
-    .rxFrame        = (CEDI_CbRxFrame)Cy_ETHIF_EventRxFrame,
-    .rxError        = (CEDI_CbRxError)Cy_ETHIF_EventRxError,
-    .hrespError     = (CEDI_CbHrespError)Cy_ETHIF_EventhrespError,
-    .lpPageRx       = (CEDI_CbLpPageRx)Cy_ETHIF_EventLpPageRx,
-    .anComplete     = (CEDI_CbAnComplete)Cy_ETHIF_EventAn,
-    .linkChange     = (CEDI_CbLinkChange)Cy_ETHIF_EventLinkChange,
-    .tsuEvent       = (CEDI_CbTsuEvent)Cy_ETHIF_EventTsu,
-    .pauseEvent     = (CEDI_CbPauseEvent)Cy_ETHIF_EventPauseFrame,
-    .ptpPriFrameTx  = (CEDI_CbPtpPriFrameTx)Cy_ETHIF_EventPtp,
-    .ptpPeerFrameTx = (CEDI_CbPtpPeerFrameTx)Cy_ETHIF_EventPtp,
-    .ptpPriFrameRx  = (CEDI_CbPtpPriFrameRx)Cy_ETHIF_EventPtp,
-    .ptpPeerFrameRx = (CEDI_CbPtpPeerFrameRx)Cy_ETHIF_EventPtp,
-    .lpiStatus      = (CEDI_CbLpiStatus)Cy_ETHIF_EventLpi,
-    .wolEvent       = (CEDI_CbWolEvent)Cy_ETHIF_EventWol,
-    .extInpIntr     = (CEDI_CbExtInpIntr)Cy_ETHIF_EventExternalInt
+CEDI_Callbacks Cy_ETHIF_Callbacks = {
+  .phyManComplete = (CEDI_CbPhyManComplete)Cy_ETHIF_EventPhyManComplete,
+  .txEvent        = (CEDI_CbTxEvent)Cy_ETHIF_EventTx,
+  .txError        = (CEDI_CbTxError)Cy_ETHIF_EventTxError,
+  .rxFrame        = (CEDI_CbRxFrame)Cy_ETHIF_EventRxFrame,
+  .rxError        = (CEDI_CbRxError)Cy_ETHIF_EventRxError,
+  .hrespError     = (CEDI_CbHrespError)Cy_ETHIF_EventhrespError,
+  .lpPageRx       = (CEDI_CbLpPageRx)Cy_ETHIF_EventLpPageRx,
+  .anComplete     = (CEDI_CbAnComplete)Cy_ETHIF_EventAn,
+  .linkChange     = (CEDI_CbLinkChange)Cy_ETHIF_EventLinkChange,
+  .tsuEvent       = (CEDI_CbTsuEvent)Cy_ETHIF_EventTsu,
+  .pauseEvent     = (CEDI_CbPauseEvent)Cy_ETHIF_EventPauseFrame,
+  .ptpPriFrameTx  = (CEDI_CbPtpPriFrameTx)Cy_ETHIF_EventPtp,
+  .ptpPeerFrameTx = (CEDI_CbPtpPeerFrameTx)Cy_ETHIF_EventPtp,
+  .ptpPriFrameRx  = (CEDI_CbPtpPriFrameRx)Cy_ETHIF_EventPtp,
+  .ptpPeerFrameRx = (CEDI_CbPtpPeerFrameRx)Cy_ETHIF_EventPtp,
+  .lpiStatus      = (CEDI_CbLpiStatus)Cy_ETHIF_EventLpi,
+  .wolEvent       = (CEDI_CbWolEvent)Cy_ETHIF_EventWol,
+  .extInpIntr     = (CEDI_CbExtInpIntr)Cy_ETHIF_EventExternalInt
 };
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.4')
 
@@ -345,8 +345,8 @@ cy_en_ethif_status_t Cy_ETHIF_Init(ETH_Type *base, cy_stc_ethif_mac_config_t * p
     (void)cyp_ethif_gemgxlobj->probe(&cy_ethif_cfg[u8EthIfInstance], &cy_ethif_sysreq);
 
     /* Check for assigned memory and required memory match */
-    u16SysReqTxBDLength = (uint16_t)((cy_ethif_sysreq.txDescListSize /  CY_ETH_DEFINE_NUM_TXQS) / (CY_ETH_DEFINE_TOTAL_BD_PER_TXQUEUE + 1U));
-    u16SysReqRxBDLength = (uint16_t)((cy_ethif_sysreq.rxDescListSize /  CY_ETH_DEFINE_NUM_RXQS) / (CY_ETH_DEFINE_TOTAL_BD_PER_RXQUEUE + 1U));
+    u16SysReqTxBDLength = (uint16_t)((cy_ethif_sysreq.txDescListSize /  CY_ETH_DEFINE_NUM_TXQS)/(CY_ETH_DEFINE_TOTAL_BD_PER_TXQUEUE + 1U));
+    u16SysReqRxBDLength = (uint16_t)((cy_ethif_sysreq.rxDescListSize /  CY_ETH_DEFINE_NUM_RXQS)/(CY_ETH_DEFINE_TOTAL_BD_PER_RXQUEUE + 1U));
 
     if ((u16SysReqTxBDLength != CY_ETH_BD_SIZE) || (u16SysReqRxBDLength != CY_ETH_BD_SIZE))
     {
@@ -357,7 +357,7 @@ cy_en_ethif_status_t Cy_ETHIF_Init(ETH_Type *base, cy_stc_ethif_mac_config_t * p
     /* assign starting addresses to local variable */
     Cy_ETHIF_AssignMemory(u8EthIfInstance);
 
-    if (sizeof(cy_ethif_privatedata[u8EthIfInstance]) < cy_ethif_sysreq.privDataSize)
+    if (sizeof(cy_ethif_privatedata[u8EthIfInstance])< cy_ethif_sysreq.privDataSize)
     {
         /* Memory not enough */
         return CY_ETHIF_MEMORY_NOT_ENOUGH;
@@ -403,9 +403,9 @@ cy_en_ethif_status_t Cy_ETHIF_Init(ETH_Type *base, cy_stc_ethif_mac_config_t * p
                 rx_buff_addr.vAddr = (uintptr_t)((*pstcEthIfConfig->pRxQbuffPool)[u8tmpcounter][u8tmpintrcntr]);
                 rx_buff_addr.pAddr = rx_buff_addr.vAddr;
                 (void)cyp_ethif_gemgxlobj->addRxBuf((void *)cyp_ethif_pd[u8EthIfInstance],
-                                                    u8tmpcounter,
-                                                    (CEDI_BuffAddr *)&rx_buff_addr,
-                                                    0);
+                                                u8tmpcounter,
+                                            (CEDI_BuffAddr *)&rx_buff_addr,
+                                                0);
             }
         }
     }
@@ -527,7 +527,7 @@ cy_en_ethif_status_t Cy_ETHIF_TransmitFrame(ETH_Type *base, uint8_t * pu8TxBuffe
     tmpBuffAdd.vAddr = tmpBuffAdd.pAddr;
 
 #if ((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || (CY_CPU_CORTEX_M55)
-    SCB_CleanDCache_by_Addr((void*)(tmpBuffAdd.pAddr), (int32_t)u16Length);
+    SCB_CleanDCache_by_Addr((void*) (tmpBuffAdd.pAddr), (int32_t)u16Length);
 #endif /* (CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE) */
 
     /* Typecast bEndBuffer to Flag type    */
@@ -552,10 +552,10 @@ cy_en_ethif_status_t Cy_ETHIF_TransmitFrame(ETH_Type *base, uint8_t * pu8TxBuffe
     CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 1, 'Intentional typecast of &tmpBuffAdd to CEDI_BuffAddr* struct type.')
     /* Trigger Internal transmit function  */
     u32result = cyp_ethif_gemgxlobj->queueTxBuf((void *)cyp_ethif_pd[u8EthIfInstance],
-                u8QueueIndex,
-                (CEDI_BuffAddr*)&tmpBuffAdd,
-                u16Length,
-                u8flags);
+                                       u8QueueIndex,
+                                       (CEDI_BuffAddr*)&tmpBuffAdd,
+                                       u16Length,
+                                       u8flags);
     CY_MISRA_BLOCK_END('MISRA C-2012 Rule 11.3')
 
     if (0UL != u32result)
@@ -672,7 +672,7 @@ void Cy_ETHIF_SetNoBroadCast(ETH_Type *base, bool rejectBC)
     {
         u8EthIfInstance = CY_ETHIF_IP_INSTANCE(base);
 
-        cyp_ethif_gemgxlobj->setNoBroadcast((void *)cyp_ethif_pd[u8EthIfInstance], rejectBC);
+        cyp_ethif_gemgxlobj->setNoBroadcast((void *)cyp_ethif_pd[u8EthIfInstance],rejectBC);
     }
 }
 
@@ -699,7 +699,7 @@ void Cy_ETHIF_SetPromiscuousMode(ETH_Type *base, bool toBeEnabled)
     {
         u8EthIfInstance = CY_ETHIF_IP_INSTANCE(base);
 
-        cyp_ethif_gemgxlobj->setCopyAllFrames((void *)cyp_ethif_pd[u8EthIfInstance], toBeEnabled);
+        cyp_ethif_gemgxlobj->setCopyAllFrames((void *)cyp_ethif_pd[u8EthIfInstance],toBeEnabled);
     }
 }
 
@@ -732,12 +732,12 @@ cy_en_ethif_status_t Cy_ETHIF_SetFilterAddress(ETH_Type *base, cy_en_ethif_filte
         return CY_ETHIF_BAD_PARAM;
     }
 
-    if (filterNo >= CY_ETHIF_FILTER_NUM_INV)
+    if(filterNo >= CY_ETHIF_FILTER_NUM_INV)
     {
         return CY_ETHIF_BAD_PARAM;
     }
 
-    if (config == NULL)
+    if(config == NULL)
     {
         return CY_ETHIF_BAD_PARAM;
     }
@@ -748,10 +748,10 @@ cy_en_ethif_status_t Cy_ETHIF_SetFilterAddress(ETH_Type *base, cy_en_ethif_filte
 
     CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 1, 'Intentional typecast of &config->filterAddr to CEDI_MacAddress* struct type.')
     (void)cyp_ethif_gemgxlobj->setSpecificAddr((void *)cyp_ethif_pd[u8EthIfInstance],
-            filterNo,
-            (CEDI_MacAddress*)&config->filterAddr,
-            config->typeFilter,
-            config->ignoreBytes);
+                                        filterNo,
+                                        (CEDI_MacAddress*)&config->filterAddr,
+                                        config->typeFilter,
+                                        config->ignoreBytes);
     CY_MISRA_BLOCK_END('MISRA C-2012 Rule 11.3')
 
     return CY_ETHIF_SUCCESS;
@@ -791,9 +791,9 @@ uint32_t Cy_ETHIF_PhyRegRead(ETH_Type *base, uint8_t u8RegNo, uint8_t u8PHYAddr)
 
     u8EthIfInstance = CY_ETHIF_IP_INSTANCE(base);
 
-    cyp_ethif_gemgxlobj->phyStartMdioRead((void *)cyp_ethif_pd[u8EthIfInstance], CY_ETHIF_PHY_FLAG, u8PHYAddr, u8RegNo);
+    cyp_ethif_gemgxlobj->phyStartMdioRead( (void *)cyp_ethif_pd[u8EthIfInstance], CY_ETHIF_PHY_FLAG, u8PHYAddr, u8RegNo);
 
-    while (cyp_ethif_gemgxlobj->getMdioIdle((void *)cyp_ethif_pd[u8EthIfInstance]) != CY_ETH_MDIO_BUSY_0)
+    while(cyp_ethif_gemgxlobj->getMdioIdle((void *)cyp_ethif_pd[u8EthIfInstance]) != CY_ETH_MDIO_BUSY_0)
     {
         /* poll till operation completes */
     }
@@ -842,7 +842,7 @@ cy_en_ethif_status_t Cy_ETHIF_PhyRegWrite(ETH_Type *base, uint8_t u8RegNo, uint1
 
     u8EthIfInstance = CY_ETHIF_IP_INSTANCE(base);
 
-    cyp_ethif_gemgxlobj->phyStartMdioWrite((void *)cyp_ethif_pd[u8EthIfInstance], CY_ETHIF_PHY_FLAG, u8PHYAddr, u8RegNo, u16Data);
+    cyp_ethif_gemgxlobj->phyStartMdioWrite( (void *)cyp_ethif_pd[u8EthIfInstance], CY_ETHIF_PHY_FLAG, u8PHYAddr, u8RegNo, u16Data );
     /* poll till operation completes */
     while (cyp_ethif_gemgxlobj->getMdioIdle((void *)cyp_ethif_pd[u8EthIfInstance]) != CY_ETH_MDIO_BUSY_0)
     {
@@ -856,7 +856,7 @@ cy_en_ethif_status_t Cy_ETHIF_PhyRegWrite(ETH_Type *base, uint8_t u8RegNo, uint1
 
 
 /*******************************************************************************
-* Function Name: Cy_ETHIF_GetTimerValue
+* Function Name: Cy_ETHIF_Get1588TimerValue
 ****************************************************************************//**
 *
 * \brief Returns the current timer value from TSU register
@@ -866,6 +866,7 @@ cy_en_ethif_status_t Cy_ETHIF_PhyRegWrite(ETH_Type *base, uint8_t u8RegNo, uint1
 *
 * \return CY_ETHIF_SUCCESS Timer value is successfully retrieved
 * \return CY_ETHIF_BAD_PARAM Parameter passed contains invalid values
+* \return CY_ETHIF_NOT_INITIALIZED Ethernet Interface not initialized
 *
 *******************************************************************************/
 cy_en_ethif_status_t Cy_ETHIF_Get1588TimerValue(ETH_Type *base, cy_stc_ethif_1588_timer_val_t *stcRetTmrValue)
@@ -884,15 +885,19 @@ cy_en_ethif_status_t Cy_ETHIF_Get1588TimerValue(ETH_Type *base, cy_stc_ethif_158
     {
         return CY_ETHIF_BAD_PARAM;
     }
+    if (cyp_ethif_gemgxlobj == NULL || cyp_ethif_gemgxlobj->get1588Timer == NULL)
+    {
+        return CY_ETHIF_NOT_INITIALIZED;
+    }
 
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast of stcRetTmrValue to CEDI_1588TimerVal* struct type.');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast of stcRetTmrValue to CEDI_1588TimerVal* struct type.');
     (void)cyp_ethif_gemgxlobj->get1588Timer((void *)cyp_ethif_pd[u8EthIfInstance], (CEDI_1588TimerVal*)stcRetTmrValue);
 
     return CY_ETHIF_SUCCESS;
 }
 
 /*******************************************************************************
-* Function Name: Cy_ETHIF_SetTimerValue
+* Function Name: Cy_ETHIF_Set1588TimerValue
 ****************************************************************************//**
 *
 * \brief Setting the current timer value in TSU register
@@ -902,6 +907,7 @@ cy_en_ethif_status_t Cy_ETHIF_Get1588TimerValue(ETH_Type *base, cy_stc_ethif_158
 *
 * \return CY_ETHIF_SUCCESS Timer value is set
 * \return CY_ETHIF_BAD_PARAM Parameter passed contains invalid values
+* \return CY_ETHIF_NOT_INITIALIZED Ethernet Interface not initialized
 *
 *******************************************************************************/
 cy_en_ethif_status_t Cy_ETHIF_Set1588TimerValue(ETH_Type *base, cy_stc_ethif_1588_timer_val_t *pstcTmrValue)
@@ -920,9 +926,12 @@ cy_en_ethif_status_t Cy_ETHIF_Set1588TimerValue(ETH_Type *base, cy_stc_ethif_158
     {
         return CY_ETHIF_BAD_PARAM;
     }
-
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast of stcRetTmrValue to CEDI_1588TimerVal* struct type.');
-    if (((uint32_t)EOK) != cyp_ethif_gemgxlobj->set1588Timer((void *)cyp_ethif_pd[u8EthIfInstance], (CEDI_1588TimerVal *)pstcTmrValue))
+    if (cyp_ethif_gemgxlobj == NULL || cyp_ethif_gemgxlobj->get1588Timer == NULL)
+    {
+        return CY_ETHIF_NOT_INITIALIZED;
+    }
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast of stcRetTmrValue to CEDI_1588TimerVal* struct type.');
+    if (((uint32_t)EOK) != cyp_ethif_gemgxlobj->set1588Timer((void *)cyp_ethif_pd[u8EthIfInstance], (CEDI_1588TimerVal*)pstcTmrValue))
     {
         /* Reason could be Null pointer, hardware does not support TSU or pstcTimerValue.nanosecs>0x3FFFFFFF */
         return CY_ETHIF_BAD_PARAM;
@@ -1004,7 +1013,7 @@ void Cy_ETHIF_DiscardNonVLANFrames(ETH_Type *base, bool enable)
 * \param pstcInterruptList pointer to structure list
 *
 *******************************************************************************/
-static void Cy_ETHIF_EnableInterrupts(uint8_t u8EthIfInstance, cy_stc_ethif_intr_config_t * pstcInterruptList)
+static void Cy_ETHIF_EnableInterrupts (uint8_t u8EthIfInstance, cy_stc_ethif_intr_config_t * pstcInterruptList)
 {
     uint32_t u32InterruptEn = 0;
 
@@ -1086,7 +1095,7 @@ static void Cy_ETHIF_EnableInterrupts(uint8_t u8EthIfInstance, cy_stc_ethif_intr
     }
     if (pstcInterruptList->btx_retry_ex_late_coll == true)
     {
-        u32InterruptEn |= ((uint32_t)CEDI_EV_TX_RETRY_EX_LATE_COLL);
+        u32InterruptEn |=((uint32_t)CEDI_EV_TX_RETRY_EX_LATE_COLL);
     }
     if (pstcInterruptList->btx_underrun == true)
     {
@@ -1124,34 +1133,32 @@ static void Cy_ETHIF_EnableInterrupts(uint8_t u8EthIfInstance, cy_stc_ethif_intr
 * \param config Pointer to Ethernet configuration passed from Application layer
 *
 *******************************************************************************/
-static void Cy_ETHIF_PrepareConfiguration(uint8_t u8EthIfInstance, cy_stc_ethif_mac_config_t * pstcEthIfConfig)
+static void Cy_ETHIF_PrepareConfiguration(uint8_t u8EthIfInstance, cy_stc_ethif_mac_config_t * pstcEthIfConfig )
 {
     uint8_t u8QueueCounter = 0u;
 
-#if defined(CY_IP_MXETH_INSTANCES) && (CY_IP_MXETH_INSTANCES > 1u)
+    #if defined(CY_IP_MXETH_INSTANCES) && (CY_IP_MXETH_INSTANCES > 1u)
     CY_ASSERT(u8EthIfInstance <= 1u);
-#else
+    #else
     CY_ASSERT(u8EthIfInstance == 0u);
-#endif
+    #endif
 
     /** Clear configuration table   */
     (void)memset((void *)&cy_ethif_cfg[u8EthIfInstance], 0, sizeof(cy_ethif_cfg[u8EthIfInstance]));
 
     /** Load GEM_GXL register base address  */
     cy_ethif_cfg[u8EthIfInstance].regBase = CY_ETHIF_GEMGXL_ADDR_REGBASE(u8EthIfInstance);
-    //(u8EthIfInstance == CY_ETHIF_INSTANCE_0) ? CY_ETH0_GEMGXL_ADDR_REGBASE : CY_ETH1_GEMGXL_ADDR_REGBASE;
+     //(u8EthIfInstance == CY_ETHIF_INSTANCE_0) ? CY_ETH0_GEMGXL_ADDR_REGBASE : CY_ETH1_GEMGXL_ADDR_REGBASE;
 
     /** Prepare Queues  */
     cy_ethif_cfg[u8EthIfInstance].rxQs = CY_ETH_DEFINE_NUM_RXQS;
     cy_ethif_cfg[u8EthIfInstance].txQs = CY_ETH_DEFINE_NUM_TXQS;
 
-    for (u8QueueCounter = 0; u8QueueCounter < cy_ethif_cfg[u8EthIfInstance].rxQs; u8QueueCounter++)
-    {
+    for (u8QueueCounter=0; u8QueueCounter<cy_ethif_cfg[u8EthIfInstance].rxQs; u8QueueCounter++) {
         cy_ethif_cfg[u8EthIfInstance].rxQLen[u8QueueCounter] = CY_ETH_DEFINE_TOTAL_BD_PER_RXQUEUE;
     }
 
-    for (u8QueueCounter = 0; u8QueueCounter < cy_ethif_cfg[u8EthIfInstance].txQs; u8QueueCounter++)
-    {
+    for (u8QueueCounter=0; u8QueueCounter<cy_ethif_cfg[u8EthIfInstance].txQs; u8QueueCounter++) {
         cy_ethif_cfg[u8EthIfInstance].txQLen[u8QueueCounter] = CY_ETH_DEFINE_TOTAL_BD_PER_TXQUEUE;
     }
 
@@ -1167,29 +1174,29 @@ static void Cy_ETHIF_PrepareConfiguration(uint8_t u8EthIfInstance, cy_stc_ethif_
     cy_ethif_cfg[u8EthIfInstance].ignoreIpgRxEr      = 0;                                       /* bit30    ignore_ipg_rx_er, Not supported by hardware        */
     cy_ethif_cfg[u8EthIfInstance].enRxBadPreamble    = pstcEthIfConfig->u8enRxBadPreamble;      /* bit29    nsp_change           */
     // cy_ethif_cfg[u8EthIfInstance].ifTypeSel          = pstcEthIfConfig->ifTypeSel;              /* bit27    sgmii_mode_enable  (reserved)  */
-    /*          (see the following)  */
+                                                                                                /*          (see the following)  */
     // don't care                                                                               /* bit26    ignore_rx_fcs        */
     cy_ethif_cfg[u8EthIfInstance].enRxHalfDupTx      = 0;                                       /* bit25    en_half_duplex_rx, not supported by hardware    */
     cy_ethif_cfg[u8EthIfInstance].chkSumOffEn        = pstcEthIfConfig->u8chkSumOffEn;          /* bit24    receive_checksum_offload_enable */
     cy_ethif_cfg[u8EthIfInstance].disCopyPause       = pstcEthIfConfig->u8disCopyPause;         /* bit23    disable_copy_of_pause_frames */
-#if defined(ETH_AXI_MASTER_PRESENT) && (ETH_AXI_MASTER_PRESENT == 1U)
-    cy_ethif_cfg[u8EthIfInstance].dmaBusWidth    = CEDI_DMA_BUS_WIDTH_64;                   /* bit22:21 data bus with        */
-#else
-    cy_ethif_cfg[u8EthIfInstance].dmaBusWidth    = CEDI_DMA_BUS_WIDTH_32;                   /* bit22:21 data bus with        */
-#endif
-    /* 00:32bit 01:64bit    */
+    #if defined(ETH_AXI_MASTER_PRESENT) && (ETH_AXI_MASTER_PRESENT == 1U)
+        cy_ethif_cfg[u8EthIfInstance].dmaBusWidth    = CEDI_DMA_BUS_WIDTH_64;                   /* bit22:21 data bus with        */
+    #else
+        cy_ethif_cfg[u8EthIfInstance].dmaBusWidth    = CEDI_DMA_BUS_WIDTH_32;                   /* bit22:21 data bus with        */
+    #endif
+                                                                                                /* 00:32bit 01:64bit    */
     cy_ethif_cfg[u8EthIfInstance].mdcPclkDiv         = (CEDI_MdcClkDiv)pstcEthIfConfig->mdcPclkDiv;             /* bit20:18 mdc_clock_division   */
-    /*          010: Divide 32       */
-    /*          011: Divide 48       */
+                                                                                                /*          010: Divide 32       */
+                                                                                                /*          011: Divide 48       */
     // don't care                                                                               /* bit17    fcs_remove           */
     cy_ethif_cfg[u8EthIfInstance].rxLenErrDisc       = pstcEthIfConfig->u8rxLenErrDisc;         /* bit16    length_field_error_frame_discard */
     cy_ethif_cfg[u8EthIfInstance].rxBufOffset        = 0;                                       /* bit15:14 receive_buffer_offset */
     // don't care                                                                               /* bit13    pause_enable         */
     // don't care                                                                               /* bit12    retry_test           */
     //cy_ethif_cfg[u8EthIfInstance].ifTypeSel        = pstcEthIfConfig->ifTypeSel               /* bit11    pcs_select (reserved)*/
-    /*          (see the following)  */
+                                                                                                /*          (see the following)  */
     //cy_ethif_cfg[u8EthIfInstance].ifTypeSel        = pstcEthIfConfig->ifTypeSel               /* bit10    gigabit_mode_enable  */
-    /*          (see the following)  */
+                                                                                                /*          (see the following)  */
     cy_ethif_cfg[u8EthIfInstance].extAddrMatch       = 0;                                       /* bit9     external_address_match_enable, not supported by hardware */
     cy_ethif_cfg[u8EthIfInstance].rx1536ByteEn       = pstcEthIfConfig->u8rx1536ByteEn;         /* bit8     receive_1536_byte_frames */
     // don't care                                                                               /* bit7     unicast_hash_enable  */
@@ -1203,21 +1210,21 @@ static void Cy_ETHIF_PrepareConfiguration(uint8_t u8EthIfInstance, cy_stc_ethif_
 
     /** configuration for cy_ethif_cfg[u8EthIfInstance].ifTypeSel    */
     if ((pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_MII_10) ||
-            (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_10) ||
-            (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RMII_10))
+       (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_10) ||
+       (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RMII_10))
     {
-        cy_ethif_cfg[u8EthIfInstance].ifTypeSel = CEDI_IFSP_10M_MII;
+       cy_ethif_cfg[u8EthIfInstance].ifTypeSel = CEDI_IFSP_10M_MII;
     }
     else if ((pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_MII_100) ||
-             (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RMII_100) ||
-             (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_100))
+        (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RMII_100) ||
+        (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_100))
     {
         cy_ethif_cfg[u8EthIfInstance].ifTypeSel = CEDI_IFSP_100M_MII;
     }
     else
     {
         if ((pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_GMII_1000) ||
-                (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_1000))
+            (pstcEthIfConfig->pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_1000))
         {
             cy_ethif_cfg[u8EthIfInstance].ifTypeSel = CEDI_IFSP_1000M_GMII;
         }
@@ -1228,47 +1235,46 @@ static void Cy_ETHIF_PrepareConfiguration(uint8_t u8EthIfInstance, cy_stc_ethif_
     }
 
     /*=================================================================================================*/
-    /* CTL.ETH_MODE   | Network_config[0] |  Network_config[10]   |     PHY mode                       */
+    /* CTL.ETH_MODE   |	Network_config[0] |  Network_config[10]   |	    PHY mode                       */
     /*                |     (speed)       | (gigabit_mode_enable) |                                    */
     /*=================================================================================================*/
-    /*       2’d0   |          0        |          0            |   MII - 10Mbps                     */
-    /*       2’d0   |          1        |          0            |   MII – 100Mbps                    */
-    /*       2’d1   |          0        |          1            |   GMII – 1000Mbps                  */
-    /*       2’d2   |          0        |          0            |   RGMII – 10Mbps (4bits/Cycle)     */
-    /*       2’d2   |          1        |          0            |   RGMII – 100Mbps (4bits/Cycle)    */
-    /*       2’d2   |          0        |          1            |   RGMII – 1000Mbps (8bits/Cycle)   */
-    /*       2’d3   |          0        |          0            |   RMII – 10Mbps                    */
-    /*       2’d3   |          1        |          0            |   RMII – 100Mbps                   */
+    /*       2’d0	  |          0	      |          0       	  |   MII - 10Mbps                     */
+    /*       2’d0	  |          1	      |          0       	  |   MII – 100Mbps                    */
+    /*       2’d1	  |          0	      |          1       	  |   GMII – 1000Mbps                  */
+    /*       2’d2	  |          0	      |          0       	  |   RGMII – 10Mbps (4bits/Cycle)     */
+    /*       2’d2	  |          1	      |          0       	  |   RGMII – 100Mbps (4bits/Cycle)    */
+    /*       2’d2	  |          0	      |          1       	  |   RGMII – 1000Mbps (8bits/Cycle)   */
+    /*       2’d3	  |          0	      |          0       	  |   RMII – 10Mbps                    */
+    /*       2’d3	  |          1	      |          0       	  |   RMII – 100Mbps                   */
     /*=================================================================================================*/
 
     /** Prepare DMA Config register */
     cy_ethif_cfg[u8EthIfInstance].dmaAddrBusWidth    = 0;                                       /* bit30  DMA address bus width. 0 =32b , 1=64b    */
-    /* 0:32bit 1:64bit         */
+                                                                                                /* 0:32bit 1:64bit         */
     cy_ethif_cfg[u8EthIfInstance].enTxExtBD          = CY_ETH_DEFINE_BD;                               /* bit29  tx_bd_extended_mode_en  */
     cy_ethif_cfg[u8EthIfInstance].enRxExtBD          = CY_ETH_DEFINE_BD;                               /* bit28  rx_bd_extended_mode_en  */
     cy_ethif_cfg[u8EthIfInstance].dmaCfgFlags        = pstcEthIfConfig->u8dmaCfgFlags;          /* bit26  force_max_amba_burst_tx */
-    /* bit25  force_max_amba_burst_rx */
-    /* bit24  force_discard_on_err    */
-    for (u8QueueCounter = 0; u8QueueCounter < cy_ethif_cfg[u8EthIfInstance].rxQs; u8QueueCounter++)
-    {
+                                                                                                /* bit25  force_max_amba_burst_rx */
+                                                                                                /* bit24  force_discard_on_err    */
+    for (u8QueueCounter=0; u8QueueCounter<cy_ethif_cfg[u8EthIfInstance].rxQs; u8QueueCounter++) {
         cy_ethif_cfg[u8EthIfInstance].rxBufLength[u8QueueCounter] = CY_ETH_SIZE_BUF_TXQ_RXQ >> 6;            /* bit23:16 rx_buf_size       */
     }
 
     cy_ethif_cfg[u8EthIfInstance].txPktBufSize       = CY_ETH_TX_PBUF_SIZE;                     /* bit10  tx_pbuf_size            */
     cy_ethif_cfg[u8EthIfInstance].rxPktBufSize       = CY_ETH_RX_PBUF_SIZE;                     /* bit9:8 rx_pbuf_size            */
     cy_ethif_cfg[u8EthIfInstance].dmaEndianism       = 0;                                       /* bit7   endian_swap_packet  */
-    /*        0: little endian mode */
-    /*        1: endian swap mode enable for packet data (CEDI_END_SWAP_DATA) */
-    /* bit6   endian_swap_management   */
-    /*        0: little endian mode    */
-    /*        1: endian swap mode enable for management descriptor (CEDI_END_SWAP_DESC) */
+                                                                                                /*        0: little endian mode */
+                                                                                                /*        1: endian swap mode enable for packet data (CEDI_END_SWAP_DATA) */
+                                                                                                /* bit6   endian_swap_management   */
+                                                                                                /*        0: little endian mode    */
+                                                                                                /*        1: endian swap mode enable for management descriptor (CEDI_END_SWAP_DESC) */
     cy_ethif_cfg[u8EthIfInstance].dmaDataBurstLen    = (CEDI_DmaDatBLen)pstcEthIfConfig->dmaDataBurstLen;        /* bit4:0   amba_burst_length                                         */
-    /* 1xxxx: attempt use burst up to 16 (CEDI_DMA_DBUR_LEN_16)  */
-    /* 01xxx: attempt use burst up to  8 (CEDI_DMA_DBUR_LEN_8)   */
-    /* 001xx: attempt use burst up to  4 (CEDI_DMA_DBUR_LEN_4)   */
-    /* 0001x: always use single burst                            */
-    /* 00001: always use single burst    (CEDI_AMBD_BURST_LEN_1) */
-    /* 00000: best AXI burst up to 256 beats                     */
+                                                                                                /* 1xxxx: attempt use burst up to 16 (CEDI_DMA_DBUR_LEN_16)  */
+                                                                                                /* 01xxx: attempt use burst up to  8 (CEDI_DMA_DBUR_LEN_8)   */
+                                                                                                /* 001xx: attempt use burst up to  4 (CEDI_DMA_DBUR_LEN_4)   */
+                                                                                                /* 0001x: always use single burst                            */
+                                                                                                /* 00001: always use single burst    (CEDI_AMBD_BURST_LEN_1) */
+                                                                                                /* 00000: best AXI burst up to 256 beats                     */
 
     /** Prepare upper_tx_q_base_addr and upper_rx_q_base_addr register (0x4c8, 0x4D4)   */
     cy_ethif_cfg[u8EthIfInstance].upper32BuffTxQAddr = 0;                                       /* bit31:0  not used              */
@@ -1293,7 +1299,7 @@ static void Cy_ETHIF_PrepareConfiguration(uint8_t u8EthIfInstance, cy_stc_ethif_
 * \return CY_ETHIF_BAD_PARAM Parameter passed contains invalid values
 *
 *******************************************************************************/
-static cy_en_ethif_status_t Cy_ETHIF_WrapperConfig(uint8_t u8EthIfInstance, cy_stc_ethif_wrapper_config_t * pstcWrapperConfig)
+static cy_en_ethif_status_t Cy_ETHIF_WrapperConfig(uint8_t u8EthIfInstance, cy_stc_ethif_wrapper_config_t * pstcWrapperConfig )
 {
     ETH_Type *base;
     uint32_t mode, srcSel, clkDiv;
@@ -1307,22 +1313,22 @@ static cy_en_ethif_status_t Cy_ETHIF_WrapperConfig(uint8_t u8EthIfInstance, cy_s
     base = CY_ETHIF_IP_ADDR_REGBASE(u8EthIfInstance);
 
     if ((pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_MII_10) ||
-            (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_MII_100))
+       (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_MII_100))
     {
-        mode = 0;
+       mode = 0;
     }
     else if (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_GMII_1000)
     {
         mode = 1;
     }
     else if ((pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_10) ||
-             (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_100) ||
-             (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_1000))
+            (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_100) ||
+            (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RGMII_1000))
     {
         mode = 2;
     }
     else if ((pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RMII_10) ||
-             (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RMII_100))
+            (pstcWrapperConfig->stcInterfaceSel == CY_ETHIF_CTL_RMII_100))
     {
         mode = 3;
     }
@@ -1331,7 +1337,7 @@ static cy_en_ethif_status_t Cy_ETHIF_WrapperConfig(uint8_t u8EthIfInstance, cy_s
         return CY_ETHIF_BAD_PARAM;
     }
 
-    srcSel = (uint32_t)(pstcWrapperConfig->bRefClockSource);
+    srcSel =  (uint32_t)(pstcWrapperConfig->bRefClockSource);
     clkDiv = (((uint32_t)pstcWrapperConfig->u8RefClkDiv) - 1U);        /** NOTE: This bits are not part of eth header file as of now   */
 
     //pstcEthConfig->unCTL.u32Register = unEthCtl.u32Register;
@@ -1353,7 +1359,7 @@ static cy_en_ethif_status_t Cy_ETHIF_WrapperConfig(uint8_t u8EthIfInstance, cy_s
 *******************************************************************************/
 static void Cy_ETHIF_IPEnable(ETH_Type *base)
 {
-    ETH_CTL(base) |= _VAL2FLD(ETH_CTL_ENABLED, CY_ETH_ENABLE_1);
+    ETH_CTL(base) |=_VAL2FLD(ETH_CTL_ENABLED, CY_ETH_ENABLE_1);
 }
 
 /*******************************************************************************
@@ -1381,11 +1387,11 @@ static void Cy_ETHIF_IPDisable(ETH_Type *base)
 *******************************************************************************/
 static void Cy_ETHIF_AssignMemory(uint8_t u8EthIfInstance)
 {
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast of cy_ethif_privatedata[u8EthIfInstance] to CEDI_PrivateData* struct type.');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast of cy_ethif_privatedata[u8EthIfInstance] to CEDI_PrivateData* struct type.');
     cyp_ethif_pd[u8EthIfInstance] = (CEDI_PrivateData *)cy_ethif_privatedata[u8EthIfInstance];
     cy_ethif_cfg[u8EthIfInstance].rxQAddr   = (uintptr_t)cy_ethif_rx_desc_list[u8EthIfInstance];
     cy_ethif_cfg[u8EthIfInstance].txQAddr   = (uintptr_t)cy_ethif_tx_desc_list[u8EthIfInstance];
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast of cy_ethif_statistic[u8EthIfInstance] to CEDI_Statistics* struct type.');
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast of cy_ethif_statistic[u8EthIfInstance] to CEDI_Statistics* struct type.');
     cyp_ethif_statistic[u8EthIfInstance] = (CEDI_Statistics *)cy_ethif_statistic[u8EthIfInstance];
     cy_ethif_cfg[u8EthIfInstance].statsRegs = (uintptr_t)cyp_ethif_statistic[u8EthIfInstance];
     /** get the physical address */
@@ -1405,7 +1411,7 @@ static void Cy_ETHIF_AssignMemory(uint8_t u8EthIfInstance)
 * \param base Ethernet Instance
 *
 *******************************************************************************/
-static cy_en_ethif_status_t Cy_ETHIF_DisableQueues(ETH_Type *base, cy_stc_ethif_mac_config_t * pstcEthIfConfig)
+static cy_en_ethif_status_t Cy_ETHIF_DisableQueues (ETH_Type *base, cy_stc_ethif_mac_config_t * pstcEthIfConfig)
 {
     uint8_t u8EthIfInstance;
 
@@ -1479,21 +1485,21 @@ static cy_en_ethif_status_t Cy_ETHIF_DisableQueues(ETH_Type *base, cy_stc_ethif_
 * \return CY_ETHIF_BAD_PARAM Parameter passed contains invalid values
 *
 *******************************************************************************/
-static cy_en_ethif_status_t Cy_ETHIF_TSUInit(uint8_t u8EthIfInstance, cy_stc_ethif_tsu_config_t * pstcTSUConfig)
+static cy_en_ethif_status_t Cy_ETHIF_TSUInit (uint8_t u8EthIfInstance, cy_stc_ethif_tsu_config_t * pstcTSUConfig)
 {
     /* set 1588 timer value */
     /* Load Timer Value */
 
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast of pstcTSUConfig->pstcTimerValue to CEDI_1588TimerVal* struct type.');
-    if (((uint32_t)EOK) != cyp_ethif_gemgxlobj->set1588Timer((void *)cyp_ethif_pd[u8EthIfInstance], (CEDI_1588TimerVal *)pstcTSUConfig->pstcTimerValue))
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast of pstcTSUConfig->pstcTimerValue to CEDI_1588TimerVal* struct type.');
+    if (((uint32_t)EOK) != cyp_ethif_gemgxlobj->set1588Timer((void *)cyp_ethif_pd[u8EthIfInstance], (CEDI_1588TimerVal*)pstcTSUConfig->pstcTimerValue))
     {
         /* Reason could be Null pointer, hardware does not support TSU or pstcTimerValue.nanosecs>0x3FFFFFFF */
         return CY_ETHIF_BAD_PARAM;
     }
 
     /* Timer increment register to achieve 1 second as precise as possible */
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast of pstcTSUConfig->pstcTimerIncValue to CEDI_TimerIncrement* struct type.');
-    if (((uint32_t)EOK) != cyp_ethif_gemgxlobj->set1588TimerInc((void *)cyp_ethif_pd[u8EthIfInstance], (CEDI_TimerIncrement *)pstcTSUConfig->pstcTimerIncValue))
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast of pstcTSUConfig->pstcTimerIncValue to CEDI_TimerIncrement* struct type.');
+    if (((uint32_t)EOK) != cyp_ethif_gemgxlobj->set1588TimerInc((void *)cyp_ethif_pd[u8EthIfInstance], (CEDI_TimerIncrement*)pstcTSUConfig->pstcTimerIncValue))
     {
         /* Reason could be Null pointer, hardware does not support TSU */
         return CY_ETHIF_BAD_PARAM;
@@ -1508,7 +1514,7 @@ static cy_en_ethif_status_t Cy_ETHIF_TSUInit(uint8_t u8EthIfInstance, cy_stc_eth
 
     /* Set the descriptor time stamp Mode */
     if (((uint32_t)EOK) != cyp_ethif_gemgxlobj->setDescTimeStampMode((void *)cyp_ethif_pd[u8EthIfInstance],
-            (CEDI_TxTsMode)pstcTSUConfig->enTxDescStoreTimeStamp, (CEDI_RxTsMode)pstcTSUConfig->enRxDescStoreTimeStamp))
+               (CEDI_TxTsMode)pstcTSUConfig->enTxDescStoreTimeStamp, (CEDI_RxTsMode)pstcTSUConfig->enRxDescStoreTimeStamp))
     {
         /** Reason could be Null pointer, hardware does not support TSU, enTxDescStoreTimeStamp > CEDI_TX_TS_ALL, enRxDescStoreTimeStamp > CEDI_RX_TS_ALL  */
         return CY_ETHIF_BAD_PARAM;
@@ -1534,9 +1540,9 @@ static cy_en_ethif_status_t Cy_ETHIF_TSUInit(uint8_t u8EthIfInstance, cy_stc_eth
 * \param none
 *
 *******************************************************************************/
-static void Cy_ETHIF_InitializeBuffers(void)
+static void Cy_ETHIF_InitializeBuffers (void)
 {
-    for (uint32_t index = 0; index < CY_ETH_DEFINE_NUM_IP; index++)
+    for (uint32_t index=0; index<CY_ETH_DEFINE_NUM_IP; index++)
     {
         g_tx_bdcount[index] = 0;
     }
@@ -1563,18 +1569,18 @@ static uint8_t Cy_ETHIF_GetEthIfInstance(void *pcy_privatedata)
     }
     else
     {
-#if defined(CY_IP_MXETH_INSTANCES) && (CY_IP_MXETH_INSTANCES > 1u)
-        if (pcy_privatedata == cyp_ethif_pd[1])
-        {
-            u8EthIfInstance = CY_ETHIF_INSTANCE_1;
-        }
-        else
-        {
-            CY_ASSERT(0UL);
-        }
-#else
+        #if defined(CY_IP_MXETH_INSTANCES) && (CY_IP_MXETH_INSTANCES > 1u)
+            if(pcy_privatedata == cyp_ethif_pd[1])
+            {
+                u8EthIfInstance = CY_ETHIF_INSTANCE_1;
+            }
+            else
+            {
+                CY_ASSERT(0UL);
+            }
+        #else
         CY_ASSERT(0UL);
-#endif
+        #endif
     }
     return u8EthIfInstance;
 }
@@ -1698,18 +1704,18 @@ static void Cy_ETHIF_EventRxFrame(void *pcy_privatedata, uint8_t u8qnum)
         }
 
         (void)cyp_ethif_gemgxlobj->readRxBuf((void *)cyp_ethif_pd[u8EthIfInstance],
-                                             u8qnum,
-                                             &tmpBufAddr,
-                                             CY_ETHIF_BUFFER_CLEARED_0,
-                                             &Rx_DescData);
+                                          u8qnum,
+                                          &tmpBufAddr,
+                                          CY_ETHIF_BUFFER_CLEARED_0,
+                                          &Rx_DescData);
 
         switch ((CEDI_RxRdStat)Rx_DescData.status)
         {
-        case CEDI_RXDATA_SOF_EOF:     // 0
+          case CEDI_RXDATA_SOF_EOF:     // 0
             /* receive start and end frame */
             cyp_ethif_gemgxlobj->getRxDescStat((void *)cyp_ethif_pd[u8EthIfInstance],
-                                               Rx_DescData.rxDescStat,
-                                               &Rx_DescStat);
+                                         Rx_DescData.rxDescStat,
+                                         &Rx_DescStat);
 
             /* application callback function */
             if (stccallbackfunctions[u8EthIfInstance].rxframecb != NULL)
@@ -1717,28 +1723,28 @@ static void Cy_ETHIF_EventRxFrame(void *pcy_privatedata, uint8_t u8qnum)
                 stccallbackfunctions[u8EthIfInstance].rxframecb(base, (uint8_t*)tmpBufAddr.pAddr, Rx_DescStat.bufLen);
             }
             break;
-        case CEDI_RXDATA_SOF_ONLY:    // 1
+          case CEDI_RXDATA_SOF_ONLY:    // 1
             /* fragment start */
             // debug_printf("[ETH] (SOF)Don't use fragment yet...\r\n");
             break; //return;
-        case CEDI_RXDATA_NO_FLAG:     // 2
+          case CEDI_RXDATA_NO_FLAG:     // 2
             /* fragment */
             // debug_printf("[ETH] (NOF)Don't use fragment yet...\r\n");
             break; //return;
-        case CEDI_RXDATA_EOF_ONLY:    // 3
+          case CEDI_RXDATA_EOF_ONLY:    // 3
             /* fragment end */
             // debug_printf("[ETH] (EOF)Don't use fragment yet...\r\n");
             break;
-        case CEDI_RXDATA_NODATA:      // 4
+          case CEDI_RXDATA_NODATA:      // 4
             /* normal leaving */
             // debug_printf("[ETH] NG5 RXDATA_NODATA\r\n");
             noData = true;
             break;
-        default:
+          default:
             /* Unknown status */
             break;
         }
-        if (noData)
+        if(noData)
         {
             break;/* from here it breaks while loop   */
         }
@@ -1863,7 +1869,7 @@ static void Cy_ETHIF_EventLinkChange(void *pcy_privatedata, uint8_t a_linkstate)
 *
 *
 *******************************************************************************/
-static void Cy_ETHIF_EventTsu(void *pcy_privatedata, uint32_t u32event)
+static void Cy_ETHIF_EventTsu (void *pcy_privatedata, uint32_t u32event)
 {
     uint8_t u8EthIfInstance = 255;
     ETH_Type *base = NULL;
@@ -1916,7 +1922,7 @@ static void Cy_ETHIF_EventPauseFrame(void *pcy_privatedata, uint32_t u32event)
 *
 *
 *******************************************************************************/
-static void Cy_ETHIF_EventPtp(void* pcy_privatedata, uint32_t u32type, struct CEDI_1588TimerVal* time)
+static void Cy_ETHIF_EventPtp (void* pcy_privatedata, uint32_t u32type, struct CEDI_1588TimerVal* time)
 {
     if (0UL != (u32type & ((uint32_t)CEDI_EV_PTP_TX_SYNC)))
     {
@@ -2002,132 +2008,132 @@ static cy_en_syspm_status_t Cy_ETHIF_DSCallbackFunc(cy_stc_syspm_callback_params
 
     CY_UNUSED_PARAMETER(callbackParams);
 
-    switch (mode)
+    switch(mode)
     {
-    case CY_SYSPM_CHECK_READY:
-    {
-        retVal = CY_SYSPM_SUCCESS;
-    }
-    break;
-    case CY_SYSPM_CHECK_FAIL:
-    {
-        retVal = CY_SYSPM_SUCCESS;
-    }
-    break;
-    case CY_SYSPM_BEFORE_TRANSITION:
-    {
-        uint8_t u8EthIfInstance, u8tmpcounter;
-        ETH_Type *base;
-
-        base = (ETH_Type *)callbackParams->base;
-        if (!CY_ETHIF_IS_IP_INSTANCE_VALID(base))
+        case CY_SYSPM_CHECK_READY:
         {
-            return CY_SYSPM_BAD_PARAM;
+            retVal = CY_SYSPM_SUCCESS;
         }
-
-        u8EthIfInstance = CY_ETHIF_IP_INSTANCE(base);
-
-        (void)cyp_ethif_gemgxlobj->getCopyAllFrames((void *)cyp_ethif_pd[u8EthIfInstance], &(g_ds_regs[u8EthIfInstance].copy_all_frames));
-        (void)cyp_ethif_gemgxlobj->getNoBroadcast((void *)cyp_ethif_pd[u8EthIfInstance], &(g_ds_regs[u8EthIfInstance].no_broadcast));
-
-        CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 1, 'Intentional typecast of &config->filterAddr to CEDI_MacAddress* struct type.')
-        (void)emacGetSpecificAddr((void *)cyp_ethif_pd[u8EthIfInstance],
-                                  (uint8_t)CY_ETHIF_FILTER_NUM_1,
-                                  (CEDI_MacAddress*) & (g_ds_regs[u8EthIfInstance].fileter1Config.filterAddr),
-                                  (uint8_t *) & (g_ds_regs[u8EthIfInstance].fileter1Config.typeFilter),
-                                  (uint8_t *) & (g_ds_regs[u8EthIfInstance].fileter1Config.ignoreBytes));
-        CY_MISRA_BLOCK_END('MISRA C-2012 Rule 11.3')
-
-        for (u8tmpcounter = 0; u8tmpcounter < cy_ethif_cfg[u8EthIfInstance].rxQs; u8tmpcounter++)
+        break;
+        case CY_SYSPM_CHECK_FAIL:
         {
-            (void)emacNumRxBufs((void *)cyp_ethif_pd[u8EthIfInstance], 0, g_ds_regs[u8EthIfInstance].ptrRxBufs[u8tmpcounter]);
+            retVal = CY_SYSPM_SUCCESS;
         }
-        retVal = CY_SYSPM_SUCCESS;
-    }
-    break;
-    case CY_SYSPM_AFTER_TRANSITION:
-    {
-        uint32_t u32RetValue;
-        uint8_t u8EthIfInstance;
-        uint8_t u8tmpcounter = 0, u8tmpintrcntr = 0;
-        CEDI_BuffAddr rx_buff_addr;
-        ETH_Type *base;
-
-        base = (ETH_Type *)callbackParams->base;
-
-        /* check for arguments */
-        if (!CY_ETHIF_IS_IP_INSTANCE_VALID(base))
+        break;
+        case CY_SYSPM_BEFORE_TRANSITION:
         {
-            retVal = CY_SYSPM_BAD_PARAM;
-            break;
-        }
+            uint8_t u8EthIfInstance, u8tmpcounter;
+            ETH_Type *base;
 
-        u8EthIfInstance = CY_ETHIF_IP_INSTANCE(base);
-        /* Restore registers */
-        /* Enable the IP to access EMAC registers set */
-        Cy_ETHIF_IPEnable(base);
-
-        /* Initialization EMAC registers */
-        u32RetValue = cyp_ethif_gemgxlobj->init((void *)cyp_ethif_pd[u8EthIfInstance], &cy_ethif_cfg[u8EthIfInstance], &Cy_ETHIF_Callbacks);
-        if (u32RetValue == ((uint32_t)EINVAL) || u32RetValue == ((uint32_t)ENOTSUP))
-        {
-            Cy_ETHIF_IPDisable(base);
-            retVal = CY_SYSPM_BAD_PARAM;
-            break;
-        }
-
-        for (u8tmpcounter = 0; u8tmpcounter < cy_ethif_cfg[u8EthIfInstance].rxQs; u8tmpcounter++)
-        {
-            if (g_pRxQbuffPool[u8EthIfInstance][u8tmpcounter] != NULL)
+            base = (ETH_Type *)callbackParams->base;
+            if (!CY_ETHIF_IS_IP_INSTANCE_VALID(base))
             {
-                for (u8tmpintrcntr = 0; u8tmpintrcntr < cy_ethif_cfg[u8EthIfInstance].rxQLen[u8tmpcounter]; u8tmpintrcntr++)
+                return CY_SYSPM_BAD_PARAM;
+            }
+
+            u8EthIfInstance = CY_ETHIF_IP_INSTANCE(base);
+
+            (void)cyp_ethif_gemgxlobj->getCopyAllFrames((void *)cyp_ethif_pd[u8EthIfInstance], &(g_ds_regs[u8EthIfInstance].copy_all_frames));
+            (void)cyp_ethif_gemgxlobj->getNoBroadcast((void *)cyp_ethif_pd[u8EthIfInstance], &(g_ds_regs[u8EthIfInstance].no_broadcast));
+
+            CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 1, 'Intentional typecast of &config->filterAddr to CEDI_MacAddress* struct type.')
+            (void)emacGetSpecificAddr((void *)cyp_ethif_pd[u8EthIfInstance],
+                                (uint8_t)CY_ETHIF_FILTER_NUM_1,
+                                (CEDI_MacAddress*)&(g_ds_regs[u8EthIfInstance].fileter1Config.filterAddr),
+                                (uint8_t *)&(g_ds_regs[u8EthIfInstance].fileter1Config.typeFilter),
+                                (uint8_t *)&(g_ds_regs[u8EthIfInstance].fileter1Config.ignoreBytes));
+            CY_MISRA_BLOCK_END('MISRA C-2012 Rule 11.3')
+
+            for (u8tmpcounter = 0; u8tmpcounter < cy_ethif_cfg[u8EthIfInstance].rxQs; u8tmpcounter++)
+            {
+                (void)emacNumRxBufs((void *)cyp_ethif_pd[u8EthIfInstance], 0, g_ds_regs[u8EthIfInstance].ptrRxBufs[u8tmpcounter]);
+            }
+            retVal = CY_SYSPM_SUCCESS;
+        }
+        break;
+        case CY_SYSPM_AFTER_TRANSITION:
+        {
+            uint32_t u32RetValue;
+            uint8_t u8EthIfInstance;
+            uint8_t u8tmpcounter=0, u8tmpintrcntr=0;
+            CEDI_BuffAddr rx_buff_addr;
+            ETH_Type *base;
+
+            base = (ETH_Type *)callbackParams->base;
+
+            /* check for arguments */
+            if (!CY_ETHIF_IS_IP_INSTANCE_VALID(base))
+            {
+                retVal = CY_SYSPM_BAD_PARAM;
+                break;
+            }
+
+            u8EthIfInstance = CY_ETHIF_IP_INSTANCE(base);
+            /* Restore registers */
+            /* Enable the IP to access EMAC registers set */
+			Cy_ETHIF_IPEnable(base);
+
+            /* Initialization EMAC registers */
+            u32RetValue = cyp_ethif_gemgxlobj->init((void *)cyp_ethif_pd[u8EthIfInstance], &cy_ethif_cfg[u8EthIfInstance], &Cy_ETHIF_Callbacks);
+            if (u32RetValue == ((uint32_t)EINVAL) || u32RetValue == ((uint32_t)ENOTSUP))
+            {
+                Cy_ETHIF_IPDisable(base);
+                retVal = CY_SYSPM_BAD_PARAM;
+                break;
+            }
+
+            for (u8tmpcounter = 0; u8tmpcounter < cy_ethif_cfg[u8EthIfInstance].rxQs; u8tmpcounter++)
+            {
+                if (g_pRxQbuffPool[u8EthIfInstance][u8tmpcounter] != NULL)
                 {
-                    rx_buff_addr.vAddr = (uintptr_t)((*g_pRxQbuffPool[u8EthIfInstance])[u8tmpcounter][u8tmpintrcntr]);
-                    rx_buff_addr.pAddr = rx_buff_addr.vAddr;
-                    (void)cyp_ethif_gemgxlobj->addRxBuf((void *)cyp_ethif_pd[u8EthIfInstance],
+                    for (u8tmpintrcntr = 0; u8tmpintrcntr < cy_ethif_cfg[u8EthIfInstance].rxQLen[u8tmpcounter]; u8tmpintrcntr++)
+                    {
+                        rx_buff_addr.vAddr = (uintptr_t)((*g_pRxQbuffPool[u8EthIfInstance])[u8tmpcounter][u8tmpintrcntr]);
+                        rx_buff_addr.pAddr = rx_buff_addr.vAddr;
+                        (void)cyp_ethif_gemgxlobj->addRxBuf((void *)cyp_ethif_pd[u8EthIfInstance],
                                                         u8tmpcounter,
-                                                        (CEDI_BuffAddr *)&rx_buff_addr,
+                                                    (CEDI_BuffAddr *)&rx_buff_addr,
                                                         0);
+                    }
                 }
             }
+
+
+            /* additional Receive configurations */
+            cyp_ethif_gemgxlobj->setCopyAllFrames((void *)cyp_ethif_pd[u8EthIfInstance], CY_ETH_ENABLE_1);
+            cyp_ethif_gemgxlobj->setRxBadPreamble((void *)cyp_ethif_pd[u8EthIfInstance], CY_ETH_ENABLE_1);
+
+            /* Do not drop frames with CRC error */
+            cyp_ethif_gemgxlobj->setIgnoreFcsRx((void *)cyp_ethif_pd[u8EthIfInstance], CY_ETH_ENABLE_1);
+
+            /* Enable MDIO */
+            cyp_ethif_gemgxlobj->setMdioEnable((void *)(void *)cyp_ethif_pd[u8EthIfInstance], CY_ETH_ENABLE_1);
+
+            /* driver start */
+            cyp_ethif_gemgxlobj->start((void *)cyp_ethif_pd[u8EthIfInstance]);
+
+
+            /* set config reg */
+            cyp_ethif_gemgxlobj->setCopyAllFrames((void *)cyp_ethif_pd[u8EthIfInstance], g_ds_regs[u8EthIfInstance].copy_all_frames);
+
+            /* Reject Broad cast frames */
+            cyp_ethif_gemgxlobj->setNoBroadcast((void *)cyp_ethif_pd[u8EthIfInstance], g_ds_regs[u8EthIfInstance].no_broadcast);
+
+            CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 1, 'Intentional typecast of &config->filterAddr to CEDI_MacAddress* struct type.')
+            /* Apply filter */
+            (void)cyp_ethif_gemgxlobj->setSpecificAddr((void *)cyp_ethif_pd[u8EthIfInstance],
+                                        CY_ETHIF_FILTER_NUM_1,
+                                        (CEDI_MacAddress*)&(g_ds_regs[u8EthIfInstance].fileter1Config.filterAddr),
+                                        g_ds_regs[u8EthIfInstance].fileter1Config.typeFilter,
+                                        g_ds_regs[u8EthIfInstance].fileter1Config.ignoreBytes);
+            CY_MISRA_BLOCK_END('MISRA C-2012 Rule 11.3')
+
+            retVal = CY_SYSPM_SUCCESS;
         }
-
-
-        /* additional Receive configurations */
-        cyp_ethif_gemgxlobj->setCopyAllFrames((void *)cyp_ethif_pd[u8EthIfInstance], CY_ETH_ENABLE_1);
-        cyp_ethif_gemgxlobj->setRxBadPreamble((void *)cyp_ethif_pd[u8EthIfInstance], CY_ETH_ENABLE_1);
-
-        /* Do not drop frames with CRC error */
-        cyp_ethif_gemgxlobj->setIgnoreFcsRx((void *)cyp_ethif_pd[u8EthIfInstance], CY_ETH_ENABLE_1);
-
-        /* Enable MDIO */
-        cyp_ethif_gemgxlobj->setMdioEnable((void *)(void *)cyp_ethif_pd[u8EthIfInstance], CY_ETH_ENABLE_1);
-
-        /* driver start */
-        cyp_ethif_gemgxlobj->start((void *)cyp_ethif_pd[u8EthIfInstance]);
-
-
-        /* set config reg */
-        cyp_ethif_gemgxlobj->setCopyAllFrames((void *)cyp_ethif_pd[u8EthIfInstance], g_ds_regs[u8EthIfInstance].copy_all_frames);
-
-        /* Reject Broad cast frames */
-        cyp_ethif_gemgxlobj->setNoBroadcast((void *)cyp_ethif_pd[u8EthIfInstance], g_ds_regs[u8EthIfInstance].no_broadcast);
-
-        CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 1, 'Intentional typecast of &config->filterAddr to CEDI_MacAddress* struct type.')
-        /* Apply filter */
-        (void)cyp_ethif_gemgxlobj->setSpecificAddr((void *)cyp_ethif_pd[u8EthIfInstance],
-                CY_ETHIF_FILTER_NUM_1,
-                (CEDI_MacAddress*) & (g_ds_regs[u8EthIfInstance].fileter1Config.filterAddr),
-                g_ds_regs[u8EthIfInstance].fileter1Config.typeFilter,
-                g_ds_regs[u8EthIfInstance].fileter1Config.ignoreBytes);
-        CY_MISRA_BLOCK_END('MISRA C-2012 Rule 11.3')
-
-        retVal = CY_SYSPM_SUCCESS;
-    }
-    break;
-    default:
-        /* default case */
         break;
+        default:
+            /* default case */
+            break;
     }
 
     return retVal;

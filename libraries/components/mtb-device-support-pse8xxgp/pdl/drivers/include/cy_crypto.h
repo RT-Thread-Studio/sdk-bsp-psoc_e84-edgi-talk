@@ -28,7 +28,6 @@
 * \addtogroup group_crypto
 * \{
 * \note IP Supported: CRYPTO
-* \note Device Categories: CAT1A & CAT1C. Please refer <a href="usergroup1.html">Device Catalog</a>.
 *
 * The Crypto driver provides a public API to perform cryptographic and hash
 * operations, as well as generate both true and pseudo random numbers.
@@ -36,18 +35,11 @@
 * It uses a hardware IP block to accelerate operations.
 *
 * The functions and other declarations used in this driver are in cy_crypto.h,
-* cy_crypto_core.h, and cy_crypto_server.h. You can also include cy_pdl.h
+* cy_crypto_core.h. You can also include cy_pdl.h
 * to get access to all functions and declarations in the PDL.
-*
-* The driver implements two usage models:
-* * \ref group_crypto_cli_srv
-* * \ref group_crypto_lld_api
-*
-* Mixing these usage models will result in undefined behaviour.
 *
 * The Crypto driver supports these standards: DES, TDES, AES (128, 192, 256 bits), CMAC-AES, SHA,
 * HMAC, PRNG, TRNG, CRC, RSA, ECP, and ECDSA.
-* \note ECP and ECDSA are only implemented for the \ref group_crypto_lld_api model.
 *
 * \section group_crypto_configuration_considerations Configuration Considerations
 *
@@ -78,7 +70,7 @@
 * other function for that technique, and re-initialize after you use a different
 * encryption technique.
 *
-* For example, use \ref Cy_Crypto_Aes_Init to configure an AES encryption
+* For example, use \ref Cy_Crypto_Core_Aes_Init to configure an AES encryption
 * operation with the encryption key, and key length.
 * Provide pointers to two context structures. You can then call the AES Run functions.
 * If you use DES after that, you must re-initialize the AES encryption before using
@@ -246,651 +238,11 @@
 *
 * See the "Cryptographic Function Block" chapter of the Technical Reference Manual.
 *
-* \section group_crypto_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td> 2.150</td>
-*     <td>Added new macro CY_CRYPTO_ALIGN_CACHE_LINE to Manually align memory allocation for DCache management in XMC devices.</td>
-*     <td>Removed Pragma align dependency.</td>
-*   </tr>
-*   <tr>
-*     <td> 2.140</td>
-*     <td> Added new APIs \ref Cy_Crypto_Core_EC25519_MakePublicKey, \ref Cy_Crypto_Core_EC25519_MakePrivateKey, \ref Cy_Crypto_Core_EC25519_PointMultiplication. </td>
-*     <td>EC25519 curve support added for ECDH.</td>
-*   </tr>
-*   <tr>
-*     <td> 2.130</td>
-*     <td>Updated API \ref Cy_Crypto_Core_Vu_RegMemPointer, \ref Cy_Crypto_Core_ED25519_PointDecode</td>
-*     <td>Bug Fixes</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.120</td>
-*     <td>
-*         <ul>
-*         <li>Added new enums \ref cy_en_eddsa_sig_type_t , updated enums \ref cy_en_crypto_ecc_curve_id_t and ED25519 macros.<br>
-*         <li>Added new APIs \ref Cy_Crypto_Core_ED25519_Sign, \ref Cy_Crypto_Core_ED25519_PointMultiplication,
-*             \ref Cy_Crypto_Core_ED25519_Verify, \ref Cy_Crypto_Core_ED25519_MakePublicKey. </td>
-*         </ul>
-*     <td>Added EDDSA Hardware acceleration for CAT1A and CAT1C MCUs.</td>
-*   </tr>
-*   <tr>
-*     <td>Updated structures \ref cy_stc_crypto_aes_buffers_t, \ref cy_stc_crypto_aes_state_t, \ref cy_stc_crypto_aes_ccm_buffers_t
-*            \ref cy_stc_crypto_aes_gcm_buffers_t, \ref cy_stc_crypto_aes_gcm_state_t, \ref cy_stc_crypto_sha_state_t.</td>
-*     <td>Fixed AES CCM, GCM and SHA algorithm issues with DCache enablement on CAT1C device. </td>
-*   </tr>
-*   <tr>
-*     <td> 2.110</td>
-*     <td>Fixed data synchronization barrier issue in AES</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td> 2.100</td>
-*     <td>Added SHA3, HKDF, AES multistage support for modes ECB, CBC, CFB CTR added</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td> 2.90</td>
-*     <td>Updated internal APIs and bug fixes.</td>
-*     <td>Fixed GCM initialization and coverity bugs.</td>
-*   </tr>
-*   <tr>
-*     <td> 2.80</td>
-*     <td>Added AES GCM support.</td>
-*     <td>Driver enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td> 2.70</td>
-*     <td>Added TRNG enhancements to support health monitor check.</td>
-*     <td>Driver enhancement and new feature addition.</td>
-*   </tr>
-*   <tr>
-*     <td> 2.60</td>
-*     <td>
-*         <ul>
-*         <li>Added support for compile time crypto functionality selection with user defined
-*             config header. By default, all crypto features supported will be enabled.<br>
-*         <li>Added new API \ref Cy_Crypto_Core_Rsa_Verify_Ext to support verification of PKCS 1.5
-*             signatures with CY_CRYPTO_MODE_SHA_NONE, which was unsupported in existing
-*             \ref Cy_Crypto_Core_Rsa_Verify.</td>
-*         </ul>
-*     <td>Driver enhancement and new feature addition.</td>
-*   </tr>
-*   <tr>
-*     <td> 2.50</td>
-*     <td>Fixed the Cy_Crypto_Core_ECC_VerifyHash() and an internal function behaviour
-*         to support 0 hash message. Resolved MISRA 2012 standard defects.</td>
-*     <td>Defect fixing and MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>2.40</td>
-*     <td>
-*         Resolve MISRA 2012 standard defects.
-*     </td>
-*     <td>
-*         MISRA 2012 compliance.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.30.4</td>
-*     <td>
-*         Updated code snippets for client-server usage model.
-*     </td>
-*     <td>
-*         Documentation enhancement.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.30.3</td>
-*     <td>
-*         Minor documentation updates.
-*     </td>
-*     <td>
-*         Documentation enhancement.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.30.2</td>
-*     <td>
-*         Code formatting cleanup, updated copyright date.
-*     </td>
-*     <td>
-*         PDL project update.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.30.1</td>
-*     <td>
-*         Added a C++ namespace guards.
-*     </td>
-*     <td>
-*         Make a driver code to be compatible with C++.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.30</td>
-*     <td>
-*         <ul>
-*         <li>Added a multi-instance support for AES and SHA.</li>
-*         <li>Added a small chunks mode for SHA with any chunk size (from one
-*             byte).</li>
-*         <li>Added the operation memory buffer management (set a new address,
-*             get a size).</li>
-*         <li>Added a support for ARM Compiler 6.</li>
-*         </ul>
-*     </td>
-*     <td>Integration with mbedOS/mbedTLS, restructured the implementation of
-*         AES and SHA for the Crypto ALT interface.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.20</td>
-*     <td>
-*         <ul>
-*         <li>Moved from a pre-compiled library to Open Source under
-*             Apache 2.0 license.</li>
-*         <li>Core (server) This API is now available.</li>
-*         <li>Added ECP and ECDSA support for the NIST P curves:
-*             SECP192R1, SECP224R1, SECP256R1, SECP384R1, SECP521R1.</li>
-*         <li>ECP and ECDSA only supported with direct calls to Crypto APIs,
-*             no client interface functions are present.</li>
-*         <li>Added Chunk mode for CRC.</li>
-*         <li>Added Chunk mode for SHA, the chunk size is limited to
-*             the SHA block size.</li>
-*         </ul>
-*     </td>
-*     <td>ECC support added.<br>
-*         Integration with mbedOS/mbedTLS, restructured the implementation of
-*         SHA and CRC for the Crypto ALT interface.
-*     </td>
-*   </tr>
-*   <tr>
-*     <td>2.11b</td>
-*     <td>The same as production 2.10; only the newly-added Elliptic Curve point
-*     multiplication functionality (NIST P256) is pre-production.
-*     Open source under Apache version 2.0 license.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>2.11</td>
-*     <td>Based on pre-production 2.10, except the newly-added Elliptic Curve point
-*     multiplication functionality (NIST P256).
-*     Does not incorporate the production level documentation.
-*     Open source under Apache version 2.0 license.</td>
-*     <td>ECC support.</td>
-*   </tr>
-*   <tr>
-*     <td>2.10b</td>
-*     <td>The same as production 2.10. Open source under Apache version 2.0 license.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td rowspan="4">2.10</td>
-*     <td>Flattened the organization of the driver source code into the single
-*         source directory and the single include directory.
-*     </td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Removed files with the default driver configuration. \n
-*     Added API functions to start different server functionality:
-*         - Cy_Crypto_Server_Start_Base
-*         - Cy_Crypto_Server_Start_Extra
-*         - Cy_Crypto_Server_Start_Full
-*     </td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td>Added the register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>Added precompiled libraries for the IAR toolchain.</td>
-*     <td>IAR toolchain support in ModusToolbox.</td>
-*   </tr>
-*   <tr>
-*     <td>2.0b</td>
-*     <td>The same as production 2.0. Open source under Apache version 2.0 license.</td>
-*     <td></td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.0</td>
-*     <td>Clarified what parameters must be 4-byte aligned for the functions:
-*         \ref Cy_Crypto_Aes_Cmac_Run, \ref Cy_Crypto_Sha_Run,
-*         \ref Cy_Crypto_Hmac_Run, \ref Cy_Crypto_Str_MemCmp,
-*         \ref Cy_Crypto_Trng_Generate, \ref Cy_Crypto_Des_Run,
-*         \ref Cy_Crypto_Tdes_Run, \ref Cy_Crypto_Rsa_Proc
-*     </td>
-*     <td>Documentation update and clarification.</td>
-*   </tr>
-*   <tr>
-*     <td>
-*         Changed crypto IP power control.<br>
-*         Enhanced Vector Unit functionality for RSA crypto algorithm.<br>
-*         Added support of the single-core devices.
-*     </td>
-*     <td>New device support.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
-* \defgroup group_crypto_cli_srv Client-Server Model
-* \{
-*   \defgroup group_crypto_cli_srv_macros Macros
-*   \defgroup group_crypto_cli_srv_functions Functions
-*   \{
-*     \defgroup group_crypto_cli_functions Client Functions
-*     \defgroup group_crypto_srv_functions Server Functions
-*   \}
-*   \defgroup group_crypto_cli_srv_data_structures Data Structures
-*   \{
-*     \defgroup group_crypto_config_structure Common Data Structures
-*     \defgroup group_crypto_cli_data_structures Client Data Structures
-*     \defgroup group_crypto_srv_data_structures Server Data Structures
-*   \}
-* \}
 * \defgroup group_crypto_lld_api Direct Crypto Core Access
 * \defgroup group_crypto_data_structures Common Data Structures
 * \defgroup group_crypto_enums Common Enumerated Types
+* \defgroup group_crypto_macros Common macro defines
 */
-
-/**
-* \addtogroup group_crypto_cli_srv
-* \{
-*   Use the client-server API to isolate the Crypto hardware from non-secure
-*   application access.
-*
-*   The functions and other declarations used in this part of the driver are in
-*   cy_crypto.h and cy_crypto_server.h. You can also include cy_pdl.h
-*   to get access to all functions and declarations in the
-*   PDL.
-*
-*   The firmware initializes and starts the Crypto server. The server can run on any
-*   core and works with the Crypto hardware. The Crypto server is implemented as
-*   a secure block. It performs all cryptographic operations for the client.
-*   Access to the server is through the Inter Process Communication (IPC) driver.
-*   Direct access is not allowed.
-*
-*   The Crypto client can run on any core too. The firmware initializes and starts
-*   the client. The firmware then provides configuration data required for
-*   the desired cryptographic technique and a request that the server run the
-*   cryptographic operation.
-*
-*   Note that Client-server model is not supported when DCache is enabled.
-*
-* This document contains the following topics:
-*   - \ref group_crypto_architecture
-*   - \ref group_crypto_configuration_structure
-*   - \ref group_crypto_server_init
-*   - \ref group_crypto_client_init
-*   - \ref group_crypto_common_use_cases
-*   - \ref group_crypto_rsa_considerations
-*   - \ref group_crypto_irq_implements
-*   - \ref group_crypto_definitions
-*   - \ref group_crypto_more_information
-*
-* \section group_crypto_architecture Architectural model
-* The client-server implementation uses:
-*   - one IPC channel for data exchange between client and server applications;
-*   - three interrupts: an IPC notify interrupt, an IPC release interrupt, and
-*     an interrupt for error handling.
-*
-* Firmware initializes and starts the Crypto server. The server can run on
-* any core and works with the Crypto hardware.
-* The Crypto server is implemented as a secure block. It performs all
-* cryptographic operations for the client. Access to the server is through the
-* Inter Process Communication (IPC) driver. Direct access is not allowed.
-*
-* The Crypto client can also run on any core. Firmware initializes and starts
-* the client. The firmware then provides the configuration data required for the
-* desired cryptographic technique, and requests that the server run the
-* cryptographic operation.
-*
-* \note
-* Only one Crypto server and only one Crypto client can be run at the same time
-* on any core. So, valid configurations are:
-* - one server instance runs on CM0+ and one client instance on CM4 (and vice versa).
-* - one server instance and one client instance run on CM0+
-*   (__** This is not recommended, use Direct Crypto API's to perform Crypto
-*   operations on a single core__).
-* - one server instance and one client instance run on CM4
-*   (__** This is not recommended, use Direct Crypto API's to perform Crypto
-*   operations on a single core__).
-*
-* \image html crypto_architecture.png
-*
-* IPC communication between the client and server is completely transparent.
-* Using IPC for communication provides a simple synchronization mechanism to
-* handle concurrent requests from different cores.
-*
-* \section group_crypto_configuration_structure Configuration Structure
-*
-* IPC communication for the Crypto driver is handled transparently. User should
-* select the IPC channel, and configure the required notify, release, and error
-* interrupts.
-*
-* These initialization routines, \ref Cy_Crypto_Server_Start (server)
-* and \ref Cy_Crypto_Init (client), use separate instances of the same
-* cy_stc_crypto_config_t configuration structure. Some fields should be the same,
-* and some are set specifically by either the server or client. The table lists
-* each field in the config structure, and which initialization routine sets the
-* value.
-*
-* <table>
-* <tr><th>Field</th><th>Which</th><th>Description</th><th>Notes</th></tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::ipcChannel ipcChannel\endlink</td>
-* <td>Server and Client</td>
-* <td>IPC channel for communication between client and server</td>
-* <td>IPC Channel, same for both</td>
-* </tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::acquireNotifierChannel acquireNotifierChannel\endlink</td>
-* <td>Server and Client</td>
-* <td>IPC interrupt structure used for the new request notifications</td>
-* <td>Notify interrupt number, for Server side only</td>
-* </tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::releaseNotifierChannel releaseNotifierChannel\endlink</td>
-* <td>Server and Client</td>
-* <td>IPC interrupt structure used for data ready notifications. Used to call
-*     userCompleteCallback handler function.</td>
-* <td>Release interrupt number, for Client side only</td>
-* </tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::userCompleteCallback userCompleteCallback\endlink</td>
-* <td>Client</td>
-* <td>User-defined callback for the Release interrupt handler; can be NULL</td>
-* <td>See Implementing Crypto Interrupts</td>
-* </tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::releaseNotifierConfig releaseNotifierConfig \endlink</td>
-* <td>Client</td>
-* <td>IRQ handler settings for data ready notifications. This interrupt occurs
-* when server completely processed all input data and released an IPC
-* communication channel.</td>
-* <td>configuration for the interrupt</td>
-* </tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::userGetDataHandler userGetDataHandler\endlink</td>
-* <td>Server</td>
-* <td>User-defined function to override default interrupt handler; NULL = use default</td>
-* <td>ISR for the Notify interrupt</td>
-* </tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::acquireNotifierConfig acquireNotifierConfig\endlink</td>
-* <td>Server</td>
-* <td>IRQ handler settings for new request notifications. This interrupt occurs
-* when client sent a new request for processing.</td>
-* <td>configuration for the interrupt</td>
-* </tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::userErrorHandler userErrorHandler\endlink</td>
-* <td>Server</td>
-* <td>User-defined function to override default interrupt handler; NULL = use default</td>
-* <td>ISR for a server error</td>
-* </tr>
-* <tr>
-* <td>\link cy_stc_crypto_config_t::cryptoErrorIntrConfig cryptoErrorIntrConfig\endlink</td>
-* <td>Server</td>
-* <td>IRQ handler settings for hardware error events</td>
-* <td>configuration for the interrupt</td>
-* </tr>
-* </table>
-*
-* \section group_crypto_server_init Server Initialization
-*
-* Use a \ref Cy_Crypto_Server_Start function.
-* Provide the configuration parameters (cy_stc_crypto_config_t) and a pointer
-* to the server context (cy_stc_crypto_server_context_t) that will be used to
-* store all temporary data.
-*
-* \snippet crypto/snippet/main.c snippet_myCryptoServerStart
-*
-* Because the two cores operate asynchronously, ensure that server
-* initialization is complete before initializing the client.
-* There are several ways to do this:
-*
-*   - Use \ref Cy_Crypto_Sync as a blocking call, before initializing the client.
-*   - Enable the CM4 core (\ref Cy_SysEnableCM4) after
-*     Crypto Server Start executes successfully.
-*   - Check the return status from calls to \ref Cy_Crypto_Init or
-*     \ref Cy_Crypto_Enable to ensure \ref CY_CRYPTO_SUCCESS.
-*
-* All crypto operations are asynchronous. To ensure that any crypto operation
-* is complete and the result is valid, use \ref Cy_Crypto_Sync.
-* Use the \ref CY_CRYPTO_SYNC_NON_BLOCKING parameter to check status.
-* Use \ref CY_CRYPTO_SYNC_BLOCKING  to wait for the operation to complete.
-*
-* \section group_crypto_client_init Client initialization
-*
-* Use \ref Cy_Crypto_Init to initialize the Crypto client with the configuration
-* parameters (cy_stc_crypto_config_t) and a pointer to the context
-* (cy_stc_crypto_context_t). Do not fill in the values for the context structure.
-*
-* Then call \ref Cy_Crypto_Enable to enable the Crypto hardware IP block.
-* After this, the Crypto driver is ready to execute crypto functions.
-* These calls must be made on the client side.
-* Firmware can implement the client on either core.
-*
-* \snippet crypto/snippet/main.c snippet_myCryptoInit
-*
-* \section group_crypto_common_use_cases Common Use Cases
-*
-* \subsection group_crypto_Use_CRC CRC Calculation
-*
-* To calculate CRC of a data image:
-*   - Use \ref Cy_Crypto_Crc_Init to set parameters for selected CRC mode,
-*   - Call \ref Cy_Crypto_Crc_Run to calculate CRC for a data image.
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoCrcUse
-*
-* \subsection group_crypto_Use_PRNG Pseudo Random Number Generation
-*
-* To generate a pseudo random number:
-*   - Use \ref Cy_Crypto_Prng_Init to set required parameters,
-*   - Call \ref Cy_Crypto_Prng_Generate.
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoPrngUse
-*
-* \subsection group_crypto_Use_TRNG True Random Number Generation
-*
-* To generate a true random number:
-*   - Call \ref Cy_Crypto_Trng_Generate with needed parameters.
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoTrngUse
-*
-* \subsection group_crypto_Use_DES DES encryption
-*
-* To encrypt a message using the DES algorithm:
-*   - Place DES key into an array,
-*   - Call \ref Cy_Crypto_Des_Run with required parameters, including the key
-*     array
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoDesUse
-*
-* \subsection group_crypto_Use_TDES TDES encryption
-*
-* To encrypt a message using the TDES algorithm:
-*   - Place 3 DES keys into a solid array,
-*   - Call \ref Cy_Crypto_Tdes_Run with required parameters, including the array
-*     of keys
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoTdesUse
-*
-* \subsection group_crypto_Use_AES AES encryption
-*
-* The Crypto driver provides a four AES encryption algorithms (ECB, CBC, CFB
-* and CTR) that are used similarly.
-*
-* To encrypt a message using AES ECB algorithm (as example):
-*   - Place AES key into array of appropriate size
-*   - Use \ref Cy_Crypto_Aes_Init to configure the operation
-*   - Call \ref Cy_Crypto_Aes_Ecb_Run (\ref Cy_Crypto_Aes_Cbc_Run,
-*     \ref Cy_Crypto_Aes_Cfb_Run or \ref Cy_Crypto_Aes_Ctr_Run) with appropriate
-*     parameters to make an operation
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoAesEcbUse
-*
-* \subsection group_crypto_Use_SHA SHA digest calculation
-*
-* To calculate a SHA digest of a message:
-*   - Call \ref Cy_Crypto_Sha_Run with appropriate parameters to make an
-*     operation
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoSha256Use
-*
-* \subsection group_crypto_Use_CMAC CMAC calculation
-*
-* To calculate CMAC of a message:
-*   - Place AES key into array of appropriate size
-*   - Use \ref Cy_Crypto_Aes_Init to configure the operation
-*   - Call \ref Cy_Crypto_Aes_Ecb_Run with appropriate parameters to make an
-*     operation
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoCmacUse
-*
-* \subsection group_crypto_Use_HMAC HMAC calculation
-*
-* To calculate HMAC of a message:
-*   - Place HMAC key into array of appropriate size
-*   - Call \ref Cy_Crypto_Hmac_Run with appropriate parameters to make an
-*     operation
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoHmacUse
-*
-* \subsection group_crypto_Use_RSA_VER RSA signature verification
-*
-* To verify the RSA signature of the data image:
-*   - Fill RSA public key structure by RSA public key data
-*   - Use \ref Cy_Crypto_Sha_Run to calculate SHA digest of the data image
-*   - Use \ref Cy_Crypto_Rsa_Proc to decrypt present encrypted signature
-*   - Use \ref Cy_Crypto_Rsa_Verify to verify the decrypted signature with
-*     calculated SHA digest
-*
-* Code example:
-* \snippet crypto/snippet/main.c snippet_myCryptoRsaVerUse
-*
-* \section group_crypto_rsa_considerations RSA Usage Considerations
-*
-* General RSA encryption and decryption is supported.
-* \ref Cy_Crypto_Rsa_Proc encrypts or decrypts data based on the parameters
-* passed to the function. If you pass in plain text and a public key, the output
-* is encrypted (cipher text). If you pass in cipher text and a private key, the
-* output is decrypted (plain text).
-*
-* One parameter for this function call is a structure that defines the key:
-* cy_stc_crypto_rsa_pub_key_t. The four modulus and exponent fields are
-* mandatory. They represent the data for either the public or private key as
-* appropriate.
-*
-* \note The <b>modulus</b> and <b>exponent</b> values in the
-* \ref cy_stc_crypto_rsa_pub_key_t must be in little-endian order.<br>
-* Use the \ref Cy_Crypto_InvertEndianness function to convert to or from
-* little-endian order.
-*
-* The remaining fields represent three pre-calculated coefficients that can
-* reduce execution time by up to 5x. The fields are: coefficient for Barrett
-* reduction, binary inverse of the modulus, and the result of
-* (2^moduloLength mod modulo). These fields are optional, and can be set to NULL.
-*
-* Calculate these coefficients with \ref Cy_Crypto_Rsa_CalcCoefs.
-* Pass them in the address of the key structure with the modulus and exponent
-* values for the key. The function returns the coefficients for the key in the
-* key structure, replacing any previous values.
-*
-* The RSA functionality also implements functions to decrypt a signature using
-* a public key. This signature must follow the RSASSA-PKCS-v1_5 standard.
-* The signature must contain a SHA digest (hash).
-* MD2, MD4, and MD5 message digests are not supported.
-*
-* An encrypted signature is stored as big-endian data. It must be inverted for
-* RSA processing. To use the provided signature decryption, firmware must
-*   -# Calculate the SHA digest of the data to be verified with
-*      \ref Cy_Crypto_Sha_Run.
-*   -# Ensure that the RSA signature is in little-endian format.
-*      Use \ref Cy_Crypto_InvertEndianness.
-*   -# Decrypt the RSA signature with a public key, by calling
-*      \ref Cy_Crypto_Rsa_Proc.
-*   -# Invert the byte order of the output, to return to big-endian format.
-*      Use \ref Cy_Crypto_InvertEndianness.
-*   -# Call \ref Cy_Crypto_Rsa_Verify (which requires data in big-endian format).
-*
-* \section group_crypto_irq_implements Implementing Crypto Interrupts
-*
-* The Crypto driver uses three interrupts:
-*   - A notify interrupt when data is ready for a cryptographic operation
-*   - A release interrupt when a cryptographic operation is complete
-*   - An error interrupt if the server encounters a hardware error
-*
-* You can modify default behavior for each interrupt.
-*
-* <b>Notify Interrupt:</b> the Crypto server has a default ISR to handle this
-* interrupt, \ref Cy_Crypto_Server_GetDataHandler. The default ISR clears the
-* interrupt, retrieves the data from the IPC channel, and dispatches control to
-* the desired cryptographic operation.
-*
-* To use the default handler, set the \link
-* cy_stc_crypto_config_t::userGetDataHandler userGetDataHandler \endlink field
-* of the cy_stc_crypto_config_t structure to NULL.
-*
-* To override, populate this
-* field with your ISR. Then call Crypto Server Start function.
-* Your ISR can perform additional tasks required by your application logic,
-* but must also call \ref Cy_Crypto_Server_GetDataHandler to dispatch the data
-* to the correct cryptographic operation.
-*
-* \note \ref Cy_Crypto_Server_Process should be performed from this ISR or from
-* any other task in the multi-task environment.
-*
-* \snippet crypto/snippet/main.c snippet_myCryptoServerMyGetDataISR
-* \snippet crypto/snippet/main.c snippet_myCryptoServerStartMyGetDataISR
-*
-* <b>Release Interrupt:</b> The Crypto driver includes a handler for this
-* interrupt. The interrupt handler clears the interrupt and calls a user-provided
-* callback routine. You cannot override this interrupt handler.
-* By default the interrupt is disabled.
-*
-* To use default behavior (interrupt disabled), set the \link
-* cy_stc_crypto_config_t::userCompleteCallback userCompleteCallback \endlink
-* field of the cy_stc_crypto_config_t structure to NULL.
-* To enable the interrupt, populate this field with your callback function.
-* Then call \ref Cy_Crypto_Init. If the callback function is not NULL, the Init
-* function enables the interrupt, and default behavior calls your routine.
-*
-* When performing cryptographic operations, firmware must ensure the operation
-* is complete before acting on the results. If the release interrupt is disabled,
-* typically calls to \ref Cy_Crypto_Sync should be blocking. If the interrupt is
-* enabled, your callback function is called when the operation is complete.
-* This lets you avoid blocking calls to \ref Cy_Crypto_Sync.
-*
-* <b>Error Interrupt:</b> The Crypto server has a default ISR to handle this
-* interrupt. It clears the interrupt and sets an internal flag that an error
-* has occurred.
-*
-* To use the default handler, set the userErrorHandler field of the
-* cy_stc_crypto_config_t structure to NULL. To override, populate this field
-* with your ISR. Then call Crypto Server Start function.
-*
-* Your ISR must call \ref Cy_Crypto_Server_ErrorHandler, and can perform any
-* additional tasks required by your application logic.
-*/
-/** \} group_crypto_cli_srv */
 
 #if !defined (CY_CRYPTO_H)
 #define CY_CRYPTO_H
@@ -914,11 +266,7 @@ cy_en_crypto_status_t Cy_Crypto_GetLibraryInfo(cy_en_crypto_lib_info_t *cryptoIn
 
 /** \endcond */
 
-/**
-* \addtogroup group_crypto_cli_functions
-* \{
-*/
-
+/** \cond INTERNAL */
 /*******************************************************************************
 * Function Name: Cy_Crypto_Init
 ****************************************************************************//**
@@ -1049,9 +397,9 @@ cy_en_crypto_status_t Cy_Crypto_GetErrorStatus(cy_stc_crypto_hw_error_t *hwError
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Prng_Init(uint32_t lfsr32InitState,
-        uint32_t lfsr31InitState,
-        uint32_t lfsr29InitState,
-        cy_stc_crypto_context_prng_t *cfContext);
+                                          uint32_t lfsr31InitState,
+                                          uint32_t lfsr29InitState,
+                                          cy_stc_crypto_context_prng_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Prng_Generate
@@ -1080,8 +428,8 @@ cy_en_crypto_status_t Cy_Crypto_Prng_Init(uint32_t lfsr32InitState,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Prng_Generate(uint32_t max,
-        uint32_t *randomNum,
-        cy_stc_crypto_context_prng_t *cfContext);
+                                              uint32_t *randomNum,
+                                              cy_stc_crypto_context_prng_t *cfContext);
 #endif /* (CPUSS_CRYPTO_PR == 1) && defined(CY_CRYPTO_CFG_PRNG_C) */
 
 #if (CPUSS_CRYPTO_AES == 1) && defined(CY_CRYPTO_CFG_AES_C)
@@ -1113,8 +461,8 @@ cy_en_crypto_status_t Cy_Crypto_Prng_Generate(uint32_t max,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Aes_Init(uint32_t *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        cy_stc_crypto_context_aes_t *cfContext);
+                                         cy_en_crypto_aes_key_length_t keyLength,
+                                         cy_stc_crypto_context_aes_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Aes_Ecb_Run
@@ -1146,9 +494,9 @@ cy_en_crypto_status_t Cy_Crypto_Aes_Init(uint32_t *key,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Aes_Ecb_Run(cy_en_crypto_dir_mode_t dirMode,
-        uint32_t *dstBlock,
-        uint32_t *srcBlock,
-        cy_stc_crypto_context_aes_t *cfContext);
+                                            uint32_t *dstBlock,
+                                            uint32_t *srcBlock,
+                                            cy_stc_crypto_context_aes_t *cfContext);
 
 #if defined(CY_CRYPTO_CFG_CIPHER_MODE_CBC)
 /*******************************************************************************
@@ -1183,11 +531,11 @@ cy_en_crypto_status_t Cy_Crypto_Aes_Ecb_Run(cy_en_crypto_dir_mode_t dirMode,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Aes_Cbc_Run(cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint32_t *ivPtr,
-        uint32_t *dst,
-        uint32_t *src,
-        cy_stc_crypto_context_aes_t *cfContext);
+                                            uint32_t srcSize,
+                                            uint32_t *ivPtr,
+                                            uint32_t *dst,
+                                            uint32_t *src,
+                                            cy_stc_crypto_context_aes_t *cfContext);
 #endif /* defined(CY_CRYPTO_CFG_CIPHER_MODE_CBC) */
 
 #if defined(CY_CRYPTO_CFG_CIPHER_MODE_CFB)
@@ -1223,11 +571,11 @@ cy_en_crypto_status_t Cy_Crypto_Aes_Cbc_Run(cy_en_crypto_dir_mode_t dirMode,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Aes_Cfb_Run(cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint32_t *ivPtr,
-        uint32_t *dst,
-        uint32_t *src,
-        cy_stc_crypto_context_aes_t *cfContext);
+                                            uint32_t srcSize,
+                                            uint32_t *ivPtr,
+                                            uint32_t *dst,
+                                            uint32_t *src,
+                                            cy_stc_crypto_context_aes_t *cfContext);
 #endif /* defined(CY_CRYPTO_CFG_CIPHER_MODE_CFB) */
 
 #if defined(CY_CRYPTO_CFG_CIPHER_MODE_CTR)
@@ -1274,13 +622,13 @@ cy_en_crypto_status_t Cy_Crypto_Aes_Cfb_Run(cy_en_crypto_dir_mode_t dirMode,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Aes_Ctr_Run(cy_en_crypto_dir_mode_t dirMode,
-        uint32_t srcSize,
-        uint32_t *srcOffset,
-        uint32_t nonceCounter[CY_CRYPTO_AES_BLOCK_SIZE / 8u],
-        uint32_t streamBlock[CY_CRYPTO_AES_BLOCK_SIZE / 8u],
-        uint32_t *dst,
-        uint32_t *src,
-        cy_stc_crypto_context_aes_t *cfContext);
+                                            uint32_t srcSize,
+                                            uint32_t *srcOffset,
+                                            uint32_t nonceCounter[CY_CRYPTO_AES_BLOCK_SIZE / 8u],
+                                            uint32_t streamBlock[CY_CRYPTO_AES_BLOCK_SIZE / 8u],
+                                            uint32_t *dst,
+                                            uint32_t *src,
+                                            cy_stc_crypto_context_aes_t *cfContext);
 #endif /* defined(CY_CRYPTO_CFG_CIPHER_MODE_CTR) */
 #endif /* (CPUSS_CRYPTO_AES == 1) && defined(CY_CRYPTO_CFG_AES_C) */
 
@@ -1321,11 +669,11 @@ cy_en_crypto_status_t Cy_Crypto_Aes_Ctr_Run(cy_en_crypto_dir_mode_t dirMode,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Aes_Cmac_Run(uint32_t *src,
-        uint32_t srcSize,
-        uint32_t *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        uint32_t *cmacPtr,
-        cy_stc_crypto_context_aes_t *cfContext);
+                                             uint32_t srcSize,
+                                             uint32_t *key,
+                                             cy_en_crypto_aes_key_length_t keyLength,
+                                             uint32_t *cmacPtr,
+                                             cy_stc_crypto_context_aes_t *cfContext);
 #endif /* (CPUSS_CRYPTO_AES == 1) && defined(CY_CRYPTO_CFG_CMAC_C) */
 
 #if (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_SHA_C)
@@ -1414,12 +762,12 @@ cy_en_crypto_status_t Cy_Crypto_Sha_Run(uint32_t *message,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Hmac_Run(uint32_t *hmac,
-        uint32_t *message,
-        uint32_t  messageSize,
-        uint32_t *key,
-        uint32_t keyLength,
-        cy_en_crypto_sha_mode_t mode,
-        cy_stc_crypto_context_sha_t *cfContext);
+                                         uint32_t *message,
+                                         uint32_t  messageSize,
+                                         uint32_t *key,
+                                         uint32_t keyLength,
+                                         cy_en_crypto_sha_mode_t mode,
+                                         cy_stc_crypto_context_sha_t *cfContext);
 #endif /* (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_HMAC_C) */
 
 #if (CPUSS_CRYPTO_STR == 1)
@@ -1453,9 +801,9 @@ cy_en_crypto_status_t Cy_Crypto_Hmac_Run(uint32_t *hmac,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Str_MemCpy(void *dst,
-        void const *src,
-        uint16_t size,
-        cy_stc_crypto_context_str_t *cfContext);
+                                           void const *src,
+                                           uint16_t size,
+                                           cy_stc_crypto_context_str_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Str_MemSet
@@ -1485,9 +833,9 @@ cy_en_crypto_status_t Cy_Crypto_Str_MemCpy(void *dst,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Str_MemSet(void *dst,
-        uint8_t data,
-        uint16_t size,
-        cy_stc_crypto_context_str_t *cfContext);
+                                           uint8_t data,
+                                           uint16_t size,
+                                           cy_stc_crypto_context_str_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Str_MemCmp
@@ -1522,10 +870,10 @@ cy_en_crypto_status_t Cy_Crypto_Str_MemSet(void *dst,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Str_MemCmp(void const *src0,
-        void const *src1,
-        uint16_t size,
-        uint32_t *resultPtr,
-        cy_stc_crypto_context_str_t *cfContext);
+                                           void const *src1,
+                                           uint16_t size,
+                                           uint32_t *resultPtr,
+                                           cy_stc_crypto_context_str_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Crypto_Str_MemXor
@@ -1560,10 +908,10 @@ cy_en_crypto_status_t Cy_Crypto_Str_MemCmp(void const *src0,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Str_MemXor(void const *src0,
-        void const *src1,
-        void *dst,
-        uint16_t size,
-        cy_stc_crypto_context_str_t *cfContext);
+                                           void const *src1,
+                                           void *dst,
+                                           uint16_t size,
+                                           cy_stc_crypto_context_str_t *cfContext);
 #endif /* #if (CPUSS_CRYPTO_STR == 1) */
 
 #if (CPUSS_CRYPTO_CRC == 1) && defined(CY_CRYPTO_CFG_CRC_C)
@@ -1682,11 +1030,11 @@ cy_en_crypto_status_t Cy_Crypto_Str_MemXor(void const *src0,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Crc_Init(uint32_t polynomial,
-        uint8_t  dataReverse,
-        uint8_t  dataXor,
-        uint8_t  remReverse,
-        uint32_t remXor,
-        cy_stc_crypto_context_crc_t *cfContext);
+                                         uint8_t  dataReverse,
+                                         uint8_t  dataXor,
+                                         uint8_t  remReverse,
+                                         uint32_t remXor,
+                                         cy_stc_crypto_context_crc_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Crc_Run
@@ -1762,10 +1110,10 @@ cy_en_crypto_status_t Cy_Crypto_Crc_Run(void     *data,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Trng_Generate(uint32_t  GAROPol,
-        uint32_t  FIROPol,
-        uint32_t  max,
-        uint32_t *randomNum,
-        cy_stc_crypto_context_trng_t *cfContext);
+                                              uint32_t  FIROPol,
+                                              uint32_t  max,
+                                              uint32_t *randomNum,
+                                              cy_stc_crypto_context_trng_t *cfContext);
 #endif /* (CPUSS_CRYPTO_TR == 1) && defined(CY_CRYPTO_CFG_TRNG_C) */
 
 #if (CPUSS_CRYPTO_DES == 1) && defined(CY_CRYPTO_CFG_DES_C)
@@ -1841,10 +1189,10 @@ cy_en_crypto_status_t Cy_Crypto_Des_Run(cy_en_crypto_dir_mode_t dirMode,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Tdes_Run(cy_en_crypto_dir_mode_t dirMode,
-        uint32_t *key,
-        uint32_t *dstBlock,
-        uint32_t *srcBlock,
-        cy_stc_crypto_context_des_t *cfContext);
+                                         uint32_t *key,
+                                         uint32_t *dstBlock,
+                                         uint32_t *srcBlock,
+                                         cy_stc_crypto_context_des_t *cfContext);
 #endif /* (CPUSS_CRYPTO_DES == 1) && defined(CY_CRYPTO_CFG_DES_C) */
 
 #if (CPUSS_CRYPTO_VU == 1) && defined(CY_CRYPTO_CFG_RSA_C)
@@ -1866,7 +1214,7 @@ cy_en_crypto_status_t Cy_Crypto_Tdes_Run(cy_en_crypto_dir_mode_t dirMode,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_GetMemBufAddress(uint32_t **membufAddress,
-        cy_stc_crypto_context_str_t *cfContext);
+                                           cy_stc_crypto_context_str_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_GetMemBufSize
@@ -1886,7 +1234,7 @@ cy_en_crypto_status_t Cy_Crypto_GetMemBufAddress(uint32_t **membufAddress,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_GetMemBufSize(uint32_t *membufSize,
-        cy_stc_crypto_context_str_t *cfContext);
+                                           cy_stc_crypto_context_str_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_SetMemBufAddress
@@ -1916,8 +1264,8 @@ cy_en_crypto_status_t Cy_Crypto_GetMemBufSize(uint32_t *membufSize,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_SetMemBufAddress(uint32_t const *newMembufAddress,
-        uint32_t newMembufSize,
-        cy_stc_crypto_context_str_t *cfContext);
+                                           uint32_t newMembufSize,
+                                           cy_stc_crypto_context_str_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Rsa_Proc
@@ -1971,10 +1319,10 @@ cy_en_crypto_status_t Cy_Crypto_SetMemBufAddress(uint32_t const *newMembufAddres
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Rsa_Proc(cy_stc_crypto_rsa_pub_key_t const *pubKey,
-        uint32_t const *message,
-        uint32_t messageSize,
-        uint32_t *processedMessage,
-        cy_stc_crypto_context_rsa_t *cfContext);
+                                         uint32_t const *message,
+                                         uint32_t messageSize,
+                                         uint32_t *processedMessage,
+                                         cy_stc_crypto_context_rsa_t *cfContext);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Rsa_CalcCoefs
@@ -2010,7 +1358,7 @@ cy_en_crypto_status_t Cy_Crypto_Rsa_Proc(cy_stc_crypto_rsa_pub_key_t const *pubK
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Rsa_CalcCoefs(cy_stc_crypto_rsa_pub_key_t const *pubKey,
-        cy_stc_crypto_context_rsa_t *cfContext);
+                                         cy_stc_crypto_context_rsa_t *cfContext);
 
 #if (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_SHA_C) && defined(CY_CRYPTO_CFG_RSA_VERIFY_ENABLED)
 /*******************************************************************************
@@ -2054,11 +1402,11 @@ cy_en_crypto_status_t Cy_Crypto_Rsa_CalcCoefs(cy_stc_crypto_rsa_pub_key_t const 
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Rsa_Verify(cy_en_crypto_rsa_ver_result_t *verResult,
-        cy_en_crypto_sha_mode_t digestType,
-        uint32_t const *digest,
-        uint32_t const *decryptedSignature,
-        uint32_t decryptedSignatureLength,
-        cy_stc_crypto_context_rsa_ver_t *cfContext);
+                                           cy_en_crypto_sha_mode_t digestType,
+                                           uint32_t const *digest,
+                                           uint32_t const *decryptedSignature,
+                                           uint32_t decryptedSignatureLength,
+                                           cy_stc_crypto_context_rsa_ver_t *cfContext);
 #endif /* (CPUSS_CRYPTO_SHA == 1) && defined(CY_CRYPTO_CFG_SHA_C) && defined(CY_CRYPTO_CFG_RSA_VERIFY_ENABLED) */
 #endif /* (CPUSS_CRYPTO_VU == 1) && defined(CY_CRYPTO_CFG_RSA_C) */
 
@@ -2093,11 +1441,11 @@ cy_en_crypto_status_t Cy_Crypto_Rsa_Verify(cy_en_crypto_rsa_ver_result_t *verRes
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_ECDSA_SignHash(const uint8_t *hash,
-        uint32_t hashlen,
-        uint8_t *sig,
-        const cy_stc_crypto_ecc_key *key,
-        const uint8_t *messageKey,
-        cy_stc_crypto_context_ecc_t *cfContext);
+                                        uint32_t hashlen,
+                                        uint8_t *sig,
+                                        const cy_stc_crypto_ecc_key *key,
+                                        const uint8_t *messageKey,
+                                        cy_stc_crypto_context_ecc_t *cfContext);
 #endif /* defined(CY_CRYPTO_CFG_ECDSA_SIGN_C) */
 
 #if defined(CY_CRYPTO_CFG_ECDSA_VERIFY_C)
@@ -2130,43 +1478,15 @@ cy_en_crypto_status_t Cy_Crypto_ECDSA_SignHash(const uint8_t *hash,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_ECDSA_VerifyHash(const uint8_t *sig,
-        const uint8_t *hash,
-        uint32_t hashlen,
-        uint8_t *stat,
-        const cy_stc_crypto_ecc_key *key,
-        cy_stc_crypto_context_ecc_t *cfContext);
+                                        const uint8_t *hash,
+                                        uint32_t hashlen,
+                                        uint8_t *stat,
+                                        const cy_stc_crypto_ecc_key *key,
+                                        cy_stc_crypto_context_ecc_t *cfContext);
 
 #endif /* defined(CY_CRYPTO_CFG_ECDSA_VERIFY_C) */
 #endif /* (CPUSS_CRYPTO_VU == 1) && defined(CY_CRYPTO_CFG_ECDSA_C) */
-
-/*******************************************************************************
-* Function Name: Cy_Crypto_InvertEndianness
-****************************************************************************//**
-*
-* This function reverts byte-array memory block, like:<br>
-* inArr[0] <---> inArr[n]<br>
-* inArr[1] <---> inArr[n-1]<br>
-* inArr[2] <---> inArr[n-2]<br>
-* ........................<br>
-* inArr[n/2] <---> inArr[n/2-1]<br>
-*
-* Odd or even byteSize are acceptable.
-*
-* \param inArrPtr
-* The pointer to the memory whose endianness is to be inverted.
-*
-* \param byteSize
-* The length of the memory array whose endianness is to be inverted (in bytes)
-*
-*******************************************************************************/
-void Cy_Crypto_InvertEndianness(void *inArrPtr, uint32_t byteSize);
-
-/** \cond INTERNAL */
-/* For backward compatibility */
-#define Cy_Crypto_Rsa_InvertEndianness(p, s) Cy_Crypto_InvertEndianness((p), (s))
 /** \endcond */
-
-/** \} group_crypto_cli_functions */
 
 #if defined(__cplusplus)
 }

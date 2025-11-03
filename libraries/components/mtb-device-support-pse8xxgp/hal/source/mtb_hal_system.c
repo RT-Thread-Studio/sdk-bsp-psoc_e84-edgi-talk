@@ -30,9 +30,8 @@
 #include "mtb_hal_system_impl.h"
 #include "cy_syslib.h"
 
-
 #if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
-    #include "cyabs_rtos.h"
+#include "cyabs_rtos.h"
 #endif
 
 #if (MTB_HAL_DRIVER_AVAILABLE_SYSTEM)

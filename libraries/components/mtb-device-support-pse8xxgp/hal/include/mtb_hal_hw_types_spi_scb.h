@@ -29,14 +29,14 @@
 /* Older IP versions don't define SCB_SPI; it is always present */
 #if (defined(CY_IP_MXSCB) || defined(CY_IP_MXS22SCB)) && (!defined(SCB_SPI) || (SCB_SPI))
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_SPI)
-    /** Macro specifying whether the SPI driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_SPI (1u)
+/** Macro specifying whether the SPI driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_SPI (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_SPI)
 
 /** \} group_hal_availability */
@@ -56,18 +56,18 @@
  */
 typedef struct
 {
-    CySCB_Type                         *base;//!< Base address for the SCB
-    const mtb_hal_clock_t              *clock;//!< Clock interface
-    cy_stc_scb_spi_context_t           *context;//!< PDL context
+    CySCB_Type*                         base;//!< Base address for the SCB
+    const mtb_hal_clock_t*              clock;//!< Clock interface
+    cy_stc_scb_spi_context_t*           context;//!< PDL context
     uint16_t volatile                   pending; //!< Flags for pending operations
     bool                                is_target; //!< Configured as target
     uint8_t                             data_bits; //!< Width of data bus
     uint32_t                            irq_cause; //!< User-enabled events
     uint8_t                             write_fill; //!< Placeholder value when reading more than
-    //!< writing
-    void *rx_buffer; //!< Buffer for read operations
+                                                    //!< writing
+    void* rx_buffer; //!< Buffer for read operations
     uint32_t                            rx_buffer_size; //!< Size of read buffer
-    const void *tx_buffer; //!< Buffer for write operations
+    const void* tx_buffer; //!< Buffer for write operations
     uint32_t                            tx_buffer_size; //!< Size of write buffer
     bool                                is_async; //!< Is an async operation in progress
     _mtb_hal_event_callback_data_t      callback_data; //!< User-registered callback
@@ -83,9 +83,9 @@ typedef struct
  */
 typedef struct
 {
-    CySCB_Type                             *base; //!< Base address for the SCB
-    const mtb_hal_clock_t                  *clock; //!< Default clock object
-    const cy_stc_scb_spi_config_t          *config; //!< PDL-level configuration structure
+    CySCB_Type*                             base; //!< Base address for the SCB
+    const mtb_hal_clock_t*                  clock; //!< Default clock object
+    const cy_stc_scb_spi_config_t*          config; //!< PDL-level configuration structure
 } mtb_hal_spi_configurator_t;
 
 #endif // defined(CY_IP_MXSCB) || defined(CY_IP_MXS22SCB)

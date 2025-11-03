@@ -53,8 +53,6 @@
   @param[out]     pDst  points to the output MFCC values
   @param[inout]     pTmp  points to a temporary buffer of complex
 
-  @return        none
-
   @par           Description
                    The number of input samples if the FFT length used
                    when initializing the instance data structure.
@@ -67,88 +65,88 @@
                    The source buffer is modified by this function.
 
  */
-void arm_mfcc_f32(
-    const arm_mfcc_instance_f32 * S,
-    float32_t *pSrc,
-    float32_t *pDst,
-    float32_t *pTmp
-)
+ARM_DSP_ATTRIBUTE void arm_mfcc_f32(
+  const arm_mfcc_instance_f32 * S,
+  float32_t *pSrc,
+  float32_t *pDst,
+  float32_t *pTmp
+  )
 {
-    float32_t maxValue;
-    uint32_t  index;
-    uint32_t i;
-    float32_t result;
-    const float32_t *coefs = S->filterCoefs;
-    arm_matrix_instance_f32 pDctMat;
+  float32_t maxValue;
+  uint32_t  index; 
+  uint32_t i;
+  float32_t result;
+  const float32_t *coefs=S->filterCoefs;
+  arm_matrix_instance_f32 pDctMat;
 
-    /* Normalize */
-    arm_absmax_f32(pSrc, S->fftLen, &maxValue, &index);
+  /* Normalize */
+  arm_absmax_f32(pSrc,S->fftLen,&maxValue,&index);
 
-    if (maxValue != 0.0f)
-    {
-        arm_scale_f32(pSrc, 1.0f / maxValue, pSrc, S->fftLen);
-    }
+  if (maxValue != 0.0f)
+  {
+     arm_scale_f32(pSrc,1.0f/maxValue,pSrc,S->fftLen);
+  }
 
-    /* Multiply by window */
-    arm_mult_f32(pSrc, S->windowCoefs, pSrc, S->fftLen);
+  /* Multiply by window */
+  arm_mult_f32(pSrc,S->windowCoefs,pSrc,S->fftLen);
 
-    /* Compute spectrum magnitude
-    */
+  /* Compute spectrum magnitude 
+  */
 #if defined(ARM_MFCC_CFFT_BASED)
-    /* some HW accelerator for CMSIS-DSP used in some boards
-       are only providing acceleration for CFFT.
-       With ARM_MFCC_CFFT_BASED enabled, CFFT is used and the MFCC
-       will be accelerated on those boards.
-
-       The default is to use RFFT
-    */
-    /* Convert from real to complex */
-    for (i = 0; i < S->fftLen ; i++)
-    {
-        pTmp[2 * i] = pSrc[i];
-        pTmp[2 * i + 1] = 0.0f;
-    }
-    arm_cfft_f32(&(S->cfft), pTmp, 0, 1);
+  /* some HW accelerator for CMSIS-DSP used in some boards
+     are only providing acceleration for CFFT.
+     With ARM_MFCC_CFFT_BASED enabled, CFFT is used and the MFCC
+     will be accelerated on those boards.
+ 
+     The default is to use RFFT
+  */
+  /* Convert from real to complex */
+  for(i=0; i < S->fftLen ; i++)
+  {
+    pTmp[2*i] = pSrc[i];
+    pTmp[2*i+1] = 0.0f;
+  }
+  arm_cfft_f32(&(S->cfft),pTmp,0,1);
 #else
-    /* Default RFFT based implementation */
-    arm_rfft_fast_f32(&(S->rfft), pSrc, pTmp, 0);
-    /* Unpack real values */
-    pTmp[S->fftLen] = pTmp[1];
-    pTmp[S->fftLen + 1] = 0.0f;
-    pTmp[1] = 0.0f;
+  /* Default RFFT based implementation */
+  arm_rfft_fast_f32(&(S->rfft),pSrc,pTmp,0);
+  /* Unpack real values */
+  pTmp[S->fftLen]=pTmp[1];
+  pTmp[S->fftLen+1]=0.0f;
+  pTmp[1]=0.0f;
 #endif
-    arm_cmplx_mag_f32(pTmp, pSrc, S->fftLen);
-    if (maxValue != 0.0f)
-    {
-        arm_scale_f32(pSrc, maxValue, pSrc, S->fftLen);
-    }
+  arm_cmplx_mag_f32(pTmp,pSrc,S->fftLen);
+  if (maxValue != 0.0f)
+  {
+     arm_scale_f32(pSrc,maxValue,pSrc,S->fftLen);
+  }
 
-    /* Apply MEL filters */
-    for (i = 0; i < S->nbMelFilters; i++)
-    {
-        arm_dot_prod_f32(pSrc + S->filterPos[i],
-                         coefs,
-                         S->filterLengths[i],
-                         &result);
+  /* Apply MEL filters */
+  for(i=0; i<S->nbMelFilters; i++)
+  {
+      arm_dot_prod_f32(pSrc+S->filterPos[i],
+        coefs,
+        S->filterLengths[i],
+        &result);
 
-        coefs += S->filterLengths[i];
+      coefs += S->filterLengths[i];
 
-        pTmp[i] = result;
+      pTmp[i] = result;
 
-    }
+  }
 
-    /* Compute the log */
-    arm_offset_f32(pTmp, 1.0e-6f, pTmp, S->nbMelFilters);
-    arm_vlog_f32(pTmp, pTmp, S->nbMelFilters);
+  /* Compute the log */
+  arm_offset_f32(pTmp,1.0e-6f,pTmp,S->nbMelFilters);
+  arm_vlog_f32(pTmp,pTmp,S->nbMelFilters);
 
-    /* Multiply with the DCT matrix */
+  /* Multiply with the DCT matrix */
 
-    pDctMat.numRows = S->nbDctOutputs;
-    pDctMat.numCols = S->nbMelFilters;
-    pDctMat.pData = (float32_t*)S->dctCoefs;
+  pDctMat.numRows=S->nbDctOutputs;
+  pDctMat.numCols=S->nbMelFilters;
+  pDctMat.pData=(float32_t*)S->dctCoefs;
 
-    arm_mat_vec_mult_f32(&pDctMat, pTmp, pDst);
-
+  arm_mat_vec_mult_f32(&pDctMat, pTmp, pDst);
+      
 
 }
 

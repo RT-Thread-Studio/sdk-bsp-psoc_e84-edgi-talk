@@ -1,25 +1,25 @@
-/**********************************************************************
-* Copyright (C) 2011-2015 Cadence Design Systems, Inc.- http://www.cadence.com
-* SPDX-License-Identifier: Apache-2.0
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-***********************************************************************
-* cps_v2.h
-* Interface for Cadence Platform Services (CPS), version 2
-*
-* This is the "hardware abstraction layer" upon which all drivers are built.
-* It must be implemented for each platform.
-***********************************************************************/
+ /**********************************************************************
+ * Copyright (C) 2011-2015 Cadence Design Systems, Inc.- http://www.cadence.com
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ ***********************************************************************
+ * cps_v2.h
+ * Interface for Cadence Platform Services (CPS), version 2
+ * 
+ * This is the "hardware abstraction layer" upon which all drivers are built.
+ * It must be implemented for each platform.
+ ***********************************************************************/
 #ifndef _CPS_H_
 #define _CPS_H_
 
@@ -30,7 +30,7 @@
  ***************************************************************************/
 
 /** A lock handle */
-typedef void *CPS_LockHandle;
+typedef void* CPS_LockHandle;
 
 /****************************************************************************
  * Prototypes

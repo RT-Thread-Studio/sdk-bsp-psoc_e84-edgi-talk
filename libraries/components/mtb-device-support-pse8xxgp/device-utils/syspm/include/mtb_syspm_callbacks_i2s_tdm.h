@@ -29,11 +29,11 @@
 #include "mtb_syspm_callbacks_hw_resources.h"
 
 #if defined(MTB_SYSPM_CALLBACKS_AVAILABLE_I2S)
-    #include "mtb_syspm_callbacks_i2s.h"
+#include "mtb_syspm_callbacks_i2s.h"
 #endif
 
 #if defined(MTB_SYSPM_CALLBACKS_AVAILABLE_TDM)
-    #include "mtb_syspm_callbacks_tdm.h"
+#include "mtb_syspm_callbacks_tdm.h"
 #endif
 
 #if defined(__cplusplus)
@@ -44,7 +44,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
                              'Rule requires const attributes for inputs but signature for following API needs to match requested one in PDL');
 
 /**
- * \addtogroup group_i2s_tdm I2S and TDM Deep Sleep Callback
+ * \addtogroup mtb_syspm_group_i2s_tdm I2S and TDM Deep Sleep Callback
  * \{
  * Implementation of the I2S and TDM Deep Sleep callback
  */
@@ -57,12 +57,12 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.13', 1, \
  * @return Returns CY_SYSPM_SUCCESS if successful, an error code otherwise
  */
 cy_en_syspm_status_t mtb_syspm_i2s_tdm_deepsleep_callback(
-    cy_stc_syspm_callback_params_t *params,
+    cy_stc_syspm_callback_params_t* params,
     cy_en_syspm_callback_mode_t mode);
 
 #if defined(__cplusplus)
 }
 #endif
 
-/** \} group_i2s_dma */
+/** \} mtb_syspm_group_i2s_dma */
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.13');

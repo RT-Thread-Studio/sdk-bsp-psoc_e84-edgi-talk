@@ -66,13 +66,13 @@ __STATIC_INLINE mtb_hal_reset_reason_t _mtb_hal_system_convert_reset_reason(uint
     {
         reason |= MTB_HAL_SYSTEM_RESET_WDT;
     }
-#if defined(CY_IP_S8SRSSLT)
+    #if defined(CY_IP_S8SRSSLT)
     if (CY_SYSLIB_PROT_FAULT & pdl_reason)
     {
         reason |= MTB_HAL_SYSTEM_RESET_PROTECTION;
     }
-#endif
-#if defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS) || defined(CY_IP_MXS22SRSS)
+    #endif
+    #if defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS) || defined(CY_IP_MXS22SRSS)
     if (CY_SYSLIB_RESET_ACT_FAULT & pdl_reason)
     {
         reason |= MTB_HAL_SYSTEM_RESET_ACTIVE_FAULT;
@@ -94,30 +94,38 @@ __STATIC_INLINE mtb_hal_reset_reason_t _mtb_hal_system_convert_reset_reason(uint
         reason |= MTB_HAL_SYSTEM_RESET_SYS_CLK_ERR;
     }
     if ((CY_SYSLIB_RESET_SWWDT0 | CY_SYSLIB_RESET_SWWDT1 | CY_SYSLIB_RESET_SWWDT2 |
-            CY_SYSLIB_RESET_SWWDT3) & pdl_reason)
+         CY_SYSLIB_RESET_SWWDT3) & pdl_reason)
     {
         reason |= MTB_HAL_SYSTEM_RESET_WDT;
     }
-#endif // if defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS) || defined(CY_IP_MXS22SRSS)
-#if (SRSS_WCOCSV_PRESENT != 0U)
+    #endif // if defined(CY_IP_MXS40SRSS) || defined(CY_IP_MXS40SSRSS) || defined(CY_IP_MXS22SRSS)
+    #if defined(CY_SYSLIB_RESET_SOFT0) && defined(CY_SYSLIB_RESET_SOFT1) \
+    && defined(CY_SYSLIB_RESET_SOFT2)
+    if ((CY_SYSLIB_RESET_SOFT0 | CY_SYSLIB_RESET_SOFT1 | CY_SYSLIB_RESET_SOFT2) & pdl_reason)
+    {
+        reason |= MTB_HAL_SYSTEM_RESET_SOFT;
+    }
+    #endif // if defined(CY_SYSLIB_RESET_SOFT0) && defined(CY_SYSLIB_RESET_SOFT1)
+    //                                   && defined(CY_SYSLIB_RESET_SOFT2)
+    #if (SRSS_WCOCSV_PRESENT != 0U)
     if (CY_SYSLIB_RESET_CSV_WCO_LOSS & pdl_reason)
     {
         reason |= MTB_HAL_SYSTEM_RESET_WCO_ERR;
     }
-#endif
-#if (SRSS_MASK_HFCSV != 0U)
+    #endif
+    #if (SRSS_MASK_HFCSV != 0U)
     if ((CY_SYSLIB_RESET_HFCLK_LOSS | CY_SYSLIB_RESET_HFCLK_ERR) & pdl_reason)
     {
         reason |= MTB_HAL_SYSTEM_RESET_SYS_CLK_ERR;
     }
-#endif
+    #endif
 
-#if defined(CY_IP_MXS40SSRSS)
+    #if defined(CY_IP_MXS40SSRSS)
     if ((reason == MTB_HAL_SYSTEM_RESET_NONE) && Cy_SysLib_IsDSRAMWarmBootEntry())
     {
         reason |= MTB_HAL_SYSTEM_RESET_WARMBOOT;
     }
-#endif
+    #endif
 
     return (mtb_hal_reset_reason_t)reason;
 }

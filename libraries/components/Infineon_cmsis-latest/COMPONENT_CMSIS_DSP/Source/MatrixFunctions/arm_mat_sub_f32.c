@@ -37,7 +37,7 @@
 
   Subtract two matrices.
   @par Subraction of two 3 x 3 matrices
-
+  
   \f[
   \begin{pmatrix}
    a_{1,1} & a_{1,2} & a_{1,3} \\
@@ -77,10 +77,10 @@
                    - \ref ARM_MATH_SIZE_MISMATCH : Matrix size check failed
  */
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
-arm_status arm_mat_sub_f32(
-    const arm_matrix_instance_f32 * pSrcA,
-    const arm_matrix_instance_f32 * pSrcB,
-    arm_matrix_instance_f32 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_sub_f32(
+  const arm_matrix_instance_f32 * pSrcA,
+  const arm_matrix_instance_f32 * pSrcB,
+  arm_matrix_instance_f32 * pDst)
 {
     arm_status status;                             /* status of matrix subtraction */
     uint32_t  numSamples;       /* total number of elements in the matrix  */
@@ -97,217 +97,217 @@ arm_status arm_mat_sub_f32(
     pSrcBVec = (float32_t const *) pDataB;
 
 #ifdef ARM_MATH_MATRIX_CHECK
-    /* Check for matrix mismatch condition */
-    if ((pSrcA->numRows != pSrcB->numRows) ||
-            (pSrcA->numCols != pSrcB->numCols) ||
-            (pSrcA->numRows != pDst->numRows) || (pSrcA->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrcA->numRows != pSrcB->numRows) ||
+     (pSrcA->numCols != pSrcB->numCols) ||
+     (pSrcA->numRows != pDst->numRows) || (pSrcA->numCols != pDst->numCols))
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 #endif /*    #ifdef ARM_MATH_MATRIX_CHECK    */
+  {
+    /*
+     * Total number of samples in the input matrix
+     */
+    numSamples = (uint32_t) pSrcA->numRows * pSrcA->numCols;
+    blkCnt = numSamples >> 2;
+    while (blkCnt > 0U)
     {
+        /* C(m,n) = A(m,n) + B(m,n) */
+        /* sub and then store the results in the destination buffer. */
+        vecA = vld1q(pSrcAVec); 
+        pSrcAVec += 4;
+        vecB = vld1q(pSrcBVec); 
+        pSrcBVec += 4;
+        vecDst = vsubq(vecA, vecB);
+        vst1q(pDataDst, vecDst);  
+        pDataDst += 4;
         /*
-         * Total number of samples in the input matrix
+         * Decrement the blockSize loop counter
          */
-        numSamples = (uint32_t) pSrcA->numRows * pSrcA->numCols;
-        blkCnt = numSamples >> 2;
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) + B(m,n) */
-            /* sub and then store the results in the destination buffer. */
-            vecA = vld1q(pSrcAVec);
-            pSrcAVec += 4;
-            vecB = vld1q(pSrcBVec);
-            pSrcBVec += 4;
-            vecDst = vsubq(vecA, vecB);
-            vst1q(pDataDst, vecDst);
-            pDataDst += 4;
-            /*
-             * Decrement the blockSize loop counter
-             */
-            blkCnt--;
-        }
-        /*
-         * tail
-         * (will be merged thru tail predication)
-         */
-        blkCnt = numSamples & 3;
-        if (blkCnt > 0U)
-        {
-            mve_pred16_t p0 = vctp32q(blkCnt);
-            vecA = vld1q(pSrcAVec);
-            vecB = vld1q(pSrcBVec);
-            vecDst = vsubq_m(vecDst, vecA, vecB, p0);
-            vstrwq_p(pDataDst, vecDst, p0);
-        }
-        status = ARM_MATH_SUCCESS;
+        blkCnt--;
     }
+    /*
+     * tail
+     * (will be merged thru tail predication)
+     */
+    blkCnt = numSamples & 3;
+    if (blkCnt > 0U)
+    {
+        mve_pred16_t p0 = vctp32q(blkCnt);
+        vecA = vld1q(pSrcAVec); 
+        vecB = vld1q(pSrcBVec); 
+        vecDst = vsubq_m(vecDst, vecA, vecB, p0);
+        vstrwq_p(pDataDst, vecDst, p0);
+    }
+    status = ARM_MATH_SUCCESS;
+  }
 
-    /* Return to application */
-    return (status);
+  /* Return to application */
+  return (status);
 }
 
 #else
 #if defined(ARM_MATH_NEON)
-arm_status arm_mat_sub_f32(
-    const arm_matrix_instance_f32 * pSrcA,
-    const arm_matrix_instance_f32 * pSrcB,
-    arm_matrix_instance_f32 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_sub_f32(
+  const arm_matrix_instance_f32 * pSrcA,
+  const arm_matrix_instance_f32 * pSrcB,
+  arm_matrix_instance_f32 * pDst)
 {
-    float32_t *pIn1 = pSrcA->pData;                /* input data matrix pointer A */
-    float32_t *pIn2 = pSrcB->pData;                /* input data matrix pointer B */
-    float32_t *pOut = pDst->pData;                 /* output data matrix pointer  */
+  float32_t *pIn1 = pSrcA->pData;                /* input data matrix pointer A */
+  float32_t *pIn2 = pSrcB->pData;                /* input data matrix pointer B */
+  float32_t *pOut = pDst->pData;                 /* output data matrix pointer  */
 
 
-    uint32_t numSamples;                           /* total number of elements in the matrix  */
-    uint32_t blkCnt;                               /* loop counters */
-    arm_status status;                             /* status of matrix subtraction */
+  uint32_t numSamples;                           /* total number of elements in the matrix  */
+  uint32_t blkCnt;                               /* loop counters */
+  arm_status status;                             /* status of matrix subtraction */
 
 #ifdef ARM_MATH_MATRIX_CHECK
-    /* Check for matrix mismatch condition */
-    if ((pSrcA->numRows != pSrcB->numRows) ||
-            (pSrcA->numCols != pSrcB->numCols) ||
-            (pSrcA->numRows != pDst->numRows) || (pSrcA->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrcA->numRows != pSrcB->numRows) ||
+     (pSrcA->numCols != pSrcB->numCols) ||
+     (pSrcA->numRows != pDst->numRows) || (pSrcA->numCols != pDst->numCols))
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 #endif /*    #ifdef ARM_MATH_MATRIX_CHECK    */
+  {
+    float32x4_t vec1;
+    float32x4_t vec2;
+    float32x4_t res;
+
+    /* Total number of samples in the input matrix */
+    numSamples = (uint32_t) pSrcA->numRows * pSrcA->numCols;
+
+    blkCnt = numSamples >> 2U;
+
+    /* Compute 4 outputs at a time.
+     ** a second loop below computes the remaining 1 to 3 samples. */
+    while (blkCnt > 0U)
     {
-        float32x4_t vec1;
-        float32x4_t vec2;
-        float32x4_t res;
+      /* C(m,n) = A(m,n) - B(m,n) */
+      /* Subtract and then store the results in the destination buffer. */
+      /* Read values from source A */
+      vec1 = vld1q_f32(pIn1);
+      vec2 = vld1q_f32(pIn2);
+      res = vsubq_f32(vec1, vec2);
+      vst1q_f32(pOut, res);
 
-        /* Total number of samples in the input matrix */
-        numSamples = (uint32_t) pSrcA->numRows * pSrcA->numCols;
+      /* Update pointers to process next samples */
+      pIn1 += 4U;
+      pIn2 += 4U;
+      pOut += 4U;
 
-        blkCnt = numSamples >> 2U;
-
-        /* Compute 4 outputs at a time.
-         ** a second loop below computes the remaining 1 to 3 samples. */
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) - B(m,n) */
-            /* Subtract and then store the results in the destination buffer. */
-            /* Read values from source A */
-            vec1 = vld1q_f32(pIn1);
-            vec2 = vld1q_f32(pIn2);
-            res = vsubq_f32(vec1, vec2);
-            vst1q_f32(pOut, res);
-
-            /* Update pointers to process next samples */
-            pIn1 += 4U;
-            pIn2 += 4U;
-            pOut += 4U;
-
-            /* Decrement the loop counter */
-            blkCnt--;
-        }
-
-        /* If the numSamples is not a multiple of 4, compute any remaining output samples here.
-         ** No loop unrolling is used. */
-        blkCnt = numSamples % 0x4U;
-
-
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) - B(m,n) */
-            /* Subtract and then store the results in the destination buffer. */
-            *pOut++ = (*pIn1++) - (*pIn2++);
-
-            /* Decrement the loop counter */
-            blkCnt--;
-        }
-
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+      /* Decrement the loop counter */
+      blkCnt--;
     }
 
-    /* Return to application */
-    return (status);
+    /* If the numSamples is not a multiple of 4, compute any remaining output samples here.
+     ** No loop unrolling is used. */
+    blkCnt = numSamples % 0x4U;
+
+
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) - B(m,n) */
+      /* Subtract and then store the results in the destination buffer. */
+      *pOut++ = (*pIn1++) - (*pIn2++);
+
+      /* Decrement the loop counter */
+      blkCnt--;
+    }
+
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 #else
-arm_status arm_mat_sub_f32(
-    const arm_matrix_instance_f32 * pSrcA,
-    const arm_matrix_instance_f32 * pSrcB,
-    arm_matrix_instance_f32 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_sub_f32(
+  const arm_matrix_instance_f32 * pSrcA,
+  const arm_matrix_instance_f32 * pSrcB,
+        arm_matrix_instance_f32 * pDst)
 {
-    float32_t *pInA = pSrcA->pData;                /* input data matrix pointer A */
-    float32_t *pInB = pSrcB->pData;                /* input data matrix pointer B */
-    float32_t *pOut = pDst->pData;                 /* output data matrix pointer */
+  float32_t *pInA = pSrcA->pData;                /* input data matrix pointer A */
+  float32_t *pInB = pSrcB->pData;                /* input data matrix pointer B */
+  float32_t *pOut = pDst->pData;                 /* output data matrix pointer */
 
-    uint32_t numSamples;                           /* total number of elements in the matrix */
-    uint32_t blkCnt;                               /* loop counters */
-    arm_status status;                             /* status of matrix subtraction */
+  uint32_t numSamples;                           /* total number of elements in the matrix */
+  uint32_t blkCnt;                               /* loop counters */
+  arm_status status;                             /* status of matrix subtraction */
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrcA->numRows != pSrcB->numRows) ||
-            (pSrcA->numCols != pSrcB->numCols) ||
-            (pSrcA->numRows != pDst->numRows)  ||
-            (pSrcA->numCols != pDst->numCols))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrcA->numRows != pSrcB->numRows) ||
+      (pSrcA->numCols != pSrcB->numCols) ||
+      (pSrcA->numRows != pDst->numRows)  ||
+      (pSrcA->numCols != pDst->numCols)    )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
 
-    {
-        /* Total number of samples in input matrix */
-        numSamples = (uint32_t) pSrcA->numRows * pSrcA->numCols;
+  {
+    /* Total number of samples in input matrix */
+    numSamples = (uint32_t) pSrcA->numRows * pSrcA->numCols;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-        /* Loop unrolling: Compute 4 outputs at a time */
-        blkCnt = numSamples >> 2U;
+    /* Loop unrolling: Compute 4 outputs at a time */
+    blkCnt = numSamples >> 2U;
 
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) - B(m,n) */
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) - B(m,n) */
 
-            /* Subtract and store result in destination buffer. */
-            *pOut++ = (*pInA++) - (*pInB++);
-            *pOut++ = (*pInA++) - (*pInB++);
-            *pOut++ = (*pInA++) - (*pInB++);
-            *pOut++ = (*pInA++) - (*pInB++);
+      /* Subtract and store result in destination buffer. */
+      *pOut++ = (*pInA++) - (*pInB++);
+      *pOut++ = (*pInA++) - (*pInB++);
+      *pOut++ = (*pInA++) - (*pInB++);
+      *pOut++ = (*pInA++) - (*pInB++);
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
+      /* Decrement loop counter */
+      blkCnt--;
+    }
 
-        /* Loop unrolling: Compute remaining outputs */
-        blkCnt = numSamples % 0x4U;
+    /* Loop unrolling: Compute remaining outputs */
+    blkCnt = numSamples % 0x4U;
 
 #else
 
-        /* Initialize blkCnt with number of samples */
-        blkCnt = numSamples;
+    /* Initialize blkCnt with number of samples */
+    blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-        while (blkCnt > 0U)
-        {
-            /* C(m,n) = A(m,n) - B(m,n) */
+    while (blkCnt > 0U)
+    {
+      /* C(m,n) = A(m,n) - B(m,n) */
 
-            /* Subtract and store result in destination buffer. */
-            *pOut++ = (*pInA++) - (*pInB++);
+      /* Subtract and store result in destination buffer. */
+      *pOut++ = (*pInA++) - (*pInB++);
 
-            /* Decrement loop counter */
-            blkCnt--;
-        }
-
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+      /* Decrement loop counter */
+      blkCnt--;
     }
 
-    /* Return to application */
-    return (status);
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 #endif /* #if defined(ARM_MATH_NEON) */
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

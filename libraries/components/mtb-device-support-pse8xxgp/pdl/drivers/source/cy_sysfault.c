@@ -30,7 +30,7 @@
 
 cy_en_SysFault_status_t  Cy_SysFault_Init(FAULT_STRUCT_Type *base, cy_stc_SysFault_t *config)
 {
-    if (config != NULL)
+    if(config != NULL)
     {
         FAULT_CTL(base) = _VAL2FLD(FAULT_STRUCT_CTL_TR_EN, config->TriggerEnable) |
                           _VAL2FLD(FAULT_STRUCT_CTL_OUT_EN, config->OutputEnable) |
@@ -52,14 +52,14 @@ void Cy_SysFault_ClearStatus(FAULT_STRUCT_Type *base)
 
 cy_en_SysFault_source_t Cy_SysFault_GetErrorSource(FAULT_STRUCT_Type *base)
 {
-    if (_FLD2VAL(FAULT_STRUCT_STATUS_VALID, FAULT_STATUS(base)) == 1UL)
+    if(_FLD2VAL(FAULT_STRUCT_STATUS_VALID, FAULT_STATUS(base)) == 1UL)
     {
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_SysFault_source_t enum.');
-        return ((cy_en_SysFault_source_t)(_FLD2VAL(FAULT_STRUCT_STATUS_IDX, FAULT_STATUS(base))));
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_SysFault_source_t enum.');
+        return((cy_en_SysFault_source_t)(_FLD2VAL(FAULT_STRUCT_STATUS_IDX, FAULT_STATUS(base))));
     }
     else
     {
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_SysFault_source_t enum.');
+        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_SysFault_source_t enum.');
         return (cy_en_SysFault_source_t)CY_SYSFAULT_NO_FAULT;
     }
 
@@ -79,31 +79,31 @@ uint32_t Cy_SysFault_GetPendingFault(FAULT_STRUCT_Type *base, cy_en_SysFault_Set
     CY_ASSERT_L3(CY_SYSFAULT_IS_FAULT_SET_VALID(pendingFault));
     uint32_t retVal = 0;
 
-    switch (pendingFault)
+    switch(pendingFault)
     {
-    case CY_SYSFAULT_SET0:
-    {
-        retVal = _FLD2VAL(FAULT_STRUCT_PENDING0_SOURCE, FAULT_PENDING0(base));
-    }
-    break;
+        case CY_SYSFAULT_SET0:
+        {
+            retVal = _FLD2VAL(FAULT_STRUCT_PENDING0_SOURCE, FAULT_PENDING0(base));
+        }
+        break;
 
-    case CY_SYSFAULT_SET1:
-    {
-        retVal = _FLD2VAL(FAULT_STRUCT_PENDING1_SOURCE, FAULT_PENDING1(base));
-    }
-    break;
+        case CY_SYSFAULT_SET1:
+        {
+            retVal = _FLD2VAL(FAULT_STRUCT_PENDING1_SOURCE, FAULT_PENDING1(base));
+        }
+        break;
 
-    case CY_SYSFAULT_SET2:
-    {
-        retVal = _FLD2VAL(FAULT_STRUCT_PENDING1_SOURCE, FAULT_PENDING2(base));
-    }
-    break;
+        case CY_SYSFAULT_SET2:
+        {
+            retVal = _FLD2VAL(FAULT_STRUCT_PENDING1_SOURCE, FAULT_PENDING2(base));
+        }
+        break;
 
-    default:
-    {
-        CY_ASSERT_L3(0);
-    }
-    break;
+        default:
+        {
+            CY_ASSERT_L3(0);
+        }
+        break;
     }
 
     return retVal;
@@ -112,32 +112,32 @@ uint32_t Cy_SysFault_GetPendingFault(FAULT_STRUCT_Type *base, cy_en_SysFault_Set
 void Cy_SysFault_SetMaskByIdx(FAULT_STRUCT_Type *base, cy_en_SysFault_source_t idx)
 {
     CY_ASSERT_L3(idx < CY_SYSFAULT_NO_FAULT);
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_SysFault_Set_t enum.');
-    switch (((cy_en_SysFault_Set_t)((uint32_t)idx / 32UL)))
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_SysFault_Set_t enum.');
+    switch(((cy_en_SysFault_Set_t)((uint32_t)idx / 32UL)))
     {
-    case CY_SYSFAULT_SET0:
-    {
-        FAULT_MASK0(base) |= _VAL2FLD(FAULT_STRUCT_MASK0_SOURCE, (1UL << (uint32_t)idx));
-    }
-    break;
+        case CY_SYSFAULT_SET0:
+        {
+            FAULT_MASK0(base) |= _VAL2FLD(FAULT_STRUCT_MASK0_SOURCE, (1UL << (uint32_t)idx));
+        }
+        break;
 
-    case CY_SYSFAULT_SET1:
-    {
-        FAULT_MASK1(base) |= _VAL2FLD(FAULT_STRUCT_MASK1_SOURCE, (1UL << ((uint32_t)idx - 32UL)));
-    }
-    break;
+        case CY_SYSFAULT_SET1:
+        {
+            FAULT_MASK1(base) |= _VAL2FLD(FAULT_STRUCT_MASK1_SOURCE, (1UL << ((uint32_t)idx - 32UL)));
+        }
+        break;
 
-    case CY_SYSFAULT_SET2:
-    {
-        FAULT_MASK2(base) |= _VAL2FLD(FAULT_STRUCT_MASK2_SOURCE, (1UL << ((uint32_t)idx - 64UL)));
-    }
-    break;
+        case CY_SYSFAULT_SET2:
+        {
+            FAULT_MASK2(base) |= _VAL2FLD(FAULT_STRUCT_MASK2_SOURCE, (1UL << ((uint32_t)idx - 64UL)));
+        }
+        break;
 
-    default:
-    {
-        CY_ASSERT_L3(0);
-    }
-    break;
+        default:
+        {
+            CY_ASSERT_L3(0);
+        }
+        break;
     }
 }
 
@@ -145,32 +145,32 @@ void Cy_SysFault_SetMaskByIdx(FAULT_STRUCT_Type *base, cy_en_SysFault_source_t i
 void  Cy_SysFault_ClearMaskByIdx(FAULT_STRUCT_Type *base, cy_en_SysFault_source_t idx)
 {
     CY_ASSERT_L3(idx < CY_SYSFAULT_NO_FAULT);
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_SysFault_Set_t enum.');
-    switch (((cy_en_SysFault_Set_t)((uint32_t)idx / 32UL)))
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_SysFault_Set_t enum.');
+    switch(((cy_en_SysFault_Set_t)((uint32_t)idx / 32UL)))
     {
-    case CY_SYSFAULT_SET0:
-    {
-        FAULT_MASK0(base) &= ~(1UL << (uint32_t)idx);
-    }
-    break;
+        case CY_SYSFAULT_SET0:
+        {
+            FAULT_MASK0(base) &= ~(1UL << (uint32_t)idx);
+        }
+        break;
 
-    case CY_SYSFAULT_SET1:
-    {
-        FAULT_MASK1(base) &= ~(1UL << ((uint32_t)idx - 32UL));
-    }
-    break;
+        case CY_SYSFAULT_SET1:
+        {
+            FAULT_MASK1(base) &= ~(1UL << ((uint32_t)idx - 32UL));
+        }
+        break;
 
-    case CY_SYSFAULT_SET2:
-    {
-        FAULT_MASK2(base) &= ~(1UL << ((uint32_t)idx - 64UL));
-    }
-    break;
+        case CY_SYSFAULT_SET2:
+        {
+            FAULT_MASK2(base) &= ~(1UL << ((uint32_t)idx - 64UL));
+        }
+        break;
 
-    default:
-    {
-        CY_ASSERT_L3(0);
-    }
-    break;
+        default:
+        {
+            CY_ASSERT_L3(0);
+        }
+        break;
     }
 }
 
@@ -183,7 +183,7 @@ uint32_t Cy_SysFault_GetInterruptStatus(FAULT_STRUCT_Type *base)
 
 void Cy_SysFault_ClearInterrupt(FAULT_STRUCT_Type *base)
 {
-    FAULT_INTR(base) = 1UL;
+     FAULT_INTR(base) = 1UL;
 }
 
 
@@ -205,13 +205,13 @@ void Cy_SysFault_ClearInterruptMask(FAULT_STRUCT_Type *base)
 
 uint32_t Cy_SysFault_GetInterruptMask(FAULT_STRUCT_Type *base)
 {
-    return (FAULT_INTR_MASK(base));
+    return(FAULT_INTR_MASK(base));
 }
 
 
 uint32_t Cy_SysFault_GetInterruptStatusMasked(FAULT_STRUCT_Type *base)
 {
-    return (FAULT_INTR_MASKED(base));
+    return(FAULT_INTR_MASKED(base));
 }
 
 #endif /* CY_IP_M7CPUSS */

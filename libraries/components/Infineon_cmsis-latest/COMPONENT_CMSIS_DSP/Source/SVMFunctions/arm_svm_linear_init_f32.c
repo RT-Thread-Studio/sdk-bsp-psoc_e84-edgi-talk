@@ -64,25 +64,24 @@
  * @param[in]    dualCoefficients       Array of dual coefficients
  * @param[in]    supportVectors         Array of support vectors
  * @param[in]    classes                Array of 2 classes ID
- * @return none.
  *
  */
 
 
-void arm_svm_linear_init_f32(arm_svm_linear_instance_f32 *S,
-                             uint32_t nbOfSupportVectors,
-                             uint32_t vectorDimension,
-                             float32_t intercept,
-                             const float32_t *dualCoefficients,
-                             const float32_t *supportVectors,
-                             const int32_t *classes)
+ARM_DSP_ATTRIBUTE void arm_svm_linear_init_f32(arm_svm_linear_instance_f32 *S, 
+  uint32_t nbOfSupportVectors,
+  uint32_t vectorDimension,
+  float32_t intercept,
+  const float32_t *dualCoefficients,
+  const float32_t *supportVectors,
+  const int32_t *classes)
 {
-    S->nbOfSupportVectors = nbOfSupportVectors;
-    S->vectorDimension = vectorDimension;
-    S->intercept = intercept;
-    S->dualCoefficients = dualCoefficients;
-    S->supportVectors = supportVectors;
-    S->classes = classes;
+   S->nbOfSupportVectors = nbOfSupportVectors;
+   S->vectorDimension = vectorDimension;
+   S->intercept = intercept;
+   S->dualCoefficients = dualCoefficients;
+   S->supportVectors = supportVectors;
+   S->classes = classes;
 }
 
 

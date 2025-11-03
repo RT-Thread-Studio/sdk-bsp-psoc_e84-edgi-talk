@@ -42,7 +42,6 @@
   @param[in]     pSrc       points to the input vector
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Conditions for optimum performance
                    Input and output buffers should be aligned by 32-bit
@@ -55,7 +54,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_abs_q7(
+ARM_DSP_ATTRIBUTE void arm_abs_q7(
     const q7_t * pSrc,
     q7_t * pDst,
     uint32_t blockSize)
@@ -96,81 +95,81 @@ void arm_abs_q7(
 }
 
 #else
-void arm_abs_q7(
-    const q7_t * pSrc,
-    q7_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_abs_q7(
+  const q7_t * pSrc,
+        q7_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q7_t in;                                       /* Temporary input variable */
+        uint32_t blkCnt;                               /* Loop counter */
+        q7_t in;                                       /* Temporary input variable */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = |A| */
+  while (blkCnt > 0U)
+  {
+    /* C = |A| */
 
-        /* Calculate absolute of input (if -1 then saturated to 0x7f) and store result in destination buffer. */
-        in = *pSrc++;
+    /* Calculate absolute of input (if -1 then saturated to 0x7f) and store result in destination buffer. */
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = (in > 0) ? in : (q7_t)__QSUB8(0, in);
+    *pDst++ = (in > 0) ? in : (q7_t)__QSUB8(0, in);
 #else
-        *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
+    *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
 #endif
 
-        in = *pSrc++;
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = (in > 0) ? in : (q7_t)__QSUB8(0, in);
+    *pDst++ = (in > 0) ? in : (q7_t)__QSUB8(0, in);
 #else
-        *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
+    *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
 #endif
 
-        in = *pSrc++;
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = (in > 0) ? in : (q7_t)__QSUB8(0, in);
+    *pDst++ = (in > 0) ? in : (q7_t)__QSUB8(0, in);
 #else
-        *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
+    *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
 #endif
 
-        in = *pSrc++;
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = (in > 0) ? in : (q7_t)__QSUB8(0, in);
+    *pDst++ = (in > 0) ? in : (q7_t)__QSUB8(0, in);
 #else
-        *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
+    *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = |A| */
+  while (blkCnt > 0U)
+  {
+    /* C = |A| */
 
-        /* Calculate absolute of input (if -1 then saturated to 0x7f) and store result in destination buffer. */
-        in = *pSrc++;
+    /* Calculate absolute of input (if -1 then saturated to 0x7f) and store result in destination buffer. */
+    in = *pSrc++;
 #if defined (ARM_MATH_DSP)
-        *pDst++ = (in > 0) ? in : (q7_t) __QSUB8(0, in);
+    *pDst++ = (in > 0) ? in : (q7_t) __QSUB8(0, in);
 #else
-        *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
+    *pDst++ = (in > 0) ? in : ((in == (q7_t) 0x80) ? (q7_t) 0x7f : -in);
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

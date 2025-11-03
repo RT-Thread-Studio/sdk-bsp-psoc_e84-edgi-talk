@@ -174,19 +174,19 @@ extern "C" {
 /** Types of events that could be asserted by SDIO */
 typedef enum
 {
-#if (MTB_HAL_DRIVER_AVAILABLE_SDIO_HOST)
+    #if (MTB_HAL_DRIVER_AVAILABLE_SDIO_HOST)
     /* SDIO host events */
     MTB_HAL_SDIO_CMD_COMPLETE   = 0x00001,  //!< Command Complete
     MTB_HAL_SDIO_XFER_COMPLETE  = 0x00002,  //!< Host read/write transfer is complete
     MTB_HAL_SDIO_BGAP_EVENT     = 0x00004,  //!< Set when both read/write transaction is stopped
     MTB_HAL_SDIO_DMA_INTERRUPT  = 0x00008,  //!< Host controller detects an SDMA Buffer Boundary
-    //!< during transfer
+                                            //!< during transfer
     MTB_HAL_SDIO_BUF_WR_READY   = 0x00010,  //!< Set if the Buffer Write Enable changes from 0 to 1
     MTB_HAL_SDIO_BUF_RD_READY   = 0x00020,  //!< Set if the Buffer Read Enable changes from 0 to 1
     MTB_HAL_SDIO_CARD_INSERTION = 0x00040,  //!< Set if the Card Inserted in the Present State
     MTB_HAL_SDIO_CARD_REMOVAL   = 0x00080,  //!< Set if the Card Inserted in the Present State
     MTB_HAL_SDIO_CARD_INTERRUPT = 0x00100,  //!< Synchronized value of the DAT[1] interrupt input
-    //!< for SD mode
+                                            //!< for SD mode
     MTB_HAL_SDIO_INT_A          = 0x00200,  //!< Reserved: set to 0
     MTB_HAL_SDIO_INT_B          = 0x00400,  //!< Reserved: set to 0
     MTB_HAL_SDIO_INT_C          = 0x00800,  //!< Reserved: set to 0
@@ -194,16 +194,16 @@ typedef enum
     MTB_HAL_SDIO_FX_EVENT       = 0x02000,  //!< Set when R[14] of response register is set to 1
     MTB_HAL_SDIO_CQE_EVENT      = 0x04000,  //!< Set if Command Queuing/Crypto event has occurred
     MTB_HAL_SDIO_ERR_INTERRUPT  = 0x08000,  //!< Set if any of the bits in the Error Interrupt
-    //!< Status register are set
-#endif // if (MTB_HAL_DRIVER_AVAILABLE_SDIO_HOST)
-#if (MTB_HAL_DRIVER_AVAILABLE_SDIO_DEV)
+                                            //!< Status register are set
+    #endif // if (MTB_HAL_DRIVER_AVAILABLE_SDIO_HOST)
+    #if (MTB_HAL_DRIVER_AVAILABLE_SDIO_DEV)
     /* SDIO device events */
     MTB_HAL_SDIO_DEV_HOST_INFO      = 0x80001,  /**< Info from host (e.g. mailbox) was received */
     MTB_HAL_SDIO_DEV_READ_COMPLETE  = 0x80002,  /**< Device read operation is complete */
     MTB_HAL_SDIO_DEV_WRITE_COMPLETE = 0x80004,  /**< Device write operation is complete */
     MTB_HAL_SDIO_DEV_READ_ERROR     = 0x80008,  /**< Device error while performing read */
     MTB_HAL_SDIO_DEV_WRITE_ERROR    = 0x80010,  /**< Device error while performing write */
-#endif
+    #endif
     MTB_HAL_SDIO_ALL_INTERRUPTS = 0x0E1FF   //!< Used to enable/disable all interrupts events
 } mtb_hal_sdio_event_t;
 
@@ -262,7 +262,7 @@ typedef enum
 typedef struct
 {
     uint32_t frequencyhal_hz;           //!< Clock frequency in hertz (target SDIO frequency for
-    //!< device mode)
+                                        //!< device mode)
     uint16_t block_size;                //!< Block size (max block size for device mode)
     bool     is_sdio_dev;               //!< 0 if SDIO host, 1 if SDIO device
 } mtb_hal_sdio_cfg_t;
@@ -290,7 +290,7 @@ typedef void (* mtb_hal_sdio_event_callback_t)(void* callback_arg, mtb_hal_sdio_
  * @return the status of the HAL setup
  */
 cy_rslt_t mtb_hal_sdio_setup(mtb_hal_sdio_t* obj, const mtb_hal_sdio_configurator_t* config,
-                             const mtb_hal_clock_t *clock, cy_stc_sd_host_context_t *sdio_context);
+                             const mtb_hal_clock_t* clock, cy_stc_sd_host_context_t* sdio_context);
 
 /** Configure the SDIO block
  *
@@ -318,7 +318,7 @@ cy_rslt_t mtb_hal_sdio_configure(mtb_hal_sdio_t* obj, const mtb_hal_sdio_cfg_t* 
  * information.
  */
 void mtb_hal_sdio_register_callback(mtb_hal_sdio_t* obj, mtb_hal_sdio_event_callback_t callback,
-                                    void *callback_arg);
+                                    void* callback_arg);
 
 /** Configure the callback event
  *
@@ -376,7 +376,7 @@ cy_rslt_t mtb_hal_sdio_process_interrupt(mtb_hal_sdio_t* obj);
 cy_rslt_t mtb_hal_sdio_host_send_cmd(mtb_hal_sdio_t* obj,
                                      mtb_hal_sdio_host_transfer_type_t direction,
                                      mtb_hal_sdio_host_command_t command, uint32_t argument,
-                                     uint32_t *response);
+                                     uint32_t* response);
 
 /** Perform a bulk data transfer
  *
@@ -411,9 +411,9 @@ cy_rslt_t mtb_hal_sdio_host_send_cmd(mtb_hal_sdio_t* obj,
  * for more information.
  */
 cy_rslt_t mtb_hal_sdio_host_bulk_transfer(mtb_hal_sdio_t* obj,
-        mtb_hal_sdio_host_transfer_type_t direction,
-        uint32_t argument, const uint32_t *data, uint16_t length,
-        uint32_t *response);
+                                          mtb_hal_sdio_host_transfer_type_t direction,
+                                          uint32_t argument, const uint32_t* data, uint16_t length,
+                                          uint32_t* response);
 
 /** Set the voltage level of the I/O line
  *
@@ -429,8 +429,8 @@ cy_rslt_t mtb_hal_sdio_host_bulk_transfer(mtb_hal_sdio_t* obj,
  * @return The status of the operation
  */
 cy_rslt_t mtb_hal_sdio_host_set_io_voltage(mtb_hal_sdio_t* obj,
-        mtb_hal_sdio_host_io_voltage_t io_voltage,
-        mtb_hal_sdio_host_io_volt_action_type_t io_switch_type);
+                                           mtb_hal_sdio_host_io_voltage_t io_voltage,
+                                           mtb_hal_sdio_host_io_volt_action_type_t io_switch_type);
 
 #endif /* (MTB_HAL_DRIVER_AVAILABLE_SDIO_HOST) */
 
@@ -439,7 +439,7 @@ cy_rslt_t mtb_hal_sdio_host_set_io_voltage(mtb_hal_sdio_t* obj,
 #endif
 
 #ifdef MTB_HAL_SDIO_IMPL_HEADER
-    #include MTB_HAL_SDIO_IMPL_HEADER
+#include MTB_HAL_SDIO_IMPL_HEADER
 #endif /* MTB_HAL_SDIO_IMPL_HEADER */
 
 #endif //defined(MTB_HAL_DRIVER_AVAILABLE_SDIO)

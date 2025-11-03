@@ -1,26 +1,26 @@
-/**********************************************************************
-* Copyright (C) 2013-2015 Cadence Design Systems, Inc.- http://www.cadence.com
-* SPDX-License-Identifier: Apache-2.0
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-**********************************************************************
-* WARNING: This file is auto-generated using api-generator utility.
-*          Do not edit it manually.
-**********************************************************************
-* Cadence Core Driver for the Cadence Ethernet MAC (EMAC) core. This
-* header file lists the API providing a HAL (hardware abstraction
-* layer) interface for the EMAC core, GEM_GXL  part no. IP7014
-**********************************************************************/
+ /**********************************************************************
+ * Copyright (C) 2013-2015 Cadence Design Systems, Inc.- http://www.cadence.com
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ **********************************************************************
+ * WARNING: This file is auto-generated using api-generator utility.
+ *          Do not edit it manually.
+ **********************************************************************
+ * Cadence Core Driver for the Cadence Ethernet MAC (EMAC) core. This
+ * header file lists the API providing a HAL (hardware abstraction
+ * layer) interface for the EMAC core, GEM_GXL  part no. IP7014
+ **********************************************************************/
 
 #ifndef _CEDI_H_
 #define _CEDI_H_
@@ -929,7 +929,7 @@ typedef struct CEDI_qTxBufParams
     /** number of Tx queue */
     uint8_t queueNum;
     /** pointer to struct containing physical & virtual addresses of buffer - virtual field is for upper layer use only, can contain other reference/status if required */
-    struct CEDI_BuffAddr *bufAdd;
+    struct CEDI_BuffAddr* bufAdd;
     /** length of data in buffer */
     uint32_t length;
     /** bit-flags (CEDI_TXB_xx) specifying last buffer/auto CRC and LSO controls */

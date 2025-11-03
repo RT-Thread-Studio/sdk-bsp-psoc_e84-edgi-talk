@@ -218,7 +218,7 @@ typedef cy_rslt_t (* mtb_async_transfer_dma_set_len_t)(void* dma_ref, size_t len
  * flags enum; both directions may be set at once
  */
 typedef void (* mtb_async_transfer_event_callback_t)(void* callback_arg,
-        mtb_async_transfer_direction_t direction);
+                                                     mtb_async_transfer_direction_t direction);
 
 /** Function pointer to disable interrupts and returns a value indicating whether the interrupts
  * were previously enabled
@@ -255,13 +255,13 @@ typedef struct
     /** The opaque pointer that is passed as the first argument to all non-DMA
      * functions. For e.g. this could be pointer to peripheral instance base
      * address */
-    void                                *inst_ref;
+    void*                                inst_ref;
 
     /**  Pointer to the read data source address */
-    volatile uint32_t                   *rx_addr;
+    volatile uint32_t*                   rx_addr;
 
     /**  Pointer to the write data destination address */
-    volatile uint32_t                   *tx_addr;
+    volatile uint32_t*                   tx_addr;
 
     /** Function to get the number of elements available in the RX FIFO */
     mtb_async_transfer_get_num_fifo_t    get_num_rx_fifo;
@@ -297,10 +297,10 @@ typedef struct
     uint32_t                             transfer_width;
 
     /** Opaque pointer that is passed as the first argument when operating on the RX DMA */
-    void                                *dma_rx_ref;
+    void*                                dma_rx_ref;
 
     /** Opaque pointer that is passed as the first argument when operating on the TX DMA */
-    void                                *dma_tx_ref;
+    void*                                dma_tx_ref;
 
     /** Function to set the DMA transfer length */
     mtb_async_transfer_dma_set_len_t     dma_set_length;
@@ -331,14 +331,14 @@ typedef struct
 
     /**  Pointer to the source address from which the data is transferred in case
      *  of write */
-    void                                *src_addr;
+    void*                                src_addr;
 
     /**  Number of bytes to be transferred from the source */
     uint32_t                             src_length;
 
     /**  Pointer to the destination address to which the data is transferred in case
      *  of read */
-    void                                *dest_addr;
+    void*                                dest_addr;
 
     /**  Number of bytes to be transferred to the destination */
     uint32_t                             dest_length;
@@ -347,7 +347,7 @@ typedef struct
     mtb_async_transfer_event_callback_t  callback;
 
     /** Argument to be provided to the transfer complete callback function when invoked */
-    void                                *callback_arg;
+    void*                                callback_arg;
 } mtb_async_transfer_context_t;
 
 /** \} group_mtb_async_transfer_structures */
@@ -368,7 +368,7 @@ typedef struct
  * @return the status of the initialization
  */
 cy_rslt_t mtb_async_transfer_init(mtb_async_transfer_context_t* context,
-                                  const mtb_async_transfer_interface_t *iface);
+                                  const mtb_async_transfer_interface_t* iface);
 
 /** Reads data from the peripheral to the memory in the background
  *
@@ -383,7 +383,9 @@ cy_rslt_t mtb_async_transfer_init(mtb_async_transfer_context_t* context,
  * @param[in,out] context The context object for this peripheral that was populated by \ref
  *                        mtb_async_transfer_init
  * @param[in,out] dest    Pointer to the buffer to which the data read from the peripheral
- *                        should be stored.
+ *                        should be stored. This buffer must remain valid for the duration
+ *                        of the transfer, and its contents should not be accessed until the
+ *                        read transfer is complete.
  * @param[in]     length  Length, in bytes, of the data that is to be read
  *
  * \note This function modifies the RX FIFO level depending on the number of bytes
@@ -406,6 +408,9 @@ cy_rslt_t mtb_async_transfer_read(mtb_async_transfer_context_t* context, void* d
  * @param[in,out] context The context object for this peripheral that was populated by \ref
  *                        mtb_async_transfer_init
  * @param[in]     source  Pointer to the data that is to be written to the peripheral
+ *                        This buffer must remain valid for the duration of the transfer,
+ *                        and its contents should not be accessed until the write transfer
+ *                        is complete.
  * @param[in]     length  Length, in bytes, of the data that is to be written to the peripheral
  *
  * \note This function modifies the TX FIFO level depending on the number of bytes
@@ -479,8 +484,8 @@ cy_rslt_t mtb_async_transfer_abort_write(mtb_async_transfer_context_t* context);
  * @return the status of registering the callback
  */
 cy_rslt_t mtb_async_transfer_register_callback(mtb_async_transfer_context_t* context,
-        mtb_async_transfer_event_callback_t callback,
-        void *arg);
+                                               mtb_async_transfer_event_callback_t callback,
+                                               void* arg);
 
 /** Handler for when the FIFO in the peripheral reaches the trigger level.
  * The user of async-transfer must arrange for this function to be invoked
@@ -493,7 +498,7 @@ cy_rslt_t mtb_async_transfer_register_callback(mtb_async_transfer_context_t* con
  * @return the status of handling the event
  */
 cy_rslt_t mtb_async_transfer_process_fifo_level_event(mtb_async_transfer_context_t* context,
-        mtb_async_transfer_direction_t direction);
+                                                      mtb_async_transfer_direction_t direction);
 
 /** Handler for when a DMA transfer is complete.
  * The user of async-transfer must arrange for this function to be invoked
@@ -506,7 +511,7 @@ cy_rslt_t mtb_async_transfer_process_fifo_level_event(mtb_async_transfer_context
  * @return the status of handling the event
  */
 cy_rslt_t mtb_async_transfer_process_dma_complete(mtb_async_transfer_context_t* context,
-        mtb_async_transfer_direction_t direction);
+                                                  mtb_async_transfer_direction_t direction);
 
 /** \} group_mtb_async_transfer */
 

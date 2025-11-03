@@ -38,51 +38,50 @@
 /**
   * \brief Power Policy Unit Registers for CPUSS (CPUSS_PPU)
   */
-typedef struct
-{
-    __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
-    __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
-    __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
-    __IM uint32_t RESERVED;
-    __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
-    __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
-    __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
-    __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
-    __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
-    __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
-    __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
-    __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
-    __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
-    __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
-    __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
-    __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
-    __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
-    __IM uint32_t RESERVED3[65];
-    __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
-    __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
-    __IM uint32_t RESERVED4[2];
-    __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
-    __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
-    __IM uint32_t RESERVED5[910];
-    __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
-    __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
-    __IM uint32_t RESERVED6[4];
-    __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
-    __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
-    __IM uint32_t PID4;                          /*!< 0x00000FD0 Implementation Defined Identification Register (PID4) */
-    __IM uint32_t RESERVED7[3];
-    __IM uint32_t PID0;                          /*!< 0x00000FE0 Implementation Defined Identification Register (PID0) */
-    __IM uint32_t PID1;                          /*!< 0x00000FE4 Implementation Defined Identification Register (PID1) */
-    __IM uint32_t PID2;                          /*!< 0x00000FE8 Implementation Defined Identification Register (PID2) */
-    __IM uint32_t PID3;                          /*!< 0x00000FEC Implementation Defined Identification Register (PID3) */
-    __IM uint32_t ID0;                           /*!< 0x00000FF0 Implementation Defined Identification Register (ID0) */
-    __IM uint32_t ID1;                           /*!< 0x00000FF4 Implementation Defined Identification Register (ID1) */
-    __IM uint32_t ID2;                           /*!< 0x00000FF8 Implementation Defined Identification Register (ID2) */
-    __IM uint32_t ID3;                           /*!< 0x00000FFC Implementation Defined Identification Register (ID3) */
+typedef struct {
+  __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
+  __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
+   __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
+   __IM uint32_t RESERVED;
+   __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
+   __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
+   __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
+  __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
+  __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
+  __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
+  __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
+  __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
+  __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
+  __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
+  __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
+  __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
+  __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
+   __IM uint32_t RESERVED3[65];
+  __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
+  __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
+   __IM uint32_t RESERVED4[2];
+   __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
+   __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
+   __IM uint32_t RESERVED5[910];
+   __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
+   __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
+   __IM uint32_t RESERVED6[4];
+   __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
+   __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
+   __IM uint32_t PID4;                          /*!< 0x00000FD0 Implementation Defined Identification Register (PID4) */
+   __IM uint32_t RESERVED7[3];
+   __IM uint32_t PID0;                          /*!< 0x00000FE0 Implementation Defined Identification Register (PID0) */
+   __IM uint32_t PID1;                          /*!< 0x00000FE4 Implementation Defined Identification Register (PID1) */
+   __IM uint32_t PID2;                          /*!< 0x00000FE8 Implementation Defined Identification Register (PID2) */
+   __IM uint32_t PID3;                          /*!< 0x00000FEC Implementation Defined Identification Register (PID3) */
+   __IM uint32_t ID0;                           /*!< 0x00000FF0 Implementation Defined Identification Register (ID0) */
+   __IM uint32_t ID1;                           /*!< 0x00000FF4 Implementation Defined Identification Register (ID1) */
+   __IM uint32_t ID2;                           /*!< 0x00000FF8 Implementation Defined Identification Register (ID2) */
+   __IM uint32_t ID3;                           /*!< 0x00000FFC Implementation Defined Identification Register (ID3) */
 } CPUSS_PPU_Type;                               /*!< Size = 4096 (0x1000) */
 
 

@@ -61,26 +61,26 @@ typedef struct
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Cmac_Init(CRYPTO_Type *base, cy_stc_crypto_v2_cmac_state_t* cmacState, cy_stc_crypto_v2_cmac_buffers_t* buffer);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Cmac_Start(CRYPTO_Type *base, cy_stc_crypto_v2_cmac_state_t *cmacState,
-        uint8_t const *aesKey, cy_en_crypto_aes_key_length_t keyLength);
+                                                    uint8_t const *aesKey, cy_en_crypto_aes_key_length_t keyLength);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Cmac_Update(CRYPTO_Type *base,
-        cy_stc_crypto_v2_cmac_state_t *cmacState,
-        uint8_t const *message,
-        uint32_t  messageSize);
+                                cy_stc_crypto_v2_cmac_state_t *cmacState,
+                                uint8_t const *message,
+                                uint32_t  messageSize);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Cmac_Finish(CRYPTO_Type *base, cy_stc_crypto_v2_cmac_state_t *cmacState, uint8_t* cmac);
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Cmac_Free(CRYPTO_Type *base,
-        cy_stc_crypto_v2_cmac_state_t *cmacState
-                                                 );
+                                cy_stc_crypto_v2_cmac_state_t *cmacState
+                                );
 
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Cmac(CRYPTO_Type *base,
-        uint8_t  const *message,
-        uint32_t messageSize,
-        uint8_t  const *key,
-        cy_en_crypto_aes_key_length_t keyLength,
-        uint8_t *cmac,
-        cy_stc_crypto_aes_state_t *aesState);
+                              uint8_t  const *message,
+                              uint32_t messageSize,
+                              uint8_t  const *key,
+                              cy_en_crypto_aes_key_length_t keyLength,
+                              uint8_t *cmac,
+                              cy_stc_crypto_aes_state_t *aesState);
 
 /** \endcond */
 

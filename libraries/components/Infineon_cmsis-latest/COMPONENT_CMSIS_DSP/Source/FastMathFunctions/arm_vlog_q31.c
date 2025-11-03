@@ -54,145 +54,145 @@
 /* Clay Turner algorithm */
 static uint32_t arm_scalar_log_q31(uint32_t src)
 {
-    int32_t i;
+   int32_t i;
 
-    int32_t c = __CLZ(src);
-    int32_t normalization = 0;
+   int32_t c = __CLZ(src);
+   int32_t normalization=0;
 
-    /* 0.5 in q26 */
-    uint32_t inc = LOQ_Q31_Q32_HALF >> (LOG_Q31_INTEGER_PART + 1);
+   /* 0.5 in q26 */
+   uint32_t inc = LOQ_Q31_Q32_HALF >> (LOG_Q31_INTEGER_PART + 1);
 
-    /* Will compute y = log2(x) for 1 <= x < 2.0 */
-    uint32_t x;
+   /* Will compute y = log2(x) for 1 <= x < 2.0 */
+   uint32_t x;
 
-    /* q26 */
-    uint32_t y = 0;
+   /* q26 */
+   uint32_t y=0;
 
-    /* q26 */
-    int32_t tmp;
-
-
-    /* Normalize and convert to q30 format */
-    x = src;
-    if ((c - 1) < 0)
-    {
-        x = x >> (1 - c);
-    }
-    else
-    {
-        x = x << (c - 1);
-    }
-    normalization = c;
-
-    /* Compute the Log2. Result is in q26
-       because we know 0 <= y < 1.0 but
-       do not want to use q32 to allow
-       following computation with less instructions.
-    */
-    for (i = 0; i < LOG_Q31_ACCURACY ; i++)
-    {
-        x = ((int64_t)x * x)  >> (LOG_Q31_ACCURACY - 1);
-
-        if (x >= LOQ_Q31_THRESHOLD)
-        {
-            y += inc ;
-            x = x >> 1;
-        }
-        inc = inc >> 1;
-    }
-
-    /*
-       Convert the Log2 to Log and apply normalization.
-       We compute (y - normalisation) * (1 / Log2[e]).
-
-    */
-
-    /* q26 */
-    tmp = (int32_t)y - (normalization << (LOG_Q31_ACCURACY - LOG_Q31_INTEGER_PART));
+   /* q26 */
+   int32_t tmp;
 
 
-    /* q5.26 */
-    y = ((int64_t)tmp * LOG_Q31_INVLOG2EXP) >> 31;
+   /* Normalize and convert to q30 format */
+   x = src;
+   if ((c-1) < 0)
+   {
+     x = x >> (1-c);
+   }
+   else
+   {
+     x = x << (c-1);
+   }
+   normalization = c;
+
+   /* Compute the Log2. Result is in q26
+      because we know 0 <= y < 1.0 but
+      do not want to use q32 to allow
+      following computation with less instructions.
+   */
+   for(i = 0; i < LOG_Q31_ACCURACY ; i++)
+   {
+      x = ((int64_t)x*x)  >> (LOG_Q31_ACCURACY - 1);
+
+      if (x >= LOQ_Q31_THRESHOLD)
+      {
+         y += inc ;
+         x = x >> 1;
+      }
+      inc = inc >> 1;
+   }
+
+   /*
+      Convert the Log2 to Log and apply normalization.
+      We compute (y - normalisation) * (1 / Log2[e]).
+
+   */
+
+   /* q26 */
+   tmp = (int32_t)y - (normalization << (LOG_Q31_ACCURACY - LOG_Q31_INTEGER_PART));
+
+
+   /* q5.26 */
+   y = ((int64_t)tmp * LOG_Q31_INVLOG2EXP) >> 31;
 
 
 
-    return (y);
+   return(y);
 
 }
 
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 
-q31x4_t vlogq_q31(q31x4_t src)
+static q31x4_t vlogq_q31(q31x4_t src)
 {
 
-    int32_t i;
+   int32_t i;
 
-    int32x4_t c = vclzq_s32(src);
-    int32x4_t normalization = c;
-
-
-    /* 0.5 in q11 */
-    uint32_t inc  = LOQ_Q31_Q32_HALF >> (LOG_Q31_INTEGER_PART + 1);
-
-    /* Will compute y = log2(x) for 1 <= x < 2.0 */
-    uint32x4_t x;
+   int32x4_t c = vclzq_s32(src);
+   int32x4_t normalization = c;
 
 
-    /* q11 */
-    uint32x4_t y = vdupq_n_u32(0);
+   /* 0.5 in q11 */
+   uint32_t inc  = LOQ_Q31_Q32_HALF >> (LOG_Q31_INTEGER_PART + 1);
+
+   /* Will compute y = log2(x) for 1 <= x < 2.0 */
+   uint32x4_t x;
 
 
-    /* q11 */
-    int32x4_t vtmp;
+   /* q11 */
+   uint32x4_t y = vdupq_n_u32(0);
 
 
-    mve_pred16_t p;
+   /* q11 */
+   int32x4_t vtmp;
 
-    /* Normalize and convert to q14 format */
+
+   mve_pred16_t p;
+
+   /* Normalize and convert to q14 format */
 
 
-    vtmp = vsubq_n_s32(c, 1);
-    x = vshlq_u32((uint32x4_t)src, vtmp);
+   vtmp = vsubq_n_s32(c,1);
+   x = vshlq_u32((uint32x4_t)src,vtmp);
 
 
     /* Compute the Log2. Result is in Q26
       because we know 0 <= y < 1.0 but
       do not want to use Q32 to allow
       following computation with less instructions.
-    */
-    for (i = 0; i < LOG_Q31_ACCURACY ; i++)
-    {
-        x = vmulhq_u32(x, x);
-        x = vshlq_n_u32(x, 2);
+   */
+   for(i = 0; i < LOG_Q31_ACCURACY ; i++)
+   {
+      x = vmulhq_u32(x,x);
+      x = vshlq_n_u32(x,2);
 
 
-        p = vcmphiq_u32(x, vdupq_n_u32(LOQ_Q31_THRESHOLD));
-        y = vaddq_m_n_u32(y, y, inc, p);
-        x = vshrq_m_n_u32(x, x, 1, p);
+      p = vcmphiq_u32(x,vdupq_n_u32(LOQ_Q31_THRESHOLD));
+      y = vaddq_m_n_u32(y, y,inc,p);
+      x = vshrq_m_n_u32(x,x,1,p);
 
-        inc = inc >> 1;
-    }
-
-
-    /*
-       Convert the Log2 to Log and apply normalization.
-       We compute (y - normalisation) * (1 / Log2[e]).
-
-    */
-
-    /* q11 */
-    // tmp = (int16_t)y - (normalization << (LOG_Q15_ACCURACY - LOG_Q15_INTEGER_PART));
-    vtmp = vshlq_n_s32(normalization, LOG_Q31_ACCURACY - LOG_Q31_INTEGER_PART);
-    vtmp = vsubq_s32((int32x4_t)y, vtmp);
+      inc = inc >> 1;
+   }
 
 
+   /*
+      Convert the Log2 to Log and apply normalization.
+      We compute (y - normalisation) * (1 / Log2[e]).
 
-    /* q4.11 */
-    // y = ((int32_t)tmp * LOG_Q15_INVLOG2EXP) >> 15;
-    vtmp = vqdmulhq_n_s32(vtmp, LOG_Q31_INVLOG2EXP);
+   */
 
-    return (vtmp);
+   /* q11 */
+   // tmp = (int16_t)y - (normalization << (LOG_Q15_ACCURACY - LOG_Q15_INTEGER_PART));
+   vtmp = vshlq_n_s32(normalization,LOG_Q31_ACCURACY - LOG_Q31_INTEGER_PART);
+   vtmp = vsubq_s32((int32x4_t)y,vtmp);
+
+
+
+   /* q4.11 */
+   // y = ((int32_t)tmp * LOG_Q15_INVLOG2EXP) >> 15;
+   vtmp = vqdmulhq_n_s32(vtmp,LOG_Q31_INVLOG2EXP);
+
+   return(vtmp);
 }
 #endif
 
@@ -210,46 +210,44 @@ q31x4_t vlogq_q31(q31x4_t src)
   @param[in]     pSrc       points to the input vector in q31
   @param[out]    pDst       points to the output vector q5.26
   @param[in]     blockSize  number of samples in each vector
-  @return        none
-
  */
-void arm_vlog_q31(
-    const q31_t * pSrc,
-    q31_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_vlog_q31(
+  const q31_t * pSrc,
+        q31_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t  blkCnt;           /* loop counters */
+  uint32_t  blkCnt;           /* loop counters */
 
-#if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
+  #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    q31x4_t src;
-    q31x4_t dst;
+  q31x4_t src;
+  q31x4_t dst;
 
-    blkCnt = blockSize >> 2;
+  blkCnt = blockSize >> 2;
 
-    while (blkCnt > 0U)
-    {
-        src = vld1q(pSrc);
-        dst = vlogq_q31(src);
-        vst1q(pDst, dst);
+  while (blkCnt > 0U)
+  {
+      src = vld1q(pSrc);
+      dst = vlogq_q31(src);
+      vst1q(pDst, dst);
 
-        pSrc += 4;
-        pDst += 4;
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+      pSrc += 4;
+      pDst += 4;
+      /* Decrement loop counter */
+      blkCnt--;
+  }
 
-    blkCnt = blockSize & 3;
-#else
-    blkCnt = blockSize;
-#endif
+  blkCnt = blockSize & 3;
+  #else
+  blkCnt = blockSize;
+  #endif
 
-    while (blkCnt > 0U)
-    {
-        *pDst++ = arm_scalar_log_q31(*pSrc++);
+  while (blkCnt > 0U)
+  {
+     *pDst++=arm_scalar_log_q31(*pSrc++);
 
-        blkCnt--;
-    }
+     blkCnt--;
+  }
 
 }
 

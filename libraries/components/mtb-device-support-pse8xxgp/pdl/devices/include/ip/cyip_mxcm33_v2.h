@@ -38,28 +38,27 @@
 /**
   * \brief MXCM33-0/1 (MXCM33)
   */
-typedef struct
-{
-    __IOM uint32_t CM33_CTL;                      /*!< 0x00000000 Control */
-    __IOM uint32_t CM33_CMD;                      /*!< 0x00000004 Command */
-    __IM uint32_t CM33_STATUS;                   /*!< 0x00000008 Status */
-    __IM uint32_t RESERVED[13];
-    __IM uint32_t CM33_INT_STATUS[16];           /*!< 0x00000040 CM33 interrupt status */
-    __IOM uint32_t CM33_NMI_CTL[4];               /*!< 0x00000080 CM33 NMI control */
-    __IM uint32_t RESERVED1[12];
-    __IOM uint32_t CM33_EVENT_CTL;                /*!< 0x000000C0 CM33 event control */
-    __IM uint32_t RESERVED2[975];
-    __IOM uint32_t CM33_S_VECTOR_TABLE_BASE;      /*!< 0x00001000 CM33 secure vector table base */
-    __IOM uint32_t CM33_NS_VECTOR_TABLE_BASE;     /*!< 0x00001004 CM33 non-secure vector table base */
-    __IM uint32_t RESERVED3[1022];
-    __IOM uint32_t CM33_PC_CTL;                   /*!< 0x00002000 CM33 protection context control */
-    __IM uint32_t RESERVED4[15];
-    __IOM uint32_t CM33_PC0_HANDLER;              /*!< 0x00002040 CM33 protection context 0 handler */
-    __IOM uint32_t CM33_PC1_HANDLER;              /*!< 0x00002044 CM33 protection context 1 handler */
-    __IOM uint32_t CM33_PC2_HANDLER;              /*!< 0x00002048 CM33 protection context 2 handler */
-    __IOM uint32_t CM33_PC3_HANDLER;              /*!< 0x0000204C CM33 protection context 3 handler */
-    __IM uint32_t RESERVED5[6124];
-    __IOM uint32_t CM33_SYSTEM_INT_CTL[1023];     /*!< 0x00008000 CM33 system interrupt control */
+typedef struct {
+  __IOM uint32_t CM33_CTL;                      /*!< 0x00000000 Control */
+  __IOM uint32_t CM33_CMD;                      /*!< 0x00000004 Command */
+   __IM uint32_t CM33_STATUS;                   /*!< 0x00000008 Status */
+   __IM uint32_t RESERVED[13];
+   __IM uint32_t CM33_INT_STATUS[16];           /*!< 0x00000040 CM33 interrupt status */
+  __IOM uint32_t CM33_NMI_CTL[4];               /*!< 0x00000080 CM33 NMI control */
+   __IM uint32_t RESERVED1[12];
+  __IOM uint32_t CM33_EVENT_CTL;                /*!< 0x000000C0 CM33 event control */
+   __IM uint32_t RESERVED2[975];
+  __IOM uint32_t CM33_S_VECTOR_TABLE_BASE;      /*!< 0x00001000 CM33 secure vector table base */
+  __IOM uint32_t CM33_NS_VECTOR_TABLE_BASE;     /*!< 0x00001004 CM33 non-secure vector table base */
+   __IM uint32_t RESERVED3[1022];
+  __IOM uint32_t CM33_PC_CTL;                   /*!< 0x00002000 CM33 protection context control */
+   __IM uint32_t RESERVED4[15];
+  __IOM uint32_t CM33_PC0_HANDLER;              /*!< 0x00002040 CM33 protection context 0 handler */
+  __IOM uint32_t CM33_PC1_HANDLER;              /*!< 0x00002044 CM33 protection context 1 handler */
+  __IOM uint32_t CM33_PC2_HANDLER;              /*!< 0x00002048 CM33 protection context 2 handler */
+  __IOM uint32_t CM33_PC3_HANDLER;              /*!< 0x0000204C CM33 protection context 3 handler */
+   __IM uint32_t RESERVED5[6124];
+  __IOM uint32_t CM33_SYSTEM_INT_CTL[1023];     /*!< 0x00008000 CM33 system interrupt control */
 } MXCM33_Type;                                  /*!< Size = 36860 (0x8FFC) */
 
 

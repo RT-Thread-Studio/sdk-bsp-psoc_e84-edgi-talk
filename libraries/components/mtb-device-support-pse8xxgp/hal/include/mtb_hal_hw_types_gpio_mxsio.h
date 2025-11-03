@@ -29,18 +29,18 @@
 #if defined(CY_IP_MXS22IOSS) || defined(CY_IP_MXS40IOSS) || defined(CY_IP_MXS40SIOSS) \
     || defined(CY_IP_IOCL)
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_GPIO)
-    /** Macro specifying whether the GPIO driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_GPIO (1u)
+/** Macro specifying whether the GPIO driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_GPIO (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_GPIO)
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_GPIO_PORT)
-    /** Macro specifying whether the GPIO Port driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_GPIO_PORT (1u)
+/** Macro specifying whether the GPIO Port driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_GPIO_PORT (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_GPIO PORT)
 
 /** \} group_hal_availability */
@@ -66,9 +66,9 @@ typedef struct
 {
     uint8_t                               pin_num;        //!< The associated gpio pin number
     uint8_t                               port_num;       //!< The associated gpio port number
-    GPIO_PRT_Type                        *port_addr;      //!< The associated gpio port address
+    GPIO_PRT_Type*                        port_addr;      //!< The associated gpio port address
     _mtb_hal_event_callback_data_t        callback_data;  //!< The callback data associated with the
-    //!< pin
+                                                          //!< pin
 } mtb_hal_gpio_t;
 
 /**
@@ -78,7 +78,7 @@ typedef struct
  * They are considered an implementation detail which is subject to change
  * between platforms and/or HAL releases.
  */
-typedef GPIO_PRT_Type *mtb_hal_gpio_port_t;
+typedef GPIO_PRT_Type* mtb_hal_gpio_port_t;
 
 #endif /* defined(CY_IP_MXS22IOSS) || defined(CY_IP_MXS40IOSS) || defined(CY_IP_MXS40SIOSS)
        || defined(CY_IP_IOCL) */

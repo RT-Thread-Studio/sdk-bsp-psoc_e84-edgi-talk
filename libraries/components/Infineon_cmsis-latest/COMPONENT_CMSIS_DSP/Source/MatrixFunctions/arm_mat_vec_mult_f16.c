@@ -52,7 +52,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_mat_vec_mult_f16(
+ARM_DSP_ATTRIBUTE void arm_mat_vec_mult_f16(
     const arm_matrix_instance_f16   *pSrcMat,
     const float16_t                 *pSrcVec,
     float16_t                       *pDstVec)
@@ -108,18 +108,18 @@ void arm_mat_vec_mult_f16(
         {
             f16x8_t vecA;
 
-            vecIn = vld1q(pInVec);
+            vecIn = vld1q(pInVec);      
             pInVec += 8;
-            vecA = vld1q(pSrcA0Vec);
+            vecA = vld1q(pSrcA0Vec);    
             pSrcA0Vec += 8;
             acc0 = vfmaq(acc0, vecIn, vecA);
-            vecA = vld1q(pSrcA1Vec);
+            vecA = vld1q(pSrcA1Vec);  
             pSrcA1Vec += 8;
             acc1 = vfmaq(acc1, vecIn, vecA);
-            vecA = vld1q(pSrcA2Vec);
+            vecA = vld1q(pSrcA2Vec);  
             pSrcA2Vec += 8;
             acc2 = vfmaq(acc2, vecIn, vecA);
-            vecA = vld1q(pSrcA3Vec);
+            vecA = vld1q(pSrcA3Vec);  
             pSrcA3Vec += 8;
             acc3 = vfmaq(acc3, vecIn, vecA);
 
@@ -191,12 +191,12 @@ void arm_mat_vec_mult_f16(
         {
             f16x8_t vecA;
 
-            vecIn = vld1q(pInVec);
+            vecIn = vld1q(pInVec);      
             pInVec += 8;
-            vecA = vld1q(pSrcA0Vec);
+            vecA = vld1q(pSrcA0Vec);    
             pSrcA0Vec += 8;
             acc0 = vfmaq(acc0, vecIn, vecA);
-            vecA = vld1q(pSrcA1Vec);
+            vecA = vld1q(pSrcA1Vec);    
             pSrcA1Vec += 8;
             acc1 = vfmaq(acc1, vecIn, vecA);
 
@@ -253,9 +253,9 @@ void arm_mat_vec_mult_f16(
         {
             f16x8_t vecA;
 
-            vecIn = vld1q(pInVec);
+            vecIn = vld1q(pInVec);      
             pInVec += 8;
-            vecA = vld1q(pSrcA0Vec);
+            vecA = vld1q(pSrcA0Vec);    
             pSrcA0Vec += 8;
             acc0 = vfmaq(acc0, vecIn, vecA);
 
@@ -282,7 +282,7 @@ void arm_mat_vec_mult_f16(
     }
 }
 #else
-void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_t *pVec, float16_t *pDst)
+ARM_DSP_ATTRIBUTE void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_t *pVec, float16_t *pDst)
 {
     uint32_t numRows = pSrcMat->numRows;
     uint32_t numCols = pSrcMat->numCols;
@@ -293,7 +293,8 @@ void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_
     const float16_t *pInA4;      /* input data matrix pointer A of Q31 type */
     const float16_t *pInVec;     /* input data matrix pointer B of Q31 type */
     float16_t *px;               /* Temporary output data matrix pointer */
-    uint16_t i, row, colCnt; /* loop counters */
+    uint32_t i;
+    uint16_t row, colCnt; /* loop counters */
     float16_t matData, matData2, vecData, vecData2;
 
 
@@ -304,8 +305,7 @@ void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_
 
     /* The following loop performs the dot-product of each row in pSrcA with the vector */
     /* row loop */
-    while (row > 0)
-    {
+    while (row > 0) {
         /* For every row wise process, the pInVec pointer is set
          ** to the starting address of the vector */
         pInVec = pVec;
@@ -327,8 +327,7 @@ void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_
 
 
         // Main loop: matrix-vector multiplication
-        while (colCnt > 0u)
-        {
+        while (colCnt > 0u) {
             // Read 2 values from vector
             vecData = *(pInVec)++;
             // Read 8 values from the matrix - 2 values from each of 4 rows, and do multiply accumulate
@@ -359,8 +358,7 @@ void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_
 
     /* process any remaining rows */
     row = numRows & 3u;
-    while (row > 0)
-    {
+    while (row > 0) {
 
         float16_t sum = 0.0f16;
         pInVec = pVec;
@@ -368,8 +366,7 @@ void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_
 
         colCnt = numCols >> 1;
 
-        while (colCnt > 0)
-        {
+        while (colCnt > 0) {
             vecData = *(pInVec)++;
             vecData2 = *(pInVec)++;
             matData = *(pInA1)++;
@@ -380,9 +377,8 @@ void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_
         }
         // process remainder of row
         colCnt = numCols & 1u;
-        while (colCnt > 0)
-        {
-            sum += (_Float16) * pInA1++ * (_Float16) * pInVec++;
+        while (colCnt > 0) {
+            sum += (_Float16)*pInA1++ * (_Float16)*pInVec++;
             colCnt--;
         }
 
@@ -397,5 +393,5 @@ void arm_mat_vec_mult_f16(const arm_matrix_instance_f16 *pSrcMat, const float16_
  * @} end of MatrixMult group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

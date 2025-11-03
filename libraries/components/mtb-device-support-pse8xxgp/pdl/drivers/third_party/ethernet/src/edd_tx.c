@@ -1,24 +1,24 @@
-/**********************************************************************
-* Copyright (C) 2014-2015 Cadence Design Systems, Inc.- http://www.cadence.com
-* SPDX-License-Identifier: Apache-2.0
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-******************************************************************************
-* edd_tx.c
-* Ethernet DMA MAC Driver
-*
-* Tx-related functions source file
-*****************************************************************************/
+ /**********************************************************************
+ * Copyright (C) 2014-2015 Cadence Design Systems, Inc.- http://www.cadence.com
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ ******************************************************************************
+ * edd_tx.c
+ * Ethernet DMA MAC Driver
+ *
+ * Tx-related functions source file
+ *****************************************************************************/
 /****************************************************************************
 * Modification by Infineon: To make this file compile with ModusToolbox
 * toolchain
@@ -46,32 +46,24 @@ extern "C" {
 /* move descriptor pointer bd and virtual address pointer vp on to next in ring.
  * stat should be the status (word 1) of current descriptor */
 static void inc_txbd(void *pD, uint32_t stat, txDesc **bd, uintptr_t **vp,
-                     txQueue_t *txQ)
-{
-    if (stat & CEDI_TXD_WRAP)
-    {
+                        txQueue_t *txQ) {
+    if (stat & CEDI_TXD_WRAP) {
         *bd = txQ->bdBase;
         *vp = txQ->vAddrList;
-    }
-    else
-    {
-        *bd = (txDesc *)(((uintptr_t)(*bd)) + (CEDI_PdVar(txDescriptorSize)));
+    } else {
+        *bd = (txDesc *) (((uintptr_t)(*bd))+(CEDI_PdVar(txDescriptorSize)));
         ++(*vp);
     }
 }
 
 /* move descriptor and virtual address pointers back to previous in ring */
-static void dec_txbd(void *pD, txDesc **bd, uintptr_t **vp, txQueue_t *txQ)
-{
-    if (*bd == txQ->bdBase)
-    {
-        *bd = (txDesc *)(((uintptr_t)(*bd)) +
-                         (txQ->descMax - 1) * (CEDI_PdVar(txDescriptorSize)));
-        *vp += (txQ->descMax - 1);
-    }
-    else
-    {
-        *bd = (txDesc *)(((uintptr_t)(*bd)) - (CEDI_PdVar(txDescriptorSize)));
+static void dec_txbd(void *pD, txDesc **bd, uintptr_t **vp, txQueue_t *txQ) {
+    if (*bd==txQ->bdBase) {
+        *bd = (txDesc *)(((uintptr_t)(*bd))+
+                            (txQ->descMax-1)*(CEDI_PdVar(txDescriptorSize)));
+        *vp += (txQ->descMax-1);
+    } else {
+        *bd = (txDesc *)(((uintptr_t)(*bd))-(CEDI_PdVar(txDescriptorSize)));
         --(*vp);
     }
 }
@@ -89,8 +81,7 @@ static void dec_txbd(void *pD, txDesc **bd, uintptr_t **vp, txQueue_t *txQ)
  * @return 0 if successful
  * @return EINVAL if any parameter =NULL
  */
-uint32_t emacCalcMaxTxFrameSize(void *pD, CEDI_FrameSize *maxTxSize)
-{
+uint32_t emacCalcMaxTxFrameSize(void *pD, CEDI_FrameSize *maxTxSize) {
     uint32_t i, watermark;
     uint16_t ram_word_size, ram_addr_bits, burst_len;
     uint16_t ram_size, num_segments, size_per_segment, tx_overhead;
@@ -98,32 +89,32 @@ uint32_t emacCalcMaxTxFrameSize(void *pD, CEDI_FrameSize *maxTxSize)
     uint8_t enabled = 0;
     uint32_t ret;
 
-    if ((pD == NULL) || (maxTxSize == NULL)) return EINVAL;
+    if ((pD==NULL) || (maxTxSize==NULL)) return EINVAL;
 
-    if (0 != (ret = emacGetTxPartialStFwd(pD, &watermark, &enabled)))
+    if (0!=(ret = emacGetTxPartialStFwd(pD, &watermark, &enabled)))
         return ret;
 
     if (!(enabled) && CEDI_PdVar(hwCfg).tx_pkt_buffer)
     {
         // What is word size of SRAM in bytes
-        ram_word_size = (CEDI_PdVar(hwCfg).tx_pbuf_data >> 1) + 1;
+        ram_word_size = (CEDI_PdVar(hwCfg).tx_pbuf_data >> 1)+1;
         //vDbgMsg(DBG_GEN_MSG, 10, "RAM word size = %u (x32 bits)\n", CEDI_PdVar(hwCfg).tx_pbuf_data);
         ram_addr_bits = CEDI_PdVar(hwCfg).tx_pbuf_addr;
         //vDbgMsg(DBG_GEN_MSG, 10, "RAM Tx addr bits = %u\n", ram_addr_bits);
 
         ram_size = ram_addr_bits + ram_word_size + 1;
-        vDbgMsg(DBG_GEN_MSG, 10, "RAM size = %u\n", 1 << ram_size);
+        vDbgMsg(DBG_GEN_MSG, 10, "RAM size = %u\n", 1<<ram_size);
 
         // how many segments are there ?
         num_segments = CEDI_PdVar(hwCfg).tx_pbuf_queue_segment_size;
         /* this is number of address lines used for segment selection,
          * e.g. if =3, there are 2^3 = 8 segments */
-        vDbgMsg(DBG_GEN_MSG, 10, "Num segments = %u\n", 1 << num_segments);
+        vDbgMsg(DBG_GEN_MSG, 10, "Num segments = %u\n", 1<<num_segments);
 
         size_per_segment  = (ram_size - num_segments);
-        /* again, as a power of 2 */
+                                                  /* again, as a power of 2 */
         vDbgMsg(DBG_GEN_MSG, 10, "RAM Size per segment = %u\n",
-                1 << size_per_segment);
+                1<<size_per_segment);
 
         num_segments_q[0] = CEDI_PdVar(hwCfg).tx_pbuf_num_segments_q0;
         num_segments_q[1] = CEDI_PdVar(hwCfg).tx_pbuf_num_segments_q1;
@@ -152,36 +143,33 @@ uint32_t emacCalcMaxTxFrameSize(void *pD, CEDI_FrameSize *maxTxSize)
 
         burst_len = EMAC_REGS__DMA_CONFIG__AMBA_BURST_LENGTH__READ(
                         CPS_UncachedRead32(CEDI_RegAddr(dma_config)));
-        switch (burst_len)
-        {
-        case CEDI_AMBD_BURST_LEN_8:
-            tx_overhead = ((CEDI_PdVar(hwCfg).tx_pbuf_data << 5) / 8) * 26;
-            break;
-        case CEDI_AMBD_BURST_LEN_16:
-            tx_overhead = ((CEDI_PdVar(hwCfg).tx_pbuf_data << 5) / 8) * 46;
-            break;
-        case CEDI_AMBD_BURST_LEN_1:
-        case CEDI_AMBD_BURST_LEN_4:
-        default:
-            tx_overhead = ((CEDI_PdVar(hwCfg).tx_pbuf_data << 5) / 8) * 16;
+        switch (burst_len) {
+         case CEDI_AMBD_BURST_LEN_8:
+                 tx_overhead = ((CEDI_PdVar(hwCfg).tx_pbuf_data << 5)/8)*26;
+                 break;
+         case CEDI_AMBD_BURST_LEN_16:
+                 tx_overhead = ((CEDI_PdVar(hwCfg).tx_pbuf_data << 5)/8)*46;
+                 break;
+         case CEDI_AMBD_BURST_LEN_1:
+         case CEDI_AMBD_BURST_LEN_4:
+         default:
+                 tx_overhead = ((CEDI_PdVar(hwCfg).tx_pbuf_data << 5)/8)*16;
         }
 
-        for (i = 0; i < CEDI_MAX_TX_QUEUES; i++)
-        {
-            if (i < CEDI_PdVar(cfg).txQs)
-            {
+        for (i=0; i<CEDI_MAX_TX_QUEUES; i++) {
+            if (i<CEDI_PdVar(cfg).txQs) {
                 maxTxSize->FrameSize[i] =
-                    (1 << (num_segments_q[i] + size_per_segment)) - tx_overhead;
+                   (1 << (num_segments_q[i] + size_per_segment)) - tx_overhead;
                 /* add in some extra overhead */
-                maxTxSize->FrameSize[i] = (maxTxSize->FrameSize[i] * 9) / 10;
+                maxTxSize->FrameSize[i] = (maxTxSize->FrameSize[i]*9)/10;
             }
             else
                 maxTxSize->FrameSize[i] = 0;
         }
     }
     else
-        for (i = 0; i < CEDI_MAX_TX_QUEUES; i++)
-            if (i < CEDI_PdVar(cfg).txQs)
+        for (i=0; i<CEDI_MAX_TX_QUEUES; i++)
+            if (i<CEDI_PdVar(cfg).txQs)
                 maxTxSize->FrameSize[i] = CEDI_TXD_LMASK;
             else
                 maxTxSize->FrameSize[i] = 0;
@@ -213,7 +201,7 @@ uint32_t emacCalcMaxTxFrameSize(void *pD, CEDI_FrameSize *maxTxSize)
  * @return ENOENT if no available descriptors
  */
 uint32_t emacQueueTxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *bufAdd,
-                        uint32_t length, uint8_t flags)
+        uint32_t length, uint8_t flags)
 {
     txQueue_t *txQ;
     txDesc *freeDesc;
@@ -221,8 +209,8 @@ uint32_t emacQueueTxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *bufAdd,
     uint32_t stat, ncr;
     uint16_t nFree;
 
-    if ((pD == NULL) || (queueNum >= CEDI_PdVar(cfg).txQs) || (bufAdd == NULL)
-            || (bufAdd->pAddr == 0))
+    if ((pD==NULL) || (queueNum>=CEDI_PdVar(cfg).txQs) || (bufAdd==NULL)
+            || (bufAdd->pAddr==0))
         return EINVAL;
 
 //    vDbgMsg(DBG_GEN_MSG, 10, "%s entered\n", __func__);
@@ -231,27 +219,24 @@ uint32_t emacQueueTxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *bufAdd,
     freeDesc = txQ->bdHead;
     bd1stBuf = txQ->bd1stBuf;
 
-    if (!length || (length > CEDI_TXD_LMASK))
-    {
+    if (!length || (length > CEDI_TXD_LMASK)) {
         vDbgMsg(DBG_GEN_MSG, 5, "Error: bad length specified: %u\n", length);
         return EINVAL;
     }
 
     if (emacTxDescFree(pD, queueNum, &nFree)) return EINVAL;
-    if (!nFree)
-    {
+    if (!nFree) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: insufficient buffer descriptors");
         return ENOENT;
     }
 
     /* preserve wrap bit if present in status word */
     stat = CPS_UncachedRead32(&freeDesc->word[1]) & CEDI_TXD_WRAP;
-    stat |= ((flags & CEDI_TXB_LAST_BUFF) ? CEDI_TXD_LAST_BUF : 0)
-            | ((flags & CEDI_TXB_NO_AUTO_CRC) ? CEDI_TXD_NO_AUTO_CRC : 0) | length;
+    stat |= ((flags & CEDI_TXB_LAST_BUFF)?CEDI_TXD_LAST_BUF:0)
+            | ((flags & CEDI_TXB_NO_AUTO_CRC)?CEDI_TXD_NO_AUTO_CRC:0) | length;
 
     /* Handle a multi-buffer frame */
-    if (!(flags & CEDI_TXB_LAST_BUFF) && (NULL == bd1stBuf))
-    {
+    if (!(flags & CEDI_TXB_LAST_BUFF) && (NULL == bd1stBuf)) {
         /* This is the 1st buf of several; prevent it from going and remember its BD. */
         stat |= (uint32_t)CEDI_TXD_USED;
         txQ->bd1stBuf = freeDesc;
@@ -260,23 +245,21 @@ uint32_t emacQueueTxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *bufAdd,
     *txQ->vHead = bufAdd->vAddr;
     CPS_UncachedWrite32(&freeDesc->word[0], bufAdd->pAddr & 0xFFFFFFFF);
     /* upper 32 bits if 64 bit addressing */
-    if (CEDI_PdVar(cfg).dmaAddrBusWidth)
-    {
+    if (CEDI_PdVar(cfg).dmaAddrBusWidth) {
 #ifdef CEDI_64B_COMPILE
         /* 64-bit addressing */
         CPS_UncachedWrite32(&freeDesc->word[2],
-                            (bufAdd->pAddr & 0xFFFFFFFF00000000) >> 32);
+                             (bufAdd->pAddr & 0xFFFFFFFF00000000)>>32);
 #else
         /* 32-bit addressing */
 #endif
     }
     CPS_UncachedWrite32(&freeDesc->word[1], stat);
 
-    if ((flags & CEDI_TXB_LAST_BUFF) && (NULL != bd1stBuf))
-    {
+    if ((flags & CEDI_TXB_LAST_BUFF) && (NULL != bd1stBuf)) {
         /* Last buffer of a multibuffer frame is in place, 1st buffer can go. */
         CPS_UncachedWrite32(&bd1stBuf->word[1],
-                            CPS_UncachedRead32(&bd1stBuf->word[1]) & ~CEDI_TXD_USED);
+            CPS_UncachedRead32(&bd1stBuf->word[1]) & ~CEDI_TXD_USED);
         txQ->bd1stBuf = NULL;
     }
 
@@ -288,8 +271,7 @@ uint32_t emacQueueTxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *bufAdd,
     txQ->bdHead = freeDesc;
 
     /* set going if complete frame queued */
-    if ((flags & CEDI_TXB_LAST_BUFF) && !(flags & CEDI_TXB_NO_AUTO_START))
-    {
+    if ((flags & CEDI_TXB_LAST_BUFF) && !(flags & CEDI_TXB_NO_AUTO_START)) {
         ncr = CPS_UncachedRead32(CEDI_RegAddr(network_control));
         EMAC_REGS__NETWORK_CONTROL__TX_START_PCLK__SET(ncr);
         CPS_UncachedWrite32(CEDI_RegAddr(network_control), ncr);
@@ -317,9 +299,9 @@ uint32_t emacQTxBuf(void *pD, CEDI_qTxBufParams *prm)
     uint32_t stat, ncr;
     uint16_t nFree;
 
-    if ((pD == NULL) || (prm->queueNum >= CEDI_PdVar(cfg).txQs)
-            || (prm->bufAdd == NULL)
-            || (prm->bufAdd->pAddr == 0))
+    if ((pD==NULL) || (prm->queueNum>=CEDI_PdVar(cfg).txQs)
+            || (prm->bufAdd==NULL)
+            || (prm->bufAdd->pAddr==0))
         return EINVAL;
 
 //    vDbgMsg(DBG_GEN_MSG, 10, "%s entered\n", __func__);
@@ -328,51 +310,47 @@ uint32_t emacQTxBuf(void *pD, CEDI_qTxBufParams *prm)
     freeDesc = txQ->bdHead;
     bd1stBuf = txQ->bd1stBuf;
 
-    if (!prm->length || (prm->length > CEDI_TXD_LMASK))
-    {
+    if (!prm->length || (prm->length > CEDI_TXD_LMASK)) {
         vDbgMsg(DBG_GEN_MSG, 5, "Error: bad length specified: %u\n",
                 prm->length);
         return EINVAL;
     }
 
     if (emacTxDescFree(pD, prm->queueNum, &nFree)) return EINVAL;
-    if (!nFree)
-    {
+    if (!nFree) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: insufficient buffer descriptors");
         return ENOENT;
     }
 
-    if (NULL != bd1stBuf)     /* inc counter after 1st in frame */
-    {
+    if (NULL!=bd1stBuf) {     /* inc counter after 1st in frame */
         txQ->descNum++;
     }
 
     /* preserve wrap bit if present in status word */
     stat = CPS_UncachedRead32(&freeDesc->word[1]) & CEDI_TXD_WRAP;
-    stat |= ((prm->flags & CEDI_TXB_LAST_BUFF) ? CEDI_TXD_LAST_BUF : 0)
-            | ((prm->flags & CEDI_TXB_NO_AUTO_CRC) ? CEDI_TXD_NO_AUTO_CRC : 0)
+    stat |= ((prm->flags & CEDI_TXB_LAST_BUFF)?CEDI_TXD_LAST_BUF:0)
+            | ((prm->flags & CEDI_TXB_NO_AUTO_CRC)?CEDI_TXD_NO_AUTO_CRC:0)
             | prm->length
-            | ((txQ->descNum >= 1) ?
-               ((prm->mssMfs << CEDI_TXD_MSSMFS_SHIFT) & CEDI_TXD_MSSMFS_MASK) : 0);
-    // only set MSS/MFS on second or later descriptor
+            | ((txQ->descNum>=1)?
+                ((prm->mssMfs << CEDI_TXD_MSSMFS_SHIFT) & CEDI_TXD_MSSMFS_MASK):0);
+                                // only set MSS/MFS on second or later descriptor
 //    vDbgMsg(DBG_GEN_MSG, 10, "descNum = %u, desc wd1 = 0x%08X, mss = %u\n",
 //            txQ->descNum, stat, (stat>>16) & 0x3FFF);
 
     /* Handle a multi-buffer frame */
-    if (!(prm->flags & CEDI_TXB_LAST_BUFF) && (NULL == bd1stBuf))
-    {
+    if (!(prm->flags & CEDI_TXB_LAST_BUFF) && (NULL==bd1stBuf)) {
         /* This is the 1st buf of several; prevent it from going and remember its BD. */
         stat |= CEDI_TXD_USED
-                /* Also use this condition to set encapsulation flags & TCP stream -
-                 * must not set stream if TSO bit clear */
-                | ((prm->flags & CEDI_TXB_TCP_ENCAP) ?
-                   /* TSO settings */
-                   (CEDI_TXD_TSO_ENABLE |
-                    (((prm->tcpStream) << CEDI_TXD_STREAM_SHIFT)
-                     & CEDI_TXD_STREAM_MASK) |
-                    ((prm->flags & CEDI_TXB_TSO_AUTO_SEQ) ? CEDI_TXD_AUTOSEQ_SEL : 0)) :
-                   /* UFO bit only */
-                   ((prm->flags & CEDI_TXB_UDP_ENCAP) ? CEDI_TXD_UFO_ENABLE : 0));
+         /* Also use this condition to set encapsulation flags & TCP stream -
+          * must not set stream if TSO bit clear */
+                | ((prm->flags & CEDI_TXB_TCP_ENCAP)?
+                        /* TSO settings */
+                   (CEDI_TXD_TSO_ENABLE|
+                    (((prm->tcpStream)<<CEDI_TXD_STREAM_SHIFT)
+                        & CEDI_TXD_STREAM_MASK)|
+                    ((prm->flags & CEDI_TXB_TSO_AUTO_SEQ)?CEDI_TXD_AUTOSEQ_SEL:0)) :
+                        /* UFO bit only */
+                  ((prm->flags & CEDI_TXB_UDP_ENCAP)?CEDI_TXD_UFO_ENABLE:0));
         txQ->bd1stBuf = freeDesc;
     }
 
@@ -380,23 +358,21 @@ uint32_t emacQTxBuf(void *pD, CEDI_qTxBufParams *prm)
     CPS_UncachedWrite32(&freeDesc->word[0], prm->bufAdd->pAddr & 0xFFFFFFFF);
 
     /* upper 32 bits if 64 bit addressing */
-    if (CEDI_PdVar(cfg).dmaAddrBusWidth)
-    {
+    if (CEDI_PdVar(cfg).dmaAddrBusWidth) {
 #ifdef CEDI_64B_COMPILE
         /* 64-bit addressing */
         CPS_UncachedWrite32(&freeDesc->word[2],
-                            (prm->bufAdd->pAddr & 0xFFFFFFFF00000000) >> 32);
+                             (prm->bufAdd->pAddr & 0xFFFFFFFF00000000)>>32);
 #else
 #endif
     }
     CPS_UncachedWrite32(&freeDesc->word[1], stat);
 
 
-    if ((prm->flags & CEDI_TXB_LAST_BUFF) && (NULL != bd1stBuf))
-    {
+    if ((prm->flags & CEDI_TXB_LAST_BUFF) && (NULL!=bd1stBuf)) {
         /* Last buffer of a multibuffer frame is in place, 1st buffer can go. */
         CPS_UncachedWrite32(&bd1stBuf->word[1],
-                            CPS_UncachedRead32(&bd1stBuf->word[1]) & ~CEDI_TXD_USED);
+            CPS_UncachedRead32(&bd1stBuf->word[1]) & ~CEDI_TXD_USED);
         /* vDbgMsg(DBG_GEN_MSG, 10,
                 "set multi-buffer go: 1stBuf=%p, wd1=%08X, transmit queue ptr=%08X\n",
                 bd1stBuf, CPS_UncachedRead32(&bd1stBuf->word[1]),
@@ -417,11 +393,10 @@ uint32_t emacQTxBuf(void *pD, CEDI_qTxBufParams *prm)
     txQ->bdHead = freeDesc;
 
     /* set going if complete frame queued */
-    if ((prm->flags & CEDI_TXB_LAST_BUFF) && !(prm->flags & CEDI_TXB_NO_AUTO_START))
-    {
-        ncr = CPS_UncachedRead32(CEDI_RegAddr(network_control));
-        EMAC_REGS__NETWORK_CONTROL__TX_START_PCLK__SET(ncr);
-        CPS_UncachedWrite32(CEDI_RegAddr(network_control), ncr);
+    if ((prm->flags & CEDI_TXB_LAST_BUFF) && !(prm->flags & CEDI_TXB_NO_AUTO_START)) {
+          ncr = CPS_UncachedRead32(CEDI_RegAddr(network_control));
+          EMAC_REGS__NETWORK_CONTROL__TX_START_PCLK__SET(ncr);
+          CPS_UncachedWrite32(CEDI_RegAddr(network_control), ncr);
     }
 
     return 0;
@@ -444,8 +419,8 @@ uint32_t emacDeQTxBuf(void *pD, CEDI_qTxBufParams *prm)
     txDesc *descToFree;
     uint32_t stat;
 
-    if ((pD == NULL) || (prm == NULL) || (prm->bufAdd == NULL) ||
-            (prm->queueNum >= CEDI_PdVar(cfg).txQs))
+    if ((pD==NULL) || (prm==NULL) || (prm->bufAdd==NULL) ||
+            (prm->queueNum>=CEDI_PdVar(cfg).txQs))
         return EINVAL;
 
 //    vDbgMsg(DBG_GEN_MSG, 10, "%s entered\n", __func__);
@@ -454,7 +429,7 @@ uint32_t emacDeQTxBuf(void *pD, CEDI_qTxBufParams *prm)
     descToFree = txQ->bdHead;
 
     /* Check if any in queue */
-    if (txQ->bdTail == txQ->bdHead)
+    if (txQ->bdTail==txQ->bdHead)
         return ENOENT;
 
     /* unwind head pointers */
@@ -468,9 +443,8 @@ uint32_t emacDeQTxBuf(void *pD, CEDI_qTxBufParams *prm)
     prm->bufAdd->pAddr = CPS_UncachedRead32(&descToFree->word[0]);
 #ifdef CEDI_64B_COMPILE
     /* upper 32 bits if 64 bit addressing */
-    if (CEDI_PdVar(cfg).dmaAddrBusWidth)
-    {
-        prm->bufAdd->pAddr |= (CPS_UncachedRead32(&descToFree->word[2]) << 32);
+    if (CEDI_PdVar(cfg).dmaAddrBusWidth) {
+        prm->bufAdd->pAddr |= (CPS_UncachedRead32(&descToFree->word[2])<<32);
     }
 #endif
 
@@ -480,7 +454,7 @@ uint32_t emacDeQTxBuf(void *pD, CEDI_qTxBufParams *prm)
     /* set used bit */
     CPS_UncachedWrite32(&descToFree->word[1], stat | (uint32_t)CEDI_TXD_USED);
 
-    if (txQ->descNum > 0)
+    if (txQ->descNum>0)
         txQ->descNum--;
 
     ++txQ->descFree;
@@ -497,7 +471,7 @@ uint32_t emacDeQTxBuf(void *pD, CEDI_qTxBufParams *prm)
  */
 uint32_t emacTxDescFree(void *pD, uint8_t queueNum, uint16_t *numFree)
 {
-    if ((pD == NULL) || (numFree == NULL) || (queueNum >= CEDI_PdVar(cfg).txQs))
+    if ((pD==NULL) || (numFree==NULL) || (queueNum>=CEDI_PdVar(cfg).txQs))
         return EINVAL;
     *numFree = CEDI_PdVar(txQueue)[queueNum].descFree;
     return 0;
@@ -541,8 +515,14 @@ uint32_t emacTxDescFree(void *pD, uint8_t queueNum, uint16_t *numFree)
  *          queue)
  * @return EINVAL if any parameter invalid
  */
+#if defined(__llvm__)
+#pragma clang optimize off
+#endif
 uint32_t emacFreeTxDesc(void *pD, uint8_t queueNum, CEDI_TxDescData *descData)
 {
+#if defined(__llvm__)
+#pragma clang optimize on
+#endif
     txQueue_t *txQ;
 //    uint16_t nFree = 0;
 //    txDesc *freedDesc;
@@ -552,9 +532,9 @@ uint32_t emacFreeTxDesc(void *pD, uint8_t queueNum, CEDI_TxDescData *descData)
 //    txDesc *nextD;
 //    uint32_t wd1_1, wd1_2, wd1_3, wd1_4, wd1_5;
 
-    if ((pD == NULL) || (descData == NULL))
+    if ((pD==NULL) || (descData==NULL))
         return EINVAL;
-    if (queueNum >= CEDI_PdVar(cfg).txQs)
+    if (queueNum>=CEDI_PdVar(cfg).txQs)
         return EINVAL;
 
 //    vDbgMsg(DBG_GEN_MSG, 10, "%s entered\n", __func__);
@@ -572,27 +552,26 @@ uint32_t emacFreeTxDesc(void *pD, uint8_t queueNum, CEDI_TxDescData *descData)
     if (txQ->firstToFree)
     {
         /* look ahead to next desc */
-        /*  nextD = txQ->bdTail;
-          nextV = txQ->vTail;
-          inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
-          wd1_1 = CPS_UncachedRead32(&(nextD->word[1]));
-          inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
-          wd1_2 = CPS_UncachedRead32(&(nextD->word[1]));
-          inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
-          wd1_3 = CPS_UncachedRead32(&(nextD->word[1]));
-          inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
-          wd1_4 = CPS_UncachedRead32(&(nextD->word[1]));
-          inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
-          wd1_5 = CPS_UncachedRead32(&(nextD->word[1]));
-          vDbgMsg(DBG_GEN_MSG, 10,
-                  " testing desc:  queue=%u, txBdTail=%p, wd1(0)=%08X,"\
-            " wd1(1)=%08X, wd1(2)=%08X, wd1(3)=%08X, wd1(4)=%08X, wd1(5)=%08X\n",
-            queueNum, txQ->bdTail, descData->txDescStat, wd1_1, wd1_2,
-            wd1_3, wd1_4, wd1_5);*/
+      /*  nextD = txQ->bdTail;
+        nextV = txQ->vTail;
+        inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
+        wd1_1 = CPS_UncachedRead32(&(nextD->word[1]));
+        inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
+        wd1_2 = CPS_UncachedRead32(&(nextD->word[1]));
+        inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
+        wd1_3 = CPS_UncachedRead32(&(nextD->word[1]));
+        inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
+        wd1_4 = CPS_UncachedRead32(&(nextD->word[1]));
+        inc_txbd(pD, descData->txDescStat, &nextD, &nextV, txQ);
+        wd1_5 = CPS_UncachedRead32(&(nextD->word[1]));
+        vDbgMsg(DBG_GEN_MSG, 10,
+                " testing desc:  queue=%u, txBdTail=%p, wd1(0)=%08X,"\
+          " wd1(1)=%08X, wd1(2)=%08X, wd1(3)=%08X, wd1(4)=%08X, wd1(5)=%08X\n",
+          queueNum, txQ->bdTail, descData->txDescStat, wd1_1, wd1_2,
+          wd1_3, wd1_4, wd1_5);*/
 
         /* Only test used bit state for first buffer in frame. */
-        if (!(descData->txDescStat & (uint32_t)CEDI_TXD_USED))
-        {
+        if(!(descData->txDescStat & (uint32_t)CEDI_TXD_USED)) {
             descData->status = CEDI_TXDATA_NONE_FREED;
             return 0;
         }
@@ -601,48 +580,44 @@ uint32_t emacFreeTxDesc(void *pD, uint8_t queueNum, CEDI_TxDescData *descData)
         if ((CEDI_PdVar(cfg).enTxExtBD) &&
                 (descData->txDescStat & CEDI_TXD_TS_VALID))
         {
-            uint32_t reg;
+        uint32_t reg;
             descData->txTsData.tsValid = 1;
-            // position depends on 32/64 bit addr
-            wdNum = (CEDI_PdVar(cfg).dmaAddrBusWidth) ? 4 : 2;
+        // position depends on 32/64 bit addr
+            wdNum = (CEDI_PdVar(cfg).dmaAddrBusWidth)?4:2;
             tsLowerWd = CPS_UncachedRead32(&(txQ->bdTail->word[wdNum]));
-            tsUpperWd = CPS_UncachedRead32(&(txQ->bdTail->word[wdNum + 1]));
+            tsUpperWd = CPS_UncachedRead32(&(txQ->bdTail->word[wdNum+1]));
 
             descData->txTsData.tsNanoSec = tsLowerWd & CEDI_TS_NANO_SEC_MASK;
             descData->txTsData.tsSecs = ((tsUpperWd & CEDI_TS_SEC1_MASK)
-                                         << CEDI_TS_SEC1_POS_SHIFT)
-                                        | (tsLowerWd >> CEDI_TS_SEC0_SHIFT);
+                                            <<CEDI_TS_SEC1_POS_SHIFT)
+                                           | (tsLowerWd >> CEDI_TS_SEC0_SHIFT);
 
-            /* The timestamp only contains lower few bits of seconds, so add value from 1588 timer */
-            reg =  CPS_UncachedRead32(CEDI_RegAddr(tsu_timer_sec));
-            /* If the top bit is set in the timestamp, but not in 1588 timer, it has rolled over, so subtract max size */
-            if ((descData->txTsData.tsSecs & (CEDI_TS_SEC_TOP >> 1)) && !(reg & (CEDI_TS_SEC_TOP >> 1)))
-            {
-                descData->txTsData.tsSecs -= CEDI_TS_SEC_TOP;
-            }
-            descData->txTsData.tsSecs += ((~CEDI_TS_SEC_MASK) & EMAC_REGS__TSU_TIMER_SEC__TIMER__READ(reg));
+        /* The timestamp only contains lower few bits of seconds, so add value from 1588 timer */
+        reg =  CPS_UncachedRead32(CEDI_RegAddr(tsu_timer_sec));
+        /* If the top bit is set in the timestamp, but not in 1588 timer, it has rolled over, so subtract max size */
+        if ((descData->txTsData.tsSecs & (CEDI_TS_SEC_TOP>>1)) && !(reg & (CEDI_TS_SEC_TOP>>1))) {
+        descData->txTsData.tsSecs -= CEDI_TS_SEC_TOP;
         }
-        else
-        {
-            descData->txTsData.tsValid = 0;
+        descData->txTsData.tsSecs += ((~CEDI_TS_SEC_MASK) & EMAC_REGS__TSU_TIMER_SEC__TIMER__READ(reg));
+    }
+    else{
+        descData->txTsData.tsValid = 0;
 
-        }
+    }
 
-        if (descData->txDescStat & CEDI_TXD_LAST_BUF)
-            descData->status = CEDI_TXDATA_1ST_AND_LAST;
-        else
-        {
-            txQ->firstToFree = 0;
-            descData->status = CEDI_TXDATA_1ST_NOT_LAST;
-        }
+    if (descData->txDescStat & CEDI_TXD_LAST_BUF)
+        descData->status = CEDI_TXDATA_1ST_AND_LAST;
+    else {
+        txQ->firstToFree = 0;
+        descData->status = CEDI_TXDATA_1ST_NOT_LAST;
+    }
     }
     else
     {
         /* set later used bits in frame, for consistency */
         CPS_UncachedWrite32(&(txQ->bdTail->word[1]),
-                            descData->txDescStat | (uint32_t)CEDI_TXD_USED);
-        if (descData->txDescStat & CEDI_TXD_LAST_BUF)
-        {
+                                descData->txDescStat | (uint32_t)CEDI_TXD_USED);
+        if (descData->txDescStat & CEDI_TXD_LAST_BUF) {
             descData->status = CEDI_TXDATA_LAST_BUFFER;
             txQ->firstToFree = 1;
         }
@@ -655,9 +630,9 @@ uint32_t emacFreeTxDesc(void *pD, uint8_t queueNum, CEDI_TxDescData *descData)
 #ifdef CEDI_64B_COMPILE
     /* upper 32 bits if 64 bit addressing */
     if ((CEDI_PdVar(cfg).dmaAddrBusWidth) &&
-            (sizeof(descData->bufAdd.pAddr) == sizeof(uint64_t)))
+                (sizeof(descData->bufAdd.pAddr)==sizeof(uint64_t)))
         descData->bufAdd.pAddr |=
-            ((uint64_t)CPS_UncachedRead32(&(txQ->bdTail->word[2]))) << 32;
+                ((uint64_t)CPS_UncachedRead32(&(txQ->bdTail->word[2])))<<32;
 
 #endif
 
@@ -674,9 +649,8 @@ uint32_t emacFreeTxDesc(void *pD, uint8_t queueNum, CEDI_TxDescData *descData)
             (void *)descData->bufAdd.pAddr, descData->txDescStat & CEDI_TXD_LMASK, nFree);*/
 
     /* paranoid - empty and no last buffer flag (on last freed)? */
-    if ((0 == (descData->txDescStat & CEDI_TXD_LAST_BUF)) &&
-            (txQ->descFree == txQ->descMax - CEDI_MIN_TXBD))
-    {
+    if ((0==(descData->txDescStat & CEDI_TXD_LAST_BUF)) &&
+            (txQ->descFree==txQ->descMax-CEDI_MIN_TXBD)) {
         vDbgMsg(DBG_GEN_MSG, 5,
                 "Error: txQueue %u: LAST bit of frame not found!\n", queueNum);
         txQ->firstToFree = 1;
@@ -695,15 +669,15 @@ void emacGetTxDescStat(void *pD, uint32_t txDStatWord, CEDI_TxDescStat *txDStat)
 {
     uint32_t wd1;
 
-    if ((NULL == pD) || (NULL == txDStat))
-        return;
+    if ((NULL==pD) || (NULL==txDStat))
+      return;
 
     wd1 = txDStatWord;
     txDStat->chkOffErr = (wd1 & CEDI_TXD_CHKOFF_MASK) >> CEDI_TXD_CHKOFF_SHIFT;
-    txDStat->lateColl = (wd1 & CEDI_TXD_LATE_COLL) ? 1 : 0;
-    txDStat->frameCorr = (wd1 & CEDI_TXD_FR_CORR) ? 1 : 0;
-    txDStat->txUnderrun = (wd1 & CEDI_TXD_UNDERRUN) ? 1 : 0;
-    txDStat->retryExc = (wd1 & CEDI_TXD_RETRY_EXC) ? 1 : 0;
+    txDStat->lateColl = (wd1 & CEDI_TXD_LATE_COLL)?1:0;
+    txDStat->frameCorr = (wd1 & CEDI_TXD_FR_CORR)?1:0;
+    txDStat->txUnderrun = (wd1 & CEDI_TXD_UNDERRUN)?1:0;
+    txDStat->retryExc = (wd1 & CEDI_TXD_RETRY_EXC)?1:0;
 }
 
 /* Provide the size of descriptor calculated for the current configuration.
@@ -712,7 +686,7 @@ void emacGetTxDescStat(void *pD, uint32_t txDStatWord, CEDI_TxDescStat *txDStat)
  */
 void emacGetTxDescSize(void *pD, uint32_t *txDescSize)
 {
-    if ((pD == NULL) || (txDescSize == NULL)) return;
+    if ((pD==NULL)||(txDescSize==NULL)) return;
     *txDescSize = CEDI_PdVar(txDescriptorSize);
 }
 
@@ -724,6 +698,9 @@ void emacGetTxDescSize(void *pD, uint32_t *txDescSize)
  * @return 0 if successful
  * @return EINVAL if invalid parameter
  */
+#if defined(__llvm__)
+#pragma clang optimize off
+#endif
 uint32_t emacResetTxQ(void *pD, uint8_t queueNum)
 {
 #define CEDI_WR_TXQ_PTR_REG_N_CASE(Q) case Q:\
@@ -731,7 +708,9 @@ uint32_t emacResetTxQ(void *pD, uint8_t queueNum)
     EMAC_REGS__TRANSMIT_Q_PTR__DMA_TX_Q_PTR__MODIFY(regTmp, pAddr>>2);\
         CPS_UncachedWrite32(CEDI_RegAddr(transmit_q##Q##_ptr), regTmp);\
         break;
-
+#if defined(__llvm__)
+#pragma clang optimize on
+#endif
     uint32_t result = 0, regTmp;
     txQueue_t *txQ;
     txDesc *descStartPerQ;
@@ -739,7 +718,7 @@ uint32_t emacResetTxQ(void *pD, uint8_t queueNum)
     uintptr_t vAddr;
     uint16_t q, i;
 
-    if ((pD == NULL) || (queueNum >= CEDI_PdVar(cfg).txQs))
+    if ((pD==NULL) || (queueNum>=CEDI_PdVar(cfg).txQs))
         return EINVAL;
 
     txQ = &CEDI_PdVar(txQueue)[queueNum];
@@ -749,10 +728,9 @@ uint32_t emacResetTxQ(void *pD, uint8_t queueNum)
     pAddr = CEDI_PdVar(cfg).txQPhyAddr;
     q = 0;
     /* find start addresses for this txQ */
-    if (queueNum > 0)
+    if (queueNum>0)
         txQ->vAddrList = CEDI_PdVar(txQueue)[0].vAddrList;
-    while (q < queueNum)
-    {
+    while (q<queueNum) {
         vAddr += txQ->descMax * (CEDI_PdVar(txDescriptorSize));  //sizeof(txDesc);
         pAddr += txQ->descMax * (CEDI_PdVar(txDescriptorSize));  //sizeof(txDesc);
         txQ->vAddrList += txQ->descMax;
@@ -772,39 +750,36 @@ uint32_t emacResetTxQ(void *pD, uint8_t queueNum)
 
     /* set used flags & last wrap flag */
     descStartPerQ = txQ->bdBase;
-    for (i = 0; i < txQ->descMax; i++)
-    {
-        CPS_UncachedWrite32((uint32_t *) & (descStartPerQ->word[0]), 0);
-        CPS_UncachedWrite32((uint32_t *) & (descStartPerQ->word[1]),
-                            CEDI_TXD_USED | (i == (txQ->descMax - 1) ? CEDI_TXD_WRAP : 0));
+    for (i = 0; i<txQ->descMax; i++) {
+        CPS_UncachedWrite32((uint32_t *)&(descStartPerQ->word[0]), 0);
+        CPS_UncachedWrite32((uint32_t *)&(descStartPerQ->word[1]),
+                CEDI_TXD_USED | (i==(txQ->descMax-1)?CEDI_TXD_WRAP:0));
 
-        descStartPerQ = (txDesc*)(((uintptr_t)(descStartPerQ)) +
-                                  (CEDI_PdVar(txDescriptorSize)));
+        descStartPerQ = (txDesc*) (((uintptr_t)(descStartPerQ)) +
+                            (CEDI_PdVar(txDescriptorSize)));
     }
 
-    switch (q)
-    {
+    switch (q) {
     case 0:
-        regTmp = CPS_UncachedRead32(CEDI_RegAddr(transmit_q_ptr));
-        \
-        EMAC_REGS__TRANSMIT_Q_PTR__DMA_TX_Q_PTR__MODIFY(regTmp, pAddr >> 2);
+    regTmp = CPS_UncachedRead32(CEDI_RegAddr(transmit_q_ptr));\
+    EMAC_REGS__TRANSMIT_Q_PTR__DMA_TX_Q_PTR__MODIFY(regTmp, pAddr>>2);
         CPS_UncachedWrite32(CEDI_RegAddr(transmit_q_ptr), regTmp);
         break;
-        CEDI_WR_TXQ_PTR_REG_N_CASE(1);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(2);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(3);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(4);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(5);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(6);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(7);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(8);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(9);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(10);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(11);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(12);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(13);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(14);
-        CEDI_WR_TXQ_PTR_REG_N_CASE(15);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(1);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(2);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(3);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(4);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(5);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(6);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(7);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(8);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(9);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(10);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(11);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(12);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(13);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(14);
+    CEDI_WR_TXQ_PTR_REG_N_CASE(15);
     }
 
     return result;
@@ -826,7 +801,7 @@ uint32_t emacStartTx(void *pD)
     txQueue_t *txQ;
     uint32_t ncr;
 
-    if (pD == NULL) return EINVAL;
+    if (pD==NULL) return EINVAL;
 
     vDbgMsg(DBG_GEN_MSG, 10, "%s entered\n", __func__);
 
@@ -836,11 +811,9 @@ uint32_t emacStartTx(void *pD)
         emacEnableTx(pD);
 
     /* if anything to transmit, start transmission */
-    for (qNum = 0; qNum < cfg->txQs; ++qNum)
-    {
+    for (qNum = 0; qNum < cfg->txQs; ++qNum) {
         txQ = &CEDI_PdVar(txQueue)[qNum];
-        if (txQ->bdHead != txQ->bdTail)
-        {
+        if (txQ->bdHead != txQ->bdTail) {
             ok = 1;
             break;
         }
@@ -893,10 +866,10 @@ void emacAbortTx(void *pD)
  */
 uint32_t emacTransmitting(void *pD)
 {
-    if (pD == NULL) return 0;
+    if (pD==NULL) return 0;
 
     return EMAC_REGS__TRANSMIT_STATUS__TRANSMIT_GO__READ(
-               CPS_UncachedRead32(CEDI_RegAddr(transmit_status)));
+            CPS_UncachedRead32(CEDI_RegAddr(transmit_status)));
 }
 
 /**
@@ -908,7 +881,7 @@ uint32_t emacTransmitting(void *pD)
 void emacEnableTx(void *pD)
 {
     uint32_t ncr;
-    if (pD == NULL) return;
+    if (pD==NULL) return;
 
     /* Enable the transmitter */
     ncr = CPS_UncachedRead32(CEDI_RegAddr(network_control));
@@ -924,10 +897,10 @@ void emacEnableTx(void *pD)
  */
 uint32_t emacGetTxEnabled(void *pD)
 {
-    if (pD == NULL) return 0;
+    if (pD==NULL) return 0;
 
     return EMAC_REGS__NETWORK_CONTROL__ENABLE_TRANSMIT__READ(
-               CPS_UncachedRead32(CEDI_RegAddr(network_control)));
+            CPS_UncachedRead32(CEDI_RegAddr(network_control)));
 }
 
 /* Get the content of EMAC transmit status register
@@ -938,30 +911,30 @@ uint32_t emacGetTxEnabled(void *pD)
 uint32_t emacGetTxStatus(void *pD, CEDI_TxStatus *status)
 {
     uint32_t reg;
-    if ((pD == NULL) || (status == NULL))
+    if ((pD==NULL)||(status==NULL))
         return 0;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(transmit_status));
 //    vDbgMsg(DBG_GEN_MSG, 10, "-----getTxStatus reads 0x%08X ------\n", reg);
 
     status->txComplete =
-        EMAC_REGS__TRANSMIT_STATUS__TRANSMIT_COMPLETE__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__TRANSMIT_COMPLETE__READ(reg);
     status->usedBitRead =
-        EMAC_REGS__TRANSMIT_STATUS__USED_BIT_READ__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__USED_BIT_READ__READ(reg);
     status->collisionOcc =
-        EMAC_REGS__TRANSMIT_STATUS__COLLISION_OCCURRED__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__COLLISION_OCCURRED__READ(reg);
     status->retryLimExc =
-        EMAC_REGS__TRANSMIT_STATUS__RETRY_LIMIT_EXCEEDED__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__RETRY_LIMIT_EXCEEDED__READ(reg);
     status->lateCollision =
-        EMAC_REGS__TRANSMIT_STATUS__LATE_COLLISION_OCCURRED__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__LATE_COLLISION_OCCURRED__READ(reg);
     status->txActive =
-        EMAC_REGS__TRANSMIT_STATUS__TRANSMIT_GO__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__TRANSMIT_GO__READ(reg);
     status->txFrameErr =
-        EMAC_REGS__TRANSMIT_STATUS__AMBA_ERROR__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__AMBA_ERROR__READ(reg);
     status->txUnderRun =
-        EMAC_REGS__TRANSMIT_STATUS__TRANSMIT_UNDER_RUN__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__TRANSMIT_UNDER_RUN__READ(reg);
     status->hRespNotOk =
-        EMAC_REGS__TRANSMIT_STATUS__RESP_NOT_OK__READ(reg);
+            EMAC_REGS__TRANSMIT_STATUS__RESP_NOT_OK__READ(reg);
 
     return reg;
 }
@@ -1000,17 +973,16 @@ uint32_t emacSetTxPartialStFwd(void *pD, uint32_t watermark, uint8_t enable)
 {
     uint32_t reg;
     if (!pD) return EINVAL;
-    if (CEDI_PdVar(hwCfg).tx_pkt_buffer == 0)
+    if (CEDI_PdVar(hwCfg).tx_pkt_buffer==0)
         return ENOTSUP;
-    if (enable > 1) return EINVAL;
+    if (enable>1) return EINVAL;
 
-    if ((enable == 1) &&
-            ((watermark < 0x14UL) || (watermark >= (1UL << CEDI_PdVar(hwCfg).tx_pbuf_addr))))
+    if ((enable==1) &&
+        ((watermark<0x14UL) || (watermark>=(1UL<<CEDI_PdVar(hwCfg).tx_pbuf_addr))))
         return EINVAL;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(pbuf_txcutthru));
-    if (enable)
-    {
+    if (enable) {
         EMAC_REGS__PBUF_TXCUTTHRU__DMA_TX_CUTTHRU_THRESHOLD__MODIFY(reg,
                 watermark);
         EMAC_REGS__PBUF_TXCUTTHRU__DMA_TX_CUTTHRU__SET(reg);
@@ -1026,17 +998,17 @@ uint32_t emacSetTxPartialStFwd(void *pD, uint32_t watermark, uint8_t enable)
 uint32_t emacGetTxPartialStFwd(void *pD, uint32_t *watermark, uint8_t *enable)
 {
     uint32_t reg;
-    if ((pD == 0) || (enable == 0) || (watermark == 0))
+    if ((pD==0)||(enable==0)||(watermark==0))
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).tx_pkt_buffer == 0)
+    if (CEDI_PdVar(hwCfg).tx_pkt_buffer==0)
         return ENOTSUP;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(pbuf_txcutthru));
     (*enable) = EMAC_REGS__PBUF_TXCUTTHRU__DMA_TX_CUTTHRU__READ(reg);
     if (*enable)
-        (*watermark) = EMAC_REGS__PBUF_TXCUTTHRU__DMA_TX_CUTTHRU_THRESHOLD__READ(reg);
+      (*watermark) = EMAC_REGS__PBUF_TXCUTTHRU__DMA_TX_CUTTHRU_THRESHOLD__READ(reg);
 
-    return 0;
+        return 0;
 }
 
 
@@ -1061,29 +1033,27 @@ uint32_t emacEnableCbs(void *pD, uint8_t qSel, uint32_t idleSlope)
     uint8_t enabled;
     uint32_t reg;
 
-    if (pD == NULL) return EINVAL;
+    if (pD==NULL) return EINVAL;
 
-    if (CEDI_PdVar(hwCfg).exclude_cbs == 1)
+    if (CEDI_PdVar(hwCfg).exclude_cbs==1)
         return ENOTSUP;
 
-    if (CEDI_PdVar(numQs) == 1)
+    if (CEDI_PdVar(numQs)==1)
         return EINVAL;
 
     ret = emacGetCbsQSetting(pD, qSel, &enabled, &tmp);
-    if (ret != 0)
+    if (ret!=0)
         return ret;
 
     if (enabled)
         emacDisableCbs(pD, qSel);
 
     reg = 0;
-    if (qSel)     /* i.e. queue B */
-    {
+    if (qSel) {   /* i.e. queue B */
         EMAC_REGS__CBS_IDLESLOPE_Q_B__IDLESLOPE_B__MODIFY(reg, idleSlope);
         CPS_UncachedWrite32(CEDI_RegAddr(cbs_idleslope_q_b), reg);
     }
-    else
-    {
+    else {
         EMAC_REGS__CBS_IDLESLOPE_Q_A__IDLESLOPE_A__MODIFY(reg, idleSlope);
         CPS_UncachedWrite32(CEDI_RegAddr(cbs_idleslope_q_a), reg);
     }
@@ -1107,7 +1077,7 @@ void emacDisableCbs(void *pD, uint8_t qSel)
 {
     uint32_t reg;
 
-    if ((!pD) || (qSel > 1) || CEDI_PdVar(hwCfg).exclude_cbs) return;
+    if ((!pD) || (qSel>1) || CEDI_PdVar(hwCfg).exclude_cbs) return;
     reg = CPS_UncachedRead32(CEDI_RegAddr(cbs_control));
     if (qSel)   /* i.e. queue B */
         EMAC_REGS__CBS_CONTROL__CBS_ENABLE_QUEUE_B__MODIFY(reg, 0);
@@ -1131,37 +1101,33 @@ void emacDisableCbs(void *pD, uint8_t qSel)
  * @return ENOTSUP if CBS has been excluded from h/w config
  */
 uint32_t emacGetCbsQSetting(void *pD, uint8_t qSel,
-                            uint8_t *enable, uint32_t *idleSlope)
+               uint8_t *enable, uint32_t *idleSlope)
 {
     uint32_t reg, enabled;
 
-    if ((pD == 0) || (enable == 0) || (idleSlope == 0))
+    if ((pD==0)||(enable==0)||(idleSlope==0))
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).exclude_cbs == 1)
+    if (CEDI_PdVar(hwCfg).exclude_cbs==1)
         return ENOTSUP;
-    if (qSel > 1) return EINVAL;
+    if (qSel>1) return EINVAL;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(cbs_control));
-    if (qSel)   /* i.e. queue B */
-    {
+    if (qSel) { /* i.e. queue B */
         enabled = EMAC_REGS__CBS_CONTROL__CBS_ENABLE_QUEUE_B__READ(reg);
-        if (enabled && (idleSlope != NULL))
-        {
+        if (enabled && (idleSlope!=NULL)) {
             reg = CPS_UncachedRead32(CEDI_RegAddr(cbs_idleslope_q_b));
             *idleSlope = EMAC_REGS__CBS_IDLESLOPE_Q_B__IDLESLOPE_B__READ(reg);
         }
     }
-    else
-    {
+    else {
         enabled = EMAC_REGS__CBS_CONTROL__CBS_ENABLE_QUEUE_A__READ(reg);
-        if (enabled && (idleSlope != NULL))
-        {
+        if (enabled && (idleSlope!=NULL)) {
             reg = CPS_UncachedRead32(CEDI_RegAddr(cbs_idleslope_q_a));
             *idleSlope = EMAC_REGS__CBS_IDLESLOPE_Q_A__IDLESLOPE_A__READ(reg);
         }
     }
 
-    *enable = enabled;
+    *enable=enabled;
     return 0;
 }
 
@@ -1179,15 +1145,14 @@ uint32_t emacGetCbsQSetting(void *pD, uint8_t qSel,
  * @return 0 if successful.
  */
 uint32_t emacSetIpgStretch(void *pD, uint8_t enable, uint8_t multiplier,
-                           uint8_t divisor)
+        uint8_t divisor)
 {
     uint32_t reg;
 
-    if (pD == NULL) return EINVAL;
-    if (enable > 1) return EINVAL;
+    if (pD==NULL) return EINVAL;
+    if (enable>1) return EINVAL;
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_config));
-    if (enable)
-    {
+    if (enable) {
         EMAC_REGS__NETWORK_CONFIG__IPG_STRETCH_ENABLE__SET(reg);
         CPS_UncachedWrite32(CEDI_RegAddr(network_config), reg);
         reg = CPS_UncachedRead32(CEDI_RegAddr(stretch_ratio));
@@ -1195,8 +1160,7 @@ uint32_t emacSetIpgStretch(void *pD, uint8_t enable, uint8_t multiplier,
                 (divisor << 8) | multiplier);
         CPS_UncachedWrite32(CEDI_RegAddr(stretch_ratio), reg);
     }
-    else
-    {
+    else {
         EMAC_REGS__NETWORK_CONFIG__IPG_STRETCH_ENABLE__CLR(reg);
         CPS_UncachedWrite32(CEDI_RegAddr(network_config), reg);
     }
@@ -1212,24 +1176,22 @@ uint32_t emacSetIpgStretch(void *pD, uint8_t enable, uint8_t multiplier,
  * @return =0 if successful, EINVAL if any parameter =NULL
  */
 uint32_t emacGetIpgStretch(void *pD, uint8_t *enabled, uint8_t *multiplier,
-                           uint8_t *divisor)
+        uint8_t *divisor)
 {
     uint32_t reg, stretch;
 
-    if ((pD == NULL) || (enabled == NULL) || (multiplier == NULL) || (divisor == NULL))
+    if ((pD==NULL) || (enabled==NULL) || (multiplier==NULL) || (divisor==NULL))
         return EINVAL;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_config));
-    if (EMAC_REGS__NETWORK_CONFIG__IPG_STRETCH_ENABLE__READ(reg))
-    {
+    if (EMAC_REGS__NETWORK_CONFIG__IPG_STRETCH_ENABLE__READ(reg)) {
         *enabled = 1;
         reg = CPS_UncachedRead32(CEDI_RegAddr(stretch_ratio));
         stretch = EMAC_REGS__STRETCH_RATIO__IPG_STRETCH__READ(reg);
         *multiplier = (stretch & 0xFF);
         *divisor = (stretch >> 8) & 0xFF;
     }
-    else
-    {
+    else {
         *enabled = 0;
         *multiplier = 0;
         *divisor = 0;

@@ -66,9 +66,9 @@ extern "C" {
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Prng_Init(CRYPTO_Type *base,
-        uint32_t lfsr32InitState,
-        uint32_t lfsr31InitState,
-        uint32_t lfsr29InitState)
+                                                  uint32_t lfsr32InitState,
+                                                  uint32_t lfsr31InitState,
+                                                  uint32_t lfsr29InitState)
 {
     REG_CRYPTO_PR_LFSR_CTL0(base) = (uint32_t)(_VAL2FLD(CRYPTO_PR_LFSR_CTL0_LFSR32, lfsr32InitState));
 
@@ -99,8 +99,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Prng_Init(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Prng(CRYPTO_Type *base,
-        uint32_t max,
-        uint32_t *randomNum)
+                                             uint32_t max,
+                                             uint32_t *randomNum)
 {
     Cy_Crypto_SetReg1Instr(base, max);
 
@@ -109,7 +109,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Prng(CRYPTO_Type *base,
                              CY_CRYPTO_RSRC0_SHIFT);
 
     /* Wait until the PRNG instruction is complete */
-    while (0uL != _FLD2VAL(CRYPTO_STATUS_PR_BUSY, REG_CRYPTO_STATUS(base)))
+    while(0uL != _FLD2VAL(CRYPTO_STATUS_PR_BUSY, REG_CRYPTO_STATUS(base)))
     {
     }
 

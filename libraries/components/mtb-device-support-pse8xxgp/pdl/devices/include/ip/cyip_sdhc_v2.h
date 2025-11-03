@@ -40,104 +40,101 @@
 /**
   * \brief MMIO at SDHC wrapper level (SDHC_WRAP)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Top level wrapper control */
-    __IM uint32_t RESERVED[7];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Top level wrapper control */
+   __IM uint32_t RESERVED[7];
 } SDHC_WRAP_Type;                               /*!< Size = 32 (0x20) */
 
 /**
   * \brief MMIO for Synopsys Mobile Storage Host Controller IP (SDHC_CORE)
   */
-typedef struct
-{
-    __IOM uint32_t SDMASA_R;                      /*!< 0x00000000 SDMA System Address register */
-    __IOM uint16_t BLOCKSIZE_R;                   /*!< 0x00000004 Block Size register */
-    __IOM uint16_t BLOCKCOUNT_R;                  /*!< 0x00000006 16-bit Block Count register */
-    __IOM uint32_t ARGUMENT_R;                    /*!< 0x00000008 Argument register */
-    __IOM uint16_t XFER_MODE_R;                   /*!< 0x0000000C Transfer Mode register */
-    __IOM uint16_t CMD_R;                         /*!< 0x0000000E Command register */
-    __IM uint32_t RESP01_R;                      /*!< 0x00000010 Response Register 0/1 */
-    __IM uint32_t RESP23_R;                      /*!< 0x00000014 Response Register 2/3 */
-    __IM uint32_t RESP45_R;                      /*!< 0x00000018 Response Register 4/5 */
-    __IM uint32_t RESP67_R;                      /*!< 0x0000001C Response Register 6/7 */
-    __IOM uint32_t BUF_DATA_R;                    /*!< 0x00000020 Buffer Data Port Register */
-    __IM uint32_t PSTATE_REG;                    /*!< 0x00000024 Present State Register */
-    __IOM uint8_t  HOST_CTRL1_R;                  /*!< 0x00000028 Host Control 1 Register */
-    __IOM uint8_t  PWR_CTRL_R;                    /*!< 0x00000029 Power Control Register */
-    __IOM uint8_t  BGAP_CTRL_R;                   /*!< 0x0000002A Block Gap Control Register */
-    __IOM uint8_t  WUP_CTRL_R;                    /*!< 0x0000002B Wakeup Control Register */
-    __IOM uint16_t CLK_CTRL_R;                    /*!< 0x0000002C Clock Control Register */
-    __IOM uint8_t  TOUT_CTRL_R;                   /*!< 0x0000002E Timeout Control Register */
-    __IOM uint8_t  SW_RST_R;                      /*!< 0x0000002F Software Reset Register */
-    __IOM uint16_t NORMAL_INT_STAT_R;             /*!< 0x00000030 Normal Interrupt Status Register */
-    __IOM uint16_t ERROR_INT_STAT_R;              /*!< 0x00000032 Error Interrupt Status Register */
-    __IOM uint16_t NORMAL_INT_STAT_EN_R;          /*!< 0x00000034 Normal Interrupt Status Enable Register */
-    __IOM uint16_t ERROR_INT_STAT_EN_R;           /*!< 0x00000036 Error Interrupt Status Enable Register */
-    __IOM uint16_t NORMAL_INT_SIGNAL_EN_R;        /*!< 0x00000038 Normal Interrupt Signal Enable Register */
-    __IOM uint16_t ERROR_INT_SIGNAL_EN_R;         /*!< 0x0000003A Error Interrupt Signal Enable Register */
-    __IM uint16_t AUTO_CMD_STAT_R;               /*!< 0x0000003C Auto CMD Status Register */
-    __IOM uint16_t HOST_CTRL2_R;                  /*!< 0x0000003E Host Control 2 Register */
-    __IM uint32_t CAPABILITIES1_R;               /*!< 0x00000040 Capabilities 1 Register - 0 to 31 */
-    __IM uint32_t CAPABILITIES2_R;               /*!< 0x00000044 Capabilities Register - 32 to 63 */
-    __IM uint32_t CURR_CAPABILITIES1_R;          /*!< 0x00000048 Current Capabilities Register - 0 to 31 */
-    __IM uint32_t CURR_CAPABILITIES2_R;          /*!< 0x0000004C Maximum Current Capabilities Register - 32 to 63 */
-    __OM uint16_t FORCE_AUTO_CMD_STAT_R;         /*!< 0x00000050 Force Event Register for Auto CMD Error Status register */
-    __IOM uint16_t FORCE_ERROR_INT_STAT_R;        /*!< 0x00000052 Force Event Register for Error Interrupt Status */
-    __IM uint8_t  ADMA_ERR_STAT_R;               /*!< 0x00000054 ADMA Error Status Register */
-    __IM uint8_t  RESERVED[3];
-    __IOM uint32_t ADMA_SA_LOW_R;                 /*!< 0x00000058 ADMA System Address Register - Low */
-    __IM uint32_t RESERVED1[7];
-    __IOM uint32_t ADMA_ID_LOW_R;                 /*!< 0x00000078 ADMA3 Integrated Descriptor Address Register - Low */
-    __IM uint16_t RESERVED2[65];
-    __IM uint16_t HOST_CNTRL_VERS_R;             /*!< 0x000000FE Host Controller Version */
-    __IM uint32_t RESERVED3[32];
-    __IM uint32_t CQVER;                         /*!< 0x00000180 Command Queuing Version register */
-    __IM uint32_t CQCAP;                         /*!< 0x00000184 Command Queuing Capabilities register */
-    __IOM uint32_t CQCFG;                         /*!< 0x00000188 Command Queuing Configuration register */
-    __IOM uint32_t CQCTL;                         /*!< 0x0000018C Command Queuing Control register */
-    __IOM uint32_t CQIS;                          /*!< 0x00000190 Command Queuing Interrupt Status register */
-    __IOM uint32_t CQISE;                         /*!< 0x00000194 Command Queuing Interrupt Status Enable register */
-    __IOM uint32_t CQISGE;                        /*!< 0x00000198 Command Queuing Interrupt signal enable register */
-    __IOM uint32_t CQIC;                          /*!< 0x0000019C Command Queuing Interrupt Coalescing register */
-    __IOM uint32_t CQTDLBA;                       /*!< 0x000001A0 Command Queuing Task Descriptor List Base Address register */
-    __IM uint32_t RESERVED4;
-    __IOM uint32_t CQTDBR;                        /*!< 0x000001A8 Command Queuing DoorBell register */
-    __IOM uint32_t CQTCN;                         /*!< 0x000001AC Command Queuing TaskClear Notification register */
-    __IM uint32_t CQDQS;                         /*!< 0x000001B0 Device queue status register */
-    __IM uint32_t CQDPT;                         /*!< 0x000001B4 Device pending tasks register */
-    __IOM uint32_t CQTCLR;                        /*!< 0x000001B8 Command Queuing DoorBell register */
-    __IM uint32_t RESERVED5;
-    __IOM uint32_t CQSSC1;                        /*!< 0x000001C0 CQ Send Status Configuration 1 register */
-    __IOM uint32_t CQSSC2;                        /*!< 0x000001C4 CQ Send Status Configuration 2 register */
-    __IM uint32_t CQCRDCT;                       /*!< 0x000001C8 Command response for direct command register */
-    __IM uint32_t RESERVED6;
-    __IOM uint32_t CQRMEM;                        /*!< 0x000001D0 Command response mode error mask register */
-    __IM uint32_t CQTERRI;                       /*!< 0x000001D4 CQ Task Error Information register */
-    __IM uint32_t CQCRI;                         /*!< 0x000001D8 CQ Command response index */
-    __IM uint32_t CQCRA;                         /*!< 0x000001DC CQ Command response argument register */
-    __IM uint32_t RESERVED7[200];
-    __IM uint32_t MSHC_VER_ID_R;                 /*!< 0x00000500 MSHC version */
-    __IM uint32_t MSHC_VER_TYPE_R;               /*!< 0x00000504 MSHC version type */
-    __IOM uint8_t  MSHC_CTRL_R;                   /*!< 0x00000508 MSHC Control register */
-    __IM uint8_t  RESERVED8[7];
-    __IOM uint8_t  MBIU_CTRL_R;                   /*!< 0x00000510 MBIU Control register */
-    __IM uint8_t  RESERVED9[27];
-    __IOM uint16_t EMMC_CTRL_R;                   /*!< 0x0000052C eMMC Control register */
-    __IOM uint16_t BOOT_CTRL_R;                   /*!< 0x0000052E eMMC Boot Control register */
-    __IM uint32_t GP_IN_R;                       /*!< 0x00000530 General Purpose Input register */
-    __IOM uint32_t GP_OUT_R;                      /*!< 0x00000534 General Purpose Output register */
-    __IM uint32_t RESERVED10[690];
+typedef struct {
+  __IOM uint32_t SDMASA_R;                      /*!< 0x00000000 SDMA System Address register */
+  __IOM uint16_t BLOCKSIZE_R;                   /*!< 0x00000004 Block Size register */
+  __IOM uint16_t BLOCKCOUNT_R;                  /*!< 0x00000006 16-bit Block Count register */
+  __IOM uint32_t ARGUMENT_R;                    /*!< 0x00000008 Argument register */
+  __IOM uint16_t XFER_MODE_R;                   /*!< 0x0000000C Transfer Mode register */
+  __IOM uint16_t CMD_R;                         /*!< 0x0000000E Command register */
+   __IM uint32_t RESP01_R;                      /*!< 0x00000010 Response Register 0/1 */
+   __IM uint32_t RESP23_R;                      /*!< 0x00000014 Response Register 2/3 */
+   __IM uint32_t RESP45_R;                      /*!< 0x00000018 Response Register 4/5 */
+   __IM uint32_t RESP67_R;                      /*!< 0x0000001C Response Register 6/7 */
+  __IOM uint32_t BUF_DATA_R;                    /*!< 0x00000020 Buffer Data Port Register */
+   __IM uint32_t PSTATE_REG;                    /*!< 0x00000024 Present State Register */
+  __IOM uint8_t  HOST_CTRL1_R;                  /*!< 0x00000028 Host Control 1 Register */
+  __IOM uint8_t  PWR_CTRL_R;                    /*!< 0x00000029 Power Control Register */
+  __IOM uint8_t  BGAP_CTRL_R;                   /*!< 0x0000002A Block Gap Control Register */
+  __IOM uint8_t  WUP_CTRL_R;                    /*!< 0x0000002B Wakeup Control Register */
+  __IOM uint16_t CLK_CTRL_R;                    /*!< 0x0000002C Clock Control Register */
+  __IOM uint8_t  TOUT_CTRL_R;                   /*!< 0x0000002E Timeout Control Register */
+  __IOM uint8_t  SW_RST_R;                      /*!< 0x0000002F Software Reset Register */
+  __IOM uint16_t NORMAL_INT_STAT_R;             /*!< 0x00000030 Normal Interrupt Status Register */
+  __IOM uint16_t ERROR_INT_STAT_R;              /*!< 0x00000032 Error Interrupt Status Register */
+  __IOM uint16_t NORMAL_INT_STAT_EN_R;          /*!< 0x00000034 Normal Interrupt Status Enable Register */
+  __IOM uint16_t ERROR_INT_STAT_EN_R;           /*!< 0x00000036 Error Interrupt Status Enable Register */
+  __IOM uint16_t NORMAL_INT_SIGNAL_EN_R;        /*!< 0x00000038 Normal Interrupt Signal Enable Register */
+  __IOM uint16_t ERROR_INT_SIGNAL_EN_R;         /*!< 0x0000003A Error Interrupt Signal Enable Register */
+   __IM uint16_t AUTO_CMD_STAT_R;               /*!< 0x0000003C Auto CMD Status Register */
+  __IOM uint16_t HOST_CTRL2_R;                  /*!< 0x0000003E Host Control 2 Register */
+   __IM uint32_t CAPABILITIES1_R;               /*!< 0x00000040 Capabilities 1 Register - 0 to 31 */
+   __IM uint32_t CAPABILITIES2_R;               /*!< 0x00000044 Capabilities Register - 32 to 63 */
+   __IM uint32_t CURR_CAPABILITIES1_R;          /*!< 0x00000048 Current Capabilities Register - 0 to 31 */
+   __IM uint32_t CURR_CAPABILITIES2_R;          /*!< 0x0000004C Maximum Current Capabilities Register - 32 to 63 */
+   __OM uint16_t FORCE_AUTO_CMD_STAT_R;         /*!< 0x00000050 Force Event Register for Auto CMD Error Status register */
+  __IOM uint16_t FORCE_ERROR_INT_STAT_R;        /*!< 0x00000052 Force Event Register for Error Interrupt Status */
+   __IM uint8_t  ADMA_ERR_STAT_R;               /*!< 0x00000054 ADMA Error Status Register */
+   __IM uint8_t  RESERVED[3];
+  __IOM uint32_t ADMA_SA_LOW_R;                 /*!< 0x00000058 ADMA System Address Register - Low */
+   __IM uint32_t RESERVED1[7];
+  __IOM uint32_t ADMA_ID_LOW_R;                 /*!< 0x00000078 ADMA3 Integrated Descriptor Address Register - Low */
+   __IM uint16_t RESERVED2[65];
+   __IM uint16_t HOST_CNTRL_VERS_R;             /*!< 0x000000FE Host Controller Version */
+   __IM uint32_t RESERVED3[32];
+   __IM uint32_t CQVER;                         /*!< 0x00000180 Command Queuing Version register */
+   __IM uint32_t CQCAP;                         /*!< 0x00000184 Command Queuing Capabilities register */
+  __IOM uint32_t CQCFG;                         /*!< 0x00000188 Command Queuing Configuration register */
+  __IOM uint32_t CQCTL;                         /*!< 0x0000018C Command Queuing Control register */
+  __IOM uint32_t CQIS;                          /*!< 0x00000190 Command Queuing Interrupt Status register */
+  __IOM uint32_t CQISE;                         /*!< 0x00000194 Command Queuing Interrupt Status Enable register */
+  __IOM uint32_t CQISGE;                        /*!< 0x00000198 Command Queuing Interrupt signal enable register */
+  __IOM uint32_t CQIC;                          /*!< 0x0000019C Command Queuing Interrupt Coalescing register */
+  __IOM uint32_t CQTDLBA;                       /*!< 0x000001A0 Command Queuing Task Descriptor List Base Address register */
+   __IM uint32_t RESERVED4;
+  __IOM uint32_t CQTDBR;                        /*!< 0x000001A8 Command Queuing DoorBell register */
+  __IOM uint32_t CQTCN;                         /*!< 0x000001AC Command Queuing TaskClear Notification register */
+   __IM uint32_t CQDQS;                         /*!< 0x000001B0 Device queue status register */
+   __IM uint32_t CQDPT;                         /*!< 0x000001B4 Device pending tasks register */
+  __IOM uint32_t CQTCLR;                        /*!< 0x000001B8 Command Queuing DoorBell register */
+   __IM uint32_t RESERVED5;
+  __IOM uint32_t CQSSC1;                        /*!< 0x000001C0 CQ Send Status Configuration 1 register */
+  __IOM uint32_t CQSSC2;                        /*!< 0x000001C4 CQ Send Status Configuration 2 register */
+   __IM uint32_t CQCRDCT;                       /*!< 0x000001C8 Command response for direct command register */
+   __IM uint32_t RESERVED6;
+  __IOM uint32_t CQRMEM;                        /*!< 0x000001D0 Command response mode error mask register */
+   __IM uint32_t CQTERRI;                       /*!< 0x000001D4 CQ Task Error Information register */
+   __IM uint32_t CQCRI;                         /*!< 0x000001D8 CQ Command response index */
+   __IM uint32_t CQCRA;                         /*!< 0x000001DC CQ Command response argument register */
+   __IM uint32_t RESERVED7[200];
+   __IM uint32_t MSHC_VER_ID_R;                 /*!< 0x00000500 MSHC version */
+   __IM uint32_t MSHC_VER_TYPE_R;               /*!< 0x00000504 MSHC version type */
+  __IOM uint8_t  MSHC_CTRL_R;                   /*!< 0x00000508 MSHC Control register */
+   __IM uint8_t  RESERVED8[7];
+  __IOM uint8_t  MBIU_CTRL_R;                   /*!< 0x00000510 MBIU Control register */
+   __IM uint8_t  RESERVED9[27];
+  __IOM uint16_t EMMC_CTRL_R;                   /*!< 0x0000052C eMMC Control register */
+  __IOM uint16_t BOOT_CTRL_R;                   /*!< 0x0000052E eMMC Boot Control register */
+   __IM uint32_t GP_IN_R;                       /*!< 0x00000530 General Purpose Input register */
+  __IOM uint32_t GP_OUT_R;                      /*!< 0x00000534 General Purpose Output register */
+   __IM uint32_t RESERVED10[690];
 } SDHC_CORE_Type;                               /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief SD/eMMC Host Controller (SDHC)
   */
-typedef struct
-{
-    SDHC_WRAP_Type WRAP;                    /*!< 0x00000000 MMIO at SDHC wrapper level */
-    __IM uint32_t RESERVED[1016];
-    SDHC_CORE_Type CORE;                    /*!< 0x00001000 MMIO for Synopsys Mobile Storage Host Controller IP */
+typedef struct {
+        SDHC_WRAP_Type WRAP;                    /*!< 0x00000000 MMIO at SDHC wrapper level */
+   __IM uint32_t RESERVED[1016];
+        SDHC_CORE_Type CORE;                    /*!< 0x00001000 MMIO for Synopsys Mobile Storage Host Controller IP */
 } SDHC_Type;                                    /*!< Size = 8192 (0x2000) */
 
 

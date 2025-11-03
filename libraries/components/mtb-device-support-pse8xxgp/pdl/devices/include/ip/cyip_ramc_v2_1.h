@@ -39,54 +39,52 @@
 /**
   * \brief MPC Memory Protection Controller registers (RAMC_MPC)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
                                                                 the security owner PC. The error response configuration is
                                                                 located in CFG.RESPONSE, only one such configuration exists
                                                                 applying to all protection contexts in the system. */
-    __IM uint32_t RESERVED[63];
-    __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
+   __IM uint32_t RESERVED[63];
+  __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
                                                                 (Separate CTRL for each PC depends on access_pc) */
-    __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
-    __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
-    __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
+   __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
+   __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
+  __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
                                                                 for each PC depending on access_pc) */
-    __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
-    __IM uint32_t RESERVED1[59];
-    __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
-    __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
-    __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
-    __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
+  __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
+   __IM uint32_t RESERVED1[59];
+  __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
+   __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
+  __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
+  __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
                                                                 ROT_BLK_LUT */
-    __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
-    __IM uint32_t RESERVED3[889];
+  __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
+   __IM uint32_t RESERVED3[889];
 } RAMC_MPC_Type;                                /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief RAMC0/1/2 (RAMC)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IM uint32_t RESERVED;
-    __IM uint32_t STATUS;                        /*!< 0x00000008 Status */
-    __IM uint32_t RESERVED1[5];
-    __IOM uint32_t ECC_CTL;                       /*!< 0x00000020 ECC control */
-    __IM uint32_t ECC_STATUS0;                   /*!< 0x00000024 ECC status 0 */
-    __IM uint32_t ECC_STATUS1;                   /*!< 0x00000028 ECC status 1 */
-    __IM uint32_t RESERVED2[54];
-    __IOM uint32_t ECC_MATCH;                     /*!< 0x00000104 ECC match */
-    __IM uint32_t RESERVED3[62];
-    __IOM uint32_t PWR_MACRO_CTL;                 /*!< 0x00000200 SRAM power partition power control */
-    __IM uint32_t RESERVED4[15];
-    __IOM uint32_t PWR_MACRO_CTL_LOCK;            /*!< 0x00000240 SRAM power partition power control Lock */
-    __IM uint32_t RESERVED5[15];
-    __IOM uint32_t PWR_DELAY_CTL;                 /*!< 0x00000280 SRAM power switch power up & sequence delay */
-    __IM uint32_t RESERVED6[3935];
-    RAMC_MPC_Type MPC[1];                   /*!< 0x00004000 MPC Memory Protection Controller registers */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+   __IM uint32_t RESERVED;
+   __IM uint32_t STATUS;                        /*!< 0x00000008 Status */
+   __IM uint32_t RESERVED1[5];
+  __IOM uint32_t ECC_CTL;                       /*!< 0x00000020 ECC control */
+   __IM uint32_t ECC_STATUS0;                   /*!< 0x00000024 ECC status 0 */
+   __IM uint32_t ECC_STATUS1;                   /*!< 0x00000028 ECC status 1 */
+   __IM uint32_t RESERVED2[54];
+  __IOM uint32_t ECC_MATCH;                     /*!< 0x00000104 ECC match */
+   __IM uint32_t RESERVED3[62];
+  __IOM uint32_t PWR_MACRO_CTL;                 /*!< 0x00000200 SRAM power partition power control */
+   __IM uint32_t RESERVED4[15];
+  __IOM uint32_t PWR_MACRO_CTL_LOCK;            /*!< 0x00000240 SRAM power partition power control Lock */
+   __IM uint32_t RESERVED5[15];
+  __IOM uint32_t PWR_DELAY_CTL;                 /*!< 0x00000280 SRAM power switch power up & sequence delay */
+   __IM uint32_t RESERVED6[3935];
+        RAMC_MPC_Type MPC[1];                   /*!< 0x00004000 MPC Memory Protection Controller registers */
 } RAMC_Type;                                    /*!< Size = 20480 (0x5000) */
 
 

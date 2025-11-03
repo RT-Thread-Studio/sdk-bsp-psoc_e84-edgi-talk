@@ -38,24 +38,23 @@
 /**
   * \brief MXCM55-0/1 (MXCM55)
   */
-typedef struct
-{
-    __IOM uint32_t CM55_CTL;                      /*!< 0x00000000 Control */
-    __IOM uint32_t CM55_CMD;                      /*!< 0x00000004 Command */
-    __IM uint32_t CM55_STATUS;                   /*!< 0x00000008 Status */
-    __IOM uint32_t CM55_TCM_CTL;                  /*!< 0x0000000C TCM control */
-    __IM uint32_t RESERVED[12];
-    __IM uint32_t CM55_INT_STATUS[16];           /*!< 0x00000040 CM55 interrupt status */
-    __IOM uint32_t CM55_NMI_CTL[4];               /*!< 0x00000080 CM55 NMI control */
-    __IM uint32_t RESERVED1[12];
-    __IOM uint32_t CM55_EVENT_CTL;                /*!< 0x000000C0 CM55 EVENT control */
-    __IM uint32_t RESERVED2[975];
-    __IOM uint32_t CM55_S_VECTOR_TABLE_BASE;      /*!< 0x00001000 CM55 secure vector table base */
-    __IOM uint32_t CM55_NS_VECTOR_TABLE_BASE;     /*!< 0x00001004 CM55 non-secure vector table base */
-    __IM uint32_t RESERVED3[1070];
-    __IOM uint32_t WOUNDING;                      /*!< 0x000020C0 Wounding */
-    __IM uint32_t RESERVED4[6095];
-    __IOM uint32_t CM55_SYSTEM_INT_CTL[1023];     /*!< 0x00008000 CM55 system interrupt control */
+typedef struct {
+  __IOM uint32_t CM55_CTL;                      /*!< 0x00000000 Control */
+  __IOM uint32_t CM55_CMD;                      /*!< 0x00000004 Command */
+   __IM uint32_t CM55_STATUS;                   /*!< 0x00000008 Status */
+  __IOM uint32_t CM55_TCM_CTL;                  /*!< 0x0000000C TCM control */
+   __IM uint32_t RESERVED[12];
+   __IM uint32_t CM55_INT_STATUS[16];           /*!< 0x00000040 CM55 interrupt status */
+  __IOM uint32_t CM55_NMI_CTL[4];               /*!< 0x00000080 CM55 NMI control */
+   __IM uint32_t RESERVED1[12];
+  __IOM uint32_t CM55_EVENT_CTL;                /*!< 0x000000C0 CM55 EVENT control */
+   __IM uint32_t RESERVED2[975];
+  __IOM uint32_t CM55_S_VECTOR_TABLE_BASE;      /*!< 0x00001000 CM55 secure vector table base */
+  __IOM uint32_t CM55_NS_VECTOR_TABLE_BASE;     /*!< 0x00001004 CM55 non-secure vector table base */
+   __IM uint32_t RESERVED3[1070];
+  __IOM uint32_t WOUNDING;                      /*!< 0x000020C0 Wounding */
+   __IM uint32_t RESERVED4[6095];
+  __IOM uint32_t CM55_SYSTEM_INT_CTL[1023];     /*!< 0x00008000 CM55 system interrupt control */
 } MXCM55_Type;                                  /*!< Size = 36860 (0x8FFC) */
 
 

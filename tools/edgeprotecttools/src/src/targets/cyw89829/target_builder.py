@@ -14,26 +14,26 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from ..cyw20829_b0 import CYW20829B0Builder
+from ..cyw20829 import CYW20829B1Builder
 
 
-class CYW89829Builder(CYW20829B0Builder):
-    """ CYW89829 target builder """
+class CYW89829B1Builder(CYW20829B1Builder):
+    """ CYW89829 B1 target builder """
 
     def get_test_packages(self):
         return {
             'testapps': {
-                'package': 'testapps_cyw89829', 'flow_name': 'testapps'
+                'package': 'testapps_cyw89829_b1', 'flow_name': 'testapps'
             },
             'testapps_si': {
-                'package': 'testapps_cyw89829', 'flow_name': 'testapps_si'
+                'package': 'testapps_cyw89829_b1', 'flow_name': 'testapps_si'
             }
         }
 
     def get_silicon_id(self):
         """Gets the target silicon ID"""
         return {
-            'id': [0xEB47],
+            'id': [0xEB4E, 0xEB51],
             'rev': [0x21],
             'family': 0x110
         }

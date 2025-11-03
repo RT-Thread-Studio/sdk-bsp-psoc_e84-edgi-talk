@@ -140,7 +140,7 @@ cy_rslt_t mtb_hal_clock_set_enabled(mtb_hal_clock_t* clock, bool enabled, bool w
  * @return The status of the request to set the clock frequency.
  */
 cy_rslt_t mtb_hal_clock_set_frequency(mtb_hal_clock_t* clock, uint32_t hz,
-                                      const mtb_hal_clock_tolerance_t *tolerance);
+                                      const mtb_hal_clock_tolerance_t* tolerance);
 
 
 #if defined(__cplusplus)
@@ -148,7 +148,7 @@ cy_rslt_t mtb_hal_clock_set_frequency(mtb_hal_clock_t* clock, uint32_t hz,
 #endif /* defined(__cplusplus) */
 
 #ifdef MTB_HAL_CLOCK_IMPL_HEADER
-    #include MTB_HAL_CLOCK_IMPL_HEADER
+#include MTB_HAL_CLOCK_IMPL_HEADER
 #endif /* MTB_HAL_CLOCK_IMPL_HEADER */
 
 /** \} group_hal_clock */

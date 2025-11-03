@@ -65,14 +65,13 @@
   @param[in]     pSrc        points to the input vector
   @param[out]    pDst        points to the output vector
   @param[in]     numSamples  number of samples in each vector
-  @return        none
  */
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_cmplx_conj_f32(
-    const float32_t *pSrc,
-    float32_t *pDst,
+ARM_DSP_ATTRIBUTE void arm_cmplx_conj_f32(
+    const float32_t * pSrc,
+    float32_t * pDst,
     uint32_t numSamples)
 {
     static const float32_t cmplx_conj_sign[4] = { 1.0f, -1.0f, 1.0f, -1.0f };
@@ -92,7 +91,7 @@ void arm_cmplx_conj_f32(
     while (blkCnt > 0U)
     {
         vecSrc = vld1q(pSrc);
-        vst1q(pDst, vmulq(vecSrc, vecSign));
+        vst1q(pDst,vmulq(vecSrc, vecSign));
         /*
          * Decrement the blkCnt loop counter
          * Advance vector source and destination pointers
@@ -102,108 +101,108 @@ void arm_cmplx_conj_f32(
         blkCnt--;
     }
 
-    /* Tail */
+     /* Tail */
     blkCnt = (blockSize & 0x3) >> 1;
 
     while (blkCnt > 0U)
     {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
-
-        /* Calculate Complex Conjugate and store result in destination buffer. */
-        *pDst++ =  *pSrc++;
-        *pDst++ = -*pSrc++;
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  
+      /* Calculate Complex Conjugate and store result in destination buffer. */
+      *pDst++ =  *pSrc++;
+      *pDst++ = -*pSrc++;
+  
+      /* Decrement loop counter */
+      blkCnt--;
     }
 
 }
 
 #else
-void arm_cmplx_conj_f32(
-    const float32_t *pSrc,
-    float32_t *pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_conj_f32(
+  const float32_t * pSrc,
+        float32_t * pDst,
+        uint32_t numSamples)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 #if defined(ARM_MATH_NEON) && !defined(ARM_MATH_AUTOVECTORIZE)
-    float32x4_t zero;
-    float32x4x2_t vec;
+   float32x4_t zero;
+   float32x4x2_t vec;
 
-    zero = vdupq_n_f32(0.0f);
+   zero = vdupq_n_f32(0.0f);
 
-    /* Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+   /* Compute 4 outputs at a time */
+   blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C[0]+jC[1] = A[0]+(-1)*jA[1] */
-        /* Calculate Complex Conjugate and then store the results in the destination buffer. */
-        vec = vld2q_f32(pSrc);
-        vec.val[1] = vsubq_f32(zero, vec.val[1]);
-        vst2q_f32(pDst, vec);
+   while (blkCnt > 0U)
+   {
+     /* C[0]+jC[1] = A[0]+(-1)*jA[1] */
+     /* Calculate Complex Conjugate and then store the results in the destination buffer. */
+     vec = vld2q_f32(pSrc);
+     vec.val[1] = vsubq_f32(zero,vec.val[1]);
+     vst2q_f32(pDst,vec);
 
-        /* Increment pointers */
-        pSrc += 8;
-        pDst += 8;
+     /* Increment pointers */
+     pSrc += 8;
+     pDst += 8;
+        
+     /* Decrement the loop counter */
+     blkCnt--;
+   }
 
-        /* Decrement the loop counter */
-        blkCnt--;
-    }
-
-    /* Tail */
-    blkCnt = numSamples & 0x3;
+   /* Tail */
+   blkCnt = numSamples & 0x3;
 
 #else
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  while (blkCnt > 0U)
+  {
+    /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
 
-        /* Calculate Complex Conjugate and store result in destination buffer. */
-        *pDst++ =  *pSrc++;
-        *pDst++ = -*pSrc++;
+    /* Calculate Complex Conjugate and store result in destination buffer. */
+    *pDst++ =  *pSrc++;
+    *pDst++ = -*pSrc++;
 
-        *pDst++ =  *pSrc++;
-        *pDst++ = -*pSrc++;
+    *pDst++ =  *pSrc++;
+    *pDst++ = -*pSrc++;
 
-        *pDst++ =  *pSrc++;
-        *pDst++ = -*pSrc++;
+    *pDst++ =  *pSrc++;
+    *pDst++ = -*pSrc++;
 
-        *pDst++ =  *pSrc++;
-        *pDst++ = -*pSrc++;
+    *pDst++ =  *pSrc++;
+    *pDst++ = -*pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = numSamples % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = numSamples % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 #endif /* #if defined (ARM_MATH_NEON) */
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  while (blkCnt > 0U)
+  {
+    /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
 
-        /* Calculate Complex Conjugate and store result in destination buffer. */
-        *pDst++ =  *pSrc++;
-        *pDst++ = -*pSrc++;
+    /* Calculate Complex Conjugate and store result in destination buffer. */
+    *pDst++ =  *pSrc++;
+    *pDst++ = -*pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

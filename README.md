@@ -29,7 +29,7 @@ $ sdk-bsp-psoc_e84-edgi-talk
 │   ├── Edgi-Talk_Audio
 │   ├── Edgi-Talk_Blink_Led
 │   ├── Edgi-Talk_CoreMark
-│   ├── Edgi-Talk_emUSB_device_CDC_Echo
+│   ├── Edgi-Talk_CDC_Echo
 │   ├── Edgi-Talk_HyperRam
 │   ├── Edgi-Talk_Key_Irq
 │   ├── Edgi-Talk_LSM6DS3
@@ -110,4 +110,4 @@ The system boot sequence is as follows:
   ```
   RT-Thread Settings --> Hardware --> select SOC Multi Core Mode --> Enable CM55 Core
   ```
-
+![Enable M55](docs/figures/config.png)

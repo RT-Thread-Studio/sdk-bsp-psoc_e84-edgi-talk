@@ -41,47 +41,43 @@
 /**
   * \brief Peripheral group structure (PERI_GR)
   */
-typedef struct
-{
-    __IOM uint32_t CLOCK_CTL;                     /*!< 0x00000000 Clock control */
-    __IM uint32_t RESERVED[3];
-    __IOM uint32_t SL_CTL;                        /*!< 0x00000010 Slave control */
-    __IOM uint32_t SL_CTL2;                       /*!< 0x00000014 Slave control2 */
-    __IM uint32_t SL_CTL3;                       /*!< 0x00000018 Slave control3 */
-    __IM uint32_t RESERVED1[9];
+typedef struct {
+  __IOM uint32_t CLOCK_CTL;                     /*!< 0x00000000 Clock control */
+   __IM uint32_t RESERVED[3];
+  __IOM uint32_t SL_CTL;                        /*!< 0x00000010 Slave control */
+  __IOM uint32_t SL_CTL2;                       /*!< 0x00000014 Slave control2 */
+   __IM uint32_t SL_CTL3;                       /*!< 0x00000018 Slave control3 */
+   __IM uint32_t RESERVED1[9];
 } PERI_GR_Type;                                 /*!< Size = 64 (0x40) */
 
 /**
   * \brief Trigger group (PERI_TR_GR)
   */
-typedef struct
-{
-    __IOM uint32_t TR_CTL[256];                   /*!< 0x00000000 Trigger control register */
+typedef struct {
+  __IOM uint32_t TR_CTL[256];                   /*!< 0x00000000 Trigger control register */
 } PERI_TR_GR_Type;                              /*!< Size = 1024 (0x400) */
 
 /**
   * \brief Trigger 1-to-1 group (PERI_TR_1TO1_GR)
   */
-typedef struct
-{
-    __IOM uint32_t TR_CTL[256];                   /*!< 0x00000000 Trigger control register */
+typedef struct {
+  __IOM uint32_t TR_CTL[256];                   /*!< 0x00000000 Trigger control register */
 } PERI_TR_1TO1_GR_Type;                         /*!< Size = 1024 (0x400) */
 
 /**
   * \brief Peripheral interconnect (PERI)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[128];
-    __IOM uint32_t TIMEOUT_CTL;                   /*!< 0x00000200 Timeout control */
-    __IM uint32_t RESERVED1[1919];
-    __IOM uint32_t TR_CMD;                        /*!< 0x00002000 Trigger command */
-    __IOM uint32_t INFRA_CLK_FORCE;               /*!< 0x00002004 Infrastructure clock force enable */
-    __IM uint32_t RESERVED2[2046];
-    PERI_GR_Type GR[16];                    /*!< 0x00004000 Peripheral group structure */
-    __IM uint32_t RESERVED3[3840];
-    PERI_TR_GR_Type TR_GR[16];              /*!< 0x00008000 Trigger group */
-    PERI_TR_1TO1_GR_Type TR_1TO1_GR[16];    /*!< 0x0000C000 Trigger 1-to-1 group */
+typedef struct {
+   __IM uint32_t RESERVED[128];
+  __IOM uint32_t TIMEOUT_CTL;                   /*!< 0x00000200 Timeout control */
+   __IM uint32_t RESERVED1[1919];
+  __IOM uint32_t TR_CMD;                        /*!< 0x00002000 Trigger command */
+  __IOM uint32_t INFRA_CLK_FORCE;               /*!< 0x00002004 Infrastructure clock force enable */
+   __IM uint32_t RESERVED2[2046];
+        PERI_GR_Type GR[16];                    /*!< 0x00004000 Peripheral group structure */
+   __IM uint32_t RESERVED3[3840];
+        PERI_TR_GR_Type TR_GR[16];              /*!< 0x00008000 Trigger group */
+        PERI_TR_1TO1_GR_Type TR_1TO1_GR[16];    /*!< 0x0000C000 Trigger 1-to-1 group */
 } PERI_Type;                                    /*!< Size = 65536 (0x10000) */
 
 

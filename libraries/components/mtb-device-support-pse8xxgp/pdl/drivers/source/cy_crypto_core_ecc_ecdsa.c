@@ -79,8 +79,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
     cy_stc_crypto_ecc_key ephKey;
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-    uint8_t myKGX_t[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_ECC_MAX_BYTE_SIZE) + CY_CRYPTO_DCAHCE_PADDING_SIZE];
-    uint8_t myKGY_t[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_ECC_MAX_BYTE_SIZE) + CY_CRYPTO_DCAHCE_PADDING_SIZE];
+    uint8_t myKGX_t[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_ECC_MAX_BYTE_SIZE)+CY_CRYPTO_DCAHCE_PADDING_SIZE];
+    uint8_t myKGY_t[CY_CRYPTO_ALIGN_CACHE_LINE(CY_CRYPTO_ECC_MAX_BYTE_SIZE)+CY_CRYPTO_DCAHCE_PADDING_SIZE];
     uint8_t *myKGX = (uint8_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(myKGX_t);
     uint8_t *myKGY = (uint8_t *)CY_CRYPTO_DCACHE_ALIGN_ADDRESS(myKGY_t);
 #else
@@ -118,9 +118,9 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
 
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
             /* Flush the cache */
-            SCB_CleanDCache_by_Addr((volatile void *)hash, (int32_t)hashlen);
+            SCB_CleanDCache_by_Addr((volatile void *)hash,(int32_t)hashlen);
             SCB_CleanDCache_by_Addr((volatile void *)key->k, (int32_t)bytesize);
-            SCB_CleanDCache_by_Addr((volatile void *)messageKey, (int32_t)bytesize);
+            SCB_CleanDCache_by_Addr((volatile void *)messageKey,(int32_t)bytesize);
 #endif
 
             /* make ephemeral key pair */
@@ -138,53 +138,53 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
                 uint32_t p_d      = 11U;
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
                 /* Flush the cache */
-                SCB_CleanDCache_by_Addr((volatile void *)ephKey.pubkey.x, (int32_t)bytesize);
+                SCB_CleanDCache_by_Addr((volatile void *)ephKey.pubkey.x,(int32_t)bytesize);
                 SCB_CleanDCache_by_Addr((volatile void *)ephKey.pubkey.y, (int32_t)bytesize);
 #endif
                 /* load values needed for reduction modulo order of the base point */
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_P, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_P, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->order), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->order), bitsize);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_BARRETT, bitsize + 1U);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_BARRETT, bitsize + 1U);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->barrett_o), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_BARRETT, (uint8_t const*)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->barrett_o), bitsize);
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_r, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_r, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_s, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_s, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_r, (uint8_t *)ephKey.pubkey.x, bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_r, (uint8_t *)ephKey.pubkey.x, bitsize);
 
                 mallocMask = CY_CRYPTO_VU_REG_BIT(VR_P) | CY_CRYPTO_VU_REG_BIT(VR_BARRETT) |
                              CY_CRYPTO_VU_REG_BIT(p_r)  | CY_CRYPTO_VU_REG_BIT(p_s);
 
                 if (!Cy_Crypto_Core_Vu_IsRegZero(base, p_r))
                 {
-                    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_temp, bitsize);
-                    if (CY_CRYPTO_SUCCESS != tmpResult)
+                    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_temp, bitsize);
+                    if(CY_CRYPTO_SUCCESS != tmpResult)
                     {
                         return tmpResult;
                     }
 
-                    tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_d, datasize * 8u);
-                    if (CY_CRYPTO_SUCCESS != tmpResult)
+                    tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_d, datasize * 8u);
+                    if(CY_CRYPTO_SUCCESS != tmpResult)
                     {
                         return tmpResult;
                     }
@@ -198,13 +198,13 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
 
                         /* z = x % mod */
                         tmpResult = Cy_Crypto_Core_EC_Bar_MulRed(base, p_r, p_temp, bitsize);
-                        if (CY_CRYPTO_SUCCESS != tmpResult)
+                        if(CY_CRYPTO_SUCCESS != tmpResult)
                         {
                             return tmpResult;
                         }
 
                         /* r = x1 mod n */
-                        Cy_Crypto_Core_Vu_GetMemValue(base, sigPtrRemap, p_r, bitsize);
+                        Cy_Crypto_Core_Vu_GetMemValue (base, sigPtrRemap, p_r, bitsize);
 
                         if (Cy_Crypto_Core_Vu_IsRegZero(base, p_r))
                         {
@@ -222,19 +222,19 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
                     {
                         /* find s = (e + d*r)/k */
                         /* load signing private key */
-                        Cy_Crypto_Core_Vu_SetMemValue(base, p_temp, (uint8_t *)keyKRemap, bitsize);
+                        Cy_Crypto_Core_Vu_SetMemValue (base, p_temp, (uint8_t *)keyKRemap, bitsize);
 
                         /* use Barrett reduction algorithm for operations modulo n (order of the base point) */
                         Cy_Crypto_Core_EC_NistP_SetRedAlg(CY_CRYPTO_NIST_P_BARRETT_RED_ALG);
 
                         /* d*r mod n */
                         tmpResult = Cy_Crypto_Core_EC_MulMod(base, p_s, p_temp, p_r, bitsize);    /* z = a * b % mod */
-                        if (CY_CRYPTO_SUCCESS != tmpResult)
+                        if(CY_CRYPTO_SUCCESS != tmpResult)
                         {
                             return tmpResult;
                         }
                         /* load message hash, truncate it if needed. */
-                        Cy_Crypto_Core_Vu_SetMemValue(base, p_d, (uint8_t *)hashPtrRemap, datasize * 8u);
+                        Cy_Crypto_Core_Vu_SetMemValue (base, p_d, (uint8_t *)hashPtrRemap, datasize * 8u);
                         Cy_Crypto_Core_VU_RegInvertEndianness(base, p_d);
 
                         if ((datasize * 8u) > bitsize)
@@ -251,21 +251,21 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
 
                             /* z = x % mod */
                             tmpResult = Cy_Crypto_Core_EC_Bar_MulRed(base, p_d, p_temp, bitsize);
-                            if (CY_CRYPTO_SUCCESS != tmpResult)
+                            if(CY_CRYPTO_SUCCESS != tmpResult)
                             {
                                 return tmpResult;
                             }
                         }
 
                         /* Use p_r as temporary register */
-                        Cy_Crypto_Core_Vu_SetMemValue(base, p_r, messageKeyPtrRemap, bitsize);
+                        Cy_Crypto_Core_Vu_SetMemValue (base, p_r, messageKeyPtrRemap, bitsize);
 
                         /* e + d*r mod n */
-                        Cy_Crypto_Core_EC_AddMod(base, p_s, p_d, p_s);       /* z = a + b % mod */
+                        Cy_Crypto_Core_EC_AddMod (base, p_s, p_d, p_s);      /* z = a + b % mod */
 
                         /* (e + d*r)/k mod n */
-                        tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, dividend, bitsize);
-                        if (CY_CRYPTO_SUCCESS != tmpResult)
+                        tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, dividend, bitsize);
+                        if(CY_CRYPTO_SUCCESS != tmpResult)
                         {
                             return tmpResult;
                         }
@@ -274,7 +274,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
 
                         /* z = a / b % mod */
                         tmpResult = Cy_Crypto_Core_EC_DivMod(base, p_s, dividend, p_r, bitsize);
-                        if (CY_CRYPTO_SUCCESS != tmpResult)
+                        if(CY_CRYPTO_SUCCESS != tmpResult)
                         {
                             return tmpResult;
                         }
@@ -284,7 +284,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
                         if (!Cy_Crypto_Core_Vu_IsRegZero(base, p_s))
                         {
                             /* S is not zero!!! */
-                            Cy_Crypto_Core_Vu_GetMemValue(base, &sigPtrRemap[bytesize], p_s, bitsize);
+                            Cy_Crypto_Core_Vu_GetMemValue (base, &sigPtrRemap[bytesize], p_s, bitsize);
                         }
                         else
                         {
@@ -297,8 +297,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
 
                 CY_CRYPTO_VU_FREE_MEM(base, mallocMask);
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to int32_t.');
-                SCB_InvalidateDCache_by_Addr(sig, (int32_t)(bytesize * 2U));
+                CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to int32_t.');
+                SCB_InvalidateDCache_by_Addr(sig, (int32_t)(bytesize*2U));
 #endif
             }
         }
@@ -339,8 +339,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_SignHash(CRYPTO_Type *base, const uint8
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
-        const uint8_t *sig, const uint8_t *hash, uint32_t hashlen,
-        uint8_t *stat, const cy_stc_crypto_ecc_key *key)
+                            const uint8_t *sig, const uint8_t *hash, uint32_t hashlen,
+                            uint8_t *stat, const cy_stc_crypto_ecc_key *key)
 {
     cy_en_crypto_status_t tmpResult = CY_CRYPTO_BAD_PARAMS;
 
@@ -384,19 +384,19 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
             uint32_t p_qy = 12U;
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
             /* Flush the cache */
-            SCB_CleanDCache_by_Addr((volatile void *)hash, (int32_t)hashlen);
+            SCB_CleanDCache_by_Addr((volatile void *)hash,(int32_t)hashlen);
             SCB_CleanDCache_by_Addr((volatile void *)key->pubkey.x, (int32_t)bytesize);
             SCB_CleanDCache_by_Addr((volatile void *)key->pubkey.y, (int32_t)bytesize);
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to int32_t.');
-            SCB_CleanDCache_by_Addr((volatile void *)sig, (int32_t)(2u * bytesize));
-            SCB_CleanDCache_by_Addr((volatile void *)eccDp->order, (int32_t)bytesize);
-            SCB_CleanDCache_by_Addr((volatile void *)eccDp->Gx, (int32_t)bytesize);
-            SCB_CleanDCache_by_Addr((volatile void *)eccDp->Gy, (int32_t)bytesize);
-            SCB_CleanDCache_by_Addr((volatile void *)eccDp->prime, (int32_t)bytesize);
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to int32_t.');
-            SCB_CleanDCache_by_Addr((volatile void *)eccDp->barrett_o, (int32_t)(bytesize + 1u));
-            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to int32_t.');
-            SCB_CleanDCache_by_Addr((volatile void *)eccDp->barrett_p, (int32_t)(bytesize + 1u));
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to int32_t.');
+            SCB_CleanDCache_by_Addr((volatile void *)sig,(int32_t)(2u*bytesize));
+            SCB_CleanDCache_by_Addr((volatile void *)eccDp->order,(int32_t)bytesize);
+            SCB_CleanDCache_by_Addr((volatile void *)eccDp->Gx,(int32_t)bytesize);
+            SCB_CleanDCache_by_Addr((volatile void *)eccDp->Gy,(int32_t)bytesize);
+            SCB_CleanDCache_by_Addr((volatile void *)eccDp->prime,(int32_t)bytesize);
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to int32_t.');
+            SCB_CleanDCache_by_Addr((volatile void *)eccDp->barrett_o,(int32_t)(bytesize+1u));
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to int32_t.');
+            SCB_CleanDCache_by_Addr((volatile void *)eccDp->barrett_p,(int32_t)(bytesize+1u));
 #endif
             /* use Barrett reduction algorithm for operations modulo n (order of the base point) */
             Cy_Crypto_Core_EC_NistP_SetRedAlg(CY_CRYPTO_NIST_P_BARRETT_RED_ALG);
@@ -404,36 +404,36 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
 
             /*******************************************************************************/
             /* load values needed for reduction modulo order of the base point             */
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_P, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_P, bitsize);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
-            Cy_Crypto_Core_Vu_SetMemValue(base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->order), bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->order), bitsize);
 
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, VR_BARRETT, bitsize + 1U);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, VR_BARRETT, bitsize + 1U);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
-            Cy_Crypto_Core_Vu_SetMemValue(base, VR_BARRETT, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->barrett_o), bitsize + 1U);
+            Cy_Crypto_Core_Vu_SetMemValue (base, VR_BARRETT, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->barrett_o), bitsize + 1U);
 
             /*******************************************************************************/
             /* check that R and S are within the valid range, i.e. 0 < R < n and 0 < S < n */
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_r, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_r, bitsize);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
-            tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_s, bitsize);
-            if (CY_CRYPTO_SUCCESS != tmpResult)
+            tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_s, bitsize);
+            if(CY_CRYPTO_SUCCESS != tmpResult)
             {
                 return tmpResult;
             }
 
-            Cy_Crypto_Core_Vu_SetMemValue(base, p_r, (uint8_t *)sigPtrRemap, bitsize);
-            Cy_Crypto_Core_Vu_SetMemValue(base, p_s, (uint8_t *)&sigPtrRemap[bytesize], bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, p_r, (uint8_t *)sigPtrRemap, bitsize);
+            Cy_Crypto_Core_Vu_SetMemValue (base, p_s, (uint8_t *)&sigPtrRemap[bytesize], bitsize);
 
             mallocMask = CY_CRYPTO_VU_REG_BIT(VR_P) | CY_CRYPTO_VU_REG_BIT(VR_BARRETT) |
                          CY_CRYPTO_VU_REG_BIT(p_r)  | CY_CRYPTO_VU_REG_BIT(p_s);
@@ -462,38 +462,38 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
 
             if (CY_CRYPTO_SUCCESS == tmpResult)
             {
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_u1, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_u1, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_u2, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_u2, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_gx, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_gx, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_gy, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_gy, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_qx, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_qx, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_qy, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_qy, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
@@ -507,18 +507,18 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
                 CY_CRYPTO_VU_SET_TO_ZERO(base, p_u1);
 
                 /* load message hash, truncate it if needed. */
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_o,  datasize * 8u);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_o,  datasize * 8u);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
                 CY_CRYPTO_VU_SET_TO_ZERO(base, p_o);
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_o, (uint8_t *)hashPtrRemap, datasize * 8u);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_o, (uint8_t *)hashPtrRemap, datasize * 8u);
                 Cy_Crypto_Core_VU_RegInvertEndianness(base, p_o);
 
                 /* Check if message hash is zero */
-                if (Cy_Crypto_Core_Vu_IsRegZero(base, p_o))
+                if(Cy_Crypto_Core_Vu_IsRegZero(base, p_o))
                 {
                     isHashZero = true;
                 }
@@ -533,13 +533,13 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
                 CY_CRYPTO_VU_MOV(base, p_u1, p_o);
 
                 CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(p_o));
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, p_o, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, p_o, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
-                tmpResult = CY_CRYPTO_VU_ALLOC_MEM(base, dividend, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult = CY_CRYPTO_VU_ALLOC_MEM (base, dividend, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
@@ -552,7 +552,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
 
                     /* z = x % mod */
                     tmpResult = Cy_Crypto_Core_EC_Bar_MulRed(base, p_u1, p_o, bitsize);
-                    if (CY_CRYPTO_SUCCESS != tmpResult)
+                    if(CY_CRYPTO_SUCCESS != tmpResult)
                     {
                         return tmpResult;
                     }
@@ -561,21 +561,21 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
                 /* w = s^-1 mod n */
                 CY_CRYPTO_VU_SET_TO_ONE(base, dividend);
                 tmpResult = Cy_Crypto_Core_EC_DivMod(base, p_s, dividend, p_s, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
                 /* u1 = e*w mod n */
                 tmpResult = Cy_Crypto_Core_EC_MulMod(base, p_u1, p_u1, p_s, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
                 /* u2 = r*w mod n */
-                tmpResult = Cy_Crypto_Core_EC_MulMod(base, p_u2, p_r, p_s, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                tmpResult =Cy_Crypto_Core_EC_MulMod(base, p_u2, p_r, p_s, bitsize);
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
@@ -584,31 +584,31 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
                 Cy_Crypto_Core_EC_NistP_SetRedAlg(eccDp->algo);
 
                 /* load prime, order and Barrett coefficient */
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->prime), bitsize);
-                Cy_Crypto_Core_Vu_SetMemValue(base, VR_BARRETT, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->barrett_p), bitsize + 1U);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_P, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->prime), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, VR_BARRETT, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->barrett_p), bitsize + 1U);
 
                 /* load base Point G */
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_gx, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->Gx), bitsize);
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_gy, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->Gy), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_gx, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->Gx), bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_gy, (uint8_t const *)CY_REMAP_ADDRESS_FOR_CRYPTO(eccDp->Gy), bitsize);
 
                 /* load public key Qa */
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_qx, (uint8_t const *)pubKeyXRemap, bitsize);
-                Cy_Crypto_Core_Vu_SetMemValue(base, p_qy, (uint8_t const *)pubKeyYRemap, bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_qx, (uint8_t const *)pubKeyXRemap, bitsize);
+                Cy_Crypto_Core_Vu_SetMemValue (base, p_qy, (uint8_t const *)pubKeyYRemap, bitsize);
 
                 /* u1 * G */
                 tmpResult = Cy_Crypto_Core_EC_NistP_PointMul(base, p_gx, p_gy, p_u1, p_o, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
                 /* u2 * Qa */
                 tmpResult = Cy_Crypto_Core_EC_NistP_PointMul(base, p_qx, p_qy, p_u2, p_o, bitsize);
-                if (CY_CRYPTO_SUCCESS != tmpResult)
+                if(CY_CRYPTO_SUCCESS != tmpResult)
                 {
                     return tmpResult;
                 }
 
-                if (isHashZero)
+                if(isHashZero)
                 {
                     /* GECC 3.22 */
                     CY_CRYPTO_VU_MOV(base, p_s, p_qx);
@@ -619,18 +619,18 @@ cy_en_crypto_status_t Cy_Crypto_Core_ECC_VerifyHash(CRYPTO_Type *base,
                     Cy_Crypto_Core_EC_SubMod(base, dividend, p_qy, p_gy);            /* (y2-y1) */
                     Cy_Crypto_Core_EC_SubMod(base, p_s, p_qx, p_gx);                /* (x2-x1) */
                     tmpResult = Cy_Crypto_Core_EC_DivMod(base, p_s, dividend, p_s, bitsize);    /* s = (y2-y1)/(x2-x1) */
-                    if (CY_CRYPTO_SUCCESS != tmpResult)
+                    if(CY_CRYPTO_SUCCESS != tmpResult)
                     {
                         return tmpResult;
                     }
 
-                    tmpResult = Cy_Crypto_Core_EC_SquareMod(base, p_s, p_s, bitsize);            /* s^2 */
-                    if (CY_CRYPTO_SUCCESS != tmpResult)
+                    tmpResult = Cy_Crypto_Core_EC_SquareMod (base, p_s, p_s, bitsize);           /* s^2 */
+                    if(CY_CRYPTO_SUCCESS != tmpResult)
                     {
                         return tmpResult;
                     }
-                    Cy_Crypto_Core_EC_SubMod(base, p_s, p_s, p_gx);                /* s^2 - x1 */
-                    Cy_Crypto_Core_EC_SubMod(base, p_s, p_s, p_qx);                /* s^2 - x1 - x2 which is Px mod n */
+                    Cy_Crypto_Core_EC_SubMod    (base, p_s, p_s, p_gx);            /* s^2 - x1 */
+                    Cy_Crypto_Core_EC_SubMod    (base, p_s, p_s, p_qx);            /* s^2 - x1 - x2 which is Px mod n */
                 }
 
                 CY_CRYPTO_VU_FREE_MEM(base, CY_CRYPTO_VU_REG_BIT(p_o));

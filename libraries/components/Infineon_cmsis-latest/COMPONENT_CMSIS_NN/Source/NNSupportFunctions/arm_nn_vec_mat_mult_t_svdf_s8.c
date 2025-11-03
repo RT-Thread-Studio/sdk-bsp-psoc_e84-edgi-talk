@@ -47,17 +47,17 @@
  *
  */
 arm_status arm_nn_vec_mat_mult_t_svdf_s8(const q7_t *lhs,
-        const q7_t *rhs,
-        q15_t *dst,
-        const int32_t lhs_offset,
-        const int32_t rhs_offset,
-        const int32_t dst_offset,
-        const int32_t dst_multiplier,
-        const int32_t dst_shift,
-        const int32_t rhs_cols,
-        const int32_t rhs_rows,
-        const int32_t activation_min,
-        const int32_t activation_max)
+                                         const q7_t *rhs,
+                                         q15_t *dst,
+                                         const int32_t lhs_offset,
+                                         const int32_t rhs_offset,
+                                         const int32_t dst_offset,
+                                         const int32_t dst_multiplier,
+                                         const int32_t dst_shift,
+                                         const int32_t rhs_cols,
+                                         const int32_t rhs_rows,
+                                         const int32_t activation_min,
+                                         const int32_t activation_max)
 {
     (void)rhs_offset;
     if (rhs_cols < 0 || (Q31_MAX - rhs_cols) < 16 || dst_offset < 0)
@@ -266,10 +266,10 @@ arm_status arm_nn_vec_mat_mult_t_svdf_s8(const q7_t *lhs,
         q31_t res02 = 0;
         for (int32_t rhs_cols_idx = 0; rhs_cols_idx < rhs_cols; ++rhs_cols_idx)
         {
-            const q31_t rhs_value0 = (int8_t) * rhs_ptr_0;
-            const q31_t rhs_value1 = (int8_t) * rhs_ptr_1;
-            const q31_t rhs_value2 = (int8_t) * rhs_ptr_2;
-            const q31_t lhs_value = (int8_t) * lhs_ptr + lhs_offset;
+            const q31_t rhs_value0 = (int8_t)*rhs_ptr_0;
+            const q31_t rhs_value1 = (int8_t)*rhs_ptr_1;
+            const q31_t rhs_value2 = (int8_t)*rhs_ptr_2;
+            const q31_t lhs_value = (int8_t)*lhs_ptr + lhs_offset;
 
             res00 += lhs_value * rhs_value0;
             res01 += lhs_value * rhs_value1;

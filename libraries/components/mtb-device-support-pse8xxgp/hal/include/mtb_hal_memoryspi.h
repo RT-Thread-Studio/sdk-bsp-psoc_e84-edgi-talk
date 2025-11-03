@@ -269,7 +269,7 @@ typedef enum
 
 /** Handler for MemorySPI callbacks */
 typedef void (* mtb_hal_memoryspi_event_callback_t)(void* callback_arg,
-        mtb_hal_memoryspi_event_t event);
+                                                    mtb_hal_memoryspi_event_t event);
 
 /**
  * Sets up a HAL instance to use the specified hardware resource. This hardware
@@ -283,8 +283,8 @@ typedef void (* mtb_hal_memoryspi_event_callback_t)(void* callback_arg,
  * @return the status of the HAL setup
  */
 cy_rslt_t mtb_hal_memoryspi_setup(mtb_hal_memoryspi_t* obj,
-                                  const mtb_hal_memoryspi_configurator_t *config,
-                                  cy_stc_smif_context_t *context);
+                                  const mtb_hal_memoryspi_configurator_t* config,
+                                  cy_stc_smif_context_t* context);
 
 
 /** Get the actual frequency that MemorySPI is configured for
@@ -314,8 +314,8 @@ uint32_t mtb_hal_memoryspi_get_frequency(mtb_hal_memoryspi_t* obj);
  * @return The status of pin configuration
  */
 cy_rslt_t mtb_hal_memoryspi_chip_configure(mtb_hal_memoryspi_t* obj,
-        const mtb_hal_memoryspi_chip_select_t csel,
-        mtb_hal_memoryspi_data_select_t data_select);
+                                           const mtb_hal_memoryspi_chip_select_t csel,
+                                           mtb_hal_memoryspi_data_select_t data_select);
 
 /** Selects an active chip select (CSEL) line from one of available and configured.
  *
@@ -326,7 +326,7 @@ cy_rslt_t mtb_hal_memoryspi_chip_configure(mtb_hal_memoryspi_t* obj,
  * MTB_HAL_MEMORYSPI_RSLT_ERR_CANNOT_SWITCH_CSEL
  */
 cy_rslt_t mtb_hal_memoryspi_select_active_csel(mtb_hal_memoryspi_t* obj,
-        mtb_hal_memoryspi_chip_select_t csel);
+                                               mtb_hal_memoryspi_chip_select_t csel);
 
 /** Sends a command to initiate a read, waits for the command to be accepted then reads a
  *  block of data in a blocking fashion.
@@ -343,8 +343,8 @@ cy_rslt_t mtb_hal_memoryspi_select_active_csel(mtb_hal_memoryspi_t* obj,
  * @return The status of the read request
  */
 cy_rslt_t mtb_hal_memoryspi_read(mtb_hal_memoryspi_t* obj,
-                                 const mtb_hal_memoryspi_command_t *command,
-                                 uint32_t address, void *data, size_t *length);
+                                 const mtb_hal_memoryspi_command_t* command,
+                                 uint32_t address, void* data, size_t* length);
 
 /** Sends a command to initiate a read, waits for the command to be accepted then reads a
  *  block of data in a non-blocking fashion.
@@ -362,8 +362,8 @@ cy_rslt_t mtb_hal_memoryspi_read(mtb_hal_memoryspi_t* obj,
  * @return The status of the read request
  */
 cy_rslt_t mtb_hal_memoryspi_read_async(mtb_hal_memoryspi_t* obj,
-                                       const mtb_hal_memoryspi_command_t *command,
-                                       uint32_t address, void *data, size_t *length);
+                                       const mtb_hal_memoryspi_command_t* command,
+                                       uint32_t address, void* data, size_t* length);
 
 /** Sends a command to initiate a write, waits for the command to be accepted then writes a
  *  block of data in a blocking fashion.
@@ -382,8 +382,8 @@ cy_rslt_t mtb_hal_memoryspi_read_async(mtb_hal_memoryspi_t* obj,
  * @return The status of the write request
  */
 cy_rslt_t mtb_hal_memoryspi_write(mtb_hal_memoryspi_t* obj,
-                                  const mtb_hal_memoryspi_command_t *command,
-                                  uint32_t address, const void *data, size_t *length);
+                                  const mtb_hal_memoryspi_command_t* command,
+                                  uint32_t address, const void* data, size_t* length);
 
 /** Sends a command to initiate a write, waits for the command to be accepted then writes a
  *  block of data in a non-blocking fashion.
@@ -405,8 +405,8 @@ cy_rslt_t mtb_hal_memoryspi_write(mtb_hal_memoryspi_t* obj,
  * @return The status of the write request
  */
 cy_rslt_t mtb_hal_memoryspi_write_async(mtb_hal_memoryspi_t* obj,
-                                        const mtb_hal_memoryspi_command_t *command,
-                                        uint32_t address, const void *data, size_t *length);
+                                        const mtb_hal_memoryspi_command_t* command,
+                                        uint32_t address, const void* data, size_t* length);
 
 /** Send a command (and optionally data , if tx_buffer is specified) and get the response
  * (and optionally data if trx_buffer is specified). Can be used to send/receive device
@@ -422,9 +422,9 @@ cy_rslt_t mtb_hal_memoryspi_write_async(mtb_hal_memoryspi_t* obj,
  * @return The status of the transfer request
  */
 cy_rslt_t mtb_hal_memoryspi_transfer(
-    mtb_hal_memoryspi_t *obj, const mtb_hal_memoryspi_command_t *command, uint32_t address,
-    const void *tx_data, size_t tx_size,
-    void *rx_data, size_t rx_size);
+    mtb_hal_memoryspi_t* obj, const mtb_hal_memoryspi_command_t* command, uint32_t address,
+    const void* tx_data, size_t tx_size,
+    void* rx_data, size_t rx_size);
 
 /** Register a MemorySPI event handler
  *
@@ -436,8 +436,8 @@ cy_rslt_t mtb_hal_memoryspi_transfer(
  * @param[in] callback_arg Generic argument that will be provided to the handler when called
  */
 void mtb_hal_memoryspi_register_callback(mtb_hal_memoryspi_t* obj,
-        mtb_hal_memoryspi_event_callback_t callback,
-        void *callback_arg);
+                                         mtb_hal_memoryspi_event_callback_t callback,
+                                         void* callback_arg);
 
 /** Configure MemorySPI interrupt enablement.
  *
@@ -479,7 +479,7 @@ bool mtb_hal_memoryspi_is_busy(mtb_hal_memoryspi_t* obj);
 #endif
 
 #ifdef MTB_HAL_MEMORYSPI_IMPL_HEADER
-    #include MTB_HAL_MEMORYSPI_IMPL_HEADER
+#include MTB_HAL_MEMORYSPI_IMPL_HEADER
 #endif /* MTB_HAL_MEMORYSPI_IMPL_HEADER */
 
 #endif // defined(MTB_HAL_DRIVER_AVAILABLE_MEMORYSPI)

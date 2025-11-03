@@ -47,21 +47,20 @@
   @param[in]     pSrc       points to the input vector
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    standard deviation value returned here
-  @return        none
  */
-void arm_std_f16(
-    const float16_t *pSrc,
-    uint32_t blockSize,
-    float16_t *pResult)
+ARM_DSP_ATTRIBUTE void arm_std_f16(
+  const float16_t * pSrc,
+        uint32_t blockSize,
+        float16_t * pResult)
 {
-    float16_t var;
-    arm_var_f16(pSrc, blockSize, &var);
-    arm_sqrt_f16(var, pResult);
+  float16_t var;
+  arm_var_f16(pSrc,blockSize,&var);
+  arm_sqrt_f16(var, pResult);
 }
 
 /**
   @} end of STD group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

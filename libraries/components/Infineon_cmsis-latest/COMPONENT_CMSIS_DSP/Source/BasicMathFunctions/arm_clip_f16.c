@@ -45,18 +45,17 @@
   @param[in]     low           lower bound
   @param[in]     high          higher bound
   @param[in]     numSamples    number of samples to clip
-  @return        none
  */
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
-void arm_clip_f16(const float16_t * pSrc,
-                  float16_t *pDst,
-                  float16_t low,
-                  float16_t high,
-                  uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_clip_f16(const float16_t * pSrc, 
+  float16_t * pDst, 
+  float16_t low, 
+  float16_t high, 
+  uint32_t numSamples)
 {
     uint32_t  blkCnt;
     f16x8_t curVec0, curVec1;
@@ -115,20 +114,20 @@ void arm_clip_f16(const float16_t * pSrc,
 
 #if defined(ARM_FLOAT16_SUPPORTED)
 
-void arm_clip_f16(const float16_t * pSrc,
-                  float16_t *pDst,
-                  float16_t low,
-                  float16_t high,
-                  uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_clip_f16(const float16_t * pSrc, 
+  float16_t * pDst, 
+  float16_t low, 
+  float16_t high, 
+  uint32_t numSamples)
 {
     for (uint32_t i = 0; i < numSamples; i++)
-    {
-        if ((_Float16)pSrc[i] > (_Float16)high)
-            pDst[i] = high;
-        else if ((_Float16)pSrc[i] < (_Float16)low)
-            pDst[i] = low;
-        else
-            pDst[i] = pSrc[i];
+    {                                        
+        if ((_Float16)pSrc[i] > (_Float16)high)                  
+            pDst[i] = high;                  
+        else if ((_Float16)pSrc[i] < (_Float16)low)              
+            pDst[i] = low;                   
+        else                                 
+            pDst[i] = pSrc[i];               
     }
 }
 #endif /* defined(ARM_FLOAT16_SUPPORTED */

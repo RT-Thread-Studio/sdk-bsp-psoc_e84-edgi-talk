@@ -50,9 +50,9 @@ static void buffer_scale_back_q15_to_q7(q15_t *buffer, q7_t *target, uint16_t le
 }
 
 static void compare_and_replace_if_larger_q7(q7_t *base,           // base data
-        const q7_t *target,   // compare target
-        const uint16_t length // data length
-                                            )
+                                             const q7_t *target,   // compare target
+                                             const uint16_t length // data length
+)
 {
     q7_t *pIn = base;
     const q7_t *pCom = target;

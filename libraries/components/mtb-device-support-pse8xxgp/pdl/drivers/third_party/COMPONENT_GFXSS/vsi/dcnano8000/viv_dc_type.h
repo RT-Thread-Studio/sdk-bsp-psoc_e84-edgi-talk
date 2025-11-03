@@ -29,13 +29,13 @@
 #define _VIV_DC_TYPE_H_
 #include "viv_dc_options.h"
 #ifndef __linux__
-    #include <math.h>
+#include <math.h>
 #endif
 
 #if vivENABLE_DISPLAY_NEWGMMA
-    #define GAMMA_TABLE_SIZE 300
+#define GAMMA_TABLE_SIZE 300
 #else
-    #define GAMMA_TABLE_SIZE 256
+#define GAMMA_TABLE_SIZE 256
 #endif
 
 #define DEGAMMA_TABLE_SIZE 260
@@ -64,38 +64,38 @@ typedef double                  gctDOUBLE;
 #define vivTRUE                 1
 
 #ifdef __cplusplus
-    #define vivNULL              0
+#   define vivNULL              0
 #else
-    #define vivNULL              ((void *) 0)
+#   define vivNULL              ((void *) 0)
 #endif
 
 #ifdef __cplusplus
-    #define gcvNULL              0
+#   define gcvNULL              0
 #else
-    #define gcvNULL              ((void *) 0)
+#   define gcvNULL              ((void *) 0)
 #endif
 
 /*
  * Common parameter pointer types
  */
-typedef gctBOOL                *gctBOOL_PTR;
-typedef void                   *gctFILE;
-typedef float                  *gctFLOAT_PTR;
-typedef void                   *gctHANDLE;
-typedef gctINT                 *gctINT_PTR;
-typedef gctINT8                *gctINT8_PTR;
-typedef gctINT16               *gctINT16_PTR;
-typedef gctINT32               *gctINT32_PTR;
-typedef gctINT64               *gctINT64_PTR;
-typedef void                   *gctPHYS_ADDR;
-typedef void                   *gctPOINTER;
-typedef gctSIZE_T              *gctSIZE_T_PTR;
-typedef void                   *gctSTRING;
-typedef gctUINT                *gctUINT_PTR;
-typedef gctUINT8               *gctUINT8_PTR;
-typedef gctUINT16              *gctUINT16_PTR;
-typedef gctUINT32              *gctUINT32_PTR;
-typedef gctUINT64              *gctUINT64_PTR;
+typedef gctBOOL *               gctBOOL_PTR;
+typedef void *                  gctFILE;
+typedef float *                 gctFLOAT_PTR;
+typedef void *                  gctHANDLE;
+typedef gctINT *                gctINT_PTR;
+typedef gctINT8 *               gctINT8_PTR;
+typedef gctINT16 *              gctINT16_PTR;
+typedef gctINT32 *              gctINT32_PTR;
+typedef gctINT64 *              gctINT64_PTR;
+typedef void *                  gctPHYS_ADDR;
+typedef void *                  gctPOINTER;
+typedef gctSIZE_T *             gctSIZE_T_PTR;
+typedef void *                  gctSTRING;
+typedef gctUINT *               gctUINT_PTR;
+typedef gctUINT8 *              gctUINT8_PTR;
+typedef gctUINT16 *             gctUINT16_PTR;
+typedef gctUINT32 *             gctUINT32_PTR;
+typedef gctUINT64 *             gctUINT64_PTR;
 
 typedef gctUINT32               gctADDRESS;
 
@@ -103,16 +103,14 @@ typedef gctUINT32               gctADDRESS;
 /*           Enumeration           */
 /***********************************/
 
-typedef enum _viv_layer_status
-{
+typedef enum _viv_layer_status{
     vivLATER_IDLE,
     vivLATER_OCCUPIED_BY_SELF,
     vivLATER_OCCUPIED_BY_OTHERS,
 }
 viv_layer_status;
 
-typedef enum _viv_display
-{
+typedef enum _viv_display{
     vivDISPLAY_0,
     vivDISPLAY_1,
     vivDISPLAY_COUNT,
@@ -122,8 +120,7 @@ viv_display;
 /*
  * Error status enumeration
  */
-typedef enum _viv_status_type
-{
+typedef enum _viv_status_type {
     vivSTATUS_HEAP_CORRUPTED = -7,
     vivSTATUS_OUT_OF_RESOURCES = -6,
     vivSTATUS_TIMEOUT = -5,
@@ -136,11 +133,10 @@ typedef enum _viv_status_type
 }
 viv_status_type, vivSTATUS;
 
-/*
- * Input format type.
- */
-typedef enum _viv_input_format_type
-{
+ /*
+  * Input format type.
+  */
+typedef enum _viv_input_format_type {
     /* RGB format */
     vivARGB4444,
     vivABGR4444,
@@ -189,8 +185,7 @@ typedef enum _viv_input_format_type
 viv_input_format_type;
 
 /* Color sapce change mode */
-typedef enum _viv_csc_mode
-{
+typedef enum _viv_csc_mode {
     vivCSC_BT601,
     vivCSC_BT709,
     vivCSC_BT2020,
@@ -198,11 +193,10 @@ typedef enum _viv_csc_mode
 }
 viv_csc_mode;
 
-/*
- * Display type.
- */
-typedef enum _viv_display_type
-{
+ /*
+  * Display type.
+  */
+typedef enum _viv_display_type {
     vivDPI,
     vivDP,
     vivEDP,
@@ -210,11 +204,10 @@ typedef enum _viv_display_type
 }
 viv_display_type;
 
-/*
- * Display format type.
- */
-typedef enum _viv_display_format_type
-{
+ /*
+  * Display format type.
+  */
+typedef enum _viv_display_format_type {
     /* DPI */
     vivD24,
     vivD30,
@@ -269,22 +262,20 @@ typedef enum _viv_display_format_type
 }
 viv_display_format_type;
 
-/*
- *witeback type
- */
-typedef enum _viv_write_back_type
-{
+ /*
+  *witeback type
+  */
+typedef enum _viv_write_back_type {
     vivWB_DEFAULT,
     vivWB_AFTER_BLENDING,
     vivWB_AFTER_DITHER,
 }
 viv_write_back_type;
 
-/*
- * Tilling format type.
- */
-typedef enum _viv_tiling_type
-{
+ /*
+  * Tilling format type.
+  */
+typedef enum _viv_tiling_type {
     vivLINEAR,
     vivTILED4X4,
     vivTILED8X8,
@@ -293,11 +284,10 @@ typedef enum _viv_tiling_type
 }
 viv_tiling_type;
 
-/*
- * Dec tile mode.
- */
-typedef enum _viv_dec_tile_mode
-{
+ /*
+  * Dec tile mode.
+  */
+typedef enum _viv_dec_tile_mode {
     vivDEC_TILE_MODE_8X8_XMAJOR,
     vivDEC_TILE_MODE_8X4,
     vivDEC_TILE_MODE_4X8,
@@ -312,52 +302,47 @@ typedef enum _viv_dec_tile_mode
 }
 viv_dec_tile_mode;
 
-/*
- * Filter tap type.
- */
-typedef enum _viv_filter_tap_type
-{
+ /*
+  * Filter tap type.
+  */
+typedef enum _viv_filter_tap_type {
     vivFILTER_H3_V3,
     vivFILTER_H5_V3,
 }
 viv_filter_tap_type;
 
-/*
- * Cursoe size type.
- */
-typedef enum _viv_cursor_size_type
-{
+ /*
+  * Cursoe size type.
+  */
+typedef enum _viv_cursor_size_type {
     vivCURSOR_32x32,
     vivCURSOR_64x64,
 }
 viv_cursor_size_type;
 
-/*
- * Alpha mode.
- */
-typedef enum _viv_alpha_mode
-{
+ /*
+  * Alpha mode.
+  */
+typedef enum _viv_alpha_mode {
     vivALPHA_NORMAL,
     vivALPHA_INVERSED,
 }
 viv_alpha_mode;
 
-/*
- * Global alpha mode.
- */
-typedef enum _viv_global_alpha_mode
-{
+ /*
+  * Global alpha mode.
+  */
+typedef enum _viv_global_alpha_mode {
     vivGALPHA_NORMAL,
     vivGALPHA_GLOBAL,
     vivGALPHA_SCALED,
 }
 viv_global_alpha_mode;
 
-/*
- * Porter duff mode.
- */
-typedef enum _viv_porter_duff_mode
-{
+ /*
+  * Porter duff mode.
+  */
+typedef enum _viv_porter_duff_mode {
     vivPD_CLEAR,
     vivPD_SRC,
     vivPD_DST,
@@ -373,11 +358,10 @@ typedef enum _viv_porter_duff_mode
 }
 viv_porter_duff_mode;
 
-/*
- * Src/dst blend mode.
- */
-typedef enum _viv_blend_mode
-{
+ /*
+  * Src/dst blend mode.
+  */
+typedef enum _viv_blend_mode {
     vivBLENDING_ZERO,
     vivBLENDING_ONE,
     vivBLENDING_NORMAL,
@@ -389,11 +373,10 @@ typedef enum _viv_blend_mode
 }
 viv_blend_mode;
 
-/*
- * Pool type.
- */
-typedef enum _viv_pool_type
-{
+ /*
+  * Pool type.
+  */
+typedef enum _viv_pool_type {
     gcvPOOL_CONTIGUOUS,
     gcvPOOL_DEFAULT,
     gcvPOOL_USER,
@@ -401,18 +384,16 @@ typedef enum _viv_pool_type
 viv_pool_type;
 
 #if ALLOC_RESERVED_MEM_IN_KERNEL
-typedef enum _viv_resemem_type
-{
+typedef enum _viv_resemem_type{
     viv_mem_type_ddr,
     viv_mem_count,
 }
 viv_resmem_type;
 #endif
-/*
- * Rotation type.
- */
-typedef enum _viv_rotation_type
-{
+ /*
+  * Rotation type.
+  */
+typedef enum _viv_rotation_type {
     vivROTANGLE_0,
     vivROTANGLE_90,
     vivROTANGLE_180,
@@ -423,11 +404,10 @@ typedef enum _viv_rotation_type
 }
 viv_rotation_type;
 
-/*
- * Display size type.
- */
-typedef enum _viv_display_size_type
-{
+ /*
+  * Display size type.
+  */
+typedef enum _viv_display_size_type {
     vivDISPLAY_320_480_60,
     vivDISPLAY_480_800_60,
     vivDISPLAY_480_864_60,
@@ -446,11 +426,10 @@ typedef enum _viv_display_size_type
 }
 viv_display_size_type;
 
-/*
- * Chip feature enumeration.
- */
-typedef enum _viv_dc_features
-{
+ /*
+  * Chip feature enumeration.
+  */
+typedef enum _viv_dc_features {
     vivFEATURE_DISPLAY_COUNT,
     vivFEATURE_LAYER_COUNT,
     vivFEATURE_CURSOR_COUNT,
@@ -481,8 +460,7 @@ viv_dc_features;
 /*
   * Layer feature enumeration.
   */
-typedef enum _viv_dc_layer_cap
-{
+typedef enum _viv_dc_layer_cap {
     vivLAYER_CAP_DEC400_COMPRESSION,
     vivLAYER_CAP_SCALE,
     vivLAYER_CAP_TILED,
@@ -588,7 +566,7 @@ typedef struct _viv_layer_alpha_mode
     viv_alpha_mode    srcAlphaMode;
     gctUINT32         srcAlphaValue;
 
-    /* dest global alpha */
+     /* dest global alpha */
     viv_global_alpha_mode  dstGlobalAlphaMode;
     gctUINT32              dstGlobalAlphaValue;
 
@@ -649,9 +627,9 @@ typedef enum _dcCHIPMODEL
 }
 dcCHIPMODEL;
 
-/*
- * Chip feature.
- */
+ /*
+  * Chip feature.
+  */
 typedef enum _gceFEATURE
 {
     gcvFEATURE_DC_SOURCE_ROTATION,
@@ -679,12 +657,11 @@ typedef enum _gceFEATURE
 }
 gceFEATURE;
 
-/*
- * DBI type.
- * Used in viv_conf_output_dbi_set_config()
- */
-typedef enum _viv_dbi_type
-{
+ /*
+  * DBI type.
+  * Used in viv_conf_output_dbi_set_config()
+  */
+typedef enum _viv_dbi_type {
     vivDBI_AFIXED,
     vivDBI_ACLOCK,
     vivDBI_B,
@@ -692,12 +669,11 @@ typedef enum _viv_dbi_type
 }
 viv_dbi_type;
 
-/*
- * DBI command flag
- * Used in viv_conf_output_dbi_set_command()
- */
-typedef enum _viv_dbi_command_type
-{
+ /*
+  * DBI command flag
+  * Used in viv_conf_output_dbi_set_command()
+  */
+typedef enum _viv_dbi_command_type {
     vivDBI_COMMAND_ADDRESS,
     vivDBI_COMMAND_MEM,
     vivDBI_COMMAND_DATA,
@@ -707,8 +683,7 @@ viv_dbi_command_type;
 /*
   * csc moulde switch type.
   */
-typedef enum _viv_csc_moudle
-{
+typedef enum _viv_csc_moudle {
     /* Unsupport programmable csc moudle */
     vivCSC_NONE,
     vivCSC_RGB2RGB,
@@ -720,8 +695,7 @@ viv_csc_moudle;
 /*
  * The enlarge value for 3D LUT.
  */
-typedef enum _viv_lut_enlarge
-{
+typedef enum _viv_lut_enlarge {
     vivLUT_ENLARGE0,
     vivLUT_ENLARGE9,
     vivLUT_ENLARGE10,
@@ -731,8 +705,7 @@ viv_lut_enlarge;
 /*
  * Core type
  */
-typedef enum _viv_core_type
-{
+typedef enum _viv_core_type {
     HW_VC8000D = 0,
     HW_VC8000DJ,
     HW_BIGOCEAN,
@@ -748,8 +721,7 @@ typedef enum _viv_core_type
 }
 viv_core_type;
 
-typedef enum _viv_file_type
-{
+typedef enum _viv_file_type {
     vivFILE_BINARY = 0x001,
 
     vivFILE_READ   = 0x010,
@@ -760,8 +732,7 @@ typedef enum _viv_file_type
 }
 viv_file_type;
 
-typedef enum _viv_test_type
-{
+typedef enum _viv_test_type {
     vivTEST_NORMAL          = 0x0,
     vivTEST_MULTIFRAME      = 0x1,
     vivTEST_VIDEOSTRESS     = 0x2,
@@ -769,8 +740,7 @@ typedef enum _viv_test_type
 }
 viv_test_type;
 
-typedef enum _viv_mmu_mode
-{
+typedef enum _viv_mmu_mode {
     vivMMU_1KMODE_4KPAGE,
     vivMMU_1KMODE_64KPAGE,
     vivMMU_1KMODE_1MPAGE,
@@ -780,9 +750,8 @@ typedef enum _viv_mmu_mode
 }
 viv_mmu_mode;
 
-typedef struct _viv_interface_query_chip_identity *viv_interface_query_chip_identity_ptr;
-typedef struct _viv_interface_query_chip_identity
-{
+typedef struct _viv_interface_query_chip_identity * viv_interface_query_chip_identity_ptr;
+typedef struct _viv_interface_query_chip_identity {
     /* Chip model. */
     dcCHIPMODEL chipModel;
     /* Revision value.*/
@@ -849,10 +818,10 @@ typedef struct _viv_mem_node
     /* Index(num) of the memory node */
     gctUINT32 handle;
 
-    struct _viv_mem_node *next;
-    struct _viv_mem_node *prev;
-    struct _viv_mem_node *next_free;
-    struct _viv_mem_node *prev_free;
+    struct _viv_mem_node * next;
+    struct _viv_mem_node * prev;
+    struct _viv_mem_node * next_free;
+    struct _viv_mem_node * prev_free;
 
 }
 viv_mem_node;
@@ -866,7 +835,7 @@ typedef struct _viv_mem_node_list
 {
     gctUINT32 bitmap;
 
-    viv_mem_node *mem_node[MEM_NODE_NUM];
+    viv_mem_node* mem_node[MEM_NODE_NUM];
 }
 viv_mem_node_list;
 

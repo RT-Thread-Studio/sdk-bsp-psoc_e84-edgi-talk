@@ -30,7 +30,7 @@
 #include "arm_common_tables.h"
 
 #if (defined(ARM_MATH_MVEF) || defined(ARM_MATH_HELIUM) || defined(ARM_MATH_NEON) || defined(ARM_MATH_NEON_EXPERIMENTAL)) && !defined(ARM_MATH_AUTOVECTORIZE)
-    #include "arm_vec_math.h"
+#include "arm_vec_math.h"
 #endif
 
 /**
@@ -53,69 +53,68 @@
   @param[in]     pSrc       points to the input vector
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
-void arm_vexp_f32(
-    const float32_t *pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_vexp_f32(
+  const float32_t * pSrc,
+        float32_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;
+   uint32_t blkCnt; 
 
 #if (defined(ARM_MATH_MVEF) || defined(ARM_MATH_HELIUM)) && !defined(ARM_MATH_AUTOVECTORIZE)
-    f32x4_t src;
-    f32x4_t dst;
+   f32x4_t src;
+   f32x4_t dst;
 
-    blkCnt = blockSize >> 2;
+   blkCnt = blockSize >> 2;
 
-    while (blkCnt > 0U)
-    {
-        src = vld1q(pSrc);
-        dst = vexpq_f32(src);
-        vst1q(pDst, dst);
+   while (blkCnt > 0U)
+   {
+      src = vld1q(pSrc);
+      dst = vexpq_f32(src);
+      vst1q(pDst, dst);
 
-        pSrc += 4;
-        pDst += 4;
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+      pSrc += 4;
+      pDst += 4;
+      /* Decrement loop counter */
+      blkCnt--;
+   }
 
-    blkCnt = blockSize & 3;
+   blkCnt = blockSize & 3;
 #else
 #if (defined(ARM_MATH_NEON) || defined(ARM_MATH_NEON_EXPERIMENTAL)) && !defined(ARM_MATH_AUTOVECTORIZE)
-    f32x4_t src;
-    f32x4_t dst;
+   f32x4_t src;
+   f32x4_t dst;
 
-    blkCnt = blockSize >> 2;
+   blkCnt = blockSize >> 2;
 
-    while (blkCnt > 0U)
-    {
-        src = vld1q_f32(pSrc);
-        dst = vexpq_f32(src);
-        vst1q_f32(pDst, dst);
+   while (blkCnt > 0U)
+   {
+      src = vld1q_f32(pSrc);
+      dst = vexpq_f32(src);
+      vst1q_f32(pDst, dst);
 
-        pSrc += 4;
-        pDst += 4;
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+      pSrc += 4;
+      pDst += 4;
+      /* Decrement loop counter */
+      blkCnt--;
+   }
 
-    blkCnt = blockSize & 3;
+   blkCnt = blockSize & 3;
 #else
-    blkCnt = blockSize;
+   blkCnt = blockSize;
 #endif
 #endif
 
-    while (blkCnt > 0U)
-    {
-        /* C = log(A) */
-
-        /* Calculate log and store result in destination buffer. */
-        *pDst++ = expf(*pSrc++);
-
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+   while (blkCnt > 0U)
+   {
+      /* C = log(A) */
+  
+      /* Calculate log and store result in destination buffer. */
+      *pDst++ = expf(*pSrc++);
+  
+      /* Decrement loop counter */
+      blkCnt--;
+   }
 }
 
 /**

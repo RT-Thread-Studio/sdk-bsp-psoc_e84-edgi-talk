@@ -33,26 +33,25 @@
 #define DC_DISPLAY_NUM 1
 #define DC_CURSOR_NUM 1
 
-typedef struct
-{
-    gctUINT32 LAYER_COMPRESSION: 1;
-    gctUINT32 LAYER_SCALE: 1;
-    gctUINT32 LAYER_TILED: 1;
-    gctUINT32 LAYER_ROTATION: 1;
-    gctUINT32 LAYER_ROI: 1;
+typedef struct {
+    gctUINT32 LAYER_COMPRESSION:1;
+    gctUINT32 LAYER_SCALE:1;
+    gctUINT32 LAYER_TILED:1;
+    gctUINT32 LAYER_ROTATION:1;
+    gctUINT32 LAYER_ROI:1;
 } gcsDC_LAYERCAP;
 
 gctUINT _DCQueryLayerCount(
     gctVOID
-);
+    );
 
 gctUINT _DCQueryLayerHWId(
     gctUINT sw_id
-);
+    );
 
 vivSTATUS _DCQueryLayerFeature(
     gctUINT layer_id,
     viv_dc_layer_cap cap,
     gctUINT *value
-);
+    );
 #endif

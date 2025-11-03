@@ -1,24 +1,24 @@
-/**********************************************************************
-* Copyright (C) 2014-2015 Cadence Design Systems, Inc.- http://www.cadence.com
-* SPDX-License-Identifier: Apache-2.0
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-******************************************************************************
-* edd_rx.c
-* Ethernet DMA MAC Driver
-*
-* Rx-related functions source file
-*****************************************************************************/
+ /**********************************************************************
+ * Copyright (C) 2014-2015 Cadence Design Systems, Inc.- http://www.cadence.com
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ ******************************************************************************
+ * edd_rx.c
+ * Ethernet DMA MAC Driver
+ *
+ * Rx-related functions source file
+ *****************************************************************************/
 /****************************************************************************
 * Modification by Infineon: To make this file compile with ModusToolbox
 * toolchain
@@ -51,27 +51,23 @@ extern "C" {
  * @return 0 if successful
  * @return EINVAL if invalid parameters
  */
-uint32_t emacCalcMaxRxFrameSize(void *pD, uint32_t *maxSize)
-{
+uint32_t emacCalcMaxRxFrameSize(void *pD, uint32_t *maxSize) {
     uint16_t ram_word_size, ram_addr_bits;
     uint32_t ram_size, max_size, tmp;
     uint8_t enabled = 0;
     uint16_t length;
 
-    if ((pD == NULL) || (maxSize == NULL)) return EINVAL;
+    if ((pD==NULL) || (maxSize==NULL)) return EINVAL;
 
-    if (0 != emacGetJumboFramesRx(pD, &enabled))
+    if (0!=emacGetJumboFramesRx(pD,&enabled))
         return EINVAL;
 
-    if (enabled)
-    {
-        if (0 != emacGetJumboFrameRxMaxLen(pD, &length))
+    if (enabled) {
+        if (0!=emacGetJumboFrameRxMaxLen(pD, &length))
             return EINVAL;
         max_size = length;
-    }
-    else
-    {
-        if (0 != emacGet1536ByteFramesRx(pD, &enabled))
+    } else {
+        if (0!=emacGet1536ByteFramesRx(pD,&enabled))
             return EINVAL;
         if (enabled)
             max_size = 1536;
@@ -79,21 +75,21 @@ uint32_t emacCalcMaxRxFrameSize(void *pD, uint32_t *maxSize)
             max_size = 1518;
     }
 
-    if (0 != emacGetRxPartialStFwd(pD, &tmp, &enabled))
+    if (0!=emacGetRxPartialStFwd(pD, &tmp, &enabled))
         return EINVAL;
 
     if ((!enabled) && CEDI_PdVar(hwCfg).rx_pkt_buffer)
     {
         // What is word size of SRAM in bytes
-        ram_word_size = (CEDI_PdVar(hwCfg).rx_pbuf_data >> 1) + 1;
+        ram_word_size = (CEDI_PdVar(hwCfg).rx_pbuf_data >> 1)+1;
         //vDbgMsg(DBG_GEN_MSG, 10, "RAM word size = %u (x32 bits)\n", CEDI_PdVar(hwCfg).rx_pbuf_data);
         ram_addr_bits = CEDI_PdVar(hwCfg).rx_pbuf_addr;
         //vDbgMsg(DBG_GEN_MSG, 10, "RAM Rx addr bits = %u\n", ram_addr_bits);
 
-        ram_size = (1 << (ram_addr_bits + ram_word_size + 1)) - 96;
+        ram_size = (1<<(ram_addr_bits + ram_word_size + 1)) - 96;
         vDbgMsg(DBG_GEN_MSG, 10, "RAM size = %u\n", ram_size);
 
-        if (ram_size < max_size)
+        if (ram_size<max_size)
             max_size = ram_size;
     }
     vDbgMsg(DBG_GEN_MSG, 10, "Max Rx frame size = %u\n", max_size);
@@ -114,6 +110,9 @@ uint32_t emacCalcMaxRxFrameSize(void *pD, uint32_t *maxSize)
  * @return 0 if successful, EINVAL if invalid queueNum, buffer alignment, or
  *    bufStart pointer/addresses
  */
+#if defined(__llvm__)
+#pragma clang optimize off
+#endif
 uint32_t emacAddRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf, uint8_t init)
 {
     uint32_t tmp, bufLenWords;
@@ -121,14 +120,12 @@ uint32_t emacAddRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf, uint8_t in
 
     if (!pD) return EINVAL;
 
-    if (queueNum >= (CEDI_PdVar(cfg)).rxQs)
-    {
+    if (queueNum>=(CEDI_PdVar(cfg)).rxQs) {
         vDbgMsg(DBG_GEN_MSG, 5, "Error: Invalid Rx queue number: %u\n", queueNum);
         return EINVAL;
     }
 
-    if ((buf == 0) || (buf->vAddr == 0) || (buf->pAddr == 0))
-    {
+    if ((buf==0) || (buf->vAddr==0) || (buf->pAddr==0)) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: NULL buf parameter");
         return EINVAL;
     }
@@ -137,30 +134,22 @@ uint32_t emacAddRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf, uint8_t in
 
     rxQ = &(CEDI_PdVar(rxQueue[queueNum]));
 
-    if (rxQ->numRxBufs >= ((CEDI_PdVar(cfg)).rxQLen[queueNum]))
-    {
+    if (rxQ->numRxBufs>=((CEDI_PdVar(cfg)).rxQLen[queueNum])) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: Rx descriptor list full");
         return EINVAL;
     }
 
     /* alignment checking */
-    switch (CEDI_PdVar(cfg).dmaBusWidth)
-    {
+    switch (CEDI_PdVar(cfg).dmaBusWidth) {
     case CEDI_DMA_BUS_WIDTH_32:
-        tmp = 4;
-        break;
+        tmp = 4; break;
     case CEDI_DMA_BUS_WIDTH_64:
-        tmp = 8;
-        break;
+        tmp = 8; break;
     case CEDI_DMA_BUS_WIDTH_128:
-        tmp = 16;
-        break;
-    default:
-        tmp = 4;
-        break;
+        tmp = 16; break;
+    default: tmp = 4; break;
     }
-    if ((buf->pAddr) % tmp)
-    {
+    if ((buf->pAddr)%tmp) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: Rx buffer not word-aligned");
         return EINVAL;
     }
@@ -168,21 +157,20 @@ uint32_t emacAddRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf, uint8_t in
     /* save virtual address */
     *(rxQ->rxEndVA) = buf->vAddr;
 
-    bufLenWords = (CEDI_PdVar(cfg).rxBufLength[queueNum]) << 4;
+    bufLenWords = (CEDI_PdVar(cfg).rxBufLength[queueNum])<<4;
     if (init)
-        for (tmp = 0; tmp < bufLenWords; tmp++)
-            CPS_UncachedWrite32((uint32_t *)(buf->vAddr) + tmp, 0);
+        for (tmp=0; tmp<bufLenWords; tmp++)
+            CPS_UncachedWrite32((uint32_t *)(buf->vAddr)+tmp, 0);
 
     /* clear wrap & used on old end, add new buffer */
     CPS_UncachedWrite32(&(rxQ->rxDescEnd->word[0]),
-                        buf->pAddr & CEDI_RXD_ADDR_MASK);
+                            buf->pAddr & CEDI_RXD_ADDR_MASK);
     /* upper 32 bits if 64 bit addressing */
-    if (CEDI_PdVar(cfg).dmaAddrBusWidth)
-    {
+    if (CEDI_PdVar(cfg).dmaAddrBusWidth) {
 #ifdef CEDI_64B_COMPILE
         /* 64-bit addressing */
         CPS_UncachedWrite32(&(rxQ->rxDescEnd->word[2]),
-                            (buf->pAddr & 0xFFFFFFFF00000000) >> 32);
+                             (buf->pAddr & 0xFFFFFFFF00000000)>>32);
 #else
         /* 32-bit addressing */
         CPS_UncachedWrite32(&(rxQ->rxDescEnd->word[2]), 0x00000000);
@@ -194,7 +182,7 @@ uint32_t emacAddRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf, uint8_t in
 
     /* inc end & stop pointer */
     rxQ->rxDescEnd = (rxDesc *)(((uintptr_t)rxQ->rxDescEnd) +
-                                (CEDI_PdVar(rxDescriptorSize)));
+            (CEDI_PdVar(rxDescriptorSize)));
     rxQ->rxDescStop = rxQ->rxDescEnd;
 
     /* inc VA end & stop pointers & buffer count */
@@ -205,11 +193,13 @@ uint32_t emacAddRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf, uint8_t in
 
     /* write new end(-stop) descriptor */
     CPS_UncachedWrite32(&(rxQ->rxDescEnd->word[0]),
-                        CEDI_RXD_WRAP | CEDI_RXD_USED);
+                             CEDI_RXD_WRAP | CEDI_RXD_USED );
 
     return 0;
 }
-
+#if defined(__llvm__)
+#pragma clang optimize on
+#endif
 /* Get the number of useable buffers/descriptors present in the specified
  * Rx queue, excluding the end-stop descriptor.
  * @param pD - driver private state info specific to this instance
@@ -220,7 +210,7 @@ uint32_t emacAddRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf, uint8_t in
  */
 uint32_t emacNumRxBufs(void *pD, uint8_t queueNum, uint16_t *numBufs)
 {
-    if ((pD == NULL) || (numBufs == NULL) || (queueNum >= (CEDI_PdVar(cfg)).rxQs))
+    if ((pD==NULL) || (numBufs==NULL) || (queueNum>=(CEDI_PdVar(cfg)).rxQs))
         return EINVAL;
 
     *numBufs = (CEDI_PdVar(rxQueue[queueNum])).numRxBufs;
@@ -236,17 +226,17 @@ uint32_t emacNumRxBufs(void *pD, uint8_t queueNum, uint16_t *numBufs)
  */
 uint32_t emacNumRxUsed(void *pD, uint8_t queueNum)
 {
-    uint32_t tmp, thisWd, count = 0;
+    uint32_t tmp, thisWd, count=0;
     rxDesc *thisDesc;
     rxQueue_t *rxQ;
 
-    if ((pD == NULL) || (queueNum >= (CEDI_PdVar(cfg)).rxQs))
+    if ((pD==NULL) || (queueNum>=(CEDI_PdVar(cfg)).rxQs))
         return 0;
 
     rxQ = &(CEDI_PdVar(rxQueue[queueNum]));
     /* count forward from tail, until used not set */
     thisDesc =  rxQ->rxDescTail;
-    for (tmp = 0; tmp < rxQ->numRxBufs; tmp++)
+    for (tmp = 0; tmp<rxQ->numRxBufs; tmp++)
     {
         thisWd = CPS_UncachedRead32(&(thisDesc->word[0]));
         if (thisWd & CEDI_RXD_USED)
@@ -257,7 +247,7 @@ uint32_t emacNumRxUsed(void *pD, uint8_t queueNum)
             thisDesc = rxQ->rxDescStart;
         else
             thisDesc = (rxDesc *)(((uintptr_t)(thisDesc))
-                                  + (CEDI_PdVar(rxDescriptorSize)));
+                                    + (CEDI_PdVar(rxDescriptorSize)));
     }
     return count;
 }
@@ -300,9 +290,15 @@ uint32_t emacNumRxUsed(void *pD, uint8_t queueNum)
  * @return EINVAL if invalid queueNum, buf, rxDescStat or
  *    status parameters
  */
+#if defined(__llvm__)
+#pragma clang optimize off
+#endif
 uint32_t emacReadRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf,
-                       uint8_t init, CEDI_RxDescData *descData)
+                        uint8_t init, CEDI_RxDescData *descData)
 {
+#if defined(__llvm__)
+#pragma clang optimize on
+#endif
     uint32_t tmp, bufLenWords, descWd0;
     CEDI_BuffAddr oldbuf;
     uint8_t wdNum, tailWrap;
@@ -314,48 +310,37 @@ uint32_t emacReadRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf,
 //    vDbgMsg(DBG_GEN_MSG, 10, "%s entered (regBase %08lX)\n", __func__,
 //                CEDI_PdVar(cfg).regBase);
 
-    if (buf == NULL)
-    {
+    if (buf==NULL) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: NULL buf parameter");
         return EINVAL;
     }
 
-    if (descData == NULL)
-    {
+    if (descData==NULL) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: NULL descData parameter");
         return EINVAL;
     }
 
-    if (queueNum >= (CEDI_PdVar(cfg)).rxQs)
-    {
+    if (queueNum>=(CEDI_PdVar(cfg)).rxQs) {
         vDbgMsg(DBG_GEN_MSG, 5, "Error: Invalid Rx queue number - %u\n", queueNum);
         return EINVAL;
     }
 
-    if ((buf->vAddr == 0) || (buf->pAddr == 0))
-    {
+    if ((buf->vAddr==0) || (buf->pAddr==0)) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: NULL buf address");
         return EINVAL;
     }
 
     /* alignment checking for new buffer */
-    switch (CEDI_PdVar(cfg).dmaBusWidth)
-    {
+    switch (CEDI_PdVar(cfg).dmaBusWidth) {
     case CEDI_DMA_BUS_WIDTH_32:
-        tmp = 4;
-        break;
+        tmp = 4; break;
     case CEDI_DMA_BUS_WIDTH_64:
-        tmp = 8;
-        break;
+        tmp = 8; break;
     case CEDI_DMA_BUS_WIDTH_128:
-        tmp = 16;
-        break;
-    default:
-        tmp = 4;
-        break;
+        tmp = 16; break;
+    default: tmp = 4; break;
     }
-    if ((buf->pAddr) % tmp)
-    {
+    if ((buf->pAddr)%tmp) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: Rx buffer not word-aligned");
         return EINVAL;
     }
@@ -365,8 +350,7 @@ uint32_t emacReadRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf,
     /* get first descriptor & test used bit */
     descWd0 = CPS_UncachedRead32(&(rxQ->rxDescTail->word[0]));
 
-    if (descWd0 & CEDI_RXD_USED)
-    {
+    if (descWd0 & CEDI_RXD_USED) {
         /* new data received - read & process descriptor */
 
         /* get old physical address */
@@ -376,7 +360,7 @@ uint32_t emacReadRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf,
         /* upper 32 bits if 64 bit addressing */
         if (CEDI_PdVar(cfg).dmaAddrBusWidth)
             oldbuf.pAddr |= ((uint64_t)CPS_UncachedRead32(
-                                 &(rxQ->rxDescTail->word[2]))) << 32;
+                                        &(rxQ->rxDescTail->word[2])))<<32;
 #endif
 
         /* get old virtual address & clear from list */
@@ -386,67 +370,64 @@ uint32_t emacReadRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf,
         /* save new virtual address */
         *(rxQ->rxStopVA) = buf->vAddr;
 
-        bufLenWords = (CEDI_PdVar(cfg).rxBufLength[queueNum]) << 4;
+        bufLenWords = (CEDI_PdVar(cfg).rxBufLength[queueNum])<<4;
         if (init)
-            for (tmp = 0; tmp < bufLenWords; tmp++)
-                CPS_UncachedWrite32((uint32_t *)(buf->vAddr + 4 * tmp), 0);
+            for (tmp=0; tmp<bufLenWords; tmp++)
+                CPS_UncachedWrite32((uint32_t *)(buf->vAddr+4*tmp), 0);
 
         /* read Rx status */
         descData->rxDescStat = CPS_UncachedRead32(&(rxQ->rxDescTail->word[1]));
 
         /* extract timestamp if available */
-        if ((CEDI_PdVar(cfg).enRxExtBD) && (descWd0 & CEDI_RXD_TS_VALID))
-        {
-            uint32_t reg;
+        if ((CEDI_PdVar(cfg).enRxExtBD) && (descWd0 & CEDI_RXD_TS_VALID)) {
+        uint32_t reg;
             descData->rxTsData.tsValid = 1;
-            // position depends on 32/64 bit addr
-            wdNum = (CEDI_PdVar(cfg).dmaAddrBusWidth) ? 4 : 2;
+                        // position depends on 32/64 bit addr
+            wdNum = (CEDI_PdVar(cfg).dmaAddrBusWidth)?4:2;
 
             tsLowerWd = CPS_UncachedRead32(&(rxQ->rxDescTail->word[wdNum]));
-            tsUpperWd = CPS_UncachedRead32(&(rxQ->rxDescTail->word[wdNum + 1]));
+            tsUpperWd = CPS_UncachedRead32(&(rxQ->rxDescTail->word[wdNum+1]));
 
             descData->rxTsData.tsNanoSec = tsLowerWd & CEDI_TS_NANO_SEC_MASK;
             descData->rxTsData.tsSecs =
-                (((tsUpperWd & CEDI_TS_SEC1_MASK) << CEDI_TS_SEC1_POS_SHIFT)
-                 | (tsLowerWd >> CEDI_TS_SEC0_SHIFT));
+                    (((tsUpperWd & CEDI_TS_SEC1_MASK)<<CEDI_TS_SEC1_POS_SHIFT)
+                        | (tsLowerWd >> CEDI_TS_SEC0_SHIFT));
 
-            /* The timestamp only contains lower few bits of seconds, so add value from 1588 timer */
-            reg =  CPS_UncachedRead32(CEDI_RegAddr(tsu_timer_sec));
-            /* If the top bit is set in the timestamp, but not in 1588 timer, it has rolled over, so subtract max size */
-            if ((descData->rxTsData.tsSecs & (CEDI_TS_SEC_TOP >> 1)) && !(reg & (CEDI_TS_SEC_TOP >> 1)))
-            {
-                descData->rxTsData.tsSecs -= (CEDI_TS_SEC_TOP << 1);
+        /* The timestamp only contains lower few bits of seconds, so add value from 1588 timer */
+        reg =  CPS_UncachedRead32(CEDI_RegAddr(tsu_timer_sec));
+        /* If the top bit is set in the timestamp, but not in 1588 timer, it has rolled over, so subtract max size */
+        if ((descData->rxTsData.tsSecs & (CEDI_TS_SEC_TOP>>1)) && !(reg & (CEDI_TS_SEC_TOP>>1))) {
+        descData->rxTsData.tsSecs -= (CEDI_TS_SEC_TOP<<1);
 
-            }
-            descData->rxTsData.tsSecs += ((~CEDI_TS_SEC_MASK) & EMAC_REGS__TSU_TIMER_SEC__TIMER__READ(reg));
         }
-        else
-        {
-            descData->rxTsData.tsValid = 0;
-        }
+        descData->rxTsData.tsSecs += ((~CEDI_TS_SEC_MASK) & EMAC_REGS__TSU_TIMER_SEC__TIMER__READ(reg));
+    }
+    else
+    {
+        descData->rxTsData.tsValid = 0;
+    }
 
         /* save this for later */
         tailWrap = descWd0 & CEDI_RXD_WRAP;
 
-        /* write back to descriptors */
+                /* write back to descriptors */
         CPS_UncachedWrite32(&(rxQ->rxDescTail->word[1]), CEDI_RXD_EMPTY);
         /* zero buf physical address & set used - this will be new end-stop */
         CPS_UncachedWrite32(&(rxQ->rxDescTail->word[0]),
-                            CEDI_RXD_USED | (tailWrap ? CEDI_RXD_WRAP : 0));
+                                CEDI_RXD_USED | (tailWrap?CEDI_RXD_WRAP:0));
 
         /* handle old "stop" descriptor now */
         /* insert new buf physical address & clear used */
         descWd0 = CPS_UncachedRead32(&(rxQ->rxDescStop->word[0]));
         descWd0 = ((buf->pAddr) & CEDI_RXD_ADDR_MASK) |
-                  (descWd0 & CEDI_RXD_WRAP);
+                    (descWd0 & CEDI_RXD_WRAP);
         CPS_UncachedWrite32(&(rxQ->rxDescStop->word[0]), descWd0);
         /* upper 32 bits if 64 bit addressing */
-        if (CEDI_PdVar(cfg).dmaAddrBusWidth)
-        {
+        if (CEDI_PdVar(cfg).dmaAddrBusWidth) {
 #ifdef CEDI_64B_COMPILE
             /* 64-bit addressing */
             CPS_UncachedWrite32(&(rxQ->rxDescStop->word[2]),
-                                (buf->pAddr & 0xFFFFFFFF00000000) >> 32);
+                             (buf->pAddr & 0xFFFFFFFF00000000)>>32);
 #else
             /* 32-bit addressing */
             CPS_UncachedWrite32(&(rxQ->rxDescStop->word[2]), 0x00000000);
@@ -456,28 +437,25 @@ uint32_t emacReadRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf,
         /* update pointers */
         rxQ->rxDescStop = rxQ->rxDescTail;
         rxQ->rxStopVA = rxQ->rxTailVA;
-        if (tailWrap)
-        {
+        if (tailWrap) {
             rxQ->rxDescTail = rxQ->rxDescStart;
             rxQ->rxTailVA = rxQ->rxBufVAddr;
         }
-        else
-        {
+        else {
             rxQ->rxDescTail = (rxDesc *)(((uintptr_t)(rxQ->rxDescTail))
-                                         + (CEDI_PdVar(rxDescriptorSize)));
+                                        + (CEDI_PdVar(rxDescriptorSize)));
             rxQ->rxTailVA++;
         }
 
         /* return old buffer addresses */
         buf->pAddr = oldbuf.pAddr;
         buf->vAddr = oldbuf.vAddr;
-        /*        vDbgMsg(DBG_GEN_MSG, 10, "%s vAddr=%p pAddr=%p\n",
-                              __func__, (void *)buf->vAddr, (void *)buf->pAddr);*/
+/*        vDbgMsg(DBG_GEN_MSG, 10, "%s vAddr=%p pAddr=%p\n",
+                      __func__, (void *)buf->vAddr, (void *)buf->pAddr);*/
 
 
         /* work out read frame status */
-        if ((descData->rxDescStat) & CEDI_RXD_SOF)
-        {
+        if ((descData->rxDescStat) & CEDI_RXD_SOF) {
             if ((descData->rxDescStat) & CEDI_RXD_EOF)
                 descData->status = CEDI_RXDATA_SOF_EOF;
             else
@@ -506,68 +484,64 @@ void emacGetRxDescStat(void *pD, uint32_t rxDStatWord, CEDI_RxDescStat *rxDStat)
 {
     uint32_t reg, wd1;
 
-    if ((NULL == pD) || (NULL == rxDStat)) return;
+    if ((NULL==pD) || (NULL==rxDStat)) return;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_config));
 
     wd1 = rxDStatWord;
     rxDStat->bufLen = wd1 & CEDI_RXD_LEN_MASK;
     if (EMAC_REGS__NETWORK_CONFIG__JUMBO_FRAMES__READ(reg) ||
-            (EMAC_REGS__NETWORK_CONFIG__IGNORE_RX_FCS__READ(reg) == 0))
-    {
+        (EMAC_REGS__NETWORK_CONFIG__IGNORE_RX_FCS__READ(reg)==0)) {
         rxDStat->bufLen |= wd1 & CEDI_RXD_LEN13_FCS_STAT;
         rxDStat->fcsStatus = 0;
     }
     else
-        rxDStat->fcsStatus = (wd1 & CEDI_RXD_LEN13_FCS_STAT) ? 1 : 0;
+        rxDStat->fcsStatus = (wd1 & CEDI_RXD_LEN13_FCS_STAT)?1:0;
 
-    rxDStat->sof = (wd1 & CEDI_RXD_SOF) ? 1 : 0;
-    rxDStat->eof = (wd1 & CEDI_RXD_EOF) ? 1 : 0;
-    rxDStat->header = (!rxDStat->eof && (wd1 & CEDI_RXD_HDR)) ? 1 : 0;
-    rxDStat->eoh = (!rxDStat->eof && (wd1 & CEDI_RXD_EOH)) ? 1 : 0;
-    rxDStat->vlanTagDet = (wd1 & CEDI_RXD_VLAN_TAG) ? 1 : 0;
-    rxDStat->cfi = ((wd1 & CEDI_RXD_CFI) && rxDStat->vlanTagDet) ? 1 : 0;
+    rxDStat->sof = (wd1 & CEDI_RXD_SOF)?1:0;
+    rxDStat->eof = (wd1 & CEDI_RXD_EOF)?1:0;
+    rxDStat->header = (!rxDStat->eof && (wd1 & CEDI_RXD_HDR))?1:0;
+    rxDStat->eoh = (!rxDStat->eof && (wd1 & CEDI_RXD_EOH))?1:0;
+    rxDStat->vlanTagDet = (wd1 & CEDI_RXD_VLAN_TAG)?1:0;
+    rxDStat->cfi = ((wd1 & CEDI_RXD_CFI) && rxDStat->vlanTagDet)?1:0;
     if (rxDStat->vlanTagDet)
         rxDStat->vlanPri =
-            (wd1 & CEDI_RXD_VLAN_PRI_MASK) >> CEDI_RXD_VLAN_PRI_SHIFT;
+                (wd1 & CEDI_RXD_VLAN_PRI_MASK)>>CEDI_RXD_VLAN_PRI_SHIFT;
     else
         rxDStat->vlanPri = 0;
-    rxDStat->priTagDet = (wd1 & CEDI_RXD_PRI_TAG) ? 1 : 0;
-    if (EMAC_REGS__NETWORK_CONFIG__RECEIVE_CHECKSUM_OFFLOAD_ENABLE__READ(reg))
-    {
+    rxDStat->priTagDet = (wd1 & CEDI_RXD_PRI_TAG)?1:0;
+    if (EMAC_REGS__NETWORK_CONFIG__RECEIVE_CHECKSUM_OFFLOAD_ENABLE__READ(reg)) {
         rxDStat->chkOffStat = (wd1 & CEDI_RXD_TYP_IDR_CHK_STA_MASK)\
-                              >> CEDI_RXD_TYP_IDR_CHK_STA_SHIFT;
-        rxDStat->snapNoVlanCfi = (wd1 & CEDI_RXD_TYP_MAT_SNP_NCFI) ? 1 : 0;
+                                    >>CEDI_RXD_TYP_IDR_CHK_STA_SHIFT;
+        rxDStat->snapNoVlanCfi = (wd1 & CEDI_RXD_TYP_MAT_SNP_NCFI)?1:0;
         rxDStat->typeMatchReg = 0;
         rxDStat->typeIdMatch = 0;
     }
-    else
-    {
+    else {
         rxDStat->chkOffStat = 0;
         rxDStat->snapNoVlanCfi = 0;
         rxDStat->typeMatchReg = (wd1 & CEDI_RXD_TYP_IDR_CHK_STA_MASK)\
-                                >> CEDI_RXD_TYP_IDR_CHK_STA_SHIFT;
-        rxDStat->typeIdMatch = (wd1 & CEDI_RXD_TYP_MAT_SNP_NCFI) ? 1 : 0;
+                                    >>CEDI_RXD_TYP_IDR_CHK_STA_SHIFT;
+        rxDStat->typeIdMatch = (wd1 & CEDI_RXD_TYP_MAT_SNP_NCFI)?1:0;
     }
 
     rxDStat->specAddReg = (wd1 & CEDI_RXD_SPEC_REG_MASK)\
-                          >> CEDI_RXD_SPEC_REG_SHIFT;
+                                >>CEDI_RXD_SPEC_REG_SHIFT;
     if (CEDI_PdVar(hwCfg).rx_pkt_buffer &&
-            (CEDI_PdVar(hwCfg).num_spec_add_filters > 4))
-    {
-        /* extra spec. addr matching variation */
-        rxDStat->specAddReg += ((wd1 & CEDI_RXD_SPEC_ADD_MAT) ? 1 : 0) << 2;
-        rxDStat->specAddMatch = (wd1 & CEDI_RXD_EXT_ADD_MAT) ? 1 : 0;
+            (CEDI_PdVar(hwCfg).num_spec_add_filters>4))
+    {   /* extra spec. addr matching variation */
+        rxDStat->specAddReg += ((wd1 & CEDI_RXD_SPEC_ADD_MAT)?1:0) << 2;
+        rxDStat->specAddMatch = (wd1 & CEDI_RXD_EXT_ADD_MAT)?1:0;
         rxDStat->extAddrMatch = 0;
     }
     else
     {
-        rxDStat->specAddMatch = (wd1 & CEDI_RXD_SPEC_ADD_MAT) ? 1 : 0;
-        rxDStat->extAddrMatch = (wd1 & CEDI_RXD_EXT_ADD_MAT) ? 1 : 0;
+        rxDStat->specAddMatch = (wd1 & CEDI_RXD_SPEC_ADD_MAT)?1:0;
+        rxDStat->extAddrMatch = (wd1 & CEDI_RXD_EXT_ADD_MAT)?1:0;
     }
-    rxDStat->uniHashMatch = (wd1 & CEDI_RXD_UNI_HASH_MAT) ? 1 : 0;
-    rxDStat->multiHashMatch = (wd1 & CEDI_RXD_MULTI_HASH_MAT) ? 1 : 0;
-    rxDStat->broadcast = (wd1 & (uint32_t)CEDI_RXD_BROADCAST_DET) ? 1 : 0;
+    rxDStat->uniHashMatch = (wd1 & CEDI_RXD_UNI_HASH_MAT)?1:0;
+    rxDStat->multiHashMatch = (wd1 & CEDI_RXD_MULTI_HASH_MAT)?1:0;
+    rxDStat->broadcast = (wd1 & (uint32_t)CEDI_RXD_BROADCAST_DET)?1:0;
 }
 
 /* Provide the size of descriptor calculated for the current configuration.
@@ -576,7 +550,7 @@ void emacGetRxDescStat(void *pD, uint32_t rxDStatWord, CEDI_RxDescStat *rxDStat)
  */
 void emacGetRxDescSize(void *pD, uint32_t *rxDescSize)
 {
-    if ((pD == NULL) || (rxDescSize == NULL))
+    if ((pD==NULL)||(rxDescSize==NULL))
         return;
     *rxDescSize = CEDI_PdVar(rxDescriptorSize);
 }
@@ -589,7 +563,7 @@ void emacGetRxDescSize(void *pD, uint32_t *rxDescSize)
 uint32_t emacRxEnabled(void *pD)
 {
     uint32_t reg;
-    if (pD == NULL) return 0;
+    if (pD==NULL) return 0;
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_control));
     return EMAC_REGS__NETWORK_CONTROL__ENABLE_RECEIVE__READ(reg);
 }
@@ -636,42 +610,39 @@ uint32_t emacRemoveRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf)
 
     if (!pD) return EINVAL;
 
-    if (queueNum >= (CEDI_PdVar(cfg)).rxQs)
-    {
+    if (queueNum>=(CEDI_PdVar(cfg)).rxQs) {
         vDbgMsg(DBG_GEN_MSG, 5, "Error: Invalid Rx queue number: %u\n", queueNum);
         return EINVAL;
     }
 
-    if (buf == 0)
-    {
+    if (buf==0) {
         vDbgMsg(DBG_GEN_MSG, 5, "%s\n", "Error: NULL buf parameter");
         return EINVAL;
     }
 
     rxQ = &(CEDI_PdVar(rxQueue[queueNum]));
 
-    if (0 == rxQ->numRxBufs)
+    if (0==rxQ->numRxBufs)
         return ENOENT;
 
     /* skip "stop" descriptor since no buffer there */
-    if ((rxQ->rxDescEnd == rxQ->rxDescStop) && (rxQ->rxDescEnd != rxQ->rxDescStart))
+    if ((rxQ->rxDescEnd==rxQ->rxDescStop) && (rxQ->rxDescEnd!=rxQ->rxDescStart))
     {
         rxQ->rxDescEnd = (rxDesc*)
-                         ((uintptr_t)(rxQ->rxDescEnd) - CEDI_PdVar(rxDescriptorSize));
-        rxQ->rxEndVA--;
+                ((uintptr_t)(rxQ->rxDescEnd) - CEDI_PdVar(rxDescriptorSize));
+    rxQ->rxEndVA--;
     }
 
     /* get physical address */
     buf->pAddr = CPS_UncachedRead32(&(rxQ->rxDescEnd->word[0]))
-                 & CEDI_RXD_ADDR_MASK;
+                                            & CEDI_RXD_ADDR_MASK;
     /* get virtual address */
     buf->vAddr = *(rxQ->rxEndVA);
 
     /* dec end/tail pointers unless already at start of list */
-    if (rxQ->rxDescEnd != rxQ->rxDescStart)
-    {
+    if (rxQ->rxDescEnd!=rxQ->rxDescStart) {
         rxQ->rxDescEnd = (rxDesc*)
-                         ((uintptr_t)(rxQ->rxDescEnd) - CEDI_PdVar(rxDescriptorSize));
+                ((uintptr_t)(rxQ->rxDescEnd) - CEDI_PdVar(rxDescriptorSize));
         rxQ->rxEndVA--;
 
         /* set wrap on new end descriptor */
@@ -684,25 +655,24 @@ uint32_t emacRemoveRxBuf(void *pD, uint8_t queueNum, CEDI_BuffAddr *buf)
 }
 
 void emacFindQBaseAddr(void *pD, uint8_t queueNum, rxQueue_t *rxQ,
-                       uint32_t *pAddr, uintptr_t *vAddr)
-{
+                        uint32_t *pAddr, uintptr_t *vAddr) {
     uint8_t q = 0;
     /* find start addresses for this rxQ */
     *vAddr = CEDI_PdVar(cfg).rxQAddr;
     *pAddr = CEDI_PdVar(cfg).rxQPhyAddr;
 
-    if (queueNum > 0)
+    if (queueNum>0)
         rxQ->rxBufVAddr = (CEDI_PdVar(rxQueue[0]).rxBufVAddr);
-    while (q < queueNum)
-    {
-        *vAddr += (rxQ->numRxDesc) * (CEDI_PdVar(rxDescriptorSize)); //sizeof(rxDesc);
-        *pAddr += (rxQ->numRxDesc) * (CEDI_PdVar(rxDescriptorSize)); //sizeof(rxDesc);
+    while (q<queueNum) {
+        *vAddr += (rxQ->numRxDesc)*(CEDI_PdVar(rxDescriptorSize));//sizeof(rxDesc);
+        *pAddr += (rxQ->numRxDesc)*(CEDI_PdVar(rxDescriptorSize));//sizeof(rxDesc);
         rxQ->rxBufVAddr += rxQ->numRxDesc;
         q++;
     }
     vDbgMsg(DBG_GEN_MSG, 10, "%s: base address Q%u virt=%08lX phys=%08X vAddrList=%p\n",
             __func__, queueNum, *vAddr, *pAddr, rxQ->rxBufVAddr);
 }
+
 /* Reset Rx buffer descriptor list/ buffer virtual address list to initial
  * empty state, clearing all descriptors.  For use by init or after a fatal
  * error. Disables receive circuit.
@@ -715,12 +685,17 @@ void emacFindQBaseAddr(void *pD, uint8_t queueNum, rxQueue_t *rxQ,
  * @return 0 if successful
  * @return EINVAL if invalid parameter
  */
+#if defined(__llvm__)
+#pragma clang optimize off
+#endif
 uint32_t emacResetRxQ(void *pD, uint8_t queueNum, uint8_t ptrsOnly)
 {
 #define CEDI_WR_RXQ_PTR_REG_N_CASE(Q) case Q:\
         CPS_UncachedWrite32(CEDI_RegAddr(receive_q##Q##_ptr), regTmp);\
         break;
-
+#if defined(__llvm__)
+#pragma clang optimize on
+#endif
     uint32_t regTmp;
     uint16_t i;
     uint32_t pAddr;
@@ -728,7 +703,7 @@ uint32_t emacResetRxQ(void *pD, uint8_t queueNum, uint8_t ptrsOnly)
     rxDesc* descPtr;
     rxQueue_t *rxQ;
 
-    if ((pD == NULL) || (queueNum >= CEDI_PdVar(cfg).rxQs) || (ptrsOnly > 1))
+    if ((pD==NULL) || (queueNum>=CEDI_PdVar(cfg).rxQs) || (ptrsOnly>1))
         return EINVAL;
 
     emacDisableRx(pD);
@@ -737,28 +712,25 @@ uint32_t emacResetRxQ(void *pD, uint8_t queueNum, uint8_t ptrsOnly)
     emacFindQBaseAddr(pD, queueNum, rxQ, &pAddr, &vAddr);
 
     /* want the virtual addresses here: */
-    if (ptrsOnly)
-    {
-        if (rxQ->rxDescStop != rxQ->rxDescEnd)
-        {
-            /* copy buffer addresses from new "stop" descriptor to old one,
-             * before reset pointers */
-            CPS_UncachedWrite32((uint32_t *) & (rxQ->rxDescStop->word[0]),
-                                CPS_UncachedRead32((uint32_t *) & (rxQ->rxDescEnd->word[0])));
+    if (ptrsOnly) {
+        if (rxQ->rxDescStop!=rxQ->rxDescEnd) {
+        /* copy buffer addresses from new "stop" descriptor to old one,
+         * before reset pointers */
+            CPS_UncachedWrite32((uint32_t *)&(rxQ->rxDescStop->word[0]),
+                CPS_UncachedRead32((uint32_t *)&(rxQ->rxDescEnd->word[0])));
             *(rxQ->rxStopVA) = *(rxQ->rxEndVA);
         }
     }
     else
     {
-        rxQ->rxDescStart = (rxDesc *)vAddr;
+    rxQ->rxDescStart = (rxDesc *)vAddr;
         rxQ->rxDescEnd = (rxDesc *)vAddr;
     }
     rxQ->rxDescStop = (rxDesc *)vAddr;
     rxQ->rxDescTail = (rxDesc *)vAddr;
     rxQ->rxTailVA = rxQ->rxBufVAddr;
     rxQ->rxStopVA = rxQ->rxBufVAddr;
-    if (!ptrsOnly)
-    {
+    if (!ptrsOnly) {
         rxQ->rxEndVA = rxQ->rxBufVAddr;
         *(rxQ->rxStopVA) = 0;
         rxQ->numRxBufs = 0;
@@ -768,66 +740,60 @@ uint32_t emacResetRxQ(void *pD, uint8_t queueNum, uint8_t ptrsOnly)
      * available size as buffers are added - if ptrsOnly, then buffers already
      * in ring, preserve addresses & only clear used bits/wd1  */
     descPtr = rxQ->rxDescStart;
-    for (i = 0; i < rxQ->numRxDesc; i++)
-    {
-        if (ptrsOnly)
-        {
-            if (rxQ->rxDescStop == rxQ->rxDescEnd)
-            {
-                CPS_UncachedWrite32((uint32_t *) & (rxQ->rxDescStop->word[0]),
-                                    CEDI_RXD_WRAP | CEDI_RXD_USED);
+    for (i = 0; i<rxQ->numRxDesc; i++) {
+        if (ptrsOnly) {
+            if (rxQ->rxDescStop==rxQ->rxDescEnd) {
+                CPS_UncachedWrite32((uint32_t *)&(rxQ->rxDescStop->word[0]),
+                                          CEDI_RXD_WRAP|CEDI_RXD_USED );
                 CPS_UncachedWrite32(&(rxQ->rxDescStop->word[1]), CEDI_RXD_EMPTY);
                 *(rxQ->rxStopVA) = 0;
             }
             else
             {
-                pAddr = CPS_UncachedRead32((uint32_t *) & (rxQ->rxDescStop->word[0]));
-                CPS_UncachedWrite32((uint32_t *) & (rxQ->rxDescStop->word[0]),
-                                    pAddr & ~(CEDI_RXD_WRAP | CEDI_RXD_USED));
+                pAddr = CPS_UncachedRead32((uint32_t *)&(rxQ->rxDescStop->word[0]));
+                CPS_UncachedWrite32((uint32_t *)&(rxQ->rxDescStop->word[0]),
+                                    pAddr & ~(CEDI_RXD_WRAP|CEDI_RXD_USED));
                 CPS_UncachedWrite32(&(rxQ->rxDescStop->word[1]), CEDI_RXD_EMPTY);
                 /* inc stop pointer */
                 rxQ->rxDescStop = (rxDesc *)(((uintptr_t)rxQ->rxDescStop) +
-                                             (CEDI_PdVar(rxDescriptorSize)));
+                                    (CEDI_PdVar(rxDescriptorSize)));
                 /* inc VA stop pointer */
                 rxQ->rxStopVA++;
             }
         }
-        else
-        {
-            CPS_UncachedWrite32((uint32_t *)
-                                & (descPtr->word[0]), i ? 0 : CEDI_RXD_WRAP | CEDI_RXD_USED);
-            CPS_UncachedWrite32((uint32_t *)
-                                & (descPtr->word[1]), CEDI_RXD_EMPTY);
-            descPtr = (rxDesc*)(((uintptr_t)(descPtr)) +
-                                (CEDI_PdVar(rxDescriptorSize)));
+        else {
+        CPS_UncachedWrite32((uint32_t *)
+                &(descPtr->word[0]), i?0:CEDI_RXD_WRAP|CEDI_RXD_USED);
+        CPS_UncachedWrite32((uint32_t *)
+                &(descPtr->word[1]), CEDI_RXD_EMPTY);
+            descPtr = (rxDesc*) (((uintptr_t)(descPtr)) +
+                (CEDI_PdVar(rxDescriptorSize)));
         }
     }
 
-    if (!ptrsOnly)
-    {
+    if (!ptrsOnly) {
         /* write hardware base address register */
         regTmp = 0;
-        EMAC_REGS__RECEIVE_Q_PTR__DMA_RX_Q_PTR__MODIFY(regTmp, pAddr >> 2);
-        switch (queueNum)
-        {
+        EMAC_REGS__RECEIVE_Q_PTR__DMA_RX_Q_PTR__MODIFY(regTmp, pAddr>>2);
+        switch (queueNum) {
         case 0:
             CPS_UncachedWrite32(CEDI_RegAddr(receive_q_ptr), regTmp);
             break;
-            CEDI_WR_RXQ_PTR_REG_N_CASE(1);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(2);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(3);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(4);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(5);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(6);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(7);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(8);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(9);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(10);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(11);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(12);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(13);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(14);
-            CEDI_WR_RXQ_PTR_REG_N_CASE(15);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(1);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(2);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(3);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(4);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(5);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(6);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(7);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(8);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(9);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(10);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(11);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(12);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(13);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(14);
+        CEDI_WR_RXQ_PTR_REG_N_CASE(15);
         }
     }
     return 0;
@@ -841,21 +807,21 @@ uint32_t emacResetRxQ(void *pD, uint8_t queueNum, uint8_t ptrsOnly)
 uint32_t emacGetRxStatus(void *pD, CEDI_RxStatus *status)
 {
     uint32_t reg;
-    if ((pD == NULL) || (status == NULL))
+    if ((pD==NULL)||(status==NULL))
         return 0;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(receive_status));
 
     status->buffNotAvail =
-        EMAC_REGS__RECEIVE_STATUS__BUFFER_NOT_AVAILABLE__READ(reg);
+            EMAC_REGS__RECEIVE_STATUS__BUFFER_NOT_AVAILABLE__READ(reg);
     status->frameRx =
-        EMAC_REGS__RECEIVE_STATUS__FRAME_RECEIVED__READ(reg);
+            EMAC_REGS__RECEIVE_STATUS__FRAME_RECEIVED__READ(reg);
     status->rxOverrun =
-        EMAC_REGS__RECEIVE_STATUS__RECEIVE_OVERRUN__READ(reg);
+            EMAC_REGS__RECEIVE_STATUS__RECEIVE_OVERRUN__READ(reg);
     status->hRespNotOk =
-        EMAC_REGS__RECEIVE_STATUS__RESP_NOT_OK__READ(reg);
+            EMAC_REGS__RECEIVE_STATUS__RESP_NOT_OK__READ(reg);
 
-    return reg ? 1 : 0;
+    return reg?1:0;
 }
 
 /* Reset the bits of EMAC receive status register as selected in resetStatus
@@ -887,13 +853,12 @@ void emacClearRxStatus(void *pD, uint32_t resetStatus)
  *  When enabled, frame L2/L3/L4 headers will written to separate
  *  buffer, before data starts in a second buffer (if not zero payload)
  */
-uint32_t emacSetHdrDataSplit(void *pD, uint8_t enable)
-{
+uint32_t emacSetHdrDataSplit(void *pD, uint8_t enable) {
 
     uint32_t reg;
-    if ((pD == NULL) || (enable > 1))
+    if ((pD==NULL) || (enable>1))
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).hdr_split == 0)
+    if (CEDI_PdVar(hwCfg).hdr_split==0)
         return ENOTSUP;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(dma_config));
@@ -909,16 +874,15 @@ uint32_t emacSetHdrDataSplit(void *pD, uint8_t enable)
 /**
  * Read enable/disable status for header-data split feature
  */
-uint32_t emacGetHdrDataSplit(void *pD, uint8_t *enable)
-{
+uint32_t emacGetHdrDataSplit(void *pD, uint8_t *enable) {
 
-    if ((pD == NULL) || (enable == NULL))
+    if ((pD==NULL) || (enable==NULL))
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).hdr_split == 0)
+    if (CEDI_PdVar(hwCfg).hdr_split==0)
         return ENOTSUP;
 
     *enable = EMAC_REGS__DMA_CONFIG__HDR_DATA_SPLITTING_EN__READ(
-                  CPS_UncachedRead32(CEDI_RegAddr(dma_config)));
+                CPS_UncachedRead32(CEDI_RegAddr(dma_config)));
 
     return EOK;
 }
@@ -928,24 +892,23 @@ uint32_t emacGetHdrDataSplit(void *pD, uint8_t *enable)
  *  When enabled, consecutive TCP/IP frames on a priority queue
  *  will be combined to form a single large frame
  */
-uint32_t emacSetRscEnable(void *pD, uint8_t queue, uint8_t enable)
-{
+uint32_t emacSetRscEnable(void *pD, uint8_t queue, uint8_t enable) {
 
     uint32_t reg, enableField;
-    if (pD == NULL)
+    if (pD==NULL)
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).pbuf_rsc == 0)
+    if (CEDI_PdVar(hwCfg).pbuf_rsc==0)
         return ENOTSUP;
-    if ((queue < 1) || (queue >= (CEDI_PdVar(cfg)).rxQs) || (enable > 1))
+    if ((queue<1) || (queue>=(CEDI_PdVar(cfg)).rxQs) || (enable>1))
         return EINVAL;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(rsc_control));
     enableField = EMAC_REGS__RSC_CONTROL__RSC_CONTROL__READ(reg);
 
     if (enable)
-        enableField |= (1 << (queue - 1));
+        enableField |= (1 << (queue-1));
     else
-        enableField &= ~(1 << (queue - 1));
+        enableField &= ~(1 << (queue-1));
 
     EMAC_REGS__RSC_CONTROL__RSC_CONTROL__MODIFY(reg, enableField);
     CPS_UncachedWrite32(CEDI_RegAddr(rsc_control), reg);
@@ -956,20 +919,19 @@ uint32_t emacSetRscEnable(void *pD, uint8_t queue, uint8_t enable)
 /**
  * Read enabled status of RSC on a specified priority queue
  */
-uint32_t emacGetRscEnable(void *pD, uint8_t queue, uint8_t *enable)
-{
+uint32_t emacGetRscEnable(void *pD, uint8_t queue, uint8_t *enable) {
 
     uint32_t reg;
-    if ((pD == NULL) || (enable == NULL))
+    if ((pD==NULL) || (enable==NULL))
         return EINVAL;
-    if ((queue < 1) || (queue >= (CEDI_PdVar(cfg)).rxQs))
+    if ((queue<1)||(queue>=(CEDI_PdVar(cfg)).rxQs))
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).pbuf_rsc == 0)
+    if (CEDI_PdVar(hwCfg).pbuf_rsc==0)
         return ENOTSUP;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(rsc_control));
     *enable = (EMAC_REGS__RSC_CONTROL__RSC_CONTROL__READ(reg)
-               & (1 << (queue - 1))) ? 1 : 0;
+                            & (1<<(queue-1)))?1:0;
 
     return EOK;
 }
@@ -980,20 +942,19 @@ uint32_t emacGetRscEnable(void *pD, uint8_t queue, uint8_t *enable)
  *  disabled by receipt of frame with an end-coalesce flag set
  *  (SYN/FIN/RST/URG)
  */
-uint32_t emacSetRscClearMask(void *pD, uint8_t setMask)
-{
+uint32_t emacSetRscClearMask(void *pD, uint8_t setMask) {
 
     uint32_t reg;
-    if ((pD == NULL) || (setMask > 1))
+    if ((pD==NULL) || (setMask>1))
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).pbuf_rsc == 0)
+    if (CEDI_PdVar(hwCfg).pbuf_rsc==0)
         return ENOTSUP;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(rsc_control));
     if (setMask)
-        reg |= (1 << 16);
+        reg |= (1<<16);
     else
-        reg &= ~(1 << 16);
+        reg &= ~(1<<16);
     CPS_UncachedWrite32(CEDI_RegAddr(rsc_control), reg);
 
     return EOK;
@@ -1003,17 +964,16 @@ uint32_t emacSetRxPartialStFwd(void *pD, uint32_t watermark, uint8_t enable)
 {
     uint32_t reg;
     if (!pD) return EINVAL;
-    if (CEDI_PdVar(hwCfg).rx_pkt_buffer == 0)
+    if (CEDI_PdVar(hwCfg).rx_pkt_buffer==0)
         return ENOTSUP;
-    if (enable > 1) return EINVAL;
+    if (enable>1) return EINVAL;
 //    if ((enable) && (!CEDI_PdVar(hwCfg).rx_pkt_buffer))
 //        return EINVAL;
-    if (watermark > ((1UL << CEDI_PdVar(hwCfg).rx_pbuf_addr) - 1))
+    if (watermark>((1UL<<CEDI_PdVar(hwCfg).rx_pbuf_addr)-1))
         return EINVAL;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(pbuf_rxcutthru));
-    if (enable)
-    {
+    if (enable) {
         EMAC_REGS__PBUF_RXCUTTHRU__DMA_RX_CUTTHRU_THRESHOLD__MODIFY(reg,
                 watermark);
         EMAC_REGS__PBUF_RXCUTTHRU__DMA_RX_CUTTHRU__SET(reg);
@@ -1029,9 +989,9 @@ uint32_t emacSetRxPartialStFwd(void *pD, uint32_t watermark, uint8_t enable)
 uint32_t emacGetRxPartialStFwd(void *pD, uint32_t *watermark, uint8_t *enable)
 {
     uint32_t reg;
-    if ((pD == 0) || (enable == 0) || (watermark == 0))
+    if ((pD==0)||(enable==0)||(watermark==0))
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).rx_pkt_buffer == 0)
+    if (CEDI_PdVar(hwCfg).rx_pkt_buffer==0)
         return ENOTSUP;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(pbuf_rxcutthru));
@@ -1045,27 +1005,27 @@ uint32_t emacGetRxPartialStFwd(void *pD, uint32_t *watermark, uint8_t *enable)
 
 /******************************** Rx Filtering ******************************/
 
-/**
- * Set specific address register to the given address value
- * @param[in] pD driver private state info specific to this instance
- * @param[in] addrNum number of specific address filters,
- *                in range 1 - num_spec_add_filters.
- *    $RANGE $FROM 1 $TO CEDI_DesignCfg.num_spec_add_filters$
- * @param[in] addr pointer to the 6-byte MAC address value to write
- * @param[in] specFilterType flag specifying whether to use MAC source or
- *    destination address to be compared for filtering. Source filter when =1.
- *    $RANGE $FROM 0 $TO 1 $
- * @param[in] byteMask  Bits masking out bytes of specific address from
- *    comparison.  When high, the associated address byte will be ignored.
- *    e.g. LSB of byteMask=1 implies first byte received should not be compared
- *    Ignored if addrNum=1, full bit masking available (SpecificAddr1Mask)
- *    $RANGE $FROM 0 $TO 0x3F $TEST_SUBSET 4 $
- * @return 0 if successful,
- * @return EINVAL if pD, addrNum, specFilterType or byteMask invalid
- * @return ENOTSUP if CEDI_DesignCfg.num_spec_add_filters==0
- */
+  /**
+   * Set specific address register to the given address value
+   * @param[in] pD driver private state info specific to this instance
+   * @param[in] addrNum number of specific address filters,
+   *                in range 1 - num_spec_add_filters.
+   *    $RANGE $FROM 1 $TO CEDI_DesignCfg.num_spec_add_filters$
+   * @param[in] addr pointer to the 6-byte MAC address value to write
+   * @param[in] specFilterType flag specifying whether to use MAC source or
+   *    destination address to be compared for filtering. Source filter when =1.
+   *    $RANGE $FROM 0 $TO 1 $
+   * @param[in] byteMask  Bits masking out bytes of specific address from
+   *    comparison.  When high, the associated address byte will be ignored.
+   *    e.g. LSB of byteMask=1 implies first byte received should not be compared
+   *    Ignored if addrNum=1, full bit masking available (SpecificAddr1Mask)
+   *    $RANGE $FROM 0 $TO 0x3F $TEST_SUBSET 4 $
+   * @return 0 if successful,
+   * @return EINVAL if pD, addrNum, specFilterType or byteMask invalid
+   * @return ENOTSUP if CEDI_DesignCfg.num_spec_add_filters==0
+   */
 uint32_t emacSetSpecificAddr(void *pD, uint8_t addrNum, CEDI_MacAddress *addr,
-                             uint8_t specFilterType, uint8_t byteMask)
+                            uint8_t specFilterType, uint8_t byteMask)
 {
 #define CEDI_WR_SPEC_ADDR_CASE(reg) \
           case(reg):EMAC_REGS__SPEC_ADD_BOTTOM__ADDRESS__MODIFY(regVal,\
@@ -1091,74 +1051,73 @@ uint32_t emacSetSpecificAddr(void *pD, uint8_t addrNum, CEDI_MacAddress *addr,
                                           regVal); break;
 
     uint32_t regVal;
-    if ((!pD) || (addr == NULL)) return EINVAL;
-    if ((!addrNum) || (addrNum > (CEDI_PdVar(hwCfg).num_spec_add_filters)))
+    if ((!pD)||(addr==NULL)) return EINVAL;
+    if ((!addrNum) || (addrNum>(CEDI_PdVar(hwCfg).num_spec_add_filters)))
         return EINVAL;
-    if ((specFilterType > 1) || (byteMask > 0x3F))
+    if ((specFilterType>1) || (byteMask>0x3F))
         return EINVAL;
 
-    if (CEDI_PdVar(hwCfg).num_spec_add_filters == 0)
+    if (CEDI_PdVar(hwCfg).num_spec_add_filters==0)
         return ENOTSUP;
 
     regVal = 0;
-    switch (addrNum)
-    {
-        CEDI_WR_SPEC_ADDR_CASE(1)
-        CEDI_WR_SPEC_ADDR_CASE(2)
-        CEDI_WR_SPEC_ADDR_CASE(3)
-        CEDI_WR_SPEC_ADDR_CASE(4)
-        CEDI_WR_SPEC_ADDR_CASE(5)
-        CEDI_WR_SPEC_ADDR_CASE(6)
-        CEDI_WR_SPEC_ADDR_CASE(7)
-        CEDI_WR_SPEC_ADDR_CASE(8)
-        CEDI_WR_SPEC_ADDR_CASE(9)
-        CEDI_WR_SPEC_ADDR_CASE(10)
-        CEDI_WR_SPEC_ADDR_CASE(11)
-        CEDI_WR_SPEC_ADDR_CASE(12)
-        CEDI_WR_SPEC_ADDR_CASE(13)
-        CEDI_WR_SPEC_ADDR_CASE(14)
-        CEDI_WR_SPEC_ADDR_CASE(15)
-        CEDI_WR_SPEC_ADDR_CASE(16)
-        CEDI_WR_SPEC_ADDR_CASE(17)
-        CEDI_WR_SPEC_ADDR_CASE(18)
-        CEDI_WR_SPEC_ADDR_CASE(19)
-        CEDI_WR_SPEC_ADDR_CASE(20)
-        CEDI_WR_SPEC_ADDR_CASE(21)
-        CEDI_WR_SPEC_ADDR_CASE(22)
-        CEDI_WR_SPEC_ADDR_CASE(23)
-        CEDI_WR_SPEC_ADDR_CASE(24)
-        CEDI_WR_SPEC_ADDR_CASE(25)
-        CEDI_WR_SPEC_ADDR_CASE(26)
-        CEDI_WR_SPEC_ADDR_CASE(27)
-        CEDI_WR_SPEC_ADDR_CASE(28)
-        CEDI_WR_SPEC_ADDR_CASE(29)
-        CEDI_WR_SPEC_ADDR_CASE(30)
-        CEDI_WR_SPEC_ADDR_CASE(31)
-        CEDI_WR_SPEC_ADDR_CASE(32)
-    }
+    switch(addrNum) {
+            CEDI_WR_SPEC_ADDR_CASE(1)
+            CEDI_WR_SPEC_ADDR_CASE(2)
+            CEDI_WR_SPEC_ADDR_CASE(3)
+            CEDI_WR_SPEC_ADDR_CASE(4)
+            CEDI_WR_SPEC_ADDR_CASE(5)
+            CEDI_WR_SPEC_ADDR_CASE(6)
+            CEDI_WR_SPEC_ADDR_CASE(7)
+            CEDI_WR_SPEC_ADDR_CASE(8)
+            CEDI_WR_SPEC_ADDR_CASE(9)
+            CEDI_WR_SPEC_ADDR_CASE(10)
+            CEDI_WR_SPEC_ADDR_CASE(11)
+            CEDI_WR_SPEC_ADDR_CASE(12)
+            CEDI_WR_SPEC_ADDR_CASE(13)
+            CEDI_WR_SPEC_ADDR_CASE(14)
+            CEDI_WR_SPEC_ADDR_CASE(15)
+            CEDI_WR_SPEC_ADDR_CASE(16)
+            CEDI_WR_SPEC_ADDR_CASE(17)
+            CEDI_WR_SPEC_ADDR_CASE(18)
+            CEDI_WR_SPEC_ADDR_CASE(19)
+            CEDI_WR_SPEC_ADDR_CASE(20)
+            CEDI_WR_SPEC_ADDR_CASE(21)
+            CEDI_WR_SPEC_ADDR_CASE(22)
+            CEDI_WR_SPEC_ADDR_CASE(23)
+            CEDI_WR_SPEC_ADDR_CASE(24)
+            CEDI_WR_SPEC_ADDR_CASE(25)
+            CEDI_WR_SPEC_ADDR_CASE(26)
+            CEDI_WR_SPEC_ADDR_CASE(27)
+            CEDI_WR_SPEC_ADDR_CASE(28)
+            CEDI_WR_SPEC_ADDR_CASE(29)
+            CEDI_WR_SPEC_ADDR_CASE(30)
+            CEDI_WR_SPEC_ADDR_CASE(31)
+            CEDI_WR_SPEC_ADDR_CASE(32)
+}
 
     return EOK;
 }
 
-/**
- * Get the value of a specific address register
- * @param[in] pD driver private state info specific to this instance
- * @param[in] addrNum number of specific address filters, in
- *                range 1 - num_spec_add_filters
- * @param[out] specFilterType flag specifying whether to use MAC source or
- *    destination address for filtering. When set to 1 use source address.
- * @param[out] byteMask Bits masking out bytes of specific address from
- *    comparison.  When high, the associated address byte will be ignored.
- *    e.g. LSB of byteMask=1 implies first byte received should not be compared
- *    Ignored if addrNum=1, full bit masking available (SpecificAddr1Mask)
- * @param[out] addr pointer to a 6-byte MAC address struct for returning the
- *    address value
- * @return 0 if successful
- * @return EINVAL if pD, addrNum, specFilterType or byteMask invalid
- * @return ENOTSUP if CEDI_DesignCfg.num_spec_add_filters==0
- */
+  /**
+   * Get the value of a specific address register
+   * @param[in] pD driver private state info specific to this instance
+   * @param[in] addrNum number of specific address filters, in
+   *                range 1 - num_spec_add_filters
+   * @param[out] specFilterType flag specifying whether to use MAC source or
+   *    destination address for filtering. When set to 1 use source address.
+   * @param[out] byteMask Bits masking out bytes of specific address from
+   *    comparison.  When high, the associated address byte will be ignored.
+   *    e.g. LSB of byteMask=1 implies first byte received should not be compared
+   *    Ignored if addrNum=1, full bit masking available (SpecificAddr1Mask)
+   * @param[out] addr pointer to a 6-byte MAC address struct for returning the
+   *    address value
+   * @return 0 if successful
+   * @return EINVAL if pD, addrNum, specFilterType or byteMask invalid
+   * @return ENOTSUP if CEDI_DesignCfg.num_spec_add_filters==0
+   */
 uint32_t emacGetSpecificAddr(void *pD, uint8_t addrNum, CEDI_MacAddress *addr,
-                             uint8_t *specFilterType, uint8_t *byteMask)
+                        uint8_t *specFilterType, uint8_t *byteMask)
 {
 
 #define CEDI_RD_SPEC_ADDR_CASE(reg) \
@@ -1181,62 +1140,61 @@ uint32_t emacGetSpecificAddr(void *pD, uint8_t addrNum, CEDI_MacAddress *addr,
               break;
 
     uint32_t regAddrTop, regAddrBottom, regTopVal;
-    if ((pD == NULL) || (addr == NULL))
+    if ((pD==NULL)||(addr==NULL))
         return EINVAL;
 
-    if ((specFilterType == NULL) || (byteMask == NULL))
+    if ((specFilterType==NULL)||(byteMask==NULL))
         return EINVAL;
 
-    if (CEDI_PdVar(hwCfg).num_spec_add_filters == 0)
+    if (CEDI_PdVar(hwCfg).num_spec_add_filters==0)
         return ENOTSUP;
-    if ((!addrNum) || (addrNum > (CEDI_PdVar(hwCfg).num_spec_add_filters)))
+    if ((!addrNum) || (addrNum>(CEDI_PdVar(hwCfg).num_spec_add_filters)))
         return EINVAL;
     regAddrTop = 0;
     regAddrBottom = 0;
-    switch (addrNum)
-    {
-        CEDI_RD_SPEC_ADDR_CASE(1)
-        CEDI_RD_SPEC_ADDR_CASE(2)
-        CEDI_RD_SPEC_ADDR_CASE(3)
-        CEDI_RD_SPEC_ADDR_CASE(4)
-        CEDI_RD_SPEC_ADDR_CASE(5)
-        CEDI_RD_SPEC_ADDR_CASE(6)
-        CEDI_RD_SPEC_ADDR_CASE(7)
-        CEDI_RD_SPEC_ADDR_CASE(8)
-        CEDI_RD_SPEC_ADDR_CASE(9)
-        CEDI_RD_SPEC_ADDR_CASE(10)
-        CEDI_RD_SPEC_ADDR_CASE(11)
-        CEDI_RD_SPEC_ADDR_CASE(12)
-        CEDI_RD_SPEC_ADDR_CASE(13)
-        CEDI_RD_SPEC_ADDR_CASE(14)
-        CEDI_RD_SPEC_ADDR_CASE(15)
-        CEDI_RD_SPEC_ADDR_CASE(16)
-        CEDI_RD_SPEC_ADDR_CASE(17)
-        CEDI_RD_SPEC_ADDR_CASE(18)
-        CEDI_RD_SPEC_ADDR_CASE(19)
-        CEDI_RD_SPEC_ADDR_CASE(20)
-        CEDI_RD_SPEC_ADDR_CASE(21)
-        CEDI_RD_SPEC_ADDR_CASE(22)
-        CEDI_RD_SPEC_ADDR_CASE(23)
-        CEDI_RD_SPEC_ADDR_CASE(24)
-        CEDI_RD_SPEC_ADDR_CASE(25)
-        CEDI_RD_SPEC_ADDR_CASE(26)
-        CEDI_RD_SPEC_ADDR_CASE(27)
-        CEDI_RD_SPEC_ADDR_CASE(28)
-        CEDI_RD_SPEC_ADDR_CASE(29)
-        CEDI_RD_SPEC_ADDR_CASE(30)
-        CEDI_RD_SPEC_ADDR_CASE(31)
-        CEDI_RD_SPEC_ADDR_CASE(32)
+    switch(addrNum) {
+                CEDI_RD_SPEC_ADDR_CASE(1)
+                CEDI_RD_SPEC_ADDR_CASE(2)
+                CEDI_RD_SPEC_ADDR_CASE(3)
+                CEDI_RD_SPEC_ADDR_CASE(4)
+                CEDI_RD_SPEC_ADDR_CASE(5)
+                CEDI_RD_SPEC_ADDR_CASE(6)
+                CEDI_RD_SPEC_ADDR_CASE(7)
+                CEDI_RD_SPEC_ADDR_CASE(8)
+                CEDI_RD_SPEC_ADDR_CASE(9)
+                CEDI_RD_SPEC_ADDR_CASE(10)
+                CEDI_RD_SPEC_ADDR_CASE(11)
+                CEDI_RD_SPEC_ADDR_CASE(12)
+                CEDI_RD_SPEC_ADDR_CASE(13)
+                CEDI_RD_SPEC_ADDR_CASE(14)
+                CEDI_RD_SPEC_ADDR_CASE(15)
+                CEDI_RD_SPEC_ADDR_CASE(16)
+                CEDI_RD_SPEC_ADDR_CASE(17)
+                CEDI_RD_SPEC_ADDR_CASE(18)
+                CEDI_RD_SPEC_ADDR_CASE(19)
+                CEDI_RD_SPEC_ADDR_CASE(20)
+                CEDI_RD_SPEC_ADDR_CASE(21)
+                CEDI_RD_SPEC_ADDR_CASE(22)
+                CEDI_RD_SPEC_ADDR_CASE(23)
+                CEDI_RD_SPEC_ADDR_CASE(24)
+                CEDI_RD_SPEC_ADDR_CASE(25)
+                CEDI_RD_SPEC_ADDR_CASE(26)
+                CEDI_RD_SPEC_ADDR_CASE(27)
+                CEDI_RD_SPEC_ADDR_CASE(28)
+                CEDI_RD_SPEC_ADDR_CASE(29)
+                CEDI_RD_SPEC_ADDR_CASE(30)
+                CEDI_RD_SPEC_ADDR_CASE(31)
+                CEDI_RD_SPEC_ADDR_CASE(32)
     }
 
 //    vDbgMsg(DBG_GEN_MSG, 10, "top=%08X  bottom=%08X\n",
 //                    regAddrTop, regAddrBottom);
     addr->byte[0] = (regAddrBottom & 0xFF);
-    addr->byte[1] = ((regAddrBottom >> 8) & 0xFF);
-    addr->byte[2] = ((regAddrBottom >> 16) & 0xFF);
-    addr->byte[3] = ((regAddrBottom >> 24) & 0xFF);
+    addr->byte[1] = ((regAddrBottom>>8) & 0xFF);
+    addr->byte[2] = ((regAddrBottom>>16) & 0xFF);
+    addr->byte[3] = ((regAddrBottom>>24) & 0xFF);
     addr->byte[4] = (regAddrTop & 0xFF);
-    addr->byte[5] = ((regAddrTop >> 8) & 0xFF);
+    addr->byte[5] = ((regAddrTop>>8) & 0xFF);
     return EOK;
 }
 
@@ -1252,19 +1210,19 @@ uint32_t emacSetSpecificAddr1Mask(void *pD, CEDI_MacAddress *mask)
 {
     uint32_t reg;
 
-    if ((pD == NULL) || (mask == NULL))
+    if ((pD==NULL) || (mask==NULL))
         return EINVAL;
-    if (CEDI_PdVar(hwCfg).num_spec_add_filters == 0)
+    if (CEDI_PdVar(hwCfg).num_spec_add_filters==0)
         return ENOTSUP;
 
     reg = 0;
     EMAC_REGS__MASK_ADD1_BOTTOM__ADDRESS_MASK__MODIFY(reg,
-            mask->byte[0] + (mask->byte[1] << 8) + (mask->byte[2] << 16)
-            + (mask->byte[3] << 24));
+            mask->byte[0] + (mask->byte[1]<<8) + (mask->byte[2]<<16)
+                        + (mask->byte[3]<<24));
     CPS_UncachedWrite32((CEDI_RegAddr(mask_add1_bottom)), reg);
     reg = 0;
     EMAC_REGS__MASK_ADD1_TOP__ADDRESS_MASK__MODIFY(reg,
-            mask->byte[4] + (mask->byte[5] << 8));
+            mask->byte[4] + (mask->byte[5]<<8));
     CPS_UncachedWrite32((CEDI_RegAddr(mask_add1_top)), reg);
     return EOK;
 }
@@ -1279,22 +1237,22 @@ uint32_t emacSetSpecificAddr1Mask(void *pD, CEDI_MacAddress *mask)
 uint32_t emacGetSpecificAddr1Mask(void *pD, CEDI_MacAddress *mask)
 {
     int reg1, reg2;
-    if ((pD == NULL) || (mask == NULL)) return EINVAL;
-    if (CEDI_PdVar(hwCfg).num_spec_add_filters == 0)
+    if ((pD==NULL)||(mask==NULL)) return EINVAL;
+    if (CEDI_PdVar(hwCfg).num_spec_add_filters==0)
         return ENOTSUP;
 
     reg1 = EMAC_REGS__MASK_ADD1_BOTTOM__ADDRESS_MASK__READ(
-               CPS_UncachedRead32(CEDI_RegAddr(mask_add1_bottom)));
+            CPS_UncachedRead32(CEDI_RegAddr(mask_add1_bottom)));
     reg2 = EMAC_REGS__MASK_ADD1_TOP__ADDRESS_MASK__READ(
-               CPS_UncachedRead32(CEDI_RegAddr(mask_add1_top)));
+            CPS_UncachedRead32(CEDI_RegAddr(mask_add1_top)));
 
 //      vDbgMsg(DBG_GEN_MSG, 10, "top=%08X  bottom=%08X\n", reg2, reg1);
     mask->byte[0] = (reg1 & 0xFF);
-    mask->byte[1] = ((reg1 >> 8) & 0xFF);
-    mask->byte[2] = ((reg1 >> 16) & 0xFF);
-    mask->byte[3] = ((reg1 >> 24) & 0xFF);
+    mask->byte[1] = ((reg1>>8) & 0xFF);
+    mask->byte[2] = ((reg1>>16) & 0xFF);
+    mask->byte[3] = ((reg1>>24) & 0xFF);
     mask->byte[4] = (reg2 & 0xFF);
-    mask->byte[5] = ((reg2 >> 8) & 0xFF);
+    mask->byte[5] = ((reg2>>8) & 0xFF);
     return EOK;
 }
 
@@ -1315,45 +1273,44 @@ uint32_t emacDisableSpecAddr(void *pD, uint8_t addrNum)
         CPS_UncachedWrite32((CEDI_RegAddr(spec_add##reg##_bottom)), 0); break;
 
     if (!pD) return EINVAL;
-    if (CEDI_PdVar(hwCfg).num_spec_add_filters == 0)
+    if (CEDI_PdVar(hwCfg).num_spec_add_filters==0)
         return ENOTSUP;
-    if ((!addrNum) || (addrNum > (CEDI_PdVar(hwCfg).num_spec_add_filters)))
+    if ((!addrNum) || (addrNum>(CEDI_PdVar(hwCfg).num_spec_add_filters)))
         return EINVAL;
 
-    switch (addrNum)
-    {
-        CEDI_DIS_SPEC_ADDR_CASE(1)
-        CEDI_DIS_SPEC_ADDR_CASE(2)
-        CEDI_DIS_SPEC_ADDR_CASE(3)
-        CEDI_DIS_SPEC_ADDR_CASE(4)
-        CEDI_DIS_SPEC_ADDR_CASE(5)
-        CEDI_DIS_SPEC_ADDR_CASE(6)
-        CEDI_DIS_SPEC_ADDR_CASE(7)
-        CEDI_DIS_SPEC_ADDR_CASE(8)
-        CEDI_DIS_SPEC_ADDR_CASE(9)
-        CEDI_DIS_SPEC_ADDR_CASE(10)
-        CEDI_DIS_SPEC_ADDR_CASE(11)
-        CEDI_DIS_SPEC_ADDR_CASE(12)
-        CEDI_DIS_SPEC_ADDR_CASE(13)
-        CEDI_DIS_SPEC_ADDR_CASE(14)
-        CEDI_DIS_SPEC_ADDR_CASE(15)
-        CEDI_DIS_SPEC_ADDR_CASE(16)
-        CEDI_DIS_SPEC_ADDR_CASE(17)
-        CEDI_DIS_SPEC_ADDR_CASE(18)
-        CEDI_DIS_SPEC_ADDR_CASE(19)
-        CEDI_DIS_SPEC_ADDR_CASE(20)
-        CEDI_DIS_SPEC_ADDR_CASE(21)
-        CEDI_DIS_SPEC_ADDR_CASE(22)
-        CEDI_DIS_SPEC_ADDR_CASE(23)
-        CEDI_DIS_SPEC_ADDR_CASE(24)
-        CEDI_DIS_SPEC_ADDR_CASE(25)
-        CEDI_DIS_SPEC_ADDR_CASE(26)
-        CEDI_DIS_SPEC_ADDR_CASE(27)
-        CEDI_DIS_SPEC_ADDR_CASE(28)
-        CEDI_DIS_SPEC_ADDR_CASE(29)
-        CEDI_DIS_SPEC_ADDR_CASE(30)
-        CEDI_DIS_SPEC_ADDR_CASE(31)
-        CEDI_DIS_SPEC_ADDR_CASE(32)
+    switch(addrNum) {
+                CEDI_DIS_SPEC_ADDR_CASE(1)
+                CEDI_DIS_SPEC_ADDR_CASE(2)
+                CEDI_DIS_SPEC_ADDR_CASE(3)
+                CEDI_DIS_SPEC_ADDR_CASE(4)
+                CEDI_DIS_SPEC_ADDR_CASE(5)
+                CEDI_DIS_SPEC_ADDR_CASE(6)
+                CEDI_DIS_SPEC_ADDR_CASE(7)
+                CEDI_DIS_SPEC_ADDR_CASE(8)
+                CEDI_DIS_SPEC_ADDR_CASE(9)
+                CEDI_DIS_SPEC_ADDR_CASE(10)
+                CEDI_DIS_SPEC_ADDR_CASE(11)
+                CEDI_DIS_SPEC_ADDR_CASE(12)
+                CEDI_DIS_SPEC_ADDR_CASE(13)
+                CEDI_DIS_SPEC_ADDR_CASE(14)
+                CEDI_DIS_SPEC_ADDR_CASE(15)
+                CEDI_DIS_SPEC_ADDR_CASE(16)
+                CEDI_DIS_SPEC_ADDR_CASE(17)
+                CEDI_DIS_SPEC_ADDR_CASE(18)
+                CEDI_DIS_SPEC_ADDR_CASE(19)
+                CEDI_DIS_SPEC_ADDR_CASE(20)
+                CEDI_DIS_SPEC_ADDR_CASE(21)
+                CEDI_DIS_SPEC_ADDR_CASE(22)
+                CEDI_DIS_SPEC_ADDR_CASE(23)
+                CEDI_DIS_SPEC_ADDR_CASE(24)
+                CEDI_DIS_SPEC_ADDR_CASE(25)
+                CEDI_DIS_SPEC_ADDR_CASE(26)
+                CEDI_DIS_SPEC_ADDR_CASE(27)
+                CEDI_DIS_SPEC_ADDR_CASE(28)
+                CEDI_DIS_SPEC_ADDR_CASE(29)
+                CEDI_DIS_SPEC_ADDR_CASE(30)
+                CEDI_DIS_SPEC_ADDR_CASE(31)
+                CEDI_DIS_SPEC_ADDR_CASE(32)
     }
 
     return 0;
@@ -1376,45 +1333,40 @@ uint32_t emacDisableSpecAddr(void *pD, uint8_t addrNum)
  *  $EXPECT_RETURN EINVAL $
  */
 uint32_t emacSetTypeIdMatch(void *pD, uint8_t matchSel, uint16_t typeId,
-                            uint8_t enable)
+        uint8_t enable)
 {
     uint32_t regVal = 0;
-    if ((pD == NULL) || (matchSel < 1) || (matchSel > 4)) return EINVAL;
-    if (enable > 1) return EINVAL;
+    if ((pD==NULL) || (matchSel<1) || (matchSel>4)) return EINVAL;
+    if (enable>1) return EINVAL;
 
-    switch (matchSel)
-    {
+    switch (matchSel) {
     case 1:
-        if (enable)
-        {
+        if (enable) {
             EMAC_REGS__SPEC_TYPE1__ENABLE_COPY__SET(regVal);
             EMAC_REGS__SPEC_TYPE1__MATCH__MODIFY(regVal, typeId);
         }
-        CPS_UncachedWrite32(CEDI_RegAddr(spec_type1), regVal);
+        CPS_UncachedWrite32(CEDI_RegAddr(spec_type1),regVal);
         break;
     case 2:
-        if (enable)
-        {
+        if (enable) {
             EMAC_REGS__SPEC_TYPE2__ENABLE_COPY__SET(regVal);
             EMAC_REGS__SPEC_TYPE2__MATCH__MODIFY(regVal, typeId);
         }
-        CPS_UncachedWrite32(CEDI_RegAddr(spec_type2), regVal);
+        CPS_UncachedWrite32(CEDI_RegAddr(spec_type2),regVal);
         break;
     case 3:
-        if (enable)
-        {
+        if (enable) {
             EMAC_REGS__SPEC_TYPE3__ENABLE_COPY__SET(regVal);
             EMAC_REGS__SPEC_TYPE3__MATCH__MODIFY(regVal, typeId);
         }
-        CPS_UncachedWrite32(CEDI_RegAddr(spec_type3), regVal);
+        CPS_UncachedWrite32(CEDI_RegAddr(spec_type3),regVal);
         break;
     case 4:
-        if (enable)
-        {
+        if (enable) {
             EMAC_REGS__SPEC_TYPE4__ENABLE_COPY__SET(regVal);
             EMAC_REGS__SPEC_TYPE4__MATCH__MODIFY(regVal, typeId);
         }
-        CPS_UncachedWrite32(CEDI_RegAddr(spec_type4), regVal);
+        CPS_UncachedWrite32(CEDI_RegAddr(spec_type4),regVal);
         break;
     }
 
@@ -1431,15 +1383,14 @@ uint32_t emacSetTypeIdMatch(void *pD, uint8_t matchSel, uint16_t typeId,
  * @return 0 if successful, EINVAL if invalid parameter
  */
 uint32_t emacGetTypeIdMatch(void *pD, uint8_t matchSel, uint16_t *typeId,
-                            uint8_t *enabled)
+        uint8_t *enabled)
 {
     uint32_t regVal = 0;
-    if (pD == NULL) return EINVAL;
-    if ((matchSel < 1) || (matchSel > 4) || (enabled == NULL)) return EINVAL;
-    if (*enabled && (typeId == NULL)) return EINVAL;
+    if (pD==NULL) return EINVAL;
+    if ((matchSel<1) || (matchSel>4) || (enabled==NULL)) return EINVAL;
+    if (*enabled && (typeId==NULL)) return EINVAL;
 
-    switch (matchSel)
-    {
+    switch (matchSel) {
     case 1:
         regVal = CPS_UncachedRead32(CEDI_RegAddr(spec_type1));
         *enabled = EMAC_REGS__SPEC_TYPE1__ENABLE_COPY__READ(regVal);
@@ -1473,7 +1424,7 @@ void emacSetUnicastEnable(void *pD, uint8_t enable)
 {
     uint32_t reg;
     if (!pD) return;
-    if (enable > 1) return;
+    if (enable>1) return;
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_config));
     if (enable)
         EMAC_REGS__NETWORK_CONFIG__UNICAST_HASH_ENABLE__SET(reg);
@@ -1488,10 +1439,10 @@ void emacSetUnicastEnable(void *pD, uint8_t enable)
  */
 uint32_t emacGetUnicastEnable(void *pD, uint8_t *enable)
 {
-    if ((pD == 0) || (enable == 0))
-        return EINVAL;
-    *enable = EMAC_REGS__NETWORK_CONFIG__UNICAST_HASH_ENABLE__READ(
-                  CPS_UncachedRead32(CEDI_RegAddr(network_config)));
+    if ((pD==0)||(enable==0))
+      return EINVAL;
+    *enable= EMAC_REGS__NETWORK_CONFIG__UNICAST_HASH_ENABLE__READ(
+            CPS_UncachedRead32(CEDI_RegAddr(network_config)));
 
     return 0;
 }
@@ -1504,7 +1455,7 @@ void emacSetMulticastEnable(void *pD, uint8_t enable)
 {
     uint32_t reg;
     if (!pD) return;
-    if (enable > 1) return;
+    if (enable>1) return;
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_config));
     if (enable)
         EMAC_REGS__NETWORK_CONFIG__MULTICAST_HASH_ENABLE__SET(reg);
@@ -1519,10 +1470,10 @@ void emacSetMulticastEnable(void *pD, uint8_t enable)
  */
 uint32_t emacGetMulticastEnable(void *pD, uint8_t *enable)
 {
-    if ((pD == 0) || (enable == 0))
-        return EINVAL;
-    *enable = EMAC_REGS__NETWORK_CONFIG__MULTICAST_HASH_ENABLE__READ(
-                  CPS_UncachedRead32(CEDI_RegAddr(network_config)));
+    if ((pD==0)||(enable==0))
+      return EINVAL;
+    *enable= EMAC_REGS__NETWORK_CONFIG__MULTICAST_HASH_ENABLE__READ(
+            CPS_UncachedRead32(CEDI_RegAddr(network_config)));
 
     return 0;
 }
@@ -1549,10 +1500,10 @@ void emacSetNoBroadcast(void *pD, uint8_t reject)
  */
 uint32_t emacGetNoBroadcast(void *pD, uint8_t *reject)
 {
-    if ((pD == 0) || (reject == 0))
-        return EINVAL;
-    *reject = EMAC_REGS__NETWORK_CONFIG__NO_BROADCAST__READ(
-                  CPS_UncachedRead32(CEDI_RegAddr(network_config)));
+    if ((pD==0)||(reject==0))
+      return EINVAL;
+    *reject= EMAC_REGS__NETWORK_CONFIG__NO_BROADCAST__READ(
+            CPS_UncachedRead32(CEDI_RegAddr(network_config)));
 
     return 0;
 }
@@ -1565,7 +1516,7 @@ void emacSetVlanOnly(void *pD, uint8_t enable)
 {
     uint32_t reg;
     if (!pD) return;
-    if (enable > 1) return;
+    if (enable>1) return;
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_config));
     if (enable)
         EMAC_REGS__NETWORK_CONFIG__DISCARD_NON_VLAN_FRAMES__SET(reg);
@@ -1580,10 +1531,10 @@ void emacSetVlanOnly(void *pD, uint8_t enable)
  */
 uint32_t emacGetVlanOnly(void *pD, uint8_t *enable)
 {
-    if ((pD == 0) || (enable == 0))
-        return EINVAL;
-    *enable = EMAC_REGS__NETWORK_CONFIG__DISCARD_NON_VLAN_FRAMES__READ(
-                  CPS_UncachedRead32(CEDI_RegAddr(network_config)));
+    if ((pD==0)||(enable==0))
+      return EINVAL;
+    *enable= EMAC_REGS__NETWORK_CONFIG__DISCARD_NON_VLAN_FRAMES__READ(
+            CPS_UncachedRead32(CEDI_RegAddr(network_config)));
 
     return 0;
 }
@@ -1598,11 +1549,10 @@ void emacSetStackedVlanReg(void *pD, uint8_t enable, uint16_t vlanType)
 {
     uint32_t reg;
     if (!pD) return;
-    if (enable > 1) return;
+    if (enable>1) return;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(stacked_vlan));
-    if (enable)
-    {
+    if (enable) {
         EMAC_REGS__STACKED_VLAN__ENABLE_PROCESSING__SET(reg);
         EMAC_REGS__STACKED_VLAN__MATCH__MODIFY(reg, vlanType);
     }
@@ -1621,7 +1571,7 @@ void emacSetStackedVlanReg(void *pD, uint8_t enable, uint16_t vlanType)
 void emacGetStackedVlanReg(void *pD, uint8_t *enable, uint16_t *vlanType)
 {
     uint32_t reg;
-    if ((pD == NULL) || (enable == NULL) || (vlanType == NULL)) return;
+    if ((pD==NULL)||(enable==NULL) || (vlanType==NULL)) return;
 
     reg = CPS_UncachedRead32(CEDI_RegAddr(stacked_vlan));
     *enable = EMAC_REGS__STACKED_VLAN__ENABLE_PROCESSING__READ(reg);
@@ -1637,7 +1587,7 @@ void emacSetCopyAllFrames(void *pD, uint8_t enable)
 {
     uint32_t reg;
     if (!pD) return;
-    if (enable > 1) return;
+    if (enable>1) return;
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_config));
     if (enable)
         EMAC_REGS__NETWORK_CONFIG__COPY_ALL_FRAMES__SET(reg);
@@ -1652,10 +1602,10 @@ void emacSetCopyAllFrames(void *pD, uint8_t enable)
  */
 uint32_t emacGetCopyAllFrames(void *pD, uint8_t *enable)
 {
-    if ((pD == 0) || (enable == 0))
-        return EINVAL;
-    *enable = EMAC_REGS__NETWORK_CONFIG__COPY_ALL_FRAMES__READ(
-                  CPS_UncachedRead32(CEDI_RegAddr(network_config)));
+    if ((pD==0)||(enable==0))
+      return EINVAL;
+    *enable= EMAC_REGS__NETWORK_CONFIG__COPY_ALL_FRAMES__READ(
+            CPS_UncachedRead32(CEDI_RegAddr(network_config)));
 
     return 0;
 }
@@ -1668,11 +1618,11 @@ uint32_t emacGetCopyAllFrames(void *pD, uint8_t *enable)
  */
 uint32_t emacSetHashAddr(void *pD, uint32_t hAddrTop, uint32_t hAddrBot)
 {
-    if (pD == NULL) return EINVAL;
+    if (pD==NULL) return EINVAL;
     CPS_UncachedWrite32(CEDI_RegAddr(hash_bottom),
-                        EMAC_REGS__HASH_BOTTOM__ADDRESS__WRITE(hAddrBot));
+            EMAC_REGS__HASH_BOTTOM__ADDRESS__WRITE(hAddrBot));
     CPS_UncachedWrite32(CEDI_RegAddr(hash_top),
-                        EMAC_REGS__HASH_TOP__ADDRESS__WRITE(hAddrTop));
+            EMAC_REGS__HASH_TOP__ADDRESS__WRITE(hAddrTop));
     return 0;
 }
 
@@ -1686,11 +1636,11 @@ uint32_t emacSetHashAddr(void *pD, uint32_t hAddrTop, uint32_t hAddrBot)
  */
 uint32_t emacGetHashAddr(void *pD, uint32_t *hAddrTop, uint32_t *hAddrBot)
 {
-    if ((pD == NULL) || (hAddrTop == NULL) || (hAddrBot == NULL)) return EINVAL;
+    if ((pD==NULL) || (hAddrTop==NULL) || (hAddrBot==NULL)) return EINVAL;
     *hAddrBot = EMAC_REGS__HASH_BOTTOM__ADDRESS__READ(
-                    CPS_UncachedRead32(CEDI_RegAddr(hash_bottom)));
+                CPS_UncachedRead32(CEDI_RegAddr(hash_bottom)));
     *hAddrTop = EMAC_REGS__HASH_TOP__ADDRESS__READ(
-                    CPS_UncachedRead32(CEDI_RegAddr(hash_top)));
+                CPS_UncachedRead32(CEDI_RegAddr(hash_top)));
     return 0;
 }
 
@@ -1703,7 +1653,7 @@ void emacSetLenErrDiscard(void *pD, uint8_t enable)
 {
     uint32_t reg;
     if (!pD) return;
-    if (enable > 1) return;
+    if (enable>1) return;
     reg = CPS_UncachedRead32(CEDI_RegAddr(network_config));
     if (enable)
         EMAC_REGS__NETWORK_CONFIG__LENGTH_FIELD_ERROR_FRAME_DISCARD__SET(reg);
@@ -1719,10 +1669,10 @@ void emacSetLenErrDiscard(void *pD, uint8_t enable)
  */
 uint32_t emacGetLenErrDiscard(void *pD, uint8_t *enable)
 {
-    if ((pD == 0) || (enable == 0))
-        return EINVAL;
-    *enable = EMAC_REGS__NETWORK_CONFIG__LENGTH_FIELD_ERROR_FRAME_DISCARD__READ(
-                  CPS_UncachedRead32(CEDI_RegAddr(network_config)));
+    if ((pD==0)||(enable==0))
+      return EINVAL;
+    *enable= EMAC_REGS__NETWORK_CONFIG__LENGTH_FIELD_ERROR_FRAME_DISCARD__READ(
+            CPS_UncachedRead32(CEDI_RegAddr(network_config)));
 
     return 0;
 }
@@ -1737,7 +1687,7 @@ uint32_t emacGetLenErrDiscard(void *pD, uint8_t *enable)
  */
 uint32_t emacGetNumScreenRegs(void *pD, CEDI_NumScreeners *regNums)
 {
-    if ((pD == NULL) || (regNums == NULL))
+    if ((pD==NULL) || (regNums==NULL))
         return EINVAL;
 
     regNums->type1ScrRegs = CEDI_PdVar(hwCfg).num_type1_screeners;
@@ -1764,31 +1714,30 @@ uint32_t emacSetType1ScreenReg(void *pD, uint8_t regNum, CEDI_T1Screen *regVals)
         break;
 
     uint32_t reg;
-    if ((pD == NULL) || (regVals == NULL))
+    if ((pD==NULL) || (regVals==NULL))
         return EINVAL;
 
-    if (CEDI_PdVar(hwCfg).num_type1_screeners == 0)
+    if (CEDI_PdVar(hwCfg).num_type1_screeners==0)
         return ENOTSUP;
 
-    if ((regNum >= CEDI_PdVar(hwCfg).num_type1_screeners) ||
-            (regVals->qNum >= CEDI_PdVar(cfg).rxQs) ||
-            (regVals->udpEnable > 1) || (regVals->dstcEnable > 1))
+    if ((regNum>=CEDI_PdVar(hwCfg).num_type1_screeners) ||
+        (regVals->qNum>=CEDI_PdVar(cfg).rxQs) ||
+        (regVals->udpEnable>1) || (regVals->dstcEnable>1))
         return EINVAL;
 
     reg = 0;
     EMAC_REGS__SCREENING_TYPE_1_REGISTER__QUEUE_NUMBER__MODIFY(reg,
-            regVals->qNum);
+                                                            regVals->qNum);
     EMAC_REGS__SCREENING_TYPE_1_REGISTER__DSTC_ENABLE__MODIFY(reg,
-            regVals->dstcEnable);
+                                                        regVals->dstcEnable);
     EMAC_REGS__SCREENING_TYPE_1_REGISTER__DSTC_MATCH__MODIFY(reg,
-            regVals->dstcMatch);
+                                                        regVals->dstcMatch);
     EMAC_REGS__SCREENING_TYPE_1_REGISTER__UDP_PORT_MATCH_ENABLE__MODIFY(reg,
-            regVals->udpEnable);
+                                                    regVals->udpEnable);
     EMAC_REGS__SCREENING_TYPE_1_REGISTER__UDP_PORT_MATCH__MODIFY(reg,
-            regVals->udpPort);
+                                                        regVals->udpPort);
 
-    switch (regNum)
-    {
+    switch (regNum) {
         CEDI_WR_SCRN_TYPE1_REG_CASE(0)
         CEDI_WR_SCRN_TYPE1_REG_CASE(1)
         CEDI_WR_SCRN_TYPE1_REG_CASE(2)
@@ -1825,17 +1774,16 @@ uint32_t emacGetType1ScreenReg(void *pD, uint8_t regNum, CEDI_T1Screen *regVals)
 
     uint32_t reg = 0;
 
-    if ((pD == NULL) || (regVals == NULL))
+    if ((pD==NULL) || (regVals==NULL))
         return EINVAL;
 
-    if (CEDI_PdVar(hwCfg).num_type1_screeners == 0)
+    if (CEDI_PdVar(hwCfg).num_type1_screeners==0)
         return ENOTSUP;
 
-    if (regNum >= CEDI_PdVar(hwCfg).num_type1_screeners)
+    if (regNum>=CEDI_PdVar(hwCfg).num_type1_screeners)
         return EINVAL;
 
-    switch (regNum)
-    {
+    switch (regNum) {
         CEDI_RD_SCRN_TYPE1_REG_CASE(0)
         CEDI_RD_SCRN_TYPE1_REG_CASE(1)
         CEDI_RD_SCRN_TYPE1_REG_CASE(2)
@@ -1854,16 +1802,16 @@ uint32_t emacGetType1ScreenReg(void *pD, uint8_t regNum, CEDI_T1Screen *regVals)
         CEDI_RD_SCRN_TYPE1_REG_CASE(15)
     }
     regVals->qNum =
-        EMAC_REGS__SCREENING_TYPE_1_REGISTER__QUEUE_NUMBER__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_1_REGISTER__QUEUE_NUMBER__READ(reg);
     regVals->dstcMatch =
-        EMAC_REGS__SCREENING_TYPE_1_REGISTER__DSTC_MATCH__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_1_REGISTER__DSTC_MATCH__READ(reg);
     regVals->udpPort =
-        EMAC_REGS__SCREENING_TYPE_1_REGISTER__UDP_PORT_MATCH__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_1_REGISTER__UDP_PORT_MATCH__READ(reg);
     regVals->dstcEnable =
-        EMAC_REGS__SCREENING_TYPE_1_REGISTER__DSTC_ENABLE__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_1_REGISTER__DSTC_ENABLE__READ(reg);
     regVals->udpEnable =
-        EMAC_REGS__SCREENING_TYPE_1_REGISTER__UDP_PORT_MATCH_ENABLE__READ(
-            reg);
+            EMAC_REGS__SCREENING_TYPE_1_REGISTER__UDP_PORT_MATCH_ENABLE__READ(
+                    reg);
     return 0;
 }
 
@@ -1884,60 +1832,59 @@ uint32_t emacSetType2ScreenReg(void *pD, uint8_t regNum, CEDI_T2Screen *regVals)
 
     uint32_t reg;
 
-    if ((pD == NULL) || (regVals == NULL))
+    if ((pD==NULL) || (regVals==NULL))
         return EINVAL;
 
-    if (CEDI_PdVar(hwCfg).num_type2_screeners == 0)
+    if (CEDI_PdVar(hwCfg).num_type2_screeners==0)
         return ENOTSUP;
 
-    if ((regNum >= CEDI_PdVar(hwCfg).num_type2_screeners) ||
-            (regVals->qNum >= CEDI_PdVar(cfg).rxQs) ||
-            (regVals->vlanEnable > 1) ||
-            (regVals->vlanEnable && (regVals->vlanPriority >= 8)) ||
-            (regVals->eTypeEnable > 1) ||
-            ((regVals->eTypeEnable) && (regVals->ethTypeIndex >= 8)) ||
+    if ((regNum>=CEDI_PdVar(hwCfg).num_type2_screeners) ||
+        (regVals->qNum>=CEDI_PdVar(cfg).rxQs) ||
+        (regVals->vlanEnable>1) ||
+        (regVals->vlanEnable && (regVals->vlanPriority>=8)) ||
+        (regVals->eTypeEnable>1) ||
+        ((regVals->eTypeEnable) && (regVals->ethTypeIndex>=8)) ||
             ((regVals->eTypeEnable) &&
-             (regVals->ethTypeIndex >= CEDI_PdVar(hwCfg).num_scr2_ethtype_regs)) ||
-            (regVals->compAEnable > 1) ||
-            ((regVals->compAEnable) && (regVals->compAIndex >= 32)) ||
+              (regVals->ethTypeIndex>=CEDI_PdVar(hwCfg).num_scr2_ethtype_regs)) ||
+        (regVals->compAEnable>1) ||
+        ((regVals->compAEnable) && (regVals->compAIndex>=32)) ||
             ((regVals->compAEnable) &&
-             (regVals->compAIndex >= CEDI_PdVar(hwCfg).num_scr2_compare_regs)) ||
-            (regVals->compBEnable > 1) ||
-            ((regVals->compBEnable) && (regVals->compBIndex >= 32)) ||
+              (regVals->compAIndex>=CEDI_PdVar(hwCfg).num_scr2_compare_regs)) ||
+        (regVals->compBEnable>1) ||
+        ((regVals->compBEnable) && (regVals->compBIndex>=32)) ||
             ((regVals->compBEnable) &&
-             (regVals->compBIndex >= CEDI_PdVar(hwCfg).num_scr2_compare_regs)) ||
-            (regVals->compCEnable > 1) ||
-            ((regVals->compCEnable) && (regVals->compCIndex >= 32)) ||
+              (regVals->compBIndex>=CEDI_PdVar(hwCfg).num_scr2_compare_regs)) ||
+        (regVals->compCEnable>1) ||
+        ((regVals->compCEnable) && (regVals->compCIndex>=32)) ||
             ((regVals->compCEnable) &&
-             (regVals->compCIndex >= CEDI_PdVar(hwCfg).num_scr2_compare_regs)))
+              (regVals->compCIndex>=CEDI_PdVar(hwCfg).num_scr2_compare_regs)))
         return EINVAL;
 
     reg = 0;
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__QUEUE_NUMBER__MODIFY(reg,
-            regVals->qNum);
+                                                            regVals->qNum);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__VLAN_ENABLE__MODIFY(reg,
-            regVals->vlanEnable);
+                                                    regVals->vlanEnable);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__VLAN_PRIORITY__MODIFY(reg,
-            regVals->vlanPriority);
+                                                    regVals->vlanPriority);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__ETHERTYPE_ENABLE__MODIFY(reg,
-            regVals->eTypeEnable);
+                                                    regVals->eTypeEnable);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__INDEX__MODIFY(reg,
-            regVals->ethTypeIndex);
+                                                    regVals->ethTypeIndex);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_A_ENABLE__MODIFY(reg,
-            regVals->compAEnable);
+                                                    regVals->compAEnable);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_A__MODIFY(reg,
-            regVals->compAIndex);
+                                                    regVals->compAIndex);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_B_ENABLE__MODIFY(reg,
-            regVals->compBEnable);
+                                                    regVals->compBEnable);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_B__MODIFY(reg,
-            regVals->compBIndex);
+                                                    regVals->compBIndex);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_C_ENABLE__MODIFY(reg,
-            regVals->compCEnable);
+                                                    regVals->compCEnable);
     EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_C__MODIFY(reg,
-            regVals->compCIndex);
+                                                    regVals->compCIndex);
 
-    switch (regNum)
-    {
+    switch (regNum) {
         CEDI_WR_SCRN_TYPE2_REG_CASE(0)
         CEDI_WR_SCRN_TYPE2_REG_CASE(1)
         CEDI_WR_SCRN_TYPE2_REG_CASE(2)
@@ -1974,17 +1921,16 @@ uint32_t emacGetType2ScreenReg(void *pD, uint8_t regNum, CEDI_T2Screen *regVals)
 
     uint32_t reg = 0;
 
-    if ((pD == 0) || (regVals == 0))
+    if ((pD==0)||(regVals==0))
         return EINVAL;
 
-    if (CEDI_PdVar(hwCfg).num_type2_screeners == 0)
+    if (CEDI_PdVar(hwCfg).num_type2_screeners==0)
         return ENOTSUP;
 
-    if (regNum >= CEDI_PdVar(hwCfg).num_type2_screeners)
+    if (regNum>=CEDI_PdVar(hwCfg).num_type2_screeners)
         return EINVAL;
 
-    switch (regNum)
-    {
+    switch (regNum) {
         CEDI_RD_SCRN_TYPE2_REG_CASE(0)
         CEDI_RD_SCRN_TYPE2_REG_CASE(1)
         CEDI_RD_SCRN_TYPE2_REG_CASE(2)
@@ -2003,27 +1949,27 @@ uint32_t emacGetType2ScreenReg(void *pD, uint8_t regNum, CEDI_T2Screen *regVals)
         CEDI_RD_SCRN_TYPE2_REG_CASE(15)
     }
     regVals->qNum =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__QUEUE_NUMBER__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__QUEUE_NUMBER__READ(reg);
     regVals->vlanPriority =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__VLAN_PRIORITY__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__VLAN_PRIORITY__READ(reg);
     regVals->vlanEnable =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__VLAN_ENABLE__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__VLAN_ENABLE__READ(reg);
     regVals->ethTypeIndex =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__INDEX__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__INDEX__READ(reg);
     regVals->eTypeEnable =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__ETHERTYPE_ENABLE__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__ETHERTYPE_ENABLE__READ(reg);
     regVals->compAIndex =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_A__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_A__READ(reg);
     regVals->compAEnable =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_A_ENABLE__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_A_ENABLE__READ(reg);
     regVals->compBIndex =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_B__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_B__READ(reg);
     regVals->compBEnable =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_B_ENABLE__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_B_ENABLE__READ(reg);
     regVals->compCIndex =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_C__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_C__READ(reg);
     regVals->compCEnable =
-        EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_C_ENABLE__READ(reg);
+            EMAC_REGS__SCREENING_TYPE_2_REGISTER__COMPARE_C_ENABLE__READ(reg);
     return 0;
 }
 
@@ -2044,21 +1990,20 @@ uint32_t emacSetType2EthertypeReg(void *pD, uint8_t index, uint16_t eTypeVal)
 
     uint32_t reg;
 
-    if (pD == NULL)
+    if (pD==NULL)
         return EINVAL;
 
-    if ((CEDI_PdVar(hwCfg).num_type2_screeners == 0) ||
-            (CEDI_PdVar(hwCfg).num_scr2_ethtype_regs == 0))
-        return ENOTSUP;
+    if ((CEDI_PdVar(hwCfg).num_type2_screeners==0) ||
+            (CEDI_PdVar(hwCfg).num_scr2_ethtype_regs==0))
+    return ENOTSUP;
 
-    if (index >= CEDI_PdVar(hwCfg).num_scr2_ethtype_regs)
+    if (index>=CEDI_PdVar(hwCfg).num_scr2_ethtype_regs)
         return EINVAL;
 
     reg = 0;
     EMAC_REGS__SCREENING_TYPE_2_ETHERTYPE_REG__COMPARE_VALUE__MODIFY(reg,
-            eTypeVal);
-    switch (index)
-    {
+                                                                    eTypeVal);
+    switch (index) {
         CEDI_WR_SCRN_TYPE2_ETHTYPE_REG_CASE(0)
         CEDI_WR_SCRN_TYPE2_ETHTYPE_REG_CASE(1)
         CEDI_WR_SCRN_TYPE2_ETHTYPE_REG_CASE(2)
@@ -2088,18 +2033,17 @@ uint32_t emacGetType2EthertypeReg(void *pD, uint8_t index, uint16_t *eTypeVal)
 
     uint32_t reg = 0;
 
-    if ((pD == NULL) || (eTypeVal == NULL))
+    if ((pD==NULL)||(eTypeVal==NULL))
         return EINVAL;
 
-    if ((CEDI_PdVar(hwCfg).num_type2_screeners == 0) ||
-            (CEDI_PdVar(hwCfg).num_scr2_ethtype_regs == 0))
-        return ENOTSUP;
+    if ((CEDI_PdVar(hwCfg).num_type2_screeners==0) ||
+            (CEDI_PdVar(hwCfg).num_scr2_ethtype_regs==0))
+    return ENOTSUP;
 
-    if (index >= CEDI_PdVar(hwCfg).num_scr2_ethtype_regs)
+    if (index>=CEDI_PdVar(hwCfg).num_scr2_ethtype_regs)
         return EINVAL;
 
-    switch (index)
-    {
+    switch (index) {
         CEDI_RD_SCRN_TYPE2_ETHTYPE_REG_CASE(0)
         CEDI_RD_SCRN_TYPE2_ETHTYPE_REG_CASE(1)
         CEDI_RD_SCRN_TYPE2_ETHTYPE_REG_CASE(2)
@@ -2110,7 +2054,7 @@ uint32_t emacGetType2EthertypeReg(void *pD, uint8_t index, uint16_t *eTypeVal)
         CEDI_RD_SCRN_TYPE2_ETHTYPE_REG_CASE(7)
     }
     *eTypeVal = (uint16_t)(
-                    EMAC_REGS__SCREENING_TYPE_2_ETHERTYPE_REG__COMPARE_VALUE__READ(reg));
+            EMAC_REGS__SCREENING_TYPE_2_ETHERTYPE_REG__COMPARE_VALUE__READ(reg));
     return 0;
 }
 
@@ -2132,34 +2076,33 @@ uint32_t emacSetType2CompareReg(void *pD, uint8_t index, CEDI_T2Compare *regVals
 
     uint32_t reg0, reg1;
 
-    if ((pD == NULL) || (regVals == NULL))
+    if ((pD==NULL)||(regVals==NULL))
         return EINVAL;
 
-    if ((CEDI_PdVar(hwCfg).num_type2_screeners == 0) ||
-            (CEDI_PdVar(hwCfg).num_scr2_compare_regs == 0))
-        return ENOTSUP;
+    if ((CEDI_PdVar(hwCfg).num_type2_screeners==0) ||
+            (CEDI_PdVar(hwCfg).num_scr2_compare_regs==0))
+    return ENOTSUP;
 
-    if ((index >= CEDI_PdVar(hwCfg).num_scr2_compare_regs)
-            || (regVals->offsetVal > 0x3F)
-            || (regVals->offsetPosition > CEDI_T2COMP_OFF_TCPUDP)
-            || (regVals->disableMask > 1))
+    if ((index>=CEDI_PdVar(hwCfg).num_scr2_compare_regs)
+        || (regVals->offsetVal>0x3F)
+        || (regVals->offsetPosition>CEDI_T2COMP_OFF_TCPUDP)
+        || (regVals->disableMask>1))
         return EINVAL;
 
     reg0 = 0;
     reg1 = 0;
     EMAC_REGS__TYPE2_COMPARE_WORD_0__MASK_VALUE__MODIFY(reg0,
-            regVals->compMask);
+                                                        regVals->compMask);
     EMAC_REGS__TYPE2_COMPARE_WORD_0__COMPARE_VALUE__MODIFY(reg0,
-            regVals->compValue);
+                                                        regVals->compValue);
     EMAC_REGS__TYPE2_COMPARE_WORD_1__OFFSET_VALUE__MODIFY(reg1,
-            regVals->offsetVal);
+                                                        regVals->offsetVal);
     EMAC_REGS__TYPE2_COMPARE_WORD_1__COMPARE_OFFSET__MODIFY(reg1,
-            regVals->offsetPosition);
+                                                    regVals->offsetPosition);
     EMAC_REGS__TYPE2_COMPARE_WORD_1__DISABLE_MASK__MODIFY(reg1,
-            regVals->disableMask);
+                                                    regVals->disableMask);
 
-    switch (index)
-    {
+    switch (index) {
         CEDI_WR_SCRN_TYPE2_COMPARE_REG_CASE(0)
         CEDI_WR_SCRN_TYPE2_COMPARE_REG_CASE(1)
         CEDI_WR_SCRN_TYPE2_COMPARE_REG_CASE(2)
@@ -2214,18 +2157,17 @@ uint32_t emacGetType2CompareReg(void *pD, uint8_t index, CEDI_T2Compare *regVals
 
     uint32_t reg0 = 0, reg1 = 0;
 
-    if ((pD == 0) || (regVals == 0))
+    if ((pD==0)||(regVals==0))
+      return EINVAL;
+
+    if ((CEDI_PdVar(hwCfg).num_type2_screeners==0) ||
+            (CEDI_PdVar(hwCfg).num_scr2_compare_regs==0))
+    return ENOTSUP;
+
+    if (index>=CEDI_PdVar(hwCfg).num_scr2_compare_regs)
         return EINVAL;
 
-    if ((CEDI_PdVar(hwCfg).num_type2_screeners == 0) ||
-            (CEDI_PdVar(hwCfg).num_scr2_compare_regs == 0))
-        return ENOTSUP;
-
-    if (index >= CEDI_PdVar(hwCfg).num_scr2_compare_regs)
-        return EINVAL;
-
-    switch (index)
-    {
+    switch (index) {
         CEDI_RD_SCRN_TYPE2_COMPARE_REG_CASE(0)
         CEDI_RD_SCRN_TYPE2_COMPARE_REG_CASE(1)
         CEDI_RD_SCRN_TYPE2_COMPARE_REG_CASE(2)
@@ -2260,16 +2202,16 @@ uint32_t emacGetType2CompareReg(void *pD, uint8_t index, CEDI_T2Compare *regVals
         CEDI_RD_SCRN_TYPE2_COMPARE_REG_CASE(31)
     }
 
-    regVals->compMask = (uint16_t)(
-                            EMAC_REGS__TYPE2_COMPARE_WORD_0__MASK_VALUE__READ(reg0));
-    regVals->compValue = (uint16_t)(
-                             EMAC_REGS__TYPE2_COMPARE_WORD_0__COMPARE_VALUE__READ(reg0));
-    regVals->offsetVal = (uint8_t)(
-                             EMAC_REGS__TYPE2_COMPARE_WORD_1__OFFSET_VALUE__READ(reg1));
-    regVals->offsetPosition = (CEDI_T2Offset)(
-                                  EMAC_REGS__TYPE2_COMPARE_WORD_1__COMPARE_OFFSET__READ(reg1));
+    regVals->compMask =(uint16_t)(
+        EMAC_REGS__TYPE2_COMPARE_WORD_0__MASK_VALUE__READ(reg0));
+    regVals->compValue =(uint16_t)(
+        EMAC_REGS__TYPE2_COMPARE_WORD_0__COMPARE_VALUE__READ(reg0));
+    regVals->offsetVal =(uint8_t)(
+        EMAC_REGS__TYPE2_COMPARE_WORD_1__OFFSET_VALUE__READ(reg1));
+    regVals->offsetPosition =(CEDI_T2Offset)(
+        EMAC_REGS__TYPE2_COMPARE_WORD_1__COMPARE_OFFSET__READ(reg1));
     regVals->disableMask = (uint8_t)(
-                               EMAC_REGS__TYPE2_COMPARE_WORD_1__DISABLE_MASK__READ(reg1));
+        EMAC_REGS__TYPE2_COMPARE_WORD_1__DISABLE_MASK__READ(reg1));
 
     return 0;
 }

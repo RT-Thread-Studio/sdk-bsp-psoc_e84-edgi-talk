@@ -135,3 +135,4 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
   ```
   RT-Thread Settings --> 硬件 --> select SOC Multi Core Mode --> Enable CM55 Core
   ```
+![config](figures/config.png)

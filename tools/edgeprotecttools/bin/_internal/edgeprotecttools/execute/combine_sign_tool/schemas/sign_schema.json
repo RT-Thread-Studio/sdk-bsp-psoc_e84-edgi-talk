@@ -171,9 +171,29 @@
                         "title": "Symmetric key used to encrypt the image (AES)",
                         "type": "string"
                     },
+                    "encryption-key-role": {
+                        "title": "An encryption key role",
+                        "type": "string",
+                        "enum": [
+                            "XIP",
+                            "AES-KW"
+                        ]
+                    },
                     "encryption-address": {
                         "title": "Starting address for data encryption",
                         "type": "string"
+                    },
+                    "remove-tlv": {
+                        "title": "Removes TLV with the specified ID",
+                        "type": "array"
+                    },
+                    "kdf": {
+                        "title": "Use HKDF or KBKDFCMAC for key derivation method",
+                        "type": "string",
+                        "enum": [
+                            "HKDF",
+                            "KBKDFCMAC"
+                        ]
                     },
                     "protected-tlv": {
                         "title": "The custom TLV to be placed into a protected area (the signed part). Add the '0x' prefix for the value to be interpreted as an integer, otherwise it will be interpreted as a string",

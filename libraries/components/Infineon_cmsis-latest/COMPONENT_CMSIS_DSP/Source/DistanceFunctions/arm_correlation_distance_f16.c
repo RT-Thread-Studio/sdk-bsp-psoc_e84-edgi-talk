@@ -63,9 +63,9 @@
  *
  */
 
-float16_t arm_correlation_distance_f16(float16_t *pA, float16_t *pB, uint32_t blockSize)
+ARM_DSP_ATTRIBUTE float16_t arm_correlation_distance_f16(float16_t *pA,float16_t *pB, uint32_t blockSize)
 {
-    float16_t ma, mb, pwra, pwrb, dot, tmp;
+    float16_t ma,mb,pwra,pwrb,dot,tmp;
 
     arm_mean_f16(pA, blockSize, &ma);
     arm_mean_f16(pB, blockSize, &mb);
@@ -76,17 +76,17 @@ float16_t arm_correlation_distance_f16(float16_t *pA, float16_t *pB, uint32_t bl
     arm_power_f16(pA, blockSize, &pwra);
     arm_power_f16(pB, blockSize, &pwrb);
 
-    arm_dot_prod_f16(pA, pB, blockSize, &dot);
+    arm_dot_prod_f16(pA,pB,blockSize,&dot);
 
     dot = (_Float16)dot / (_Float16)blockSize;
     pwra = (_Float16)pwra / (_Float16)blockSize;
     pwrb = (_Float16)pwrb / (_Float16)blockSize;
 
-    arm_sqrt_f16((_Float16)pwra * (_Float16)pwrb, &tmp);
+    arm_sqrt_f16((_Float16)pwra * (_Float16)pwrb,&tmp);
+ 
+    return(1.0f16 - (_Float16)dot / (_Float16)tmp);
 
-    return (1.0f16 - (_Float16)dot / (_Float16)tmp);
-
-
+   
 }
 
 
@@ -95,5 +95,5 @@ float16_t arm_correlation_distance_f16(float16_t *pA, float16_t *pB, uint32_t bl
  * @} end of Correlation group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

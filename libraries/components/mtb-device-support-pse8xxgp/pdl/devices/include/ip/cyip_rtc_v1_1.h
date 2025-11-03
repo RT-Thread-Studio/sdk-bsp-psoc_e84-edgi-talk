@@ -40,53 +40,50 @@
 /**
   * \brief clk_bak Backup domain Clock Supervisor registers (RTC_CSV_RTC_CSV)
   */
-typedef struct
-{
-    __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
-    __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
-    __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
-    __IM uint32_t RESERVED;
+typedef struct {
+  __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
+  __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
+  __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
+   __IM uint32_t RESERVED;
 } RTC_CSV_RTC_CSV_Type;                         /*!< Size = 16 (0x10) */
 
 /**
   * \brief CSV registers for clk_rtc clock (RTC_CSV_RTC)
   */
-typedef struct
-{
-    RTC_CSV_RTC_CSV_Type CSV;               /*!< 0x00000000 clk_bak Backup domain Clock Supervisor registers */
+typedef struct {
+        RTC_CSV_RTC_CSV_Type CSV;               /*!< 0x00000000 clk_bak Backup domain Clock Supervisor registers */
 } RTC_CSV_RTC_Type;                             /*!< Size = 16 (0x10) */
 
 /**
   * \brief SRSS RTC Registers (RTC)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t RTC_RW;                        /*!< 0x00000008 RTC Read Write register */
-    __IOM uint32_t CAL_CTL;                       /*!< 0x0000000C Oscillator calibration for absolute frequency */
-    __IM uint32_t STATUS;                        /*!< 0x00000010 Status */
-    __IOM uint32_t RTC_TIME;                      /*!< 0x00000014 Calendar Seconds, Minutes, Hours, Day of Week */
-    __IOM uint32_t RTC_DATE;                      /*!< 0x00000018 Calendar Day of Month, Month,  Year */
-    __IOM uint32_t ALM1_TIME;                     /*!< 0x0000001C Alarm 1 Seconds, Minute, Hours, Day of Week */
-    __IOM uint32_t ALM1_DATE;                     /*!< 0x00000020 Alarm 1 Day of Month, Month */
-    __IOM uint32_t ALM2_TIME;                     /*!< 0x00000024 Alarm 2 Seconds, Minute, Hours, Day of Week */
-    __IOM uint32_t ALM2_DATE;                     /*!< 0x00000028 Alarm 2 Day of Month, Month */
-    __IOM uint32_t INTR;                          /*!< 0x0000002C Interrupt request register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000030 Interrupt set request register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000034 Interrupt mask register */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x00000038 Interrupt masked request register */
-    __IM uint32_t RESERVED1[3];
-    __IOM uint32_t RESET;                         /*!< 0x00000048 RTC reset register */
-    __IM uint32_t RESERVED2[17];
-    __IOM uint32_t CSV_RTC_REF_SEL;               /*!< 0x00000090 Select CSV Reference clock for RTC clock */
-    __IM uint32_t RESERVED3[27];
-    RTC_CSV_RTC_Type CSV_RTC;               /*!< 0x00000100 CSV registers for clk_rtc clock */
-    __IM uint32_t RESERVED4[956];
-    __IOM uint32_t BREG_SET0[4];                  /*!< 0x00001000 Backup register region 0 */
-    __IOM uint32_t BREG_SET1[4];                  /*!< 0x00001010 Backup register region 1 */
-    __IOM uint32_t BREG_SET2[8];                  /*!< 0x00001020 Backup register region 2 */
-    __IM uint32_t RESERVED5[16];
-    __IOM uint32_t BREG_SET3[48];                 /*!< 0x00001080 Backup register region 3 */
+typedef struct {
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t RTC_RW;                        /*!< 0x00000008 RTC Read Write register */
+  __IOM uint32_t CAL_CTL;                       /*!< 0x0000000C Oscillator calibration for absolute frequency */
+   __IM uint32_t STATUS;                        /*!< 0x00000010 Status */
+  __IOM uint32_t RTC_TIME;                      /*!< 0x00000014 Calendar Seconds, Minutes, Hours, Day of Week */
+  __IOM uint32_t RTC_DATE;                      /*!< 0x00000018 Calendar Day of Month, Month,  Year */
+  __IOM uint32_t ALM1_TIME;                     /*!< 0x0000001C Alarm 1 Seconds, Minute, Hours, Day of Week */
+  __IOM uint32_t ALM1_DATE;                     /*!< 0x00000020 Alarm 1 Day of Month, Month */
+  __IOM uint32_t ALM2_TIME;                     /*!< 0x00000024 Alarm 2 Seconds, Minute, Hours, Day of Week */
+  __IOM uint32_t ALM2_DATE;                     /*!< 0x00000028 Alarm 2 Day of Month, Month */
+  __IOM uint32_t INTR;                          /*!< 0x0000002C Interrupt request register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000030 Interrupt set request register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000034 Interrupt mask register */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x00000038 Interrupt masked request register */
+   __IM uint32_t RESERVED1[3];
+  __IOM uint32_t RESET;                         /*!< 0x00000048 RTC reset register */
+   __IM uint32_t RESERVED2[17];
+  __IOM uint32_t CSV_RTC_REF_SEL;               /*!< 0x00000090 Select CSV Reference clock for RTC clock */
+   __IM uint32_t RESERVED3[27];
+        RTC_CSV_RTC_Type CSV_RTC;               /*!< 0x00000100 CSV registers for clk_rtc clock */
+   __IM uint32_t RESERVED4[956];
+  __IOM uint32_t BREG_SET0[4];                  /*!< 0x00001000 Backup register region 0 */
+  __IOM uint32_t BREG_SET1[4];                  /*!< 0x00001010 Backup register region 1 */
+  __IOM uint32_t BREG_SET2[8];                  /*!< 0x00001020 Backup register region 2 */
+   __IM uint32_t RESERVED5[16];
+  __IOM uint32_t BREG_SET3[48];                 /*!< 0x00001080 Backup register region 3 */
 } RTC_Type;                                     /*!< Size = 4416 (0x1140) */
 
 

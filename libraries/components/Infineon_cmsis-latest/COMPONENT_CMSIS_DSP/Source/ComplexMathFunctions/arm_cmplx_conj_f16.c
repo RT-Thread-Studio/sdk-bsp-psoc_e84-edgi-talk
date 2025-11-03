@@ -44,14 +44,13 @@
   @param[in]     pSrc        points to the input vector
   @param[out]    pDst        points to the output vector
   @param[in]     numSamples  number of samples in each vector
-  @return        none
  */
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-void arm_cmplx_conj_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
+ARM_DSP_ATTRIBUTE void arm_cmplx_conj_f16(
+    const float16_t * pSrc,
+    float16_t * pDst,
     uint32_t numSamples)
 {
     static const float16_t cmplx_conj_sign[8] = { 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f };
@@ -71,7 +70,7 @@ void arm_cmplx_conj_f16(
     while (blkCnt > 0U)
     {
         vecSrc = vld1q(pSrc);
-        vst1q(pDst, vmulq(vecSrc, vecSign));
+        vst1q(pDst,vmulq(vecSrc, vecSign));
         /*
          * Decrement the blkCnt loop counter
          * Advance vector source and destination pointers
@@ -81,78 +80,78 @@ void arm_cmplx_conj_f16(
         blkCnt--;
     }
 
-    /* Tail */
+     /* Tail */
     blkCnt = (blockSize & 0x7) >> 1;
 
     while (blkCnt > 0U)
     {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
-
-        /* Calculate Complex Conjugate and store result in destination buffer. */
-        *pDst++ =  *pSrc++;
-        *pDst++ = -(_Float16) * pSrc++;
-
-        /* Decrement loop counter */
-        blkCnt--;
+      /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  
+      /* Calculate Complex Conjugate and store result in destination buffer. */
+      *pDst++ =  *pSrc++;
+      *pDst++ = -(_Float16)*pSrc++;
+  
+      /* Decrement loop counter */
+      blkCnt--;
     }
 
 }
 
 #else
-void arm_cmplx_conj_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t numSamples)
+ARM_DSP_ATTRIBUTE void arm_cmplx_conj_f16(
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t numSamples)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 #if defined (ARM_MATH_LOOPUNROLL) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = numSamples >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = numSamples >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  while (blkCnt > 0U)
+  {
+    /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
 
-        /* Calculate Complex Conjugate and store result in destination buffer. */
-        *pDst++ =  *pSrc++;
-        *pDst++ = -(_Float16) * pSrc++;
+    /* Calculate Complex Conjugate and store result in destination buffer. */
+    *pDst++ =  *pSrc++;
+    *pDst++ = -(_Float16)*pSrc++;
 
-        *pDst++ =  *pSrc++;
-        *pDst++ = -(_Float16) * pSrc++;
+    *pDst++ =  *pSrc++;
+    *pDst++ = -(_Float16)*pSrc++;
 
-        *pDst++ =  *pSrc++;
-        *pDst++ = -(_Float16) * pSrc++;
+    *pDst++ =  *pSrc++;
+    *pDst++ = -(_Float16)*pSrc++;
 
-        *pDst++ =  *pSrc++;
-        *pDst++ = -(_Float16) * pSrc++;
+    *pDst++ =  *pSrc++;
+    *pDst++ = -(_Float16)*pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = numSamples % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = numSamples % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = numSamples;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = numSamples;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
+  while (blkCnt > 0U)
+  {
+    /* C[0] + jC[1] = A[0]+ j(-1)A[1] */
 
-        /* Calculate Complex Conjugate and store result in destination buffer. */
-        *pDst++ =  *pSrc++;
-        *pDst++ = -(_Float16) * pSrc++;
+    /* Calculate Complex Conjugate and store result in destination buffer. */
+    *pDst++ =  *pSrc++;
+    *pDst++ = -(_Float16)*pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

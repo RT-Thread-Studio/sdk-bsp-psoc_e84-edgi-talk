@@ -26,54 +26,53 @@
 #pragma clang system_header   /* treat file as system include file */
 
 #ifndef __CMSIS_ARMCLANG_H
-    #error "This file must not be included directly"
+  #error "This file must not be included directly"
 #endif
 
 #if (__ARM_ACLE >= 200)
-    #include <arm_acle.h>
+  #include <arm_acle.h>
 #else
-    #error Compiler must support ACLE V2.0
+  #error Compiler must support ACLE V2.0
 #endif /* (__ARM_ACLE >= 200) */
 
 /* #########################  Startup and Lowlevel Init  ######################## */
 #ifndef __PROGRAM_START
-    #define __PROGRAM_START           __main
+#define __PROGRAM_START           __main
 #endif
 
 #ifndef __INITIAL_SP
-    #define __INITIAL_SP              Image$$ARM_LIB_STACK$$ZI$$Limit
+#define __INITIAL_SP              Image$$ARM_LIB_STACK$$ZI$$Limit
 #endif
 
 #ifndef __STACK_LIMIT
-    #define __STACK_LIMIT             Image$$ARM_LIB_STACK$$ZI$$Base
+#define __STACK_LIMIT             Image$$ARM_LIB_STACK$$ZI$$Base
 #endif
 
 #ifndef __VECTOR_TABLE
-    #define __VECTOR_TABLE            __Vectors
+#define __VECTOR_TABLE            __Vectors
 #endif
 
 #ifndef __VECTOR_TABLE_ATTRIBUTE
-    #define __VECTOR_TABLE_ATTRIBUTE  __attribute__((used, section("RESET")))
+#define __VECTOR_TABLE_ATTRIBUTE  __attribute__((used, section("RESET")))
 #endif
 
 #if (__ARM_FEATURE_CMSE == 3)
 #ifndef __STACK_SEAL
-    #define __STACK_SEAL              Image$$STACKSEAL$$ZI$$Base
+#define __STACK_SEAL              Image$$STACKSEAL$$ZI$$Base
 #endif
 
 #ifndef __TZ_STACK_SEAL_SIZE
-    #define __TZ_STACK_SEAL_SIZE      8U
+#define __TZ_STACK_SEAL_SIZE      8U
 #endif
 
 #ifndef __TZ_STACK_SEAL_VALUE
-    #define __TZ_STACK_SEAL_VALUE     0xFEF5EDA5FEF5EDA5ULL
+#define __TZ_STACK_SEAL_VALUE     0xFEF5EDA5FEF5EDA5ULL
 #endif
 
 
-__STATIC_FORCEINLINE void __TZ_set_STACKSEAL_S(uint32_t* stackTop)
-{
-    *((uint64_t *)stackTop) = __TZ_STACK_SEAL_VALUE;
-}
+__STATIC_FORCEINLINE void __TZ_set_STACKSEAL_S (uint32_t* stackTop) {
+  *((uint64_t *)stackTop) = __TZ_STACK_SEAL_VALUE;
+  }
 #endif
 
 #if (__ARM_ARCH_ISA_THUMB >= 2)
@@ -85,7 +84,7 @@ __STATIC_FORCEINLINE void __TZ_set_STACKSEAL_S(uint32_t* stackTop)
  */
 __STATIC_FORCEINLINE void __STRBT(uint8_t value, volatile uint8_t *ptr)
 {
-    __ASM volatile("strbt %1, %0" : "=Q"(*ptr) : "r"((uint32_t)value));
+  __ASM volatile ("strbt %1, %0" : "=Q" (*ptr) : "r" ((uint32_t)value) );
 }
 
 
@@ -97,7 +96,7 @@ __STATIC_FORCEINLINE void __STRBT(uint8_t value, volatile uint8_t *ptr)
  */
 __STATIC_FORCEINLINE void __STRHT(uint16_t value, volatile uint16_t *ptr)
 {
-    __ASM volatile("strht %1, %0" : "=Q"(*ptr) : "r"((uint32_t)value));
+  __ASM volatile ("strht %1, %0" : "=Q" (*ptr) : "r" ((uint32_t)value) );
 }
 
 
@@ -109,7 +108,7 @@ __STATIC_FORCEINLINE void __STRHT(uint16_t value, volatile uint16_t *ptr)
  */
 __STATIC_FORCEINLINE void __STRT(uint32_t value, volatile uint32_t *ptr)
 {
-    __ASM volatile("strt %1, %0" : "=Q"(*ptr) : "r"(value));
+  __ASM volatile ("strt %1, %0" : "=Q" (*ptr) : "r" (value) );
 }
 #endif /* (__ARM_ARCH_ISA_THUMB >= 2) */
 
@@ -128,10 +127,10 @@ __STATIC_FORCEINLINE void __STRT(uint32_t value, volatile uint32_t *ptr)
  */
 __STATIC_FORCEINLINE uint32_t __get_CONTROL(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, control" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, control" : "=r" (result) );
+  return (result);
 }
 
 
@@ -143,10 +142,10 @@ __STATIC_FORCEINLINE uint32_t __get_CONTROL(void)
  */
 __STATIC_FORCEINLINE uint32_t __TZ_get_CONTROL_NS(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, control_ns" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, control_ns" : "=r" (result) );
+  return (result);
 }
 #endif
 
@@ -158,8 +157,8 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_CONTROL_NS(void)
  */
 __STATIC_FORCEINLINE void __set_CONTROL(uint32_t control)
 {
-    __ASM volatile("MSR control, %0" : : "r"(control) : "memory");
-    __ISB();
+  __ASM volatile ("MSR control, %0" : : "r" (control) : "memory");
+  __ISB();
 }
 
 
@@ -171,8 +170,8 @@ __STATIC_FORCEINLINE void __set_CONTROL(uint32_t control)
  */
 __STATIC_FORCEINLINE void __TZ_set_CONTROL_NS(uint32_t control)
 {
-    __ASM volatile("MSR control_ns, %0" : : "r"(control) : "memory");
-    __ISB();
+  __ASM volatile ("MSR control_ns, %0" : : "r" (control) : "memory");
+  __ISB();
 }
 #endif
 
@@ -184,10 +183,10 @@ __STATIC_FORCEINLINE void __TZ_set_CONTROL_NS(uint32_t control)
  */
 __STATIC_FORCEINLINE uint32_t __get_IPSR(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, ipsr" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, ipsr" : "=r" (result) );
+  return (result);
 }
 
 
@@ -198,10 +197,10 @@ __STATIC_FORCEINLINE uint32_t __get_IPSR(void)
  */
 __STATIC_FORCEINLINE uint32_t __get_APSR(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, apsr" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, apsr" : "=r" (result) );
+  return (result);
 }
 
 
@@ -212,10 +211,10 @@ __STATIC_FORCEINLINE uint32_t __get_APSR(void)
  */
 __STATIC_FORCEINLINE uint32_t __get_xPSR(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, xpsr" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, xpsr" : "=r" (result) );
+  return (result);
 }
 
 
@@ -226,10 +225,10 @@ __STATIC_FORCEINLINE uint32_t __get_xPSR(void)
  */
 __STATIC_FORCEINLINE uint32_t __get_PSP(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, psp"  : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, psp"  : "=r" (result) );
+  return (result);
 }
 
 
@@ -241,10 +240,10 @@ __STATIC_FORCEINLINE uint32_t __get_PSP(void)
  */
 __STATIC_FORCEINLINE uint32_t __TZ_get_PSP_NS(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, psp_ns"  : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, psp_ns"  : "=r" (result) );
+  return (result);
 }
 #endif
 
@@ -256,7 +255,7 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_PSP_NS(void)
  */
 __STATIC_FORCEINLINE void __set_PSP(uint32_t topOfProcStack)
 {
-    __ASM volatile("MSR psp, %0" : : "r"(topOfProcStack) :);
+  __ASM volatile ("MSR psp, %0" : : "r" (topOfProcStack) : );
 }
 
 
@@ -268,7 +267,7 @@ __STATIC_FORCEINLINE void __set_PSP(uint32_t topOfProcStack)
  */
 __STATIC_FORCEINLINE void __TZ_set_PSP_NS(uint32_t topOfProcStack)
 {
-    __ASM volatile("MSR psp_ns, %0" : : "r"(topOfProcStack) :);
+  __ASM volatile ("MSR psp_ns, %0" : : "r" (topOfProcStack) : );
 }
 #endif
 
@@ -280,10 +279,10 @@ __STATIC_FORCEINLINE void __TZ_set_PSP_NS(uint32_t topOfProcStack)
  */
 __STATIC_FORCEINLINE uint32_t __get_MSP(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, msp" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, msp" : "=r" (result) );
+  return (result);
 }
 
 
@@ -295,10 +294,10 @@ __STATIC_FORCEINLINE uint32_t __get_MSP(void)
  */
 __STATIC_FORCEINLINE uint32_t __TZ_get_MSP_NS(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, msp_ns" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, msp_ns" : "=r" (result) );
+  return (result);
 }
 #endif
 
@@ -310,7 +309,7 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_MSP_NS(void)
  */
 __STATIC_FORCEINLINE void __set_MSP(uint32_t topOfMainStack)
 {
-    __ASM volatile("MSR msp, %0" : : "r"(topOfMainStack) :);
+  __ASM volatile ("MSR msp, %0" : : "r" (topOfMainStack) : );
 }
 
 
@@ -322,7 +321,7 @@ __STATIC_FORCEINLINE void __set_MSP(uint32_t topOfMainStack)
  */
 __STATIC_FORCEINLINE void __TZ_set_MSP_NS(uint32_t topOfMainStack)
 {
-    __ASM volatile("MSR msp_ns, %0" : : "r"(topOfMainStack) :);
+  __ASM volatile ("MSR msp_ns, %0" : : "r" (topOfMainStack) : );
 }
 #endif
 
@@ -335,10 +334,10 @@ __STATIC_FORCEINLINE void __TZ_set_MSP_NS(uint32_t topOfMainStack)
  */
 __STATIC_FORCEINLINE uint32_t __TZ_get_SP_NS(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, sp_ns" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, sp_ns" : "=r" (result) );
+  return (result);
 }
 
 
@@ -349,7 +348,7 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_SP_NS(void)
  */
 __STATIC_FORCEINLINE void __TZ_set_SP_NS(uint32_t topOfStack)
 {
-    __ASM volatile("MSR sp_ns, %0" : : "r"(topOfStack) :);
+  __ASM volatile ("MSR sp_ns, %0" : : "r" (topOfStack) : );
 }
 #endif
 
@@ -361,10 +360,10 @@ __STATIC_FORCEINLINE void __TZ_set_SP_NS(uint32_t topOfStack)
  */
 __STATIC_FORCEINLINE uint32_t __get_PRIMASK(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, primask" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, primask" : "=r" (result) );
+  return (result);
 }
 
 
@@ -376,10 +375,10 @@ __STATIC_FORCEINLINE uint32_t __get_PRIMASK(void)
  */
 __STATIC_FORCEINLINE uint32_t __TZ_get_PRIMASK_NS(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, primask_ns" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, primask_ns" : "=r" (result) );
+  return (result);
 }
 #endif
 
@@ -391,7 +390,7 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_PRIMASK_NS(void)
  */
 __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
 {
-    __ASM volatile("MSR primask, %0" : : "r"(priMask) : "memory");
+  __ASM volatile ("MSR primask, %0" : : "r" (priMask) : "memory");
 }
 
 
@@ -403,7 +402,7 @@ __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
  */
 __STATIC_FORCEINLINE void __TZ_set_PRIMASK_NS(uint32_t priMask)
 {
-    __ASM volatile("MSR primask_ns, %0" : : "r"(priMask) : "memory");
+  __ASM volatile ("MSR primask_ns, %0" : : "r" (priMask) : "memory");
 }
 #endif
 
@@ -416,10 +415,10 @@ __STATIC_FORCEINLINE void __TZ_set_PRIMASK_NS(uint32_t priMask)
  */
 __STATIC_FORCEINLINE uint32_t __get_BASEPRI(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, basepri" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, basepri" : "=r" (result) );
+  return (result);
 }
 
 
@@ -431,10 +430,10 @@ __STATIC_FORCEINLINE uint32_t __get_BASEPRI(void)
  */
 __STATIC_FORCEINLINE uint32_t __TZ_get_BASEPRI_NS(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, basepri_ns" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, basepri_ns" : "=r" (result) );
+  return (result);
 }
 #endif
 
@@ -446,7 +445,7 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_BASEPRI_NS(void)
  */
 __STATIC_FORCEINLINE void __set_BASEPRI(uint32_t basePri)
 {
-    __ASM volatile("MSR basepri, %0" : : "r"(basePri) : "memory");
+  __ASM volatile ("MSR basepri, %0" : : "r" (basePri) : "memory");
 }
 
 
@@ -458,7 +457,7 @@ __STATIC_FORCEINLINE void __set_BASEPRI(uint32_t basePri)
  */
 __STATIC_FORCEINLINE void __TZ_set_BASEPRI_NS(uint32_t basePri)
 {
-    __ASM volatile("MSR basepri_ns, %0" : : "r"(basePri) : "memory");
+  __ASM volatile ("MSR basepri_ns, %0" : : "r" (basePri) : "memory");
 }
 #endif
 
@@ -471,7 +470,7 @@ __STATIC_FORCEINLINE void __TZ_set_BASEPRI_NS(uint32_t basePri)
  */
 __STATIC_FORCEINLINE void __set_BASEPRI_MAX(uint32_t basePri)
 {
-    __ASM volatile("MSR basepri_max, %0" : : "r"(basePri) : "memory");
+  __ASM volatile ("MSR basepri_max, %0" : : "r" (basePri) : "memory");
 }
 
 
@@ -482,10 +481,10 @@ __STATIC_FORCEINLINE void __set_BASEPRI_MAX(uint32_t basePri)
  */
 __STATIC_FORCEINLINE uint32_t __get_FAULTMASK(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, faultmask" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, faultmask" : "=r" (result) );
+  return (result);
 }
 
 
@@ -497,10 +496,10 @@ __STATIC_FORCEINLINE uint32_t __get_FAULTMASK(void)
  */
 __STATIC_FORCEINLINE uint32_t __TZ_get_FAULTMASK_NS(void)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("MRS %0, faultmask_ns" : "=r"(result));
-    return (result);
+  __ASM volatile ("MRS %0, faultmask_ns" : "=r" (result) );
+  return (result);
 }
 #endif
 
@@ -512,7 +511,7 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_FAULTMASK_NS(void)
  */
 __STATIC_FORCEINLINE void __set_FAULTMASK(uint32_t faultMask)
 {
-    __ASM volatile("MSR faultmask, %0" : : "r"(faultMask) : "memory");
+  __ASM volatile ("MSR faultmask, %0" : : "r" (faultMask) : "memory");
 }
 
 
@@ -524,7 +523,7 @@ __STATIC_FORCEINLINE void __set_FAULTMASK(uint32_t faultMask)
  */
 __STATIC_FORCEINLINE void __TZ_set_FAULTMASK_NS(uint32_t faultMask)
 {
-    __ASM volatile("MSR faultmask_ns, %0" : : "r"(faultMask) : "memory");
+  __ASM volatile ("MSR faultmask_ns, %0" : : "r" (faultMask) : "memory");
 }
 #endif
 
@@ -546,12 +545,12 @@ __STATIC_FORCEINLINE uint32_t __get_PSPLIM(void)
 #if (((__ARM_ARCH_8M_MAIN__   < 1) && \
       (__ARM_ARCH_8_1M_MAIN__ < 1)    ) && \
      (__ARM_FEATURE_CMSE < 3)              )
-    /* without main extensions, the non-secure PSPLIM is RAZ/WI */
-    return (0U);
+  /* without main extensions, the non-secure PSPLIM is RAZ/WI */
+  return (0U);
 #else
-    uint32_t result;
-    __ASM volatile("MRS %0, psplim"  : "=r"(result));
-    return (result);
+  uint32_t result;
+  __ASM volatile ("MRS %0, psplim"  : "=r" (result) );
+  return (result);
 #endif
 }
 
@@ -568,12 +567,12 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_PSPLIM_NS(void)
 {
 #if ((__ARM_ARCH_8M_MAIN__   < 1) && \
      (__ARM_ARCH_8_1M_MAIN__ < 1)    )
-    /* without main extensions, the non-secure PSPLIM is RAZ/WI */
-    return (0U);
+  /* without main extensions, the non-secure PSPLIM is RAZ/WI */
+  return (0U);
 #else
-    uint32_t result;
-    __ASM volatile("MRS %0, psplim_ns"  : "=r"(result));
-    return (result);
+  uint32_t result;
+  __ASM volatile ("MRS %0, psplim_ns"  : "=r" (result) );
+  return (result);
 #endif
 }
 #endif
@@ -593,10 +592,10 @@ __STATIC_FORCEINLINE void __set_PSPLIM(uint32_t ProcStackPtrLimit)
 #if (((__ARM_ARCH_8M_MAIN__   < 1) && \
       (__ARM_ARCH_8_1M_MAIN__ < 1)    ) && \
      (__ARM_FEATURE_CMSE < 3)              )
-    /* without main extensions, the non-secure PSPLIM is RAZ/WI */
-    (void)ProcStackPtrLimit;
+  /* without main extensions, the non-secure PSPLIM is RAZ/WI */
+  (void)ProcStackPtrLimit;
 #else
-    __ASM volatile("MSR psplim, %0" : : "r"(ProcStackPtrLimit));
+  __ASM volatile ("MSR psplim, %0" : : "r" (ProcStackPtrLimit));
 #endif
 }
 
@@ -614,10 +613,10 @@ __STATIC_FORCEINLINE void __TZ_set_PSPLIM_NS(uint32_t ProcStackPtrLimit)
 {
 #if ((__ARM_ARCH_8M_MAIN__   < 1) && \
      (__ARM_ARCH_8_1M_MAIN__ < 1)    )
-    /* without main extensions, the non-secure PSPLIM is RAZ/WI */
-    (void)ProcStackPtrLimit;
+  /* without main extensions, the non-secure PSPLIM is RAZ/WI */
+  (void)ProcStackPtrLimit;
 #else
-    __ASM volatile("MSR psplim_ns, %0\n" : : "r"(ProcStackPtrLimit));
+  __ASM volatile ("MSR psplim_ns, %0\n" : : "r" (ProcStackPtrLimit));
 #endif
 }
 #endif
@@ -636,12 +635,12 @@ __STATIC_FORCEINLINE uint32_t __get_MSPLIM(void)
 #if (((__ARM_ARCH_8M_MAIN__   < 1) && \
       (__ARM_ARCH_8_1M_MAIN__ < 1)    ) && \
      (__ARM_FEATURE_CMSE < 3)              )
-    /* without main extensions, the non-secure MSPLIM is RAZ/WI */
-    return (0U);
+  /* without main extensions, the non-secure MSPLIM is RAZ/WI */
+  return (0U);
 #else
-    uint32_t result;
-    __ASM volatile("MRS %0, msplim" : "=r"(result));
-    return (result);
+  uint32_t result;
+  __ASM volatile ("MRS %0, msplim" : "=r" (result) );
+  return (result);
 #endif
 }
 
@@ -659,12 +658,12 @@ __STATIC_FORCEINLINE uint32_t __TZ_get_MSPLIM_NS(void)
 {
 #if ((__ARM_ARCH_8M_MAIN__   < 1) && \
      (__ARM_ARCH_8_1M_MAIN__ < 1)    )
-    /* without main extensions, the non-secure MSPLIM is RAZ/WI */
-    return (0U);
+  /* without main extensions, the non-secure MSPLIM is RAZ/WI */
+  return (0U);
 #else
-    uint32_t result;
-    __ASM volatile("MRS %0, msplim_ns" : "=r"(result));
-    return (result);
+  uint32_t result;
+  __ASM volatile ("MRS %0, msplim_ns" : "=r" (result) );
+  return (result);
 #endif
 }
 #endif
@@ -683,10 +682,10 @@ __STATIC_FORCEINLINE void __set_MSPLIM(uint32_t MainStackPtrLimit)
 #if (((__ARM_ARCH_8M_MAIN__   < 1) && \
       (__ARM_ARCH_8_1M_MAIN__ < 1)    ) && \
      (__ARM_FEATURE_CMSE < 3)              )
-    /* without main extensions, the non-secure MSPLIM is RAZ/WI */
-    (void)MainStackPtrLimit;
+  /* without main extensions, the non-secure MSPLIM is RAZ/WI */
+  (void)MainStackPtrLimit;
 #else
-    __ASM volatile("MSR msplim, %0" : : "r"(MainStackPtrLimit));
+  __ASM volatile ("MSR msplim, %0" : : "r" (MainStackPtrLimit));
 #endif
 }
 
@@ -704,10 +703,10 @@ __STATIC_FORCEINLINE void __TZ_set_MSPLIM_NS(uint32_t MainStackPtrLimit)
 {
 #if ((__ARM_ARCH_8M_MAIN__   < 1) && \
      (__ARM_ARCH_8_1M_MAIN__ < 1)    )
-    /* without main extensions, the non-secure MSPLIM is RAZ/WI */
-    (void)MainStackPtrLimit;
+  /* without main extensions, the non-secure MSPLIM is RAZ/WI */
+  (void)MainStackPtrLimit;
 #else
-    __ASM volatile("MSR msplim_ns, %0" : : "r"(MainStackPtrLimit));
+  __ASM volatile ("MSR msplim_ns, %0" : : "r" (MainStackPtrLimit));
 #endif
 }
 #endif
@@ -805,15 +804,15 @@ __extension__ \
 
 #define __SXTAB16_RORn(ARG1, ARG2, ARG3) __SXTAB16(ARG1, __ROR(ARG2, ARG3))
 
-__STATIC_FORCEINLINE int32_t __SMMLA(int32_t op1, int32_t op2, int32_t op3)
+__STATIC_FORCEINLINE int32_t __SMMLA (int32_t op1, int32_t op2, int32_t op3)
 {
-    int32_t result;
+  int32_t result;
 
-    __ASM volatile("smmla %0, %1, %2, %3" : "=r"(result): "r"(op1), "r"(op2), "r"(op3));
-    return (result);
+  __ASM volatile ("smmla %0, %1, %2, %3" : "=r" (result): "r"  (op1), "r" (op2), "r" (op3) );
+  return (result);
 }
 #endif /* (defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)) */
-/** @} end of group CMSIS_SIMD_intrinsics */
+ /** @} end of group CMSIS_SIMD_intrinsics */
 
 
 #endif /* __CMSIS_ARMCLANG_M_H */

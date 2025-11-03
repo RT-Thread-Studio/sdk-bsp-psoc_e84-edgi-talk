@@ -42,10 +42,10 @@ extern "C" {
 #include "mtb_hal_hw_types_dma_dw.h"
 
 #if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW) || defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_DMA)
 /** Macro specifying whether the DMA driver is available for the current device */
@@ -67,12 +67,12 @@ extern "C" {
  * defer to the alignment defined by the DMAC hardware, if any
  */
 #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
-#define _MTB_HAL_DMA_ALIGN        CY_ALIGN(__SCB_DCACHE_LINE_SIZE)
+    #define _MTB_HAL_DMA_ALIGN        CY_ALIGN(__SCB_DCACHE_LINE_SIZE)
 #elif defined(_MTB_HAL_DMA_ALIGN_DMAC)
-// Macro value not in parentheses because it needs to expand out
-#define _MTB_HAL_DMA_ALIGN _MTB_HAL_DMA_ALIGN_DMAC
+    // Macro value not in parentheses because it needs to expand out
+    #define _MTB_HAL_DMA_ALIGN _MTB_HAL_DMA_ALIGN_DMAC
 #else
-#define _MTB_HAL_DMA_ALIGN
+    #define _MTB_HAL_DMA_ALIGN
 #endif
 
 
@@ -94,21 +94,21 @@ typedef struct
 {
     union
     {
-#if defined (_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
-        _mtb_hal_dw_base_t *dw_base;
-#endif
-#if defined (_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
-        _mtb_hal_dmac_base_t *dmac_base;
-#endif
+        #if defined (_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
+        _mtb_hal_dw_base_t* dw_base;
+        #endif
+        #if defined (_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
+        _mtb_hal_dmac_base_t* dmac_base;
+        #endif
     } base;
     union
     {
-#if defined (_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
-        _mtb_hal_dw_descriptor_t *dw;
-#endif
-#if defined (_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
-        _mtb_hal_dmac_descriptor_t *dmac;
-#endif
+        #if defined (_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
+        _mtb_hal_dw_descriptor_t* dw;
+        #endif
+        #if defined (_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
+        _mtb_hal_dmac_descriptor_t* dmac;
+        #endif
     } descriptor;
     mtb_hal_dma_type_t                       dma_type;
     uint32_t                                 channel;
@@ -134,22 +134,22 @@ typedef struct
     {
         union
         {
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
-            _mtb_hal_dw_base_t const         *dw_base;
-#endif
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
-            _mtb_hal_dmac_base_t const       *dmac_base;
-#endif
+            #if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
+            _mtb_hal_dw_base_t const*         dw_base;
+            #endif
+            #if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
+            _mtb_hal_dmac_base_t const*       dmac_base;
+            #endif
         };
 
         union
         {
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
-            _mtb_hal_dw_descriptor_t    *dw_descriptor;
-#endif
-#if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
-            _mtb_hal_dmac_descriptor_t *dmac_descriptor;
-#endif
+            #if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
+            _mtb_hal_dw_descriptor_t *   dw_descriptor;
+            #endif
+            #if defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DMAC)
+            _mtb_hal_dmac_descriptor_t * dmac_descriptor;
+            #endif
         };
     };
 } mtb_hal_dma_configurator_t;

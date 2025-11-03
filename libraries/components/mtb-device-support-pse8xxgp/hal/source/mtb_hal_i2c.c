@@ -32,15 +32,15 @@
 #include "mtb_hal_utils.h"
 
 #if   defined(CY_IP_MXSCB) && (CY_IP_MXSCB_VERSION == 1)
-    #include "mtb_hal_i2c_mxs22scb_v1.h"
+#include "mtb_hal_i2c_mxs22scb_v1.h"
 #elif defined(CY_IP_MXSCB) && (CY_IP_MXSCB_VERSION == 2)
-    #include "mtb_hal_i2c_mxscb_ver2_s40e_v2.h"
+#include "mtb_hal_i2c_mxscb_ver2_s40e_v2.h"
 #elif defined(CY_IP_MXSCB) && (CY_IP_MXSCB_VERSION == 3)
-    #include "mtb_hal_i2c_mxscb_v3.h"
+#include "mtb_hal_i2c_mxscb_v3.h"
 #elif defined(CY_IP_MXSCB) && (CY_IP_MXSCB_VERSION == 4)
-    #include "mtb_hal_i2c_mxscb_v4.h"
+#include "mtb_hal_i2c_mxscb_v4.h"
 #elif defined (CY_IP_MXS22SCB) && (CY_IP_MXS22SCB_VERSION == 1)
-    #include "mtb_hal_i2c_mxs22scb_v1.h"
+#include "mtb_hal_i2c_mxs22scb_v1.h"
 #endif
 
 #if (MTB_HAL_DRIVER_AVAILABLE_I2C)
@@ -93,7 +93,7 @@ static const _mtb_hal_buffer_info_t _mtb_hal_i2c_buff_info_default =
 /* Keep track of the current I2C object to ensure we are referencing the
  * correct one, as we don't directly pass the object through the PDL callback
  * indirection.  This also protects against a nested callback situation. */
-static volatile mtb_hal_i2c_t *_mtb_hal_i2c_irq_obj = NULL;
+static volatile mtb_hal_i2c_t* _mtb_hal_i2c_irq_obj = NULL;
 
 //--------------------------------------------------------------------------------------------------
 // mtb_hal_i2c_process_interrupt
@@ -103,7 +103,7 @@ cy_rslt_t mtb_hal_i2c_process_interrupt(mtb_hal_i2c_t* obj)
     /* Save the old value and store it aftewards in case we get into a nested IRQ situation */
     /* Safe to cast away volatile because we don't expect this pointer to be changed while we're in
      * here, they just might change where the original pointer points */
-    mtb_hal_i2c_t *old_irq_obj = (mtb_hal_i2c_t*)_mtb_hal_i2c_irq_obj;
+    mtb_hal_i2c_t* old_irq_obj = (mtb_hal_i2c_t*)_mtb_hal_i2c_irq_obj;
 
     if (NULL == obj)
     {
@@ -111,14 +111,12 @@ cy_rslt_t mtb_hal_i2c_process_interrupt(mtb_hal_i2c_t* obj)
     }
 
     _mtb_hal_i2c_irq_obj = obj;
-
     Cy_SCB_I2C_Interrupt(obj->base, obj->context);
-
     _mtb_hal_i2c_irq_obj = old_irq_obj;
 
-#if defined(BCM55500)
+    #if defined(BCM55500)
     Cy_SCB_EnableInterrupt(obj->base);
-#endif /* defined(BCM55500) */
+    #endif /* defined(BCM55500) */
 
     return CY_RSLT_SUCCESS;
 }
@@ -131,7 +129,7 @@ static void _mtb_hal_i2c_cb_wrapper(uint32_t event)
 {
     /* Safe to cast away volatile because we don't expect this pointer to be changed while we're in
        here, they just might change where the original pointer points */
-    mtb_hal_i2c_t *obj = (mtb_hal_i2c_t*)_mtb_hal_i2c_irq_obj;
+    mtb_hal_i2c_t* obj = (mtb_hal_i2c_t*)_mtb_hal_i2c_irq_obj;
     if ((mtb_hal_i2c_event_t)(obj->irq_cause & event))
     {
         /* Indicates read/write operations will be in a callback */
@@ -152,7 +150,7 @@ static cy_en_scb_i2c_command_t _mtb_hal_i2c_cb_addr_wrapper(uint32_t event)
 {
     /* Safe to cast away volatile because we don't expect this pointer to be changed while we're in
        here, they just might change where the original pointer points */
-    mtb_hal_i2c_t *obj = (mtb_hal_i2c_t*)_mtb_hal_i2c_irq_obj;
+    mtb_hal_i2c_t* obj = (mtb_hal_i2c_t*)_mtb_hal_i2c_irq_obj;
     mtb_hal_i2c_addr_event_t addr_events =
         (mtb_hal_i2c_addr_event_t)(obj->addr_irq_cause & event);
     uint8_t device_address = 0;
@@ -164,9 +162,7 @@ static cy_en_scb_i2c_command_t _mtb_hal_i2c_cb_addr_wrapper(uint32_t event)
            Cy_SCB_ReadRxFifo API as per I2C PDL documentation */
         if (0L != (MTB_HAL_I2C_ADDR_MATCH_EVENT & addr_events))
         {
-            /* Target address stored in PDL is shifted left by 1, so to get correct target address
-               need to do LSR by 1 */
-            device_address = (Cy_SCB_ReadRxFifo(obj->base)) >> 1;
+            device_address = (Cy_SCB_ReadRxFifo(obj->base));
         }
         /* Indicates read/write operations will be in a callback */
         obj->op_in_callback = true;
@@ -179,6 +175,24 @@ static cy_en_scb_i2c_command_t _mtb_hal_i2c_cb_addr_wrapper(uint32_t event)
     return (cy_en_scb_i2c_command_t)cmd;
 }
 
+
+#if ((CY_IP_MXSCB_VERSION >= 4) && (CY_IP_MXSCB_VERSION_MINOR >= 4))
+//--------------------------------------------------------------------------------------------------
+// _mtb_hal_i2c_cb_byte_wrapper
+//--------------------------------------------------------------------------------------------------
+static cy_en_scb_i2c_command_t _mtb_hal_i2c_cb_byte_wrapper(uint8_t byte_received)
+{
+    mtb_hal_i2c_t* obj = (mtb_hal_i2c_t*)_mtb_hal_i2c_irq_obj;
+    obj->op_in_callback = true;
+    mtb_hal_i2c_byte_callback_t callback =
+        (mtb_hal_i2c_byte_callback_t)obj->byte_callback_data.callback;
+    mtb_hal_i2c_command_rsp_t cmd = callback(obj->byte_callback_data.callback_arg, byte_received);
+    obj->op_in_callback = false;
+    return (cy_en_scb_i2c_command_t)cmd;
+}
+
+
+#endif /* ((CY_IP_MXSCB_VERSION>=4) && (CY_IP_MXSCB_VERSION_MINOR>=4)) */
 
 //--------------------------------------------------------------------------------------------------
 // _mtb_hal_i2c_target_status
@@ -213,7 +227,7 @@ __STATIC_INLINE void _mtb_hal_i2c_target_clear_read_status(mtb_hal_i2c_t* obj)
  * NOTE: When the read/write operation was called in a I2C callback function timeout is ignored
  */
 static cy_rslt_t _mtb_hal_i2c_target_wait_for_status(mtb_hal_i2c_t* obj, uint32_t i2c_status,
-        uint32_t timeout)
+                                                     uint32_t timeout)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
     uint32_t timeout_us = _MTB_HAL_UTILS_US_PER_MS;
@@ -245,7 +259,7 @@ static cy_rslt_t _mtb_hal_i2c_target_wait_for_status(mtb_hal_i2c_t* obj, uint32_
 cy_rslt_t _mtb_hal_i2c_set_peri_divider(void* obj, uint32_t freq, bool is_target)
 {
     CySCB_Type* base = ((mtb_hal_i2c_t*)obj)->base;
-    const mtb_hal_clock_t *clock = (((mtb_hal_i2c_t*)obj)->clock);
+    const mtb_hal_clock_t* clock = (((mtb_hal_i2c_t*)obj)->clock);
     cy_rslt_t result = MTB_HAL_I2C_RSLT_ERR_CAN_NOT_REACH_DR;
 
     /* Return the actual data rate on success, 0 otherwise */
@@ -275,14 +289,14 @@ cy_rslt_t _mtb_hal_i2c_set_peri_divider(void* obj, uint32_t freq, bool is_target
         uint32_t original_freq = clock->interface->get_frequency_hz(clock->clock_ref);
         uint32_t original_data_rate = Cy_SCB_I2C_GetDataRate(base, original_freq);
         result = clock->interface->set_frequency_hz(clock->clock_ref, peri_freq,
-                     _MTB_HAL_I2C_CLK_DIV_TOLERANCE_PPM);
+                                                    _MTB_HAL_I2C_CLK_DIV_TOLERANCE_PPM);
 
         if (result == CY_RSLT_SUCCESS)
         {
             data_rate = (is_target)
-                        ? Cy_SCB_I2C_GetDataRate(base, clock->interface->get_frequency_hz(clock->clock_ref))
-                        : Cy_SCB_I2C_SetDataRate(base, freq, clock->interface->get_frequency_hz(
-                                clock->clock_ref));
+                ? Cy_SCB_I2C_GetDataRate(base, clock->interface->get_frequency_hz(clock->clock_ref))
+                : Cy_SCB_I2C_SetDataRate(base, freq, clock->interface->get_frequency_hz(
+                                             clock->clock_ref));
             if (data_rate == 0)
             {
                 result = MTB_HAL_I2C_RSLT_ERR_CAN_NOT_REACH_DR;
@@ -293,7 +307,7 @@ cy_rslt_t _mtb_hal_i2c_set_peri_divider(void* obj, uint32_t freq, bool is_target
         {
             /* Revert clocks */
             clock->interface->set_frequency_hz(clock->clock_ref, original_freq,
-                                                   _MTB_HAL_I2C_CLK_DIV_TOLERANCE_PPM);
+                                               _MTB_HAL_I2C_CLK_DIV_TOLERANCE_PPM);
             if (!is_target)
             {
                 Cy_SCB_I2C_SetDataRate(base, original_data_rate, original_freq);
@@ -306,7 +320,7 @@ cy_rslt_t _mtb_hal_i2c_set_peri_divider(void* obj, uint32_t freq, bool is_target
 
 /* Start API implementing */
 cy_rslt_t mtb_hal_i2c_setup(mtb_hal_i2c_t* obj, const mtb_hal_i2c_configurator_t* config,
-                            cy_stc_scb_i2c_context_t *context, mtb_hal_clock_t *clock)
+                            cy_stc_scb_i2c_context_t* context, mtb_hal_clock_t* clock)
 {
     CY_ASSERT(NULL != obj);
     CY_ASSERT(NULL != config);
@@ -339,9 +353,10 @@ cy_rslt_t mtb_hal_i2c_configure(mtb_hal_i2c_t* obj, const mtb_hal_i2c_cfg_t* cfg
     cy_stc_scb_i2c_config_t _config_structure;
     memcpy(&_config_structure, obj->config, sizeof(cy_stc_scb_i2c_config_t));
 
-    _config_structure.i2cMode = (cfg->is_target)
-                                ? CY_SCB_I2C_SLAVE
-                                : CY_SCB_I2C_MASTER;
+    // Preserve the dual mode if it was initially set
+    _config_structure.i2cMode =
+        (_config_structure.i2cMode == CY_SCB_I2C_MASTER_SLAVE) ? CY_SCB_I2C_MASTER_SLAVE :
+        ((cfg->is_target) ? CY_SCB_I2C_SLAVE : CY_SCB_I2C_MASTER);
 
     _config_structure.slaveAddress  = (uint8_t)cfg->address;
 
@@ -374,15 +389,15 @@ cy_rslt_t mtb_hal_i2c_configure(mtb_hal_i2c_t* obj, const mtb_hal_i2c_cfg_t* cfg
 // _mtb_hal_i2c_controller_read_write
 //--------------------------------------------------------------------------------------------------
 static cy_rslt_t _mtb_hal_i2c_controller_read_write(mtb_hal_i2c_t* obj, uint16_t dev_addr,
-        const uint8_t *data, uint16_t size,
-        uint32_t timeout, bool send_stop,
-        cy_en_scb_i2c_direction_t direction)
+                                                    const uint8_t* data, uint16_t size,
+                                                    uint32_t timeout, bool send_stop,
+                                                    cy_en_scb_i2c_direction_t direction)
 {
     cy_en_scb_i2c_command_t ack = CY_SCB_I2C_ACK;
 
     cy_en_scb_i2c_status_t status = (obj->context->state == CY_SCB_I2C_IDLE)
-                                    ? Cy_SCB_I2C_MasterSendStart(obj->base, dev_addr, direction, timeout, obj->context)
-                                    : Cy_SCB_I2C_MasterSendReStart(obj->base, dev_addr, direction, timeout, obj->context);
+        ? Cy_SCB_I2C_MasterSendStart(obj->base, dev_addr, direction, timeout, obj->context)
+        : Cy_SCB_I2C_MasterSendReStart(obj->base, dev_addr, direction, timeout, obj->context);
 
     if (status == CY_SCB_I2C_SUCCESS)
     {
@@ -429,7 +444,7 @@ cy_rslt_t mtb_hal_i2c_controller_write(mtb_hal_i2c_t* obj, uint16_t dev_addr, co
                                        uint16_t size, uint32_t timeout, bool send_stop)
 {
     return _mtb_hal_i2c_controller_read_write(obj, dev_addr, data, size, timeout, send_stop,
-            CY_SCB_I2C_WRITE_XFER);
+                                              CY_SCB_I2C_WRITE_XFER);
 }
 
 
@@ -440,7 +455,7 @@ cy_rslt_t mtb_hal_i2c_controller_read(mtb_hal_i2c_t* obj, uint16_t dev_addr, uin
                                       uint16_t size, uint32_t timeout, bool send_stop)
 {
     return _mtb_hal_i2c_controller_read_write(obj, dev_addr, data, size, timeout, send_stop,
-            CY_SCB_I2C_READ_XFER);
+                                              CY_SCB_I2C_READ_XFER);
 }
 
 
@@ -458,27 +473,20 @@ cy_rslt_t mtb_hal_i2c_target_abort_read(mtb_hal_i2c_t* obj)
 // mtb_hal_i2c_target_config_read_buffer
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_i2c_target_config_read_buffer(mtb_hal_i2c_t* obj, const uint8_t* data,
-        uint16_t size)
+                                                uint16_t size)
 {
     cy_rslt_t result = MTB_HAL_I2C_RSLT_ERR_BAD_ARGUMENT;
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(size > 0 && data != NULL, MTB_HAL_I2C_RSLT_ERR_BAD_ARGUMENT);
-#else
+    #else
     if ((size > 0) && (data != NULL))
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
     {
-        if (obj->context->state == CY_SCB_I2C_IDLE)
-        {
-            /* Note - 'WriteBuf' is intentional.  PDL and HAL buffer names are opposite */
-            Cy_SCB_I2C_SlaveConfigWriteBuf(obj->base, (uint8_t*)data, size, obj->context);
-            obj->rx_target_buff.addr.u8 = (uint8_t*)data;
-            obj->rx_target_buff.size = size;
-            result = CY_RSLT_SUCCESS;
-        }
-        else
-        {
-            result = MTB_HAL_I2C_RSLT_WARN_DEVICE_BUSY;
-        }
+        /* Note - 'WriteBuf' is intentional.  PDL and HAL buffer names are opposite */
+        Cy_SCB_I2C_SlaveConfigWriteBuf(obj->base, (uint8_t*)data, size, obj->context);
+        obj->rx_target_buff.addr.u8 = (uint8_t*)data;
+        obj->rx_target_buff.size = size;
+        result = CY_RSLT_SUCCESS;
     }
     return result;
 }
@@ -490,24 +498,17 @@ cy_rslt_t mtb_hal_i2c_target_config_read_buffer(mtb_hal_i2c_t* obj, const uint8_
 cy_rslt_t mtb_hal_i2c_target_config_write_buffer(mtb_hal_i2c_t* obj, uint8_t* data, uint16_t size)
 {
     cy_rslt_t result = MTB_HAL_I2C_RSLT_ERR_BAD_ARGUMENT;
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(size > 0 && data != NULL, MTB_HAL_I2C_RSLT_ERR_BAD_ARGUMENT);
-#else
+    #else
     if ((size > 0) && (data != NULL))
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
     {
-        if (obj->context->state == CY_SCB_I2C_IDLE)
-        {
-            /* Note - 'ReadBuf' is intentional.  PDL and HAL buffer names are opposite */
-            Cy_SCB_I2C_SlaveConfigReadBuf(obj->base, (uint8_t*)data, size, obj->context);
-            obj->tx_target_buff.addr.u8 = data;
-            obj->tx_target_buff.size = size;
-            result = CY_RSLT_SUCCESS;
-        }
-        else
-        {
-            result = MTB_HAL_I2C_RSLT_WARN_DEVICE_BUSY;
-        }
+        /* Note - 'ReadBuf' is intentional.  PDL and HAL buffer names are opposite */
+        Cy_SCB_I2C_SlaveConfigReadBuf(obj->base, (uint8_t*)data, size, obj->context);
+        obj->tx_target_buff.addr.u8 = data;
+        obj->tx_target_buff.size = size;
+        result = CY_RSLT_SUCCESS;
     }
     return result;
 }
@@ -521,17 +522,17 @@ cy_rslt_t mtb_hal_i2c_target_read(mtb_hal_i2c_t* obj, uint8_t* dst_buff, uint16_
 {
     cy_rslt_t status = MTB_HAL_I2C_RSLT_ERR_BAD_ARGUMENT;
 
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN(((obj->rx_target_buff.addr.u8 != NULL) &&
                           ((dst_buff != NULL) && (size != NULL))),
                          MTB_HAL_I2C_RSLT_ERR_BUFFERS_NULL_PTR);
-#else
+    #else
     if (obj->rx_target_buff.addr.u8 == NULL)
     {
         status = MTB_HAL_I2C_RSLT_ERR_BUFFERS_NULL_PTR;
     }
     else if ((dst_buff != NULL) && (size != NULL))
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
     {
         /* Wait until the controller completes writing */
         status = _mtb_hal_i2c_target_wait_for_status(obj, CY_SCB_I2C_SLAVE_WR_CMPLT, timeout);
@@ -568,17 +569,17 @@ cy_rslt_t mtb_hal_i2c_target_write(mtb_hal_i2c_t* obj, const uint8_t* src_buff, 
 {
     cy_rslt_t status = MTB_HAL_I2C_RSLT_ERR_BAD_ARGUMENT;
 
-#if defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #if defined(MTB_HAL_DISABLE_ERR_CHECK)
     CY_ASSERT_AND_RETURN((obj->tx_target_buff.addr.u8 != NULL) &&
                          ((src_buff != NULL) && (size != NULL)),
                          MTB_HAL_I2C_RSLT_ERR_BUFFERS_NULL_PTR);
-#else
+    #else
     if (obj->tx_target_buff.addr.u8 == NULL)
     {
         status = MTB_HAL_I2C_RSLT_ERR_BUFFERS_NULL_PTR;
     }
     else if ((src_buff != NULL) && (size != NULL))
-#endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
+    #endif // defined(MTB_HAL_DISABLE_ERR_CHECK)
     {
         /* Wait for completion of a previous Controller read transaction */
         while (obj->context->state != CY_SCB_I2C_IDLE && !(obj->op_in_callback))
@@ -613,7 +614,7 @@ cy_rslt_t mtb_hal_i2c_target_write(mtb_hal_i2c_t* obj, const uint8_t* src_buff, 
 // mtb_hal_i2c_register_callback
 //--------------------------------------------------------------------------------------------------
 void mtb_hal_i2c_register_callback(mtb_hal_i2c_t* obj, mtb_hal_i2c_event_callback_t callback,
-                                   void *callback_arg)
+                                   void* callback_arg)
 {
     uint32_t savedIntrStatus = mtb_hal_system_critical_section_enter();
     obj->callback_data.callback = (cy_israddress)callback;
@@ -627,14 +628,31 @@ void mtb_hal_i2c_register_callback(mtb_hal_i2c_t* obj, mtb_hal_i2c_event_callbac
 // mtb_hal_i2c_register_address_callback
 //--------------------------------------------------------------------------------------------------
 void mtb_hal_i2c_register_address_callback(mtb_hal_i2c_t* obj,
-        mtb_hal_i2c_address_callback_t callback,
-        void *callback_arg)
+                                           mtb_hal_i2c_address_callback_t callback,
+                                           void* callback_arg)
 {
     uint32_t savedIntrStatus = mtb_hal_system_critical_section_enter();
     obj->addr_callback_data.callback = (cy_israddress)callback;
     obj->addr_callback_data.callback_arg = callback_arg;
     mtb_hal_system_critical_section_exit(savedIntrStatus);
     Cy_SCB_I2C_RegisterAddrCallback(obj->base, _mtb_hal_i2c_cb_addr_wrapper, obj->context);
+}
+
+
+//--------------------------------------------------------------------------------------------------
+// mtb_hal_i2c_register_byte_received_callback
+//--------------------------------------------------------------------------------------------------
+void mtb_hal_i2c_register_byte_received_callback(mtb_hal_i2c_t* obj,
+                                                 mtb_hal_i2c_byte_callback_t callback,
+                                                 void* callback_arg)
+{
+    uint32_t savedIntrStatus = mtb_hal_system_critical_section_enter();
+    obj->byte_callback_data.callback = (cy_israddress)callback;
+    obj->byte_callback_data.callback_arg = callback_arg;
+    mtb_hal_system_critical_section_exit(savedIntrStatus);
+    #if ((CY_IP_MXSCB_VERSION >= 4) && (CY_IP_MXSCB_VERSION_MINOR >= 4))
+    Cy_SCB_I2C_RegisterByteReceivedCallback(obj->base, _mtb_hal_i2c_cb_byte_wrapper, obj->context);
+    #endif /* ((CY_IP_MXSCB_VERSION>=4) && (CY_IP_MXSCB_VERSION_MINOR>=4)) */
 }
 
 

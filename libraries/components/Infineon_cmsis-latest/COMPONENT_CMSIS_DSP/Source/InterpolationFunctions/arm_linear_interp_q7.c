@@ -38,23 +38,23 @@
    * @{
    */
 
-/**
- *
- * @brief  Process function for the Q7 Linear Interpolation Function.
- * @param[in] pYData   pointer to Q7 Linear Interpolation table
- * @param[in] x        input sample to process
- * @param[in] nValues  number of table values
- * @return y processed output sample.
- *
- * \par
- * Input sample <code>x</code> is in 12.20 format which contains 12 bits for table index and 20 bits for fractional part.
- * This function can support maximum of table size 2^12.
- */
-q7_t arm_linear_interp_q7(
-    const q7_t * pYData,
-    q31_t x,
-    uint32_t nValues)
-{
+  /**
+   *
+   * @brief  Process function for the Q7 Linear Interpolation Function.
+   * @param[in] pYData   pointer to Q7 Linear Interpolation table
+   * @param[in] x        input sample to process
+   * @param[in] nValues  number of table values
+   * @return y processed output sample.
+   *
+   * \par
+   * Input sample <code>x</code> is in 12.20 format which contains 12 bits for table index and 20 bits for fractional part.
+   * This function can support maximum of table size 2^12.
+   */
+  q7_t arm_linear_interp_q7(
+  const q7_t * pYData,
+  q31_t x,
+  uint32_t nValues)
+  {
     q31_t y;                                     /* output */
     q7_t y0, y1;                                 /* Nearest output values */
     q31_t fract;                                 /* fractional part */
@@ -65,35 +65,35 @@ q7_t arm_linear_interp_q7(
     /* Index value calculation */
     if (x < 0)
     {
-        return (pYData[0]);
+      return (pYData[0]);
     }
     index = (x >> 20) & 0xfff;
 
     if (index >= (nValues - 1))
     {
-        return (pYData[nValues - 1]);
+      return (pYData[nValues - 1]);
     }
     else
     {
-        /* 20 bits for the fractional part */
-        /* fract is in 12.20 format */
-        fract = (x & 0x000FFFFF);
+      /* 20 bits for the fractional part */
+      /* fract is in 12.20 format */
+      fract = (x & 0x000FFFFF);
 
-        /* Read two nearest output values from the index and are in 1.7(q7) format */
-        y0 = pYData[index];
-        y1 = pYData[index + 1];
+      /* Read two nearest output values from the index and are in 1.7(q7) format */
+      y0 = pYData[index];
+      y1 = pYData[index + 1];
 
-        /* Calculation of y0 * (1-fract ) and y is in 13.27(q27) format */
-        y = ((y0 * (0xFFFFF - fract)));
+      /* Calculation of y0 * (1-fract ) and y is in 13.27(q27) format */
+      y = ((y0 * (0xFFFFF - fract)));
 
-        /* Calculation of y1 * fract + y0 * (1-fract) and y is in 13.27(q27) format */
-        y += (y1 * fract);
+      /* Calculation of y1 * fract + y0 * (1-fract) and y is in 13.27(q27) format */
+      y += (y1 * fract);
 
-        /* convert y to 1.7(q7) format */
-        return (q7_t)(y >> 20);
-    }
-}
-/**
- * @} end of LinearInterpolate group
- */
+      /* convert y to 1.7(q7) format */
+      return (q7_t) (y >> 20);
+     }
+  }
+  /**
+   * @} end of LinearInterpolate group
+   */
 

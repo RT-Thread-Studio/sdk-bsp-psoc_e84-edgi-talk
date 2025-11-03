@@ -188,7 +188,7 @@ bool ethosu_dev_handle_interrupt(struct ethosu_device *dev)
 
     // If a fault has occured, the NPU needs to be reset
     if (dev->reg->STATUS.bus_status || dev->reg->STATUS.cmd_parse_error || dev->reg->STATUS.branch_fault ||
-            dev->reg->STATUS.ecc_fault || !dev->reg->STATUS.cmd_end_reached)
+        dev->reg->STATUS.ecc_fault || !dev->reg->STATUS.cmd_end_reached)
     {
         return false;
     }
@@ -199,7 +199,7 @@ bool ethosu_dev_handle_interrupt(struct ethosu_device *dev)
 bool ethosu_dev_verify_access_state(struct ethosu_device *dev)
 {
     if (dev->reg->PROT.active_CSL != (dev->secure ? SECURITY_LEVEL_SECURE : SECURITY_LEVEL_NON_SECURE) ||
-            dev->reg->PROT.active_CPL != (dev->privileged ? PRIVILEGE_LEVEL_PRIVILEGED : PRIVILEGE_LEVEL_USER))
+        dev->reg->PROT.active_CPL != (dev->privileged ? PRIVILEGE_LEVEL_PRIVILEGED : PRIVILEGE_LEVEL_USER))
     {
         return false;
     }
@@ -264,8 +264,8 @@ void ethosu_dev_get_hw_info(struct ethosu_device *dev, struct ethosu_hw_info *hw
 }
 
 enum ethosu_error_codes ethosu_dev_set_clock_and_power(struct ethosu_device *dev,
-        enum ethosu_clock_q_request clock_q,
-        enum ethosu_power_q_request power_q)
+                                                       enum ethosu_clock_q_request clock_q,
+                                                       enum ethosu_power_q_request power_q)
 {
     struct cmd_r cmd = {0};
     cmd.word         = dev->reg->CMD.word & NPU_CMD_PWR_CLK_MASK;

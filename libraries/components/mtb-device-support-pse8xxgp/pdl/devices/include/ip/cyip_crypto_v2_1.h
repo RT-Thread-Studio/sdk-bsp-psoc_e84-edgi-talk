@@ -38,101 +38,100 @@
 /**
   * \brief Cryptography component (CRYPTO_V2)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t RAM_PWR_CTL;                   /*!< 0x00000008 SRAM power control */
-    __IOM uint32_t RAM_PWR_DELAY_CTL;             /*!< 0x0000000C SRAM power delay control */
-    __IOM uint32_t ECC_CTL;                       /*!< 0x00000010 ECC control */
-    __IM uint32_t RESERVED1[3];
-    __IM uint32_t ERROR_STATUS0;                 /*!< 0x00000020 Error status 0 */
-    __IOM uint32_t ERROR_STATUS1;                 /*!< 0x00000024 Error status 1 */
-    __IM uint32_t RESERVED2[54];
-    __IOM uint32_t INTR;                          /*!< 0x00000100 Interrupt register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000104 Interrupt set register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000108 Interrupt mask register */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000010C Interrupt masked register */
-    __IM uint32_t RESERVED3[60];
-    __IOM uint32_t PR_LFSR_CTL0;                  /*!< 0x00000200 Pseudo random LFSR control 0 */
-    __IOM uint32_t PR_LFSR_CTL1;                  /*!< 0x00000204 Pseudo random LFSR control 1 */
-    __IOM uint32_t PR_LFSR_CTL2;                  /*!< 0x00000208 Pseudo random LFSR control 2 */
-    __IOM uint32_t PR_MAX_CTL;                    /*!< 0x0000020C Pseudo random maximum control */
-    __IOM uint32_t PR_CMD;                        /*!< 0x00000210 Pseudo random command */
-    __IM uint32_t RESERVED4;
-    __IOM uint32_t PR_RESULT;                     /*!< 0x00000218 Pseudo random result */
-    __IM uint32_t RESERVED5[25];
-    __IOM uint32_t TR_CTL0;                       /*!< 0x00000280 True random control 0 */
-    __IOM uint32_t TR_CTL1;                       /*!< 0x00000284 True random control 1 */
-    __IOM uint32_t TR_CTL2;                       /*!< 0x00000288 True random control 2 */
-    __IM uint32_t TR_STATUS;                     /*!< 0x0000028C True random status */
-    __IOM uint32_t TR_CMD;                        /*!< 0x00000290 True random command */
-    __IM uint32_t RESERVED6;
-    __IOM uint32_t TR_RESULT;                     /*!< 0x00000298 True random result */
-    __IM uint32_t RESERVED7;
-    __IOM uint32_t TR_GARO_CTL;                   /*!< 0x000002A0 True random GARO control */
-    __IOM uint32_t TR_FIRO_CTL;                   /*!< 0x000002A4 True random FIRO control */
-    __IM uint32_t RESERVED8[6];
-    __IOM uint32_t TR_MON_CTL;                    /*!< 0x000002C0 True random monitor control */
-    __IM uint32_t RESERVED9;
-    __IOM uint32_t TR_MON_CMD;                    /*!< 0x000002C8 True random monitor command */
-    __IM uint32_t RESERVED10;
-    __IOM uint32_t TR_MON_RC_CTL;                 /*!< 0x000002D0 True random monitor RC control */
-    __IM uint32_t RESERVED11;
-    __IM uint32_t TR_MON_RC_STATUS0;             /*!< 0x000002D8 True random monitor RC status 0 */
-    __IM uint32_t TR_MON_RC_STATUS1;             /*!< 0x000002DC True random monitor RC status 1 */
-    __IOM uint32_t TR_MON_AP_CTL;                 /*!< 0x000002E0 True random monitor AP control */
-    __IM uint32_t RESERVED12;
-    __IM uint32_t TR_MON_AP_STATUS0;             /*!< 0x000002E8 True random monitor AP status 0 */
-    __IM uint32_t TR_MON_AP_STATUS1;             /*!< 0x000002EC True random monitor AP status 1 */
-    __IM uint32_t RESERVED13[837];
-    __IM uint32_t STATUS;                        /*!< 0x00001004 Status */
-    __IM uint32_t RESERVED14[14];
-    __IOM uint32_t INSTR_FF_CTL;                  /*!< 0x00001040 Instruction FIFO control */
-    __IM uint32_t INSTR_FF_STATUS;               /*!< 0x00001044 Instruction FIFO status */
-    __OM uint32_t INSTR_FF_WR;                   /*!< 0x00001048 Instruction FIFO write */
-    __IM uint32_t RESERVED15[29];
-    __IM uint32_t LOAD0_FF_STATUS;               /*!< 0x000010C0 Load 0 FIFO status */
-    __IM uint32_t RESERVED16[3];
-    __IM uint32_t LOAD1_FF_STATUS;               /*!< 0x000010D0 Load 1 FIFO status */
-    __IM uint32_t RESERVED17[7];
-    __IM uint32_t STORE_FF_STATUS;               /*!< 0x000010F0 Store FIFO status */
-    __IM uint32_t RESERVED18[3];
-    __IOM uint32_t AES_CTL;                       /*!< 0x00001100 AES control */
-    __IM uint32_t RESERVED19[31];
-    __IOM uint32_t RESULT;                        /*!< 0x00001180 Result */
-    __IM uint32_t RESERVED20[159];
-    __IOM uint32_t CRC_CTL;                       /*!< 0x00001400 CRC control */
-    __IM uint32_t RESERVED21[3];
-    __IOM uint32_t CRC_DATA_CTL;                  /*!< 0x00001410 CRC data control */
-    __IM uint32_t RESERVED22[3];
-    __IOM uint32_t CRC_POL_CTL;                   /*!< 0x00001420 CRC polynomial control */
-    __IM uint32_t RESERVED23[7];
-    __IOM uint32_t CRC_REM_CTL;                   /*!< 0x00001440 CRC remainder control */
-    __IM uint32_t RESERVED24;
-    __IM uint32_t CRC_REM_RESULT;                /*!< 0x00001448 CRC remainder result */
-    __IM uint32_t RESERVED25[13];
-    __IOM uint32_t VU_CTL0;                       /*!< 0x00001480 Vector unit control 0 */
-    __IOM uint32_t VU_CTL1;                       /*!< 0x00001484 Vector unit control 1 */
-    __IOM uint32_t VU_CTL2;                       /*!< 0x00001488 Vector unit control 2 */
-    __IM uint32_t RESERVED26;
-    __IM uint32_t VU_STATUS;                     /*!< 0x00001490 Vector unit status */
-    __IM uint32_t RESERVED27[11];
-    __IM uint32_t VU_RF_DATA[16];                /*!< 0x000014C0 Vector unit register-file */
-    __IM uint32_t RESERVED28[704];
-    __IOM uint32_t DEV_KEY_ADDR0_CTL;             /*!< 0x00002000 Device key address 0 control */
-    __IOM uint32_t DEV_KEY_ADDR0;                 /*!< 0x00002004 Device key address 0 */
-    __IM uint32_t RESERVED29[6];
-    __IOM uint32_t DEV_KEY_ADDR1_CTL;             /*!< 0x00002020 Device key address 1 control */
-    __IOM uint32_t DEV_KEY_ADDR1;                 /*!< 0x00002024 Device key address 1 control */
-    __IM uint32_t RESERVED30[22];
-    __IM uint32_t DEV_KEY_STATUS;                /*!< 0x00002080 Device key status */
-    __IM uint32_t RESERVED31[31];
-    __IOM uint32_t DEV_KEY_CTL0;                  /*!< 0x00002100 Device key control 0 */
-    __IM uint32_t RESERVED32[7];
-    __IOM uint32_t DEV_KEY_CTL1;                  /*!< 0x00002120 Device key control 1 */
-    __IM uint32_t RESERVED33[6071];
-    __IOM uint32_t MEM_BUFF[8192];                /*!< 0x00008000 Memory buffer */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t RAM_PWR_CTL;                   /*!< 0x00000008 SRAM power control */
+  __IOM uint32_t RAM_PWR_DELAY_CTL;             /*!< 0x0000000C SRAM power delay control */
+  __IOM uint32_t ECC_CTL;                       /*!< 0x00000010 ECC control */
+   __IM uint32_t RESERVED1[3];
+   __IM uint32_t ERROR_STATUS0;                 /*!< 0x00000020 Error status 0 */
+  __IOM uint32_t ERROR_STATUS1;                 /*!< 0x00000024 Error status 1 */
+   __IM uint32_t RESERVED2[54];
+  __IOM uint32_t INTR;                          /*!< 0x00000100 Interrupt register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000104 Interrupt set register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000108 Interrupt mask register */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000010C Interrupt masked register */
+   __IM uint32_t RESERVED3[60];
+  __IOM uint32_t PR_LFSR_CTL0;                  /*!< 0x00000200 Pseudo random LFSR control 0 */
+  __IOM uint32_t PR_LFSR_CTL1;                  /*!< 0x00000204 Pseudo random LFSR control 1 */
+  __IOM uint32_t PR_LFSR_CTL2;                  /*!< 0x00000208 Pseudo random LFSR control 2 */
+  __IOM uint32_t PR_MAX_CTL;                    /*!< 0x0000020C Pseudo random maximum control */
+  __IOM uint32_t PR_CMD;                        /*!< 0x00000210 Pseudo random command */
+   __IM uint32_t RESERVED4;
+  __IOM uint32_t PR_RESULT;                     /*!< 0x00000218 Pseudo random result */
+   __IM uint32_t RESERVED5[25];
+  __IOM uint32_t TR_CTL0;                       /*!< 0x00000280 True random control 0 */
+  __IOM uint32_t TR_CTL1;                       /*!< 0x00000284 True random control 1 */
+  __IOM uint32_t TR_CTL2;                       /*!< 0x00000288 True random control 2 */
+   __IM uint32_t TR_STATUS;                     /*!< 0x0000028C True random status */
+  __IOM uint32_t TR_CMD;                        /*!< 0x00000290 True random command */
+   __IM uint32_t RESERVED6;
+  __IOM uint32_t TR_RESULT;                     /*!< 0x00000298 True random result */
+   __IM uint32_t RESERVED7;
+  __IOM uint32_t TR_GARO_CTL;                   /*!< 0x000002A0 True random GARO control */
+  __IOM uint32_t TR_FIRO_CTL;                   /*!< 0x000002A4 True random FIRO control */
+   __IM uint32_t RESERVED8[6];
+  __IOM uint32_t TR_MON_CTL;                    /*!< 0x000002C0 True random monitor control */
+   __IM uint32_t RESERVED9;
+  __IOM uint32_t TR_MON_CMD;                    /*!< 0x000002C8 True random monitor command */
+   __IM uint32_t RESERVED10;
+  __IOM uint32_t TR_MON_RC_CTL;                 /*!< 0x000002D0 True random monitor RC control */
+   __IM uint32_t RESERVED11;
+   __IM uint32_t TR_MON_RC_STATUS0;             /*!< 0x000002D8 True random monitor RC status 0 */
+   __IM uint32_t TR_MON_RC_STATUS1;             /*!< 0x000002DC True random monitor RC status 1 */
+  __IOM uint32_t TR_MON_AP_CTL;                 /*!< 0x000002E0 True random monitor AP control */
+   __IM uint32_t RESERVED12;
+   __IM uint32_t TR_MON_AP_STATUS0;             /*!< 0x000002E8 True random monitor AP status 0 */
+   __IM uint32_t TR_MON_AP_STATUS1;             /*!< 0x000002EC True random monitor AP status 1 */
+   __IM uint32_t RESERVED13[837];
+   __IM uint32_t STATUS;                        /*!< 0x00001004 Status */
+   __IM uint32_t RESERVED14[14];
+  __IOM uint32_t INSTR_FF_CTL;                  /*!< 0x00001040 Instruction FIFO control */
+   __IM uint32_t INSTR_FF_STATUS;               /*!< 0x00001044 Instruction FIFO status */
+   __OM uint32_t INSTR_FF_WR;                   /*!< 0x00001048 Instruction FIFO write */
+   __IM uint32_t RESERVED15[29];
+   __IM uint32_t LOAD0_FF_STATUS;               /*!< 0x000010C0 Load 0 FIFO status */
+   __IM uint32_t RESERVED16[3];
+   __IM uint32_t LOAD1_FF_STATUS;               /*!< 0x000010D0 Load 1 FIFO status */
+   __IM uint32_t RESERVED17[7];
+   __IM uint32_t STORE_FF_STATUS;               /*!< 0x000010F0 Store FIFO status */
+   __IM uint32_t RESERVED18[3];
+  __IOM uint32_t AES_CTL;                       /*!< 0x00001100 AES control */
+   __IM uint32_t RESERVED19[31];
+  __IOM uint32_t RESULT;                        /*!< 0x00001180 Result */
+   __IM uint32_t RESERVED20[159];
+  __IOM uint32_t CRC_CTL;                       /*!< 0x00001400 CRC control */
+   __IM uint32_t RESERVED21[3];
+  __IOM uint32_t CRC_DATA_CTL;                  /*!< 0x00001410 CRC data control */
+   __IM uint32_t RESERVED22[3];
+  __IOM uint32_t CRC_POL_CTL;                   /*!< 0x00001420 CRC polynomial control */
+   __IM uint32_t RESERVED23[7];
+  __IOM uint32_t CRC_REM_CTL;                   /*!< 0x00001440 CRC remainder control */
+   __IM uint32_t RESERVED24;
+   __IM uint32_t CRC_REM_RESULT;                /*!< 0x00001448 CRC remainder result */
+   __IM uint32_t RESERVED25[13];
+  __IOM uint32_t VU_CTL0;                       /*!< 0x00001480 Vector unit control 0 */
+  __IOM uint32_t VU_CTL1;                       /*!< 0x00001484 Vector unit control 1 */
+  __IOM uint32_t VU_CTL2;                       /*!< 0x00001488 Vector unit control 2 */
+   __IM uint32_t RESERVED26;
+   __IM uint32_t VU_STATUS;                     /*!< 0x00001490 Vector unit status */
+   __IM uint32_t RESERVED27[11];
+   __IM uint32_t VU_RF_DATA[16];                /*!< 0x000014C0 Vector unit register-file */
+   __IM uint32_t RESERVED28[704];
+  __IOM uint32_t DEV_KEY_ADDR0_CTL;             /*!< 0x00002000 Device key address 0 control */
+  __IOM uint32_t DEV_KEY_ADDR0;                 /*!< 0x00002004 Device key address 0 */
+   __IM uint32_t RESERVED29[6];
+  __IOM uint32_t DEV_KEY_ADDR1_CTL;             /*!< 0x00002020 Device key address 1 control */
+  __IOM uint32_t DEV_KEY_ADDR1;                 /*!< 0x00002024 Device key address 1 control */
+   __IM uint32_t RESERVED30[22];
+   __IM uint32_t DEV_KEY_STATUS;                /*!< 0x00002080 Device key status */
+   __IM uint32_t RESERVED31[31];
+  __IOM uint32_t DEV_KEY_CTL0;                  /*!< 0x00002100 Device key control 0 */
+   __IM uint32_t RESERVED32[7];
+  __IOM uint32_t DEV_KEY_CTL1;                  /*!< 0x00002120 Device key control 1 */
+   __IM uint32_t RESERVED33[6071];
+  __IOM uint32_t MEM_BUFF[8192];                /*!< 0x00008000 Memory buffer */
 } CRYPTO_V2_Type;                               /*!< Size = 65536 (0x10000) */
 
 

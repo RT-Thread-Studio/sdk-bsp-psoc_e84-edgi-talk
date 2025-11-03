@@ -1,6 +1,6 @@
 /**
  * \file ifx_se_fih.h
- * \version 1.1.0
+ * \version 1.2.0
  *
  * \brief Fault injection hardening module definitions.
  *
@@ -62,7 +62,7 @@
  * together. This also means that comparisons between ifx_se_fih_uints can be
  * verified by doing x == y && x_msk == y_msk.
  *
- * Makes all while(1) failure loops redirect to a global failure loop.
+ * Makes all while(1) failure loops redirect to a global failure loop. 
  * This loop has mitigations against loop escapes / unlooping.
  * This also means that any unlooping won't immediately continue executing the
  * function that was executing before the failure.
@@ -75,7 +75,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Directive 4.9', 4, \
-                             'Use function-like macro as simple inline functions.')
+    'Use function-like macro as simple inline functions.')
 
 /** \addtogroup fih
  * \{
@@ -89,9 +89,9 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Directive 4.9', 4, \
 #define IFX_SE_FIH_NEGATIVE_VALUE   (uint32_t)(0xAAAA5555U)
 
 #ifdef __DOXYGEN__
-#define IFX_SE_NOINLINE
+    #define IFX_SE_NOINLINE
 #else
-#define IFX_SE_NOINLINE                  __attribute__((noinline))
+    #define IFX_SE_NOINLINE                  __attribute__((noinline))
 #endif /* __DOXYGEN__ */
 
 /*
@@ -109,8 +109,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Directive 4.9', 4, \
  * All ints are replaced with two int - the normal one and a backup which is
  * XORed with the mask.
  */
-typedef struct
-{
+typedef struct {
     volatile uint32_t val;
     volatile uint32_t msk;
 } ifx_se_fih_uint;
@@ -491,8 +490,7 @@ ifx_se_fih_uint ifx_se_fih_uint_and(ifx_se_fih_uint x, ifx_se_fih_uint y)
 typedef ifx_se_fih_uint ifx_se_fih_t;
 
 /** Special pointer FIH type definition for SE RT Services transport */
-typedef struct
-{
+typedef struct {
     volatile uint32_t val;
     volatile uint32_t msk;
 } ifx_se_fih_ptr_t;
@@ -543,9 +541,9 @@ bool ifx_se_fih_ptr_validate(ifx_se_fih_ptr_t x)
 }
 
 CY_MISRA_DEVIATE_BLOCK_START('CERT INT36-C', 2, \
-                             'Intentional typecast between "void *" and "ifx_se_fih_ptr_t" types.')
+    'Intentional typecast between "void *" and "ifx_se_fih_ptr_t" types.')
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.6', 2, \
-                             'Intentional typecast between "void *" and "ifx_se_fih_ptr_t" types.')
+    'Intentional typecast between "void *" and "ifx_se_fih_ptr_t" types.')
 
 /*******************************************************************************
  * Function Name: ifx_se_fih_ptr_encode
@@ -574,7 +572,7 @@ ifx_se_fih_ptr_t ifx_se_fih_ptr_encode(const void *x)
  *
  ******************************************************************************/
 __STATIC_FORCEINLINE
-void *ifx_se_fih_ptr_decode(ifx_se_fih_ptr_t x)
+void * ifx_se_fih_ptr_decode(ifx_se_fih_ptr_t x)
 {
     (void)ifx_se_fih_ptr_validate(x);
     return (void *)(x.val);

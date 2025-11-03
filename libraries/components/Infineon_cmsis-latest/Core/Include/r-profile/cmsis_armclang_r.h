@@ -28,7 +28,7 @@
 #pragma clang system_header   /* treat file as system include file */
 
 #ifndef __CMSIS_ARMCLANG_H
-    #error "This file must not be included directly"
+  #error "This file must not be included directly"
 #endif
 
 
@@ -43,9 +43,9 @@
  */
 __STATIC_FORCEINLINE uint32_t __get_CPSR(void)
 {
-    uint32_t result;
-    __ASM volatile("MRS %0, cpsr" : "=r"(result));
-    return (result);
+  uint32_t result;
+  __ASM volatile("MRS %0, cpsr" : "=r" (result) );
+  return(result);
 }
 
 /** \brief  Set CPSR Register
@@ -53,7 +53,7 @@ __STATIC_FORCEINLINE uint32_t __get_CPSR(void)
  */
 __STATIC_FORCEINLINE void __set_CPSR(uint32_t cpsr)
 {
-    __ASM volatile("MSR cpsr, %0" : : "r"(cpsr) : "cc", "memory");
+  __ASM volatile ("MSR cpsr, %0" : : "r" (cpsr) : "cc", "memory");
 }
 
 /** \brief  Get Mode
@@ -61,7 +61,7 @@ __STATIC_FORCEINLINE void __set_CPSR(uint32_t cpsr)
  */
 __STATIC_FORCEINLINE uint32_t __get_mode(void)
 {
-    return (__get_CPSR() & 0x1FU);
+  return (__get_CPSR() & 0x1FU);
 }
 
 /** \brief  Set Mode
@@ -69,7 +69,7 @@ __STATIC_FORCEINLINE uint32_t __get_mode(void)
  */
 __STATIC_FORCEINLINE void __set_mode(uint32_t mode)
 {
-    __ASM volatile("MSR  cpsr_c, %0" : : "r"(mode) : "memory");
+  __ASM volatile("MSR  cpsr_c, %0" : : "r" (mode) : "memory");
 }
 
 /** \brief  Get Stack Pointer
@@ -77,9 +77,9 @@ __STATIC_FORCEINLINE void __set_mode(uint32_t mode)
  */
 __STATIC_FORCEINLINE uint32_t __get_SP(void)
 {
-    uint32_t result;
-    __ASM volatile("MOV  %0, sp" : "=r"(result) : : "memory");
-    return result;
+  uint32_t result;
+  __ASM volatile("MOV  %0, sp" : "=r" (result) : : "memory");
+  return result;
 }
 
 /** \brief  Set Stack Pointer
@@ -87,7 +87,7 @@ __STATIC_FORCEINLINE uint32_t __get_SP(void)
  */
 __STATIC_FORCEINLINE void __set_SP(uint32_t stack)
 {
-    __ASM volatile("MOV  sp, %0" : : "r"(stack) : "memory");
+  __ASM volatile("MOV  sp, %0" : : "r" (stack) : "memory");
 }
 
 /** \brief  Get USR/SYS Stack Pointer
@@ -95,16 +95,16 @@ __STATIC_FORCEINLINE void __set_SP(uint32_t stack)
  */
 __STATIC_FORCEINLINE uint32_t __get_SP_usr(void)
 {
-    uint32_t cpsr;
-    uint32_t result;
-    __ASM volatile(
-        "MRS     %0, cpsr   \n"
-        "CPS     #0x1F      \n" // no effect in USR mode
-        "MOV     %1, sp     \n"
-        "MSR     cpsr_c, %0 \n" // no effect in USR mode
-        "ISB" :  "=r"(cpsr), "=r"(result) : : "memory"
-    );
-    return result;
+  uint32_t cpsr;
+  uint32_t result;
+  __ASM volatile(
+    "MRS     %0, cpsr   \n"
+    "CPS     #0x1F      \n" // no effect in USR mode
+    "MOV     %1, sp     \n"
+    "MSR     cpsr_c, %0 \n" // no effect in USR mode
+    "ISB" :  "=r"(cpsr), "=r"(result) : : "memory"
+   );
+  return result;
 }
 
 /** \brief  Set USR/SYS Stack Pointer
@@ -112,14 +112,14 @@ __STATIC_FORCEINLINE uint32_t __get_SP_usr(void)
  */
 __STATIC_FORCEINLINE void __set_SP_usr(uint32_t topOfProcStack)
 {
-    uint32_t cpsr;
-    __ASM volatile(
-        "MRS     %0, cpsr   \n"
-        "CPS     #0x1F      \n" // no effect in USR mode
-        "MOV     sp, %1     \n"
-        "MSR     cpsr_c, %0 \n" // no effect in USR mode
-        "ISB" : "=r"(cpsr) : "r"(topOfProcStack) : "memory"
-    );
+  uint32_t cpsr;
+  __ASM volatile(
+    "MRS     %0, cpsr   \n"
+    "CPS     #0x1F      \n" // no effect in USR mode
+    "MOV     sp, %1     \n"
+    "MSR     cpsr_c, %0 \n" // no effect in USR mode
+    "ISB" : "=r"(cpsr) : "r" (topOfProcStack) : "memory"
+   );
 }
 
 /** \brief  Get FPEXC
@@ -128,11 +128,11 @@ __STATIC_FORCEINLINE void __set_SP_usr(uint32_t topOfProcStack)
 __STATIC_FORCEINLINE uint32_t __get_FPEXC(void)
 {
 #if (__FPU_PRESENT == 1)
-    uint32_t result;
-    __ASM volatile("VMRS %0, fpexc" : "=r"(result) : : "memory");
-    return (result);
+  uint32_t result;
+  __ASM volatile("VMRS %0, fpexc" : "=r" (result) : : "memory");
+  return(result);
 #else
-    return (0);
+  return(0);
 #endif
 }
 
@@ -142,7 +142,7 @@ __STATIC_FORCEINLINE uint32_t __get_FPEXC(void)
 __STATIC_FORCEINLINE void __set_FPEXC(uint32_t fpexc)
 {
 #if (__FPU_PRESENT == 1)
-    __ASM volatile("VMSR fpexc, %0" : : "r"(fpexc) : "memory");
+  __ASM volatile ("VMSR fpexc, %0" : : "r" (fpexc) : "memory");
 #endif
 }
 

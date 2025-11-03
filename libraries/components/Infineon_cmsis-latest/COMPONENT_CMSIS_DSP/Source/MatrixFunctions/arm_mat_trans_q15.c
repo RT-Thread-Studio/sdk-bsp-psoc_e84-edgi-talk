@@ -45,187 +45,186 @@
                    - \ref ARM_MATH_SUCCESS       : Operation successful
                    - \ref ARM_MATH_SIZE_MISMATCH : Matrix size check failed
  */
-
+ 
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
 
 
-arm_status arm_mat_trans_q15(
-    const arm_matrix_instance_q15 * pSrc,
-    arm_matrix_instance_q15 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_trans_q15(
+  const arm_matrix_instance_q15 * pSrc,
+        arm_matrix_instance_q15 * pDst)
 {
-    arm_status status;                             /* status of matrix transpose */
+  arm_status status;                             /* status of matrix transpose */
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numCols) ||
-            (pSrc->numCols != pDst->numRows))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numCols) ||
+      (pSrc->numCols != pDst->numRows)   )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
 
+  {
+    if (pDst->numRows == pDst->numCols)
     {
-        if (pDst->numRows == pDst->numCols)
+        if (pDst->numCols == 1)
         {
-            if (pDst->numCols == 1)
-            {
-                pDst->pData[0] = pSrc->pData[0];
-                return (ARM_MATH_SUCCESS);
-            }
-            if (pDst->numCols == 2)
-                return arm_mat_trans_16bit_2x2((uint16_t  *)pSrc->pData, (uint16_t  *)pDst->pData);
-            if (pDst->numCols == 3)
-                return arm_mat_trans_16bit_3x3_mve((uint16_t  *)pSrc->pData, (uint16_t  *)pDst->pData);
-            if (pDst->numCols == 4)
-                return arm_mat_trans_16bit_4x4_mve((uint16_t  *)pSrc->pData, (uint16_t  *)pDst->pData);
+          pDst->pData[0] = pSrc->pData[0];
+          return(ARM_MATH_SUCCESS);
         }
-
-        arm_mat_trans_16bit_generic(pSrc->numRows, pSrc->numCols, (uint16_t  *)pSrc->pData, (uint16_t  *)pDst->pData);
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
+        if (pDst->numCols == 2)
+            return arm_mat_trans_16bit_2x2((uint16_t  *)pSrc->pData, (uint16_t  *)pDst->pData);
+        if (pDst->numCols == 3)
+            return arm_mat_trans_16bit_3x3_mve((uint16_t  *)pSrc->pData, (uint16_t  *)pDst->pData);
+        if (pDst->numCols == 4)
+            return arm_mat_trans_16bit_4x4_mve((uint16_t  *)pSrc->pData, (uint16_t  *)pDst->pData);
     }
 
-    /* Return to application */
-    return (status);
+    arm_mat_trans_16bit_generic(pSrc->numRows, pSrc->numCols, (uint16_t  *)pSrc->pData, (uint16_t  *)pDst->pData);
+      /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
+
+  /* Return to application */
+  return (status);
 }
 #else
-arm_status arm_mat_trans_q15(
-    const arm_matrix_instance_q15 * pSrc,
-    arm_matrix_instance_q15 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_trans_q15(
+  const arm_matrix_instance_q15 * pSrc,
+        arm_matrix_instance_q15 * pDst)
 {
-    q15_t *pIn = pSrc->pData;                      /* input data matrix pointer */
-    q15_t *pOut = pDst->pData;                     /* output data matrix pointer */
-    uint16_t nRows = pSrc->numRows;                /* number of rows */
-    uint16_t nCols = pSrc->numCols;                /* number of columns */
-    uint32_t col, row = nRows, i = 0U;             /* Loop counters */
-    arm_status status;                             /* status of matrix transpose */
+        q15_t *pIn = pSrc->pData;                      /* input data matrix pointer */
+        q15_t *pOut = pDst->pData;                     /* output data matrix pointer */
+        uint16_t nRows = pSrc->numRows;                /* number of rows */
+        uint16_t nCols = pSrc->numCols;                /* number of columns */
+        uint32_t col, row = nRows, i = 0U;             /* Loop counters */
+        arm_status status;                             /* status of matrix transpose */
 
 #if defined (ARM_MATH_LOOPUNROLL)
-    q31_t in;                                      /* variable to hold temporary output  */
+        q31_t in;                                      /* variable to hold temporary output  */
 #endif
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numCols) ||
-            (pSrc->numCols != pDst->numRows))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numCols) ||
+      (pSrc->numCols != pDst->numRows)   )
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 
 #endif /* #ifdef ARM_MATH_MATRIX_CHECK */
 
+  {
+    /* Matrix transpose by exchanging the rows with columns */
+    /* row loop */
+    do
     {
-        /* Matrix transpose by exchanging the rows with columns */
-        /* row loop */
-        do
-        {
-            /* Pointer pOut is set to starting address of column being processed */
-            pOut = pDst->pData + i;
+      /* Pointer pOut is set to starting address of column being processed */
+      pOut = pDst->pData + i;
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-            /* Loop unrolling: Compute 4 outputs at a time */
-            col = nCols >> 2U;
+      /* Loop unrolling: Compute 4 outputs at a time */
+      col = nCols >> 2U;
 
-            while (col > 0U)        /* column loop */
-            {
-                /* Read two elements from row */
-                in = read_q15x2_ia(&pIn);
+      while (col > 0U)        /* column loop */
+      {
+        /* Read two elements from row */
+        in = read_q15x2_ia (&pIn);
 
-                /* Unpack and store one element in  destination */
+        /* Unpack and store one element in  destination */
 #ifndef ARM_MATH_BIG_ENDIAN
-                *pOut = (q15_t) in;
+        *pOut = (q15_t) in;
 #else
-                *pOut = (q15_t)((in & (q31_t) 0xffff0000) >> 16);
+        *pOut = (q15_t) ((in & (q31_t) 0xffff0000) >> 16);
 #endif /* #ifndef ARM_MATH_BIG_ENDIAN */
 
-                /* Update pointer pOut to point to next row of transposed matrix */
-                pOut += nRows;
+        /* Update pointer pOut to point to next row of transposed matrix */
+        pOut += nRows;
 
-                /* Unpack and store second element in destination */
+        /* Unpack and store second element in destination */
 #ifndef ARM_MATH_BIG_ENDIAN
-                *pOut = (q15_t)((in & (q31_t) 0xffff0000) >> 16);
+        *pOut = (q15_t) ((in & (q31_t) 0xffff0000) >> 16);
 #else
-                *pOut = (q15_t) in;
+        *pOut = (q15_t) in;
 #endif /* #ifndef ARM_MATH_BIG_ENDIAN */
 
-                /* Update  pointer pOut to point to next row of transposed matrix */
-                pOut += nRows;
+        /* Update  pointer pOut to point to next row of transposed matrix */
+        pOut += nRows;
 
-                /* Read two elements from row */
-                in = read_q15x2_ia(&pIn);
+        /* Read two elements from row */
+        in = read_q15x2_ia (&pIn);
 
-                /* Unpack and store one element in destination */
+        /* Unpack and store one element in destination */
 #ifndef ARM_MATH_BIG_ENDIAN
-                *pOut = (q15_t) in;
+        *pOut = (q15_t) in;
 #else
-                *pOut = (q15_t)((in & (q31_t) 0xffff0000) >> 16);
+        *pOut = (q15_t) ((in & (q31_t) 0xffff0000) >> 16);
 
 #endif /* #ifndef ARM_MATH_BIG_ENDIAN */
 
-                /* Update pointer pOut to point to next row of transposed matrix */
-                pOut += nRows;
+        /* Update pointer pOut to point to next row of transposed matrix */
+        pOut += nRows;
 
-                /* Unpack and store second element in destination */
+        /* Unpack and store second element in destination */
 #ifndef ARM_MATH_BIG_ENDIAN
-                *pOut = (q15_t)((in & (q31_t) 0xffff0000) >> 16);
+        *pOut = (q15_t) ((in & (q31_t) 0xffff0000) >> 16);
 #else
-                *pOut = (q15_t) in;
+        *pOut = (q15_t) in;
 #endif /* #ifndef ARM_MATH_BIG_ENDIAN */
 
-                /* Update pointer pOut to point to next row of transposed matrix */
-                pOut += nRows;
+        /* Update pointer pOut to point to next row of transposed matrix */
+        pOut += nRows;
 
-                /* Decrement column loop counter */
-                col--;
-            }
+        /* Decrement column loop counter */
+        col--;
+      }
 
-            /* Loop unrolling: Compute remaining outputs */
-            col = nCols % 0x4U;
+      /* Loop unrolling: Compute remaining outputs */
+      col = nCols % 0x4U;
 
 #else
 
-            /* Initialize col with number of samples */
-            col = nCols;
+      /* Initialize col with number of samples */
+      col = nCols;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-            while (col > 0U)
-            {
-                /* Read and store input element in destination */
-                *pOut = *pIn++;
+      while (col > 0U)
+      {
+        /* Read and store input element in destination */
+        *pOut = *pIn++;
 
-                /* Update pointer pOut to point to next row of transposed matrix */
-                pOut += nRows;
+        /* Update pointer pOut to point to next row of transposed matrix */
+        pOut += nRows;
 
-                /* Decrement column loop counter */
-                col--;
-            }
+        /* Decrement column loop counter */
+        col--;
+      }
 
-            i++;
+      i++;
 
-            /* Decrement row loop counter */
-            row--;
+      /* Decrement row loop counter */
+      row--;
 
-        }
-        while (row > 0U);            /* row loop end */
+    } while (row > 0U);          /* row loop end */
 
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
-    }
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
 
-    /* Return to application */
-    return (status);
+  /* Return to application */
+  return (status);
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

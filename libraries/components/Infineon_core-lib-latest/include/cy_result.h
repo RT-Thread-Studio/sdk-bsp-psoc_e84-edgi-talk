@@ -320,6 +320,8 @@ typedef enum
     CY_RSLT_MODULE_DRIVER_DSADC = 0x0050,
     /** Module identifier for the CAN2.0B driver. Asset(s): (mtb-pdl-cat2) */
     CY_RSLT_MODULE_DRIVER_CAN2B = 0x0051,
+    /** Module identifier for the ISOUART driver. Asset(s): (mtb-pdl-cat2) */
+    CY_RSLT_MODULE_DRIVER_ISOUART = 0x0052,
     /** Module identifier for the Key Scan driver. Asset(s): (mtb-pdl-cat1) */
     CY_RSLT_MODULE_DRIVER_KEYSCAN = 0x0072,
     /** Module identifier for the PDM-PCM v2 driver. Asset(s): (mtb-pdl-cat1) */
@@ -347,9 +349,9 @@ typedef enum
     /** Module identifier for RTOS abstraction. Asset(s): (abstraction-rtos) */
     CY_RSLT_MODULE_ABSTRACTION_OS = 0x0183,
     /** Module identifier for Data Streaming abstraction. Asset(s): (data-streaming) */
-    CY_RSLT_MODULE_ABSTRACTION_DATA_STREAMING = 0x0184,
+    CY_RSLT_MODULE_ABSTRACTION_DATA_STREAMING= 0x0184,
     /** Module identifier for Block storage abstraction. Asset(s): (block-storage) */
-    CY_RSLT_MODULE_ABSTRACTION_BLOCK_STORAGE = 0x0185,
+    CY_RSLT_MODULE_ABSTRACTION_BLOCK_STORAGE= 0x0185,
 
     /** Module identifier for the Retarget IO Board Library. Asset(s): (retarget-io) */
     CY_RSLT_MODULE_BOARD_LIB_RETARGET_IO = 0x1A0,
@@ -462,7 +464,11 @@ typedef enum
     /** Module identifier for the MTB IPC Utility Library. Asset(s): (mtb-ipc) */
     CY_RSLT_MODULE_MIDDLEWARE_IPC = 0x0257,
     /** Module identifier for the MTB AFX Library. Asset(s): (afx) */
-    CY_RSLT_MODULE_MIDDLEWARE_AFX = 0x0258
+    CY_RSLT_MODULE_MIDDLEWARE_AFX = 0x0258,
+    /** Module identifier for the MTB Secure Request Framework. Asset(s): (mtb-srf) */
+    CY_RSLT_MODULE_MIDDLEWARE_SRF = 0x0259,
+    /** Module identifier for the MTB PMBus Middleware Library. Asset(s): (mtb-pmbus) */
+    CY_RSLT_MODULE_MIDDLEWARE_PMBUS = 0x025a
 } cy_en_rslt_module_t;
 
 /** \} modules */
@@ -496,10 +502,8 @@ typedef union
     /** Anonymous struct breaking out each of the fields of the result type */
     struct
     {
-        uint16_t code :
-        CY_RSLT_CODE_WIDTH;                 //!< The 16bit result code
-        cy_en_rslt_type_t type :
-        CY_RSLT_TYPE_WIDTH;        //!< The  2bit result type
+        uint16_t code : CY_RSLT_CODE_WIDTH;                 //!< The 16bit result code
+        cy_en_rslt_type_t type : CY_RSLT_TYPE_WIDTH;        //!< The  2bit result type
         cy_en_rslt_module_t module : CY_RSLT_MODULE_WIDTH;  //!< The 14bit module id
     };
 } cy_rslt_decode_t;

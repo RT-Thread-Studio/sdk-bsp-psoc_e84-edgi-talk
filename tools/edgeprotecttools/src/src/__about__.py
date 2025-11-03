@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 __pkg_name__ = 'EdgeProtectTools'
-__version__ = '1.5.0'
+__version__ = '1.6.1'
 __pkg_author__ = 'Infineon Technologies AG'
 __pkg_short_name__ = 'E'
 __github_url__ = 'https://github.com/Infineon/edgeprotecttools'

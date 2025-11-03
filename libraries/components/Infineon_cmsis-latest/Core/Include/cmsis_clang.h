@@ -28,92 +28,92 @@
 #pragma clang system_header   /* treat file as system include file */
 
 #if (__ARM_ACLE >= 200)
-    #include <arm_acle.h>
+  #include <arm_acle.h>
 #else
-    #error Compiler must support ACLE V2.0
+  #error Compiler must support ACLE V2.0
 #endif /* (__ARM_ACLE >= 200) */
 
 /* Fallback for __has_builtin */
 #ifndef __has_builtin
-    #define __has_builtin(x) (0)
+  #define __has_builtin(x) (0)
 #endif
 
 /* CMSIS compiler specific defines */
 #ifndef   __ASM
-    #define __ASM                                  __asm
+  #define __ASM                                  __asm
 #endif
 #ifndef   __INLINE
-    #define __INLINE                               inline
+  #define __INLINE                               inline
 #endif
 #ifndef   __STATIC_INLINE
-    #define __STATIC_INLINE                        static inline
+  #define __STATIC_INLINE                        static inline
 #endif
 #ifndef   __STATIC_FORCEINLINE
-    #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
+  #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
 #endif
 #ifndef   __NO_RETURN
-    #define __NO_RETURN                            __attribute__((__noreturn__))
+  #define __NO_RETURN                            __attribute__((__noreturn__))
 #endif
 #ifndef   CMSIS_DEPRECATED
-    #define CMSIS_DEPRECATED                       __attribute__((deprecated))
+  #define CMSIS_DEPRECATED                       __attribute__((deprecated))
 #endif
 #ifndef   __USED
-    #define __USED                                 __attribute__((used))
+  #define __USED                                 __attribute__((used))
 #endif
 #ifndef   __WEAK
-    #define __WEAK                                 __attribute__((weak))
+  #define __WEAK                                 __attribute__((weak))
 #endif
 #ifndef   __PACKED
-    #define __PACKED                               __attribute__((packed, aligned(1)))
+  #define __PACKED                               __attribute__((packed, aligned(1)))
 #endif
 #ifndef   __PACKED_STRUCT
-    #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
+  #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
 #endif
 #ifndef   __PACKED_UNION
-    #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
+  #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
 #endif
 #ifndef   __UNALIGNED_UINT16_WRITE
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpacked"
-__PACKED_STRUCT T_UINT16_WRITE { uint16_t v; };
-#pragma clang diagnostic pop
-#define __UNALIGNED_UINT16_WRITE(addr, val)    (void)((((struct T_UINT16_WRITE *)(void *)(addr))->v) = (val))
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wpacked"
+  __PACKED_STRUCT T_UINT16_WRITE { uint16_t v; };
+  #pragma clang diagnostic pop
+  #define __UNALIGNED_UINT16_WRITE(addr, val)    (void)((((struct T_UINT16_WRITE *)(void *)(addr))->v) = (val))
 #endif
 #ifndef   __UNALIGNED_UINT16_READ
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpacked"
-__PACKED_STRUCT T_UINT16_READ { uint16_t v; };
-#pragma clang diagnostic pop
-#define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(addr))->v)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wpacked"
+  __PACKED_STRUCT T_UINT16_READ { uint16_t v; };
+  #pragma clang diagnostic pop
+  #define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(addr))->v)
 #endif
 #ifndef   __UNALIGNED_UINT32_WRITE
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpacked"
-__PACKED_STRUCT T_UINT32_WRITE { uint32_t v; };
-#pragma clang diagnostic pop
-#define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))->v) = (val))
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wpacked"
+  __PACKED_STRUCT T_UINT32_WRITE { uint32_t v; };
+  #pragma clang diagnostic pop
+  #define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))->v) = (val))
 #endif
 #ifndef   __UNALIGNED_UINT32_READ
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpacked"
-__PACKED_STRUCT T_UINT32_READ { uint32_t v; };
-#pragma clang diagnostic pop
-#define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(addr))->v)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wpacked"
+  __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
+  #pragma clang diagnostic pop
+  #define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(addr))->v)
 #endif
 #ifndef   __ALIGNED
-    #define __ALIGNED(x)                           __attribute__((aligned(x)))
+  #define __ALIGNED(x)                           __attribute__((aligned(x)))
 #endif
 #ifndef   __RESTRICT
-    #define __RESTRICT                             __restrict
+  #define __RESTRICT                             __restrict
 #endif
 #ifndef   __COMPILER_BARRIER
-    #define __COMPILER_BARRIER()                   __ASM volatile("":::"memory")
+  #define __COMPILER_BARRIER()                   __ASM volatile("":::"memory")
 #endif
 #ifndef __NO_INIT
-    #define __NO_INIT                              __attribute__ ((section (".noinit")))
+  #define __NO_INIT                              __attribute__ ((section (".noinit")))
 #endif
 #ifndef __ALIAS
-    #define __ALIAS(x)                             __attribute__ ((alias(x)))
+  #define __ALIAS(x)                             __attribute__ ((alias(x)))
 #endif
 
 /* ##########################  Core Instruction Access  ######################### */
@@ -126,13 +126,13 @@ __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
  * For thumb1, use low register (r0-r7), specified by constraint "l"
  * Otherwise, use general registers, specified by constraint "r" */
 #if defined (__thumb__) && !defined (__thumb2__)
-    #define __CMSIS_GCC_OUT_REG(r) "=l" (r)
-    #define __CMSIS_GCC_RW_REG(r) "+l" (r)
-    #define __CMSIS_GCC_USE_REG(r) "l" (r)
+#define __CMSIS_GCC_OUT_REG(r) "=l" (r)
+#define __CMSIS_GCC_RW_REG(r) "+l" (r)
+#define __CMSIS_GCC_USE_REG(r) "l" (r)
 #else
-    #define __CMSIS_GCC_OUT_REG(r) "=r" (r)
-    #define __CMSIS_GCC_RW_REG(r) "+r" (r)
-    #define __CMSIS_GCC_USE_REG(r) "r" (r)
+#define __CMSIS_GCC_OUT_REG(r) "=r" (r)
+#define __CMSIS_GCC_RW_REG(r) "+r" (r)
+#define __CMSIS_GCC_USE_REG(r) "r" (r)
 #endif
 
 /**
@@ -286,20 +286,20 @@ __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
  */
 __STATIC_FORCEINLINE int32_t __SSAT(int32_t val, uint32_t sat)
 {
-    if ((sat >= 1U) && (sat <= 32U))
+  if ((sat >= 1U) && (sat <= 32U))
+  {
+    const int32_t max = (int32_t)((1U << (sat - 1U)) - 1U);
+    const int32_t min = -1 - max ;
+    if (val > max)
     {
-        const int32_t max = (int32_t)((1U << (sat - 1U)) - 1U);
-        const int32_t min = -1 - max ;
-        if (val > max)
-        {
-            return (max);
-        }
-        else if (val < min)
-        {
-            return (min);
-        }
+      return (max);
     }
-    return (val);
+    else if (val < min)
+    {
+      return (min);
+    }
+  }
+  return (val);
 }
 
 
@@ -312,93 +312,93 @@ __STATIC_FORCEINLINE int32_t __SSAT(int32_t val, uint32_t sat)
  */
 __STATIC_FORCEINLINE uint32_t __USAT(int32_t val, uint32_t sat)
 {
-    if (sat <= 31U)
+  if (sat <= 31U)
+  {
+    const uint32_t max = ((1U << sat) - 1U);
+    if (val > (int32_t)max)
     {
-        const uint32_t max = ((1U << sat) - 1U);
-        if (val > (int32_t)max)
-        {
-            return (max);
-        }
-        else if (val < 0)
-        {
-            return (0U);
-        }
+      return (max);
     }
-    return ((uint32_t)val);
+    else if (val < 0)
+    {
+      return (0U);
+    }
+  }
+  return ((uint32_t)val);
 }
 #endif /* (__ARM_FEATURE_SAT >= 1) */
 
 
 #if (__ARM_FEATURE_LDREX >= 1)
-    /**
-    \brief   Remove the exclusive lock
-    \details Removes the exclusive lock which is created by LDREX.
-    */
-    #define __CLREX             __builtin_arm_clrex
+/**
+  \brief   Remove the exclusive lock
+  \details Removes the exclusive lock which is created by LDREX.
+ */
+#define __CLREX             __builtin_arm_clrex
 
 
-    /**
-    \brief   LDR Exclusive (8 bit)
-    \details Executes a exclusive LDR instruction for 8 bit value.
-    \param [in]    ptr  Pointer to data
-    \return             value of type uint8_t at (*ptr)
-    */
-    #define __LDREXB        (uint8_t)__builtin_arm_ldrex
+/**
+  \brief   LDR Exclusive (8 bit)
+  \details Executes a exclusive LDR instruction for 8 bit value.
+  \param [in]    ptr  Pointer to data
+  \return             value of type uint8_t at (*ptr)
+ */
+#define __LDREXB        (uint8_t)__builtin_arm_ldrex
 
 
-    /**
-    \brief   STR Exclusive (8 bit)
-    \details Executes a exclusive STR instruction for 8 bit values.
-    \param [in]  value  Value to store
-    \param [in]    ptr  Pointer to location
-    \return          0  Function succeeded
-    \return          1  Function failed
-    */
-    #define __STREXB        (uint32_t)__builtin_arm_strex
+/**
+  \brief   STR Exclusive (8 bit)
+  \details Executes a exclusive STR instruction for 8 bit values.
+  \param [in]  value  Value to store
+  \param [in]    ptr  Pointer to location
+  \return          0  Function succeeded
+  \return          1  Function failed
+ */
+#define __STREXB        (uint32_t)__builtin_arm_strex
 #endif /* (__ARM_FEATURE_LDREX >= 1) */
 
 
 #if (__ARM_FEATURE_LDREX >= 2)
-    /**
-    \brief   LDR Exclusive (16 bit)
-    \details Executes a exclusive LDR instruction for 16 bit values.
-    \param [in]    ptr  Pointer to data
-    \return        value of type uint16_t at (*ptr)
-    */
-    #define __LDREXH        (uint16_t)__builtin_arm_ldrex
+/**
+  \brief   LDR Exclusive (16 bit)
+  \details Executes a exclusive LDR instruction for 16 bit values.
+  \param [in]    ptr  Pointer to data
+  \return        value of type uint16_t at (*ptr)
+ */
+#define __LDREXH        (uint16_t)__builtin_arm_ldrex
 
 
-    /**
-    \brief   STR Exclusive (16 bit)
-    \details Executes a exclusive STR instruction for 16 bit values.
-    \param [in]  value  Value to store
-    \param [in]    ptr  Pointer to location
-    \return          0  Function succeeded
-    \return          1  Function failed
-    */
-    #define __STREXH        (uint32_t)__builtin_arm_strex
+/**
+  \brief   STR Exclusive (16 bit)
+  \details Executes a exclusive STR instruction for 16 bit values.
+  \param [in]  value  Value to store
+  \param [in]    ptr  Pointer to location
+  \return          0  Function succeeded
+  \return          1  Function failed
+ */
+#define __STREXH        (uint32_t)__builtin_arm_strex
 #endif /* (__ARM_FEATURE_LDREX >= 2) */
 
 
 #if (__ARM_FEATURE_LDREX >= 4)
-    /**
-    \brief   LDR Exclusive (32 bit)
-    \details Executes a exclusive LDR instruction for 32 bit values.
-    \param [in]    ptr  Pointer to data
-    \return        value of type uint32_t at (*ptr)
-    */
-    #define __LDREXW        (uint32_t)__builtin_arm_ldrex
+/**
+  \brief   LDR Exclusive (32 bit)
+  \details Executes a exclusive LDR instruction for 32 bit values.
+  \param [in]    ptr  Pointer to data
+  \return        value of type uint32_t at (*ptr)
+ */
+#define __LDREXW        (uint32_t)__builtin_arm_ldrex
 
 
-    /**
-    \brief   STR Exclusive (32 bit)
-    \details Executes a exclusive STR instruction for 32 bit values.
-    \param [in]  value  Value to store
-    \param [in]    ptr  Pointer to location
-    \return          0  Function succeeded
-    \return          1  Function failed
-    */
-    #define __STREXW        (uint32_t)__builtin_arm_strex
+/**
+  \brief   STR Exclusive (32 bit)
+  \details Executes a exclusive STR instruction for 32 bit values.
+  \param [in]  value  Value to store
+  \param [in]    ptr  Pointer to location
+  \return          0  Function succeeded
+  \return          1  Function failed
+ */
+#define __STREXW        (uint32_t)__builtin_arm_strex
 #endif /* (__ARM_FEATURE_LDREX >= 4) */
 
 
@@ -412,10 +412,10 @@ __STATIC_FORCEINLINE uint32_t __USAT(int32_t val, uint32_t sat)
  */
 __STATIC_FORCEINLINE uint32_t __RRX(uint32_t value)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("rrx %0, %1" : "=r"(result) : "r"(value));
-    return (result);
+  __ASM volatile ("rrx %0, %1" : "=r" (result) : "r" (value));
+  return (result);
 }
 
 
@@ -427,10 +427,10 @@ __STATIC_FORCEINLINE uint32_t __RRX(uint32_t value)
  */
 __STATIC_FORCEINLINE uint8_t __LDRBT(volatile uint8_t *ptr)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("ldrbt %0, %1" : "=r"(result) : "Q"(*ptr));
-    return ((uint8_t)result);    /* Add explicit type cast here */
+  __ASM volatile ("ldrbt %0, %1" : "=r" (result) : "Q" (*ptr) );
+  return ((uint8_t)result);    /* Add explicit type cast here */
 }
 
 
@@ -442,10 +442,10 @@ __STATIC_FORCEINLINE uint8_t __LDRBT(volatile uint8_t *ptr)
  */
 __STATIC_FORCEINLINE uint16_t __LDRHT(volatile uint16_t *ptr)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("ldrht %0, %1" : "=r"(result) : "Q"(*ptr));
-    return ((uint16_t)result);    /* Add explicit type cast here */
+  __ASM volatile ("ldrht %0, %1" : "=r" (result) : "Q" (*ptr) );
+  return ((uint16_t)result);    /* Add explicit type cast here */
 }
 
 
@@ -457,10 +457,10 @@ __STATIC_FORCEINLINE uint16_t __LDRHT(volatile uint16_t *ptr)
  */
 __STATIC_FORCEINLINE uint32_t __LDRT(volatile uint32_t *ptr)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("ldrt %0, %1" : "=r"(result) : "Q"(*ptr));
-    return (result);
+  __ASM volatile ("ldrt %0, %1" : "=r" (result) : "Q" (*ptr) );
+  return (result);
 }
 #endif /* (__ARM_ARCH_ISA_THUMB >= 2) */
 
@@ -474,10 +474,10 @@ __STATIC_FORCEINLINE uint32_t __LDRT(volatile uint32_t *ptr)
  */
 __STATIC_FORCEINLINE uint8_t __LDAB(volatile uint8_t *ptr)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("ldab %0, %1" : "=r"(result) : "Q"(*ptr) : "memory");
-    return ((uint8_t)result);    /* Add explicit type cast here */
+  __ASM volatile ("ldab %0, %1" : "=r" (result) : "Q" (*ptr) : "memory" );
+  return ((uint8_t)result);    /* Add explicit type cast here */
 }
 
 
@@ -489,10 +489,10 @@ __STATIC_FORCEINLINE uint8_t __LDAB(volatile uint8_t *ptr)
  */
 __STATIC_FORCEINLINE uint16_t __LDAH(volatile uint16_t *ptr)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("ldah %0, %1" : "=r"(result) : "Q"(*ptr) : "memory");
-    return ((uint16_t)result);    /* Add explicit type cast here */
+  __ASM volatile ("ldah %0, %1" : "=r" (result) : "Q" (*ptr) : "memory" );
+  return ((uint16_t)result);    /* Add explicit type cast here */
 }
 
 
@@ -504,10 +504,10 @@ __STATIC_FORCEINLINE uint16_t __LDAH(volatile uint16_t *ptr)
  */
 __STATIC_FORCEINLINE uint32_t __LDA(volatile uint32_t *ptr)
 {
-    uint32_t result;
+  uint32_t result;
 
-    __ASM volatile("lda %0, %1" : "=r"(result) : "Q"(*ptr) : "memory");
-    return (result);
+  __ASM volatile ("lda %0, %1" : "=r" (result) : "Q" (*ptr) : "memory" );
+  return (result);
 }
 
 
@@ -519,7 +519,7 @@ __STATIC_FORCEINLINE uint32_t __LDA(volatile uint32_t *ptr)
  */
 __STATIC_FORCEINLINE void __STLB(uint8_t value, volatile uint8_t *ptr)
 {
-    __ASM volatile("stlb %1, %0" : "=Q"(*ptr) : "r"((uint32_t)value) : "memory");
+  __ASM volatile ("stlb %1, %0" : "=Q" (*ptr) : "r" ((uint32_t)value) : "memory" );
 }
 
 
@@ -531,7 +531,7 @@ __STATIC_FORCEINLINE void __STLB(uint8_t value, volatile uint8_t *ptr)
  */
 __STATIC_FORCEINLINE void __STLH(uint16_t value, volatile uint16_t *ptr)
 {
-    __ASM volatile("stlh %1, %0" : "=Q"(*ptr) : "r"((uint32_t)value) : "memory");
+  __ASM volatile ("stlh %1, %0" : "=Q" (*ptr) : "r" ((uint32_t)value) : "memory" );
 }
 
 
@@ -543,7 +543,7 @@ __STATIC_FORCEINLINE void __STLH(uint16_t value, volatile uint16_t *ptr)
  */
 __STATIC_FORCEINLINE void __STL(uint32_t value, volatile uint32_t *ptr)
 {
-    __ASM volatile("stl %1, %0" : "=Q"(*ptr) : "r"((uint32_t)value) : "memory");
+  __ASM volatile ("stl %1, %0" : "=Q" (*ptr) : "r" ((uint32_t)value) : "memory" );
 }
 
 
@@ -624,7 +624,7 @@ __STATIC_FORCEINLINE void __STL(uint32_t value, volatile uint32_t *ptr)
  */
 __STATIC_FORCEINLINE void __enable_irq(void)
 {
-    __ASM volatile("cpsie i" : : : "memory");
+  __ASM volatile ("cpsie i" : : : "memory");
 }
 
 
@@ -635,7 +635,7 @@ __STATIC_FORCEINLINE void __enable_irq(void)
  */
 __STATIC_FORCEINLINE void __disable_irq(void)
 {
-    __ASM volatile("cpsid i" : : : "memory");
+  __ASM volatile ("cpsid i" : : : "memory");
 }
 
 #if (__ARM_ARCH_ISA_THUMB >= 2)
@@ -646,7 +646,7 @@ __STATIC_FORCEINLINE void __disable_irq(void)
  */
 __STATIC_FORCEINLINE void __enable_fault_irq(void)
 {
-    __ASM volatile("cpsie f" : : : "memory");
+  __ASM volatile ("cpsie f" : : : "memory");
 }
 
 
@@ -657,7 +657,7 @@ __STATIC_FORCEINLINE void __enable_fault_irq(void)
  */
 __STATIC_FORCEINLINE void __disable_fault_irq(void)
 {
-    __ASM volatile("cpsid f" : : : "memory");
+  __ASM volatile ("cpsid f" : : : "memory");
 }
 #endif
 
@@ -671,9 +671,9 @@ __STATIC_FORCEINLINE void __disable_fault_irq(void)
 __STATIC_FORCEINLINE uint32_t __get_FPSCR(void)
 {
 #if (defined(__ARM_FP) && (__ARM_FP >= 1))
-    return (__builtin_arm_get_fpscr());
+  return (__builtin_arm_get_fpscr());
 #else
-    return (0U);
+  return (0U);
 #endif
 }
 
@@ -686,9 +686,9 @@ __STATIC_FORCEINLINE uint32_t __get_FPSCR(void)
 __STATIC_FORCEINLINE void __set_FPSCR(uint32_t fpscr)
 {
 #if (defined(__ARM_FP) && (__ARM_FP >= 1))
-    __builtin_arm_set_fpscr(fpscr);
+  __builtin_arm_set_fpscr(fpscr);
 #else
-    (void)fpscr;
+  (void)fpscr;
 #endif
 }
 
@@ -696,13 +696,13 @@ __STATIC_FORCEINLINE void __set_FPSCR(uint32_t fpscr)
 
 // Include the profile specific settings:
 #if __ARM_ARCH_PROFILE == 'A'
-    #include "./a-profile/cmsis_clang_a.h"
+  #include "./a-profile/cmsis_clang_a.h"
 #elif __ARM_ARCH_PROFILE == 'R'
-    #include "./r-profile/cmsis_clang_r.h"
+  #include "./r-profile/cmsis_clang_r.h"
 #elif __ARM_ARCH_PROFILE == 'M'
-    #include "./m-profile/cmsis_clang_m.h"
+  #include "./m-profile/cmsis_clang_m.h"
 #else
-    #error "Unknown Arm architecture profile"
+  #error "Unknown Arm architecture profile"
 #endif
 
 #endif /* __CMSIS_CLANG_H */

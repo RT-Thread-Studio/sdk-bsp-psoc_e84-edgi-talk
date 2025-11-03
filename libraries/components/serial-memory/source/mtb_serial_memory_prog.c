@@ -55,7 +55,7 @@ extern "C" {
 
 typedef struct
 {
-    const cy_stc_smif_block_config_t *smifCfg;  // Pointer to SMIF top-level configuration
+    const cy_stc_smif_block_config_t* smifCfg;  // Pointer to SMIF top-level configuration
     const uint32_t                    null_t;   // NULL termination
 } stc_smif_ipblocks_arr_t;
 
@@ -80,18 +80,18 @@ const uint32_t cyToc[128] =
     0x200-4,               // Offset=0x0000: Object Size, bytes
     0x01211220,            // Offset=0x0004: Magic Number (TOC Part 2, ID)
     0,                     // Offset=0x0008: Key Storage Address
-    (int) &smifIpBlocksArr, // Offset=0x000C: This points to a null terminated array of SMIF
-    //                structures.
+    (int)&smifIpBlocksArr, // Offset=0x000C: This points to a null terminated array of SMIF
+                           //                structures.
     0x10000000u,           // Offset=0x0010: App image start address
-    // Offset=0x0014-0x01F7: Reserved
+                           // Offset=0x0014-0x01F7: Reserved
     [126] =  0x000002C2,   // Offset=0x01
-    //     Bits[ 1: 0] CLOCK_CONFIG (0=8MHz, 1=25MHz, 2=50MHz, 3=100MHz)
-    //     Bits[ 4: 2] LISTEN_WINDOW (0=20ms, 1=10ms, 2=1ms, 3=0ms, 4=100ms)
-    //     Bits[ 6: 5] SWJ_PINS_CTL (0/1/3=Disable SWJ, 2=Enable SWJ)
-    //     Bits[ 8: 7] APP_AUTHENTICATION (0/2/3=Enable, 1=Disable)
-    //     Bits[10: 9] FB_BOOTLOADER_CTL: UNUSED
+                           //     Bits[ 1: 0] CLOCK_CONFIG (0=8MHz, 1=25MHz, 2=50MHz, 3=100MHz)
+                           //     Bits[ 4: 2] LISTEN_WINDOW (0=20ms, 1=10ms, 2=1ms, 3=0ms, 4=100ms)
+                           //     Bits[ 6: 5] SWJ_PINS_CTL (0/1/3=Disable SWJ, 2=Enable SWJ)
+                           //     Bits[ 8: 7] APP_AUTHENTICATION (0/2/3=Enable, 1=Disable)
+                           //     Bits[10: 9] FB_BOOTLOADER_CTL: UNUSED
     [127] =  0x3BB30000    // Offset=0x01FC: CRC16-CCITT
-    //     (the upper 2 bytes contain the CRC and the lower 2 bytes are 0)
+                           //     (the upper 2 bytes contain the CRC and the lower 2 bytes are 0)
 };
 
 #endif // defined(MTB_SERIAL_MEMORY_ENABLE_XIP_PROGRAM)

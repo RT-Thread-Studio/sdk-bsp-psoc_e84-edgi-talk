@@ -37,24 +37,24 @@
 
 
 
-/**
- * @addtogroup BilinearInterpolate
- * @{
- */
+  /**
+   * @addtogroup BilinearInterpolate
+   * @{
+   */
 
 
-/**
-* @brief  Floating-point bilinear interpolation.
-* @param[in,out] S  points to an instance of the interpolation structure.
-* @param[in]     X  interpolation coordinate.
-* @param[in]     Y  interpolation coordinate.
-* @return out interpolated value.
-*/
-float16_t arm_bilinear_interp_f16(
-    const arm_bilinear_interp_instance_f16 * S,
-    float16_t X,
-    float16_t Y)
-{
+  /**
+  * @brief  Floating-point bilinear interpolation.
+  * @param[in,out] S  points to an instance of the interpolation structure.
+  * @param[in]     X  interpolation coordinate.
+  * @param[in]     Y  interpolation coordinate.
+  * @return out interpolated value.
+  */
+  float16_t arm_bilinear_interp_f16(
+  const arm_bilinear_interp_instance_f16 * S,
+  float16_t X,
+  float16_t Y)
+  {
     float16_t out;
     float16_t f00, f01, f10, f11;
     const float16_t *pData = S->pData;
@@ -69,11 +69,11 @@ float16_t arm_bilinear_interp_f16(
     /* Returns zero output when values are outside table boundary */
     if (xIndex < 0 || xIndex > (S->numCols - 2) || yIndex < 0 || yIndex > (S->numRows - 2))
     {
-        return (0);
+      return (0);
     }
 
     /* Calculation of index for two nearest points in X-direction */
-    index = (xIndex) + (yIndex) * S->numCols;
+    index = (xIndex ) + (yIndex ) * S->numCols;
 
 
     /* Read two nearest points in X-direction */
@@ -81,7 +81,7 @@ float16_t arm_bilinear_interp_f16(
     f01 = pData[index + 1];
 
     /* Calculation of index for two nearest points in Y-direction */
-    index = (xIndex) + (yIndex + 1) * S->numCols;
+    index = (xIndex ) + (yIndex+1) * S->numCols;
 
 
     /* Read two nearest points in Y-direction */
@@ -101,17 +101,17 @@ float16_t arm_bilinear_interp_f16(
     ydiff = (_Float16)Y - (_Float16)yIndex;
 
     /* Calculation of bi-linear interpolated output */
-    out = (_Float16)b1 + (_Float16)b2 * (_Float16)xdiff +
-          (_Float16)b3 * (_Float16)ydiff + (_Float16)b4 * (_Float16)xdiff * (_Float16)ydiff;
+    out = (_Float16)b1 + (_Float16)b2 * (_Float16)xdiff + 
+    (_Float16)b3 * (_Float16)ydiff + (_Float16)b4 * (_Float16)xdiff * (_Float16)ydiff;
 
     /* return to application */
     return (out);
-}
+  }
 
-/**
- * @} end of BilinearInterpolate group
- */
+  /**
+   * @} end of BilinearInterpolate group
+   */
 
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

@@ -43,7 +43,7 @@ extern "C" {
 #include "cy_syslib.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 2, \
-                             'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
+'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_V2_Prng_Init
@@ -69,9 +69,9 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 2, \
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Prng_Init(CRYPTO_Type *base,
-        uint32_t lfsr32InitState,
-        uint32_t lfsr31InitState,
-        uint32_t lfsr29InitState)
+                                                  uint32_t lfsr32InitState,
+                                                  uint32_t lfsr31InitState,
+                                                  uint32_t lfsr29InitState)
 {
     REG_CRYPTO_PR_LFSR_CTL0(base) = (uint32_t)(_VAL2FLD(CRYPTO_PR_LFSR_CTL0_LFSR32, lfsr32InitState));
 
@@ -102,15 +102,15 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Prng_Init(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Prng(CRYPTO_Type *base,
-        uint32_t max,
-        uint32_t *randomNum)
+                                             uint32_t max,
+                                             uint32_t *randomNum)
 {
     REG_CRYPTO_PR_MAX_CTL(base) = max;
 
     REG_CRYPTO_PR_CMD(base) = _VAL2FLD(CRYPTO_V2_PR_CMD_START, 1u);
 
     /* Wait until the PRNG instruction is complete */
-    while (0uL != _FLD2VAL(CRYPTO_V2_STATUS_BUSY, REG_CRYPTO_STATUS(base)))
+    while(0uL != _FLD2VAL(CRYPTO_V2_STATUS_BUSY, REG_CRYPTO_STATUS(base)))
     {
     }
 

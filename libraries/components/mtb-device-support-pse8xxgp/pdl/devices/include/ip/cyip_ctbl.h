@@ -41,48 +41,44 @@
 /**
   * \brief CTBL static configuration (CTBL_STA)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Configuration (only accessible if ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t COMP_STAT;                     /*!< 0x00000004 Comparator status */
-    __IM uint32_t RESERVED[126];
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Configuration (only accessible if ACTRLR.STATUS.MODE=0) */
+   __IM uint32_t COMP_STAT;                     /*!< 0x00000004 Comparator status */
+   __IM uint32_t RESERVED[126];
 } CTBL_STA_Type;                                /*!< Size = 512 (0x200) */
 
 /**
   * \brief CTBL dynamic configuration structure (only accessible if ACTRLR.STATUS.MODE=0) (CTBL_DYN)
   */
-typedef struct
-{
-    __IOM uint32_t OA_MUX_CFG;                    /*!< 0x00000000 Opamp Mux Configuration */
-    __IM uint32_t RESERVED[3];
+typedef struct {
+  __IOM uint32_t OA_MUX_CFG;                    /*!< 0x00000000 Opamp Mux Configuration */
+   __IM uint32_t RESERVED[3];
 } CTBL_DYN_Type;                                /*!< Size = 16 (0x10) */
 
 /**
   * \brief CTBL trim structure (only accessible if ACTRLR.STATUS.MODE=0) (CTBL_TRIM)
   */
-typedef struct
-{
-    __IOM uint32_t OA0_OFFSET_TRIM;               /*!< 0x00000000 Opamp0 trim control */
-    __IOM uint32_t OA0_SLOPE_OFFSET_TRIM;         /*!< 0x00000004 Opamp0 trim control */
-    __IOM uint32_t OA0_COMP_TRIM;                 /*!< 0x00000008 Opamp0 trim control */
-    __IOM uint32_t OA1_OFFSET_TRIM;               /*!< 0x0000000C Opamp1 trim control */
-    __IOM uint32_t OA1_SLOPE_OFFSET_TRIM;         /*!< 0x00000010 Opamp1 trim control */
-    __IOM uint32_t OA1_COMP_TRIM;                 /*!< 0x00000014 Opamp1 trim control */
-    __IOM uint32_t RMP_TRIM;                      /*!< 0x00000018 Risk Mitigation bits */
-    __IM uint32_t RESERVED;
+typedef struct {
+  __IOM uint32_t OA0_OFFSET_TRIM;               /*!< 0x00000000 Opamp0 trim control */
+  __IOM uint32_t OA0_SLOPE_OFFSET_TRIM;         /*!< 0x00000004 Opamp0 trim control */
+  __IOM uint32_t OA0_COMP_TRIM;                 /*!< 0x00000008 Opamp0 trim control */
+  __IOM uint32_t OA1_OFFSET_TRIM;               /*!< 0x0000000C Opamp1 trim control */
+  __IOM uint32_t OA1_SLOPE_OFFSET_TRIM;         /*!< 0x00000010 Opamp1 trim control */
+  __IOM uint32_t OA1_COMP_TRIM;                 /*!< 0x00000014 Opamp1 trim control */
+  __IOM uint32_t RMP_TRIM;                      /*!< 0x00000018 Risk Mitigation bits */
+   __IM uint32_t RESERVED;
 } CTBL_TRIM_Type;                               /*!< Size = 32 (0x20) */
 
 /**
   * \brief Continuous Time Block Lite (CTBL)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[256];
-    CTBL_STA_Type STA;                      /*!< 0x00000400 CTBL static configuration */
-    CTBL_DYN_Type DYN[8];                   /*!< 0x00000600 CTBL dynamic configuration structure (only accessible if
+typedef struct {
+   __IM uint32_t RESERVED[256];
+        CTBL_STA_Type STA;                      /*!< 0x00000400 CTBL static configuration */
+        CTBL_DYN_Type DYN[8];                   /*!< 0x00000600 CTBL dynamic configuration structure (only accessible if
                                                                 ACTRLR.STATUS.MODE=0) */
-    __IM uint32_t RESERVED1[544];
-    CTBL_TRIM_Type TRIM;                    /*!< 0x00000F00 CTBL trim structure (only accessible if ACTRLR.STATUS.MODE=0) */
+   __IM uint32_t RESERVED1[544];
+        CTBL_TRIM_Type TRIM;                    /*!< 0x00000F00 CTBL trim structure (only accessible if ACTRLR.STATUS.MODE=0) */
 } CTBL_Type;                                    /*!< Size = 3872 (0xF20) */
 
 

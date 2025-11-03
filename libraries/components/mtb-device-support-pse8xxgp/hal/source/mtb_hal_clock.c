@@ -84,20 +84,20 @@ uint32_t mtb_hal_clock_get_peri_clock_freq(const void* clk)
     dividerNum  = ((mtb_hal_peri_div_t*)clk)->div_num;
 
     /* Get the frequency of the output of the peripheral divider */
-#if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS) && \
+    #if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS) && \
     (CY_IP_MXS40SRSS_VERSION >= 2)) || defined (CY_IP_MXS22SRSS)
     en_clk_dst_t clk_dst = ((mtb_hal_peri_div_t*)clk)->clk_dst;
     freq = Cy_SysClk_PeriPclkGetFrequency(clk_dst, dividerType, dividerNum);
-#elif defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION < 2)
+    #elif defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION < 2)
     freq = Cy_SysClk_PeriphGetFrequency(dividerType, dividerNum);
-#endif
+    #endif
     return freq;
 }
 
 
 /** Update the operating frequency of the peripheral clock */
 cy_rslt_t mtb_hal_clock_set_peri_clock_freq(const void* clk, uint32_t frequency,
-        uint32_t tolerance_ppm)
+                                            uint32_t tolerance_ppm)
 {
     cy_en_divider_types_t dividerType;
     uint32_t              dividerNum;
@@ -138,7 +138,7 @@ cy_rslt_t mtb_hal_clock_set_peri_clock_freq(const void* clk, uint32_t frequency,
     }
 
     if ((uint32_t)(abs(_mtb_hal_utils_calculate_tolerance(MTB_HAL_TOLERANCE_PPM, frequency,
-                       (uint32_t)rslt_freq))) > tolerance_ppm)
+                                                          (uint32_t)rslt_freq))) > tolerance_ppm)
     {
         return MTB_HAL_CLOCK_RSLT_ERR_FREQ;
     }
@@ -146,7 +146,7 @@ cy_rslt_t mtb_hal_clock_set_peri_clock_freq(const void* clk, uint32_t frequency,
     dividerValue -= 1;
     /* dividerFracValue does not need -1 here as this register is 0-inclusive */
 
-#if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS) && \
+    #if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS) && \
     (CY_IP_MXS40SRSS_VERSION >= 2)) || defined (CY_IP_MXS22SRSS)
 
     Cy_SysClk_PeriPclkDisableDivider(clk_dst, dividerType, dividerNum);
@@ -161,7 +161,7 @@ cy_rslt_t mtb_hal_clock_set_peri_clock_freq(const void* clk, uint32_t frequency,
     }
     Cy_SysClk_PeriPclkEnableDivider(clk_dst, dividerType, dividerNum);
 
-#elif (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION < 2))
+    #elif (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION < 2))
 
     Cy_SysClk_PeriphDisableDivider(dividerType, dividerNum);
     if (dividerType < CY_SYSCLK_DIV_16_5_BIT)
@@ -174,7 +174,7 @@ cy_rslt_t mtb_hal_clock_set_peri_clock_freq(const void* clk, uint32_t frequency,
     }
     Cy_SysClk_PeriphEnableDivider(dividerType, dividerNum);
 
-#endif // if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined
+    #endif // if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined
     // (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION >= 2)) || defined (CY_IP_MXS22SRSS)
     return CY_RSLT_SUCCESS;
 }
@@ -190,7 +190,7 @@ cy_rslt_t mtb_hal_clock_set_peri_clock_enabled(const void* clk, bool enable)
     dividerType = ((mtb_hal_peri_div_t*)clk)->div_type;
     dividerNum  = ((mtb_hal_peri_div_t*)clk)->div_num;
 
-#if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS) && \
+    #if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined (CY_IP_MXS40SRSS) && \
     (CY_IP_MXS40SRSS_VERSION >= 2)) || defined (CY_IP_MXS22SRSS)
     en_clk_dst_t clk_dst = ((mtb_hal_peri_div_t*)clk)->clk_dst;
     if (enable)
@@ -201,7 +201,7 @@ cy_rslt_t mtb_hal_clock_set_peri_clock_enabled(const void* clk, bool enable)
     {
         Cy_SysClk_PeriPclkDisableDivider(clk_dst, dividerType, dividerNum);
     }
-#elif (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION < 2))
+    #elif (defined (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION < 2))
     CY_UNUSED_PARAMETER(clk_dst);
     if (enable)
     {
@@ -211,7 +211,7 @@ cy_rslt_t mtb_hal_clock_set_peri_clock_enabled(const void* clk, bool enable)
     {
         Cy_SysClk_PeriphDisableDivider(dividerType, dividerNum);
     }
-#endif // if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined
+    #endif // if defined (CY_IP_MXS28SRSS) || defined (CY_IP_MXS40SSRSS) || (defined
     // (CY_IP_MXS40SRSS) && (CY_IP_MXS40SRSS_VERSION >= 2)) || defined (CY_IP_MXS22SRSS)
     return CY_RSLT_SUCCESS;
 }
@@ -226,13 +226,13 @@ uint32_t mtb_hal_clock_get_peri_src_clock_freq(const void* clk)
     en_clk_dst_t clk_dst = ((mtb_hal_peri_div_t*)clk)->clk_dst;
 
     uint32_t src_freq = Cy_SysClk_ClkHfGetFrequency(Cy_Sysclk_PeriPclkGetClkHfNum(clk_dst));
-#if defined(CY_IP_MXS40SRSS)
+    #if defined(CY_IP_MXS40SRSS)
     // May have a PERI clock between the HF and the peri divider, if so adjust for its divider
     uint32_t peri_grpNum = (((uint32_t)clk_dst) & PERI_PCLK_GR_NUM_Msk) >> PERI_PCLK_GR_NUM_Pos;
     // CLK_PERI only sources Peri Clock Group 0.  Ignore the divider for other groups
     uint32_t peri_div = (peri_grpNum == 0UL) ? (1UL + (uint32_t)Cy_SysClk_ClkPeriGetDivider()) : 1U;
     src_freq = CY_SYSLIB_DIV_ROUND(src_freq, peri_div);
-#endif /* defined(CY_IP_MXS40SRSS) */
+    #endif /* defined(CY_IP_MXS40SRSS) */
     return src_freq;
 }
 
@@ -250,7 +250,7 @@ uint32_t mtb_hal_clock_get_hf_clock_freq(const void* clk)
 // mtb_hal_clock_set_hf_clock_freq
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_clock_set_hf_clock_freq(const void* clk, uint32_t frequency,
-        uint32_t tolerance_ppm)
+                                          uint32_t tolerance_ppm)
 {
     CY_UNUSED_PARAMETER(clk);
     CY_UNUSED_PARAMETER(frequency);
@@ -292,7 +292,7 @@ cy_rslt_t mtb_hal_clock_set_enabled(mtb_hal_clock_t* clock, bool enabled, bool w
 // mtb_hal_clock_set_frequency
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_clock_set_frequency(mtb_hal_clock_t* clock, uint32_t hz,
-                                      const mtb_hal_clock_tolerance_t *tolerance)
+                                      const mtb_hal_clock_tolerance_t* tolerance)
 {
     // API not implemented yet
     CY_UNUSED_PARAMETER(clock);

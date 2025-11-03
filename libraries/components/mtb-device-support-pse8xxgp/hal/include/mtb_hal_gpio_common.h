@@ -74,7 +74,7 @@ __STATIC_INLINE uint32_t _mtb_hal_gpio_get_interrupt_cause(mtb_hal_gpio_t* obj)
 
 /** Set the GPIO interrupt edge */
 __STATIC_INLINE void _mtb_hal_gpio_set_interrupt_edge(mtb_hal_gpio_t* obj,
-        mtb_hal_gpio_event_t event, bool enable)
+                                                      mtb_hal_gpio_event_t event, bool enable)
 {
     Cy_GPIO_SetInterruptEdge(obj->port_addr, (uint32_t)obj->pin_num,
                              (uint32_t)event);

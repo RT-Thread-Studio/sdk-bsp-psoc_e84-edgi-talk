@@ -45,31 +45,30 @@
   @param[in] pvCoeffs   points to ladder coefficient buffer.  The array is of length numStages+1
   @param[in] pState     points to state buffer.  The array is of length numStages+blockSize
   @param[in] blockSize  number of samples to process
-  @return        none
  */
 
-void arm_iir_lattice_init_q15(
-    arm_iir_lattice_instance_q15 * S,
-    uint16_t numStages,
-    q15_t * pkCoeffs,
-    q15_t * pvCoeffs,
-    q15_t * pState,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_iir_lattice_init_q15(
+  arm_iir_lattice_instance_q15 * S,
+  uint16_t numStages,
+  q15_t * pkCoeffs,
+  q15_t * pvCoeffs,
+  q15_t * pState,
+  uint32_t blockSize)
 {
-    /* Assign filter taps */
-    S->numStages = numStages;
+  /* Assign filter taps */
+  S->numStages = numStages;
 
-    /* Assign reflection coefficient pointer */
-    S->pkCoeffs = pkCoeffs;
+  /* Assign reflection coefficient pointer */
+  S->pkCoeffs = pkCoeffs;
 
-    /* Assign ladder coefficient pointer */
-    S->pvCoeffs = pvCoeffs;
+  /* Assign ladder coefficient pointer */
+  S->pvCoeffs = pvCoeffs;
 
-    /* Clear state buffer and size is always blockSize + numStages */
-    memset(pState, 0, (numStages + blockSize) * sizeof(q15_t));
+  /* Clear state buffer and size is always blockSize + numStages */
+  memset(pState, 0, (numStages + blockSize) * sizeof(q15_t));
 
-    /* Assign state pointer */
-    S->pState = pState;
+  /* Assign state pointer */
+  S->pState = pState;
 }
 
 /**

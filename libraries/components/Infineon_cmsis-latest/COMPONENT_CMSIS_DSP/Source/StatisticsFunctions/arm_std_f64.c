@@ -42,16 +42,15 @@
   @param[in]     pSrc       points to the input vector
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    standard deviation value returned here
-  @return        none
  */
-void arm_std_f64(
-    const float64_t *pSrc,
-    uint32_t blockSize,
-    float64_t *pResult)
+ARM_DSP_ATTRIBUTE void arm_std_f64(
+  const float64_t * pSrc,
+        uint32_t blockSize,
+        float64_t * pResult)
 {
-    float64_t var;
-    arm_var_f64(pSrc, blockSize, &var);
-    *pResult = sqrt(var);
+  float64_t var;
+  arm_var_f64(pSrc,blockSize,&var);
+  *pResult = sqrt(var);
 }
 
 /**

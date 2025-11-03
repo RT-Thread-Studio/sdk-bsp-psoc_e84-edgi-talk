@@ -39,36 +39,34 @@
 /**
   * \brief Timer Table Structure  (only accessible if CTRL.EN=0) (ACTRLR_TTCFG)
   */
-typedef struct
-{
-    __IOM uint32_t TT_CFG0;                       /*!< 0x00000000 AC Table Configuration 0 */
-    __IOM uint32_t TT_CFG1;                       /*!< 0x00000004 AC Table Configuration 1 */
-    __IOM uint32_t TT_CFG2;                       /*!< 0x00000008 AC Table Configuration 2 */
-    __IOM uint32_t TT_CFG3;                       /*!< 0x0000000C AC Table Configuration 3 */
-    __IOM uint32_t TT_CFG4;                       /*!< 0x00000010 AC Table Configuration 4 */
-    __IM uint32_t RESERVED[3];
+typedef struct {
+  __IOM uint32_t TT_CFG0;                       /*!< 0x00000000 AC Table Configuration 0 */
+  __IOM uint32_t TT_CFG1;                       /*!< 0x00000004 AC Table Configuration 1 */
+  __IOM uint32_t TT_CFG2;                       /*!< 0x00000008 AC Table Configuration 2 */
+  __IOM uint32_t TT_CFG3;                       /*!< 0x0000000C AC Table Configuration 3 */
+  __IOM uint32_t TT_CFG4;                       /*!< 0x00000010 AC Table Configuration 4 */
+   __IM uint32_t RESERVED[3];
 } ACTRLR_TTCFG_Type;                            /*!< Size = 32 (0x20) */
 
 /**
   * \brief Autonomnous Controller (ACTRLR)
   */
-typedef struct
-{
-    __IOM uint32_t CTRL;                          /*!< 0x00000000 control register */
-    __IOM uint32_t CMD_RUN;                       /*!< 0x00000004 run command register */
-    __IOM uint32_t CMD_STATE;                     /*!< 0x00000008 state override register */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t FW_TR[4];                      /*!< 0x00000010 firmware trigger */
-    __IM uint32_t STATUS;                        /*!< 0x00000020 status register */
-    __IOM uint32_t CFG;                           /*!< 0x00000024 config register (only accessible if CTRL.EN=0) */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t DEBUG_PAUSE;                   /*!< 0x00000030 pause debug register */
-    __IOM uint32_t DEBUG_SINGLE_STEP;             /*!< 0x00000034 single step debug register */
-    __IM uint32_t PWR_STATUS;                    /*!< 0x00000038 power status register */
-    __IM uint32_t RESERVED2[49];
-    __IM uint32_t CNTR_STATUS[4];                /*!< 0x00000100 Loop/Interval counter status register */
-    __IM uint32_t RESERVED3[444];
-    ACTRLR_TTCFG_Type TTCFG[64];            /*!< 0x00000800 Timer Table Structure  (only accessible if CTRL.EN=0) */
+typedef struct {
+  __IOM uint32_t CTRL;                          /*!< 0x00000000 control register */
+  __IOM uint32_t CMD_RUN;                       /*!< 0x00000004 run command register */
+  __IOM uint32_t CMD_STATE;                     /*!< 0x00000008 state override register */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t FW_TR[4];                      /*!< 0x00000010 firmware trigger */
+   __IM uint32_t STATUS;                        /*!< 0x00000020 status register */
+  __IOM uint32_t CFG;                           /*!< 0x00000024 config register (only accessible if CTRL.EN=0) */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t DEBUG_PAUSE;                   /*!< 0x00000030 pause debug register */
+  __IOM uint32_t DEBUG_SINGLE_STEP;             /*!< 0x00000034 single step debug register */
+   __IM uint32_t PWR_STATUS;                    /*!< 0x00000038 power status register */
+   __IM uint32_t RESERVED2[49];
+   __IM uint32_t CNTR_STATUS[4];                /*!< 0x00000100 Loop/Interval counter status register */
+   __IM uint32_t RESERVED3[444];
+        ACTRLR_TTCFG_Type TTCFG[64];            /*!< 0x00000800 Timer Table Structure  (only accessible if CTRL.EN=0) */
 } ACTRLR_Type;                                  /*!< Size = 4096 (0x1000) */
 
 

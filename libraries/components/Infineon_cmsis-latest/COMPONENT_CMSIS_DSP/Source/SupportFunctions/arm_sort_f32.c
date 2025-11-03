@@ -47,35 +47,35 @@
  * @param[in]  blockSize  number of samples to process.
  */
 
-void arm_sort_f32(
-    const arm_sort_instance_f32 * S,
-    float32_t *pSrc,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_sort_f32(
+  const arm_sort_instance_f32 * S, 
+        float32_t * pSrc, 
+        float32_t * pDst, 
+        uint32_t blockSize)
 {
-    switch (S->alg)
+    switch(S->alg)
     {
-    case ARM_SORT_BITONIC:
+        case ARM_SORT_BITONIC:
         arm_bitonic_sort_f32(S, pSrc, pDst, blockSize);
         break;
 
-    case ARM_SORT_BUBBLE:
+        case ARM_SORT_BUBBLE:
         arm_bubble_sort_f32(S, pSrc, pDst, blockSize);
         break;
 
-    case ARM_SORT_HEAP:
+        case ARM_SORT_HEAP:
         arm_heap_sort_f32(S, pSrc, pDst, blockSize);
         break;
 
-    case ARM_SORT_INSERTION:
+        case ARM_SORT_INSERTION:
         arm_insertion_sort_f32(S, pSrc, pDst, blockSize);
         break;
 
-    case ARM_SORT_QUICK:
+        case ARM_SORT_QUICK:
         arm_quick_sort_f32(S, pSrc, pDst, blockSize);
         break;
 
-    case ARM_SORT_SELECTION:
+        case ARM_SORT_SELECTION:
         arm_selection_sort_f32(S, pSrc, pDst, blockSize);
         break;
     }

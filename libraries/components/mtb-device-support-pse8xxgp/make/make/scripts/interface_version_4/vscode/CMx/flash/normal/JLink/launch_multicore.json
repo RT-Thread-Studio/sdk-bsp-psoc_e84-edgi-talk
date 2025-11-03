@@ -7,6 +7,7 @@
             "servertype": "jlink",
             "device": "&&_MTB_RECIPE__JLINK_CFG&&",
             "interface": "&&_MTB_RECIPE__PROBE_INTERFACE&&",
+            "serialNumber": "&&_MTB_RECIPE__PROBE_SERIAL&&",
             "preLaunchCommands": [
                 // Program via the hex file to get complete coverage
                 "exec-file &&_MTB_RECIPE__HEX_FILE&&",//CM33 Only//
@@ -39,6 +40,7 @@
             "servertype": "jlink",
             "device": "&&_MTB_RECIPE__JLINK_CFG&&",
             "interface": "&&_MTB_RECIPE__PROBE_INTERFACE&&",
+            "serialNumber": "&&_MTB_RECIPE__PROBE_SERIAL&&",
             "preAttachCommands": [
                 // Add symbol file of NS or S project//CM33 Only//
                 //"add-symbol-file <other_proj_elf_file_path>"//CM33 Only//

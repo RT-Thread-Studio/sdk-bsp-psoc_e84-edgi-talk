@@ -8,6 +8,10 @@ Provides functions for interacting with an external memory connected through its
 * Allows for providing information to the programming tool to program the external memory.
 
 ### What Changed?
+#### v3.1.0
+* Documentation update
+#### v3.0.0
+* Support SMIF MemNum interface instead of MemSlot interface
 #### v2.0.0
 * Renamed library from serial-flash to serial-memory. All APIs were renamed from cy_serial_flash_* to mtb_serial_memory_* and all macros were prefaced with MTB_SERIAL_MEMORY_* .
 #### v1.4.3

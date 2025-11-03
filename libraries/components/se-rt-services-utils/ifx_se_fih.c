@@ -1,6 +1,6 @@
 /**
  * \file ifx_se_fih.c
- * \version 1.1.0
+ * \version 1.2.0
  *
  * \brief Fault injection hardening module implementation.
  *
@@ -50,15 +50,15 @@ __attribute__((used))
 __attribute__((noinline))
 void ifx_se_fih_panic_loop(void)
 {
-    __asm volatile("b ifx_se_fih_panic_loop");
-    __asm volatile("b ifx_se_fih_panic_loop");
-    __asm volatile("b ifx_se_fih_panic_loop");
-    __asm volatile("b ifx_se_fih_panic_loop");
-    __asm volatile("b ifx_se_fih_panic_loop");
-    __asm volatile("b ifx_se_fih_panic_loop");
-    __asm volatile("b ifx_se_fih_panic_loop");
-    __asm volatile("b ifx_se_fih_panic_loop");
-    __asm volatile("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
+    __asm volatile ("b ifx_se_fih_panic_loop");
 }
 
 IFX_SE_NOINLINE bool ifx_se_fih_check_eq_mask(ifx_se_fih_uint *a, ifx_se_fih_uint *b)

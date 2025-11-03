@@ -31,9 +31,9 @@
 /* System IRQ refers to signals that peripherals produce to request and interrupt,
  * which may or may not correspond 1:1 to the CPU IRQ lines */
 #if defined(CPUSS_SYSTEM_IRQ_PRESENT)
-    #define _MTB_HAL_IRQ_MUXING (CY_CPU_CORTEX_M0P || CPUSS_SYSTEM_IRQ_PRESENT)
+#define _MTB_HAL_IRQ_MUXING (CY_CPU_CORTEX_M0P || CPUSS_SYSTEM_IRQ_PRESENT)
 #elif defined(CY_DEVICE_PSOC6ABLE2)
-    #define _MTB_HAL_IRQ_MUXING (CY_CPU_CORTEX_M0P)
+#define _MTB_HAL_IRQ_MUXING (CY_CPU_CORTEX_M0P)
 #else
-    #define _MTB_HAL_IRQ_MUXING (0)
+#define _MTB_HAL_IRQ_MUXING (0)
 #endif

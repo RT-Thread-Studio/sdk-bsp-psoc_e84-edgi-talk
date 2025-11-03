@@ -22,9 +22,9 @@
  * limitations under the License.
  */
 
-#ifndef _ARM_MATH_UTILS_H_
+#ifndef ARM_MATH_UTILS_H_
 
-#define _ARM_MATH_UTILS_H_
+#define ARM_MATH_UTILS_H_
 
 #include "arm_math_types.h"
 #include <limits.h>
@@ -34,36 +34,38 @@ extern "C"
 {
 #endif
 
-/**
- * @brief Macros required for reciprocal calculation in Normalized LMS
- */
+  /**
+   * @brief Macros required for reciprocal calculation in Normalized LMS
+   */
 
 #define INDEX_MASK         0x0000003F
 
 #ifndef MIN
-#define MIN(x,y) ((x) < (y) ? (x) : (y))
-#endif
+  #define MIN(x,y) ((x) < (y) ? (x) : (y))
+#endif 
 
 #ifndef MAX
-#define MAX(x,y) ((x) > (y) ? (x) : (y))
+  #define MAX(x,y) ((x) > (y) ? (x) : (y))
+#endif 
+
+#ifndef ARM_SQ
+#define ARM_SQ(x) ((x) * (x))
 #endif
 
-#define SQ(x) ((x) * (x))
-
-#ifndef ROUND_UP
-#define ROUND_UP(N, S) ((((N) + (S) - 1) / (S)) * (S))
+#ifndef ARM_ROUND_UP
+  #define ARM_ROUND_UP(N, S) ((((N) + (S) - 1) / (S)) * (S))
 #endif
 
 
-/**
- * @brief Function to Calculates 1/in (reciprocal) value of Q31 Data type.
-   It should not be used with negative values.
- */
-__STATIC_FORCEINLINE uint32_t arm_recip_q31(
-    q31_t in,
-    q31_t * dst,
-    const q31_t * pRecipTable)
-{
+  /**
+   * @brief Function to Calculates 1/in (reciprocal) value of Q31 Data type.
+     It should not be used with negative values.
+   */
+  __STATIC_FORCEINLINE uint32_t arm_recip_q31(
+        q31_t in,
+        q31_t * dst,
+  const q31_t * pRecipTable)
+  {
     q31_t out;
     uint32_t tempVal;
     uint32_t index, i;
@@ -71,11 +73,11 @@ __STATIC_FORCEINLINE uint32_t arm_recip_q31(
 
     if (in > 0)
     {
-        signBits = ((uint32_t)(__CLZ((uint32_t)in) - 1));
+      signBits = ((uint32_t) (__CLZ( (uint32_t)in) - 1));
     }
     else
     {
-        signBits = ((uint32_t)(__CLZ((uint32_t)(-in)) - 1));
+      signBits = ((uint32_t) (__CLZ((uint32_t)(-in)) - 1));
     }
 
     /* Convert input sample to 1.31 format */
@@ -92,11 +94,11 @@ __STATIC_FORCEINLINE uint32_t arm_recip_q31(
     /* running approximation for two iterations */
     for (i = 0U; i < 2U; i++)
     {
-        tempVal = (uint32_t)(((q63_t) in * out) >> 31);
-        tempVal = 0x7FFFFFFFu - tempVal;
-        /*      1.31 with exp 1 */
-        /* out = (q31_t) (((q63_t) out * tempVal) >> 30); */
-        out = clip_q63_to_q31(((q63_t) out * tempVal) >> 30);
+      tempVal = (uint32_t) (((q63_t) in * out) >> 31);
+      tempVal = 0x7FFFFFFFu - tempVal;
+      /*      1.31 with exp 1 */
+      /* out = (q31_t) (((q63_t) out * tempVal) >> 30); */
+      out = clip_q63_to_q31(((q63_t) out * tempVal) >> 30);
     }
 
     /* write output */
@@ -104,18 +106,18 @@ __STATIC_FORCEINLINE uint32_t arm_recip_q31(
 
     /* return num of signbits of out = 1/in value */
     return (signBits + 1U);
-}
+  }
 
 
-/**
- * @brief Function to Calculates 1/in (reciprocal) value of Q15 Data type.
-   It should not be used with negative values.
- */
-__STATIC_FORCEINLINE uint32_t arm_recip_q15(
-    q15_t in,
-    q15_t * dst,
-    const q15_t * pRecipTable)
-{
+  /**
+   * @brief Function to Calculates 1/in (reciprocal) value of Q15 Data type.
+     It should not be used with negative values.
+   */
+  __STATIC_FORCEINLINE uint32_t arm_recip_q15(
+        q15_t in,
+        q15_t * dst,
+  const q15_t * pRecipTable)
+  {
     q15_t out = 0;
     int32_t tempVal = 0;
     uint32_t index = 0, i = 0;
@@ -123,11 +125,11 @@ __STATIC_FORCEINLINE uint32_t arm_recip_q15(
 
     if (in > 0)
     {
-        signBits = ((uint32_t)(__CLZ((uint32_t)in) - 17));
+      signBits = ((uint32_t)(__CLZ( (uint32_t)in) - 17));
     }
     else
     {
-        signBits = ((uint32_t)(__CLZ((uint32_t)(-in)) - 17));
+      signBits = ((uint32_t)(__CLZ((uint32_t)(-in)) - 17));
     }
 
     /* Convert input sample to 1.15 format */
@@ -144,11 +146,11 @@ __STATIC_FORCEINLINE uint32_t arm_recip_q15(
     /* running approximation for two iterations */
     for (i = 0U; i < 2U; i++)
     {
-        tempVal = (((q31_t) in * out) >> 15);
-        tempVal = 0x7FFF - tempVal;
-        /*      1.15 with exp 1 */
-        out = (q15_t)(((q31_t) out * tempVal) >> 14);
-        /* out = clip_q31_to_q15(((q31_t) out * tempVal) >> 14); */
+      tempVal = (((q31_t) in * out) >> 15);
+      tempVal = 0x7FFF - tempVal;
+      /*      1.15 with exp 1 */
+      out = (q15_t) (((q31_t) out * tempVal) >> 14);
+      /* out = clip_q31_to_q15(((q31_t) out * tempVal) >> 14); */
     }
 
     /* write output */
@@ -156,7 +158,7 @@ __STATIC_FORCEINLINE uint32_t arm_recip_q15(
 
     /* return num of signbits of out = 1/in value */
     return (signBits + 1);
-}
+  }
 
 
 /**
@@ -168,8 +170,8 @@ __STATIC_FORCEINLINE uint32_t arm_recip_q15(
 __STATIC_INLINE  void arm_norm_64_to_32u(uint64_t in, int32_t * normalized, int32_t *norm)
 {
     int32_t     n1;
-    int32_t     hi = (int32_t)(in >> 32);
-    int32_t     lo = (int32_t)((in << 32) >> 32);
+    int32_t     hi = (int32_t) (in >> 32);
+    int32_t     lo = (int32_t) ((in << 32) >> 32);
 
     n1 = __CLZ((uint32_t)hi) - 32;
     if (!n1)
@@ -185,8 +187,7 @@ __STATIC_INLINE  void arm_norm_64_to_32u(uint64_t in, int32_t * normalized, int3
              */
             *norm = -1;
             *normalized = (((uint32_t) lo) >> 1);
-        }
-        else
+        } else
         {
             if (n1 == 32)
             {
@@ -195,8 +196,7 @@ __STATIC_INLINE  void arm_norm_64_to_32u(uint64_t in, int32_t * normalized, int3
                  */
                 *norm = 0;
                 *normalized = 0;
-            }
-            else
+            } else
             {
                 /*
                  * 32-bit normalization
@@ -205,8 +205,7 @@ __STATIC_INLINE  void arm_norm_64_to_32u(uint64_t in, int32_t * normalized, int3
                 *normalized = lo << *norm;
             }
         }
-    }
-    else
+    } else
     {
         /*
          * input fits in 64-bit
@@ -237,7 +236,7 @@ __STATIC_INLINE int32_t arm_div_int64_to_int32(int64_t num, int32_t den)
     }
     else
     {
-        absNum = (uint64_t)(num > 0 ? num : -num);
+       absNum = (uint64_t) (num > 0 ? num : -num);
     }
     arm_norm_64_to_32u(absNum, &normalized, &norm);
     if (norm > 0)
@@ -249,11 +248,12 @@ __STATIC_INLINE int32_t arm_div_int64_to_int32(int64_t num, int32_t den)
         /*
          * 64-bit division
          */
-        result = (int32_t)(num / den);
+        result = (int32_t) (num / den);
 
     return result;
 }
 
+#undef INDEX_MASK
 
 #ifdef   __cplusplus
 }

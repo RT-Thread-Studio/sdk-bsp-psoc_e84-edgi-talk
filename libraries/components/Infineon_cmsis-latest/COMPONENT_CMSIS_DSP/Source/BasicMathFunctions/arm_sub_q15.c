@@ -43,7 +43,6 @@
   @param[in]     pSrcB      points to the second input vector
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function uses saturating arithmetic.
@@ -54,7 +53,7 @@
 
 #include "arm_helium_utils.h"
 
-void arm_sub_q15(
+ARM_DSP_ATTRIBUTE void arm_sub_q15(
     const q15_t * pSrcA,
     const q15_t * pSrcB,
     q15_t * pDst,
@@ -101,74 +100,74 @@ void arm_sub_q15(
 
 
 #else
-void arm_sub_q15(
-    const q15_t * pSrcA,
-    const q15_t * pSrcB,
-    q15_t * pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_sub_q15(
+  const q15_t * pSrcA,
+  const q15_t * pSrcB,
+        q15_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
 #if defined (ARM_MATH_DSP)
-    q31_t inA1, inA2;
-    q31_t inB1, inB2;
+  q31_t inA1, inA2;
+  q31_t inB1, inB2;
 #endif
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = A - B */
+  while (blkCnt > 0U)
+  {
+    /* C = A - B */
 
 #if defined (ARM_MATH_DSP)
-        /* read 2 times 2 samples at a time from sourceA */
-        inA1 = read_q15x2_ia(&pSrcA);
-        inA2 = read_q15x2_ia(&pSrcA);
-        /* read 2 times 2 samples at a time from sourceB */
-        inB1 = read_q15x2_ia(&pSrcB);
-        inB2 = read_q15x2_ia(&pSrcB);
+    /* read 2 times 2 samples at a time from sourceA */
+    inA1 = read_q15x2_ia (&pSrcA);
+    inA2 = read_q15x2_ia (&pSrcA);
+    /* read 2 times 2 samples at a time from sourceB */
+    inB1 = read_q15x2_ia (&pSrcB);
+    inB2 = read_q15x2_ia (&pSrcB);
 
-        /* Subtract and store 2 times 2 samples at a time */
-        write_q15x2_ia(&pDst, __QSUB16(inA1, inB1));
-        write_q15x2_ia(&pDst, __QSUB16(inA2, inB2));
+    /* Subtract and store 2 times 2 samples at a time */
+    write_q15x2_ia (&pDst, __QSUB16(inA1, inB1));
+    write_q15x2_ia (&pDst, __QSUB16(inA2, inB2));
 #else
-        *pDst++ = (q15_t) __SSAT(((q31_t) * pSrcA++ - *pSrcB++), 16);
-        *pDst++ = (q15_t) __SSAT(((q31_t) * pSrcA++ - *pSrcB++), 16);
-        *pDst++ = (q15_t) __SSAT(((q31_t) * pSrcA++ - *pSrcB++), 16);
-        *pDst++ = (q15_t) __SSAT(((q31_t) * pSrcA++ - *pSrcB++), 16);
+    *pDst++ = (q15_t) __SSAT(((q31_t) *pSrcA++ - *pSrcB++), 16);
+    *pDst++ = (q15_t) __SSAT(((q31_t) *pSrcA++ - *pSrcB++), 16);
+    *pDst++ = (q15_t) __SSAT(((q31_t) *pSrcA++ - *pSrcB++), 16);
+    *pDst++ = (q15_t) __SSAT(((q31_t) *pSrcA++ - *pSrcB++), 16);
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A - B */
+  while (blkCnt > 0U)
+  {
+    /* C = A - B */
 
-        /* Subtract and store result in destination buffer. */
+    /* Subtract and store result in destination buffer. */
 #if defined (ARM_MATH_DSP)
-        *pDst++ = (q15_t) __QSUB16(*pSrcA++, *pSrcB++);
+    *pDst++ = (q15_t) __QSUB16(*pSrcA++, *pSrcB++);
 #else
-        *pDst++ = (q15_t) __SSAT(((q31_t) * pSrcA++ - *pSrcB++), 16);
+    *pDst++ = (q15_t) __SSAT(((q31_t) *pSrcA++ - *pSrcB++), 16);
 #endif
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEI) */

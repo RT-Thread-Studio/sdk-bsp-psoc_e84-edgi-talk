@@ -42,7 +42,6 @@
   @param[in]     pSrc       points to the input vector
   @param[in]     blockSize  number of samples in input vector
   @param[out]    pResult    mean value returned here
-  @return        none
 
   @par           Scaling and Overflow Behavior
                    The function is implemented using a 64-bit internal accumulator.
@@ -53,10 +52,10 @@
                    Finally, the accumulator is truncated to yield a result of 1.31 format.
  */
 #if defined(ARM_MATH_MVEI) && !defined(ARM_MATH_AUTOVECTORIZE)
-void arm_mean_q31(
-    const q31_t * pSrc,
-    uint32_t blockSize,
-    q31_t * pResult)
+ARM_DSP_ATTRIBUTE void arm_mean_q31(
+  const q31_t * pSrc,
+        uint32_t blockSize,
+        q31_t * pResult)
 {
     uint32_t  blkCnt;           /* loop counters */
     q31x4_t vecSrc;
@@ -83,64 +82,64 @@ void arm_mean_q31(
 
     while (blkCnt > 0U)
     {
-        /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
-        sum += *pSrc++;
-        blkCnt --;
+      /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
+      sum += *pSrc++;
+      blkCnt --;
     }
 
     *pResult = arm_div_int64_to_int32(sum, blockSize);
 }
 #else
-void arm_mean_q31(
-    const q31_t * pSrc,
-    uint32_t blockSize,
-    q31_t * pResult)
+ARM_DSP_ATTRIBUTE void arm_mean_q31(
+  const q31_t * pSrc,
+        uint32_t blockSize,
+        q31_t * pResult)
 {
-    uint32_t blkCnt;                               /* Loop counter */
-    q63_t sum = 0;                                 /* Temporary result storage */
+        uint32_t blkCnt;                               /* Loop counter */
+        q63_t sum = 0;                                 /* Temporary result storage */
 
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
-        sum += *pSrc++;
+  while (blkCnt > 0U)
+  {
+    /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
+    sum += *pSrc++;
 
-        sum += *pSrc++;
+    sum += *pSrc++;
 
-        sum += *pSrc++;
+    sum += *pSrc++;
 
-        sum += *pSrc++;
+    sum += *pSrc++;
 
-        /* Decrement the loop counter */
-        blkCnt--;
-    }
+    /* Decrement the loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
-        sum += *pSrc++;
+  while (blkCnt > 0U)
+  {
+    /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) */
+    sum += *pSrc++;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) / blockSize  */
-    /* Store result to destination */
-    *pResult = (q31_t)(sum / blockSize);
+  /* C = (A[0] + A[1] + A[2] + ... + A[blockSize-1]) / blockSize  */
+  /* Store result to destination */
+  *pResult = (q31_t) (sum / blockSize);
 }
 #endif /* defined(ARM_MATH_MVEI) */
 

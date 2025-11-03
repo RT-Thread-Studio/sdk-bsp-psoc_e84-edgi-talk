@@ -27,15 +27,13 @@
 
 #include "dc_layer_feature.h"
 
-static gctUINT32 layerIdMapTable[DC_LAYER_NUM][2] =
-{
+static gctUINT32 layerIdMapTable[DC_LAYER_NUM][2] = {
     {0, 0},
     {1, 1},
     {2, 2},
 };
 
-static gcsDC_LAYERCAP gDCLayercapInfos[] =
-{
+static gcsDC_LAYERCAP gDCLayercapInfos[]= {
     {/* video layer */
         0x0,/* gcLAYERCAP_BIT_LAYER_COMPRESSION */
         0x0,/* gcLAYERCAP_BIT_LAYER_SCALE */
@@ -61,7 +59,7 @@ static gcsDC_LAYERCAP gDCLayercapInfos[] =
 
 gctUINT _DCQueryLayerCount(
     gctVOID
-)
+    )
 {
     gctUINT layer_count = 0;
 
@@ -72,7 +70,7 @@ gctUINT _DCQueryLayerCount(
 
 gctUINT _DCQueryLayerHWId(
     gctUINT sw_id
-)
+    )
 {
     gctUINT layer_count = sizeof(gDCLayercapInfos) / sizeof(gDCLayercapInfos[0]);
     if (sw_id >= layer_count)
@@ -86,27 +84,27 @@ vivSTATUS _DCQueryLayerFeature(
     gctUINT layer_id,
     viv_dc_layer_cap cap,
     gctUINT *value
-)
+    )
 {
-    switch (cap)
-    {
-    case vivLAYER_CAP_DEC400_COMPRESSION:
+    switch (cap){
+      case vivLAYER_CAP_DEC400_COMPRESSION:
         *value = gDCLayercapInfos[layer_id].LAYER_COMPRESSION;
         break;
-    case vivLAYER_CAP_SCALE:
+      case vivLAYER_CAP_SCALE:
         *value = gDCLayercapInfos[layer_id].LAYER_SCALE;
         break;
-    case vivLAYER_CAP_TILED:
+      case vivLAYER_CAP_TILED:
         *value = gDCLayercapInfos[layer_id].LAYER_TILED;
         break;
-    case vivLAYER_CAP_ROTATION:
+      case vivLAYER_CAP_ROTATION:
         *value = gDCLayercapInfos[layer_id].LAYER_ROTATION;
         break;
-    case vivLAYER_CAP_ROI:
+      case vivLAYER_CAP_ROI:
         *value =  gDCLayercapInfos[layer_id].LAYER_ROI;
         break;
-    default:
+      default:
         break;
     }
     return vivSTATUS_OK;
 }
+/* [] END OF FILE */

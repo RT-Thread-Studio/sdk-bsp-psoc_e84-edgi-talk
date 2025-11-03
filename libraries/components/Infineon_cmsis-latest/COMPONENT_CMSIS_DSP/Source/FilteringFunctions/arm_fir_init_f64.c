@@ -44,7 +44,6 @@
   @param[in]     pCoeffs    points to the filter coefficients buffer
   @param[in]     pState     points to the state buffer
   @param[in]     blockSize  number of samples processed per call
-  @return        none
 
   @par           Details
                    <code>pCoeffs</code> points to the array of filter coefficients stored in time reversed order:
@@ -54,25 +53,25 @@
   @par
                    <code>pState</code> points to the array of state variables.
                    <code>pState</code> is of length <code>numTaps+blockSize-1</code> samples, where <code>blockSize</code> is the number of input samples processed by each call to <code>arm_fir_f64()</code>.
-
+  
   @par
                    There is no Helium version of the fir F64.
 
  */
 
-void arm_fir_init_f64(
+ARM_DSP_ATTRIBUTE void arm_fir_init_f64(
     arm_fir_instance_f64 * S,
     uint16_t numTaps,
-    const float64_t *pCoeffs,
-    float64_t *pState,
+    const float64_t * pCoeffs,
+    float64_t * pState,
     uint32_t blockSize)
 {
     /* Assign filter taps */
     S->numTaps = numTaps;
-
+    
     /* Assign coefficient pointer */
     S->pCoeffs = pCoeffs;
-
+    
     /* Clear state buffer. The size is always (blockSize + numTaps - 1) */
     memset(pState, 0, (numTaps + (blockSize - 1U)) * sizeof(float64_t));
     /* Assign state pointer */

@@ -17,7 +17,7 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       emUSB-Device version: V3.66.0                                *
+*       emUSB-Device version: V3.66.5                                *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
@@ -27,12 +27,12 @@ may only be used in accordance with the following terms:
 
 The source code of the emUSB Device software has been licensed to Cypress
 Semiconductor Corporation, whose registered office is 198 Champion
-Court, San Jose, CA 95134, USA including the
-right to create and distribute the object code version of
+Court, San Jose, CA 95134, USA including the 
+right to create and distribute the object code version of 
 the emUSB Device software for its Cortex M0, M0+, M4, M33 and M55 based devices.
-The object code version can be used by Cypress customers under the
+The object code version can be used by Cypress customers under the 
 terms and conditions of the associated End User License Agreement.
-Support for the object code version is provided by Cypress,
+Support for the object code version is provided by Cypress, 
 full source code is available at: www.segger.com
 
 We appreciate your understanding and fairness.
@@ -48,7 +48,7 @@ License model:            Cypress Services and License Agreement, signed Novembe
 Licensed platform:        Cypress devices containing ARM Cortex M cores: M0, M0+, M4, M33 and M55
 ----------------------------------------------------------------------
 Support and Update Agreement (SUA)
-SUA period:               2022-05-12 - 2025-05-19
+SUA period:               2022-05-12 - 2026-05-19
 Contact to extend SUA:    sales@segger.com
 ----------------------------------------------------------------------
 Purpose : Implementation of the new generation USB Audio Class.
@@ -277,14 +277,13 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 *   Description
 *     This structure contains information about the type of a control request.
 */
-typedef struct
-{
-    U32   ID;               // Request ID:
-    // Bits 20..16 contain the interface index (0 = control interface, 1,... = streaming interfaces)
-    // Bits 15..8 contain the unit / terminal / entity ID. Is set to 0xFF if recipient is the endpoint.
-    // Bits 7..0 contain the control selector.
-    U8    bRequest;         // Audio Class-Specific Request Code, see USB_AC_REQ... defines.
-    U8    ChannelNumber;
+typedef struct {
+  U32   ID;               // Request ID:
+                          // Bits 20..16 contain the interface index (0 = control interface, 1,... = streaming interfaces)
+                          // Bits 15..8 contain the unit / terminal / entity ID. Is set to 0xFF if recipient is the endpoint.
+                          // Bits 7..0 contain the control selector.
+  U8    bRequest;         // Audio Class-Specific Request Code, see USB_AC_REQ... defines.
+  U8    ChannelNumber;
 } USBD_AC_CONTROL_INFO;
 
 /*********************************************************************
@@ -361,16 +360,15 @@ typedef void USBD_AC_GET_ALT_INTERFACE(unsigned InterfaceNo);
 *   Description
 *     This structure contains information about an audio streaming interface.
 */
-typedef struct
-{
-    U16   MaxPacketSize;            // Maximum packet size of the endpoint.
-    U8    IntervalExp;              // Specifies the interval of the endpoint in micro frames (125us):
-    // Interval = 2^IntervalExp
-    U8    NrChannels;               // Number of audio channels. If not specified in the audio description file, contains 0.
-    U8    SubframeSize;             // Number of byte for a single audio sample (one channel).
-    // If not specified in the audio description file, contains 0.
-    U8    BitResolution;            // Number of relevant bits in a single audio sample.
-    // If not specified in the audio description file, contains 0.
+typedef struct {
+  U16   MaxPacketSize;            // Maximum packet size of the endpoint.
+  U8    IntervalExp;              // Specifies the interval of the endpoint in micro frames (125us):
+                                  // Interval = 2^IntervalExp
+  U8    NrChannels;               // Number of audio channels. If not specified in the audio description file, contains 0.
+  U8    SubframeSize;             // Number of byte for a single audio sample (one channel).
+                                  // If not specified in the audio description file, contains 0.
+  U8    BitResolution;            // Number of relevant bits in a single audio sample.
+                                  // If not specified in the audio description file, contains 0.
 } USBD_AC_STREAM_INTF_INFO;
 
 /*********************************************************************
@@ -380,16 +378,15 @@ typedef struct
 *   Description
 *     This structure contains information about an audio streaming interface.
 */
-typedef struct
-{
-    U8    StringIndex;        // Index of string descriptor.
-    I8    EPIndex_Data;       // Index of the data EP (into the audio endpoint table) or -1, if no EP.
-    I8    EPIndex_Feedback;   // Index of the feedback EP (into the audio endpoint table) or -1, if no feedback EP.
-    U8    EPDescSize;         // Size of Audio Data Endpoint Descriptor in bytes.
-    const U8   *pEPDesc;            // Pointer to the Audio Data Endpoint Descriptor.
-    const U8   *pASDesc;            // Pointer to the Audio Class-Specific AS Interface Descriptor
-    U16   ASDescSize;         // Size of Audio Class-Specific AS Interface Descriptor in bytes.
-    USBD_AC_STREAM_INTF_INFO Info;
+typedef struct {
+        U8    StringIndex;        // Index of string descriptor.
+        I8    EPIndex_Data;       // Index of the data EP (into the audio endpoint table) or -1, if no EP.
+        I8    EPIndex_Feedback;   // Index of the feedback EP (into the audio endpoint table) or -1, if no feedback EP.
+        U8    EPDescSize;         // Size of Audio Data Endpoint Descriptor in bytes.
+  const U8  * pEPDesc;            // Pointer to the Audio Data Endpoint Descriptor.
+  const U8  * pASDesc;            // Pointer to the Audio Class-Specific AS Interface Descriptor
+        U16   ASDescSize;         // Size of Audio Class-Specific AS Interface Descriptor in bytes.
+  USBD_AC_STREAM_INTF_INFO Info;
 } USBD_AC_INTF_INFO;
 
 /*********************************************************************
@@ -399,11 +396,10 @@ typedef struct
 *   Description
 *     Contains a list of USB_AC_INTF_INFO's for all alternate settings.
 */
-typedef struct
-{
-    U8 NumAlternateSettings;            // Number of entries in pIntfInfoList. First is AltSetting == 0.
-    I8 isTX;                            // 0: Receive interface, 1: Send Interface
-    const USBD_AC_INTF_INFO *pIntfInfo;
+typedef struct {
+  U8 NumAlternateSettings;            // Number of entries in pIntfInfoList. First is AltSetting == 0.
+  I8 isTX;                            // 0: Receive interface, 1: Send Interface
+  const USBD_AC_INTF_INFO *pIntfInfo;
 } USBD_AC_INTF_LIST;
 
 /*********************************************************************
@@ -413,11 +409,10 @@ typedef struct
 *  Description
 *    Structure contains information for each audio endpoint.
 */
-typedef struct
-{
-    U8               InterfaceNo;   // Number of the interface the EP belongs to.
-    U8               Res2;
-    USB_ADD_EP_INFO  EPInfo;
+typedef struct {
+  U8               InterfaceNo;   // Number of the interface the EP belongs to.
+  U8               Res2;
+  USB_ADD_EP_INFO  EPInfo;
 } USBD_AC_EP_INFO;
 
 /*********************************************************************
@@ -427,20 +422,19 @@ typedef struct
 *   Description
 *     Configuration data for the Audio class instance.
 */
-typedef struct
-{
-    I8                        GeneratorFormat;  // Major version of the generator tool.
-    U8                        ProtocolVersion;  // USB audio protocol version (0x00 or 0x20).
-    U8                        NumInterfaces;    // Number of streaming interfaces (entries in pIntfList).
-    U8                        NumEndpoints;     // Number of entries in pEPList.
-    U8                        FirstStringIdx;   // Index of first string in pStringTab.
-    U8                        NumStrings;       // Number of strings in pStringTab.
-    U8                        StringIndex;      // Index of string descriptor for control interface.
-    U16                       ControlDescSize;  // Size of Control interface descriptor in bytes.
-    const U8                 *pControlDesc;     // Control interface descriptor.
-    const USBD_AC_INTF_LIST *pIntfList;         // List of USB_AC_INTF_INFO's.
-    const USBD_AC_EP_INFO    *pEPList;          // List of all endpoints.
-    const char *const       *pStringTab;        // List of strings.
+typedef struct {
+  I8                        GeneratorFormat;  // Major version of the generator tool.
+  U8                        ProtocolVersion;  // USB audio protocol version (0x00 or 0x20).
+  U8                        NumInterfaces;    // Number of streaming interfaces (entries in pIntfList).
+  U8                        NumEndpoints;     // Number of entries in pEPList.
+  U8                        FirstStringIdx;   // Index of first string in pStringTab.
+  U8                        NumStrings;       // Number of strings in pStringTab.
+  U8                        StringIndex;      // Index of string descriptor for control interface.
+  U16                       ControlDescSize;  // Size of Control interface descriptor in bytes.
+  const U8                * pControlDesc;     // Control interface descriptor.
+  const USBD_AC_INTF_LIST * pIntfList;        // List of USB_AC_INTF_INFO's.
+  const USBD_AC_EP_INFO   * pEPList;          // List of all endpoints.
+  const char * const      * pStringTab;       // List of strings.
 } USBD_AC_CONFIG;
 
 /*********************************************************************
@@ -450,18 +444,17 @@ typedef struct
 *   Description
 *     Initialization data for the Audio class instance.
 */
-typedef struct
-{
-    const USBD_AC_CONFIG       *pACConfig;           // Pointer to configuration data created by the generator.
-    USBD_AC_CONTROL_GET_FUNC   *pfControlGet;        // Callback function to handle audio control get requests.
-    USBD_AC_CONTROL_SET_FUNC   *pfControlSet;        // Callback function to handle audio control set requests.
-    USBD_AC_SET_ALT_INTERFACE *pfSetAlternate;       // Callback to inform the application about Set Interface control requests.
+typedef struct {
+  const USBD_AC_CONFIG      * pACConfig;           // Pointer to configuration data created by the generator.
+  USBD_AC_CONTROL_GET_FUNC  * pfControlGet;        // Callback function to handle audio control get requests.
+  USBD_AC_CONTROL_SET_FUNC  * pfControlSet;        // Callback function to handle audio control set requests.
+  USBD_AC_SET_ALT_INTERFACE * pfSetAlternate;      // Callback to inform the application about Set Interface control requests.
 #if USB_SUPPORT_GET_INTERFACE_CB
-    USBD_AC_GET_ALT_INTERFACE *pfGetInterfaceInfo;   // Callback to inform the application about Get Interface control requests.
+  USBD_AC_GET_ALT_INTERFACE * pfGetInterfaceInfo;  // Callback to inform the application about Get Interface control requests.
 #endif
-    U8                          IntEP;               // Optional interrupt EP. If used, it must be allocated by calling
-    // USBD_AddEP(1, USB_TRANSFER_TYPE_INT, Interval, NULL, PacketSize),
-    // where PacketSize must be 2 for audio 1.0 devices and 6 for audio 2.0 devices.
+  U8                          IntEP;               // Optional interrupt EP. If used, it must be allocated by calling
+                                                   // USBD_AddEP(1, USB_TRANSFER_TYPE_INT, Interval, NULL, PacketSize),
+                                                   // where PacketSize must be 2 for audio 1.0 devices and 6 for audio 2.0 devices.
 } USBD_AC_INIT_DATA;
 
 /*********************************************************************
@@ -471,12 +464,11 @@ typedef struct
 *  Description
 *    Event types for RX / TX callback functions.
 */
-typedef enum
-{
-    USBD_AC_EVENT_DATA_RECEIVED,       // Data was read from the host.
-    USBD_AC_EVENT_DATA_SEND,           // Data was send to the host.
-    USBD_AC_EVENT_TIMOUT,              // Timeout on read or write.
-    USBD_AC_EVENT_CLOSED               // Interface was closed by the host.
+typedef enum {
+  USBD_AC_EVENT_DATA_RECEIVED,       // Data was read from the host.
+  USBD_AC_EVENT_DATA_SEND,           // Data was send to the host.
+  USBD_AC_EVENT_TIMOUT,              // Timeout on read or write.
+  USBD_AC_EVENT_CLOSED               // Interface was closed by the host.
 } USBD_AC_EVENT;
 
 /*********************************************************************
@@ -501,25 +493,24 @@ typedef void USBD_AC_TX_CALLBACK(USBD_AC_EVENT Event, const void *pData, void *p
 *   Description
 *     This structure is used to forward audio data to the application.
 */
-typedef struct
-{
-    void                 *pBuffer;        // Pointer to the buffer which is used to receive audio data.
-    // The buffer must be provided by the application and must have a size of at least
-    // the maximum packet size of the currently selected audio stream endpoint,
-    // rounded up to a multiple of 4 or a multiple of the cache line size of the system.
-    // To achieve best performance the buffer should be word aligned or
-    // cache aligned if the system is using a data cache.
-    // Must be initialized before calling USBD_AC_OpenRXStream() (within USBD_AC_RX_CTX)
-    // and in the pfCallback function before it returns.
-    U32                   NumBytes;       // Must be initialized by the application to the size of the buffer 'pBuffer'.
-    // When the function pfCallback is called, it contains the number of bytes actually received.
-    U16                   NumPackets;     // Must be initialized by the application to the maximum number of audio packets that are read into
-    // the buffer before the application is notified via the callback function.
-    // When the function pfCallback is called, it contains the number of packets actually received.
-    U16                   Timeout;        // Timeout in units of SOFs (1ms for full-speed / 125us in high-speed).
-    // If no packets were received within the specified time, the application is notified
-    // with a USBD_AC_EVENT_TIMOUT event. A value of 0 means no timeout.
-    void                 *pUserContext;   // Can be arbitrarily used by the application.
+typedef struct {
+  void                * pBuffer;        // Pointer to the buffer which is used to receive audio data.
+                                        // The buffer must be provided by the application and must have a size of at least
+                                        // the maximum packet size of the currently selected audio stream endpoint,
+                                        // rounded up to a multiple of 4 or a multiple of the cache line size of the system.
+                                        // To achieve best performance the buffer should be word aligned or
+                                        // cache aligned if the system is using a data cache.
+                                        // Must be initialized before calling USBD_AC_OpenRXStream() (within USBD_AC_RX_CTX)
+                                        // and in the pfCallback function before it returns.
+  U32                   NumBytes;       // Must be initialized by the application to the size of the buffer 'pBuffer'.
+                                        // When the function pfCallback is called, it contains the number of bytes actually received.
+  U16                   NumPackets;     // Must be initialized by the application to the maximum number of audio packets that are read into
+                                        // the buffer before the application is notified via the callback function.
+                                        // When the function pfCallback is called, it contains the number of packets actually received.
+  U16                   Timeout;        // Timeout in units of SOFs (1ms for full-speed / 125us in high-speed).
+                                        // If no packets were received within the specified time, the application is notified
+                                        // with a USBD_AC_EVENT_TIMOUT event. A value of 0 means no timeout.
+  void                * pUserContext;   // Can be arbitrarily used by the application.
 } USBD_AC_RX_DATA;
 
 /*********************************************************************
@@ -552,44 +543,41 @@ typedef void USBD_AC_RX_CALLBACK(USBD_AC_EVENT Event, USBD_AC_RX_DATA * pRxData)
 *     function USBD_AC_OpenRXStream(). The data must remain valid and must not
 *     be modified by the application while the stream is open and used.
 */
-typedef struct
-{
-    U16    Interface;                  // Index of the audio interface, see generated USBD_AC_INTERFACE_... defines.
-    U16    Flags;                      // Reserved for future extensions, must be set to 0.
-    void (*pfSOFCallback)(void *pCtx); // Function that is called every 'Interval' SOFs received from the host (optional).
-    // May be used to to calculate the data rate for explicit feedback.
-    // The function takes a pointer to the USBD_AC_RX_CTX structure as parameter
-    // (need to be cast to USBD_AC_RX_CTX * inside the function, if used).
-    U16 FeedbackInterval;              // Interval (Number of SOFs) used for calling pfSOFCallback.
-    // Measured in units of 1ms for full-speed / 125us in high-speed.
-    USBD_AC_RX_CALLBACK *pfCallback;   // Function that is called when data was received from the host
-    // or a 'close' event or timeout has occurred on the stream.
-    USBD_AC_RX_DATA RxData;            // Data transfer information.
-    struct
-    {
-        //
-        // This members are private to the USB audio class implementation.
-        // They do not need to be initialized and must never be modified by the application.
-        //
-        U8  DataEPIndex;       // Index of the data endpoint
-        U8  FeedbackEPIndex;   // Index of the feedback endpoint (or 0, if none).
-        U8  Speed;             // Actual USB speed: 0 = full-speed, 1 = high-speed.
-        U8  CurrentAltSetting;
-        I8  isOpen;
-        U16 MaxPacketSize;
-        U16 MaxPackets;        // Max. number of packets to read.
-        U8  *pBuffer;
-        U32 NumBytesToRead;
-        union
-        {
-            U32  Dummy;          // For alignment
-            U8   DataRate[5];    // Data rate value to be send to the host.
-        } Feedback;
-        USB_SOF_CALLBACK_HOOK  TimeoutSOFHook;     // To monitor timeouts.
-        USB_SOF_CALLBACK_HOOK  FeedbackSOFHook;    // To register the pfSOFCallback function.
-        USB_EVENT_CALLBACK     DataEPHook;         // To catch data EP events.
-        USB_EVENT_CALLBACK     FeedbackEPHook;     // To catch feedback EP events.
-    } Private;
+typedef struct {
+  U16    Interface;                  // Index of the audio interface, see generated USBD_AC_INTERFACE_... defines.
+  U16    Flags;                      // Reserved for future extensions, must be set to 0.
+  void (*pfSOFCallback)(void *pCtx); // Function that is called every 'Interval' SOFs received from the host (optional).
+                                     // May be used to to calculate the data rate for explicit feedback.
+                                     // The function takes a pointer to the USBD_AC_RX_CTX structure as parameter
+                                     // (need to be cast to USBD_AC_RX_CTX * inside the function, if used).
+  U16 FeedbackInterval;              // Interval (Number of SOFs) used for calling pfSOFCallback.
+                                     // Measured in units of 1ms for full-speed / 125us in high-speed.
+  USBD_AC_RX_CALLBACK * pfCallback;  // Function that is called when data was received from the host
+                                     // or a 'close' event or timeout has occurred on the stream.
+  USBD_AC_RX_DATA RxData;            // Data transfer information.
+  struct {
+    //
+    // This members are private to the USB audio class implementation.
+    // They do not need to be initialized and must never be modified by the application.
+    //
+    U8  DataEPIndex;       // Index of the data endpoint
+    U8  FeedbackEPIndex;   // Index of the feedback endpoint (or 0, if none).
+    U8  Speed;             // Actual USB speed: 0 = full-speed, 1 = high-speed.
+    U8  CurrentAltSetting;
+    I8  isOpen;
+    U16 MaxPacketSize;
+    U16 MaxPackets;        // Max. number of packets to read.
+    U8  *pBuffer;
+    U32 NumBytesToRead;
+    union {
+      U32  Dummy;          // For alignment
+      U8   DataRate[5];    // Data rate value to be send to the host.
+    } Feedback;
+    USB_SOF_CALLBACK_HOOK  TimeoutSOFHook;     // To monitor timeouts.
+    USB_SOF_CALLBACK_HOOK  FeedbackSOFHook;    // To register the pfSOFCallback function.
+    USB_EVENT_CALLBACK     DataEPHook;         // To catch data EP events.
+    USB_EVENT_CALLBACK     FeedbackEPHook;     // To catch feedback EP events.
+  } Private;
 } USBD_AC_RX_CTX;
 
 /*********************************************************************
@@ -599,14 +587,13 @@ typedef struct
 *   Description
 *     Internal use.
 */
-typedef struct
-{
-    U16               NumPackets;      // Total number of packets for this entry
-    U16               NumLargePackets; // Number of Packets with one more sample
-    U16               PacketSize;      // Size of 'small' packets
-    U32               Factor;          // Distribution of small and large packets
-    const U8         *pData;
-    const void       *pBuffer;         // Pointer saved for user callback
+typedef struct {
+  U16               NumPackets;      // Total number of packets for this entry
+  U16               NumLargePackets; // Number of Packets with one more sample
+  U16               PacketSize;      // Size of 'small' packets
+  U32               Factor;          // Distribution of small and large packets
+  const U8        * pData;
+  const void      * pBuffer;         // Pointer saved for user callback
 } USBD_AC_WRITE_QUEUE;
 
 /*********************************************************************
@@ -619,43 +606,40 @@ typedef struct
 *     function USBD_AC_OpenTXStream(). The data must remain valid and must not
 *     be modified by the application while the stream is open and used.
 */
-typedef struct
-{
-    U16                   Interface;      // Index of the audio interface, see generated USBD_AC_INTERFACE_... defines.
-    U16                   Flags;          // Reserved for future extensions, must be set to 0.
-    U16                   SampleSize;     // Number of bytes for a single audio sample (all channels).
-    // The value is not required (and is ignored) if only single audio packets is
-    // send via USBD_AD_Send().
-    U16                   Timeout;        // Timeout in units of SOFs (1ms for full-speed / 125us in high-speed).
-    // If no packets were send within the specified time, the application is notified
-    // with a USBD_AC_EVENT_TIMOUT event. A value of 0 means no timeout.
-    USBD_AC_TX_CALLBACK *pfCallback;      // Function that is called when data was send to the host
-    // or a 'close' event or timeout has occurred on the stream.
-    void                 *pUserContext;   // Can be arbitrarily used by the application.
-    struct
-    {
-        //
-        // This members are private to the USB audio class implementation.
-        // They do not need to be initialized and must never be modified by the application.
-        //
-        U8  DataEPIndex;                // Index of the data endpoint
-        U8  FeedbackEPIndex;            // Index of the feedback endpoint (or 0, if none).
-        U8  Speed;                      // Actual USB speed: 0 = full-speed, 1 = high-speed.
-        U8  CurrentAltSetting;
-        U16 MaxPacketSize;
-        I8  isOpen;
-        U8  NumEntries;                 // Number of active entries in Queue.
-        USBD_AC_WRITE_QUEUE Queue[2];
-        union
-        {
-            U32  Dummy;                   // For alignment
-            U8   DataRateU[5];            // Data rate value to be send to host.
-            // Only bytes [1..4] are used, first byte to force unalignment.
-        } Feedback;
-        USB_SOF_CALLBACK_HOOK  TimeoutSOFHook;     // To monitor timeouts.
-        USB_EVENT_CALLBACK     DataEPHook;         // To catch data EP events.
-        USB_EVENT_CALLBACK     FeedbackEPHook;     // To catch feedback EP events.
-    } Private;
+typedef struct {
+  U16                   Interface;      // Index of the audio interface, see generated USBD_AC_INTERFACE_... defines.
+  U16                   Flags;          // Reserved for future extensions, must be set to 0.
+  U16                   SampleSize;     // Number of bytes for a single audio sample (all channels).
+                                        // The value is not required (and is ignored) if only single audio packets is
+                                        // send via USBD_AD_Send().
+  U16                   Timeout;        // Timeout in units of SOFs (1ms for full-speed / 125us in high-speed).
+                                        // If no packets were send within the specified time, the application is notified
+                                        // with a USBD_AC_EVENT_TIMOUT event. A value of 0 means no timeout.
+  USBD_AC_TX_CALLBACK * pfCallback;     // Function that is called when data was send to the host
+                                        // or a 'close' event or timeout has occurred on the stream.
+  void                * pUserContext;   // Can be arbitrarily used by the application.
+  struct {
+    //
+    // This members are private to the USB audio class implementation.
+    // They do not need to be initialized and must never be modified by the application.
+    //
+    U8  DataEPIndex;                // Index of the data endpoint
+    U8  FeedbackEPIndex;            // Index of the feedback endpoint (or 0, if none).
+    U8  Speed;                      // Actual USB speed: 0 = full-speed, 1 = high-speed.
+    U8  CurrentAltSetting;
+    U16 MaxPacketSize;
+    I8  isOpen;
+    U8  NumEntries;                 // Number of active entries in Queue.
+    USBD_AC_WRITE_QUEUE Queue[2];
+    union {
+      U32  Dummy;                   // For alignment
+      U8   DataRateU[5];            // Data rate value to be send to host.
+                                    // Only bytes [1..4] are used, first byte to force unalignment.
+    } Feedback;
+    USB_SOF_CALLBACK_HOOK  TimeoutSOFHook;     // To monitor timeouts.
+    USB_EVENT_CALLBACK     DataEPHook;         // To catch data EP events.
+    USB_EVENT_CALLBACK     FeedbackEPHook;     // To catch feedback EP events.
+  } Private;
 } USBD_AC_TX_CTX;
 
 /*********************************************************************
@@ -664,22 +648,22 @@ typedef struct
 *
 **********************************************************************
 */
-int      USBD_AC_Add(const USBD_AC_INIT_DATA * pInitData);
-unsigned USBD_AC_GetCurrentAltSetting(unsigned Interface);
-int      USBD_AC_SendInterruptMessage(unsigned Interface, U32 ID, U8 ChannelNumber, int ms);
-int      USBD_AC_OpenRXStream(USBD_AC_RX_CTX *pCtx);
-void     USBD_AC_CloseRXStream(USBD_AC_RX_CTX *pCtx);
-void     USBD_AC_SetFeedbackDataRate(USBD_AC_RX_CTX *pCtx, U32 DataRate);
-int      USBD_AC_OpenTXStream(USBD_AC_TX_CTX *pCtx);
-void     USBD_AC_CloseTXStream(USBD_AC_TX_CTX *pCtx);
-U32      USBD_AC_GetFeedbackDataRate(USBD_AC_TX_CTX *pCtx);
-int      USBD_AC_Send(USBD_AC_TX_CTX *pCtx, U16 NumFrames, U32 NumBytes, const void *pData);
+int      USBD_AC_Add                    (const USBD_AC_INIT_DATA * pInitData);
+unsigned USBD_AC_GetCurrentAltSetting   (unsigned Interface);
+int      USBD_AC_SendInterruptMessage   (unsigned Interface, U32 ID, U8 ChannelNumber, int ms);
+int      USBD_AC_OpenRXStream           (USBD_AC_RX_CTX *pCtx);
+void     USBD_AC_CloseRXStream          (USBD_AC_RX_CTX *pCtx);
+void     USBD_AC_SetFeedbackDataRate    (USBD_AC_RX_CTX *pCtx, U32 DataRate);
+int      USBD_AC_OpenTXStream           (USBD_AC_TX_CTX *pCtx);
+void     USBD_AC_CloseTXStream          (USBD_AC_TX_CTX *pCtx);
+U32      USBD_AC_GetFeedbackDataRate    (USBD_AC_TX_CTX *pCtx);
+int      USBD_AC_Send                   (USBD_AC_TX_CTX *pCtx, U16 NumFrames, U32 NumBytes, const void *pData);
 
-const USBD_AC_STREAM_INTF_INFO *USBD_AC_GetStreamInfo(unsigned Interface, int AltSetting);
+const USBD_AC_STREAM_INTF_INFO * USBD_AC_GetStreamInfo(unsigned Interface, int AltSetting);
 
 
 #if defined(__cplusplus)
-}
+  }
 #endif
 
 #endif  /* USBD_AC_H */

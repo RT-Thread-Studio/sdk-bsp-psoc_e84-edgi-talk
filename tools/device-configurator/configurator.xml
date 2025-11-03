@@ -1,6 +1,6 @@
 <configurators>
   <configurator id="device-configurator">
-    <display_name>Device Configurator 5.30</display_name>
+    <display_name>Device Configurator 5.50</display_name>
     <executable>device-configurator</executable>
     <icon>device-configurator.png</icon>
     <command_line_args>--design=$CONFIG_FILE</command_line_args>

@@ -26,13 +26,14 @@
 /**
 * \addtogroup group_ms_ctl
 * \{
-* MS CTL is the Master Security Controller which helps to protect the transactions
+* MSC is the Master Security Controller which helps to protect the transactions
 * initiated on the bus.
 *
 * MSC is instantiated on non-CPU paths to provide security extension attributes
 * and to add TrustZone-M capability. MSC Driver provides APIs to configure
-* access rights to the given master for each Protection Context. Maximum of 32 masters
-* are supported. It also provides API to set the active PC.
+* access rights to the given master (a core, DMA, etc) for each Protection Context 
+* (provides a more precise way of applying memory restrictions).
+* Maximum of 32 masters are supported. It also provides API to set the active PC.
 *
 * The functions and other declarations used in this driver are in cy_ms_ctl.h.
 * You can include cy_pdl.h (ModusToolbox only) to get access to all functions
@@ -40,11 +41,16 @@
 *
 * You can use this driver to protect the transactions initiated on the bus.
 *
-* PSE8 devices support multiple CPU subsystems, viz. SYSCPUSS and APPCPUSS. Each subsystem
-* has its own version of MS_CTL IP within it. In order to support MS_CTL IP in the
-* APPCPUSS, new set of APIs with suffix V1 are added.
+* Devices support multiple CPU subsystems, viz. SYSCPUSS (Power Domain 0 powered by a 
+* low-power 32-bit Arm® Cortex-M33 (CM33) CPU, which handles security, control, communication) 
+* and APPCPUSS (Power Domain 1 powered by an Arm Cortex-M55 (CM55) processor, 
+* which supports M-profile vector extension (MVE), Digital Signal Processing (DSP), 
+* and Machine Learning (ML) capabilities).
 *
-* Following APIs are used for MS_CTL IP in SYSCPUSS <br>
+* The default MSC configuration is pre-defined and can be found in the architecture TRM.
+* Each subsystem has its own MSC APIs to be used within it.
+*
+* Following APIs are used for MSC IP in SYSCPUSS <br>
 * Cy_Ms_Ctl_ConfigBusMaster <br>
 * Cy_Ms_Ctl_ConfigMscAcgResp <br>
 * Cy_Ms_Ctl_SetActivePC <br>
@@ -52,7 +58,7 @@
 * Cy_Ms_Ctl_SetPcHandler <br>
 * Cy_Ms_Ctl_GetPcHandler <br>
 *
-* Following APIs are used for MS_CTL IP in APPCPUSS <br>
+* Following APIs are used for MSC IP in APPCPUSS <br>
 * Cy_Ms_Ctl_ConfigBusMasterV1 <br>
 * Cy_Ms_Ctl_ConfigMscAcgRespV1 <br>
 * Cy_Ms_Ctl_SetActivePCV1 <br>
@@ -64,27 +70,7 @@
 * the technical reference manual (TRM).
 *
 * \section group_ms_ctl_MISRA MISRA-C Compliance
-* The mSc driver does not have any specific deviations.
-*
-* \section group_ms_ctl_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.2</td>
-*     <td>Updated API \ref Cy_Ms_Ctl_SetPcHandler.</td>
-*     <td>Defect fix.</td>
-*   </tr>
-*   <tr>
-*     <td>1.1</td>
-*     <td>Added support for PSE8 devices, Corrected typo in API</td>
-*     <td>Support for PSE8 devices</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
+* The MSC driver does not have any specific deviations.
 *
 * \defgroup group_ms_ctl_macros Macros
 * \defgroup group_ms_ctl_functions Functions
@@ -131,7 +117,7 @@ extern "C" {
 /** MSC API return status */
 typedef enum
 {
-    CY_MS_CTL_SUCCESS       = 0x00U,                                   /**< Returned successful */
+    CY_MS_CTL_SUCCESS       = 0x00U,                                      /**< Returned successful */
     CY_MS_CTL_BAD_PARAM     = CY_MS_CTL_ID | CY_PDL_STATUS_ERROR | 0x01U, /**< Bad parameter was passed */
     CY_MS_CTL_INVALID_STATE = CY_MS_CTL_ID | CY_PDL_STATUS_ERROR | 0x02U, /**< The operation is not setup */
     CY_MS_CTL_FAILURE       = CY_MS_CTL_ID | CY_PDL_STATUS_ERROR | 0x03U, /**< The resource is locked */
@@ -139,69 +125,43 @@ typedef enum
 } cy_en_ms_ctl_status_t;
 
 /** Bus masters */
-#if (CY_IP_M33SYSCPUSS_VERSION > 1) || defined (CY_IP_M55APPCPUSS)
 typedef enum
 {
-    CPUSS_MS_ID_CM33_0            = 0,
-    CPUSS_MS_ID_CM33_1            = 1,
-    CPUSS_MS_ID_DMAC0_MS          = 2,
-    CPUSS_MS_ID_DMAC1_MS          = 3,
-    CPUSS_MS_ID_DW0_MS            = 4,
-    CPUSS_MS_ID_DW1_MS            = 5,
-    CPUSS_MS_ID_CODE_MS_0         = 6,
-    CPUSS_MS_ID_SYS_MS_0          = 7,
-    CPUSS_MS_ID_SYS_MS_1          = 8,
-    CPUSS_MS_ID_EXP_SYSCPUSS_MS_0 = 9,
-    CPUSS_MS_ID_EXP_SYSCPUSS_MS_1 = 10,
-    CPUSS_MS_ID_EXP_SYSCPUSS_MS_2 = 11,
-    CPUSS_MS_ID_EXP_SYSCPUSS_MS_3 = 12,
-    CPUSS_MS_ID_EXP_APPCPUSS_MS_0 = 13,
-    CPUSS_MS_ID_EXP_APPCPUSS_MS_1 = 14,
-    CPUSS_MS_ID_EXP_APPCPUSS_MS_2 = 15,
-    CPUSS_MS_ID_EXP_APPCPUSS_MS_3 = 16,
-    CPUSS_MS_ID_SYS_MS_0_NVM      = 17,
-    CPUSS_MS_ID_SYS_MS_1_NVM      = 18,
-    CPUSS_MS_ID_CM55_MS_0         = 19,
-    CPUSS_MS_ID_CM55_MS_1         = 20,
-    CPUSS_MS_ID_CM55_MS_2         = 21,
-    CPUSS_MS_ID_CM55_MS_3         = 22,
-    CPUSS_MS_ID_AXIDMAC0_MS       = 23,
-    CPUSS_MS_ID_AXIDMAC1_MS       = 24,
-    CPUSS_MS_ID_U55AXI0_MS        = 25,
-    CPUSS_MS_ID_U55AXI1_MS        = 26,
-    CPUSS_MS_ID_AXI_SYS_MS2       = 27,
-    CPUSS_MS_ID_AXI_SYS_MS3       = 28,
-    CPUSS_MS_ID_BISR_MS           = 29,
-    CPUSS_MS_ID_RESERVED          = 30,
-    CPUSS_MS_ID_TC_MS             = 31
+    CY_MS_CTL_ID_CM33_0            = 0,  /**< Cortex M33 CPU-0 */
+    CY_MS_CTL_ID_CM33_1            = 1,  /**< Cortex M33 CPU-1 */
+    CY_MS_CTL_ID_DMAC0_MS          = 2,  /**< AHBDMA 0 controller */
+    CY_MS_CTL_ID_DMAC1_MS          = 3,  /**< AHBDMA 1 controller */
+    CY_MS_CTL_ID_DW0_MS            = 4,  /**< DataWire 0 */
+    CY_MS_CTL_ID_DW1_MS            = 5,  /**< DataWire 1 */
+    CY_MS_CTL_ID_CODE_MS_0         = 6,  /**< External 128-bit AHB5 CODE master-0 */
+    CY_MS_CTL_ID_SYS_MS_0          = 7,  /**< External 32-bit AHB5 SYS interconnect master-0 */
+    CY_MS_CTL_ID_SYS_MS_1          = 8,  /**< External 32-bit AHB5 SYS interconnect master-1 */
+    CY_MS_CTL_ID_EXP_SYSCPUSS_MS_0 = 9,  /**< External 32-bit AHB5 EXP interconnect master-0 */
+    CY_MS_CTL_ID_EXP_SYSCPUSS_MS_1 = 10, /**< External 32-bit AHB5 EXP interconnect master-1 */
+    CY_MS_CTL_ID_EXP_SYSCPUSS_MS_2 = 11, /**< External 32-bit AHB5 EXP interconnect master-2 */
+    CY_MS_CTL_ID_EXP_SYSCPUSS_MS_3 = 12, /**< External 32-bit AHB5 EXP interconnect master-3 */
+    CY_MS_CTL_ID_EXP_APPCPUSS_MS_0 = 13, /**< External 32-bit AHB5 EXP interconnect master-4 */
+    CY_MS_CTL_ID_EXP_APPCPUSS_MS_1 = 14, /**< External 32-bit AHB5 EXP interconnect master-5 */
+    CY_MS_CTL_ID_EXP_APPCPUSS_MS_2 = 15, /**< External 32-bit AHB5 EXP interconnect master-6 */
+    CY_MS_CTL_ID_EXP_APPCPUSS_MS_3 = 16, /**< External 32-bit AHB5 EXP interconnect master-7 */
+    CY_MS_CTL_ID_SYS_MS_0_NVM      = 17, /**< External 32-bit AHB5 SYS NVM interconnect master-0 */
+    CY_MS_CTL_ID_SYS_MS_1_NVM      = 18, /**< External 32-bit AHB5 SYS NVM interconnect master-1 */
+    CY_MS_CTL_ID_CM55_MS_0         = 19, /**< Cortex M55 CPU-0 */
+    CY_MS_CTL_ID_CM55_MS_1         = 20, /**< Cortex M55 CPU-1 */
+    CY_MS_CTL_ID_CM55_MS_2         = 21, /**< Cortex M55 CPU-2 */
+    CY_MS_CTL_ID_CM55_MS_3         = 22, /**< Cortex M55 CPU-3 */
+    CY_MS_CTL_ID_AXIDMAC0_MS       = 23, /**< AXIDMA 0 controller */
+    CY_MS_CTL_ID_AXIDMAC1_MS       = 24, /**< AXIDMA 1 controller */
+    CY_MS_CTL_ID_U55AXI0_MS        = 25, /**< AXI_SYS_MS_0 */
+    CY_MS_CTL_ID_U55AXI1_MS        = 26, /**< AXI_SYS_MS_1 */
+    CY_MS_CTL_ID_AXI_SYS_MS2       = 27, /**< AXI_SYS_MS_2 */
+    CY_MS_CTL_ID_AXI_SYS_MS3       = 28, /**< AXI_SYS_MS_3 */
+    CY_MS_CTL_ID_BISR_MS           = 29, /**< BISR_MS */
+    CY_MS_CTL_ID_RESERVED          = 30, /**< Reserved */
+    CY_MS_CTL_ID_TC_MS             = 31  /**< Test Controller */
 } en_ms_ctl_master_t;
-#else
-typedef enum
-{
-    CPUSS_MS_ID_CM33_0       = 0,
-    CPUSS_MS_ID_CM33_1       = 1,
-    CPUSS_MS_ID_DMAC0_MS     = 2,
-    CPUSS_MS_ID_DMAC1_MS     = 3,
-    CPUSS_MS_ID_DW0          = 4,
-    CPUSS_MS_ID_DW1          = 5,
-    CPUSS_MS_ID_CODE_MS_0    = 6,
-    CPUSS_MS_ID_SYS_MS_0     = 7,
-    CPUSS_MS_ID_SYS_MS_1     = 8,
-    CPUSS_MS_ID_EXP_MS_0     = 9,
-    CPUSS_MS_ID_EXP_MS_1     = 10,
-    CPUSS_MS_ID_EXP_MS_2     = 11,
-    CPUSS_MS_ID_EXP_MS_3     = 12,
-    CPUSS_MS_ID_EXP_MS_4     = 13,
-    CPUSS_MS_ID_EXP_MS_5     = 14,
-    CPUSS_MS_ID_EXP_MS_6     = 15,
-    CPUSS_MS_ID_EXP_MS_7     = 16,
-    CPUSS_MS_ID_SYS_MS_0_NVM = 17,
-    CPUSS_MS_ID_SYS_MS_1_NVM = 18,
-    CPUSS_MS_ID_TC_MS        = 31
-} en_ms_ctl_master_t;
-#endif
 
-/** Bus masters security controller and ACG config */
+/** Bus masters security controller and Access Control Group (ACG) config */
 typedef enum
 {
     CODE_MS0_MSC = 0,
@@ -214,7 +174,7 @@ typedef enum
 
 #if defined (CY_IP_M55APPCPUSS)
 
-/** Bus masters security controller and ACG config */
+/** Bus masters security controller and Access Control Group (ACG) config */
 typedef enum
 {
     APP_SYS_MS0_MSC  = 0,
@@ -231,7 +191,7 @@ typedef enum
     APP_EXP_MS3_MSC  = 11,
 } en_ms_ctl_master_sc_acg_v1_t;
 #endif
-
+ 
 /** Response type when ACG blocks incoming transfers */
 typedef enum
 {
@@ -265,7 +225,7 @@ typedef enum
     CY_MS_CTL_PCMASK13 = 0x2000U,  /**< Mask to allow PC = 13 */
     CY_MS_CTL_PCMASK14 = 0x4000U,  /**< Mask to allow PC = 14 */
     CY_MS_CTL_PCMASK15 = 0x8000U   /**< Mask to allow PC = 15 */
-} cy_en_prot_pcmask_t;
+} cy_en_ms_ctl_pcmask_t;
 
 /** \} group_ms_ctl_enums */
 
@@ -273,70 +233,33 @@ typedef enum
 * \addtogroup group_ms_ctl_functions
 * \{
 */
-/*******************************************************************************
-* Function Name: Cy_Ms_Ctl_ConfigBusMaster
-****************************************************************************//**
-*
-* \brief Configures the referenced bus master  by setting the privilege , non-secure
-* and PC mask settings
-*
-* \param busMaster
-* Bus master being initialized
-*
-* \param privileged
-* privileged setting
-*
-* \param pcMask
-* pcMask
-*
-* \param nonSecure
-* Bus master security  setting
-*
-* \return
-* Initialization status
-*
-*******************************************************************************/
 cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigBusMaster(en_ms_ctl_master_t busMaster, bool privileged, bool nonSecure, uint32_t pcMask);
-
-/*******************************************************************************
-* Function Name: Cy_Ms_Ctl_ConfigMscAcgResp
-****************************************************************************//**
-*
-* \brief Response configuration for ACG and MSC for the referenced bus master
-*
-* \param busMaster
-* Bus master for which response is being initialized
-*
-* \param gateResp
-* Response type when the ACG is blocking the incoming transfers:
-*
-* \param secResp
-* Bust master privileged setting
-*
-* \return
-* Initialization status
-*
-*******************************************************************************/
-
 cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigMscAcgResp(en_ms_ctl_master_sc_acg_t busMaster, cy_en_ms_ctl_cfg_gate_resp_t gateResp, cy_en_ms_ctl_sec_resp_t secResp);
+cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetPcHandler(uint32_t pc, cy_israddress handler);
+
 
 /*******************************************************************************
 * Function Name: Cy_Ms_Ctl_SetActivePC
 ****************************************************************************//**
 *
-* \brief Set active protection context (PC)for the referenced bus master
+* \brief Set active protection context (PC) for the referenced bus master
 *
 * \param busMaster
 * Bus master being initialized
 *
 * \param pc
-* PC value
+* Protection Context value
 *
 * \return
-* Initialization status
+* Requested operation status
 *
 *******************************************************************************/
-cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetActivePC(en_ms_ctl_master_t busMaster, uint32_t pc);
+__STATIC_INLINE cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetActivePC(en_ms_ctl_master_t busMaster, uint32_t pc)
+{
+    CY_REG32_CLR_SET(MS_CTL_PC_VAL_VX(busMaster), MS_PC_PC_PC , pc);
+    return CY_MS_CTL_SUCCESS;
+}
+
 
 /*******************************************************************************
 * Function Name: Cy_Ms_Ctl_GetActivePC
@@ -348,11 +271,14 @@ cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetActivePC(en_ms_ctl_master_t busMaster, uint32
 * Bus master for which the PC value is being read
 *
 * \return
-* PC value
+* Protection Context value
 *
 *******************************************************************************/
+__STATIC_INLINE uint32_t Cy_Ms_Ctl_GetActivePC(en_ms_ctl_master_t busMaster)
+{
+    return ((uint32_t)_FLD2VAL(MS_PC_PC_READ_MIR_PC, MS_CTL_PC_READ_MIRROR_VX(busMaster)));
+}
 
-uint32_t Cy_Ms_Ctl_GetActivePC(en_ms_ctl_master_t busMaster);
 
 /*******************************************************************************
 * Function Name: Cy_Ms_Ctl_SetSavedPC
@@ -364,13 +290,17 @@ uint32_t Cy_Ms_Ctl_GetActivePC(en_ms_ctl_master_t busMaster);
 * Bus master being initialized
 *
 * \param savedPc
-* PC value
+* Protection Context value
 *
 * \return
-* Initialization status
+* Requested operation status
 *
 *******************************************************************************/
-cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetSavedPC(en_ms_ctl_master_t busMaster, uint32_t savedPc);
+__STATIC_INLINE cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetSavedPC(en_ms_ctl_master_t busMaster, uint32_t savedPc)
+{
+    CY_REG32_CLR_SET(MS_CTL_PC_VAL_VX(busMaster), MS_PC_PC_PC_SAVED , savedPc);
+    return CY_MS_CTL_SUCCESS;
+}
 
 
 /*******************************************************************************
@@ -383,34 +313,14 @@ cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetSavedPC(en_ms_ctl_master_t busMaster, uint32_
 * Bus master for which the saved PC value is being read
 *
 * \return
-* PC value
+* Protection Context value
 *
 *******************************************************************************/
+__STATIC_INLINE uint32_t Cy_Ms_Ctl_GetSavedPC(en_ms_ctl_master_t busMaster)
+{
+    return ((uint32_t)_FLD2VAL(MS_PC_PC_READ_MIR_PC_SAVED, MS_CTL_PC_READ_MIRROR_VX(busMaster)));
+}
 
-uint32_t Cy_Ms_Ctl_GetSavedPC(en_ms_ctl_master_t busMaster);
-
-/*******************************************************************************
-* Function Name: Cy_Ms_Ctl_SetPcHandler
-****************************************************************************//**
-*
-* \brief Sets the handler address for the given PC. This is used to detect entry to Cypress
-* "trusted" code through an exception/interrupt.
-*
-* \note The function can't update the handler address for the PC lower than the current application's PC.
-* For example, if the application is running in PC2 it can't update handler address for PC0 or PC1.
-*
-* \param pc
-* Protection context for which the handler is being set
-*
-* \param handler
-* Address of the protection context  handler
-*
-* \return
-* Initialization status
-*
-*******************************************************************************/
-
-cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetPcHandler(uint32_t pc, cy_israddress handler);
 
 /*******************************************************************************
 * Function Name: Cy_Ms_Ctl_GetPcHandler
@@ -429,87 +339,49 @@ cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetPcHandler(uint32_t pc, cy_israddress handler)
 cy_israddress Cy_Ms_Ctl_GetPcHandler(uint32_t pc);
 
 #if defined (CY_IP_M55APPCPUSS)
-
-
-/*******************************************************************************
-* Function Name: Cy_Ms_Ctl_ConfigBusMasterV1
-****************************************************************************//**
-*
-* \brief Configures the referenced bus master  by setting the privilege , non-secure
-* and PC mask settings in APPCPUSS.
-*
-* \param busMaster
-* Bus master being initialized
-*
-* \param privileged
-* privileged setting
-*
-* \param pcMask
-* pcMask
-*
-* \param nonSecure
-* Bus master security  setting
-*
-* \return
-* Initialization status
-*
-*******************************************************************************/
 cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigBusMasterV1(en_ms_ctl_master_t busMaster, bool privileged, bool nonSecure, uint32_t pcMask);
-
-/*******************************************************************************
-* Function Name: Cy_Ms_Ctl_ConfigMscAcgRespV1
-****************************************************************************//**
-*
-* \brief Response configuration for ACG and MSC for the referenced bus master in APPCPUSS
-*
-* \param busMaster
-* Bus master for which response is being initialized
-*
-* \param gateResp
-* Response type when the ACG is blocking the incoming transfers:
-*
-* \param secResp
-* Bust master privileged setting
-*
-* \return
-* Initialization status
-*
-*******************************************************************************/
-
 cy_en_ms_ctl_status_t Cy_Ms_Ctl_ConfigMscAcgRespV1(en_ms_ctl_master_sc_acg_v1_t busMaster, cy_en_ms_ctl_cfg_gate_resp_t gateResp, cy_en_ms_ctl_sec_resp_t secResp);
 
 /*******************************************************************************
 * Function Name: Cy_Ms_Ctl_SetActivePCV1
 ****************************************************************************//**
 *
-* \brief Set active protection context (PC)for the referenced bus master in APPCPUSS
+* \brief Set active protection context (PCTX) for the referenced bus master in APPCPUSS
 *
 * \param busMaster
 * Bus master being initialized
 *
-* \param pc
-* PC value
+* \param p_ctx
+* Protection Context value
 *
 * \return
-* Initialization status
+* Requested operation status
 *
 *******************************************************************************/
-cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetActivePCV1(en_ms_ctl_master_t busMaster, uint32_t pc);
+__STATIC_INLINE cy_en_ms_ctl_status_t Cy_Ms_Ctl_SetActivePCV1(en_ms_ctl_master_t busMaster, uint32_t pc)
+{
+    CY_REG32_CLR_SET(MS_CTL_PC_VAL_V1(busMaster), MS_CTL_MS_PC_PC_PC , pc);
+    return CY_MS_CTL_SUCCESS;
+}
+
 
 /*******************************************************************************
 * Function Name: Cy_Ms_Ctl_AppCpuSsGetActivePC
 ****************************************************************************//**
 *
-* \brief Reads the active protection context (PC) for the referenced bus master in APPCPUSS
+* \brief Reads the active protection context (PCTX) for the referenced bus master in APPCPUSS
 *
 * \param busMaster
 * Bus master for which the PC value is being read
 *
 * \return
-* PC value
+* Protection Context value
 *
 *******************************************************************************/
-uint32_t Cy_Ms_Ctl_GetActivePCV1(en_ms_ctl_master_t busMaster);
+__STATIC_INLINE uint32_t Cy_Ms_Ctl_GetActivePCV1(en_ms_ctl_master_t busMaster)
+{
+    return ((uint32_t)_FLD2VAL(MS_CTL_MS_PC_PC_READ_MIR_PC, MS_CTL_PC_READ_MIRROR_V1(busMaster)));
+}
 
 #endif
 /** \} group_ms_ctl_functions */
@@ -519,7 +391,7 @@ uint32_t Cy_Ms_Ctl_GetActivePCV1(en_ms_ctl_master_t busMaster);
 #endif
 
 #endif /* #if defined (CY_IP_M55APPCPUSS) */
-
+ 
 #endif /* #if defined (CY_IP_M33SYSCPUSS) */
 
 /** \} group_ms_ctl */

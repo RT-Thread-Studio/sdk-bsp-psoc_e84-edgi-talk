@@ -84,11 +84,11 @@ static uint8_t const cy_desWeakKeys[CY_CRYPTO_DES_WEAK_KEY_COUNT][CY_CRYPTO_DES_
 };
 
 static void Cy_Crypto_Core_V1_Des_ProcessBlock(CRYPTO_Type *base,
-        cy_en_crypto_des_mode_t desMode,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t const *key,
-        uint32_t const *dstBlock,
-        uint32_t const *srcBlock);
+                                     cy_en_crypto_des_mode_t desMode,
+                                     cy_en_crypto_dir_mode_t dirMode,
+                                     uint32_t const *key,
+                                     uint32_t const *dstBlock,
+                                     uint32_t const *srcBlock);
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_V1_Des_ProcessBlock
@@ -118,22 +118,21 @@ static void Cy_Crypto_Core_V1_Des_ProcessBlock(CRYPTO_Type *base,
 *
 *******************************************************************************/
 static void Cy_Crypto_Core_V1_Des_ProcessBlock(CRYPTO_Type *base,
-        cy_en_crypto_des_mode_t desMode,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint32_t const *key,
-        uint32_t const *dstBlock,
-        uint32_t const *srcBlock)
+                                     cy_en_crypto_des_mode_t desMode,
+                                     cy_en_crypto_dir_mode_t dirMode,
+                                     uint32_t const *key,
+                                     uint32_t const *dstBlock,
+                                     uint32_t const *srcBlock)
 {
-    uint8_t const cy_desCommands[2][2] =
-    {
+    uint8_t const cy_desCommands[2][2] = {
         { CY_CRYPTO_V1_DES_BLOCK_OPC,  CY_CRYPTO_V1_DES_BLOCK_INV_OPC  },   /*  DES mode */
         { CY_CRYPTO_V1_TDES_BLOCK_OPC, CY_CRYPTO_V1_TDES_BLOCK_INV_OPC }    /* TDES mode */
     };
 
     Cy_Crypto_SetReg3Instr(base,
-                           (uint32_t)key,
-                           (uint32_t)srcBlock,
-                           (uint32_t)dstBlock);
+                          (uint32_t)key,
+                          (uint32_t)srcBlock,
+                          (uint32_t)dstBlock);
 
     /* Issue the DES_BLOCK instruction */
     Cy_Crypto_Run3ParamInstr(base,
@@ -177,10 +176,10 @@ static void Cy_Crypto_Core_V1_Des_ProcessBlock(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Des(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t const *key,
-        uint8_t *dst,
-        uint8_t const *src)
+                                        cy_en_crypto_dir_mode_t dirMode,
+                                        uint8_t const *key,
+                                        uint8_t *dst,
+                                        uint8_t const *src)
 {
     uint32_t i;
     cy_en_crypto_status_t status = CY_CRYPTO_SUCCESS;
@@ -201,7 +200,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Des(CRYPTO_Type *base,
     Cy_Crypto_Core_V1_MemCpy(base, desBuffers->block0, src, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
 
     Cy_Crypto_Core_V1_Des_ProcessBlock(base, CY_CRYPTO_DES_MODE_SINGLE, dirMode,
-                                       (uint32_t const *)desBuffers->key, (uint32_t const *)desBuffers->block1, (uint32_t const *)desBuffers->block0);
+        (uint32_t const *)desBuffers->key, (uint32_t const *)desBuffers->block1, (uint32_t const *)desBuffers->block0);
 
     Cy_Crypto_Core_V1_MemCpy(base, dst, desBuffers->block1, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
 
@@ -237,10 +236,10 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Des(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V1_Tdes(CRYPTO_Type *base,
-        cy_en_crypto_dir_mode_t dirMode,
-        uint8_t const *key,
-        uint8_t *dst,
-        uint8_t const *src)
+                                        cy_en_crypto_dir_mode_t dirMode,
+                                        uint8_t const *key,
+                                        uint8_t *dst,
+                                        uint8_t const *src)
 {
     uint32_t i;
     cy_en_crypto_status_t status = CY_CRYPTO_SUCCESS;
@@ -250,7 +249,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Tdes(CRYPTO_Type *base,
     /* Check weak keys */
     for (i = 0U; i < CY_CRYPTO_DES_WEAK_KEY_COUNT; i++)
     {
-        for (uint32_t keynum = 0U; keynum < (CY_CRYPTO_TDES_KEY_SIZE / CY_CRYPTO_DES_KEY_SIZE); keynum++)
+        for (uint32_t keynum=0U; keynum < (CY_CRYPTO_TDES_KEY_SIZE / CY_CRYPTO_DES_KEY_SIZE); keynum++)
         {
             if (Cy_Crypto_Core_V1_MemCmp(base, &(key[keynum * CY_CRYPTO_DES_KEY_BYTE_LENGTH]), (uint8_t const *)cy_desWeakKeys[i], CY_CRYPTO_DES_KEY_BYTE_LENGTH) == 0U)
             {
@@ -268,7 +267,7 @@ cy_en_crypto_status_t Cy_Crypto_Core_V1_Tdes(CRYPTO_Type *base,
     Cy_Crypto_Core_V1_MemCpy(base, desBuffers->block0, src, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
 
     Cy_Crypto_Core_V1_Des_ProcessBlock(base, CY_CRYPTO_DES_MODE_TRIPLE, dirMode,
-                                       (uint32_t const *)desBuffers->key, (uint32_t const *)desBuffers->block1, (uint32_t const *)desBuffers->block0);
+        (uint32_t const *)desBuffers->key, (uint32_t const *)desBuffers->block1, (uint32_t const *)desBuffers->block0);
 
     Cy_Crypto_Core_V1_MemCpy(base, dst, desBuffers->block1, CY_CRYPTO_DES_KEY_BYTE_LENGTH);
 

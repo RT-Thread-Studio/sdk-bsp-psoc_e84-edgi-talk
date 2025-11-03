@@ -53,74 +53,73 @@
 
 #include "arm_helium_utils.h"
 
-arm_status arm_mat_cmplx_trans_f16(const arm_matrix_instance_f16 * pSrc, arm_matrix_instance_f16 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_cmplx_trans_f16(const arm_matrix_instance_f16 * pSrc, arm_matrix_instance_f16 * pDst)
 {
     return arm_mat_cmplx_trans_16bit(pSrc->numRows, pSrc->numCols, (uint16_t *) pSrc->pData,
-                                     pDst->numRows, pDst->numCols, (uint16_t *) pDst->pData);
+                                   pDst->numRows, pDst->numCols, (uint16_t *) pDst->pData);
 }
 
 #else
-arm_status arm_mat_cmplx_trans_f16(
-    const arm_matrix_instance_f16 * pSrc,
-    arm_matrix_instance_f16 * pDst)
+ARM_DSP_ATTRIBUTE arm_status arm_mat_cmplx_trans_f16(
+  const arm_matrix_instance_f16 * pSrc,
+  arm_matrix_instance_f16 * pDst)
 {
-    float16_t *pIn = pSrc->pData;                  /* input data matrix pointer */
-    float16_t *pOut = pDst->pData;                 /* output data matrix pointer */
-    float16_t *px;                                 /* Temporary output data matrix pointer */
-    uint16_t nRows = pSrc->numRows;                /* number of rows */
-    uint16_t nColumns = pSrc->numCols;             /* number of columns */
-    uint16_t col, i = 0U, row = nRows;             /* loop counters */
-    arm_status status;                             /* status of matrix transpose  */
+  float16_t *pIn = pSrc->pData;                  /* input data matrix pointer */
+  float16_t *pOut = pDst->pData;                 /* output data matrix pointer */
+  float16_t *px;                                 /* Temporary output data matrix pointer */
+  uint16_t nRows = pSrc->numRows;                /* number of rows */
+  uint16_t nColumns = pSrc->numCols;             /* number of columns */
+  uint16_t col, i = 0U, row = nRows;             /* loop counters */
+  arm_status status;                             /* status of matrix transpose  */
 
 
 #ifdef ARM_MATH_MATRIX_CHECK
 
-    /* Check for matrix mismatch condition */
-    if ((pSrc->numRows != pDst->numCols) || (pSrc->numCols != pDst->numRows))
-    {
-        /* Set status as ARM_MATH_SIZE_MISMATCH */
-        status = ARM_MATH_SIZE_MISMATCH;
-    }
-    else
+  /* Check for matrix mismatch condition */
+  if ((pSrc->numRows != pDst->numCols) || (pSrc->numCols != pDst->numRows))
+  {
+    /* Set status as ARM_MATH_SIZE_MISMATCH */
+    status = ARM_MATH_SIZE_MISMATCH;
+  }
+  else
 #endif /*      #ifdef ARM_MATH_MATRIX_CHECK    */
 
+  {
+    /* Matrix transpose by exchanging the rows with columns */
+    /* row loop     */
+    do
     {
-        /* Matrix transpose by exchanging the rows with columns */
-        /* row loop     */
-        do
-        {
-            /* The pointer px is set to starting address of the column being processed */
-            px = pOut + CMPLX_DIM * i;
+      /* The pointer px is set to starting address of the column being processed */
+      px = pOut + CMPLX_DIM * i;
 
-            /* Initialize column loop counter */
-            col = nColumns;
+      /* Initialize column loop counter */
+      col = nColumns;
 
-            while (col > 0U)
-            {
-                /* Read and store the input element in the destination */
-                px[0] = *pIn++; // real
-                px[1] = *pIn++; // imag
+      while (col > 0U)
+      {
+        /* Read and store the input element in the destination */
+        px[0] = *pIn++; // real
+        px[1] = *pIn++; // imag
 
-                /* Update the pointer px to point to the next row of the transposed matrix */
-                px += CMPLX_DIM * nRows;
+        /* Update the pointer px to point to the next row of the transposed matrix */
+        px += CMPLX_DIM * nRows;
 
-                /* Decrement the column loop counter */
-                col--;
-            }
-            i++;
+        /* Decrement the column loop counter */
+        col--;
+      }
+      i++;
 
-            /* Decrement the row loop counter */
-            row--;
+      /* Decrement the row loop counter */
+      row--;
 
-        }
-        while (row > 0U);            /* row loop end  */
+    } while (row > 0U);          /* row loop end  */
 
-        /* Set status as ARM_MATH_SUCCESS */
-        status = ARM_MATH_SUCCESS;
-    }
+    /* Set status as ARM_MATH_SUCCESS */
+    status = ARM_MATH_SUCCESS;
+  }
 
-    /* Return to application */
-    return (status);
+  /* Return to application */
+  return (status);
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */
 
@@ -128,5 +127,5 @@ arm_status arm_mat_cmplx_trans_f16(
  * @} end of MatrixTrans group
  */
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

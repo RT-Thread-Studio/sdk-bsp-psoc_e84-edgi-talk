@@ -27,12 +27,12 @@
 
 #if defined(CY_IP_M4CPUSS_DMA) || defined(CY_IP_M7CPUSS_DMA) || defined(CY_IP_MXDW)
 
-    #if !defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
-        #define _MTB_HAL_DRIVER_AVAILABLE_DMA_DW (1u)
-    #endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
+#if !defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
+#define _MTB_HAL_DRIVER_AVAILABLE_DMA_DW (1u)
+#endif // !defined(_MTB_HAL_DRIVER_AVAILABLE_DMA_DW)
 
 
-    typedef cy_stc_dma_descriptor_t _mtb_hal_dw_descriptor_t;
-    typedef DW_Type                 _mtb_hal_dw_base_t;
+typedef cy_stc_dma_descriptor_t _mtb_hal_dw_descriptor_t;
+typedef DW_Type                 _mtb_hal_dw_base_t;
 
 #endif // defined(CY_IP_M4CPUSS_DMA) || defined(CY_IP_M7CPUSS_DMA) || defined(CY_IP_MXDW)

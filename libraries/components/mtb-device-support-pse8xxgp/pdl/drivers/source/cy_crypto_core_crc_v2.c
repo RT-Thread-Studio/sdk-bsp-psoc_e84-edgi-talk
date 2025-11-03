@@ -43,7 +43,7 @@ extern "C" {
 #include "cy_syslib.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 3, \
-                             'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
+'CRYPTO_Type will typecast to either CRYPTO_V1_Type or CRYPTO_V2_Type but not both on PDL initialization based on the target device at compile time.')
 
 /*******************************************************************************
 * Function Name: Cy_Crypto_Core_V2_Crc_Init
@@ -74,19 +74,19 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 11.3', 3, \
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_Init(CRYPTO_Type *base,
-        uint32_t polynomial,
-        uint32_t dataReverse,
-        uint32_t dataXor,
-        uint32_t remReverse,
-        uint32_t remXor)
+                                        uint32_t polynomial,
+                                        uint32_t dataReverse,
+                                        uint32_t dataXor,
+                                        uint32_t remReverse,
+                                        uint32_t remXor)
 {
 
     /* Specifies the bit order in which a data Byte is processed
      * (reversal is performed after XORing):
      *                                       '0': Most significant bit (bit 1) first.
      *                                       '1': Least significant bit (bit 0) first. */
-    REG_CRYPTO_CRC_CTL(base) = (uint32_t)((_VAL2FLD(CRYPTO_V2_CRC_CTL_DATA_REVERSE, dataReverse)) |
-                                          (_VAL2FLD(CRYPTO_V2_CRC_CTL_REM_REVERSE,  remReverse)));
+    REG_CRYPTO_CRC_CTL(base) = (uint32_t)( (_VAL2FLD(CRYPTO_V2_CRC_CTL_DATA_REVERSE, dataReverse)) |
+                                           (_VAL2FLD(CRYPTO_V2_CRC_CTL_REM_REVERSE,  remReverse)) );
 
     /* Specifies a byte mask with which each data byte is XORed.
      * The XOR is performed before data reversal. */
@@ -132,14 +132,14 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_Init(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc(CRYPTO_Type *base,
-        uint32_t *crc,
-        void const  *data,
-        uint32_t  dataSize,
-        uint32_t  lfsrInitState)
+                                        uint32_t *crc,
+                                        void const  *data,
+                                        uint32_t  dataSize,
+                                        uint32_t  lfsrInitState)
 {
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
     /* Flush the cache */
-    SCB_CleanDCache_by_Addr((volatile void *)data, (int32_t)dataSize);
+    SCB_CleanDCache_by_Addr((volatile void *)data,(int32_t)dataSize);
 #endif
     uint8_t *dataRemap;
     dataRemap = (uint8_t *)CY_REMAP_ADDRESS_FOR_CRYPTO(data);
@@ -197,13 +197,13 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc(CRYPTO_Type *base,
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcInit(CRYPTO_Type *base,
-        uint32_t width,
-        uint32_t polynomial,
-        uint32_t dataReverse,
-        uint32_t dataXor,
-        uint32_t remReverse,
-        uint32_t remXor,
-        uint32_t lfsrInitState)
+                                        uint32_t width,
+                                        uint32_t polynomial,
+                                        uint32_t dataReverse,
+                                        uint32_t dataXor,
+                                        uint32_t remReverse,
+                                        uint32_t remXor,
+                                        uint32_t lfsrInitState)
 {
     CY_ASSERT_L1((width >= 1U) && (width <= CY_CRYPTO_HW_REGS_WIDTH));
 
@@ -211,8 +211,8 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcInit(CRYPTO_Type *base,
      * (reversal is performed after XORing):
      *                                       '0': Most significant bit (bit 1) first.
      *                                       '1': Least significant bit (bit 0) first. */
-    REG_CRYPTO_CRC_CTL(base) = (uint32_t)((_VAL2FLD(CRYPTO_V2_CRC_CTL_DATA_REVERSE, dataReverse)) |
-                                          (_VAL2FLD(CRYPTO_V2_CRC_CTL_REM_REVERSE,  remReverse)));
+    REG_CRYPTO_CRC_CTL(base) = (uint32_t)( (_VAL2FLD(CRYPTO_V2_CRC_CTL_DATA_REVERSE, dataReverse)) |
+                                           (_VAL2FLD(CRYPTO_V2_CRC_CTL_REM_REVERSE,  remReverse)) );
 
     /* Specifies the byte mask with which each data byte is XORed.
      * The XOR is performed before data reversal. */
@@ -286,11 +286,11 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcStart(CRYPTO_Type *base, uint32_
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcPartial(CRYPTO_Type *base,
-        void const  *data, uint32_t  dataSize)
+                                        void const  *data, uint32_t  dataSize)
 {
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
     /* Flush the cache */
-    SCB_CleanDCache_by_Addr((volatile void *)data, (int32_t)dataSize);
+    SCB_CleanDCache_by_Addr((volatile void *)data,(int32_t)dataSize);
 #endif
 
     uint8_t *dataRemap;
@@ -379,17 +379,17 @@ cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_CalcFinish(CRYPTO_Type *base, uint32
 *
 *******************************************************************************/
 cy_en_crypto_status_t Cy_Crypto_Core_V2_Crc_Calc(CRYPTO_Type *base,
-        uint32_t  width,
-        uint32_t *crc,
-        void  const *data,
-        uint32_t  dataSize)
+                                        uint32_t  width,
+                                        uint32_t *crc,
+                                        void  const *data,
+                                        uint32_t  dataSize)
 {
     CY_ASSERT_L1((width >= 1U) && (width <= CY_CRYPTO_HW_REGS_WIDTH));
 
     uint32_t calculatedCrc;
 #if (((CY_CPU_CORTEX_M7) && defined (ENABLE_CM7_DATA_CACHE)) || CY_CPU_CORTEX_M55)
-    /* Flush the cache */
-    SCB_CleanDCache_by_Addr((volatile void *)data, (int32_t)dataSize);
+        /* Flush the cache */
+        SCB_CleanDCache_by_Addr((volatile void *)data,(int32_t)dataSize);
 #endif
 
     uint8_t *dataRemap;

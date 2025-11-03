@@ -29,14 +29,14 @@
 #include "mtb_hal_hw_types_tcpwm.h"
 #include "mtb_hal_irq_impl.h"
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_TIMER)
-    /** Macro specifying whether the Timer driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_TIMER (1u)
+/** Macro specifying whether the Timer driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_TIMER (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_TIMER)
 
 /** \} group_hal_availability */
@@ -63,10 +63,10 @@ typedef struct
     mtb_hal_tcpwm_t                 tcpwm; //!< Shared TCPWM data structure
     _mtb_hal_event_callback_data_t  callback_data; //!< User-registered callback
     uint32_t                        callback_event;//!< Event requested
-#if (_MTB_HAL_IRQ_MUXING)
+    #if (_MTB_HAL_IRQ_MUXING)
     /** Events that should be disabled the next time process_interrupts runs */
     uint32_t                        clear_intr_mask;
-#endif /* (_MTB_HAL_IRQ_MUXING) */
+    #endif /* (_MTB_HAL_IRQ_MUXING) */
 } mtb_hal_timer_t;
 
 /**
@@ -79,9 +79,9 @@ typedef struct
  */
 typedef struct
 {
-    TCPWM_Type             *tcpwm_base; //!< Base address for the TCPWM
+    TCPWM_Type*             tcpwm_base; //!< Base address for the TCPWM
     uint32_t                tcpwm_cntnum;//!< Counter number within the TCPWM block
-    const mtb_hal_clock_t  *clock; //!< Default clock to use
+    const mtb_hal_clock_t*  clock; //!< Default clock to use
 } mtb_hal_timer_configurator_t;
 
 #endif // defined(CY_IP_MXTCPWM)

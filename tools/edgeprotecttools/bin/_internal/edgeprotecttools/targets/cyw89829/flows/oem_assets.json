@@ -7,6 +7,7 @@
     "oem_config",
     "nv_counter",
     "oem_key_0_hash",
-    "oem_key_1_hash"
+    "oem_key_1_hash",
+    "oem_secure_key"
   ]
 }

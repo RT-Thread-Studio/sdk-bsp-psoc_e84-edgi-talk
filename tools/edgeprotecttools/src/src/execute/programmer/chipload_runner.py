@@ -21,6 +21,7 @@ import platform
 
 import serial
 
+from ...core.mtb_tools_discovery import mtb_tool_dir
 from ...execute.programmer.hci_commands import OPCode, OPResponse
 
 logger = logging.getLogger(__name__)
@@ -39,67 +40,70 @@ class ChipLoadRunner:
         self.tool_path = settings.ocd_path
         self.serial_config = settings.serial_config()
         self.serial_port = self.serial_config.get('hwid')
+        self.serial = None
 
         if self.serial_port is None:
             raise ValueError('Serial port not specified')
 
-        if platform.system() not in ['Windows', 'Linux', 'Darwin']:
-            raise ValueError(f'Unsupported OS platform: {platform.system()}')
+        os_name = platform.system()
+        if os_name not in ['Windows', 'Linux', 'Darwin']:
+            raise ValueError(f'Unsupported OS platform: {os_name}')
 
-        self.serial = None
+        if not self.tool_path:
+            logger.info('Tool auto-discovery applied')
+            self.tool_path = mtb_tool_dir('chipload')
 
-    def run(self, image, launch_addr, **kwargs):
-        """Executes the ChipLoad application
-        @param image: List of arguments
-        @param launch_addr: Indicates whether to add the
-            arguments for the currently selected protocol
-        @return: True if success or False
-        """
         if os.path.isdir(self.tool_path):
-            os_name = platform.system()
-
-            if os_name not in ['Windows', 'Linux', 'Darwin']:
-                raise ValueError(f'Unsupported OS platform: {os_name}')
-
             if os.path.basename(self.tool_path) != 'bin':
                 self.tool_path = os.path.join(self.tool_path, 'bin')
 
             if os_name == 'Windows':
-                f_name = self.executable + '.exe'
+                exe = self.executable + '.exe'
             else:
-                f_name = self.executable
+                exe = self.executable
 
-            exec_path = os.path.abspath(os.path.join(self.tool_path, f_name))
+            self.exec_path = os.path.abspath(os.path.join(self.tool_path, exe))
         else:
-            exec_path = os.path.abspath(self.tool_path)
+            self.exec_path = os.path.abspath(self.tool_path)
 
-        self.init_serial()
-
-        status = False
-        if self.check_connected():
-            if self.device_in_dm_state():
-                status = self.init_load_session()
-            else:
-                logger.error('Failed to check device state')
-        self.serial.close()
-
-        if status:
-            btp_config = kwargs.get('btp_config')
-            command = self.create_command(exec_path, image, launch_addr,
-                                          btp_config)
-            command_line = ' '.join(command)
-            logger.debug('Execute command: %s', command_line)
-            result = subprocess.run(command, capture_output=True, check=False)
-            if result.returncode != 0:
-                self.check_result_and_log(result.stdout, None)
-                self.check_result_and_log(result.stderr, None)
-            else:
-                status = self.check_result_and_log(
-                    result.stdout, 'Current state: Completed successfully')
-        if status:
-            self.init_serial()
-            status = self.is_app_executed()
+    def open_serial_port(self):
+        """Opens the serial port"""
+        comm = self.comm_args()
+        if self.serial:
             self.serial.close()
+        self.serial = serial.Serial(
+            comm.get('port_name'), comm.get('baudrate'), timeout=1)
+
+    def close_serial_port(self):
+        """Closes the serial port"""
+        self.serial.close()
+        self.serial = None
+
+    def run(self, operation, config, btp, **kwargs):
+        """Executes the ChipLoad application
+        @param operation: ChipLoad operation (programming or erasing)
+        @param config: ChipLoad config file
+        @param btp: BTP file
+        @param kwargs: Additional arguments
+            launch_addr: Launch address tells where to jump after reset
+        @return: True if success or False
+        """
+        status = False
+        if operation == 'program':
+            cmd = self.program_cmd(config, kwargs.get('launch_addr'), btp)
+        elif operation == 'erase':
+            cmd = self.erase_cmd(config, btp)
+        else:
+            raise ValueError(f'Unknown operation: {operation}')
+
+        logger.debug('Execute command: %s', ' '.join(cmd))
+        result = subprocess.run(cmd, capture_output=True, check=False)
+        if result.returncode != 0:
+            self.check_result_and_log(result.stdout, None)
+            self.check_result_and_log(result.stderr, None)
+        else:
+            status = self.check_result_and_log(
+                result.stdout, 'Current state: Completed successfully')
         return status
 
     def check_connected(self, attempts=5):
@@ -123,7 +127,7 @@ class ChipLoadRunner:
         ]
         return self.run_commands(commands)
 
-    def init_load_session(self):
+    def enter_download_mode(self):
         """Switching the device into download mode"""
         commands = [
             (OPCode.RESET, OPResponse.RESET),
@@ -168,14 +172,6 @@ class ChipLoadRunner:
             return False
         return received
 
-    def init_serial(self):
-        """Creates serial port communication"""
-        comm = self.comm_args()
-        if self.serial:
-            self.serial.close()
-        self.serial = serial.Serial(
-            comm.get('port_name'), comm.get('baudrate'), timeout=1)
-
     @staticmethod
     def check_result_and_log(info_data, find_msg=None, print_output=True):
         """Logs the messages from info_data and displays
@@ -189,30 +185,39 @@ class ChipLoadRunner:
                 if find_msg and find_msg in line and print_output:
                     logger.info(find_msg)
                     status = True
-                logger.debug(line)
+                logger.info(line)
         return status
 
-    def create_command(self, exec_path, image, launch_addr, btp):
-        """Create ChipLoad protocol arguments"""
+    def program_cmd(self, config, launch_addr, btp):
+        """Create CLI command for programming the device"""
         comm = self.comm_args()
-        command = [exec_path]
-        no_val_opts = [
+        command = [
+            self.exec_path,
             '-BLUETOOLMODE',
+            '-PORT', comm.get('port_name'),
+            '-BAUDRATE', str(comm.get('baudrate')),
+            '-NOVERIFY',
             '-NODLMINIDRIVER',
             '-NOERASE',
-            '-NOVERIFY'
+            '-LAUNCHADDRESS', hex(launch_addr),
+            '-CONFIG', config,
+            '-BTP', btp,
         ]
-        command.extend(no_val_opts)
-        val_opts = {
-            '-CONFIG': image,
-            '-BTP': btp,
-            '-LAUNCHADDRESS': hex(launch_addr),
-            '-PORT': comm.get('port_name'),
-            '-BAUDRATE': comm.get('baudrate')
-        }
-        for itm, val in val_opts.items():
-            if val:
-                command.extend([itm, str(val)])
+        return command
+
+    def erase_cmd(self, config, btp):
+        """Create CLI command for erasing the device"""
+        comm = self.comm_args()
+        command = [
+            self.exec_path,
+            '-BLUETOOLMODE',
+            '-PORT', comm.get('port_name'),
+            '-BAUDRATE', str(comm.get('baudrate')),
+            '-NOVERIFY',
+            '-MINIDRIVER', config,
+            '-BTP', btp,
+            '-ERASE',
+        ]
         return command
 
     def comm_args(self):
@@ -229,7 +234,7 @@ class ChipLoadRunner:
     def hci_run(self, command, timeout):
         """Executes HCI commands and returns received data"""
         data = None
-        self.init_serial()
+        self.open_serial_port()
         status = self.check_connected()
         if status:
             data = self.send_receive(command, timeout=timeout)

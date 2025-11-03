@@ -188,7 +188,7 @@ arm_status arm_convolve_HWC_q15_basic(const q15_t *Im_in,
                             for (l = 0; l < ch_im_in; l++)
                             {
                                 conv_out += Im_in[(in_row * dim_im_in + in_col) * ch_im_in + l] *
-                                            wt[i * ch_im_in * dim_kernel * dim_kernel + (m * dim_kernel + n) * ch_im_in + l];
+                                    wt[i * ch_im_in * dim_kernel * dim_kernel + (m * dim_kernel + n) * ch_im_in + l];
                             }
                         }
                     }

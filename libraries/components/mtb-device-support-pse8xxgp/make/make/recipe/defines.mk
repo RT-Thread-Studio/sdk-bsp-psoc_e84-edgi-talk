@@ -42,7 +42,7 @@ _MTB_RECIPE__PROGRAM_INTERFACE_SUPPORTED:=KitProg3 JLink
 # Compactibility interface for this recipe make
 #
 MTB_RECIPE__INTERFACE_VERSION:=2
-MTB_RECIPE__EXPORT_INTERFACES:=3 4
+MTB_RECIPE__EXPORT_INTERFACES:=3 4 5
 
 MTB_RECIPE__NINJA_SUPPORT:=1 2
 
@@ -74,30 +74,6 @@ endif
 # Define the default device mode
 #
 VCORE_ATTRS?=SECURE
-
-# TODO(OMAK): Need to revise when MPNs are available
-ifeq ($(MTB_RECIPE__CORE),CM33)
-ifneq ($(filter NON_SECURE,$(VCORE_ATTRS)),)
-_MTB_RECIPE__START_FLASH=0x00000000
-else
-_MTB_RECIPE__START_FLASH=0x10000000
-endif
-else
-_MTB_RECIPE__START_FLASH=0x00000000
-endif
-
-#
-# Core specifics
-#
-_MTB_RECIPE__OPENOCD_SECOND_RESET_TYPE=
-_MTB_RECIPE__OPENOCD_RUN_RESTART_CMD_DEBUG_ECLIPSE=
-_MTB_RECIPE__OPENOCD_RUN_RESTART_CMD_ATTACH_ECLIPSE=
-_MTB_RECIPE__OPENOCD_EXTRA_PORT_ECLIPSE=
-_MTB_RECIPE__OPENOCD_CORE=
-_MTB_RECIPE__OPENOCD_CORE_PORT=
-_MTB_RECIPE__JLINK_GDB_PORT=
-_MTB_RECIPE__JLINK_SWO_PORT=
-_MTB_RECIPE__JLINK_TELNET_PORT=
 
 #
 # Architecure specifics
@@ -185,9 +161,15 @@ ifneq ($(filter PSE84_PSVP,$(DEFINES)),)
 _MTB_RECIPE__OPENOCD_BOARD=set BOARD psvp
 endif
 
+ifeq ($(MTB_PROBE_INTERFACE),jtag)
+_MTB_RECIPE__OPENOCD_PROBE_FREQUENCY?=adapter speed 8000;
+else
+_MTB_RECIPE__OPENOCD_PROBE_FREQUENCY?=adapter speed 12000;
+endif
+
 # MVE support
-# If MVE is not available on device then MVE_SELECT=NO_MVE. 
-# If MVE is available on device and VFP_SELECT=softfloat, then MVE_SELECT=MVE-I, 
+# If MVE is not available on device then MVE_SELECT=NO_MVE.
+# If MVE is available on device and VFP_SELECT=softfloat, then MVE_SELECT=MVE-I,
 # else MVE_SELECT=<empty> (MVE-F mode).
 ifeq ($(filter $(CORE_NAME)_MVE_PRESENT,$(DEVICE_$(DEVICE)_FEATURES)),)
 MVE_SELECT?=NO_MVE

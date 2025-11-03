@@ -30,8 +30,7 @@
 #include "viv_dc_type.h"
 
 /*dc feature*/
-typedef struct
-{
+typedef struct {
     gctUINT32 chipID;
     gctUINT32 chipVersion;
     gctUINT32 productID;
@@ -39,35 +38,35 @@ typedef struct
     gctUINT32 customerID;
     gctUINT32 patchVersion;
     gctUINT32 formalRelease;
-    gctUINT32 DC_DISPLAY_COUNT: 8;
-    gctUINT32 DC_LAYER_COUNT: 8;
-    gctUINT32 DC_CURSOR_COUNT: 8;
-    gctUINT32 DC_GAMMA_BIT_OUT: 8;
-    gctUINT32 DC_SECURITY: 1;
-    gctUINT32 DC_MMU: 1;
-    gctUINT32 DC_CURSOR_VERSION: 1;
-    gctUINT32 DC_CSC_MODULE: 1;
-    gctUINT32 DC_3D_LUT: 1;
-    gctUINT32 DC_DE_GAMMA: 1;
-    gctUINT32 DC_DP: 1;
-    gctUINT32 DC_DP_YUV: 1;
-    gctUINT32 DC_DPI: 1;
-    gctUINT32 DC_DBI: 1;
-    gctUINT32 DC_NEW_GAMMA: 1;
-    gctUINT32 DC_COLOR_BAR: 1;
-    gctUINT32 DC_CRC: 1;
-    gctUINT32 DC_40BIT_ADDRESS: 1;
-    gctUINT32 DC_WRITEBACK: 1;
-    gctUINT32 DC_PROGRAM_WB: 1;
-    gctUINT32 DC_CUSTOMER_TILE4X4: 1;
+    gctUINT32 DC_DISPLAY_COUNT:8;
+    gctUINT32 DC_LAYER_COUNT:8;
+    gctUINT32 DC_CURSOR_COUNT:8;
+    gctUINT32 DC_GAMMA_BIT_OUT:8;
+    gctUINT32 DC_SECURITY:1;
+    gctUINT32 DC_MMU:1;
+    gctUINT32 DC_CURSOR_VERSION:1;
+    gctUINT32 DC_CSC_MODULE:1;
+    gctUINT32 DC_3D_LUT:1;
+    gctUINT32 DC_DE_GAMMA:1;
+    gctUINT32 DC_DP:1;
+    gctUINT32 DC_DP_YUV:1;
+    gctUINT32 DC_DPI:1;
+    gctUINT32 DC_DBI:1;
+    gctUINT32 DC_NEW_GAMMA:1;
+    gctUINT32 DC_COLOR_BAR:1;
+    gctUINT32 DC_CRC:1;
+    gctUINT32 DC_40BIT_ADDRESS:1;
+    gctUINT32 DC_WRITEBACK:1;
+    gctUINT32 DC_PROGRAM_WB:1;
+    gctUINT32 DC_CUSTOMER_TILE4X4:1;
     gctUINT32 DC_DUAL_OS;
 } gcsDC_FEATURES;
 
-gcsDC_FEATURES *_DCQueryFeatures(
+gcsDC_FEATURES* _DCQueryFeatures(
     gctUINT32 ChipID,
     gctUINT32 ChipVersion,
     gctUINT32 ProductID,
     gctUINT32 EcoID,
     gctUINT32 CustomerID
-);
+    );
 #endif

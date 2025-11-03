@@ -37,26 +37,26 @@ gctVOID viv_init_lcd(viv_dc_core *core)
 
     switch (format)
     {
-    case vivD8R5G6B5:
-        data = 0x05;
-        break;
-    case vivD8R6G6B6:
-        data = 0x06;
-        break;
-    case vivD8R8G8B8:
-        data = 0x07;
-        break;
-    case vivD1R5G6B5OP1:
-    case vivD1R5G6B5OP3:
-        data = 0x05;
-        break;
-    case vivD1R8G8B8OP1:
-    case vivD1R8G8B8OP3:
-        data = 0x06;
-        break;
-    default:
-        data = 0x05;
-        break;
+        case vivD8R5G6B5:
+            data = 0x05;
+            break;
+        case vivD8R6G6B6:
+            data = 0x06;
+            break;
+        case vivD8R8G8B8:
+            data = 0x07;
+            break;
+        case vivD1R5G6B5OP1:
+        case vivD1R5G6B5OP3:
+            data = 0x05;
+            break;
+        case vivD1R8G8B8OP1:
+        case vivD1R8G8B8OP3:
+            data = 0x06;
+            break;
+        default:
+            data = 0x05;
+            break;
     }
 
     viv_os_print("start to init LCD\n");

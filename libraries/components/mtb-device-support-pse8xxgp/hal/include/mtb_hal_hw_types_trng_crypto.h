@@ -28,14 +28,14 @@
 #if defined(CY_IP_MXCRYPTO_INSTANCES) || defined(CPUSS_CRYPTO_PRESENT) \
     || defined(CY_IP_M0S8CRYPTO)
 
-/**
-* \ingroup group_hal_availability
-* \{
-*/
+ /**
+ * \ingroup group_hal_availability
+ * \{
+ */
 
 #if !defined(MTB_HAL_DRIVER_AVAILABLE_TRNG)
-    /** Macro specifying whether the TRNG driver is available for the current device */
-    #define MTB_HAL_DRIVER_AVAILABLE_TRNG (1u)
+/** Macro specifying whether the TRNG driver is available for the current device */
+#define MTB_HAL_DRIVER_AVAILABLE_TRNG (1u)
 #endif // !defined(MTB_HAL_DRIVER_AVAILABLE_TRNG)
 
 /** \} group_hal_availability */
@@ -50,7 +50,7 @@
  */
 typedef struct
 {
-    CRYPTO_Type                *base; //!< Base address of CRYPTO IP instance
+    CRYPTO_Type*                base; //!< Base address of CRYPTO IP instance
 } mtb_hal_trng_t;
 
 #endif // if defined(CY_IP_MXCRYPTO_INSTANCES) || defined(CPUSS_CRYPTO_PRESENT) ||

@@ -162,36 +162,6 @@
 *
 * Refer to the technical reference manual (TRM) and the device datasheet.
 *
-* \section group_smartio_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>1.0.4</td>
-*     <td>Updated driver guards.</td>
-*     <td>Driver disabled on devices that do not support SMARTIO.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0.3</td>
-*     <td>Updated driver guards.</td>
-*     <td>Support Added for future devices of the CAT1B.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0.2</td>
-*     <td>Documented MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0.1</td>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>The initial version.</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_smartio_macros Macros
 * \defgroup group_smartio_functions Functions
 * \{
@@ -221,7 +191,7 @@ extern "C" {
 #endif
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.8', 12, \
-                             'Value extracted from _FLD2VAL macro will not exceed enum range.')
+'Value extracted from _FLD2VAL macro will not exceed enum range.')
 
 /** \addtogroup group_smartio_macros
 * \{
@@ -288,8 +258,7 @@ typedef enum
 /**
 * Smart I/O clock selection
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_CLK_IO0  = 0,    /**< Clock sourced from signal on io0 */
     CY_SMARTIO_CLK_IO1  = 1,    /**< Clock sourced from signal on io1 */
     CY_SMARTIO_CLK_IO2  = 2,    /**< Clock sourced from signal on io2 */
@@ -312,13 +281,12 @@ typedef enum
     CY_SMARTIO_CLK_LFCLK  = 19, /**< Clock sourced from LFCLK */
     CY_SMARTIO_CLK_GATED  = 20, /**< Disables the clock. Used when turning off the block */
     CY_SMARTIO_CLK_ASYNC  = 31, /**< Asynchronous operation (only allow combinatorial logic) */
-} cy_en_smartio_clksrc_t;
+}cy_en_smartio_clksrc_t;
 
 /**
 * Smart I/O LUT number
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_LUT0 = 0,        /**< Look-Up-Table #0 */
     CY_SMARTIO_LUT1 = 1,        /**< Look-Up-Table #1 */
     CY_SMARTIO_LUT2 = 2,        /**< Look-Up-Table #2 */
@@ -327,32 +295,29 @@ typedef enum
     CY_SMARTIO_LUT5 = 5,        /**< Look-Up-Table #5 */
     CY_SMARTIO_LUT6 = 6,        /**< Look-Up-Table #6 */
     CY_SMARTIO_LUT7 = 7,        /**< Look-Up-Table #7 */
-} cy_en_smartio_lutnum_t;
+}cy_en_smartio_lutnum_t;
 
 /**
 * Smart I/O input trigger number
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_TR0 = 0,         /**< Input trigger #0 */
     CY_SMARTIO_TR1 = 1,         /**< Input trigger #1 */
     CY_SMARTIO_TR2 = 2,         /**< Input trigger #2 */
-} cy_en_smartio_trnum_t;
+}cy_en_smartio_trnum_t;
 
 /**
 * Smart I/O Data Unit's input "DATA" number
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_DATA0 = 0,       /**< Input DATA #0 */
     CY_SMARTIO_DATA1 = 1,       /**< Input DATA #1 */
-} cy_en_smartio_datanum_t;
+}cy_en_smartio_datanum_t;
 
 /**
 * Smart I/O LUT input trigger source
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_LUTTR_DU_OUT   = 0,  /**< Data Unit output */
     CY_SMARTIO_LUTTR_LUT0_OUT = 0,  /**< LUT0 output */
     CY_SMARTIO_LUTTR_LUT1_OUT = 1,  /**< LUT1 output */
@@ -379,24 +344,22 @@ typedef enum
     CY_SMARTIO_LUTTR_IO3      = 15, /**< I/O signal 3 (for LUT 0,1,2,3) */
     CY_SMARTIO_LUTTR_IO7      = 15, /**< I/O signal 7 (for LUT 4,5,6,7) */
     CY_SMARTIO_LUTTR_INVALID  = 255, /**< Invalid input trigger selection */
-} cy_en_smartio_luttr_t;
+}cy_en_smartio_luttr_t;
 
 /**
 * Smart I/O LUT opcode
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_LUTOPC_COMB      = 0,    /**< Combinatorial output */
     CY_SMARTIO_LUTOPC_GATED_TR2 = 1,    /**< TR2 gated, Combinatorial output */
     CY_SMARTIO_LUTOPC_GATED_OUT = 2,    /**< Sequential (gated) output */
     CY_SMARTIO_LUTOPC_ASYNC_SR  = 3,    /**< Asynchronous Set/Reset mode */
-} cy_en_smartio_lutopc_t;
+}cy_en_smartio_lutopc_t;
 
 /**
 * Smart I/O Data Unit input trigger source
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_DUTR_ZERO     = 0,   /**< Constant 0 */
     CY_SMARTIO_DUTR_ONE      = 1,   /**< Constant 1 */
     CY_SMARTIO_DUTR_DU_OUT   = 2,   /**< Data Unit output */
@@ -409,24 +372,22 @@ typedef enum
     CY_SMARTIO_DUTR_LUT6_OUT = 9,   /**< LUT6 output */
     CY_SMARTIO_DUTR_LUT7_OUT = 10,  /**< LUT7 output */
     CY_SMARTIO_DUTR_INVALID  = 255, /**< Invalid input trigger selected */
-} cy_en_smartio_dutr_t;
+}cy_en_smartio_dutr_t;
 
 /**
 * Smart I/O Data Unit input "DATA" source
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_DUDATA_ZERO    = 0,  /**< Constant 0 */
     CY_SMARTIO_DUDATA_CHIP    = 1,  /**< Chip signal [7:0] */
     CY_SMARTIO_DUDATA_IO      = 2,  /**< I/O signal [7:0] */
     CY_SMARTIO_DUDATA_DATAREG = 3,  /**< SMARTIO.DATA register */
-} cy_en_smartio_dudata_t;
+}cy_en_smartio_dudata_t;
 
 /**
 * Smart I/O Data Unit opcode
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_DUOPC_INCR = 1,              /**< Increment (Count up) */
     CY_SMARTIO_DUOPC_DECR = 2,              /**< Decrement (Count down) */
     CY_SMARTIO_DUOPC_INCR_WRAP = 3,         /**< Increment and wrap-around (Count up and wrap) */
@@ -438,13 +399,12 @@ typedef enum
     CY_SMARTIO_DUOPC_AND_OR = 9,            /**< out = ((DATA0 & DATA1) == 0) ? 0 : 1 */
     CY_SMARTIO_DUOPC_SHR_MAJ3 = 10,         /**< Majority 3 (Check if 2 out of 3 LSB bits are logic 1) */
     CY_SMARTIO_DUOPC_SHR_EQL = 11,          /**< Check for equality against DATA1. Also perform Shift right */
-} cy_en_smartio_duopc_t;
+}cy_en_smartio_duopc_t;
 
 /**
 * Smart I/O Data Unit operation bit size
 */
-typedef enum
-{
+typedef enum {
     CY_SMARTIO_DUSIZE_1 = 0,    /**< 1-bit size/width operand */
     CY_SMARTIO_DUSIZE_2 = 1,    /**< 2-bits size/width operand */
     CY_SMARTIO_DUSIZE_3 = 2,    /**< 3-bits size/width operand */
@@ -453,7 +413,7 @@ typedef enum
     CY_SMARTIO_DUSIZE_6 = 5,    /**< 6-bits size/width operand */
     CY_SMARTIO_DUSIZE_7 = 6,    /**< 7-bits size/width operand */
     CY_SMARTIO_DUSIZE_8 = 7,    /**< 8-bits size/width operand */
-} cy_en_smartio_dusize_t;
+}cy_en_smartio_dusize_t;
 
 /** \} group_smartio_enums */
 
@@ -468,18 +428,16 @@ typedef enum
 */
 
 /** LUT configuration structure */
-typedef struct
-{
+typedef struct {
     cy_en_smartio_luttr_t tr0;      /**< LUT input trigger 0 source selection */
     cy_en_smartio_luttr_t tr1;      /**< LUT input trigger 1 source selection */
     cy_en_smartio_luttr_t tr2;      /**< LUT input trigger 2 source selection */
     cy_en_smartio_lutopc_t opcode;  /**< LUT Opcode */
     uint8_t lutMap;                 /**< LUT output mapping */
-} cy_stc_smartio_lutcfg_t;
+}cy_stc_smartio_lutcfg_t;
 
 /** Data Unit (DU) configuration structure */
-typedef struct
-{
+typedef struct {
     cy_en_smartio_dutr_t tr0;       /**< DU input trigger 0 source selection */
     cy_en_smartio_dutr_t tr1;       /**< DU input trigger 1 source selection */
     cy_en_smartio_dutr_t tr2;       /**< DU input trigger 2 source selection */
@@ -488,26 +446,25 @@ typedef struct
     cy_en_smartio_duopc_t opcode;   /**< DU op-code */
     cy_en_smartio_dusize_t size;    /**< DU operation bit size */
     uint8_t dataReg;                /**< DU DATA register value */
-} cy_stc_smartio_ducfg_t;
+}cy_stc_smartio_ducfg_t;
 
 /** Smart I/O configuration structure */
-typedef struct
-{
+typedef struct {
     cy_en_smartio_clksrc_t clkSrc;          /**< Smart I/O instance clock source */
     uint8_t bypassMask;                     /**< Smart I/O io<->chip channel bypass mask */
     uint8_t ioSyncEn;                       /**< Synchronization enable/disable for I/O terminals */
     uint8_t chipSyncEn;                     /**< Synchronization enable/disable for Chip terminals */
-    const cy_stc_smartio_lutcfg_t *lutCfg0; /**< Pointer to LUT0 configuration (NULL if not used) */
-    const cy_stc_smartio_lutcfg_t *lutCfg1; /**< Pointer to LUT1 configuration (NULL if not used) */
-    const cy_stc_smartio_lutcfg_t *lutCfg2; /**< Pointer to LUT2 configuration (NULL if not used) */
-    const cy_stc_smartio_lutcfg_t *lutCfg3; /**< Pointer to LUT3 configuration (NULL if not used) */
-    const cy_stc_smartio_lutcfg_t *lutCfg4; /**< Pointer to LUT4 configuration (NULL if not used) */
-    const cy_stc_smartio_lutcfg_t *lutCfg5; /**< Pointer to LUT5 configuration (NULL if not used) */
-    const cy_stc_smartio_lutcfg_t *lutCfg6; /**< Pointer to LUT6 configuration (NULL if not used) */
-    const cy_stc_smartio_lutcfg_t *lutCfg7; /**< Pointer to LUT7 configuration (NULL if not used) */
-    const cy_stc_smartio_ducfg_t *duCfg;    /**< Pointer to Data Unit configuration (NULL if not used) */
+    const cy_stc_smartio_lutcfg_t* lutCfg0; /**< Pointer to LUT0 configuration (NULL if not used) */
+    const cy_stc_smartio_lutcfg_t* lutCfg1; /**< Pointer to LUT1 configuration (NULL if not used) */
+    const cy_stc_smartio_lutcfg_t* lutCfg2; /**< Pointer to LUT2 configuration (NULL if not used) */
+    const cy_stc_smartio_lutcfg_t* lutCfg3; /**< Pointer to LUT3 configuration (NULL if not used) */
+    const cy_stc_smartio_lutcfg_t* lutCfg4; /**< Pointer to LUT4 configuration (NULL if not used) */
+    const cy_stc_smartio_lutcfg_t* lutCfg5; /**< Pointer to LUT5 configuration (NULL if not used) */
+    const cy_stc_smartio_lutcfg_t* lutCfg6; /**< Pointer to LUT6 configuration (NULL if not used) */
+    const cy_stc_smartio_lutcfg_t* lutCfg7; /**< Pointer to LUT7 configuration (NULL if not used) */
+    const cy_stc_smartio_ducfg_t* duCfg;    /**< Pointer to Data Unit configuration (NULL if not used) */
     bool hldOvr;                            /**< Hold override enable (true) / disable (false) */
-} cy_stc_smartio_config_t;
+}cy_stc_smartio_config_t;
 
 /** \} group_smartio_data_structures */
 
@@ -615,7 +572,7 @@ cy_en_smartio_status_t Cy_SmartIO_SetDataReg(SMARTIO_PRT_Type* base, uint8_t dat
 *******************************************************************************/
 __STATIC_INLINE uint8_t Cy_SmartIO_GetChBypass(SMARTIO_PRT_Type* base)
 {
-    return ((uint8_t)_FLD2VAL(SMARTIO_PRT_CTL_BYPASS, SMARTIO_PRT_CTL(base)));
+    return((uint8_t)_FLD2VAL(SMARTIO_PRT_CTL_BYPASS, SMARTIO_PRT_CTL(base)));
 }
 
 
@@ -637,7 +594,7 @@ __STATIC_INLINE uint8_t Cy_SmartIO_GetChBypass(SMARTIO_PRT_Type* base)
 *******************************************************************************/
 __STATIC_INLINE cy_en_smartio_clksrc_t Cy_SmartIO_GetClock(SMARTIO_PRT_Type* base)
 {
-    return ((cy_en_smartio_clksrc_t)_FLD2VAL(SMARTIO_PRT_CTL_CLOCK_SRC, SMARTIO_PRT_CTL(base)));
+    return((cy_en_smartio_clksrc_t)_FLD2VAL(SMARTIO_PRT_CTL_CLOCK_SRC, SMARTIO_PRT_CTL(base)));
 }
 
 
@@ -671,7 +628,7 @@ __STATIC_INLINE cy_en_smartio_clksrc_t Cy_SmartIO_GetClock(SMARTIO_PRT_Type* bas
 *******************************************************************************/
 __STATIC_INLINE uint8_t Cy_SmartIO_GetIoSync(SMARTIO_PRT_Type* base)
 {
-    return ((uint8_t)_FLD2VAL(SMARTIO_PRT_SYNC_CTL_IO_SYNC_EN, SMARTIO_PRT_SYNC_CTL(base)));
+    return((uint8_t)_FLD2VAL(SMARTIO_PRT_SYNC_CTL_IO_SYNC_EN, SMARTIO_PRT_SYNC_CTL(base)));
 }
 
 
@@ -705,7 +662,7 @@ __STATIC_INLINE uint8_t Cy_SmartIO_GetIoSync(SMARTIO_PRT_Type* base)
 *******************************************************************************/
 __STATIC_INLINE uint8_t Cy_SmartIO_GetChipSync(SMARTIO_PRT_Type* base)
 {
-    return ((uint8_t)_FLD2VAL(SMARTIO_PRT_SYNC_CTL_CHIP_SYNC_EN, SMARTIO_PRT_SYNC_CTL(base)));
+    return((uint8_t)_FLD2VAL(SMARTIO_PRT_SYNC_CTL_CHIP_SYNC_EN, SMARTIO_PRT_SYNC_CTL(base)));
 }
 
 /** \} group_smartio_functions_general */
@@ -736,7 +693,7 @@ __STATIC_INLINE uint8_t Cy_SmartIO_GetChipSync(SMARTIO_PRT_Type* base)
 *******************************************************************************/
 __STATIC_INLINE cy_en_smartio_lutopc_t Cy_SmartIO_GetLutOpcode(SMARTIO_PRT_Type* base, cy_en_smartio_lutnum_t lutNum)
 {
-    return ((cy_en_smartio_lutopc_t)(_FLD2VAL(SMARTIO_PRT_LUT_CTL_LUT_OPC, SMARTIO_PRT_LUT_CTL(base, lutNum))));
+    return((cy_en_smartio_lutopc_t)(_FLD2VAL(SMARTIO_PRT_LUT_CTL_LUT_OPC, SMARTIO_PRT_LUT_CTL(base, lutNum))));
 }
 
 
@@ -773,7 +730,7 @@ __STATIC_INLINE cy_en_smartio_lutopc_t Cy_SmartIO_GetLutOpcode(SMARTIO_PRT_Type*
 *******************************************************************************/
 __STATIC_INLINE uint8_t Cy_SmartIO_GetLutMap(SMARTIO_PRT_Type* base, cy_en_smartio_lutnum_t lutNum)
 {
-    return ((uint8_t)(_FLD2VAL(SMARTIO_PRT_LUT_CTL_LUT, SMARTIO_PRT_LUT_CTL(base, lutNum))));
+   return((uint8_t)(_FLD2VAL(SMARTIO_PRT_LUT_CTL_LUT, SMARTIO_PRT_LUT_CTL(base, lutNum))));
 }
 
 /** \} group_smartio_functions_lut */
@@ -805,8 +762,8 @@ __STATIC_INLINE uint8_t Cy_SmartIO_GetLutMap(SMARTIO_PRT_Type* base, cy_en_smart
 __STATIC_INLINE cy_en_smartio_dudata_t Cy_SmartIO_GetDuData(SMARTIO_PRT_Type* base, cy_en_smartio_datanum_t dataNum)
 {
     return ((dataNum == CY_SMARTIO_DATA0) ?
-            (cy_en_smartio_dudata_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_DATA0_SEL, SMARTIO_PRT_DU_SEL(base)) :
-            (cy_en_smartio_dudata_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_DATA1_SEL, SMARTIO_PRT_DU_SEL(base)));
+                (cy_en_smartio_dudata_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_DATA0_SEL, SMARTIO_PRT_DU_SEL(base)) :
+                (cy_en_smartio_dudata_t)_FLD2VAL(SMARTIO_PRT_DU_SEL_DU_DATA1_SEL, SMARTIO_PRT_DU_SEL(base)));
 }
 
 

@@ -109,3 +109,4 @@ The system starts in the following order:
   ```
   RT-Thread Settings --> Hardware --> select SOC Multi Core Mode --> Enable CM55 Core
   ```
+![config](figures/config.png)

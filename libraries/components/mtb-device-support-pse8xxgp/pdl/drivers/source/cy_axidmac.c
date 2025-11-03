@@ -30,7 +30,7 @@
 #include "cy_axidmac.h"
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 10.3', 5, \
-                             'Implicit conversion from essential type "unsigned 32-bit int" to different or narrower essential type "signed 16-bit int".')
+'Implicit conversion from essential type "unsigned 32-bit int" to different or narrower essential type "signed 16-bit int".')
 
 /*******************************************************************************
 * Function Name: Cy_AXIDMAC_Descriptor_Init
@@ -59,7 +59,7 @@ cy_en_axidmac_status_t Cy_AXIDMAC_Descriptor_Init(cy_stc_axidmac_descriptor_t * 
             _VAL2FLD(AXI_DMAC_CH_DESCR_CTL_INTR_TYPE, config->interruptType) |
             _VAL2FLD(AXI_DMAC_CH_DESCR_CTL_TR_OUT_TYPE, config->triggerOutType) |
             _VAL2FLD(AXI_DMAC_CH_DESCR_CTL_TR_IN_TYPE, config->triggerInType) |
-            _BOOL2FLD(AXI_DMAC_CH_DESCR_CTL_DATA_PREFETCH, config->dataPrefetch) |
+           _BOOL2FLD(AXI_DMAC_CH_DESCR_CTL_DATA_PREFETCH, config->dataPrefetch) |
             _VAL2FLD(AXI_DMAC_CH_DESCR_CTL_CH_DISABLE, config->channelState) |
             _VAL2FLD(AXI_DMAC_CH_DESCR_CTL_DESCR_TYPE, config->descriptorType);
 
@@ -69,22 +69,22 @@ cy_en_axidmac_status_t Cy_AXIDMAC_Descriptor_Init(cy_stc_axidmac_descriptor_t * 
 
         Cy_AXIDMAC_Descriptor_SetMloopDataCount(descriptor, config->mCount);
 
-        if (CY_AXIDMAC_1D_MEMORY_COPY != config->descriptorType)
+        if(CY_AXIDMAC_1D_MEMORY_COPY != config->descriptorType)
         {
             Cy_AXIDMAC_Descriptor_SetXloopDataCount(descriptor, config->xCount);
         }
 
         Cy_AXIDMAC_Descriptor_SetNextDescriptor(descriptor, config->nextDescriptor);
 
-        if ((CY_AXIDMAC_2D_MEMORY_COPY == config->descriptorType) ||
-                (CY_AXIDMAC_3D_MEMORY_COPY == config->descriptorType))
+        if((CY_AXIDMAC_2D_MEMORY_COPY == config->descriptorType) ||
+           (CY_AXIDMAC_3D_MEMORY_COPY == config->descriptorType))
         {
 
             descriptor->xIncr = _VAL2FLD(AXI_DMAC_CH_DESCR_X_INCR_SRC_X, config->srcXincrement) |
                                 _VAL2FLD(AXI_DMAC_CH_DESCR_X_INCR_DST_X, config->dstXincrement);
         }
 
-        if (CY_AXIDMAC_3D_MEMORY_COPY == config->descriptorType)
+        if(CY_AXIDMAC_3D_MEMORY_COPY == config->descriptorType)
         {
             Cy_AXIDMAC_Descriptor_SetYloopDataCount(descriptor, config->yCount);
 
@@ -141,8 +141,8 @@ cy_en_axidmac_status_t Cy_AXIDMAC_Channel_Init(AXI_DMAC_Type * base, uint32_t ch
 
         /* Set the channel configuration */
         AXIDMAC_CH_CTL(base, channel) = _VAL2FLD(AXI_DMAC_CH_CTL_PRIO,    config->priority) |
-                                        _BOOL2FLD(AXI_DMAC_CH_CTL_ENABLED, config->enable)   |
-                                        _BOOL2FLD(AXI_DMAC_CH_CTL_B,       config->bufferable);
+                                    _BOOL2FLD(AXI_DMAC_CH_CTL_ENABLED, config->enable)   |
+                                    _BOOL2FLD(AXI_DMAC_CH_CTL_B,       config->bufferable);
         ret = CY_AXIDMAC_SUCCESS;
     }
 
@@ -183,8 +183,8 @@ uint32_t Cy_AXIDMAC_Descriptor_GetXloopDataCount(cy_stc_axidmac_descriptor_t con
     CY_ASSERT_L1(CY_AXIDMAC_1D_MEMORY_COPY != Cy_AXIDMAC_Descriptor_GetDescriptorType(descriptor));
 
 
-    /* Convert the data count from the machine range (0-65535) into the user's range (1-65536). */
-    retVal = _FLD2VAL(AXI_DMAC_CH_DESCR_X_SIZE_X_COUNT, descriptor->xSize) + 1UL;
+     /* Convert the data count from the machine range (0-65535) into the user's range (1-65536). */
+     retVal = _FLD2VAL(AXI_DMAC_CH_DESCR_X_SIZE_X_COUNT, descriptor->xSize) + 1UL;
 
     return (retVal);
 }
@@ -225,27 +225,27 @@ void Cy_AXIDMAC_Descriptor_SetXloopDataCount(cy_stc_axidmac_descriptor_t * descr
 void Cy_AXIDMAC_Descriptor_SetNextDescriptor(cy_stc_axidmac_descriptor_t * descriptor, cy_stc_axidmac_descriptor_t const * nextDescriptor)
 {
     CY_ASSERT_L1(NULL != descriptor);
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_axidmac_descriptor_type_t enum.');
-    switch ((cy_en_axidmac_descriptor_type_t)_FLD2VAL(AXI_DMAC_CH_DESCR_CTL_DESCR_TYPE, descriptor->ctl))
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_axidmac_descriptor_type_t enum.');
+    switch((cy_en_axidmac_descriptor_type_t)_FLD2VAL(AXI_DMAC_CH_DESCR_CTL_DESCR_TYPE, descriptor->ctl))
     {
-    case CY_AXIDMAC_1D_MEMORY_COPY:
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast to cy_stc_axidmac_dscr_1d_t.');
-        ((cy_stc_axidmac_dscr_1d_t*)descriptor)->nextPtr = (uint32_t)nextDescriptor;
-        break;
+        case CY_AXIDMAC_1D_MEMORY_COPY:
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast to cy_stc_axidmac_dscr_1d_t.');
+            ((cy_stc_axidmac_dscr_1d_t*)descriptor)->nextPtr = (uint32_t)nextDescriptor;
+            break;
 
-    case CY_AXIDMAC_2D_MEMORY_COPY:
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast to cy_stc_axidmac_dscr_2d_t.');
-        ((cy_stc_axidmac_dscr_2d_t*)descriptor)->nextPtr = (uint32_t)nextDescriptor;
-        break;
+        case CY_AXIDMAC_2D_MEMORY_COPY:
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast to cy_stc_axidmac_dscr_2d_t.');
+            ((cy_stc_axidmac_dscr_2d_t*)descriptor)->nextPtr = (uint32_t)nextDescriptor;
+            break;
 
-    case CY_AXIDMAC_3D_MEMORY_COPY:
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast to cy_stc_axidmac_dscr_3d_t.');
-        ((cy_stc_axidmac_dscr_3d_t*)descriptor)->nextPtr = (uint32_t)nextDescriptor;
-        break;
+        case CY_AXIDMAC_3D_MEMORY_COPY:
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast to cy_stc_axidmac_dscr_3d_t.');
+            ((cy_stc_axidmac_dscr_3d_t*)descriptor)->nextPtr = (uint32_t)nextDescriptor;
+            break;
 
-    default:
-        /* Unsupported type of descriptor */
-        break;
+        default:
+            /* Unsupported type of descriptor */
+            break;
     }
 }
 
@@ -264,31 +264,31 @@ void Cy_AXIDMAC_Descriptor_SetNextDescriptor(cy_stc_axidmac_descriptor_t * descr
 *
 *
 *******************************************************************************/
-cy_stc_axidmac_descriptor_t *Cy_AXIDMAC_Descriptor_GetNextDescriptor(cy_stc_axidmac_descriptor_t const * descriptor)
+cy_stc_axidmac_descriptor_t * Cy_AXIDMAC_Descriptor_GetNextDescriptor(cy_stc_axidmac_descriptor_t const * descriptor)
 {
     uint32_t retVal = 0UL;
-    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8', 'Intentional typecast to cy_en_axidmac_descriptor_type_t enum.');
-    switch ((cy_en_axidmac_descriptor_type_t)_FLD2VAL(AXI_DMAC_CH_DESCR_CTL_DESCR_TYPE, descriptor->ctl))
+    CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 10.8','Intentional typecast to cy_en_axidmac_descriptor_type_t enum.');
+    switch((cy_en_axidmac_descriptor_type_t)_FLD2VAL(AXI_DMAC_CH_DESCR_CTL_DESCR_TYPE, descriptor->ctl))
     {
 
-    case CY_AXIDMAC_1D_MEMORY_COPY:
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast to cy_stc_axidmac_dscr_1d_t.');
-        retVal = ((cy_stc_axidmac_dscr_1d_t const*)descriptor)->nextPtr;
-        break;
+        case CY_AXIDMAC_1D_MEMORY_COPY:
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast to cy_stc_axidmac_dscr_1d_t.');
+            retVal = ((cy_stc_axidmac_dscr_1d_t const*)descriptor)->nextPtr;
+            break;
 
-    case CY_AXIDMAC_2D_MEMORY_COPY:
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast to cy_stc_axidmac_dscr_2d_t.');
-        retVal = ((cy_stc_axidmac_dscr_2d_t const*)descriptor)->nextPtr;
-        break;
+        case CY_AXIDMAC_2D_MEMORY_COPY:
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast to cy_stc_axidmac_dscr_2d_t.');
+            retVal = ((cy_stc_axidmac_dscr_2d_t const*)descriptor)->nextPtr;
+            break;
 
-    case CY_AXIDMAC_3D_MEMORY_COPY:
-        CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3', 'Intentional typecast to cy_stc_axidmac_dscr_3d_t.');
-        retVal = ((cy_stc_axidmac_dscr_3d_t const*)descriptor)->nextPtr;
-        break;
+        case CY_AXIDMAC_3D_MEMORY_COPY:
+            CY_MISRA_DEVIATE_LINE('MISRA C-2012 Rule 11.3','Intentional typecast to cy_stc_axidmac_dscr_3d_t.');
+            retVal = ((cy_stc_axidmac_dscr_3d_t const*)descriptor)->nextPtr;
+            break;
 
-    default:
-        /* An unsupported type of the descriptor */
-        break;
+        default:
+            /* An unsupported type of the descriptor */
+            break;
     }
 
     return ((cy_stc_axidmac_descriptor_t*)retVal);

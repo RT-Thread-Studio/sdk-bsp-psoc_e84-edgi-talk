@@ -22,6 +22,7 @@ from typing import Union
 
 from cryptography.hazmat.primitives.asymmetric import ec
 
+from ...core.key_handlers import load_enckey
 from ..encryption import XipEncryptor
 from ...core.signtool_base import SignToolBase
 from ...core.key_handlers.ec_handler import ECHandler
@@ -71,9 +72,11 @@ class SignTool(SignToolBase):
         self.prot_tlv = []
         self.remove_tlv = []
         self.enckey = None
+        self.enckey_role = 'xip'
         self.encrypt_addr = None
         self.nonce = None
         self.nonce_output = None
+        self.kdf = None
 
     def initialize(self, kwargs):
         """Initializes class attributes with the keyword arguments"""
@@ -86,11 +89,11 @@ class SignTool(SignToolBase):
             if kwargs.get('pubkey'):
                 self.key_path = os.path.abspath(kwargs.get('pubkey'))
 
-        if kwargs.get('erased_val'):
+        if kwargs.get('erased_val') is not None:
             self.erased_val = int(str(kwargs.get('erased_val')), 0)
-        if kwargs.get('slot_size'):
+        if kwargs.get('slot_size') is not None:
             self.slot_size = int(str(kwargs.get('slot_size')), 0)
-        if kwargs.get('header_size'):
+        if kwargs.get('header_size') is not None:
             self.header_size = int(str(kwargs.get('header_size')), 0)
         if kwargs.get('align'):
             self.align = int(str(kwargs.get('align')), 0)
@@ -119,16 +122,16 @@ class SignTool(SignToolBase):
         self.boot_record = kwargs.get('boot_record', self.boot_record)
         if kwargs.get('min_erase_size'):
             self.min_erase_size = int(str(kwargs.get('min_erase_size')), 0)
-        if kwargs.get('hex_addr'):
+        if kwargs.get('hex_addr') is not None:
             self.hex_addr = int(str(kwargs.get('hex_addr')), 0)
-        if kwargs.get('load_addr'):
+        if kwargs.get('load_addr') is not None:
             self.load_addr = int(str(kwargs.get('load_addr')), 0)
-        if kwargs.get('rom_fixed'):
+        if kwargs.get('rom_fixed') is not None:
             self.rom_fixed = int(str(kwargs.get('rom_fixed')), 0)
         self.max_sectors = kwargs.get('max_sectors', self.max_sectors)
         self.save_enctlv = kwargs.get('save_enctlv', self.save_enctlv)
         self.image_version = kwargs.get('image_version', self.image_version)
-        if kwargs.get('security_counter'):
+        if kwargs.get('security_counter') is not None:
             self.security_counter = int(str(kwargs.get('security_counter')), 0)
         self.dependencies = kwargs.get('dependencies')
         self.encrypt = kwargs.get('encrypt')
@@ -142,10 +145,13 @@ class SignTool(SignToolBase):
         if kwargs.get('remove_tlv'):
             self.remove_tlv.extend(kwargs.get('remove_tlv'))
         self.enckey = kwargs.get('enckey')
-        if kwargs.get('encrypt_addr'):
+        if kwargs.get('enckey_role'):
+            self.enckey_role = kwargs.get('enckey_role').lower()
+        if kwargs.get('encrypt_addr') is not None:
             self.encrypt_addr = int(str(kwargs.get('encrypt_addr')), 0)
         if kwargs.get('nonce_output'):
             self.nonce_output = kwargs.get('nonce_output')
+        self.kdf = kwargs.get('kdf')
 
     def sign_image(self, image: str, **kwargs) -> Union[str, Image]:
         """Signs image. Optionally encrypts the image
@@ -180,8 +186,10 @@ class SignTool(SignToolBase):
             :remove_tlv: TLV ID list to remove
             :allow_signed: Allows signing already signed image
             :enckey: Encryption key
+            :enckey_role: Encryption key role, either 'xip' or 'aes-kw'
             :encrypt_addr: Starting address for data encryption
             :nonce_output: The path where to save the nonce
+            :kdf: Key derivation function name
         @return: Either path to the signed file if 'output' argument is
         specified, otherwise the image object
         """
@@ -239,6 +247,7 @@ class SignTool(SignToolBase):
             :tlv: Non-Protected TLVs
             :remove_tlv: TLV ID list to remove
             :enckey: Encryption key
+            :enckey_role: Encryption key role, either 'xip' or 'aes-kw'
             :encrypt_addr: Starting address for data encryption
             :nonce_output: The path where to save the nonce
         @return: Different results based on input parameters:
@@ -383,15 +392,22 @@ class SignTool(SignToolBase):
             self.output = temp_out.name
             logger.debug("Created temporary file '%s'", self.output)
 
-        if self.encrypt_addr:
+        encryptor = None
+        if self.enckey_role == 'xip' and self.encrypt_addr:
             encryptor = XipEncryptor(
                 initial_counter=self.encrypt_addr + self.header_size,
                 nonce=None,
                 plainkey=self.enckey,
                 nonce_output=self.nonce_output
             )
+            encrypt_arg = self.load_key(self.encrypt) if self.encrypt else None
+        elif self.enckey_role == 'aes-kw':
+            if isinstance(self.enckey, bytes):
+                encrypt_arg = self.enckey
+            else:
+                encrypt_arg = load_enckey(self.enckey)
         else:
-            encryptor = None
+            encrypt_arg = self.load_key(self.encrypt) if self.encrypt else None
 
         args = {
             'key': self.load_key(key) if key else None,
@@ -420,9 +436,10 @@ class SignTool(SignToolBase):
             'custom_tlv_unprotected': self.tlv,
             'rom_fixed': self.rom_fixed,
             'use_random_iv': self.encrypt is not None or encryptor is not None,
-            'encrypt': self.load_key(self.encrypt) if self.encrypt else None,
+            'encrypt': encrypt_arg,
             'image_addr': self.encrypt_addr or 0,
-            'encryptor': encryptor
+            'encryptor': encryptor,
+            'kdf': self.kdf
         }
 
         try:

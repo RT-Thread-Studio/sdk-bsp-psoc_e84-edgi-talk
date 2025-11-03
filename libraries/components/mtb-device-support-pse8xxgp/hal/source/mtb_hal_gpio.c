@@ -45,7 +45,7 @@ extern "C" {
 // _mtb_hal_gpio_convert_drive_mode
 //--------------------------------------------------------------------------------------------------
 __STATIC_INLINE uint32_t _mtb_hal_gpio_convert_drive_mode(mtb_hal_gpio_drive_mode_t drive_mode,
-        mtb_hal_gpio_direction_t direction)
+                                                          mtb_hal_gpio_direction_t direction)
 {
     uint32_t drvMode = (uint32_t)CY_GPIO_DM_HIGHZ;
 
@@ -93,7 +93,7 @@ cy_rslt_t mtb_hal_gpio_process_interrupt(mtb_hal_gpio_t* obj)
         {
             uint8_t                       pin = obj->pin_num;
             mtb_hal_gpio_event_t          event = (mtb_hal_gpio_event_t)Cy_GPIO_GetInterruptEdge(
-                    obj->port_addr, pin);
+                obj->port_addr, pin);
             mtb_hal_gpio_event_callback_t callback =
                 (mtb_hal_gpio_event_callback_t)obj->callback_data.callback;
 
@@ -104,16 +104,16 @@ cy_rslt_t mtb_hal_gpio_process_interrupt(mtb_hal_gpio_t* obj)
             {
                 switch (event)
                 {
-                case MTB_HAL_GPIO_IRQ_RISE:
-                case MTB_HAL_GPIO_IRQ_FALL:
-                    break;
+                    case MTB_HAL_GPIO_IRQ_RISE:
+                    case MTB_HAL_GPIO_IRQ_FALL:
+                        break;
 
-                default:
-                    event =
-                        (Cy_GPIO_Read(obj->port_addr,
-                                      pin) !=
-                         0) ? MTB_HAL_GPIO_IRQ_RISE : MTB_HAL_GPIO_IRQ_FALL;
-                    break;
+                    default:
+                        event =
+                            (Cy_GPIO_Read(obj->port_addr,
+                                          pin) !=
+                             0) ? MTB_HAL_GPIO_IRQ_RISE : MTB_HAL_GPIO_IRQ_FALL;
+                        break;
                 }
                 /* Call registered callbacks here */
                 callback(obj->callback_data.callback_arg, event);
@@ -155,7 +155,7 @@ void mtb_hal_gpio_configure(mtb_hal_gpio_t* obj, mtb_hal_gpio_direction_t direct
 // mtb_hal_gpio_register_callback
 //--------------------------------------------------------------------------------------------------
 void mtb_hal_gpio_register_callback(mtb_hal_gpio_t* obj, mtb_hal_gpio_event_callback_t callback,
-                                    void *callback_arg)
+                                    void* callback_arg)
 {
     uint32_t savedIntrStatus = Cy_SysLib_EnterCriticalSection();
     obj->callback_data.callback = (cy_israddress)callback;
@@ -169,11 +169,11 @@ void mtb_hal_gpio_register_callback(mtb_hal_gpio_t* obj, mtb_hal_gpio_event_call
 //--------------------------------------------------------------------------------------------------
 void mtb_hal_gpio_enable_event(mtb_hal_gpio_t* obj, mtb_hal_gpio_event_t event, bool enable)
 {
-#if (_MTB_HAL_IRQ_MUXING)
+    #if (_MTB_HAL_IRQ_MUXING)
     /* We may be in a critical section. Only clear the interrupt status if there isn't a pending
        interrupt */
     if ((Cy_GPIO_GetInterruptStatus(obj->port_addr, (uint32_t)obj->pin_num) == 0) || enable)
-#endif
+    #endif
     {
         Cy_GPIO_ClearInterrupt(obj->port_addr, (uint32_t)obj->pin_num);
     }

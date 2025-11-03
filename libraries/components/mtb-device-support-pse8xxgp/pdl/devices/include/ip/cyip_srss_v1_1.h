@@ -55,348 +55,330 @@
 /**
   * \brief ECO Configuration (CLK_ECO)
   */
-typedef struct
-{
-    __IOM uint32_t CONFIG;                        /*!< 0x00000000 ECO Configuration Register */
-    __IOM uint32_t CONFIG2;                       /*!< 0x00000004 ECO Configuration Register 2 */
-    __IM uint32_t STATUS;                        /*!< 0x00000008 ECO Status Register */
-    __IM uint32_t RESERVED;
+typedef struct {
+  __IOM uint32_t CONFIG;                        /*!< 0x00000000 ECO Configuration Register */
+  __IOM uint32_t CONFIG2;                       /*!< 0x00000004 ECO Configuration Register 2 */
+   __IM uint32_t STATUS;                        /*!< 0x00000008 ECO Status Register */
+   __IM uint32_t RESERVED;
 } CLK_ECO_Type;                                 /*!< Size = 16 (0x10) */
 
 /**
   * \brief Active domain Clock Supervisor (CSV) registers (CSV_HF_CSV)
   */
-typedef struct
-{
-    __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
-    __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
-    __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
-    __IM uint32_t RESERVED;
+typedef struct {
+  __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
+  __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
+  __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
+   __IM uint32_t RESERVED;
 } CSV_HF_CSV_Type;                              /*!< Size = 16 (0x10) */
 
 /**
   * \brief Clock Supervisor (CSV) registers for Root clocks (CSV_HF)
   */
-typedef struct
-{
-    CSV_HF_CSV_Type CSV[16];                /*!< 0x00000000 Active domain Clock Supervisor (CSV) registers */
+typedef struct {
+        CSV_HF_CSV_Type CSV[16];                /*!< 0x00000000 Active domain Clock Supervisor (CSV) registers */
 } CSV_HF_Type;                                  /*!< Size = 256 (0x100) */
 
 /**
   * \brief Active domain Clock Supervisor (CSV) registers for CSV Reference clock (CSV_REF_CSV)
   */
-typedef struct
-{
-    __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
-    __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
-    __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
-    __IM uint32_t RESERVED;
+typedef struct {
+  __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
+  __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
+  __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
+   __IM uint32_t RESERVED;
 } CSV_REF_CSV_Type;                             /*!< Size = 16 (0x10) */
 
 /**
   * \brief CSV registers for the CSV Reference clock (CSV_REF)
   */
-typedef struct
-{
-    CSV_REF_CSV_Type CSV;                   /*!< 0x00000000 Active domain Clock Supervisor (CSV) registers for CSV
+typedef struct {
+        CSV_REF_CSV_Type CSV;                   /*!< 0x00000000 Active domain Clock Supervisor (CSV) registers for CSV
                                                                 Reference clock */
 } CSV_REF_Type;                                 /*!< Size = 16 (0x10) */
 
 /**
   * \brief LF clock Clock Supervisor registers (CSV_LF_CSV)
   */
-typedef struct
-{
-    __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
-    __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
-    __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
-    __IM uint32_t RESERVED;
+typedef struct {
+  __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
+  __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
+  __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
+   __IM uint32_t RESERVED;
 } CSV_LF_CSV_Type;                              /*!< Size = 16 (0x10) */
 
 /**
   * \brief CSV registers for LF clock (CSV_LF)
   */
-typedef struct
-{
-    CSV_LF_CSV_Type CSV;                    /*!< 0x00000000 LF clock Clock Supervisor registers */
+typedef struct {
+        CSV_LF_CSV_Type CSV;                    /*!< 0x00000000 LF clock Clock Supervisor registers */
 } CSV_LF_Type;                                  /*!< Size = 16 (0x10) */
 
 /**
   * \brief HVILO clock DeepSleep domain Clock Supervisor registers (CSV_PILO_CSV)
   */
-typedef struct
-{
-    __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
-    __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
-    __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
-    __IM uint32_t RESERVED;
+typedef struct {
+  __IOM uint32_t REF_CTL;                       /*!< 0x00000000 Clock Supervision Reference Control */
+  __IOM uint32_t REF_LIMIT;                     /*!< 0x00000004 Clock Supervision Reference Limits */
+  __IOM uint32_t MON_CTL;                       /*!< 0x00000008 Clock Supervision Monitor Control */
+   __IM uint32_t RESERVED;
 } CSV_PILO_CSV_Type;                            /*!< Size = 16 (0x10) */
 
 /**
   * \brief CSV registers for PILO clock (CSV_PILO)
   */
-typedef struct
-{
-    CSV_PILO_CSV_Type CSV;                  /*!< 0x00000000 HVILO clock DeepSleep domain Clock Supervisor registers */
+typedef struct {
+        CSV_PILO_CSV_Type CSV;                  /*!< 0x00000000 HVILO clock DeepSleep domain Clock Supervisor registers */
 } CSV_PILO_Type;                                /*!< Size = 16 (0x10) */
 
 /**
   * \brief DPLL LP Configuration Register (CLK_DPLL_LP)
   */
-typedef struct
-{
-    __IOM uint32_t CONFIG;                        /*!< 0x00000000 DPLL_LP Configuration Register */
-    __IOM uint32_t CONFIG2;                       /*!< 0x00000004 DPLL_LP Configuration Register 2 */
-    __IOM uint32_t CONFIG3;                       /*!< 0x00000008 DPLL_LP Configuration Register 3 */
-    __IOM uint32_t CONFIG4;                       /*!< 0x0000000C DPLL_LP Configuration Register 4 */
-    __IOM uint32_t CONFIG5;                       /*!< 0x00000010 DPLL_LP Configuration Register 5 */
-    __IOM uint32_t CONFIG6;                       /*!< 0x00000014 DPLL_LP Configuration Register 6 */
-    __IOM uint32_t CONFIG7;                       /*!< 0x00000018 DPLL_LP Configuration Register 7 */
-    __IOM uint32_t STATUS;                        /*!< 0x0000001C DPLL_LP Status Register */
+typedef struct {
+  __IOM uint32_t CONFIG;                        /*!< 0x00000000 DPLL_LP Configuration Register */
+  __IOM uint32_t CONFIG2;                       /*!< 0x00000004 DPLL_LP Configuration Register 2 */
+  __IOM uint32_t CONFIG3;                       /*!< 0x00000008 DPLL_LP Configuration Register 3 */
+  __IOM uint32_t CONFIG4;                       /*!< 0x0000000C DPLL_LP Configuration Register 4 */
+  __IOM uint32_t CONFIG5;                       /*!< 0x00000010 DPLL_LP Configuration Register 5 */
+  __IOM uint32_t CONFIG6;                       /*!< 0x00000014 DPLL_LP Configuration Register 6 */
+  __IOM uint32_t CONFIG7;                       /*!< 0x00000018 DPLL_LP Configuration Register 7 */
+  __IOM uint32_t STATUS;                        /*!< 0x0000001C DPLL_LP Status Register */
 } CLK_DPLL_LP_Type;                             /*!< Size = 32 (0x20) */
 
 /**
   * \brief DPLL HP Configuration Register (CLK_DPLL_HP)
   */
-typedef struct
-{
-    __IOM uint32_t CONFIG;                        /*!< 0x00000000 DPLL_HP Configuration Register */
-    __IOM uint32_t CONFIG2;                       /*!< 0x00000004 DPLL_HP Configuration Register 2 */
-    __IOM uint32_t CONFIG3;                       /*!< 0x00000008 DPLL_HP Configuration Register 3 */
-    __IOM uint32_t CONFIG4;                       /*!< 0x0000000C DPLL_HP Configuration Register 4 */
-    __IOM uint32_t CONFIG5;                       /*!< 0x00000010 DPLL_HP Configuration Register 5 */
-    __IOM uint32_t TRIGMOD;                       /*!< 0x00000014 DPLL_HP Trigmod SSCG Register */
-    __IOM uint32_t TRIGMOD2;                      /*!< 0x00000018 DPLL_HP Trigmod2 SSCG Register */
-    __IOM uint32_t STATUS;                        /*!< 0x0000001C DPLL_HP Status Register */
-    __IOM uint32_t DUTYCAL_CTRL;                  /*!< 0x00000020 DPLL_HP_User DUTYCAL Control Register */
-    __IM uint32_t RESERVED[7];
+typedef struct {
+  __IOM uint32_t CONFIG;                        /*!< 0x00000000 DPLL_HP Configuration Register */
+  __IOM uint32_t CONFIG2;                       /*!< 0x00000004 DPLL_HP Configuration Register 2 */
+  __IOM uint32_t CONFIG3;                       /*!< 0x00000008 DPLL_HP Configuration Register 3 */
+  __IOM uint32_t CONFIG4;                       /*!< 0x0000000C DPLL_HP Configuration Register 4 */
+  __IOM uint32_t CONFIG5;                       /*!< 0x00000010 DPLL_HP Configuration Register 5 */
+  __IOM uint32_t TRIGMOD;                       /*!< 0x00000014 DPLL_HP Trigmod SSCG Register */
+  __IOM uint32_t TRIGMOD2;                      /*!< 0x00000018 DPLL_HP Trigmod2 SSCG Register */
+  __IOM uint32_t STATUS;                        /*!< 0x0000001C DPLL_HP Status Register */
+  __IOM uint32_t DUTYCAL_CTRL;                  /*!< 0x00000020 DPLL_HP_User DUTYCAL Control Register */
+   __IM uint32_t RESERVED[7];
 } CLK_DPLL_HP_Type;                             /*!< Size = 64 (0x40) */
 
 /**
   * \brief DPLL LP Trims (CLK_TRIM_DPLL_LP)
   */
-typedef struct
-{
-    __IOM uint32_t DPLL_LP_CTL;                   /*!< 0x00000000 DPLL LP Trim Register */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t DPLL_LP_CTL3;                  /*!< 0x00000008 DPLL LP Trim Register 3 */
-    __IOM uint32_t DPLL_LP_CTL4;                  /*!< 0x0000000C DPLL LP Trim Register 4 */
-    __IM uint32_t RESERVED1[3];
-    __IOM uint32_t DPLL_LP_TEST4;                 /*!< 0x0000001C DPLL LP Test Register 4 */
+typedef struct {
+  __IOM uint32_t DPLL_LP_CTL;                   /*!< 0x00000000 DPLL LP Trim Register */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t DPLL_LP_CTL3;                  /*!< 0x00000008 DPLL LP Trim Register 3 */
+  __IOM uint32_t DPLL_LP_CTL4;                  /*!< 0x0000000C DPLL LP Trim Register 4 */
+   __IM uint32_t RESERVED1[3];
+  __IOM uint32_t DPLL_LP_TEST4;                 /*!< 0x0000001C DPLL LP Test Register 4 */
 } CLK_TRIM_DPLL_LP_Type;                        /*!< Size = 32 (0x20) */
 
 /**
   * \brief SRAM Trim registers (RAM_TRIM)
   */
-typedef struct
-{
-    __IOM uint32_t TRIM_RAM_CTL[10];              /*!< 0x00000000 Trim Register for RAM Type 0 */
-    __IM uint32_t RESERVED[6];
+typedef struct {
+  __IOM uint32_t TRIM_RAM_CTL[10];              /*!< 0x00000000 Trim Register for RAM Type 0 */
+   __IM uint32_t RESERVED[6];
 } RAM_TRIM_Type;                                /*!< Size = 64 (0x40) */
 
 /**
   * \brief Watchdog Timer (Type B) (WDT)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 WDT Control Register */
-    __IOM uint32_t LOWER_LIMIT;                   /*!< 0x00000004 WDT Lower Limit Register */
-    __IOM uint32_t UPPER_LIMIT;                   /*!< 0x00000008 WDT Upper Limit Register */
-    __IOM uint32_t WARN_LIMIT;                    /*!< 0x0000000C WDT Warn Limit Register */
-    __IOM uint32_t CONFIG;                        /*!< 0x00000010 WDT Configuration Register */
-    __IOM uint32_t CNT;                           /*!< 0x00000014 WDT Count Register */
-    __IM uint32_t RESERVED[10];
-    __IOM uint32_t LOCK;                          /*!< 0x00000040 WDT Lock register */
-    __IOM uint32_t SERVICE;                       /*!< 0x00000044 WDT Service register */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t INTR;                          /*!< 0x00000050 WDT Interrupt Register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000054 WDT Interrupt Set Register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000058 WDT Interrupt Mask Register */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000005C WDT Interrupt Masked Register */
-    __IM uint32_t RESERVED2[8];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 WDT Control Register */
+  __IOM uint32_t LOWER_LIMIT;                   /*!< 0x00000004 WDT Lower Limit Register */
+  __IOM uint32_t UPPER_LIMIT;                   /*!< 0x00000008 WDT Upper Limit Register */
+  __IOM uint32_t WARN_LIMIT;                    /*!< 0x0000000C WDT Warn Limit Register */
+  __IOM uint32_t CONFIG;                        /*!< 0x00000010 WDT Configuration Register */
+  __IOM uint32_t CNT;                           /*!< 0x00000014 WDT Count Register */
+   __IM uint32_t RESERVED[10];
+  __IOM uint32_t LOCK;                          /*!< 0x00000040 WDT Lock register */
+  __IOM uint32_t SERVICE;                       /*!< 0x00000044 WDT Service register */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t INTR;                          /*!< 0x00000050 WDT Interrupt Register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000054 WDT Interrupt Set Register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000058 WDT Interrupt Mask Register */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000005C WDT Interrupt Masked Register */
+   __IM uint32_t RESERVED2[8];
 } WDT_Type;                                     /*!< Size = 128 (0x80) */
 
 /**
   * \brief Multi-Counter Watchdog Timer (Type A) (MCWDT_STRUCT)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED;
-    __IOM uint32_t MCWDT_CNTLOW;                  /*!< 0x00000004 Multi-Counter Watchdog Sub-counters 0/1 */
-    __IOM uint32_t MCWDT_CNTHIGH;                 /*!< 0x00000008 Multi-Counter Watchdog Sub-counter 2 */
-    __IOM uint32_t MCWDT_MATCH;                   /*!< 0x0000000C Multi-Counter Watchdog Counter Match Register */
-    __IOM uint32_t MCWDT_CONFIG;                  /*!< 0x00000010 Multi-Counter Watchdog Counter Configuration */
-    __IOM uint32_t MCWDT_CTL;                     /*!< 0x00000014 Multi-Counter Watchdog Counter Control */
-    __IOM uint32_t MCWDT_INTR;                    /*!< 0x00000018 Multi-Counter Watchdog Counter Interrupt Register */
-    __IOM uint32_t MCWDT_INTR_SET;                /*!< 0x0000001C Multi-Counter Watchdog Counter Interrupt Set Register */
-    __IOM uint32_t MCWDT_INTR_MASK;               /*!< 0x00000020 Multi-Counter Watchdog Counter Interrupt Mask Register */
-    __IM uint32_t MCWDT_INTR_MASKED;             /*!< 0x00000024 Multi-Counter Watchdog Counter Interrupt Masked Register */
-    __IOM uint32_t MCWDT_LOCK;                    /*!< 0x00000028 Multi-Counter Watchdog Counter Lock Register */
-    __IOM uint32_t MCWDT_LOWER_LIMIT;             /*!< 0x0000002C Multi-Counter Watchdog Counter Lower Limit Register */
-    __IM uint32_t RESERVED1[4];
+typedef struct {
+   __IM uint32_t RESERVED;
+  __IOM uint32_t MCWDT_CNTLOW;                  /*!< 0x00000004 Multi-Counter Watchdog Sub-counters 0/1 */
+  __IOM uint32_t MCWDT_CNTHIGH;                 /*!< 0x00000008 Multi-Counter Watchdog Sub-counter 2 */
+  __IOM uint32_t MCWDT_MATCH;                   /*!< 0x0000000C Multi-Counter Watchdog Counter Match Register */
+  __IOM uint32_t MCWDT_CONFIG;                  /*!< 0x00000010 Multi-Counter Watchdog Counter Configuration */
+  __IOM uint32_t MCWDT_CTL;                     /*!< 0x00000014 Multi-Counter Watchdog Counter Control */
+  __IOM uint32_t MCWDT_INTR;                    /*!< 0x00000018 Multi-Counter Watchdog Counter Interrupt Register */
+  __IOM uint32_t MCWDT_INTR_SET;                /*!< 0x0000001C Multi-Counter Watchdog Counter Interrupt Set Register */
+  __IOM uint32_t MCWDT_INTR_MASK;               /*!< 0x00000020 Multi-Counter Watchdog Counter Interrupt Mask Register */
+   __IM uint32_t MCWDT_INTR_MASKED;             /*!< 0x00000024 Multi-Counter Watchdog Counter Interrupt Masked Register */
+  __IOM uint32_t MCWDT_LOCK;                    /*!< 0x00000028 Multi-Counter Watchdog Counter Lock Register */
+  __IOM uint32_t MCWDT_LOWER_LIMIT;             /*!< 0x0000002C Multi-Counter Watchdog Counter Lower Limit Register */
+   __IM uint32_t RESERVED1[4];
 } MCWDT_STRUCT_Type;                            /*!< Size = 64 (0x40) */
 
 /**
   * \brief MCWDT Configuration for Subcounter 0 and 1 (MCWDT_CTR)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 MCWDT Subcounter Control Register */
-    __IOM uint32_t LOWER_LIMIT;                   /*!< 0x00000004 MCWDT Subcounter Lower Limit Register */
-    __IOM uint32_t UPPER_LIMIT;                   /*!< 0x00000008 MCWDT Subcounter Upper Limit Register */
-    __IOM uint32_t WARN_LIMIT;                    /*!< 0x0000000C MCWDT Subcounter Warn Limit Register */
-    __IOM uint32_t CONFIG;                        /*!< 0x00000010 MCWDT Subcounter Configuration Register */
-    __IOM uint32_t CNT;                           /*!< 0x00000014 MCWDT Subcounter Count Register */
-    __IM uint32_t RESERVED[2];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 MCWDT Subcounter Control Register */
+  __IOM uint32_t LOWER_LIMIT;                   /*!< 0x00000004 MCWDT Subcounter Lower Limit Register */
+  __IOM uint32_t UPPER_LIMIT;                   /*!< 0x00000008 MCWDT Subcounter Upper Limit Register */
+  __IOM uint32_t WARN_LIMIT;                    /*!< 0x0000000C MCWDT Subcounter Warn Limit Register */
+  __IOM uint32_t CONFIG;                        /*!< 0x00000010 MCWDT Subcounter Configuration Register */
+  __IOM uint32_t CNT;                           /*!< 0x00000014 MCWDT Subcounter Count Register */
+   __IM uint32_t RESERVED[2];
 } MCWDT_CTR_Type;                               /*!< Size = 32 (0x20) */
 
 /**
   * \brief Multi-Counter Watchdog Timer (Type B) (MCWDT)
   */
-typedef struct
-{
-    MCWDT_CTR_Type CTR[2];                  /*!< 0x00000000 MCWDT Configuration for Subcounter 0 and 1 */
-    __IOM uint32_t CPU_SELECT;                    /*!< 0x00000040 MCWDT CPU selection register */
-    __IM uint32_t RESERVED[15];
-    __IOM uint32_t CTR2_CTL;                      /*!< 0x00000080 MCWDT Subcounter 2 Control register */
-    __IOM uint32_t CTR2_CONFIG;                   /*!< 0x00000084 MCWDT Subcounter 2 Configuration register */
-    __IOM uint32_t CTR2_CNT;                      /*!< 0x00000088 MCWDT Subcounter 2 Count Register */
-    __IM uint32_t RESERVED1;
-    __IOM uint32_t LOCK;                          /*!< 0x00000090 MCWDT Lock Register */
-    __IOM uint32_t SERVICE;                       /*!< 0x00000094 MCWDT Service Register */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t INTR;                          /*!< 0x000000A0 MCWDT Interrupt Register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x000000A4 MCWDT Interrupt Set Register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x000000A8 MCWDT Interrupt Mask Register */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x000000AC MCWDT Interrupt Masked Register */
-    __IM uint32_t RESERVED3[20];
+typedef struct {
+        MCWDT_CTR_Type CTR[2];                  /*!< 0x00000000 MCWDT Configuration for Subcounter 0 and 1 */
+  __IOM uint32_t CPU_SELECT;                    /*!< 0x00000040 MCWDT CPU selection register */
+   __IM uint32_t RESERVED[15];
+  __IOM uint32_t CTR2_CTL;                      /*!< 0x00000080 MCWDT Subcounter 2 Control register */
+  __IOM uint32_t CTR2_CONFIG;                   /*!< 0x00000084 MCWDT Subcounter 2 Configuration register */
+  __IOM uint32_t CTR2_CNT;                      /*!< 0x00000088 MCWDT Subcounter 2 Count Register */
+   __IM uint32_t RESERVED1;
+  __IOM uint32_t LOCK;                          /*!< 0x00000090 MCWDT Lock Register */
+  __IOM uint32_t SERVICE;                       /*!< 0x00000094 MCWDT Service Register */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t INTR;                          /*!< 0x000000A0 MCWDT Interrupt Register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x000000A4 MCWDT Interrupt Set Register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x000000A8 MCWDT Interrupt Mask Register */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x000000AC MCWDT Interrupt Masked Register */
+   __IM uint32_t RESERVED3[20];
 } MCWDT_Type;                                   /*!< Size = 256 (0x100) */
 
 /**
   * \brief SRSS Core Registers (SRSS)
   */
-typedef struct
-{
-    __IM uint32_t RESERVED[64];
-    __IOM uint32_t CLK_DSI_SELECT[16];            /*!< 0x00000100 Clock DSI Select Register */
-    __IOM uint32_t CLK_OUTPUT_FAST;               /*!< 0x00000140 Fast Clock Output Select Register */
-    __IOM uint32_t CLK_OUTPUT_SLOW;               /*!< 0x00000144 Slow Clock Output Select Register */
-    __IOM uint32_t CLK_CAL_CNT1;                  /*!< 0x00000148 Clock Calibration Counter 1 */
-    __IM uint32_t CLK_CAL_CNT2;                  /*!< 0x0000014C Clock Calibration Counter 2 */
-    __IM uint32_t RESERVED1[44];
-    __IOM uint32_t SRSS_INTR;                     /*!< 0x00000200 SRSS Interrupt Register */
-    __IOM uint32_t SRSS_INTR_SET;                 /*!< 0x00000204 SRSS Interrupt Set Register */
-    __IOM uint32_t SRSS_INTR_MASK;                /*!< 0x00000208 SRSS Interrupt Mask Register */
-    __IM uint32_t SRSS_INTR_MASKED;              /*!< 0x0000020C SRSS Interrupt Masked Register */
-    __IM uint32_t RESERVED2[60];
-    __IOM uint32_t SRSS_AINTR;                    /*!< 0x00000300 SRSS Additional Interrupt Register */
-    __IOM uint32_t SRSS_AINTR_SET;                /*!< 0x00000304 SRSS Additional Interrupt Set Register */
-    __IOM uint32_t SRSS_AINTR_MASK;               /*!< 0x00000308 SRSS Additional Interrupt Mask Register */
-    __IM uint32_t SRSS_AINTR_MASKED;             /*!< 0x0000030C SRSS Additional Interrupt Masked Register */
-    __IM uint32_t RESERVED3[12];
-    __IM uint32_t PWR_LVD_STATUS;                /*!< 0x00000340 High Voltage / Low Voltage Detector (HVLVD) Status Register */
-    __IM uint32_t RESERVED4[48];
-    __IOM uint32_t BOOT_DLM_CTL;                  /*!< 0x00000404 Debug Control Register */
-    __IOM uint32_t BOOT_DLM_CTL2;                 /*!< 0x00000408 Debug Control Register 2 */
-    __IOM uint32_t BOOT_DLM_STATUS;               /*!< 0x0000040C Debug Status Register */
-    __IOM uint32_t RES_SOFT_CTL;                  /*!< 0x00000410 Soft Reset Trigger Register */
-    __IM uint32_t RESERVED5;
-    __IOM uint32_t BOOT_STATUS;                   /*!< 0x00000418 Boot Execution Status Register */
-    __IM uint32_t RESERVED6[5];
-    __IOM uint32_t BOOT_ENTRY;                    /*!< 0x00000430 Warm Boot Entry Address */
-    __IM uint32_t RESERVED7[3];
-    __IM uint32_t DECODED_LCS_DATA;              /*!< 0x00000440 Decoded Life Cycle Stage Data Register */
-    __IM uint32_t RESERVED8[239];
-    __IOM uint32_t PWR_HIB_DATA[32];              /*!< 0x00000800 Hibernate Data Register */
-    __IM uint32_t RESERVED9[8];
-    __IOM uint32_t PWR_HIB_WAKE_CTL;              /*!< 0x000008A0 Hibernate Wakeup Mask Register */
-    __IOM uint32_t PWR_HIB_WAKE_CTL2;             /*!< 0x000008A4 Hibernate Wakeup Polarity Register */
-    __IM uint32_t RESERVED10;
-    __IOM uint32_t PWR_HIB_WAKE_CAUSE;            /*!< 0x000008AC Hibernate Wakeup Cause Register */
-    __IM uint32_t RESERVED11[25];
-    __IOM uint32_t TST_XRES_SECURE;               /*!< 0x00000914 SECURE TEST and FIRMWARE TEST Key control register */
-    __IM uint32_t RESERVED12[442];
-    __IM uint32_t PWR_CTL;                       /*!< 0x00001000 Power Mode Control */
-    __IOM uint32_t PWR_CTL2;                      /*!< 0x00001004 Power Mode Control 2 */
-    __IOM uint32_t PWR_HIBERNATE;                 /*!< 0x00001008 HIBERNATE Mode Register */
-    __IM uint32_t RESERVED13[5];
-    __IOM uint32_t PWR_LVD_CTL;                   /*!< 0x00001020 High Voltage / Low Voltage Detector (HVLVD) Configuration
+typedef struct {
+   __IM uint32_t RESERVED[64];
+  __IOM uint32_t CLK_DSI_SELECT[16];            /*!< 0x00000100 Clock DSI Select Register */
+  __IOM uint32_t CLK_OUTPUT_FAST;               /*!< 0x00000140 Fast Clock Output Select Register */
+  __IOM uint32_t CLK_OUTPUT_SLOW;               /*!< 0x00000144 Slow Clock Output Select Register */
+  __IOM uint32_t CLK_CAL_CNT1;                  /*!< 0x00000148 Clock Calibration Counter 1 */
+   __IM uint32_t CLK_CAL_CNT2;                  /*!< 0x0000014C Clock Calibration Counter 2 */
+   __IM uint32_t RESERVED1[44];
+  __IOM uint32_t SRSS_INTR;                     /*!< 0x00000200 SRSS Interrupt Register */
+  __IOM uint32_t SRSS_INTR_SET;                 /*!< 0x00000204 SRSS Interrupt Set Register */
+  __IOM uint32_t SRSS_INTR_MASK;                /*!< 0x00000208 SRSS Interrupt Mask Register */
+   __IM uint32_t SRSS_INTR_MASKED;              /*!< 0x0000020C SRSS Interrupt Masked Register */
+   __IM uint32_t RESERVED2[60];
+  __IOM uint32_t SRSS_AINTR;                    /*!< 0x00000300 SRSS Additional Interrupt Register */
+  __IOM uint32_t SRSS_AINTR_SET;                /*!< 0x00000304 SRSS Additional Interrupt Set Register */
+  __IOM uint32_t SRSS_AINTR_MASK;               /*!< 0x00000308 SRSS Additional Interrupt Mask Register */
+   __IM uint32_t SRSS_AINTR_MASKED;             /*!< 0x0000030C SRSS Additional Interrupt Masked Register */
+   __IM uint32_t RESERVED3[12];
+   __IM uint32_t PWR_LVD_STATUS;                /*!< 0x00000340 High Voltage / Low Voltage Detector (HVLVD) Status Register */
+   __IM uint32_t RESERVED4[48];
+  __IOM uint32_t BOOT_DLM_CTL;                  /*!< 0x00000404 Debug Control Register */
+  __IOM uint32_t BOOT_DLM_CTL2;                 /*!< 0x00000408 Debug Control Register 2 */
+  __IOM uint32_t BOOT_DLM_STATUS;               /*!< 0x0000040C Debug Status Register */
+  __IOM uint32_t RES_SOFT_CTL;                  /*!< 0x00000410 Soft Reset Trigger Register */
+   __IM uint32_t RESERVED5;
+  __IOM uint32_t BOOT_STATUS;                   /*!< 0x00000418 Boot Execution Status Register */
+   __IM uint32_t RESERVED6[5];
+  __IOM uint32_t BOOT_ENTRY;                    /*!< 0x00000430 Warm Boot Entry Address */
+   __IM uint32_t RESERVED7[3];
+   __IM uint32_t DECODED_LCS_DATA;              /*!< 0x00000440 Decoded Life Cycle Stage Data Register */
+   __IM uint32_t RESERVED8[239];
+  __IOM uint32_t PWR_HIB_DATA[32];              /*!< 0x00000800 Hibernate Data Register */
+   __IM uint32_t RESERVED9[8];
+  __IOM uint32_t PWR_HIB_WAKE_CTL;              /*!< 0x000008A0 Hibernate Wakeup Mask Register */
+  __IOM uint32_t PWR_HIB_WAKE_CTL2;             /*!< 0x000008A4 Hibernate Wakeup Polarity Register */
+   __IM uint32_t RESERVED10;
+  __IOM uint32_t PWR_HIB_WAKE_CAUSE;            /*!< 0x000008AC Hibernate Wakeup Cause Register */
+   __IM uint32_t RESERVED11[25];
+  __IOM uint32_t TST_XRES_SECURE;               /*!< 0x00000914 SECURE TEST and FIRMWARE TEST Key control register */
+   __IM uint32_t RESERVED12[442];
+   __IM uint32_t PWR_CTL;                       /*!< 0x00001000 Power Mode Control */
+  __IOM uint32_t PWR_CTL2;                      /*!< 0x00001004 Power Mode Control 2 */
+  __IOM uint32_t PWR_HIBERNATE;                 /*!< 0x00001008 HIBERNATE Mode Register */
+   __IM uint32_t RESERVED13[5];
+  __IOM uint32_t PWR_LVD_CTL;                   /*!< 0x00001020 High Voltage / Low Voltage Detector (HVLVD) Configuration
                                                                 Register */
-    __IM uint32_t RESERVED14[119];
-    __IOM uint32_t CLK_PATH_SELECT[16];           /*!< 0x00001200 Clock Path Select Register */
-    __IOM uint32_t CLK_ROOT_SELECT[16];           /*!< 0x00001240 Clock Root Select Register */
-    __IOM uint32_t CLK_DIRECT_SELECT[16];         /*!< 0x00001280 Clock Root Direct Select Register */
-    __IM uint32_t RESERVED15[16];
-    __IOM uint32_t CLK_SELECT;                    /*!< 0x00001300 Clock selection register */
-    __IOM uint32_t CLK_MF_SELECT;                 /*!< 0x00001304 Medium Frequency Clock Select Register */
-    __IM uint32_t RESERVED16[2];
-    __IOM uint32_t CLK_ALTHF_CTL[2];              /*!< 0x00001310 Alternate High Frequency Clock Control Register */
-    __IM uint32_t RESERVED17[2];
-    __IOM uint32_t CLK_ECO_PRESCALE;              /*!< 0x00001320 ECO Prescaler Configuration Register */
-    __IM uint32_t RESERVED18[7];
-    __IOM uint32_t CLK_IMO_CONFIG;                /*!< 0x00001340 IMO Configuration */
-    __IOM uint32_t CLK_IHO_CONFIG;                /*!< 0x00001344 IHO Configuration Register */
-    __IM uint32_t RESERVED19[6];
-    CLK_ECO_Type CLK_ECO_STRUCT;            /*!< 0x00001360 ECO Configuration */
-    __IOM uint32_t CLK_PILO_CONFIG;               /*!< 0x00001370 Precision ILO Configuration Register */
-    __IM uint32_t CLK_PILO_STATUS;               /*!< 0x00001374 Precision ILO Status Register */
-    __IM uint32_t RESERVED20[2];
-    __IOM uint32_t CLK_ILO_CONFIG;                /*!< 0x00001380 ILO Configuration */
-    __IOM uint32_t CLK_TRIM_ILO_CTL;              /*!< 0x00001384 ILO Trim Register */
-    __IM uint32_t RESERVED21[2];
-    __IOM uint32_t CLK_WCO_CONFIG;                /*!< 0x00001390 WCO Configuration Register */
-    __IM uint32_t CLK_WCO_STATUS;                /*!< 0x00001394 WCO Status Register */
-    __IM uint32_t RESERVED22[26];
-    CSV_HF_Type CSV_HF_STRUCT;              /*!< 0x00001400 Clock Supervisor (CSV) registers for Root clocks */
-    __IOM uint32_t CSV_REF_SEL;                   /*!< 0x00001500 Select CSV Reference clock for Active domain */
-    __IM uint32_t RESERVED23[3];
-    CSV_REF_Type CSV_REF_STRUCT;            /*!< 0x00001510 CSV registers for the CSV Reference clock */
-    __IOM uint32_t CSV_LF_REF_SEL;                /*!< 0x00001520 Select CSV Reference clock for LF clock */
-    __IM uint32_t RESERVED24[3];
-    CSV_LF_Type CSV_LF_STRUCT;              /*!< 0x00001530 CSV registers for LF clock */
-    __IOM uint32_t CSV_PILO_REF_SEL;              /*!< 0x00001540 Select CSV Reference clock for PILO clock */
-    __IM uint32_t RESERVED25[3];
-    CSV_PILO_Type CSV_PILO;                 /*!< 0x00001550 CSV registers for PILO clock */
-    __IM uint32_t RESERVED26[40];
-    CLK_DPLL_LP_Type CLK_DPLL_LP[15];       /*!< 0x00001600 DPLL LP Configuration Register */
-    __IM uint32_t RESERVED27[8];
-    CLK_DPLL_HP_Type CLK_DPLL_HP[15];       /*!< 0x00001800 DPLL HP Configuration Register */
-    __IM uint32_t RESERVED28[4];
-    __IOM uint32_t RES_CAUSE;                     /*!< 0x00001BD0 Reset Cause Observation Register */
-    __IOM uint32_t RES_CAUSE2;                    /*!< 0x00001BD4 Reset Cause Observation Register 2 */
-    __IM uint32_t RESERVED29[3];
-    __OM uint32_t RES_PXRES_CTL;                 /*!< 0x00001BE4 Programmable XRES Control Register */
-    __IM uint32_t RESERVED30[7];
-    __IOM uint32_t RES_CAUSE_EXTEND;              /*!< 0x00001C04 Extended Reset Cause Observation Register */
-    __IM uint32_t RESERVED31[2];
-    __IOM uint32_t PWR_CBUCK_CTL;                 /*!< 0x00001C10 Core Buck Control Register */
-    __IOM uint32_t PWR_CBUCK_CTL2;                /*!< 0x00001C14 Core Buck Control Register 2 */
-    __IM uint32_t RESERVED32;
-    __IOM uint32_t PWR_CBUCK_DPSLP_CTL;           /*!< 0x00001C1C Core Buck Deepsleep Control Register */
-    __IM uint32_t PWR_CBUCK_STATUS;              /*!< 0x00001C20 Core Buck Status Register */
-    __IOM uint32_t PWR_RETLDO_CTL;                /*!< 0x00001C24 RETLDO Control Register */
-    __IOM uint32_t PWR_SRAMLDO_CTL;               /*!< 0x00001C28 SRAMLDO Control Register */
-    __IM uint32_t RESERVED33;
-    __IOM uint32_t PWR_MISCLDO_CTL;               /*!< 0x00001C30 MISCLDO Control Register */
-    __IM uint32_t RESERVED34[311];
-    __IOM uint32_t PWR_TRIM_PMU_CTL0;             /*!< 0x00002110 PMU Trim Register 0 */
-    __IM uint32_t RESERVED35[963];
-    __IOM uint32_t CLK_TRIM_ECO_CTL;              /*!< 0x00003020 ECO Trim Register */
-    __IM uint32_t RESERVED36[119];
-    CLK_TRIM_DPLL_LP_Type CLK_TRIM_DPLL_LP[15]; /*!< 0x00003200 DPLL LP Trims */
-    __IM uint32_t RESERVED37[776];
-    RAM_TRIM_Type RAM_TRIM_STRUCT;          /*!< 0x00004000 SRAM Trim registers */
-    __IM uint32_t RESERVED38[8176];
-    __IOM uint32_t WDT_CTL;                       /*!< 0x0000C000 Watchdog Counter Control Register (Type A) */
-    __IOM uint32_t WDT_CNT;                       /*!< 0x0000C004 Watchdog Counter Count Register (Type A) */
-    __IOM uint32_t WDT_MATCH;                     /*!< 0x0000C008 Watchdog Counter Match Register (Type A) */
-    __IOM uint32_t WDT_MATCH2;                    /*!< 0x0000C00C Watchdog Counter Match Register 2 (Type A) */
-    __IM uint32_t RESERVED39[60];
-    WDT_Type WDT[4];                        /*!< 0x0000C100 Watchdog Timer (Type B) */
-    __IM uint32_t RESERVED40[832];
-    MCWDT_STRUCT_Type MCWDT_STRUCT[4];      /*!< 0x0000D000 Multi-Counter Watchdog Timer (Type A) */
-    __IM uint32_t RESERVED41[960];
-    MCWDT_Type MCWDT[4];                    /*!< 0x0000E000 Multi-Counter Watchdog Timer (Type B) */
+   __IM uint32_t RESERVED14[119];
+  __IOM uint32_t CLK_PATH_SELECT[16];           /*!< 0x00001200 Clock Path Select Register */
+  __IOM uint32_t CLK_ROOT_SELECT[16];           /*!< 0x00001240 Clock Root Select Register */
+  __IOM uint32_t CLK_DIRECT_SELECT[16];         /*!< 0x00001280 Clock Root Direct Select Register */
+   __IM uint32_t RESERVED15[16];
+  __IOM uint32_t CLK_SELECT;                    /*!< 0x00001300 Clock selection register */
+  __IOM uint32_t CLK_MF_SELECT;                 /*!< 0x00001304 Medium Frequency Clock Select Register */
+   __IM uint32_t RESERVED16[2];
+  __IOM uint32_t CLK_ALTHF_CTL[2];              /*!< 0x00001310 Alternate High Frequency Clock Control Register */
+   __IM uint32_t RESERVED17[2];
+  __IOM uint32_t CLK_ECO_PRESCALE;              /*!< 0x00001320 ECO Prescaler Configuration Register */
+   __IM uint32_t RESERVED18[7];
+  __IOM uint32_t CLK_IMO_CONFIG;                /*!< 0x00001340 IMO Configuration */
+  __IOM uint32_t CLK_IHO_CONFIG;                /*!< 0x00001344 IHO Configuration Register */
+   __IM uint32_t RESERVED19[6];
+        CLK_ECO_Type CLK_ECO_STRUCT;            /*!< 0x00001360 ECO Configuration */
+  __IOM uint32_t CLK_PILO_CONFIG;               /*!< 0x00001370 Precision ILO Configuration Register */
+   __IM uint32_t CLK_PILO_STATUS;               /*!< 0x00001374 Precision ILO Status Register */
+   __IM uint32_t RESERVED20[2];
+  __IOM uint32_t CLK_ILO_CONFIG;                /*!< 0x00001380 ILO Configuration */
+  __IOM uint32_t CLK_TRIM_ILO_CTL;              /*!< 0x00001384 ILO Trim Register */
+   __IM uint32_t RESERVED21[2];
+  __IOM uint32_t CLK_WCO_CONFIG;                /*!< 0x00001390 WCO Configuration Register */
+   __IM uint32_t CLK_WCO_STATUS;                /*!< 0x00001394 WCO Status Register */
+   __IM uint32_t RESERVED22[26];
+        CSV_HF_Type CSV_HF_STRUCT;              /*!< 0x00001400 Clock Supervisor (CSV) registers for Root clocks */
+  __IOM uint32_t CSV_REF_SEL;                   /*!< 0x00001500 Select CSV Reference clock for Active domain */
+   __IM uint32_t RESERVED23[3];
+        CSV_REF_Type CSV_REF_STRUCT;            /*!< 0x00001510 CSV registers for the CSV Reference clock */
+  __IOM uint32_t CSV_LF_REF_SEL;                /*!< 0x00001520 Select CSV Reference clock for LF clock */
+   __IM uint32_t RESERVED24[3];
+        CSV_LF_Type CSV_LF_STRUCT;              /*!< 0x00001530 CSV registers for LF clock */
+  __IOM uint32_t CSV_PILO_REF_SEL;              /*!< 0x00001540 Select CSV Reference clock for PILO clock */
+   __IM uint32_t RESERVED25[3];
+        CSV_PILO_Type CSV_PILO;                 /*!< 0x00001550 CSV registers for PILO clock */
+   __IM uint32_t RESERVED26[40];
+        CLK_DPLL_LP_Type CLK_DPLL_LP[15];       /*!< 0x00001600 DPLL LP Configuration Register */
+   __IM uint32_t RESERVED27[8];
+        CLK_DPLL_HP_Type CLK_DPLL_HP[15];       /*!< 0x00001800 DPLL HP Configuration Register */
+   __IM uint32_t RESERVED28[4];
+  __IOM uint32_t RES_CAUSE;                     /*!< 0x00001BD0 Reset Cause Observation Register */
+  __IOM uint32_t RES_CAUSE2;                    /*!< 0x00001BD4 Reset Cause Observation Register 2 */
+   __IM uint32_t RESERVED29[3];
+   __OM uint32_t RES_PXRES_CTL;                 /*!< 0x00001BE4 Programmable XRES Control Register */
+   __IM uint32_t RESERVED30[7];
+  __IOM uint32_t RES_CAUSE_EXTEND;              /*!< 0x00001C04 Extended Reset Cause Observation Register */
+   __IM uint32_t RESERVED31[2];
+  __IOM uint32_t PWR_CBUCK_CTL;                 /*!< 0x00001C10 Core Buck Control Register */
+  __IOM uint32_t PWR_CBUCK_CTL2;                /*!< 0x00001C14 Core Buck Control Register 2 */
+   __IM uint32_t RESERVED32;
+  __IOM uint32_t PWR_CBUCK_DPSLP_CTL;           /*!< 0x00001C1C Core Buck Deepsleep Control Register */
+   __IM uint32_t PWR_CBUCK_STATUS;              /*!< 0x00001C20 Core Buck Status Register */
+  __IOM uint32_t PWR_RETLDO_CTL;                /*!< 0x00001C24 RETLDO Control Register */
+  __IOM uint32_t PWR_SRAMLDO_CTL;               /*!< 0x00001C28 SRAMLDO Control Register */
+   __IM uint32_t RESERVED33;
+  __IOM uint32_t PWR_MISCLDO_CTL;               /*!< 0x00001C30 MISCLDO Control Register */
+   __IM uint32_t RESERVED34[311];
+  __IOM uint32_t PWR_TRIM_PMU_CTL0;             /*!< 0x00002110 PMU Trim Register 0 */
+   __IM uint32_t RESERVED35[963];
+  __IOM uint32_t CLK_TRIM_ECO_CTL;              /*!< 0x00003020 ECO Trim Register */
+   __IM uint32_t RESERVED36[119];
+        CLK_TRIM_DPLL_LP_Type CLK_TRIM_DPLL_LP[15]; /*!< 0x00003200 DPLL LP Trims */
+   __IM uint32_t RESERVED37[776];
+        RAM_TRIM_Type RAM_TRIM_STRUCT;          /*!< 0x00004000 SRAM Trim registers */
+   __IM uint32_t RESERVED38[8176];
+  __IOM uint32_t WDT_CTL;                       /*!< 0x0000C000 Watchdog Counter Control Register (Type A) */
+  __IOM uint32_t WDT_CNT;                       /*!< 0x0000C004 Watchdog Counter Count Register (Type A) */
+  __IOM uint32_t WDT_MATCH;                     /*!< 0x0000C008 Watchdog Counter Match Register (Type A) */
+  __IOM uint32_t WDT_MATCH2;                    /*!< 0x0000C00C Watchdog Counter Match Register 2 (Type A) */
+   __IM uint32_t RESERVED39[60];
+        WDT_Type WDT[4];                        /*!< 0x0000C100 Watchdog Timer (Type B) */
+   __IM uint32_t RESERVED40[832];
+        MCWDT_STRUCT_Type MCWDT_STRUCT[4];      /*!< 0x0000D000 Multi-Counter Watchdog Timer (Type A) */
+   __IM uint32_t RESERVED41[960];
+        MCWDT_Type MCWDT[4];                    /*!< 0x0000E000 Multi-Counter Watchdog Timer (Type B) */
 } SRSS_Type;                                    /*!< Size = 58368 (0xE400) */
 
 

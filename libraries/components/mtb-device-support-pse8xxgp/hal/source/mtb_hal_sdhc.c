@@ -132,51 +132,51 @@ extern "C"
 #if (defined(SDHC_CHIP_TOP_DATA8_PRESENT) && (SDHC_CHIP_TOP_DATA8_PRESENT)) || \
     (defined(SDHC0_CHIP_TOP_DATA8_PRESENT) && (SDHC0_CHIP_TOP_DATA8_PRESENT)) || \
     (defined(SDHC1_CHIP_TOP_DATA8_PRESENT) && (SDHC1_CHIP_TOP_DATA8_PRESENT))
-#define _MTB_HAL_SDHC_DATA8_PRESENT   1
+    #define _MTB_HAL_SDHC_DATA8_PRESENT   1
 #else
-#define _MTB_HAL_SDHC_DATA8_PRESENT   0
+    #define _MTB_HAL_SDHC_DATA8_PRESENT   0
 #endif
 #if (defined(SDHC_CHIP_TOP_CARD_DETECT_PRESENT) && (SDHC_CHIP_TOP_CARD_DETECT_PRESENT)) || \
     (defined(SDHC0_CHIP_TOP_CARD_DETECT_PRESENT) && (SDHC0_CHIP_TOP_CARD_DETECT_PRESENT)) || \
     (defined(SDHC1_CHIP_TOP_CARD_DETECT_PRESENT) && (SDHC1_CHIP_TOP_CARD_DETECT_PRESENT))
-#define _MTB_HAL_SDHC_CARD_DETECT_PRESENT   1
+    #define _MTB_HAL_SDHC_CARD_DETECT_PRESENT   1
 #else
-#define _MTB_HAL_SDHC_CARD_DETECT_PRESENT   0
+    #define _MTB_HAL_SDHC_CARD_DETECT_PRESENT   0
 #endif
 #if (defined(SDHC_CHIP_TOP_CARD_WRITE_PROT_PRESENT) && (SDHC_CHIP_TOP_CARD_WRITE_PROT_PRESENT)) || \
     (defined(SDHC0_CHIP_TOP_CARD_WRITE_PROT_PRESENT) && (SDHC0_CHIP_TOP_CARD_WRITE_PROT_PRESENT)) || \
     (defined(SDHC1_CHIP_TOP_CARD_WRITE_PROT_PRESENT) && (SDHC1_CHIP_TOP_CARD_WRITE_PROT_PRESENT))
-#define _MTB_HAL_SDHC_CARD_WRITE_PROT_PRESENT   1
+    #define _MTB_HAL_SDHC_CARD_WRITE_PROT_PRESENT   1
 #else
-#define _MTB_HAL_SDHC_CARD_WRITE_PROT_PRESENT   0
+    #define _MTB_HAL_SDHC_CARD_WRITE_PROT_PRESENT   0
 #endif
 #if (defined(SDHC_CHIP_TOP_LED_CTRL_PRESENT) && (SDHC_CHIP_TOP_LED_CTRL_PRESENT)) || \
     (defined(SDHC0_CHIP_TOP_LED_CTRL_PRESENT) && (SDHC0_CHIP_TOP_LED_CTRL_PRESENT)) || \
     (defined(SDHC1_CHIP_TOP_LED_CTRL_PRESENT) && (SDHC1_CHIP_TOP_LED_CTRL_PRESENT))
-#define _MTB_HAL_SDHC_LED_CTRL_PRESENT   1
+    #define _MTB_HAL_SDHC_LED_CTRL_PRESENT   1
 #else
-#define _MTB_HAL_SDHC_LED_CTRL_PRESENT   0
+    #define _MTB_HAL_SDHC_LED_CTRL_PRESENT   0
 #endif
 #if (defined(SDHC_CHIP_TOP_IO_VOLT_SEL_PRESENT) && (SDHC_CHIP_TOP_IO_VOLT_SEL_PRESENT)) || \
     (defined(SDHC0_CHIP_TOP_IO_VOLT_SEL_PRESENT) && (SDHC0_CHIP_TOP_IO_VOLT_SEL_PRESENT)) || \
     (defined(SDHC1_CHIP_TOP_IO_VOLT_SEL_PRESENT) && (SDHC1_CHIP_TOP_IO_VOLT_SEL_PRESENT))
-#define _MTB_HAL_SDHC_IO_VOLT_SEL_PRESENT   1
+    #define _MTB_HAL_SDHC_IO_VOLT_SEL_PRESENT   1
 #else
-#define _MTB_HAL_SDHC_IO_VOLT_SEL_PRESENT   0
+    #define _MTB_HAL_SDHC_IO_VOLT_SEL_PRESENT   0
 #endif
 #if (defined(SDHC_CHIP_TOP_CARD_IF_PWR_EN_PRESENT) && (SDHC_CHIP_TOP_CARD_IF_PWR_EN_PRESENT)) || \
     (defined(SDHC0_CHIP_TOP_CARD_IF_PWR_EN_PRESENT) && (SDHC0_CHIP_TOP_CARD_IF_PWR_EN_PRESENT)) || \
     (defined(SDHC1_CHIP_TOP_CARD_IF_PWR_EN_PRESENT) && (SDHC1_CHIP_TOP_CARD_IF_PWR_EN_PRESENT))
-#define _MTB_HAL_SDHC_CARD_IF_PWR_EN_PRESENT   1
+    #define _MTB_HAL_SDHC_CARD_IF_PWR_EN_PRESENT   1
 #else
-#define _MTB_HAL_SDHC_CARD_IF_PWR_EN_PRESENT   0
+    #define _MTB_HAL_SDHC_CARD_IF_PWR_EN_PRESENT   0
 #endif
 #if (defined(SDHC_CHIP_TOP_CARD_EMMC_RESET_PRESENT) && (SDHC_CHIP_TOP_CARD_EMMC_RESET_PRESENT)) || \
     (defined(SDHC0_CHIP_TOP_CARD_EMMC_RESET_PRESENT) && (SDHC0_CHIP_TOP_CARD_EMMC_RESET_PRESENT)) || \
     (defined(SDHC1_CHIP_TOP_CARD_EMMC_RESET_PRESENT) && (SDHC1_CHIP_TOP_CARD_EMMC_RESET_PRESENT))
-#define _MTB_HAL_SDHC_CARD_EMMC_RESET_PRESENT   1
+    #define _MTB_HAL_SDHC_CARD_EMMC_RESET_PRESENT   1
 #else
-#define _MTB_HAL_SDHC_CARD_EMMC_RESET_PRESENT   0
+    #define _MTB_HAL_SDHC_CARD_EMMC_RESET_PRESENT   0
 #endif
 
 /* SDHC/SDIO I/O voltage select principle.
@@ -222,21 +222,21 @@ static _mtb_hal_sdxx_semaphore_status_t _mtb_hal_sdxx_semaphore_status[CY_IP_MXS
 //--------------------------------------------------------------------------------------------------
 static uint8_t _mtb_hal_sdxx_get_block_num(_mtb_hal_sdxx_t* sdxx)
 {
-#if defined(SDHC0)
+    #if defined(SDHC0)
     if ((sdxx->base) == SDHC0)
     {
         return (uint8_t)0U;
     }
-#endif
-#if defined(SDHC1)
+    #endif
+    #if defined(SDHC1)
     if ((sdxx->base) == SDHC1)
     {
         return (uint8_t)1U;
     }
-#endif
+    #endif
 
     // Should never get here, return an invalid block num
-    return (uint8_t) -1;
+    return (uint8_t)-1;
 }
 
 
@@ -299,7 +299,7 @@ bool _mtb_hal_sdhc_is_busy(const _mtb_hal_sdxx_t* sdxx)
     /* Check DAT Line Active */
     uint32_t pState = Cy_SD_Host_GetPresentState(sdxx->base);
     if ((CY_SD_HOST_DAT_LINE_ACTIVE != (pState & CY_SD_HOST_DAT_LINE_ACTIVE)) &&
-            (CY_SD_HOST_CMD_CMD_INHIBIT_DAT != (pState & CY_SD_HOST_CMD_CMD_INHIBIT_DAT)))
+        (CY_SD_HOST_CMD_CMD_INHIBIT_DAT != (pState & CY_SD_HOST_CMD_CMD_INHIBIT_DAT)))
     {
         busy_status = false;
     }
@@ -323,18 +323,18 @@ static cy_en_sd_host_bus_width_t _mtb_hal_sdhc_buswidth_hal_to_pdl(uint8_t sd_da
 {
     switch (sd_data_bits)
     {
-    case 1:
-        return CY_SD_HOST_BUS_WIDTH_1_BIT;
+        case 1:
+            return CY_SD_HOST_BUS_WIDTH_1_BIT;
 
-    case 4:
-        return CY_SD_HOST_BUS_WIDTH_4_BIT;
+        case 4:
+            return CY_SD_HOST_BUS_WIDTH_4_BIT;
 
-    case 8:
-        return CY_SD_HOST_BUS_WIDTH_8_BIT;
+        case 8:
+            return CY_SD_HOST_BUS_WIDTH_8_BIT;
 
-    default:
-        CY_ASSERT(false);
-        return CY_SD_HOST_BUS_WIDTH_1_BIT;
+        default:
+            CY_ASSERT(false);
+            return CY_SD_HOST_BUS_WIDTH_1_BIT;
     }
 }
 
@@ -346,18 +346,18 @@ static uint8_t _mtb_hal_sdhc_buswidth_pdl_to_hal(cy_en_sd_host_bus_width_t sd_da
 {
     switch (sd_data_bits)
     {
-    case CY_SD_HOST_BUS_WIDTH_1_BIT:
-        return 1;
+        case CY_SD_HOST_BUS_WIDTH_1_BIT:
+            return 1;
 
-    case CY_SD_HOST_BUS_WIDTH_4_BIT:
-        return 4;
+        case CY_SD_HOST_BUS_WIDTH_4_BIT:
+            return 4;
 
-    case CY_SD_HOST_BUS_WIDTH_8_BIT:
-        return 8;
+        case CY_SD_HOST_BUS_WIDTH_8_BIT:
+            return 8;
 
-    default:
-        CY_ASSERT(false);
-        return 1;
+        default:
+            CY_ASSERT(false);
+            return 1;
     }
 }
 
@@ -375,9 +375,9 @@ static uint8_t _mtb_hal_sdhc_buswidth_pdl_to_hal(cy_en_sd_host_bus_width_t sd_da
 *
 ***********************************************************************************************************************/
 static cy_rslt_t _mtb_hal_sdxx_find_best_div(uint32_t hz_src, uint32_t desired_hz,
-        const mtb_hal_clock_tolerance_t *tolerance,
-        bool only_below_desired, uint32_t *div,
-        uint32_t min_hf_freq)
+                                             const mtb_hal_clock_tolerance_t* tolerance,
+                                             bool only_below_desired, uint32_t* div,
+                                             uint32_t min_hf_freq)
 {
     CY_UNUSED_PARAMETER(tolerance);
     CY_UNUSED_PARAMETER(only_below_desired);
@@ -417,7 +417,7 @@ static cy_rslt_t _mtb_hal_sdxx_find_best_div(uint32_t hz_src, uint32_t desired_h
 *
 ***********************************************************************************************************************/
 static cy_rslt_t _mtb_hal_sdxx_update_hw_clock_config(_mtb_hal_sdxx_t* sdxx, uint32_t freq,
-        bool lv_signaling, bool negotiate)
+                                                      bool lv_signaling, bool negotiate)
 {
     cy_en_sd_host_bus_speed_mode_t  busSpeed;
     cy_rslt_t                       result;
@@ -440,20 +440,20 @@ static cy_rslt_t _mtb_hal_sdxx_update_hw_clock_config(_mtb_hal_sdxx_t* sdxx, uin
         if (freq <= _MTB_HAL_SDXX_MHZ(25))
         {
             busSpeed = (lv_signaling)
-                       ? CY_SD_HOST_BUS_SPEED_SDR12_5
-                       : CY_SD_HOST_BUS_SPEED_DEFAULT;
+                ? CY_SD_HOST_BUS_SPEED_SDR12_5
+                : CY_SD_HOST_BUS_SPEED_DEFAULT;
         }
         else if (freq <= _MTB_HAL_SDXX_MHZ(50))
         {
             busSpeed = (lv_signaling)
-                       ? CY_SD_HOST_BUS_SPEED_SDR25
-                       : CY_SD_HOST_BUS_SPEED_HIGHSPEED;
+                ? CY_SD_HOST_BUS_SPEED_SDR25
+                : CY_SD_HOST_BUS_SPEED_HIGHSPEED;
         }
         else
         {
             busSpeed = (lv_signaling)
-                       ? CY_SD_HOST_BUS_SPEED_SDR50
-                       : CY_SD_HOST_BUS_SPEED_HIGHSPEED;
+                ? CY_SD_HOST_BUS_SPEED_SDR50
+                : CY_SD_HOST_BUS_SPEED_HIGHSPEED;
         }
     }
 
@@ -483,7 +483,7 @@ static cy_rslt_t _mtb_hal_sdxx_update_hw_clock_config(_mtb_hal_sdxx_t* sdxx, uin
 *
 ***********************************************************************************************************************/
 static cy_rslt_t _mtb_hal_sdxx_sdcardchangeclock(_mtb_hal_sdxx_t* sdxx, uint32_t* frequency,
-        bool lv_signaling, bool negotiate)
+                                                 bool lv_signaling, bool negotiate)
 {
     CY_ASSERT(NULL != sdxx);
     CY_ASSERT(NULL != frequency);
@@ -494,17 +494,17 @@ static cy_rslt_t _mtb_hal_sdxx_sdcardchangeclock(_mtb_hal_sdxx_t* sdxx, uint32_t
     uint32_t bus_freq = 0;
     uint32_t source_freq = 0;
 
-#if defined(CY_IP_MXS22SRSS)
+    #if defined(CY_IP_MXS22SRSS)
     if (*frequency > _MTB_HAL_SDXX_MHZ(100))
     {
         result = MTB_HAL_SDHC_RSLT_ERR_CLOCK;
     }
-#endif
+    #endif
 
     if (CY_RSLT_SUCCESS == result)
     {
         result = _mtb_hal_sdxx_find_best_div(sdxx->clock->interface->get_frequency_hz(
-                sdxx->clock->clock_ref), *frequency, NULL, false,
+                                                 sdxx->clock->clock_ref), *frequency, NULL, false,
                                              &most_suitable_div, 0);
     }
 
@@ -544,7 +544,7 @@ static cy_rslt_t _mtb_hal_sdxx_sdcardchangeclock(_mtb_hal_sdxx_t* sdxx, uint32_t
 *
 *******************************************************************************/
 static cy_en_sd_host_status_t _mtb_hal_sdxx_pollcmdcomplete(_mtb_hal_sdxx_t* sdxx,
-        uint32_t *time_used_ms)
+                                                            uint32_t* time_used_ms)
 {
     cy_en_sd_host_status_t result = CY_SD_HOST_ERROR_TIMEOUT;
     uint32_t retry  = _MTB_HAL_SDHC_RETRY_TIMES * _MTB_HAL_SDIO_CMD_CMPLT_DELAY_US;
@@ -553,7 +553,7 @@ static cy_en_sd_host_status_t _mtb_hal_sdxx_pollcmdcomplete(_mtb_hal_sdxx_t* sdx
     {
         /* Command complete */
         if (CY_SD_HOST_CMD_COMPLETE ==
-                (CY_SD_HOST_CMD_COMPLETE & Cy_SD_Host_GetNormalInterruptStatus(sdxx->base)))
+            (CY_SD_HOST_CMD_COMPLETE & Cy_SD_Host_GetNormalInterruptStatus(sdxx->base)))
         {
             sdxx->data_transfer_status &= ~_MTB_HAL_SDXX_WAIT_CMD_COMPLETE;
 
@@ -588,7 +588,7 @@ static cy_en_sd_host_status_t _mtb_hal_sdxx_pollcmdcomplete(_mtb_hal_sdxx_t* sdx
 *
 *******************************************************************************/
 static cy_en_sd_host_status_t _mtb_hal_sdxx_polltransfercomplete(_mtb_hal_sdxx_t* sdxx,
-        const uint16_t delay)
+                                                                 const uint16_t delay)
 {
     cy_en_sd_host_status_t result = CY_SD_HOST_ERROR_TIMEOUT;
     uint32_t               retry = _MTB_HAL_SDHC_RW_RETRY_CYCLES;
@@ -604,7 +604,7 @@ static cy_en_sd_host_status_t _mtb_hal_sdxx_polltransfercomplete(_mtb_hal_sdxx_t
          */
         status = Cy_SD_Host_GetNormalInterruptStatus(sdxx->base);
         if ((CY_SD_HOST_XFER_COMPLETE == (CY_SD_HOST_XFER_COMPLETE & status)) ||
-                (sdxx->is_sdio ? !_mtb_hal_sdio_is_busy(sdxx) : !_mtb_hal_sdhc_is_busy(sdxx)))
+            (sdxx->is_sdio ? !_mtb_hal_sdio_is_busy(sdxx) : !_mtb_hal_sdhc_is_busy(sdxx)))
         {
             /* Transfer complete */
             result = CY_SD_HOST_SUCCESS;
@@ -620,7 +620,7 @@ static cy_en_sd_host_status_t _mtb_hal_sdxx_polltransfercomplete(_mtb_hal_sdxx_t
 // Indicates that a sync transfer is in process
 static void _mtb_hal_sdxx_setup_smphr(_mtb_hal_sdxx_t* sdxx)
 {
-#if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+    #if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
     uint8_t block_num = _mtb_hal_sdxx_get_block_num(sdxx);
     bool in_isr = (SCB->ICSR & SCB_ICSR_VECTACTIVE_Msk) != 0;
     if (!in_isr)
@@ -652,10 +652,10 @@ static void _mtb_hal_sdxx_setup_smphr(_mtb_hal_sdxx_t* sdxx)
     {
         _mtb_hal_sdxx_semaphore_status[block_num] = _MTB_HAL_SDXX_SEMA_NOT_USED;
     }
-#else // if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+    #else // if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
     // We don't need to do anything special if we're not in an RTOS context
     CY_UNUSED_PARAMETER(sdxx);
-#endif // if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+    #endif // if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
 }
 
 
@@ -671,13 +671,13 @@ static cy_rslt_t _mtb_hal_sdxx_waitfor_transfer_complete(_mtb_hal_sdxx_t* sdxx)
      * the SDXX ISR priority we use the normal polling method.
      */
     cy_rslt_t result = CY_RSLT_SUCCESS;
-#if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+    #if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
     bool in_isr = (SCB->ICSR & SCB_ICSR_VECTACTIVE_Msk) != 0;
     if ((!in_isr) && _mtb_hal_sdxx_is_smfr_ready_for_get(sdxx))
     {
         result =
             cy_rtos_get_semaphore(&(_mtb_hal_sdxx_semaphore_xfer_done[_mtb_hal_sdxx_get_block_num(
-                                        sdxx)]), 500, in_isr);
+                                                                          sdxx)]), 500, in_isr);
         if (CY_RSLT_SUCCESS == result)
         {
             _mtb_hal_sdxx_semaphore_status[_mtb_hal_sdxx_get_block_num(sdxx)] =
@@ -686,13 +686,13 @@ static cy_rslt_t _mtb_hal_sdxx_waitfor_transfer_complete(_mtb_hal_sdxx_t* sdxx)
     }
     else
     {
-#endif // if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
-        result = (cy_rslt_t)_mtb_hal_sdxx_polltransfercomplete(sdxx, _MTB_HAL_SDHC_RW_TIMEOUT_US);
-#if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
-    }
+    #endif // if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+    result = (cy_rslt_t)_mtb_hal_sdxx_polltransfercomplete(sdxx, _MTB_HAL_SDHC_RW_TIMEOUT_US);
+    #if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+}
 
 
-#endif
+    #endif
 
     return result;
 }
@@ -733,15 +733,15 @@ static void _mtb_hal_sdhc_irq_handler(_mtb_hal_sdxx_t* sdxx)
 
         sdxx->data_transfer_status &= ~_MTB_HAL_SDXX_WAIT_XFER_COMPLETE;
 
-#if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+        #if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
         if (_mtb_hal_sdxx_is_smfr_ready_for_set(sdxx))
         {
             cy_rtos_set_semaphore(&(_mtb_hal_sdxx_semaphore_xfer_done[_mtb_hal_sdxx_get_block_num(
-                                        sdxx)]), true);
+                                                                          sdxx)]), true);
             _mtb_hal_sdxx_semaphore_status[_mtb_hal_sdxx_get_block_num(sdxx)] =
                 _MTB_HAL_SDXX_SEMA_SET;
         }
-#endif /* CY_RTOS_AWARE or COMPONENT_RTOS_AWARE defined */
+        #endif /* CY_RTOS_AWARE or COMPONENT_RTOS_AWARE defined */
 
         /* Disabling transfer complete interrupt mask */
         Cy_SD_Host_SetNormalInterruptMask(sdxx->base,
@@ -802,7 +802,7 @@ static void _mtb_hal_sdio_irq_handler(mtb_hal_sdio_t* obj)
     {
         obj->sdxx.data_transfer_status &= ~_MTB_HAL_SDXX_WAIT_XFER_COMPLETE;
         interruptsToClear |= (uint32_t)CY_SD_HOST_XFER_COMPLETE;
-#if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+        #if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
         if (_mtb_hal_sdxx_is_smfr_ready_for_set(&(obj->sdxx)))
         {
             cy_rtos_set_semaphore(&(_mtb_hal_sdxx_semaphore_xfer_done[
@@ -810,7 +810,7 @@ static void _mtb_hal_sdio_irq_handler(mtb_hal_sdio_t* obj)
             _mtb_hal_sdxx_semaphore_status[_mtb_hal_sdxx_get_block_num(&(obj->sdxx))] =
                 _MTB_HAL_SDXX_SEMA_SET;
         }
-#endif /* CY_RTOS_AWARE or COMPONENT_RTOS_AWARE defined */
+        #endif /* CY_RTOS_AWARE or COMPONENT_RTOS_AWARE defined */
 
         /* Disabling transfer complete interrupt mask */
         Cy_SD_Host_SetNormalInterruptMask(obj->sdxx.base,
@@ -875,7 +875,7 @@ static cy_rslt_t _mtb_hal_sdhc_init_card_common(mtb_hal_sdhc_t* obj)
     CY_ASSERT(NULL != obj);
     CY_ASSERT(NULL != obj->sdxx.base);
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     /* Initialize the card */
     cy_rslt_t result =
@@ -891,7 +891,7 @@ static cy_rslt_t _mtb_hal_sdhc_init_card_common(mtb_hal_sdhc_t* obj)
         uint8_t ext_csd[_MTB_HAL_SDHC_EXTCSD_SIZE] = { 0UL };
         memset(&ext_csd, 0x00, sizeof(ext_csd));
         if (CY_RSLT_SUCCESS ==
-                (cy_rslt_t)Cy_SD_Host_GetExtCsd(sdxx->base, (uint32_t *)ext_csd, sdxx->context))
+            (cy_rslt_t)Cy_SD_Host_GetExtCsd(sdxx->base, (uint32_t*)ext_csd, sdxx->context))
         {
             /* Get GENERIC_CMD6_TIME [248] of the EXTCSD register */
             obj->emmc_generic_cmd6_time_ms =
@@ -907,14 +907,14 @@ static cy_rslt_t _mtb_hal_sdhc_init_card_common(mtb_hal_sdhc_t* obj)
 // mtb_hal_sdhc_setup
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_sdhc_setup(mtb_hal_sdhc_t* obj, const mtb_hal_sdhc_configurator_t* config,
-                             const mtb_hal_clock_t *clock,
-                             cy_stc_sd_host_context_t *sdhc_host_context)
+                             const mtb_hal_clock_t* clock,
+                             cy_stc_sd_host_context_t* sdhc_host_context)
 {
     CY_ASSERT(NULL != obj);
     CY_ASSERT(NULL != config);
     memset(obj, 0, sizeof(mtb_hal_sdhc_t));
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     obj->low_voltage_io_desired = config->card_config->lowVoltageSignaling;
     obj->bus_width = _mtb_hal_sdhc_buswidth_pdl_to_hal(config->card_config->busWidth);
@@ -964,10 +964,10 @@ cy_rslt_t mtb_hal_sdhc_setup(mtb_hal_sdhc_t* obj, const mtb_hal_sdhc_configurato
 
     sdxx->base = config->base;
     sdxx->data_transfer_status = _MTB_HAL_SDXX_NOT_RUNNING;
-#if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+    #if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
     _mtb_hal_sdxx_semaphore_status[_mtb_hal_sdxx_get_block_num(sdxx)] =
         _MTB_HAL_SDXX_SEMA_NOT_INITED;
-#endif /* defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE) */
+    #endif /* defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE) */
 
     sdxx->emmc = config->host_config->emmc;
 
@@ -983,7 +983,7 @@ cy_rslt_t mtb_hal_sdhc_setup(mtb_hal_sdhc_t* obj, const mtb_hal_sdhc_configurato
 cy_rslt_t mtb_hal_sdhc_erase(mtb_hal_sdhc_t* obj, uint32_t start_addr, size_t length,
                              uint32_t timeout_ms)
 {
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     if (timeout_ms == 0)
     {
@@ -1036,7 +1036,7 @@ cy_rslt_t mtb_hal_sdhc_erase(mtb_hal_sdhc_t* obj, uint32_t start_addr, size_t le
             {
                 cardStatus = Cy_SD_Host_GetCardStatus(sdxx->base, sdxx->context);
                 if (((CY_SD_HOST_CARD_TRAN << CY_SD_HOST_CMD13_CURRENT_STATE) |
-                        (1UL << CY_SD_HOST_CMD13_READY_FOR_DATA)) == cardStatus)
+                     (1UL << CY_SD_HOST_CMD13_READY_FOR_DATA)) == cardStatus)
                 {
                     result = CY_RSLT_SUCCESS;
                     break;
@@ -1060,30 +1060,30 @@ cy_rslt_t mtb_hal_sdhc_erase(mtb_hal_sdhc_t* obj, uint32_t start_addr, size_t le
 // _mtb_hal_sdhc_async_transfer
 //--------------------------------------------------------------------------------------------------
 static cy_rslt_t _mtb_hal_sdhc_async_transfer(mtb_hal_sdhc_t* obj, uint32_t address,
-        size_t *length,
-        cy_stc_sd_host_write_read_config_t *dataConfig,
-        bool write)
+                                              size_t* length,
+                                              cy_stc_sd_host_write_read_config_t* dataConfig,
+                                              bool write)
 {
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
     cy_rslt_t result;
 
     /* The address to write/read data on the card or eMMC. */
     dataConfig->address = address;
     /* The number of blocks to write/read. */
-    dataConfig->numberOfBlocks = (uint32_t) * length;
-    dataConfig->autoCommand = (1UL == (uint32_t) * length)
-                              ? CY_SD_HOST_AUTO_CMD_NONE
-                              : CY_SD_HOST_AUTO_CMD_AUTO;
+    dataConfig->numberOfBlocks = (uint32_t)*length;
+    dataConfig->autoCommand = (1UL == (uint32_t)*length)
+        ? CY_SD_HOST_AUTO_CMD_NONE
+        : CY_SD_HOST_AUTO_CMD_AUTO;
     /* The timeout value for the transfer. */
     dataConfig->dataTimeout = obj->data_timeout_tout;
     /* For EMMC cards enable reliable write. */
     dataConfig->enReliableWrite = false;
     dataConfig->enableDma = true;
 
-#if defined(CORE_NAME_CM55_0)
+    #if defined(CORE_NAME_CM55_0)
     SCB_CleanDCache_by_Addr((void*)dataConfig->data,
                             (uint32_t)(dataConfig->numberOfBlocks * _MTB_HAL_SDHC_BLOCK_SIZE));
-#endif
+    #endif
 
     /* First clear out the transfer and command complete statuses */
     Cy_SD_Host_ClearNormalInterruptStatus(sdxx->base,
@@ -1111,10 +1111,10 @@ static cy_rslt_t _mtb_hal_sdhc_async_transfer(mtb_hal_sdhc_t* obj, uint32_t addr
         }
     }
 
-#if defined(CORE_NAME_CM55_0)
+    #if defined(CORE_NAME_CM55_0)
     SCB_InvalidateDCache_by_Addr((void*)dataConfig->data,
                                  (uint32_t)(dataConfig->numberOfBlocks * _MTB_HAL_SDHC_BLOCK_SIZE));
-#endif
+    #endif
 
     return result;
 }
@@ -1124,7 +1124,7 @@ static cy_rslt_t _mtb_hal_sdhc_async_transfer(mtb_hal_sdhc_t* obj, uint32_t addr
 // mtb_hal_sdhc_read_async
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_sdhc_read_async(mtb_hal_sdhc_t* obj, uint32_t address, uint8_t* data,
-                                  size_t *length)
+                                  size_t* length)
 {
     cy_stc_sd_host_write_read_config_t dataConfig;
 
@@ -1139,7 +1139,7 @@ cy_rslt_t mtb_hal_sdhc_read_async(mtb_hal_sdhc_t* obj, uint32_t address, uint8_t
 // mtb_hal_sdhc_write_async
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_sdhc_write_async(mtb_hal_sdhc_t* obj, uint32_t address, const uint8_t* data,
-                                   size_t *length)
+                                   size_t* length)
 {
     cy_stc_sd_host_write_read_config_t dataConfig;
 
@@ -1179,7 +1179,7 @@ cy_rslt_t mtb_hal_sdhc_get_block_count(mtb_hal_sdhc_t* obj, uint32_t* block_coun
 {
     CY_ASSERT(NULL != obj);
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
     cy_rslt_t result = MTB_HAL_SDHC_RSLT_ERR_BLOCK_COUNT_GET_FAILURE;
 
     if (CY_SD_HOST_SUCCESS == Cy_SD_Host_GetBlockCount(sdxx->base, block_count, sdxx->context))
@@ -1197,7 +1197,7 @@ cy_rslt_t mtb_hal_sdhc_get_block_count(mtb_hal_sdhc_t* obj, uint32_t* block_coun
 cy_rslt_t mtb_hal_sdhc_set_frequency(mtb_hal_sdhc_t* obj, uint32_t hz, bool negotiate)
 {
     CY_ASSERT(NULL != obj);
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     cy_rslt_t result = MTB_HAL_SDHC_RSLT_ERR_SET_FREQ;
     if (NULL != sdxx->base)
@@ -1224,7 +1224,7 @@ cy_rslt_t mtb_hal_sdhc_set_frequency(mtb_hal_sdhc_t* obj, uint32_t hz, bool nego
                 /* User have data timeout configured, we need to reconfigure it according to new
                    card clock */
                 result = mtb_hal_sdhc_set_data_read_timeout(obj, obj->data_timeout_card_clocks_user,
-                         true);
+                                                            true);
             }
         }
     }
@@ -1275,7 +1275,7 @@ uint32_t mtb_hal_sdhc_get_frequency(mtb_hal_sdhc_t* obj)
 // mtb_hal_sdhc_set_data_read_timeout
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_sdhc_set_data_read_timeout(mtb_hal_sdhc_t* obj, uint32_t timeout,
-        bool auto_reconfigure)
+                                             bool auto_reconfigure)
 {
     CY_ASSERT(NULL != obj);
 
@@ -1285,7 +1285,7 @@ cy_rslt_t mtb_hal_sdhc_set_data_read_timeout(mtb_hal_sdhc_t* obj, uint32_t timeo
      *  This is defined in registers (TOUT_CLK_FREQ[5:0] = 1 and TOUT_CLK_UNIT[7] = 1).  */
     cy_float32_t tout_clk_period_us = _MTB_HAL_SDHC_EXPECTED_BASE_CLK_FREQ_HZ /
                                       (cy_float32_t)(obj->sdxx.clock->interface->get_frequency_hz(
-                                              obj->sdxx.clock->clock_ref));
+                                                         obj->sdxx.clock->clock_ref));
 
     uint32_t user_needs_us = (((uint64_t)timeout * 1000000) + current_card_clock - 1) /
                              current_card_clock;
@@ -1294,7 +1294,7 @@ cy_rslt_t mtb_hal_sdhc_set_data_read_timeout(mtb_hal_sdhc_t* obj, uint32_t timeo
      * TMCLK x 2^13 for 0, TMCLK x 2^14 for 1, ..., TMCLK x 2^27 for 0xE. 0xF is reserved. */
     const uint8_t tout_clk_power_base = _MTB_HAL_SDHC_TOUT_TMCLK_POW_MIN;
     for (uint8_t tmclk_power = tout_clk_power_base; tmclk_power <= _MTB_HAL_SDHC_TOUT_TMCLK_POW_MAX;
-            tmclk_power++)
+         tmclk_power++)
     {
         if (tout_clk_period_us * ((uint32_t)1 << tmclk_power) >= user_needs_us)
         {
@@ -1312,12 +1312,12 @@ cy_rslt_t mtb_hal_sdhc_set_data_read_timeout(mtb_hal_sdhc_t* obj, uint32_t timeo
 // mtb_hal_sdhc_config_data_transfer
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_sdhc_config_data_transfer(mtb_hal_sdhc_t* obj,
-        mtb_hal_sdhc_data_config_t *data_config)
+                                            mtb_hal_sdhc_data_config_t* data_config)
 {
     CY_ASSERT(NULL != obj);
     CY_ASSERT(NULL != data_config);
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
     CY_ASSERT(NULL != sdxx->base);
 
     if (NULL == data_config->data_ptr)
@@ -1348,17 +1348,17 @@ cy_rslt_t mtb_hal_sdhc_config_data_transfer(mtb_hal_sdhc_t* obj,
 
     /* SDHC needs to be able to access the data_ptr that is in DTCM when using CM55. Remap this
        address for access */
-#if defined(CORE_NAME_CM55_0)
+    #if defined(CORE_NAME_CM55_0)
     sdxx->adma_descriptor_tbl[1] = (uint32_t)cy_DTCMRemapAddr(data_config->data_ptr);
     dataConfig.data = (uint32_t*)cy_DTCMRemapAddr(&sdxx->adma_descriptor_tbl[0]); /* The address of
                                                                                      the ADMA
                                                                                      descriptor
                                                                                      table. */
-#else
+    #else
     sdxx->adma_descriptor_tbl[1] = (uint32_t)data_config->data_ptr;
     dataConfig.data = (uint32_t*)&sdxx->adma_descriptor_tbl[0]; /* The address of the ADMA
                                                                    descriptor table. */
-#endif
+    #endif
 
     return (cy_rslt_t)Cy_SD_Host_InitDataTransfer(sdxx->base, &dataConfig);
 }
@@ -1372,7 +1372,7 @@ cy_rslt_t mtb_hal_sdhc_send_cmd(mtb_hal_sdhc_t* obj, mtb_hal_sdhc_cmd_config_t* 
     CY_ASSERT(NULL != obj);
     CY_ASSERT(NULL != cmd_config);
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
     CY_ASSERT(NULL != sdxx->base);
 
     cy_rslt_t result = CY_RSLT_SUCCESS;
@@ -1522,12 +1522,12 @@ __STATIC_INLINE void _mtb_hal_sdhc_wait_ncc_time_at_400khz(void)
 // _mtb_hal_sdhc_io_volt_negotiate
 //--------------------------------------------------------------------------------------------------
 static cy_rslt_t _mtb_hal_sdhc_io_volt_negotiate(mtb_hal_sdhc_t* obj,
-        mtb_hal_sdhc_io_voltage_t io_voltage)
+                                                 mtb_hal_sdhc_io_voltage_t io_voltage)
 {
     /* GO_IDLE (CMD0) command is issued in scope of Cy_SD_Host_SelBusVoltage, which resets
      * SD bus to 1 bit bus width and 400 khz on the SD card side. Preparing host side for that. */
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     /* 1 bit data bus width */
     cy_rslt_t result = mtb_hal_sdhc_set_bus_width(obj, 1, true);
@@ -1588,16 +1588,16 @@ typedef struct
 {
     en_hsiom_sel_t      clk;
     en_hsiom_sel_t      cmd;
-#if _MTB_HAL_SDHC_DATA8_PRESENT
+    #if _MTB_HAL_SDHC_DATA8_PRESENT
     en_hsiom_sel_t      data[8];
-#else
+    #else
     en_hsiom_sel_t      data[4];
-#endif
+    #endif
 } _mtb_hal_sdhc_saved_lines_hsiom_t;
 
 /* power cycle config single pin */
 static void _mtb_hal_sdhc_pc_config_single_pin(mtb_hal_gpio_t gpio, en_hsiom_sel_t* hsiom_ptr,
-        bool set_line_low)
+                                               bool set_line_low)
 {
     GPIO_PRT_Type* port;
     uint8_t pin;
@@ -1623,12 +1623,12 @@ static void _mtb_hal_sdhc_pc_config_single_pin(mtb_hal_gpio_t gpio, en_hsiom_sel
  * logical 0 by the host to avoid operating current being drawn through the signal lines.
  * Lines are set low if set_lines_low true, pins configuration resored if set_lines_low false */
 static void _mtb_hal_sdhc_power_cycle_config_lines(mtb_hal_sdhc_t* obj,
-        _mtb_hal_sdhc_saved_lines_hsiom_t *pins_cfg,
-        bool set_lines_low)
+                                                   _mtb_hal_sdhc_saved_lines_hsiom_t* pins_cfg,
+                                                   bool set_lines_low)
 {
     _mtb_hal_sdhc_pc_config_single_pin(obj->sdxx.pin_clk, &pins_cfg->clk, set_lines_low);
     _mtb_hal_sdhc_pc_config_single_pin(obj->sdxx.pin_cmd, &pins_cfg->cmd, set_lines_low);
-    for (size_t i = 0; i < sizeof(pins_cfg->data) / sizeof(pins_cfg->data[0]); ++i)
+    for (size_t i = 0; i < sizeof(pins_cfg->data)/sizeof(pins_cfg->data[0]); ++i)
     {
         _mtb_hal_sdhc_pc_config_single_pin(obj->pin_data[i], &(pins_cfg->data[i]), set_lines_low);
     }
@@ -1663,14 +1663,14 @@ static cy_rslt_t _mtb_hal_sdhc_card_power_cycle(mtb_hal_sdhc_t* obj)
 // _mtb_hal_sdxx_set_io_voltage
 //--------------------------------------------------------------------------------------------------
 static cy_rslt_t _mtb_hal_sdxx_set_io_voltage(_mtb_hal_sdxx_t* sdxx,
-        mtb_hal_sdxx_io_voltage_t io_voltage,
-        _mtb_hal_sdxx_io_switch_action_t io_switch_type)
+                                              mtb_hal_sdxx_io_voltage_t io_voltage,
+                                              _mtb_hal_sdxx_io_switch_action_t io_switch_type)
 {
     CY_ASSERT(NULL != sdxx);
     CY_ASSERT(NULL != sdxx->base);
 
     if ((!sdxx->is_sdio && (CY_SD_HOST_SD != sdxx->context->cardType)) &&
-            (_MTB_HAL_SDXX_IO_VOLT_ACTION_NONE != io_switch_type))
+        (_MTB_HAL_SDXX_IO_VOLT_ACTION_NONE != io_switch_type))
     {
         /* For SDHC, Negotiation or Voltage switch is not supported when eMMC used */
         return MTB_HAL_SDHC_RSLT_ERR_UNSUPPORTED;
@@ -1686,69 +1686,69 @@ static cy_rslt_t _mtb_hal_sdxx_set_io_voltage(_mtb_hal_sdxx_t* sdxx,
 
     switch (io_switch_type)
     {
-    /* Not supported by current SDIO HAL implementation */
-    case _MTB_HAL_SDXX_IO_VOLT_ACTION_NEGOTIATE:
-    {
-        mtb_hal_sdhc_t *sdhc_obj = (mtb_hal_sdhc_t*)sdxx->obj;
+        /* Not supported by current SDIO HAL implementation */
+        case _MTB_HAL_SDXX_IO_VOLT_ACTION_NEGOTIATE:
+        {
+            mtb_hal_sdhc_t* sdhc_obj = (mtb_hal_sdhc_t*)sdxx->obj;
 
-        /* Bus width and card frequency settings are initialized to default during negotiation.
-         * Saving the parameters to restore them after I/O switch is done. */
-        uint8_t sd_bus_width_before_switch = mtb_hal_sdhc_get_bus_width(sdhc_obj);
-        uint32_t sd_freq_before_switch = mtb_hal_sdhc_get_frequency(sdhc_obj);
+            /* Bus width and card frequency settings are initialized to default during negotiation.
+             * Saving the parameters to restore them after I/O switch is done. */
+            uint8_t sd_bus_width_before_switch = mtb_hal_sdhc_get_bus_width(sdhc_obj);
+            uint32_t sd_freq_before_switch = mtb_hal_sdhc_get_frequency(sdhc_obj);
 
-        /* Once the card enters 1.8V signaling mode, it cannot be switched back to 3.3V
-           signaling without power cycle. */
-        if ((_FLD2BOOL(SDHC_CORE_HOST_CTRL2_R_SIGNALING_EN,
-                       SDHC_CORE_HOST_CTRL2_R(sdhc_obj->sdxx.base))) &&
+            /* Once the card enters 1.8V signaling mode, it cannot be switched back to 3.3V
+               signaling without power cycle. */
+            if ((_FLD2BOOL(SDHC_CORE_HOST_CTRL2_R_SIGNALING_EN,
+                           SDHC_CORE_HOST_CTRL2_R(sdhc_obj->sdxx.base))) &&
                 (_MTB_HAL_SDXX_IO_VOLTAGE_3_3V == io_voltage))
-        {
-            result = _mtb_hal_sdhc_card_power_cycle(sdhc_obj);
-            if (CY_RSLT_SUCCESS == result)
             {
-                sdhc_obj->low_voltage_io_desired = false;
-                result = _mtb_hal_sdhc_init_card_common(sdhc_obj);
+                result = _mtb_hal_sdhc_card_power_cycle(sdhc_obj);
+                if (CY_RSLT_SUCCESS == result)
+                {
+                    sdhc_obj->low_voltage_io_desired = false;
+                    result = _mtb_hal_sdhc_init_card_common(sdhc_obj);
+                }
             }
-        }
-        else
-        {
-            result = _mtb_hal_sdhc_io_volt_negotiate(sdhc_obj,
-                     (mtb_hal_sdhc_io_voltage_t)io_voltage);
-        }
-
-        /* Return back bus width and frequency regardless of volt select change status */
-        (void)mtb_hal_sdhc_set_bus_width(sdhc_obj, sd_bus_width_before_switch, true);
-        (void)mtb_hal_sdhc_set_frequency(sdhc_obj, sd_freq_before_switch, true);
-        break;
-    }
-
-    case _MTB_HAL_SDXX_IO_VOLT_ACTION_SWITCH_SEQ_ONLY:
-        if (_MTB_HAL_SDXX_IO_VOLTAGE_1_8V == io_voltage)
-        {
-            result = _mtb_hal_sdxx_io_volt_switch_seq(sdxx->base);
-            if (CY_RSLT_SUCCESS != result)
+            else
             {
-                result =
-                    sdxx->is_sdio ? MTB_HAL_SDIO_RSLT_ERR_IO_VOLT_SWITCH_SEQ :
-                    MTB_HAL_SDHC_RSLT_ERR_IO_VOLT_SWITCH_SEQ;
+                result = _mtb_hal_sdhc_io_volt_negotiate(sdhc_obj,
+                                                         (mtb_hal_sdhc_io_voltage_t)io_voltage);
             }
-            /* Cy_SD_Host_ChangeIoVoltage is already called within
-             * _mtb_hal_sdxx_io_volt_switch_seq, so we can safely break, as the IO Voltage
-             * has already been updated for this 1.8V case. */
+
+            /* Return back bus width and frequency regardless of volt select change status */
+            (void)mtb_hal_sdhc_set_bus_width(sdhc_obj, sd_bus_width_before_switch, true);
+            (void)mtb_hal_sdhc_set_frequency(sdhc_obj, sd_freq_before_switch, true);
             break;
         }
-        else
-        {
+
+        case _MTB_HAL_SDXX_IO_VOLT_ACTION_SWITCH_SEQ_ONLY:
+            if (_MTB_HAL_SDXX_IO_VOLTAGE_1_8V == io_voltage)
+            {
+                result = _mtb_hal_sdxx_io_volt_switch_seq(sdxx->base);
+                if (CY_RSLT_SUCCESS != result)
+                {
+                    result =
+                        sdxx->is_sdio ? MTB_HAL_SDIO_RSLT_ERR_IO_VOLT_SWITCH_SEQ :
+                        MTB_HAL_SDHC_RSLT_ERR_IO_VOLT_SWITCH_SEQ;
+                }
+                /* Cy_SD_Host_ChangeIoVoltage is already called within
+                 * _mtb_hal_sdxx_io_volt_switch_seq, so we can safely break, as the IO Voltage
+                 * has already been updated for this 1.8V case. */
+                break;
+            }
+            else
+            {
+                Cy_SD_Host_ChangeIoVoltage(sdxx->base, (cy_en_sd_host_io_voltage_t)io_voltage);
+                break;
+            }
+
+        case _MTB_HAL_SDXX_IO_VOLT_ACTION_NONE:
             Cy_SD_Host_ChangeIoVoltage(sdxx->base, (cy_en_sd_host_io_voltage_t)io_voltage);
             break;
-        }
 
-    case _MTB_HAL_SDXX_IO_VOLT_ACTION_NONE:
-        Cy_SD_Host_ChangeIoVoltage(sdxx->base, (cy_en_sd_host_io_voltage_t)io_voltage);
-        break;
-
-    default:
-        /* Illegal io_switch_type value provided */
-        CY_ASSERT(false);
+        default:
+            /* Illegal io_switch_type value provided */
+            CY_ASSERT(false);
     }
 
     return result;
@@ -1796,7 +1796,7 @@ cy_rslt_t mtb_hal_sdhc_set_bus_width(mtb_hal_sdhc_t* obj, uint8_t bus_width, boo
 {
     CY_ASSERT(NULL != obj);
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
     CY_ASSERT(NULL != sdxx->base);
 
     if (!_mtb_hal_sdhc_is_buswidth_correct(bus_width))
@@ -1810,7 +1810,7 @@ cy_rslt_t mtb_hal_sdhc_set_bus_width(mtb_hal_sdhc_t* obj, uint8_t bus_width, boo
     {
         result =
             (cy_rslt_t)Cy_SD_Host_SetBusWidth(sdxx->base, _mtb_hal_sdhc_buswidth_hal_to_pdl(
-                    bus_width), sdxx->context);
+                                                  bus_width), sdxx->context);
         if ((CY_RSLT_SUCCESS == result) && (sdxx->emmc))
         {
             /* GENERIC_CMD6_TIME is maximum timeout for a SWITCH command (CMD6), that is called for
@@ -1821,7 +1821,7 @@ cy_rslt_t mtb_hal_sdhc_set_bus_width(mtb_hal_sdhc_t* obj, uint8_t bus_width, boo
     else
     {
         result = (cy_rslt_t)Cy_SD_Host_SetHostBusWidth(sdxx->base, _mtb_hal_sdhc_buswidth_hal_to_pdl(
-                     bus_width));
+                                                           bus_width));
     }
 
     if (CY_RSLT_SUCCESS == result)
@@ -1882,7 +1882,7 @@ cy_rslt_t mtb_hal_sdhc_enable_card_power(mtb_hal_sdhc_t* obj, bool enable)
 {
     CY_ASSERT(NULL != obj);
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
     CY_ASSERT(NULL != sdxx->base);
 
     if (enable)
@@ -1908,16 +1908,16 @@ cy_rslt_t mtb_hal_sdhc_enable_card_power(mtb_hal_sdhc_t* obj, bool enable)
 *
 *******************************************************************************/
 static cy_rslt_t _mtb_hal_sdio_host_transfer_async(mtb_hal_sdio_t* obj,
-        mtb_hal_sdio_host_transfer_type_t direction,
-        uint32_t argument, const uint32_t *data,
-        uint16_t length)
+                                                   mtb_hal_sdio_host_transfer_type_t direction,
+                                                   uint32_t argument, const uint32_t* data,
+                                                   uint16_t length)
 {
     if (NULL == obj)
     {
         return MTB_HAL_SDIO_RSLT_ERR_BAD_PARAM;
     }
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     cy_rslt_t                    result;
     uint32_t                     retry = _MTB_HAL_SDIO_TRANSFER_TRIES;
@@ -1931,12 +1931,12 @@ static cy_rslt_t _mtb_hal_sdio_host_transfer_async(mtb_hal_sdio_t* obj,
     data_config.enReliableWrite     = false;
     data_config.enableDma           = true;
 
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+    #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     if (direction == MTB_HAL_SDIO_XFER_TYPE_WRITE)
     {
         SCB_CleanDCache_by_Addr((void*)data, length);
     }
-#endif
+    #endif
 
     do
     {
@@ -1956,7 +1956,7 @@ static cy_rslt_t _mtb_hal_sdio_host_transfer_async(mtb_hal_sdio_t* obj,
         /* Check if an error occurred on any previous transactions or reset after the first
            unsuccessful transfer try */
         if ((Cy_SD_Host_GetNormalInterruptStatus(sdxx->base) & CY_SD_HOST_ERR_INTERRUPT) ||
-                (retry < _MTB_HAL_SDIO_TRANSFER_TRIES))
+            (retry < _MTB_HAL_SDIO_TRANSFER_TRIES))
         {
             /* Reset the block if there was an error. Note a full reset usually
              * requires more time, but this short version is working quite well and
@@ -2006,19 +2006,19 @@ static cy_rslt_t _mtb_hal_sdio_host_transfer_async(mtb_hal_sdio_t* obj,
 
         /* SDHC needs to be able to access the data_ptr that is in DTCM when using CM55. Remap this
          * address for access */
-#if defined(CORE_NAME_CM55_0)
+        #if defined(CORE_NAME_CM55_0)
         sdxx->adma_descriptor_tbl[1] = (uint32_t)cy_DTCMRemapAddr(data);
         /* The address of the ADMA descriptor table. */
         data_config.data = (uint32_t*)cy_DTCMRemapAddr(&(sdxx->adma_descriptor_tbl[0]));
-#else
+        #else
         sdxx->adma_descriptor_tbl[1] = (uint32_t)data;
         /* The address of the ADMA descriptor table. */
-        data_config.data = (uint32_t*) & (sdxx->adma_descriptor_tbl[0]);
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+        data_config.data = (uint32_t*)&(sdxx->adma_descriptor_tbl[0]);
+        #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
         SCB_CleanDCache_by_Addr((void*)sdxx->adma_descriptor_tbl,
                                 sizeof(sdxx->adma_descriptor_tbl));
-#endif
-#endif // if defined(CORE_NAME_CM55_0)
+        #endif
+        #endif // if defined(CORE_NAME_CM55_0)
 
         result = _mtb_hal_sdxx_prepare_for_transfer(sdxx);
 
@@ -2038,8 +2038,7 @@ static cy_rslt_t _mtb_hal_sdio_host_transfer_async(mtb_hal_sdio_t* obj,
         {
             result = (cy_rslt_t)_mtb_hal_sdxx_pollcmdcomplete(sdxx, NULL);
         }
-    }
-    while ((CY_RSLT_SUCCESS != result) && (--retry > 0UL));
+    } while ((CY_RSLT_SUCCESS != result) && (--retry > 0UL));
 
     if (CY_RSLT_SUCCESS != result)
     {
@@ -2048,12 +2047,12 @@ static cy_rslt_t _mtb_hal_sdio_host_transfer_async(mtb_hal_sdio_t* obj,
     }
 
     // Invalidate dcache if enabled to update dcache's contents after DMA transfer
-#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+    #if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
     if (direction == MTB_HAL_SDIO_XFER_TYPE_READ)
     {
         SCB_InvalidateDCache_by_Addr((void*)data, length);
     }
-#endif
+    #endif
 
     return result;
 }
@@ -2063,14 +2062,14 @@ static cy_rslt_t _mtb_hal_sdio_host_transfer_async(mtb_hal_sdio_t* obj,
 // mtb_hal_sdio_setup
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_sdio_setup(mtb_hal_sdio_t* obj, const mtb_hal_sdio_configurator_t* config,
-                             const mtb_hal_clock_t *clock, cy_stc_sd_host_context_t *sdio_context)
+                             const mtb_hal_clock_t* clock, cy_stc_sd_host_context_t* sdio_context)
 {
     CY_ASSERT(NULL != obj);
     CY_ASSERT(NULL != config);
     CY_ASSERT(NULL != config->host_config);
     memset(obj, 0, sizeof(mtb_hal_sdio_t));
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     sdxx->obj = obj;
     sdxx->is_sdio = true;
@@ -2112,10 +2111,10 @@ cy_rslt_t mtb_hal_sdio_setup(mtb_hal_sdio_t* obj, const mtb_hal_sdio_configurato
 
     sdxx->base = config->base;
     sdxx->data_transfer_status = _MTB_HAL_SDXX_NOT_RUNNING;
-#if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
+    #if defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE)
     _mtb_hal_sdxx_semaphore_status[_mtb_hal_sdxx_get_block_num(sdxx)] =
         _MTB_HAL_SDXX_SEMA_NOT_INITED;
-#endif /* defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE) */
+    #endif /* defined(CY_RTOS_AWARE) || defined(COMPONENT_RTOS_AWARE) */
 
     sdxx->irq_cause = 0UL;
 
@@ -2135,7 +2134,7 @@ cy_rslt_t mtb_hal_sdio_configure(mtb_hal_sdio_t* obj, const mtb_hal_sdio_cfg_t* 
         return MTB_HAL_SDIO_RSLT_ERR_BAD_PARAM;
     }
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     if (config->frequencyhal_hz != 0U)
     {
@@ -2168,7 +2167,7 @@ cy_rslt_t mtb_hal_sdio_configure(mtb_hal_sdio_t* obj, const mtb_hal_sdio_cfg_t* 
 cy_rslt_t mtb_hal_sdio_host_send_cmd(mtb_hal_sdio_t* obj,
                                      mtb_hal_sdio_host_transfer_type_t direction, \
                                      mtb_hal_sdio_host_command_t command, uint32_t argument,
-                                     uint32_t *response)
+                                     uint32_t* response)
 {
     CY_UNUSED_PARAMETER(direction);
     if (NULL == obj)
@@ -2176,7 +2175,7 @@ cy_rslt_t mtb_hal_sdio_host_send_cmd(mtb_hal_sdio_t* obj,
         return MTB_HAL_SDIO_RSLT_ERR_BAD_PARAM;
     }
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     cy_rslt_t                   result;
     cy_stc_sd_host_cmd_config_t cmd;
@@ -2229,8 +2228,7 @@ cy_rslt_t mtb_hal_sdio_host_send_cmd(mtb_hal_sdio_t* obj,
         {
             result = (cy_rslt_t)_mtb_hal_sdxx_pollcmdcomplete(sdxx, NULL);
         }
-    }
-    while ((CY_RSLT_SUCCESS != result) && (retry-- > 0UL));
+    } while ((CY_RSLT_SUCCESS != result) && (retry-- > 0UL));
 
     if (CY_RSLT_SUCCESS == result)
     {
@@ -2245,14 +2243,14 @@ cy_rslt_t mtb_hal_sdio_host_send_cmd(mtb_hal_sdio_t* obj,
 // mtb_hal_sdio_host_bulk_transfer
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_sdio_host_bulk_transfer(mtb_hal_sdio_t* obj,
-        mtb_hal_sdio_host_transfer_type_t direction,
-        uint32_t argument, const uint32_t *data,
-        uint16_t length, uint32_t *response)
+                                          mtb_hal_sdio_host_transfer_type_t direction,
+                                          uint32_t argument, const uint32_t* data,
+                                          uint16_t length, uint32_t* response)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
     uint32_t retry = _MTB_HAL_SDIO_TRANSFER_TRIES;
 
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     _mtb_hal_sdxx_setup_smphr(sdxx);
 
@@ -2274,8 +2272,7 @@ cy_rslt_t mtb_hal_sdio_host_bulk_transfer(mtb_hal_sdio_t* obj,
              *   Issue the reset to recover from error. */
             _mtb_hal_sdxx_reset(sdxx);
         }
-    }
-    while ((CY_RSLT_SUCCESS != result) && (--retry > 0UL));
+    } while ((CY_RSLT_SUCCESS != result) && (--retry > 0UL));
 
     if (CY_RSLT_SUCCESS != result)
     {
@@ -2296,7 +2293,7 @@ cy_rslt_t mtb_hal_sdio_host_bulk_transfer(mtb_hal_sdio_t* obj,
 // mtb_hal_sdio_register_callback
 //--------------------------------------------------------------------------------------------------
 void mtb_hal_sdio_register_callback(mtb_hal_sdio_t* obj, mtb_hal_sdio_event_callback_t callback,
-                                    void *callback_arg)
+                                    void* callback_arg)
 {
     uint32_t savedIntrStatus = mtb_hal_system_critical_section_enter();
     obj->callback_data.callback = (cy_israddress)callback;
@@ -2310,7 +2307,7 @@ void mtb_hal_sdio_register_callback(mtb_hal_sdio_t* obj, mtb_hal_sdio_event_call
 //--------------------------------------------------------------------------------------------------
 void mtb_hal_sdio_enable_event(mtb_hal_sdio_t* obj, mtb_hal_sdio_event_t event, bool enable)
 {
-    _mtb_hal_sdxx_t *sdxx = &(obj->sdxx);
+    _mtb_hal_sdxx_t* sdxx = &(obj->sdxx);
 
     /* Configure interrupt-based event(s) */
     if (0U != ((uint32_t)event & (uint32_t)MTB_HAL_SDIO_ALL_INTERRUPTS))
@@ -2350,8 +2347,8 @@ void mtb_hal_sdio_enable_event(mtb_hal_sdio_t* obj, mtb_hal_sdio_event_t event, 
 // mtb_hal_sdio_host_set_io_voltage
 //--------------------------------------------------------------------------------------------------
 cy_rslt_t mtb_hal_sdio_host_set_io_voltage(mtb_hal_sdio_t* obj,
-        mtb_hal_sdio_host_io_voltage_t io_voltage,
-        mtb_hal_sdio_host_io_volt_action_type_t io_switch_type)
+                                           mtb_hal_sdio_host_io_voltage_t io_voltage,
+                                           mtb_hal_sdio_host_io_volt_action_type_t io_switch_type)
 {
     CY_ASSERT(NULL != obj);
 

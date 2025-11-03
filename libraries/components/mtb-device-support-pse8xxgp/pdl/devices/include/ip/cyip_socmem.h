@@ -46,192 +46,183 @@
 /**
   * \brief MPC Memory Protection Controller registers (SOCMEM_SRAM_MPC)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
                                                                 the security owner PC. The error response configuration is
                                                                 located in CFG.RESPONSE, only one such configuration exists
                                                                 applying to all protection contexts in the system. */
-    __IM uint32_t RESERVED[63];
-    __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
+   __IM uint32_t RESERVED[63];
+  __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
                                                                 (Separate CTRL for each PC depends on access_pc) */
-    __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
-    __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
-    __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
+   __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
+   __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
+  __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
                                                                 for each PC depending on access_pc) */
-    __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
-    __IM uint32_t RESERVED1[59];
-    __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
-    __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
-    __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
-    __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
+  __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
+   __IM uint32_t RESERVED1[59];
+  __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
+   __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
+  __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
+  __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
                                                                 ROT_BLK_LUT */
-    __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
-    __IM uint32_t RESERVED3[889];
+  __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
+   __IM uint32_t RESERVED3[889];
 } SOCMEM_SRAM_MPC_Type;                         /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief SRAM MPC (SOCMEM_SRAM)
   */
-typedef struct
-{
-    SOCMEM_SRAM_MPC_Type MPC[1];            /*!< 0x00000000 MPC Memory Protection Controller registers */
+typedef struct {
+        SOCMEM_SRAM_MPC_Type MPC[1];            /*!< 0x00000000 MPC Memory Protection Controller registers */
 } SOCMEM_SRAM_Type;                             /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief MPC Memory Protection Controller registers (SOCMEM_SROM_MPC)
   */
-typedef struct
-{
-    __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
+typedef struct {
+  __IOM uint32_t CFG;                           /*!< 0x00000000 Config register with error response, RegionID PPC_MPC_MAIN is
                                                                 the security owner PC. The error response configuration is
                                                                 located in CFG.RESPONSE, only one such configuration exists
                                                                 applying to all protection contexts in the system. */
-    __IM uint32_t RESERVED[63];
-    __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
+   __IM uint32_t RESERVED[63];
+  __IOM uint32_t CTRL;                          /*!< 0x00000100 Control register with lock bit and auto-increment only
                                                                 (Separate CTRL for each PC depends on access_pc) */
-    __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
-    __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
-    __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
+   __IM uint32_t BLK_MAX;                       /*!< 0x00000104 Max value of block-based index register */
+   __IM uint32_t BLK_CFG;                       /*!< 0x00000108 Block size & initialization in progress */
+  __IOM uint32_t BLK_IDX;                       /*!< 0x0000010C Index of 32-block group accessed through BLK_LUT (Separate IDX
                                                                 for each PC depending on access_pc) */
-    __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
-    __IM uint32_t RESERVED1[59];
-    __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
-    __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
-    __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
-    __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
+  __IOM uint32_t BLK_LUT;                       /*!< 0x00000110 NS status for 32 blocks at BLK_IDX with PC=<access_pc> */
+   __IM uint32_t RESERVED1[59];
+  __IOM uint32_t ROT_CTRL;                      /*!< 0x00000200 Control register with lock bit and auto-increment only */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t ROT_BLK_MAX;                   /*!< 0x00000208 Max value of block-based index register for ROT */
+   __IM uint32_t ROT_BLK_CFG;                   /*!< 0x0000020C Same as BLK_CFG */
+  __IOM uint32_t ROT_BLK_IDX;                   /*!< 0x00000210 Index of 8-block group accessed through ROT_BLK_LUT_* */
+  __IOM uint32_t ROT_BLK_PC;                    /*!< 0x00000214 Protection context of 8-block group accesses through
                                                                 ROT_BLK_LUT */
-    __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
-    __IM uint32_t RESERVED3[889];
+  __IOM uint32_t ROT_BLK_LUT;                   /*!< 0x00000218 (R,W,NS) bits for 8 blocks at ROT_BLK_IDX for PC=ROT_BKL_PC */
+   __IM uint32_t RESERVED3[889];
 } SOCMEM_SROM_MPC_Type;                         /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief SROM MPC (SOCMEM_SROM)
   */
-typedef struct
-{
-    SOCMEM_SROM_MPC_Type MPC[1];            /*!< 0x00000000 MPC Memory Protection Controller registers */
+typedef struct {
+        SOCMEM_SROM_MPC_Type MPC[1];            /*!< 0x00000000 MPC Memory Protection Controller registers */
 } SOCMEM_SROM_Type;                             /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Port structure (SOCMEM_PORT_STRUCT)
   */
-typedef struct
-{
-    __IOM uint32_t PATCH_CTL;                     /*!< 0x00000000 Patch control */
-    __IM uint32_t PATCH_STATUS;                  /*!< 0x00000004 Patch status */
-    __IM uint32_t RESERVED[2];
-    __IOM uint32_t PATCH_SROM;                    /*!< 0x00000010 Patch SROM boundary */
-    __IOM uint32_t PATCH_SRAM;                    /*!< 0x00000014 Patch SRAM address */
-    __IM uint32_t RESERVED1[2];
-    __IM uint32_t PATCH_CFG;                     /*!< 0x00000020 Patch configuration */
-    __IM uint32_t RESERVED2[503];
-    __IOM uint32_t PATCH_STRUCT_CTL[512];         /*!< 0x00000800 Patch structure control */
+typedef struct {
+  __IOM uint32_t PATCH_CTL;                     /*!< 0x00000000 Patch control */
+   __IM uint32_t PATCH_STATUS;                  /*!< 0x00000004 Patch status */
+   __IM uint32_t RESERVED[2];
+  __IOM uint32_t PATCH_SROM;                    /*!< 0x00000010 Patch SROM boundary */
+  __IOM uint32_t PATCH_SRAM;                    /*!< 0x00000014 Patch SRAM address */
+   __IM uint32_t RESERVED1[2];
+   __IM uint32_t PATCH_CFG;                     /*!< 0x00000020 Patch configuration */
+   __IM uint32_t RESERVED2[503];
+  __IOM uint32_t PATCH_STRUCT_CTL[512];         /*!< 0x00000800 Patch structure control */
 } SOCMEM_PORT_STRUCT_Type;                      /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Power Policy Unit Registers for SOCMEM PPU (SOCMEM_PPU_SOCMEM)
   */
-typedef struct
-{
-    __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
-    __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
-    __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
-    __IM uint32_t RESERVED;
-    __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
-    __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
-    __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
-    __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
-    __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
-    __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
-    __IM uint32_t RESERVED1[2];
-    __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
-    __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
-    __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
-    __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
-    __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
-    __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
-    __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
-    __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
-    __IM uint32_t RESERVED3[65];
-    __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
-    __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
-    __IM uint32_t RESERVED4[2];
-    __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
-    __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
-    __IM uint32_t RESERVED5[910];
-    __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
-    __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
-    __IM uint32_t RESERVED6[4];
-    __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
-    __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
-    __IM uint32_t PID4;                          /*!< 0x00000FD0 Implementation Defined Identification Register (PID4) */
-    __IM uint32_t RESERVED7[3];
-    __IM uint32_t PID0;                          /*!< 0x00000FE0 Implementation Defined Identification Register (PID0) */
-    __IM uint32_t PID1;                          /*!< 0x00000FE4 Implementation Defined Identification Register (PID1) */
-    __IM uint32_t PID2;                          /*!< 0x00000FE8 Implementation Defined Identification Register (PID2) */
-    __IM uint32_t PID3;                          /*!< 0x00000FEC Implementation Defined Identification Register (PID3) */
-    __IM uint32_t ID0;                           /*!< 0x00000FF0 Implementation Defined Identification Register (ID0) */
-    __IM uint32_t ID1;                           /*!< 0x00000FF4 Implementation Defined Identification Register (ID1) */
-    __IM uint32_t ID2;                           /*!< 0x00000FF8 Implementation Defined Identification Register (ID2) */
-    __IM uint32_t ID3;                           /*!< 0x00000FFC Implementation Defined Identification Register (ID3) */
+typedef struct {
+  __IOM uint32_t PWPR;                          /*!< 0x00000000 Power Policy Register */
+  __IOM uint32_t PMER;                          /*!< 0x00000004 Power Mode Emulation Register */
+   __IM uint32_t PWSR;                          /*!< 0x00000008 Power Status Register */
+   __IM uint32_t RESERVED;
+   __IM uint32_t DISR;                          /*!< 0x00000010 Device Interface Input Current Status Register */
+   __IM uint32_t MISR;                          /*!< 0x00000014 Miscellaneous Input Current Status Register */
+   __IM uint32_t STSR;                          /*!< 0x00000018 Stored Status Register */
+  __IOM uint32_t UNLK;                          /*!< 0x0000001C Unlock register */
+  __IOM uint32_t PWCR;                          /*!< 0x00000020 Power Configuration Register */
+  __IOM uint32_t PTCR;                          /*!< 0x00000024 Power Mode Transition Configuration Register */
+   __IM uint32_t RESERVED1[2];
+  __IOM uint32_t IMR;                           /*!< 0x00000030 Interrupt Mask Register */
+  __IOM uint32_t AIMR;                          /*!< 0x00000034 Additional Interrupt Mask Register */
+  __IOM uint32_t ISR;                           /*!< 0x00000038 Interrupt Status Register */
+  __IOM uint32_t AISR;                          /*!< 0x0000003C Additional Interrupt Status Register */
+  __IOM uint32_t IESR;                          /*!< 0x00000040 Input Edge Sensitivity Register */
+  __IOM uint32_t OPSR;                          /*!< 0x00000044 Operating Mode Active Edge Sensitivity Register */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t FUNRR;                         /*!< 0x00000050 Functional Retention RAM Configuration Register */
+  __IOM uint32_t FULRR;                         /*!< 0x00000054 Full Retention RAM Configuration Register */
+  __IOM uint32_t MEMRR;                         /*!< 0x00000058 Memory Retention RAM Configuration Register */
+   __IM uint32_t RESERVED3[65];
+  __IOM uint32_t EDTR0;                         /*!< 0x00000160 Power Mode Entry Delay Register 0 */
+  __IOM uint32_t EDTR1;                         /*!< 0x00000164 Power Mode Entry Delay Register 1 */
+   __IM uint32_t RESERVED4[2];
+   __IM uint32_t DCDR0;                         /*!< 0x00000170 Device Control Delay Configuration Register 0 */
+   __IM uint32_t DCDR1;                         /*!< 0x00000174 Device Control Delay Configuration Register 1 */
+   __IM uint32_t RESERVED5[910];
+   __IM uint32_t IDR0;                          /*!< 0x00000FB0 PPU Identification Register 0 */
+   __IM uint32_t IDR1;                          /*!< 0x00000FB4 PPU Identification Register 1 */
+   __IM uint32_t RESERVED6[4];
+   __IM uint32_t IIDR;                          /*!< 0x00000FC8 Implementation Identification Register */
+   __IM uint32_t AIDR;                          /*!< 0x00000FCC Architecture Identification Register */
+   __IM uint32_t PID4;                          /*!< 0x00000FD0 Implementation Defined Identification Register (PID4) */
+   __IM uint32_t RESERVED7[3];
+   __IM uint32_t PID0;                          /*!< 0x00000FE0 Implementation Defined Identification Register (PID0) */
+   __IM uint32_t PID1;                          /*!< 0x00000FE4 Implementation Defined Identification Register (PID1) */
+   __IM uint32_t PID2;                          /*!< 0x00000FE8 Implementation Defined Identification Register (PID2) */
+   __IM uint32_t PID3;                          /*!< 0x00000FEC Implementation Defined Identification Register (PID3) */
+   __IM uint32_t ID0;                           /*!< 0x00000FF0 Implementation Defined Identification Register (ID0) */
+   __IM uint32_t ID1;                           /*!< 0x00000FF4 Implementation Defined Identification Register (ID1) */
+   __IM uint32_t ID2;                           /*!< 0x00000FF8 Implementation Defined Identification Register (ID2) */
+   __IM uint32_t ID3;                           /*!< 0x00000FFC Implementation Defined Identification Register (ID3) */
 } SOCMEM_PPU_SOCMEM_Type;                       /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief Power Domain Controller (SOCMEM_SOCMEM_PD)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
-    __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
-    __IM uint32_t RESERVED[6];
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Power Domain Control */
+  __IOM uint32_t PWR_UP_DELAY;                  /*!< 0x00000004 Active switch weak enable to active switch strong enable delay */
+   __IM uint32_t RESERVED[6];
 } SOCMEM_SOCMEM_PD_Type;                        /*!< Size = 32 (0x20) */
 
 /**
   * \brief Power Domain controller (SOCMEM_SOCMEM)
   */
-typedef struct
-{
-    SOCMEM_SOCMEM_PD_Type PD;               /*!< 0x00000000 Power Domain Controller */
-    __IM uint32_t RESERVED[1016];
+typedef struct {
+        SOCMEM_SOCMEM_PD_Type PD;               /*!< 0x00000000 Power Domain Controller */
+   __IM uint32_t RESERVED[1016];
 } SOCMEM_SOCMEM_Type;                           /*!< Size = 4096 (0x1000) */
 
 /**
   * \brief SoC memory (SOCMEM)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 Status */
-    __IOM uint32_t GK_CTL;                        /*!< 0x00000008 Gate keeper control */
-    __IM uint32_t GK_STATUS;                     /*!< 0x0000000C Gate keeper status */
-    __IOM uint32_t ARB_DYN_CTL[16];               /*!< 0x00000010 Port arbitration control */
-    __IM uint32_t RESERVED[4];
-    __IOM uint32_t MPC_READ_PORT_CTL;             /*!< 0x00000060 MPC MMIO read port index control */
-    __IM uint32_t RESERVED1[39];
-    __IOM uint32_t ECC_CTL;                       /*!< 0x00000100 ECC control */
-    __IOM uint32_t ECC_MATCH;                     /*!< 0x00000104 ECC match */
-    __IM uint32_t RESERVED2[2];
-    __IOM uint32_t WOUNDING;                      /*!< 0x00000110 Wounding */
-    __IM uint32_t RESERVED3[59];
-    __IOM uint32_t PWR_PARTITION_CTL[16];         /*!< 0x00000200 SRAM partition power control */
-    __IM uint32_t RESERVED4[16];
-    __IOM uint32_t PWR_PARTITION_CTL_LOCK;        /*!< 0x00000280 SRAM power partition control Lock */
-    __IOM uint32_t PWR_DELAY_CTL;                 /*!< 0x00000284 SRAM power switch power up & sequence delay */
-    __IM uint32_t PWR_STATUS;                    /*!< 0x00000288 SRAM power status */
-    __IM uint32_t RESERVED5[1885];
-    SOCMEM_SRAM_Type SRAM;                  /*!< 0x00002000 SRAM MPC */
-    SOCMEM_SROM_Type SROM;                  /*!< 0x00003000 SROM MPC */
-    __IM uint32_t RESERVED6[12288];
-    SOCMEM_PORT_STRUCT_Type PORT_STRUCT[16]; /*!< 0x00010000 Port structure */
-    SOCMEM_PPU_SOCMEM_Type PPU_SOCMEM;      /*!< 0x00020000 Power Policy Unit Registers for SOCMEM PPU */
-    SOCMEM_SOCMEM_Type SOCMEM;              /*!< 0x00021000 Power Domain controller */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 Status */
+  __IOM uint32_t GK_CTL;                        /*!< 0x00000008 Gate keeper control */
+   __IM uint32_t GK_STATUS;                     /*!< 0x0000000C Gate keeper status */
+  __IOM uint32_t ARB_DYN_CTL[16];               /*!< 0x00000010 Port arbitration control */
+   __IM uint32_t RESERVED[4];
+  __IOM uint32_t MPC_READ_PORT_CTL;             /*!< 0x00000060 MPC MMIO read port index control */
+   __IM uint32_t RESERVED1[39];
+  __IOM uint32_t ECC_CTL;                       /*!< 0x00000100 ECC control */
+  __IOM uint32_t ECC_MATCH;                     /*!< 0x00000104 ECC match */
+   __IM uint32_t RESERVED2[2];
+  __IOM uint32_t WOUNDING;                      /*!< 0x00000110 Wounding */
+   __IM uint32_t RESERVED3[59];
+  __IOM uint32_t PWR_PARTITION_CTL[16];         /*!< 0x00000200 SRAM partition power control */
+   __IM uint32_t RESERVED4[16];
+  __IOM uint32_t PWR_PARTITION_CTL_LOCK;        /*!< 0x00000280 SRAM power partition control Lock */
+  __IOM uint32_t PWR_DELAY_CTL;                 /*!< 0x00000284 SRAM power switch power up & sequence delay */
+   __IM uint32_t PWR_STATUS;                    /*!< 0x00000288 SRAM power status */
+   __IM uint32_t RESERVED5[1885];
+        SOCMEM_SRAM_Type SRAM;                  /*!< 0x00002000 SRAM MPC */
+        SOCMEM_SROM_Type SROM;                  /*!< 0x00003000 SROM MPC */
+   __IM uint32_t RESERVED6[12288];
+        SOCMEM_PORT_STRUCT_Type PORT_STRUCT[16]; /*!< 0x00010000 Port structure */
+        SOCMEM_PPU_SOCMEM_Type PPU_SOCMEM;      /*!< 0x00020000 Power Policy Unit Registers for SOCMEM PPU */
+        SOCMEM_SOCMEM_Type SOCMEM;              /*!< 0x00021000 Power Domain controller */
 } SOCMEM_Type;                                  /*!< Size = 139264 (0x22000) */
 
 

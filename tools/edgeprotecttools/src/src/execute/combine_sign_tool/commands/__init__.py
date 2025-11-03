@@ -28,3 +28,4 @@ from .command_bin2hex import CommandBin2Hex
 from .command_hash import CommandHash
 from .command_hex_dump import CommandHexDump
 from .command_hex2bin import CommandHex2Bin
+from .command_hex_relocate import CommandHexRelocate

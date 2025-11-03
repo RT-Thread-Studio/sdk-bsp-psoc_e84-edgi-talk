@@ -70,20 +70,19 @@
   @param[in]     scale      scale factor to be applied
   @param[out]    pDst       points to the output vector
   @param[in]     blockSize  number of samples in each vector
-  @return        none
  */
 
 #if defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE)
 
 #include "arm_helium_utils.h"
 
-void arm_scale_f32(
-    const float32_t *pSrc,
-    float32_t scale,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_scale_f32(
+  const float32_t * pSrc,
+        float32_t scale,
+        float32_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+        uint32_t blkCnt;                               /* Loop counter */
 
     f32x4_t vec1;
     f32x4_t res;
@@ -94,16 +93,16 @@ void arm_scale_f32(
     while (blkCnt > 0U)
     {
         /* C = A + offset */
-
+ 
         /* Add offset and then store the results in the destination buffer. */
         vec1 = vld1q(pSrc);
-        res = vmulq(vec1, scale);
+        res = vmulq(vec1,scale);
         vst1q(pDst, res);
 
         /* Increment pointers */
         pSrc += 4;
         pDst += 4;
-
+        
         /* Decrement the loop counter */
         blkCnt--;
     }
@@ -122,13 +121,13 @@ void arm_scale_f32(
 }
 
 #else
-void arm_scale_f32(
-    const float32_t *pSrc,
-    float32_t scale,
-    float32_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_scale_f32(
+  const float32_t *pSrc,
+        float32_t scale,
+        float32_t *pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;                               /* Loop counter */
+  uint32_t blkCnt;                               /* Loop counter */
 #if defined(ARM_MATH_NEON_EXPERIMENTAL)
     f32x4_t vec1;
     f32x4_t res;
@@ -140,15 +139,15 @@ void arm_scale_f32(
     {
         /* C = A * scale */
 
-        /* Scale the input and then store the results in the destination buffer. */
+    	/* Scale the input and then store the results in the destination buffer. */
         vec1 = vld1q_f32(pSrc);
         res = vmulq_f32(vec1, vdupq_n_f32(scale));
         vst1q_f32(pDst, res);
 
         /* Increment pointers */
-        pSrc += 4;
+        pSrc += 4; 
         pDst += 4;
-
+        
         /* Decrement the loop counter */
         blkCnt--;
     }
@@ -159,54 +158,54 @@ void arm_scale_f32(
 #else
 #if defined (ARM_MATH_LOOPUNROLL)
 
-    /* Loop unrolling: Compute 4 outputs at a time */
-    blkCnt = blockSize >> 2U;
+  /* Loop unrolling: Compute 4 outputs at a time */
+  blkCnt = blockSize >> 2U;
 
-    while (blkCnt > 0U)
-    {
-        float32_t in1, in2, in3, in4;
+  while (blkCnt > 0U)
+  {
+    float32_t in1, in2, in3, in4;
 
-        /* C = A * scale */
+    /* C = A * scale */
 
-        /* Scale input and store result in destination buffer. */
-        in1 = (*pSrc++) * scale;
+    /* Scale input and store result in destination buffer. */
+    in1 = (*pSrc++) * scale;
 
-        in2 = (*pSrc++) * scale;
+    in2 = (*pSrc++) * scale;
 
-        in3 = (*pSrc++) * scale;
+    in3 = (*pSrc++) * scale;
 
-        in4 = (*pSrc++) * scale;
+    in4 = (*pSrc++) * scale;
 
-        *pDst++ = in1;
-        *pDst++ = in2;
-        *pDst++ = in3;
-        *pDst++ = in4;
+    *pDst++ = in1;
+    *pDst++ = in2;
+    *pDst++ = in3;
+    *pDst++ = in4;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
-    /* Loop unrolling: Compute remaining outputs */
-    blkCnt = blockSize % 0x4U;
+  /* Loop unrolling: Compute remaining outputs */
+  blkCnt = blockSize % 0x4U;
 
 #else
 
-    /* Initialize blkCnt with number of samples */
-    blkCnt = blockSize;
+  /* Initialize blkCnt with number of samples */
+  blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
 #endif /* #if defined(ARM_MATH_NEON_EXPERIMENTAL) */
 
-    while (blkCnt > 0U)
-    {
-        /* C = A * scale */
+  while (blkCnt > 0U)
+  {
+    /* C = A * scale */
 
-        /* Scale input and store result in destination buffer. */
-        *pDst++ = (*pSrc++) * scale;
+    /* Scale input and store result in destination buffer. */
+    *pDst++ = (*pSrc++) * scale;
 
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+    /* Decrement loop counter */
+    blkCnt--;
+  }
 
 }
 #endif /* defined(ARM_MATH_MVEF) && !defined(ARM_MATH_AUTOVECTORIZE) */

@@ -58,10 +58,9 @@
   @brief         Welch window generating function (f64).
   @param[out]    pDst       points to the output generated window
   @param[in]     blockSize  number of samples in the window
-  @return        none
-
+ 
   @par Parameters of the window
-
+  
   | Parameter                             | Value              |
   | ------------------------------------: | -----------------: |
   | Peak sidelobe level                   |           21.3 dB  |
@@ -74,19 +73,19 @@
 
 
 
-void arm_welch_f64(
-    float64_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_welch_f64(
+        float64_t * pDst,
+        uint32_t blockSize)
 {
-    float64_t k = 2.0 / ((float64_t) blockSize);
-    float64_t w;
+   float64_t k = 2.0 / ((float64_t) blockSize);
+   float64_t w;
 
-    for (uint32_t i = 0; i < blockSize; i++)
-    {
-        w = i * k - 1.0;
-        w = 1.0 - w * w;
-        pDst[i] = w;
-    }
+   for(uint32_t i=0;i<blockSize;i++)
+   {
+     w = i * k - 1.0;
+     w = 1.0 - w * w;
+     pDst[i] = w;
+   }
 }
 
 /**

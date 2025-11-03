@@ -38,9 +38,8 @@
 /**
   * \brief DEBUG600
   */
-typedef struct
-{
-    __IM uint32_t VERSION;                       /*!< 0x00000000 IP Version Information */
+typedef struct {
+   __IM uint32_t VERSION;                       /*!< 0x00000000 IP Version Information */
 } DEBUG600_Type;                                /*!< Size = 4 (0x4) */
 
 

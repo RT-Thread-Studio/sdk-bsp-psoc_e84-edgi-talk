@@ -34,46 +34,46 @@
 
 #include "arm_vec_math_f16.h"
 
-void arm_vinverse_f16(
-    const float16_t *pSrc,
-    float16_t *pDst,
-    uint32_t blockSize)
+ARM_DSP_ATTRIBUTE void arm_vinverse_f16(
+  const float16_t * pSrc,
+        float16_t * pDst,
+        uint32_t blockSize)
 {
-    uint32_t blkCnt;
+   uint32_t blkCnt; 
 
 #if defined(ARM_MATH_MVE_FLOAT16) && !defined(ARM_MATH_AUTOVECTORIZE)
 
-    f16x8_t src;
-    f16x8_t dst;
+   f16x8_t src;
+   f16x8_t dst;
 
-    blkCnt = blockSize >> 3;
+   blkCnt = blockSize >> 3;
 
-    while (blkCnt > 0U)
-    {
-        src = vld1q(pSrc);
-        dst = vrecip_hiprec_f16(src);
-        vst1q(pDst, dst);
+   while (blkCnt > 0U)
+   {
+      src = vld1q(pSrc);
+      dst = vrecip_hiprec_f16(src);
+      vst1q(pDst, dst);
 
-        pSrc += 8;
-        pDst += 8;
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+      pSrc += 8;
+      pDst += 8;
+      /* Decrement loop counter */
+      blkCnt--;
+   }
 
-    blkCnt = blockSize & 7;
+   blkCnt = blockSize & 7;
 #else
-    blkCnt = blockSize;
+   blkCnt = blockSize;
 #endif
 
-    while (blkCnt > 0U)
-    {
-
-        *pDst++ = 1.0f16 / (_Float16) * pSrc++;
-
-        /* Decrement loop counter */
-        blkCnt--;
-    }
+   while (blkCnt > 0U)
+   {
+      
+      *pDst++ = 1.0f16 / (_Float16)*pSrc++;
+  
+      /* Decrement loop counter */
+      blkCnt--;
+   }
 }
 
-#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */
+#endif /* #if defined(ARM_FLOAT16_SUPPORTED) */ 
 

@@ -21,7 +21,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 *******************************************************************************/
-
 /**
 * \addtogroup group_scb_uart
 * \{
@@ -444,7 +443,7 @@ typedef struct stc_scb_uart_config
     * Enables the UART operation in Multi-Processor mode which requires
     * dataWidth to be 9 bits (the 9th bit is used to indicate address byte)
     */
-    bool        enableMutliProcessorMode;
+    bool        enableMultiProcessorMode;
 
     /**
     * If Multi Processor mode is enabled, this is the address of the RX
@@ -594,17 +593,17 @@ typedef struct cy_stc_scb_uart_context
 * \{
 */
 cy_en_scb_uart_status_t Cy_SCB_UART_Init(CySCB_Type *base, cy_stc_scb_uart_config_t const *config,
-        cy_stc_scb_uart_context_t *context);
-void Cy_SCB_UART_DeInit(CySCB_Type *base);
+                                         cy_stc_scb_uart_context_t *context);
+void Cy_SCB_UART_DeInit (CySCB_Type *base);
 __STATIC_INLINE void Cy_SCB_UART_Enable(CySCB_Type *base);
 void Cy_SCB_UART_Disable(CySCB_Type *base, cy_stc_scb_uart_context_t *context);
 
-__STATIC_INLINE void     Cy_SCB_UART_EnableCts(CySCB_Type *base);
-__STATIC_INLINE void     Cy_SCB_UART_DisableCts(CySCB_Type *base);
+__STATIC_INLINE void     Cy_SCB_UART_EnableCts      (CySCB_Type *base);
+__STATIC_INLINE void     Cy_SCB_UART_DisableCts     (CySCB_Type *base);
 __STATIC_INLINE void     Cy_SCB_UART_SetRtsFifoLevel(CySCB_Type *base, uint32_t level);
 __STATIC_INLINE uint32_t Cy_SCB_UART_GetRtsFifoLevel(CySCB_Type const *base);
 
-__STATIC_INLINE void Cy_SCB_UART_EnableSkipStart(CySCB_Type *base);
+__STATIC_INLINE void Cy_SCB_UART_EnableSkipStart (CySCB_Type *base);
 __STATIC_INLINE void Cy_SCB_UART_DisableSkipStart(CySCB_Type *base);
 #if (CY_SCB_UART_RX_HALF_DUPLEX_SUPPORTED)
 __STATIC_INLINE void Cy_SCB_UART_EnableSingleWireHalfDuplex(CySCB_Type *base);
@@ -616,22 +615,22 @@ __STATIC_INLINE void Cy_SCB_UART_DisableSingleWireHalfDuplex(CySCB_Type *base);
 * \addtogroup group_scb_uart_high_level_functions
 * \{
 */
-void     Cy_SCB_UART_StartRingBuffer(CySCB_Type *base, void *buffer, uint32_t size,
-                                     cy_stc_scb_uart_context_t *context);
-void     Cy_SCB_UART_StopRingBuffer(CySCB_Type *base, cy_stc_scb_uart_context_t *context);
+void     Cy_SCB_UART_StartRingBuffer   (CySCB_Type *base, void *buffer, uint32_t size,
+                                        cy_stc_scb_uart_context_t *context);
+void     Cy_SCB_UART_StopRingBuffer    (CySCB_Type *base, cy_stc_scb_uart_context_t *context);
 uint32_t Cy_SCB_UART_GetNumInRingBuffer(CySCB_Type const *base, cy_stc_scb_uart_context_t const *context);
-void     Cy_SCB_UART_ClearRingBuffer(CySCB_Type const *base, cy_stc_scb_uart_context_t *context);
+void     Cy_SCB_UART_ClearRingBuffer   (CySCB_Type const *base, cy_stc_scb_uart_context_t *context);
 
 cy_en_scb_uart_status_t Cy_SCB_UART_Receive(CySCB_Type *base, void *buffer, uint32_t size,
-        cy_stc_scb_uart_context_t *context);
-void     Cy_SCB_UART_AbortReceive(CySCB_Type *base, cy_stc_scb_uart_context_t *context);
+                                            cy_stc_scb_uart_context_t *context);
+void     Cy_SCB_UART_AbortReceive    (CySCB_Type *base, cy_stc_scb_uart_context_t *context);
 uint32_t Cy_SCB_UART_GetReceiveStatus(CySCB_Type const *base, cy_stc_scb_uart_context_t const *context);
-uint32_t Cy_SCB_UART_GetNumReceived(CySCB_Type const *base, cy_stc_scb_uart_context_t const *context);
+uint32_t Cy_SCB_UART_GetNumReceived  (CySCB_Type const *base, cy_stc_scb_uart_context_t const *context);
 
 cy_en_scb_uart_status_t Cy_SCB_UART_Transmit(CySCB_Type *base, void *buffer, uint32_t size,
-        cy_stc_scb_uart_context_t *context);
-void     Cy_SCB_UART_AbortTransmit(CySCB_Type *base, cy_stc_scb_uart_context_t *context);
-uint32_t Cy_SCB_UART_GetTransmitStatus(CySCB_Type const *base, cy_stc_scb_uart_context_t const *context);
+                                             cy_stc_scb_uart_context_t *context);
+void     Cy_SCB_UART_AbortTransmit       (CySCB_Type *base, cy_stc_scb_uart_context_t *context);
+uint32_t Cy_SCB_UART_GetTransmitStatus   (CySCB_Type const *base, cy_stc_scb_uart_context_t const *context);
 uint32_t Cy_SCB_UART_GetNumLeftToTransmit(CySCB_Type const *base, cy_stc_scb_uart_context_t const *context);
 /** \} group_scb_uart_high_level_functions */
 
@@ -639,29 +638,29 @@ uint32_t Cy_SCB_UART_GetNumLeftToTransmit(CySCB_Type const *base, cy_stc_scb_uar
 * \addtogroup group_scb_uart_low_level_functions
 * \{
 */
-__STATIC_INLINE uint32_t Cy_SCB_UART_Put(CySCB_Type *base, uint32_t data);
-__STATIC_INLINE uint32_t Cy_SCB_UART_PutArray(CySCB_Type *base, void *buffer, uint32_t size);
+__STATIC_INLINE uint32_t Cy_SCB_UART_Put             (CySCB_Type *base, uint32_t data);
+__STATIC_INLINE uint32_t Cy_SCB_UART_PutArray        (CySCB_Type *base, void *buffer, uint32_t size);
 __STATIC_INLINE void     Cy_SCB_UART_PutArrayBlocking(CySCB_Type *base, void *buffer, uint32_t size);
-__STATIC_INLINE void     Cy_SCB_UART_PutString(CySCB_Type *base, char_t const string[]);
+__STATIC_INLINE void     Cy_SCB_UART_PutString       (CySCB_Type *base, char_t const string[]);
 void Cy_SCB_UART_SendBreakBlocking(CySCB_Type *base, uint32_t breakWidth);
 
-__STATIC_INLINE uint32_t Cy_SCB_UART_Get(CySCB_Type const *base);
-__STATIC_INLINE uint32_t Cy_SCB_UART_GetArray(CySCB_Type const *base, void *buffer, uint32_t size);
+__STATIC_INLINE uint32_t Cy_SCB_UART_Get             (CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_UART_GetArray        (CySCB_Type const *base, void *buffer, uint32_t size);
 __STATIC_INLINE void     Cy_SCB_UART_GetArrayBlocking(CySCB_Type const *base, void *buffer, uint32_t size);
 
-__STATIC_INLINE uint32_t Cy_SCB_UART_GetTxFifoStatus(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_UART_GetTxFifoStatus  (CySCB_Type const *base);
 __STATIC_INLINE void     Cy_SCB_UART_ClearTxFifoStatus(CySCB_Type *base, uint32_t clearMask);
 
-__STATIC_INLINE uint32_t Cy_SCB_UART_GetRxFifoStatus(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_UART_GetRxFifoStatus  (CySCB_Type const *base);
 __STATIC_INLINE void     Cy_SCB_UART_ClearRxFifoStatus(CySCB_Type *base, uint32_t clearMask);
 
-__STATIC_INLINE uint32_t Cy_SCB_UART_GetNumInTxFifo(CySCB_Type const *base);
-__STATIC_INLINE bool     Cy_SCB_UART_IsTxComplete(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_UART_GetNumInTxFifo   (CySCB_Type const *base);
+__STATIC_INLINE bool     Cy_SCB_UART_IsTxComplete     (CySCB_Type const *base);
 
-__STATIC_INLINE uint32_t Cy_SCB_UART_GetNumInRxFifo(CySCB_Type const *base);
+__STATIC_INLINE uint32_t Cy_SCB_UART_GetNumInRxFifo   (CySCB_Type const *base);
 
-__STATIC_INLINE void     Cy_SCB_UART_ClearRxFifo(CySCB_Type *base);
-__STATIC_INLINE void     Cy_SCB_UART_ClearTxFifo(CySCB_Type *base);
+__STATIC_INLINE void     Cy_SCB_UART_ClearRxFifo      (CySCB_Type *base);
+__STATIC_INLINE void     Cy_SCB_UART_ClearTxFifo      (CySCB_Type *base);
 
 __STATIC_INLINE uint32_t Cy_SCB_UART_GetOverSample(CySCB_Type const *base);
 cy_en_scb_uart_status_t Cy_SCB_UART_SetOverSample(CySCB_Type *base, uint32_t overSample, cy_stc_scb_uart_context_t *context);
@@ -689,7 +688,7 @@ void Cy_SCB_UART_SetEnableMsbFirst(CySCB_Type *base, bool enableMsbFirst);
 void Cy_SCB_UART_Interrupt(CySCB_Type *base, cy_stc_scb_uart_context_t *context);
 
 __STATIC_INLINE void Cy_SCB_UART_RegisterCallback(CySCB_Type const *base, cy_cb_scb_uart_handle_events_t callback,
-        cy_stc_scb_uart_context_t *context);
+                                                  cy_stc_scb_uart_context_t *context);
 /** \} group_scb_uart_interrupt_functions */
 
 /**
@@ -828,6 +827,9 @@ cy_en_syspm_status_t Cy_SCB_UART_HibernateCallback(cy_stc_syspm_callback_params_
 
 /** The receive hardware detected a break transmission from transmitter */
 #define CY_SCB_UART_RECEIVE_BREAK_DETECT   (SCB_INTR_RX_BREAK_DETECT_Msk)
+
+/** The receive hardware detected a baudrate detection */
+#define CY_SCB_UART_RECEIVE_BAUD_DETECT       (SCB_INTR_RX_BAUD_DETECT_Msk)
 /** \} group_scb_uart_macros_receive_status */
 
 /**
@@ -971,7 +973,7 @@ cy_en_syspm_status_t Cy_SCB_UART_HibernateCallback(cy_stc_syspm_callback_params_
                                                               ((width) <= 16UL) )
 #define CY_SCB_UART_IS_TX_BREAK_WIDTH_VALID(width)          ( ((width) >= 4UL) && ((width) <= 16UL) )
 
-#define CY_SCB_UART_IS_MUTLI_PROC_VALID(mp, mode, width, parity)    ( (mp) ? ((CY_SCB_UART_STANDARD  == (mode)) && ((width) == 9UL) && \
+#define CY_SCB_UART_IS_MULTI_PROC_VALID(mp, mode, width, parity)    ( (mp) ? ((CY_SCB_UART_STANDARD  == (mode)) && ((width) == 9UL) && \
                                                                               (CY_SCB_UART_PARITY_NONE == (parity))) : true)
 
 /** \endcond */
@@ -1193,7 +1195,7 @@ __STATIC_INLINE void Cy_SCB_UART_DisableSingleWireHalfDuplex(CySCB_Type *base)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_SCB_UART_GetOverSample(CySCB_Type const *base)
 {
-    return (_FLD2VAL(SCB_CTRL_OVS, SCB_CTRL(base)) + 1UL);
+    return (_FLD2VAL(SCB_CTRL_OVS, SCB_CTRL(base))+1UL);
 }
 
 
@@ -1217,7 +1219,7 @@ __STATIC_INLINE uint32_t Cy_SCB_UART_GetOverSample(CySCB_Type const *base)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_SCB_UART_GetDataWidth(CySCB_Type const *base)
 {
-    return (_FLD2VAL(SCB_TX_CTRL_DATA_WIDTH, SCB_TX_CTRL(base)) + 1UL);
+    return (_FLD2VAL(SCB_TX_CTRL_DATA_WIDTH, SCB_TX_CTRL(base))+1UL);
 }
 
 
@@ -1265,7 +1267,7 @@ __STATIC_INLINE uint32_t Cy_SCB_UART_GetParity(CySCB_Type const *base)
 *******************************************************************************/
 __STATIC_INLINE uint32_t Cy_SCB_UART_GetStopBits(CySCB_Type const *base)
 {
-    return (_FLD2VAL(SCB_UART_TX_CTRL_STOP_BITS, SCB_UART_TX_CTRL(base)) + 1UL);
+    return (_FLD2VAL(SCB_UART_TX_CTRL_STOP_BITS, SCB_UART_TX_CTRL(base))+1UL);
 }
 
 
@@ -1730,13 +1732,86 @@ __STATIC_INLINE void Cy_SCB_UART_ClearTxFifo(CySCB_Type *base)
 *
 *******************************************************************************/
 __STATIC_INLINE void Cy_SCB_UART_RegisterCallback(CySCB_Type const *base,
-        cy_cb_scb_uart_handle_events_t callback, cy_stc_scb_uart_context_t *context)
+          cy_cb_scb_uart_handle_events_t callback, cy_stc_scb_uart_context_t *context)
 {
     /* Suppress a compiler warning about unused variables */
     (void) base;
 
     context->cbEvents = callback;
 }
+
+/*******************************************************************************
+* Function Name: Cy_SCB_UART_GetBaudRateCount
+****************************************************************************//**
+*
+* Reads an amount of peripheral clock periods that constitute the transmission of
+* a 0x55 data frame.
+*
+* \param base
+* The pointer to the UART SCB instance.
+*
+* \return
+* Amount of peripheral clock periods that constitute the transmission of a 0x55
+* data frame.
+*
+* \note
+* This function return the valid data when interrupt \ref CY_SCB_UART_RECEIVE_BAUD_DETECT
+* triggered and LIN_MODE is enabled.
+*
+* \note
+* Only applicable for LIN protocol.
+*
+*******************************************************************************/
+__STATIC_INLINE uint32_t Cy_SCB_UART_GetBaudRateCount(CySCB_Type const *base)
+{
+    return (SCB_UART_RX_STATUS(base) & SCB_UART_RX_STATUS_BR_COUNTER_Msk);
+}
+
+/*******************************************************************************
+* Function Name: Cy_SCB_UART_EnableLINMode
+****************************************************************************//**
+*
+* Enables the LIN (Local Interconnect Network) mode for the UART.
+*
+* \param base
+* The pointer to the UART SCB instance.
+*
+* \return
+* If true, LIN mode is enabled. If false, LIN mode is not enabled.
+*
+* \note
+* LIN protocol operation is only supported in STANDARD UART mode
+*******************************************************************************/
+__STATIC_INLINE bool Cy_SCB_UART_EnableLINMode(CySCB_Type *base)
+{
+    /* Enable LIN mode only if the UART is in STANDARD mode */
+    if ((SCB_UART_CTRL(base) & SCB_UART_CTRL_MODE_Msk) == CY_SCB_UART_STANDARD)
+    {
+        SCB_UART_RX_CTRL(base) |= SCB_UART_RX_CTRL_LIN_MODE_Msk;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+/*******************************************************************************
+* Function Name: Cy_SCB_UART_DisableLINMode
+****************************************************************************//**
+*
+* Disables the LIN (Local Interconnect Network) mode for the UART.
+*
+* \param base
+* The pointer to the UART SCB instance.
+*
+*******************************************************************************/
+__STATIC_INLINE void Cy_SCB_UART_DisableLINMode(CySCB_Type *base)
+{
+    SCB_UART_RX_CTRL(base) &= (uint32_t) ~SCB_UART_RX_CTRL_LIN_MODE_Msk;
+}
+
 /** \} group_scb_uart_interrupt_functions */
 
 #if defined(__cplusplus)

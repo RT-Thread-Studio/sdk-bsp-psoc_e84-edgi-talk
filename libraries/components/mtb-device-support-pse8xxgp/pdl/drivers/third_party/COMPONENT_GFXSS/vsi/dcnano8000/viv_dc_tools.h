@@ -34,19 +34,19 @@
 gctUINT32 get_stretch_factor(
     gctUINT32 src_size,
     gctUINT32 dest_size
-);
+    );
 
 gctFLOAT sinc_filter(
     gctFLOAT x,
     gctINT32 radius
-);
+    );
 
 viv_status_type calculate_sync_table(
     gctUINT8 kernel_size,
     gctUINT32 src_size,
     gctUINT32 dst_size,
     gcsFILTER_BLIT_ARRAY_PTR kernel_info
-);
+    );
 
 gctINT viv_generate_factor(
     gctUINT32* scale_factorx,
@@ -55,7 +55,7 @@ gctINT viv_generate_factor(
     gctUINT32  src_height,
     gctUINT32  dst_width,
     gctUINT32  dst_height
-);
+    );
 #endif
 
 #endif

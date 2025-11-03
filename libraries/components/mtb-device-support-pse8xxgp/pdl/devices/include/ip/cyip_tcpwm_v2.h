@@ -40,49 +40,46 @@
 /**
   * \brief Timer/Counter/PWM Counter Module (TCPWM_GRP_CNT)
   */
-typedef struct
-{
-    __IOM uint32_t CTRL;                          /*!< 0x00000000 Counter control register */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 Counter status register */
-    __IOM uint32_t COUNTER;                       /*!< 0x00000008 Counter count register */
-    __IM uint32_t RESERVED;
-    __IOM uint32_t CC0;                           /*!< 0x00000010 Counter compare/capture 0 register */
-    __IOM uint32_t CC0_BUFF;                      /*!< 0x00000014 Counter buffered compare/capture 0 register */
-    __IOM uint32_t CC1;                           /*!< 0x00000018 Counter compare/capture 1 register */
-    __IOM uint32_t CC1_BUFF;                      /*!< 0x0000001C Counter buffered compare/capture 1 register */
-    __IOM uint32_t PERIOD;                        /*!< 0x00000020 Counter period register */
-    __IOM uint32_t PERIOD_BUFF;                   /*!< 0x00000024 Counter buffered period register */
-    __IOM uint32_t LINE_SEL;                      /*!< 0x00000028 Counter line selection register */
-    __IOM uint32_t LINE_SEL_BUFF;                 /*!< 0x0000002C Counter buffered line selection register */
-    __IOM uint32_t DT;                            /*!< 0x00000030 Counter PWM dead time register */
-    __IM uint32_t RESERVED1[3];
-    __IOM uint32_t TR_CMD;                        /*!< 0x00000040 Counter trigger command register */
-    __IOM uint32_t TR_IN_SEL0;                    /*!< 0x00000044 Counter input trigger selection register 0 */
-    __IOM uint32_t TR_IN_SEL1;                    /*!< 0x00000048 Counter input trigger selection register 1 */
-    __IOM uint32_t TR_IN_EDGE_SEL;                /*!< 0x0000004C Counter input trigger edge selection register */
-    __IOM uint32_t TR_PWM_CTRL;                   /*!< 0x00000050 Counter trigger PWM control register */
-    __IOM uint32_t TR_OUT_SEL;                    /*!< 0x00000054 Counter output trigger selection register */
-    __IM uint32_t RESERVED2[6];
-    __IOM uint32_t INTR;                          /*!< 0x00000070 Interrupt request register */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000074 Interrupt set request register */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000078 Interrupt mask register */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000007C Interrupt masked request register */
+typedef struct {
+  __IOM uint32_t CTRL;                          /*!< 0x00000000 Counter control register */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 Counter status register */
+  __IOM uint32_t COUNTER;                       /*!< 0x00000008 Counter count register */
+   __IM uint32_t RESERVED;
+  __IOM uint32_t CC0;                           /*!< 0x00000010 Counter compare/capture 0 register */
+  __IOM uint32_t CC0_BUFF;                      /*!< 0x00000014 Counter buffered compare/capture 0 register */
+  __IOM uint32_t CC1;                           /*!< 0x00000018 Counter compare/capture 1 register */
+  __IOM uint32_t CC1_BUFF;                      /*!< 0x0000001C Counter buffered compare/capture 1 register */
+  __IOM uint32_t PERIOD;                        /*!< 0x00000020 Counter period register */
+  __IOM uint32_t PERIOD_BUFF;                   /*!< 0x00000024 Counter buffered period register */
+  __IOM uint32_t LINE_SEL;                      /*!< 0x00000028 Counter line selection register */
+  __IOM uint32_t LINE_SEL_BUFF;                 /*!< 0x0000002C Counter buffered line selection register */
+  __IOM uint32_t DT;                            /*!< 0x00000030 Counter PWM dead time register */
+   __IM uint32_t RESERVED1[3];
+  __IOM uint32_t TR_CMD;                        /*!< 0x00000040 Counter trigger command register */
+  __IOM uint32_t TR_IN_SEL0;                    /*!< 0x00000044 Counter input trigger selection register 0 */
+  __IOM uint32_t TR_IN_SEL1;                    /*!< 0x00000048 Counter input trigger selection register 1 */
+  __IOM uint32_t TR_IN_EDGE_SEL;                /*!< 0x0000004C Counter input trigger edge selection register */
+  __IOM uint32_t TR_PWM_CTRL;                   /*!< 0x00000050 Counter trigger PWM control register */
+  __IOM uint32_t TR_OUT_SEL;                    /*!< 0x00000054 Counter output trigger selection register */
+   __IM uint32_t RESERVED2[6];
+  __IOM uint32_t INTR;                          /*!< 0x00000070 Interrupt request register */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000074 Interrupt set request register */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000078 Interrupt mask register */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000007C Interrupt masked request register */
 } TCPWM_GRP_CNT_Type;                           /*!< Size = 128 (0x80) */
 
 /**
   * \brief Group of counters (TCPWM_GRP)
   */
-typedef struct
-{
-    TCPWM_GRP_CNT_Type CNT[256];            /*!< 0x00000000 Timer/Counter/PWM Counter Module */
+typedef struct {
+        TCPWM_GRP_CNT_Type CNT[256];            /*!< 0x00000000 Timer/Counter/PWM Counter Module */
 } TCPWM_GRP_Type;                               /*!< Size = 32768 (0x8000) */
 
 /**
   * \brief Timer/Counter/PWM (TCPWM)
   */
-typedef struct
-{
-    TCPWM_GRP_Type GRP[4];                  /*!< 0x00000000 Group of counters */
+typedef struct {
+        TCPWM_GRP_Type GRP[4];                  /*!< 0x00000000 Group of counters */
 } TCPWM_Type;                                   /*!< Size = 131072 (0x20000) */
 
 

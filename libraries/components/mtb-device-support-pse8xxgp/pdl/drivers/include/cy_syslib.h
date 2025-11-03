@@ -129,236 +129,6 @@
 * \section group_syslib_more_information More Information
 * Refer to the technical reference manual (TRM).
 *
-* \section group_syslib_changelog Changelog
-* <table class="doxtable">
-*   <tr><th>Version</th><th>Changes</th><th>Reason for Change</th></tr>
-*   <tr>
-*     <td>3.80</td>
-*     <td>Coverity fixes and added new API \ref Cy_SysLib_GetDeviceLCS for PSoC C3.</td>
-*     <td>Code enhancement and new functionality.</td>
-*   </tr>
-*   <tr>
-*     <td>3.70</td>
-*     <td>Updated API \ref Cy_SysLib_GetUniqueId and added new \ref Cy_Syslib_IsMemCacheable.</td>
-*     <td>Code enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>3.60</td>
-*     <td>Updated API \ref Cy_SysLib_GetUniqueId, added section for unified linker script update</td>
-*     <td>Code enhancement and bug fixes to enable API compilation for PSoC C3.</td>
-*   </tr>
-*   <tr>
-*     <td>3.50</td>
-*     <td>Added support for TRAVEO&trade; II Body Entry devices.<br>
-*          Pre-processor check for MXS40SRSS version now groups ver. 2 with ver. 3. Previously ver. 2 was grouped with ver. 1.</td>
-*          Some pre-processor checks for if the device has a CM4 now also require device to not be HT_Variant to exclude TVIIBE and CAT1C devices.</td>
-*     <td>Code enhancement and support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">3.40</td>
-*     <td>
-*         Newly added API \ref Cy_SysLib_GetDeviceLCS and enum \ref cy_en_syslib_lcs_mode_t
-*     </td>
-*     <td>Support of LCS added for PSE8 devices .</td>
-*   </tr>
-*   <tr>
-*     <td>Updated API \ref Cy_SysLib_SetWaitStates and added new macros.</td>
-*     <td>Enabled wait-states API for CAT1C devices.</td>
-*   </tr>
-*   <tr>
-*     <td>3.30</td>
-*     <td>Added \ref Cy_SysLib_IsDSRAMWarmBootEntry and \ref Cy_SysLib_ClearDSRAMWarmBootEntryStatus APIs.</td>
-*     <td>DEEPSLEEP-RAM support added for CAT1B Devices.</td>
-*   </tr>
-*   <tr>
-*     <td>3.20</td>
-*     <td>Updated Cy_SysLib_Delay() to perform correctly, enable Cy_SysLib_GetUniqueId() API for CAT1B,
-*         coverity fixes and documentation enhancements. \n
-*         Added CY_SECTION_INIT_CODECOPY_START and CY_SECTION_INIT_CODECOPY_END macro
-*         to move block of code from flash to sram during startup init. Currently
-*         it only supports in IAR build.</td>
-*     <td>Bug Fixes and Enhancements.</td>
-*   </tr>
-*   <tr>
-*     <td>3.10</td>
-*     <td>CAT1B, CAT1C, PSE8 devices support.<br>Added new API Cy_Syslib_SetWarmBootEntryPoint()
-*         to set the warm boot entry point address to a location read by BootROM.<br>
-*         To get the accurate delay, updated Cy_SysLib_Delay(), Cy_SysLib_DelayUs() with a calibration factor.</td>
-*     <td>Support for new devices.</td>
-*   </tr>
-*   <tr>
-*     <td>3.0</td>
-*     <td>Updated \ref Cy_SysLib_SoftResetCM4 to perform correctly when function is called multiple times.</td>
-*     <td>Fixed issue which caused IPC Message to Fail if API is called more than once.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.90</td>
-*     <td>Added new functions \ref Cy_SysLib_Rtos_Delay, \ref Cy_SysLib_Rtos_DelayUs.</td>
-*     <td>Provide user an option to overwrite delay function implementation based on target RTOS environment.</td>
-*   </tr>
-*   <tr>
-*     <td>Added new functions \ref Cy_SysLib_GetResetStatus, \ref Cy_SysLib_GetWcoTrim and \ref Cy_SysLib_SetWcoTrim.</td>
-*     <td>Add a possibility to manage the backup domain reset better and to store/restore the WCO trimming value.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.80</td>
-*     <td>Support for CM33.</td>
-*     <td>New devices support.</td>
-*   </tr>
-*   <tr>
-*     <td>Update \ref Cy_SysLib_GetResetReason API to read RES_CAUSE2 register as well.</td>
-*     <td>Code Enhancement/Bug Fix.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="4">2.70</td>
-*     <td>Added new macros CY_SECTION_RAMFUNC_BEGIN, CY_SECTION_RAMFUNC_END,
-*         CY_SECTION_SHAREDMEM to enable overriding of the linker section placement.</td>
-*     <td>Enhancement based on usability feedback.</td>
-*   </tr>
-*   <tr>
-*     <td>Noted that implementation of CY_ASSERT() was changed back in version 2.50,
-*         so that Cy_SysLib_AssertFailed() function is not called and user application
-*         may need to be updated.</td>
-*     <td>Documentation update.</td>
-*   </tr>
-*   <tr>
-*     <td>Removed the issue related to the malloc() failure to report error for the case when
-*         requested allocation size is bigger than the heap size.
-*         Refer to the \ref group_system_config_heap_stack_config_gcc section for the more details.
-*         Removed empty Known Issues section.
-*     <td>Documentation update and clarification.</td>
-*   </tr>
-*   <tr>
-*     <td>Fixed/Documented MISRA 2012 violations.</td>
-*     <td>MISRA 2012 compliance.</td>
-*   </tr>
-*   <tr>
-*     <td>2.60.1</td>
-*     <td>Updated the Configuration Considerations section with the information that
-*         CY_ASSERT() macro is defined in the cy_utils.h file, which is part of the
-*         <a href="https://github.com/Infineon/core-lib">Cypress Core Library (core-lib)</a>
-*     <td>Documentation update and clarification.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.60</td>
-*     <td>Updated the following functions for the PSoC 64 devices:
-*         \ref Cy_SysLib_ClearFlashCacheAndBuffer, \ref Cy_SysLib_ClearResetReason,
-*         \ref Cy_SysLib_SetWaitStates.
-*     <td>Added PSoC 64 device support.</td>
-*   </tr>
-*   <tr>
-*     <td>Minor documentation updates.</td>
-*     <td>Documentation enhancement.</td>
-*   </tr>
-*   <tr>
-*     <td>2.50.3</td>
-*     <td>Add section Known Issues
-*     <td>Documentation update and clarification.</td>
-*   </tr>
-*   <tr>
-*     <td>2.50.1</td>
-*     <td>Used the core library defines for the message codes forming.
-*     <td>Improve PDL code base.</td>
-*   </tr>
-*   <tr>
-*     <td>2.50</td>
-*     <td>Moved following macros to the core library:
-*         CY_LO8,CY_HI8,CY_LO16,CY_HI16,CY_SWAP_ENDIAN16,CY_SWAP_ENDIAN32,
-*         CY_SWAP_ENDIAN64,CY_GET_REG8,CY_SET_REG8,CY_GET_REG16,CY_SET_REG16,
-*         CY_GET_REG24,CY_SET_REG24,CY_GET_REG32,CY_SET_REG32,_CLR_SET_FLD32U,
-*         CY_REG32_CLR_SET,_CLR_SET_FLD16U,CY_REG16_CLR_SET,_CLR_SET_FLD8U,
-*         CY_REG8_CLR_SET,_BOOL2FLD,_FLD2BOOL,CY_SYSLIB_DIV_ROUND,
-*         CY_SYSLIB_DIV_ROUNDUP,CY_NOINIT,CY_SECTION,CY_UNUSED,CY_NOINLINE,
-*         CY_ALIGN,CY_RAMFUNC_BEGIN,CY_RAMFUNC_END.
-*         Use at least version 1.1 of the core library: https://github.com/Infineon/core-lib.
-*     <td>Improve PDL code base.</td>
-*   </tr>
-*   <tr>
-*     <td>2.40.1</td>
-*     <td>Correct the CY_RAMFUNC_BEGIN macro for the IAR compiler.</td>
-*     <td>Removed the IAR compiler warning.</td>
-*   </tr>
-*   <tr>
-*     <td>2.40</td>
-*     <td>Added new macros CY_SYSLIB_DIV_ROUND and CY_SYSLIB_DIV_ROUNDUP to easy perform integer division with rounding.</td>
-*     <td>Improve PDL code base.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="3">2.30</td>
-*     <td>Updated implementation of the Cy_SysLib_AsmInfiniteLoop() function to be compatible with ARMC6.</td>
-*     <td>Provided support for the ARM Compiler 6.</td>
-*   </tr>
-*   <tr>
-*     <td>Minor documentation edits.</td>
-*     <td>Documentation update and clarification.</td>
-*   </tr>
-*   <tr>
-*     <td>Added new macros CY_RAMFUNC_BEGIN and CY_RAMFUNC_END for convenient placement function in RAM for all supported compilers.</td>
-*     <td>Improve user experience.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="2">2.20</td>
-*     <td>Updated implementation of the \ref Cy_SysLib_AssertFailed() function to be available in Release and Debug modes.</td>
-*     <td>Provided support for the PDL static library in Release mode.</td>
-*   </tr>
-*   <tr>
-*     <td>Minor documentation edits.</td>
-*     <td>Documentation update and clarification.</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="4">2.10</td>
-*     <td>Flattened the organization of the driver source code into the single source directory and the single include directory.</td>
-*     <td>Driver library directory-structure simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Added the following macros: CY_REG32_CLR_SET, _CLR_SET_FLD16U, CY_REG16_CLR_SET, _CLR_SET_FLD8U, CY_REG8_CLR_SET</td>
-*     <td>Register access simplification.</td>
-*   </tr>
-*   <tr>
-*     <td>Removed the Cy_SysLib_GetNumHfclkResetCause API function.</td>
-*     <td>This feature is not supported by SRSS_ver1.</td>
-*   </tr>
-*   <tr>
-*     <td>Added register access layer. Use register access macros instead
-*         of direct register access using dereferenced pointers.</td>
-*     <td>Makes register access device-independent, so that the PDL does
-*         not need to be recompiled for each supported part number.</td>
-*   </tr>
-*   <tr>
-*     <td>2.0.1</td>
-*     <td>Minor documentation edits</td>
-*     <td>Documentation update and clarification</td>
-*   </tr>
-*   <tr>
-*     <td rowspan="4"> 2.0</td>
-*     <td>
-* Added Cy_SysLib_ResetBackupDomain() API implementation. \n
-* Added CY_NOINLINE attribute implementation. \n
-* Added DIE_YEAR field to 64-bit unique ID return value of Cy_SysLib_GetUniqueId() API. \n
-* Added storing of SCB->HFSR, SCB->SHCSR registers and SCB->MMFAR, SCB->BFAR addresses to Fault Handler debug structure. \n
-* Optimized Cy_SysLib_SetWaitStates() API implementation.
-*     </td>
-*     <td>Improvements made based on usability feedback.</td>
-*   </tr>
-*   <tr>
-*     <td>Added Assertion Classes and Levels.</td>
-*     <td>For error checking, parameter validation and status returns in the PDL API.</td>
-*   </tr>
-*   <tr>
-*     <td>Applied CY_NOINIT attribute to cy_assertFileName, cy_assertLine, and cy_faultFrame global variables.</td>
-*     <td>To store debug information into a non-zero init area for future analysis.</td>
-*   </tr>
-*   <tr>
-*     <td>Removed CY_WEAK attribute implementation.</td>
-*     <td>CMSIS __WEAK attribute should be used instead.</td>
-*   </tr>
-*   <tr>
-*     <td>1.0</td>
-*     <td>Initial version</td>
-*     <td></td>
-*   </tr>
-* </table>
-*
 * \defgroup group_syslib_macros Macros
 * \defgroup group_syslib_functions Functions
 * \defgroup group_syslib_data_structures Data Structures
@@ -383,17 +153,19 @@ extern "C" {
 #endif /* defined(__cplusplus) */
 
 #if defined( __ICCARM__ )
-/* Suppress the warning for multiple volatile variables in an expression. */
-/* This is common for driver's code and the usage is not order-dependent. */
-#pragma diag_suppress=Pa082
+    /* Suppress the warning for multiple volatile variables in an expression. */
+    /* This is common for driver's code and the usage is not order-dependent. */
+    #pragma diag_suppress=Pa082
 #endif  /* defined( __ICCARM__ ) */
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.6', 3, \
-                             'Coverity does not check the .S assembly files, the definition is a part of syslib assembly source file.')
+'Coverity does not check the .S assembly files, the definition is a part of syslib assembly source file.')
 
 /**
 * \addtogroup group_syslib_macros
 * \{
+*   \defgroup group_syslib_cpu_macros      CPU Type Macros
+*   \{
 */
 
 /******************************************************************************
@@ -427,6 +199,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 8.6', 3, \
 #ifndef CY_SYSLIB_DELAY_CALIBRATION_FACTOR
 #define CY_SYSLIB_DELAY_CALIBRATION_FACTOR     1U
 #endif
+/** \} group_syslib_cpu_macros */
 
 /**
 * \defgroup group_syslib_macros_status_codes Status codes
@@ -490,126 +263,126 @@ typedef enum
 */
 
 #if (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED)
-#if (CY_CPU_CORTEX_M4 || (defined (CY_CPU_CORTEX_M7) && CY_CPU_CORTEX_M7) || \
+    #if (CY_CPU_CORTEX_M4 || (defined (CY_CPU_CORTEX_M7) && CY_CPU_CORTEX_M7) || \
         (defined (CY_CPU_CORTEX_M33) && CY_CPU_CORTEX_M33) || (defined (CY_CPU_CORTEX_M55) && CY_CPU_CORTEX_M55))
-/** Configurable Fault Status Register - CFSR */
-typedef struct
-{
-    /** MemManage Fault Status Sub-register - MMFSR */
-    uint32_t iaccViol    : 1;  /**< MemManage Fault - The instruction access violation flag */
-    uint32_t daccViol    : 1;  /**< MemManage Fault - The data access violation flag */
-    uint32_t reserved1   : 1;  /**< Reserved */
-    uint32_t mUnstkErr   : 1;  /**< MemManage Fault - Unstacking for a return from exception */
-    uint32_t mStkErr     : 1;  /**< MemManage Fault - MemManage fault on stacking for exception entry */
-    uint32_t mlspErr     : 1;  /**< MemManage Fault - MemManage fault occurred during floating-point lazy state preservation */
-    uint32_t reserved2   : 1;  /**< Reserved */
-    uint32_t mmarValid   : 1;  /**< MemManage Fault - The MemManage Address register valid flag */
-    /** Bus Fault Status Sub-register - UFSR */
-    uint32_t iBusErr     : 1;  /**< Bus Fault - The instruction bus error */
-    uint32_t precisErr   : 1;  /**< Bus Fault - The precise Data bus error */
-    uint32_t imprecisErr : 1;  /**< Bus Fault - The imprecise data bus error */
-    uint32_t unstkErr    : 1;  /**< Bus Fault - Unstacking for an exception return has caused one or more bus faults */
-    uint32_t stkErr      : 1;  /**< Bus Fault - Stacking for an exception entry has caused one or more bus faults */
-    uint32_t lspErr      : 1;  /**< Bus Fault - A bus fault occurred during the floating-point lazy state */
-    uint32_t reserved3   : 1;  /**< Reserved */
-    uint32_t bfarValid   : 1;  /**< Bus Fault - The bus fault address register valid flag */
-    /** Usage Fault Status Sub-register - UFSR */
-    uint32_t undefInstr  : 1;  /**< Usage Fault - An undefined instruction */
-    uint32_t invState    : 1;  /**< Usage Fault - The invalid state */
-    uint32_t invPC       : 1;  /**< Usage Fault - An invalid PC */
-    uint32_t noCP        : 1;  /**< Usage Fault - No coprocessor */
-    uint32_t reserved4   : 4;  /**< Reserved */
-    uint32_t unaligned   : 1;  /**< Usage Fault - Unaligned access */
-    uint32_t divByZero   : 1;  /**< Usage Fault - Divide by zero */
-    uint32_t reserved5   : 6;  /**< Reserved */
-} cy_stc_fault_cfsr_t;
+        /** Configurable Fault Status Register - CFSR */
+        typedef struct
+        {
+            /** MemManage Fault Status Sub-register - MMFSR */
+            uint32_t iaccViol    : 1;  /**< MemManage Fault - The instruction access violation flag */
+            uint32_t daccViol    : 1;  /**< MemManage Fault - The data access violation flag */
+            uint32_t reserved1   : 1;  /**< Reserved */
+            uint32_t mUnstkErr   : 1;  /**< MemManage Fault - Unstacking for a return from exception */
+            uint32_t mStkErr     : 1;  /**< MemManage Fault - MemManage fault on stacking for exception entry */
+            uint32_t mlspErr     : 1;  /**< MemManage Fault - MemManage fault occurred during floating-point lazy state preservation */
+            uint32_t reserved2   : 1;  /**< Reserved */
+            uint32_t mmarValid   : 1;  /**< MemManage Fault - The MemManage Address register valid flag */
+            /** Bus Fault Status Sub-register - UFSR */
+            uint32_t iBusErr     : 1;  /**< Bus Fault - The instruction bus error */
+            uint32_t precisErr   : 1;  /**< Bus Fault - The precise Data bus error */
+            uint32_t imprecisErr : 1;  /**< Bus Fault - The imprecise data bus error */
+            uint32_t unstkErr    : 1;  /**< Bus Fault - Unstacking for an exception return has caused one or more bus faults */
+            uint32_t stkErr      : 1;  /**< Bus Fault - Stacking for an exception entry has caused one or more bus faults */
+            uint32_t lspErr      : 1;  /**< Bus Fault - A bus fault occurred during the floating-point lazy state */
+            uint32_t reserved3   : 1;  /**< Reserved */
+            uint32_t bfarValid   : 1;  /**< Bus Fault - The bus fault address register valid flag */
+            /** Usage Fault Status Sub-register - UFSR */
+            uint32_t undefInstr  : 1;  /**< Usage Fault - An undefined instruction */
+            uint32_t invState    : 1;  /**< Usage Fault - The invalid state */
+            uint32_t invPC       : 1;  /**< Usage Fault - An invalid PC */
+            uint32_t noCP        : 1;  /**< Usage Fault - No coprocessor */
+            uint32_t reserved4   : 4;  /**< Reserved */
+            uint32_t unaligned   : 1;  /**< Usage Fault - Unaligned access */
+            uint32_t divByZero   : 1;  /**< Usage Fault - Divide by zero */
+            uint32_t reserved5   : 6;  /**< Reserved */
+        } cy_stc_fault_cfsr_t;
 
-/** Hard Fault Status Register - HFSR */
-typedef struct
-{
-    uint32_t reserved1   :  1;   /**< Reserved. */
-    uint32_t vectTbl     :  1;   /**< HFSR - Indicates a bus fault on a vector table read during exception processing */
-    uint32_t reserved2   : 28;   /**< Reserved. */
-    uint32_t forced      :  1;   /**< HFSR - Indicates a forced hard fault */
-    uint32_t debugEvt    :  1;   /**< HFSR - Reserved for the debug use.  */
-} cy_stc_fault_hfsr_t;
+        /** Hard Fault Status Register - HFSR */
+        typedef struct
+        {
+            uint32_t reserved1   :  1;   /**< Reserved. */
+            uint32_t vectTbl     :  1;   /**< HFSR - Indicates a bus fault on a vector table read during exception processing */
+            uint32_t reserved2   : 28;   /**< Reserved. */
+            uint32_t forced      :  1;   /**< HFSR - Indicates a forced hard fault */
+            uint32_t debugEvt    :  1;   /**< HFSR - Reserved for the debug use.  */
+        } cy_stc_fault_hfsr_t;
 
-/** System Handler Control and State Register - SHCSR */
-typedef struct
-{
-    uint32_t memFaultAct    :  1;   /**< SHCSR - The MemManage exception active bit, reads as 1 if the exception is active */
-    uint32_t busFaultAct    :  1;   /**< SHCSR - The BusFault exception active bit, reads as 1 if the exception is active */
-    uint32_t reserved1      :  1;   /**< Reserved. */
-    uint32_t usgFaultAct    :  1;   /**< SHCSR - The UsageFault exception active bit, reads as 1 if the exception is active */
-    uint32_t reserved2      :  3;   /**< Reserved. */
-    uint32_t svCallAct      :  1;   /**< SHCSR - The SVCall active bit, reads as 1 if the SVC call is active */
-    uint32_t monitorAct     :  1;   /**< SHCSR - The debug monitor active bit, reads as 1 if the debug monitor is active */
-    uint32_t reserved3      :  1;   /**< Reserved. */
-    uint32_t pendSVAct      :  1;   /**< SHCSR - The PendSV exception active bit, reads as 1 if the exception is active */
-    uint32_t sysTickAct     :  1;   /**< SHCSR - The SysTick exception active bit, reads as 1 if the exception is active  */
-    uint32_t usgFaultPended :  1;   /**< SHCSR - The UsageFault exception pending bit, reads as 1 if the exception is pending */
-    uint32_t memFaultPended :  1;   /**< SHCSR - The MemManage exception pending bit, reads as 1 if the exception is pending */
-    uint32_t busFaultPended :  1;   /**< SHCSR - The BusFault exception pending bit, reads as 1 if the exception is pending */
-    uint32_t svCallPended   :  1;   /**< SHCSR - The SVCall pending bit, reads as 1 if the exception is pending */
-    uint32_t memFaultEna    :  1;   /**< SHCSR - The MemManage enable bit, set to 1 to enable */
-    uint32_t busFaultEna    :  1;   /**< SHCSR - The BusFault enable bit, set to 1 to enable */
-    uint32_t usgFaultEna    :  1;   /**< SHCSR - The UsageFault enable bit, set to 1 to enable */
-    uint32_t reserved4      : 13;   /**< Reserved */
-} cy_stc_fault_shcsr_t;
-#endif /* CY_CPU_CORTEX_M4, CY_CPU_CORTEX_M7, CY_CPU_CORTEX_M33, CY_CPU_CORTEX_M55*/
+        /** System Handler Control and State Register - SHCSR */
+        typedef struct
+        {
+            uint32_t memFaultAct    :  1;   /**< SHCSR - The MemManage exception active bit, reads as 1 if the exception is active */
+            uint32_t busFaultAct    :  1;   /**< SHCSR - The BusFault exception active bit, reads as 1 if the exception is active */
+            uint32_t reserved1      :  1;   /**< Reserved. */
+            uint32_t usgFaultAct    :  1;   /**< SHCSR - The UsageFault exception active bit, reads as 1 if the exception is active */
+            uint32_t reserved2      :  3;   /**< Reserved. */
+            uint32_t svCallAct      :  1;   /**< SHCSR - The SVCall active bit, reads as 1 if the SVC call is active */
+            uint32_t monitorAct     :  1;   /**< SHCSR - The debug monitor active bit, reads as 1 if the debug monitor is active */
+            uint32_t reserved3      :  1;   /**< Reserved. */
+            uint32_t pendSVAct      :  1;   /**< SHCSR - The PendSV exception active bit, reads as 1 if the exception is active */
+            uint32_t sysTickAct     :  1;   /**< SHCSR - The SysTick exception active bit, reads as 1 if the exception is active  */
+            uint32_t usgFaultPended :  1;   /**< SHCSR - The UsageFault exception pending bit, reads as 1 if the exception is pending */
+            uint32_t memFaultPended :  1;   /**< SHCSR - The MemManage exception pending bit, reads as 1 if the exception is pending */
+            uint32_t busFaultPended :  1;   /**< SHCSR - The BusFault exception pending bit, reads as 1 if the exception is pending */
+            uint32_t svCallPended   :  1;   /**< SHCSR - The SVCall pending bit, reads as 1 if the exception is pending */
+            uint32_t memFaultEna    :  1;   /**< SHCSR - The MemManage enable bit, set to 1 to enable */
+            uint32_t busFaultEna    :  1;   /**< SHCSR - The BusFault enable bit, set to 1 to enable */
+            uint32_t usgFaultEna    :  1;   /**< SHCSR - The UsageFault enable bit, set to 1 to enable */
+            uint32_t reserved4      : 13;   /**< Reserved */
+        } cy_stc_fault_shcsr_t;
+    #endif /* CY_CPU_CORTEX_M4, CY_CPU_CORTEX_M7, CY_CPU_CORTEX_M33, CY_CPU_CORTEX_M55*/
 
-/** The fault configuration structure. */
-typedef struct
-{
-    uint32_t r0;       /**< R0 register content */
-    uint32_t r1;       /**< R1 register content */
-    uint32_t r2;       /**< R2 register content */
-    uint32_t r3;       /**< R3 register content */
-    uint32_t r12;      /**< R12 register content */
-    uint32_t lr;       /**< LR register content */
-    uint32_t pc;       /**< PC register content */
-    uint32_t psr;      /**< PSR register content */
-#if (CY_CPU_CORTEX_M4 || (defined (CY_CPU_CORTEX_M7) && CY_CPU_CORTEX_M7) || \
+    /** The fault configuration structure. */
+    typedef struct
+    {
+        uint32_t r0;       /**< R0 register content */
+        uint32_t r1;       /**< R1 register content */
+        uint32_t r2;       /**< R2 register content */
+        uint32_t r3;       /**< R3 register content */
+        uint32_t r12;      /**< R12 register content */
+        uint32_t lr;       /**< LR register content */
+        uint32_t pc;       /**< PC register content */
+        uint32_t psr;      /**< PSR register content */
+        #if (CY_CPU_CORTEX_M4 || (defined (CY_CPU_CORTEX_M7) && CY_CPU_CORTEX_M7) || \
              (defined (CY_CPU_CORTEX_M33) && CY_CPU_CORTEX_M33) || (defined (CY_CPU_CORTEX_M55) && CY_CPU_CORTEX_M55))
-    union
-    {
-        uint32_t cfsrReg;              /**< CFSR register content as a word */
-        cy_stc_fault_cfsr_t cfsrBits;  /**< CFSR register content as a structure */
-    } cfsr;
-    union
-    {
-        uint32_t hfsrReg;              /**< HFSR register content as a word */
-        cy_stc_fault_hfsr_t hfsrBits;  /**< HFSR register content as a structure */
-    } hfsr;
-    union
-    {
-        uint32_t shcsrReg;              /**< SHCSR register content as a word */
-        cy_stc_fault_shcsr_t shcsrBits; /**< SHCSR register content as a structure */
-    } shcsr;
-    uint32_t mmfar;                /**< MMFAR register content */
-    uint32_t bfar;                 /**< BFAR register content */
-#if ((defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
+            union
+            {
+                uint32_t cfsrReg;              /**< CFSR register content as a word */
+                cy_stc_fault_cfsr_t cfsrBits;  /**< CFSR register content as a structure */
+            } cfsr;
+            union
+            {
+                uint32_t hfsrReg;              /**< HFSR register content as a word */
+                cy_stc_fault_hfsr_t hfsrBits;  /**< HFSR register content as a structure */
+            } hfsr;
+            union
+            {
+                uint32_t shcsrReg;              /**< SHCSR register content as a word */
+                cy_stc_fault_shcsr_t shcsrBits; /**< SHCSR register content as a structure */
+            } shcsr;
+            uint32_t mmfar;                /**< MMFAR register content */
+            uint32_t bfar;                 /**< BFAR register content */
+            #if ((defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && \
                  (defined (__FPU_USED   ) && (__FPU_USED    == 1U)))
-    uint32_t s0;       /**< FPU S0 register content */
-    uint32_t s1;       /**< FPU S1 register content */
-    uint32_t s2;       /**< FPU S2 register content */
-    uint32_t s3;       /**< FPU S3 register content */
-    uint32_t s4;       /**< FPU S4 register content */
-    uint32_t s5;       /**< FPU S5 register content */
-    uint32_t s6;       /**< FPU S6 register content */
-    uint32_t s7;       /**< FPU S7 register content */
-    uint32_t s8;       /**< FPU S8 register content */
-    uint32_t s9;       /**< FPU S9 register content */
-    uint32_t s10;      /**< FPU S10 register content */
-    uint32_t s11;      /**< FPU S11 register content */
-    uint32_t s12;      /**< FPU S12 register content */
-    uint32_t s13;      /**< FPU S13 register content */
-    uint32_t s14;      /**< FPU S14 register content */
-    uint32_t s15;      /**< FPU S15 register content */
-    uint32_t fpscr;    /**< FPU FPSCR register content */
-#endif /* __FPU_PRESENT */
-#endif /* CY_CPU_CORTEX_M4, CY_CPU_CORTEX_M7, CY_CPU_CORTEX_M33, CY_CPU_CORTEX_M55*/
-} cy_stc_fault_frame_t;
+                uint32_t s0;       /**< FPU S0 register content */
+                uint32_t s1;       /**< FPU S1 register content */
+                uint32_t s2;       /**< FPU S2 register content */
+                uint32_t s3;       /**< FPU S3 register content */
+                uint32_t s4;       /**< FPU S4 register content */
+                uint32_t s5;       /**< FPU S5 register content */
+                uint32_t s6;       /**< FPU S6 register content */
+                uint32_t s7;       /**< FPU S7 register content */
+                uint32_t s8;       /**< FPU S8 register content */
+                uint32_t s9;       /**< FPU S9 register content */
+                uint32_t s10;      /**< FPU S10 register content */
+                uint32_t s11;      /**< FPU S11 register content */
+                uint32_t s12;      /**< FPU S12 register content */
+                uint32_t s13;      /**< FPU S13 register content */
+                uint32_t s14;      /**< FPU S14 register content */
+                uint32_t s15;      /**< FPU S15 register content */
+                uint32_t fpscr;    /**< FPU FPSCR register content */
+            #endif /* __FPU_PRESENT */
+        #endif /* CY_CPU_CORTEX_M4, CY_CPU_CORTEX_M7, CY_CPU_CORTEX_M33, CY_CPU_CORTEX_M55*/
+    } cy_stc_fault_frame_t;
 #endif /* (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED) */
 
 /** \} group_syslib_data_structures */
@@ -617,6 +390,8 @@ typedef struct
 /**
 * \addtogroup group_syslib_macros
 * \{
+*   \defgroup group_syslib_version_macros      Version Macros
+*   \{
 */
 
 /** The driver major version */
@@ -624,6 +399,13 @@ typedef struct
 
 /** The driver minor version */
 #define CY_SYSLIB_DRV_VERSION_MINOR    80
+
+/** \} group_syslib_version_macros */
+
+/**
+*   \defgroup group_syslib_section_macros  Section Macros
+*   \{
+*/
 
 /** Define start of the function placed to the SRAM area by the linker */
 #ifndef CY_SECTION_RAMFUNC_BEGIN
@@ -643,60 +425,23 @@ typedef struct
 #endif
 #endif
 
-/** Define start of the function placed to the SRAM1 area by the linker */
-#ifndef CY_SECTION_SRAM1_CODE_BEGIN
+/** Define start of the function placed to the SRAM area by the linker */
+#ifndef CY_SECTION_SRAM_CODE_BEGIN
 #if defined (__ICCARM__)
-#define CY_SECTION_SRAM1_CODE_BEGIN CY_PRAGMA(diag_suppress = Ta023) __ramfunc
+#define CY_SECTION_SRAM_CODE_BEGIN CY_PRAGMA(diag_suppress = Ta023) __ramfunc
 #else
-#define CY_SECTION_SRAM1_CODE_BEGIN CY_SECTION(".cy_sram1_code")
+#define CY_SECTION_SRAM_CODE_BEGIN CY_SECTION(".cy_sram_code")
 #endif
 #endif
 
-/** Define end of the function placed to the SRAM1 area by the linker */
-#ifndef CY_SECTION_SRAM1_CODE_END
+/** Define end of the function placed to the SRAM area by the linker */
+#ifndef CY_SECTION_SRAM_CODE_END
 #if defined (__ICCARM__)
-#define CY_SECTION_SRAM1_CODE_END CY_PRAGMA(diag_default = Ta023)
+#define CY_SECTION_SRAM_CODE_END CY_PRAGMA(diag_default = Ta023)
 #else
-#define CY_SECTION_SRAM1_CODE_END
+#define CY_SECTION_SRAM_CODE_END
 #endif
 #endif
-
-/** Define start of the function placed to the SRAM1 area by the linker */
-#ifndef CY_SECTION_SRAM1_DATANS_BEGIN
-#if defined (__ICCARM__)
-#define CY_SECTION_SRAM1_DATANS_BEGIN CY_PRAGMA(diag_suppress = Ta023) __ramfunc
-#else
-#define CY_SECTION_SRAM1_DATANS_BEGIN CY_SECTION(".cy_sram1_data_ns")
-#endif
-#endif
-
-/** Define end of the function placed to the SRAM1 area by the linker */
-#ifndef CY_SECTION_SRAM1_DATANS_END
-#if defined (__ICCARM__)
-#define CY_SECTION_SRAM1_DATANS_END CY_PRAGMA(diag_default = Ta023)
-#else
-#define CY_SECTION_SRAM1_DATANS_END
-#endif
-#endif
-
-/** Define start of the function placed to the SRAM1 area by the linker */
-#ifndef CY_SECTION_SRAM0_DATANS_BEGIN
-#if defined (__ICCARM__)
-#define CY_SECTION_SRAM0_DATANS_BEGIN CY_PRAGMA(diag_suppress = Ta023) __ramfunc
-#else
-#define CY_SECTION_SRAM0_DATANS_BEGIN CY_SECTION(".cy_sram0_data_ns")
-#endif
-#endif
-
-/** Define end of the function placed to the SRAM1 area by the linker */
-#ifndef CY_SECTION_SRAM0_DATANS_END
-#if defined (__ICCARM__)
-#define CY_SECTION_SRAM0_DATANS_END CY_PRAGMA(diag_default = Ta023)
-#else
-#define CY_SECTION_SRAM0_DATANS_END
-#endif
-#endif
-
 
 #if (CY_CPU_CORTEX_M7 || CY_CPU_CORTEX_M55)
 /** Define start of the function placed to the ITCM area by the linker */
@@ -723,7 +468,7 @@ typedef struct
 /** Define start of the code block to be copied to SRAM by the linker during init */
 #ifndef CY_SECTION_INIT_CODECOPY_BEGIN
 #if defined (__ICCARM__)
-#define CY_SECTION_INIT_CODECOPY_BEGIN CY_PRAGMA(default_function_attributes = @ "code_in_RAM")
+#define CY_SECTION_INIT_CODECOPY_BEGIN CY_PRAGMA(default_function_attributes = @ ".cy_ramfunc")
 #else
 #define CY_SECTION_INIT_CODECOPY_BEGIN
 #endif
@@ -812,15 +557,9 @@ typedef struct
 #endif
 #endif
 
-/** Define start of the data placed in the SRAM0 area by the linker */
-#ifndef CY_SECTION_SRAM0DATA_BEGIN
-#define CY_SECTION_SRAM0DATA_BEGIN CY_SECTION(".cy_sram0_data")
-#endif
+/** \} group_syslib_section_macros */
 
-/** Define end of the function placed to the ITCM area by the linker */
-#ifndef CY_SECTION_SRAM0DATA_END
-#define CY_SECTION_SRAM0DATA_END
-#endif
+/** \cond INTERNAL */
 
 #if defined(CY_IP_MXS22SRSS)
 typedef SRSS_Type  cy_syslib_lcs_data_t;    /**< Type of block with LCS data */
@@ -828,11 +567,7 @@ typedef SRSS_Type  cy_syslib_lcs_data_t;    /**< Type of block with LCS data */
 
 typedef void (* cy_israddress)(void);   /**< Type of ISR callbacks */
 #if defined (__ICCARM__)
-typedef union
-{
-    cy_israddress __fun;
-    void *__ptr;
-} cy_intvec_elem;
+    typedef union { cy_israddress __fun; void * __ptr; } cy_intvec_elem;
 #endif  /* defined (__ICCARM__) */
 
 /* MISRA rule 6.3 recommends using specific-length typedef for the basic
@@ -843,47 +578,49 @@ typedef float    float32_t; /**< Specific-length typedef for the basic numerical
 typedef double   float64_t; /**< Specific-length typedef for the basic numerical types of double */
 
 #if !defined(NDEBUG)
-/** The max size of the file name which stores the ASSERT location */
-#define CY_MAX_FILE_NAME_SIZE  (24U)
-extern CY_NOINIT char_t cy_assertFileName[CY_MAX_FILE_NAME_SIZE + 1];  /**< The assert buffer */
-extern CY_NOINIT uint32_t cy_assertLine;                           /**< The assert line value */
+    /** The max size of the file name which stores the ASSERT location */
+    #define CY_MAX_FILE_NAME_SIZE  (24U)
+    extern CY_NOINIT char_t cy_assertFileName[CY_MAX_FILE_NAME_SIZE + 1];  /**< The assert buffer */
+    extern CY_NOINIT uint32_t cy_assertLine;                           /**< The assert line value */
 #endif /* NDEBUG */
 
 #if (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED)
-#define CY_R0_Pos             (0U)     /**< The position of the R0  content in a fault structure */
-#define CY_R1_Pos             (1U)     /**< The position of the R1  content in a fault structure */
-#define CY_R2_Pos             (2U)     /**< The position of the R2  content in a fault structure */
-#define CY_R3_Pos             (3U)     /**< The position of the R3  content in a fault structure */
-#define CY_R12_Pos            (4U)     /**< The position of the R12 content in a fault structure */
-#define CY_LR_Pos             (5U)     /**< The position of the LR  content in a fault structure */
-#define CY_PC_Pos             (6U)     /**< The position of the PC  content in a fault structure */
-#define CY_PSR_Pos            (7U)     /**< The position of the PSR content in a fault structure */
-#if (CY_CPU_CORTEX_M4 || (defined (CY_CPU_CORTEX_M7) && CY_CPU_CORTEX_M7) || \
+    #define CY_R0_Pos             (0U)     /**< The position of the R0  content in a fault structure */
+    #define CY_R1_Pos             (1U)     /**< The position of the R1  content in a fault structure */
+    #define CY_R2_Pos             (2U)     /**< The position of the R2  content in a fault structure */
+    #define CY_R3_Pos             (3U)     /**< The position of the R3  content in a fault structure */
+    #define CY_R12_Pos            (4U)     /**< The position of the R12 content in a fault structure */
+    #define CY_LR_Pos             (5U)     /**< The position of the LR  content in a fault structure */
+    #define CY_PC_Pos             (6U)     /**< The position of the PC  content in a fault structure */
+    #define CY_PSR_Pos            (7U)     /**< The position of the PSR content in a fault structure */
+    #if (CY_CPU_CORTEX_M4 || (defined (CY_CPU_CORTEX_M7) && CY_CPU_CORTEX_M7) || \
          (defined (CY_CPU_CORTEX_M33) && CY_CPU_CORTEX_M33) || (defined (CY_CPU_CORTEX_M55) && CY_CPU_CORTEX_M55)) && \
          ((defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)) && (defined (__FPU_USED   ) && (__FPU_USED    == 1U)))
-#define CY_FPSCR_IXC_Msk  (0x00000010U)    /**< The cumulative exception bit for floating-point exceptions */
-#define CY_FPSCR_IDC_Msk  (0x00000080U)    /**< The cumulative exception bit for floating-point exceptions */
-#define CY_S0_Pos         (8U)     /**< The position of the FPU S0 content in a fault structure */
-#define CY_S1_Pos         (9U)     /**< The position of the FPU S1 content in a fault structure */
-#define CY_S2_Pos         (10U)    /**< The position of the FPU S2 content in a fault structure */
-#define CY_S3_Pos         (11U)    /**< The position of the FPU S3 content in a fault structure */
-#define CY_S4_Pos         (12U)    /**< The position of the FPU S4 content in a fault structure */
-#define CY_S5_Pos         (13U)    /**< The position of the FPU S5 content in a fault structure */
-#define CY_S6_Pos         (14U)    /**< The position of the FPU S6 content in a fault structure */
-#define CY_S7_Pos         (15U)    /**< The position of the FPU S7 content in a fault structure */
-#define CY_S8_Pos         (16U)    /**< The position of the FPU S8 content in a fault structure */
-#define CY_S9_Pos         (17U)    /**< The position of the FPU S9 content in a fault structure */
-#define CY_S10_Pos        (18U)    /**< The position of the FPU S10 content in a fault structure */
-#define CY_S11_Pos        (19U)    /**< The position of the FPU S11 content in a fault structure */
-#define CY_S12_Pos        (20U)    /**< The position of the FPU S12 content in a fault structure */
-#define CY_S13_Pos        (21U)    /**< The position of the FPU S13 content in a fault structure */
-#define CY_S14_Pos        (22U)    /**< The position of the FPU S14 content in a fault structure */
-#define CY_S15_Pos        (23U)    /**< The position of the FPU S15 content in a fault structure */
-#define CY_FPSCR_Pos      (24U)    /**< The position of the FPU FPSCR content in a fault structure */
-#endif /* (CY_CPU_CORTEX_M4 || CY_CPU_CORTEX_M7 || CY_CPU_CORTEX_M33 || CY_CPU_CORTEX_M55) && __FPU_PRESENT */
+        #define CY_FPSCR_IXC_Msk  (0x00000010U)    /**< The cumulative exception bit for floating-point exceptions */
+        #define CY_FPSCR_IDC_Msk  (0x00000080U)    /**< The cumulative exception bit for floating-point exceptions */
+        #define CY_S0_Pos         (8U)     /**< The position of the FPU S0 content in a fault structure */
+        #define CY_S1_Pos         (9U)     /**< The position of the FPU S1 content in a fault structure */
+        #define CY_S2_Pos         (10U)    /**< The position of the FPU S2 content in a fault structure */
+        #define CY_S3_Pos         (11U)    /**< The position of the FPU S3 content in a fault structure */
+        #define CY_S4_Pos         (12U)    /**< The position of the FPU S4 content in a fault structure */
+        #define CY_S5_Pos         (13U)    /**< The position of the FPU S5 content in a fault structure */
+        #define CY_S6_Pos         (14U)    /**< The position of the FPU S6 content in a fault structure */
+        #define CY_S7_Pos         (15U)    /**< The position of the FPU S7 content in a fault structure */
+        #define CY_S8_Pos         (16U)    /**< The position of the FPU S8 content in a fault structure */
+        #define CY_S9_Pos         (17U)    /**< The position of the FPU S9 content in a fault structure */
+        #define CY_S10_Pos        (18U)    /**< The position of the FPU S10 content in a fault structure */
+        #define CY_S11_Pos        (19U)    /**< The position of the FPU S11 content in a fault structure */
+        #define CY_S12_Pos        (20U)    /**< The position of the FPU S12 content in a fault structure */
+        #define CY_S13_Pos        (21U)    /**< The position of the FPU S13 content in a fault structure */
+        #define CY_S14_Pos        (22U)    /**< The position of the FPU S14 content in a fault structure */
+        #define CY_S15_Pos        (23U)    /**< The position of the FPU S15 content in a fault structure */
+        #define CY_FPSCR_Pos      (24U)    /**< The position of the FPU FPSCR content in a fault structure */
+    #endif /* (CY_CPU_CORTEX_M4 || CY_CPU_CORTEX_M7 || CY_CPU_CORTEX_M33 || CY_CPU_CORTEX_M55) && __FPU_PRESENT */
 
-extern CY_NOINIT cy_stc_fault_frame_t cy_faultFrame;    /**< Fault frame structure */
+    extern CY_NOINIT cy_stc_fault_frame_t cy_faultFrame;    /**< Fault frame structure */
 #endif /* (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED) */
+
+/** \endcond */
 
 /**
 * \defgroup group_syslib_macros_assert Assert Classes and Levels
@@ -904,27 +641,32 @@ extern CY_NOINIT cy_stc_fault_frame_t cy_faultFrame;    /**< Fault frame structu
 #define CY_ASSERT_CLASS_3           (3U)
 
 #ifndef CY_ASSERT_LEVEL
-/** The user-definable assert level from compiler command-line argument (similarly to DEBUG / NDEBUG) */
-#define CY_ASSERT_LEVEL         CY_ASSERT_CLASS_3
+    /** The user-definable assert level from compiler command-line argument (similarly to DEBUG / NDEBUG) */
+    #define CY_ASSERT_LEVEL         CY_ASSERT_CLASS_3
 #endif /* CY_ASSERT_LEVEL */
 
 #if (CY_ASSERT_LEVEL == CY_ASSERT_CLASS_1)
-#define CY_ASSERT_L1(x)         CY_ASSERT(x)        /**< Assert Level 1 */
-#define CY_ASSERT_L2(x)         do{}while(false)    /**< Assert Level 2 */
-#define CY_ASSERT_L3(x)         do{}while(false)    /**< Assert Level 3 */
+    #define CY_ASSERT_L1(x)         CY_ASSERT(x)        /**< Assert Level 1 */
+    #define CY_ASSERT_L2(x)         do{}while(false)    /**< Assert Level 2 */
+    #define CY_ASSERT_L3(x)         do{}while(false)    /**< Assert Level 3 */
 #elif (CY_ASSERT_LEVEL == CY_ASSERT_CLASS_2)
-#define CY_ASSERT_L1(x)         CY_ASSERT(x)        /**< Assert Level 1 */
-#define CY_ASSERT_L2(x)         CY_ASSERT(x)        /**< Assert Level 2 */
-#define CY_ASSERT_L3(x)         do{}while(false)    /**< Assert Level 3 */
+    #define CY_ASSERT_L1(x)         CY_ASSERT(x)        /**< Assert Level 1 */
+    #define CY_ASSERT_L2(x)         CY_ASSERT(x)        /**< Assert Level 2 */
+    #define CY_ASSERT_L3(x)         do{}while(false)    /**< Assert Level 3 */
 #else /* Default is Level 3 */
-#define CY_ASSERT_L1(x)         CY_ASSERT(x)        /**< Assert Level 1 */
-#define CY_ASSERT_L2(x)         CY_ASSERT(x)        /**< Assert Level 2 */
-#define CY_ASSERT_L3(x)         CY_ASSERT(x)        /**< Assert Level 3 */
+    #define CY_ASSERT_L1(x)         CY_ASSERT(x)        /**< Assert Level 1 */
+    #define CY_ASSERT_L2(x)         CY_ASSERT(x)        /**< Assert Level 2 */
+    #define CY_ASSERT_L3(x)         CY_ASSERT(x)        /**< Assert Level 3 */
 #endif /* CY_ASSERT_LEVEL == CY_ASSERT_CLASS_1 */
 
 /** \} group_syslib_macros_assert */
 
 #ifdef CY_IP_M33SYSCPUSS
+/**
+* \defgroup group_syslib_macros_helper Helper Macros
+* \{
+* Defines for the Helper Macros
+*/
 /*******************************************************************************
 * Macro Name: CY_UNUSED_PARAM
 ****************************************************************************//**
@@ -950,6 +692,7 @@ extern CY_NOINIT cy_stc_fault_frame_t cy_faultFrame;    /**< Fault frame structu
 *
 *******************************************************************************/
 #define CY_ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+/** \} group_syslib_macros_helper */
 #endif /* CY_IP_M33SYSCPUSS */
 
 
@@ -963,37 +706,63 @@ extern CY_NOINIT cy_stc_fault_frame_t cy_faultFrame;    /**< Fault frame structu
 * Define RESET_CAUSE mask values
 */
 /** A basic WatchDog Timer (WDT) reset has occurred since the last power cycle. */
-#define CY_SYSLIB_RESET_HWWDT           (0x0001U)
+#define CY_SYSLIB_RESET_HWWDT                 (0x0001U)
 /** The fault logging system requested a reset from its Active logic. */
-#define CY_SYSLIB_RESET_ACT_FAULT       (0x0002U)
+#define CY_SYSLIB_RESET_ACT_FAULT             (0x0002U)
 /** The fault logging system requested a reset from its Deep-Sleep logic. */
-#define CY_SYSLIB_RESET_DPSLP_FAULT     (0x0004U)
+#define CY_SYSLIB_RESET_DPSLP_FAULT           (0x0004U)
 
-#if defined (CY_IP_M33SYSCPUSS) || defined (CY_IP_M7CPUSS)
 /** The fault logging system requested a reset from its Test Controller or debugger asserted test. */
 /**
 * \note
 * This macro is available for devices having M33SYSCPUSS IP.
 **/
-#define CY_SYSLIB_RESET_TC_DBGRESET     (0x0008U)
-#endif
+#define CY_SYSLIB_RESET_TC_DBGRESET           (0x0008U)
 
-/** The CPU requested a system reset through it's SYSRESETREQ. This can be done via a debugger probe or in firmware. */
-#define CY_SYSLIB_RESET_SOFT            (0x0010U)
+/** SYSCPUSS (M33 core) requested a system reset through its SYSRESETREQ. This can be done via a debugger probe or in firmware. */
+#define CY_SYSLIB_RESET_SOFT0                 (0x0010U)
+/** Backwards compatibility alias for CY_SYSLIB_RESET_SOFT0 */
+#define CY_SYSLIB_RESET_SOFT                  CY_SYSLIB_RESET_SOFT0
+/** APPCPUSS (M55 core) requested a system reset through its SYSRESETREQ. This can be done via a debugger probe or in firmware. */
+#define CY_SYSLIB_RESET_SOFT1                 (0x0020U)
+/** M0SECCPUSS (M0SEC core) requested a system reset through its SYSRESETREQ. This can be done via a debugger probe or in firmware. */
+#define CY_SYSLIB_RESET_SOFT2                 (0x0040U)
 /** The Multi-Counter Watchdog timer #0 reset has occurred since the last power cycle. */
-#define CY_SYSLIB_RESET_SWWDT0          (0x0020U)
+#define CY_SYSLIB_RESET_SWWDT0                (0x0100U)
 /** The Multi-Counter Watchdog timer #1 reset has occurred since the last power cycle. */
-#define CY_SYSLIB_RESET_SWWDT1          (0x0040U)
+#define CY_SYSLIB_RESET_SWWDT1                (0x0200U)
 /** The Multi-Counter Watchdog timer #2 reset has occurred since the last power cycle. */
-#define CY_SYSLIB_RESET_SWWDT2          (0x0080U)
+#define CY_SYSLIB_RESET_SWWDT2                (0x0400U)
 /** The Multi-Counter Watchdog timer #3 reset has occurred since the last power cycle. */
-#define CY_SYSLIB_RESET_SWWDT3          (0x0100U)
+#define CY_SYSLIB_RESET_SWWDT3                (0x0800U)
+/** The reset has occurred on a wakeup from DS OFF power mode. */
+#define CY_SYSLIB_RESET_DS_OFF_WAKEUP         (0x02000U)
+/** External XRES pin was asserted. This is a high-voltage cause bit that blocks recording of other high-voltage cause bits, except RESET_PORVDDD or WDT. */
+#define CY_SYSLIB_RESET_XRES                  (0x04000U)
+/** External VDDD supply crossed brown-out limit.  Note that this cause will only be observable as long as the VDDD supply does not go below the POR (power on reset) detection limit. */
+#define CY_SYSLIB_RESET_BODVDDD               (0x08000U)
 /** The reset has occurred on a loss of high-frequency clock. */
-#define CY_SYSLIB_RESET_CSV_LOSS_WAKEUP      (0x10000U)
+#define CY_SYSLIB_RESET_CSV_LOSS_WAKEUP       (0x10000U)
 /** The reset has occurred due to frequency error of high-frequency clock. */
 #define CY_SYSLIB_RESET_CSV_ERROR_WAKEUP      (0x20000U)
+/** Internal VCCD core supply crossed the brown-out limit.  Note that this detector will detect gross issues with the internal core supply, but may not catch all brown-out conditions. */
+#define CY_SYSLIB_RESET_BODVCCD               (0x80000U)
+/** External VBAT supply crossed brown-out limit.  Note that this cause will only be observable as long as the VDDD supply does not go below the POR (power on reset) detection limit. */
+#define CY_SYSLIB_RESET_BODVBAT               (0x100000U)
+/** Overvoltage detection on the internal core VCCD supply.  This is a high-voltage cause bit that blocks recording of other high-voltage cause bits, except RESET_PORVDDD  *XRES, or WDT. */
+#define CY_SYSLIB_RESET_OVDVCCD               (0x400000U)
+/** PXRES triggered.  This is a high-voltage cause bit that blocks recording of other high-voltage cause bits, except RESET_PORVDDD, *XRES, or WDT. Hardware clears this bit during POR. */
+#define CY_SYSLIB_RESET_PXRES                 (0x10000000U)
+/** Structural reset was asserted.  This is a high-voltage cause bit that blocks recording of other high-voltage cause bits, except RESET_PORVDDD, *XRES, or WDT. Hardware clears this bit during POR. */
+#define CY_SYSLIB_RESET_STRUCT_XRES           (0x20000000U)
+/** Indicator that a POR occurred.  This is a high-voltage cause bit, and hardware clears the other bits when this one is set. It does not block further recording of other high-voltage causes. */
+#define CY_SYSLIB_RESET_PORVDDD               (0x40000000U)
 /** The reset has occurred on a wakeup from Hibernate power mode. */
-#define CY_SYSLIB_RESET_HIB_WAKEUP      (0x80000000U)
+#define CY_SYSLIB_RESET_HIB_WAKEUP            (0x80000000U)
+/** Token to detect the reset has occurred on a wakeup from Hibernate power mode. */
+#define CY_SYSLIB_HIBERNATE_TOKEN             (0x1BU)
+/** Token to detect the reset has occurred on a wakeup from DS OFF power mode. */
+#define CY_SYSLIB_DEEP_SLEEP_OFF_TOKEN        (0x3BU)
 
 
 
@@ -1055,7 +824,6 @@ extern CY_NOINIT cy_stc_fault_frame_t cy_faultFrame;    /**< Fault frame structu
 
 /** \} group_syslib_macros_unique_id */
 #endif
-
 /** \} group_syslib_macros */
 
 /******************************************************************************
@@ -1086,6 +854,11 @@ extern CY_NOINIT cy_stc_fault_frame_t cy_faultFrame;    /**< Fault frame structu
 *       CPU's use branch prediction, currently applicable for only devices
 *       with a CM7 processor.
 *
+* \note The accuracy of the delay functions depends on the value of the global variable \ref SystemCoreClock.
+*       If the system clock configuration is changed at runtime or if the project does not call cycfg_config_init() then
+*       you must call \ref SystemCoreClockUpdate to refresh the SystemCoreClock variable.
+*       Failing to do so may result in incorrect delay durations.
+*
 *******************************************************************************/
 void Cy_SysLib_Delay(uint32_t milliseconds);
 
@@ -1107,6 +880,11 @@ void Cy_SysLib_Delay(uint32_t milliseconds);
 * \note The Calibration factor is to correct the delay in cases where
 *       CPU's use branch prediction, currently applicable for only devices
 *       with a CM7 processor.
+*
+* \note The accuracy of the delay functions depends on the value of the global variable \ref SystemCoreClock.
+*       If the system clock configuration is changed at runtime or if the project does not call cycfg_config_init() then
+*       you must call \ref SystemCoreClockUpdate to refresh the SystemCoreClock variable.
+*       Failing to do so may result in incorrect delay durations.
 *
 *******************************************************************************/
 void Cy_SysLib_DelayUs(uint16_t microseconds);
@@ -1152,6 +930,11 @@ void Cy_SysLib_Rtos_DelayUs(uint16_t microseconds);
 * CY_SYSLIB_DELAY_CALIBRATION_FACTOR = 1 for CM0P, CM33 and CM4.
 * CY_SYSLIB_DELAY_CALIBRATION_FACTOR = 2 for CM7_0 and CM7_1.
 *
+* \note The accuracy of the delay functions depends on the value of the global variable \ref SystemCoreClock.
+*       If the system clock configuration is changed at runtime or if the project does not call cycfg_config_init() then
+*       you must call \ref SystemCoreClockUpdate to refresh the SystemCoreClock variable.
+*       Failing to do so may result in incorrect delay durations.
+*
 *******************************************************************************/
 void Cy_SysLib_DelayCycles(uint32_t cycles);
 
@@ -1182,7 +965,7 @@ void Cy_SysLib_DelayCycles(uint32_t cycles);
 *
 *******************************************************************************/
 #if defined (CY_IP_M33SYSCPUSS) || defined (CY_IP_M55APPCPUSS) || defined (CY_DOXYGEN)
-void Cy_SysLib_Halt(uint32_t reason);
+    void Cy_SysLib_Halt(uint32_t reason);
 #endif
 
 
@@ -1337,16 +1120,14 @@ uint32_t Cy_SysLib_GetResetReason(void);
 * Function Name: Cy_SysLib_ClearResetReason
 ****************************************************************************//**
 *
-* This function clears the values of RES_CAUSE and RES_CAUSE2. Also it clears
+* This function clears the values of RES_CAUSE_EXTEND, RES_CAUSE and RES_CAUSE2. Also it clears
 * PWR_HIBERNATE token, which indicates reset event on waking up from HIBERNATE.
 *
 *******************************************************************************/
 void Cy_SysLib_ClearResetReason(void);
 
 
-#if defined(CY_INIT_CODECOPY_ENABLE)
 CY_SECTION_INIT_CODECOPY_BEGIN
-#endif
 
 /*******************************************************************************
 * Function Name: Cy_SysLib_GetResetStatus
@@ -1370,15 +1151,13 @@ CY_SECTION_INIT_CODECOPY_BEGIN
 * \snippet syslib/snippet/main.c snippet_Cy_SysLib_ResetBackup
 *
 *******************************************************************************/
-__STATIC_INLINE cy_en_syslib_status_t Cy_SysLib_GetResetStatus(void)
+__STATIC_INLINE cy_en_syslib_status_t Cy_SysLib_GetResetStatus (void)
 {
     return ((0UL == (BACKUP_RESET & BACKUP_RESET_RESET_Msk)) ? CY_SYSLIB_SUCCESS : CY_SYSLIB_INVALID_STATE);
 }
 
 
-#if defined(CY_INIT_CODECOPY_ENABLE)
 CY_SECTION_INIT_CODECOPY_END
-#endif
 
 #if (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED) || defined(CY_DOXYGEN)
 
@@ -1408,7 +1187,7 @@ CY_SECTION_INIT_CODECOPY_END
 *       Settings): "-D CY_ARM_FAULT_DEBUG=0".
 *
 *******************************************************************************/
-void Cy_SysLib_FaultHandler(uint32_t const *faultStackAddr);
+    void Cy_SysLib_FaultHandler(uint32_t const *faultStackAddr);
 
 
 /*******************************************************************************
@@ -1425,7 +1204,7 @@ void Cy_SysLib_FaultHandler(uint32_t const *faultStackAddr);
 *       stack processing and NVIC_SystemReset() function call.
 *
 *******************************************************************************/
-void Cy_SysLib_ProcessingFault(void);
+    void Cy_SysLib_ProcessingFault(void);
 #endif /* (CY_ARM_FAULT_DEBUG == CY_ARM_FAULT_DEBUG_ENABLED) */
 
 /*******************************************************************************
@@ -1594,6 +1373,7 @@ void Cy_SysLib_ClearDSRAMWarmBootEntryStatus(void);
 bool Cy_Syslib_IsMemCacheable(MPU_Type* mpu, uint32_t addr, uint32_t size);
 #endif
 
+/** \cond INTERNAL */
 
 #define CY_SYSLIB_COEFFICIENT_ULP     (80U) /**< Wait states coefficient for ULP mode  */
 #define CY_SYSLIB_COEFFICIENT         (60U) /**< Wait states coefficient for general mode  */
@@ -1658,12 +1438,8 @@ typedef volatile uint32_t reg32;  /**< Alias to uint32_t for backward compatibil
 /** A type of ISR callbacks for backward compatibility with the UDB components. Do not use it in your code. */
 typedef void (* cyisraddress)(void);
 #if defined (__ICCARM__)
-/** A type of ISR callbacks for backward compatibility with the UDB components. Do not use it in your code. */
-typedef union
-{
-    cyisraddress __fun;
-    void *__ptr;
-} intvec_elem;
+    /** A type of ISR callbacks for backward compatibility with the UDB components. Do not use it in your code. */
+    typedef union { cyisraddress __fun; void * __ptr; } intvec_elem;
 #endif  /* defined (__ICCARM__) */
 
 /** The backward compatibility define for the CyDelay() API for the UDB components.
@@ -1690,10 +1466,6 @@ typedef union
 
 /** \} group_syslib_functions */
 CY_MISRA_BLOCK_END('MISRA C-2012 Rule 8.6')
-/** \cond INTERNAL */
-
-/** \endcond */
-
 
 #if defined(__cplusplus)
 }

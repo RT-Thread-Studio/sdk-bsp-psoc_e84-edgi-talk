@@ -90,8 +90,7 @@
     & __gcmMASK(reg##_##field), reg##_##field) \
     )
 
-typedef struct _viv_dc_hardware
-{
+typedef struct _viv_dc_hardware {
     struct _viv_dc_os *os;
 
     gctUINT chip_id;
@@ -109,27 +108,27 @@ viv_dc_hardware;
 
 vivSTATUS viv_init_reg_config(
     gctVOID
-);
+    );
 
 gctUINT viv_get_reg_config(
     gctUINT addr
-);
+    );
 
 vivSTATUS viv_set_reg_config(
     gctUINT addr,
     gctUINT config
-);
+    );
 
 #if vivENABLE_DISPLAY_CRC
 vivSTATUS viv_hw_reset_sw_stat(
     gctVOID
-);
+    );
 #endif
 
 vivSTATUS dc_query_hardware_chip_identity(
     viv_dc_hardware *hardware,
     viv_interface_query_chip_identity_ptr Identity
-);
+    );
 
 vivSTATUS viv_hw_version_get(
     viv_dc_hardware *hardware,
@@ -142,17 +141,17 @@ vivSTATUS viv_hw_version_get(
     gctUINT* customer_id,
     gctUINT* product_date,
     gctUINT* product_time
-);
+    );
 
 #if vivENABLE_LAYER_DECOMPRESS
 vivSTATUS viv_hw_dec400_init(
     viv_dc_hardware* hardware
-);
+    );
 
 vivSTATUS viv_hw_dec400_stream_disable(
     viv_dc_hardware* hardware,
     gctUINT32 stream_index
-);
+    );
 
 vivSTATUS viv_hw_dec400_stream_set(
     viv_dc_hardware* hardware,
@@ -164,7 +163,7 @@ vivSTATUS viv_hw_dec400_stream_set(
     viv_cache_mode cache_mode,
     gctUINT32 stream_index,
     gctUINT32 fast_clear_value
-);
+    );
 #endif
 
 vivSTATUS viv_hw_shadow_register_pending_enable(
@@ -172,14 +171,14 @@ vivSTATUS viv_hw_shadow_register_pending_enable(
     gctBOOL enable,
     gctBOOL *layer_dirty,
     gctBOOL *display_dirty
-);
+    );
 
 #if vivENABLE_DISPLAY_R2Y
 vivSTATUS viv_hw_set_output_csc(
     viv_dc_hardware *hardware,
     viv_display id,
     gctINT *coef
-);
+    );
 #endif
 
 vivSTATUS viv_hw_dither_enable(
@@ -188,7 +187,7 @@ vivSTATUS viv_hw_dither_enable(
     gctBOOL enable,
     gctUINT low,
     gctUINT high
-);
+    );
 
 #if vivENABLE_WRITEBACK
 vivSTATUS viv_hw_set_write_back_dither(
@@ -197,7 +196,7 @@ vivSTATUS viv_hw_set_write_back_dither(
     gctBOOL enable,
     gctUINT low,
     gctUINT high
-);
+    );
 
 vivSTATUS viv_hw_set_dest_address(
     viv_dc_hardware *hardware,
@@ -205,26 +204,26 @@ vivSTATUS viv_hw_set_dest_address(
     viv_display id,
     viv_dc_buffer *buffer_ptr,
     viv_write_back_type type
-);
+    );
 
 vivSTATUS viv_hw_set_dest_stride(
     viv_dc_hardware *hardware,
     viv_display id,
     gctUINT stride
-);
+    );
 #endif
 
 vivSTATUS viv_hw_gamma_set_config(
     viv_dc_hardware *hardware,
     gctUINT disp_id,
     gctUINT16 gamma[][3]
-);
+    );
 
 vivSTATUS viv_hw_set_background(
     viv_dc_hardware *hardware,
     viv_display display_id,
     viv_dc_color bg_color
-);
+    );
 
 #if vivENABLE_DISPLAY_CLRBAR
 vivSTATUS viv_hw_set_color_bar(
@@ -234,7 +233,7 @@ vivSTATUS viv_hw_set_color_bar(
     gctUINT index,
     viv_dc_rect range,
     viv_dc_color color
-);
+    );
 #endif
 
 #if vivENABLE_DISPLAY_CRC
@@ -243,26 +242,26 @@ vivSTATUS viv_hw_set_crc_range(
     gctUINT i,
     gctBOOL enable,
     viv_dc_rect range
-);
+    );
 
 vivSTATUS viv_hw_get_crc_value(
     viv_dc_hardware *hardware,
     gctUINT index,
     gctUINT32 *value
-);
+    );
 #endif
 
 vivSTATUS viv_hw_set_qos(
     viv_dc_hardware* hardware,
     gctUINT32 low,
     gctUINT32 high
-);
+    );
 
 vivSTATUS viv_hw_cursor_hotspot(
     viv_dc_hardware* hardware,
     viv_display display_id,
     viv_cursor* cursor_ptr
-);
+    );
 
 vivSTATUS viv_hw_cursor_set(
     viv_dc_hardware* hardware,
@@ -270,20 +269,20 @@ vivSTATUS viv_hw_cursor_set(
     gctBOOL enable,
     viv_dc_buffer* buffer_ptr,
     viv_cursor* cursor_ptr
-);
+    );
 
 vivSTATUS viv_hw_layer_clear(
     viv_dc_hardware *hardware,
     gctUINT layer_id,
     viv_dc_layer layer
-);
+    );
 
 #if vivENABLE_LAYER_ROI
 vivSTATUS viv_hw_layer_roi(
     viv_dc_hardware *hardware,
     gctUINT layer_id,
     viv_dc_layer layer
-);
+    );
 #endif
 
 #if vivENABLE_LAYER_SCALE
@@ -296,45 +295,45 @@ vivSTATUS viv_hw_scale_set_config(
     gctUINT32 *hor_kernel,
     gctUINT32 *ver_kernel,
     gctBOOL enable
-);
+    );
 #endif
 
 vivSTATUS viv_hw_layer_set_watermark(
     viv_dc_hardware *hardware,
     gctUINT id,
     gctUINT32 value
-);
+    );
 
 vivSTATUS viv_hw_layer_set_position(
     viv_dc_hardware *hardware,
     gctUINT layer_id,
     viv_dc_layer layer,
     viv_display_size_type size
-);
+    );
 
 vivSTATUS viv_hw_layer_colorkey_set_config(
     viv_dc_hardware *hardware,
     gctUINT id,
     viv_dc_layer layer
-);
+    );
 
 vivSTATUS viv_hw_layer_y2r_set_config(
     viv_dc_hardware *hardware,
     gctUINT id,
     viv_dc_layer layer
-);
+    );
 
 vivSTATUS viv_hw_layer_r2r_set_config(
     viv_dc_hardware *hardware,
     gctUINT id,
     viv_dc_layer layer
-);
+    );
 
 vivSTATUS viv_hw_set_alpha(
     viv_dc_hardware *hardware,
     gctUINT id,
     viv_layer_alpha_mode alpha
-);
+    );
 
 vivSTATUS viv_hw_set_blend_mode(
     viv_dc_hardware *hardware,
@@ -342,25 +341,25 @@ vivSTATUS viv_hw_set_blend_mode(
     gctBOOL enable,
     viv_porter_duff_mode mode,
     viv_layer_alpha_mode alpha_mode
-);
+    );
 
 vivSTATUS viv_hw_layer_set_zorder(
     viv_dc_hardware *hardware
-);
+    );
 
 vivSTATUS viv_hw_layer_set_config(
     viv_dc_hardware *hardware,
     gctUINT id,
     viv_dc_layer layer,
     gctBOOL gamma
-);
+    );
 
 vivSTATUS viv_hw_display_set_size(
     viv_dc_hardware *hardware,
     viv_display id,
     viv_display_size_type size,
     gctBOOL *mem2mem
-);
+    );
 
 /* Set custom display size */
 vivSTATUS viv_hw_set_custom_display_size(
@@ -375,7 +374,7 @@ vivSTATUS viv_hw_set_custom_display_size(
     gctUINT vsync_end,
     gctUINT vtotal,
     gctBOOL *mem2mem
-);
+    );
 
 vivSTATUS viv_hw_display_set_output(
     viv_dc_hardware *hardware,
@@ -387,43 +386,43 @@ vivSTATUS viv_hw_display_set_output(
     gctBOOL rgb2yuv,
 #endif
     gctBOOL threed_lut_enable
-);
+    );
 
 vivSTATUS viv_hw_start_panel_set_config(
     viv_dc_hardware *hardware,
     gctUINT32 mask
-);
+    );
 
 vivSTATUS viv_hw_display_dbi_reset(
     viv_dc_hardware *hardware
-);
+    );
 
 vivSTATUS viv_hw_display_dbi_set_command(
     viv_dc_hardware *hardware,
     viv_display_format_type format,
     viv_dbi_command_type type,
     gctUINT command
-);
+    );
 
 vivSTATUS viv_hw_display_dbi_set_config(
     viv_dc_hardware *hardware,
     viv_dbi_type type,
     viv_display_format_type format
-);
+    );
 
 vivSTATUS viv_hw_display_dbi_set_write(
     viv_dc_hardware *hardware
-);
+    );
 
 vivSTATUS viv_hw_dbi_reset(
     viv_dc_hardware *hardware
-);
+    );
 
 vivSTATUS viv_hw_dbi_set_command(
     viv_dc_hardware *hardware,
     gctUINT type,
     gctUINT command
-);
+    );
 
 #if vivENABLE_DISPLAY_3DLUT
 vivSTATUS viv_hw_3d_lut_set_config(
@@ -431,50 +430,50 @@ vivSTATUS viv_hw_3d_lut_set_config(
     viv_display display_id,
     gctBOOL enable,
     gctUINT32* lut
-);
+    );
 
 vivSTATUS viv_hw_3d_lut_ex_config(
     viv_dc_hardware *hardware,
     viv_display display_id,
     gctUINT32* scale_val,
     gctUINT32* offset_val
-);
+    );
 
 vivSTATUS viv_hw_3d_lut_set_enlarge(
     viv_dc_hardware *hardware,
     viv_display display_id,
     viv_lut_enlarge value
-);
+    );
 #endif
 
 vivSTATUS viv_hw_cursor_set_pos(
     viv_dc_hardware *hardware,
     gctUINT x,
     gctUINT y
-);
+    );
 
 vivSTATUS viv_hw_cursor_move(
     viv_dc_hardware *hardware,
     viv_display display_id,
     viv_cursor* cursor_ptr
-);
+    );
 
 vivSTATUS viv_hw_interrupt_enable(
     viv_dc_hardware *hardware,
     gctBOOL enable
-);
+    );
 
 gctUINT viv_hw_interrupt_get(
     viv_dc_hardware *hardware
-);
+    );
 
 gctUINT viv_hw_get_vblank_counter(
     viv_dc_hardware *hardware
-);
+    );
 
 vivSTATUS viv_hw_dc_reset(
     viv_dc_hardware *hardware
-);
+    );
 
 /*
  * set dc interrupt enable/disable.

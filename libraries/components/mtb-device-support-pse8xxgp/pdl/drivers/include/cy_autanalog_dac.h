@@ -292,7 +292,7 @@
 *       <td>
 *           The LUT address is updated on every positive edge of the DAC_INC or DAC_DEC
 *           from the State Transition Table, see cy_stc_autanalog_stt_dac_t::direction,
-*           unless cy_stc_autanalog_dac_ch_t::sampleAndhold is set\n
+*           unless cy_stc_autanalog_dac_ch_t::sampleAndHold is set\n
 *           (for more details, refer to \ref group_autanalog_dac_sampleAndHold chapter).\n
 *           The update step size is defined by STEP_VAL.\n
 *           If on the START_ADDR and DAC_DEC is triggered, the address wraps forward to the END_ADDR.\n
@@ -308,7 +308,7 @@
 *           The DAC outputs the data stored at the START_ADDR.\n
 *           The DAC output value is incremented or decremented based on
 *           every positive edge of the DAC_INC or DAC_DEC from the State Transition Table,
-*           see cy_stc_autanalog_stt_dac_t::direction, unless cy_stc_autanalog_dac_ch_t::sampleAndhold is set\n
+*           see cy_stc_autanalog_stt_dac_t::direction, unless cy_stc_autanalog_dac_ch_t::sampleAndHold is set\n
 *           (for more details, refer to \ref group_autanalog_dac_sampleAndHold chapter).\n
 *           The increment/decrement amount is set by STEP_VAL.\n
 *           \note In this mode, the DAC does not output an EPOCH trigger.
@@ -879,10 +879,10 @@ typedef struct
 typedef struct
 {
     uint16_t                               numSamples;       /**< The number of samples in the waveform */
-    const int16_t                         *waveformData;     /**< The pointer to the waveform data */
+    const int16_t                        * waveformData;     /**< The pointer to the waveform data */
     bool                                   isDriveModeArray; /**< Indicates that all samples in the waveform array
                                                               *   have the same drive mode configuration */
-    cy_en_autanalog_dac_out_drive_mode_t *driveMode;         /**< The pointer to the drive mode configurations */
+    cy_en_autanalog_dac_out_drive_mode_t * driveMode;        /**< The pointer to the drive mode configurations */
 
 }   cy_stc_autanalog_dac_waveform_t;
 
@@ -975,13 +975,13 @@ typedef struct
                                                                                  *   \note The sample time is measured
                                                                                  *   in terms of the number of clock cycles.
                                                                                  */
-    cy_stc_autanalog_dac_ch_t        *chCfg[CY_AUTANALOG_DAC_CH_CFG_NUM];       /**< The array of pointers to the
+    cy_stc_autanalog_dac_ch_t       * chCfg[CY_AUTANALOG_DAC_CH_CFG_NUM];       /**< The array of pointers to the
                                                                                  *   configuration structures for the
                                                                                  *   DAC channels, a NULL element
                                                                                  *   means that the channel structure
                                                                                  *   is not configured.
                                                                                  */
-    cy_stc_autanalog_dac_ch_limit_t *chLimitCfg[CY_AUTANALOG_DAC_CH_RANGE_NUM];/**< The array of pointers to the
+    cy_stc_autanalog_dac_ch_limit_t * chLimitCfg[CY_AUTANALOG_DAC_CH_RANGE_NUM];/**< The array of pointers to the
                                                                                  *   configuration structures for the
                                                                                  *   DAC output range detection,
                                                                                  *   a NULL element means that the
@@ -997,10 +997,10 @@ typedef struct
 typedef struct
 {
     /* Static part of configuration */
-    cy_stc_autanalog_dac_sta_t       *dacStaCfg; /**< The pointer to a static part of the DAC configuration */
+    cy_stc_autanalog_dac_sta_t      * dacStaCfg; /**< The pointer to a static part of the DAC configuration */
 
     /* Waveform part of configuration */
-    cy_stc_autanalog_dac_waveform_t *waveform;   /**< The pointer to a waveform part of the DAC configuration */
+    cy_stc_autanalog_dac_waveform_t * waveform;  /**< The pointer to a waveform part of the DAC configuration */
 
 } cy_stc_autanalog_dac_t;
 

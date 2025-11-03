@@ -1,5 +1,5 @@
 # KIT_PSE84_EVAL_EPC2 BSP Release Notes
-
+The PSOC™ Edge E84 Evaluation Kit (KIT\_PSE84\_EVAL) is based on the PSOC™ Edge family of devices. It enables the evaluation and development of applications for the PSOC™ Edge E84 EPC2 MCU.
 
 NOTE: BSPs are versioned by family. This means that version 1.2.0 of any BSP in a family (eg: XMC™ ) will have the same software maturity level. However, not all updates are necessarily applicable for each BSP in the family so not all version numbers will exist for each board. Additionally, new BSPs may not start at version 1.0.0. In the event of adding a common feature across all BSPs, the libraries are assigned the same version number. For example if BSP_A is at v1.3.0 and BSP_B is at v1.2.0, the event will trigger a version update to v1.4.0 for both BSP_A and BSP_B. This allows the common feature to be tracked in a consistent way.
 
@@ -15,6 +15,14 @@ The KIT_PSE84_EVAL_EPC2 library includes the following:
 * API documentation
 
 ### What Changed?
+#### v1.1.0
+* Removing out of date defines and improving error handling
+#### v1.0.0
+* BSP version update to 1.0.0
+* Removed Postbuild command from bsp.mk
+* ICWAEPROD-26044: Added epc2/epc4 capabilities to respective BSPs
+* Changed min_tool version for EPC2 and EPC4 BSPs to 3.6.0
+* Added bt-fw-mur-cyw55513 as dependency for KIT_PSE84_AI BSP
 #### v0.9.5
 * Updated bsp dependencies: Reverted bt-fw-ifx-cyw55500a1 version updated to release-2.2.0
 * Re-enabled Wifi capability for for all suported kit BSPs
@@ -48,8 +56,8 @@ The KIT_PSE84_EVAL_EPC2 library includes the following:
 * Updated bsp dependencies: recipe-make-cat1d v1.0.3, core-lib v1.4.3, mtb-pdl-cat1 v3.11.102
 * Renamed DEVICE_MODE to VCORE_ATTRS in bsp.mk file
 #### v0.7.0
-* Removed RAM linkers 
-* KIT_PSOCE84_EVK: CYW55513IUBG A1 silicon support in the BSP 
+* Removed RAM linkers
+* KIT_PSOCE84_EVK: CYW55513IUBG A1 silicon support in the BSP
 * KIT_PSOCE84_EVK: BSP dependencies update
 #### v0.6.0
 * ECO (17.2032 MHz) as source for DPLL LP (DPLL_LP0, DPLL_LP1) and IHO (50 MHz) for DPLL_HP
@@ -79,18 +87,20 @@ This version of the KIT_PSE84_EVAL_EPC2 BSP was validated for compatibility with
 
 | Software and Tools                        | Version |
 | :---                                      | :----:  |
-| ModusToolbox™ Software Environment        | 3.4.0   |
-| GCC Compiler                              | 12.2.1  |
-| ARM Compiler                              | 6.16    |
+| ModusToolbox™ Software Environment        | 3.6.0   |
+| GCC Compiler                              | 14.2.1  |
+| ARM Compiler&reg;                         | 6.16    |
+| IAR Compiler                              | 9.50.1  |
+| LLVM ARM Compiler                         | 19.1.1  |
 
-Minimum required ModusToolbox™ Software Environment: v3.4.0
+Minimum required ModusToolbox™ Software Environment: v3.6.0
 
 ### More information
 * [KIT_PSE84_EVAL_EPC2 BSP API Reference Manual][api]
 * [KIT_PSE84_EVAL_EPC2 Documentation](https://www.infineon.com/cms/en/product/evaluation-boards/placeholder/)
-* [Cypress Semiconductor, an Infineon Technologies Company](http://www.cypress.com)
+* [Infineon Technologies AG](https://www.infineon.com)
 * [Infineon GitHub](https://github.com/infineon)
-* [ModusToolbox™](https://www.cypress.com/products/modustoolbox-software-environment)
+* [ModusToolbox™](https://www.infineon.com/modustoolbox)
 
 [api]: https://infineon.github.io/TARGET_KIT_PSE84_EVAL_EPC2/html/modules.html
 

@@ -37,10 +37,10 @@
   @ingroup DCT4_IDCT4
  */
 
-/**
- @addtogroup DCT4Q15
- @{
-*/
+ /**
+  @addtogroup DCT4Q15
+  @{
+ */
 
 /**
   @brief         Initialization function for the Q15 DCT4/IDCT4.
@@ -59,72 +59,72 @@
                    The normalizing factor is <code>sqrt(2/N)</code>, which depends on the size of transform <code>N</code>.
                    Normalizing factors in 1.15 format are mentioned in the table below for different DCT sizes:
 
-| DCT Size  | Normalizing factor value (hexadecimal)  |
-| --------: | ---------------------------------------:|
-| 2048      | 0x400                                   |
-| 512       | 0x800                                   |
-| 128       | 0x1000                                  |
+| DCT Size  | Normalizing factor value (hexadecimal)  | 
+| --------: | ---------------------------------------:| 
+| 2048      | 0x400                                   | 
+| 512       | 0x800                                   | 
+| 128       | 0x1000                                  | 
 
  */
 
-arm_status arm_dct4_init_q15(
-    arm_dct4_instance_q15 * S,
-    arm_rfft_instance_q15 * S_RFFT,
-    arm_cfft_radix4_instance_q15 * S_CFFT,
-    uint16_t N,
-    uint16_t Nby2,
-    q15_t normalize)
+ARM_DSP_ATTRIBUTE arm_status arm_dct4_init_q15(
+  arm_dct4_instance_q15 * S,
+  arm_rfft_instance_q15 * S_RFFT,
+  arm_cfft_radix4_instance_q15 * S_CFFT,
+  uint16_t N,
+  uint16_t Nby2,
+  q15_t normalize)
 {
-    /*  Initialise the default arm status */
-    arm_status status = ARM_MATH_SUCCESS;
+  /*  Initialise the default arm status */
+  arm_status status = ARM_MATH_SUCCESS;
 
-    /* Initialize the DCT4 length */
-    S->N = N;
+  /* Initialize the DCT4 length */
+  S->N = N;
 
-    /* Initialize the half of DCT4 length */
-    S->Nby2 = Nby2;
+  /* Initialize the half of DCT4 length */
+  S->Nby2 = Nby2;
 
-    /* Initialize the DCT4 Normalizing factor */
-    S->normalize = normalize;
+  /* Initialize the DCT4 Normalizing factor */
+  S->normalize = normalize;
 
-    /* Initialize Real FFT Instance */
-    S->pRfft = S_RFFT;
+  /* Initialize Real FFT Instance */
+  S->pRfft = S_RFFT;
 
-    /* Initialize Complex FFT Instance */
-    S->pCfft = S_CFFT;
+  /* Initialize Complex FFT Instance */
+  S->pCfft = S_CFFT;
 
-    switch (N)
-    {
+  switch (N)
+  {
     /* Initialize the table modifier values */
-    case 8192U:
-        S->pTwiddle = WeightsQ15_8192;
-        S->pCosFactor = cos_factorsQ15_8192;
-        break;
+  case 8192U:
+    S->pTwiddle = WeightsQ15_8192;
+    S->pCosFactor = cos_factorsQ15_8192;
+    break;
 
-    case 2048U:
-        S->pTwiddle = WeightsQ15_2048;
-        S->pCosFactor = cos_factorsQ15_2048;
-        break;
+  case 2048U:
+    S->pTwiddle = WeightsQ15_2048;
+    S->pCosFactor = cos_factorsQ15_2048;
+    break;
 
-    case 512U:
-        S->pTwiddle = WeightsQ15_512;
-        S->pCosFactor = cos_factorsQ15_512;
-        break;
+  case 512U:
+    S->pTwiddle = WeightsQ15_512;
+    S->pCosFactor = cos_factorsQ15_512;
+    break;
 
-    case 128U:
-        S->pTwiddle = WeightsQ15_128;
-        S->pCosFactor = cos_factorsQ15_128;
-        break;
+  case 128U:
+    S->pTwiddle = WeightsQ15_128;
+    S->pCosFactor = cos_factorsQ15_128;
+    break;
 
-    default:
-        status = ARM_MATH_ARGUMENT_ERROR;
-    }
+  default:
+    status = ARM_MATH_ARGUMENT_ERROR;
+  }
 
-    /* Initialize the RFFT/RIFFT */
-    arm_rfft_init_q15(S->pRfft, S->N, 0U, 1U);
+  /* Initialize the RFFT/RIFFT */
+  arm_rfft_init_q15(S->pRfft, S->N, 0U, 1U);
 
-    /* return the status of DCT4 Init function */
-    return (status);
+  /* return the status of DCT4 Init function */
+  return (status);
 }
 
 /**

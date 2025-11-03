@@ -14,7 +14,7 @@
  *
  ***************************************************************************************************
  * \copyright
- * Copyright 2018-2022 Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2018-2025 Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -42,12 +42,12 @@
 #include <stdio.h>
 #include "cy_result.h"
 #if defined(COMPONENT_MTB_HAL)
-    #include "mtb_hal_hw_types.h"
+#include "mtb_hal_hw_types.h"
 #elif defined(CY_USING_HAL)
-    #include "cyhal_hw_types.h"
+#include "cyhal_hw_types.h"
 #else
-    #include "cy_pdl.h"
-    #include <stdbool.h>
+#include "cy_pdl.h"
+#include <stdbool.h>
 #endif
 
 

@@ -1,6 +1,6 @@
 /**
  * \file ifx_se_psacrypto_values.h
- * \version 1.1.0
+ * \version 1.2.0
  *
  * \brief PSA cryptography module: macros to build and analyze integer values.
  *
@@ -16,7 +16,7 @@
  *
  *******************************************************************************
  * \copyright
- * Copyright 2022-2024, Cypress Semiconductor Corporation (an Infineon company).
+ * Copyright 2022-2025, Cypress Semiconductor Corporation (an Infineon company).
  * All rights reserved.
  * You may use this file only in accordance with the license, terms, conditions,
  * disclaimers, and limitations in the end user license agreement accompanying
@@ -51,7 +51,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Directive 4.9', 3, \
-                             'Use function-like macro as simple inline functions.')
+    'Use function-like macro as simple inline functions.')
 
 /** \addtogroup psacrypto_error
  * @{
@@ -579,7 +579,7 @@ CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Directive 4.9', 3, \
 #define IFX_SE_ECC_FAMILY_IS_WEIERSTRASS(family) ((family & 0xc0) == 0)
 
 CY_MISRA_DEVIATE_BLOCK_START('MISRA C-2012 Rule 3.1', 4, \
-                             'The character sequence "//" is a part of http URL.')
+    'The character sequence "//" is a part of http URL.')
 
 /** SEC Koblitz curves over prime fields.
  *
@@ -2468,11 +2468,8 @@ CY_MISRA_BLOCK_END('MISRA C-2012 Rule 3.1')
 static inline ifx_se_svc_key_id_t ifx_se_svc_key_id_make(
     ifx_se_key_owner_id_t owner_id, ifx_se_key_id_t key_id)
 {
-    return (ifx_se_svc_key_id_t)
-    {
-        .key_id = key_id,
-        .owner = owner_id
-    };
+    return (ifx_se_svc_key_id_t){ .key_id = key_id,
+                                  .owner = owner_id };
 }
 
 /**@}*/
@@ -2744,7 +2741,7 @@ static inline ifx_se_svc_key_id_t ifx_se_svc_key_id_make(
  *     - main built-in keys
  *       (from \ref IFX_SE_KEY_ID_BUILTIN_HUK to \ref IFX_SE_KEY_ID_BUILTIN_ATTEST_PUB)
  *     - test built-in keys
- *       (from \ref IFX_SE_KEY_ID_BUILTIN_TEST_AES128 to \ref IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF).
+ *       (from \ref IFX_SE_KEY_ID_BUILTIN_TEST_AES128 to \ref IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB).
  *
  *     Main built-in keys used during boot and in the normal operating flow.
  *
@@ -2767,7 +2764,8 @@ static inline ifx_se_svc_key_id_t ifx_se_svc_key_id_make(
  * | ^          | \ref IFX_SE_KEY_ID_BUILTIN_TEST_CMAC256     | AES-256         | CMAC                  | \ref IFX_SE_KEY_USAGE_SIGN_MESSAGE \ref IFX_SE_KEY_USAGE_VERIFY_MESSAGE \ref IFX_SE_KEY_USAGE_EXPORT                                                                   |
  * | ^          | \ref IFX_SE_KEY_ID_BUILTIN_TEST_ECC384      | ECC Public key  | ECDSA-384R1 (SHA_256) | \ref IFX_SE_KEY_USAGE_VERIFY_HASH \ref IFX_SE_KEY_USAGE_VERIFY_MESSAGE \ref IFX_SE_KEY_USAGE_EXPORT                                                                    |
  * | ^          | \ref IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF     | AES-256         | CMAC-KDF              | \ref IFX_SE_KEY_USAGE_DERIVE                                                                                                                                           |
-
+ * | ^          | \ref IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB     | ECC Public key  | ECDSA-256R1 (SHA_256) | \ref IFX_SE_KEY_USAGE_VERIFY_HASH \ref IFX_SE_KEY_USAGE_VERIFY_MESSAGE \ref IFX_SE_KEY_USAGE_EXPORT                                                                    |
+ *
  * \note * \ref IFX_SE_KEY_ID_BUILTIN_DEVICE used only in provisioning stage to
  *       generate device certificates and not available for user SIGN operations.
  *
@@ -2860,6 +2858,22 @@ static inline ifx_se_svc_key_id_t ifx_se_svc_key_id_make(
  * @endverbatim
  */
 #define IFX_SE_KEY_ID_BUILTIN_TEST_CMACKDF  (IFX_SE_KEY_ID_BUILTIN_MIN + 37u)
+/** Built-in public ECC (P-256) key to use in verify.
+ * @verbatim
+ * 
+ * csrc.nist.gov/CSRC/media/Projects/Cryptographic-Algorithm-Validation-Program/documents/dss/186-4ecdsatestvectors.zip
+ *
+ * SigVer.rsp [P-256, SHA-256]
+ *     Msg = 5905238877c77421f73e43ee3da6f2d9e2ccad5fc942dcec0cbd25482935faaf416983fe165b1a045ee2bcd2e6dca3bdf46c4310a7461f9a37960ca672d3feb5473e253605fb1ddfd28065b53cb5858a8ad28175bf9bd386a5e471ea7a65c17cc934a9d791e91491eb3754d03799790fe2d308d16146d5c9b0d0debd97d79ce8
+ *     d = 519b423d715f8b581f4fa8ee59f4771a5b44c8130b4e3eacca54a56dda72b464
+ *     Qx = 1ccbe91c075fc7f4f033bfa248db8fccd3565de94bbfb12f3c59ff46c271bf83
+ *     Qy = ce4014c68811f9a21a1fdb2c0e6113e06db7ca93b7404e78dc7ccd5ca89a4ca9
+ *     k = 94a1bbb14b906a61a280f245f9e93c7f3b4a6247824f5d33b9670787642a68de
+ *     R = f3ac8061b514795b8843e3d6629527ed2afd6b1f6a555a7acabb5e6f79c8c2ac
+ *     S = 8bf77819ca05a6b2786c76262bf7371cef97b218e96f175a3ccdda2acc058903
+ * @endverbatim
+ */
+#define IFX_SE_KEY_ID_BUILTIN_TEST_ECC_PUB  (IFX_SE_KEY_ID_BUILTIN_MIN + 38u)
 
 /**@}*/
 

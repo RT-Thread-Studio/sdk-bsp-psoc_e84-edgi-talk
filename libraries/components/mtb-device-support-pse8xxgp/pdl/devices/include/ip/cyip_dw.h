@@ -39,56 +39,54 @@
 /**
   * \brief DW channel structure (DW_CH_STRUCT)
   */
-typedef struct
-{
-    __IOM uint32_t CH_CTL;                        /*!< 0x00000000 Channel control */
-    __IM uint32_t CH_STATUS;                     /*!< 0x00000004 Channel status */
-    __IOM uint32_t CH_IDX;                        /*!< 0x00000008 Channel current indices */
-    __IOM uint32_t CH_CURR_PTR;                   /*!< 0x0000000C Channel current descriptor pointer */
-    __IOM uint32_t INTR;                          /*!< 0x00000010 Interrupt */
-    __IOM uint32_t INTR_SET;                      /*!< 0x00000014 Interrupt set */
-    __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Interrupt mask */
-    __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Interrupt masked */
-    __IOM uint32_t SRAM_DATA0;                    /*!< 0x00000020 SRAM data 0 */
-    __IOM uint32_t SRAM_DATA1;                    /*!< 0x00000024 SRAM data 1 */
-    __IOM uint32_t TR_CMD;                        /*!< 0x00000028 Channel software trigger */
-    __IM uint32_t RESERVED[5];
+typedef struct {
+  __IOM uint32_t CH_CTL;                        /*!< 0x00000000 Channel control */
+   __IM uint32_t CH_STATUS;                     /*!< 0x00000004 Channel status */
+  __IOM uint32_t CH_IDX;                        /*!< 0x00000008 Channel current indices */
+  __IOM uint32_t CH_CURR_PTR;                   /*!< 0x0000000C Channel current descriptor pointer */
+  __IOM uint32_t INTR;                          /*!< 0x00000010 Interrupt */
+  __IOM uint32_t INTR_SET;                      /*!< 0x00000014 Interrupt set */
+  __IOM uint32_t INTR_MASK;                     /*!< 0x00000018 Interrupt mask */
+   __IM uint32_t INTR_MASKED;                   /*!< 0x0000001C Interrupt masked */
+  __IOM uint32_t SRAM_DATA0;                    /*!< 0x00000020 SRAM data 0 */
+  __IOM uint32_t SRAM_DATA1;                    /*!< 0x00000024 SRAM data 1 */
+  __IOM uint32_t TR_CMD;                        /*!< 0x00000028 Channel software trigger */
+   __IM uint32_t RESERVED[5];
 } DW_CH_STRUCT_Type;                            /*!< Size = 64 (0x40) */
 
 /**
   * \brief DW-0/1 (DW)
   */
-typedef struct
-{
-    __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
-    __IM uint32_t STATUS;                        /*!< 0x00000004 Status */
-    __IM uint32_t RESERVED[6];
-    __IM uint32_t ACT_DESCR_CTL;                 /*!< 0x00000020 Active descriptor control */
-    __IM uint32_t ACT_DESCR_SRC;                 /*!< 0x00000024 Active descriptor source */
-    __IM uint32_t ACT_DESCR_DST;                 /*!< 0x00000028 Active descriptor destination */
-    __IM uint32_t RESERVED1;
-    __IM uint32_t ACT_DESCR_X_CTL;               /*!< 0x00000030 Active descriptor X loop control */
-    __IM uint32_t ACT_DESCR_Y_CTL;               /*!< 0x00000034 Active descriptor Y loop control */
-    __IM uint32_t ACT_DESCR_NEXT_PTR;            /*!< 0x00000038 Active descriptor next pointer */
-    __IM uint32_t RESERVED2;
-    __IM uint32_t ACT_SRC;                       /*!< 0x00000040 Active source */
-    __IM uint32_t ACT_DST;                       /*!< 0x00000044 Active destination */
-    __IM uint32_t RESERVED3[14];
-    __IOM uint32_t ECC_CTL;                       /*!< 0x00000080 ECC control */
-    __IM uint32_t RESERVED4[31];
-    __IOM uint32_t CRC_CTL;                       /*!< 0x00000100 CRC control */
-    __IM uint32_t RESERVED5[3];
-    __IOM uint32_t CRC_DATA_CTL;                  /*!< 0x00000110 CRC data control */
-    __IM uint32_t RESERVED6[3];
-    __IOM uint32_t CRC_POL_CTL;                   /*!< 0x00000120 CRC polynomial control */
-    __IM uint32_t RESERVED7[3];
-    __IOM uint32_t CRC_LFSR_CTL;                  /*!< 0x00000130 CRC LFSR control */
-    __IM uint32_t RESERVED8[3];
-    __IOM uint32_t CRC_REM_CTL;                   /*!< 0x00000140 CRC remainder control */
-    __IM uint32_t RESERVED9;
-    __IM uint32_t CRC_REM_RESULT;                /*!< 0x00000148 CRC remainder result */
-    __IM uint32_t RESERVED10[8109];
-    DW_CH_STRUCT_Type CH_STRUCT[512];       /*!< 0x00008000 DW channel structure */
+typedef struct {
+  __IOM uint32_t CTL;                           /*!< 0x00000000 Control */
+   __IM uint32_t STATUS;                        /*!< 0x00000004 Status */
+   __IM uint32_t RESERVED[6];
+   __IM uint32_t ACT_DESCR_CTL;                 /*!< 0x00000020 Active descriptor control */
+   __IM uint32_t ACT_DESCR_SRC;                 /*!< 0x00000024 Active descriptor source */
+   __IM uint32_t ACT_DESCR_DST;                 /*!< 0x00000028 Active descriptor destination */
+   __IM uint32_t RESERVED1;
+   __IM uint32_t ACT_DESCR_X_CTL;               /*!< 0x00000030 Active descriptor X loop control */
+   __IM uint32_t ACT_DESCR_Y_CTL;               /*!< 0x00000034 Active descriptor Y loop control */
+   __IM uint32_t ACT_DESCR_NEXT_PTR;            /*!< 0x00000038 Active descriptor next pointer */
+   __IM uint32_t RESERVED2;
+   __IM uint32_t ACT_SRC;                       /*!< 0x00000040 Active source */
+   __IM uint32_t ACT_DST;                       /*!< 0x00000044 Active destination */
+   __IM uint32_t RESERVED3[14];
+  __IOM uint32_t ECC_CTL;                       /*!< 0x00000080 ECC control */
+   __IM uint32_t RESERVED4[31];
+  __IOM uint32_t CRC_CTL;                       /*!< 0x00000100 CRC control */
+   __IM uint32_t RESERVED5[3];
+  __IOM uint32_t CRC_DATA_CTL;                  /*!< 0x00000110 CRC data control */
+   __IM uint32_t RESERVED6[3];
+  __IOM uint32_t CRC_POL_CTL;                   /*!< 0x00000120 CRC polynomial control */
+   __IM uint32_t RESERVED7[3];
+  __IOM uint32_t CRC_LFSR_CTL;                  /*!< 0x00000130 CRC LFSR control */
+   __IM uint32_t RESERVED8[3];
+  __IOM uint32_t CRC_REM_CTL;                   /*!< 0x00000140 CRC remainder control */
+   __IM uint32_t RESERVED9;
+   __IM uint32_t CRC_REM_RESULT;                /*!< 0x00000148 CRC remainder result */
+   __IM uint32_t RESERVED10[8109];
+        DW_CH_STRUCT_Type CH_STRUCT[512];       /*!< 0x00008000 DW channel structure */
 } DW_Type;                                      /*!< Size = 65536 (0x10000) */
 
 
