@@ -1,13 +1,8 @@
----
-yaml_version: 3
-pkg_version: 1.0.0
-pkg_vendor: RealThread
-pkg_type: Board_Support_Packages
 board:
   name: Edgi-Talk
   version: 1.0.0
   vendor: RT-Thread
-  description_zh: Edgi-Talk 开发板基于 PSoC™ E84 MCU，为工程师提供了一个灵活、全面的开发平台。板上集成了丰富的外设接口和示例模块，助力开发者快速完成多传感器、显示和通信应用的开发。
+  description_zh: Edgi-Talk 开发板基于 PSoC™ E84 MCU,为工程师提供了一个灵活、全面的开发平台。板上集成了丰富的外设接口和示例模块，助力开发者快速完成多传感器、显示和通信应用的开发。
   description_en: The Edgi-Talk board is based on the PSoC™ E84 MCU and provides a flexible and comprehensive development platform.It integrates a variety of peripheral interfaces and sample modules, helping developers quickly implement applications involving multi-sensor integration, display, and communication.
   small_image: docs/figures/board_small.jpg
   large_image: docs/figures/board_large.jpg
@@ -33,18 +28,18 @@ chip:
   target_freq: '400000000'
   uart_name: UART2
 docs:
-- file: "docs/board/PSOC Edge E84/PSoc_Edge_Product_Brief.pdf"
-  title: "PSOC Edge E84 MCU ProductBrief"
-  category: ProductBrief
-- file: docs/board/PSOC Edge E84/PSoc_Edge_Product_Data_Sheet.pdf
-  title: PSOC Edge E84 MCU Datasheet
-  category: Datasheet
-- file: docs/board/PSOC Edge E84/PSoc_Edge_Core_Schematic.pdf
-  title: PSOC Edge E84 核心板原理图
-  category: Core
-- file: docs/board/PSOC Edge E84/PSoc_Edge_Basic_Schematic.pdf
-  title: PSOC Edge E84 底板原理图
-  category: other
+- category: ProductBrief
+  file: docs/board/PSOC-Edge-E84/PSoc_Edge_Product_Brief.pdf
+  title: PSOC-Edge-E84-MCU-Product-Brief
+- category: Datasheet
+  file: docs/board/PSOC-Edge-E84/PSoc_Edge_Product_Data_Sheet.pdf
+  title: PSOC-Edge-E84-MCU-Datasheet
+- category: Core_Schematic
+  file: docs/board/PSOC-Edge-E84/PSoc_Edge_Core_Schematic.pdf
+  title: PSOC-Edge-E84-Core-Schematic
+- category: Base_Schematic
+  file: docs/board/PSOC-Edge-E84/PSoc_Edge_Basic_Schematic.pdf
+  title: PSOC-Edge-E84-Basic-Schematic
 features:
 - Arm® Cortex® M55 And Arm® Cortex® M33 256KB ITCM 256KB DTCM 512KB RRAM 1MB SRAM 5MB SocMEM 
 - On-board KitProg3(CY8C5868LTI)
@@ -69,10 +64,12 @@ features_zh:
 - 128Mb HyperRAM
 - 三个用户 LED：D1（蓝）、D2（红）、D3（绿）
 - 两个按键（用户按键和复位按键）
-
+pkg_version: 1.0.0
+pkg_vendor: RealThread
+pkg_type: Board_Support_Packages
 template_projects:
 - project_name: Edgi_Talk_M33_Template
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: M33 模板工程，可作为二次开发的基础工程
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template
@@ -110,7 +107,7 @@ template_projects:
 
 example_projects:
 - project_name: Edgi_Talk_M33_S_Template
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: M33 安全模式模板工程
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template
@@ -178,7 +175,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_Blink_LED
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: M33 LED闪烁示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED
@@ -215,7 +212,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M55_Blink_LED
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: M55 LED闪烁示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED
@@ -252,7 +249,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_SDCARD
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: SD卡示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD
@@ -289,7 +286,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_RTC
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: RTC 实时时钟示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_RTC/Edgi_Talk_M33_RTC
@@ -326,7 +323,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_Key_Irq
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: 按键中断控制LED示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq
@@ -363,7 +360,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_ADC
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: ADC 采样示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_ADC/Edgi_Talk_M33_ADC
@@ -400,7 +397,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_S_HyperRam
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: M33 安全模式 HyperRAM 示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam
@@ -469,7 +466,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_HyperRam
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: HyperRAM 示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam
@@ -506,7 +503,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_AHT20
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: AHT20 温湿度传感器示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20
@@ -543,7 +540,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_Audio
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: ES8388 音频示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_Audio/Edgi_Talk_M33_Audio
@@ -580,7 +577,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_WavPlayer
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: WAV 音频播放器示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer
@@ -617,7 +614,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M55_MIPI_LCD
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: MIPI LCD 屏幕示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD
@@ -654,7 +651,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M55_CoreMark
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: CoreMark 性能测试示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark
@@ -691,7 +688,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M55_WIFI
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: WiFi6 (CYW55512) 示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI
@@ -728,7 +725,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M55_XiaoZhi
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: 小智 AI 语音助手示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi
@@ -765,7 +762,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_LSM6DS3
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: LSM6DS3 六轴传感器示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3
@@ -802,7 +799,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M33_CDC_Echo
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: USB CDC 回环测试示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_CDC_Echo/Edgi_Talk_M33_CDC_Echo
@@ -839,7 +836,7 @@ example_projects:
     files_and_folders: []
     
 - project_name: Edgi_Talk_M55_LVGL
-  project_description: creat this peoject if user choose rt-thread project
+  project_description: LVGL 图形界面示例
   project_type: rt-thread|@full|@5.1.0
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL
@@ -874,3 +871,4 @@ example_projects:
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
+yaml_version: 3
