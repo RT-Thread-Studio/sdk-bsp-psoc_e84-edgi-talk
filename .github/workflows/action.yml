@@ -62,6 +62,7 @@ jobs:
          - {RTT_BSP: "Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq"}
          - {RTT_BSP: "Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3"}
          - {RTT_BSP: "Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL"}
+         - {RTT_BSP: "Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template"}
          - {RTT_BSP: "Edgi-Talk_M33_Template/Edgi_Talk_M33_Template"}
          - {RTT_BSP: "Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD"}
          - {RTT_BSP: "Edgi-Talk_RTC/Edgi_Talk_M33_RTC"}

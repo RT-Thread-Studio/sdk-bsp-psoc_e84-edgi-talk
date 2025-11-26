@@ -48,7 +48,7 @@ features:
 - SDIO WIFI6:CYW55512
 - HDC UART BuleTooth:CYW55512
 - Audio ES8388
-- MIPI connector
+- 800x480 MIPI-DSI touch screen
 - 128-Mb HyperRAM
 - "Three user LEDs: D1 (blue), D2 (red), D3 (green)"
 - Two push-buttons (user and reset)
@@ -60,7 +60,7 @@ features_zh:
 - SDIO WIFI6：CYW55512
 - HDC UART 蓝牙：CYW55512
 - 音频芯片：ES8388
-- MIPI 接口
+- 800x480 MIPI-DSI 触摸屏幕
 - 128Mb HyperRAM
 - 三个用户 LED：D1（蓝）、D2（红）、D3（绿）
 - 两个按键（用户按键和复位按键）
@@ -70,7 +70,7 @@ pkg_type: Board_Support_Packages
 template_projects:
 - project_name: Edgi_Talk_M33_Template
   project_description: M33 模板工程，可作为二次开发的基础工程
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template
     target_path_offset: ''
