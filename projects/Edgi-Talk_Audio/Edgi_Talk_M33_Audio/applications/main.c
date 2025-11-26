@@ -41,7 +41,7 @@ int main(void)
     struct rt_audio_caps sound_dev_arg;
     sound_dev_arg.main_type = AUDIO_TYPE_MIXER;
     sound_dev_arg.sub_type = AUDIO_MIXER_VOLUME;
-    sound_dev_arg.udata.value = 100;
+    sound_dev_arg.udata.value = 65;
     rt_device_control(sound_dev, AUDIO_CTL_CONFIGURE, &sound_dev_arg);
 
     rt_device_open(sound_dev, RT_DEVICE_OFLAG_WRONLY);
