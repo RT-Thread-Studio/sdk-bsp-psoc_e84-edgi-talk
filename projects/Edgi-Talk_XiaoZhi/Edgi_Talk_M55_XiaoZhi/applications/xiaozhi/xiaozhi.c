@@ -116,7 +116,7 @@ void xz_button_thread_entry(void *param)
             LOG_I("Wake up...\n");
             if (evt & BUTTON_EVENT_PRESSED)
             {
-                xiaozhi_ui_chat_status("     连接中");
+                xiaozhi_ui_chat_status("   Connecting");
                 reconnect_websocket();
                 WEBSOCKET_RECONNECT_FLAG = 1;
             }
@@ -135,7 +135,7 @@ void xz_button_thread_entry(void *param)
                     ws_send_listen_start(&g_xz_ws.clnt, g_xz_ws.session_id,
                                          kListeningModeAutoStop);
                     LOG_I("Listening...\n");
-                    xiaozhi_ui_chat_status("     聆听中");
+                    xiaozhi_ui_chat_status("   Listening");
                     xz_mic(1);
                     g_state = kDeviceStateListening;
                 }
@@ -264,8 +264,8 @@ err_t my_wsapp_fn(int code, char *buf, size_t len)
         }
         // extern void poweroff(void);
         // poweroff();
-        xiaozhi_ui_chat_status("     休眠中");
-        xiaozhi_ui_chat_output("等待唤醒");
+        xiaozhi_ui_chat_status("   Sleeping");
+        xiaozhi_ui_chat_output("Waiting for wake-up");
         xiaozhi_ui_update_emoji("sleepy");
         LOG_I("WebSocket closed\n");
         g_xz_ws.is_connected = 0;
@@ -431,15 +431,15 @@ void Message_handle(const uint8_t *data, uint16_t len)
         xz_ws_audio_init();
         send_iot_descriptors();
         send_iot_states();
-        xiaozhi_ui_chat_status("     待命中");
+        xiaozhi_ui_chat_status("   On standby");
         xiaozhi_ui_chat_output(" ");
         xiaozhi_ui_update_emoji("neutral");
         LOG_I("Waiting...\n");
     }
     else if (strcmp(type, "goodbye") == 0)
     {
-        xiaozhi_ui_chat_status("     休眠中");
-        xiaozhi_ui_chat_output("等待唤醒");
+        xiaozhi_ui_chat_status("   Sleeping");
+        xiaozhi_ui_chat_output("Waiting for wake-up");
         xiaozhi_ui_update_emoji("sleepy");
         g_state = kDeviceStateUnknown;
         LOG_I("session ended\n");
@@ -452,7 +452,7 @@ void Message_handle(const uint8_t *data, uint16_t len)
             if (g_state == kDeviceStateIdle || g_state == kDeviceStateListening)
             {
                 g_state = kDeviceStateSpeaking;
-                xiaozhi_ui_chat_status("     说话中");
+                xiaozhi_ui_chat_status("   Speaking");
                 xz_speaker(1);
             }
         }

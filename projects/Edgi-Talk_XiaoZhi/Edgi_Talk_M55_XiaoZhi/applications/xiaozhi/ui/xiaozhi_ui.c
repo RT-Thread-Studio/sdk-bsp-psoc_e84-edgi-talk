@@ -27,6 +27,7 @@ extern const int xiaozhi_font_size;
 static lv_obj_t *global_label1;
 static lv_obj_t *global_label2;
 static lv_obj_t *global_label3;
+static lv_obj_t *global_label4;
 static lv_style_t style;
 static lv_style_t style24;
 #define EMOJI_NUM   18
@@ -89,6 +90,13 @@ rt_err_t xiaozhi_ui_obj_init(void)
     lv_obj_add_style(global_label3, &style, 0);
     lv_obj_set_style_text_color(global_label3, lv_color_hex(0xFF0000), 0);  // 红色
     lv_obj_set_style_transform_angle(global_label3, 900, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    global_label4 = lv_label_create(lv_screen_active());
+    lv_obj_set_x(global_label4, 40);
+    lv_obj_set_y(global_label4, 20);
+    lv_obj_add_style(global_label4, &style24, 0);
+//    lv_obj_set_style_text_color(global_label4, lv_color_hex(0xFF0000), 0);  // 红色
+    lv_obj_set_style_transform_angle(global_label4, 900, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     for (int i = 0; i < EMOJI_NUM; i++)
     {
@@ -182,9 +190,10 @@ void xiaozhi_ui_task(void *args)
 
     if (xiaozhi_ui_obj_init() != RT_EOK) return;
 
-    lv_label_set_text(global_label1, "    连接中...");
-    lv_label_set_text(global_label2, " ");
+    lv_label_set_text(global_label1, "  Connecting");
+    lv_label_set_text(global_label2, "Use a Phone or Computer to connect to the Hotspot");
     lv_label_set_text(global_label3, " ");
+    lv_label_set_text(global_label4, "SSID: RT-Thread-AP Password: 123456789 IP:192.168.169.1");
     lv_obj_clear_flag(emoji_objs[0], LV_OBJ_FLAG_HIDDEN);
     lv_task_handler();
     while (1)
@@ -197,7 +206,7 @@ void xiaozhi_ui_task(void *args)
                 lv_label_set_text(global_label1, msg.data);
                 break;
             case UI_CMD_SET_OUTPUT:
-                lv_label_set_text(global_label2, msg.data);
+                lv_label_set_text(global_label4, msg.data);
                 break;
             case UI_CMD_SET_ADC:
                 lv_label_set_text(global_label3, msg.data);
@@ -235,4 +244,8 @@ void init_ui(void)
     rt_mq_init(&ui_mq, "ui_mq", mq_pool, sizeof(ui_msg_t), sizeof(mq_pool), RT_IPC_FLAG_FIFO);
     rt_thread_t tid = rt_thread_create("xz_ui", xiaozhi_ui_task, NULL, 1024 * 10, 25, 10);
     if (tid) rt_thread_startup(tid);
+}
+
+void clean_info(void){
+    lv_label_set_text(global_label2, " ");
 }

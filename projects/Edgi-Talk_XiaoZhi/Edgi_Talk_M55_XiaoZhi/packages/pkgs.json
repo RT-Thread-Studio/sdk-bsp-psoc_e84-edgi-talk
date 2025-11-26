@@ -5,6 +5,11 @@
   "name": "WEBCLIENT"
  }, 
  {
+  "path": "/packages/iot/webnet", 
+  "ver": "v2.0.3", 
+  "name": "WEBNET"
+ }, 
+ {
   "path": "/packages/iot/netutils", 
   "ver": "latest", 
   "name": "NETUTILS"
@@ -20,6 +25,11 @@
   "name": "CJSON"
  }, 
  {
+  "path": "/packages/multimedia/wavplayer", 
+  "ver": "latest", 
+  "name": "WAVPLAYER"
+ }, 
+ {
   "path": "/packages/tools/cpu_usage", 
   "ver": "latest", 
   "name": "CPU_USAGE"
@@ -28,5 +38,10 @@
   "path": "/packages/system/FreeRTOS_Wrapper", 
   "ver": "latest", 
   "name": "FREERTOS_WRAPPER"
+ }, 
+ {
+  "path": "/packages/misc/optparse", 
+  "ver": "latest", 
+  "name": "OPTPARSE"
  }
 ]
