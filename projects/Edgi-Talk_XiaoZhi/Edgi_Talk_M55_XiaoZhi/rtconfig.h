@@ -64,6 +64,7 @@
 #define RT_USING_USER_MAIN
 #define RT_MAIN_THREAD_STACK_SIZE 2048
 #define RT_MAIN_THREAD_PRIORITY 10
+#define RT_USING_LEGACY
 #define RT_USING_MSH
 #define RT_USING_FINSH
 #define FINSH_USING_MSH
@@ -89,6 +90,7 @@
 #define DFS_FILESYSTEMS_MAX 4
 #define DFS_FILESYSTEM_TYPES_MAX 4
 #define RT_USING_DFS_DEVFS
+#define RT_USING_DFS_ROMFS
 /* end of DFS: device virtual file system */
 
 /* Device Drivers */
@@ -236,6 +238,9 @@
 #define LWIP_SO_LINGER 0
 #define LWIP_NETIF_LOOPBACK 0
 #define RT_LWIP_USING_PING
+#define LWIP_USING_DHCPD
+#define DHCPD_SERVER_IP "192.168.169.1"
+#define DHCPD_USING_ROUTER
 /* end of Network */
 
 /* Utilities */
@@ -255,6 +260,19 @@
 #define WEBCLIENT_USING_MBED_TLS
 #define PKG_USING_WEBCLIENT_V220
 #define PKG_WEBCLIENT_VER_NUM 0x20200
+#define PKG_USING_WEBNET
+#define WEBNET_PORT 80
+#define WEBNET_CONN_MAX 16
+#define WEBNET_ROOT "/webnet"
+
+/* Select supported modules */
+
+#define WEBNET_USING_CGI
+#define WEBNET_USING_INDEX
+#define WEBNET_CACHE_LEVEL 0
+/* end of Select supported modules */
+#define PKG_USING_WEBNET_V203
+#define PKG_WEBNET_VER_NUM 0x20003
 #define CY_WIFI_WHD_THREAD_PRIORITY 6
 #define CY_WIFI_WHD_THREAD_STACK_SIZE 5120
 #define CYBSP_REG_ON_PIN 94
@@ -332,6 +350,10 @@
 /* u8g2: a monochrome graphic library */
 
 /* end of u8g2: a monochrome graphic library */
+#define PKG_USING_WAVPLAYER
+#define PKG_WP_USING_PLAY
+#define PKG_WP_PLAY_DEVICE "sound0"
+#define PKG_USING_WAVPLAYER_LATEST_VERSION
 /* end of multimedia packages */
 
 /* tools packages */
@@ -436,6 +458,8 @@
 /* entertainment: terminal games and other interesting software packages */
 
 /* end of entertainment: terminal games and other interesting software packages */
+#define PKG_USING_OPTPARSE
+#define PKG_USING_OPTPARSE_LATEST_VERSION
 /* end of miscellaneous packages */
 
 /* Arduino libraries */
@@ -495,6 +519,7 @@
 #define BSP_USING_AUDIO
 #define BSP_USING_AUDIO_PLAY
 #define BSP_USING_AUDIO_RECORD
+#define ENABLE_STEREO_INPUT_FEED
 /* end of Onboard Peripheral Drivers */
 
 /* On-chip Peripheral Drivers */
@@ -504,6 +529,9 @@
 #define BSP_USING_ADC1
 #define BSP_USING_I2C
 #define BSP_USING_HW_I2C0
+#define BSP_USING_SOFT_I2C1
+#define BSP_SOFT_I2C1_SCL_PIN 105
+#define BSP_SOFT_I2C1_SDA_PIN 106
 #define BSP_USING_UART
 #define BSP_USING_UART2
 #define BSP_USING_RTC

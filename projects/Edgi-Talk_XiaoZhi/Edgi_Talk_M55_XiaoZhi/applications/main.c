@@ -1,23 +1,6 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 #include <board.h>
-#include <wlan_mgnt.h>
-#include "xiaozhi.h"
-
-static void wifi_ready_handler(int event, struct rt_wlan_buff *buff, void *parameter)
-{
-    ws_xiaozhi_init();
-}
-
-static void wifi_disconnected_handler(int event, struct rt_wlan_buff *buff, void *parameter)
-{
-    do
-    {
-        rt_thread_mdelay(500);
-        rt_kprintf("WiFi connecting...\n");
-    }
-    while (rt_wlan_connect("TEST", "88888888"));
-}
 
 #define LED_PIN_G         GET_PIN(16, 6)
 int main(void)
@@ -25,18 +8,12 @@ int main(void)
     rt_kprintf("It's cortex-m55\r\n");
     rt_pin_mode(LED_PIN_G, PIN_MODE_OUTPUT);
 
+    rt_thread_mdelay(2000);
+    extern void wifi_init(void);
+    wifi_init();
     extern void init_ui(void);
     init_ui();
 
-    do
-    {
-        rt_thread_mdelay(500);
-        rt_kprintf("WiFi connecting...\n");
-    }
-    while (rt_wlan_connect("TEST", "88888888"));
-
-    rt_wlan_register_event_handler(RT_WLAN_EVT_READY, wifi_ready_handler, NULL);
-    rt_wlan_register_event_handler(RT_WLAN_EVT_STA_DISCONNECTED, wifi_disconnected_handler, NULL);
     while (1)
     {
         rt_pin_write(LED_PIN_G, PIN_LOW);

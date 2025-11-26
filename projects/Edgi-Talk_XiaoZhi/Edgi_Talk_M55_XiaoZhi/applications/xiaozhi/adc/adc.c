@@ -142,4 +142,4 @@ static int adc_check_entry_init(void)
     return RT_EOK;
 }
 
-INIT_APP_EXPORT(adc_check_entry_init);
+//INIT_APP_EXPORT(adc_check_entry_init);

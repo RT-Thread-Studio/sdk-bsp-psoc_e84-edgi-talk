@@ -6,38 +6,29 @@
  * Change Logs:
  * Date           Author       Notes
  * 2021-01-13     RiceChen     the first version
+ * 2025-09-08     Grok         Modified for thread-based touch reading
  */
 
 #define DBG_TAG "ST7102"
 #define DBG_LVL DBG_INFO
 #include <rtdbg.h>
+#include <rtthread.h>
+#include <rtdevice.h>
 #include "drv_touch.h"
 
 static struct rt_i2c_client ST7102_client;
-rt_uint8_t cmd[2];
-rt_uint8_t read_index;
-int8_t read_id = 0;
-rt_uint8_t point_status = 0;
-rt_uint8_t touch_num = 0;
-rt_uint8_t write_buf[3];
-int16_t input_x = 0;
-int16_t input_y = 0;
-int16_t Last_input_x = 0;
-int16_t Last_input_y = 0;
-static uint16_t count = 0;
-static uint16_t Last_Touch_Intn = 0;
-static uint16_t Touch_Intn = 0;
-rt_uint8_t read_buf[8 * ST7102_MAX_TOUCH] = {0};
-rt_uint8_t Last_read_buf[8 * ST7102_MAX_TOUCH] = {0};
+#define TOUCH_SLAVE_ADDRESS 0x55
+#define POLLING_INTERVAL_MS 10 /* 10ms polling interval (~100Hz) */
 
 static rt_err_t ST7102_write_reg(struct rt_i2c_client *dev, rt_uint8_t *data, rt_uint8_t len)
 {
-    struct rt_i2c_msg msgs[1];
+    struct rt_i2c_msg msgs[2];
+    rt_uint8_t buf[2];
 
     msgs[0].addr = dev->client_addr;
     msgs[0].flags = RT_I2C_WR;
     msgs[0].buf = data;
-    msgs[0].len = len;
+    msgs[0].len = len + 1;
 
     if (rt_i2c_transfer(dev->bus, msgs, 1) == 1)
     {
@@ -52,6 +43,7 @@ static rt_err_t ST7102_write_reg(struct rt_i2c_client *dev, rt_uint8_t *data, rt
 static rt_err_t ST7102_read_regs(struct rt_i2c_client *dev, rt_uint8_t *reg, rt_uint8_t *data, rt_uint8_t len)
 {
     struct rt_i2c_msg msgs[2];
+    rt_uint8_t buf[2];
 
     msgs[0].addr = dev->client_addr;
     msgs[0].flags = RT_I2C_WR;
@@ -73,71 +65,116 @@ static rt_err_t ST7102_read_regs(struct rt_i2c_client *dev, rt_uint8_t *reg, rt_
     }
 }
 
-static rt_err_t ST7102_get_product_id(struct rt_i2c_client *dev, rt_uint8_t *data, rt_uint8_t len)
-{
-    rt_uint8_t reg[2];
-
-    reg[0] = (rt_uint8_t)(ST7102_Producer_ID >> 8);
-    reg[1] = (rt_uint8_t)(ST7102_Producer_ID & 0xff);
-
-    if (ST7102_read_regs(dev, reg, data, len) != RT_EOK)
-    {
-        LOG_E("read id failed");
-        return -RT_ERROR;
-    }
-    return RT_EOK;
-}
-
 static rt_err_t ST7102_get_info(struct rt_i2c_client *dev, struct rt_touch_info *info)
 {
     rt_uint8_t Reg_High[2];
     rt_uint8_t Reg_Low[2];
 
-    cmd[0] = (rt_uint8_t)((ST7102_MAX_X_Coord_High >> 8) & 0xFF);
-    cmd[1] = (rt_uint8_t)(ST7102_MAX_X_Coord_High & 0xFF);
-    ST7102_read_regs(dev, cmd, Reg_High, 1);
-
-    cmd[0] = (rt_uint8_t)((ST7102_MAX_X_Coord_Low >> 8) & 0xFF);
-    cmd[1] = (rt_uint8_t)(ST7102_MAX_X_Coord_Low & 0xFF);
-    ST7102_read_regs(dev, cmd, Reg_Low, 1);
+    ST7102_read_regs(dev, ST7102_MAX_X_Coord_High, Reg_High, 1);
+    ST7102_read_regs(dev, ST7102_MAX_X_Coord_Low, Reg_Low, 1);
     info->range_x = (Reg_High[0] & 0x3F) << 8 | Reg_Low[0];
 
-    cmd[0] = (rt_uint8_t)((ST7102_MAX_Y_Coord_High >> 8) & 0xFF);
-    cmd[1] = (rt_uint8_t)(ST7102_MAX_Y_Coord_High & 0xFF);
-    ST7102_read_regs(dev, cmd, Reg_High, 1);
-
-    cmd[0] = (rt_uint8_t)((ST7102_MAX_Y_Coord_Low >> 8) & 0xFF);
-    cmd[1] = (rt_uint8_t)(ST7102_MAX_Y_Coord_Low & 0xFF);
-    ST7102_read_regs(dev, cmd, Reg_Low, 1);
+    ST7102_read_regs(dev, ST7102_MAX_Y_Coord_High, Reg_High, 1);
+    ST7102_read_regs(dev, ST7102_MAX_Y_Coord_Low, Reg_Low, 1);
     info->range_y = (Reg_High[0] & 0x3F) << 8 | Reg_Low[0];
 
-    cmd[0] = (rt_uint8_t)((ST7102_MAX_Touches >> 8) & 0xFF);
-    cmd[1] = (rt_uint8_t)(ST7102_MAX_Touches & 0xFF);
-    ST7102_read_regs(dev, cmd, Reg_Low, 1);
+    ST7102_read_regs(dev, ST7102_MAX_Touches, Reg_Low, 1);
     info->point_num = Reg_Low[0];
 
     return RT_EOK;
 }
 
+static rt_uint8_t buf[3] = {-1};
+static rt_err_t ST7102_soft_reset(struct rt_i2c_client *dev)
+{
+    buf[0] = (rt_uint8_t)(ST7102_Device_Control >> 8);
+    buf[1] = (rt_uint8_t)(ST7102_Device_Control & 0xFF);
+    buf[2] = 0x01; /* Reset CMD */
 
+    if (ST7102_write_reg(dev, buf, 3) != RT_EOK)
+    {
+        LOG_E("soft reset failed");
+        return -RT_ERROR;
+    }
+    return RT_EOK;
+}
+
+static int16_t pre_x[ST7102_MAX_TOUCH] = {-1, -1, -1, -1, -1};
+static int16_t pre_y[ST7102_MAX_TOUCH] = {-1, -1, -1, -1, -1};
+static int16_t pre_w[ST7102_MAX_TOUCH] = {-1, -1, -1, -1, -1};
+static rt_uint8_t s_tp_dowm[ST7102_MAX_TOUCH];
+static struct rt_touch_data *read_data;
+
+static void ST7102_touch_up(void *buf, int8_t id)
+{
+    read_data = (struct rt_touch_data *)buf;
+
+    if (s_tp_dowm[id] == 1)
+    {
+        s_tp_dowm[id] = 0;
+        read_data[id].event = RT_TOUCH_EVENT_UP;
+    }
+    else
+    {
+        read_data[id].event = RT_TOUCH_EVENT_NONE;
+    }
+
+//    read_data[id].timestamp = rt_touch_get_ts();
+    read_data[id].width = pre_w[id];
+    read_data[id].x_coordinate = pre_x[id];
+    read_data[id].y_coordinate = pre_y[id];
+    read_data[id].track_id = id;
+
+    pre_x[id] = -1; /* last point is none */
+    pre_y[id] = -1;
+    pre_w[id] = -1;
+}
+
+static void ST7102_touch_down(void *buf, int8_t id, int16_t x, int16_t y, int16_t w)
+{
+    read_data = (struct rt_touch_data *)buf;
+
+    if (s_tp_dowm[id] == 1)
+    {
+        read_data[id].event = RT_TOUCH_EVENT_MOVE;
+    }
+    else
+    {
+        read_data[id].event = RT_TOUCH_EVENT_DOWN;
+        s_tp_dowm[id] = 1;
+    }
+
+//    read_data[id].timestamp = rt_touch_get_ts();
+    read_data[id].width = w;
+    read_data[id].x_coordinate = x;
+    read_data[id].y_coordinate = y;
+    read_data[id].track_id = id;
+
+    pre_x[id] = x; /* save last point */
+    pre_y[id] = y;
+    pre_w[id] = w;
+}
+
+rt_uint8_t read_buf[8 * ST7102_MAX_TOUCH] = {0};
+rt_uint8_t Last_read_buf[8 * ST7102_MAX_TOUCH] = {0};
+#define LED_RED GET_PIN(16, 7)
 static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_size_t read_num)
 {
-    /* point status register */
-    cmd[0] = (rt_uint8_t)((ST7102_READ_STATUS >> 8) & 0xFF);
-    cmd[1] = (rt_uint8_t)(ST7102_READ_STATUS & 0xFF);
+    rt_pin_write(LED_RED, PIN_HIGH);
+    rt_uint8_t touch_num = 0;
+    rt_uint8_t cmd[2];
 
-    if (ST7102_read_regs(&ST7102_client, cmd, &point_status, 1) != RT_EOK)
-    {
-        LOG_D("read point failed\n");
-        read_num = 0;
-        goto exit_;
-    }
+    int16_t input_x = 0;
+    int16_t input_y = 0;
+    int16_t Last_input_x = 0;
+    int16_t Last_input_y = 0;
 
-    if ((point_status & 0x08) == 0) /* No Touch detected */
-    {
-        read_num = 0;
-        goto exit_;
-    }
+    static uint16_t count = 0;
+    static uint16_t Last_Touch_Intn = 0;
+    static uint16_t Touch_Intn = 0;
+
+    static rt_uint8_t pre_touch = 0;
+    static int8_t pre_id[ST7102_MAX_TOUCH] = {0};
 
     cmd[0] = (rt_uint8_t)((ST7102_Read_Start_Position >> 8) & 0xFF);
     cmd[1] = (rt_uint8_t)(ST7102_Read_Start_Position & 0xFF);
@@ -148,10 +185,10 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
         read_num = 0;
         goto exit_;
     }
-    // Read all Point_Data
+
     for (count = 0; count < ST7102_MAX_TOUCH; count++)
     {
-        if (read_buf[0x09 + count * 7] > 0 && read_buf[0] == 0x08)// Touch Detected
+        if (read_buf[0x09 + count * 7] > 0 && read_buf[0] == 0x08) /* Touch Detected */
         {
             Last_input_x = (Last_read_buf[(7 * count) + 0x04] & 0x3F) << 8 | Last_read_buf[(7 * count) + 0x05];
             Last_input_y = (Last_read_buf[(7 * count) + 0x06] & 0x3F) << 8 | Last_read_buf[(7 * count) + 0x07];
@@ -161,53 +198,35 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
             input_y = (read_buf[(7 * count) + 0x06] & 0x3F) << 8 | read_buf[(7 * count) + 0x07];
             Touch_Intn = read_buf[(7 * count) + 0x09];
 
-            if (Last_input_x == input_x && Last_input_y == input_y && Last_Touch_Intn == Touch_Intn)// Touch the same Point
+            if (Last_input_x == input_x && Last_input_y == input_y && Last_Touch_Intn == Touch_Intn)
             {
-                // break;
+                /* Touch the same point, skip */
             }
             else
             {
-                rt_kprintf("\nPoint_Count = %d, X_Coodr = %d, Y_Coodr = %d\n", count, input_x, input_y);
+                rt_kprintf("X = %d, Y = %d\n",input_x, input_y);
+                ST7102_touch_down(buf, count, input_x, input_y, 0); /* Assume width=0 as not provided */
+                touch_num++;
             }
+        }
+        else
+        {
+            ST7102_touch_up(buf, count);
         }
     }
     rt_memcpy(Last_read_buf, read_buf, 8 * ST7102_MAX_TOUCH);
+//    rt_pin_write(LED_RED, PIN_LOW);
 
 exit_:
-    // Clear interrupt/status
-    // write_buf[0] = (rt_uint8_t)((ST7102_READ_STATUS >> 8) & 0xFF);
-    // write_buf[1] = (rt_uint8_t)(ST7102_READ_STATUS & 0xFF);
-    // write_buf[2] = 0x00;
-    // ST7102_write_reg(&ST7102_client, write_buf, 3);
-
-    return read_num;
-}
-
-
-//Trigger interrupt by polling
-static void touch_polling_thread(void *parameter)
-{
-    struct rt_touch_device *touch = (struct rt_touch_device *)parameter;
-
-    while (1)
-    {
-        ST7102_read_point(touch, read_buf, ST7102_MAX_TOUCH);
-        rt_thread_mdelay(5);
-    }
+    return touch_num;
 }
 
 static rt_err_t ST7102_control(struct rt_touch_device *touch, int cmd, void *arg)
 {
-    if (cmd == RT_TOUCH_CTRL_GET_ID)
-    {
-        return ST7102_get_product_id(&ST7102_client, arg, 2);
-    }
-
     if (cmd == RT_TOUCH_CTRL_GET_INFO)
     {
         return ST7102_get_info(&ST7102_client, arg);
     }
-
     return RT_EOK;
 }
 
@@ -217,9 +236,29 @@ static struct rt_touch_ops ST7102_touch_ops =
     .touch_control = ST7102_control,
 };
 
+/* Thread function for polling touch data */
+static void ST7102_touch_thread_entry(void *parameter)
+{
+    struct rt_touch_device *touch = (struct rt_touch_device *)parameter;
+    struct rt_touch_data touch_data[ST7102_MAX_TOUCH];
+
+    while (1)
+    {
+        rt_memset(touch_data, 0, sizeof(touch_data));
+        rt_size_t touch_num = ST7102_read_point(touch, touch_data, ST7102_MAX_TOUCH);
+        if (touch_num > 0)
+        {
+            /* Process touch data if needed, e.g., notify application */
+            /* For now, touch data is printed in ST7102_read_point */
+        }
+        rt_thread_mdelay(POLLING_INTERVAL_MS);
+    }
+}
+
 int rt_hw_ST7102_init(const char *name, struct rt_touch_config *cfg)
 {
     struct rt_touch_device *touch_device = RT_NULL;
+    static rt_thread_t touch_thread = RT_NULL;
 
     touch_device = (struct rt_touch_device *)rt_malloc(sizeof(struct rt_touch_device));
     if (touch_device == RT_NULL)
@@ -229,8 +268,8 @@ int rt_hw_ST7102_init(const char *name, struct rt_touch_config *cfg)
     }
     rt_memset((void *)touch_device, 0, sizeof(struct rt_touch_device));
 
-    /* hw init */
-    rt_pin_mode(*(rt_uint8_t *)cfg->user_data, PIN_MODE_OUTPUT); // Reset Pin
+    /* Hardware initialization */
+    rt_pin_mode(*(rt_uint8_t *)cfg->user_data, PIN_MODE_OUTPUT); /* Reset Pin */
     rt_pin_mode(cfg->irq_pin.pin, PIN_MODE_OUTPUT);
     rt_pin_write(cfg->irq_pin.pin, PIN_LOW);
     rt_pin_write(*(rt_uint8_t *)cfg->user_data, PIN_LOW);
@@ -242,60 +281,48 @@ int rt_hw_ST7102_init(const char *name, struct rt_touch_config *cfg)
     rt_pin_write(cfg->irq_pin.pin, PIN_HIGH);
     rt_thread_mdelay(10);
 
-    ST7102_client.client_addr = ST7102_ADDRESS;
-
+    ST7102_client.client_addr = TOUCH_SLAVE_ADDRESS;
     ST7102_client.bus = (struct rt_i2c_bus_device *)rt_device_find(cfg->dev_name);
 
     if (ST7102_client.bus == RT_NULL)
     {
         LOG_E("Can't find %s device", cfg->dev_name);
+        rt_free(touch_device);
         return -RT_ERROR;
     }
 
     if (rt_device_open((rt_device_t)ST7102_client.bus, RT_DEVICE_FLAG_RDWR) != RT_EOK)
     {
         LOG_E("open %s device failed", cfg->dev_name);
+        rt_free(touch_device);
         return -RT_ERROR;
     }
 
-    /* register touch device */
+    /* Register touch device */
     touch_device->info.type = RT_TOUCH_TYPE_CAPACITANCE;
     touch_device->info.vendor = RT_TOUCH_VENDOR_GT;
     rt_memcpy(&touch_device->config, cfg, sizeof(struct rt_touch_config));
     touch_device->ops = &ST7102_touch_ops;
 
-    rt_hw_touch_register(touch_device, name, RT_DEVICE_FLAG_RDWR, RT_NULL);
+    rt_hw_touch_register(touch_device, name, RT_DEVICE_FLAG_INT_RX, RT_NULL);
 
-    //Trigger by interrupt mode
-    // ret = rt_pin_attach_irq(ST7102_IRQ_PIN, PIN_IRQ_MODE_FALLING, ST7102_read_point, 0);
-
-    // if (ret != RT_EOK)
-    // {
-    //     rt_kprintf("Failed to attach IRQ for pin %d, error: %d\n", ST7102_IRQ_PIN, ret);
-    //     return 0;
-    // }
-
-    // ret = rt_pin_irq_enable(ST7102_IRQ_PIN, PIN_IRQ_ENABLE);
-    // if (ret != RT_EOK)
-    // {
-    //     rt_kprintf("Failed to enable IRQ for pin %d, error: %d\n", ST7102_IRQ_PIN, ret);
-    //     return 0;
-    // }
-
-    // Create polling thread instead of interrupt
-    rt_thread_t thread = rt_thread_create("st7102_poll", touch_polling_thread, touch_device, 2048, 15, 20);
-    if (thread != RT_NULL)
+    /* Create touch polling thread */
+    touch_thread = rt_thread_create("st7102_touch",
+                                   ST7102_touch_thread_entry,
+                                   touch_device,
+                                   2048, /* Stack size */
+                                   20,   /* Priority */
+                                   10);  /* Time slice */
+    if (touch_thread == RT_NULL)
     {
-        rt_thread_startup(thread);
-    }
-    else
-    {
-        LOG_E("Failed to create polling thread");
+        LOG_E("Failed to create touch thread");
+        rt_device_close((rt_device_t)ST7102_client.bus);
+        rt_free(touch_device);
         return -RT_ERROR;
     }
+    rt_thread_startup(touch_thread);
 
-    LOG_I("Touch device ST7102 init success");
-
+    LOG_I("touch device ST7102 init success");
     return RT_EOK;
 }
 
@@ -310,8 +337,13 @@ int rt_hw_ST7102_port(void)
     cfg.irq_pin.mode = PIN_MODE_INPUT_PULLDOWN;
     cfg.user_data = &rst_pin;
 
-    rt_hw_ST7102_init("ST7102", &cfg);
+    return rt_hw_ST7102_init("ST7102", &cfg);
+}
+//INIT_ENV_EXPORT(rt_hw_ST7102_port);
 
+int soft_reset_test(void)
+{
+    ST7102_soft_reset(&ST7102_client);
     return 0;
 }
-INIT_ENV_EXPORT(rt_hw_ST7102_port);
+MSH_CMD_EXPORT(soft_reset_test, Demo);
