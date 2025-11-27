@@ -10,7 +10,7 @@
  ******************************************************************************/
 
 #ifndef LV_FONT_BENCHMARK_MONTSERRAT_28_COMPR_AZ
-    #define LV_FONT_BENCHMARK_MONTSERRAT_28_COMPR_AZ 1
+#define LV_FONT_BENCHMARK_MONTSERRAT_28_COMPR_AZ 1
 #endif
 
 #if LV_FONT_BENCHMARK_MONTSERRAT_28_COMPR_AZ
@@ -20,8 +20,7 @@
  *----------------*/
 
 /*Store the image of the glyphs*/
-static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] =
-{
+static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+20 " " */
 
     /* U+61 "a" */
@@ -360,8 +359,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] =
  *  GLYPH DESCRIPTION
  *--------------------*/
 
-static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] =
-{
+static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
     {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
     {.bitmap_index = 0, .adv_w = 121, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 268, .box_w = 14, .box_h = 15, .ofs_x = 1, .ofs_y = 0},
@@ -475,8 +473,7 @@ static const lv_font_fmt_txt_kern_classes_t kern_classes =
  *--------------------*/
 
 /*Store all the custom data of the font*/
-static lv_font_fmt_txt_dsc_t font_dsc =
-{
+static lv_font_fmt_txt_dsc_t font_dsc = {
     .glyph_bitmap = glyph_bitmap,
     .glyph_dsc = glyph_dsc,
     .cmaps = cmaps,
@@ -494,8 +491,7 @@ static lv_font_fmt_txt_dsc_t font_dsc =
  *----------------*/
 
 /*Initialize a public general font descriptor*/
-lv_font_t lv_font_benchmark_montserrat_28_compr_az =
-{
+lv_font_t lv_font_benchmark_montserrat_28_compr_az = {
     .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
     .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/
     .line_height = 26,          /*The maximum line height required by the font*/

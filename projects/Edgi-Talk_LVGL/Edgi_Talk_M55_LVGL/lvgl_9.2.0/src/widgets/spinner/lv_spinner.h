@@ -40,7 +40,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_spinner_class;
  * @param parent    pointer to an object, it will be the parent of the new spinner.
  * @return          the created spinner
  */
-lv_obj_t *lv_spinner_create(lv_obj_t * parent);
+lv_obj_t * lv_spinner_create(lv_obj_t * parent);
 
 /**
  * Set the animation time and arc length of the spinner

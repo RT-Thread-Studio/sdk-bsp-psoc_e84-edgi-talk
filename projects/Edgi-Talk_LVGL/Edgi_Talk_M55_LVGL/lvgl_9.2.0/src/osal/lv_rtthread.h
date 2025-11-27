@@ -25,18 +25,15 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef struct
-{
+typedef struct {
     rt_thread_t thread;
 } lv_thread_t;
 
-typedef struct
-{
+typedef struct {
     rt_mutex_t mutex;
 } lv_mutex_t;
 
-typedef struct
-{
+typedef struct {
     rt_sem_t sem;
 } lv_thread_sync_t;
 

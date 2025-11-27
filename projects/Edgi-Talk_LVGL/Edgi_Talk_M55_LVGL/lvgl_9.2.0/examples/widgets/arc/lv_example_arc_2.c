@@ -13,7 +13,7 @@ static void set_angle(void * obj, int32_t v)
 void lv_example_arc_2(void)
 {
     /*Create an Arc*/
-    lv_obj_t *arc = lv_arc_create(lv_screen_active());
+    lv_obj_t * arc = lv_arc_create(lv_screen_active());
     lv_arc_set_rotation(arc, 270);
     lv_arc_set_bg_angles(arc, 0, 360);
     lv_obj_remove_style(arc, NULL, LV_PART_KNOB);   /*Be sure the knob is not displayed*/

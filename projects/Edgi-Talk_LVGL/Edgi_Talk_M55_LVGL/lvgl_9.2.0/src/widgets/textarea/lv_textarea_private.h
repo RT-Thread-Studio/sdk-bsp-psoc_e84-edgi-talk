@@ -28,18 +28,16 @@ extern "C" {
  **********************/
 
 /** Data of text area */
-struct lv_textarea_t
-{
+struct lv_textarea_t {
     lv_obj_t obj;
-    lv_obj_t *label;             /**< Label of the text area */
-    char *placeholder_txt;       /**< Place holder label. only visible if text is an empty string */
-    char *pwd_tmp;               /**< Used to store the original text in password mode */
-    char *pwd_bullet;            /**< Replacement characters displayed in password mode */
-    const char *accepted_chars;  /**< Only these characters will be accepted. NULL: accept all */
+    lv_obj_t * label;            /**< Label of the text area */
+    char * placeholder_txt;      /**< Place holder label. only visible if text is an empty string */
+    char * pwd_tmp;              /**< Used to store the original text in password mode */
+    char * pwd_bullet;           /**< Replacement characters displayed in password mode */
+    const char * accepted_chars; /**< Only these characters will be accepted. NULL: accept all */
     uint32_t max_length;         /**< The max. number of characters. 0: no limit */
     uint32_t pwd_show_time;      /**< Time to show characters in password mode before change them to '*' */
-    struct
-    {
+    struct {
         int32_t valid_x;         /**< Used when stepping up/down to a shorter line.
                                   *(Used by the library) */
         uint32_t pos;            /**< The current cursor position

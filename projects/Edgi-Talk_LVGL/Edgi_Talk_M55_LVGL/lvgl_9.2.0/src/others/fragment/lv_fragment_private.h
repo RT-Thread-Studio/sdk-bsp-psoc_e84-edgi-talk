@@ -29,24 +29,23 @@ extern "C" {
 /**
  * Fragment states
  */
-struct lv_fragment_managed_states_t
-{
+struct lv_fragment_managed_states_t  {
     /**
      * Class of the fragment
      */
-    const lv_fragment_class_t *cls;
+    const lv_fragment_class_t * cls;
     /**
      * Manager the fragment attached to
      */
-    lv_fragment_manager_t *manager;
+    lv_fragment_manager_t * manager;
     /**
      * Container object the fragment adding view to
      */
-    lv_obj_t *const *container;
+    lv_obj_t * const * container;
     /**
      * Fragment instance
      */
-    lv_fragment_t *instance;
+    lv_fragment_t * instance;
     /**
      * true between `create_obj_cb` and `obj_deleted_cb`
      */

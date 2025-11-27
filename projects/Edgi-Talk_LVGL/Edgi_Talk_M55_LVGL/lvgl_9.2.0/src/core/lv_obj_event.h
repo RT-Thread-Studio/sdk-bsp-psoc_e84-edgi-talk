@@ -26,8 +26,7 @@ extern "C" {
  **********************/
 
 /** Cover check results.*/
-typedef enum
-{
+typedef enum {
     LV_COVER_RES_COVER      = 0,
     LV_COVER_RES_NOT_COVER  = 1,
     LV_COVER_RES_MASKED     = 2,
@@ -60,14 +59,14 @@ lv_result_t lv_obj_event_base(const lv_obj_class_t * class_p, lv_event_t * e);
  * @param e     pointer to the event descriptor
  * @return      the target of the event_code
  */
-lv_obj_t *lv_event_get_current_target_obj(lv_event_t * e);
+lv_obj_t * lv_event_get_current_target_obj(lv_event_t * e);
 
 /**
  * Get the object originally targeted by the event. It's the same even if the event is bubbled.
  * @param e     pointer to the event descriptor
  * @return      pointer to the original target of the event_code
  */
-lv_obj_t *lv_event_get_target_obj(lv_event_t * e);
+lv_obj_t * lv_event_get_target_obj(lv_event_t * e);
 
 /**
  * Add an event handler function for an object.
@@ -79,11 +78,11 @@ lv_obj_t *lv_event_get_target_obj(lv_event_t * e);
  * @param           user_data custom data will be available in `event_cb`
  * @return          handler to the event. It can be used in `lv_obj_remove_event_dsc`.
  */
-lv_event_dsc_t *lv_obj_add_event_cb(lv_obj_t * obj, lv_event_cb_t event_cb, lv_event_code_t filter, void * user_data);
+lv_event_dsc_t * lv_obj_add_event_cb(lv_obj_t * obj, lv_event_cb_t event_cb, lv_event_code_t filter, void * user_data);
 
 uint32_t lv_obj_get_event_count(lv_obj_t * obj);
 
-lv_event_dsc_t *lv_obj_get_event_dsc(lv_obj_t * obj, uint32_t index);
+lv_event_dsc_t * lv_obj_get_event_dsc(lv_obj_t * obj, uint32_t index);
 
 bool lv_obj_remove_event(lv_obj_t * obj, uint32_t index);
 
@@ -105,7 +104,7 @@ uint32_t lv_obj_remove_event_cb_with_user_data(lv_obj_t * obj, lv_event_cb_t eve
  * @param e     pointer to an event
  * @return      the indev that triggered the event or NULL if called on a not indev related event
  */
-lv_indev_t *lv_event_get_indev(lv_event_t * e);
+lv_indev_t * lv_event_get_indev(lv_event_t * e);
 
 /**
  * Get the draw context which should be the first parameter of the draw functions.
@@ -113,14 +112,14 @@ lv_indev_t *lv_event_get_indev(lv_event_t * e);
  * @param e     pointer to an event
  * @return      pointer to a draw context or NULL if called on an unrelated event
  */
-lv_layer_t *lv_event_get_layer(lv_event_t * e);
+lv_layer_t * lv_event_get_layer(lv_event_t * e);
 
 /**
  * Get the old area of the object before its size was changed. Can be used in `LV_EVENT_SIZE_CHANGED`
  * @param e     pointer to an event
  * @return      the old absolute area of the object or NULL if called on an unrelated event
  */
-const lv_area_t *lv_event_get_old_size(lv_event_t * e);
+const lv_area_t * lv_event_get_old_size(lv_event_t * e);
 
 /**
  * Get the key passed as parameter to an event. Can be used in `LV_EVENT_KEY`
@@ -141,7 +140,7 @@ int32_t lv_event_get_rotary_diff(lv_event_t * e);
  * @param e     pointer to an event
  * @return      the animation that will scroll the object. (can be modified as required)
  */
-lv_anim_t *lv_event_get_scroll_anim(lv_event_t * e);
+lv_anim_t * lv_event_get_scroll_anim(lv_event_t * e);
 
 /**
  * Set the new extra draw size. Can be used in `LV_EVENT_REFR_EXT_DRAW_SIZE`
@@ -156,14 +155,14 @@ void lv_event_set_ext_draw_size(lv_event_t * e, int32_t size);
  * @param e     pointer to an event
  * @return      pointer to `lv_point_t` or NULL if called on an unrelated event
  */
-lv_point_t *lv_event_get_self_size_info(lv_event_t * e);
+lv_point_t * lv_event_get_self_size_info(lv_event_t * e);
 
 /**
  * Get a pointer to an `lv_hit_test_info_t` variable in which the hit test result should be saved. Can be used in `LV_EVENT_HIT_TEST`
  * @param e     pointer to an event
  * @return      pointer to `lv_hit_test_info_t` or NULL if called on an unrelated event
  */
-lv_hit_test_info_t *lv_event_get_hit_test_info(lv_event_t * e);
+lv_hit_test_info_t * lv_event_get_hit_test_info(lv_event_t * e);
 
 /**
  * Get a pointer to an area which should be examined whether the object fully covers it or not.
@@ -171,7 +170,7 @@ lv_hit_test_info_t *lv_event_get_hit_test_info(lv_event_t * e);
  * @param e     pointer to an event
  * @return      an area with absolute coordinates to check
  */
-const lv_area_t *lv_event_get_cover_area(lv_event_t * e);
+const lv_area_t * lv_event_get_cover_area(lv_event_t * e);
 
 /**
  * Set the result of cover checking. Can be used in `LV_EVENT_COVER_CHECK`
@@ -186,7 +185,7 @@ void lv_event_set_cover_res(lv_event_t * e, lv_cover_res_t res);
  * @param e     pointer to an event
  * @return      the added draw task
  */
-lv_draw_task_t *lv_event_get_draw_task(lv_event_t * e);
+lv_draw_task_t * lv_event_get_draw_task(lv_event_t * e);
 
 /**********************
  *      MACROS

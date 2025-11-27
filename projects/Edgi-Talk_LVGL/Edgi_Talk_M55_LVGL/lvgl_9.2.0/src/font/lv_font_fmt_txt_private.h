@@ -25,17 +25,15 @@ extern "C" {
  **********************/
 
 #if LV_USE_FONT_COMPRESSED
-typedef enum
-{
+typedef enum {
     RLE_STATE_SINGLE = 0,
     RLE_STATE_REPEATED,
     RLE_STATE_COUNTER,
 } lv_font_fmt_rle_state_t;
 
-typedef struct
-{
+typedef struct {
     uint32_t rdp;
-    const uint8_t *in;
+    const uint8_t * in;
     uint8_t bpp;
     uint8_t prev_v;
     uint8_t count;

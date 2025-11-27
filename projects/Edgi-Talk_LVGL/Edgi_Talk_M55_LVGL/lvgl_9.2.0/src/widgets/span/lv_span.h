@@ -28,15 +28,13 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_SPAN_OVERFLOW_CLIP,
     LV_SPAN_OVERFLOW_ELLIPSIS,
     LV_SPAN_OVERFLOW_LAST,  /**< Fence member*/
 } lv_span_overflow_t;
 
-typedef enum
-{
+typedef enum {
     LV_SPAN_MODE_FIXED,     /**< fixed the obj size */
     LV_SPAN_MODE_EXPAND,    /**< Expand the object size to the text size */
     LV_SPAN_MODE_BREAK,     /**< Keep width, break the too long lines and expand height */
@@ -57,14 +55,14 @@ void lv_span_stack_deinit(void);
  * @param parent    pointer to an object, it will be the parent of the new spangroup
  * @return          pointer to the created spangroup
  */
-lv_obj_t *lv_spangroup_create(lv_obj_t * parent);
+lv_obj_t * lv_spangroup_create(lv_obj_t * parent);
 
 /**
  * Create a span string descriptor and add to spangroup.
  * @param obj       pointer to a spangroup object.
  * @return          pointer to the created span.
  */
-lv_span_t *lv_spangroup_new_span(lv_obj_t * obj);
+lv_span_t * lv_spangroup_new_span(lv_obj_t * obj);
 
 /**
  * Remove the span from the spangroup and free memory.
@@ -136,7 +134,7 @@ void lv_spangroup_set_max_lines(lv_obj_t * obj, int32_t lines);
  * @param span  pointer to the span
  * @return      pointer to the style. valid as long as the span is valid
 */
-lv_style_t *lv_span_get_style(lv_span_t * span);
+lv_style_t * lv_span_get_style(lv_span_t * span);
 
 /**
  * Get a spangroup child by its index.
@@ -150,7 +148,7 @@ lv_style_t *lv_span_get_style(lv_span_t * span);
  *              -2: the second youngest
  * @return      The child span at index `id`, or NULL if the ID does not exist
  */
-lv_span_t *lv_spangroup_get_child(const lv_obj_t * obj, int32_t id);
+lv_span_t * lv_spangroup_get_child(const lv_obj_t * obj, int32_t id);
 
 /**
  * Get number of spans

@@ -146,14 +146,17 @@ uint32_t calculate_idle_percentage(void)
 
 static void dc_irq_handler(void)
 {
-    /* Clear the DC interrupt */
+    rt_interrupt_enter();
     Cy_GFXSS_Clear_DC_Interrupt(gfxbase, &lcd_gfx_context);
+    rt_interrupt_leave();
 }
 
 static void gpu_irq_handler(void)
 {
+    rt_interrupt_enter();
     Cy_GFXSS_Clear_GPU_Interrupt(gfxbase, &lcd_gfx_context);
     vg_lite_IRQHandler();
+    rt_interrupt_leave();
 }
 
 rt_err_t psoc_lcd_init(struct drv_lcd_device *lcd)

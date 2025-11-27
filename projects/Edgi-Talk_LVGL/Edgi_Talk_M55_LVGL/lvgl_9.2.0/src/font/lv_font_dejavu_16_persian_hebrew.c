@@ -21,8 +21,7 @@
  *----------------*/
 
 /*Store the image of the glyphs*/
-static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] =
-{
+static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+0020 " " */
 
     /* U+0021 "!" */
@@ -5869,8 +5868,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] =
  *  GLYPH DESCRIPTION
  *--------------------*/
 
-static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] =
-{
+static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
     {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
     {.bitmap_index = 0, .adv_w = 81, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 103, .box_w = 2, .box_h = 12, .ofs_x = 2, .ofs_y = 0},
@@ -6474,21 +6472,18 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] =
  *  CHARACTER MAPPING
  *--------------------*/
 
-static const uint16_t unicode_list_2[] =
-{
+static const uint16_t unicode_list_2[] = {
     0x0, 0x1, 0x3, 0x4, 0x6, 0xf, 0x15, 0x19
 };
 
-static const uint8_t glyph_id_ofs_list_5[] =
-{
+static const uint8_t glyph_id_ofs_list_5[] = {
     0, 0, 0, 1, 0, 0, 0, 0,
     0, 2, 3, 4, 5, 6, 7, 8,
     9, 10, 11, 12, 13, 14, 15, 16,
     17, 18, 0, 0, 0, 19
 };
 
-static const uint16_t unicode_list_7[] =
-{
+static const uint16_t unicode_list_7[] = {
     0x0, 0x1, 0x2, 0x5, 0x6, 0x8, 0xa, 0xf,
     0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31,
     0x32, 0x33, 0xe93b, 0xe942, 0xe945, 0xe946, 0xe947, 0xe94b,
@@ -6501,8 +6496,7 @@ static const uint16_t unicode_list_7[] =
     0xebcd, 0xec27, 0xec3e, 0xee94, 0xf0fc, 0xf1dc
 };
 
-static const uint16_t unicode_list_9[] =
-{
+static const uint16_t unicode_list_9[] = {
     0x0, 0x1, 0x2, 0x3, 0x29, 0x2a, 0x2b, 0x2c,
     0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x34, 0x35,
     0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f, 0x52, 0x53,
@@ -6510,8 +6504,7 @@ static const uint16_t unicode_list_9[] =
 };
 
 /*Collect the unicode lists and glyph_id offsets*/
-static const lv_font_fmt_txt_cmap_t cmaps[] =
-{
+static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
         .unicode_list = NULL, .glyph_id_ofs_list = NULL, .list_length = 0, .type = LV_FONT_FMT_TXT_CMAP_FORMAT0_TINY
@@ -6569,11 +6562,9 @@ static const lv_font_fmt_txt_cmap_t cmaps[] =
 #if LVGL_VERSION_MAJOR >= 8
 /*Store all the custom data of the font*/
 
-static const lv_font_fmt_txt_dsc_t font_dsc =
-{
+static const lv_font_fmt_txt_dsc_t font_dsc = {
 #else
-static lv_font_fmt_txt_dsc_t font_dsc =
-{
+static lv_font_fmt_txt_dsc_t font_dsc = {
 #endif
     .glyph_bitmap = glyph_bitmap,
     .glyph_dsc = glyph_dsc,
@@ -6593,11 +6584,9 @@ static lv_font_fmt_txt_dsc_t font_dsc =
 
 /*Initialize a public general font descriptor*/
 #if LVGL_VERSION_MAJOR >= 8
-const lv_font_t lv_font_dejavu_16_persian_hebrew =
-{
+const lv_font_t lv_font_dejavu_16_persian_hebrew = {
 #else
-lv_font_t lv_font_dejavu_16_persian_hebrew =
-{
+lv_font_t lv_font_dejavu_16_persian_hebrew = {
 #endif
     .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
     .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/

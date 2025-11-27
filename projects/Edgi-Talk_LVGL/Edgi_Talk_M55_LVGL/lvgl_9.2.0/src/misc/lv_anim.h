@@ -80,8 +80,7 @@ LV_EXPORT_CONST_INT(LV_ANIM_PLAYTIME_INFINITE);
  **********************/
 
 /** Can be used to indicate if animations are enabled or disabled in a case*/
-typedef enum
-{
+typedef enum {
     LV_ANIM_OFF,
     LV_ANIM_ON,
 } lv_anim_enable_t;
@@ -114,8 +113,7 @@ typedef int32_t (*lv_anim_get_value_cb_t)(lv_anim_t *);
 typedef void (*lv_anim_deleted_cb_t)(lv_anim_t *);
 
 /** Parameter used when path is custom_bezier */
-typedef struct
-{
+typedef struct {
     int16_t x1;
     int16_t y1;
     int16_t x2;
@@ -123,9 +121,8 @@ typedef struct
 } lv_anim_bezier3_para_t;
 
 /** Describes an animation*/
-struct lv_anim_t
-{
-    void *var;                                /**< Variable to animate*/
+struct lv_anim_t {
+    void * var;                               /**< Variable to animate*/
     lv_anim_exec_xcb_t exec_cb;               /**< Function to execute to animate*/
     lv_anim_custom_exec_cb_t custom_exec_cb;  /**< Function to execute to animate,
                                                * same purpose as exec_cb but different parameters*/
@@ -133,7 +130,7 @@ struct lv_anim_t
     lv_anim_completed_cb_t completed_cb;      /**< Call it when the animation is fully completed*/
     lv_anim_deleted_cb_t deleted_cb;          /**< Call it when the animation is deleted*/
     lv_anim_get_value_cb_t get_value_cb;      /**< Get the current value in relative mode*/
-    void *user_data;                          /**< Custom user data*/
+    void * user_data;                         /**< Custom user data*/
     lv_anim_path_cb_t path_cb;                /**< Describe the path (curve) of animations*/
     int32_t start_value;                      /**< Start value*/
     int32_t current_value;                    /**< Current value*/
@@ -144,8 +141,7 @@ struct lv_anim_t
     uint32_t playback_duration;               /**< Duration of playback animation*/
     uint32_t repeat_delay;                    /**< Wait before repeat*/
     uint32_t repeat_cnt;                      /**< Repeat count for the animation*/
-    union lv_anim_path_para_t
-    {
+    union lv_anim_path_para_t {
         lv_anim_bezier3_para_t bezier3;       /**< Parameter used when path is custom_bezier*/
     } parameter;
 
@@ -324,7 +320,7 @@ void lv_anim_set_bezier3_param(lv_anim_t * a, int16_t x1, int16_t y1, int16_t x2
  * @param a         an initialized 'anim_t' variable. Not required after call.
  * @return          pointer to the created animation (different from the `a` parameter)
  */
-lv_anim_t *lv_anim_start(const lv_anim_t * a);
+lv_anim_t * lv_anim_start(const lv_anim_t * a);
 
 /**
  * Get a delay before starting the animation
@@ -359,7 +355,7 @@ uint32_t lv_anim_get_repeat_count(const lv_anim_t * a);
  * @param   a pointer to an initialized `lv_anim_t` variable
  * @return  the pointer to the custom user_data of the animation
  */
-void *lv_anim_get_user_data(const lv_anim_t * a);
+void * lv_anim_get_user_data(const lv_anim_t * a);
 
 /**
  * Delete animation(s) of a variable with a given animator function
@@ -381,13 +377,13 @@ void lv_anim_delete_all(void);
  * @param exec_cb   a function pointer which is animating 'var', or NULL to return first matching 'var'
  * @return          pointer to the animation.
  */
-lv_anim_t *lv_anim_get(void * var, lv_anim_exec_xcb_t exec_cb);
+lv_anim_t * lv_anim_get(void * var, lv_anim_exec_xcb_t exec_cb);
 
 /**
  * Get global animation refresher timer.
  * @return pointer to the animation refresher timer.
  */
-lv_timer_t *lv_anim_get_timer(void);
+lv_timer_t * lv_anim_get_timer(void);
 
 /**
  * Delete an animation by getting the animated variable from `a`.
@@ -411,7 +407,7 @@ bool lv_anim_custom_delete(lv_anim_t * a, lv_anim_custom_exec_cb_t exec_cb);
  * @param exec_cb   a function pointer which is animating 'var', or NULL to return first matching 'var'
  * @return          pointer to the animation.
  */
-lv_anim_t *lv_anim_custom_get(lv_anim_t * a, lv_anim_custom_exec_cb_t exec_cb);
+lv_anim_t * lv_anim_custom_get(lv_anim_t * a, lv_anim_custom_exec_cb_t exec_cb);
 
 /**
  * Get the number of currently running animations

@@ -20,15 +20,13 @@
 /**********************
  *      TYPEDEFS
  **********************/
-typedef struct
-{
+typedef struct {
     uint8_t char_offset;
     uint16_t char_end_form;
     int8_t char_beginning_form_offset;
     int8_t char_middle_form_offset;
     int8_t char_isolated_form_offset;
-    struct
-    {
+    struct {
         uint8_t conj_to_previous;
         uint8_t conj_to_next;
     } ap_chars_conjunction;
@@ -46,8 +44,7 @@ static bool lv_text_is_arabic_vowel(uint16_t c);
  *  STATIC VARIABLES
  **********************/
 
-const ap_chars_map_t ap_chars_map[] =
-{
+const ap_chars_map_t ap_chars_map[] = {
     /*{Key Offset, End, Beginning, Middle, Isolated, {conjunction}}*/
     {1, 0xFE84, -1, 0, -1,  {1, 0}},    // أ
     {2, 0xFE86, -1, 0, -1,  {1, 0}},    // ؤ
@@ -121,19 +118,18 @@ uint32_t lv_text_ap_calc_bytes_count(const char * txt)
 
     i = 0;
     j = 0;
-    while (i < txt_length)
-    {
+    while(i < txt_length) {
         ch_enc = lv_text_encoded_next(txt, &j);
         current_ap_idx = lv_ap_get_char_index(ch_enc);
 
-        if (current_ap_idx != LV_UNDEF_ARABIC_PERSIAN_CHARS)
+        if(current_ap_idx != LV_UNDEF_ARABIC_PERSIAN_CHARS)
             ch_enc = ap_chars_map[current_ap_idx].char_end_form;
 
-        if (ch_enc < 0x80)
+        if(ch_enc < 0x80)
             chars_cnt++;
-        else if (ch_enc < 0x0800)
+        else if(ch_enc < 0x0800)
             chars_cnt += 2;
-        else if (ch_enc < 0x010000)
+        else if(ch_enc < 0x010000)
             chars_cnt += 3;
         else
             chars_cnt += 4;
@@ -148,9 +144,9 @@ void lv_text_ap_proc(const char * txt, char * txt_out)
 {
     uint32_t txt_length = 0;
     uint32_t index_current, idx_next, idx_previous, i, j;
-    uint32_t *ch_enc;
-    uint32_t *ch_fin;
-    char *txt_out_temp;
+    uint32_t * ch_enc;
+    uint32_t * ch_fin;
+    char * txt_out_temp;
 
     txt_length = lv_text_get_encoded_length(txt);
 
@@ -159,7 +155,7 @@ void lv_text_ap_proc(const char * txt, char * txt_out)
 
     i = 0;
     j = 0;
-    while (j < txt_length)
+    while(j < txt_length)
         ch_enc[j++] = lv_text_encoded_next(txt, &i);
 
     ch_enc[j] = 0;
@@ -167,25 +163,21 @@ void lv_text_ap_proc(const char * txt, char * txt_out)
     i = 0;
     j = 0;
     idx_previous = LV_UNDEF_ARABIC_PERSIAN_CHARS;
-    while (i < txt_length)
-    {
+    while(i < txt_length) {
         index_current = lv_ap_get_char_index(ch_enc[i]);
         idx_next = lv_ap_get_char_index(ch_enc[i + 1]);
 
-        if (lv_text_is_arabic_vowel(ch_enc[i]))   // Current character is a vowel
-        {
+        if(lv_text_is_arabic_vowel(ch_enc[i])) {  // Current character is a vowel
             ch_fin[j] = ch_enc[i];
             i++;
             j++;
             continue;   // Skip this character
         }
-        else if (lv_text_is_arabic_vowel(ch_enc[i + 1]))     // Next character is a vowel
-        {
+        else if(lv_text_is_arabic_vowel(ch_enc[i + 1])) {    // Next character is a vowel
             idx_next = lv_ap_get_char_index(ch_enc[i + 2]); // Skip the vowel character to join with the character after it
         }
 
-        if (index_current == LV_UNDEF_ARABIC_PERSIAN_CHARS)
-        {
+        if(index_current == LV_UNDEF_ARABIC_PERSIAN_CHARS) {
             ch_fin[j] = ch_enc[i];
             j++;
             i++;
@@ -199,10 +191,8 @@ void lv_text_ap_proc(const char * txt, char * txt_out)
                                        idx_next == LV_UNDEF_ARABIC_PERSIAN_CHARS) ? 0 : ap_chars_map[idx_next].ap_chars_conjunction.conj_to_previous;
 
         uint32_t lam_alef = lv_text_lam_alef(index_current, idx_next);
-        if (lam_alef)
-        {
-            if (conjunction_to_previous)
-            {
+        if(lam_alef) {
+            if(conjunction_to_previous) {
                 lam_alef ++;
             }
             ch_fin[j] = lam_alef;
@@ -212,11 +202,11 @@ void lv_text_ap_proc(const char * txt, char * txt_out)
             continue;
         }
 
-        if (conjunction_to_previous && conjunction_to_next)
+        if(conjunction_to_previous && conjunction_to_next)
             ch_fin[j] = ap_chars_map[index_current].char_end_form + ap_chars_map[index_current].char_middle_form_offset;
-        else if (!conjunction_to_previous && conjunction_to_next)
+        else if(!conjunction_to_previous && conjunction_to_next)
             ch_fin[j] = ap_chars_map[index_current].char_end_form + ap_chars_map[index_current].char_beginning_form_offset;
-        else if (conjunction_to_previous && !conjunction_to_next)
+        else if(conjunction_to_previous && !conjunction_to_next)
             ch_fin[j] = ap_chars_map[index_current].char_end_form;
         else
             ch_fin[j] = ap_chars_map[index_current].char_end_form + ap_chars_map[index_current].char_isolated_form_offset;
@@ -225,34 +215,29 @@ void lv_text_ap_proc(const char * txt, char * txt_out)
         j++;
     }
     ch_fin[j] = 0;
-    for (i = 0; i < txt_length; i++)
+    for(i = 0; i < txt_length; i++)
         ch_enc[i] = 0;
-    for (i = 0; i < j; i++)
+    for(i = 0; i < j; i++)
         ch_enc[i] = ch_fin[i];
     lv_free(ch_fin);
 
     txt_out_temp = txt_out;
     i = 0;
 
-    while (i < txt_length)
-    {
-        if (ch_enc[i] < 0x80)
-        {
+    while(i < txt_length) {
+        if(ch_enc[i] < 0x80) {
             *(txt_out_temp++) = ch_enc[i] & 0xFF;
         }
-        else if (ch_enc[i] < 0x0800)
-        {
+        else if(ch_enc[i] < 0x0800) {
             *(txt_out_temp++) = ((ch_enc[i] >> 6) & 0x1F) | 0xC0;
             *(txt_out_temp++) = ((ch_enc[i] >> 0) & 0x3F) | 0x80;
         }
-        else if (ch_enc[i] < 0x010000)
-        {
+        else if(ch_enc[i] < 0x010000) {
             *(txt_out_temp++) = ((ch_enc[i] >> 12) & 0x0F) | 0xE0;
             *(txt_out_temp++) = ((ch_enc[i] >> 6) & 0x3F) | 0x80;
             *(txt_out_temp++) = ((ch_enc[i] >> 0) & 0x3F) | 0x80;
         }
-        else if (ch_enc[i] < 0x110000)
-        {
+        else if(ch_enc[i] < 0x110000) {
             *(txt_out_temp++) = ((ch_enc[i] >> 18) & 0x07) | 0xF0;
             *(txt_out_temp++) = ((ch_enc[i] >> 12) & 0x3F) | 0x80;
             *(txt_out_temp++) = ((ch_enc[i] >> 6) & 0x3F) | 0x80;
@@ -270,15 +255,13 @@ void lv_text_ap_proc(const char * txt, char * txt_out)
 
 static uint32_t lv_ap_get_char_index(uint16_t c)
 {
-    for (uint8_t i = 0; ap_chars_map[i].char_end_form; i++)
-    {
-        if (c == (ap_chars_map[i].char_offset + LV_AP_ALPHABET_BASE_CODE))
+    for(uint8_t i = 0; ap_chars_map[i].char_end_form; i++) {
+        if(c == (ap_chars_map[i].char_offset + LV_AP_ALPHABET_BASE_CODE))
             return i;
-        else if (c == ap_chars_map[i].char_end_form                                                 //is it an End form
-                 || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_beginning_form_offset)     //is it a Beginning form
-                 || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_middle_form_offset)       //is it a middle form
-                 || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_isolated_form_offset))    //is it an isolated form
-        {
+        else if(c == ap_chars_map[i].char_end_form                                                  //is it an End form
+                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_beginning_form_offset)     //is it a Beginning form
+                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_middle_form_offset)       //is it a middle form
+                || c == (ap_chars_map[i].char_end_form + ap_chars_map[i].char_isolated_form_offset)) {  //is it an isolated form
             return i;
         }
     }
@@ -288,29 +271,23 @@ static uint32_t lv_ap_get_char_index(uint16_t c)
 static uint32_t lv_text_lam_alef(uint32_t ch_curr, uint32_t ch_next)
 {
     uint32_t ch_code = 0;
-    if (ap_chars_map[ch_curr].char_offset != 34)
-    {
+    if(ap_chars_map[ch_curr].char_offset != 34) {
         return 0;
     }
-    if (ch_next == LV_UNDEF_ARABIC_PERSIAN_CHARS)
-    {
+    if(ch_next == LV_UNDEF_ARABIC_PERSIAN_CHARS) {
         return 0;
     }
     ch_code = ap_chars_map[ch_next].char_offset + LV_AP_ALPHABET_BASE_CODE;
-    if (ch_code == 0x0622)
-    {
+    if(ch_code == 0x0622) {
         return 0xFEF5;    // (lam-alef) mad
     }
-    if (ch_code == 0x0623)
-    {
+    if(ch_code == 0x0623) {
         return 0xFEF7;    // (lam-alef) top hamza
     }
-    if (ch_code == 0x0625)
-    {
+    if(ch_code == 0x0625) {
         return 0xFEF9;    // (lam-alef) bot hamza
     }
-    if (ch_code == 0x0627)
-    {
+    if(ch_code == 0x0627) {
         return 0xFEFB;    // (lam-alef) alef
     }
     return 0;

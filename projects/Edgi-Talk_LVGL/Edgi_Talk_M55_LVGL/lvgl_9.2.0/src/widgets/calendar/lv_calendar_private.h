@@ -28,16 +28,15 @@ extern "C" {
  **********************/
 
 /** Data of calendar */
-struct lv_calendar_t
-{
+struct lv_calendar_t {
     lv_obj_t obj;
     /* New data for this type */
-    lv_obj_t *btnm;
+    lv_obj_t * btnm;
     lv_calendar_date_t today;                /**< Date of today */
     lv_calendar_date_t showed_date;          /**< Currently visible month (day is ignored) */
-    lv_calendar_date_t *highlighted_dates;   /**< Apply different style on these days (pointer to user-defined array) */
+    lv_calendar_date_t * highlighted_dates;  /**< Apply different style on these days (pointer to user-defined array) */
     size_t highlighted_dates_num;            /**< Number of elements in `highlighted_days` */
-    const char *map[8 * 7];
+    const char * map[8 * 7];
 #ifdef LV_USE_CALENDAR_CHINESE
     bool use_chinese_calendar;
 

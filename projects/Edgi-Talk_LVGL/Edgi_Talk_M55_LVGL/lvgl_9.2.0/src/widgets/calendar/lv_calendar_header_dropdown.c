@@ -34,8 +34,7 @@ static void value_changed_event_cb(lv_event_t * e);
  *  STATIC VARIABLES
  **********************/
 
-const lv_obj_class_t lv_calendar_header_dropdown_class =
-{
+const lv_obj_class_t lv_calendar_header_dropdown_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_PCT(100),
     .height_def = LV_SIZE_CONTENT,
@@ -43,9 +42,8 @@ const lv_obj_class_t lv_calendar_header_dropdown_class =
     .name = "calendar-header-dropdown",
 };
 
-static const char *month_list = "01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12";
-static const char *year_list =
-{
+static const char * month_list = "01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12";
+static const char * year_list = {
     "2025\n2024\n2023\n2022\n2021\n"
     "2020\n2019\n2018\n2017\n2016\n2015\n2014\n2013\n2012\n2011\n2010\n2009\n2008\n2007\n2006\n2005\n2004\n2003\n2002\n2001\n"
     "2000\n1999\n1998\n1997\n1996\n1995\n1994\n1993\n1992\n1991\n1990\n1989\n1988\n1987\n1986\n1985\n1984\n1983\n1982\n1981\n"
@@ -63,9 +61,9 @@ static const char *year_list =
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_obj_t *lv_calendar_header_dropdown_create(lv_obj_t * parent)
+lv_obj_t * lv_calendar_header_dropdown_create(lv_obj_t * parent)
 {
-    lv_obj_t *obj = lv_obj_class_create_obj(&lv_calendar_header_dropdown_class, parent);
+    lv_obj_t * obj = lv_obj_class_create_obj(&lv_calendar_header_dropdown_class, parent);
     lv_obj_class_init_obj(obj);
 
     return obj;
@@ -74,9 +72,8 @@ lv_obj_t *lv_calendar_header_dropdown_create(lv_obj_t * parent)
 void lv_calendar_header_dropdown_set_year_list(lv_obj_t * parent, const char * years_list)
 {
     /* Search for the header dropdown */
-    lv_obj_t *header = lv_obj_get_child_by_type(parent, 0, &lv_calendar_header_dropdown_class);
-    if (NULL == header)
-    {
+    lv_obj_t * header = lv_obj_get_child_by_type(parent, 0, &lv_calendar_header_dropdown_class);
+    if(NULL == header) {
         /* Header not found */
         return;
     }
@@ -85,9 +82,8 @@ void lv_calendar_header_dropdown_set_year_list(lv_obj_t * parent, const char * y
      * Index is 0 because in the header dropdown constructor the year dropdown (year_dd)
      * is the first created child of the header */
     const int32_t year_dropdown_index = 0;
-    lv_obj_t *year_dropdown = lv_obj_get_child_by_type(header, year_dropdown_index, &lv_dropdown_class);
-    if (NULL == year_dropdown)
-    {
+    lv_obj_t * year_dropdown = lv_obj_get_child_by_type(header, year_dropdown_index, &lv_dropdown_class);
+    if(NULL == year_dropdown) {
         /* year dropdown not found */
         return;
     }
@@ -108,16 +104,16 @@ static void my_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 
     LV_UNUSED(class_p);
 
-    lv_obj_t *calendar = lv_obj_get_parent(obj);
+    lv_obj_t * calendar = lv_obj_get_parent(obj);
     lv_obj_move_to_index(obj, 0);
     lv_obj_set_flex_flow(obj, LV_FLEX_FLOW_ROW);
 
-    lv_obj_t *year_dd = lv_dropdown_create(obj);
+    lv_obj_t * year_dd = lv_dropdown_create(obj);
     lv_dropdown_set_options(year_dd, year_list);
     lv_obj_add_event_cb(year_dd, year_event_cb, LV_EVENT_VALUE_CHANGED, calendar);
     lv_obj_set_flex_grow(year_dd, 1);
 
-    lv_obj_t *month_dd = lv_dropdown_create(obj);
+    lv_obj_t * month_dd = lv_dropdown_create(obj);
     lv_dropdown_set_options(month_dd, month_list);
     lv_obj_add_event_cb(month_dd, month_event_cb, LV_EVENT_VALUE_CHANGED, calendar);
     lv_obj_set_flex_grow(month_dd, 1);
@@ -129,12 +125,12 @@ static void my_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 
 static void month_event_cb(lv_event_t * e)
 {
-    lv_obj_t *dropdown = lv_event_get_current_target(e);
-    lv_obj_t *calendar = lv_event_get_user_data(e);
+    lv_obj_t * dropdown = lv_event_get_current_target(e);
+    lv_obj_t * calendar = lv_event_get_user_data(e);
 
     uint32_t sel = lv_dropdown_get_selected(dropdown);
 
-    const lv_calendar_date_t *d;
+    const lv_calendar_date_t * d;
     d = lv_calendar_get_showed_date(calendar);
     lv_calendar_date_t newd = *d;
     newd.month = sel + 1;
@@ -144,17 +140,17 @@ static void month_event_cb(lv_event_t * e)
 
 static void year_event_cb(lv_event_t * e)
 {
-    lv_obj_t *dropdown = lv_event_get_current_target(e);
-    lv_obj_t *calendar = lv_event_get_user_data(e);
+    lv_obj_t * dropdown = lv_event_get_current_target(e);
+    lv_obj_t * calendar = lv_event_get_user_data(e);
 
     uint32_t sel = lv_dropdown_get_selected(dropdown);
 
-    const lv_calendar_date_t *d;
+    const lv_calendar_date_t * d;
     d = lv_calendar_get_showed_date(calendar);
 
     /* Get the first year on the options list
      * NOTE: Assumes the first 4 digits in the option list are numbers */
-    const char *year_p = lv_dropdown_get_options(dropdown);
+    const char * year_p = lv_dropdown_get_options(dropdown);
     const uint32_t year = (year_p[0] - '0') * 1000 + (year_p[1] - '0') * 100 + (year_p[2] - '0') * 10 +
                           (year_p[3] - '0');
 
@@ -166,21 +162,21 @@ static void year_event_cb(lv_event_t * e)
 
 static void value_changed_event_cb(lv_event_t * e)
 {
-    lv_obj_t *header = lv_event_get_current_target(e);
-    lv_obj_t *calendar = lv_obj_get_parent(header);
-    const lv_calendar_date_t *cur_date = lv_calendar_get_showed_date(calendar);
+    lv_obj_t * header = lv_event_get_current_target(e);
+    lv_obj_t * calendar = lv_obj_get_parent(header);
+    const lv_calendar_date_t * cur_date = lv_calendar_get_showed_date(calendar);
 
-    lv_obj_t *year_dd = lv_obj_get_child(header, 0);
+    lv_obj_t * year_dd = lv_obj_get_child(header, 0);
 
     /* Get the first year on the options list
      * NOTE: Assumes the first 4 digits in the option list are numbers */
-    const char *year_p = lv_dropdown_get_options(year_dd);
+    const char * year_p = lv_dropdown_get_options(year_dd);
     const uint32_t year = (year_p[0] - '0') * 1000 + (year_p[1] - '0') * 100 + (year_p[2] - '0') * 10 +
                           (year_p[3] - '0');
 
     lv_dropdown_set_selected(year_dd, year - cur_date->year);
 
-    lv_obj_t *month_dd = lv_obj_get_child(header, 1);
+    lv_obj_t * month_dd = lv_obj_get_child(header, 1);
     lv_dropdown_set_selected(month_dd, cur_date->month - 1);
 }
 

@@ -31,8 +31,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_switch_t
-{
+struct lv_switch_t {
     lv_obj_t obj;
     int32_t anim_state;
 };

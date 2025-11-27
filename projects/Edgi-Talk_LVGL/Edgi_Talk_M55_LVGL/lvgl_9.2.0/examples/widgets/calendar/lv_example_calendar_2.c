@@ -3,7 +3,7 @@
 
 void lv_example_calendar_2(void)
 {
-    lv_obj_t   *calendar = lv_calendar_create(lv_screen_active());
+    lv_obj_t  * calendar = lv_calendar_create(lv_screen_active());
     lv_obj_set_size(calendar, 300, 300);
     lv_obj_align(calendar, LV_ALIGN_TOP_MID, 0, 0);
 
@@ -24,7 +24,7 @@ void lv_example_calendar_2(void)
 
 void lv_example_calendar_2(void)
 {
-    lv_obj_t *label = lv_label_create(lv_screen_active());
+    lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "chinese calendar is not enabled");
     lv_obj_center(label);
 }

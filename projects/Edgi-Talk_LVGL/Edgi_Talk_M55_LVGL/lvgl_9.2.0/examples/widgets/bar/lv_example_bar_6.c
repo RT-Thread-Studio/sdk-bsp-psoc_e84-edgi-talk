@@ -11,7 +11,7 @@ static void set_value(void * bar, int32_t v)
 
 static void event_cb(lv_event_t * e)
 {
-    lv_obj_t *obj = lv_event_get_target(e);
+    lv_obj_t * obj = lv_event_get_target(e);
 
     lv_draw_label_dsc_t label_dsc;
     lv_draw_label_dsc_init(&label_dsc);
@@ -35,20 +35,18 @@ static void event_cb(lv_event_t * e)
     lv_area_set_width(&indic_area, lv_area_get_width(&indic_area) * lv_bar_get_value(obj) / MAX_VALUE);
 
     /*If the indicator is long enough put the text inside on the right*/
-    if (lv_area_get_width(&indic_area) > txt_size.x + 20)
-    {
+    if(lv_area_get_width(&indic_area) > txt_size.x + 20) {
         lv_area_align(&indic_area, &txt_area, LV_ALIGN_RIGHT_MID, -10, 0);
         label_dsc.color = lv_color_white();
     }
     /*If the indicator is still short put the text out of it on the right*/
-    else
-    {
+    else {
         lv_area_align(&indic_area, &txt_area, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
         label_dsc.color = lv_color_black();
     }
     label_dsc.text = buf;
     label_dsc.text_local = true;
-    lv_layer_t *layer = lv_event_get_layer(e);
+    lv_layer_t * layer = lv_event_get_layer(e);
     lv_draw_label(layer, &label_dsc, &txt_area);
 }
 
@@ -57,7 +55,7 @@ static void event_cb(lv_event_t * e)
  */
 void lv_example_bar_6(void)
 {
-    lv_obj_t *bar = lv_bar_create(lv_screen_active());
+    lv_obj_t * bar = lv_bar_create(lv_screen_active());
     lv_bar_set_range(bar, MIN_VALUE, MAX_VALUE);
     lv_obj_set_size(bar, 200, 20);
     lv_obj_center(bar);

@@ -25,7 +25,7 @@
  **********************/
 static void fs_init(void);
 
-static void *fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode);
+static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode);
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p);
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br);
 static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, uint32_t btw, uint32_t * bw);
@@ -33,7 +33,7 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 static lv_fs_res_t fs_size(lv_fs_drv_t * drv, void * file_p, uint32_t * size_p);
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p);
 
-static void *fs_dir_open(lv_fs_drv_t * drv, const char * path);
+static void * fs_dir_open(lv_fs_drv_t * drv, const char * path);
 static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * rddir_p, char * fn, uint32_t fn_len);
 static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * rddir_p);
 
@@ -102,24 +102,21 @@ static void fs_init(void)
  * @param mode      read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
  * @return          a file descriptor or NULL on error
  */
-static void *fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
+static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 {
     lv_fs_res_t res = LV_FS_RES_NOT_IMP;
 
-    void *f = NULL;
+    void * f = NULL;
 
-    if (mode == LV_FS_MODE_WR)
-    {
+    if(mode == LV_FS_MODE_WR) {
         /*Open a file for write*/
         f = ...         /*Add your code here*/
     }
-    else if (mode == LV_FS_MODE_RD)
-    {
+    else if(mode == LV_FS_MODE_RD) {
         /*Open a file for read*/
         f = ...         /*Add your code here*/
     }
-    else if (mode == (LV_FS_MODE_WR | LV_FS_MODE_RD))
-    {
+    else if(mode == (LV_FS_MODE_WR | LV_FS_MODE_RD)) {
         /*Open a file for read and write*/
         f = ...         /*Add your code here*/
     }
@@ -216,9 +213,9 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
  * @param path      path to a directory
  * @return          pointer to the directory read descriptor or NULL on error
  */
-static void *fs_dir_open(lv_fs_drv_t * drv, const char * path)
+static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 {
-    void *dir = NULL;
+    void * dir = NULL;
     /*Add your code here*/
     dir = ...           /*Add your code here*/
           return dir;

@@ -23,14 +23,13 @@
  *      TYPEDEFS
  **********************/
 
-struct lv_lru_item_t
-{
-    void *value;
-    void *key;
+struct lv_lru_item_t {
+    void * value;
+    void * key;
     size_t value_length;
     size_t key_length;
     uint64_t access_count;
-    struct lv_lru_item_t *next;
+    struct lv_lru_item_t * next;
 };
 
 /**********************
@@ -51,7 +50,7 @@ static int lv_lru_cmp_keys(lv_lru_item_t * item, const void * key, uint32_t key_
 static void lv_lru_remove_item(lv_lru_t * cache, lv_lru_item_t * prev, lv_lru_item_t * item, uint32_t hash_index);
 
 /** pop an existing item off the free queue, or create a new one */
-static lv_lru_item_t *lv_lru_pop_or_create_item(lv_lru_t * cache);
+static lv_lru_item_t * lv_lru_pop_or_create_item(lv_lru_t * cache);
 
 /**********************
  *  STATIC VARIABLES
@@ -72,13 +71,12 @@ static lv_lru_item_t *lv_lru_pop_or_create_item(lv_lru_t * cache);
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_lru_t *lv_lru_create(size_t cache_size, size_t average_length, lv_lru_free_cb_t value_free,
-                        lv_lru_free_cb_t key_free)
+lv_lru_t * lv_lru_create(size_t cache_size, size_t average_length, lv_lru_free_cb_t value_free,
+                         lv_lru_free_cb_t key_free)
 {
     // create the cache
-    lv_lru_t *cache = lv_malloc_zeroed(sizeof(lv_lru_t));
-    if (!cache)
-    {
+    lv_lru_t * cache = lv_malloc_zeroed(sizeof(lv_lru_t));
+    if(!cache) {
         LV_LOG_WARN("LRU Cache unable to create cache object");
         return NULL;
     }
@@ -92,8 +90,7 @@ lv_lru_t *lv_lru_create(size_t cache_size, size_t average_length, lv_lru_free_cb
 
     // size the hash table to a guestimate of the number of slots required (assuming a perfect hash)
     cache->items = lv_malloc_zeroed(sizeof(lv_lru_item_t *) * cache->hash_table_size);
-    if (!cache->items)
-    {
+    if(!cache->items) {
         LV_LOG_WARN("LRU Cache unable to create cache hash table");
         lv_free(cache);
         return NULL;
@@ -106,15 +103,12 @@ void lv_lru_delete(lv_lru_t * cache)
     LV_ASSERT_NULL(cache);
 
     // free each of the cached items, and the hash table
-    lv_lru_item_t *item = NULL, *next = NULL;
+    lv_lru_item_t * item = NULL, * next = NULL;
     uint32_t i = 0;
-    if (cache->items)
-    {
-        for (; i < cache->hash_table_size; i++)
-        {
+    if(cache->items) {
+        for(; i < cache->hash_table_size; i++) {
             item = cache->items[i];
-            while (item)
-            {
+            while(item) {
                 next = (lv_lru_item_t *) item->next;
                 cache->value_free(item->value);
                 cache->key_free(item->key);
@@ -126,11 +120,9 @@ void lv_lru_delete(lv_lru_t * cache)
         lv_free(cache->items);
     }
 
-    if (cache->free_items)
-    {
+    if(cache->free_items) {
         item = cache->free_items;
-        while (item)
-        {
+        while(item) {
             next = (lv_lru_item_t *) item->next;
             lv_free(item);
             item = next;
@@ -151,17 +143,15 @@ lv_lru_res_t lv_lru_set(lv_lru_t * cache, const void * key, size_t key_length, v
     // see if the key already exists
     uint32_t hash_index = lv_lru_hash(cache, key, key_length);
     int required = 0;
-    lv_lru_item_t *item = NULL, *prev = NULL;
+    lv_lru_item_t * item = NULL, * prev = NULL;
     item = cache->items[hash_index];
 
-    while (item && lv_lru_cmp_keys(item, key, key_length))
-    {
+    while(item && lv_lru_cmp_keys(item, key, key_length)) {
         prev = item;
         item = (lv_lru_item_t *) item->next;
     }
 
-    if (item)
-    {
+    if(item) {
         // update the value and value_lengths
         required = (int)(value_length - item->value_length);
         cache->value_free(item->value);
@@ -169,8 +159,7 @@ lv_lru_res_t lv_lru_set(lv_lru_t * cache, const void * key, size_t key_length, v
         item->value_length = value_length;
 
     }
-    else
-    {
+    else {
         // insert a new item
         item = lv_lru_pop_or_create_item(cache);
         item->value = value;
@@ -180,7 +169,7 @@ lv_lru_res_t lv_lru_set(lv_lru_t * cache, const void * key, size_t key_length, v
         item->key_length = key_length;
         required = (int) value_length;
 
-        if (prev)
+        if(prev)
             prev->next = item;
         else
             cache->items[hash_index] = item;
@@ -188,9 +177,8 @@ lv_lru_res_t lv_lru_set(lv_lru_t * cache, const void * key, size_t key_length, v
     item->access_count = ++cache->access_count;
 
     // remove as many items as necessary to free enough space
-    if (required > 0 && (size_t) required > cache->free_memory)
-    {
-        while (cache->free_memory < (size_t) required)
+    if(required > 0 && (size_t) required > cache->free_memory) {
+        while(cache->free_memory < (size_t) required)
             lv_lru_remove_lru_item(cache);
     }
     cache->free_memory -= required;
@@ -204,18 +192,16 @@ lv_lru_res_t lv_lru_get(lv_lru_t * cache, const void * key, size_t key_size, voi
 
     // loop until we find the item, or hit the end of a chain
     uint32_t hash_index = lv_lru_hash(cache, key, key_size);
-    lv_lru_item_t *item = cache->items[hash_index];
+    lv_lru_item_t * item = cache->items[hash_index];
 
-    while (item && lv_lru_cmp_keys(item, key, key_size))
+    while(item && lv_lru_cmp_keys(item, key, key_size))
         item = (lv_lru_item_t *) item->next;
 
-    if (item)
-    {
+    if(item) {
         *value = item->value;
         item->access_count = ++cache->access_count;
     }
-    else
-    {
+    else {
         *value = NULL;
     }
 
@@ -228,18 +214,16 @@ lv_lru_res_t lv_lru_remove(lv_lru_t * cache, const void * key, size_t key_size)
     test_for_missing_key();
 
     // loop until we find the item, or hit the end of a chain
-    lv_lru_item_t *item = NULL, *prev = NULL;
+    lv_lru_item_t * item = NULL, * prev = NULL;
     uint32_t hash_index = lv_lru_hash(cache, key, key_size);
     item = cache->items[hash_index];
 
-    while (item && lv_lru_cmp_keys(item, key, key_size))
-    {
+    while(item && lv_lru_cmp_keys(item, key, key_size)) {
         prev = item;
         item = (lv_lru_item_t *) item->next;
     }
 
-    if (item)
-    {
+    if(item) {
         lv_lru_remove_item(cache, prev, item, hash_index);
     }
 
@@ -248,20 +232,17 @@ lv_lru_res_t lv_lru_remove(lv_lru_t * cache, const void * key, size_t key_size)
 
 void lv_lru_remove_lru_item(lv_lru_t * cache)
 {
-    lv_lru_item_t *min_item = NULL, *min_prev = NULL;
-    lv_lru_item_t *item = NULL, *prev = NULL;
+    lv_lru_item_t * min_item = NULL, * min_prev = NULL;
+    lv_lru_item_t * item = NULL, * prev = NULL;
     uint32_t i = 0, min_index = -1;
     uint64_t min_access_count = -1;
 
-    for (; i < cache->hash_table_size; i++)
-    {
+    for(; i < cache->hash_table_size; i++) {
         item = cache->items[i];
         prev = NULL;
 
-        while (item)
-        {
-            if (item->access_count < min_access_count || (int64_t) min_access_count == -1)
-            {
+        while(item) {
+            if(item->access_count < min_access_count || (int64_t) min_access_count == -1) {
                 min_access_count = item->access_count;
                 min_item = item;
                 min_prev = prev;
@@ -272,8 +253,7 @@ void lv_lru_remove_lru_item(lv_lru_t * cache)
         }
     }
 
-    if (min_item)
-    {
+    if(min_item) {
         lv_lru_remove_item(cache, min_prev, min_item, min_index);
     }
 }
@@ -287,10 +267,9 @@ static uint32_t lv_lru_hash(lv_lru_t * cache, const void * key, uint32_t key_len
     uint32_t m = 0x5bd1e995;
     uint32_t r = 24;
     uint32_t h = cache->seed ^ key_length;
-    char *data = (char *) key;
+    char * data = (char *) key;
 
-    while (key_length >= 4)
-    {
+    while(key_length >= 4) {
         uint32_t k = *(uint32_t *) data;
         k *= m;
         k ^= k >> r;
@@ -301,16 +280,13 @@ static uint32_t lv_lru_hash(lv_lru_t * cache, const void * key, uint32_t key_len
         key_length -= 4;
     }
 
-    if (key_length >= 3)
-    {
+    if(key_length >= 3) {
         h ^= data[2] << 16;
     }
-    if (key_length >= 2)
-    {
+    if(key_length >= 2) {
         h ^= data[1] << 8;
     }
-    if (key_length >= 1)
-    {
+    if(key_length >= 1) {
         h ^= data[0];
         h *= m;
     }
@@ -323,24 +299,20 @@ static uint32_t lv_lru_hash(lv_lru_t * cache, const void * key, uint32_t key_len
 
 static int lv_lru_cmp_keys(lv_lru_item_t * item, const void * key, uint32_t key_length)
 {
-    if (key_length != item->key_length)
-    {
+    if(key_length != item->key_length) {
         return 1;
     }
-    else
-    {
+    else {
         return lv_memcmp(key, item->key, key_length);
     }
 }
 
 static void lv_lru_remove_item(lv_lru_t * cache, lv_lru_item_t * prev, lv_lru_item_t * item, uint32_t hash_index)
 {
-    if (prev)
-    {
+    if(prev) {
         prev->next = item->next;
     }
-    else
-    {
+    else {
         cache->items[hash_index] = (lv_lru_item_t *) item->next;
     }
 
@@ -355,18 +327,16 @@ static void lv_lru_remove_item(lv_lru_t * cache, lv_lru_item_t * prev, lv_lru_it
     cache->free_items = item;
 }
 
-static lv_lru_item_t *lv_lru_pop_or_create_item(lv_lru_t * cache)
+static lv_lru_item_t * lv_lru_pop_or_create_item(lv_lru_t * cache)
 {
-    lv_lru_item_t *item = NULL;
+    lv_lru_item_t * item = NULL;
 
-    if (cache->free_items)
-    {
+    if(cache->free_items) {
         item = cache->free_items;
         cache->free_items = item->next;
         lv_memzero(item, sizeof(lv_lru_item_t));
     }
-    else
-    {
+    else {
         item = lv_malloc_zeroed(sizeof(lv_lru_item_t));
     }
 

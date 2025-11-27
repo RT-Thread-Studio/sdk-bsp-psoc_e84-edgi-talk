@@ -28,10 +28,9 @@ extern "C" {
  * Special, rarely used attributes.
  * They are allocated automatically if any elements is set.
  */
-struct lv_obj_spec_attr_t
-{
-    lv_obj_t **children;            /**< Store the pointer of the children in an array.*/
-    lv_group_t *group_p;
+struct lv_obj_spec_attr_t {
+    lv_obj_t ** children;           /**< Store the pointer of the children in an array.*/
+    lv_group_t * group_p;
     lv_event_list_t event_list;
 
     lv_point_t scroll;              /**< The current X/Y scroll offset*/
@@ -47,19 +46,18 @@ struct lv_obj_spec_attr_t
     uint16_t layer_type : 2;        /**< Cache the layer type here. Element of lv_intermediate_layer_type_t */
 };
 
-struct lv_obj_t
-{
-    const lv_obj_class_t *class_p;
-    lv_obj_t *parent;
-    lv_obj_spec_attr_t *spec_attr;
-    lv_obj_style_t *styles;
+struct lv_obj_t {
+    const lv_obj_class_t * class_p;
+    lv_obj_t * parent;
+    lv_obj_spec_attr_t * spec_attr;
+    lv_obj_style_t * styles;
 #if LV_OBJ_STYLE_CACHE
     uint32_t style_main_prop_is_set;
     uint32_t style_other_prop_is_set;
 #endif
-    void *user_data;
+    void * user_data;
 #if LV_USE_OBJ_ID
-    void *id;
+    void * id;
 #endif
     lv_area_t coords;
     lv_obj_flag_t flags;

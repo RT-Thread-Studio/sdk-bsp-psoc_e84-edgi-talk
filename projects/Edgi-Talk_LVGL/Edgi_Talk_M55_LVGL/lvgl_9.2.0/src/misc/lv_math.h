@@ -36,8 +36,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     uint16_t i;
     uint16_t f;
 } lv_sqrt_res_t;

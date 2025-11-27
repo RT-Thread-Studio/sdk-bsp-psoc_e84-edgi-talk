@@ -68,10 +68,9 @@ static inline void _gifdec_fill_bg_mve(uint8_t * dst, uint16_t w, uint16_t h, ui
 }
 
 static inline void _gifdec_render_frame_mve(uint8_t * dst, uint16_t w, uint16_t h, uint16_t stride, uint8_t * frame,
-        uint8_t *pattern, uint16_t tindex)
+                                            uint8_t * pattern, uint16_t tindex)
 {
-    if (w == 0 || h == 0)
-    {
+    if(w == 0 || h == 0) {
         return;
     }
 

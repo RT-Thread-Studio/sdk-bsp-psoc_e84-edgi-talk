@@ -46,8 +46,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_THREAD_PRIO_LOWEST,
     LV_THREAD_PRIO_LOW,
     LV_THREAD_PRIO_MID,
@@ -74,7 +73,7 @@ typedef enum
  * @return              LV_RESULT_OK: success; LV_RESULT_INVALID: failure
  */
 lv_result_t lv_thread_init(lv_thread_t * thread, lv_thread_prio_t prio, void (*callback)(void *), size_t stack_size,
-                           void *user_data);
+                           void * user_data);
 
 /**
  * Delete a thread

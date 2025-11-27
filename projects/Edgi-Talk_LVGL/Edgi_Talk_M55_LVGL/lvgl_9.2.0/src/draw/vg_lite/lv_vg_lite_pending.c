@@ -19,11 +19,10 @@
  *      TYPEDEFS
  **********************/
 
-struct lv_vg_lite_pending_t
-{
+struct lv_vg_lite_pending_t {
     lv_array_t objs;
     lv_vg_lite_pending_free_cb_t free_cb;
-    void *user_data;
+    void * user_data;
 };
 
 /**********************
@@ -42,9 +41,9 @@ struct lv_vg_lite_pending_t
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_vg_lite_pending_t *lv_vg_lite_pending_create(size_t obj_size, uint32_t capacity_default)
+lv_vg_lite_pending_t * lv_vg_lite_pending_create(size_t obj_size, uint32_t capacity_default)
 {
-    lv_vg_lite_pending_t *pending = lv_malloc_zeroed(sizeof(lv_vg_lite_pending_t));
+    lv_vg_lite_pending_t * pending = lv_malloc_zeroed(sizeof(lv_vg_lite_pending_t));
     LV_ASSERT_MALLOC(pending);
     lv_array_init(&pending->objs, capacity_default, obj_size);
     return pending;
@@ -60,7 +59,7 @@ void lv_vg_lite_pending_destroy(lv_vg_lite_pending_t * pending)
 }
 
 void lv_vg_lite_pending_set_free_cb(lv_vg_lite_pending_t * pending, lv_vg_lite_pending_free_cb_t free_cb,
-                                    void *user_data)
+                                    void * user_data)
 {
     LV_ASSERT_NULL(pending);
     LV_ASSERT_NULL(free_cb);
@@ -81,14 +80,12 @@ void lv_vg_lite_pending_remove_all(lv_vg_lite_pending_t * pending)
     LV_ASSERT_NULL(pending->free_cb);
 
     uint32_t size = lv_array_size(&pending->objs);
-    if (size == 0)
-    {
+    if(size == 0) {
         return;
     }
 
     /* remove all the pending objects */
-    for (uint32_t i = 0; i < size; i++)
-    {
+    for(uint32_t i = 0; i < size; i++) {
         pending->free_cb(lv_array_at(&pending->objs, i), pending->user_data);
     }
 

@@ -44,8 +44,7 @@ LV_EXPORT_CONST_INT(LV_SCALE_LABEL_ENABLED_DEFAULT);
 /**
  * Scale mode
  */
-typedef enum
-{
+typedef enum {
     LV_SCALE_MODE_HORIZONTAL_TOP    = 0x00U,
     LV_SCALE_MODE_HORIZONTAL_BOTTOM = 0x01U,
     LV_SCALE_MODE_VERTICAL_LEFT     = 0x02U,
@@ -66,7 +65,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_scale_class;
  * @param parent    pointer to an object, it will be the parent of the new scale
  * @return          pointer to the created scale
  */
-lv_obj_t *lv_scale_create(lv_obj_t * parent);
+lv_obj_t * lv_scale_create(lv_obj_t * parent);
 
 /*======================
  * Add/remove functions
@@ -175,7 +174,7 @@ void lv_scale_set_draw_ticks_on_top(lv_obj_t * obj, bool en);
  * @param obj       pointer to a scale object
  * @return          pointer to the new section
  */
-lv_scale_section_t *lv_scale_add_section(lv_obj_t * obj);
+lv_scale_section_t * lv_scale_add_section(lv_obj_t * obj);
 
 /**
  * Set the range for the given scale section

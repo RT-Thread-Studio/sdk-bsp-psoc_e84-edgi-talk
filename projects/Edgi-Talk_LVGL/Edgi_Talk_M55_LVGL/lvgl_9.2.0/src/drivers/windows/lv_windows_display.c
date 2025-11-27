@@ -27,7 +27,7 @@
  **********************/
 
 static unsigned int __stdcall lv_windows_display_thread_entrypoint(
-    void *parameter);
+    void * parameter);
 
 /**********************
  *  STATIC VARIABLES
@@ -41,8 +41,8 @@ static unsigned int __stdcall lv_windows_display_thread_entrypoint(
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_windows_create_display(
-    const wchar_t *title,
+lv_display_t * lv_windows_create_display(
+    const wchar_t * title,
     int32_t hor_res,
     int32_t ver_res,
     int32_t zoom_level,
@@ -60,8 +60,7 @@ lv_display_t *lv_windows_create_display(
     data.simulator_mode = simulator_mode;
     data.mutex = CreateEventExW(NULL, NULL, 0, EVENT_ALL_ACCESS);
     data.display = NULL;
-    if (!data.mutex)
-    {
+    if(!data.mutex) {
         return NULL;
     }
 
@@ -76,13 +75,11 @@ lv_display_t *lv_windows_create_display(
 
     WaitForSingleObjectEx(data.mutex, INFINITE, FALSE);
 
-    if (thread)
-    {
+    if(thread) {
         CloseHandle(thread);
     }
 
-    if (data.mutex)
-    {
+    if(data.mutex) {
         CloseHandle(data.mutex);
     }
 
@@ -119,14 +116,13 @@ int32_t lv_windows_dpi_to_physical(int32_t logical, int32_t dpi)
  **********************/
 
 static unsigned int __stdcall lv_windows_display_thread_entrypoint(
-    void *parameter)
+    void * parameter)
 {
-    lv_windows_create_display_data_t *data = parameter;
+    lv_windows_create_display_data_t * data = parameter;
     LV_ASSERT_NULL(data);
 
     DWORD window_style = WS_OVERLAPPEDWINDOW;
-    if (data->simulator_mode)
-    {
+    if(data->simulator_mode) {
         window_style &= ~(WS_SIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME);
     }
 
@@ -143,15 +139,13 @@ static unsigned int __stdcall lv_windows_display_thread_entrypoint(
                              NULL,
                              NULL,
                              data);
-    if (!window_handle)
-    {
+    if(!window_handle) {
         return 0;
     }
 
-    lv_windows_window_context_t *context = lv_windows_get_window_context(
-            window_handle);
-    if (!context)
-    {
+    lv_windows_window_context_t * context = lv_windows_get_window_context(
+                                                window_handle);
+    if(!context) {
         return 0;
     }
 
@@ -165,8 +159,7 @@ static unsigned int __stdcall lv_windows_display_thread_entrypoint(
     data = NULL;
 
     MSG message;
-    while (GetMessageW(&message, NULL, 0, 0))
-    {
+    while(GetMessageW(&message, NULL, 0, 0)) {
         TranslateMessage(&message);
         DispatchMessageW(&message);
     }

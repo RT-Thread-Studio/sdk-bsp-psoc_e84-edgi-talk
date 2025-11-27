@@ -31,8 +31,7 @@ LV_EXPORT_CONST_INT(LV_BUTTONMATRIX_BUTTON_NONE);
 
 /** Type to store button control bits (disabled, hidden etc.)
  * The first 3 bits are used to store the width*/
-typedef enum
-{
+typedef enum {
     LV_BUTTONMATRIX_CTRL_HIDDEN       = 0x0010, /**< Button hidden*/
     LV_BUTTONMATRIX_CTRL_NO_REPEAT    = 0x0020, /**< Do not repeat press this button.*/
     LV_BUTTONMATRIX_CTRL_DISABLED     = 0x0040, /**< Disable this button.*/
@@ -48,7 +47,7 @@ typedef enum
 } lv_buttonmatrix_ctrl_t;
 
 typedef bool (*lv_buttonmatrix_button_draw_cb_t)(lv_obj_t * btnm, uint32_t btn_id, const lv_area_t * draw_area,
-        const lv_area_t *clip_area);
+                                                 const lv_area_t * clip_area);
 
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_buttonmatrix_class;
 
@@ -61,7 +60,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_buttonmatrix_class;
  * @param parent    pointer to an object, it will be the parent of the new button matrix
  * @return          pointer to the created button matrix
  */
-lv_obj_t *lv_buttonmatrix_create(lv_obj_t * parent);
+lv_obj_t * lv_buttonmatrix_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -156,7 +155,7 @@ void lv_buttonmatrix_set_one_checked(lv_obj_t * obj, bool en);
  * @param obj       pointer to a button matrix object
  * @return          the current map
  */
-const char **lv_buttonmatrix_get_map(const lv_obj_t * obj);
+const char ** lv_buttonmatrix_get_map(const lv_obj_t * obj);
 
 /**
  * Get the index of the lastly "activated" button by the user (pressed, released, focused etc)
@@ -172,7 +171,7 @@ uint32_t lv_buttonmatrix_get_selected_button(const lv_obj_t * obj);
  * @param btn_id    the index a button not counting new line characters.
  * @return          text of btn_index` button
  */
-const char *lv_buttonmatrix_get_button_text(const lv_obj_t * obj, uint32_t btn_id);
+const char * lv_buttonmatrix_get_button_text(const lv_obj_t * obj, uint32_t btn_id);
 
 /**
  * Get the whether a control value is enabled or disabled for button of a button matrix

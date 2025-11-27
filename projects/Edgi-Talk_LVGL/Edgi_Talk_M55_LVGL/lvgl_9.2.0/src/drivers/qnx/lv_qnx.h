@@ -40,7 +40,7 @@ extern "C" {
  * @param   ver_res     The vertical resolution (size) of the window
  * @return  A pointer to a new display object if successful, NULL otherwise
  */
-lv_display_t *lv_qnx_window_create(int32_t hor_res, int32_t ver_res);
+lv_display_t * lv_qnx_window_create(int32_t hor_res, int32_t ver_res);
 
 /**
  * Set the title of the window identified by the given display.

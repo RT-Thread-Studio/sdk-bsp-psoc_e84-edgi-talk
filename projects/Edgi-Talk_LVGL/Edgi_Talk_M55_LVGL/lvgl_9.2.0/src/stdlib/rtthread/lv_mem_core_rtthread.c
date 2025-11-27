@@ -63,12 +63,12 @@ void lv_mem_remove_pool(lv_mem_pool_t pool)
     return;
 }
 
-void *lv_malloc_core(size_t size)
+void * lv_malloc_core(size_t size)
 {
     return rt_malloc(size);
 }
 
-void *lv_realloc_core(void * p, size_t new_size)
+void * lv_realloc_core(void * p, size_t new_size)
 {
     return rt_realloc(p, new_size);
 }

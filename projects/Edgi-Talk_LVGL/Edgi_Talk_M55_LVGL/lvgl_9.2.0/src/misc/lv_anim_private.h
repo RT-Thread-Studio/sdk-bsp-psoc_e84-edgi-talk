@@ -24,11 +24,10 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     bool anim_list_changed;
     bool anim_run_round;
-    lv_timer_t *timer;
+    lv_timer_t * timer;
     lv_ll_t anim_ll;
 } lv_anim_state_t;
 

@@ -24,21 +24,19 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_event_dsc_t
-{
+struct lv_event_dsc_t {
     lv_event_cb_t cb;
-    void *user_data;
+    void * user_data;
     uint32_t filter;
 };
 
-struct lv_event_t
-{
-    void *current_target;
-    void *original_target;
+struct lv_event_t {
+    void * current_target;
+    void * original_target;
     lv_event_code_t code;
-    void *user_data;
-    void *param;
-    lv_event_t *prev;
+    void * user_data;
+    void * param;
+    lv_event_t * prev;
     uint8_t deleted : 1;
     uint8_t stop_processing : 1;
     uint8_t stop_bubbling : 1;

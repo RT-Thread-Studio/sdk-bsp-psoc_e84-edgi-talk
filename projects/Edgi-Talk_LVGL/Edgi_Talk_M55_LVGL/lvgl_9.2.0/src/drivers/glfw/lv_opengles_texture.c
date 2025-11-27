@@ -24,10 +24,9 @@
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     unsigned int texture_id;
-    uint8_t *fb1;
+    uint8_t * fb1;
 } lv_opengles_texture_t;
 
 /**********************
@@ -49,25 +48,22 @@ static void release_disp_cb(lv_event_t * e);
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_opengles_texture_create(int32_t w, int32_t h)
+lv_display_t * lv_opengles_texture_create(int32_t w, int32_t h)
 {
-    lv_display_t *disp = lv_display_create(w, h);
-    if (disp == NULL)
-    {
+    lv_display_t * disp = lv_display_create(w, h);
+    if(disp == NULL) {
         return NULL;
     }
-    lv_opengles_texture_t *dsc = lv_malloc_zeroed(sizeof(lv_opengles_texture_t));
+    lv_opengles_texture_t * dsc = lv_malloc_zeroed(sizeof(lv_opengles_texture_t));
     LV_ASSERT_MALLOC(dsc);
-    if (dsc == NULL)
-    {
+    if(dsc == NULL) {
         lv_display_delete(disp);
         return NULL;
     }
     uint32_t stride = lv_draw_buf_width_to_stride(w, lv_display_get_color_format(disp));
     uint32_t buf_size = stride * w;
     dsc->fb1 = malloc(buf_size);
-    if (dsc->fb1 == NULL)
-    {
+    if(dsc->fb1 == NULL) {
         lv_free(dsc);
         lv_display_delete(disp);
         return NULL;
@@ -91,22 +87,19 @@ lv_display_t *lv_opengles_texture_create(int32_t w, int32_t h)
 
 unsigned int lv_opengles_texture_get_texture_id(lv_display_t * disp)
 {
-    if (disp->flush_cb != flush_cb)
-    {
+    if(disp->flush_cb != flush_cb) {
         return 0;
     }
-    lv_opengles_texture_t *dsc = lv_display_get_driver_data(disp);
+    lv_opengles_texture_t * dsc = lv_display_get_driver_data(disp);
     return dsc->texture_id;
 }
 
-lv_display_t *lv_opengles_texture_get_from_texture_id(unsigned int texture_id)
+lv_display_t * lv_opengles_texture_get_from_texture_id(unsigned int texture_id)
 {
-    lv_display_t *disp = NULL;
-    while (NULL != (disp = lv_display_get_next(disp)))
-    {
+    lv_display_t * disp = NULL;
+    while(NULL != (disp = lv_display_get_next(disp))) {
         unsigned int disp_texture_id = lv_opengles_texture_get_texture_id(disp);
-        if (disp_texture_id == texture_id)
-        {
+        if(disp_texture_id == texture_id) {
             return disp;
         }
     }
@@ -122,10 +115,9 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
     LV_UNUSED(area);
     LV_UNUSED(px_map);
 
-    if (lv_display_flush_is_last(disp))
-    {
+    if(lv_display_flush_is_last(disp)) {
 
-        lv_opengles_texture_t *dsc = lv_display_get_driver_data(disp);
+        lv_opengles_texture_t * dsc = lv_display_get_driver_data(disp);
 
         GL_CALL(glBindTexture(GL_TEXTURE_2D, dsc->texture_id));
 
@@ -150,8 +142,8 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
 
 static void release_disp_cb(lv_event_t * e)
 {
-    lv_display_t *disp = lv_event_get_user_data(e);
-    lv_opengles_texture_t *dsc = lv_display_get_driver_data(disp);
+    lv_display_t * disp = lv_event_get_user_data(e);
+    lv_opengles_texture_t * dsc = lv_display_get_driver_data(disp);
     free(dsc->fb1);
     lv_free(dsc);
 }

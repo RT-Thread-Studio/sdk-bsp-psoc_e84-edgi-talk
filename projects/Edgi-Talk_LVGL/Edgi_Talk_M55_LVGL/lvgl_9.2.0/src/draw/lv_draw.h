@@ -44,8 +44,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_DRAW_TASK_TYPE_NONE = 0,
     LV_DRAW_TASK_TYPE_FILL,
     LV_DRAW_TASK_TYPE_BORDER,
@@ -61,19 +60,17 @@ typedef enum
     LV_DRAW_TASK_TYPE_VECTOR,
 } lv_draw_task_type_t;
 
-typedef enum
-{
+typedef enum {
     LV_DRAW_TASK_STATE_WAITING,     /*Waiting for something to be finished. E.g. rendering a layer*/
     LV_DRAW_TASK_STATE_QUEUED,
     LV_DRAW_TASK_STATE_IN_PROGRESS,
     LV_DRAW_TASK_STATE_READY,
 } lv_draw_task_state_t;
 
-struct lv_layer_t
-{
+struct lv_layer_t  {
 
     /** Target draw buffer of the layer*/
-    lv_draw_buf_t *draw_buf;
+    lv_draw_buf_t * draw_buf;
 
     /** The absolute coordinates of the buffer */
     lv_area_t buf_area;
@@ -102,23 +99,22 @@ struct lv_layer_t
 #endif
 
     /** Linked list of draw tasks */
-    lv_draw_task_t *draw_task_head;
+    lv_draw_task_t * draw_task_head;
 
-    lv_layer_t *parent;
-    lv_layer_t *next;
+    lv_layer_t * parent;
+    lv_layer_t * next;
     bool all_tasks_added;
-    void *user_data;
+    void * user_data;
 };
 
-typedef struct
-{
-    lv_obj_t *obj;
+typedef struct {
+    lv_obj_t * obj;
     lv_part_t part;
     uint32_t id1;
     uint32_t id2;
-    lv_layer_t *layer;
+    lv_layer_t * layer;
     size_t dsc_size;
-    void *user_data;
+    void * user_data;
 } lv_draw_dsc_base_t;
 
 /**********************
@@ -140,7 +136,7 @@ void lv_draw_deinit(void);
  * @param size      the size to allocate. E.g. `sizeof(my_draw_unit_t)`,
  *                  where the first element of `my_draw_unit_t` is `lv_draw_unit_t`.
  */
-void *lv_draw_create_unit(size_t size);
+void * lv_draw_create_unit(size_t size);
 
 /**
  * Add an empty draw task to the draw task list of a layer.
@@ -149,7 +145,7 @@ void *lv_draw_create_unit(size_t size);
  * @return          the created draw task which needs to be
  *                  further configured e.g. by added a draw descriptor
  */
-lv_draw_task_t *lv_draw_add_task(lv_layer_t * layer, const lv_area_t * coords);
+lv_draw_task_t * lv_draw_add_task(lv_layer_t * layer, const lv_area_t * coords);
 
 /**
  * Needs to be called when a draw task is created and configured.
@@ -203,7 +199,7 @@ uint32_t lv_draw_get_unit_count(void);
  * @param draw_unit_id      check the task where `preferred_draw_unit_id` equals this value or `LV_DRAW_UNIT_NONE`
  * @return                  tan available draw task or NULL if there is no any
  */
-lv_draw_task_t *lv_draw_get_next_available_task(lv_layer_t * layer, lv_draw_task_t * t_prev, uint8_t draw_unit_id);
+lv_draw_task_t * lv_draw_get_next_available_task(lv_layer_t * layer, lv_draw_task_t * t_prev, uint8_t draw_unit_id);
 
 /**
  * Tell how many draw task are waiting to be drawn on the area of `t_check`.
@@ -222,14 +218,14 @@ uint32_t lv_draw_get_dependent_count(lv_draw_task_t * t_check);
  * @param area              the areas of the layer (absolute coordinates)
  * @return                  the new target_layer or NULL on error
  */
-lv_layer_t *lv_draw_layer_create(lv_layer_t * parent_layer, lv_color_format_t color_format, const lv_area_t * area);
+lv_layer_t * lv_draw_layer_create(lv_layer_t * parent_layer, lv_color_format_t color_format, const lv_area_t * area);
 
 /**
  * Try to allocate a buffer for the layer.
  * @param layer             pointer to a layer
  * @return                  pointer to the allocated aligned buffer or NULL on failure
  */
-void *lv_draw_layer_alloc_buf(lv_layer_t * layer);
+void * lv_draw_layer_alloc_buf(lv_layer_t * layer);
 
 /**
  * Got to a pixel at X and Y coordinate on a layer
@@ -238,7 +234,7 @@ void *lv_draw_layer_alloc_buf(lv_layer_t * layer);
  * @param y                 the target X coordinate
  * @return                  `buf` offset to point to the given X and Y coordinate
  */
-void *lv_draw_layer_go_to_xy(lv_layer_t * layer, int32_t x, int32_t y);
+void * lv_draw_layer_go_to_xy(lv_layer_t * layer, int32_t x, int32_t y);
 
 /**
  * Get the type of a draw task
@@ -252,7 +248,7 @@ lv_draw_task_type_t lv_draw_task_get_type(const lv_draw_task_t * t);
  * @param t   the draw task to get the draw descriptor of
  * @return    a void pointer to the draw descriptor
 */
-void *lv_draw_task_get_draw_dsc(const lv_draw_task_t * t);
+void * lv_draw_task_get_draw_dsc(const lv_draw_task_t * t);
 
 /**
  * Get the draw area of a draw task

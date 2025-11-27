@@ -25,8 +25,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_STYLE_STATE_CMP_SAME,           /**< The style properties in the 2 states are identical */
     LV_STYLE_STATE_CMP_DIFF_REDRAW,    /**< The differences can be shown with a simple redraw */
     LV_STYLE_STATE_CMP_DIFF_DRAW_PAD,  /**< The differences can be shown with a simple redraw */
@@ -150,7 +149,7 @@ void lv_obj_set_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_
                                  lv_style_selector_t selector);
 
 lv_style_res_t lv_obj_get_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_value_t * value,
-        lv_style_selector_t selector);
+                                           lv_style_selector_t selector);
 
 /**
  * Remove a local style property from a part of an object with a given state.
@@ -241,14 +240,14 @@ static inline void lv_obj_set_style_pad_gap(lv_obj_t * obj, int32_t value, lv_st
 }
 
 static inline void lv_obj_set_style_size(lv_obj_t * obj, int32_t width, int32_t height,
-        lv_style_selector_t selector)
+                                         lv_style_selector_t selector)
 {
     lv_obj_set_style_width(obj, width, selector);
     lv_obj_set_style_height(obj, height, selector);
 }
 
 static inline void lv_obj_set_style_transform_scale(lv_obj_t * obj, int32_t value,
-        lv_style_selector_t selector)
+                                                    lv_style_selector_t selector)
 {
     lv_obj_set_style_transform_scale_x(obj, value, selector);
     lv_obj_set_style_transform_scale_y(obj, value, selector);

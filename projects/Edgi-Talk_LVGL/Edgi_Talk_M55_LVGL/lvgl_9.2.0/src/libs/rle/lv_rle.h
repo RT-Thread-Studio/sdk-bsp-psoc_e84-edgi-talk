@@ -30,7 +30,7 @@ extern "C" {
  **********************/
 
 uint32_t lv_rle_decompress(const uint8_t * input,
-                           uint32_t input_buff_len, uint8_t *output,
+                           uint32_t input_buff_len, uint8_t * output,
                            uint32_t output_buff_len, uint8_t blk_size);
 
 /**********************

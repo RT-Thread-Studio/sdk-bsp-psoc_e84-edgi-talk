@@ -31,14 +31,13 @@
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     /* fd should be defined at the beginning */
     int fd;
     struct touch_sample_s last_sample;
     bool has_last_sample;
     lv_indev_state_t last_state;
-    lv_indev_t *indev_drv;
+    lv_indev_t * indev_drv;
 } lv_nuttx_touchscreen_t;
 
 /**********************
@@ -46,7 +45,7 @@ typedef struct
  **********************/
 static void touchscreen_read(lv_indev_t * drv, lv_indev_data_t * data);
 static void touchscreen_delete_cb(lv_event_t * e);
-static lv_indev_t *touchscreen_init(int fd);
+static lv_indev_t * touchscreen_init(int fd);
 
 /**********************
  *  STATIC VARIABLES
@@ -60,16 +59,15 @@ static lv_indev_t *touchscreen_init(int fd);
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_indev_t *lv_nuttx_touchscreen_create(const char * dev_path)
+lv_indev_t * lv_nuttx_touchscreen_create(const char * dev_path)
 {
-    lv_indev_t *indev;
+    lv_indev_t * indev;
     int fd;
 
     LV_ASSERT_NULL(dev_path);
     LV_LOG_USER("touchscreen %s opening", dev_path);
     fd = open(dev_path, O_RDONLY | O_NONBLOCK);
-    if (fd < 0)
-    {
+    if(fd < 0) {
         perror("Error: cannot open touchscreen device");
         return NULL;
     }
@@ -78,8 +76,7 @@ lv_indev_t *lv_nuttx_touchscreen_create(const char * dev_path)
 
     indev = touchscreen_init(fd);
 
-    if (indev == NULL)
-    {
+    if(indev == NULL) {
         close(fd);
     }
 
@@ -91,15 +88,14 @@ lv_indev_t *lv_nuttx_touchscreen_create(const char * dev_path)
  **********************/
 
 static void conv_touch_sample(lv_indev_t * drv,
-                              lv_indev_data_t *data,
+                              lv_indev_data_t * data,
                               struct touch_sample_s * sample)
 {
-    lv_nuttx_touchscreen_t *touchscreen = drv->driver_data;
+    lv_nuttx_touchscreen_t * touchscreen = drv->driver_data;
     uint8_t touch_flags = sample->point[0].flags;
 
-    if (touch_flags & (TOUCH_DOWN | TOUCH_MOVE))
-    {
-        lv_display_t *disp = lv_indev_get_display(drv);
+    if(touch_flags & (TOUCH_DOWN | TOUCH_MOVE)) {
+        lv_display_t * disp = lv_indev_get_display(drv);
         int32_t hor_max = lv_display_get_horizontal_resolution(disp) - 1;
         int32_t ver_max = lv_display_get_vertical_resolution(disp) - 1;
 
@@ -107,8 +103,7 @@ static void conv_touch_sample(lv_indev_t * drv,
         data->point.y = LV_CLAMP(0, sample->point[0].y, ver_max);
         touchscreen->last_state = LV_INDEV_STATE_PRESSED;
     }
-    else if (touch_flags & TOUCH_UP)
-    {
+    else if(touch_flags & TOUCH_UP) {
         touchscreen->last_state = LV_INDEV_STATE_RELEASED;
     }
 }
@@ -121,7 +116,7 @@ static bool touchscreen_read_sample(int fd, struct touch_sample_s * sample)
 
 static void touchscreen_read(lv_indev_t * drv, lv_indev_data_t * data)
 {
-    lv_nuttx_touchscreen_t *touchscreen = drv->driver_data;
+    lv_nuttx_touchscreen_t * touchscreen = drv->driver_data;
     struct touch_sample_s sample;
 
     /*
@@ -132,15 +127,12 @@ static void touchscreen_read(lv_indev_t * drv, lv_indev_data_t * data)
      */
 
     /* If has last sample, use it first */
-    if (touchscreen->has_last_sample)
-    {
+    if(touchscreen->has_last_sample) {
         conv_touch_sample(drv, data, &touchscreen->last_sample);
     }
-    else
-    {
+    else {
         /* Read first sample */
-        if (!touchscreen_read_sample(touchscreen->fd, &sample))
-        {
+        if(!touchscreen_read_sample(touchscreen->fd, &sample)) {
             /* No sample available, return last state */
             data->state = touchscreen->last_state;
             return;
@@ -150,15 +142,13 @@ static void touchscreen_read(lv_indev_t * drv, lv_indev_data_t * data)
     }
 
     /* Try to read next sample */
-    if (touchscreen_read_sample(touchscreen->fd, &sample))
-    {
+    if(touchscreen_read_sample(touchscreen->fd, &sample)) {
         /* Save last sample and let lvgl continue reading */
         touchscreen->last_sample = sample;
         touchscreen->has_last_sample = true;
         data->continue_reading = true;
     }
-    else
-    {
+    else {
         /* No more sample available, clear last sample flag */
         touchscreen->has_last_sample = false;
     }
@@ -168,15 +158,13 @@ static void touchscreen_read(lv_indev_t * drv, lv_indev_data_t * data)
 
 static void touchscreen_delete_cb(lv_event_t * e)
 {
-    lv_indev_t *indev = (lv_indev_t *) lv_event_get_user_data(e);
-    lv_nuttx_touchscreen_t *touchscreen = lv_indev_get_driver_data(indev);
-    if (touchscreen)
-    {
+    lv_indev_t * indev = (lv_indev_t *) lv_event_get_user_data(e);
+    lv_nuttx_touchscreen_t * touchscreen = lv_indev_get_driver_data(indev);
+    if(touchscreen) {
         lv_indev_set_driver_data(indev, NULL);
         lv_indev_set_read_cb(indev, NULL);
 
-        if (touchscreen->fd >= 0)
-        {
+        if(touchscreen->fd >= 0) {
             close(touchscreen->fd);
             touchscreen->fd = -1;
         }
@@ -185,14 +173,13 @@ static void touchscreen_delete_cb(lv_event_t * e)
     }
 }
 
-static lv_indev_t *touchscreen_init(int fd)
+static lv_indev_t * touchscreen_init(int fd)
 {
-    lv_nuttx_touchscreen_t *touchscreen;
-    lv_indev_t *indev = NULL;
+    lv_nuttx_touchscreen_t * touchscreen;
+    lv_indev_t * indev = NULL;
 
     touchscreen = lv_malloc_zeroed(sizeof(lv_nuttx_touchscreen_t));
-    if (touchscreen == NULL)
-    {
+    if(touchscreen == NULL) {
         LV_LOG_ERROR("touchscreen_s malloc failed");
         return NULL;
     }

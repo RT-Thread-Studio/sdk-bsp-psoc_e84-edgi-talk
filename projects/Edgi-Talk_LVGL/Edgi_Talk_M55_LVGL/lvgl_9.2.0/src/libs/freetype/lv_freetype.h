@@ -34,8 +34,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_FREETYPE_FONT_STYLE_NORMAL = 0,
     LV_FREETYPE_FONT_STYLE_ITALIC = 1 << 0,
     LV_FREETYPE_FONT_STYLE_BOLD = 1 << 1,
@@ -43,16 +42,14 @@ typedef enum
 
 typedef lv_freetype_font_style_t LV_FT_FONT_STYLE;
 
-typedef enum
-{
+typedef enum {
     LV_FREETYPE_FONT_RENDER_MODE_BITMAP = 0,
     LV_FREETYPE_FONT_RENDER_MODE_OUTLINE = 1,
 } lv_freetype_font_render_mode_t;
 
-typedef void *lv_freetype_outline_t;
+typedef void * lv_freetype_outline_t;
 
-typedef enum
-{
+typedef enum {
     LV_FREETYPE_OUTLINE_END,
     LV_FREETYPE_OUTLINE_MOVE_TO,
     LV_FREETYPE_OUTLINE_LINE_TO,
@@ -83,8 +80,8 @@ void lv_freetype_uninit(void);
  * @param style font style(see lv_freetype_font_style_t for details).
  * @return Created font, or NULL on failure.
  */
-lv_font_t *lv_freetype_font_create(const char * pathname, lv_freetype_font_render_mode_t render_mode, uint32_t size,
-                                   lv_freetype_font_style_t style);
+lv_font_t * lv_freetype_font_create(const char * pathname, lv_freetype_font_render_mode_t render_mode, uint32_t size,
+                                    lv_freetype_font_style_t style);
 
 /**
  * Delete a freetype font.

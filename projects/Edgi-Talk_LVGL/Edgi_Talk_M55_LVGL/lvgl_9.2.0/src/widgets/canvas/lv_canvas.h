@@ -38,7 +38,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_canvas_class;
  * @param parent     pointer to an object, it will be the parent of the new canvas
  * @return           pointer to the created canvas
  */
-lv_obj_t *lv_canvas_create(lv_obj_t * parent);
+lv_obj_t * lv_canvas_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -100,7 +100,7 @@ void lv_canvas_set_palette(lv_obj_t * obj, uint8_t index, lv_color32_t color);
  * Getter functions
  *====================*/
 
-lv_draw_buf_t *lv_canvas_get_draw_buf(lv_obj_t * obj);
+lv_draw_buf_t * lv_canvas_get_draw_buf(lv_obj_t * obj);
 
 /**
  * Get a pixel's color and opacity
@@ -116,7 +116,7 @@ lv_color32_t lv_canvas_get_px(lv_obj_t * obj, int32_t x, int32_t y);
  * @param canvas    pointer to a canvas object
  * @return          pointer to the image descriptor.
  */
-lv_image_dsc_t *lv_canvas_get_image(lv_obj_t * canvas);
+lv_image_dsc_t * lv_canvas_get_image(lv_obj_t * canvas);
 
 /**
  * Return the pointer for the buffer.
@@ -125,7 +125,7 @@ lv_image_dsc_t *lv_canvas_get_image(lv_obj_t * canvas);
  * @param canvas    pointer to a canvas object
  * @return          pointer to the buffer
  */
-const void *lv_canvas_get_buf(lv_obj_t * canvas);
+const void * lv_canvas_get_buf(lv_obj_t * canvas);
 
 /*=====================
  * Other functions
@@ -139,7 +139,7 @@ const void *lv_canvas_get_buf(lv_obj_t * canvas);
  * @param dest_area     the area of the destination buffer to copy to. If omitted NULL, copy to the whole `dest_buf`
  */
 void lv_canvas_copy_buf(lv_obj_t * obj, const lv_area_t * canvas_area, lv_draw_buf_t * dest_buf,
-                        const lv_area_t *dest_area);
+                        const lv_area_t * dest_area);
 
 /**
  * Fill the canvas with color

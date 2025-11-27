@@ -32,8 +32,7 @@ extern "C" {
 
 /*Can't include lv_obj.h because it includes this header file*/
 
-typedef enum
-{
+typedef enum {
     LV_FLEX_ALIGN_START,
     LV_FLEX_ALIGN_END,
     LV_FLEX_ALIGN_CENTER,
@@ -42,8 +41,7 @@ typedef enum
     LV_FLEX_ALIGN_SPACE_BETWEEN,
 } lv_flex_align_t;
 
-typedef enum
-{
+typedef enum {
     LV_FLEX_FLOW_ROW                 = 0x00,
     LV_FLEX_FLOW_COLUMN              = LV_FLEX_COLUMN,
     LV_FLEX_FLOW_ROW_WRAP            = LV_FLEX_FLOW_ROW | LV_FLEX_WRAP,

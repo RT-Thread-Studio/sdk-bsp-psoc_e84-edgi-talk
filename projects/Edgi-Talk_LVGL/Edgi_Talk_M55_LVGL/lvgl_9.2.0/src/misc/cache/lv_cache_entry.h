@@ -61,14 +61,14 @@ bool     lv_cache_entry_is_invalid(lv_cache_entry_t * entry);
  * @param entry        The cache entry to get the data of.
  * @return             The pointer to the data of the cache entry.
  */
-void    *lv_cache_entry_get_data(lv_cache_entry_t * entry);
+void  *  lv_cache_entry_get_data(lv_cache_entry_t * entry);
 
 /**
  * Get the cache instance of a cache entry.
  * @param entry        The cache entry to get the cache instance of.
  * @return             The pointer to the cache instance of the cache entry.
  */
-const lv_cache_t *lv_cache_entry_get_cache(const lv_cache_entry_t * entry);
+const lv_cache_t * lv_cache_entry_get_cache(const lv_cache_entry_t * entry);
 
 /**
  * Get the cache entry of a data. The data should be allocated by the cache instance.
@@ -76,7 +76,7 @@ const lv_cache_t *lv_cache_entry_get_cache(const lv_cache_entry_t * entry);
  * @param node_size    The size of the node in the cache.
  * @return             The pointer to the cache entry of the data.
  */
-lv_cache_entry_t *lv_cache_entry_get_entry(void * data, const uint32_t node_size);
+lv_cache_entry_t * lv_cache_entry_get_entry(void * data, const uint32_t node_size);
 
 /**
  * Allocate a cache entry.
@@ -84,7 +84,7 @@ lv_cache_entry_t *lv_cache_entry_get_entry(void * data, const uint32_t node_size
  * @param cache        The cache instance to allocate the cache entry from.
  * @return             The pointer to the allocated cache entry.
  */
-lv_cache_entry_t *lv_cache_entry_alloc(const uint32_t node_size, const lv_cache_t * cache);
+lv_cache_entry_t * lv_cache_entry_alloc(const uint32_t node_size, const lv_cache_t * cache);
 
 /**
  * Initialize a cache entry.

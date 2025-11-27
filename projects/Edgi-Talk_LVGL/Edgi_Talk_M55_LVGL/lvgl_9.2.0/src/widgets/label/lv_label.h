@@ -45,8 +45,7 @@ LV_EXPORT_CONST_INT(LV_LABEL_TEXT_SELECTION_OFF);
  **********************/
 
 /** Long mode behaviors. Used in 'lv_label_ext_t'*/
-typedef enum
-{
+typedef enum {
     LV_LABEL_LONG_WRAP,             /**< Keep the object width, wrap lines longer than object width and expand the object height*/
     LV_LABEL_LONG_DOT,              /**< Keep the size and write dots at the end if the text is too long*/
     LV_LABEL_LONG_SCROLL,           /**< Keep the size and roll the text back and forth*/
@@ -55,8 +54,7 @@ typedef enum
 } lv_label_long_mode_t;
 
 #if LV_USE_OBJ_PROPERTY
-enum
-{
+enum {
     LV_PROPERTY_ID(LABEL, TEXT,                   LV_PROPERTY_TYPE_TEXT,      0),
     LV_PROPERTY_ID(LABEL, LONG_MODE,              LV_PROPERTY_TYPE_INT,       1),
     LV_PROPERTY_ID(LABEL, TEXT_SELECTION_START,   LV_PROPERTY_TYPE_INT,       2),
@@ -76,7 +74,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_label_class;
  * @param parent    pointer to an object, it will be the parent of the new label.
  * @return          pointer to the created button
  */
-lv_obj_t *lv_label_create(lv_obj_t * parent);
+lv_obj_t * lv_label_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -140,7 +138,7 @@ void lv_label_set_text_selection_end(lv_obj_t * obj, uint32_t index);
  * @param obj       pointer to a label object
  * @return          the text of the label
  */
-char *lv_label_get_text(const lv_obj_t * obj);
+char * lv_label_get_text(const lv_obj_t * obj);
 
 /**
  * Get the long mode of a label

@@ -50,7 +50,7 @@ void lv_inv_area(lv_display_t * disp, const lv_area_t * area_p);
  * Get the display which is being refreshed
  * @return the display being refreshed
  */
-lv_display_t *lv_refr_get_disp_refreshing(void);
+lv_display_t * lv_refr_get_disp_refreshing(void);
 
 /**
  * Set the display which is being refreshed

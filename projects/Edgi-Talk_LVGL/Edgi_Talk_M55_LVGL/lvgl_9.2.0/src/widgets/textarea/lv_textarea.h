@@ -34,8 +34,7 @@ LV_EXPORT_CONST_INT(LV_TEXTAREA_CURSOR_LAST);
  **********************/
 
 #if LV_USE_OBJ_PROPERTY
-enum
-{
+enum {
     LV_PROPERTY_ID(TEXTAREA, TEXT,              LV_PROPERTY_TYPE_TEXT,  0),
     LV_PROPERTY_ID(TEXTAREA, PLACEHOLDER_TEXT,  LV_PROPERTY_TYPE_TEXT,  1),
     LV_PROPERTY_ID(TEXTAREA, CURSOR_POS,        LV_PROPERTY_TYPE_INT,   2),
@@ -57,8 +56,7 @@ enum
 
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_textarea_class;
 
-enum
-{
+enum {
     LV_PART_TEXTAREA_PLACEHOLDER = LV_PART_CUSTOM_FIRST,
 };
 
@@ -71,7 +69,7 @@ enum
  * @param parent    pointer to an object, it will be the parent of the new text area
  * @return          pointer to the created text area
  */
-lv_obj_t *lv_textarea_create(lv_obj_t * parent);
+lv_obj_t * lv_textarea_create(lv_obj_t * parent);
 
 /*======================
  * Add/remove functions
@@ -215,21 +213,21 @@ void lv_textarea_set_align(lv_obj_t * obj, lv_text_align_t align);
  * @param obj       pointer to a text area object
  * @return          pointer to the text
  */
-const char *lv_textarea_get_text(const lv_obj_t * obj);
+const char * lv_textarea_get_text(const lv_obj_t * obj);
 
 /**
  * Get the placeholder text of a text area
  * @param obj       pointer to a text area object
  * @return          pointer to the text
  */
-const char *lv_textarea_get_placeholder_text(lv_obj_t * obj);
+const char * lv_textarea_get_placeholder_text(lv_obj_t * obj);
 
 /**
  * Get the label of a text area
  * @param obj       pointer to a text area object
  * @return          pointer to the label object
  */
-lv_obj_t *lv_textarea_get_label(const lv_obj_t * obj);
+lv_obj_t * lv_textarea_get_label(const lv_obj_t * obj);
 
 /**
  * Get the current cursor position in character index
@@ -257,7 +255,7 @@ bool lv_textarea_get_password_mode(const lv_obj_t * obj);
  * @param obj       pointer to a text area object
  * @return          pointer to the replacement text
  */
-const char *lv_textarea_get_password_bullet(lv_obj_t * obj);
+const char * lv_textarea_get_password_bullet(lv_obj_t * obj);
 
 /**
  * Get the one line configuration attribute
@@ -271,7 +269,7 @@ bool lv_textarea_get_one_line(const lv_obj_t * obj);
  * @param obj       pointer to a text area object
  * @return          list of accented characters.
  */
-const char *lv_textarea_get_accepted_chars(lv_obj_t * obj);
+const char * lv_textarea_get_accepted_chars(lv_obj_t * obj);
 
 /**
  * Get max length of a Text Area.

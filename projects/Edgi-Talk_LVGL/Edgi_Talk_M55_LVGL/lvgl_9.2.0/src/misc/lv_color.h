@@ -37,8 +37,7 @@ LV_EXPORT_CONST_INT(LV_COLOR_DEPTH);
  * Opacity percentages.
  */
 
-enum
-{
+enum {
     LV_OPA_TRANSP = 0,
     LV_OPA_0      = 0,
     LV_OPA_10     = 25,
@@ -95,43 +94,37 @@ enum
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     uint8_t blue;
     uint8_t green;
     uint8_t red;
 } lv_color_t;
 
-typedef struct
-{
+typedef struct {
     uint16_t blue : 5;
     uint16_t green : 6;
     uint16_t red : 5;
 } lv_color16_t;
 
-typedef struct
-{
+typedef struct {
     uint8_t blue;
     uint8_t green;
     uint8_t red;
     uint8_t alpha;
 } lv_color32_t;
 
-typedef struct
-{
+typedef struct {
     uint16_t h;
     uint8_t s;
     uint8_t v;
 } lv_color_hsv_t;
 
-typedef struct
-{
+typedef struct {
     uint8_t lumi;
     uint8_t alpha;
 } lv_color16a_t;
 
-typedef enum
-{
+typedef enum {
     LV_COLOR_FORMAT_UNKNOWN           = 0,
 
     LV_COLOR_FORMAT_RAW               = 0x01,

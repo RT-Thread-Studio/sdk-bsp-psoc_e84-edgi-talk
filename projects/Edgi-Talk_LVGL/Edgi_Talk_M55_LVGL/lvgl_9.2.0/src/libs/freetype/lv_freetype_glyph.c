@@ -21,8 +21,7 @@
 /**********************
  *      TYPEDEFS
  **********************/
-typedef struct lv_freetype_glyph_cache_data_t
-{
+typedef struct lv_freetype_glyph_cache_data_t {
     uint32_t unicode;
     uint32_t size;
 
@@ -39,7 +38,7 @@ static bool freetype_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_
 static bool freetype_glyph_create_cb(lv_freetype_glyph_cache_data_t * data, void * user_data);
 static void freetype_glyph_free_cb(lv_freetype_glyph_cache_data_t * data, void * user_data);
 static lv_cache_compare_res_t freetype_glyph_compare_cb(const lv_freetype_glyph_cache_data_t * lhs,
-        const lv_freetype_glyph_cache_data_t *rhs);
+                                                        const lv_freetype_glyph_cache_data_t * rhs);
 /**********************
  *  STATIC VARIABLES
  **********************/
@@ -52,17 +51,16 @@ static lv_cache_compare_res_t freetype_glyph_compare_cb(const lv_freetype_glyph_
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_cache_t *lv_freetype_create_glyph_cache(uint32_t cache_size)
+lv_cache_t * lv_freetype_create_glyph_cache(uint32_t cache_size)
 {
-    lv_cache_ops_t ops =
-    {
+    lv_cache_ops_t ops = {
         .create_cb = (lv_cache_create_cb_t)freetype_glyph_create_cb,
         .free_cb = (lv_cache_free_cb_t)freetype_glyph_free_cb,
         .compare_cb = (lv_cache_compare_cb_t)freetype_glyph_compare_cb,
     };
 
-    lv_cache_t *glyph_cache = lv_cache_create(&lv_cache_class_lru_rb_count, sizeof(lv_freetype_glyph_cache_data_t),
-                              cache_size, ops);
+    lv_cache_t * glyph_cache = lv_cache_create(&lv_cache_class_lru_rb_count, sizeof(lv_freetype_glyph_cache_data_t),
+                                               cache_size, ops);
     lv_cache_set_name(glyph_cache, CACHE_NAME);
 
     return glyph_cache;
@@ -84,8 +82,7 @@ static bool freetype_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_
     LV_ASSERT_NULL(font);
     LV_ASSERT_NULL(g_dsc);
 
-    if (unicode_letter < 0x20)
-    {
+    if(unicode_letter < 0x20) {
         g_dsc->adv_w  = 0;
         g_dsc->box_h  = 0;
         g_dsc->box_w  = 0;
@@ -95,28 +92,25 @@ static bool freetype_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_
         return true;
     }
 
-    lv_freetype_font_dsc_t *dsc = (lv_freetype_font_dsc_t *)font->dsc;
+    lv_freetype_font_dsc_t * dsc = (lv_freetype_font_dsc_t *)font->dsc;
     LV_ASSERT_FREETYPE_FONT_DSC(dsc);
 
-    lv_freetype_glyph_cache_data_t search_key =
-    {
+    lv_freetype_glyph_cache_data_t search_key = {
         .unicode = unicode_letter,
         .size = dsc->size,
     };
 
-    lv_cache_t *glyph_cache = dsc->cache_node->glyph_cache;
+    lv_cache_t * glyph_cache = dsc->cache_node->glyph_cache;
 
-    lv_cache_entry_t *entry = lv_cache_acquire_or_create(glyph_cache, &search_key, dsc);
-    if (entry == NULL)
-    {
+    lv_cache_entry_t * entry = lv_cache_acquire_or_create(glyph_cache, &search_key, dsc);
+    if(entry == NULL) {
         LV_LOG_ERROR("glyph lookup failed for unicode = 0x%" LV_PRIx32, unicode_letter);
         return false;
     }
-    lv_freetype_glyph_cache_data_t *data = lv_cache_entry_get_data(entry);
+    lv_freetype_glyph_cache_data_t * data = lv_cache_entry_get_data(entry);
     *g_dsc = data->glyph_dsc;
 
-    if ((dsc->style & LV_FREETYPE_FONT_STYLE_ITALIC) && (unicode_letter_next == '\0'))
-    {
+    if((dsc->style & LV_FREETYPE_FONT_STYLE_ITALIC) && (unicode_letter_next == '\0')) {
         g_dsc->adv_w = g_dsc->box_w + g_dsc->ofs_x;
     }
 
@@ -132,11 +126,11 @@ static bool freetype_get_glyph_dsc_cb(const lv_font_t * font, lv_font_glyph_dsc_
 
 static bool freetype_glyph_create_cb(lv_freetype_glyph_cache_data_t * data, void * user_data)
 {
-    lv_freetype_font_dsc_t *dsc = (lv_freetype_font_dsc_t *)user_data;
+    lv_freetype_font_dsc_t * dsc = (lv_freetype_font_dsc_t *)user_data;
 
     FT_Error error;
 
-    lv_font_glyph_dsc_t *dsc_out = &data->glyph_dsc;
+    lv_font_glyph_dsc_t * dsc_out = &data->glyph_dsc;
 
     lv_mutex_lock(&dsc->cache_node->face_lock);
     FT_Face face = dsc->cache_node->face;
@@ -144,8 +138,7 @@ static bool freetype_glyph_create_cb(lv_freetype_glyph_cache_data_t * data, void
 
     FT_Set_Pixel_Sizes(face, 0, dsc->size);
     error = FT_Load_Glyph(face, glyph_index,  FT_LOAD_COMPUTE_METRICS | FT_LOAD_NO_BITMAP | FT_LOAD_NO_AUTOHINT);
-    if (error)
-    {
+    if(error) {
         FT_ERROR_MSG("FT_Load_Glyph", error);
         lv_mutex_unlock(&dsc->cache_node->face_lock);
         return false;
@@ -153,8 +146,7 @@ static bool freetype_glyph_create_cb(lv_freetype_glyph_cache_data_t * data, void
 
     FT_GlyphSlot glyph = face->glyph;
 
-    if (dsc->render_mode == LV_FREETYPE_FONT_RENDER_MODE_OUTLINE)
-    {
+    if(dsc->render_mode == LV_FREETYPE_FONT_RENDER_MODE_OUTLINE) {
         dsc_out->adv_w = FT_F26DOT6_TO_INT(glyph->metrics.horiAdvance);
         dsc_out->box_h = FT_F26DOT6_TO_INT(glyph->metrics.height);          /*Height of the bitmap in [px]*/
         dsc_out->box_w = FT_F26DOT6_TO_INT(glyph->metrics.width);           /*Width of the bitmap in [px]*/
@@ -164,16 +156,13 @@ static bool freetype_glyph_create_cb(lv_freetype_glyph_cache_data_t * data, void
         dsc_out->format = LV_FONT_GLYPH_FORMAT_VECTOR;
 
         /*Transform the glyph to italic if required*/
-        if (dsc->style & LV_FREETYPE_FONT_STYLE_ITALIC)
-        {
-            dsc_out->box_w = lv_freetype_italic_transform_on_pos((lv_point_t)
-            {
+        if(dsc->style & LV_FREETYPE_FONT_STYLE_ITALIC) {
+            dsc_out->box_w = lv_freetype_italic_transform_on_pos((lv_point_t) {
                 dsc_out->box_w, dsc_out->box_h
             });
         }
     }
-    else if (dsc->render_mode == LV_FREETYPE_FONT_RENDER_MODE_BITMAP)
-    {
+    else if(dsc->render_mode == LV_FREETYPE_FONT_RENDER_MODE_BITMAP) {
         FT_Bitmap * glyph_bitmap = &face->glyph->bitmap;
 
         dsc_out->adv_w = FT_F26DOT6_TO_INT(glyph->advance.x);        /*Width of the glyph in [pf]*/
@@ -198,14 +187,12 @@ static void freetype_glyph_free_cb(lv_freetype_glyph_cache_data_t * data, void *
     LV_UNUSED(user_data);
 }
 static lv_cache_compare_res_t freetype_glyph_compare_cb(const lv_freetype_glyph_cache_data_t * lhs,
-        const lv_freetype_glyph_cache_data_t *rhs)
+                                                        const lv_freetype_glyph_cache_data_t * rhs)
 {
-    if (lhs->unicode != rhs->unicode)
-    {
+    if(lhs->unicode != rhs->unicode) {
         return lhs->unicode > rhs->unicode ? 1 : -1;
     }
-    if (lhs->size != rhs->size)
-    {
+    if(lhs->size != rhs->size) {
         return lhs->size > rhs->size ? 1 : -1;
     }
     return 0;

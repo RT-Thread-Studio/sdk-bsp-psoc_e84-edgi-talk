@@ -17,8 +17,7 @@
  *----------------*/
 
 /*Store the image of the glyphs*/
-static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] =
-{
+static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     /* U+0020 " " */
 
     /* U+0021 "!" */
@@ -4681,8 +4680,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] =
  *  GLYPH DESCRIPTION
  *--------------------*/
 
-static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] =
-{
+static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
     {.bitmap_index = 0, .adv_w = 0, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
     {.bitmap_index = 0, .adv_w = 66, .box_w = 0, .box_h = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 67, .box_w = 4, .box_h = 10, .ofs_x = 0, .ofs_y = 0},
@@ -5208,22 +5206,19 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] =
  *  CHARACTER MAPPING
  *--------------------*/
 
-static const uint16_t unicode_list_2[] =
-{
+static const uint16_t unicode_list_2[] = {
     0x0, 0x3, 0x11, 0x12, 0x20, 0x21, 0x28, 0x35,
     0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d,
     0x3e, 0x3f, 0x44, 0x45, 0x55, 0x56, 0x57, 0x58,
     0x59, 0x5a, 0x5b, 0x5c, 0x5f, 0x60
 };
 
-static const uint16_t unicode_list_4[] =
-{
+static const uint16_t unicode_list_4[] = {
     0x0, 0x1, 0xc, 0xd, 0xe, 0xf, 0x12, 0x13,
     0x14, 0x15, 0x19, 0x1fd
 };
 
-static const uint16_t unicode_list_6[] =
-{
+static const uint16_t unicode_list_6[] = {
     0x0, 0x2, 0x4, 0x6, 0x7, 0x9, 0x18b, 0x18c,
     0x18f, 0x190, 0x194, 0x197, 0x198, 0x19b, 0x19c, 0x19d,
     0x19e, 0x19f, 0x1a1, 0x1a2, 0x1a3, 0x1a4, 0x4ca, 0x4d0,
@@ -5240,8 +5235,7 @@ static const uint16_t unicode_list_6[] =
 };
 
 /*Collect the unicode lists and glyph_id offsets*/
-static const lv_font_fmt_txt_cmap_t cmaps[] =
-{
+static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
         .unicode_list = NULL, .glyph_id_ofs_list = NULL, .list_length = 0, .type = LV_FONT_FMT_TXT_CMAP_FORMAT0_TINY
@@ -5277,8 +5271,7 @@ static const lv_font_fmt_txt_cmap_t cmaps[] =
  *----------------*/
 
 /*Map glyph_ids to kern left classes*/
-static const uint8_t kern_left_class_mapping[] =
-{
+static const uint8_t kern_left_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,
     11, 12, 0, 13, 14, 15, 16, 17,
@@ -5347,8 +5340,7 @@ static const uint8_t kern_left_class_mapping[] =
 };
 
 /*Map glyph_ids to kern right classes*/
-static const uint8_t kern_right_class_mapping[] =
-{
+static const uint8_t kern_right_class_mapping[] = {
     0, 0, 1, 2, 0, 3, 4, 5,
     2, 6, 7, 8, 9, 10, 9, 10,
     11, 12, 13, 14, 15, 16, 17, 12,
@@ -5417,8 +5409,7 @@ static const uint8_t kern_right_class_mapping[] =
 };
 
 /*Kern values between classes*/
-static const int8_t kern_class_values[] =
-{
+static const int8_t kern_class_values[] = {
     0, 0, 0, 0, 0, 0, 0, 2,
     0, 0, 0, 0, 2, 0, 0, 0,
     0, 1, 0, 0, 0, 0, 0, 0,
@@ -6292,8 +6283,7 @@ static const int8_t kern_class_values[] =
 };
 
 /*Collect the kern class' data in one place*/
-static const lv_font_fmt_txt_kern_classes_t kern_classes =
-{
+static const lv_font_fmt_txt_kern_classes_t kern_classes = {
     .class_pair_values   = kern_class_values,
     .left_class_mapping  = kern_left_class_mapping,
     .right_class_mapping = kern_right_class_mapping,
@@ -6308,11 +6298,9 @@ static const lv_font_fmt_txt_kern_classes_t kern_classes =
 #if LV_VERSION_CHECK(8, 0, 0)
 /*Store all the custom data of the font*/
 static  lv_font_fmt_txt_glyph_cache_t cache;
-static const lv_font_fmt_txt_dsc_t font_dsc =
-{
+static const lv_font_fmt_txt_dsc_t font_dsc = {
 #else
-static lv_font_fmt_txt_dsc_t font_dsc =
-{
+static lv_font_fmt_txt_dsc_t font_dsc = {
 #endif
     .glyph_bitmap = glyph_bitmap,
     .glyph_dsc = glyph_dsc,
@@ -6334,11 +6322,9 @@ static lv_font_fmt_txt_dsc_t font_dsc =
 
 /*Initialize a public general font descriptor*/
 #if LV_VERSION_CHECK(8, 0, 0)
-const lv_font_t font_multilang_small =
-{
+const lv_font_t font_multilang_small = {
 #else
-lv_font_t font_multilang_small =
-{
+lv_font_t font_multilang_small = {
 #endif
     .get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt,    /*Function pointer to get glyph's data*/
     .get_glyph_bitmap = lv_font_get_bitmap_fmt_txt,    /*Function pointer to get glyph's bitmap*/

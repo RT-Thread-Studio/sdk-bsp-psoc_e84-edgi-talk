@@ -69,10 +69,10 @@ static unsigned int index_buffer_count = 0;
 
 static unsigned int shader_id;
 
-static const char *shader_names[] = { "u_Texture", "u_ColorDepth", "u_VertexTransform", "u_Opa" };
+static const char * shader_names[] = { "u_Texture", "u_ColorDepth", "u_VertexTransform", "u_Opa" };
 static int shader_location[] = { 0, 0, 0, 0 };
 
-static const char *vertex_shader =
+static const char * vertex_shader =
     "#version 300 es\n"
     "\n"
     "in vec4 position;\n"
@@ -88,7 +88,7 @@ static const char *vertex_shader =
     "    v_TexCoord = texCoord;\n"
     "};\n";
 
-static const char *fragment_shader =
+static const char * fragment_shader =
     "#version 300 es\n"
     "\n"
     "precision mediump float;\n"
@@ -122,20 +122,18 @@ static const char *fragment_shader =
 
 void lv_opengles_init(void)
 {
-    if (is_init) return;
+    if(is_init) return;
 
     lv_opengles_enable_blending();
 
-    float positions[] =
-    {
+    float positions[] = {
         -1.0f,  1.0f,  0.0f, 0.0f,
         1.0f,  1.0f,  1.0f, 0.0f,
         1.0f, -1.0f,  1.0f, 1.0f,
         -1.0f, -1.0f,  0.0f, 1.0f
     };
 
-    unsigned int indices[] =
-    {
+    unsigned int indices[] = {
         0, 1, 2,
         2, 3, 0
     };
@@ -161,7 +159,7 @@ void lv_opengles_init(void)
 
 void lv_opengles_deinit(void)
 {
-    if (!is_init) return;
+    if(!is_init) return;
 
     lv_opengles_shader_deinit();
     lv_opengles_index_buffer_deinit();
@@ -181,8 +179,7 @@ void lv_opengles_render_texture(unsigned int texture, const lv_area_t * texture_
     float ver_scale = (float)lv_area_get_height(texture_area) / (float)disp_h;
     float hor_translate = (float)texture_area->x1 / (float)disp_w * 2.0f - (1.0f - hor_scale);
     float ver_translate = -((float)texture_area->y1 / (float)disp_h * 2.0f - (1.0f - ver_scale));
-    float matrix[9] =
-    {
+    float matrix[9] = {
         hor_scale, 0.0f,      hor_translate,
         0.0f,      ver_scale, ver_translate,
         0.0f,      0.0f,      1.0f
@@ -263,8 +260,7 @@ static void lv_opengles_vertex_array_add_buffer(void)
     lv_opengles_vertex_buffer_bind();
     intptr_t offset = 0;
 
-    for (unsigned int i = 0; i < 2; i++)
-    {
+    for(unsigned int i = 0; i < 2; i++) {
         lv_opengles_vertex_array_bind();
         GL_CALL(glEnableVertexAttribArray(i));
         GL_CALL(glVertexAttribPointer(i, 2, GL_FLOAT, GL_FALSE, 16, (const void *)offset));
@@ -305,17 +301,16 @@ static void lv_opengles_index_buffer_unbind(void)
 static unsigned int lv_opengles_shader_compile(unsigned int type, const char * source)
 {
     GL_CALL(unsigned int id = glCreateShader(type));
-    const char *src = source;
+    const char * src = source;
     GL_CALL(glShaderSource(id, 1, &src, NULL));
     GL_CALL(glCompileShader(id));
 
     int result;
     GL_CALL(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
-    if (result == GL_FALSE)
-    {
+    if(result == GL_FALSE) {
         int length;
         GL_CALL(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
-        char *message = lv_malloc_zeroed(length * sizeof(char));
+        char * message = lv_malloc_zeroed(length * sizeof(char));
         GL_CALL(glGetShaderInfoLog(id, length, &length, message));
         LV_LOG_ERROR("Failed to compile %s shader!", type == GL_VERTEX_SHADER ? "vertex" : "fragment");
         LV_LOG_ERROR("%s", message);
@@ -366,25 +361,21 @@ static void lv_opengles_shader_unbind(void)
 static int lv_opengles_shader_get_uniform_location(const char * name)
 {
     int id = -1;
-    for (size_t i = 0; i < sizeof(shader_location) / sizeof(int); i++)
-    {
-        if (lv_strcmp(shader_names[i], name) == 0)
-        {
+    for(size_t i = 0; i < sizeof(shader_location) / sizeof(int); i++) {
+        if(lv_strcmp(shader_names[i], name) == 0) {
             id = i;
         }
     }
-    if (id == -1)
-    {
+    if(id == -1) {
         return -1;
     }
 
-    if (shader_location[id] != 0)
-    {
+    if(shader_location[id] != 0) {
         return shader_location[id];
     }
 
     GL_CALL(int location = glGetUniformLocation(shader_id, name));
-    if (location == -1)
+    if(location == -1)
         LV_LOG_WARN("Warning: uniform '%s' doesn't exist!", name);
 
     shader_location[id] = location;

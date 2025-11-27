@@ -89,7 +89,7 @@ void lv_log(const char * format, ...) LV_FORMAT_ATTRIBUTE(1, 2);
  * @param ...       parameters for `format`
  */
 void lv_log_add(lv_log_level_t level, const char * file, int line,
-                const char *func, const char *format, ...) LV_FORMAT_ATTRIBUTE(5, 6);
+                const char * func, const char * format, ...) LV_FORMAT_ATTRIBUTE(5, 6);
 
 /**********************
  *      MACROS

@@ -28,15 +28,13 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_MENU_HEADER_TOP_FIXED,   /**< Header is positioned at the top */
     LV_MENU_HEADER_TOP_UNFIXED, /**< Header is positioned at the top and can be scrolled out of view*/
     LV_MENU_HEADER_BOTTOM_FIXED /**< Header is positioned at the bottom */
 } lv_menu_mode_header_t;
 
-typedef enum
-{
+typedef enum {
     LV_MENU_ROOT_BACK_BUTTON_DISABLED,
     LV_MENU_ROOT_BACK_BUTTON_ENABLED
 } lv_menu_mode_root_back_button_t;
@@ -59,7 +57,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_menu_main_header_cont_cl
  * @param parent    pointer to an object, it will be the parent of the new menu
  * @return          pointer to the created menu
  */
-lv_obj_t *lv_menu_create(lv_obj_t * parent);
+lv_obj_t * lv_menu_create(lv_obj_t * parent);
 
 /**
  * Create a menu page object
@@ -67,28 +65,28 @@ lv_obj_t *lv_menu_create(lv_obj_t * parent);
  * @param title     pointer to text for title in header (NULL to not display title)
  * @return          pointer to the created menu page
  */
-lv_obj_t *lv_menu_page_create(lv_obj_t * parent, char const * const title);
+lv_obj_t * lv_menu_page_create(lv_obj_t * parent, char const * const title);
 
 /**
  * Create a menu cont object
  * @param parent    pointer to an object, it will be the parent of the new menu cont object
  * @return          pointer to the created menu cont
  */
-lv_obj_t *lv_menu_cont_create(lv_obj_t * parent);
+lv_obj_t * lv_menu_cont_create(lv_obj_t * parent);
 
 /**
  * Create a menu section object
  * @param parent    pointer to an object, it will be the parent of the new menu section object
  * @return          pointer to the created menu section
  */
-lv_obj_t *lv_menu_section_create(lv_obj_t * parent);
+lv_obj_t * lv_menu_section_create(lv_obj_t * parent);
 
 /**
  * Create a menu separator object
  * @param parent    pointer to an object, it will be the parent of the new menu separator object
  * @return          pointer to the created menu separator
  */
-lv_obj_t *lv_menu_separator_create(lv_obj_t * parent);
+lv_obj_t * lv_menu_separator_create(lv_obj_t * parent);
 /*=====================
  * Setter functions
  *====================*/
@@ -151,42 +149,42 @@ void lv_menu_set_load_page_event(lv_obj_t * menu, lv_obj_t * obj, lv_obj_t * pag
 * @param obj        pointer to the menu
 * @return           pointer to current page
 */
-lv_obj_t *lv_menu_get_cur_main_page(lv_obj_t * obj);
+lv_obj_t * lv_menu_get_cur_main_page(lv_obj_t * obj);
 
 /**
 * Get a pointer to menu page that is currently displayed in sidebar
 * @param obj        pointer to the menu
 * @return           pointer to current page
 */
-lv_obj_t *lv_menu_get_cur_sidebar_page(lv_obj_t * obj);
+lv_obj_t * lv_menu_get_cur_sidebar_page(lv_obj_t * obj);
 
 /**
 * Get a pointer to main header obj
 * @param obj        pointer to the menu
 * @return           pointer to main header obj
 */
-lv_obj_t *lv_menu_get_main_header(lv_obj_t * obj);
+lv_obj_t * lv_menu_get_main_header(lv_obj_t * obj);
 
 /**
 * Get a pointer to main header back btn obj
 * @param obj        pointer to the menu
 * @return           pointer to main header back btn obj
 */
-lv_obj_t *lv_menu_get_main_header_back_button(lv_obj_t * obj);
+lv_obj_t * lv_menu_get_main_header_back_button(lv_obj_t * obj);
 
 /**
 * Get a pointer to sidebar header obj
 * @param obj        pointer to the menu
 * @return           pointer to sidebar header obj
 */
-lv_obj_t *lv_menu_get_sidebar_header(lv_obj_t * obj);
+lv_obj_t * lv_menu_get_sidebar_header(lv_obj_t * obj);
 
 /**
 * Get a pointer to sidebar header obj
 * @param obj        pointer to the menu
 * @return           pointer to sidebar header back btn obj
 */
-lv_obj_t *lv_menu_get_sidebar_header_back_button(lv_obj_t * obj);
+lv_obj_t * lv_menu_get_sidebar_header_back_button(lv_obj_t * obj);
 
 /**
  * Check if an obj is a root back btn

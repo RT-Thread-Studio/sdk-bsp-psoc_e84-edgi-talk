@@ -28,8 +28,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_BASE_DIR_LTR      = 0x00,
     LV_BASE_DIR_RTL      = 0x01,
     LV_BASE_DIR_AUTO     = 0x02,
@@ -73,7 +72,7 @@ static inline void lv_bidi_calculate_align(lv_text_align_t * align, lv_base_dir_
 {
     LV_UNUSED(txt);
     LV_UNUSED(base_dir);
-    if (*align == LV_TEXT_ALIGN_AUTO) * align = LV_TEXT_ALIGN_LEFT;
+    if(*align == LV_TEXT_ALIGN_AUTO) * align = LV_TEXT_ALIGN_LEFT;
 }
 #endif /*LV_USE_BIDI*/
 

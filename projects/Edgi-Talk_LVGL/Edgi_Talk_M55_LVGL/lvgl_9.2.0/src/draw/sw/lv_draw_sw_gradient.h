@@ -49,10 +49,10 @@ typedef lv_color_t lv_grad_color_t;
  */
 
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_gradient_color_calculate(const lv_grad_dsc_t * dsc, int32_t range,
-        int32_t frac, lv_grad_color_t *color_out, lv_opa_t *opa_out);
+                                                             int32_t frac, lv_grad_color_t * color_out, lv_opa_t * opa_out);
 
 /** Get a gradient cache from the given parameters */
-lv_grad_t *lv_gradient_get(const lv_grad_dsc_t * gradient, int32_t w, int32_t h);
+lv_grad_t * lv_gradient_get(const lv_grad_dsc_t * gradient, int32_t w, int32_t h);
 
 /**
  * Clean up the gradient item after it was get with `lv_grad_get_from_cache`.
@@ -143,7 +143,7 @@ void lv_gradient_linear_cleanup(lv_grad_dsc_t * dsc);
  * @param result    color buffer for the resulting line segment
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_gradient_linear_get_line(lv_grad_dsc_t * dsc, int32_t xp, int32_t yp, int32_t width,
-        lv_grad_t *result);
+                                                             lv_grad_t * result);
 
 /**
  * Calculate constants from the given parameters that are used during rendering
@@ -166,7 +166,7 @@ void lv_gradient_radial_cleanup(lv_grad_dsc_t * dsc);
  * @param result    color buffer for the resulting line segment
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_gradient_radial_get_line(lv_grad_dsc_t * dsc, int32_t xp, int32_t yp, int32_t width,
-        lv_grad_t *result);
+                                                             lv_grad_t * result);
 
 /**
  * Calculate constants from the given parameters that are used during rendering
@@ -189,8 +189,8 @@ void lv_gradient_conical_cleanup(lv_grad_dsc_t * dsc);
  * @param result    color buffer for the resulting line segment
  */
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_gradient_conical_get_line(lv_grad_dsc_t * dsc, int32_t xp, int32_t yp,
-        int32_t width,
-        lv_grad_t *result);
+                                                              int32_t width,
+                                                              lv_grad_t * result);
 
 #endif /*LV_USE_DRAW_SW_COMPLEX_GRADIENTS*/
 

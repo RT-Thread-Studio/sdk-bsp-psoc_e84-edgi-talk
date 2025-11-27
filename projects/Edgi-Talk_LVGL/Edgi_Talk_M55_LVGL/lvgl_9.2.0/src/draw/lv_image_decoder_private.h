@@ -33,8 +33,7 @@ extern "C" {
  * Default args:
  * all field are zero or false.
  */
-struct lv_image_decoder_args_t
-{
+struct lv_image_decoder_args_t {
     bool stride_align;      /**< Whether stride should be aligned */
     bool premultiply;       /**< Whether image should be premultiplied or not after decoding */
     bool no_cache;          /**< When set, decoded image won't be put to cache, and decoder open will also ignore cache. */
@@ -42,50 +41,46 @@ struct lv_image_decoder_args_t
     bool flush_cache;       /**< Whether to flush the data cache after decoding */
 };
 
-struct lv_image_decoder_t
-{
+struct lv_image_decoder_t {
     lv_image_decoder_info_f_t info_cb;
     lv_image_decoder_open_f_t open_cb;
     lv_image_decoder_get_area_cb_t get_area_cb;
     lv_image_decoder_close_f_t close_cb;
 
-    const char *name;
+    const char * name;
 
-    void *user_data;
+    void * user_data;
 };
 
-struct lv_image_cache_data_t
-{
+struct lv_image_cache_data_t {
     lv_cache_slot_size_t slot;
 
-    const void *src;
+    const void * src;
     lv_image_src_t src_type;
 
-    const lv_draw_buf_t *decoded;
-    const lv_image_decoder_t *decoder;
-    void *user_data;
+    const lv_draw_buf_t * decoded;
+    const lv_image_decoder_t * decoder;
+    void * user_data;
 };
 
-struct lv_image_header_cache_data_t
-{
-    const void *src;
+struct lv_image_header_cache_data_t {
+    const void * src;
     lv_image_src_t src_type;
 
     lv_image_header_t header;
-    lv_image_decoder_t *decoder;
+    lv_image_decoder_t * decoder;
 };
 
 /**Describe an image decoding session. Stores data about the decoding*/
-struct lv_image_decoder_dsc_t
-{
+struct lv_image_decoder_dsc_t {
     /**The decoder which was able to open the image source*/
-    lv_image_decoder_t *decoder;
+    lv_image_decoder_t * decoder;
 
     /**A copy of parameters of how this image is decoded*/
     lv_image_decoder_args_t args;
 
     /**The image source. A file path like "S:my_img.png" or pointer to an `lv_image_dsc_t` variable*/
-    const void *src;
+    const void * src;
 
     /**Type of the source: file or variable. Can be set in `open` function if required*/
     lv_image_src_t src_type;
@@ -97,9 +92,9 @@ struct lv_image_decoder_dsc_t
 
     /** Pointer to a draw buffer where the image's data (pixels) are stored in a decoded, plain format.
      *  MUST be set in `open` or `get_area_cb`function*/
-    const lv_draw_buf_t *decoded;
+    const lv_draw_buf_t * decoded;
 
-    const lv_color32_t *palette;
+    const lv_color32_t * palette;
     uint32_t palette_size;
 
     /** How much time did it take to open the image. [ms]
@@ -108,15 +103,15 @@ struct lv_image_decoder_dsc_t
 
     /**A text to display instead of the image when the image can't be opened.
      * Can be set in `open` function or set NULL.*/
-    const char *error_msg;
+    const char * error_msg;
 
-    lv_cache_t *cache;
+    lv_cache_t * cache;
 
     /**Point to cache entry information*/
-    lv_cache_entry_t *cache_entry;
+    lv_cache_entry_t * cache_entry;
 
     /**Store any custom data here is required*/
-    void *user_data;
+    void * user_data;
 };
 
 

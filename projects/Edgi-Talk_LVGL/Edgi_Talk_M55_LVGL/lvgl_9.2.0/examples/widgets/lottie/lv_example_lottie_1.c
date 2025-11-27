@@ -10,7 +10,7 @@ void lv_example_lottie_1(void)
     extern const uint8_t lv_example_lottie_approve[];
     extern const size_t lv_example_lottie_approve_size;
 
-    lv_obj_t *lottie = lv_lottie_create(lv_screen_active());
+    lv_obj_t * lottie = lv_lottie_create(lv_screen_active());
     lv_lottie_set_src_data(lottie, lv_example_lottie_approve, lv_example_lottie_approve_size);
 
 #if LV_DRAW_BUF_ALIGN == 4 && LV_DRAW_BUF_STRIDE_ALIGN == 1
@@ -33,7 +33,7 @@ void lv_example_lottie_1(void)
 {
     /*fallback for online examples*/
 
-    lv_obj_t *label = lv_label_create(lv_screen_active());
+    lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "Lottie cannot be previewed online");
     lv_obj_center(label);
 }

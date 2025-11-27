@@ -26,11 +26,10 @@ extern "C" {
  *      MACROS
  **********************/
 
-typedef struct lv_draw_image_dsc_t
-{
+typedef struct lv_draw_image_dsc_t {
     lv_draw_dsc_base_t base;
 
-    const void *src;
+    const void * src;
     lv_image_header_t header;
 
     int32_t rotation;
@@ -48,7 +47,7 @@ typedef struct lv_draw_image_dsc_t
 
     uint16_t antialias          : 1;
     uint16_t tile               : 1;
-    lv_draw_image_sup_t *sup;
+    lv_draw_image_sup_t * sup;
 
     /** Used to indicate the entire original, non-clipped area where the image is to be drawn.
      * This is important for:
@@ -59,7 +58,7 @@ typedef struct lv_draw_image_dsc_t
 
     int32_t clip_radius;
 
-    const lv_image_dsc_t *bitmap_mask_src;
+    const lv_image_dsc_t * bitmap_mask_src;
 } lv_draw_image_dsc_t;
 
 /**
@@ -72,8 +71,8 @@ typedef struct lv_draw_image_dsc_t
  * @param clipped_img_area  the absolute clip coordinates
  */
 typedef void (*lv_draw_image_core_cb)(lv_draw_unit_t * draw_unit, const lv_draw_image_dsc_t * draw_dsc,
-                                      const lv_image_decoder_dsc_t *decoder_dsc, lv_draw_image_sup_t *sup,
-                                      const lv_area_t *img_coords, const lv_area_t *clipped_img_area);
+                                      const lv_image_decoder_dsc_t * decoder_dsc, lv_draw_image_sup_t * sup,
+                                      const lv_area_t * img_coords, const lv_area_t * clipped_img_area);
 
 /**********************
  * GLOBAL PROTOTYPES
@@ -90,7 +89,7 @@ void lv_draw_image_dsc_init(lv_draw_image_dsc_t * dsc);
  * @param task      draw task
  * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_IMAGE
  */
-lv_draw_image_dsc_t *lv_draw_task_get_image_dsc(lv_draw_task_t * task);
+lv_draw_image_dsc_t * lv_draw_task_get_image_dsc(lv_draw_task_t * task);
 
 /**
  * Create an image draw task

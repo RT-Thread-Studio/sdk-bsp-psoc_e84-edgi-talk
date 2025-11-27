@@ -49,8 +49,7 @@
  **********************/
 
 /* init commands based on LovyanGFX ILI9341 driver */
-static const uint8_t init_cmd_list[] =
-{
+static const uint8_t init_cmd_list[] = {
     CMD_PWCTRB,     3,  0x00, 0xC1, 0x30,
     CMD_PONSEQ,     4,  0x64, 0x03, 0x12, 0x81,
     CMD_DTCTRA,     3,  0x85, 0x00, 0x78,
@@ -83,10 +82,10 @@ static const uint8_t init_cmd_list[] =
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_ili9341_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
-                                lv_ili9341_send_cmd_cb_t send_cmd_cb, lv_ili9341_send_color_cb_t send_color_cb)
+lv_display_t * lv_ili9341_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
+                                 lv_ili9341_send_cmd_cb_t send_cmd_cb, lv_ili9341_send_color_cb_t send_color_cb)
 {
-    lv_display_t *disp = lv_lcd_generic_mipi_create(hor_res, ver_res, flags, send_cmd_cb, send_color_cb);
+    lv_display_t * disp = lv_lcd_generic_mipi_create(hor_res, ver_res, flags, send_cmd_cb, send_color_cb);
     lv_lcd_generic_mipi_send_cmd_list(disp, init_cmd_list);
     return disp;
 }

@@ -37,7 +37,7 @@ void lv_calendar_set_chinese_mode(lv_obj_t * obj, bool en);
  * @param gregorian   to obtain the gregorian time for the name
  * @return            return the name of the day
  */
-const char *lv_calendar_get_day_name(lv_calendar_date_t * gregorian);
+const char * lv_calendar_get_day_name(lv_calendar_date_t * gregorian);
 
 /**
  * Get the chinese time of the gregorian time (reference: https://www.cnblogs.com/liyang31tg/p/4123171.html)

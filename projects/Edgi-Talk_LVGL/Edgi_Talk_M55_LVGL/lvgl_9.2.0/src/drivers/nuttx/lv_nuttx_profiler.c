@@ -49,8 +49,7 @@ static void flush_cb(const char * buf);
 void lv_nuttx_profiler_init(void)
 {
     cpu_freq = (uint32_t)up_perf_getfreq() / 1000000;
-    if (cpu_freq == 0)
-    {
+    if(cpu_freq == 0) {
         LV_LOG_ERROR("Failed to get CPU frequency");
         return;
     }
@@ -76,12 +75,10 @@ static uint32_t tick_get_cb(void)
     uint32_t elaps;
 
     /*If there is no overflow in sys_time simple subtract*/
-    if (act_time >= prev_tick)
-    {
+    if(act_time >= prev_tick) {
         elaps = act_time - prev_tick;
     }
-    else
-    {
+    else {
         elaps = UINT32_MAX - prev_tick + 1;
         elaps += act_time;
     }

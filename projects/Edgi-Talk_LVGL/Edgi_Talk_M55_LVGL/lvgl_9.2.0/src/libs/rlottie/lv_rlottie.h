@@ -23,8 +23,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_RLOTTIE_CTRL_FORWARD  = 0,
     LV_RLOTTIE_CTRL_BACKWARD = 1,
     LV_RLOTTIE_CTRL_PAUSE    = 2,
@@ -38,10 +37,10 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_rlottie_class;
  * GLOBAL PROTOTYPES
  **********************/
 
-lv_obj_t *lv_rlottie_create_from_file(lv_obj_t * parent, int32_t width, int32_t height, const char * path);
+lv_obj_t * lv_rlottie_create_from_file(lv_obj_t * parent, int32_t width, int32_t height, const char * path);
 
-lv_obj_t *lv_rlottie_create_from_raw(lv_obj_t * parent, int32_t width, int32_t height,
-                                     const char *rlottie_desc);
+lv_obj_t * lv_rlottie_create_from_raw(lv_obj_t * parent, int32_t width, int32_t height,
+                                      const char * rlottie_desc);
 
 void lv_rlottie_set_play_mode(lv_obj_t * rlottie, const lv_rlottie_ctrl_t ctrl);
 void lv_rlottie_set_current_frame(lv_obj_t * rlottie, const size_t goto_frame);

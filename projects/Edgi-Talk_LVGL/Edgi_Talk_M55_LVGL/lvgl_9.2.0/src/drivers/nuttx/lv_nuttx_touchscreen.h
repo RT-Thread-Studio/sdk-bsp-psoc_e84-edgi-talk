@@ -40,7 +40,7 @@ extern "C" {
  * Initialize indev with specified input device.
  * @param dev_path      path of input device
  */
-lv_indev_t *lv_nuttx_touchscreen_create(const char * dev_path);
+lv_indev_t * lv_nuttx_touchscreen_create(const char * dev_path);
 
 /**********************
  *      MACROS

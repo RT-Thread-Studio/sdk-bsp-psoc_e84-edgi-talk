@@ -31,8 +31,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_tabview_t
-{
+struct lv_tabview_t {
     lv_obj_t obj;
     uint32_t tab_cur;
     lv_dir_t tab_pos;

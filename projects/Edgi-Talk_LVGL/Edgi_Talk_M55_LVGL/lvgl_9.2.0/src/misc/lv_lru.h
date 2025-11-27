@@ -26,8 +26,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_LRU_OK = 0,
     LV_LRU_MISSING_CACHE,
     LV_LRU_MISSING_KEY,
@@ -40,9 +39,8 @@ typedef void (*lv_lru_free_cb_t)(void * v);
 
 typedef struct lv_lru_item_t lv_lru_item_t;
 
-typedef struct lv_lru_t
-{
-    lv_lru_item_t **items;
+typedef struct lv_lru_t {
+    lv_lru_item_t ** items;
     uint64_t access_count;
     size_t free_memory;
     size_t total_memory;
@@ -51,15 +49,15 @@ typedef struct lv_lru_t
     uint32_t seed;
     lv_lru_free_cb_t value_free;
     lv_lru_free_cb_t key_free;
-    lv_lru_item_t *free_items;
+    lv_lru_item_t * free_items;
 } lv_lru_t;
 
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
 
-lv_lru_t *lv_lru_create(size_t cache_size, size_t average_length, lv_lru_free_cb_t value_free,
-                        lv_lru_free_cb_t key_free);
+lv_lru_t * lv_lru_create(size_t cache_size, size_t average_length, lv_lru_free_cb_t value_free,
+                         lv_lru_free_cb_t key_free);
 
 void lv_lru_delete(lv_lru_t * cache);
 

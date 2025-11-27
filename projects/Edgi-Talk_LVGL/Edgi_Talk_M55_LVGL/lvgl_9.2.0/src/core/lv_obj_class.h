@@ -25,22 +25,19 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_OBJ_CLASS_EDITABLE_INHERIT,      /**< Check the base class. Must have 0 value to let zero initialized class inherit*/
     LV_OBJ_CLASS_EDITABLE_TRUE,
     LV_OBJ_CLASS_EDITABLE_FALSE,
 } lv_obj_class_editable_t;
 
-typedef enum
-{
+typedef enum {
     LV_OBJ_CLASS_GROUP_DEF_INHERIT,      /**< Check the base class. Must have 0 value to let zero initialized class inherit*/
     LV_OBJ_CLASS_GROUP_DEF_TRUE,
     LV_OBJ_CLASS_GROUP_DEF_FALSE,
 } lv_obj_class_group_def_t;
 
-typedef enum
-{
+typedef enum {
     LV_OBJ_CLASS_THEME_INHERITABLE_FALSE,    /**< Do not inherit theme from base class. */
     LV_OBJ_CLASS_THEME_INHERITABLE_TRUE,
 } lv_obj_class_theme_inheritable_t;
@@ -56,7 +53,7 @@ typedef void (*lv_obj_class_event_cb_t)(lv_obj_class_t * class_p, lv_event_t * e
  * @param parent    pointer to an object where the new object should be created
  * @return          pointer to the created object
  */
-lv_obj_t *lv_obj_class_create_obj(const lv_obj_class_t * class_p, lv_obj_t * parent);
+lv_obj_t * lv_obj_class_create_obj(const lv_obj_class_t * class_p, lv_obj_t * parent);
 
 void lv_obj_class_init_obj(lv_obj_t * obj);
 

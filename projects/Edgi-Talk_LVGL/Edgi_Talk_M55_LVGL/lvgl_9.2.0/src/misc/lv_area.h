@@ -28,21 +28,18 @@ extern "C" {
 /**
  * Represents a point on the screen.
  */
-typedef struct
-{
+typedef struct {
     int32_t x;
     int32_t y;
 } lv_point_t;
 
-typedef struct
-{
+typedef struct {
     lv_value_precise_t x;
     lv_value_precise_t y;
 } lv_point_precise_t;
 
 /** Represents an area of the screen.*/
-typedef struct
-{
+typedef struct {
     int32_t x1;
     int32_t y1;
     int32_t x2;
@@ -51,8 +48,7 @@ typedef struct
 
 /** Alignments*/
 
-typedef enum
-{
+typedef enum {
     LV_ALIGN_DEFAULT = 0,
     LV_ALIGN_TOP_LEFT,
     LV_ALIGN_TOP_MID,
@@ -78,8 +74,7 @@ typedef enum
     LV_ALIGN_OUT_RIGHT_BOTTOM,
 } lv_align_t;
 
-typedef enum
-{
+typedef enum {
     LV_DIR_NONE     = 0x00,
     LV_DIR_LEFT     = (1 << 0),
     LV_DIR_RIGHT    = (1 << 1),
@@ -189,7 +184,7 @@ void lv_point_transform(lv_point_t * point, int32_t angle, int32_t scale_x, int3
  * @param zoom_first    true: zoom first and rotate after that; else: opposite order
  */
 void lv_point_array_transform(lv_point_t * points, size_t count, int32_t angle, int32_t scale_x, int32_t scale_y,
-                              const lv_point_t *pivot,
+                              const lv_point_t * pivot,
                               bool zoom_first);
 
 lv_point_t lv_point_from_precise(const lv_point_precise_t * p);

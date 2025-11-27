@@ -31,8 +31,7 @@ extern "C" {
 /**
  * Errors in the file system module.
  */
-typedef enum
-{
+typedef enum {
     LV_FS_RES_OK = 0,
     LV_FS_RES_HW_ERR,     /*Low level hardware error*/
     LV_FS_RES_FS_ERR,     /*Error in the file system structure*/
@@ -51,8 +50,7 @@ typedef enum
 /**
  * File open mode.
  */
-typedef enum
-{
+typedef enum {
     LV_FS_MODE_WR = 0x01,
     LV_FS_MODE_RD = 0x02,
 } lv_fs_mode_t;
@@ -60,8 +58,7 @@ typedef enum
 /**
  * Seek modes.
  */
-typedef enum
-{
+typedef enum {
     LV_FS_SEEK_SET = 0x00,      /**< Set the position from absolutely (from the start of file)*/
     LV_FS_SEEK_CUR = 0x01,      /**< Set the position from the current position*/
     LV_FS_SEEK_END = 0x02,      /**< Set the position from the end of the file*/
@@ -69,31 +66,29 @@ typedef enum
 
 struct lv_fs_drv_t;
 typedef struct lv_fs_drv_t lv_fs_drv_t;
-struct lv_fs_drv_t
-{
+struct lv_fs_drv_t {
     char letter;
     uint32_t cache_size;
     bool (*ready_cb)(lv_fs_drv_t * drv);
 
-    void *(*open_cb)(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode);
+    void * (*open_cb)(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode);
     lv_fs_res_t (*close_cb)(lv_fs_drv_t * drv, void * file_p);
     lv_fs_res_t (*read_cb)(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br);
     lv_fs_res_t (*write_cb)(lv_fs_drv_t * drv, void * file_p, const void * buf, uint32_t btw, uint32_t * bw);
     lv_fs_res_t (*seek_cb)(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence);
     lv_fs_res_t (*tell_cb)(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p);
 
-    void *(*dir_open_cb)(lv_fs_drv_t * drv, const char * path);
+    void * (*dir_open_cb)(lv_fs_drv_t * drv, const char * path);
     lv_fs_res_t (*dir_read_cb)(lv_fs_drv_t * drv, void * rddir_p, char * fn, uint32_t fn_len);
     lv_fs_res_t (*dir_close_cb)(lv_fs_drv_t * drv, void * rddir_p);
 
-    void *user_data;  /**< Custom file user data*/
+    void * user_data; /**< Custom file user data*/
 };
 
-typedef struct
-{
-    void *file_d;
-    lv_fs_drv_t *drv;
-    lv_fs_file_cache_t *cache;
+typedef struct {
+    void * file_d;
+    lv_fs_drv_t * drv;
+    lv_fs_file_cache_t * cache;
 } lv_fs_file_t;
 
 /**********************
@@ -121,7 +116,7 @@ void lv_fs_drv_register(lv_fs_drv_t * drv);
  * @param letter    the driver letter
  * @return          pointer to a driver or NULL if not found
  */
-lv_fs_drv_t *lv_fs_get_drv(char letter);
+lv_fs_drv_t * lv_fs_get_drv(char letter);
 
 /**
  * Test if a drive is ready or not. If the `ready` function was not initialized `true` will be
@@ -223,28 +218,28 @@ lv_fs_res_t lv_fs_dir_close(lv_fs_dir_t * rddir_p);
  * @param buf       buffer to store the letters ('\0' added after the last letter)
  * @return          the buffer
  */
-char *lv_fs_get_letters(char * buf);
+char * lv_fs_get_letters(char * buf);
 
 /**
  * Return with the extension of the filename
  * @param fn        string with a filename
  * @return          pointer to the beginning extension or empty string if no extension
  */
-const char *lv_fs_get_ext(const char * fn);
+const char * lv_fs_get_ext(const char * fn);
 
 /**
  * Step up one level
  * @param path      pointer to a file name
  * @return          the truncated file name
  */
-char *lv_fs_up(char * path);
+char * lv_fs_up(char * path);
 
 /**
  * Get the last element of a path (e.g. U:/folder/file -> file)
  * @param path      pointer to a file name
  * @return          pointer to the beginning of the last element in the path
  */
-const char *lv_fs_get_last(const char * path);
+const char * lv_fs_get_last(const char * path);
 
 /**********************
  *      MACROS

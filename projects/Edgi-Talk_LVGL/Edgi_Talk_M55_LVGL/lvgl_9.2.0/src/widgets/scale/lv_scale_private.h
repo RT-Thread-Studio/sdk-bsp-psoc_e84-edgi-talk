@@ -27,11 +27,10 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_scale_section_t
-{
-    lv_style_t *main_style;
-    lv_style_t *indicator_style;
-    lv_style_t *items_style;
+struct lv_scale_section_t {
+    lv_style_t * main_style;
+    lv_style_t * indicator_style;
+    lv_style_t * items_style;
     int32_t minor_range;
     int32_t major_range;
     uint32_t first_tick_idx_in_section;
@@ -44,11 +43,10 @@ struct lv_scale_section_t
     lv_point_t last_tick_in_section;
 };
 
-struct lv_scale_t
-{
+struct lv_scale_t {
     lv_obj_t obj;
     lv_ll_t section_ll;     /**< Linked list for the sections (stores lv_scale_section_t)*/
-    const char **txt_src;
+    const char ** txt_src;
     lv_scale_mode_t mode;
     int32_t range_min;
     int32_t range_max;

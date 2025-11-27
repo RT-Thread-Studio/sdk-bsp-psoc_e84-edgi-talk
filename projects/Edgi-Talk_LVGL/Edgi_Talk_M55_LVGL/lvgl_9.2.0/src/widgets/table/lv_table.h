@@ -33,8 +33,7 @@ LV_EXPORT_CONST_INT(LV_TABLE_CELL_NONE);
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_TABLE_CELL_CTRL_MERGE_RIGHT = 1 << 0,
     LV_TABLE_CELL_CTRL_TEXT_CROP   = 1 << 1,
     LV_TABLE_CELL_CTRL_CUSTOM_1    = 1 << 4,
@@ -54,7 +53,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_table_class;
  * @param parent        pointer to an object, it will be the parent of the new table
  * @return              pointer to the created table
  */
-lv_obj_t *lv_table_create(lv_obj_t * parent);
+lv_obj_t * lv_table_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -152,7 +151,7 @@ void lv_table_set_selected_cell(lv_obj_t * obj, uint16_t row, uint16_t col);
  * @param col       id of the column [0 .. col_cnt -1]
  * @return          text in the cell
  */
-const char *lv_table_get_cell_value(lv_obj_t * obj, uint32_t row, uint32_t col);
+const char * lv_table_get_cell_value(lv_obj_t * obj, uint32_t row, uint32_t col);
 
 /**
  * Get the number of rows.
@@ -200,7 +199,7 @@ void lv_table_get_selected_cell(lv_obj_t * obj, uint32_t * row, uint32_t * col);
  * @param row       id of the row [0 .. row_cnt -1]
  * @param col       id of the column [0 .. col_cnt -1]
  */
-void *lv_table_get_cell_user_data(lv_obj_t * obj, uint16_t row, uint16_t col);
+void * lv_table_get_cell_user_data(lv_obj_t * obj, uint16_t row, uint16_t col);
 
 /**********************
  *      MACROS

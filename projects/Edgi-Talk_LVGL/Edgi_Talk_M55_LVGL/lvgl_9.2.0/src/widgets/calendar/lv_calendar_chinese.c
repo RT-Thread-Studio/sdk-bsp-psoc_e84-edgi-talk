@@ -18,8 +18,7 @@
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     const char festival_name[20];
     uint8_t month;
     uint8_t day;
@@ -33,8 +32,7 @@ typedef struct
  *  STATIC VARIABLES
  **********************/
 
-static const uint32_t calendar_chinese_table[199] =  /*1901-2099*/
-{
+static const uint32_t calendar_chinese_table[199] = {/*1901-2099*/
     0x04AE53, 0x0A5748, 0x5526BD, 0x0D2650, 0x0D9544, 0x46AAB9, 0x056A4D, 0x09AD42, 0x24AEB6, 0x04AE4A, /*1901-1910*/
     0x6A4DBE, 0x0A4D52, 0x0D2546, 0x5D52BA, 0x0B544E, 0x0D6A43, 0x296D37, 0x095B4B, 0x749BC1, 0x049754, /*1911-1920*/
     0x0A4B48, 0x5B25BC, 0x06A550, 0x06D445, 0x4ADAB8, 0x02B64D, 0x095742, 0x2497B7, 0x04974A, 0x664B3E, /*1921-1930*/
@@ -59,24 +57,23 @@ static const uint32_t calendar_chinese_table[199] =  /*1901-2099*/
 
 static const uint16_t month_total_day[13] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 
-static const char *chinese_calendar_month_name[] = {"正月", "二月", "三月", "四月", "五月", "六月",
-                                                    "七月", "八月", "九月", "十月", "十一月", "腊月"
-                                                   };
+static const char * chinese_calendar_month_name[] = {"正月", "二月", "三月", "四月", "五月", "六月",
+                                                     "七月", "八月", "九月", "十月", "十一月", "腊月"
+                                                    };
 
-static const char *chinese_calendar_leep_month_name[] = {"闰正月", "闰二月", "闰三月", "闰四月", "闰五月", "闰六月",
-                                                         "闰七月", "闰八月", "闰九月", "闰十月", "闰十一月", "闰腊月"
-                                                        };
+static const char * chinese_calendar_leep_month_name[] = {"闰正月", "闰二月", "闰三月", "闰四月", "闰五月", "闰六月",
+                                                          "闰七月", "闰八月", "闰九月", "闰十月", "闰十一月", "闰腊月"
+                                                         };
 
-static const char *chinese_calendar_day_name[] = {"初一", "初二", "初三", "初四", "初五",
-                                                  "初六", "初七", "初八", "初九", "初十",
-                                                  "十一", "十二", "十三", "十四", "十五",
-                                                  "十六", "十七", "十八", "十九", "二十",
-                                                  "廿一", "廿二", "廿三", "廿四", "廿五",
-                                                  "廿六", "廿七", "廿八", "廿九", "三十"
-                                                 };
+static const char * chinese_calendar_day_name[] = {"初一", "初二", "初三", "初四", "初五",
+                                                   "初六", "初七", "初八", "初九", "初十",
+                                                   "十一", "十二", "十三", "十四", "十五",
+                                                   "十六", "十七", "十八", "十九", "二十",
+                                                   "廿一", "廿二", "廿三", "廿四", "廿五",
+                                                   "廿六", "廿七", "廿八", "廿九", "三十"
+                                                  };
 
-static const lv_calendar_festival_t festivals_base_chinese[] =
-{
+static const lv_calendar_festival_t festivals_base_chinese[] = {
     {"春节", 1, 1},
     {"元宵节", 1, 15},
     {"端午节", 5, 5},
@@ -89,8 +86,7 @@ static const lv_calendar_festival_t festivals_base_chinese[] =
     {"除夕", 12, 30},/* To determine whether it is 12.29 or 12.30. */
 };
 
-static const lv_calendar_festival_t festivals_base_gregorian[] =
-{
+static const lv_calendar_festival_t festivals_base_gregorian[] = {
     {"元旦", 1, 1},
     {"情人节", 2, 14},
     {"妇女节", 3, 8},
@@ -119,65 +115,54 @@ static const lv_calendar_festival_t festivals_base_gregorian[] =
 
 void lv_calendar_set_chinese_mode(lv_obj_t * obj, bool en)
 {
-    lv_calendar_t *calendar = (lv_calendar_t *)obj;
+    lv_calendar_t * calendar = (lv_calendar_t *)obj;
     calendar->use_chinese_calendar = en;
     lv_calendar_set_showed_date(obj, calendar->today.year, calendar->today.month);
 }
 
-const char *lv_calendar_get_day_name(lv_calendar_date_t * gregorian)
+const char * lv_calendar_get_day_name(lv_calendar_date_t * gregorian)
 {
     uint16_t i, len;
     lv_calendar_chinese_t chinese_calendar;
     chinese_calendar = lv_calendar_gregorian_to_chinese(gregorian);
 
-    if (gregorian->year > 2099 || gregorian->year < 1901)
+    if(gregorian->year > 2099 || gregorian->year < 1901)
         return NULL;
 
     len = sizeof(festivals_base_chinese) / sizeof(lv_calendar_festival_t);
-    for (i = 0; i < len; i++)
-    {
-        if ((chinese_calendar.today.month == festivals_base_chinese[i].month) &&
-                (chinese_calendar.today.day == festivals_base_chinese[i].day) &&
-                chinese_calendar.leep_month == false)
-        {
-            if (chinese_calendar.today.month == 12 && chinese_calendar.today.day == 29)
-            {
-                if ((calendar_chinese_table[chinese_calendar.today.year - 1901] & 0xf00000) != 0)
-                {
-                    if ((calendar_chinese_table[chinese_calendar.today.year - 1901] & 0x000080) == 0)
-                    {
+    for(i = 0; i < len; i++) {
+        if((chinese_calendar.today.month == festivals_base_chinese[i].month) &&
+           (chinese_calendar.today.day == festivals_base_chinese[i].day) &&
+           chinese_calendar.leep_month == false) {
+            if(chinese_calendar.today.month == 12 && chinese_calendar.today.day == 29) {
+                if((calendar_chinese_table[chinese_calendar.today.year - 1901] & 0xf00000) != 0) {
+                    if((calendar_chinese_table[chinese_calendar.today.year - 1901] & 0x000080) == 0) {
                         return festivals_base_chinese[i].festival_name;
                     }
                 }
-                else
-                {
-                    if ((calendar_chinese_table[chinese_calendar.today.year - 1901] & 0x000100) == 0)
-                    {
+                else {
+                    if((calendar_chinese_table[chinese_calendar.today.year - 1901] & 0x000100) == 0) {
                         return festivals_base_chinese[i].festival_name;
                     }
                 }
             }
-            else
-            {
+            else {
                 return festivals_base_chinese[i].festival_name;
             }
         }
     }
 
     len = sizeof(festivals_base_gregorian) / sizeof(lv_calendar_festival_t);
-    for (i = 0; i < len; i++)
-    {
-        if ((gregorian->month == festivals_base_gregorian[i].month) &&
-                (gregorian->day == festivals_base_gregorian[i].day))
+    for(i = 0; i < len; i++) {
+        if((gregorian->month == festivals_base_gregorian[i].month) &&
+           (gregorian->day == festivals_base_gregorian[i].day))
             return festivals_base_gregorian[i].festival_name;
     }
 
-    if (chinese_calendar.today.day == 1)
-    {
-        if (chinese_calendar.leep_month == false)
+    if(chinese_calendar.today.day == 1) {
+        if(chinese_calendar.leep_month == false)
             return chinese_calendar_month_name[chinese_calendar.today.month - 1];
-        else
-        {
+        else {
             return chinese_calendar_leep_month_name[chinese_calendar.today.month - 1];
         }
     }
@@ -208,8 +193,7 @@ lv_calendar_chinese_t lv_calendar_gregorian_to_chinese(lv_calendar_date_t * greg
     bool leep_month;
     lv_calendar_chinese_t chinese_calendar;
 
-    if (year < 1901 || year > 2099)
-    {
+    if(year < 1901 || year > 2099) {
         chinese_calendar.leep_month = 0;
         chinese_calendar.today.year = 2000;
         chinese_calendar.today.month = 1;
@@ -217,77 +201,72 @@ lv_calendar_chinese_t lv_calendar_gregorian_to_chinese(lv_calendar_date_t * greg
         return chinese_calendar;
     }
 
-    if (((calendar_chinese_table[year - 1901] & 0x0060) >> 5) == 1)
+    if(((calendar_chinese_table[year - 1901] & 0x0060) >> 5) == 1)
         by_spring = (calendar_chinese_table[year - 1901] & 0x001F) - 1;
     else
         by_spring = (calendar_chinese_table[year - 1901] & 0x001F) - 1 + 31;
 
     by_gregorian = month_total_day[month - 1] + day - 1;
 
-    if ((!(year % 4)) && (month > 2))
+    if((!(year % 4)) && (month > 2))
         by_gregorian++;
 
-    if (by_gregorian >= by_spring) /*Gregorian calendar days after the Spring Festival*/
-    {
+    if(by_gregorian >= by_spring) {/*Gregorian calendar days after the Spring Festival*/
         by_gregorian -= by_spring;
         month = 1;
         index = 1;
         leep_month = false;
 
-        if ((calendar_chinese_table[year - 1901] & (0x80000 >> (index - 1))) == 0)
+        if((calendar_chinese_table[year - 1901] & (0x80000 >> (index - 1))) == 0)
             days_per_month = 29;
         else
             days_per_month = 30;
 
-        while (by_gregorian >= days_per_month)
-        {
+        while(by_gregorian >= days_per_month) {
             by_gregorian -= days_per_month;
             index++;
 
-            if (month == ((calendar_chinese_table[year - 1901] & 0xF00000) >> 20))
-            {
+            if(month == ((calendar_chinese_table[year - 1901] & 0xF00000) >> 20)) {
                 leep_month = !leep_month;
-                if (leep_month == false)
+                if(leep_month == false)
                     month++;
             }
             else
                 month++;
 
-            if ((calendar_chinese_table[year - 1901] & (0x80000 >> (index - 1))) == 0)
+            if((calendar_chinese_table[year - 1901] & (0x80000 >> (index - 1))) == 0)
                 days_per_month = 29;
             else
                 days_per_month = 30;
         }
         day = by_gregorian + 1;
     }
-    else  /*Solar day before the Spring Festival*/
-    {
+    else {/*Solar day before the Spring Festival*/
         by_spring -= by_gregorian;
         year--;
         month = 12;
-        if (((calendar_chinese_table[year - 1901] & 0xF00000) >> 20) == 0)
+        if(((calendar_chinese_table[year - 1901] & 0xF00000) >> 20) == 0)
             index = 12;
         else
             index = 13;
         leep_month = false;
 
-        if ((calendar_chinese_table[year - 1901] & (0x80000 >> (index - 1))) == 0)
+        if((calendar_chinese_table[year - 1901] & (0x80000 >> (index - 1))) == 0)
             days_per_month = 29;
         else
             days_per_month = 30;
 
-        while (by_spring > days_per_month)
-        {
+        while(by_spring > days_per_month) {
             by_spring -= days_per_month;
             index--;
 
-            if (leep_month == false)
+            if(leep_month == false)
                 month--;
 
-            if (month == ((calendar_chinese_table[year - 1901] & 0xF00000) >> 20))
+            if(month == ((calendar_chinese_table[year - 1901] & 0xF00000) >> 20))
                 leep_month = !leep_month;
 
-            if ((calendar_chinese_table[year - 1901] & (0x80000 >> (index - 1))) == 0)
+            if((calendar_chinese_table[year - 1901] & (0x80000 >> (index - 1))) == 0)
                 days_per_month = 29;
             else
                 days_per_month = 30;

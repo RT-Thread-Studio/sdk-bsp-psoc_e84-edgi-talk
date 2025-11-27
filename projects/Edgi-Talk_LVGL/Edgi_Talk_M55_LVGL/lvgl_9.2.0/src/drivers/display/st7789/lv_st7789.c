@@ -57,8 +57,7 @@
  **********************/
 
 /* init commands based on LovyanGFX ST7789 driver */
-static const uint8_t init_cmd_list[] =
-{
+static const uint8_t init_cmd_list[] = {
     CMD_GCTRL,      1,  0x44,       /* GCTRL -- panel dependent */
     CMD_VCOMS,      1,  0x24,       /* VCOMS -- panel dependent */
     CMD_VRHS,       1,  0x13,       /* VRHS - panel dependent */
@@ -82,10 +81,10 @@ static const uint8_t init_cmd_list[] =
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_st7789_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
-                               lv_st7789_send_cmd_cb_t send_cmd_cb, lv_st7789_send_color_cb_t send_color_cb)
+lv_display_t * lv_st7789_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
+                                lv_st7789_send_cmd_cb_t send_cmd_cb, lv_st7789_send_color_cb_t send_color_cb)
 {
-    lv_display_t *disp = lv_lcd_generic_mipi_create(hor_res, ver_res, flags, send_cmd_cb, send_color_cb);
+    lv_display_t * disp = lv_lcd_generic_mipi_create(hor_res, ver_res, flags, send_cmd_cb, send_color_cb);
     lv_lcd_generic_mipi_send_cmd_list(disp, init_cmd_list);
     return disp;
 }

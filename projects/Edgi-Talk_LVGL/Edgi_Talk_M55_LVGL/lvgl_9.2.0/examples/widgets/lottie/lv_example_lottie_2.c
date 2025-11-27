@@ -8,7 +8,7 @@
 void lv_example_lottie_2(void)
 {
 
-    lv_obj_t *lottie = lv_lottie_create(lv_screen_active());
+    lv_obj_t * lottie = lv_lottie_create(lv_screen_active());
     lv_lottie_set_src_file(lottie, "lvgl/examples/widgets/lottie/lv_example_lottie_approve.json");
 
 #if LV_DRAW_BUF_ALIGN == 4 && LV_DRAW_BUF_STRIDE_ALIGN == 1
@@ -31,7 +31,7 @@ void lv_example_lottie_2(void)
 {
     /*fallback for online examples*/
 
-    lv_obj_t *label = lv_label_create(lv_screen_active());
+    lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "Lottie cannot be previewed online");
     lv_obj_center(label);
 }

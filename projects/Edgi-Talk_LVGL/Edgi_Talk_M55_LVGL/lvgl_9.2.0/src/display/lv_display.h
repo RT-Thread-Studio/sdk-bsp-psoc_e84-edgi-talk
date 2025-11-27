@@ -31,16 +31,14 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_DISPLAY_ROTATION_0 = 0,
     LV_DISPLAY_ROTATION_90,
     LV_DISPLAY_ROTATION_180,
     LV_DISPLAY_ROTATION_270
 } lv_display_rotation_t;
 
-typedef enum
-{
+typedef enum {
     /**
      * Use the buffer(s) to render the screen is smaller parts.
      * This way the buffers can be smaller then the display to save RAM. At least 1/10 screen size buffer(s) are recommended.
@@ -61,8 +59,7 @@ typedef enum
     LV_DISPLAY_RENDER_MODE_FULL,
 } lv_display_render_mode_t;
 
-typedef enum
-{
+typedef enum {
     LV_SCR_LOAD_ANIM_NONE,
     LV_SCR_LOAD_ANIM_OVER_LEFT,
     LV_SCR_LOAD_ANIM_OVER_RIGHT,
@@ -94,7 +91,7 @@ typedef void (*lv_display_flush_wait_cb_t)(lv_display_t * disp);
  * @param ver_res   vertical resolution in pixels
  * @return          pointer to a display object or `NULL` on error
  */
-lv_display_t *lv_display_create(int32_t hor_res, int32_t ver_res);
+lv_display_t * lv_display_create(int32_t hor_res, int32_t ver_res);
 
 /**
  * Remove a display
@@ -112,14 +109,14 @@ void lv_display_set_default(lv_display_t * disp);
  * Get the default display
  * @return          pointer to the default display
  */
-lv_display_t *lv_display_get_default(void);
+lv_display_t * lv_display_get_default(void);
 
 /**
  * Get the next display.
  * @param disp      pointer to the current display. NULL to initialize.
  * @return          the next display or NULL if no more. Gives the first display when the parameter is NULL.
  */
-lv_display_t *lv_display_get_next(lv_display_t * disp);
+lv_display_t * lv_display_get_next(lv_display_t * disp);
 
 /*---------------------
  * RESOLUTION
@@ -341,7 +338,7 @@ bool lv_display_is_double_buffered(lv_display_t * disp);
  *                  (NULL to use the default screen)
  * @return          pointer to the active screen object (loaded by 'lv_screen_load()')
  */
-lv_obj_t *lv_display_get_screen_active(lv_display_t * disp);
+lv_obj_t * lv_display_get_screen_active(lv_display_t * disp);
 
 /**
  * Return with a pointer to the previous screen. Only used during screen transitions.
@@ -349,21 +346,21 @@ lv_obj_t *lv_display_get_screen_active(lv_display_t * disp);
  *                  (NULL to use the default screen)
  * @return          pointer to the previous screen object or NULL if not used now
  */
-lv_obj_t *lv_display_get_screen_prev(lv_display_t * disp);
+lv_obj_t * lv_display_get_screen_prev(lv_display_t * disp);
 
 /**
  * Return the top layer. The top layer is the same on all screens and it is above the normal screen layer.
  * @param disp      pointer to display which top layer should be get. (NULL to use the default screen)
  * @return          pointer to the top layer object
  */
-lv_obj_t *lv_display_get_layer_top(lv_display_t * disp);
+lv_obj_t * lv_display_get_layer_top(lv_display_t * disp);
 
 /**
  * Return the sys. layer. The system layer is the same on all screen and it is above the normal screen and the top layer.
  * @param disp      pointer to display which sys. layer should be retrieved. (NULL to use the default screen)
  * @return          pointer to the sys layer object
  */
-lv_obj_t *lv_display_get_layer_sys(lv_display_t * disp);
+lv_obj_t * lv_display_get_layer_sys(lv_display_t * disp);
 
 /**
  * Return the bottom layer. The bottom layer is the same on all screen and it is under the normal screen layer.
@@ -371,7 +368,7 @@ lv_obj_t *lv_display_get_layer_sys(lv_display_t * disp);
  * @param disp      pointer to display (NULL to use the default screen)
  * @return          pointer to the bottom layer object
  */
-lv_obj_t *lv_display_get_layer_bottom(lv_display_t * disp);
+lv_obj_t * lv_display_get_layer_bottom(lv_display_t * disp);
 
 /**
  * Load a screen on the default display
@@ -394,25 +391,25 @@ void lv_screen_load_anim(lv_obj_t * scr, lv_screen_load_anim_t anim_type, uint32
  * Get the active screen of the default display
  * @return          pointer to the active screen
  */
-lv_obj_t *lv_screen_active(void);
+lv_obj_t * lv_screen_active(void);
 
 /**
  * Get the top layer  of the default display
  * @return          pointer to the top layer
  */
-lv_obj_t *lv_layer_top(void);
+lv_obj_t * lv_layer_top(void);
 
 /**
  * Get the system layer  of the default display
  * @return          pointer to the sys layer
  */
-lv_obj_t *lv_layer_sys(void);
+lv_obj_t * lv_layer_sys(void);
 
 /**
  * Get the bottom layer  of the default display
  * @return          pointer to the bottom layer
  */
-lv_obj_t *lv_layer_bottom(void);
+lv_obj_t * lv_layer_bottom(void);
 
 /*---------------------
  * OTHERS
@@ -440,7 +437,7 @@ uint32_t lv_display_get_event_count(lv_display_t * disp);
  * @param index         the index of the event
  * @return              the event descriptor
  */
-lv_event_dsc_t *lv_display_get_event_dsc(lv_display_t * disp, uint32_t index);
+lv_event_dsc_t * lv_display_get_event_dsc(lv_display_t * disp, uint32_t index);
 
 /**
  * Remove an event
@@ -480,7 +477,7 @@ void lv_display_set_theme(lv_display_t * disp, lv_theme_t * th);
  * @param disp      pointer to a display
  * @return          the display's theme (can be NULL)
  */
-lv_theme_t *lv_display_get_theme(lv_display_t * disp);
+lv_theme_t * lv_display_get_theme(lv_display_t * disp);
 
 /**
  * Get elapsed time since last user activity on a display (e.g. click)
@@ -515,7 +512,7 @@ bool lv_display_is_invalidation_enabled(lv_display_t * disp);
  * @param disp      pointer to a display
  * @return          pointer to the display refresher timer. (NULL on error)
  */
-lv_timer_t *lv_display_get_refr_timer(lv_display_t * disp);
+lv_timer_t * lv_display_get_refr_timer(lv_display_t * disp);
 
 /**
  * Delete screen refresher timer
@@ -525,9 +522,9 @@ void lv_display_delete_refr_timer(lv_display_t * disp);
 
 void lv_display_set_user_data(lv_display_t * disp, void * user_data);
 void lv_display_set_driver_data(lv_display_t * disp, void * driver_data);
-void *lv_display_get_user_data(lv_display_t * disp);
-void *lv_display_get_driver_data(lv_display_t * disp);
-lv_draw_buf_t *lv_display_get_buf_active(lv_display_t * disp);
+void * lv_display_get_user_data(lv_display_t * disp);
+void * lv_display_get_driver_data(lv_display_t * disp);
+lv_draw_buf_t * lv_display_get_buf_active(lv_display_t * disp);
 
 /**
  * Rotate an area in-place according to the display's rotation

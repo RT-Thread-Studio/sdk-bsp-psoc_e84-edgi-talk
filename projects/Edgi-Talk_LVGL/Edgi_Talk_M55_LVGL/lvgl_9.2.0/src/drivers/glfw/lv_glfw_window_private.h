@@ -32,9 +32,8 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_glfw_window_t
-{
-    GLFWwindow *window;
+struct lv_glfw_window_t {
+    GLFWwindow * window;
     int32_t hor_res;
     int32_t ver_res;
     lv_ll_t textures;
@@ -44,13 +43,12 @@ struct lv_glfw_window_t
     uint8_t closing : 1;
 };
 
-struct lv_glfw_texture_t
-{
-    lv_glfw_window_t *window;
+struct lv_glfw_texture_t {
+    lv_glfw_window_t * window;
     unsigned int texture_id;
     lv_area_t area;
     lv_opa_t opa;
-    lv_indev_t *indev;
+    lv_indev_t * indev;
     lv_point_t indev_last_point;
     lv_indev_state_t indev_last_state;
 };

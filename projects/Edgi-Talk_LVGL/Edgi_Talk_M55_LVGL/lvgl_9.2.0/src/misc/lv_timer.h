@@ -81,7 +81,7 @@ void lv_timer_handler_set_resume_cb(lv_timer_handler_resume_cb_t cb, void * data
  * `lv_timer_set_cb` and `lv_timer_set_period`
  * @return pointer to the created timer
  */
-lv_timer_t *lv_timer_create_basic(void);
+lv_timer_t * lv_timer_create_basic(void);
 
 /**
  * Create a new lv_timer
@@ -92,7 +92,7 @@ lv_timer_t *lv_timer_create_basic(void);
  * @param user_data custom parameter
  * @return pointer to the new timer
  */
-lv_timer_t *lv_timer_create(lv_timer_cb_t timer_xcb, uint32_t period, void * user_data);
+lv_timer_t * lv_timer_create(lv_timer_cb_t timer_xcb, uint32_t period, void * user_data);
 
 /**
  * Delete a lv_timer
@@ -183,14 +183,14 @@ uint32_t lv_timer_get_time_until_next(void);
  * @param timer NULL to start iteration or the previous return value to get the next timer
  * @return the next timer or NULL if there is no more timer
  */
-lv_timer_t *lv_timer_get_next(lv_timer_t * timer);
+lv_timer_t * lv_timer_get_next(lv_timer_t * timer);
 
 /**
  * Get the user_data passed when the timer was created
  * @param timer pointer to the lv_timer
  * @return pointer to the user_data
  */
-void *lv_timer_get_user_data(lv_timer_t * timer);
+void * lv_timer_get_user_data(lv_timer_t * timer);
 
 /**
  * Get the pause state of a timer

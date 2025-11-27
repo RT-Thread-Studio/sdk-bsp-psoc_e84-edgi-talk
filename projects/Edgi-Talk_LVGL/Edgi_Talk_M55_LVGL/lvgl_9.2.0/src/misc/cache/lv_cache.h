@@ -45,9 +45,9 @@ extern "C" {
  * @param ops           A set of operations that can be performed on the cache. See lv_cache_ops_t for details.
  * @return              Returns a pointer to the created cache object on success, `NULL` on error.
  */
-lv_cache_t *lv_cache_create(const lv_cache_class_t * cache_class,
-                            size_t node_size, size_t max_size,
-                            lv_cache_ops_t ops);
+lv_cache_t * lv_cache_create(const lv_cache_class_t * cache_class,
+                             size_t node_size, size_t max_size,
+                             lv_cache_ops_t ops);
 
 /**
  * Destroy a cache object.
@@ -64,7 +64,7 @@ void lv_cache_destroy(lv_cache_t * cache, void * user_data);
  * @param user_data     A user data pointer that will be passed to the create callback.
  * @return              Returns a pointer to the acquired cache entry on success with `lv_cache_entry_t::ref_cnt` incremented, `NULL` on error.
  */
-lv_cache_entry_t *lv_cache_acquire(lv_cache_t * cache, const void * key, void * user_data);
+lv_cache_entry_t * lv_cache_acquire(lv_cache_t * cache, const void * key, void * user_data);
 
 /**
  * Acquire a cache entry with the given key. If the entry is not in the cache, it will create a new entry with the given key.
@@ -77,7 +77,7 @@ lv_cache_entry_t *lv_cache_acquire(lv_cache_t * cache, const void * key, void * 
  * @param user_data     A user data pointer that will be passed to the create callback.
  * @return              Returns a pointer to the acquired or created cache entry on success with `lv_cache_entry_t::ref_cnt` incremented, `NULL` on error.
  */
-lv_cache_entry_t *lv_cache_acquire_or_create(lv_cache_t * cache, const void * key, void * user_data);
+lv_cache_entry_t * lv_cache_acquire_or_create(lv_cache_t * cache, const void * key, void * user_data);
 
 /**
  * Add a new cache entry with the given key and data. If the cache is full, the cache's policy will be used to evict an entry.
@@ -86,7 +86,7 @@ lv_cache_entry_t *lv_cache_acquire_or_create(lv_cache_t * cache, const void * ke
  * @param user_data     A user data pointer that will be passed to the create callback.
  * @return              Returns a pointer to the added cache entry on success with `lv_cache_entry_t::ref_cnt` incremented, `NULL` on error.
  */
-lv_cache_entry_t *lv_cache_add(lv_cache_t * cache, const void * key, void * user_data);
+lv_cache_entry_t * lv_cache_add(lv_cache_t * cache, const void * key, void * user_data);
 
 /**
  * Release a cache entry. The `lv_cache_entry_t::ref_cnt` will be decremented. If the `lv_cache_entry_t::ref_cnt` is zero, it will issue an error.
@@ -213,7 +213,7 @@ void lv_cache_set_name(lv_cache_t * cache, const char * name);
  * @param cache         The cache object pointer to get the name.
  * @return              Returns the name of the cache.
  */
-const char *lv_cache_get_name(lv_cache_t * cache);
+const char * lv_cache_get_name(lv_cache_t * cache);
 
 /*************************
  *    GLOBAL VARIABLES

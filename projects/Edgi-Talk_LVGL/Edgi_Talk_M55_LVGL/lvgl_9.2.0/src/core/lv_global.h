@@ -76,36 +76,35 @@ struct lv_profiler_builtin_ctx_t;
 struct lv_nuttx_ctx_t;
 #endif
 
-typedef struct lv_global_t
-{
+typedef struct lv_global_t {
     bool inited;
     bool deinit_in_progress;     /**< Can be used e.g. in the LV_EVENT_DELETE to deinit the drivers too */
 
     lv_ll_t disp_ll;
-    lv_display_t *disp_refresh;
-    lv_display_t *disp_default;
+    lv_display_t * disp_refresh;
+    lv_display_t * disp_default;
 
     lv_ll_t style_trans_ll;
     bool style_refresh;
     uint32_t style_custom_table_size;
     uint32_t style_last_custom_prop_id;
-    uint8_t *style_custom_prop_flag_lookup_table;
+    uint8_t * style_custom_prop_flag_lookup_table;
 
     lv_ll_t group_ll;
-    lv_group_t *group_default;
+    lv_group_t * group_default;
 
     lv_ll_t indev_ll;
-    lv_indev_t *indev_active;
-    lv_obj_t *indev_obj_active;
+    lv_indev_t * indev_active;
+    lv_obj_t * indev_obj_active;
 
     uint32_t layout_count;
-    lv_layout_dsc_t *layout_list;
+    lv_layout_dsc_t * layout_list;
     bool layout_update_mutex;
 
     uint32_t memory_zero;
     uint32_t math_rand_seed;
 
-    lv_event_t *event_header;
+    lv_event_t * event_header;
     uint32_t event_last_register_id;
 
     lv_timer_state_t timer_state;
@@ -119,8 +118,8 @@ typedef struct lv_global_t
 
     lv_ll_t img_decoder_ll;
 
-    lv_cache_t *img_cache;
-    lv_cache_t *img_header_cache;
+    lv_cache_t * img_cache;
+    lv_cache_t * img_header_cache;
 
     lv_draw_global_info_t draw_info;
 #if defined(LV_DRAW_SW_SHADOW_CACHE_SIZE) && LV_DRAW_SW_SHADOW_CACHE_SIZE > 0
@@ -139,15 +138,15 @@ typedef struct lv_global_t
 #endif
 
 #if LV_USE_THEME_SIMPLE
-    void *theme_simple;
+    void * theme_simple;
 #endif
 
 #if LV_USE_THEME_DEFAULT
-    void *theme_default;
+    void * theme_default;
 #endif
 
 #if LV_USE_THEME_MONO
-    void *theme_mono;
+    void * theme_mono;
 #endif
 
 #if LV_USE_STDLIB_MALLOC == LV_STDLIB_BUILTIN
@@ -183,7 +182,7 @@ typedef struct lv_global_t
 #endif
 
 #if LV_USE_FREETYPE
-    struct lv_freetype_context_t *ft_context;
+    struct lv_freetype_context_t * ft_context;
 #endif
 
 #if LV_USE_FONT_COMPRESSED
@@ -191,11 +190,11 @@ typedef struct lv_global_t
 #endif
 
 #if LV_USE_SPAN != 0
-    struct _snippet_stack *span_snippet_stack;
+    struct _snippet_stack * span_snippet_stack;
 #endif
 
 #if LV_USE_PROFILER && LV_USE_PROFILER_BUILTIN
-    struct lv_profiler_builtin_ctx_t *profiler_context;
+    struct lv_profiler_builtin_ctx_t * profiler_context;
 #endif
 
 #if LV_USE_FILE_EXPLORER != 0
@@ -211,12 +210,12 @@ typedef struct lv_global_t
 #endif
 
 #if LV_USE_OBJ_ID_BUILTIN
-    void *objid_array;
+    void * objid_array;
     uint32_t objid_count;
 #endif
 
 #if LV_USE_NUTTX
-    struct lv_nuttx_ctx_t *nuttx_ctx;
+    struct lv_nuttx_ctx_t * nuttx_ctx;
 #endif
 
 #if LV_USE_OS != LV_OS_NONE
@@ -231,7 +230,7 @@ typedef struct lv_global_t
 #endif
 
 
-    void *user_data;
+    void * user_data;
 } lv_global_t;
 
 /**********************
@@ -258,7 +257,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern lv_global_t lv_global;
  * Get the default global object for current thread
  * @return  pointer to the default global object
  */
-lv_global_t *lv_global_default(void);
+lv_global_t * lv_global_default(void);
 #endif
 #ifdef __cplusplus
 } /*extern "C"*/

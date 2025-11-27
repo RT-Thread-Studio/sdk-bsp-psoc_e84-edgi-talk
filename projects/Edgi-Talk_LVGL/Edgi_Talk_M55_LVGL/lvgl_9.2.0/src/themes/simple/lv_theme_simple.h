@@ -35,7 +35,7 @@ extern "C" {
  * @param disp pointer to display to attach the theme
  * @return a pointer to reference this theme later
  */
-lv_theme_t *lv_theme_simple_init(lv_display_t * disp);
+lv_theme_t * lv_theme_simple_init(lv_display_t * disp);
 
 /**
 * Check if the theme is initialized
@@ -47,7 +47,7 @@ bool lv_theme_simple_is_inited(void);
  * Get simple theme
  * @return a pointer to simple theme, or NULL if this is not initialized
  */
-lv_theme_t *lv_theme_simple_get(void);
+lv_theme_t * lv_theme_simple_get(void);
 
 /**
  * Deinitialize the simple theme

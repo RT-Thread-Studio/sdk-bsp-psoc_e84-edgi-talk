@@ -81,13 +81,13 @@ struct lv_draw_vg_lite_unit_t;
 
 void lv_vg_lite_dump_info(void);
 
-const char *lv_vg_lite_error_string(vg_lite_error_t error);
+const char * lv_vg_lite_error_string(vg_lite_error_t error);
 
-const char *lv_vg_lite_feature_string(vg_lite_feature_t feature);
+const char * lv_vg_lite_feature_string(vg_lite_feature_t feature);
 
-const char *lv_vg_lite_buffer_format_string(vg_lite_buffer_format_t format);
+const char * lv_vg_lite_buffer_format_string(vg_lite_buffer_format_t format);
 
-const char *lv_vg_lite_vlc_op_string(uint8_t vlc_op);
+const char * lv_vg_lite_vlc_op_string(uint8_t vlc_op);
 
 void lv_vg_lite_path_dump_info(const vg_lite_path_t * path);
 
@@ -107,17 +107,17 @@ vg_lite_buffer_format_t lv_vg_lite_vg_fmt(lv_color_format_t cf);
 
 void lv_vg_lite_buffer_format_bytes(
     vg_lite_buffer_format_t format,
-    uint32_t *mul,
-    uint32_t *div,
-    uint32_t *bytes_align);
+    uint32_t * mul,
+    uint32_t * div,
+    uint32_t * bytes_align);
 
 uint32_t lv_vg_lite_width_to_stride(uint32_t w, vg_lite_buffer_format_t color_format);
 
 uint32_t lv_vg_lite_width_align(uint32_t w);
 
 void lv_vg_lite_buffer_init(
-    vg_lite_buffer_t *buffer,
-    const void *ptr,
+    vg_lite_buffer_t * buffer,
+    const void * ptr,
     int32_t width,
     int32_t height,
     uint32_t stride,

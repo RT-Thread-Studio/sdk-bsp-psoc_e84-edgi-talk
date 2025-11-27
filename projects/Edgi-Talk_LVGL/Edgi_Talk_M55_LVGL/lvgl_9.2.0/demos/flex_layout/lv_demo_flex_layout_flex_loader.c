@@ -62,8 +62,7 @@ static void flex_flow_event_handler(lv_event_t * e);
  *  STATIC VARIABLES
  **********************/
 
-static const lv_flex_flow_t flex_flow_map[] =
-{
+static const lv_flex_flow_t flex_flow_map[] = {
     LV_FLEX_FLOW_ROW,
     LV_FLEX_FLOW_COLUMN,
     LV_FLEX_FLOW_ROW_WRAP,
@@ -74,8 +73,7 @@ static const lv_flex_flow_t flex_flow_map[] =
     LV_FLEX_FLOW_COLUMN_WRAP_REVERSE
 };
 
-static const lv_flex_align_t flex_align_map[] =
-{
+static const lv_flex_align_t flex_align_map[] = {
     LV_FLEX_ALIGN_START,
     LV_FLEX_ALIGN_END,
     LV_FLEX_ALIGN_CENTER,
@@ -114,10 +112,8 @@ void flex_loader_obj_update(lv_obj_t * obj, view_t * ui)
 {
     lv_flex_flow_t flex_flow = lv_obj_get_style_flex_flow(obj, 0);
     uint32_t i;
-    for (i = 0; i < ARRAY_SIZE(flex_flow_map); i++)
-    {
-        if (flex_flow == flex_flow_map[i])
-        {
+    for(i = 0; i < ARRAY_SIZE(flex_flow_map); i++) {
+        if(flex_flow == flex_flow_map[i]) {
             lv_dropdown_set_selected(ui->ctrl_pad.tab.flex.ddlist_flow, i);
             break;
         }
@@ -134,12 +130,11 @@ void flex_loader_obj_update(lv_obj_t * obj, view_t * ui)
 
 static void flex_flow_event_handler(lv_event_t * e)
 {
-    view_t *ui = lv_event_get_user_data(e);
-    lv_obj_t *ddlist = lv_event_get_target(e);
+    view_t * ui = lv_event_get_user_data(e);
+    lv_obj_t * ddlist = lv_event_get_target(e);
     uint16_t selected = lv_dropdown_get_selected(ddlist);
 
-    if (ui->obj_cur)
-    {
+    if(ui->obj_cur) {
         lv_obj_set_flex_flow(ui->obj_cur, flex_flow_map[selected]);
         lv_obj_scroll_to(ui->obj_cur, 0, 0, LV_ANIM_ON);
     }

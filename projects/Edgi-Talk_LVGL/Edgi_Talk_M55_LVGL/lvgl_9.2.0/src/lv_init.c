@@ -95,8 +95,7 @@ static inline void lv_global_init(lv_global_t * global)
 {
     LV_ASSERT_NULL(global);
 
-    if (global == NULL)
-    {
+    if(global == NULL) {
         LV_LOG_ERROR("lv_global cannot be null");
         return;
     }
@@ -128,8 +127,7 @@ static inline void lv_cleanup_devices(lv_global_t * global)
 {
     LV_ASSERT_NULL(global);
 
-    if (global)
-    {
+    if(global) {
         /* cleanup indev and display */
         lv_ll_clear_custom(&(global->indev_ll), (void (*)(void *)) lv_indev_delete);
         lv_ll_clear_custom(&(global->disp_ll), (void (*)(void *)) lv_display_delete);
@@ -139,7 +137,7 @@ static inline void lv_cleanup_devices(lv_global_t * global)
 bool lv_is_initialized(void)
 {
 #if LV_ENABLE_GLOBAL_CUSTOM
-    if (LV_GLOBAL_DEFAULT()) return lv_initialized;
+    if(LV_GLOBAL_DEFAULT()) return lv_initialized;
     else return false;
 #else
     return lv_initialized;
@@ -154,8 +152,7 @@ void lv_init(void)
 #endif
 
     /*Do nothing if already initialized*/
-    if (lv_initialized)
-    {
+    if(lv_initialized) {
         LV_LOG_WARN("lv_init: already initialized");
         return;
     }
@@ -234,25 +231,22 @@ void lv_init(void)
 #endif
 
     /*Test if the IDE has UTF-8 encoding*/
-    const char *txt = "Á";
+    const char * txt = "Á";
 
-    uint8_t *txt_u8 = (uint8_t *)txt;
-    if (txt_u8[0] != 0xc3 || txt_u8[1] != 0x81 || txt_u8[2] != 0x00)
-    {
+    uint8_t * txt_u8 = (uint8_t *)txt;
+    if(txt_u8[0] != 0xc3 || txt_u8[1] != 0x81 || txt_u8[2] != 0x00) {
         LV_LOG_WARN("The strings have no UTF-8 encoding. Non-ASCII characters won't be displayed.");
     }
 
     uint32_t endianness_test = 0x11223344;
-    uint8_t *endianness_test_p = (uint8_t *) &endianness_test;
+    uint8_t * endianness_test_p = (uint8_t *) &endianness_test;
     bool big_endian = endianness_test_p[0] == 0x11;
 
-    if (big_endian)
-    {
+    if(big_endian) {
         LV_ASSERT_MSG(LV_BIG_ENDIAN_SYSTEM == 1,
                       "It's a big endian system but LV_BIG_ENDIAN_SYSTEM is not enabled in lv_conf.h");
     }
-    else
-    {
+    else {
         LV_ASSERT_MSG(LV_BIG_ENDIAN_SYSTEM == 0,
                       "It's a little endian system but LV_BIG_ENDIAN_SYSTEM is enabled in lv_conf.h");
     }
@@ -344,13 +338,12 @@ void lv_init(void)
 void lv_deinit(void)
 {
     /*Do nothing if already deinit*/
-    if (!lv_initialized)
-    {
+    if(!lv_initialized) {
         LV_LOG_WARN("lv_deinit: already deinit!");
         return;
     }
 
-    if (lv_deinit_in_progress) return;
+    if(lv_deinit_in_progress) return;
 
     lv_deinit_in_progress = true;
 

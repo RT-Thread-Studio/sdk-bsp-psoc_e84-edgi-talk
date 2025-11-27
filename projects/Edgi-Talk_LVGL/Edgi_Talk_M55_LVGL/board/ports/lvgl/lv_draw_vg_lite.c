@@ -1,5 +1,4 @@
 /*******************************************************************************
-#include <packages/lvgl_9.2.0/src/draw/vg_lite/lv_draw_vg_lite.h>
 * File Name        : lv_draw_vg_lite.c
 *
 * Description      : This file provides implementation of LVGL's drawing operations
@@ -7,12 +6,36 @@
 *
 * Related Document : See README.md
 *
+********************************************************************************
+* (c) 2025-2025, Infineon Technologies AG, or an affiliate of Infineon Technologies AG. All rights reserved.
+* This software, associated documentation and materials ("Software") is owned by
+* Infineon Technologies AG or one of its affiliates ("Infineon") and is protected
+* by and subject to worldwide patent protection, worldwide copyright laws, and
+* international treaty provisions. Therefore, you may use this Software only as
+* provided in the license agreement accompanying the software package from which
+* you obtained this Software. If no license agreement applies, then any use,
+* reproduction, modification, translation, or compilation of this Software is
+* prohibited without the express written permission of Infineon.
+* Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
+* IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING,
+* BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF THIRD-PARTY RIGHTS AND
+* IMPLIED WARRANTIES SUCH AS WARRANTIES OF FITNESS FOR A SPECIFIC USE/PURPOSE OR
+* MERCHANTABILITY. Infineon reserves the right to make changes to the Software
+* without notice. You are responsible for properly designing, programming, and
+* testing the functionality and safety of your intended application of the
+* Software, as well as complying with any legal requirements related to its
+* use. Infineon does not guarantee that the Software will be free from intrusion,
+* data theft or loss, or other breaches ("Security Breaches"), and Infineon
+* shall have no liability arising out of any Security Breaches. Unless otherwise
+* explicitly approved by Infineon, the Software may not be used in any application
+* where a failure of the Product or any consequences of the use thereof can
+* reasonably be expected to result in personal injury.
 *******************************************************************************/
 
 /*********************
  *      INCLUDES
  *********************/
-#include "lv_conf.h"
+#include "lv_draw_vg_lite.h"
 
 #if LV_USE_DRAW_VG_LITE
 
@@ -45,8 +68,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_init(void)
 #if LV_VG_LITE_USE_GPU_INIT
     extern void gpu_init(void);
     static bool inited = false;
-    if (!inited)
-    {
+    if(!inited) {
         gpu_init();
         inited = true;
     }
@@ -56,7 +78,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_init(void)
 
     lv_draw_buf_vg_lite_init_handlers();
 
-    lv_draw_vg_lite_unit_t *unit = lv_draw_create_unit(sizeof(lv_draw_vg_lite_unit_t));
+    lv_draw_vg_lite_unit_t * unit = lv_draw_create_unit(sizeof(lv_draw_vg_lite_unit_t));
     unit->base_unit.dispatch_cb = draw_dispatch;
     unit->base_unit.evaluate_cb = draw_evaluate;
     unit->base_unit.delete_cb = draw_delete;
@@ -78,8 +100,7 @@ static bool LV_ATTRIBUTE_FAST_MEM check_image_is_supported(const lv_draw_image_d
 {
     lv_image_header_t header;
     lv_result_t res = lv_image_decoder_get_info(dsc->src, &header);
-    if (res != LV_RESULT_OK)
-    {
+    if(res != LV_RESULT_OK) {
         LV_LOG_TRACE("get image info failed");
         return false;
     }
@@ -89,10 +110,10 @@ static bool LV_ATTRIBUTE_FAST_MEM check_image_is_supported(const lv_draw_image_d
 
 static void LV_ATTRIBUTE_FAST_MEM draw_execute(lv_draw_vg_lite_unit_t * u)
 {
-    lv_draw_task_t *t = u->task_act;
-    lv_draw_unit_t *draw_unit = (lv_draw_unit_t *)u;
+    lv_draw_task_t * t = u->task_act;
+    lv_draw_unit_t * draw_unit = (lv_draw_unit_t *)u;
 
-    lv_layer_t *layer = u->base_unit.target_layer;
+    lv_layer_t * layer = u->base_unit.target_layer;
 
     lv_vg_lite_buffer_from_draw_buf(&u->target_buffer, layer->draw_buf);
 
@@ -108,53 +129,51 @@ static void LV_ATTRIBUTE_FAST_MEM draw_execute(lv_draw_vg_lite_unit_t * u)
     lv_vg_lite_matrix_multiply(&u->global_matrix, &layer_matrix);
 
     /* Crop out extra pixels drawn due to scaling accuracy issues */
-    if (vg_lite_query_feature(gcFEATURE_BIT_VG_SCISSOR))
-    {
+    if(vg_lite_query_feature(gcFEATURE_BIT_VG_SCISSOR)) {
         lv_area_t scissor_area = layer->phy_clip_area;
         lv_area_move(&scissor_area, -layer->buf_area.x1, -layer->buf_area.y1);
         lv_vg_lite_set_scissor_area(&scissor_area);
     }
 #endif
 
-    switch (t->type)
-    {
-    case LV_DRAW_TASK_TYPE_LABEL:
-        lv_draw_vg_lite_label(draw_unit, t->draw_dsc, &t->area);
-        break;
-    case LV_DRAW_TASK_TYPE_FILL:
-        lv_draw_vg_lite_fill(draw_unit, t->draw_dsc, &t->area);
-        break;
-    case LV_DRAW_TASK_TYPE_BORDER:
-        lv_draw_vg_lite_border(draw_unit, t->draw_dsc, &t->area);
-        break;
-    case LV_DRAW_TASK_TYPE_BOX_SHADOW:
-        lv_draw_vg_lite_box_shadow(draw_unit, t->draw_dsc, &t->area);
-        break;
-    case LV_DRAW_TASK_TYPE_IMAGE:
-        lv_draw_vg_lite_img(draw_unit, t->draw_dsc, &t->area, false);
-        break;
-    case LV_DRAW_TASK_TYPE_ARC:
-        lv_draw_vg_lite_arc(draw_unit, t->draw_dsc, &t->area);
-        break;
-    case LV_DRAW_TASK_TYPE_LINE:
-        lv_draw_vg_lite_line(draw_unit, t->draw_dsc);
-        break;
-    case LV_DRAW_TASK_TYPE_LAYER:
-        lv_draw_vg_lite_layer(draw_unit, t->draw_dsc, &t->area);
-        break;
-    case LV_DRAW_TASK_TYPE_TRIANGLE:
-        lv_draw_vg_lite_triangle(draw_unit, t->draw_dsc);
-        break;
-    case LV_DRAW_TASK_TYPE_MASK_RECTANGLE:
-        lv_draw_vg_lite_mask_rect(draw_unit, t->draw_dsc, &t->area);
-        break;
+    switch(t->type) {
+        case LV_DRAW_TASK_TYPE_LABEL:
+            lv_draw_vg_lite_label(draw_unit, t->draw_dsc, &t->area);
+            break;
+        case LV_DRAW_TASK_TYPE_FILL:
+            lv_draw_vg_lite_fill(draw_unit, t->draw_dsc, &t->area);
+            break;
+        case LV_DRAW_TASK_TYPE_BORDER:
+            lv_draw_vg_lite_border(draw_unit, t->draw_dsc, &t->area);
+            break;
+        case LV_DRAW_TASK_TYPE_BOX_SHADOW:
+            lv_draw_vg_lite_box_shadow(draw_unit, t->draw_dsc, &t->area);
+            break;
+        case LV_DRAW_TASK_TYPE_IMAGE:
+            lv_draw_vg_lite_img(draw_unit, t->draw_dsc, &t->area, false);
+            break;
+        case LV_DRAW_TASK_TYPE_ARC:
+            lv_draw_vg_lite_arc(draw_unit, t->draw_dsc, &t->area);
+            break;
+        case LV_DRAW_TASK_TYPE_LINE:
+            lv_draw_vg_lite_line(draw_unit, t->draw_dsc);
+            break;
+        case LV_DRAW_TASK_TYPE_LAYER:
+            lv_draw_vg_lite_layer(draw_unit, t->draw_dsc, &t->area);
+            break;
+        case LV_DRAW_TASK_TYPE_TRIANGLE:
+            lv_draw_vg_lite_triangle(draw_unit, t->draw_dsc);
+            break;
+        case LV_DRAW_TASK_TYPE_MASK_RECTANGLE:
+            lv_draw_vg_lite_mask_rect(draw_unit, t->draw_dsc, &t->area);
+            break;
 #if LV_USE_VECTOR_GRAPHIC
-    case LV_DRAW_TASK_TYPE_VECTOR:
-        lv_draw_vg_lite_vector(draw_unit, t->draw_dsc);
-        break;
+        case LV_DRAW_TASK_TYPE_VECTOR:
+            lv_draw_vg_lite_vector(draw_unit, t->draw_dsc);
+            break;
 #endif
-    default:
-        break;
+        default:
+            break;
     }
 
     lv_vg_lite_flush(u);
@@ -162,33 +181,29 @@ static void LV_ATTRIBUTE_FAST_MEM draw_execute(lv_draw_vg_lite_unit_t * u)
 
 int32_t LV_ATTRIBUTE_FAST_MEM draw_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer)
 {
-    lv_draw_vg_lite_unit_t *u = (lv_draw_vg_lite_unit_t *)draw_unit;
+    lv_draw_vg_lite_unit_t * u = (lv_draw_vg_lite_unit_t *)draw_unit;
 
     /* Return immediately if it's busy with draw task. */
-    if (u->task_act)
-    {
+    if(u->task_act) {
         return 0;
     }
 
     /* Try to get an ready to draw. */
-    lv_draw_task_t *t = lv_draw_get_next_available_task(layer, NULL, VG_LITE_DRAW_UNIT_ID);
+    lv_draw_task_t * t = lv_draw_get_next_available_task(layer, NULL, VG_LITE_DRAW_UNIT_ID);
 
     /* Return 0 is no selection, some tasks can be supported by other units. */
-    if (!t || t->preferred_draw_unit_id != VG_LITE_DRAW_UNIT_ID)
-    {
+    if(!t || t->preferred_draw_unit_id != VG_LITE_DRAW_UNIT_ID) {
         lv_vg_lite_finish(u);
         return LV_DRAW_UNIT_IDLE;
     }
 
     /* Return if target buffer format is not supported. */
-    if (!lv_vg_lite_is_dest_cf_supported(layer->color_format))
-    {
+    if(!lv_vg_lite_is_dest_cf_supported(layer->color_format)) {
         return LV_DRAW_UNIT_IDLE;
     }
 
-    void *buf = lv_draw_layer_alloc_buf(layer);
-    if (!buf)
-    {
+    void * buf = lv_draw_layer_alloc_buf(layer);
+    if(!buf) {
         return LV_DRAW_UNIT_IDLE;
     }
 
@@ -213,42 +228,38 @@ int32_t LV_ATTRIBUTE_FAST_MEM draw_evaluate(lv_draw_unit_t * draw_unit, lv_draw_
     LV_UNUSED(draw_unit);
 
     /* Return if target buffer format is not supported. */
-    const lv_draw_dsc_base_t *base_dsc = task->draw_dsc;
-    if (!lv_vg_lite_is_dest_cf_supported(base_dsc->layer->color_format))
-    {
+    const lv_draw_dsc_base_t * base_dsc = task->draw_dsc;
+    if(!lv_vg_lite_is_dest_cf_supported(base_dsc->layer->color_format)) {
         return -1;
     }
 
-    switch (task->type)
-    {
-    case LV_DRAW_TASK_TYPE_FILL:
-    case LV_DRAW_TASK_TYPE_BORDER:
+    switch(task->type) {
+        case LV_DRAW_TASK_TYPE_FILL:
+        case LV_DRAW_TASK_TYPE_BORDER:
 #if LV_VG_LITE_USE_BOX_SHADOW
-    case LV_DRAW_TASK_TYPE_BOX_SHADOW:
+        case LV_DRAW_TASK_TYPE_BOX_SHADOW:
 #endif
-    case LV_DRAW_TASK_TYPE_LAYER:
-    case LV_DRAW_TASK_TYPE_LINE:
-    case LV_DRAW_TASK_TYPE_ARC:
-    case LV_DRAW_TASK_TYPE_TRIANGLE:
-    case LV_DRAW_TASK_TYPE_MASK_RECTANGLE:
+        case LV_DRAW_TASK_TYPE_LAYER:
+        case LV_DRAW_TASK_TYPE_LINE:
+        case LV_DRAW_TASK_TYPE_ARC:
+        case LV_DRAW_TASK_TYPE_TRIANGLE:
+        case LV_DRAW_TASK_TYPE_MASK_RECTANGLE:
 
 #if LV_USE_VECTOR_GRAPHIC
-    case LV_DRAW_TASK_TYPE_VECTOR:
+        case LV_DRAW_TASK_TYPE_VECTOR:
 #endif
-        break;
+            break;
 
-    case LV_DRAW_TASK_TYPE_IMAGE:
-    {
-        if (!check_image_is_supported(task->draw_dsc))
-        {
+        case LV_DRAW_TASK_TYPE_IMAGE: {
+                if(!check_image_is_supported(task->draw_dsc)) {
+                    return 0;
+                }
+            }
+            break;
+
+        default:
+            /*The draw unit is not able to draw this task. */
             return 0;
-        }
-    }
-    break;
-
-    default:
-        /*The draw unit is not able to draw this task. */
-        return 0;
     }
 
     /* The draw unit is able to draw this task. */
@@ -259,7 +270,7 @@ int32_t LV_ATTRIBUTE_FAST_MEM draw_evaluate(lv_draw_unit_t * draw_unit, lv_draw_
 
 int32_t LV_ATTRIBUTE_FAST_MEM draw_delete(lv_draw_unit_t * draw_unit)
 {
-    lv_draw_vg_lite_unit_t *unit = (lv_draw_vg_lite_unit_t *)draw_unit;
+    lv_draw_vg_lite_unit_t * unit = (lv_draw_vg_lite_unit_t *)draw_unit;
 
     lv_vg_lite_image_dsc_deinit(unit);
 #if LV_USE_VECTOR_GRAPHIC
@@ -272,3 +283,5 @@ int32_t LV_ATTRIBUTE_FAST_MEM draw_delete(lv_draw_unit_t * draw_unit)
 }
 
 #endif /*LV_USE_DRAW_VG_LITE*/
+
+/* [] END OF FILE */

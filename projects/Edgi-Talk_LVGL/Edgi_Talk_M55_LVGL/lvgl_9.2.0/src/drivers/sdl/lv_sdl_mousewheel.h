@@ -28,7 +28,7 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 
-lv_indev_t *lv_sdl_mousewheel_create(void);
+lv_indev_t * lv_sdl_mousewheel_create(void);
 
 /**********************
  *      MACROS

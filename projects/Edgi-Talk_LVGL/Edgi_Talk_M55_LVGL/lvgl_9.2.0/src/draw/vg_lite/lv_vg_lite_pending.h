@@ -40,7 +40,7 @@ typedef void (*lv_vg_lite_pending_free_cb_t)(void * obj, void * user_data);
  * @param capacity_default the default capacity of the list
  * @return a pointer to the pending list
  */
-lv_vg_lite_pending_t *lv_vg_lite_pending_create(size_t obj_size, uint32_t capacity_default);
+lv_vg_lite_pending_t * lv_vg_lite_pending_create(size_t obj_size, uint32_t capacity_default);
 
 /**
  * Destroy a pending list
@@ -55,7 +55,7 @@ void lv_vg_lite_pending_destroy(lv_vg_lite_pending_t * pending);
  * @param user_data user data to pass to the free callback
  */
 void lv_vg_lite_pending_set_free_cb(lv_vg_lite_pending_t * pending, lv_vg_lite_pending_free_cb_t free_cb,
-                                    void *user_data);
+                                    void * user_data);
 
 /**
  * Add an object to the pending list

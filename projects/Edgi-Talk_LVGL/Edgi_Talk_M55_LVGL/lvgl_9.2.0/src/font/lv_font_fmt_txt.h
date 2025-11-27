@@ -25,8 +25,7 @@ extern "C" {
  **********************/
 
 /** This describes a glyph.*/
-typedef struct
-{
+typedef struct {
 #if LV_FONT_FMT_TXT_LARGE == 0
     uint32_t bitmap_index : 20;     /**< Start index of the bitmap. A font can be max 1 MB.*/
     uint32_t adv_w : 12;            /**< Draw the next glyph after this width. 8.4 format (real_value * 16 is stored).*/
@@ -45,8 +44,7 @@ typedef struct
 } lv_font_fmt_txt_glyph_dsc_t;
 
 /** Format of font character map.*/
-typedef enum
-{
+typedef enum {
     LV_FONT_FMT_TXT_CMAP_FORMAT0_FULL,
     LV_FONT_FMT_TXT_CMAP_SPARSE_FULL,
     LV_FONT_FMT_TXT_CMAP_FORMAT0_TINY,
@@ -58,8 +56,7 @@ typedef enum
  * Several formats are supported to optimize memory usage
  * See https://github.com/lvgl/lv_font_conv/blob/master/doc/font_spec.md
  */
-typedef struct
-{
+typedef struct {
     /** First Unicode character for this range*/
     uint32_t range_start;
 
@@ -97,12 +94,12 @@ typedef struct
         glyph_id = glyph_id_start + glyph_id_ofs_list[search(unicode_list, rcp)]
     */
 
-    const uint16_t *unicode_list;
+    const uint16_t * unicode_list;
 
     /** if(type == LV_FONT_FMT_TXT_CMAP_FORMAT0_...) it's `uint8_t *`
      * if(type == LV_FONT_FMT_TXT_CMAP_SPARSE_...)  it's `uint16_t *`
      */
-    const void *glyph_id_ofs_list;
+    const void * glyph_id_ofs_list;
 
     /** Length of `unicode_list` and/or `glyph_id_ofs_list`*/
     uint16_t list_length;
@@ -112,8 +109,7 @@ typedef struct
 } lv_font_fmt_txt_cmap_t;
 
 /** A simple mapping of kern values from pairs*/
-typedef struct
-{
+typedef struct {
     /*To get a kern value of two code points:
        1. Get the `glyph_id_left` and `glyph_id_right` from `lv_font_fmt_txt_cmap_t
        2. for(i = 0; i < pair_cnt * 2; i += 2)
@@ -121,15 +117,14 @@ typedef struct
                 glyph_ids[i+1] == glyph_id_right)
                  return values[i / 2];
      */
-    const void *glyph_ids;
-    const int8_t *values;
+    const void * glyph_ids;
+    const int8_t * values;
     uint32_t pair_cnt   : 30;
     uint32_t glyph_ids_size : 2;    /**< 0: `glyph_ids` is stored as `uint8_t`; 1: as `uint16_t` */
 } lv_font_fmt_txt_kern_pair_t;
 
 /** More complex but more optimal class based kern value storage*/
-typedef struct
-{
+typedef struct {
     /*To get a kern value of two code points:
           1. Get the `glyph_id_left` and `glyph_id_right` from `lv_font_fmt_txt_cmap_t
           2. Get the class of the left and right glyphs as `left_class` and `right_class`
@@ -138,40 +133,38 @@ typedef struct
           3. value = class_pair_values[(left_class-1)*right_class_cnt + (right_class-1)]
         */
 
-    const int8_t *class_pair_values;      /**< left_class_cnt * right_class_cnt value */
-    const uint8_t *left_class_mapping;    /**< Map the glyph_ids to classes: index -> glyph_id -> class_id */
-    const uint8_t *right_class_mapping;   /**< Map the glyph_ids to classes: index -> glyph_id -> class_id */
+    const int8_t * class_pair_values;     /**< left_class_cnt * right_class_cnt value */
+    const uint8_t * left_class_mapping;   /**< Map the glyph_ids to classes: index -> glyph_id -> class_id */
+    const uint8_t * right_class_mapping;  /**< Map the glyph_ids to classes: index -> glyph_id -> class_id */
     uint8_t left_class_cnt;
     uint8_t right_class_cnt;
 } lv_font_fmt_txt_kern_classes_t;
 
 /** Bitmap formats*/
-typedef enum
-{
+typedef enum {
     LV_FONT_FMT_TXT_PLAIN      = 0,
     LV_FONT_FMT_TXT_COMPRESSED = 1,
     LV_FONT_FMT_TXT_COMPRESSED_NO_PREFILTER = 1,
 } lv_font_fmt_txt_bitmap_format_t;
 
 /** Describe store for additional data for fonts */
-typedef struct
-{
+typedef struct {
     /** The bitmaps of all glyphs */
-    const uint8_t *glyph_bitmap;
+    const uint8_t * glyph_bitmap;
 
     /** Describe the glyphs */
-    const lv_font_fmt_txt_glyph_dsc_t *glyph_dsc;
+    const lv_font_fmt_txt_glyph_dsc_t * glyph_dsc;
 
     /** Map the glyphs to Unicode characters.
      *Array of `lv_font_cmap_fmt_txt_t` variables */
-    const lv_font_fmt_txt_cmap_t *cmaps;
+    const lv_font_fmt_txt_cmap_t * cmaps;
 
     /**
      * Store kerning values.
      * Can be `lv_font_fmt_txt_kern_pair_t *  or `lv_font_kern_classes_fmt_txt_t *`
      * depending on `kern_classes`
      */
-    const void *kern_dsc;
+    const void * kern_dsc;
 
     /** Scale kern values in 12.4 format */
     uint16_t kern_scale;
@@ -202,7 +195,7 @@ typedef struct
  * @param draw_buf      a draw buffer that can be used to store the bitmap of the glyph, it's OK not to use it.
  * @return pointer to an A8 bitmap (not necessarily bitmap_out) or NULL if `unicode_letter` not found
  */
-const void *lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf_t * draw_buf);
+const void * lv_font_get_bitmap_fmt_txt(lv_font_glyph_dsc_t * g_dsc, lv_draw_buf_t * draw_buf);
 
 /**
  * Used as `get_glyph_dsc` callback in lvgl's native font format if the font is uncompressed.

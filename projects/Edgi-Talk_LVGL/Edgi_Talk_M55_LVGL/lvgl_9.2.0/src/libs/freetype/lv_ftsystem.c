@@ -44,7 +44,7 @@
 FT_CALLBACK_DEF(unsigned long)
 ft_lv_fs_stream_io(FT_Stream       stream,
                    unsigned long   offset,
-                   unsigned char *buffer,
+                   unsigned char * buffer,
                    unsigned long   count);
 FT_CALLBACK_DEF(void)
 ft_lv_fs_stream_close(FT_Stream  stream);
@@ -55,10 +55,10 @@ FT_CALLBACK_DEF(void *)
 ft_realloc(FT_Memory  memory,
            long       cur_size,
            long       new_size,
-           void      *block);
+           void   *   block);
 FT_CALLBACK_DEF(void)
 ft_free(FT_Memory  memory,
-        void      *block);
+        void   *   block);
 
 /**********************
  *  STATIC VARIABLES
@@ -88,11 +88,11 @@ ft_free(FT_Memory  memory,
 
 FT_BASE_DEF(FT_Error)
 FT_Stream_Open(FT_Stream    stream,
-               const char *filepathname)
+               const char * filepathname)
 {
     lv_fs_file_t  file;
 
-    if (!stream)
+    if(!stream)
         return FT_THROW(Invalid_Stream_Handle);
 
     stream->descriptor.pointer = NULL;
@@ -104,8 +104,7 @@ FT_Stream_Open(FT_Stream    stream,
 
     lv_fs_res_t res = lv_fs_open(&file, filepathname, LV_FS_MODE_RD);
 
-    if (res != LV_FS_RES_OK)
-    {
+    if(res != LV_FS_RES_OK) {
         FT_ERROR(("FT_Stream_Open:"
                   " could not open `%s'\n", filepathname));
 
@@ -116,8 +115,7 @@ FT_Stream_Open(FT_Stream    stream,
 
     uint32_t pos;
     res = lv_fs_tell(&file, &pos);
-    if (res != LV_FS_RES_OK)
-    {
+    if(res != LV_FS_RES_OK) {
         FT_ERROR(("FT_Stream_Open:"));
         FT_ERROR((" opened `%s' but zero-sized\n", filepathname));
         lv_fs_close(&file);
@@ -126,11 +124,10 @@ FT_Stream_Open(FT_Stream    stream,
     stream->size = pos;
     lv_fs_seek(&file, 0, LV_FS_SEEK_SET);
 
-    lv_fs_file_t *file_p = lv_malloc(sizeof(lv_fs_file_t));
+    lv_fs_file_t * file_p = lv_malloc(sizeof(lv_fs_file_t));
     LV_ASSERT_MALLOC(file_p);
 
-    if (!file_p)
-    {
+    if(!file_p) {
         FT_ERROR(("FT_Stream_Open: malloc failed for file_p"));
         lv_fs_close(&file);
         return FT_THROW(Cannot_Open_Stream);
@@ -159,8 +156,7 @@ FT_New_Memory(void)
     FT_Memory  memory;
 
     memory = (FT_Memory)lv_malloc(sizeof(*memory));
-    if (memory)
-    {
+    if(memory) {
         memory->user    = NULL;
         memory->alloc   = ft_alloc;
         memory->realloc = ft_realloc;
@@ -215,7 +211,7 @@ FT_CALLBACK_DEF(void *)
 ft_realloc(FT_Memory  memory,
            long       cur_size,
            long       new_size,
-           void      *block)
+           void   *   block)
 {
     FT_UNUSED(memory);
     FT_UNUSED(cur_size);
@@ -230,7 +226,7 @@ ft_realloc(FT_Memory  memory,
  */
 FT_CALLBACK_DEF(void)
 ft_free(FT_Memory  memory,
-        void      *block)
+        void   *   block)
 {
     FT_UNUSED(memory);
 
@@ -246,7 +242,7 @@ ft_free(FT_Memory  memory,
 FT_CALLBACK_DEF(void)
 ft_lv_fs_stream_close(FT_Stream  stream)
 {
-    lv_fs_file_t *file_p = STREAM_FILE(stream);
+    lv_fs_file_t * file_p = STREAM_FILE(stream);
     lv_fs_close(file_p);
     lv_free(file_p);
 
@@ -268,20 +264,20 @@ ft_lv_fs_stream_close(FT_Stream  stream)
 FT_CALLBACK_DEF(unsigned long)
 ft_lv_fs_stream_io(FT_Stream       stream,
                    unsigned long   offset,
-                   unsigned char *buffer,
+                   unsigned char * buffer,
                    unsigned long   count)
 {
-    lv_fs_file_t *file_p;
+    lv_fs_file_t * file_p;
 
-    if (!count && offset > stream->size)
+    if(!count && offset > stream->size)
         return 1;
 
     file_p = STREAM_FILE(stream);
 
-    if (stream->pos != offset)
+    if(stream->pos != offset)
         lv_fs_seek(file_p, (long)offset, LV_FS_SEEK_SET);
 
-    if (count == 0)
+    if(count == 0)
         return 0;
 
     uint32_t br;

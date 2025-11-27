@@ -52,13 +52,13 @@ void lv_draw_vg_lite_triangle(lv_draw_unit_t * draw_unit, const lv_draw_triangle
     bool is_common;
     lv_area_t clip_area;
     is_common = lv_area_intersect(&clip_area, &tri_area, draw_unit->clip_area);
-    if (!is_common) return;
+    if(!is_common) return;
 
     LV_PROFILER_BEGIN;
 
-    lv_draw_vg_lite_unit_t *u = (lv_draw_vg_lite_unit_t *)draw_unit;
+    lv_draw_vg_lite_unit_t * u = (lv_draw_vg_lite_unit_t *)draw_unit;
 
-    lv_vg_lite_path_t *path = lv_vg_lite_path_get(u, VG_LITE_FP32);
+    lv_vg_lite_path_t * path = lv_vg_lite_path_get(u, VG_LITE_FP32);
     lv_vg_lite_path_set_bonding_box_area(path, &clip_area);
     lv_vg_lite_path_move_to(path, dsc->p[0].x, dsc->p[0].y);
     lv_vg_lite_path_line_to(path, dsc->p[1].x, dsc->p[1].y);
@@ -66,7 +66,7 @@ void lv_draw_vg_lite_triangle(lv_draw_unit_t * draw_unit, const lv_draw_triangle
     lv_vg_lite_path_close(path);
     lv_vg_lite_path_end(path);
 
-    vg_lite_path_t *vg_lite_path = lv_vg_lite_path_get_path(path);
+    vg_lite_path_t * vg_lite_path = lv_vg_lite_path_get_path(path);
 
     LV_VG_LITE_ASSERT_DEST_BUFFER(&u->target_buffer);
     LV_VG_LITE_ASSERT_PATH(vg_lite_path);
@@ -76,8 +76,7 @@ void lv_draw_vg_lite_triangle(lv_draw_unit_t * draw_unit, const lv_draw_triangle
     lv_vg_lite_matrix_multiply(&matrix, &u->global_matrix);
     LV_VG_LITE_ASSERT_MATRIX(&matrix);
 
-    if (dsc->bg_grad.dir != LV_GRAD_DIR_NONE)
-    {
+    if(dsc->bg_grad.dir != LV_GRAD_DIR_NONE) {
 #if LV_USE_VECTOR_GRAPHIC
         lv_vg_lite_draw_grad_helper(
             u,
@@ -92,8 +91,7 @@ void lv_draw_vg_lite_triangle(lv_draw_unit_t * draw_unit, const lv_draw_triangle
         LV_LOG_WARN("Gradient fill is not supported without VECTOR_GRAPHIC");
 #endif
     }
-    else   /* normal fill */
-    {
+    else { /* normal fill */
         vg_lite_color_t color = lv_vg_lite_color(dsc->bg_color, dsc->bg_opa, true);
         LV_PROFILER_BEGIN_TAG("vg_lite_draw");
         LV_VG_LITE_CHECK_ERROR(vg_lite_draw(

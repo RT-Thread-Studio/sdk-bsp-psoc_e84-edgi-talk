@@ -40,8 +40,7 @@ LV_EXPORT_CONST_INT(LV_GRID_TEMPLATE_LAST);
 
 /*Can't include lv_obj.h because it includes this header file*/
 
-typedef enum
-{
+typedef enum {
     LV_GRID_ALIGN_START,
     LV_GRID_ALIGN_CENTER,
     LV_GRID_ALIGN_END,

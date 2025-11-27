@@ -29,8 +29,7 @@ LV_EXPORT_CONST_INT(LV_RADIUS_CIRCLE);
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     lv_draw_dsc_base_t base;
 
     int32_t radius;
@@ -41,8 +40,8 @@ typedef struct
     lv_grad_dsc_t bg_grad;
 
     /*Background img*/
-    const void *bg_image_src;
-    const void *bg_image_symbol_font;
+    const void * bg_image_src;
+    const void * bg_image_symbol_font;
     lv_color_t bg_image_recolor;
     lv_opa_t bg_image_opa;
     lv_opa_t bg_image_recolor_opa;
@@ -70,8 +69,7 @@ typedef struct
     lv_opa_t shadow_opa;
 } lv_draw_rect_dsc_t;
 
-typedef struct
-{
+typedef struct {
     lv_draw_dsc_base_t base;
 
     int32_t radius;
@@ -81,8 +79,7 @@ typedef struct
     lv_grad_dsc_t grad;
 } lv_draw_fill_dsc_t;
 
-typedef struct
-{
+typedef struct {
     lv_draw_dsc_base_t base;
 
     int32_t radius;
@@ -94,8 +91,7 @@ typedef struct
 
 } lv_draw_border_dsc_t;
 
-typedef struct
-{
+typedef struct {
     lv_draw_dsc_base_t base;
 
     int32_t radius;
@@ -130,7 +126,7 @@ void lv_draw_fill_dsc_init(lv_draw_fill_dsc_t * dsc);
  * @param task      draw task
  * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_FILL
  */
-lv_draw_fill_dsc_t *lv_draw_task_get_fill_dsc(lv_draw_task_t * task);
+lv_draw_fill_dsc_t * lv_draw_task_get_fill_dsc(lv_draw_task_t * task);
 
 /**
  * Initialize a border draw descriptor.
@@ -143,7 +139,7 @@ void lv_draw_border_dsc_init(lv_draw_border_dsc_t * dsc);
  * @param task      draw task
  * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_BORDER
  */
-lv_draw_border_dsc_t *lv_draw_task_get_border_dsc(lv_draw_task_t * task);
+lv_draw_border_dsc_t * lv_draw_task_get_border_dsc(lv_draw_task_t * task);
 
 /**
  * Initialize a box shadow draw descriptor.
@@ -156,7 +152,7 @@ void lv_draw_box_shadow_dsc_init(lv_draw_box_shadow_dsc_t * dsc);
  * @param task      draw task
  * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_BOX_SHADOW
  */
-lv_draw_box_shadow_dsc_t *lv_draw_task_get_box_shadow_dsc(lv_draw_task_t * task);
+lv_draw_box_shadow_dsc_t * lv_draw_task_get_box_shadow_dsc(lv_draw_task_t * task);
 
 /**
  * The rectangle is a wrapper for fill, border, bg. image and box shadow.

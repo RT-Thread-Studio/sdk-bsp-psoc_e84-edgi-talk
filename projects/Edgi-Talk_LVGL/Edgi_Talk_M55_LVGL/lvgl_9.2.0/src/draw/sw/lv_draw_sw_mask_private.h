@@ -24,30 +24,26 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
-    uint8_t *buf;
-    lv_opa_t *cir_opa;          /**< Opacity of values on the circumference of an 1/4 circle */
-    uint16_t *x_start_on_y;     /**< The x coordinate of the circle for each y value */
-    uint16_t *opa_start_on_y;   /**< The index of `cir_opa` for each y value */
+typedef struct  {
+    uint8_t * buf;
+    lv_opa_t * cir_opa;         /**< Opacity of values on the circumference of an 1/4 circle */
+    uint16_t * x_start_on_y;    /**< The x coordinate of the circle for each y value */
+    uint16_t * opa_start_on_y;  /**< The index of `cir_opa` for each y value */
     int32_t life;               /**< How many times the entry way used */
     uint32_t used_cnt;          /**< Like a semaphore to count the referencing masks */
     int32_t radius;             /**< The radius of the entry */
 } lv_draw_sw_mask_radius_circle_dsc_t;
 
-struct lv_draw_sw_mask_common_dsc_t
-{
+struct lv_draw_sw_mask_common_dsc_t {
     lv_draw_sw_mask_xcb_t cb;
     lv_draw_sw_mask_type_t type;
 };
 
-struct lv_draw_sw_mask_line_param_t
-{
+struct lv_draw_sw_mask_line_param_t {
     /** The first element must be the common descriptor */
     lv_draw_sw_mask_common_dsc_t dsc;
 
-    struct
-    {
+    struct {
         /*First point*/
         lv_point_t p1;
 
@@ -81,13 +77,11 @@ struct lv_draw_sw_mask_line_param_t
     uint8_t inv: 1;
 };
 
-struct lv_draw_sw_mask_angle_param_t
-{
+struct lv_draw_sw_mask_angle_param_t {
     /** The first element must be the common descriptor */
     lv_draw_sw_mask_common_dsc_t dsc;
 
-    struct
-    {
+    struct {
         lv_point_t vertex_p;
         int32_t start_angle;
         int32_t end_angle;
@@ -98,29 +92,25 @@ struct lv_draw_sw_mask_angle_param_t
     uint16_t delta_deg;
 };
 
-struct lv_draw_sw_mask_radius_param_t
-{
+struct lv_draw_sw_mask_radius_param_t {
     /** The first element must be the common descriptor */
     lv_draw_sw_mask_common_dsc_t dsc;
 
-    struct
-    {
+    struct {
         lv_area_t rect;
         int32_t radius;
         /** Invert the mask. 0: Keep the pixels inside. */
         uint8_t outer: 1;
     } cfg;
 
-    lv_draw_sw_mask_radius_circle_dsc_t *circle;
+    lv_draw_sw_mask_radius_circle_dsc_t * circle;
 };
 
-struct lv_draw_sw_mask_fade_param_t
-{
+struct lv_draw_sw_mask_fade_param_t {
     /** The first element must be the common descriptor */
     lv_draw_sw_mask_common_dsc_t dsc;
 
-    struct
-    {
+    struct {
         lv_area_t coords;
         int32_t y_top;
         int32_t y_bottom;
@@ -130,15 +120,13 @@ struct lv_draw_sw_mask_fade_param_t
 
 };
 
-struct lv_draw_sw_mask_map_param_t
-{
+struct lv_draw_sw_mask_map_param_t {
     /** The first element must be the common descriptor */
     lv_draw_sw_mask_common_dsc_t dsc;
 
-    struct
-    {
+    struct {
         lv_area_t coords;
-        const lv_opa_t *map;
+        const lv_opa_t * map;
     } cfg;
 };
 

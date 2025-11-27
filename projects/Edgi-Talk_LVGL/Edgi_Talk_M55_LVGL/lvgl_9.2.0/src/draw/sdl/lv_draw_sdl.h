@@ -37,12 +37,11 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     lv_draw_unit_t base_unit;
-    lv_draw_task_t *task_act;
+    lv_draw_task_t * task_act;
     uint32_t texture_cache_data_type;
-    lv_cache_t *texture_cache;
+    lv_cache_t * texture_cache;
 } lv_draw_sdl_unit_t;
 
 /**********************
@@ -52,7 +51,7 @@ typedef struct
 void lv_draw_sdl_init(void);
 
 void /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sdl_image(lv_draw_unit_t * draw_unit, const lv_draw_image_dsc_t * draw_dsc,
-        const lv_area_t *coords);
+                                                   const lv_area_t * coords);
 
 void lv_draw_sdl_fill(lv_draw_unit_t * draw_unit, const lv_draw_fill_dsc_t * dsc, const lv_area_t * coords);
 

@@ -6,6 +6,30 @@
 *
 * Related Document : See README.md
 *
+********************************************************************************
+* (c) 2025-2025, Infineon Technologies AG, or an affiliate of Infineon Technologies AG. All rights reserved.
+* This software, associated documentation and materials ("Software") is owned by
+* Infineon Technologies AG or one of its affiliates ("Infineon") and is protected
+* by and subject to worldwide patent protection, worldwide copyright laws, and
+* international treaty provisions. Therefore, you may use this Software only as
+* provided in the license agreement accompanying the software package from which
+* you obtained this Software. If no license agreement applies, then any use,
+* reproduction, modification, translation, or compilation of this Software is
+* prohibited without the express written permission of Infineon.
+* Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
+* IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING,
+* BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF THIRD-PARTY RIGHTS AND
+* IMPLIED WARRANTIES SUCH AS WARRANTIES OF FITNESS FOR A SPECIFIC USE/PURPOSE OR
+* MERCHANTABILITY. Infineon reserves the right to make changes to the Software
+* without notice. You are responsible for properly designing, programming, and
+* testing the functionality and safety of your intended application of the
+* Software, as well as complying with any legal requirements related to its
+* use. Infineon does not guarantee that the Software will be free from intrusion,
+* data theft or loss, or other breaches ("Security Breaches"), and Infineon
+* shall have no liability arising out of any Security Breaches. Unless otherwise
+* explicitly approved by Infineon, the Software may not be used in any application
+* where a failure of the Product or any consequences of the use thereof can
+* reasonably be expected to result in personal injury.
 *******************************************************************************/
 
 #ifndef LV_CONF_H
@@ -22,6 +46,7 @@
    STDLIB WRAPPER SETTINGS
  *=========================*/
 #include <stdint.h>
+#include "cy_utils.h"
 
 /* Possible values
  * - LV_STDLIB_BUILTIN:     LVGL's built in implementation
@@ -62,7 +87,7 @@
  *====================*/
 
 /*Default display refresh, input device read and animation step period.*/
-#define LV_DEF_REFR_PERIOD  20      /*[ms]*/
+#define LV_DEF_REFR_PERIOD  18      /*[ms]*/
 
 /*Default Dot Per Inch. Used to initialize default sizes such as widgets sized, style paddings.
  *(Not so important, you can adjust it to modify default sizes and spaces)*/
@@ -113,17 +138,17 @@
 /* The stack size of the drawing thread.
  * NOTE: If FreeType or ThorVG is enabled, it is recommended to set it to 32KB or more.
  */
-#define LV_DRAW_THREAD_STACK_SIZE    (16 * 1024)   /*[bytes]*/
+#define LV_DRAW_THREAD_STACK_SIZE    (32 * 1024)   /*[bytes]*/
 
 #define LV_USE_DRAW_SW 1
 #if LV_USE_DRAW_SW == 1
 
     /*
-    * Selectively disable color format support in order to reduce code size.
-    * NOTE: some features use certain color formats internally, e.g.
-    * - gradients use RGB888
-    * - bitmaps with transparency may use ARGB8888
-    */
+     * Selectively disable color format support in order to reduce code size.
+     * NOTE: some features use certain color formats internally, e.g.
+     * - gradients use RGB888
+     * - bitmaps with transparency may use ARGB8888
+     */
 
     #define LV_DRAW_SW_SUPPORT_RGB565       1
     #define LV_DRAW_SW_SUPPORT_RGB565A8     1
@@ -136,8 +161,8 @@
     #define LV_DRAW_SW_SUPPORT_I1           1
 
     /* Set the number of draw unit.
-    * > 1 requires an operating system enabled in `LV_USE_OS`
-    * > 1 means multiple threads will render the screen in parallel */
+     * > 1 requires an operating system enabled in `LV_USE_OS`
+     * > 1 means multiple threads will render the screen in parallel */
     #define LV_DRAW_SW_DRAW_UNIT_CNT    1
 
     /* Use Arm-2D to accelerate the sw render */
@@ -147,7 +172,7 @@
     #define LV_USE_NATIVE_HELIUM_ASM    0
 
     /* 0: use a simple renderer capable of drawing only simple rectangles with gradient, images, texts, and straight lines only
-    * 1: use a complex renderer capable of drawing rounded corners, shadow, skew lines, and arcs too */
+     * 1: use a complex renderer capable of drawing rounded corners, shadow, skew lines, and arcs too */
     #define LV_DRAW_SW_COMPLEX          1
 
     #if LV_DRAW_SW_COMPLEX == 1
@@ -178,7 +203,7 @@
 
 #if LV_USE_DRAW_VGLITE
     /* Enable blit quality degradation workaround recommended for screen's dimension > 352 pixels. */
-    #define LV_USE_VGLITE_BLIT_SPLIT 1
+    #define LV_USE_VGLITE_BLIT_SPLIT 0
 
     #if LV_USE_OS
         /* Use additional draw thread for VG-Lite processing.*/
@@ -214,7 +239,7 @@
 #define LV_USE_DRAW_SDL 0
 
 /* Use VG-Lite GPU. */
-#define LV_USE_DRAW_VG_LITE  1
+#define LV_USE_DRAW_VG_LITE 1
 
 #if LV_USE_DRAW_VG_LITE
     /* Enable VG-Lite custom external 'gpu_init()' function */
@@ -227,17 +252,17 @@
     #define LV_VG_LITE_FLUSH_MAX_COUNT 8
 
     /* Enable border to simulate shadow
-    * NOTE: which usually improves performance,
-    * but does not guarantee the same rendering quality as the software. */
+     * NOTE: which usually improves performance,
+     * but does not guarantee the same rendering quality as the software. */
     #define LV_VG_LITE_USE_BOX_SHADOW 0
 
     /* VG-Lite gradient maximum cache number.
-    * NOTE: The memory usage of a single gradient image is 4K bytes.
-    */
+     * NOTE: The memory usage of a single gradient image is 4K bytes.
+     */
     #define LV_VG_LITE_GRAD_CACHE_CNT 32
 
     /* VG-Lite stroke maximum cache number.
-    */
+     */
     #define LV_VG_LITE_STROKE_CACHE_CNT 32
 
 #endif
@@ -268,16 +293,16 @@
     #define LV_LOG_PRINTF 1
 
     /*Set callback to print the logs.
-    *E.g `my_print`. The prototype should be `void my_print(lv_log_level_t level, const char * buf)`
-    *Can be overwritten by `lv_log_register_print_cb`*/
+     *E.g `my_print`. The prototype should be `void my_print(lv_log_level_t level, const char * buf)`
+     *Can be overwritten by `lv_log_register_print_cb`*/
     //#define LV_LOG_PRINT_CB
 
     /*1: Enable print timestamp;
-    *0: Disable print timestamp*/
+     *0: Disable print timestamp*/
     #define LV_LOG_USE_TIMESTAMP 1
 
     /*1: Print file and line number of the log;
-    *0: Do not print file and line number of the log*/
+     *0: Do not print file and line number of the log*/
     #define LV_LOG_USE_FILE_LINE 1
 
 
@@ -429,10 +454,10 @@
 #define LV_ATTRIBUTE_LARGE_CONST
 
 /*Compiler prefix for a big array declaration in RAM*/
-#define LV_ATTRIBUTE_LARGE_RAM_ARRAY __attribute__ ((section(".cy_gpu_buf")))
+#define LV_ATTRIBUTE_LARGE_RAM_ARRAY CY_SECTION(".cy_socmem_data")
 
 /*Place performance critical functions into a faster memory (e.g RAM)*/
-#define LV_ATTRIBUTE_FAST_MEM __attribute__ ((section(".cy_itcm")))
+#define LV_ATTRIBUTE_FAST_MEM CY_SECTION(".cy_itcm")
 
 /*Export integer constant to binding. This macro is used with constants in the form of LV_<CONST> that
  *should also appear on LVGL binding API such as MicroPython.*/
@@ -467,7 +492,7 @@
 #define LV_FONT_MONTSERRAT_22 1
 #define LV_FONT_MONTSERRAT_24 1
 #define LV_FONT_MONTSERRAT_26 0
-#define LV_FONT_MONTSERRAT_28 1
+#define LV_FONT_MONTSERRAT_28 0
 #define LV_FONT_MONTSERRAT_30 0
 #define LV_FONT_MONTSERRAT_32 0
 #define LV_FONT_MONTSERRAT_34 0
@@ -794,12 +819,12 @@
     #define LV_FREETYPE_USE_LVGL_PORT 0
 
     /*Cache count of the glyphs in FreeType. It means the number of glyphs that can be cached.
-    *The higher the value, the more memory will be used.*/
+     *The higher the value, the more memory will be used.*/
     #define LV_FREETYPE_CACHE_FT_GLYPH_CNT 256
 #endif
 
 /* Built-in TTF decoder */
-#define LV_USE_TINY_TTF 1
+#define LV_USE_TINY_TTF 0
 #if LV_USE_TINY_TTF
     /* Enable loading TTF data from files */
     #define LV_TINY_TTF_FILE_SUPPORT 0
@@ -841,25 +866,25 @@
 #define LV_USE_SNAPSHOT 0
 
 /*1: Enable system monitor component*/
-#define LV_USE_SYSMON   1
+#define LV_USE_SYSMON   0
 #if LV_USE_SYSMON
     /*Get the idle percentage. E.g. uint32_t my_get_idle(void);*/
     extern uint32_t calculate_idle_percentage(void);
     #define LV_SYSMON_GET_IDLE calculate_idle_percentage
 
     /*1: Show CPU usage and FPS count
-    * Requires `LV_USE_SYSMON = 1`*/
-    #define LV_USE_PERF_MONITOR 0
+     * Requires `LV_USE_SYSMON = 1`*/
+    #define LV_USE_PERF_MONITOR 1
     #if LV_USE_PERF_MONITOR
-        #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT
+        #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_LEFT
 
         /*0: Displays performance data on the screen, 1: Prints performance data using log.*/
         #define LV_USE_PERF_MONITOR_LOG_MODE 0
     #endif
 
     /*1: Show the used memory and the memory fragmentation
-    * Requires `LV_USE_STDLIB_MALLOC = LV_STDLIB_BUILTIN`
-    * Requires `LV_USE_SYSMON = 1`*/
+     * Requires `LV_USE_STDLIB_MALLOC = LV_STDLIB_BUILTIN`
+     * Requires `LV_USE_SYSMON = 1`*/
     #define LV_USE_MEM_MONITOR 0
     #if LV_USE_MEM_MONITOR
         #define LV_USE_MEM_MONITOR_POS LV_ALIGN_BOTTOM_LEFT
@@ -878,7 +903,7 @@
     #endif
 
     /*Header to include for the profiler*/
-    #define LV_PROFILER_INCLUDE "lvgl/src/misc/lv_profiler_builtin.h"
+    #define LV_PROFILER_INCLUDE "lv_profiler_builtin.h"
 
     /*Profiler start point function*/
     #define LV_PROFILER_BEGIN    LV_PROFILER_BUILTIN_BEGIN
@@ -1062,7 +1087,7 @@
  ====================*/
 
 /*Show some widget. It might be required to increase `LV_MEM_SIZE` */
-#define LV_USE_DEMO_WIDGETS 1
+#define LV_USE_DEMO_WIDGETS 0
 
 /*Demonstrate the usage of encoder and keyboard*/
 #define LV_USE_DEMO_KEYPAD_AND_ENCODER 0
@@ -1080,10 +1105,10 @@
 #define LV_USE_DEMO_MUSIC 0
 #if LV_USE_DEMO_MUSIC
     #define LV_DEMO_MUSIC_SQUARE    0
-    #define LV_DEMO_MUSIC_LANDSCAPE 0
+    #define LV_DEMO_MUSIC_LANDSCAPE 1
     #define LV_DEMO_MUSIC_ROUND     0
     #define LV_DEMO_MUSIC_LARGE     0
-    #define LV_DEMO_MUSIC_AUTO_PLAY 1
+    #define LV_DEMO_MUSIC_AUTO_PLAY 0
 #endif
 
 /*Flex layout demo*/
@@ -1104,4 +1129,3 @@
 #endif /*LV_CONF_H*/
 
 /*--END OF LV_CONF_H--*/
-

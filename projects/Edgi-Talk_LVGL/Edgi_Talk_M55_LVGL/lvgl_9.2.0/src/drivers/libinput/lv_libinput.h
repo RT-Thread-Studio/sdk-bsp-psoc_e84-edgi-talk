@@ -32,8 +32,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_LIBINPUT_CAPABILITY_NONE     = 0,
     LV_LIBINPUT_CAPABILITY_KEYBOARD = 1U << 0,
     LV_LIBINPUT_CAPABILITY_POINTER  = 1U << 1,
@@ -62,7 +61,7 @@ lv_libinput_capability lv_libinput_query_capability(struct libinput_device * dev
  * @return device node path (e.g. /dev/input/event0) for the first matching device or NULL if no device was found.
  *         The pointer is safe to use until the next forceful device search.
  */
-char *lv_libinput_find_dev(lv_libinput_capability capabilities, bool force_rescan);
+char * lv_libinput_find_dev(lv_libinput_capability capabilities, bool force_rescan);
 
 /**
  * Find connected input devices with specific capabilities
@@ -81,7 +80,7 @@ size_t lv_libinput_find_devs(lv_libinput_capability capabilities, char ** found,
  * @param dev_path device path, e.g. /dev/input/event0
  * @return pointer to input device or NULL if opening failed
  */
-lv_indev_t *lv_libinput_create(lv_indev_type_t indev_type, const char * dev_path);
+lv_indev_t * lv_libinput_create(lv_indev_type_t indev_type, const char * dev_path);
 
 /**
  * Delete a libinput input device

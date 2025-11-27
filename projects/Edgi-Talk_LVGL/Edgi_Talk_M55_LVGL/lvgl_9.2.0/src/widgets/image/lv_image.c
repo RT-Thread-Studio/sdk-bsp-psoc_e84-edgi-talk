@@ -40,8 +40,7 @@ static void update_align(lv_obj_t * obj);
 #endif
 
 #if LV_USE_OBJ_PROPERTY
-static const lv_property_ops_t properties[] =
-{
+static const lv_property_ops_t properties[] = {
     {
         .id = LV_PROPERTY_IMAGE_SRC,
         .setter = lv_image_set_src,
@@ -103,8 +102,7 @@ static const lv_property_ops_t properties[] =
 /**********************
  *  STATIC VARIABLES
  **********************/
-const lv_obj_class_t lv_image_class =
-{
+const lv_obj_class_t lv_image_class = {
     .constructor_cb = lv_image_constructor,
     .destructor_cb = lv_image_destructor,
     .event_cb = lv_image_event,
@@ -135,10 +133,10 @@ const lv_obj_class_t lv_image_class =
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_obj_t *lv_image_create(lv_obj_t * parent)
+lv_obj_t * lv_image_create(lv_obj_t * parent)
 {
     LV_LOG_INFO("begin");
-    lv_obj_t *obj = lv_obj_class_create_obj(MY_CLASS, parent);
+    lv_obj_t * obj = lv_obj_class_create_obj(MY_CLASS, parent);
     lv_obj_class_init_obj(obj);
     return obj;
 }
@@ -154,31 +152,28 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
     lv_obj_invalidate(obj);
 
     lv_image_src_t src_type = lv_image_src_get_type(src);
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
 #if LV_USE_LOG && LV_LOG_LEVEL <= LV_LOG_LEVEL_INFO
-    switch (src_type)
-    {
-    case LV_IMAGE_SRC_FILE:
-        LV_LOG_TRACE("`LV_IMAGE_SRC_FILE` type found");
-        break;
-    case LV_IMAGE_SRC_VARIABLE:
-        LV_LOG_TRACE("`LV_IMAGE_SRC_VARIABLE` type found");
-        break;
-    case LV_IMAGE_SRC_SYMBOL:
-        LV_LOG_TRACE("`LV_IMAGE_SRC_SYMBOL` type found");
-        break;
-    default:
-        LV_LOG_WARN("unknown type");
+    switch(src_type) {
+        case LV_IMAGE_SRC_FILE:
+            LV_LOG_TRACE("`LV_IMAGE_SRC_FILE` type found");
+            break;
+        case LV_IMAGE_SRC_VARIABLE:
+            LV_LOG_TRACE("`LV_IMAGE_SRC_VARIABLE` type found");
+            break;
+        case LV_IMAGE_SRC_SYMBOL:
+            LV_LOG_TRACE("`LV_IMAGE_SRC_SYMBOL` type found");
+            break;
+        default:
+            LV_LOG_WARN("unknown type");
     }
 #endif
 
     /*If the new source type is unknown free the memories of the old source*/
-    if (src_type == LV_IMAGE_SRC_UNKNOWN)
-    {
+    if(src_type == LV_IMAGE_SRC_UNKNOWN) {
         LV_LOG_WARN("unknown image type");
-        if (img->src_type == LV_IMAGE_SRC_SYMBOL || img->src_type == LV_IMAGE_SRC_FILE)
-        {
+        if(img->src_type == LV_IMAGE_SRC_SYMBOL || img->src_type == LV_IMAGE_SRC_FILE) {
             lv_free((void *)img->src);
         }
         img->src      = NULL;
@@ -188,8 +183,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
 
     lv_image_header_t header;
     lv_result_t res = lv_image_decoder_get_info(src, &header);
-    if (res != LV_RESULT_OK)
-    {
+    if(res != LV_RESULT_OK) {
 #if LV_USE_LOG
         char buf[24];
         LV_LOG_WARN("failed to get image info: %s",
@@ -199,41 +193,35 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
     }
 
     /*Save the source*/
-    if (src_type == LV_IMAGE_SRC_VARIABLE)
-    {
+    if(src_type == LV_IMAGE_SRC_VARIABLE) {
         /*If memory was allocated because of the previous `src_type` then free it*/
-        if (img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL)
-        {
+        if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL) {
             lv_free((void *)img->src);
         }
         img->src = src;
     }
-    else if (src_type == LV_IMAGE_SRC_FILE || src_type == LV_IMAGE_SRC_SYMBOL)
-    {
+    else if(src_type == LV_IMAGE_SRC_FILE || src_type == LV_IMAGE_SRC_SYMBOL) {
         /*If the new and the old src are the same then it was only a refresh.*/
-        if (img->src != src)
-        {
-            const void *old_src = NULL;
+        if(img->src != src) {
+            const void * old_src = NULL;
             /*If memory was allocated because of the previous `src_type` then save its pointer and free after allocation.
              *It's important to allocate first to be sure the new data will be on a new address.
              *Else `img_cache` wouldn't see the change in source.*/
-            if (img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL)
-            {
+            if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL) {
                 old_src = img->src;
             }
-            char *new_str = lv_strdup(src);
+            char * new_str = lv_strdup(src);
             LV_ASSERT_MALLOC(new_str);
-            if (new_str == NULL) return;
+            if(new_str == NULL) return;
             img->src = new_str;
 
-            if (old_src) lv_free((void *)old_src);
+            if(old_src) lv_free((void *)old_src);
         }
     }
 
-    if (src_type == LV_IMAGE_SRC_SYMBOL)
-    {
+    if(src_type == LV_IMAGE_SRC_SYMBOL) {
         /*`lv_image_dsc_get_info` couldn't set the width and height of a font so set it here*/
-        const lv_font_t *font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
+        const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
         int32_t letter_space = lv_obj_get_style_text_letter_space(obj, LV_PART_MAIN);
         int32_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
         lv_point_t size;
@@ -252,8 +240,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
     update_align(obj);
 
     /*Provide enough room for the rotated corners*/
-    if (img->rotation || img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE)
-    {
+    if(img->rotation || img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE) {
         lv_obj_refresh_ext_draw_size(obj);
     }
 
@@ -264,7 +251,7 @@ void lv_image_set_offset_x(lv_obj_t * obj, int32_t x)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     img->offset.x = x;
     lv_obj_invalidate(obj);
@@ -274,7 +261,7 @@ void lv_image_set_offset_y(lv_obj_t * obj, int32_t y)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     img->offset.y = y;
     lv_obj_invalidate(obj);
@@ -284,18 +271,16 @@ void lv_image_set_rotation(lv_obj_t * obj, int32_t angle)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
-    if (img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM)
-    {
+    lv_image_t * img = (lv_image_t *)obj;
+    if(img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM) {
         angle = 0;
     }
-    else
-    {
-        while (angle >= 3600) angle -= 3600;
-        while (angle < 0) angle += 3600;
+    else {
+        while(angle >= 3600) angle -= 3600;
+        while(angle < 0) angle += 3600;
     }
 
-    if ((uint32_t)angle == img->rotation) return;
+    if((uint32_t)angle == img->rotation) return;
 
     lv_obj_update_layout(obj);  /*Be sure the object's size is calculated*/
     int32_t w = lv_obj_get_width(obj);
@@ -314,7 +299,7 @@ void lv_image_set_rotation(lv_obj_t * obj, int32_t angle)
 
     /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
      * the whole ext draw area */
-    lv_display_t *disp = lv_obj_get_display(obj);
+    lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);
     lv_display_enable_invalidation(disp, true);
@@ -331,14 +316,13 @@ void lv_image_set_pivot(lv_obj_t * obj, int32_t x, int32_t y)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
-    if (img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM)
-    {
+    lv_image_t * img = (lv_image_t *)obj;
+    if(img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM) {
         x = 0;
         y = 0;
     }
 
-    if (img->pivot.x == x && img->pivot.y == y) return;
+    if(img->pivot.x == x && img->pivot.y == y) return;
 
     lv_obj_update_layout(obj);  /*Be sure the object's size is calculated*/
     int32_t w = lv_obj_get_width(obj);
@@ -357,7 +341,7 @@ void lv_image_set_pivot(lv_obj_t * obj, int32_t x, int32_t y)
 
     /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
      * the whole ext draw area */
-    lv_display_t *disp = lv_obj_get_display(obj);
+    lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);
     lv_display_enable_invalidation(disp, true);
@@ -375,14 +359,14 @@ void lv_image_set_scale(lv_obj_t * obj, uint32_t zoom)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     /*If scale is set internally, do no overwrite it*/
-    if (img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
+    if(img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
 
-    if (zoom == img->scale_x && zoom == img->scale_y) return;
+    if(zoom == img->scale_x && zoom == img->scale_y) return;
 
-    if (zoom == 0) zoom = 1;
+    if(zoom == 0) zoom = 1;
 
     scale_update(obj, zoom, zoom);
 }
@@ -391,14 +375,14 @@ void lv_image_set_scale_x(lv_obj_t * obj, uint32_t zoom)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     /*If scale is set internally, do no overwrite it*/
-    if (img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
+    if(img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
 
-    if (zoom == img->scale_x) return;
+    if(zoom == img->scale_x) return;
 
-    if (zoom == 0) zoom = 1;
+    if(zoom == 0) zoom = 1;
 
     scale_update(obj, zoom, img->scale_y);
 }
@@ -407,14 +391,14 @@ void lv_image_set_scale_y(lv_obj_t * obj, uint32_t zoom)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     /*If scale is set internally, do no overwrite it*/
-    if (img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
+    if(img->align > LV_IMAGE_ALIGN_AUTO_TRANSFORM) return;
 
-    if (zoom == img->scale_y) return;
+    if(zoom == img->scale_y) return;
 
-    if (zoom == 0) zoom = 1;
+    if(zoom == 0) zoom = 1;
 
     scale_update(obj, img->scale_x, zoom);
 }
@@ -423,10 +407,10 @@ void lv_image_set_blend_mode(lv_obj_t * obj, lv_blend_mode_t blend_mode)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     /*If scale is set internally, do no overwrite it*/
-    if (img->blend_mode == blend_mode) return;
+    if(img->blend_mode == blend_mode) return;
 
     img->blend_mode = blend_mode;
 
@@ -437,8 +421,8 @@ void lv_image_set_antialias(lv_obj_t * obj, bool antialias)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
-    if (antialias == img->antialias) return;
+    lv_image_t * img = (lv_image_t *)obj;
+    if(antialias == img->antialias) return;
 
     img->antialias = antialias;
     lv_obj_invalidate(obj);
@@ -448,8 +432,8 @@ void lv_image_set_inner_align(lv_obj_t * obj, lv_image_align_t align)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
-    if (align == img->align) return;
+    lv_image_t * img = (lv_image_t *)obj;
+    if(align == img->align) return;
 
     img->align = align;
     update_align(obj);
@@ -460,7 +444,7 @@ void lv_image_set_inner_align(lv_obj_t * obj, lv_image_align_t align)
 void lv_image_set_bitmap_map_src(lv_obj_t * obj, const lv_image_dsc_t * src)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
     img->bitmap_mask_src = src;
     lv_obj_invalidate(obj);
 }
@@ -469,11 +453,11 @@ void lv_image_set_bitmap_map_src(lv_obj_t * obj, const lv_image_dsc_t * src)
  * Getter functions
  *====================*/
 
-const void *lv_image_get_src(lv_obj_t * obj)
+const void * lv_image_get_src(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->src;
 }
@@ -482,7 +466,7 @@ int32_t lv_image_get_offset_x(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->offset.x;
 }
@@ -491,7 +475,7 @@ int32_t lv_image_get_offset_y(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->offset.y;
 }
@@ -500,7 +484,7 @@ int32_t lv_image_get_rotation(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->rotation;
 }
@@ -509,7 +493,7 @@ void lv_image_get_pivot(lv_obj_t * obj, lv_point_t * pivot)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     pivot->x = lv_pct_to_px(img->pivot.x, img->w);
     pivot->y = lv_pct_to_px(img->pivot.y, img->h);
@@ -519,7 +503,7 @@ int32_t lv_image_get_scale(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->scale_x;
 }
@@ -528,7 +512,7 @@ int32_t lv_image_get_scale_x(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->scale_x;
 }
@@ -537,7 +521,7 @@ int32_t lv_image_get_scale_y(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->scale_y;
 }
@@ -546,7 +530,7 @@ lv_blend_mode_t lv_image_get_blend_mode(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->blend_mode;
 }
@@ -555,7 +539,7 @@ bool lv_image_get_antialias(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->antialias ? true : false;
 }
@@ -564,16 +548,16 @@ lv_image_align_t lv_image_get_inner_align(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->align;
 }
 
-const lv_image_dsc_t *lv_image_get_bitmap_map_src(lv_obj_t * obj)
+const lv_image_dsc_t * lv_image_get_bitmap_map_src(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     return img->bitmap_mask_src;
 }
@@ -587,7 +571,7 @@ static void lv_image_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
     LV_UNUSED(class_p);
     LV_TRACE_OBJ_CREATE("begin");
 
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     img->src       = NULL;
     img->src_type  = LV_IMAGE_SRC_UNKNOWN;
@@ -611,9 +595,8 @@ static void lv_image_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 static void lv_image_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 {
     LV_UNUSED(class_p);
-    lv_image_t *img = (lv_image_t *)obj;
-    if (img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL)
-    {
+    lv_image_t * img = (lv_image_t *)obj;
+    if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_SYMBOL) {
         lv_free((void *)img->src);
         img->src      = NULL;
         img->src_type = LV_IMAGE_SRC_UNKNOWN;
@@ -628,34 +611,29 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
     /*Call the ancestor's event handler*/
     lv_result_t res = lv_obj_event_base(MY_CLASS, e);
-    if (res != LV_RESULT_OK) return;
+    if(res != LV_RESULT_OK) return;
 
-    lv_obj_t *obj = lv_event_get_current_target(e);
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_obj_t * obj = lv_event_get_current_target(e);
+    lv_image_t * img = (lv_image_t *)obj;
     lv_point_t pivot_px;
     lv_image_get_pivot(obj, &pivot_px);
 
-    if (code == LV_EVENT_STYLE_CHANGED)
-    {
+    if(code == LV_EVENT_STYLE_CHANGED) {
         /*Refresh the file name to refresh the symbol text size*/
-        if (img->src_type == LV_IMAGE_SRC_SYMBOL)
-        {
+        if(img->src_type == LV_IMAGE_SRC_SYMBOL) {
             lv_image_set_src(obj, img->src);
         }
-        else
-        {
+        else {
             /*With transformation it might change*/
             lv_obj_refresh_ext_draw_size(obj);
         }
     }
-    else if (code == LV_EVENT_REFR_EXT_DRAW_SIZE)
-    {
+    else if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
 
-        int32_t *s = lv_event_get_param(e);
+        int32_t * s = lv_event_get_param(e);
 
         /*If the image has angle provide enough room for the rotated corners*/
-        if (img->rotation || img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE)
-        {
+        if(img->rotation || img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE) {
             lv_area_t a;
             int32_t w = lv_obj_get_width(obj);
             int32_t h = lv_obj_get_height(obj);
@@ -666,16 +644,14 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
             *s = LV_MAX(*s, a.y2 - h);
         }
     }
-    else if (code == LV_EVENT_HIT_TEST)
-    {
-        lv_hit_test_info_t *info = lv_event_get_param(e);
+    else if(code == LV_EVENT_HIT_TEST) {
+        lv_hit_test_info_t * info = lv_event_get_param(e);
 
         /*If the object is exactly image sized (not cropped, not mosaic) and transformed
          *perform hit test on its transformed area*/
-        if (img->w == lv_obj_get_width(obj) && img->h == lv_obj_get_height(obj) &&
-                (img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE ||
-                 img->rotation != 0 || img->pivot.x != img->w / 2 || img->pivot.y != img->h / 2))
-        {
+        if(img->w == lv_obj_get_width(obj) && img->h == lv_obj_get_height(obj) &&
+           (img->scale_x != LV_SCALE_NONE || img->scale_y != LV_SCALE_NONE ||
+            img->rotation != 0 || img->pivot.x != img->w / 2 || img->pivot.y != img->h / 2)) {
 
             int32_t w = lv_obj_get_width(obj);
             int32_t h = lv_obj_get_height(obj);
@@ -688,21 +664,18 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
             info->res = lv_area_is_point_on(&coords, info->point, 0);
         }
-        else
-        {
+        else {
             lv_area_t a;
             lv_obj_get_click_area(obj, &a);
             info->res = lv_area_is_point_on(&a, info->point, 0);
         }
     }
-    else if (code == LV_EVENT_GET_SELF_SIZE)
-    {
-        lv_point_t *p = lv_event_get_param(e);
+    else if(code == LV_EVENT_GET_SELF_SIZE) {
+        lv_point_t * p = lv_event_get_param(e);
         p->x = img->w;
         p->y = img->h;
     }
-    else if (code == LV_EVENT_DRAW_MAIN || code == LV_EVENT_DRAW_POST || code == LV_EVENT_COVER_CHECK)
-    {
+    else if(code == LV_EVENT_DRAW_MAIN || code == LV_EVENT_DRAW_POST || code == LV_EVENT_COVER_CHECK) {
         draw_image(e);
     }
 }
@@ -710,48 +683,40 @@ static void lv_image_event(const lv_obj_class_t * class_p, lv_event_t * e)
 static void draw_image(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *obj = lv_event_get_current_target(e);
-    lv_image_t *img = (lv_image_t *)obj;
-    if (code == LV_EVENT_COVER_CHECK)
-    {
-        lv_cover_check_info_t *info = lv_event_get_param(e);
-        if (info->res == LV_COVER_RES_MASKED) return;
-        if (img->src_type == LV_IMAGE_SRC_UNKNOWN || img->src_type == LV_IMAGE_SRC_SYMBOL)
-        {
+    lv_obj_t * obj = lv_event_get_current_target(e);
+    lv_image_t * img = (lv_image_t *)obj;
+    if(code == LV_EVENT_COVER_CHECK) {
+        lv_cover_check_info_t * info = lv_event_get_param(e);
+        if(info->res == LV_COVER_RES_MASKED) return;
+        if(img->src_type == LV_IMAGE_SRC_UNKNOWN || img->src_type == LV_IMAGE_SRC_SYMBOL) {
             info->res = LV_COVER_RES_NOT_COVER;
             return;
         }
 
         /*Non true color format might have "holes"*/
-        if (lv_color_format_has_alpha(img->cf))
-        {
+        if(lv_color_format_has_alpha(img->cf)) {
             info->res = LV_COVER_RES_NOT_COVER;
             return;
         }
 
         /*With not LV_OPA_COVER images can't cover an area */
-        if (lv_obj_get_style_image_opa(obj, LV_PART_MAIN) != LV_OPA_COVER)
-        {
+        if(lv_obj_get_style_image_opa(obj, LV_PART_MAIN) != LV_OPA_COVER) {
             info->res = LV_COVER_RES_NOT_COVER;
             return;
         }
 
-        if (img->rotation != 0)
-        {
+        if(img->rotation != 0) {
             info->res = LV_COVER_RES_NOT_COVER;
             return;
         }
 
-        if (img->scale_x == LV_SCALE_NONE && img->scale_y == LV_SCALE_NONE)
-        {
-            if (lv_area_is_in(info->area, &obj->coords, 0) == false)
-            {
+        if(img->scale_x == LV_SCALE_NONE && img->scale_y == LV_SCALE_NONE) {
+            if(lv_area_is_in(info->area, &obj->coords, 0) == false) {
                 info->res = LV_COVER_RES_NOT_COVER;
                 return;
             }
         }
-        else
-        {
+        else {
             lv_area_t a;
             lv_point_t pivot_px;
             lv_image_get_pivot(obj, &pivot_px);
@@ -762,28 +727,24 @@ static void draw_image(lv_event_t * e)
             a.x2 += obj->coords.x1;
             a.y2 += obj->coords.y1;
 
-            if (lv_area_is_in(info->area, &a, 0) == false)
-            {
+            if(lv_area_is_in(info->area, &a, 0) == false) {
                 info->res = LV_COVER_RES_NOT_COVER;
                 return;
             }
         }
-        if (img->bitmap_mask_src)
-        {
+        if(img->bitmap_mask_src) {
             info->res = LV_COVER_RES_NOT_COVER;
             return;
         }
     }
-    else if (code == LV_EVENT_DRAW_MAIN)
-    {
+    else if(code == LV_EVENT_DRAW_MAIN) {
 
-        if (img->h == 0 || img->w == 0) return;
-        if (img->scale_x == 0 || img->scale_y == 0) return;
+        if(img->h == 0 || img->w == 0) return;
+        if(img->scale_x == 0 || img->scale_y == 0) return;
 
-        lv_layer_t *layer = lv_event_get_layer(e);
+        lv_layer_t * layer = lv_event_get_layer(e);
 
-        if (img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_VARIABLE)
-        {
+        if(img->src_type == LV_IMAGE_SRC_FILE || img->src_type == LV_IMAGE_SRC_VARIABLE) {
             lv_draw_image_dsc_t draw_dsc;
             lv_draw_image_dsc_init(&draw_dsc);
             lv_obj_init_draw_image_dsc(obj, LV_PART_MAIN, &draw_dsc);
@@ -807,13 +768,11 @@ static void draw_image(lv_event_t * e)
             draw_dsc.clip_radius = lv_obj_get_style_radius(obj, LV_PART_MAIN);
 
             lv_area_t coords;
-            if (img->align < LV_IMAGE_ALIGN_AUTO_TRANSFORM)
-            {
+            if(img->align < LV_IMAGE_ALIGN_AUTO_TRANSFORM) {
                 lv_area_align(&obj->coords, &draw_dsc.image_area, img->align, img->offset.x, img->offset.y);
                 coords = draw_dsc.image_area;
             }
-            else if (img->align == LV_IMAGE_ALIGN_TILE)
-            {
+            else if(img->align == LV_IMAGE_ALIGN_TILE) {
                 lv_area_intersect(&layer->_clip_area, &layer->_clip_area, &obj->coords);
                 lv_area_move(&draw_dsc.image_area, img->offset.x, img->offset.y);
 
@@ -823,8 +782,7 @@ static void draw_image(lv_event_t * e)
                 coords = layer->_clip_area;
                 draw_dsc.tile = 1;
             }
-            else
-            {
+            else {
                 coords = draw_dsc.image_area;
             }
 
@@ -832,21 +790,18 @@ static void draw_image(lv_event_t * e)
             layer->_clip_area = clip_area_ori;
 
         }
-        else if (img->src_type == LV_IMAGE_SRC_SYMBOL)
-        {
+        else if(img->src_type == LV_IMAGE_SRC_SYMBOL) {
             lv_draw_label_dsc_t label_dsc;
             lv_draw_label_dsc_init(&label_dsc);
             lv_obj_init_draw_label_dsc(obj, LV_PART_MAIN, &label_dsc);
             label_dsc.text = img->src;
             lv_draw_label(layer, &label_dsc, &obj->coords);
         }
-        else if (img->src == NULL)
-        {
+        else if(img->src == NULL) {
             /*Do not need to draw image when src is NULL*/
             LV_LOG_WARN("image source is NULL");
         }
-        else
-        {
+        else {
             /*Trigger the error handler of image draw*/
             LV_LOG_WARN("image source type is unknown");
         }
@@ -855,7 +810,7 @@ static void draw_image(lv_event_t * e)
 
 static void scale_update(lv_obj_t * obj, int32_t scale_x, int32_t scale_y)
 {
-    lv_image_t *img = (lv_image_t *)obj;
+    lv_image_t * img = (lv_image_t *)obj;
 
     lv_obj_update_layout(obj);  /*Be sure the object's size is calculated*/
     int32_t w = lv_obj_get_width(obj);
@@ -875,7 +830,7 @@ static void scale_update(lv_obj_t * obj, int32_t scale_x, int32_t scale_y)
 
     /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
      * the whole ext draw area */
-    lv_display_t *disp = lv_obj_get_display(obj);
+    lv_display_t * disp = lv_obj_get_display(obj);
     lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);
     lv_display_enable_invalidation(disp, true);
@@ -890,17 +845,15 @@ static void scale_update(lv_obj_t * obj, int32_t scale_x, int32_t scale_y)
 
 static void update_align(lv_obj_t * obj)
 {
-    lv_image_t *img = (lv_image_t *)obj;
-    if (img->align == LV_IMAGE_ALIGN_STRETCH)
-    {
+    lv_image_t * img = (lv_image_t *)obj;
+    if(img->align == LV_IMAGE_ALIGN_STRETCH) {
         lv_image_set_rotation(obj, 0);
         lv_image_set_pivot(obj, 0, 0);
         int32_t scale_x = lv_obj_get_width(obj) * LV_SCALE_NONE / img->w;
         int32_t scale_y = lv_obj_get_height(obj) * LV_SCALE_NONE / img->h;
         scale_update(obj, scale_x, scale_y);
     }
-    else if (img->align == LV_IMAGE_ALIGN_TILE)
-    {
+    else if(img->align == LV_IMAGE_ALIGN_TILE) {
         lv_image_set_rotation(obj, 0);
         lv_image_set_pivot(obj, 0, 0);
         scale_update(obj, LV_SCALE_NONE, LV_SCALE_NONE);

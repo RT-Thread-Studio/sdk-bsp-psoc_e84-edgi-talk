@@ -35,7 +35,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_line_class;
  * @param parent pointer to an object, it will be the parent of the new line
  * @return pointer to the created line
  */
-lv_obj_t *lv_line_create(lv_obj_t * parent);
+lv_obj_t * lv_line_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -75,7 +75,7 @@ void lv_line_set_y_invert(lv_obj_t * obj, bool en);
  * @param obj           pointer to a line object
  * @return              const pointer to the array of points
  */
-const lv_point_precise_t *lv_line_get_points(lv_obj_t * obj);
+const lv_point_precise_t * lv_line_get_points(lv_obj_t * obj);
 
 /**
  * Get the number of points in the array of points.
@@ -96,7 +96,7 @@ bool lv_line_is_point_array_mutable(lv_obj_t * obj);
  * @param obj           pointer to a line object
  * @return              pointer to the array of points. NULL if not mutable.
  */
-lv_point_precise_t *lv_line_get_points_mutable(lv_obj_t * obj);
+lv_point_precise_t * lv_line_get_points_mutable(lv_obj_t * obj);
 
 /**
  * Get the y inversion attribute

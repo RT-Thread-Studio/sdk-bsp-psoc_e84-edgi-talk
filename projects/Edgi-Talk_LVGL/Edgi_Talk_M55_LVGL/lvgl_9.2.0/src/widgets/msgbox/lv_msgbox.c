@@ -38,8 +38,7 @@ static void msgbox_size_changed_event_cb(lv_event_t * e);
 /**********************
  *  STATIC VARIABLES
  **********************/
-const lv_obj_class_t lv_msgbox_class =
-{
+const lv_obj_class_t lv_msgbox_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_DPI_DEF * 2,
     .height_def = LV_SIZE_CONTENT,
@@ -47,8 +46,7 @@ const lv_obj_class_t lv_msgbox_class =
     .name = "msgbox",
 };
 
-const lv_obj_class_t lv_msgbox_header_class =
-{
+const lv_obj_class_t lv_msgbox_header_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_PCT(100),
     .height_def = LV_DPI_DEF / 3,
@@ -56,8 +54,7 @@ const lv_obj_class_t lv_msgbox_header_class =
     .name = "msgbox-header",
 };
 
-const lv_obj_class_t lv_msgbox_content_class =
-{
+const lv_obj_class_t lv_msgbox_content_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_PCT(100),
     .height_def = LV_SIZE_CONTENT,
@@ -65,8 +62,7 @@ const lv_obj_class_t lv_msgbox_content_class =
     .name = "msgbox-content",
 };
 
-const lv_obj_class_t lv_msgbox_footer_class =
-{
+const lv_obj_class_t lv_msgbox_footer_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_PCT(100),
     .height_def = LV_DPI_DEF / 3,
@@ -74,8 +70,7 @@ const lv_obj_class_t lv_msgbox_footer_class =
     .name = "msgbox-footer",
 };
 
-const lv_obj_class_t lv_msgbox_footer_button_class =
-{
+const lv_obj_class_t lv_msgbox_footer_button_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_SIZE_CONTENT,
     .height_def = LV_PCT(100),
@@ -84,8 +79,7 @@ const lv_obj_class_t lv_msgbox_footer_button_class =
     .name = "msgbox-footer-button",
 };
 
-const lv_obj_class_t lv_msgbox_header_button_class =
-{
+const lv_obj_class_t lv_msgbox_header_button_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_DPI_DEF / 3,
     .height_def = LV_PCT(100),
@@ -94,8 +88,7 @@ const lv_obj_class_t lv_msgbox_header_button_class =
     .name = "msgbox-header-button",
 };
 
-const lv_obj_class_t lv_msgbox_backdrop_class =
-{
+const lv_obj_class_t lv_msgbox_backdrop_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_PCT(100),
     .height_def = LV_PCT(100),
@@ -111,12 +104,11 @@ const lv_obj_class_t lv_msgbox_backdrop_class =
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_obj_t *lv_msgbox_create(lv_obj_t * parent)
+lv_obj_t * lv_msgbox_create(lv_obj_t * parent)
 {
     LV_LOG_INFO("begin");
     bool auto_parent = false;
-    if (parent == NULL)
-    {
+    if(parent == NULL) {
         auto_parent = true;
         parent = lv_obj_class_create_obj(&lv_msgbox_backdrop_class, lv_layer_top());
         LV_ASSERT_MALLOC(parent);
@@ -125,18 +117,18 @@ lv_obj_t *lv_msgbox_create(lv_obj_t * parent)
         lv_obj_set_size(parent, LV_PCT(100), LV_PCT(100));
     }
 
-    lv_obj_t *obj = lv_obj_class_create_obj(&lv_msgbox_class, parent);
+    lv_obj_t * obj = lv_obj_class_create_obj(&lv_msgbox_class, parent);
     LV_ASSERT_MALLOC(obj);
-    if (obj == NULL) return NULL;
+    if(obj == NULL) return NULL;
     lv_obj_class_init_obj(obj);
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
     lv_obj_set_flex_flow(obj, LV_FLEX_FLOW_COLUMN);
 
-    if (auto_parent) lv_obj_add_flag(obj, LV_MSGBOX_FLAG_AUTO_PARENT);
+    if(auto_parent) lv_obj_add_flag(obj, LV_MSGBOX_FLAG_AUTO_PARENT);
 
     mbox->content = lv_obj_class_create_obj(&lv_msgbox_content_class, obj);
     LV_ASSERT_MALLOC(obj);
-    if (mbox->content == NULL) return NULL;
+    if(mbox->content == NULL) return NULL;
     lv_obj_class_init_obj(mbox->content);
     lv_obj_set_flex_flow(mbox->content, LV_FLEX_FLOW_COLUMN);
     lv_obj_add_event_cb(obj, msgbox_size_changed_event_cb, LV_EVENT_SIZE_CHANGED, 0);
@@ -145,14 +137,13 @@ lv_obj_t *lv_msgbox_create(lv_obj_t * parent)
     return obj;
 }
 
-lv_obj_t *lv_msgbox_add_title(lv_obj_t * obj, const char * title)
+lv_obj_t * lv_msgbox_add_title(lv_obj_t * obj, const char * title)
 {
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
-    if (mbox->header == NULL)
-    {
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
+    if(mbox->header == NULL) {
         mbox->header = lv_obj_class_create_obj(&lv_msgbox_header_class, obj);
         LV_ASSERT_MALLOC(obj);
-        if (mbox->header == NULL) return NULL;
+        if(mbox->header == NULL) return NULL;
         lv_obj_class_init_obj(mbox->header);
 
         lv_obj_set_size(mbox->header, lv_pct(100), lv_display_get_dpi(lv_obj_get_display(obj)) / 3);
@@ -162,8 +153,7 @@ lv_obj_t *lv_msgbox_add_title(lv_obj_t * obj, const char * title)
         lv_obj_move_to_index(mbox->header, 0);
     }
 
-    if (mbox->title == NULL)
-    {
+    if(mbox->title == NULL) {
         mbox->title = lv_label_create(mbox->header);
         lv_obj_set_flex_grow(mbox->title, 1);
     }
@@ -173,23 +163,21 @@ lv_obj_t *lv_msgbox_add_title(lv_obj_t * obj, const char * title)
     return mbox->title;
 }
 
-lv_obj_t *lv_msgbox_add_header_button(lv_obj_t * obj, const void * icon)
+lv_obj_t * lv_msgbox_add_header_button(lv_obj_t * obj, const void * icon)
 {
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
-    if (mbox->header == NULL)
-    {
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
+    if(mbox->header == NULL) {
         lv_msgbox_add_title(obj, ""); /*Just to push the buttons to the right*/
     }
 
-    lv_obj_t *btn = lv_obj_class_create_obj(&lv_msgbox_header_button_class, mbox->header);
+    lv_obj_t * btn = lv_obj_class_create_obj(&lv_msgbox_header_button_class, mbox->header);
     LV_ASSERT_MALLOC(obj);
-    if (btn == NULL) return NULL;
+    if(btn == NULL) return NULL;
     lv_obj_class_init_obj(btn);
     lv_obj_remove_flag(btn, LV_OBJ_FLAG_SCROLLABLE);
 
-    if (icon)
-    {
-        lv_obj_t *img = lv_image_create(btn);
+    if(icon) {
+        lv_obj_t * img = lv_image_create(btn);
         lv_image_set_src(img, icon);
         lv_obj_align(img, LV_ALIGN_CENTER, 0, 0);
     }
@@ -197,25 +185,24 @@ lv_obj_t *lv_msgbox_add_header_button(lv_obj_t * obj, const void * icon)
     return btn;
 }
 
-lv_obj_t *lv_msgbox_add_text(lv_obj_t * obj, const char * text)
+lv_obj_t * lv_msgbox_add_text(lv_obj_t * obj, const char * text)
 {
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
 
-    lv_obj_t *label = lv_label_create(mbox->content);
+    lv_obj_t * label = lv_label_create(mbox->content);
     lv_label_set_text(label, text);
     lv_obj_set_width(label, lv_pct(100));
 
     return label;
 }
 
-lv_obj_t *lv_msgbox_add_footer_button(lv_obj_t * obj, const char * text)
+lv_obj_t * lv_msgbox_add_footer_button(lv_obj_t * obj, const char * text)
 {
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
-    if (mbox->footer == NULL)
-    {
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
+    if(mbox->footer == NULL) {
         mbox->footer = lv_obj_class_create_obj(&lv_msgbox_footer_class, obj);
         LV_ASSERT_MALLOC(obj);
-        if (mbox->footer == NULL) return NULL;
+        if(mbox->footer == NULL) return NULL;
         lv_obj_class_init_obj(mbox->footer);
 
         lv_obj_set_flex_flow(mbox->footer, LV_FLEX_FLOW_ROW);
@@ -223,15 +210,14 @@ lv_obj_t *lv_msgbox_add_footer_button(lv_obj_t * obj, const char * text)
         lv_obj_remove_flag(mbox->footer, LV_OBJ_FLAG_SCROLLABLE);
     }
 
-    lv_obj_t *btn = lv_obj_class_create_obj(&lv_msgbox_footer_button_class, mbox->footer);
+    lv_obj_t * btn = lv_obj_class_create_obj(&lv_msgbox_footer_button_class, mbox->footer);
     LV_ASSERT_MALLOC(obj);
-    if (btn == NULL) return NULL;
+    if(btn == NULL) return NULL;
     lv_obj_class_init_obj(btn);
     lv_obj_remove_flag(btn, LV_OBJ_FLAG_SCROLLABLE);
 
-    if (text)
-    {
-        lv_obj_t *label = lv_label_create(btn);
+    if(text) {
+        lv_obj_t * label = lv_label_create(btn);
         lv_label_set_text(label, text);
         lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     }
@@ -239,50 +225,50 @@ lv_obj_t *lv_msgbox_add_footer_button(lv_obj_t * obj, const char * text)
     return btn;
 }
 
-lv_obj_t *lv_msgbox_add_close_button(lv_obj_t * obj)
+lv_obj_t * lv_msgbox_add_close_button(lv_obj_t * obj)
 {
-    lv_obj_t *btn = lv_msgbox_add_header_button(obj, LV_SYMBOL_CLOSE);
+    lv_obj_t * btn = lv_msgbox_add_header_button(obj, LV_SYMBOL_CLOSE);
     lv_obj_add_event_cb(btn, msgbox_close_click_event_cb, LV_EVENT_CLICKED, NULL);
     return btn;
 }
 
-lv_obj_t *lv_msgbox_get_header(lv_obj_t * obj)
+lv_obj_t * lv_msgbox_get_header(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
     return mbox->header;
 }
 
-lv_obj_t *lv_msgbox_get_footer(lv_obj_t * obj)
+lv_obj_t * lv_msgbox_get_footer(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
     return mbox->footer;
 }
 
-lv_obj_t *lv_msgbox_get_content(lv_obj_t * obj)
+lv_obj_t * lv_msgbox_get_content(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
     return mbox->content;
 }
 
-lv_obj_t *lv_msgbox_get_title(lv_obj_t * obj)
+lv_obj_t * lv_msgbox_get_title(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    lv_msgbox_t *mbox = (lv_msgbox_t *)obj;
+    lv_msgbox_t * mbox = (lv_msgbox_t *)obj;
     return mbox->title;
 }
 
 void lv_msgbox_close(lv_obj_t * obj)
 {
-    if (lv_obj_has_flag(obj, LV_MSGBOX_FLAG_AUTO_PARENT)) lv_obj_delete(lv_obj_get_parent(obj));
+    if(lv_obj_has_flag(obj, LV_MSGBOX_FLAG_AUTO_PARENT)) lv_obj_delete(lv_obj_get_parent(obj));
     else lv_obj_delete(obj);
 }
 
 void lv_msgbox_close_async(lv_obj_t * obj)
 {
-    if (lv_obj_has_flag(obj, LV_MSGBOX_FLAG_AUTO_PARENT)) lv_obj_delete_async(lv_obj_get_parent(obj));
+    if(lv_obj_has_flag(obj, LV_MSGBOX_FLAG_AUTO_PARENT)) lv_obj_delete_async(lv_obj_get_parent(obj));
     else lv_obj_delete_async(obj);
 }
 
@@ -292,15 +278,15 @@ void lv_msgbox_close_async(lv_obj_t * obj)
 
 static void msgbox_close_click_event_cb(lv_event_t * e)
 {
-    lv_obj_t *btn = lv_event_get_current_target(e);
-    lv_obj_t *mbox = lv_obj_get_parent(lv_obj_get_parent(btn));
+    lv_obj_t * btn = lv_event_get_current_target(e);
+    lv_obj_t * mbox = lv_obj_get_parent(lv_obj_get_parent(btn));
     lv_msgbox_close(mbox);
 }
 
 static void msgbox_size_changed_event_cb(lv_event_t * e)
 {
-    lv_obj_t *mbox = lv_event_get_target(e);
-    lv_obj_t *content = lv_msgbox_get_content(mbox);
+    lv_obj_t * mbox = lv_event_get_target(e);
+    lv_obj_t * content = lv_msgbox_get_content(mbox);
     bool is_msgbox_height_size_content = (lv_obj_get_style_height(mbox, 0) == LV_SIZE_CONTENT);
     lv_obj_set_flex_grow(content, !is_msgbox_height_size_content);
 }

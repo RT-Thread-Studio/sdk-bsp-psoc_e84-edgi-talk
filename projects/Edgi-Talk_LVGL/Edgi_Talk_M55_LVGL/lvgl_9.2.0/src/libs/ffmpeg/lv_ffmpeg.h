@@ -27,8 +27,7 @@ struct ffmpeg_context_s;
 
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_ffmpeg_player_class;
 
-typedef enum
-{
+typedef enum {
     LV_FFMPEG_PLAYER_CMD_START,
     LV_FFMPEG_PLAYER_CMD_STOP,
     LV_FFMPEG_PLAYER_CMD_PAUSE,
@@ -57,7 +56,7 @@ int lv_ffmpeg_get_frame_num(const char * path);
  * @param parent pointer to an object, it will be the parent of the new player
  * @return pointer to the created ffmpeg_player
  */
-lv_obj_t *lv_ffmpeg_player_create(lv_obj_t * parent);
+lv_obj_t * lv_ffmpeg_player_create(lv_obj_t * parent);
 
 /**
  * Set the path of the file to be played

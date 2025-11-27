@@ -24,9 +24,8 @@
 /**********************
  *      TYPEDEFS
  **********************/
-typedef struct
-{
-    const char *name;
+typedef struct {
+    const char * name;
     void (*create_cb)(lv_obj_t * parent);
 } scene_dsc_t;
 
@@ -36,7 +35,7 @@ typedef struct
 static lv_opa_t opa_saved;
 static void add_to_cell(lv_obj_t * obj, int32_t col, int32_t row);
 
-static lv_obj_t *fill_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
+static lv_obj_t * fill_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
 {
     lv_color_t colors[] = {lv_color_hex3(0x000),
                            lv_color_hex3(0xfff),
@@ -48,7 +47,7 @@ static lv_obj_t *fill_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
                            lv_color_hex3(0xf0f),
                           };
 
-    lv_obj_t *obj = lv_obj_create(parent);
+    lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_style_opa(obj, opa_saved, 0);
     lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
@@ -64,45 +63,39 @@ static void fill_cb(lv_obj_t * parent)
 {
 
     uint32_t i;
-    for (i = 0; i < COL_CNT; i++)
-    {
+    for(i = 0; i < COL_CNT; i++) {
         fill_obj_create(parent, i, 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = fill_obj_create(parent, i, 1);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = fill_obj_create(parent, i, 1);
         lv_obj_set_style_radius(obj, 10, 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = fill_obj_create(parent, i, 2);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = fill_obj_create(parent, i, 2);
         lv_obj_set_style_radius(obj, 100, 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = fill_obj_create(parent, i, 3);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = fill_obj_create(parent, i, 3);
         lv_obj_set_style_radius(obj, 10, 0);
         lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_HOR, 0);
         lv_obj_set_style_bg_grad_color(obj, lv_color_hex3(0x888), 0);
         lv_obj_set_style_bg_grad_stop(obj, 200, 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = fill_obj_create(parent, i, 4);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = fill_obj_create(parent, i, 4);
         lv_obj_set_style_radius(obj, 10, 0);
         lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_VER, 0);
         lv_obj_set_style_bg_grad_color(obj, lv_color_hex3(0x888), 0);
         lv_obj_set_style_bg_grad_stop(obj, 200, 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
+    for(i = 0; i < COL_CNT; i++) {
 
-        lv_obj_t *obj = fill_obj_create(parent, i, 5);
+        lv_obj_t * obj = fill_obj_create(parent, i, 5);
         lv_obj_set_style_radius(obj, 10, 0);
         lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_HOR, 0);
         lv_obj_set_style_bg_grad_color(obj, lv_color_hex3(0x888), 0);
@@ -110,9 +103,8 @@ static void fill_cb(lv_obj_t * parent)
         lv_obj_set_style_bg_grad_stop(obj, 200, 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = fill_obj_create(parent, i, 6);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = fill_obj_create(parent, i, 6);
         lv_obj_set_style_radius(obj, 10, 0);
         lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_VER, 0);
         lv_obj_set_style_bg_grad_color(obj, lv_color_hex3(0x888), 0);
@@ -121,9 +113,9 @@ static void fill_cb(lv_obj_t * parent)
     }
 }
 
-static lv_obj_t *border_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
+static lv_obj_t * border_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
 {
-    lv_obj_t *obj = lv_obj_create(parent);
+    lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_style_border_color(obj, lv_color_hex3(0x000), 0);
     lv_obj_set_style_border_width(obj, 3, 0);
@@ -137,8 +129,7 @@ static lv_obj_t *border_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
 
 static void border_cb(lv_obj_t * parent)
 {
-    lv_border_side_t sides[] =
-    {
+    lv_border_side_t sides[] = {
         LV_BORDER_SIDE_NONE,
         LV_BORDER_SIDE_FULL,
         LV_BORDER_SIDE_LEFT,
@@ -158,66 +149,58 @@ static void border_cb(lv_obj_t * parent)
     };
 
     uint32_t i;
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = border_obj_create(parent, i, 0);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = border_obj_create(parent, i, 0);
         lv_obj_set_style_radius(obj, 0, 0);
         lv_obj_set_style_border_side(obj, sides[i], 0);
         lv_obj_set_style_border_color(obj, lv_color_hex3(0xf00), 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = border_obj_create(parent, i, 1);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = border_obj_create(parent, i, 1);
         lv_obj_set_style_radius(obj, 0, 0);
         lv_obj_set_style_border_side(obj, sides[i + 8], 0);
         lv_obj_set_style_border_color(obj, lv_color_hex3(0xf00), 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = border_obj_create(parent, i, 2);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = border_obj_create(parent, i, 2);
         lv_obj_set_style_radius(obj, 10, 0);
         lv_obj_set_style_border_side(obj, sides[i], 0);
         lv_obj_set_style_border_color(obj, lv_color_hex3(0x0f0), 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = border_obj_create(parent, i, 3);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = border_obj_create(parent, i, 3);
         lv_obj_set_style_radius(obj, 10, 0);
         lv_obj_set_style_border_side(obj, sides[i + 8], 0);
         lv_obj_set_style_border_color(obj, lv_color_hex3(0x0f0), 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = border_obj_create(parent, i, 4);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = border_obj_create(parent, i, 4);
         lv_obj_set_style_radius(obj, 100, 0);
         lv_obj_set_style_border_side(obj, sides[i], 0);
         lv_obj_set_style_border_color(obj, lv_color_hex3(0x00f), 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = border_obj_create(parent, i, 5);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = border_obj_create(parent, i, 5);
         lv_obj_set_style_radius(obj, 100, 0);
         lv_obj_set_style_border_side(obj, sides[i + 8], 0);
         lv_obj_set_style_border_color(obj, lv_color_hex3(0x00f), 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = border_obj_create(parent, i, 6);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = border_obj_create(parent, i, 6);
         lv_obj_set_style_radius(obj, 100, 0);
         lv_obj_set_style_border_side(obj, sides[i], 0);
         lv_obj_set_style_border_color(obj, lv_color_hex3(0x888), 0);
         lv_obj_set_style_border_width(obj, 10, 0);
     }
 
-    for (i = 0; i < COL_CNT; i++)
-    {
-        lv_obj_t *obj = border_obj_create(parent, i, 7);
+    for(i = 0; i < COL_CNT; i++) {
+        lv_obj_t * obj = border_obj_create(parent, i, 7);
         lv_obj_set_style_radius(obj, 100, 0);
         lv_obj_set_style_border_side(obj, sides[i + 8], 0);
         lv_obj_set_style_border_color(obj, lv_color_hex3(0x888), 0);
@@ -225,9 +208,9 @@ static void border_cb(lv_obj_t * parent)
     }
 }
 
-static lv_obj_t *box_shadow_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
+static lv_obj_t * box_shadow_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
 {
-    lv_obj_t *obj = lv_obj_create(parent);
+    lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_style_bg_opa(obj, LV_OPA_20, 0);
     lv_obj_set_style_bg_color(obj, lv_color_black(), 0);
@@ -246,8 +229,7 @@ static void box_shadow_cb(lv_obj_t * parent)
     static const int32_t grid_cols[] = {68, 68, 68, 68, 68, 68, 68, LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(parent, grid_cols, grid_rows);
 
-    lv_point_t ofs[] =
-    {
+    lv_point_t ofs[] = {
         {0, 0},
         {5, 5},
         {5, -5},
@@ -258,36 +240,32 @@ static void box_shadow_cb(lv_obj_t * parent)
     };
 
     uint32_t i;
-    for (i = 0; i < 7; i++)
-    {
-        lv_obj_t *obj = box_shadow_obj_create(parent, i, 0);
+    for(i = 0; i < 7; i++) {
+        lv_obj_t * obj = box_shadow_obj_create(parent, i, 0);
         lv_obj_set_style_radius(obj, 0, 0);
         lv_obj_set_style_shadow_width(obj, 10, 0);
         lv_obj_set_style_shadow_offset_x(obj, ofs[i].x, 0);
         lv_obj_set_style_shadow_offset_y(obj, ofs[i].y, 0);
     }
 
-    for (i = 0; i < 7; i++)
-    {
-        lv_obj_t *obj = box_shadow_obj_create(parent, i, 1);
+    for(i = 0; i < 7; i++) {
+        lv_obj_t * obj = box_shadow_obj_create(parent, i, 1);
         lv_obj_set_style_radius(obj, 5, 0);
         lv_obj_set_style_shadow_width(obj, 10, 0);
         lv_obj_set_style_shadow_offset_x(obj, ofs[i].x, 0);
         lv_obj_set_style_shadow_offset_y(obj, ofs[i].y, 0);
     }
 
-    for (i = 0; i < 7; i++)
-    {
-        lv_obj_t *obj = box_shadow_obj_create(parent, i, 2);
+    for(i = 0; i < 7; i++) {
+        lv_obj_t * obj = box_shadow_obj_create(parent, i, 2);
         lv_obj_set_style_radius(obj, 100, 0);
         lv_obj_set_style_shadow_width(obj, 10, 0);
         lv_obj_set_style_shadow_offset_x(obj, ofs[i].x, 0);
         lv_obj_set_style_shadow_offset_y(obj, ofs[i].y, 0);
     }
 
-    for (i = 0; i < 7; i++)
-    {
-        lv_obj_t *obj = box_shadow_obj_create(parent, i, 3);
+    for(i = 0; i < 7; i++) {
+        lv_obj_t * obj = box_shadow_obj_create(parent, i, 3);
         lv_obj_set_style_radius(obj, 5, 0);
         lv_obj_set_style_shadow_width(obj, 10, 0);
         lv_obj_set_style_shadow_spread(obj, 3, 0);
@@ -296,10 +274,10 @@ static void box_shadow_cb(lv_obj_t * parent)
     }
 }
 
-static lv_obj_t *text_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
+static lv_obj_t * text_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
 {
 
-    lv_obj_t *obj = lv_label_create(parent);
+    lv_obj_t * obj = lv_label_create(parent);
     lv_obj_remove_style_all(obj);
     lv_label_set_text(obj, "Hello LVGL! It should be a placeholder: ű. Looks good?");
     lv_obj_set_style_opa(obj, opa_saved, 0);
@@ -311,7 +289,7 @@ static lv_obj_t *text_obj_create(lv_obj_t * parent, int32_t col, int32_t row)
 
 static void text_cb(lv_obj_t * parent)
 {
-    lv_obj_t *obj;
+    lv_obj_t * obj;
 
     obj = text_obj_create(parent, 3, 0);
 
@@ -334,12 +312,11 @@ static void text_cb(lv_obj_t * parent)
 
 }
 
-static lv_obj_t *image_obj_create(lv_obj_t * parent, int32_t col, int32_t row, bool recolor)
+static lv_obj_t * image_obj_create(lv_obj_t * parent, int32_t col, int32_t row, bool recolor)
 {
-    lv_obj_t *obj = lv_image_create(parent);
+    lv_obj_t * obj = lv_image_create(parent);
     lv_obj_remove_style_all(obj);
-    if (recolor)
-    {
+    if(recolor) {
         lv_obj_set_style_image_recolor_opa(obj, LV_OPA_50, 0);
         lv_obj_set_style_image_recolor(obj, lv_color_hex3(0x0f0), 0);
     }
@@ -360,8 +337,7 @@ static void image_core_cb(lv_obj_t * parent, bool recolor, uint32_t startAt)
     LV_IMAGE_DECLARE(img_render_lvgl_logo_l8);
     LV_IMAGE_DECLARE(img_render_lvgl_logo_i1);
 
-    const void *srcs[] =
-    {
+    const void * srcs[] = {
         &img_render_lvgl_logo_argb8888,
         &img_render_lvgl_logo_xrgb8888,
         &img_render_lvgl_logo_rgb888,
@@ -370,8 +346,7 @@ static void image_core_cb(lv_obj_t * parent, bool recolor, uint32_t startAt)
         &img_render_lvgl_logo_i1,
     };
 
-    const void *names[] =
-    {
+    const void * names[] = {
         "ARGB\n8888",
         "XRGB\n8888",
         "RGB\n888",
@@ -382,9 +357,8 @@ static void image_core_cb(lv_obj_t * parent, bool recolor, uint32_t startAt)
 
     uint32_t stopAt = startAt + LV_MIN(sizeof(srcs) / sizeof(void *) - startAt, 4);
     uint32_t i;
-    for (i = startAt; i < stopAt; i++)
-    {
-        lv_obj_t *obj;
+    for(i = startAt; i < stopAt; i++) {
+        lv_obj_t * obj;
         uint32_t row = i - startAt;
 
         obj = lv_label_create(parent);
@@ -448,9 +422,9 @@ static void image_recolored_2_cb(lv_obj_t * parent)
     image_core_cb(parent, true, 4);
 }
 
-static lv_obj_t *line_obj_create(lv_obj_t * parent, int32_t col, int32_t row, lv_point_precise_t p[])
+static lv_obj_t * line_obj_create(lv_obj_t * parent, int32_t col, int32_t row, lv_point_precise_t p[])
 {
-    lv_obj_t *obj = lv_line_create(parent);
+    lv_obj_t * obj = lv_line_create(parent);
     lv_obj_remove_style_all(obj);
     lv_line_set_points(obj, p, 2);
     lv_obj_set_size(obj, DEF_WIDTH, DEF_HEIGHT);
@@ -464,8 +438,7 @@ static lv_obj_t *line_obj_create(lv_obj_t * parent, int32_t col, int32_t row, lv
 static void line_cb(lv_obj_t * parent)
 {
 
-    static lv_point_precise_t points[][2] =
-    {
+    static lv_point_precise_t points[][2] = {
         {{5, DEF_HEIGHT / 2}, {DEF_WIDTH - 5, DEF_HEIGHT / 2}}, /* - */
         {{5, DEF_HEIGHT / 2}, {DEF_WIDTH - 5, DEF_HEIGHT / 2 + 1}}, /* - */
         {{5, DEF_HEIGHT / 2}, {DEF_WIDTH - 5, DEF_HEIGHT / 2 - 1}}, /* - */
@@ -479,15 +452,12 @@ static void line_cb(lv_obj_t * parent)
     int32_t widths[] = {1, 3, 5, 10};
 
     uint32_t r;
-    for (r = 0; r < 2; r++)
-    {
+    for(r = 0; r < 2; r++) {
         uint32_t w;
-        for (w = 0; w < 4; w++)
-        {
+        for(w = 0; w < 4; w++) {
             uint32_t i;
-            for (i = 0; i < COL_CNT; i++)
-            {
-                lv_obj_t *obj = line_obj_create(parent, i, w + 4 * r, points[i]);
+            for(i = 0; i < COL_CNT; i++) {
+                lv_obj_t * obj = line_obj_create(parent, i, w + 4 * r, points[i]);
                 lv_obj_set_style_line_width(obj, widths[w], 0);
                 lv_obj_set_style_line_rounded(obj, r, 0);
             }
@@ -495,10 +465,10 @@ static void line_cb(lv_obj_t * parent)
     }
 }
 
-static lv_obj_t *arc_obj_create(lv_obj_t * parent, int32_t col, int32_t row, int32_t w,
-                                lv_value_precise_t start, lv_value_precise_t end)
+static lv_obj_t * arc_obj_create(lv_obj_t * parent, int32_t col, int32_t row, int32_t w,
+                                 lv_value_precise_t start, lv_value_precise_t end)
 {
-    lv_obj_t *obj = lv_arc_create(parent);
+    lv_obj_t * obj = lv_arc_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_style_arc_width(obj, w, 0);
     lv_obj_set_style_arc_color(obj, lv_color_white(), 0);
@@ -513,8 +483,7 @@ static lv_obj_t *arc_obj_create(lv_obj_t * parent, int32_t col, int32_t row, int
 
 static void arc_core_cb(lv_obj_t * parent, const void * img_src)
 {
-    static lv_value_precise_t angles[][2] =
-    {
+    static lv_value_precise_t angles[][2] = {
         {355, 5},
         {85, 95},
         {175, 185},
@@ -528,15 +497,12 @@ static void arc_core_cb(lv_obj_t * parent, const void * img_src)
     int32_t widths[] = {1, 5, 10, 100};
 
     uint32_t r;
-    for (r = 0; r < 2; r++)
-    {
+    for(r = 0; r < 2; r++) {
         uint32_t w;
-        for (w = 0; w < 4; w++)
-        {
+        for(w = 0; w < 4; w++) {
             uint32_t i;
-            for (i = 0; i < COL_CNT; i++)
-            {
-                lv_obj_t *obj = arc_obj_create(parent, i, w + 4 * r, widths[w], angles[i][0], angles[i][1]);
+            for(i = 0; i < COL_CNT; i++) {
+                lv_obj_t * obj = arc_obj_create(parent, i, w + 4 * r, widths[w], angles[i][0], angles[i][1]);
                 lv_obj_set_style_arc_rounded(obj, r, 0);
                 lv_obj_set_style_arc_image_src(obj, img_src, 0);
             }
@@ -560,9 +526,9 @@ static void triangle_draw_event_cb(lv_event_t * e)
     lv_draw_triangle_dsc_t dsc;
     lv_draw_triangle_dsc_init(&dsc);
 
-    lv_obj_t *obj = lv_event_get_target(e);
+    lv_obj_t * obj = lv_event_get_target(e);
 
-    lv_point_t *p_rel = lv_event_get_user_data(e);
+    lv_point_t * p_rel = lv_event_get_user_data(e);
 
     lv_area_t coords;
     lv_obj_get_coords(obj, &coords);
@@ -589,9 +555,9 @@ static void triangle_draw_event_cb(lv_event_t * e)
     lv_draw_triangle(lv_event_get_layer(e), &dsc);
 }
 
-static lv_obj_t *triangle_obj_create(lv_obj_t * parent, int32_t col, int32_t row, lv_point_t p[])
+static lv_obj_t * triangle_obj_create(lv_obj_t * parent, int32_t col, int32_t row, lv_point_t p[])
 {
-    lv_obj_t *obj = lv_arc_create(parent);
+    lv_obj_t * obj = lv_arc_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_size(obj, DEF_WIDTH, DEF_HEIGHT);
     lv_obj_set_style_bg_color(obj, lv_color_hex3(0xff0), 0);
@@ -604,8 +570,7 @@ static lv_obj_t *triangle_obj_create(lv_obj_t * parent, int32_t col, int32_t row
 
 static void triangle_cb(lv_obj_t * parent)
 {
-    static lv_point_t points[16][3] =
-    {
+    static lv_point_t points[16][3] = {
 
         /*Right angle triangles*/
         {{0, 0},  {0, 26}, {26, 26}},   /* |\ */
@@ -633,45 +598,40 @@ static void triangle_cb(lv_obj_t * parent)
     };
 
     uint32_t i;
-    for (i = 0; i < 16; i++)
-    {
+    for(i = 0; i < 16; i++) {
         triangle_obj_create(parent, i % 8, i / 8, points[i]);
     }
 
-    for (i = 0; i < 16; i++)
-    {
-        lv_obj_t *obj = triangle_obj_create(parent, i % 8, 2 + i / 8, points[i]);
+    for(i = 0; i < 16; i++) {
+        lv_obj_t * obj = triangle_obj_create(parent, i % 8, 2 + i / 8, points[i]);
         lv_obj_set_style_bg_grad_color(obj, lv_color_hex3(0xf00), 0);
         lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_VER, 0);
     }
 
-    for (i = 0; i < 16; i++)
-    {
-        lv_obj_t *obj = triangle_obj_create(parent, i % 8, 4 + i / 8, points[i]);
+    for(i = 0; i < 16; i++) {
+        lv_obj_t * obj = triangle_obj_create(parent, i % 8, 4 + i / 8, points[i]);
         lv_obj_set_style_bg_grad_color(obj, lv_color_hex3(0xf00), 0);
         lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_HOR, 0);
     }
 
-    for (i = 0; i < 8; i++)
-    {
-        lv_obj_t *obj = triangle_obj_create(parent, i % 8, 6 + i / 8, points[i]);
+    for(i = 0; i < 8; i++) {
+        lv_obj_t * obj = triangle_obj_create(parent, i % 8, 6 + i / 8, points[i]);
         lv_obj_set_style_bg_grad_color(obj, lv_color_hex3(0xf00), 0);
         lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_VER, 0);
         lv_obj_set_style_bg_grad_opa(obj, LV_OPA_TRANSP, 0);
     }
 
-    for (i = 0; i < 8; i++)
-    {
-        lv_obj_t *obj = triangle_obj_create(parent, i % 8, 7 + i / 8, points[i]);
+    for(i = 0; i < 8; i++) {
+        lv_obj_t * obj = triangle_obj_create(parent, i % 8, 7 + i / 8, points[i]);
         lv_obj_set_style_bg_grad_color(obj, lv_color_hex3(0xf00), 0);
         lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_HOR, 0);
         lv_obj_set_style_bg_grad_opa(obj, LV_OPA_TRANSP, 0);
     }
 }
 
-static lv_obj_t *layer_obj_create(lv_obj_t * parent, int32_t col, int32_t row, lv_blend_mode_t blend_mode)
+static lv_obj_t * layer_obj_create(lv_obj_t * parent, int32_t col, int32_t row, lv_blend_mode_t blend_mode)
 {
-    lv_obj_t *obj = lv_obj_create(parent);
+    lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_size(obj, DEF_WIDTH - 10, DEF_HEIGHT);
     lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
@@ -686,7 +646,7 @@ static lv_obj_t *layer_obj_create(lv_obj_t * parent, int32_t col, int32_t row, l
     lv_obj_set_style_opa(obj, opa_saved, 0);
     add_to_cell(obj, col, row);
 
-    lv_obj_t *label = lv_label_create(obj);
+    lv_obj_t * label = lv_label_create(obj);
     lv_label_set_text(label, "ABC");
     lv_obj_center(label);
 
@@ -697,10 +657,9 @@ static void layer_core_cb(lv_obj_t * parent, lv_blend_mode_t blend_mode)
 {
 
     uint32_t i;
-    for (i = 0; i < 2; i++)
-    {
+    for(i = 0; i < 2; i++) {
         int32_t row = 4 * i;
-        lv_obj_t *obj;
+        lv_obj_t * obj;
 
         obj = layer_obj_create(parent, 0, row, blend_mode);
         lv_obj_set_style_radius(obj, 8 * i, 0);
@@ -795,10 +754,10 @@ static void create_blend_mode_image_buffer(lv_obj_t * canvas)
     lv_canvas_finish_layer(canvas, &layer);
 }
 
-static lv_obj_t *create_blend_mode_obj(lv_obj_t * parent, int32_t col, int32_t row, const void * src,
-                                       lv_blend_mode_t blend_mode)
+static lv_obj_t * create_blend_mode_obj(lv_obj_t * parent, int32_t col, int32_t row, const void * src,
+                                        lv_blend_mode_t blend_mode)
 {
-    lv_obj_t *obj = lv_image_create(parent);
+    lv_obj_t * obj = lv_image_create(parent);
     lv_image_set_src(obj, src);
     lv_image_set_blend_mode(obj, blend_mode);
     lv_obj_set_style_image_opa(obj, opa_saved, 0);
@@ -825,39 +784,36 @@ static void blend_mode_cb(lv_obj_t * parent)
     static uint8_t buf_argb8888[LV_CANVAS_BUF_SIZE(36, 30, 32, LV_DRAW_BUF_STRIDE_ALIGN)];
 
     /*The canvas will stay in the top left corner to show the original image*/
-    lv_obj_t *canvas = lv_canvas_create(lv_screen_active());
+    lv_obj_t * canvas = lv_canvas_create(lv_screen_active());
 
-    const char *cf_txt[] = {"RGB565", "RGB888.", "XRGB8888", "ARGB8888"};
+    const char * cf_txt[] = {"RGB565", "RGB888.", "XRGB8888", "ARGB8888"};
     lv_color_format_t cf_values[] = {LV_COLOR_FORMAT_RGB565, LV_COLOR_FORMAT_RGB888, LV_COLOR_FORMAT_XRGB8888, LV_COLOR_FORMAT_ARGB8888};
-    uint8_t *cf_bufs[] = {buf_rgb565, buf_rgb888, buf_xrgb8888, buf_argb8888};
+    uint8_t * cf_bufs[] = {buf_rgb565, buf_rgb888, buf_xrgb8888, buf_argb8888};
     static lv_draw_buf_t image_dscs[4];
 
-    const char *mode_txt[] = {"Add.", "Sub.", "Mul."};
+    const char * mode_txt[] = {"Add.", "Sub.", "Mul."};
     lv_blend_mode_t mode_values[] = {LV_BLEND_MODE_ADDITIVE, LV_BLEND_MODE_SUBTRACTIVE, LV_BLEND_MODE_MULTIPLY};
 
     uint32_t m;
-    for (m = 0; m < 3; m++)
-    {
-        lv_obj_t *mode_label = lv_label_create(parent);
+    for(m = 0; m < 3; m++) {
+        lv_obj_t * mode_label = lv_label_create(parent);
         lv_label_set_text(mode_label, mode_txt[m]);
         lv_obj_set_grid_cell(mode_label, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 1 + m * 2, 2);
     }
 
     uint32_t cf;
-    for (cf = 0; cf < 4; cf++)
-    {
-        lv_obj_t *cf_label = lv_label_create(parent);
+    for(cf = 0; cf < 4; cf++) {
+        lv_obj_t * cf_label = lv_label_create(parent);
         lv_label_set_text(cf_label, cf_txt[cf]);
         lv_obj_set_grid_cell(cf_label, LV_GRID_ALIGN_CENTER, 1 + cf * 2, 2, LV_GRID_ALIGN_CENTER, 0, 1);
 
         lv_canvas_set_buffer(canvas, cf_bufs[cf], 36, 30, cf_values[cf]);
         create_blend_mode_image_buffer(canvas);
-        lv_draw_buf_t *img_src = lv_canvas_get_draw_buf(canvas);
+        lv_draw_buf_t * img_src = lv_canvas_get_draw_buf(canvas);
         image_dscs[cf] = *img_src;
 
-        for (m = 0; m < 3; m++)
-        {
-            lv_obj_t *img;
+        for(m = 0; m < 3; m++) {
+            lv_obj_t * img;
             img = create_blend_mode_obj(parent, 1 + cf * 2, 1 + m * 2, &image_dscs[cf], mode_values[m]);
 
             img = create_blend_mode_obj(parent, 2 + cf * 2, 1 + m * 2, &image_dscs[cf], mode_values[m]);
@@ -873,7 +829,7 @@ static void blend_mode_cb(lv_obj_t * parent)
     }
 
     /*Show the recolored image to show the original image*/
-    lv_obj_t *img_recolored = lv_image_create(parent);
+    lv_obj_t * img_recolored = lv_image_create(parent);
     lv_image_set_src(img_recolored, lv_canvas_get_image(canvas));
     lv_obj_set_style_image_recolor(img_recolored, lv_color_hex(0x00ff00), 0);
     lv_obj_set_style_image_recolor_opa(img_recolored, LV_OPA_50, 0);
@@ -884,17 +840,15 @@ static void blend_mode_cb(lv_obj_t * parent)
 
 #if LV_USE_DRAW_SW_COMPLEX_GRADIENTS
 
-static lv_obj_t *create_linear_gradient_obj(lv_obj_t * parent, int32_t col, int32_t row, lv_grad_dsc_t * grad,
-        int32_t x1, int32_t y1, lv_grad_extend_t extend, bool use_opa_map, int32_t radius)
+static lv_obj_t * create_linear_gradient_obj(lv_obj_t * parent, int32_t col, int32_t row, lv_grad_dsc_t * grad,
+                                             int32_t x1, int32_t y1, lv_grad_extend_t extend, bool use_opa_map, int32_t radius)
 {
-    const lv_color_t grad_color[2] =
-    {
+    const lv_color_t grad_color[2] = {
         LV_COLOR_MAKE(0xd5, 0x03, 0x47),
         LV_COLOR_MAKE(0x00, 0x00, 0x00),
     };
 
-    const lv_opa_t grad_opa[2] =
-    {
+    const lv_opa_t grad_opa[2] = {
         LV_OPA_100, LV_OPA_0,
     };
 
@@ -910,7 +864,7 @@ static lv_obj_t *create_linear_gradient_obj(lv_obj_t * parent, int32_t col, int3
     grad->extend = extend;                              /*color pattern outside the vector*/
 
     /*create rectangle*/
-    lv_obj_t *obj = lv_obj_create(parent);
+    lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_size(obj, 70, 50);
     lv_obj_set_style_radius(obj, radius, 0);
@@ -931,11 +885,11 @@ static void linear_gradient_cb(lv_obj_t * parent)
     static const int32_t grid_rows[] = { 32, 40, 40, 40, 40, 40, 40, LV_GRID_TEMPLATE_LAST };
     lv_obj_set_grid_dsc_array(parent, grid_cols, grid_rows);
 
-    const char *opa_txt[] = { "no opa", "no opa round", "stop opa", "stop opa round" };
+    const char * opa_txt[] = { "no opa", "no opa round", "stop opa", "stop opa round" };
     int32_t radius_values[] = { 0, 20, 0, 20 };
     bool opa_map_values[] = { false, false, true, true };
 
-    const char *offs_txt[] = { "pad", "repeat", "reflect" };
+    const char * offs_txt[] = { "pad", "repeat", "reflect" };
     int32_t x1_values[] = { lv_pct(100), lv_pct(15), lv_pct(30)};
     int32_t y1_values[] = { lv_pct(100), lv_pct(30), lv_pct(15) };
     lv_grad_extend_t extend_values[] = { LV_GRAD_EXTEND_PAD, LV_GRAD_EXTEND_REPEAT, LV_GRAD_EXTEND_REFLECT };
@@ -943,39 +897,34 @@ static void linear_gradient_cb(lv_obj_t * parent)
     static lv_grad_dsc_t grad_values[3][4];
 
     uint32_t y;
-    for (y = 0; y < 3; y++)
-    {
-        lv_obj_t *offs_label = lv_label_create(parent);
+    for(y = 0; y < 3; y++) {
+        lv_obj_t * offs_label = lv_label_create(parent);
         lv_label_set_text(offs_label, offs_txt[y]);
         lv_obj_set_grid_cell(offs_label, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 1 + y * 2, 2);
     }
 
     uint32_t x;
-    for (x = 0; x < 4; x++)
-    {
-        lv_obj_t *op_label = lv_label_create(parent);
+    for(x = 0; x < 4; x++) {
+        lv_obj_t * op_label = lv_label_create(parent);
         lv_label_set_text(op_label, opa_txt[x]);
         lv_obj_set_grid_cell(op_label, LV_GRID_ALIGN_CENTER, 1 + x * 2, 2, LV_GRID_ALIGN_CENTER, 0, 1);
 
-        for (y = 0; y < 3; y++)
-        {
+        for(y = 0; y < 3; y++) {
             create_linear_gradient_obj(parent, 1 + x * 2, 1 + y * 2, &grad_values[y][x], x1_values[y], y1_values[y],
                                        extend_values[y], opa_map_values[x], radius_values[x]);
         }
     }
 }
 
-static lv_obj_t *create_radial_gradient_obj(lv_obj_t * parent, int32_t col, int32_t row, lv_grad_dsc_t * grad,
-        int32_t offs, int32_t r0, lv_grad_extend_t extend, bool use_opa_map, int32_t radius)
+static lv_obj_t * create_radial_gradient_obj(lv_obj_t * parent, int32_t col, int32_t row, lv_grad_dsc_t * grad,
+                                             int32_t offs, int32_t r0, lv_grad_extend_t extend, bool use_opa_map, int32_t radius)
 {
-    const lv_color_t grad_color[2] =
-    {
+    const lv_color_t grad_color[2] = {
         LV_COLOR_MAKE(0xd5, 0x03, 0x47),
         LV_COLOR_MAKE(0x00, 0x00, 0x00),
     };
 
-    const lv_opa_t grad_opa[2] =
-    {
+    const lv_opa_t grad_opa[2] = {
         LV_OPA_100, LV_OPA_0,
     };
 
@@ -995,7 +944,7 @@ static lv_obj_t *create_radial_gradient_obj(lv_obj_t * parent, int32_t col, int3
     grad->extend = extend;                                      /*color pattern outside the border circles*/
 
     /*create rectangle*/
-    lv_obj_t *obj = lv_obj_create(parent);
+    lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_size(obj, 70, 50);
     lv_obj_set_style_radius(obj, radius, 0);
@@ -1016,49 +965,44 @@ static void radial_gradient_cb(lv_obj_t * parent)
     static const int32_t grid_rows[] = { 32, 40, 40, 40, 40, 40, 40, LV_GRID_TEMPLATE_LAST };
     lv_obj_set_grid_dsc_array(parent, grid_cols, grid_rows);
 
-    const char *opa_txt[] = { "no opa", "no opa round", "stop opa", "stop opa round" };
+    const char * opa_txt[] = { "no opa", "no opa round", "stop opa", "stop opa round" };
     int32_t radius_values[] = { 0, 20, 0, 20 };
     bool opa_map_values[] = { false, false, true, true };
 
-    const char *offs_txt[] = { "pad", "repeat", "reflect" };
+    const char * offs_txt[] = { "pad", "repeat", "reflect" };
     lv_grad_extend_t extend_values[] = { LV_GRAD_EXTEND_PAD, LV_GRAD_EXTEND_REPEAT, LV_GRAD_EXTEND_REFLECT};
 
     static lv_grad_dsc_t grad_values[3][4];
 
     uint32_t y;
-    for (y = 0; y < 3; y++)
-    {
-        lv_obj_t *offs_label = lv_label_create(parent);
+    for(y = 0; y < 3; y++) {
+        lv_obj_t * offs_label = lv_label_create(parent);
         lv_label_set_text(offs_label, offs_txt[y]);
         lv_obj_set_grid_cell(offs_label, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 1 + y * 2, 2);
     }
 
     uint32_t x;
-    for (x = 0; x < 4; x++)
-    {
-        lv_obj_t *op_label = lv_label_create(parent);
+    for(x = 0; x < 4; x++) {
+        lv_obj_t * op_label = lv_label_create(parent);
         lv_label_set_text(op_label, opa_txt[x]);
         lv_obj_set_grid_cell(op_label, LV_GRID_ALIGN_CENTER, 1 + x * 2, 2, LV_GRID_ALIGN_CENTER, 0, 1);
 
-        for (y = 0; y < 3; y++)
-        {
+        for(y = 0; y < 3; y++) {
             create_radial_gradient_obj(parent, 1 + x * 2, 1 + y * 2, &grad_values[y][x], y * 5, 0, extend_values[y],
                                        opa_map_values[x], radius_values[x]);
         }
     }
 }
 
-static lv_obj_t *create_conical_gradient_obj(lv_obj_t * parent, int32_t col, int32_t row, lv_grad_dsc_t * grad,
-        int32_t a0, int32_t a1, lv_grad_extend_t extend, bool use_opa_map, int32_t radius)
+static lv_obj_t * create_conical_gradient_obj(lv_obj_t * parent, int32_t col, int32_t row, lv_grad_dsc_t * grad,
+                                              int32_t a0, int32_t a1, lv_grad_extend_t extend, bool use_opa_map, int32_t radius)
 {
-    const lv_color_t grad_color[2] =
-    {
+    const lv_color_t grad_color[2] = {
         LV_COLOR_MAKE(0xd5, 0x03, 0x47),
         LV_COLOR_MAKE(0x00, 0x00, 0x00),
     };
 
-    const lv_opa_t grad_opa[2] =
-    {
+    const lv_opa_t grad_opa[2] = {
         LV_OPA_100, LV_OPA_0,
     };
 
@@ -1074,7 +1018,7 @@ static lv_obj_t *create_conical_gradient_obj(lv_obj_t * parent, int32_t col, int
     grad->extend = extend;                              /*color pattern outside the vector*/
 
     /*create rectangle*/
-    lv_obj_t *obj = lv_obj_create(parent);
+    lv_obj_t * obj = lv_obj_create(parent);
     lv_obj_remove_style_all(obj);
     lv_obj_set_size(obj, 70, 50);
     lv_obj_set_style_radius(obj, radius, 0);
@@ -1095,32 +1039,29 @@ static void conical_gradient_cb(lv_obj_t * parent)
     static const int32_t grid_rows[] = { 32, 40, 40, 40, 40, 40, 40, LV_GRID_TEMPLATE_LAST };
     lv_obj_set_grid_dsc_array(parent, grid_cols, grid_rows);
 
-    const char *opa_txt[] = { "no opa", "no opa round", "stop opa", "stop opa round" };
+    const char * opa_txt[] = { "no opa", "no opa round", "stop opa", "stop opa round" };
     int32_t radius_values[] = { 0, 20, 0, 20 };
     bool opa_map_values[] = { false, false, true, true };
 
-    const char *offs_txt[] = { "pad", "repeat", "reflect" };
+    const char * offs_txt[] = { "pad", "repeat", "reflect" };
     lv_grad_extend_t extend_values[] = { LV_GRAD_EXTEND_PAD, LV_GRAD_EXTEND_REPEAT, LV_GRAD_EXTEND_REFLECT };
 
     static lv_grad_dsc_t grad_values[3][4];
 
     uint32_t y;
-    for (y = 0; y < 3; y++)
-    {
-        lv_obj_t *offs_label = lv_label_create(parent);
+    for(y = 0; y < 3; y++) {
+        lv_obj_t * offs_label = lv_label_create(parent);
         lv_label_set_text(offs_label, offs_txt[y]);
         lv_obj_set_grid_cell(offs_label, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 1 + y * 2, 2);
     }
 
     uint32_t x;
-    for (x = 0; x < 4; x++)
-    {
-        lv_obj_t *op_label = lv_label_create(parent);
+    for(x = 0; x < 4; x++) {
+        lv_obj_t * op_label = lv_label_create(parent);
         lv_label_set_text(op_label, opa_txt[x]);
         lv_obj_set_grid_cell(op_label, LV_GRID_ALIGN_CENTER, 1 + x * 2, 2, LV_GRID_ALIGN_CENTER, 0, 1);
 
-        for (y = 0; y < 3; y++)
-        {
+        for(y = 0; y < 3; y++) {
             create_conical_gradient_obj(parent, 1 + x * 2, 1 + y * 2, &grad_values[y][x], 10, 100, extend_values[y],
                                         opa_map_values[x], radius_values[x]);
         }
@@ -1133,8 +1074,7 @@ static void conical_gradient_cb(lv_obj_t * parent)
  *  STATIC VARIABLES
  **********************/
 
-static scene_dsc_t scenes[] =
-{
+static scene_dsc_t scenes[] = {
     {.name = "fill",                .create_cb = fill_cb},
     {.name = "border",              .create_cb = border_cb},
     {.name = "box_shadow",          .create_cb = box_shadow_cb},
@@ -1169,14 +1109,14 @@ static scene_dsc_t scenes[] =
 
 void lv_demo_render(lv_demo_render_scene_t id, lv_opa_t opa)
 {
-    lv_obj_t *scr = lv_screen_active();
+    lv_obj_t * scr = lv_screen_active();
     lv_obj_clean(scr);
     lv_obj_remove_style_all(scr);
     lv_obj_set_style_bg_opa(scr, LV_OPA_COVER, 0);
     lv_obj_set_style_text_color(scr, lv_color_black(), 0);
     lv_obj_set_style_bg_color(scr, lv_color_white(), 0);
 
-    lv_obj_t *main_parent = lv_obj_create(scr);
+    lv_obj_t * main_parent = lv_obj_create(scr);
     lv_obj_remove_style_all(main_parent);
     lv_obj_set_style_bg_opa(main_parent, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_color(main_parent, lv_color_hex3(0xaaf), 0);
@@ -1188,12 +1128,12 @@ void lv_demo_render(lv_demo_render_scene_t id, lv_opa_t opa)
 
     opa_saved = opa;
 
-    if (scenes[id].create_cb) scenes[id].create_cb(main_parent);
+    if(scenes[id].create_cb) scenes[id].create_cb(main_parent);
 }
 
-const char *lv_demo_render_get_scene_name(lv_demo_render_scene_t id)
+const char * lv_demo_render_get_scene_name(lv_demo_render_scene_t id)
 {
-    if (id > LV_DEMO_RENDER_SCENE_NUM) return NULL;
+    if(id > LV_DEMO_RENDER_SCENE_NUM) return NULL;
     return scenes[id].name;
 }
 

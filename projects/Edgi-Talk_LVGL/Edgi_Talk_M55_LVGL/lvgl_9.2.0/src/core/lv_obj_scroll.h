@@ -28,8 +28,7 @@ extern "C" {
 /*Can't include lv_obj.h because it includes this header file*/
 
 /** Scrollbar modes: shows when should the scrollbars be visible*/
-typedef enum
-{
+typedef enum {
     LV_SCROLLBAR_MODE_OFF,      /**< Never show scrollbars*/
     LV_SCROLLBAR_MODE_ON,       /**< Always show scrollbars*/
     LV_SCROLLBAR_MODE_ACTIVE,   /**< Show scroll bars when object is being scrolled*/
@@ -37,8 +36,7 @@ typedef enum
 } lv_scrollbar_mode_t;
 
 /** Scroll span align options. Tells where to align the snappable children when scroll stops.*/
-typedef enum
-{
+typedef enum {
     LV_SCROLL_SNAP_NONE,    /**< Do not align, leave where it is*/
     LV_SCROLL_SNAP_START,   /**< Align to the left/top*/
     LV_SCROLL_SNAP_END,     /**< Align to the right/bottom*/

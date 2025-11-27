@@ -39,8 +39,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_image_class;
 /**
  * Image size mode, when image size and object size is different
  */
-typedef enum
-{
+typedef enum {
     LV_IMAGE_ALIGN_DEFAULT = 0,
     LV_IMAGE_ALIGN_TOP_LEFT,
     LV_IMAGE_ALIGN_TOP_MID,
@@ -57,8 +56,7 @@ typedef enum
 } lv_image_align_t;
 
 #if LV_USE_OBJ_PROPERTY
-enum
-{
+enum {
     LV_PROPERTY_ID(IMAGE, SRC,          LV_PROPERTY_TYPE_IMGSRC,    0),
     LV_PROPERTY_ID(IMAGE, OFFSET_X,     LV_PROPERTY_TYPE_INT,       1),
     LV_PROPERTY_ID(IMAGE, OFFSET_Y,     LV_PROPERTY_TYPE_INT,       2),
@@ -83,7 +81,7 @@ enum
  * @param parent pointer to an object, it will be the parent of the new image
  * @return pointer to the created image
  */
-lv_obj_t *lv_image_create(lv_obj_t * parent);
+lv_obj_t * lv_image_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -214,7 +212,7 @@ void lv_image_set_bitmap_map_src(lv_obj_t * obj, const lv_image_dsc_t * src);
  * @param obj       pointer to an image object
  * @return          the image source (symbol, file name or ::lv-img_dsc_t for C arrays)
  */
-const void *lv_image_get_src(lv_obj_t * obj);
+const void * lv_image_get_src(lv_obj_t * obj);
 
 /**
  * Get the offset's x attribute of the image object.
@@ -294,7 +292,7 @@ lv_image_align_t lv_image_get_inner_align(lv_obj_t * obj);
  * @param obj       pointer to an image object
  * @return          an lv_image_dsc_t bitmap mask source.
  */
-const lv_image_dsc_t *lv_image_get_bitmap_map_src(lv_obj_t * obj);
+const lv_image_dsc_t * lv_image_get_bitmap_map_src(lv_obj_t * obj);
 
 /**********************
  *      MACROS
