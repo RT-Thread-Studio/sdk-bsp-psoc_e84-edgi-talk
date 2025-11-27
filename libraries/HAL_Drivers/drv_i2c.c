@@ -185,6 +185,6 @@ int rt_hw_i2c_init(void)
 
     return 0;
 }
-INIT_DEVICE_EXPORT(rt_hw_i2c_init);
+INIT_PREV_EXPORT(rt_hw_i2c_init);
 
 #endif /* RT_USING_I2C */
