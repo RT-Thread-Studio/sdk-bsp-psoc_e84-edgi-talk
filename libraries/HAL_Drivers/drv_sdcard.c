@@ -15,6 +15,15 @@
 
 #ifdef BSP_USING_SDCARD
 
+/* DCache operations using CMSIS API for Cortex-M55 */
+#if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+#define CY_SDIO_DCACHE_CLEAN(addr, size)       SCB_CleanDCache_by_Addr((void *)(addr), (int32_t)(size))
+#define CY_SDIO_DCACHE_INVALIDATE(addr, size)  SCB_InvalidateDCache_by_Addr((void *)(addr), (int32_t)(size))
+#else
+#define CY_SDIO_DCACHE_CLEAN(addr, size)       ((void)0)
+#define CY_SDIO_DCACHE_INVALIDATE(addr, size)  ((void)0)
+#endif
+
 //#define DRV_DEBUG
 #define LOG_TAG              "drv.sdio"
 #ifdef DRV_DEBUG
@@ -254,11 +263,11 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
         if (data->flags & DATA_DIR_WRITE)
         {
             rt_memcpy(dma_buf, user_buf, total_bytes);
-            rt_hw_cpu_dcache_ops(RT_HW_CACHE_FLUSH, dma_buf, total_bytes);
+            CY_SDIO_DCACHE_CLEAN(dma_buf, total_bytes);
         }
         else
         {
-            rt_hw_cpu_dcache_ops(RT_HW_CACHE_INVALIDATE, dma_buf, total_bytes);
+            CY_SDIO_DCACHE_INVALIDATE(dma_buf, total_bytes);
         }
 
         data->bytes_xfered = 0;
@@ -362,7 +371,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
         /* Copy data from bounce buffer for read operations */
         if (use_bounce && (data->flags & DATA_DIR_READ))
         {
-            rt_hw_cpu_dcache_ops(RT_HW_CACHE_INVALIDATE, dma_buf, total_bytes);
+            CY_SDIO_DCACHE_INVALIDATE(dma_buf, total_bytes);
             rt_memcpy(user_buf, dma_buf, total_bytes);
         }
         data->bytes_xfered = total_bytes;
