@@ -20,7 +20,7 @@
 #define ADC_RAW_3V7        1586
 #define ADC_RAW_3V8        1629
 #define ADC_RAW_3V0        1286
-#define ADC_RAW_2V0        857
+#define ADC_RAW_2V0        800
 
 static rt_thread_t adc_check_tid = RT_NULL;
 
@@ -122,7 +122,7 @@ static int adc_check_entry_init(void)
                         adc_check_entry,
                         (void*)0x01,
                         1024,
-                        20,
+                        25,
                         5
                     );
 

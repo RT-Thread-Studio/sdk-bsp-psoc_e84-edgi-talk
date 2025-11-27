@@ -400,13 +400,11 @@ void send_iot_descriptors(void)
 char *my_json_string(cJSON *json, char *key)
 {
     cJSON *item = cJSON_GetObjectItem(json, key);
-    char *r = cJSON_Print(item);
-    if (r && *r == '\"')
+    if (item && cJSON_IsString(item))
     {
-        r++;
-        r[strlen(r) - 1] = '\0';
+        return item->valuestring;
     }
-    return r;
+    return "";
 }
 
 void Message_handle(const uint8_t *data, uint16_t len)
@@ -490,7 +488,7 @@ void Message_handle(const uint8_t *data, uint16_t len)
             {
                 iot_invoke((uint8_t *)cmd_str, strlen(cmd_str));
                 send_iot_states();
-                rt_free(cmd_str);
+                cJSON_free(cmd_str);
             }
         }
     }
@@ -500,8 +498,13 @@ void Message_handle(const uint8_t *data, uint16_t len)
         cJSON *payload = cJSON_GetObjectItem(root, "payload");
         if (payload && cJSON_IsObject(payload))
         {
-            extern void McpServer_ParseMessage(const char* message);
-            McpServer_ParseMessage(cJSON_PrintUnformatted(payload));
+            extern void McpServer_ParseMessage(const char *message);
+            char *payload_str = cJSON_PrintUnformatted(payload);
+            if (payload_str)
+            {
+                McpServer_ParseMessage(payload_str);
+                cJSON_free(payload_str);
+            }
         }
     }
     else
@@ -767,7 +770,6 @@ static void serial_thread_entry(void *parameter)
             {
                 rt_device_write(serial, 0, cmd, (sizeof(cmd)));
                 rt_event_send(xiaozhi_button_event, BUTTON_EVENT_PRESSED);
-
             }
         }
     }
@@ -793,5 +795,4 @@ void voice_rx_init()
 
     rt_thread_t thread_t = rt_thread_create("serial_voice", serial_thread_entry, RT_NULL, 1024, 7, 10);
     rt_thread_startup(thread_t);
-
 }

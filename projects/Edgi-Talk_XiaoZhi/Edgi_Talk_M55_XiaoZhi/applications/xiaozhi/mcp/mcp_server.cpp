@@ -87,6 +87,7 @@ void McpServer::AddTool(McpTool* tool) {
     // Prevent adding duplicate tools
     if (std::find_if(tools_.begin(), tools_.end(), [tool](const McpTool* t) { return t->name() == tool->name(); }) != tools_.end()) {
         rt_kprintf(TAG, "Tool %s already added", tool->name().c_str());
+        delete tool;
         return;
     }
 

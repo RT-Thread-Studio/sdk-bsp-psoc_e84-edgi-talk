@@ -1,55 +1,111 @@
+/*
+ * Copyright (c) 2006-2024, RT-Thread Development Team
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2024-01-01     RT-Thread    First version
+ */
+
 #include <rtthread.h>
 #include <rtdevice.h>
 #include <board.h>
 
-#define LED_PIN_G         GET_PIN(16, 6)
+/*****************************************************************************
+ * Macro Definitions
+ *****************************************************************************/
+#define DBG_TAG    "main"
+#define DBG_LVL    DBG_INFO
+#include <rtdbg.h>
+
+/* LED Pin */
+#define LED_PIN_GREEN       GET_PIN(16, 6)
+
+/* Power Control Pins */
+#define PIN_ES8388_PWR      GET_PIN(16, 2)  /* ES8388 power enable */
+#define PIN_SPEAKER_EN      GET_PIN(21, 6)  /* Speaker amplifier enable */
+#define PIN_WIFI_PWR        GET_PIN(16, 3)  /* WiFi power enable */
+#define PIN_WIFI_REG        GET_PIN(11, 6)  /* WiFi register switch */
+#define PIN_DCDC_CTRL       GET_PIN(7, 2)   /* 3V3 DCDC power control */
+#define PIN_LCD_BL          GET_PIN(15, 7)  /* LCD backlight power */
+#define PIN_LCD_PWR         GET_PIN(15, 6)  /* LCD IC power */
+#define PIN_LCD_PWM         GET_PIN(20, 6)  /* LCD PWM brightness */
+
+/* UI initialization timeout (ms) */
+#define UI_INIT_TIMEOUT_MS  5000
+
+/*****************************************************************************
+ * External Function Declarations
+ *****************************************************************************/
+extern void xiaozhi_ui_init(void);
+extern rt_err_t xiaozhi_ui_wait_ready(rt_int32_t timeout);
+extern void wifi_manager_init(void);
+
+/*****************************************************************************
+ * Private Functions
+ *****************************************************************************/
+
+/**
+ * @brief Initialize board power control GPIOs
+ * @return 0 on success
+ */
+static int board_power_init(void)
+{
+    /* WiFi power */
+    rt_pin_mode(PIN_WIFI_PWR, PIN_MODE_OUTPUT);
+    rt_pin_write(PIN_WIFI_PWR, PIN_HIGH);
+
+    rt_pin_mode(PIN_WIFI_REG, PIN_MODE_OUTPUT);
+    rt_pin_write(PIN_WIFI_REG, PIN_HIGH);
+
+    /* Audio power */
+    rt_pin_mode(PIN_ES8388_PWR, PIN_MODE_OUTPUT);
+    rt_pin_write(PIN_ES8388_PWR, PIN_HIGH);
+
+    rt_pin_mode(PIN_SPEAKER_EN, PIN_MODE_OUTPUT);
+    rt_pin_write(PIN_SPEAKER_EN, PIN_HIGH);
+
+    /* LCD power */
+    rt_pin_mode(PIN_LCD_BL, PIN_MODE_OUTPUT);
+    rt_pin_mode(PIN_LCD_PWR, PIN_MODE_OUTPUT);
+    rt_pin_mode(PIN_LCD_PWM, PIN_MODE_OUTPUT);
+
+    return 0;
+}
+INIT_BOARD_EXPORT(board_power_init);
+
+/*****************************************************************************
+ * Main Entry
+ *****************************************************************************/
+
 int main(void)
 {
-    rt_kprintf("It's cortex-m55\r\n");
-    rt_pin_mode(LED_PIN_G, PIN_MODE_OUTPUT);
+    LOG_I("Cortex-M55 started");
 
-    rt_thread_mdelay(2000);
-    extern void wifi_init(void);
-    wifi_init();
-    extern void init_ui(void);
-    init_ui();
+    /* Initialize LED */
+    rt_pin_mode(LED_PIN_GREEN, PIN_MODE_OUTPUT);
 
+    /* Initialize UI subsystem */
+    xiaozhi_ui_init();
+
+    /* Wait for UI initialization to complete */
+    if (xiaozhi_ui_wait_ready(rt_tick_from_millisecond(UI_INIT_TIMEOUT_MS)) != RT_EOK)
+    {
+        LOG_W("UI initialization timeout");
+    }
+
+    /* Initialize WiFi manager */
+    wifi_manager_init();
+
+    /* Main loop - LED heartbeat */
     while (1)
     {
-        rt_pin_write(LED_PIN_G, PIN_LOW);
+        rt_pin_write(LED_PIN_GREEN, PIN_LOW);
         rt_thread_mdelay(500);
-        rt_pin_write(LED_PIN_G, PIN_HIGH);
+        rt_pin_write(LED_PIN_GREEN, PIN_HIGH);
         rt_thread_mdelay(500);
     }
-    return 0;
-}
-//Mos管控制
-#define ES8388_CTRL                 GET_PIN(16, 2)  //ES8388 电源 Enable引脚
-#define SPEAKER_OE_CTRL             GET_PIN(21, 6)  //功放 Enable引脚
-#define WIFI_OE_CTRL                GET_PIN(16, 3)  //WIFI Enable引脚
-#define WIFI_WL_REG_OE_CTRL         GET_PIN(11, 6)  //WiFi寄存器开关
-#define CTRL                        GET_PIN(7, 2)   //底板 3V3 DCDC电源控制
-#define LCD_BL_GPIO_NUM             GET_PIN(15, 7)  //LCD 背光电源开关
-#define LCD_DISP_GPIO_NUM           GET_PIN(15, 6)  //LCD IC电源开关
-#define BL_PWM_DISP_CTRL            GET_PIN(20, 6)  //LCD PWM亮度调节
-int en_gpio(void)
-{
-    rt_pin_mode(WIFI_OE_CTRL, PIN_MODE_OUTPUT);
-    rt_pin_write(WIFI_OE_CTRL, PIN_HIGH);
-
-    rt_pin_mode(WIFI_WL_REG_OE_CTRL, PIN_MODE_OUTPUT);
-    rt_pin_write(WIFI_WL_REG_OE_CTRL, PIN_HIGH);
-
-    rt_pin_mode(ES8388_CTRL, PIN_MODE_OUTPUT);
-    rt_pin_write(ES8388_CTRL, PIN_HIGH);
-
-    rt_pin_mode(SPEAKER_OE_CTRL, PIN_MODE_OUTPUT);
-    rt_pin_write(SPEAKER_OE_CTRL, PIN_HIGH);
-
-    rt_pin_mode(LCD_BL_GPIO_NUM, PIN_MODE_OUTPUT);
-    rt_pin_mode(LCD_DISP_GPIO_NUM, PIN_MODE_OUTPUT);
-    rt_pin_mode(BL_PWM_DISP_CTRL, PIN_MODE_OUTPUT);
 
     return 0;
 }
-INIT_BOARD_EXPORT(en_gpio);

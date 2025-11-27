@@ -34,8 +34,6 @@ public:
             [this](const ParameterList&) {
                 return es8388_volume_get(); // 直接返回音频服务获取的值
             });
-
-        
     }
 };
 

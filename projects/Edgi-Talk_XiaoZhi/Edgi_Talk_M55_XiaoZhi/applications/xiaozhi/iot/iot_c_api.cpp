@@ -19,7 +19,7 @@ void iot_initialize() {
 }
 
 void iot_invoke(const uint8_t* data, uint16_t len) {
-    char* json_str = new char[len + 1];
+    char* json_str = (char*)rt_malloc(len + 1);
     memcpy(json_str, data, len);
     json_str[len] = '\0';
 
@@ -31,11 +31,15 @@ void iot_invoke(const uint8_t* data, uint16_t len) {
     }
 
     // 打印完整 JSON
-    rt_kprintf("[IoT] Received command: %s\n", cJSON_PrintUnformatted(root));
+    char* print_str = cJSON_PrintUnformatted(root);
+    if (print_str) {
+        rt_kprintf("[IoT] Received command: %s\n", print_str);
+        McpServer::GetInstance().ParseMessage(print_str);
+        cJSON_free(print_str);
+    }
 
     // 直接调用 ThingManager::Invoke(root)
     auto& manager = iot::ThingManager::GetInstance();
-    McpServer::GetInstance().ParseMessage(cJSON_PrintUnformatted(root));
     manager.Invoke(root);  // 这里直接传 root 即可
     
     cJSON_Delete(root);
