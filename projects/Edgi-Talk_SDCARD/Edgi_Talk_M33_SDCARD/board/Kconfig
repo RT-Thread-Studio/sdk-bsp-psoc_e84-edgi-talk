@@ -135,6 +135,10 @@ menu "On-chip Peripheral Drivers"
         default y
         select RT_USING_SERIAL
         if BSP_USING_UART
+            config BSP_USING_UART1
+                bool "Enable UART1"
+                default y
+                
             config BSP_USING_UART2
                 bool "Enable UART2"
                 default y
@@ -199,6 +203,24 @@ menu "On-chip Peripheral Drivers"
         bool "Enable MIPI LCD controller"
         select RT_USING_LCD
         default n
-    
+        if BSP_USING_LCD
+            config COMPONENT_MTB_DISPLAY_tl043wvv02
+                bool "Enable MIPI LCD Screen tl043wvv02"
+                default n
+        endif
+        
+    menuconfig USING_LVGL
+        bool "Enable LVGL"
+        select BSP_USING_LVGL
+        default n
+        if USING_LVGL
+            config BSP_USING_LVGL
+                bool "Enable BSP_USING_LVGL"
+                default n
+            config LVGL_USING_DEMOS
+                bool "Enable LVGL_USING_DEMOS"
+                default n
+        endif
+        
 endmenu
 endmenu
