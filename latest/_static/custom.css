@@ -1,0 +1,87 @@
+/* 扩展 sphinx_rtd_theme 正文内容宽度，使阅读区域自适应更宽 */
+
+/* 经典 RTD 主题主要容器选择器 */
+.wy-nav-content {
+    /* clamp(最小宽度, 首选流体宽度, 最大宽度) */
+    /* max-width: clamp(960px, 92vw, 1500px); */
+    max-width: clamp(960px, 92vw, 1500px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 中等屏幕：稍微放宽流体宽度 */
+@media screen and (max-width: 1280px) {
+    .wy-nav-content {
+        max-width: clamp(880px, 94vw, 1200px);
+    }
+}
+
+/* 小屏幕：不强制限制宽度，交给主题自身的移动端布局 */
+@media screen and (max-width: 767.98px) {
+    .wy-nav-content {
+        max-width: none;
+    }
+}
+
+/* 修复大屏下脚注（footnote）位置异常：确保脚注块正常流布局 */
+.rst-content .footnote, .rst-content .footnotes {
+    position: static !important;
+    float: none !important;
+    clear: both;
+}
+
+/* 统一中英文界面字体大小设置 */
+/* 确保侧边栏导航字体大小一致 */
+.wy-nav-side .wy-menu {
+    font-size: 14px !important;
+}
+
+.wy-nav-side .wy-menu a {
+    font-size: 14px !important;
+}
+
+.wy-nav-side .wy-menu .toctree-l1 > a {
+    font-size: 14px !important;
+    font-weight: 600;
+}
+
+.wy-nav-side .wy-menu .toctree-l2 > a {
+    font-size: 13px !important;
+    font-weight: 500;
+}
+
+.wy-nav-side .wy-menu .toctree-l3 > a {
+    font-size: 12px !important;
+    font-weight: 400;
+}
+
+.wy-nav-side .wy-menu .toctree-l4 > a {
+    font-size: 11px !important;
+    font-weight: 400;
+}
+
+/* 确保语言切换UI字体大小与PDF按钮一致 */
+.wy-nav-side .language-switch {
+    font-size: 12px !important;
+}
+
+.wy-nav-side .language-switch__option {
+    font-size: 12px !important;
+    font-weight: 600;
+}
+
+/* 确保搜索框字体大小一致 */
+.wy-nav-side .wy-side-nav-search input[type="text"] {
+    font-size: 14px !important;
+}
+
+/* 确保标题字体大小一致 */
+.wy-nav-side .wy-side-nav-search .icon {
+    font-size: 16px !important;
+}
+
+.wy-nav-side .caption {
+    font-size: 14px !important;
+    font-weight: 600;
+}
+

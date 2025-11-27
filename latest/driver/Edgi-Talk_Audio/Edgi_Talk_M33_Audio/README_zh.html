@@ -1,0 +1,660 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edgi-Talk_Audio 示例工程 &mdash; psoc_e84-edgi-talk SDK 1.0.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/version_menu.css?v=ad0e61b7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=694004e0" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pdf_button.css?v=b2b664f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/edit_button.css?v=d629c565" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/language_switch.css?v=427b9138" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/dark_mode.css?v=72ec50b7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=86952a2f"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+      <script src="../../../_static/version_menu.js?v=0cfa4c94"></script>
+      <script src="../../../_static/download_pdf.js?v=d1800c12"></script>
+      <script src="../../../_static/version_info.js"></script>
+      <script src="../../../_static/edit_on_github.js?v=5e1f1957"></script>
+      <script src="../../../_static/language_switch.js?v=53d89164"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex_zh.html" />
+    <link rel="search" title="搜索" href="../../../search_zh.html" />
+    <link rel="next" title="Edgi-Talk_Key_Irq 示例工程" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html" />
+    <link rel="prev" title="Edgi-Talk_ADC 示例工程" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html" />
+   
+  
+  
+    <script>window.SPHINX_EDIT_BASE_URL = "https://github.com/RT-Thread-Studio/sdk-bsp-psoc_e84-edgi-talk/edit/";</script>
+    <meta name="edit-base-url" content="https://github.com/RT-Thread-Studio/sdk-bsp-psoc_e84-edgi-talk/edit/">
+  
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index_zh.html" class="icon icon-home">
+            psoc_e84-edgi-talk SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">目录</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../basic/index_zh.html">基础篇</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html">Edgi-Talk_M33_Blink_LED 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#gpio">GPIO 简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#rt-thread-gpio">RT-Thread 对 GPIO 的抽象</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#id2">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#id3">硬件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#id4">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#id5">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#id6">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#id7">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED/README_zh.html#id8">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template/README_zh.html">Edgi-Talk_M33_S_Template 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template/README_zh.html#id2">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template/README_zh.html#id3">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template/README_zh.html#id4">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template/README_zh.html#id5">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template/README_zh.html#id6">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template/README_zh.html#id7">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template/README_zh.html">Edgi-Talk_M33_Template 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template/README_zh.html#id2">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template/README_zh.html#id3">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template/README_zh.html#id4">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template/README_zh.html#id5">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template/README_zh.html#id6">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template/README_zh.html#id7">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html">Edgi-Talk_M55_Blink_LED 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#gpio">GPIO 简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#rt-thread-gpio">RT-Thread 对 GPIO 的抽象</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#id2">硬件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#id3">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#id4">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#id5">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#id6">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#id7">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../basic/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED/README_zh.html#id8">启动流程</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index_zh.html">驱动篇</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html">Edgi-Talk_ADC 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id1">简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#adc">1. ADC概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id2">2. ADC工作原理</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id3">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id4">连接接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#mcu">MCU引脚</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id5">实物图位置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id6">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id7">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id8">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id9">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id10">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html#id11">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Edgi-Talk_Audio 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#audio">Audio 简介</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#es8388">ES8388连接接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">喇叭接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">控制引脚</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mcu">MCU接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">实物图位置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html">Edgi-Talk_Key_Irq 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#mcu">MCU 中断体系概述</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id2">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id3">按钮接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id4">MCU接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id5">实物图位置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id6">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id7">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id8">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id9">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id10">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html#id11">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html">Edgi-Talk_LSM6DS3 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id1">简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#lsm6ds3tr">LSM6DS3TR 简介</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id2">主要特性</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id3">应用场景</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id4">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id5">LSM6DS3TR接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#mcu">MCU接口</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id6">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id7">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id8">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id9">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id10">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3/README_zh.html#id11">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html">Edgi-Talk_M33_AHT20 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id1">简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#aht10">AHT10 软件包简介</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id2">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id3">传感器连接接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id4">电平转换</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#mcu">MCU引脚</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id5">实物图位置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id6">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id7">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id8">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id9">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id10">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20/README_zh.html#id11">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam/README_zh.html">Edgi-Talk_M33_HyperRam 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam/README_zh.html#id2">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam/README_zh.html#id3">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam/README_zh.html#id4">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam/README_zh.html#id5">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam/README_zh.html#id6">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam/README_zh.html#id7">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html">Edgi-Talk_M33_S_HyperRam 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#hyperram">HyperRAM 简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id2">1. 概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id3">2. 架构与接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id4">3. 工作原理</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id5">4. 性能特性</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id6">5. HyperRAM 的优势</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id7">6. 与其他存储的对比</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id8">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id9">HyperRam接口</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id10">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id11">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id12">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id13">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id14">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam/README_zh.html#id15">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html">Edgi-Talk_M55_MIPI_LCD 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id2">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id3">背光接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#mipi">MIPI接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#pwr">PWR接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#mcu">MCU接口</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id4">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id5">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id6">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id7">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id8">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD/README_zh.html#id9">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html">Edgi-Talk_RTC 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#rtc">RTC（实时时钟）简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id2">1. 概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id3">2. 工作原理</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id4">3. RTC 类型</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id5">4. 关键参数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id6">5. RTC 功能</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id7">6. RTC 应用场景</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id8">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id9">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id10">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id11">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id12">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_RTC/Edgi_Talk_M33_RTC/README_zh.html#id13">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html">Edgi-Talk_SDCARD 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#sd">SD 卡简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id2">1. 概述</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id3">2. SD 卡类型</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id4">3. SD 卡接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id5">4. 工作原理</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id6">5. SD 卡性能指标</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id7">6. SD 卡应用场景</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id8">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id9">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id10">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id11">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id12">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD/README_zh.html#id13">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html">Edgi-Talk_WIFI 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#id2">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#wifi">WIFI接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#mcu">MCU接口</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#id3">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#id4">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#id5">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#id6">运行效果</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#id7">注意事项</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.html#id8">启动流程</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../component/index_zh.html">示例</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html">Edgi-Talk_M55_CoreMark 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id1">简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#coremark">CoreMark 简介</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id2">测试内容</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id3">测试结果</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id4">特点</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id5">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id6">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id7">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id8">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id9">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark/README_zh.html#id10">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html">Edgi-Talk_M55_LVGL 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#lvgl">LVGL 简介</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id2">主要特点</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id3">应用场景</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id4">生态与社区</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id5">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id6">背光接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#mipi">MIPI接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#pwr">PWR接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#mcu">MCU接口</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id7">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id8">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id9">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id10">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id11">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL/README_zh.html#id12">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html">Edgi-Talk_WavPlayer 示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id1">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id2">硬件说明</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#es8388">ES8388连接接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id3">喇叭接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id4">控制引脚</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#btb">BTB座子</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#mcu">MCU接口</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id5">实物图位置</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id6">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id7">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id8">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id9">运行效果</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id10">注意事项</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer/README_zh.html#id11">启动流程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html">小智示例工程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html#id2">简介</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html#id3">软件说明</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html#id4">使用方法</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html#wifi">WIFI修改</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html#id5">编译与下载</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html#id6">运行效果</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html#id7">注意事项</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../component/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi/README_zh.html#id8">启动流程</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index_zh.html">psoc_e84-edgi-talk SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index_zh.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index_zh.html">驱动篇</a></li>
+      <li class="breadcrumb-item active">Edgi-Talk_Audio 示例工程</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="edgi-talk-audio">
+<h1>Edgi-Talk_Audio 示例工程<a class="headerlink" href="#edgi-talk-audio" title="Link to this heading"></a></h1>
+<p><strong>中文</strong> | <a class="reference internal" href="README_zh.html"><span class="std std-doc"><strong>English</strong></span></a></p>
+<section id="id1">
+<h2>简介<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>本示例工程基于 <strong>Edgi-Talk平台</strong>，演示 <strong>音频录制与播放</strong> 功能，运行在 <strong>RT-Thread 实时操作系统</strong> 上。
+通过本工程，用户可以体验麦克风采集音频数据并通过扬声器播放，同时通过按钮控制播放/停止状态，并通过 LED 指示当前播放状态。</p>
+<section id="audio">
+<h3>Audio 简介<a class="headerlink" href="#audio" title="Link to this heading"></a></h3>
+<p>Audio （音频）设备是嵌入式系统中非常重要的一个组成部分，负责音频数据的采样和输出。Audio  设备通常由数据总线接口、控制总线接口、音频编解码器（Codec）、扬声器和麦克风等组成，如下图所示：</p>
+<p><img alt="嵌入式音频系统组成" src="../../../_images/audio_system.png" /></p>
+<section id="id2">
+<h4>Audio 设备特性<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<p>RT-Thread Audio 设备驱动框架是 Audio 框架的底层部分，主要负责原生音频数据的采集和输出、音频流的控制、音频设备的管理、音量调节以及不同硬件和 Codec 的抽象等。</p>
+<ul class="simple">
+<li><p>接口：标准 device 接口(open/close/read/control)。</p></li>
+<li><p>同步模式访问。</p></li>
+<li><p>支持播放和录音。</p></li>
+<li><p>支持音频参数管理。</p></li>
+<li><p>支持音量调节。</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="id3">
+<h2>硬件说明<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<section id="es8388">
+<h3>ES8388连接接口<a class="headerlink" href="#es8388" title="Link to this heading"></a></h3>
+<p><img alt="alt text" src="../../../_images/17.png" /></p>
+</section>
+<section id="id4">
+<h3>喇叭接口<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p><img alt="alt text" src="../../../_images/27.png" /></p>
+</section>
+<section id="id5">
+<h3>控制引脚<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p><img alt="alt text" src="../../../_images/37.png" /></p>
+</section>
+<section id="btb">
+<h3>BTB座子<a class="headerlink" href="#btb" title="Link to this heading"></a></h3>
+<p><img alt="alt text" src="../../../_images/46.png" /></p>
+</section>
+<section id="mcu">
+<h3>MCU接口<a class="headerlink" href="#mcu" title="Link to this heading"></a></h3>
+<p><img alt="alt text" src="../../../_images/53.png" /></p>
+</section>
+<section id="id6">
+<h3>实物图位置<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p><img alt="alt text" src="../../../_images/62.png" /></p>
+</section>
+</section>
+<section id="id7">
+<h2>软件说明<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>工程基于 <strong>Edgi-Talk M33</strong> 平台开发。</p></li>
+<li><p>示例功能包括：</p>
+<ul>
+<li><p>麦克风音频采集</p></li>
+<li><p>音频数据播放到扬声器</p></li>
+<li><p>按钮控制音频播放/停止</p></li>
+<li><p>LED 指示播放状态</p></li>
+</ul>
+</li>
+<li><p>工程结构清晰，便于理解 RT-Thread 音频设备驱动和事件处理机制。</p></li>
+</ul>
+</section>
+<section id="id8">
+<h2>使用方法<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3>编译与下载<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>打开工程并完成编译。</p></li>
+<li><p>使用 <strong>板载下载器 (DAP)</strong> 将开发板的 USB 接口连接至 PC。</p></li>
+<li><p>通过编程工具将生成的固件烧录至开发板。</p>
+<ul class="simple">
+<li><p>工程可自动调用签名工具（如 <code class="docutils literal notranslate"><span class="pre">tools/edgeprotecttools/bin/edgeprotecttools.exe</span></code>）合并烧录固件（如 <code class="docutils literal notranslate"><span class="pre">proj_cm33_s_signed.hex</span></code>）。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id10">
+<h3>运行效果<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>烧录完成后，开发板上电即可运行示例工程。</p></li>
+<li><p>LED 灯默认点亮表示音频播放已启用。</p></li>
+<li><p>按下按钮可 <strong>切换音频播放状态</strong>：</p>
+<ul>
+<li><p><strong>播放</strong>：LED 点亮，麦克风采集的音频播放到扬声器</p></li>
+<li><p><strong>停止</strong>：LED 熄灭，音频播放暂停</p></li>
+</ul>
+</li>
+<li><p>系统可连续采集和播放音频数据，实现实时音频回放。</p></li>
+</ul>
+</section>
+</section>
+<section id="id11">
+<h2>注意事项<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<ul>
+<li><p>如需修改工程的 <strong>图形化配置</strong>，请使用以下工具打开配置文件：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tools</span><span class="o">/</span><span class="n">device</span><span class="o">-</span><span class="n">configurator</span><span class="o">/</span><span class="n">device</span><span class="o">-</span><span class="n">configurator</span><span class="o">.</span><span class="n">exe</span>
+<span class="n">libs</span><span class="o">/</span><span class="n">TARGET_APP_KIT_PSE84_EVAL_EPC2</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">design</span><span class="o">.</span><span class="n">modus</span>
+</pre></div>
+</div>
+</li>
+<li><p>修改完成后保存配置，并重新生成代码。</p></li>
+</ul>
+</section>
+<section id="id12">
+<h2>启动流程<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<p>系统启动顺序如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+------------------+</span>
+<span class="o">|</span>   <span class="n">Secure</span> <span class="n">M33</span>     <span class="o">|</span>
+<span class="o">|</span>   <span class="p">(</span><span class="n">安全内核启动</span><span class="p">)</span>  <span class="o">|</span>
+<span class="o">+------------------+</span>
+          <span class="o">|</span>
+          <span class="n">v</span>
+<span class="o">+------------------+</span>
+<span class="o">|</span>       <span class="n">M33</span>        <span class="o">|</span>
+<span class="o">|</span>   <span class="p">(</span><span class="n">非安全核启动</span><span class="p">)</span>  <span class="o">|</span>
+<span class="o">+------------------+</span>
+          <span class="o">|</span>
+          <span class="n">v</span>
+<span class="o">+-------------------+</span>
+<span class="o">|</span>       <span class="n">M55</span>         <span class="o">|</span>
+<span class="o">|</span>  <span class="p">(</span><span class="n">应用处理器启动</span><span class="p">)</span>  <span class="o">|</span>
+<span class="o">+-------------------+</span>
+</pre></div>
+</div>
+<p>⚠️ 请严格按照以上顺序烧写固件，否则系统可能无法正常运行。</p>
+<hr class="docutils" />
+<ul>
+<li><p>若示例工程无法正常运行，建议先编译并烧录 <strong>Edgi-Talk_M33_S_Template</strong> 工程，确保初始化与核心启动流程正常，再运行本示例。</p></li>
+<li><p>若要开启 M55，需要在 <strong>M33 工程</strong> 中打开配置：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RT</span><span class="o">-</span><span class="n">Thread</span> <span class="n">Settings</span> <span class="o">--&gt;</span> <span class="n">硬件</span> <span class="o">--&gt;</span> <span class="n">select</span> <span class="n">SOC</span> <span class="n">Multi</span> <span class="n">Core</span> <span class="n">Mode</span> <span class="o">--&gt;</span> <span class="n">Enable</span> <span class="n">CM55</span> <span class="n">Core</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="../../Edgi-Talk_ADC/Edgi_Talk_M33_ADC/README_zh.html" class="btn btn-neutral float-left" title="Edgi-Talk_ADC 示例工程" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../../Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq/README_zh.html" class="btn btn-neutral float-right" title="Edgi-Talk_Key_Irq 示例工程" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 Copyright (c) 2006-2025, RT-Thread Development Team。</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+   
+  <div class="sdk-footer">
+    <div class="sdk-footer__inner">
+      <div class="sdk-footer__left">
+        <strong>psoc_e84-edgi-talk SDK</strong>
+        <span class="sdk-footer__sep">•</span> 版本：1.0.0
+      </div>
+      <div class="sdk-footer__right">
+        构建时间：<span id="sdk-build-time"></span>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      try {
+        var el = document.getElementById('sdk-build-time');
+        if (el) {
+          var d = new Date(document.lastModified);
+          el.textContent = d.toLocaleString();
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+
+</body>
+</html>

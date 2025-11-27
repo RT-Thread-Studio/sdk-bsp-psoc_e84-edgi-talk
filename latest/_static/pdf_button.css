@@ -1,0 +1,73 @@
+/* 下载 PDF 按钮样式（与 RTD 主题配色协调） */
+.sdk-download-pdf-wrapper {
+    margin-top: 8px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;       /* 居中对齐容器内按钮 */
+}
+.sdk-download-pdf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 1;
+    color: #2c3e50;               /* 默认适配浅色内容区 */
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+.sdk-download-pdf-btn:hover,
+.sdk-download-pdf-btn:focus {
+    background: rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+.sdk-download-pdf-btn:focus-visible {
+    outline: 2px solid rgba(66, 133, 244, 0.35);
+    outline-offset: 2px;
+}
+.sdk-pdf-icon {
+    font-size: 14px;
+}
+.sdk-pdf-text {
+    font-size: 12px;
+}
+
+/* 侧边栏/顶部深色背景中的适配（RTD主题） */
+.wy-side-nav-search .sdk-download-pdf-btn,
+.wy-nav-top .sdk-download-pdf-btn {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.wy-side-nav-search .sdk-download-pdf-btn:hover,
+.wy-side-nav-search .sdk-download-pdf-btn:focus,
+.wy-nav-top .sdk-download-pdf-btn:hover,
+.wy-nav-top .sdk-download-pdf-btn:focus {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* 将侧边栏与顶部导航中的按钮容器居中 */
+.wy-side-nav-search .sdk-download-pdf-wrapper,
+.wy-nav-top .sdk-download-pdf-wrapper {
+    justify-content: center;
+}
+
+/* 动画降低动效模式尊重 */
+@media (prefers-reduced-motion: reduce) {
+    .sdk-download-pdf-btn {
+        transition: none;
+    }
+    .sdk-download-pdf-btn:hover,
+    .sdk-download-pdf-btn:focus {
+        transform: none;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+}
+

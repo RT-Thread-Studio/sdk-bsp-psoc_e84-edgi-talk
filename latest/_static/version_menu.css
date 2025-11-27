@@ -1,0 +1,184 @@
+/* Read the Docs 风格的版本菜单样式 */
+.rtd-version-menu {
+  position: relative;
+  display: block;
+  margin: 4px auto;
+  width: calc(30% - 6px);
+  text-align: center;
+}
+
+/* 项目标题字体大小调整 */
+.wy-nav-side .icon.icon-home {
+  font-size: 19px;
+  font-weight: 650;
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+.rtd-version-menu__button {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 3px;
+  color: #495057;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  padding: 4px 8px;
+  position: relative;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  white-space: nowrap;
+  width: 100%;
+  min-width: 80px;
+  margin: 0 auto;
+}
+
+.rtd-version-menu__button:hover {
+  border-color: #0969da;
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+  background: #e9ecef;
+}
+
+.rtd-version-menu__button:focus {
+  border-color: #0969da;
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+  outline: none;
+}
+
+.rtd-version-menu__button::after {
+  content: "";
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  margin-left: 4px;
+  transition: transform 0.15s ease-in-out;
+  flex-shrink: 0;
+}
+
+.rtd-version-menu__button[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+.rtd-version-menu__dropdown {
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 3px;
+  box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+  display: none;
+  left: 50%;
+  margin-top: 2px;
+  min-width: 100%;
+  padding: 2px 0;
+  position: absolute;
+  top: 100%;
+  z-index: 1000;
+  width: 100%;
+  transform: translateX(-50%);
+}
+
+.rtd-version-menu__dropdown.show {
+  display: block;
+}
+
+.rtd-version-menu__item {
+  background: transparent;
+  border: 0;
+  color: #24292f;
+  cursor: pointer;
+  display: block;
+  font-size: 11px;
+  line-height: 14px;
+  padding: 4px 10px;
+  text-align: left;
+  text-decoration: none;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.rtd-version-menu__item:hover {
+  background-color: #f6f8fa;
+  color: #24292f;
+  text-decoration: none;
+}
+
+.rtd-version-menu__item:focus {
+  background-color: #f6f8fa;
+  color: #24292f;
+  outline: none;
+  text-decoration: none;
+}
+
+.rtd-version-menu__item.active {
+  background-color: #0969da;
+  color: #ffffff;
+}
+
+.rtd-version-menu__item.active:hover {
+  background-color: #0858b9;
+  color: #ffffff;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .rtd-version-menu {
+    margin: 2px auto;
+    width: calc(50% - 8px);
+  }
+  
+  .rtd-version-menu__button {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+  
+  .rtd-version-menu__item {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  
+  /* 移动端项目标题字体大小 */
+  .wy-nav-side .icon.icon-home {
+    font-size: 12px;
+  }
+}
+
+/* 深色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .rtd-version-menu__button {
+    background: #21262d;
+    border-color: #30363d;
+    color: #f0f6fc;
+  }
+  
+  .rtd-version-menu__button:hover {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.1);
+    background: #30363d;
+  }
+  
+  .rtd-version-menu__dropdown {
+    background: #21262d;
+    border-color: #30363d;
+    box-shadow: 0 8px 24px rgba(1, 4, 9, 0.3);
+  }
+  
+  .rtd-version-menu__item {
+    color: #f0f6fc;
+  }
+  
+  .rtd-version-menu__item:hover {
+    background-color: #30363d;
+    color: #f0f6fc;
+  }
+  
+  .rtd-version-menu__item.active {
+    background-color: #58a6ff;
+    color: #0d1117;
+  }
+  
+  .rtd-version-menu__item.active:hover {
+    background-color: #1f6feb;
+    color: #0d1117;
+  }
+} 

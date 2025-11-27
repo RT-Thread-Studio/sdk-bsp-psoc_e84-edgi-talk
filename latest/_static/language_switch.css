@@ -1,0 +1,166 @@
+/* 中英文切换UI样式 - 简洁的 "中文 | English" 格式 */
+.language-switch {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 4px 12px;
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    border: none;
+    height: 100%; /* 确保填充容器高度 */
+}
+
+.language-switch__container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%; /* 确保填充容器高度 */
+}
+
+.language-switch__option {
+    padding: 3px 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    background: transparent;
+    border: none;
+    outline: none;
+    user-select: none;
+    border-radius: 10px;
+    line-height: 1.2; /* 确保文本垂直居中 */
+}
+
+.language-switch__option:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.language-switch__option.active {
+    color: #ffffff;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.language-switch__separator {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+    user-select: none;
+}
+
+/* 语言切换容器样式 - 使用深灰色背景 */
+.language-switch-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1a1a1a; /* 深灰色背景替代蓝色 */
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 20;
+    padding: 0; /* 移除内边距，使用内部元素控制间距 */
+    margin: 0;
+    height: 36px; /* 固定高度确保一致性 */
+    display: flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    box-sizing: border-box;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .language-switch {
+        margin: 0;
+        padding: 0 8px;
+    }
+    
+    .language-switch__option {
+        padding: 4px 8px;
+        font-size: 12px;
+        min-width: 40px;
+    }
+
+    .language-switch-container {
+        height: 32px; /* 移动端更小的高度 */
+    }
+}
+
+/* 在侧边栏中的样式调整 */
+.wy-nav-side .language-switch {
+    margin: 0;
+    background: transparent;
+    position: relative;
+    padding: 0;
+    width: 100%;
+}
+
+.wy-nav-side .language-switch__container {
+    background: transparent;
+    border: none;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+}
+
+/* 优化语言切换按钮样式 */
+.wy-nav-side .language-switch__option {
+    color: #ffffff;
+    background: transparent;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 11px !important;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: center;
+}
+
+.wy-nav-side .language-switch__option:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: transparent;
+}
+
+.wy-nav-side .language-switch__option.active {
+    color: #ffffff;
+    background: transparent;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.wy-nav-side .language-switch__separator {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 300;
+    user-select: none;
+    font-size: 11px;
+}
+
+/* 动画效果 */
+.language-switch__option {
+    transition: color 0.3s ease, font-weight 0.3s ease;
+}
+
+/* 焦点状态 */
+.language-switch__option:focus {
+    outline: 1px solid #666;
+    outline-offset: 1px;
+}
+
+/* 禁用状态 */
+.language-switch__option:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 加载状态 */
+.language-switch.loading .language-switch__option {
+    pointer-events: none;
+    opacity: 0.7;
+}
