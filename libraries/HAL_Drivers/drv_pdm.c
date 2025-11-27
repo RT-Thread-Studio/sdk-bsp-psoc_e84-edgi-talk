@@ -17,9 +17,9 @@
 * Macros
 *******************************************************************************/
 #ifdef ENABLE_STEREO_INPUT_FEED
-    #define MIC_MODE                         (2u)
+#define MIC_MODE                         (2u)
 #else
-    #define MIC_MODE                         (1u)
+#define MIC_MODE                         (1u)
 #endif /* ENABLE_STEREO_INPUT_FEED */
 rt_device_t device_sound;
 
@@ -40,9 +40,9 @@ rt_device_t device_sound;
 /* 10msec data is 320 samples in STEREO mode*/
 /* 10msec data is 160 samples in STEREO mode*/
 #ifdef ENABLE_STEREO_INPUT_FEED
-    #define HALF_FIFO_SIZE              (PDM_PCM_HW_FIFO_SIZE)
+#define HALF_FIFO_SIZE              (PDM_PCM_HW_FIFO_SIZE)
 #else
-    #define HALF_FIFO_SIZE              (PDM_PCM_HW_FIFO_SIZE/2)
+#define HALF_FIFO_SIZE              (PDM_PCM_HW_FIFO_SIZE/2)
 #endif /* ENABLE_STEREO_INPUT_FEED */
 
 /*******************************************************************************
@@ -81,6 +81,8 @@ void pdm_interrupt_handler(void)
 {
     static bool ping_pong = false;
     volatile uint32_t int_stat;
+
+    rt_interrupt_enter();
 
     if (pdm_pcm_intr_cnt == 0)
     {
@@ -146,6 +148,8 @@ void pdm_interrupt_handler(void)
     {
         Cy_PDM_PCM_Channel_ClearInterrupt(PDM0, RIGHT_CH_INDEX, CY_PDM_PCM_INTR_MASK);
     }
+
+    rt_interrupt_leave();
 }
 
 cy_rslt_t pdm_mic_interface_deinit(void)

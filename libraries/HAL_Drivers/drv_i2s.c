@@ -43,8 +43,8 @@ uint8_t i2s_playback_volume = DEFAULT_VOLUME;
 /* ASRC variables for down-sampling audio to 16000Hz */
 IFX_ASRC_STRUCT_t asrc_mem_down_sampling;
 #if SAMPLING_RATE_44_1kHz == SAMPLING_RATE
-    /* ASRC variables for up-sampling 44100Hz to 48000Hz */
-    IFX_ASRC_STRUCT_t asrc_mem_up_sampling;
+/* ASRC variables for up-sampling 44100Hz to 48000Hz */
+IFX_ASRC_STRUCT_t asrc_mem_up_sampling;
 #endif /* SAMPLING_RATE_44_1kHz */
 
 // static rt_uint32_t input_sampling_freq = 0;
@@ -93,7 +93,7 @@ struct sound_device
 };
 static struct sound_device snd_dev = {0};
 
-static char msg_pool[256];
+static char msg_pool[512];
 
 bool music_player_active = false;
 bool music_player_pause = false;
@@ -395,7 +395,7 @@ static rt_err_t sound_init(struct rt_audio_device *audio)
 
     es8388_start(ES_MODE_DAC);
 
-    es8388_volume_set(50);
+    es8388_volume_set(20);
     ifx_set_samplerate(snd_dev->audio_config);
 
     rt_thread_startup(snd_dev->playback_thread);
@@ -406,7 +406,6 @@ static rt_err_t sound_init(struct rt_audio_device *audio)
 
 static rt_err_t sound_start(struct rt_audio_device *audio, int stream)
 {
-
     RT_ASSERT(audio != RT_NULL);
 
     if (stream == AUDIO_STREAM_REPLAY)
@@ -418,6 +417,7 @@ static rt_err_t sound_start(struct rt_audio_device *audio, int stream)
 
     return RT_EOK;
 }
+
 static rt_ssize_t sound_transmit(struct rt_audio_device *audio, const void *writeBuf, void *readBuf, rt_size_t size)
 {
     struct sound_device *snd_dev;
@@ -427,11 +427,12 @@ static rt_ssize_t sound_transmit(struct rt_audio_device *audio, const void *writ
     {
         i2s_playback_q_data_t i2s_playback_q_data;
         i2s_playback_q_data.data_len = size >> 1;
-        i2s_playback_q_data.data = (rt_int16_t*) writeBuf;
+        i2s_playback_q_data.data = (rt_int16_t *) writeBuf;
         rt_mq_send(snd_dev->tx_mq, &i2s_playback_q_data, sizeof(i2s_playback_q_data_t));
     }
     return size;
 }
+
 static rt_err_t sound_stop(struct rt_audio_device *audio, int stream)
 {
     RT_ASSERT(audio != RT_NULL);
@@ -492,7 +493,7 @@ int rt_hw_sound_init(void)
     rt_err_t ret = RT_EOK;
     rt_uint8_t *tx_buff;
 
-    tx_buff = (rt_uint8_t*)rt_malloc(TX_FIFO_SIZE);
+    tx_buff = (rt_uint8_t *)rt_malloc(TX_FIFO_SIZE);
 
     rt_memset(tx_buff, 0, TX_FIFO_SIZE);
     if (tx_buff == RT_NULL)
@@ -562,9 +563,9 @@ void convert_mono_to_stereo(int16_t *mono_data, rt_uint32_t mono_data_num_sample
         mono_data++;  // Move to the next mono sample
     }
 }
+
 void i2s_playback_task(void *arg)
 {
-
     struct rt_audio_device *audio = (struct rt_audio_device *)arg;
     struct sound_device *snd_dev;
     RT_ASSERT(audio != RT_NULL);
@@ -757,24 +758,24 @@ void i2s_playback_task(void *arg)
         while (audio->replay->queue.is_empty == 1)
             rt_thread_mdelay(1);
 
-        if (music_player_active == true)
-            rt_audio_tx_complete(audio);
+        rt_audio_tx_complete(audio);
     }
 }
-
 
 
 bool is_music_player_active(void)
 {
     return music_player_active;
 }
+
 bool is_music_player_paused(void)
 {
     return music_player_pause;
 }
+
 void i2s_tx_interrupt_handler(void)
 {
-    // BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    rt_interrupt_enter();
 
     /* Get interrupt status and check for tigger interrupt and errors */
     rt_uint32_t intr_status = Cy_AudioTDM_GetTxInterruptStatusMasked(TDM_STRUCT0_TX);
@@ -852,5 +853,7 @@ void i2s_tx_interrupt_handler(void)
 
     /* Clear all Tx I2S Interrupt */
     Cy_AudioTDM_ClearTxInterrupt(TDM_STRUCT0_TX, CY_TDM_INTR_TX_MASK);
+
+    rt_interrupt_leave();
 }
 
