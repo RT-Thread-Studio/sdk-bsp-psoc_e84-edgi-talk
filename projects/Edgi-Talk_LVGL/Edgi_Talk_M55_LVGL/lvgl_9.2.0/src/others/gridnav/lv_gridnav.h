@@ -24,8 +24,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_GRIDNAV_CTRL_NONE = 0x0,
 
     /**

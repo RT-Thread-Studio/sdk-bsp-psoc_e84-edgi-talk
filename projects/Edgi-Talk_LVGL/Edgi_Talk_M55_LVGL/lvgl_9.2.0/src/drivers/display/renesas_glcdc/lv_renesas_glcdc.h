@@ -33,7 +33,7 @@ extern "C" {
  * Create a display using Renesas' GLCDC peripherial in DIRECT render mode
  * @return  pointer to the created display
  */
-lv_display_t *lv_renesas_glcdc_direct_create(void);
+lv_display_t * lv_renesas_glcdc_direct_create(void);
 
 /**
  * Create a display using Renesas' GLCDC peripherial in PARTIAL render mode
@@ -42,7 +42,7 @@ lv_display_t *lv_renesas_glcdc_direct_create(void);
  * @param buf_size  buffer size in byte
  * @return          pointer to the created display
  */
-lv_display_t *lv_renesas_glcdc_partial_create(void * buf1, void * buf2, size_t buf_size);
+lv_display_t * lv_renesas_glcdc_partial_create(void * buf1, void * buf2, size_t buf_size);
 
 /**********************
  *      MACROS

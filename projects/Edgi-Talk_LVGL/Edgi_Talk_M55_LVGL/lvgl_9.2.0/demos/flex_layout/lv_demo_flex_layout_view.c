@@ -23,7 +23,7 @@
  *  STATIC PROTOTYPES
  **********************/
 
-static lv_obj_t *btn_create(lv_obj_t * par, const char * str, lv_color_t color);
+static lv_obj_t * btn_create(lv_obj_t * par, const char * str, lv_color_t color);
 static void obj_child_node_def_style_init(lv_style_t * style);
 static void obj_child_node_checked_style_init(lv_style_t * style);
 
@@ -59,7 +59,7 @@ void view_create(lv_obj_t * par, view_t * ui)
     lv_obj_set_size(ui->root, lv_pct(50), lv_pct(80));
 
     /* mian ctrl_pad */
-    lv_obj_t *obj = lv_obj_create(par);
+    lv_obj_t * obj = lv_obj_create(par);
     lv_obj_set_size(obj, lv_pct(40), lv_pct(80));
     lv_obj_set_style_pad_all(obj, 0, 0);
     lv_obj_set_style_pad_gap(obj, 0, 0);
@@ -112,16 +112,16 @@ void view_create(lv_obj_t * par, view_t * ui)
  *   STATIC FUNCTIONS
  **********************/
 
-static lv_obj_t *btn_create(lv_obj_t * par, const char * str, lv_color_t color)
+static lv_obj_t * btn_create(lv_obj_t * par, const char * str, lv_color_t color)
 {
-    lv_obj_t *btn = lv_button_create(par);
+    lv_obj_t * btn = lv_button_create(par);
     lv_obj_set_width(btn, lv_pct(30));
     lv_obj_set_height(btn, 30);
     lv_obj_set_style_border_width(btn, 0, LV_PART_MAIN);
     lv_obj_set_style_bg_color(btn, color, LV_PART_MAIN);
     lv_obj_set_style_radius(btn, 5, LV_PART_MAIN);
 
-    lv_obj_t *label = lv_label_create(btn);
+    lv_obj_t * label = lv_label_create(btn);
     lv_label_set_text(label, str);
     lv_obj_center(label);
 
@@ -145,8 +145,7 @@ static void obj_child_node_checked_style_init(lv_style_t * style)
     lv_style_set_shadow_width(style, 20);
 
     static lv_style_transition_dsc_t tran;
-    static const lv_style_prop_t prop[] =
-    {
+    static const lv_style_prop_t prop[] = {
         LV_STYLE_SHADOW_OPA,
         LV_STYLE_BORDER_COLOR,
         LV_STYLE_PROP_INV

@@ -33,7 +33,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_tabview_class;
  * @param parent    pointer to a parent widget
  * @return          the created tabview
  */
-lv_obj_t *lv_tabview_create(lv_obj_t * parent);
+lv_obj_t * lv_tabview_create(lv_obj_t * parent);
 
 /**
  * Add a tab to the tabview
@@ -41,7 +41,7 @@ lv_obj_t *lv_tabview_create(lv_obj_t * parent);
  * @param name      the name of the tab, it will be displayed on the tab bar
  * @return          the widget where the content of the tab can be created
  */
-lv_obj_t *lv_tabview_add_tab(lv_obj_t * obj, const char * name);
+lv_obj_t * lv_tabview_add_tab(lv_obj_t * obj, const char * name);
 
 /**
  * Change the name of the tab
@@ -93,14 +93,14 @@ uint32_t lv_tabview_get_tab_active(lv_obj_t * obj);
  * @param obj       pointer to a tabview widget
  * @return          the main container widget
  */
-lv_obj_t *lv_tabview_get_content(lv_obj_t * obj);
+lv_obj_t * lv_tabview_get_content(lv_obj_t * obj);
 
 /**
  * Get the tab bar where the buttons are created
  * @param obj       pointer to a tabview widget
  * @return          the tab bar
  */
-lv_obj_t *lv_tabview_get_tab_bar(lv_obj_t * obj);
+lv_obj_t * lv_tabview_get_tab_bar(lv_obj_t * obj);
 
 /**********************
  *      MACROS

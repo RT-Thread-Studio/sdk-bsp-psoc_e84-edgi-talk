@@ -31,13 +31,12 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_msgbox_t
-{
+struct lv_msgbox_t {
     lv_obj_t obj;
-    lv_obj_t *header;
-    lv_obj_t *content;
-    lv_obj_t *footer;
-    lv_obj_t *title;
+    lv_obj_t * header;
+    lv_obj_t * content;
+    lv_obj_t * footer;
+    lv_obj_t * title;
 };
 
 

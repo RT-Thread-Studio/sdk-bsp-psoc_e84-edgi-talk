@@ -78,7 +78,7 @@ void lv_draw_sw_box_shadow(lv_draw_unit_t * draw_unit, const lv_draw_box_shadow_
  * @param coords        the coordinates of the image
  */
 void lv_draw_sw_image(lv_draw_unit_t * draw_unit, const lv_draw_image_dsc_t * draw_dsc,
-                      const lv_area_t *coords);
+                      const lv_area_t * coords);
 
 /**
  * Draw a label with SW render.
@@ -141,7 +141,7 @@ void lv_draw_sw_mask_rect(lv_draw_unit_t * draw_unit, const lv_draw_mask_rect_ds
  */
 void lv_draw_sw_transform(lv_draw_unit_t * draw_unit, const lv_area_t * dest_area, const void * src_buf,
                           int32_t src_w, int32_t src_h, int32_t src_stride,
-                          const lv_draw_image_dsc_t *draw_dsc, const lv_draw_image_sup_t *sup, lv_color_format_t cf, void *dest_buf);
+                          const lv_draw_image_dsc_t * draw_dsc, const lv_draw_image_sup_t * sup, lv_color_format_t cf, void * dest_buf);
 
 #if LV_USE_VECTOR_GRAPHIC && LV_USE_THORVG
 /**

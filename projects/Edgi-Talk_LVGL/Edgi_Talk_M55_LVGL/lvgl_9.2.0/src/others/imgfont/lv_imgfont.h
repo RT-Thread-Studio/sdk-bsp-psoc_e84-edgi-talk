@@ -27,9 +27,9 @@ extern "C" {
  **********************/
 
 /* gets the image path name of this character */
-typedef const void *(*lv_imgfont_get_path_cb_t)(const lv_font_t * font,
-        uint32_t unicode, uint32_t unicode_next,
-        int32_t *offset_y, void *user_data);
+typedef const void * (*lv_imgfont_get_path_cb_t)(const lv_font_t * font,
+                                                 uint32_t unicode, uint32_t unicode_next,
+                                                 int32_t * offset_y, void * user_data);
 
 /**********************
  * GLOBAL PROTOTYPES
@@ -42,7 +42,7 @@ typedef const void *(*lv_imgfont_get_path_cb_t)(const lv_font_t * font,
  * @param user_data pointer to user data
  * @return pointer to the new imgfont or NULL if create error.
  */
-lv_font_t *lv_imgfont_create(uint16_t height, lv_imgfont_get_path_cb_t path_cb, void * user_data);
+lv_font_t * lv_imgfont_create(uint16_t height, lv_imgfont_get_path_cb_t path_cb, void * user_data);
 
 /**
  * Destroy a image font that has been created.

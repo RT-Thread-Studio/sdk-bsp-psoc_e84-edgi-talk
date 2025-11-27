@@ -48,8 +48,7 @@ static void app_init(void)
  * application couldn't see its internals
  * -------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
     LOGGED_OUT,
     LOGGED_IN,
     AUTH_FAILED,
@@ -59,31 +58,28 @@ static lv_subject_t auth_state_subject;
 
 static void textarea_event_cb(lv_event_t * e)
 {
-    lv_obj_t *ta = lv_event_get_target(e);
-    if (lv_strcmp(lv_textarea_get_text(ta), "hello") == 0)
-    {
+    lv_obj_t * ta = lv_event_get_target(e);
+    if(lv_strcmp(lv_textarea_get_text(ta), "hello") == 0) {
         lv_subject_set_int(&auth_state_subject, LOGGED_IN);
     }
-    else
-    {
+    else {
         lv_subject_set_int(&auth_state_subject, AUTH_FAILED);
     }
 }
 
 static void info_label_observer_cb(lv_observer_t * observer, lv_subject_t * subject)
 {
-    lv_obj_t *label = lv_observer_get_target(observer);
-    switch (lv_subject_get_int(subject))
-    {
-    case LOGGED_IN:
-        lv_label_set_text(label, "Login successful");
-        break;
-    case LOGGED_OUT:
-        lv_label_set_text(label, "Logged out");
-        break;
-    case AUTH_FAILED:
-        lv_label_set_text(label, "Login failed");
-        break;
+    lv_obj_t * label = lv_observer_get_target(observer);
+    switch(lv_subject_get_int(subject)) {
+        case LOGGED_IN:
+            lv_label_set_text(label, "Login successful");
+            break;
+        case LOGGED_OUT:
+            lv_label_set_text(label, "Logged out");
+            break;
+        case AUTH_FAILED:
+            lv_label_set_text(label, "Login failed");
+            break;
     }
 }
 
@@ -98,7 +94,7 @@ static void ui_init(void)
     lv_subject_init_int(&auth_state_subject, LOGGED_OUT);
 
     /*Create a slider in the center of the display*/
-    lv_obj_t *ta = lv_textarea_create(lv_screen_active());
+    lv_obj_t * ta = lv_textarea_create(lv_screen_active());
     lv_obj_set_pos(ta, 10, 10);
     lv_obj_set_width(ta, 200);
     lv_textarea_set_one_line(ta, true);
@@ -107,11 +103,11 @@ static void ui_init(void)
     lv_obj_add_event_cb(ta, textarea_event_cb, LV_EVENT_READY, NULL);
     lv_obj_bind_state_if_eq(ta, &auth_state_subject, LV_STATE_DISABLED, LOGGED_IN);
 
-    lv_obj_t *kb = lv_keyboard_create(lv_screen_active());
+    lv_obj_t * kb = lv_keyboard_create(lv_screen_active());
     lv_keyboard_set_textarea(kb, ta);
 
-    lv_obj_t *btn;
-    lv_obj_t *label;
+    lv_obj_t * btn;
+    lv_obj_t * label;
 
     /*Create a log out button which will be active only when logged in*/
     btn = lv_button_create(lv_screen_active());

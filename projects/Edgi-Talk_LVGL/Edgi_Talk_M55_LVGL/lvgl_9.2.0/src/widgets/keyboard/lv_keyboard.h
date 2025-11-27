@@ -36,8 +36,7 @@ extern "C" {
  **********************/
 
 /** Current keyboard mode.*/
-typedef enum
-{
+typedef enum {
     LV_KEYBOARD_MODE_TEXT_LOWER,
     LV_KEYBOARD_MODE_TEXT_UPPER,
     LV_KEYBOARD_MODE_SPECIAL,
@@ -52,8 +51,7 @@ typedef enum
 } lv_keyboard_mode_t;
 
 #if LV_USE_OBJ_PROPERTY
-enum
-{
+enum {
     LV_PROPERTY_ID(KEYBOARD, TEXTAREA,            LV_PROPERTY_TYPE_OBJ,   0),
     LV_PROPERTY_ID(KEYBOARD, MODE,                LV_PROPERTY_TYPE_INT,   1),
     LV_PROPERTY_ID(KEYBOARD, POPOVERS,            LV_PROPERTY_TYPE_INT,   2),
@@ -73,7 +71,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_keyboard_class;
  * @param parent    pointer to an object, it will be the parent of the new keyboard
  * @return          pointer to the created keyboard
  */
-lv_obj_t *lv_keyboard_create(lv_obj_t * parent);
+lv_obj_t * lv_keyboard_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -121,7 +119,7 @@ void lv_keyboard_set_map(lv_obj_t * kb, lv_keyboard_mode_t mode, const char * ma
  * @param kb        pointer to a Keyboard object
  * @return          pointer to the assigned Text Area object
  */
-lv_obj_t *lv_keyboard_get_textarea(const lv_obj_t * kb);
+lv_obj_t * lv_keyboard_get_textarea(const lv_obj_t * kb);
 
 /**
  * Set a new a mode (text or number map)
@@ -142,7 +140,7 @@ bool lv_keyboard_get_popovers(const lv_obj_t * obj);
  * @param kb        pointer to a keyboard object
  * @return          the current map
  */
-const char **lv_keyboard_get_map_array(const lv_obj_t * kb);
+const char ** lv_keyboard_get_map_array(const lv_obj_t * kb);
 
 /**
  * Get the index of the lastly "activated" button by the user (pressed, released, focused etc)
@@ -158,7 +156,7 @@ uint32_t lv_keyboard_get_selected_button(const lv_obj_t * obj);
  * @param btn_id    the index a button not counting new line characters.
  * @return          text of btn_index` button
  */
-const char *lv_keyboard_get_button_text(const lv_obj_t * obj, uint32_t btn_id);
+const char * lv_keyboard_get_button_text(const lv_obj_t * obj, uint32_t btn_id);
 
 /*=====================
  * Other functions

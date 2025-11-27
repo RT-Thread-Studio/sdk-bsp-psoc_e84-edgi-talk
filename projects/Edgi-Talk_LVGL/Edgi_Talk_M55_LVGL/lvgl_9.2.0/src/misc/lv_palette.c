@@ -34,8 +34,7 @@
 
 lv_color_t lv_palette_main(lv_palette_t p)
 {
-    static const lv_color_t colors[] =
-    {
+    static const lv_color_t colors[] = {
         LV_COLOR_MAKE(0xF4, 0x43, 0x36), LV_COLOR_MAKE(0xE9, 0x1E, 0x63), LV_COLOR_MAKE(0x9C, 0x27, 0xB0), LV_COLOR_MAKE(0x67, 0x3A, 0xB7),
         LV_COLOR_MAKE(0x3F, 0x51, 0xB5), LV_COLOR_MAKE(0x21, 0x96, 0xF3), LV_COLOR_MAKE(0x03, 0xA9, 0xF4), LV_COLOR_MAKE(0x00, 0xBC, 0xD4),
         LV_COLOR_MAKE(0x00, 0x96, 0x88), LV_COLOR_MAKE(0x4C, 0xAF, 0x50), LV_COLOR_MAKE(0x8B, 0xC3, 0x4A), LV_COLOR_MAKE(0xCD, 0xDC, 0x39),
@@ -43,8 +42,7 @@ lv_color_t lv_palette_main(lv_palette_t p)
         LV_COLOR_MAKE(0x79, 0x55, 0x48), LV_COLOR_MAKE(0x60, 0x7D, 0x8B), LV_COLOR_MAKE(0x9E, 0x9E, 0x9E)
     };
 
-    if (p >= LV_PALETTE_LAST)
-    {
+    if(p >= LV_PALETTE_LAST) {
         LV_LOG_WARN("Invalid palette: %d", p);
         return lv_color_black();
     }
@@ -55,8 +53,7 @@ lv_color_t lv_palette_main(lv_palette_t p)
 
 lv_color_t lv_palette_lighten(lv_palette_t p, uint8_t lvl)
 {
-    static const lv_color_t colors[][5] =
-    {
+    static const lv_color_t colors[][5] = {
         {LV_COLOR_MAKE(0xEF, 0x53, 0x50), LV_COLOR_MAKE(0xE5, 0x73, 0x73), LV_COLOR_MAKE(0xEF, 0x9A, 0x9A), LV_COLOR_MAKE(0xFF, 0xCD, 0xD2), LV_COLOR_MAKE(0xFF, 0xEB, 0xEE)},
         {LV_COLOR_MAKE(0xEC, 0x40, 0x7A), LV_COLOR_MAKE(0xF0, 0x62, 0x92), LV_COLOR_MAKE(0xF4, 0x8F, 0xB1), LV_COLOR_MAKE(0xF8, 0xBB, 0xD0), LV_COLOR_MAKE(0xFC, 0xE4, 0xEC)},
         {LV_COLOR_MAKE(0xAB, 0x47, 0xBC), LV_COLOR_MAKE(0xBA, 0x68, 0xC8), LV_COLOR_MAKE(0xCE, 0x93, 0xD8), LV_COLOR_MAKE(0xE1, 0xBE, 0xE7), LV_COLOR_MAKE(0xF3, 0xE5, 0xF5)},
@@ -78,14 +75,12 @@ lv_color_t lv_palette_lighten(lv_palette_t p, uint8_t lvl)
         {LV_COLOR_MAKE(0xBD, 0xBD, 0xBD), LV_COLOR_MAKE(0xE0, 0xE0, 0xE0), LV_COLOR_MAKE(0xEE, 0xEE, 0xEE), LV_COLOR_MAKE(0xF5, 0xF5, 0xF5), LV_COLOR_MAKE(0xFA, 0xFA, 0xFA)},
     };
 
-    if (p >= LV_PALETTE_LAST)
-    {
+    if(p >= LV_PALETTE_LAST) {
         LV_LOG_WARN("Invalid palette: %d", p);
         return lv_color_black();
     }
 
-    if (lvl == 0 || lvl > 5)
-    {
+    if(lvl == 0 || lvl > 5) {
         LV_LOG_WARN("Invalid level: %d. Must be 1..5", lvl);
         return lv_color_black();
     }
@@ -97,8 +92,7 @@ lv_color_t lv_palette_lighten(lv_palette_t p, uint8_t lvl)
 
 lv_color_t lv_palette_darken(lv_palette_t p, uint8_t lvl)
 {
-    static const lv_color_t colors[][4] =
-    {
+    static const lv_color_t colors[][4] = {
         {LV_COLOR_MAKE(0xE5, 0x39, 0x35), LV_COLOR_MAKE(0xD3, 0x2F, 0x2F), LV_COLOR_MAKE(0xC6, 0x28, 0x28), LV_COLOR_MAKE(0xB7, 0x1C, 0x1C)},
         {LV_COLOR_MAKE(0xD8, 0x1B, 0x60), LV_COLOR_MAKE(0xC2, 0x18, 0x5B), LV_COLOR_MAKE(0xAD, 0x14, 0x57), LV_COLOR_MAKE(0x88, 0x0E, 0x4F)},
         {LV_COLOR_MAKE(0x8E, 0x24, 0xAA), LV_COLOR_MAKE(0x7B, 0x1F, 0xA2), LV_COLOR_MAKE(0x6A, 0x1B, 0x9A), LV_COLOR_MAKE(0x4A, 0x14, 0x8C)},
@@ -120,14 +114,12 @@ lv_color_t lv_palette_darken(lv_palette_t p, uint8_t lvl)
         {LV_COLOR_MAKE(0x75, 0x75, 0x75), LV_COLOR_MAKE(0x61, 0x61, 0x61), LV_COLOR_MAKE(0x42, 0x42, 0x42), LV_COLOR_MAKE(0x21, 0x21, 0x21)},
     };
 
-    if (p >= LV_PALETTE_LAST)
-    {
+    if(p >= LV_PALETTE_LAST) {
         LV_LOG_WARN("Invalid palette: %d", p);
         return lv_color_black();
     }
 
-    if (lvl == 0 || lvl > 4)
-    {
+    if(lvl == 0 || lvl > 4) {
         LV_LOG_WARN("Invalid level: %d. Must be 1..4", lvl);
         return lv_color_black();
     }

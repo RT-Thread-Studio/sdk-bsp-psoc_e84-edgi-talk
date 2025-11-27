@@ -31,8 +31,7 @@ typedef void (*lv_event_cb_t)(lv_event_t * e);
 /**
  * Type of event being sent to the object.
  */
-typedef enum
-{
+typedef enum {
     LV_EVENT_ALL = 0,
 
     /** Input device events*/
@@ -124,16 +123,16 @@ typedef lv_array_t lv_event_list_t;
 
 lv_result_t lv_event_send(lv_event_list_t * list, lv_event_t * e, bool preprocess);
 
-lv_event_dsc_t *lv_event_add(lv_event_list_t * list, lv_event_cb_t cb, lv_event_code_t filter, void * user_data);
+lv_event_dsc_t * lv_event_add(lv_event_list_t * list, lv_event_cb_t cb, lv_event_code_t filter, void * user_data);
 bool lv_event_remove_dsc(lv_event_list_t * list, lv_event_dsc_t * dsc);
 
 uint32_t lv_event_get_count(lv_event_list_t * list);
 
-lv_event_dsc_t *lv_event_get_dsc(lv_event_list_t * list, uint32_t index);
+lv_event_dsc_t * lv_event_get_dsc(lv_event_list_t * list, uint32_t index);
 
 lv_event_cb_t lv_event_dsc_get_cb(lv_event_dsc_t * dsc);
 
-void *lv_event_dsc_get_user_data(lv_event_dsc_t * dsc);
+void * lv_event_dsc_get_user_data(lv_event_dsc_t * dsc);
 
 bool lv_event_remove(lv_event_list_t * list, uint32_t index);
 
@@ -144,7 +143,7 @@ void lv_event_remove_all(lv_event_list_t * list);
  * @param e     pointer to the event descriptor
  * @return      the target of the event_code
  */
-void *lv_event_get_target(lv_event_t * e);
+void * lv_event_get_target(lv_event_t * e);
 
 /**
  * Get the current target of the event. It's the object which event handler being called.
@@ -152,7 +151,7 @@ void *lv_event_get_target(lv_event_t * e);
  * @param e     pointer to the event descriptor
  * @return      pointer to the current target of the event_code
  */
-void *lv_event_get_current_target(lv_event_t * e);
+void * lv_event_get_current_target(lv_event_t * e);
 
 /**
  * Get the event code of an event
@@ -166,14 +165,14 @@ lv_event_code_t lv_event_get_code(lv_event_t * e);
  * @param e     pointer to the event descriptor
  * @return      pointer to the parameter
  */
-void *lv_event_get_param(lv_event_t * e);
+void * lv_event_get_param(lv_event_t * e);
 
 /**
  * Get the user_data passed when the event was registered on the object
  * @param e     pointer to the event descriptor
  * @return      pointer to the user_data
  */
-void *lv_event_get_user_data(lv_event_t * e);
+void * lv_event_get_user_data(lv_event_t * e);
 
 /**
  * Stop the event from bubbling.

@@ -44,8 +44,7 @@
  **********************/
 
 /* init commands based on LovyanGFX */
-static const uint8_t init_cmd_list[] =
-{
+static const uint8_t init_cmd_list[] = {
     CMD_CSCON,      1,  0xC3,                           /* Enable extension command 2 partI */
     CMD_CSCON,      1,  0x96,                           /* Enable extension command 2 partII */
     CMD_INVCTR,     1,  0x01,                           /* 1-dot inversion */
@@ -85,10 +84,10 @@ static const uint8_t init_cmd_list[] =
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_st7796_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
-                               lv_st7796_send_cmd_cb_t send_cmd_cb, lv_st7796_send_color_cb_t send_color_cb)
+lv_display_t * lv_st7796_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
+                                lv_st7796_send_cmd_cb_t send_cmd_cb, lv_st7796_send_color_cb_t send_color_cb)
 {
-    lv_display_t *disp = lv_lcd_generic_mipi_create(hor_res, ver_res, flags, send_cmd_cb, send_color_cb);
+    lv_display_t * disp = lv_lcd_generic_mipi_create(hor_res, ver_res, flags, send_cmd_cb, send_color_cb);
     lv_lcd_generic_mipi_send_cmd_list(disp, init_cmd_list);
     return disp;
 }

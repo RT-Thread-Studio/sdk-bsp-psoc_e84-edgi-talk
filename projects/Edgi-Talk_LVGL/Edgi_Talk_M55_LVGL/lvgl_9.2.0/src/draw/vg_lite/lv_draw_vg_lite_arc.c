@@ -53,13 +53,12 @@
  **********************/
 
 void lv_draw_vg_lite_arc(lv_draw_unit_t * draw_unit, const lv_draw_arc_dsc_t * dsc,
-                         const lv_area_t *coords)
+                         const lv_area_t * coords)
 {
-    lv_draw_vg_lite_unit_t *u = (lv_draw_vg_lite_unit_t *)draw_unit;
+    lv_draw_vg_lite_unit_t * u = (lv_draw_vg_lite_unit_t *)draw_unit;
 
     lv_area_t clip_area;
-    if (!lv_area_intersect(&clip_area, coords, draw_unit->clip_area))
-    {
+    if(!lv_area_intersect(&clip_area, coords, draw_unit->clip_area)) {
         /*Fully clipped, nothing to do*/
         return;
     }
@@ -68,25 +67,22 @@ void lv_draw_vg_lite_arc(lv_draw_unit_t * draw_unit, const lv_draw_arc_dsc_t * d
     float end_angle = dsc->end_angle;
     float sweep_angle = end_angle - start_angle;
 
-    while (sweep_angle < 0)
-    {
+    while(sweep_angle < 0) {
         sweep_angle += 360;
     }
 
-    while (sweep_angle > 360)
-    {
+    while(sweep_angle > 360) {
         sweep_angle -= 360;
     }
 
     /*If the angles are the same then there is nothing to draw*/
-    if (math_zero(sweep_angle))
-    {
+    if(math_zero(sweep_angle)) {
         return;
     }
 
     LV_PROFILER_BEGIN;
 
-    lv_vg_lite_path_t *path = lv_vg_lite_path_get(u, VG_LITE_FP32);
+    lv_vg_lite_path_t * path = lv_vg_lite_path_get(u, VG_LITE_FP32);
     lv_vg_lite_path_set_quality(path, VG_LITE_HIGH);
     lv_vg_lite_path_set_bonding_box_area(path, &clip_area);
 
@@ -99,14 +95,12 @@ void lv_draw_vg_lite_arc(lv_draw_unit_t * draw_unit, const lv_draw_arc_dsc_t * d
 
     vg_lite_fill_t fill = VG_LITE_FILL_NON_ZERO;
 
-    if (math_equal(sweep_angle, 360))
-    {
+    if(math_equal(sweep_angle, 360)) {
         lv_vg_lite_path_append_circle(path, cx, cy, radius_out, radius_out);
         lv_vg_lite_path_append_circle(path, cx, cy, radius_in, radius_in);
         fill = VG_LITE_FILL_EVEN_ODD;
     }
-    else
-    {
+    else {
         /* radius_out start point */
         float start_angle_rad = MATH_RADIANS(start_angle);
         float start_x = radius_out * MATH_COSF(start_angle_rad) + cx;
@@ -142,8 +136,7 @@ void lv_draw_vg_lite_arc(lv_draw_unit_t * draw_unit, const lv_draw_arc_dsc_t * d
         lv_vg_lite_path_close(path);
 
         /* draw round */
-        if (dsc->rounded && half_width > 0)
-        {
+        if(dsc->rounded && half_width > 0) {
             float rcx1 = cx + radius_center * MATH_COSF(end_angle_rad);
             float rcy1 = cy + radius_center * MATH_SINF(end_angle_rad);
             lv_vg_lite_path_append_circle(path, rcx1, rcy1, half_width, half_width);
@@ -162,7 +155,7 @@ void lv_draw_vg_lite_arc(lv_draw_unit_t * draw_unit, const lv_draw_arc_dsc_t * d
 
     vg_lite_color_t color = lv_vg_lite_color(dsc->color, dsc->opa, true);
 
-    vg_lite_path_t *vg_lite_path = lv_vg_lite_path_get_path(path);
+    vg_lite_path_t * vg_lite_path = lv_vg_lite_path_get_path(path);
 
     LV_VG_LITE_ASSERT_DEST_BUFFER(&u->target_buffer);
     LV_VG_LITE_ASSERT_PATH(vg_lite_path);
@@ -178,12 +171,10 @@ void lv_draw_vg_lite_arc(lv_draw_unit_t * draw_unit, const lv_draw_arc_dsc_t * d
                                color));
     LV_PROFILER_END_TAG("vg_lite_draw");
 
-    if (dsc->img_src)
-    {
+    if(dsc->img_src) {
         vg_lite_buffer_t src_buf;
         lv_image_decoder_dsc_t decoder_dsc;
-        if (lv_vg_lite_buffer_open_image(&src_buf, &decoder_dsc, dsc->img_src, false))
-        {
+        if(lv_vg_lite_buffer_open_image(&src_buf, &decoder_dsc, dsc->img_src, false)) {
             vg_lite_matrix_t path_matrix;
             vg_lite_identity(&path_matrix);
             lv_vg_lite_matrix_multiply(&path_matrix, &u->global_matrix);

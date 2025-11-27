@@ -33,8 +33,7 @@ extern "C" {
 LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_animimg_class;
 
 /** Image parts */
-typedef enum
-{
+typedef enum {
     LV_ANIM_IMAGE_PART_MAIN,
 } lv_animimg_part_t;
 
@@ -47,7 +46,7 @@ typedef enum
  * @param parent pointer to an object, it will be the parent of the new button
  * @return pointer to the created animation image object
  */
-lv_obj_t *lv_animimg_create(lv_obj_t * parent);
+lv_obj_t * lv_animimg_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -90,7 +89,7 @@ void lv_animimg_set_repeat_count(lv_obj_t * img, uint32_t count);
  * @param img   pointer to an animation image object
  * @return a    pointer that will point to a series images
  */
-const void **lv_animimg_get_src(lv_obj_t * img);
+const void ** lv_animimg_get_src(lv_obj_t * img);
 
 /**
  * Get the image animation images source.

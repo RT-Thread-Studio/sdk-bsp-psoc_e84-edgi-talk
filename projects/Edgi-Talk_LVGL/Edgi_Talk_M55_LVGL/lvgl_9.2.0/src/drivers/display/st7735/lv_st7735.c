@@ -50,8 +50,7 @@
  **********************/
 
 /* init commands for buydisplay.com ER-TFTM018-3 */
-static const uint8_t init_cmd_list[] =
-{
+static const uint8_t init_cmd_list[] = {
     0xB1,       3,  0x05, 0x3C, 0x3C,
     0xB2,       3,  0x05, 0x3C, 0x3C,
     0xB3,       6,  0x05, 0x3C, 0x3C, 0x05, 0x3C, 0x3C,
@@ -79,10 +78,10 @@ static const uint8_t init_cmd_list[] =
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_st7735_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
-                               lv_st7735_send_cmd_cb_t send_cmd_cb, lv_st7735_send_color_cb_t send_color_cb)
+lv_display_t * lv_st7735_create(uint32_t hor_res, uint32_t ver_res, lv_lcd_flag_t flags,
+                                lv_st7735_send_cmd_cb_t send_cmd_cb, lv_st7735_send_color_cb_t send_color_cb)
 {
-    lv_display_t *disp = lv_lcd_generic_mipi_create(hor_res, ver_res, flags, send_cmd_cb, send_color_cb);
+    lv_display_t * disp = lv_lcd_generic_mipi_create(hor_res, ver_res, flags, send_cmd_cb, send_color_cb);
     lv_lcd_generic_mipi_send_cmd_list(disp, init_cmd_list);
     return disp;
 }

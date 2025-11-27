@@ -26,8 +26,7 @@ extern "C" {
 
 typedef void (*lv_layout_update_cb_t)(lv_obj_t *, void * user_data);
 
-typedef enum
-{
+typedef enum {
     LV_LAYOUT_NONE = 0,
 
 #if LV_USE_FLEX

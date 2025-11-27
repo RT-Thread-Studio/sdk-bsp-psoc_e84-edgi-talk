@@ -8,20 +8,19 @@ static bool size_dec = false;
 static void timer_cb(lv_timer_t * timer)
 {
     lv_obj_invalidate(lv_timer_get_user_data(timer));
-    if (size_dec) size--;
+    if(size_dec) size--;
     else size++;
 
-    if (size == 50) size_dec = true;
-    else if (size == 0) size_dec = false;
+    if(size == 50) size_dec = true;
+    else if(size == 0) size_dec = false;
 }
 
 static void event_cb(lv_event_t * e)
 {
-    lv_obj_t *obj = lv_event_get_target(e);
-    lv_draw_task_t *draw_task = lv_event_get_draw_task(e);
-    lv_draw_dsc_base_t *base_dsc = lv_draw_task_get_draw_dsc(draw_task);
-    if (base_dsc->part == LV_PART_MAIN)
-    {
+    lv_obj_t * obj = lv_event_get_target(e);
+    lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
+    lv_draw_dsc_base_t * base_dsc = lv_draw_task_get_draw_dsc(draw_task);
+    if(base_dsc->part == LV_PART_MAIN) {
         lv_draw_rect_dsc_t draw_dsc;
         lv_draw_rect_dsc_init(&draw_dsc);
         draw_dsc.bg_color = lv_color_hex(0xffaaaa);
@@ -50,7 +49,7 @@ static void event_cb(lv_event_t * e)
  */
 void lv_example_event_4(void)
 {
-    lv_obj_t *cont = lv_obj_create(lv_screen_active());
+    lv_obj_t * cont = lv_obj_create(lv_screen_active());
     lv_obj_set_size(cont, 200, 200);
     lv_obj_center(cont);
     lv_obj_add_event_cb(cont, event_cb, LV_EVENT_DRAW_TASK_ADDED, NULL);

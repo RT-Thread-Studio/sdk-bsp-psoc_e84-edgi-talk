@@ -40,7 +40,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_qrcode_class;
  * @param parent point to an object where to create the QR code
  * @return pointer to the created QR code object
  */
-lv_obj_t *lv_qrcode_create(lv_obj_t * parent);
+lv_obj_t * lv_qrcode_create(lv_obj_t * parent);
 
 /**
  * Set QR code size.

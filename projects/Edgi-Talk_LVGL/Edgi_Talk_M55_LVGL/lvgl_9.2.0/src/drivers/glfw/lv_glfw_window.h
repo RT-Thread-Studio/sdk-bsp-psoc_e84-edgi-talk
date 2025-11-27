@@ -39,7 +39,7 @@ extern "C" {
  * @param use_mouse_indev    send pointer indev input to LVGL display textures
  * @return                   the new GLFW window handle
  */
-lv_glfw_window_t *lv_glfw_window_create(int32_t hor_res, int32_t ver_res, bool use_mouse_indev);
+lv_glfw_window_t * lv_glfw_window_create(int32_t hor_res, int32_t ver_res, bool use_mouse_indev);
 
 /**
  * Delete a GLFW window. If it is the last one, the process will exit
@@ -55,8 +55,8 @@ void lv_glfw_window_delete(lv_glfw_window_t * window);
  * @param h             height in pixels of the texture
  * @return              the new texture handle
  */
-lv_glfw_texture_t *lv_glfw_window_add_texture(lv_glfw_window_t * window, unsigned int texture_id, int32_t w,
-        int32_t h);
+lv_glfw_texture_t * lv_glfw_window_add_texture(lv_glfw_window_t * window, unsigned int texture_id, int32_t w,
+                                               int32_t h);
 
 /**
  * Remove a texture from its GLFW window and delete it
@@ -93,7 +93,7 @@ void lv_glfw_texture_set_opa(lv_glfw_texture_t * texture, lv_opa_t opa);
  *                   LVGL display texture and the window was created with
  *                   `use_mouse_indev` as `true`
  */
-lv_indev_t *lv_glfw_texture_get_mouse_indev(lv_glfw_texture_t * texture);
+lv_indev_t * lv_glfw_texture_get_mouse_indev(lv_glfw_texture_t * texture);
 
 /**********************
  *      MACROS

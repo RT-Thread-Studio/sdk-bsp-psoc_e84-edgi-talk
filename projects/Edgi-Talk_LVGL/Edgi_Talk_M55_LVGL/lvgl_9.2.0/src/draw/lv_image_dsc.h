@@ -29,8 +29,7 @@ LV_EXPORT_CONST_INT(LV_IMAGE_HEADER_MAGIC);
  *      TYPEDEFS
  **********************/
 
-typedef enum lv_image_flags_t
-{
+typedef enum lv_image_flags_t {
     /**
      * For RGB map of the image data, mark if it's pre-multiplied with alpha.
      * For indexed image, this bit indicated palette data is pre-multiplied with alpha.
@@ -69,16 +68,14 @@ typedef enum lv_image_flags_t
     LV_IMAGE_FLAGS_USER8            = 0x8000,
 } lv_image_flags_t;
 
-typedef enum
-{
+typedef enum {
     LV_IMAGE_COMPRESS_NONE = 0,
     LV_IMAGE_COMPRESS_RLE,      /**< LVGL custom RLE compression */
     LV_IMAGE_COMPRESS_LZ4,
 } lv_image_compress_t;
 
 #if LV_BIG_ENDIAN_SYSTEM
-typedef struct
-{
+typedef struct {
     uint32_t reserved_2: 16;    /**< Reserved to be used later*/
     uint32_t stride: 16;        /**< Number of bytes in a row*/
     uint32_t h: 16;
@@ -88,8 +85,7 @@ typedef struct
     uint32_t magic: 8;          /**< Magic number. Must be LV_IMAGE_HEADER_MAGIC*/
 } lv_image_header_t;
 #else
-typedef struct
-{
+typedef struct {
     uint32_t magic: 8;          /**< Magic number. Must be LV_IMAGE_HEADER_MAGIC*/
     uint32_t cf : 8;            /**< Color format: See `lv_color_format_t`*/
     uint32_t flags: 16;         /**< Image flags, see `lv_image_flags_t`*/
@@ -101,23 +97,19 @@ typedef struct
 } lv_image_header_t;
 #endif
 
-typedef struct
-{
-    void *buf;
+typedef struct {
+    void * buf;
     uint32_t stride;            /**< Number of bytes in a row*/
 } lv_yuv_plane_t;
 
-typedef union
-{
+typedef union {
     lv_yuv_plane_t yuv;         /**< packed format*/
-    struct
-    {
+    struct {
         lv_yuv_plane_t y;
         lv_yuv_plane_t u;
         lv_yuv_plane_t v;
     } planar;                   /**< planar format with 3 plane*/
-    struct
-    {
+    struct {
         lv_yuv_plane_t y;
         lv_yuv_plane_t uv;
     } semi_planar;              /**< planar format with 2 plane*/
@@ -127,12 +119,11 @@ typedef union
  * Struct to describe a constant image resource.
  * It's similar to lv_draw_buf_t, but the data is constant.
  */
-typedef struct
-{
+typedef struct {
     lv_image_header_t header;   /**< A header describing the basics of the image*/
     uint32_t data_size;         /**< Size of the image in bytes*/
-    const uint8_t *data;        /**< Pointer to the data of the image*/
-    const void *reserved;       /**< A reserved field to make it has same size as lv_draw_buf_t*/
+    const uint8_t * data;       /**< Pointer to the data of the image*/
+    const void * reserved;      /**< A reserved field to make it has same size as lv_draw_buf_t*/
 } lv_image_dsc_t;
 
 /**********************

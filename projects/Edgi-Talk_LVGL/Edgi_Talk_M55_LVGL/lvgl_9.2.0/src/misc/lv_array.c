@@ -47,8 +47,7 @@ void lv_array_init(lv_array_t * array, uint32_t capacity, uint32_t element_size)
 
 void lv_array_deinit(lv_array_t * array)
 {
-    if (array->data)
-    {
+    if(array->data) {
         lv_free(array->data);
         array->data = NULL;
     }
@@ -59,8 +58,7 @@ void lv_array_deinit(lv_array_t * array)
 
 void lv_array_copy(lv_array_t * target, const lv_array_t * source)
 {
-    if (lv_array_is_empty(source))
-    {
+    if(lv_array_is_empty(source)) {
         return;
     }
     lv_array_deinit(target);
@@ -71,29 +69,26 @@ void lv_array_copy(lv_array_t * target, const lv_array_t * source)
 
 void lv_array_shrink(lv_array_t * array)
 {
-    if (array->size <= array->capacity / LV_ARRAY_DEFAULT_SHRINK_RATIO)
-    {
+    if(array->size <= array->capacity / LV_ARRAY_DEFAULT_SHRINK_RATIO) {
         lv_array_resize(array, array->size);
     }
 }
 
 lv_result_t lv_array_remove(lv_array_t * array, uint32_t index)
 {
-    if (index >= array->size)
-    {
+    if(index >= array->size) {
         return LV_RESULT_INVALID;
     }
 
     /*Shortcut*/
-    if (index == array->size - 1)
-    {
+    if(index == array->size - 1) {
         array->size--;
         lv_array_shrink(array);
         return LV_RESULT_OK;
     }
 
-    uint8_t *start = lv_array_at(array, index);
-    uint8_t *remaining = start + array->element_size;
+    uint8_t * start = lv_array_at(array, index);
+    uint8_t * remaining = start + array->element_size;
     uint32_t remaining_size = (array->size - index - 1) * array->element_size;
     lv_memmove(start, remaining, remaining_size);
     array->size--;
@@ -103,26 +98,23 @@ lv_result_t lv_array_remove(lv_array_t * array, uint32_t index)
 
 lv_result_t lv_array_erase(lv_array_t * array, uint32_t start, uint32_t end)
 {
-    if (end > array->size)
-    {
+    if(end > array->size) {
         end = array->size;
     }
 
-    if (start >= end)
-    {
+    if(start >= end) {
         return LV_RESULT_INVALID;
     }
 
     /*Shortcut*/
-    if (end == array->size)
-    {
+    if(end == array->size) {
         array->size = start;
         lv_array_shrink(array);
         return LV_RESULT_OK;
     }
 
-    uint8_t *start_p = lv_array_at(array, start);
-    uint8_t *remaining = start_p + (end - start) * array->element_size;
+    uint8_t * start_p = lv_array_at(array, start);
+    uint8_t * remaining = start_p + (end - start) * array->element_size;
     uint32_t remaining_size = (array->size - end) * array->element_size;
     lv_memcpy(start_p, remaining, remaining_size);
     array->size -= (end - start);
@@ -132,12 +124,11 @@ lv_result_t lv_array_erase(lv_array_t * array, uint32_t start, uint32_t end)
 
 void lv_array_resize(lv_array_t * array, uint32_t new_capacity)
 {
-    uint8_t *data = lv_realloc(array->data, new_capacity * array->element_size);
+    uint8_t * data = lv_realloc(array->data, new_capacity * array->element_size);
     LV_ASSERT_NULL(data);
     array->data = data;
     array->capacity = new_capacity;
-    if (array->size > new_capacity)
-    {
+    if(array->size > new_capacity) {
         array->size = new_capacity;
     }
 }
@@ -146,13 +137,12 @@ lv_result_t lv_array_concat(lv_array_t * array, const lv_array_t * other)
 {
     LV_ASSERT_NULL(array->data);
     uint32_t size = other->size;
-    if (array->size + size > array->capacity)
-    {
+    if(array->size + size > array->capacity) {
         /*array is full*/
         lv_array_resize(array, array->size + size);
     }
 
-    uint8_t *data = array->data + array->size * array->element_size;
+    uint8_t * data = array->data + array->size * array->element_size;
     lv_memcpy(data, other->data, array->element_size * size);
     array->size += size;
     return LV_RESULT_OK;
@@ -162,22 +152,20 @@ lv_result_t lv_array_push_back(lv_array_t * array, const void * element)
 {
     LV_ASSERT_NULL(array->data);
 
-    if (array->size == array->capacity)
-    {
+    if(array->size == array->capacity) {
         /*array is full*/
         lv_array_resize(array, array->capacity + LV_ARRAY_DEFAULT_CAPACITY);
     }
 
-    uint8_t *data = array->data + array->size * array->element_size;
+    uint8_t * data = array->data + array->size * array->element_size;
     lv_memcpy(data, element, array->element_size);
     array->size++;
     return LV_RESULT_OK;
 }
 
-void *lv_array_at(const lv_array_t * array, uint32_t index)
+void * lv_array_at(const lv_array_t * array, uint32_t index)
 {
-    if (index >= array->size)
-    {
+    if(index >= array->size) {
         return NULL;
     }
 
@@ -187,8 +175,8 @@ void *lv_array_at(const lv_array_t * array, uint32_t index)
 
 lv_result_t lv_array_assign(lv_array_t * array, uint32_t index, const void * value)
 {
-    uint8_t *data = lv_array_at(array, index);
-    if (data == NULL) return LV_RESULT_INVALID;
+    uint8_t * data = lv_array_at(array, index);
+    if(data == NULL) return LV_RESULT_INVALID;
 
     lv_memcpy(data, value, array->element_size);
     return LV_RESULT_OK;
@@ -219,12 +207,12 @@ void lv_array_clear(lv_array_t * array)
     array->size = 0;
 }
 
-void *lv_array_front(const lv_array_t * array)
+void * lv_array_front(const lv_array_t * array)
 {
     return lv_array_at(array, 0);
 }
 
-void *lv_array_back(const lv_array_t * array)
+void * lv_array_back(const lv_array_t * array)
 {
     return lv_array_at(array, lv_array_size(array) - 1);
 }

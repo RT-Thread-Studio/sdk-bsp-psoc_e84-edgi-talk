@@ -36,7 +36,7 @@ extern "C" {
  * @param font_size   the font size in pixel
  * @return a font object
  */
-lv_font_t *lv_tiny_ttf_create_file(const char * path, int32_t font_size);
+lv_font_t * lv_tiny_ttf_create_file(const char * path, int32_t font_size);
 
 /**
  * Create a font from the specified file or path with the specified line height with the specified cache size.
@@ -46,8 +46,8 @@ lv_font_t *lv_tiny_ttf_create_file(const char * path, int32_t font_size);
  * @param cache_size  the cache size in count
  * @return a font object
  */
-lv_font_t *lv_tiny_ttf_create_file_ex(const char * path, int32_t font_size, lv_font_kerning_t kerning,
-                                      size_t cache_size);
+lv_font_t * lv_tiny_ttf_create_file_ex(const char * path, int32_t font_size, lv_font_kerning_t kerning,
+                                       size_t cache_size);
 #endif
 
 /**
@@ -57,7 +57,7 @@ lv_font_t *lv_tiny_ttf_create_file_ex(const char * path, int32_t font_size, lv_f
  * @param font_size   the font size in pixel
  * @return a font object
  */
-lv_font_t *lv_tiny_ttf_create_data(const void * data, size_t data_size, int32_t font_size);
+lv_font_t * lv_tiny_ttf_create_data(const void * data, size_t data_size, int32_t font_size);
 
 /**
  * Create a font from the specified data pointer with the specified line height and the specified cache size.
@@ -68,8 +68,8 @@ lv_font_t *lv_tiny_ttf_create_data(const void * data, size_t data_size, int32_t 
  * @param cache_size  the cache size in count
  * @return
  */
-lv_font_t *lv_tiny_ttf_create_data_ex(const void * data, size_t data_size, int32_t font_size,
-                                      lv_font_kerning_t kerning, size_t cache_size);
+lv_font_t * lv_tiny_ttf_create_data_ex(const void * data, size_t data_size, int32_t font_size,
+                                       lv_font_kerning_t kerning, size_t cache_size);
 
 /**
  * Set the size of the font to a new font_size

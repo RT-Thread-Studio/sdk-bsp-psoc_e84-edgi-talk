@@ -24,10 +24,9 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     lv_layout_update_cb_t cb;
-    void *user_data;
+    void * user_data;
 } lv_layout_dsc_t;
 
 /**********************

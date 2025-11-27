@@ -57,8 +57,8 @@ int lv_wayland_get_fd(void);
  * @param close_cb The callback that will be execute when the user closes the window
  * @return The LVGL display associated to the window
  */
-lv_display_t *lv_wayland_window_create(uint32_t hor_res, uint32_t ver_res, char * title,
-                                       lv_wayland_display_close_f_t close_cb);
+lv_display_t * lv_wayland_window_create(uint32_t hor_res, uint32_t ver_res, char * title,
+                                        lv_wayland_display_close_f_t close_cb);
 
 /**
  * Closes the window programmatically
@@ -93,7 +93,7 @@ void lv_wayland_window_set_maximized(lv_display_t * disp, bool maximize);
  * @param disp Reference to the LVGL display associated to the window
  * @return The input device
  */
-lv_indev_t *lv_wayland_get_pointer(lv_display_t * disp);
+lv_indev_t * lv_wayland_get_pointer(lv_display_t * disp);
 
 /**
  * Obtains the input device of the encoder
@@ -101,7 +101,7 @@ lv_indev_t *lv_wayland_get_pointer(lv_display_t * disp);
  * @param disp Reference to the LVGL display associated to the window
  * @return The input device
  */
-lv_indev_t *lv_wayland_get_pointeraxis(lv_display_t * disp);
+lv_indev_t * lv_wayland_get_pointeraxis(lv_display_t * disp);
 
 /**
  * Obtains the input device of the keyboard
@@ -109,7 +109,7 @@ lv_indev_t *lv_wayland_get_pointeraxis(lv_display_t * disp);
  * @param disp Reference to the LVGL display associated to the window
  * @return The input device
  */
-lv_indev_t *lv_wayland_get_keyboard(lv_display_t * disp);
+lv_indev_t * lv_wayland_get_keyboard(lv_display_t * disp);
 
 /**
  * Obtains the input device of the touch screen
@@ -117,7 +117,7 @@ lv_indev_t *lv_wayland_get_keyboard(lv_display_t * disp);
  * @param disp Reference to the LVGL display associated to the window
  * @return The input device
  */
-lv_indev_t *lv_wayland_get_touchscreen(lv_display_t * disp);
+lv_indev_t * lv_wayland_get_touchscreen(lv_display_t * disp);
 
 /**
  * Wrapper around lv_timer_handler

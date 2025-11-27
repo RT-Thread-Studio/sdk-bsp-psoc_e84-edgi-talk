@@ -49,21 +49,18 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     void (*pvStartRoutine)(void *);       /**< Application thread function. */
-    void *pTaskArg;                       /**< Arguments for application thread function. */
+    void * pTaskArg;                      /**< Arguments for application thread function. */
     TaskHandle_t xTaskHandle;             /**< FreeRTOS task handle. */
 } lv_thread_t;
 
-typedef struct
-{
+typedef struct {
     BaseType_t xIsInitialized;            /**< Set to pdTRUE if this mutex is initialized, pdFALSE otherwise. */
     SemaphoreHandle_t xMutex;             /**< FreeRTOS mutex. */
 } lv_mutex_t;
 
-typedef struct
-{
+typedef struct {
     BaseType_t
     xIsInitialized;                       /**< Set to pdTRUE if this condition variable is initialized, pdFALSE otherwise. */
     BaseType_t xSyncSignal;               /**< Set to pdTRUE if the thread is signaled, pdFALSE otherwise. */

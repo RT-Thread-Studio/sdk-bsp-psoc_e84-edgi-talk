@@ -37,22 +37,22 @@ void lv_vg_lite_grad_init(struct lv_draw_vg_lite_unit_t * u, uint32_t cache_cnt)
 void lv_vg_lite_grad_deinit(struct lv_draw_vg_lite_unit_t * u);
 
 bool lv_vg_lite_draw_grad(
-    struct lv_draw_vg_lite_unit_t *u,
-    vg_lite_buffer_t *buffer,
-    vg_lite_path_t *path,
-    const lv_vector_gradient_t *grad,
-    const vg_lite_matrix_t *grad_matrix,
-    const vg_lite_matrix_t *matrix,
+    struct lv_draw_vg_lite_unit_t * u,
+    vg_lite_buffer_t * buffer,
+    vg_lite_path_t * path,
+    const lv_vector_gradient_t * grad,
+    const vg_lite_matrix_t * grad_matrix,
+    const vg_lite_matrix_t * matrix,
     vg_lite_fill_t fill,
     vg_lite_blend_t blend);
 
 bool lv_vg_lite_draw_grad_helper(
-    struct lv_draw_vg_lite_unit_t *u,
-    vg_lite_buffer_t *buffer,
-    vg_lite_path_t *path,
-    const lv_area_t *area,
-    const lv_grad_dsc_t *grad_dsc,
-    const vg_lite_matrix_t *matrix,
+    struct lv_draw_vg_lite_unit_t * u,
+    vg_lite_buffer_t * buffer,
+    vg_lite_path_t * path,
+    const lv_area_t * area,
+    const lv_grad_dsc_t * grad_dsc,
+    const vg_lite_matrix_t * matrix,
     vg_lite_fill_t fill,
     vg_lite_blend_t blend);
 

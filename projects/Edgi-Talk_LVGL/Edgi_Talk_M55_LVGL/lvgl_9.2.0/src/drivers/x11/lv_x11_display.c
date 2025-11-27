@@ -36,21 +36,20 @@
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     /* header (containing X Display + input user data pointer - keep aligned with x11_input module!) */
     _x11_user_hdr_t hdr;
     /* X11 related information */
     Window          window;          /**< X11 window object */
     GC              gc;              /**< X11 graphics context object */
-    Visual         *visual;          /**< X11 visual */
+    Visual     *    visual;          /**< X11 visual */
     int             dplanes;         /**< X11 display depth */
-    XImage         *ximage;          /**< X11 XImage cache object for updating window content */
+    XImage     *    ximage;          /**< X11 XImage cache object for updating window content */
     Atom            wmDeleteMessage; /**< X11 atom to window object */
-    void           *xdata;           /**< allocated data for XImage */
+    void      *     xdata;           /**< allocated data for XImage */
     /* LVGL related information */
-    lv_timer_t     *timer;           /**< timer object for @ref x11_event_handler */
-    uint8_t        *buffer[2];       /**< (double) lv display buffers, depending on @ref LV_X11_RENDER_MODE */
+    lv_timer_t   *  timer;           /**< timer object for @ref x11_event_handler */
+    uint8_t    *    buffer[2];       /**< (double) lv display buffers, depending on @ref LV_X11_RENDER_MODE */
     lv_area_t       flush_area;      /**< integrated area for a display update */
     /* systemtick by thread related information */
     pthread_t       thr_tick;        /**< pthread for SysTick simulation */
@@ -113,7 +112,7 @@ static inline lv_color32_t get_px(color_t p)
  */
 static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map)
 {
-    x11_disp_data_t *xd = lv_display_get_driver_data(disp);
+    x11_disp_data_t * xd = lv_display_get_driver_data(disp);
     LV_ASSERT_NULL(xd);
 
     static const lv_area_t inv_area = { .x1 = 0xFFFF,
@@ -131,22 +130,19 @@ static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
     int32_t hor_res = lv_display_get_horizontal_resolution(disp);
 
     uint32_t      dst_offs;
-    lv_color32_t *dst_data;
-    color_t      *src_data = (color_t *)px_map + (LV_X11_RENDER_MODE == LV_DISPLAY_RENDER_MODE_PARTIAL ? 0 : hor_res *
-                             area->y1 + area->x1);
-    for (int16_t y = area->y1; y <= area->y2; y++)
-    {
+    lv_color32_t * dst_data;
+    color_t   *   src_data = (color_t *)px_map + (LV_X11_RENDER_MODE == LV_DISPLAY_RENDER_MODE_PARTIAL ? 0 : hor_res *
+                                                  area->y1 + area->x1);
+    for(int16_t y = area->y1; y <= area->y2; y++) {
         dst_offs = area->x1 + y * hor_res;
         dst_data = &((lv_color32_t *)(xd->xdata))[dst_offs];
-        for (int16_t x = area->x1; x <= area->x2; x++, src_data++, dst_data++)
-        {
+        for(int16_t x = area->x1; x <= area->x2; x++, src_data++, dst_data++) {
             *dst_data = get_px(*src_data);
         }
         src_data += (LV_X11_RENDER_MODE == LV_DISPLAY_RENDER_MODE_PARTIAL ? 0 : hor_res - (area->x2 - area->x1 + 1));
     }
 
-    if (lv_display_flush_is_last(disp))
-    {
+    if(lv_display_flush_is_last(disp)) {
         LV_LOG_TRACE("(%d/%d), %dx%d)", xd->flush_area.x1, xd->flush_area.y1, xd->flush_area.x2 + 1 - xd->flush_area.x1,
                      xd->flush_area.y2 + 1 - xd->flush_area.y1);
 
@@ -169,15 +165,14 @@ static void x11_flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * 
  */
 static void x11_resolution_evt_cb(lv_event_t * e)
 {
-    lv_display_t *disp = lv_event_get_user_data(e);
-    x11_disp_data_t *xd = lv_display_get_driver_data(disp);
+    lv_display_t * disp = lv_event_get_user_data(e);
+    x11_disp_data_t * xd = lv_display_get_driver_data(disp);
     LV_ASSERT_NULL(xd);
 
     int32_t hor_res = lv_display_get_horizontal_resolution(disp);
     int32_t ver_res = lv_display_get_vertical_resolution(disp);
 
-    if (LV_X11_RENDER_MODE != LV_DISPLAY_RENDER_MODE_PARTIAL)
-    {
+    if(LV_X11_RENDER_MODE != LV_DISPLAY_RENDER_MODE_PARTIAL) {
         /* update lvgl full-screen display draw buffers for new display size */
         int sz_buffers = (hor_res * ver_res * (LV_COLOR_DEPTH + 7) / 8);
         xd->buffer[0] = realloc(xd->buffer[0], sz_buffers);
@@ -199,14 +194,13 @@ static void x11_resolution_evt_cb(lv_event_t * e)
  */
 static void x11_disp_delete_evt_cb(lv_event_t * e)
 {
-    lv_display_t *disp = lv_event_get_user_data(e);
-    x11_disp_data_t *xd = lv_display_get_driver_data(disp);
+    lv_display_t * disp = lv_event_get_user_data(e);
+    x11_disp_data_t * xd = lv_display_get_driver_data(disp);
 
     lv_timer_delete(xd->timer);
 
     free(xd->buffer[0]);
-    if (LV_X11_DOUBLE_BUFFER)
-    {
+    if(LV_X11_DOUBLE_BUFFER) {
         free(xd->buffer[1]);
     }
 
@@ -218,8 +212,7 @@ static void x11_disp_delete_evt_cb(lv_event_t * e)
 
     lv_free(xd);
 #if LV_X11_DIRECT_EXIT
-    if (0 == --count_windows)
-    {
+    if(0 == --count_windows) {
         exit(0);
     }
 #endif
@@ -227,7 +220,7 @@ static void x11_disp_delete_evt_cb(lv_event_t * e)
 
 static void x11_hide_cursor(lv_display_t * disp)
 {
-    x11_disp_data_t *xd = lv_display_get_driver_data(disp);
+    x11_disp_data_t * xd = lv_display_get_driver_data(disp);
     LV_ASSERT_NULL(xd);
 
     XColor black = { .red = 0, .green = 0, .blue = 0 };
@@ -254,57 +247,51 @@ static int is_disp_event(Display * disp, XEvent * event, XPointer arg)
 }
 static void x11_event_handler(lv_timer_t * t)
 {
-    lv_display_t *disp = lv_timer_get_user_data(t);
-    x11_disp_data_t *xd = lv_display_get_driver_data(disp);
+    lv_display_t * disp = lv_timer_get_user_data(t);
+    x11_disp_data_t * xd = lv_display_get_driver_data(disp);
     LV_ASSERT_NULL(xd);
 
     /* handle all outstanding X events */
     XEvent event;
-    while (XCheckIfEvent(xd->hdr.display, &event, is_disp_event, NULL))
-    {
+    while(XCheckIfEvent(xd->hdr.display, &event, is_disp_event, NULL)) {
         LV_LOG_TRACE("Display Event %d", event.type);
-        switch (event.type)
-        {
-        case Expose:
-            if (event.xexpose.count == 0)
-            {
-                XPutImage(xd->hdr.display, xd->window, xd->gc, xd->ximage, 0, 0, 0, 0, event.xexpose.width, event.xexpose.height);
-            }
-            break;
-        case ConfigureNotify:
-            if (event.xconfigure.width  != lv_display_get_horizontal_resolution(disp)
-                    ||  event.xconfigure.height != lv_display_get_vertical_resolution(disp))
-            {
-                lv_display_set_resolution(disp, event.xconfigure.width, event.xconfigure.height);
-            }
-            break;
-        case ClientMessage:
-            if (event.xclient.data.l[0] == (long)xd->wmDeleteMessage)
-            {
-                xd->terminated = true;
-                void *ret = NULL;
-                pthread_join(xd->thr_tick, &ret);
-                lv_display_delete(disp);
-                return;
-            }
-            break;
-        case MapNotify:
-        case ReparentNotify:
-            /*suppress unhandled warning*/
-            break;
-        default:
-            LV_LOG_WARN("unhandled x11 event: %d", event.type);
+        switch(event.type) {
+            case Expose:
+                if(event.xexpose.count == 0) {
+                    XPutImage(xd->hdr.display, xd->window, xd->gc, xd->ximage, 0, 0, 0, 0, event.xexpose.width, event.xexpose.height);
+                }
+                break;
+            case ConfigureNotify:
+                if(event.xconfigure.width  != lv_display_get_horizontal_resolution(disp)
+                   ||  event.xconfigure.height != lv_display_get_vertical_resolution(disp)) {
+                    lv_display_set_resolution(disp, event.xconfigure.width, event.xconfigure.height);
+                }
+                break;
+            case ClientMessage:
+                if(event.xclient.data.l[0] == (long)xd->wmDeleteMessage) {
+                    xd->terminated = true;
+                    void * ret = NULL;
+                    pthread_join(xd->thr_tick, &ret);
+                    lv_display_delete(disp);
+                    return;
+                }
+                break;
+            case MapNotify:
+            case ReparentNotify:
+                /*suppress unhandled warning*/
+                break;
+            default:
+                LV_LOG_WARN("unhandled x11 event: %d", event.type);
         }
     }
 }
 
-static void *x11_tick_thread(void * data)
+static void * x11_tick_thread(void * data)
 {
-    x11_disp_data_t *xd = data;
+    x11_disp_data_t * xd = data;
     LV_ASSERT_NULL(xd);
 
-    while (!xd->terminated)
-    {
+    while(!xd->terminated) {
         usleep(5000);
         lv_tick_inc(5);
     }
@@ -313,7 +300,7 @@ static void *x11_tick_thread(void * data)
 
 static void x11_window_create(lv_display_t * disp, char const * title)
 {
-    x11_disp_data_t *xd = lv_display_get_driver_data(disp);
+    x11_disp_data_t * xd = lv_display_get_driver_data(disp);
     LV_ASSERT_NULL(xd);
 
     /* setup display/screen */
@@ -369,15 +356,14 @@ static void x11_window_create(lv_display_t * disp, char const * title)
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_x11_window_create(char const * title, int32_t hor_res, int32_t ver_res)
+lv_display_t * lv_x11_window_create(char const * title, int32_t hor_res, int32_t ver_res)
 {
-    x11_disp_data_t *xd = lv_malloc_zeroed(sizeof(x11_disp_data_t));
+    x11_disp_data_t * xd = lv_malloc_zeroed(sizeof(x11_disp_data_t));
     LV_ASSERT_MALLOC(xd);
-    if (NULL == xd) return NULL;
+    if(NULL == xd) return NULL;
 
-    lv_display_t *disp = lv_display_create(hor_res, ver_res);
-    if (NULL == disp)
-    {
+    lv_display_t * disp = lv_display_create(hor_res, ver_res);
+    if(NULL == disp) {
         lv_free(xd);
         return NULL;
     }
@@ -389,8 +375,7 @@ lv_display_t *lv_x11_window_create(char const * title, int32_t hor_res, int32_t 
     x11_window_create(disp, title);
 
     int sz_buffers = (hor_res * ver_res * (LV_COLOR_DEPTH + 7) / 8);
-    if (LV_X11_RENDER_MODE == LV_DISPLAY_RENDER_MODE_PARTIAL)
-    {
+    if(LV_X11_RENDER_MODE == LV_DISPLAY_RENDER_MODE_PARTIAL) {
         sz_buffers /= 10;
     }
     xd->buffer[0] = malloc(sz_buffers);

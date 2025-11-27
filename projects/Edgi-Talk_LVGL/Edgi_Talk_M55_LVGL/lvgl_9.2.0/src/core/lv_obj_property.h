@@ -53,8 +53,7 @@ extern "C" {
 /**
  * Group of predefined widget ID start value.
  */
-enum
-{
+enum {
     LV_PROPERTY_ID_INVALID      = 0,
 
     /*ID 0x01 to 0xff are style ID, check lv_style_prop_t*/
@@ -76,25 +75,21 @@ enum
     LV_PROPERTY_ID_ANY          = 0x7ffffffe, /*Special ID used by lvgl to intercept all setter/getter call.*/
 };
 
-struct lv_property_name_t
-{
-    const char *name;
+struct lv_property_name_t {
+    const char * name;
     lv_prop_id_t id;
 };
 
-typedef struct
-{
+typedef struct {
     lv_prop_id_t id;
-    union
-    {
+    union {
         int32_t num;                /**< Number integer number (opacity, enums, booleans or "normal" numbers)*/
         bool enable;                /**< booleans*/
-        const void *ptr;            /**< Constant pointers  (font, cone text, etc)*/
+        const void * ptr;           /**< Constant pointers  (font, cone text, etc)*/
         lv_color_t color;           /**< Colors*/
         lv_value_precise_t precise; /**< float or int for precise value*/
         lv_point_t point;           /**< Point*/
-        struct
-        {
+        struct {
             /**
              * Note that place struct member `style` at first place is intended.
              * `style` shares same memory with `num`, `ptr`, `color`.
@@ -121,12 +116,11 @@ typedef struct
     };
 } lv_property_t;
 
-typedef struct
-{
+typedef struct {
     lv_prop_id_t id;
 
-    void *setter;       /**< Callback used to set property. */
-    void *getter;       /**< Callback used to get property. */
+    void * setter;      /**< Callback used to set property. */
+    void * getter;      /**< Callback used to get property. */
 } lv_property_ops_t;
 
 /**********************

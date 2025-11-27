@@ -68,27 +68,23 @@ static void check_stack_size(void);
 
 static void lv_global_free(void * data)
 {
-    if (data)
-    {
+    if(data) {
         free(data);
     }
 }
 
-lv_global_t *lv_global_default(void)
+lv_global_t * lv_global_default(void)
 {
     static int index = -1;
-    lv_global_t *data = NULL;
+    lv_global_t * data = NULL;
 
-    if (index < 0)
-    {
+    if(index < 0) {
         index = task_tls_alloc(lv_global_free);
     }
 
-    if (index >= 0)
-    {
+    if(index >= 0) {
         data = (lv_global_t *)task_tls_get_value(index);
-        if (data == NULL)
-        {
+        if(data == NULL) {
             data = (lv_global_t *)calloc(1, sizeof(lv_global_t));
             task_tls_set_value(index, (uintptr_t)data);
         }
@@ -99,7 +95,7 @@ lv_global_t *lv_global_default(void)
 
 void lv_nuttx_dsc_init(lv_nuttx_dsc_t * dsc)
 {
-    if (dsc == NULL)
+    if(dsc == NULL)
         return;
 
     lv_memzero(dsc, sizeof(lv_nuttx_dsc_t));
@@ -131,50 +127,41 @@ void lv_nuttx_init(const lv_nuttx_dsc_t * dsc, lv_nuttx_result_t * result)
     lv_nuttx_profiler_init();
 #endif
 
-    if (result)
-    {
+    if(result) {
         lv_memzero(result, sizeof(lv_nuttx_result_t));
     }
 
 #if !LV_USE_NUTTX_CUSTOM_INIT
 
-    if (dsc && dsc->fb_path)
-    {
-        lv_display_t *disp = NULL;
+    if(dsc && dsc->fb_path) {
+        lv_display_t * disp = NULL;
 
 #if LV_USE_NUTTX_LCD
         disp = lv_nuttx_lcd_create(dsc->fb_path);
 #else
         disp = lv_nuttx_fbdev_create();
-        if (lv_nuttx_fbdev_set_file(disp, dsc->fb_path) != 0)
-        {
+        if(lv_nuttx_fbdev_set_file(disp, dsc->fb_path) != 0) {
             lv_display_delete(disp);
             disp = NULL;
         }
 #endif
-        if (result)
-        {
+        if(result) {
             result->disp = disp;
         }
     }
 
-    if (dsc)
-    {
+    if(dsc) {
 #if LV_USE_NUTTX_TOUCHSCREEN
-        if (dsc->input_path)
-        {
-            lv_indev_t *indev = lv_nuttx_touchscreen_create(dsc->input_path);
-            if (result)
-            {
+        if(dsc->input_path) {
+            lv_indev_t * indev = lv_nuttx_touchscreen_create(dsc->input_path);
+            if(result) {
                 result->indev = indev;
             }
         }
 
-        if (dsc->utouch_path)
-        {
-            lv_indev_t *indev = lv_nuttx_touchscreen_create(dsc->utouch_path);
-            if (result)
-            {
+        if(dsc->utouch_path) {
+            lv_indev_t * indev = lv_nuttx_touchscreen_create(dsc->utouch_path);
+            if(result) {
                 result->utouch_indev = indev;
             }
         }
@@ -192,8 +179,7 @@ void lv_nuttx_run(lv_nuttx_result_t * result)
 #ifdef CONFIG_LV_USE_NUTTX_LIBUV
     lv_nuttx_uv_loop(&ui_loop, result);
 #else
-    while (1)
-    {
+    while(1) {
         uint32_t idle;
         idle = lv_timer_handler();
 
@@ -210,8 +196,7 @@ uint32_t lv_nuttx_get_idle(void)
 {
     struct cpuload_s cpuload;
     int ret = clock_cpuload(0, &cpuload);
-    if (ret < 0)
-    {
+    if(ret < 0) {
         LV_LOG_WARN("clock_cpuload failed: %d", ret);
         return 0;
     }
@@ -228,22 +213,18 @@ uint32_t lv_nuttx_get_idle(void)
 void lv_nuttx_deinit(lv_nuttx_result_t * result)
 {
 #if !LV_USE_NUTTX_CUSTOM_INIT
-    if (result)
-    {
-        if (result->disp)
-        {
+    if(result) {
+        if(result->disp) {
             lv_display_delete(result->disp);
             result->disp = NULL;
         }
 
-        if (result->indev)
-        {
+        if(result->indev) {
             lv_indev_delete(result->indev);
             result->indev = NULL;
         }
 
-        if (result->utouch_indev)
-        {
+        if(result->utouch_indev) {
             lv_indev_delete(result->utouch_indev);
             result->utouch_indev = NULL;
         }
@@ -252,8 +233,7 @@ void lv_nuttx_deinit(lv_nuttx_result_t * result)
     lv_nuttx_deinit_custom(result);
 #endif
 
-    if (nuttx_ctx_p)
-    {
+    if(nuttx_ctx_p) {
         lv_nuttx_cache_deinit();
         lv_nuttx_image_cache_deinit();
 
@@ -279,8 +259,7 @@ static uint32_t millis(void)
 #if LV_USE_LOG
 static void syslog_print(lv_log_level_t level, const char * buf)
 {
-    static const int priority[LV_LOG_LEVEL_NUM] =
-    {
+    static const int priority[LV_LOG_LEVEL_NUM] = {
         LOG_DEBUG, LOG_INFO, LOG_WARNING, LOG_ERR, LOG_CRIT
     };
 
@@ -293,7 +272,7 @@ static void lv_nuttx_uv_loop(lv_nuttx_result_t * result)
 {
     uv_loop_t loop;
     lv_nuttx_uv_t uv_info;
-    void *data;
+    void * data;
 
     uv_loop_init(&loop);
 
@@ -317,8 +296,7 @@ static void check_stack_size(void)
     ssize_t stack_size = pthread_get_stacksize_np(tid);
     LV_LOG_USER("tid: %d, Stack size : %zd", (int)tid, stack_size);
 
-    if (stack_size < LV_NUTTX_MIN_STACK_SIZE)
-    {
+    if(stack_size < LV_NUTTX_MIN_STACK_SIZE) {
         LV_LOG_ERROR("Stack size is too small. Please increase it to %d bytes or more.",
                      LV_NUTTX_MIN_STACK_SIZE);
     }

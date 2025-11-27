@@ -51,8 +51,8 @@ extern "C" {
  *                       application mode display.
  * @return The created LVGL display object.
 */
-lv_display_t *lv_windows_create_display(
-    const wchar_t *title,
+lv_display_t * lv_windows_create_display(
+    const wchar_t * title,
     int32_t hor_res,
     int32_t ver_res,
     int32_t zoom_level,

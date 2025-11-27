@@ -20,11 +20,10 @@
 /**********************
  *      TYPEDEFS
  **********************/
-typedef struct
-{
-    const void *image;
-    const char *name;
-    const char *description;
+typedef struct {
+    const void * image;
+    const char * name;
+    const char * description;
 } card_info_t;
 
 /**********************
@@ -72,8 +71,7 @@ LV_IMAGE_DECLARE(img_multilang_avatar_18);
 LV_IMAGE_DECLARE(img_multilang_avatar_22);
 LV_IMAGE_DECLARE(img_multilang_avatar_25);
 
-static card_info_t card_info[] =
-{
+static card_info_t card_info[] = {
     CARD_INFO_SET(&img_multilang_avatar_5, "Zhang Wei", "对编程和技术充满热情。 开源倡导者🚀"),
     CARD_INFO_SET(&img_multilang_avatar_18, "Ali Reza Karami", "عاشق تاریخ و عاشق همه چیز عتیقه. قسمت مورد علاقه من قرن 19 است."),
     CARD_INFO_SET(&img_multilang_avatar_25, "Sunita Kapoor", "🌍🌳 हरित कार्यकर्ता, एक स्थायी कल के लिए प्रयासरत। "),
@@ -101,9 +99,9 @@ static card_info_t card_info[] =
  *   GLOBAL FUNCTIONS
  **********************/
 
-static const void *get_imgfont_path(const lv_font_t * font,
-                                    uint32_t unicode, uint32_t unicode_next,
-                                    int32_t *offset_y, void *user_data)
+static const void * get_imgfont_path(const lv_font_t * font,
+                                     uint32_t unicode, uint32_t unicode_next,
+                                     int32_t * offset_y, void * user_data)
 {
     LV_UNUSED(user_data);
     LV_UNUSED(unicode_next);
@@ -123,38 +121,37 @@ static const void *get_imgfont_path(const lv_font_t * font,
     LV_IMAGE_DECLARE(img_emoji_rocket);
 
     *offset_y = -1;
-    switch (unicode)
-    {
-    case 0x1F30D:
-        return &img_emoji_earth_globe_europe_africa;;
-    case 0x1F431:
-        return &img_emoji_cat_face;
-    case 0x1F4AA:
-        return &img_emoji_flexed_biceps;
-    case 0x2764:
-        return &img_emoji_red_heart;
-    case 0x1F333:
-        return &img_emoji_deciduous_tree;
-    case 0x1F3A5:
-        return &img_emoji_movie_camera;
-    case 0x26BD:
-        return &img_emoji_soccer_ball;
-    case 0x1F436:
-        return &img_emoji_dog_face;
-    case 0x1F4DA:
-        return &img_emoji_books;
-    case 0x1F4F8:
-        return &img_emoji_camera_with_flash;
-    case 0x1F3A8:
-        return &img_emoji_artist_palette;
-    case 0x1F680:
-        return &img_emoji_rocket;
-    default:
-        return NULL;
+    switch(unicode) {
+        case 0x1F30D:
+            return &img_emoji_earth_globe_europe_africa;;
+        case 0x1F431:
+            return &img_emoji_cat_face;
+        case 0x1F4AA:
+            return &img_emoji_flexed_biceps;
+        case 0x2764:
+            return &img_emoji_red_heart;
+        case 0x1F333:
+            return &img_emoji_deciduous_tree;
+        case 0x1F3A5:
+            return &img_emoji_movie_camera;
+        case 0x26BD:
+            return &img_emoji_soccer_ball;
+        case 0x1F436:
+            return &img_emoji_dog_face;
+        case 0x1F4DA:
+            return &img_emoji_books;
+        case 0x1F4F8:
+            return &img_emoji_camera_with_flash;
+        case 0x1F3A8:
+            return &img_emoji_artist_palette;
+        case 0x1F680:
+            return &img_emoji_rocket;
+        default:
+            return NULL;
     }
 }
 
-lv_font_t *emoji_font;
+lv_font_t * emoji_font;
 
 void lv_demo_multilang(void)
 {
@@ -226,8 +223,7 @@ void lv_demo_multilang(void)
     lv_style_set_shadow_width(&style_btn, 0);
 
     uint32_t i;
-    for (i = 0; card_info[i].image; i++)
-    {
+    for(i = 0; card_info[i].image; i++) {
         card_create(lv_screen_active(), &card_info[i]);
     }
 
@@ -243,19 +239,17 @@ static void inactive_timer_cb(lv_timer_t * t)
     LV_UNUSED(t);
 
     static bool scrolled = false;
-    lv_obj_t *cont = lv_obj_get_child(lv_screen_active(), 0);
-    if (cont == NULL) return;
+    lv_obj_t * cont = lv_obj_get_child(lv_screen_active(), 0);
+    if(cont == NULL) return;
 
-    if (scrolled)
-    {
+    if(scrolled) {
         lv_obj_scroll_by(cont, -100, 0, LV_ANIM_ON);
         lv_obj_remove_flag(lv_layer_top(), LV_OBJ_FLAG_CLICKABLE);
         scrolled = false;
         return;
     }
 
-    if (lv_display_get_inactive_time(NULL) > 8000)
-    {
+    if(lv_display_get_inactive_time(NULL) > 8000) {
         lv_display_trigger_activity(NULL);
         lv_obj_scroll_by(cont, 100, 0, LV_ANIM_ON);
         lv_obj_add_flag(lv_layer_top(), LV_OBJ_FLAG_CLICKABLE);
@@ -265,22 +259,21 @@ static void inactive_timer_cb(lv_timer_t * t)
 
 static void shrink_anim_cb(void * var, int32_t v)
 {
-    lv_obj_t *cont = var;
+    lv_obj_t * cont = var;
     lv_obj_set_height(cont, (v * CARD_HEIGHT) >> 8);
     lv_obj_set_style_opa(cont, v, 0);
 }
 
 static void scroll_event_cb(lv_event_t * e)
 {
-    lv_indev_t *indev = lv_indev_active();
-    lv_obj_t *cont = lv_event_get_target(e);
-    if (lv_indev_get_scroll_obj(indev) != cont) return;
+    lv_indev_t * indev = lv_indev_active();
+    lv_obj_t * cont = lv_event_get_target(e);
+    if(lv_indev_get_scroll_obj(indev) != cont) return;
 
     int32_t w = lv_obj_get_width(cont);
     int32_t scroll_x = lv_obj_get_scroll_x(cont) - lv_indev_scroll_throw_predict(indev, LV_DIR_HOR);
 
-    if (scroll_x < w / 2)
-    {
+    if(scroll_x < w / 2) {
         lv_obj_set_scroll_snap_x(cont, LV_SCROLL_SNAP_NONE);
         lv_obj_remove_flag(cont, LV_OBJ_FLAG_CLICKABLE);
         lv_indev_wait_release(indev);
@@ -299,57 +292,57 @@ static void scroll_event_cb(lv_event_t * e)
 
 static void card_create(lv_obj_t * parent, card_info_t * info)
 {
-    lv_obj_t *cont = lv_obj_create(parent);
+    lv_obj_t * cont = lv_obj_create(parent);
     lv_obj_add_style(cont, &style_card_cont, 0);
     lv_obj_set_scroll_snap_x(cont, LV_SCROLL_SNAP_CENTER);
     lv_obj_add_event_cb(cont, scroll_event_cb, LV_EVENT_RELEASED, NULL);
     lv_obj_remove_flag(cont, LV_OBJ_FLAG_SCROLL_ELASTIC);
     lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
 
-    lv_obj_t *remove = lv_obj_create(cont);
+    lv_obj_t * remove = lv_obj_create(cont);
     lv_obj_add_style(remove, &style_hide, 0);
     lv_obj_remove_flag(remove, LV_OBJ_FLAG_SNAPPABLE);
     lv_obj_add_flag(remove, LV_OBJ_FLAG_FLOATING);
     lv_obj_remove_flag(remove, LV_OBJ_FLAG_CLICKABLE);
 
-    lv_obj_t *hide_label = lv_label_create(remove);
+    lv_obj_t * hide_label = lv_label_create(remove);
     lv_label_set_text(hide_label, "Hide");
     lv_obj_align(hide_label, LV_ALIGN_LEFT_MID, 10, 0);
 
-    lv_obj_t *placeholder = lv_obj_create(cont);
+    lv_obj_t * placeholder = lv_obj_create(cont);
     lv_obj_add_style(placeholder, &style_placeholder, 0);
 
-    lv_obj_t *card = lv_obj_create(cont);
+    lv_obj_t * card = lv_obj_create(cont);
     lv_obj_add_style(card, &style_card, 0);
     lv_obj_remove_flag(card, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE | LV_OBJ_FLAG_SCROLL_CHAIN_HOR);
 
-    lv_obj_t *avatar = lv_image_create(card);
+    lv_obj_t * avatar = lv_image_create(card);
     lv_image_set_src(avatar, info->image);
     lv_obj_set_grid_cell(avatar, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 0, 4);
     lv_obj_add_style(avatar, &style_avatar, 0);
 
-    lv_obj_t *name = lv_label_create(card);
+    lv_obj_t * name = lv_label_create(card);
     lv_label_set_text(name, info->name);
     lv_obj_set_grid_cell(name, LV_GRID_ALIGN_START, 2, 1, LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_set_style_text_font(name, &font_multilang_large, 0);
 
-    lv_obj_t *description = lv_label_create(card);
+    lv_obj_t * description = lv_label_create(card);
     lv_label_set_text(description, info->description);
     lv_obj_set_grid_cell(description, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
     lv_obj_set_style_text_color(description, lv_color_hex(0x5b5b5b), 0);
     lv_obj_set_style_text_line_space(description, -3, 0);
 
-    lv_obj_t *btn = lv_button_create(card);
+    lv_obj_t * btn = lv_button_create(card);
     lv_obj_remove_flag(card, LV_OBJ_FLAG_SCROLL_CHAIN_HOR);
     lv_obj_set_grid_cell(btn, LV_GRID_ALIGN_START, 2, 1, LV_GRID_ALIGN_CENTER, 3, 1);
     lv_obj_add_style(btn, &style_btn, 0);
 
     LV_IMAGE_DECLARE(img_multilang_like);
-    lv_obj_t *btn_img = lv_image_create(btn);
+    lv_obj_t * btn_img = lv_image_create(btn);
     lv_image_set_src(btn_img, &img_multilang_like);
     lv_obj_align(btn_img, LV_ALIGN_LEFT_MID, 30, 0);
 
-    lv_obj_t *btn_label = lv_label_create(btn);
+    lv_obj_t * btn_label = lv_label_create(btn);
     lv_label_set_text(btn_label, "Like");
     lv_obj_align(btn_label, LV_ALIGN_LEFT_MID, 60, 1);
 

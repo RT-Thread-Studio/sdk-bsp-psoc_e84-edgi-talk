@@ -32,9 +32,8 @@ extern "C" {
  **********************/
 
 /** Description of a array*/
-typedef struct
-{
-    uint8_t *data;
+typedef struct {
+    uint8_t * data;
     uint32_t size;
     uint32_t capacity;
     uint32_t element_size;
@@ -166,20 +165,20 @@ lv_result_t lv_array_assign(lv_array_t * array, uint32_t index, const void * val
  * @param index the index of the element to return
  * @return a pointer to the requested element, NULL if `index` is out of range
  */
-void *lv_array_at(const lv_array_t * array, uint32_t index);
+void * lv_array_at(const lv_array_t * array, uint32_t index);
 
 /**
  * Returns a pointer to the first element in the array.
  * @param array pointer to an `lv_array_t` variable
  * @return a pointer to the first element in the array
  */
-void *lv_array_front(const lv_array_t * array);
+void * lv_array_front(const lv_array_t * array);
 
 /**
  * Returns a pointer to the last element in the array.
  * @param array pointer to an `lv_array_t` variable
  */
-void *lv_array_back(const lv_array_t * array);
+void * lv_array_back(const lv_array_t * array);
 
 /**********************
  *      MACROS

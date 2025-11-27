@@ -28,8 +28,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_LAYER_TYPE_NONE,
     LV_LAYER_TYPE_SIMPLE,
     LV_LAYER_TYPE_TRANSFORM,

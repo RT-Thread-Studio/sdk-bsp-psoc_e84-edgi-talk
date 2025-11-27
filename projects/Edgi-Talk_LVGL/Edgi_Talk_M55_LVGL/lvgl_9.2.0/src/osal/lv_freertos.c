@@ -85,7 +85,7 @@ static void prvTestAndDecrement(lv_thread_sync_t * pxCond,
 
 lv_result_t lv_thread_init(lv_thread_t * pxThread, lv_thread_prio_t xSchedPriority,
                            void (*pvStartRoutine)(void *), size_t usStackSize,
-                           void *xAttr)
+                           void * xAttr)
 {
     pxThread->pTaskArg = xAttr;
     pxThread->pvStartRoutine = pvStartRoutine;
@@ -99,8 +99,7 @@ lv_result_t lv_thread_init(lv_thread_t * pxThread, lv_thread_prio_t xSchedPriori
                                        &pxThread->xTaskHandle);
 
     /* Ensure that the FreeRTOS task was successfully created. */
-    if (xTaskCreateStatus != pdPASS)
-    {
+    if(xTaskCreateStatus != pdPASS) {
         LV_LOG_ERROR("xTaskCreate failed!");
         return LV_RESULT_INVALID;
     }
@@ -129,8 +128,7 @@ lv_result_t lv_mutex_lock(lv_mutex_t * pxMutex)
     prvCheckMutexInit(pxMutex);
 
     BaseType_t xMutexTakeStatus = xSemaphoreTake(pxMutex->xMutex, portMAX_DELAY);
-    if (xMutexTakeStatus != pdTRUE)
-    {
+    if(xMutexTakeStatus != pdTRUE) {
         LV_LOG_ERROR("xSemaphoreTake failed!");
         return LV_RESULT_INVALID;
     }
@@ -146,8 +144,7 @@ lv_result_t lv_mutex_lock_isr(lv_mutex_t * pxMutex)
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
     BaseType_t xMutexTakeStatus = xSemaphoreTakeFromISR(pxMutex->xMutex, &xHigherPriorityTaskWoken);
-    if (xMutexTakeStatus != pdTRUE)
-    {
+    if(xMutexTakeStatus != pdTRUE) {
         LV_LOG_ERROR("xSemaphoreTake failed!");
         return LV_RESULT_INVALID;
     }
@@ -167,8 +164,7 @@ lv_result_t lv_mutex_unlock(lv_mutex_t * pxMutex)
     prvCheckMutexInit(pxMutex);
 
     BaseType_t xMutexGiveStatus = xSemaphoreGive(pxMutex->xMutex);
-    if (xMutexGiveStatus != pdTRUE)
-    {
+    if(xMutexGiveStatus != pdTRUE) {
         LV_LOG_ERROR("xSemaphoreGive failed!");
         return LV_RESULT_INVALID;
     }
@@ -205,16 +201,14 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
     _enter_critical();
     BaseType_t signal_sent = pxCond->xSyncSignal;
     pxCond->xSyncSignal = pdFALSE;
-    if (signal_sent == pdFALSE)
-    {
+    if(signal_sent == pdFALSE) {
         /* The signal hasn't been sent yet. Tell the sender to notify this task */
         pxCond->xTaskToNotify = current_task_handle;
     }
     /* If we have a signal from the other task, we should not ask to be notified */
     _exit_critical();
 
-    if (signal_sent == pdFALSE)
-    {
+    if(signal_sent == pdFALSE) {
         /* Wait for other task to notify this task. */
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     }
@@ -225,8 +219,7 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
     /* Acquire the mutex. */
     xSemaphoreTake(pxCond->xSyncMutex, portMAX_DELAY);
 
-    while (!pxCond->xSyncSignal)
-    {
+    while(!pxCond->xSyncSignal) {
         /* Increase the counter of threads blocking on condition variable, then
          * release the mutex. */
 
@@ -237,8 +230,7 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
         BaseType_t xMutexStatus = xSemaphoreGive(pxCond->xSyncMutex);
 
         /* Wait on the condition variable. */
-        if (xMutexStatus == pdTRUE)
-        {
+        if(xMutexStatus == pdTRUE) {
             BaseType_t xCondWaitStatus = xSemaphoreTake(
                                              pxCond->xCondWaitSemaphore,
                                              portMAX_DELAY);
@@ -246,8 +238,7 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
             /* Relock the mutex. */
             xSemaphoreTake(pxCond->xSyncMutex, portMAX_DELAY);
 
-            if (xCondWaitStatus != pdTRUE)
-            {
+            if(xCondWaitStatus != pdTRUE) {
                 LV_LOG_ERROR("xSemaphoreTake(xCondWaitSemaphore) failed!");
                 lvRes = LV_RESULT_INVALID;
 
@@ -258,8 +249,7 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * pxCond)
                 prvTestAndDecrement(pxCond, ulLocalWaitingThreads + 1);
             }
         }
-        else
-        {
+        else {
             LV_LOG_ERROR("xSemaphoreGive(xSyncMutex) failed!");
             lvRes = LV_RESULT_INVALID;
 
@@ -289,16 +279,14 @@ lv_result_t lv_thread_sync_signal(lv_thread_sync_t * pxCond)
     _enter_critical();
     TaskHandle_t task_to_notify = pxCond->xTaskToNotify;
     pxCond->xTaskToNotify = NULL;
-    if (task_to_notify == NULL)
-    {
+    if(task_to_notify == NULL) {
         /* No task waiting to be notified. Send this signal for later */
         pxCond->xSyncSignal = pdTRUE;
     }
     /* If a task is already waiting, there is no need to set the sync signal */
     _exit_critical();
 
-    if (task_to_notify != NULL)
-    {
+    if(task_to_notify != NULL) {
         /* There is a task waiting. Send a notification to it */
         xTaskNotifyGive(task_to_notify);
     }
@@ -313,18 +301,15 @@ lv_result_t lv_thread_sync_signal(lv_thread_sync_t * pxCond)
     uint32_t ulLocalWaitingThreads = pxCond->ulWaitingThreads;
 
     /* Test local copy of threads waiting is larger than zero. */
-    while (ulLocalWaitingThreads > 0)
-    {
+    while(ulLocalWaitingThreads > 0) {
         /* Atomically check whether the copy in memory has changed.
          * If not, set the copy of threads waiting in memory to zero. */
-        if (ATOMIC_COMPARE_AND_SWAP_SUCCESS == Atomic_CompareAndSwap_u32(
-                    &pxCond->ulWaitingThreads,
-                    0,
-                    ulLocalWaitingThreads))
-        {
+        if(ATOMIC_COMPARE_AND_SWAP_SUCCESS == Atomic_CompareAndSwap_u32(
+               &pxCond->ulWaitingThreads,
+               0,
+               ulLocalWaitingThreads)) {
             /* Unblock all. */
-            for (uint32_t i = 0; i < ulLocalWaitingThreads; i++)
-            {
+            for(uint32_t i = 0; i < ulLocalWaitingThreads; i++) {
                 xSemaphoreGive(pxCond->xCondWaitSemaphore);
             }
 
@@ -367,16 +352,14 @@ lv_result_t lv_thread_sync_signal_isr(lv_thread_sync_t * pxCond)
     _enter_critical();
     TaskHandle_t task_to_notify = pxCond->xTaskToNotify;
     pxCond->xTaskToNotify = NULL;
-    if (task_to_notify == NULL)
-    {
+    if(task_to_notify == NULL) {
         /* No task waiting to be notified. Send this signal for later */
         pxCond->xSyncSignal = pdTRUE;
     }
     /* If a task is already waiting, there is no need to set the sync signal */
     _exit_critical();
 
-    if (task_to_notify != NULL)
-    {
+    if(task_to_notify != NULL) {
         /* There is a task waiting. Send a notification to it */
         vTaskNotifyGiveFromISR(task_to_notify, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
@@ -390,8 +373,7 @@ lv_result_t lv_thread_sync_signal_isr(lv_thread_sync_t * pxCond)
     BaseType_t xAnyHigherPriorityTaskWoken = pdFALSE;
 
     /* Unblock all. */
-    for (uint32_t i = 0; i < pxCond->ulWaitingThreads; i++)
-    {
+    for(uint32_t i = 0; i < pxCond->ulWaitingThreads; i++) {
         xSemaphoreGiveFromISR(pxCond->xCondWaitSemaphore, &xAnyHigherPriorityTaskWoken);
         xHigherPriorityTaskWoken |= xAnyHigherPriorityTaskWoken;
     }
@@ -406,7 +388,7 @@ lv_result_t lv_thread_sync_signal_isr(lv_thread_sync_t * pxCond)
 
 void lv_freertos_task_switch_in(const char * name)
 {
-    if (lv_strcmp(name, "IDLE")) globals->freertos_idle_task_running = false;
+    if(lv_strcmp(name, "IDLE")) globals->freertos_idle_task_running = false;
     else globals->freertos_idle_task_running = true;
 
     globals->freertos_task_switch_timestamp = lv_tick_get();
@@ -415,20 +397,19 @@ void lv_freertos_task_switch_in(const char * name)
 void lv_freertos_task_switch_out(void)
 {
     uint32_t elaps = lv_tick_elaps(globals->freertos_task_switch_timestamp);
-    if (globals->freertos_idle_task_running) globals->freertos_idle_time_sum += elaps;
+    if(globals->freertos_idle_task_running) globals->freertos_idle_time_sum += elaps;
     else globals->freertos_non_idle_time_sum += elaps;
 }
 
 uint32_t lv_os_get_idle_percent(void)
 {
-    if (globals->freertos_non_idle_time_sum + globals->freertos_idle_time_sum == 0)
-    {
+    if(globals->freertos_non_idle_time_sum + globals->freertos_idle_time_sum == 0) {
         LV_LOG_WARN("Not enough time elapsed to provide idle percentage");
         return 0;
     }
 
     uint32_t pct = (globals->freertos_idle_time_sum * 100) / (globals->freertos_idle_time_sum +
-                   globals->freertos_non_idle_time_sum);
+                                                              globals->freertos_non_idle_time_sum);
 
     globals->freertos_non_idle_time_sum = 0;
     globals->freertos_idle_time_sum = 0;
@@ -442,7 +423,7 @@ uint32_t lv_os_get_idle_percent(void)
 
 static void prvRunThread(void * pxArg)
 {
-    lv_thread_t *pxThread = (lv_thread_t *)pxArg;
+    lv_thread_t * pxThread = (lv_thread_t *)pxArg;
 
     /* Run the thread routine. */
     pxThread->pvStartRoutine((void *)pxThread->pTaskArg);
@@ -455,8 +436,7 @@ static void prvMutexInit(lv_mutex_t * pxMutex)
     pxMutex->xMutex = xSemaphoreCreateRecursiveMutex();
 
     /* Ensure that the FreeRTOS mutex was successfully created. */
-    if (pxMutex->xMutex == NULL)
-    {
+    if(pxMutex->xMutex == NULL) {
         LV_LOG_ERROR("xSemaphoreCreateMutex failed!");
         return;
     }
@@ -468,8 +448,7 @@ static void prvMutexInit(lv_mutex_t * pxMutex)
 static void prvCheckMutexInit(lv_mutex_t * pxMutex)
 {
     /* Check if the mutex needs to be initialized. */
-    if (pxMutex->xIsInitialized == pdFALSE)
-    {
+    if(pxMutex->xIsInitialized == pdFALSE) {
         /* Mutex initialization must be in a critical section to prevent two threads
          * from initializing it at the same time. */
         _enter_critical();
@@ -477,8 +456,7 @@ static void prvCheckMutexInit(lv_mutex_t * pxMutex)
         /* Check again that the mutex is still uninitialized, i.e. it wasn't
          * initialized while this function was waiting to enter the critical
          * section. */
-        if (pxMutex->xIsInitialized == pdFALSE)
-        {
+        if(pxMutex->xIsInitialized == pdFALSE) {
             prvMutexInit(pxMutex);
         }
 
@@ -498,8 +476,7 @@ static void prvCondInit(lv_thread_sync_t * pxCond)
     pxCond->xCondWaitSemaphore = xSemaphoreCreateCounting(ulMAX_COUNT, 0U);
 
     /* Ensure that the FreeRTOS semaphore was successfully created. */
-    if (pxCond->xCondWaitSemaphore == NULL)
-    {
+    if(pxCond->xCondWaitSemaphore == NULL) {
         LV_LOG_ERROR("xSemaphoreCreateCounting failed!");
         return;
     }
@@ -507,8 +484,7 @@ static void prvCondInit(lv_thread_sync_t * pxCond)
     pxCond->xSyncMutex = xSemaphoreCreateMutex();
 
     /* Ensure that the FreeRTOS mutex was successfully created. */
-    if (pxCond->xSyncMutex == NULL)
-    {
+    if(pxCond->xSyncMutex == NULL) {
         LV_LOG_ERROR("xSemaphoreCreateMutex failed!");
         /* Cleanup. */
         vSemaphoreDelete(pxCond->xCondWaitSemaphore);
@@ -523,8 +499,7 @@ static void prvCondInit(lv_thread_sync_t * pxCond)
 static void prvCheckCondInit(lv_thread_sync_t * pxCond)
 {
     /* Check if the condition variable needs to be initialized. */
-    if (pxCond->xIsInitialized == pdFALSE)
-    {
+    if(pxCond->xIsInitialized == pdFALSE) {
         /* Cond initialization must be in a critical section to prevent two
          * threads from initializing it at the same time. */
         _enter_critical();
@@ -532,8 +507,7 @@ static void prvCheckCondInit(lv_thread_sync_t * pxCond)
         /* Check again that the condition is still uninitialized, i.e. it wasn't
          * initialized while this function was waiting to enter the critical
          * section. */
-        if (pxCond->xIsInitialized == pdFALSE)
-        {
+        if(pxCond->xIsInitialized == pdFALSE) {
             prvCondInit(pxCond);
         }
 
@@ -547,15 +521,13 @@ static void prvTestAndDecrement(lv_thread_sync_t * pxCond,
                                 uint32_t ulLocalWaitingThreads)
 {
     /* Test local copy of threads waiting is larger than zero. */
-    while (ulLocalWaitingThreads > 0)
-    {
+    while(ulLocalWaitingThreads > 0) {
         /* Atomically check whether the copy in memory has changed.
          * If not, decrease the copy of threads waiting in memory. */
-        if (ATOMIC_COMPARE_AND_SWAP_SUCCESS == Atomic_CompareAndSwap_u32(
-                    &pxCond->ulWaitingThreads,
-                    ulLocalWaitingThreads - 1,
-                    ulLocalWaitingThreads))
-        {
+        if(ATOMIC_COMPARE_AND_SWAP_SUCCESS == Atomic_CompareAndSwap_u32(
+               &pxCond->ulWaitingThreads,
+               ulLocalWaitingThreads - 1,
+               ulLocalWaitingThreads)) {
             /* Signal one succeeded. Break. */
             break;
         }

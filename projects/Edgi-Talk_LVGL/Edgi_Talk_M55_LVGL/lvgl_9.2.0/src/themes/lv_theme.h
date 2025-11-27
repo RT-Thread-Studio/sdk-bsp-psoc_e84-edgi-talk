@@ -34,7 +34,7 @@ typedef void (*lv_theme_apply_cb_t)(lv_theme_t *, lv_obj_t *);
  * @param obj       pointer to a theme object
  * @return          the theme of the object's display (can be NULL)
  */
-lv_theme_t   *lv_theme_get_from_obj(lv_obj_t * obj);
+lv_theme_t  * lv_theme_get_from_obj(lv_obj_t * obj);
 
 /**
  * Apply the active theme on an object
@@ -64,20 +64,20 @@ void lv_theme_set_apply_cb(lv_theme_t * theme, lv_theme_apply_cb_t apply_cb);
  * @param obj pointer to an object
  * @return pointer to the font
  */
-const lv_font_t *lv_theme_get_font_small(lv_obj_t * obj);
+const lv_font_t * lv_theme_get_font_small(lv_obj_t * obj);
 /**
  * Get the normal font of the theme
  * @param obj pointer to an object
  * @return pointer to the font
  */
-const lv_font_t *lv_theme_get_font_normal(lv_obj_t * obj);
+const lv_font_t * lv_theme_get_font_normal(lv_obj_t * obj);
 
 /**
  * Get the subtitle font of the theme
  * @param obj pointer to an object
  * @return pointer to the font
  */
-const lv_font_t *lv_theme_get_font_large(lv_obj_t * obj);
+const lv_font_t * lv_theme_get_font_large(lv_obj_t * obj);
 
 /**
  * Get the primary color of the theme

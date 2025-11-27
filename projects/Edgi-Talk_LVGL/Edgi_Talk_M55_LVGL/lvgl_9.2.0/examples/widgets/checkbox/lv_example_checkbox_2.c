@@ -8,13 +8,13 @@ static uint32_t active_index_2 = 0;
 
 static void radio_event_handler(lv_event_t * e)
 {
-    uint32_t *active_id = lv_event_get_user_data(e);
-    lv_obj_t *cont = lv_event_get_current_target(e);
-    lv_obj_t *act_cb = lv_event_get_target(e);
-    lv_obj_t *old_cb = lv_obj_get_child(cont, *active_id);
+    uint32_t * active_id = lv_event_get_user_data(e);
+    lv_obj_t * cont = lv_event_get_current_target(e);
+    lv_obj_t * act_cb = lv_event_get_target(e);
+    lv_obj_t * old_cb = lv_obj_get_child(cont, *active_id);
 
     /*Do nothing if the container was clicked*/
-    if (act_cb == cont) return;
+    if(act_cb == cont) return;
 
     lv_obj_remove_state(old_cb, LV_STATE_CHECKED);   /*Uncheck the previous radio button*/
     lv_obj_add_state(act_cb, LV_STATE_CHECKED);     /*Uncheck the current radio button*/
@@ -26,7 +26,7 @@ static void radio_event_handler(lv_event_t * e)
 
 static void radiobutton_create(lv_obj_t * parent, const char * txt)
 {
-    lv_obj_t *obj = lv_checkbox_create(parent);
+    lv_obj_t * obj = lv_checkbox_create(parent);
     lv_checkbox_set_text(obj, txt);
     lv_obj_add_flag(obj, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_add_style(obj, &style_radio, LV_PART_INDICATOR);
@@ -52,13 +52,12 @@ void lv_example_checkbox_2(void)
     uint32_t i;
     char buf[32];
 
-    lv_obj_t *cont1 = lv_obj_create(lv_screen_active());
+    lv_obj_t * cont1 = lv_obj_create(lv_screen_active());
     lv_obj_set_flex_flow(cont1, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_size(cont1, lv_pct(40), lv_pct(80));
     lv_obj_add_event_cb(cont1, radio_event_handler, LV_EVENT_CLICKED, &active_index_1);
 
-    for (i = 0; i < 5; i++)
-    {
+    for(i = 0; i < 5; i++) {
         lv_snprintf(buf, sizeof(buf), "A %d", (int)i + 1);
         radiobutton_create(cont1, buf);
 
@@ -66,14 +65,13 @@ void lv_example_checkbox_2(void)
     /*Make the first checkbox checked*/
     lv_obj_add_state(lv_obj_get_child(cont1, 0), LV_STATE_CHECKED);
 
-    lv_obj_t *cont2 = lv_obj_create(lv_screen_active());
+    lv_obj_t * cont2 = lv_obj_create(lv_screen_active());
     lv_obj_set_flex_flow(cont2, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_size(cont2, lv_pct(40), lv_pct(80));
     lv_obj_set_x(cont2, lv_pct(50));
     lv_obj_add_event_cb(cont2, radio_event_handler, LV_EVENT_CLICKED, &active_index_2);
 
-    for (i = 0; i < 3; i++)
-    {
+    for(i = 0; i < 3; i++) {
         lv_snprintf(buf, sizeof(buf), "B %d", (int)i + 1);
         radiobutton_create(cont2, buf);
     }

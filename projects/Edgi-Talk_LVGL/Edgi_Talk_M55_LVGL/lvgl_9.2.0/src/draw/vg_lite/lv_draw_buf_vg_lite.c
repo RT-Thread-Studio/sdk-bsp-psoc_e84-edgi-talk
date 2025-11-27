@@ -8,7 +8,6 @@
  *********************/
 
 #include "lv_draw_vg_lite.h"
-#include "lv_conf.h"
 
 #if LV_USE_DRAW_VG_LITE
 
@@ -43,7 +42,7 @@ static uint32_t width_to_stride(uint32_t w, lv_color_format_t color_format);
 
 void lv_draw_buf_vg_lite_init_handlers(void)
 {
-    lv_draw_buf_handlers_t *handlers = lv_draw_buf_get_handlers();
+    lv_draw_buf_handlers_t * handlers = lv_draw_buf_get_handlers();
     handlers->width_to_stride_cb = width_to_stride;
 }
 

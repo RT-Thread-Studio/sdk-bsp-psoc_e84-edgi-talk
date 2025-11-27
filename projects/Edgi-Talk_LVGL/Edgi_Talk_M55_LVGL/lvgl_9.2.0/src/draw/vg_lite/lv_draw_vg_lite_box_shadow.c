@@ -9,7 +9,6 @@
 
 #include "../../misc/lv_area_private.h"
 #include "lv_draw_vg_lite.h"
-#include "../lv_draw_rect.h"
 
 #if LV_USE_DRAW_VG_LITE
 
@@ -40,7 +39,7 @@
  **********************/
 
 void lv_draw_vg_lite_box_shadow(lv_draw_unit_t * draw_unit, const lv_draw_box_shadow_dsc_t * dsc,
-                                const lv_area_t *coords)
+                                const lv_area_t * coords)
 {
     /*Calculate the rectangle which is blurred to get the shadow in `shadow_area`*/
     lv_area_t core_area;
@@ -59,7 +58,7 @@ void lv_draw_vg_lite_box_shadow(lv_draw_unit_t * draw_unit, const lv_draw_box_sh
     /*Get clipped draw area which is the real draw area.
      *It is always the same or inside `shadow_area`*/
     lv_area_t draw_area;
-    if (!lv_area_intersect(&draw_area, &shadow_area, draw_unit->clip_area)) return;
+    if(!lv_area_intersect(&draw_area, &shadow_area, draw_unit->clip_area)) return;
 
     LV_PROFILER_BEGIN;
 
@@ -73,16 +72,14 @@ void lv_draw_vg_lite_box_shadow(lv_draw_unit_t * draw_unit, const lv_draw_box_sh
     draw_area = core_area;
     int32_t half_w = dsc->width / 2;
 
-    for (int32_t w = 0; w < half_w; w++)
-    {
+    for(int32_t w = 0; w < half_w; w++) {
         border_dsc.opa = lv_map(w, 0, half_w, dsc->opa / 4, LV_OPA_0);
         border_dsc.radius++;
         lv_area_increase(&draw_area, 1, 1);
         lv_draw_vg_lite_border(draw_unit, &border_dsc, &draw_area);
 
         /* fill center */
-        if (dsc->ofs_x || dsc->ofs_y)
-        {
+        if(dsc->ofs_x || dsc->ofs_y) {
             lv_draw_fill_dsc_t fill_dsc;
             lv_draw_fill_dsc_init(&fill_dsc);
             fill_dsc.radius = dsc->radius;

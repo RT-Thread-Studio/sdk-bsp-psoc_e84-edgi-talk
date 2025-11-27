@@ -36,7 +36,7 @@ extern "C" {
  * @return Pointer to the destination array.
  * @note The function does not check for any overlapping of the source and destination memory blocks.
  */
-void *lv_memcpy(void * dst, const void * src, size_t len);
+void * lv_memcpy(void * dst, const void * src, size_t len);
 
 /**
  * @brief Fills a block of memory with a specified value.
@@ -54,7 +54,7 @@ void lv_memset(void * dst, uint8_t v, size_t len);
  * @param len Number of bytes to copy
  * @return Pointer to the destination array.
  */
-void *lv_memmove(void * dst, const void * src, size_t len);
+void * lv_memmove(void * dst, const void * src, size_t len);
 
 /**
  * @brief This function will compare two memory blocks
@@ -100,7 +100,7 @@ size_t lv_strlcpy(char * dst, const char * src, size_t dst_size);
  * @return A pointer to the destination array, which is dst.
  * @note dst will not be null terminated if dest_size bytes were copied from src before the end of src was reached.
  */
-char *lv_strncpy(char * dst, const char * src, size_t dest_size);
+char * lv_strncpy(char * dst, const char * src, size_t dest_size);
 
 /**
  * @brief Copies the string pointed to by src, including the terminating null character,
@@ -109,7 +109,7 @@ char *lv_strncpy(char * dst, const char * src, size_t dest_size);
  * @param src Pointer to the source of data to be copied.
  * @return A pointer to the destination array, which is dst.
  */
-char *lv_strcpy(char * dst, const char * src);
+char * lv_strcpy(char * dst, const char * src);
 
 /**
  * @brief  This function will compare two strings without specified length.
@@ -124,7 +124,7 @@ int lv_strcmp(const char * s1, const char * s2);
  * @param src Pointer to the source of data to be copied.
  * @return A pointer to the new allocated string. NULL if failed.
  */
-char *lv_strdup(const char * src);
+char * lv_strdup(const char * src);
 
 /**
  * @brief Copies the string pointed to by src, including the terminating null character,
@@ -133,7 +133,7 @@ char *lv_strdup(const char * src);
  * @param src Pointer to the source of data to be copied.
  * @return A pointer to the destination string, which is dst.
  */
-char *lv_strcat(char * dst, const char * src);
+char * lv_strcat(char * dst, const char * src);
 
 /**
  * @brief Copies up to src_len characters from the string pointed to by src
@@ -145,7 +145,7 @@ char *lv_strcat(char * dst, const char * src);
  * @param src_len Maximum number of characters from src to be copied to the end of dst.
  * @return A pointer to the destination string, which is dst.
  */
-char *lv_strncat(char * dst, const char * src, size_t src_len);
+char * lv_strncat(char * dst, const char * src, size_t src_len);
 
 /**********************
  *      MACROS

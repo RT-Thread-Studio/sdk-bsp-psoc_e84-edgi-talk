@@ -25,8 +25,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef struct
-{
+typedef struct {
     lv_draw_dsc_base_t base;
 
     lv_point_precise_t p1;
@@ -57,7 +56,7 @@ void lv_draw_line_dsc_init(lv_draw_line_dsc_t * dsc);
  * @param task      draw task
  * @return          the task's draw descriptor or NULL if the task is not of type LV_DRAW_TASK_TYPE_LINE
  */
-lv_draw_line_dsc_t *lv_draw_task_get_line_dsc(lv_draw_task_t * task);
+lv_draw_line_dsc_t * lv_draw_task_get_line_dsc(lv_draw_task_t * task);
 
 /**
  * Create a line draw task

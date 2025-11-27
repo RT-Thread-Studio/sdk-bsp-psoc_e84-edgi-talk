@@ -57,8 +57,7 @@ extern "C" {
 /*
  * The error correction level in a QR Code symbol.
  */
-enum qrcodegen_Ecc
-{
+enum qrcodegen_Ecc {
     // Must be declared in ascending order of error protection
     // so that an internal qrcodegen function works properly
     qrcodegen_Ecc_LOW = 0,   // The QR Code can tolerate about  7% erroneous codewords
@@ -71,8 +70,7 @@ enum qrcodegen_Ecc
 /*
  * The mask pattern used in a QR Code symbol.
  */
-enum qrcodegen_Mask
-{
+enum qrcodegen_Mask {
     // A special value to tell the QR Code encoder to
     // automatically select an appropriate mask pattern
     qrcodegen_Mask_AUTO = -1,
@@ -91,8 +89,7 @@ enum qrcodegen_Mask
 /*
  * Describes how a segment's data bits are interpreted.
  */
-enum qrcodegen_Mode
-{
+enum qrcodegen_Mode {
     qrcodegen_Mode_NUMERIC      = 0x1,
     qrcodegen_Mode_ALPHANUMERIC = 0x2,
     qrcodegen_Mode_BYTE         = 0x4,
@@ -112,8 +109,7 @@ enum qrcodegen_Mode
  * Moreover, the maximum allowed bit length is 32767 because
  * the largest QR Code (version 40) has 31329 modules.
  */
-struct qrcodegen_Segment
-{
+struct qrcodegen_Segment {
     // The mode indicator of this segment.
     enum qrcodegen_Mode mode;
 
@@ -124,7 +120,7 @@ struct qrcodegen_Segment
 
     // The data bits of this segment, packed in bitwise big endian.
     // Can be null if the bit length is zero.
-    uint8_t *data;
+    uint8_t * data;
 
     // The number of valid data bits used in the buffer. Requires
     // 0 <= bitLength <= 32767, and bitLength <= (capacity of data array) * 8.

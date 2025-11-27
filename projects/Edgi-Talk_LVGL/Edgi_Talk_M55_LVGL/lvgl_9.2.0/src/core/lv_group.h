@@ -22,8 +22,7 @@ extern "C" {
  *      DEFINES
  *********************/
 /** Predefined keys to control focused object via lv_group_send(group, c) */
-typedef enum
-{
+typedef enum {
     LV_KEY_UP        = 17,  /*0x11*/
     LV_KEY_DOWN      = 18,  /*0x12*/
     LV_KEY_RIGHT     = 19,  /*0x13*/
@@ -45,8 +44,7 @@ typedef enum
 typedef void (*lv_group_focus_cb_t)(lv_group_t *);
 typedef void (*lv_group_edge_cb_t)(lv_group_t *, bool);
 
-typedef enum
-{
+typedef enum {
     LV_GROUP_REFOCUS_POLICY_NEXT = 0,
     LV_GROUP_REFOCUS_POLICY_PREV = 1
 } lv_group_refocus_policy_t;
@@ -59,7 +57,7 @@ typedef enum
  * Create a new object group
  * @return          pointer to the new object group
  */
-lv_group_t *lv_group_create(void);
+lv_group_t * lv_group_create(void);
 
 /**
  * Delete a group object
@@ -77,7 +75,7 @@ void lv_group_set_default(lv_group_t * group);
  * Get the default group
  * @return          pointer to the default group
  */
-lv_group_t *lv_group_get_default(void);
+lv_group_t * lv_group_get_default(void);
 
 /**
  * Add an object to a group
@@ -179,7 +177,7 @@ void lv_group_set_wrap(lv_group_t * group, bool en);
  * @param group         pointer to a group
  * @return              pointer to the focused object
  */
-lv_obj_t *lv_group_get_focused(const lv_group_t * group);
+lv_obj_t * lv_group_get_focused(const lv_group_t * group);
 
 /**
  * Get the focus callback function of a group
@@ -221,7 +219,7 @@ uint32_t lv_group_get_obj_count(lv_group_t * group);
  * @param index         index of object within the group
  * @return              pointer to the object
  */
-lv_obj_t *lv_group_get_obj_by_index(lv_group_t * group, uint32_t index);
+lv_obj_t * lv_group_get_obj_by_index(lv_group_t * group, uint32_t index);
 
 /**
  * Get the number of groups
@@ -234,7 +232,7 @@ uint32_t lv_group_get_count(void);
  * @param index         index of the group
  * @return              pointer to the group
  */
-lv_group_t   *lv_group_by_index(uint32_t index);
+lv_group_t  * lv_group_by_index(uint32_t index);
 
 /**********************
  *      MACROS

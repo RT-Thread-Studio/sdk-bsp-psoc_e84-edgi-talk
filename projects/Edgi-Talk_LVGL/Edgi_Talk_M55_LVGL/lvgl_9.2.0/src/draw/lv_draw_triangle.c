@@ -52,14 +52,14 @@ void lv_draw_triangle_dsc_init(lv_draw_triangle_dsc_t * dsc)
     LV_PROFILER_END;
 }
 
-lv_draw_triangle_dsc_t *lv_draw_task_get_triangle_dsc(lv_draw_task_t * task)
+lv_draw_triangle_dsc_t * lv_draw_task_get_triangle_dsc(lv_draw_task_t * task)
 {
     return task->type == LV_DRAW_TASK_TYPE_TRIANGLE ? (lv_draw_triangle_dsc_t *)task->draw_dsc : NULL;
 }
 
 void lv_draw_triangle(lv_layer_t * layer, const lv_draw_triangle_dsc_t * dsc)
 {
-    if (dsc->bg_opa <= LV_OPA_MIN) return;
+    if(dsc->bg_opa <= LV_OPA_MIN) return;
 
     LV_PROFILER_BEGIN;
     lv_area_t a;
@@ -68,7 +68,7 @@ void lv_draw_triangle(lv_layer_t * layer, const lv_draw_triangle_dsc_t * dsc)
     a.x2 = (int32_t)LV_MAX3(dsc->p[0].x, dsc->p[1].x, dsc->p[2].x);
     a.y2 = (int32_t)LV_MAX3(dsc->p[0].y, dsc->p[1].y, dsc->p[2].y);
 
-    lv_draw_task_t *t = lv_draw_add_task(layer, &a);
+    lv_draw_task_t * t = lv_draw_add_task(layer, &a);
 
     t->draw_dsc = lv_malloc(sizeof(*dsc));
     lv_memcpy(t->draw_dsc, dsc, sizeof(*dsc));

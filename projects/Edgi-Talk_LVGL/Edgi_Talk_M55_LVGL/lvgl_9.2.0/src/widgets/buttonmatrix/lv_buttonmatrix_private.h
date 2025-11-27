@@ -28,12 +28,11 @@ extern "C" {
  **********************/
 
 /** Data of button matrix */
-struct lv_buttonmatrix_t
-{
+struct lv_buttonmatrix_t {
     lv_obj_t obj;
-    const char **map_p;                  /**< Pointer to the current map */
-    lv_area_t *button_areas;             /**< Array of areas of buttons */
-    lv_buttonmatrix_ctrl_t *ctrl_bits;   /**< Array of control bytes */
+    const char ** map_p;                 /**< Pointer to the current map */
+    lv_area_t * button_areas;            /**< Array of areas of buttons */
+    lv_buttonmatrix_ctrl_t * ctrl_bits;  /**< Array of control bytes */
     uint32_t btn_cnt;                    /**< Number of button in 'map_p'(Handled by the library) */
     uint32_t row_cnt;                    /**< Number of rows in 'map_p'(Handled by the library) */
     uint32_t btn_id_sel;                 /**< Index of the active button (being pressed/released etc) or LV_BUTTONMATRIX_BUTTON_NONE */

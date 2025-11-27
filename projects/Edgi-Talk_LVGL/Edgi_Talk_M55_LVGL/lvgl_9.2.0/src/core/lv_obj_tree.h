@@ -25,8 +25,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_OBJ_TREE_WALK_NEXT,
     LV_OBJ_TREE_WALK_SKIP_CHILDREN,
     LV_OBJ_TREE_WALK_END,
@@ -106,21 +105,21 @@ void lv_obj_move_to_index(lv_obj_t * obj, int32_t index);
  * @param obj       pointer to an object
  * @return          pointer to the object's screen
  */
-lv_obj_t *lv_obj_get_screen(const lv_obj_t * obj);
+lv_obj_t * lv_obj_get_screen(const lv_obj_t * obj);
 
 /**
  * Get the display of the object
  * @param obj       pointer to an object
  * @return          pointer to the object's display
  */
-lv_display_t *lv_obj_get_display(const lv_obj_t * obj);
+lv_display_t * lv_obj_get_display(const lv_obj_t * obj);
 
 /**
  * Get the parent of an object
  * @param obj       pointer to an object
  * @return          the parent of the object. (NULL if `obj` was a screen)
  */
-lv_obj_t *lv_obj_get_parent(const lv_obj_t * obj);
+lv_obj_t * lv_obj_get_parent(const lv_obj_t * obj);
 
 /**
  * Get the child of an object by the child's index.
@@ -133,7 +132,7 @@ lv_obj_t *lv_obj_get_parent(const lv_obj_t * obj);
  *                  -2: the second youngest
  * @return          pointer to the child or NULL if the index was invalid
  */
-lv_obj_t *lv_obj_get_child(const lv_obj_t * obj, int32_t idx);
+lv_obj_t * lv_obj_get_child(const lv_obj_t * obj, int32_t idx);
 
 /**
  * Get the child of an object by the child's index. Consider the children only with a given type.
@@ -147,8 +146,8 @@ lv_obj_t *lv_obj_get_child(const lv_obj_t * obj, int32_t idx);
  * @param class_p   the type of the children to check
  * @return          pointer to the child or NULL if the index was invalid
  */
-lv_obj_t *lv_obj_get_child_by_type(const lv_obj_t * obj, int32_t idx,
-                                   const lv_obj_class_t *class_p);
+lv_obj_t * lv_obj_get_child_by_type(const lv_obj_t * obj, int32_t idx,
+                                    const lv_obj_class_t * class_p);
 
 /**
  * Return a sibling of an object
@@ -161,7 +160,7 @@ lv_obj_t *lv_obj_get_child_by_type(const lv_obj_t * obj, int32_t idx,
  *                  etc
  * @return          pointer to the requested sibling  or NULL if there is no such sibling
  */
-lv_obj_t *lv_obj_get_sibling(const lv_obj_t * obj, int32_t idx);
+lv_obj_t * lv_obj_get_sibling(const lv_obj_t * obj, int32_t idx);
 
 /**
  * Return a sibling of an object. Consider the siblings only with a given type.
@@ -175,8 +174,8 @@ lv_obj_t *lv_obj_get_sibling(const lv_obj_t * obj, int32_t idx);
  * @param class_p   the type of the children to check
  * @return          pointer to the requested sibling  or NULL if there is no such sibling
  */
-lv_obj_t *lv_obj_get_sibling_by_type(const lv_obj_t * obj, int32_t idx,
-                                     const lv_obj_class_t *class_p);
+lv_obj_t * lv_obj_get_sibling_by_type(const lv_obj_t * obj, int32_t idx,
+                                      const lv_obj_class_t * class_p);
 
 /**
  * Get the number of children

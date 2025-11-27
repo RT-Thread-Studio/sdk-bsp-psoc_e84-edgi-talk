@@ -48,7 +48,7 @@ HWND lv_windows_get_indev_window_handle(lv_indev_t * indev);
  * @return The LVGL pointer input device object for the specific LVGL
  *         display object.
 */
-lv_indev_t *lv_windows_acquire_pointer_indev(lv_display_t * display);
+lv_indev_t * lv_windows_acquire_pointer_indev(lv_display_t * display);
 
 /**
  * @brief Open a LVGL keypad input device object for the specific LVGL
@@ -58,7 +58,7 @@ lv_indev_t *lv_windows_acquire_pointer_indev(lv_display_t * display);
  * @return The LVGL keypad input device object for the specific LVGL
  *         display object.
 */
-lv_indev_t *lv_windows_acquire_keypad_indev(lv_display_t * display);
+lv_indev_t * lv_windows_acquire_keypad_indev(lv_display_t * display);
 
 /**
  * @brief Open a LVGL encoder input device object for the specific LVGL
@@ -68,7 +68,7 @@ lv_indev_t *lv_windows_acquire_keypad_indev(lv_display_t * display);
  * @return The LVGL encoder input device object for the specific LVGL
  *         display object.
 */
-lv_indev_t *lv_windows_acquire_encoder_indev(lv_display_t * display);
+lv_indev_t * lv_windows_acquire_encoder_indev(lv_display_t * display);
 
 /**********************
  *      MACROS

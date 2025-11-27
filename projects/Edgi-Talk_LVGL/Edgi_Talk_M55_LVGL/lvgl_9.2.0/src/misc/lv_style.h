@@ -75,8 +75,7 @@ LV_EXPORT_CONST_INT(LV_SCALE_NONE);
 /**
  * Possible options for blending opaque drawings
  */
-typedef enum
-{
+typedef enum {
     LV_BLEND_MODE_NORMAL,     /**< Simply mix according to the opacity value*/
     LV_BLEND_MODE_ADDITIVE,   /**< Add the respective color channels*/
     LV_BLEND_MODE_SUBTRACTIVE,/**< Subtract the foreground from the background*/
@@ -87,8 +86,7 @@ typedef enum
  * Some options to apply decorations on texts.
  * 'OR'ed values can be used.
  */
-typedef enum
-{
+typedef enum {
     LV_TEXT_DECOR_NONE          = 0x00,
     LV_TEXT_DECOR_UNDERLINE     = 0x01,
     LV_TEXT_DECOR_STRIKETHROUGH = 0x02,
@@ -98,8 +96,7 @@ typedef enum
  * Selects on which sides border should be drawn
  * 'OR'ed values can be used.
  */
-typedef enum
-{
+typedef enum {
     LV_BORDER_SIDE_NONE     = 0x00,
     LV_BORDER_SIDE_BOTTOM   = 0x01,
     LV_BORDER_SIDE_TOP      = 0x02,
@@ -112,8 +109,7 @@ typedef enum
 /**
  * The direction of the gradient.
  */
-typedef enum
-{
+typedef enum {
     LV_GRAD_DIR_NONE,       /**< No gradient (the `grad_color` property is ignored)*/
     LV_GRAD_DIR_VER,        /**< Simple vertical (top to bottom) gradient*/
     LV_GRAD_DIR_HOR,        /**< Simple horizontal (left to right) gradient*/
@@ -125,8 +121,7 @@ typedef enum
 /**
  * Gradient behavior outside the defined range.
 */
-typedef enum
-{
+typedef enum {
     LV_GRAD_EXTEND_PAD,     /**< Repeat the same color*/
     LV_GRAD_EXTEND_REPEAT,  /**< Repeat the pattern*/
     LV_GRAD_EXTEND_REFLECT, /**< Repeat the pattern mirrored*/
@@ -135,16 +130,14 @@ typedef enum
 /** A gradient stop definition.
  *  This matches a color and a position in a virtual 0-255 scale.
  */
-typedef struct
-{
+typedef struct {
     lv_color_t color;   /**< The stop color */
     lv_opa_t   opa;     /**< The opacity of the color*/
     uint8_t    frac;    /**< The stop position in 1/255 unit */
 } lv_gradient_stop_t;
 
 /** A descriptor of a gradient. */
-typedef struct
-{
+typedef struct {
     lv_gradient_stop_t   stops[LV_GRADIENT_MAX_STOPS];  /**< A gradient stop array */
     uint8_t              stops_count;                   /**< The number of used stops in the array */
     lv_grad_dir_t        dir : 3;                       /**< The gradient direction.
@@ -153,17 +146,14 @@ typedef struct
     lv_grad_extend_t     extend : 2;                    /**< Behaviour outside the defined range.
                                                          * LV_GRAD_EXTEND_NONE, LV_GRAD_EXTEND_PAD, LV_GRAD_EXTEND_REPEAT, LV_GRAD_EXTEND_REFLECT */
 #if LV_USE_DRAW_SW_COMPLEX_GRADIENTS
-    union
-    {
+    union {
         /*Linear gradient parameters*/
-        struct
-        {
+        struct {
             lv_point_t  start;                          /**< Linear gradient vector start point */
             lv_point_t  end;                            /**< Linear gradient vector end point */
         } linear;
         /*Radial gradient parameters*/
-        struct
-        {
+        struct {
             lv_point_t  focal;                          /**< Center of the focal (starting) circle in local coordinates */
             /* (can be the same as the ending circle to create concentric circles) */
             lv_point_t  focal_extent;                   /**< Point on the circle (can be the same as the center) */
@@ -171,24 +161,22 @@ typedef struct
             lv_point_t  end_extent;                     /**< Point on the circle determining the radius of the gradient */
         } radial;
         /*Conical gradient parameters*/
-        struct
-        {
+        struct {
             lv_point_t  center;                         /**< Conical gradient center point */
             int16_t     start_angle;                    /**< Start angle 0..3600 */
             int16_t     end_angle;                      /**< End angle 0..3600 */
         } conical;
     } params;
-    void *state;
+    void * state;
 #endif
 } lv_grad_dsc_t;
 
 /**
  * A common type to handle all the property types in the same way.
  */
-typedef union
-{
+typedef union {
     int32_t num;         /**< Number integer number (opacity, enums, booleans or "normal" numbers)*/
-    const void *ptr;     /**< Constant pointers  (font, cone text, etc)*/
+    const void * ptr;    /**< Constant pointers  (font, cone text, etc)*/
     lv_color_t color;    /**< Colors*/
 } lv_style_value_t;
 
@@ -197,8 +185,7 @@ typedef union
  *
  * Props are split into groups of 16. When adding a new prop to a group, ensure it does not overflow into the next one.
  */
-enum
-{
+enum {
     LV_STYLE_PROP_INV               = 0,
 
     /*Group 0*/
@@ -350,8 +337,7 @@ enum
     LV_STYLE_PROP_CONST             = 0xFF /* magic value for const styles */
 };
 
-typedef enum
-{
+typedef enum {
     LV_STYLE_RES_NOT_FOUND,
     LV_STYLE_RES_FOUND,
 } lv_style_res_t;
@@ -359,10 +345,9 @@ typedef enum
 /**
  * Descriptor for style transitions
  */
-typedef struct
-{
-    const lv_style_prop_t *props;  /**< An array with the properties to animate.*/
-    void *user_data;               /**< A custom user data that will be passed to the animation's user_data */
+typedef struct {
+    const lv_style_prop_t * props; /**< An array with the properties to animate.*/
+    void * user_data;              /**< A custom user data that will be passed to the animation's user_data */
     lv_anim_path_cb_t path_xcb;    /**< A path for the animation.*/
     uint32_t time;                 /**< Duration of the transition in [ms]*/
     uint32_t delay;                /**< Delay before the transition in [ms]*/
@@ -371,8 +356,7 @@ typedef struct
 /**
  * Descriptor of a constant style property.
  */
-typedef struct
-{
+typedef struct {
     lv_style_prop_t prop;
     lv_style_value_t value;
 } lv_style_const_prop_t;
@@ -380,14 +364,13 @@ typedef struct
 /**
  * Descriptor of a style (a collection of properties and values).
  */
-typedef struct
-{
+typedef struct {
 
 #if LV_USE_ASSERT_STYLE
     uint32_t sentinel;
 #endif
 
-    void *values_and_props;
+    void * values_and_props;
 
     uint32_t has_group;
     uint8_t prop_cnt;   /**< 255 means it's a constant style*/
@@ -419,7 +402,7 @@ void lv_style_reset(lv_style_t * style);
  */
 static inline bool lv_style_is_const(const lv_style_t * style)
 {
-    if (style->prop_cnt == 255) return true;
+    if(style->prop_cnt == 255) return true;
     return false;
 }
 
@@ -492,7 +475,7 @@ lv_style_res_t lv_style_get_prop(const lv_style_t * style, lv_style_prop_t prop,
  * @endcode
  */
 void lv_style_transition_dsc_init(lv_style_transition_dsc_t * tr, const lv_style_prop_t props[],
-                                  lv_anim_path_cb_t path_cb, uint32_t time, uint32_t delay, void *user_data);
+                                  lv_anim_path_cb_t path_cb, uint32_t time, uint32_t delay, void * user_data);
 
 /**
  * Get the default value of a property
@@ -512,30 +495,24 @@ lv_style_value_t lv_style_prop_get_default(lv_style_prop_t prop);
  * @note This function is the same as ::lv_style_get_prop but inlined. Use it only on performance critical places
  */
 static inline lv_style_res_t lv_style_get_prop_inlined(const lv_style_t * style, lv_style_prop_t prop,
-        lv_style_value_t *value)
+                                                       lv_style_value_t * value)
 {
-    if (lv_style_is_const(style))
-    {
-        lv_style_const_prop_t *props = (lv_style_const_prop_t *)style->values_and_props;
+    if(lv_style_is_const(style)) {
+        lv_style_const_prop_t * props = (lv_style_const_prop_t *)style->values_and_props;
         uint32_t i;
-        for (i = 0; props[i].prop != LV_STYLE_PROP_INV; i++)
-        {
-            if (props[i].prop == prop)
-            {
+        for(i = 0; props[i].prop != LV_STYLE_PROP_INV; i++) {
+            if(props[i].prop == prop) {
                 *value = props[i].value;
                 return LV_STYLE_RES_FOUND;
             }
         }
     }
-    else
-    {
-        lv_style_prop_t *props = (lv_style_prop_t *)style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
+    else {
+        lv_style_prop_t * props = (lv_style_prop_t *)style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
         uint32_t i;
-        for (i = 0; i < style->prop_cnt; i++)
-        {
-            if (props[i] == prop)
-            {
-                lv_style_value_t *values = (lv_style_value_t *)style->values_and_props;
+        for(i = 0; i < style->prop_cnt; i++) {
+            if(props[i] == prop) {
+                lv_style_value_t * values = (lv_style_value_t *)style->values_and_props;
                 *value = values[i];
                 return LV_STYLE_RES_FOUND;
             }
@@ -560,7 +537,7 @@ bool lv_style_is_empty(const lv_style_t * style);
 static inline uint32_t lv_style_get_prop_group(lv_style_prop_t prop)
 {
     uint32_t group = prop >> 2;
-    if (group > 30) group = 31;   /*The MSB marks all the custom properties*/
+    if(group > 30) group = 31;    /*The MSB marks all the custom properties*/
     return group;
 
 }

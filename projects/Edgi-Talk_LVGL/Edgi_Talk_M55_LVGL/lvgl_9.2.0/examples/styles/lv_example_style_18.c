@@ -8,8 +8,7 @@
  */
 void lv_example_style_18(void)
 {
-    static const lv_color_t grad_colors[2] =
-    {
+    static const lv_color_t grad_colors[2] = {
         LV_COLOR_MAKE(0x26, 0xa0, 0xda),
         LV_COLOR_MAKE(0x31, 0x47, 0x55),
     };
@@ -36,8 +35,8 @@ void lv_example_style_18(void)
 
     /*Create buttons with different gradient styles*/
 
-    lv_obj_t *btn;
-    lv_obj_t *label;
+    lv_obj_t * btn;
+    lv_obj_t * label;
 
     /*Simple horizontal gradient*/
     btn = lv_button_create(lv_screen_active());
@@ -88,7 +87,7 @@ void lv_example_style_18(void)
 
 void lv_example_style_18(void)
 {
-    lv_obj_t *label = lv_label_create(lv_screen_active());
+    lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_obj_set_width(label, LV_PCT(80));
     lv_label_set_text(label, "LV_USE_DRAW_SW_COMPLEX_GRADIENTS is not enabled");
     lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);

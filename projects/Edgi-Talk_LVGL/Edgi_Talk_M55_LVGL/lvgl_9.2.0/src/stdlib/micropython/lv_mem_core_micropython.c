@@ -60,7 +60,7 @@ void lv_mem_remove_pool(lv_mem_pool_t pool)
     return;
 }
 
-void *lv_malloc_core(size_t size)
+void * lv_malloc_core(size_t size)
 {
 #if MICROPY_MALLOC_USES_ALLOCATED_SIZE
     return gc_alloc(size, true);
@@ -69,7 +69,7 @@ void *lv_malloc_core(size_t size)
 #endif
 }
 
-void *lv_realloc_core(void * p, size_t new_size)
+void * lv_realloc_core(void * p, size_t new_size)
 {
 
 #if MICROPY_MALLOC_USES_ALLOCATED_SIZE

@@ -9,19 +9,18 @@
 static void file_explorer_event_handler(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *obj = lv_event_get_target(e);
+    lv_obj_t * obj = lv_event_get_target(e);
 
-    if (code == LV_EVENT_VALUE_CHANGED)
-    {
-        const char *cur_path =  lv_file_explorer_get_current_path(obj);
-        const char *sel_fn = lv_file_explorer_get_selected_file_name(obj);
+    if(code == LV_EVENT_VALUE_CHANGED) {
+        const char * cur_path =  lv_file_explorer_get_current_path(obj);
+        const char * sel_fn = lv_file_explorer_get_selected_file_name(obj);
         LV_LOG_USER("%s%s", cur_path, sel_fn);
     }
 }
 
 void lv_example_file_explorer_1(void)
 {
-    lv_obj_t *file_explorer = lv_file_explorer_create(lv_screen_active());
+    lv_obj_t * file_explorer = lv_file_explorer_create(lv_screen_active());
     lv_file_explorer_set_sort(file_explorer, LV_EXPLORER_SORT_KIND);
 
 #if LV_USE_FS_WIN32
@@ -40,7 +39,7 @@ void lv_example_file_explorer_1(void)
     lv_file_explorer_open_dir(file_explorer, "A:/");
 
 #if LV_FILE_EXPLORER_QUICK_ACCESS
-    char *envvar = "HOME";
+    char * envvar = "HOME";
     char home_dir[LV_FS_MAX_PATH_LENGTH];
     strcpy(home_dir, "A:");
     /* get the user's home directory from the HOME environment variable*/

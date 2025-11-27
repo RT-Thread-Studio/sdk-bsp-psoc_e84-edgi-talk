@@ -39,11 +39,11 @@ void lv_vg_lite_path_init(lv_draw_vg_lite_unit_t * unit);
 
 void lv_vg_lite_path_deinit(lv_draw_vg_lite_unit_t * unit);
 
-lv_vg_lite_path_t *lv_vg_lite_path_create(vg_lite_format_t data_format);
+lv_vg_lite_path_t * lv_vg_lite_path_create(vg_lite_format_t data_format);
 
 void lv_vg_lite_path_destroy(lv_vg_lite_path_t * path);
 
-lv_vg_lite_path_t *lv_vg_lite_path_get(lv_draw_vg_lite_unit_t * unit, vg_lite_format_t data_format);
+lv_vg_lite_path_t * lv_vg_lite_path_get(lv_draw_vg_lite_unit_t * unit, vg_lite_format_t data_format);
 
 void lv_vg_lite_path_drop(lv_draw_vg_lite_unit_t * unit, lv_vg_lite_path_t * path);
 
@@ -56,14 +56,14 @@ void lv_vg_lite_path_set_bonding_box(lv_vg_lite_path_t * path,
                                      float max_x, float max_y);
 
 void lv_vg_lite_path_get_bonding_box(lv_vg_lite_path_t * path,
-                                     float *min_x, float *min_y,
-                                     float *max_x, float *max_y);
+                                     float * min_x, float * min_y,
+                                     float * max_x, float * max_y);
 
 bool lv_vg_lite_path_update_bonding_box(lv_vg_lite_path_t * path);
 
 void lv_vg_lite_path_set_quality(lv_vg_lite_path_t * path, vg_lite_quality_t quality);
 
-vg_lite_path_t *lv_vg_lite_path_get_path(lv_vg_lite_path_t * path);
+vg_lite_path_t * lv_vg_lite_path_get_path(lv_vg_lite_path_t * path);
 
 void lv_vg_lite_path_move_to(lv_vg_lite_path_t * path,
                              float x, float y);
@@ -94,9 +94,9 @@ void lv_vg_lite_path_append_circle(lv_vg_lite_path_t * path,
                                    float rx, float ry);
 
 void lv_vg_lite_path_append_arc_right_angle(lv_vg_lite_path_t * path,
-        float start_x, float start_y,
-        float center_x, float center_y,
-        float end_x, float end_y);
+                                            float start_x, float start_y,
+                                            float center_x, float center_y,
+                                            float end_x, float end_y);
 
 void lv_vg_lite_path_append_arc(lv_vg_lite_path_t * path,
                                 float cx, float cy,

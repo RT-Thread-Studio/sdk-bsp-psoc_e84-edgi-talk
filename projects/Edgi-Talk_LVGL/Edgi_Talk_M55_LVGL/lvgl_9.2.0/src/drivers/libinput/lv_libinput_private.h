@@ -26,15 +26,13 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_libinput_event_t
-{
+struct lv_libinput_event_t {
     lv_indev_state_t pressed;
     int key_val;
     lv_point_t point;
 };
 
-struct lv_libinput_t
-{
+struct lv_libinput_t {
     int fd;
     struct pollfd fds[1];
 
@@ -55,8 +53,8 @@ struct lv_libinput_t
     pthread_mutex_t event_lock;
     pthread_t worker_thread;
 
-    struct libinput *libinput_context;
-    struct libinput_device *libinput_device;
+    struct libinput * libinput_context;
+    struct libinput_device * libinput_device;
 
 #if LV_LIBINPUT_XKB
     lv_xkb_t xkb;

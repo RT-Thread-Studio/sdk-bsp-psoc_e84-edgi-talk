@@ -75,23 +75,22 @@ LV_EXPORT_CONST_INT(LV_STRIDE_AUTO);
  *      TYPEDEFS
  **********************/
 
-typedef void *(*lv_draw_buf_malloc_cb)(size_t size, lv_color_format_t color_format);
+typedef void * (*lv_draw_buf_malloc_cb)(size_t size, lv_color_format_t color_format);
 
 typedef void (*lv_draw_buf_free_cb)(void * draw_buf);
 
-typedef void *(*lv_draw_buf_align_cb)(void * buf, lv_color_format_t color_format);
+typedef void * (*lv_draw_buf_align_cb)(void * buf, lv_color_format_t color_format);
 
 typedef void (*lv_draw_buf_cache_operation_cb)(const lv_draw_buf_t * draw_buf, const lv_area_t * area);
 
 typedef uint32_t (*lv_draw_buf_width_to_stride_cb)(uint32_t w, lv_color_format_t color_format);
 
-struct lv_draw_buf_t
-{
+struct lv_draw_buf_t {
     lv_image_header_t header;
     uint32_t data_size;       /**< Total buf size in bytes */
-    uint8_t *data;
-    void *unaligned_data;     /**< Unaligned address of `data`, used internally by lvgl */
-    const lv_draw_buf_handlers_t *handlers;  /**< draw buffer alloc/free ops. */
+    uint8_t * data;
+    void * unaligned_data;    /**< Unaligned address of `data`, used internally by lvgl */
+    const lv_draw_buf_handlers_t * handlers; /**< draw buffer alloc/free ops. */
 };
 
 /**********************
@@ -129,7 +128,7 @@ void lv_draw_buf_handlers_init(lv_draw_buf_handlers_t * handlers,
  * Custom callback can be set on the returned value
  * @return                  pointer to the struct of handlers
  */
-lv_draw_buf_handlers_t *lv_draw_buf_get_handlers(void);
+lv_draw_buf_handlers_t * lv_draw_buf_get_handlers(void);
 
 /**
  * Align the address of a buffer. The buffer needs to be large enough for the real data after alignment
@@ -137,7 +136,7 @@ lv_draw_buf_handlers_t *lv_draw_buf_get_handlers(void);
  * @param color_format  the color format of the buffer
  * @return              the aligned buffer
  */
-void *lv_draw_buf_align(void * buf, lv_color_format_t color_format);
+void * lv_draw_buf_align(void * buf, lv_color_format_t color_format);
 
 /**
  * Align the address of a buffer with custom draw buffer handlers.
@@ -147,7 +146,7 @@ void *lv_draw_buf_align(void * buf, lv_color_format_t color_format);
  * @param color_format  the color format of the buffer
  * @return              the aligned buffer
  */
-void *lv_draw_buf_align_ex(const lv_draw_buf_handlers_t * handlers, void * buf, lv_color_format_t color_format);
+void * lv_draw_buf_align_ex(const lv_draw_buf_handlers_t * handlers, void * buf, lv_color_format_t color_format);
 
 /**
  * Invalidate the cache of the buffer
@@ -200,7 +199,7 @@ void lv_draw_buf_clear(lv_draw_buf_t * draw_buf, const lv_area_t * a);
  * @note  `dest` and `src` should have same color format. Color converting is not supported fow now.
  */
 void lv_draw_buf_copy(lv_draw_buf_t * dest, const lv_area_t * dest_area,
-                      const lv_draw_buf_t *src, const lv_area_t *src_area);
+                      const lv_draw_buf_t * src, const lv_area_t * src_area);
 
 /**
  * Note: Eventually, lv_draw_buf_malloc/free will be kept as private.
@@ -215,7 +214,7 @@ void lv_draw_buf_copy(lv_draw_buf_t * dest, const lv_area_t * dest_area,
  * @param stride    the stride in bytes for image. Use 0 for automatic calculation based on
  *                  w, cf, and global stride alignment configuration.
  */
-lv_draw_buf_t *lv_draw_buf_create(uint32_t w, uint32_t h, lv_color_format_t cf, uint32_t stride);
+lv_draw_buf_t * lv_draw_buf_create(uint32_t w, uint32_t h, lv_color_format_t cf, uint32_t stride);
 
 /**
  * Note: Eventually, lv_draw_buf_malloc/free will be kept as private.
@@ -231,15 +230,15 @@ lv_draw_buf_t *lv_draw_buf_create(uint32_t w, uint32_t h, lv_color_format_t cf, 
  * @param stride    the stride in bytes for image. Use 0 for automatic calculation based on
  *                  w, cf, and global stride alignment configuration.
  */
-lv_draw_buf_t *lv_draw_buf_create_ex(const lv_draw_buf_handlers_t * handlers, uint32_t w, uint32_t h,
-                                     lv_color_format_t cf, uint32_t stride);
+lv_draw_buf_t * lv_draw_buf_create_ex(const lv_draw_buf_handlers_t * handlers, uint32_t w, uint32_t h,
+                                      lv_color_format_t cf, uint32_t stride);
 
 /**
  * Duplicate a draw buf with same image size, stride and color format. Copy the image data too.
  * @param draw_buf  the draw buf to duplicate
  * @return          the duplicated draw buf on success, NULL if failed
  */
-lv_draw_buf_t *lv_draw_buf_dup(const lv_draw_buf_t * draw_buf);
+lv_draw_buf_t * lv_draw_buf_dup(const lv_draw_buf_t * draw_buf);
 
 /**
  * Duplicate a draw buf with same image size, stride and color format. Copy the image data too.
@@ -247,7 +246,7 @@ lv_draw_buf_t *lv_draw_buf_dup(const lv_draw_buf_t * draw_buf);
  * @param draw_buf  the draw buf to duplicate
  * @return          the duplicated draw buf on success, NULL if failed
  */
-lv_draw_buf_t *lv_draw_buf_dup_ex(const lv_draw_buf_handlers_t * handlers, const lv_draw_buf_t * draw_buf);
+lv_draw_buf_t * lv_draw_buf_dup_ex(const lv_draw_buf_handlers_t * handlers, const lv_draw_buf_t * draw_buf);
 
 /**
  * Initialize a draw buf with the given buffer and parameters. Clear draw buffer flag to zero.
@@ -261,7 +260,7 @@ lv_draw_buf_t *lv_draw_buf_dup_ex(const lv_draw_buf_handlers_t * handlers, const
  * @return          return LV_RESULT_OK on success, LV_RESULT_INVALID otherwise
  */
 lv_result_t lv_draw_buf_init(lv_draw_buf_t * draw_buf, uint32_t w, uint32_t h, lv_color_format_t cf, uint32_t stride,
-                             void *data, uint32_t data_size);
+                             void * data, uint32_t data_size);
 
 /**
  * Keep using the existing memory, reshape the draw buffer to the given width and height.
@@ -272,8 +271,8 @@ lv_result_t lv_draw_buf_init(lv_draw_buf_t * draw_buf, uint32_t w, uint32_t h, l
  * @param h         the new height in pixels
  * @param stride    the stride in bytes for image. Use 0 for automatic calculation.
  */
-lv_draw_buf_t *lv_draw_buf_reshape(lv_draw_buf_t * draw_buf, lv_color_format_t cf, uint32_t w, uint32_t h,
-                                   uint32_t stride);
+lv_draw_buf_t * lv_draw_buf_reshape(lv_draw_buf_t * draw_buf, lv_color_format_t cf, uint32_t w, uint32_t h,
+                                    uint32_t stride);
 
 /**
  * Destroy a draw buf by freeing the actual buffer if it's marked as LV_IMAGE_FLAGS_ALLOCATED in header.
@@ -286,7 +285,7 @@ void lv_draw_buf_destroy(lv_draw_buf_t * draw_buf);
 /**
  * Return pointer to the buffer at the given coordinates
  */
-void *lv_draw_buf_goto_xy(const lv_draw_buf_t * buf, uint32_t x, uint32_t y);
+void * lv_draw_buf_goto_xy(const lv_draw_buf_t * buf, uint32_t x, uint32_t y);
 
 /**
  * Adjust the stride of a draw buf in place.

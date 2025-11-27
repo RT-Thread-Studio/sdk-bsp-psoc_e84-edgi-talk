@@ -26,35 +26,30 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_VECTOR_FILL_NONZERO = 0,
     LV_VECTOR_FILL_EVENODD,
 } lv_vector_fill_t;
 
-typedef enum
-{
+typedef enum {
     LV_VECTOR_STROKE_CAP_BUTT = 0,
     LV_VECTOR_STROKE_CAP_SQUARE,
     LV_VECTOR_STROKE_CAP_ROUND,
 } lv_vector_stroke_cap_t;
 
-typedef enum
-{
+typedef enum {
     LV_VECTOR_STROKE_JOIN_MITER = 0,
     LV_VECTOR_STROKE_JOIN_BEVEL,
     LV_VECTOR_STROKE_JOIN_ROUND,
 } lv_vector_stroke_join_t;
 
-typedef enum
-{
+typedef enum {
     LV_VECTOR_PATH_QUALITY_MEDIUM = 0, /* default*/
     LV_VECTOR_PATH_QUALITY_HIGH,
     LV_VECTOR_PATH_QUALITY_LOW,
 } lv_vector_path_quality_t;
 
-typedef enum
-{
+typedef enum {
     LV_VECTOR_BLEND_SRC_OVER = 0,
     LV_VECTOR_BLEND_SRC_IN,
     LV_VECTOR_BLEND_DST_OVER,
@@ -66,8 +61,7 @@ typedef enum
     LV_VECTOR_BLEND_SUBTRACTIVE,
 } lv_vector_blend_t;
 
-typedef enum
-{
+typedef enum {
     LV_VECTOR_PATH_OP_MOVE_TO = 0,
     LV_VECTOR_PATH_OP_LINE_TO,
     LV_VECTOR_PATH_OP_QUAD_TO,
@@ -75,28 +69,24 @@ typedef enum
     LV_VECTOR_PATH_OP_CLOSE,
 } lv_vector_path_op_t;
 
-typedef enum
-{
+typedef enum {
     LV_VECTOR_DRAW_STYLE_SOLID = 0,
     LV_VECTOR_DRAW_STYLE_PATTERN,
     LV_VECTOR_DRAW_STYLE_GRADIENT,
 } lv_vector_draw_style_t;
 
-typedef enum
-{
+typedef enum {
     LV_VECTOR_GRADIENT_SPREAD_PAD = 0,
     LV_VECTOR_GRADIENT_SPREAD_REPEAT,
     LV_VECTOR_GRADIENT_SPREAD_REFLECT,
 } lv_vector_gradient_spread_t;
 
-typedef enum
-{
+typedef enum {
     LV_VECTOR_GRADIENT_STYLE_LINEAR = 0,
     LV_VECTOR_GRADIENT_STYLE_RADIAL,
 } lv_vector_gradient_style_t;
 
-struct lv_fpoint_t
-{
+struct lv_fpoint_t {
     float x;
     float y;
 };
@@ -124,7 +114,7 @@ void lv_matrix_transform_path(const lv_matrix_t * matrix, lv_vector_path_t * pat
  * @param quality       the quality hint of path
  * @return              pointer to the created path object
  */
-lv_vector_path_t *lv_vector_path_create(lv_vector_path_quality_t quality);
+lv_vector_path_t * lv_vector_path_create(lv_vector_path_quality_t quality);
 
 /**
  * Copy a path data to another
@@ -175,7 +165,7 @@ void lv_vector_path_quad_to(lv_vector_path_t * path, const lv_fpoint_t * p1, con
  * @param p3                pointer to a `lv_fpoint_t` variable for end point
  */
 void lv_vector_path_cubic_to(lv_vector_path_t * path, const lv_fpoint_t * p1, const lv_fpoint_t * p2,
-                             const lv_fpoint_t *p3);
+                             const lv_fpoint_t * p3);
 
 /**
  * Close the sub path
@@ -232,7 +222,7 @@ void lv_vector_path_append_path(lv_vector_path_t * path, const lv_vector_path_t 
  * @param layer         pointer to a layer
  * @return              pointer to the created descriptor
  */
-lv_vector_dsc_t *lv_vector_dsc_create(lv_layer_t * layer);
+lv_vector_dsc_t * lv_vector_dsc_create(lv_layer_t * layer);
 
 /**
  * Delete the vector graphic descriptor
@@ -323,7 +313,7 @@ void lv_vector_dsc_set_fill_gradient_spread(lv_vector_dsc_t * dsc, lv_vector_gra
  * @param count            the number of stops in the array, range: 0..LV_GRADIENT_MAX_STOPS
  */
 void lv_vector_dsc_set_fill_gradient_color_stops(lv_vector_dsc_t * dsc, const lv_gradient_stop_t * stops,
-        uint16_t count);
+                                                 uint16_t count);
 
 /**
  * Set a matrix to current fill transformation matrix
@@ -421,7 +411,7 @@ void lv_vector_dsc_set_stroke_gradient_spread(lv_vector_dsc_t * dsc, lv_vector_g
  * @param count            the number of stops in the array
  */
 void lv_vector_dsc_set_stroke_gradient_color_stops(lv_vector_dsc_t * dsc, const lv_gradient_stop_t * stops,
-        uint16_t count);
+                                                   uint16_t count);
 
 /**
  * Set a matrix to current stroke transformation matrix

@@ -85,9 +85,8 @@ static inline LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_task_handler(void)
  */
 static inline void lv_obj_move_foreground(lv_obj_t * obj)
 {
-    lv_obj_t *parent = lv_obj_get_parent(obj);
-    if (!parent)
-    {
+    lv_obj_t * parent = lv_obj_get_parent(obj);
+    if(!parent) {
         LV_LOG_WARN("parent is NULL");
         return;
     }

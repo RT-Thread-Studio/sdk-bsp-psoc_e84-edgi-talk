@@ -26,17 +26,15 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef struct
-{
+typedef struct {
     pthread_t thread;
     void (*callback)(void *);
-    void *user_data;
+    void * user_data;
 } lv_thread_t;
 
 typedef pthread_mutex_t lv_mutex_t;
 
-typedef struct
-{
+typedef struct {
     pthread_mutex_t mutex;
     pthread_cond_t cond;
     bool v;

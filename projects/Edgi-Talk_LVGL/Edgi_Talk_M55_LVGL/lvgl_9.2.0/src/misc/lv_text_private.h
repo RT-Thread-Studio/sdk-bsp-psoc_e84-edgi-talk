@@ -42,7 +42,7 @@ extern "C" {
  * they are different)
  */
 uint32_t lv_text_get_next_line(const char * txt, const lv_font_t * font, int32_t letter_space,
-                               int32_t max_width, int32_t *used_width, lv_text_flag_t flag);
+                               int32_t max_width, int32_t * used_width, lv_text_flag_t flag);
 
 /**
  * Insert a string into another
@@ -68,7 +68,7 @@ void lv_text_cut(char * txt, uint32_t pos, uint32_t len);
 
  * @return pointer to the allocated text string.
  */
-char *lv_text_set_text_vfmt(const char * fmt, va_list ap) LV_FORMAT_ATTRIBUTE(1, 0);
+char * lv_text_set_text_vfmt(const char * fmt, va_list ap) LV_FORMAT_ATTRIBUTE(1, 0);
 
 /**
  * Decode two encoded character from a string.
@@ -92,10 +92,8 @@ static inline bool lv_text_is_break_char(uint32_t letter)
     bool ret = false;
 
     /*Compare the letter to TXT_BREAK_CHARS*/
-    for (i = 0; LV_TXT_BREAK_CHARS[i] != '\0'; i++)
-    {
-        if (letter == (uint32_t)LV_TXT_BREAK_CHARS[i])
-        {
+    for(i = 0; LV_TXT_BREAK_CHARS[i] != '\0'; i++) {
+        if(letter == (uint32_t)LV_TXT_BREAK_CHARS[i]) {
             ret = true; /*If match then it is break char*/
             break;
         }
@@ -112,53 +110,45 @@ static inline bool lv_text_is_break_char(uint32_t letter)
 static inline bool lv_text_is_a_word(uint32_t letter)
 {
     /*Cheap check on invalid letter*/
-    if (letter == 0) return false;
+    if(letter == 0) return false;
 
     /*CJK Unified Ideographs*/
-    if (letter >= 0x4E00 && letter <= 0x9FFF)
-    {
+    if(letter >= 0x4E00 && letter <= 0x9FFF) {
         return true;
     }
 
     /*Fullwidth ASCII variants*/
-    if (letter >= 0xFF01 && letter <= 0xFF5E)
-    {
+    if(letter >= 0xFF01 && letter <= 0xFF5E) {
         return true;
     }
 
     /*CJK symbols and punctuation*/
-    if (letter >= 0x3000 && letter <= 0x303F)
-    {
+    if(letter >= 0x3000 && letter <= 0x303F) {
         return true;
     }
 
     /*CJK Radicals Supplement*/
-    if (letter >= 0x2E80 && letter <= 0x2EFF)
-    {
+    if(letter >= 0x2E80 && letter <= 0x2EFF) {
         return true;
     }
 
     /*CJK Strokes*/
-    if (letter >= 0x31C0 && letter <= 0x31EF)
-    {
+    if(letter >= 0x31C0 && letter <= 0x31EF) {
         return true;
     }
 
     /*Hiragana and Katakana*/
-    if (letter >= 0x3040 && letter <= 0x30FF)
-    {
+    if(letter >= 0x3040 && letter <= 0x30FF) {
         return true;
     }
 
     /*Chinese Vertical Forms*/
-    if (letter >= 0xFE10 && letter <= 0xFE1F)
-    {
+    if(letter >= 0xFE10 && letter <= 0xFE1F) {
         return true;
     }
 
     /*CJK Compatibility Forms*/
-    if (letter >= 0xFE30 && letter <= 0xFE4F)
-    {
+    if(letter >= 0xFE30 && letter <= 0xFE4F) {
         return true;
     }
 
@@ -174,28 +164,28 @@ static inline bool lv_text_is_a_word(uint32_t letter)
  */
 static inline bool lv_text_is_marker(uint32_t letter)
 {
-    if (letter < 0x20) return true;
+    if(letter < 0x20) return true;
 
     /*U+061C ARABIC LETTER MARK, see https://www.compart.com/en/unicode/block/U+0600*/
-    if (letter == 0x061C) return true;
+    if(letter == 0x061C) return true;
 
     /*U+115F HANGUL CHOSEONG FILLER, See https://www.compart.com/en/unicode/block/U+1100*/
-    if (letter == 0x115F) return true;
+    if(letter == 0x115F) return true;
     /*U+1160 HANGUL JUNGSEONG FILLER*/
-    if (letter == 0x1160) return true;
+    if(letter == 0x1160) return true;
 
     /*See https://www.compart.com/en/unicode/block/U+1800*/
-    if (letter >= 0x180B && letter <= 0x180E) return true;
+    if(letter >= 0x180B && letter <= 0x180E) return true;
 
     /*See https://www.compart.com/en/unicode/block/U+2000*/
-    if (letter >= 0x200B && letter <= 0x200F) return true;
-    if (letter >= 0x2028 && letter <= 0x202F) return true;
-    if (letter >= 0x205F && letter <= 0x206F) return true;
+    if(letter >= 0x200B && letter <= 0x200F) return true;
+    if(letter >= 0x2028 && letter <= 0x202F) return true;
+    if(letter >= 0x205F && letter <= 0x206F) return true;
 
     /*U+FEFF ZERO WIDTH NO-BREAK SPACE, see https://www.compart.com/en/unicode/block/U+FE70*/
-    if (letter == 0xFEFF) return true;
+    if(letter == 0xFEFF) return true;
 
-    if (letter == 0xF8FF) return true; /*LV_SYMBOL_DUMMY*/
+    if(letter == 0xF8FF) return true; /*LV_SYMBOL_DUMMY*/
 
     return false;
 }

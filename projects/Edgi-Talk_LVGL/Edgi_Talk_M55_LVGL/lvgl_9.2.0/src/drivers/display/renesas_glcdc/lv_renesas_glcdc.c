@@ -50,7 +50,7 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
-static lv_display_t *glcdc_create(void * buf1, void * buf2, uint32_t buf_size, lv_display_render_mode_t render_mode);
+static lv_display_t * glcdc_create(void * buf1, void * buf2, uint32_t buf_size, lv_display_render_mode_t render_mode);
 static void glcdc_init(void);
 static void give_vsync_sem_and_yield(void);
 static void flush_direct(lv_display_t * display, const lv_area_t * area, uint8_t * px_map);
@@ -68,7 +68,7 @@ static void flush_wait_partial(lv_display_t * display);
 
 #ifdef _RENESAS_RX_
 static uint8_t fb_background[2][LCD_CH0_IN_GR2_HSIZE * LCD_CH0_IN_GR2_VSIZE * BYTES_PER_PIXEL]__attribute__((
-            section(".framebuffer"), aligned(64), used));
+                                                                                                                section(".framebuffer"), aligned(64), used));
 static SemaphoreHandle_t    _SemaphoreVsync = NULL;
 static glcdc_cfg_t          g_config;
 static glcdc_runtime_cfg_t  g_layer_change;
@@ -77,7 +77,7 @@ static glcdc_runtime_cfg_t  g_layer_change;
 display_t g_display0_cfg;
 #endif /*_RENESAS_RX_*/
 
-static void *rotation_buffer = NULL;
+static void * rotation_buffer = NULL;
 static uint32_t partial_buffer_size = 0;
 
 /**********************
@@ -88,13 +88,13 @@ static uint32_t partial_buffer_size = 0;
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_renesas_glcdc_direct_create(void)
+lv_display_t * lv_renesas_glcdc_direct_create(void)
 {
     return glcdc_create(&fb_background[0][0], &fb_background[1][0], sizeof(fb_background[0]),
                         LV_DISPLAY_RENDER_MODE_DIRECT);
 }
 
-lv_display_t *lv_renesas_glcdc_partial_create(void * buf1, void * buf2, size_t buf_size)
+lv_display_t * lv_renesas_glcdc_partial_create(void * buf1, void * buf2, size_t buf_size)
 {
     partial_buffer_size = buf_size;
     return glcdc_create(buf1, buf2, buf_size, LV_DISPLAY_RENDER_MODE_PARTIAL);
@@ -104,41 +104,33 @@ lv_display_t *lv_renesas_glcdc_partial_create(void * buf1, void * buf2, size_t b
 #ifdef _RENESAS_RA_
 void glcdc_callback(display_callback_args_t * p_args)
 {
-    if (DISPLAY_EVENT_LINE_DETECTION == p_args->event)
-    {
+    if(DISPLAY_EVENT_LINE_DETECTION == p_args->event) {
         give_vsync_sem_and_yield();
     }
-    else if (DISPLAY_EVENT_GR1_UNDERFLOW == p_args->event)
-    {
+    else if(DISPLAY_EVENT_GR1_UNDERFLOW == p_args->event) {
         __BKPT(0); /*Layer 1 Underrun*/
     }
-    else if (DISPLAY_EVENT_GR2_UNDERFLOW == p_args->event)
-    {
+    else if(DISPLAY_EVENT_GR2_UNDERFLOW == p_args->event) {
         __BKPT(0); /*Layer 2 Underrun*/
     }
-    else   /*DISPLAY_EVENT_FRAME_END*/
-    {
+    else { /*DISPLAY_EVENT_FRAME_END*/
         __BKPT(0);
     }
 }
 #else /* RX */
 void glcdc_callback(glcdc_callback_args_t * p_args)
 {
-    if (GLCDC_EVENT_LINE_DETECTION == p_args->event)
-    {
+    if(GLCDC_EVENT_LINE_DETECTION == p_args->event) {
         give_vsync_sem_and_yield();
     }
-    else if (GLCDC_EVENT_GR1_UNDERFLOW == p_args->event)
-    {
-        while (1); /*Layer 1 Underrun*/
+    else if(GLCDC_EVENT_GR1_UNDERFLOW == p_args->event) {
+        while(1); /*Layer 1 Underrun*/
     }
-    else if (GLCDC_EVENT_GR2_UNDERFLOW == p_args->event)
-    {
-        while (1); /*Layer 2 Underrun*/
+    else if(GLCDC_EVENT_GR2_UNDERFLOW == p_args->event) {
+        while(1); /*Layer 2 Underrun*/
     }
-    else  /*DISPLAY_EVENT_FRAME_END*/
-    {
-        while (1);
+    else {/*DISPLAY_EVENT_FRAME_END*/
+        while(1);
     }
 }
 #endif /*_RENESAS_RA_*/
@@ -147,7 +139,7 @@ void glcdc_callback(glcdc_callback_args_t * p_args)
  *   STATIC FUNCTIONS
  **********************/
 
-static lv_display_t *glcdc_create(void * buf1, void * buf2, uint32_t buf_size, lv_display_render_mode_t render_mode)
+static lv_display_t * glcdc_create(void * buf1, void * buf2, uint32_t buf_size, lv_display_render_mode_t render_mode)
 {
 #ifdef _RENESAS_RA_
     glcdc_init();
@@ -159,20 +151,17 @@ static lv_display_t *glcdc_create(void * buf1, void * buf2, uint32_t buf_size, l
     enable_dave2d_drw_interrupt();
 #endif /*_RENESAS_RA_*/
 
-    lv_display_t *display = lv_display_create(DISPLAY_HSIZE_INPUT0, DISPLAY_VSIZE_INPUT0);
+    lv_display_t * display = lv_display_create(DISPLAY_HSIZE_INPUT0, DISPLAY_VSIZE_INPUT0);
 
-    if (render_mode == LV_DISPLAY_RENDER_MODE_DIRECT)
-    {
+    if(render_mode == LV_DISPLAY_RENDER_MODE_DIRECT) {
         lv_display_set_flush_cb(display, flush_direct);
         lv_display_set_flush_wait_cb(display, flush_wait_direct);
     }
-    else if (render_mode == LV_DISPLAY_RENDER_MODE_PARTIAL)
-    {
+    else if(render_mode == LV_DISPLAY_RENDER_MODE_PARTIAL) {
         lv_display_set_flush_cb(display, flush_partial);
         lv_display_set_flush_wait_cb(display, flush_wait_partial);
     }
-    else
-    {
+    else {
         LV_ASSERT(0);
     }
 
@@ -202,29 +191,25 @@ static void glcdc_init(void)
 
 #ifdef _RENESAS_RA_
     /* Initialize GLCDC driver */
-    uint8_t *p_fb = &fb_background[1][0];
+    uint8_t * p_fb = &fb_background[1][0];
     fsp_err_t err;
 
     err = R_GLCDC_Open(&g_display0_ctrl, &g_display0_cfg);
-    if (FSP_SUCCESS != err)
-    {
+    if(FSP_SUCCESS != err) {
         __BKPT(0);
     }
 
     err = R_GLCDC_Start(&g_display0_ctrl);
-    if (FSP_SUCCESS != err)
-    {
+    if(FSP_SUCCESS != err) {
         __BKPT(0);
     }
 
-    do
-    {
+    do {
         err =
             R_GLCDC_BufferChange(&g_display0_ctrl,
                                  (uint8_t *) p_fb,
                                  (display_frame_layer_t) 0);
-    }
-    while (FSP_ERR_INVALID_UPDATE_TIMING == err);
+    } while(FSP_ERR_INVALID_UPDATE_TIMING == err);
 #else /* RX */
     glcdc_err_t err;
     glcdc_runtime_cfg_t  layer_change;
@@ -232,15 +217,13 @@ static void glcdc_init(void)
     R_GLCDC_PinSet();
 
     err = R_GLCDC_Open(&g_config);
-    if (GLCDC_SUCCESS != err)
-    {
-        while (1);
+    if(GLCDC_SUCCESS != err) {
+        while(1);
     }
 
     err = R_GLCDC_Control(GLCDC_CMD_START_DISPLAY, &g_config);
-    if (GLCDC_SUCCESS != err)
-    {
-        while (1);
+    if(GLCDC_SUCCESS != err) {
+        while(1);
     }
 
     g_layer_change.input = g_config.input[GLCDC_FRAME_LAYER_2];
@@ -249,11 +232,9 @@ static void glcdc_init(void)
 
     layer_change.input.p_base = (uint32_t *)&fb_background[1][0];
 
-    do
-    {
+    do {
         err = R_GLCDC_LayerChange(GLCDC_FRAME_LAYER_2, &g_layer_change);
-    }
-    while (GLCDC_ERR_INVALID_UPDATE_TIMING == err);
+    } while(GLCDC_ERR_INVALID_UPDATE_TIMING == err);
 #endif /*_RENESAS_RA_*/
 }
 
@@ -262,7 +243,7 @@ static void flush_direct(lv_display_t * display, const lv_area_t * area, uint8_t
     FSP_PARAMETER_NOT_USED(area);
     /*Display the frame buffer pointed by px_map*/
 
-    if (!lv_display_flush_is_last(display)) return;
+    if(!lv_display_flush_is_last(display)) return;
 
 #if defined(RENESAS_CORTEX_M85) && (BSP_CFG_DCACHE_ENABLED)
     /* Invalidate cache - so the HW can access any data written by the CPU */
@@ -278,22 +259,19 @@ static void flush_direct(lv_display_t * display, const lv_area_t * area, uint8_t
 
     g_layer_change.input.p_base = (uint32_t *)px_map;
 
-    do
-    {
+    do {
         err = R_GLCDC_LayerChange(GLCDC_FRAME_LAYER_2, &g_layer_change);
-    }
-    while (GLCDC_ERR_INVALID_UPDATE_TIMING == err);
+    } while(GLCDC_ERR_INVALID_UPDATE_TIMING == err);
 #endif /*_RENESAS_RA_*/
 }
 
 static void flush_wait_direct(lv_display_t * display)
 {
-    if (!lv_display_flush_is_last(display)) return;
+    if(!lv_display_flush_is_last(display)) return;
 
 #if USE_FREE_RTOS
     /*If Vsync semaphore has already been set, clear it then wait to avoid tearing*/
-    if (uxSemaphoreGetCount(_SemaphoreVsync))
-    {
+    if(uxSemaphoreGetCount(_SemaphoreVsync)) {
         xSemaphoreTake(_SemaphoreVsync, 10);
     }
 
@@ -304,27 +282,25 @@ static void flush_wait_direct(lv_display_t * display)
 
 static void flush_partial(lv_display_t * display, const lv_area_t * area, uint8_t * px_map)
 {
-    uint16_t *img = (uint16_t *)px_map;
+    uint16_t * img = (uint16_t *)px_map;
 
     lv_area_t rotated_area;
     lv_color_format_t cf = lv_display_get_color_format(display);
     lv_display_rotation_t rotation = lv_display_get_rotation(display);
 
-    if (rotation != LV_DISPLAY_ROTATION_0)
-    {
+    if(rotation != LV_DISPLAY_ROTATION_0) {
         int32_t w = lv_area_get_width(area);
         int32_t h = lv_area_get_height(area);
         uint32_t w_stride = lv_draw_buf_width_to_stride(w, cf);
         uint32_t h_stride = lv_draw_buf_width_to_stride(h, cf);
 
         // only allocate if rotation is actually being used
-        if (!rotation_buffer)
-        {
+        if(!rotation_buffer) {
             rotation_buffer = lv_malloc(partial_buffer_size);
             LV_ASSERT_MALLOC(rotation_buffer);
         }
 
-        if (rotation == LV_DISPLAY_ROTATION_180)
+        if(rotation == LV_DISPLAY_ROTATION_180)
             lv_draw_sw_rotate(img, rotation_buffer, w, h, w_stride, w_stride, rotation, cf);
         else /* 90 or 270 */
             lv_draw_sw_rotate(img, rotation_buffer, w, h, w_stride, h_stride, rotation, cf);
@@ -339,14 +315,13 @@ static void flush_partial(lv_display_t * display, const lv_area_t * area, uint8_
     int32_t w = lv_area_get_width(area);
     int32_t h = lv_area_get_height(area);
 
-    uint16_t *fb = (uint16_t *)fb_background[1];
+    uint16_t * fb = (uint16_t *)fb_background[1];
 
     fb = fb + area->y1 * DISPLAY_HSIZE_INPUT0;
     fb = fb + area->x1;
 
     int32_t i;
-    for (i = 0; i < h; i++)
-    {
+    for(i = 0; i < h; i++) {
         lv_memcpy(fb, img, w * BYTES_PER_PIXEL);
 
 #if defined(RENESAS_CORTEX_M85) && (BSP_CFG_DCACHE_ENABLED)

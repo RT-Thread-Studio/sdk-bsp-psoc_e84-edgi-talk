@@ -25,8 +25,7 @@
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     lv_fs_file_t f;
     unsigned int px_offset;
     int px_width;
@@ -42,7 +41,7 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc);
 
 static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc,
-                                    const lv_area_t *full_area, lv_area_t *decoded_area);
+                                    const lv_area_t * full_area, lv_area_t * decoded_area);
 
 static void decoder_close(lv_image_decoder_t * dec, lv_image_decoder_dsc_t * dsc);
 
@@ -59,7 +58,7 @@ static void decoder_close(lv_image_decoder_t * dec, lv_image_decoder_dsc_t * dsc
  **********************/
 void lv_bmp_init(void)
 {
-    lv_image_decoder_t *dec = lv_image_decoder_create();
+    lv_image_decoder_t * dec = lv_image_decoder_create();
     lv_image_decoder_set_info_cb(dec, decoder_info);
     lv_image_decoder_set_open_cb(dec, decoder_open);
     lv_image_decoder_set_get_area_cb(dec, decoder_get_area);
@@ -70,11 +69,9 @@ void lv_bmp_init(void)
 
 void lv_bmp_deinit(void)
 {
-    lv_image_decoder_t *dec = NULL;
-    while ((dec = lv_image_decoder_get_next(dec)) != NULL)
-    {
-        if (dec->info_cb == decoder_info)
-        {
+    lv_image_decoder_t * dec = NULL;
+    while((dec = lv_image_decoder_get_next(dec)) != NULL) {
+        if(dec->info_cb == decoder_info) {
             lv_image_decoder_delete(dec);
             break;
         }
@@ -95,15 +92,13 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 {
     LV_UNUSED(decoder);
 
-    const void *src = dsc->src;
+    const void * src = dsc->src;
     lv_image_src_t src_type = dsc->src_type;          /*Get the source type*/
 
     /*If it's a BMP file...*/
-    if (src_type == LV_IMAGE_SRC_FILE)
-    {
-        const char *fn = src;
-        if (lv_strcmp(lv_fs_get_ext(fn), "bmp") == 0)               /*Check the extension*/
-        {
+    if(src_type == LV_IMAGE_SRC_FILE) {
+        const char * fn = src;
+        if(lv_strcmp(lv_fs_get_ext(fn), "bmp") == 0) {              /*Check the extension*/
             /*Save the data in the header*/
             uint8_t headers[54];
 
@@ -117,28 +112,26 @@ static lv_result_t decoder_info(lv_image_decoder_t * decoder, lv_image_decoder_d
 
             uint16_t bpp;
             lv_memcpy(&bpp, headers + 28, 2);
-            switch (bpp)
-            {
-            case 16:
-                header->cf = LV_COLOR_FORMAT_RGB565;
-                break;
-            case 24:
-                header->cf = LV_COLOR_FORMAT_RGB888;
-                break;
-            case 32:
-                header->cf = LV_COLOR_FORMAT_ARGB8888;
-                break;
-            default:
-                LV_LOG_WARN("Not supported bpp: %d", bpp);
-                return LV_RESULT_OK;
+            switch(bpp) {
+                case 16:
+                    header->cf = LV_COLOR_FORMAT_RGB565;
+                    break;
+                case 24:
+                    header->cf = LV_COLOR_FORMAT_RGB888;
+                    break;
+                case 32:
+                    header->cf = LV_COLOR_FORMAT_ARGB8888;
+                    break;
+                default:
+                    LV_LOG_WARN("Not supported bpp: %d", bpp);
+                    return LV_RESULT_OK;
             }
             return LV_RESULT_OK;
         }
     }
     /* BMP file as data not supported for simplicity.
      * Convert them to LVGL compatible C arrays directly. */
-    else if (src_type == LV_IMAGE_SRC_VARIABLE)
-    {
+    else if(src_type == LV_IMAGE_SRC_VARIABLE) {
         return LV_RESULT_INVALID;
     }
 
@@ -156,12 +149,10 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
     LV_UNUSED(decoder);
 
     /*If it's a BMP file...*/
-    if (dsc->src_type == LV_IMAGE_SRC_FILE)
-    {
-        const char *fn = dsc->src;
+    if(dsc->src_type == LV_IMAGE_SRC_FILE) {
+        const char * fn = dsc->src;
 
-        if (lv_strcmp(lv_fs_get_ext(fn), "bmp") != 0)
-        {
+        if(lv_strcmp(lv_fs_get_ext(fn), "bmp") != 0) {
             return LV_RESULT_INVALID;       /*Check the extension*/
         }
 
@@ -169,13 +160,12 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
         lv_memset(&b, 0x00, sizeof(b));
 
         lv_fs_res_t res = lv_fs_open(&b.f, dsc->src, LV_FS_MODE_RD);
-        if (res != LV_FS_RES_OK) return LV_RESULT_INVALID;
+        if(res != LV_FS_RES_OK) return LV_RESULT_INVALID;
 
         uint8_t header[54];
         lv_fs_read(&b.f, header, 54, NULL);
 
-        if (0x42 != header[0] || 0x4d != header[1])
-        {
+        if(0x42 != header[0] || 0x4d != header[1]) {
             lv_fs_close(&b.f);
             return LV_RESULT_INVALID;
         }
@@ -188,14 +178,13 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 
         dsc->user_data = lv_malloc(sizeof(bmp_dsc_t));
         LV_ASSERT_MALLOC(dsc->user_data);
-        if (dsc->user_data == NULL) return LV_RESULT_INVALID;
+        if(dsc->user_data == NULL) return LV_RESULT_INVALID;
         lv_memcpy(dsc->user_data, &b, sizeof(b));
         return LV_RESULT_OK;
     }
     /* BMP file as data not supported for simplicity.
      * Convert them to LVGL compatible C arrays directly. */
-    else if (dsc->src_type == LV_IMAGE_SRC_VARIABLE)
-    {
+    else if(dsc->src_type == LV_IMAGE_SRC_VARIABLE) {
         return LV_RESULT_INVALID;
     }
 
@@ -203,47 +192,40 @@ static lv_result_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_d
 }
 
 static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc,
-                                    const lv_area_t *full_area, lv_area_t *decoded_area)
+                                    const lv_area_t * full_area, lv_area_t * decoded_area)
 {
     LV_UNUSED(decoder);
-    bmp_dsc_t *b = dsc->user_data;
-    lv_draw_buf_t *decoded = (void *)dsc->decoded;
+    bmp_dsc_t * b = dsc->user_data;
+    lv_draw_buf_t * decoded = (void *)dsc->decoded;
 
-    if (decoded_area->y1 == LV_COORD_MIN)
-    {
+    if(decoded_area->y1 == LV_COORD_MIN) {
         *decoded_area = *full_area;
         decoded_area->y2 = decoded_area->y1;
         int32_t w_px = lv_area_get_width(full_area);
-        lv_draw_buf_t *reshaped = lv_draw_buf_reshape(decoded, dsc->header.cf, w_px, 1, LV_STRIDE_AUTO);
-        if (reshaped == NULL)
-        {
-            if (decoded != NULL)
-            {
+        lv_draw_buf_t * reshaped = lv_draw_buf_reshape(decoded, dsc->header.cf, w_px, 1, LV_STRIDE_AUTO);
+        if(reshaped == NULL) {
+            if(decoded != NULL) {
                 lv_draw_buf_destroy(decoded);
                 decoded = NULL;
                 dsc->decoded = NULL;
             }
             decoded = lv_draw_buf_create_ex(image_cache_draw_buf_handlers, w_px, 1, dsc->header.cf, LV_STRIDE_AUTO);
-            if (decoded == NULL) return LV_RESULT_INVALID;
+            if(decoded == NULL) return LV_RESULT_INVALID;
         }
-        else
-        {
+        else {
             decoded = reshaped;
         }
         dsc->decoded = decoded;
     }
-    else
-    {
+    else {
         decoded_area->y1++;
         decoded_area->y2++;
     }
 
-    if (decoded_area->y1 > full_area->y2)
-    {
+    if(decoded_area->y1 > full_area->y2) {
         return LV_RESULT_INVALID;
     }
-    else
-    {
+    else {
         int32_t y = (b->px_height - 1) - (decoded_area->y1); /*BMP images are stored upside down*/
         uint32_t p = b->px_offset + b->row_size_bytes * y;
         p += (decoded_area->x1) * (b->bpp / 8);
@@ -261,10 +243,10 @@ static lv_result_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decod
 static void decoder_close(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
     LV_UNUSED(decoder);
-    bmp_dsc_t *b = dsc->user_data;
+    bmp_dsc_t * b = dsc->user_data;
     lv_fs_close(&b->f);
     lv_free(dsc->user_data);
-    if (dsc->decoded) lv_draw_buf_destroy((void *)dsc->decoded);
+    if(dsc->decoded) lv_draw_buf_destroy((void *)dsc->decoded);
 
 }
 

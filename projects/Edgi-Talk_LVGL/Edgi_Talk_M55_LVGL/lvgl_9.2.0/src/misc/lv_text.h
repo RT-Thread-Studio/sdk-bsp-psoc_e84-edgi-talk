@@ -35,8 +35,7 @@ extern "C" {
  * Options for text rendering.
  */
 
-typedef enum
-{
+typedef enum {
     LV_TEXT_FLAG_NONE      = 0x00,
     LV_TEXT_FLAG_EXPAND    = 0x01, /**< Ignore max-width to avoid automatic word wrapping*/
     LV_TEXT_FLAG_FIT       = 0x02, /**< Max-width is already equal to the longest line. (Used to skip some calculation)*/
@@ -47,8 +46,7 @@ typedef enum
 } lv_text_flag_t;
 
 /** Label align policy*/
-typedef enum
-{
+typedef enum {
     LV_TEXT_ALIGN_AUTO, /**< Align text auto*/
     LV_TEXT_ALIGN_LEFT, /**< Align text to left*/
     LV_TEXT_ALIGN_CENTER, /**< Align text to center*/

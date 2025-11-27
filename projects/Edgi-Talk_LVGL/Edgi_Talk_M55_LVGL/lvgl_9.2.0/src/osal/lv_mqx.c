@@ -38,7 +38,7 @@
  **********************/
 
 lv_result_t lv_thread_init(lv_thread_t * thread, lv_thread_prio_t prio, void (*callback)(void *), size_t stack_size,
-                           void *user_data)
+                           void * user_data)
 {
     TASK_TEMPLATE_STRUCT task_template;
 
@@ -51,8 +51,7 @@ lv_result_t lv_thread_init(lv_thread_t * thread, lv_thread_prio_t prio, void (*c
     task_template.CREATION_PARAMETER = (uint32_t)user_data;
 
     *thread = _task_create(0, 0, (uint32_t)&task_template);
-    if (*thread == MQX_NULL_TASK_ID)
-    {
+    if(*thread == MQX_NULL_TASK_ID) {
         LV_LOG_WARN("_task_create failed!");
         return LV_RESULT_INVALID;
     }
@@ -62,8 +61,7 @@ lv_result_t lv_thread_init(lv_thread_t * thread, lv_thread_prio_t prio, void (*c
 lv_result_t lv_thread_delete(lv_thread_t * thread)
 {
     _mqx_uint ret = _task_destroy(*thread);
-    if (ret != MQX_OK)
-    {
+    if(ret != MQX_OK) {
         LV_LOG_WARN("_task_destroy failed!");
         return LV_RESULT_INVALID;
     }
@@ -72,8 +70,7 @@ lv_result_t lv_thread_delete(lv_thread_t * thread)
 
 lv_result_t lv_mutex_init(lv_mutex_t * mutex)
 {
-    if (MQX_OK != _mutex_init(mutex, NULL))
-    {
+    if(MQX_OK != _mutex_init(mutex, NULL)) {
         LV_LOG_WARN("create mutex failed");
         return LV_RESULT_INVALID;
     }
@@ -83,8 +80,7 @@ lv_result_t lv_mutex_init(lv_mutex_t * mutex)
 lv_result_t lv_mutex_lock(lv_mutex_t * mutex)
 {
     _mqx_uint ret = _mutex_lock(mutex);
-    if (ret != MQX_OK)
-    {
+    if(ret != MQX_OK) {
         LV_LOG_WARN("Error: %x", ret);
         return LV_RESULT_INVALID;
     }
@@ -94,8 +90,7 @@ lv_result_t lv_mutex_lock(lv_mutex_t * mutex)
 lv_result_t lv_mutex_lock_isr(lv_mutex_t * mutex)
 {
     _mqx_uint ret = _mutex_lock(mutex);
-    if (ret != MQX_OK)
-    {
+    if(ret != MQX_OK) {
         LV_LOG_WARN("Error: %x", ret);
         return LV_RESULT_INVALID;
     }
@@ -105,8 +100,7 @@ lv_result_t lv_mutex_lock_isr(lv_mutex_t * mutex)
 lv_result_t lv_mutex_unlock(lv_mutex_t * mutex)
 {
     _mqx_uint ret = _mutex_unlock(mutex);
-    if (ret != MQX_OK)
-    {
+    if(ret != MQX_OK) {
         LV_LOG_WARN("Error: %x", ret);
         return LV_RESULT_INVALID;
     }
@@ -116,8 +110,7 @@ lv_result_t lv_mutex_unlock(lv_mutex_t * mutex)
 lv_result_t lv_mutex_delete(lv_mutex_t * mutex)
 {
     _mqx_uint ret = _mutex_destroy(mutex);
-    if (ret != MQX_OK)
-    {
+    if(ret != MQX_OK) {
         LV_LOG_WARN("Error: %x", ret);
         return LV_RESULT_INVALID;
     }
@@ -126,8 +119,7 @@ lv_result_t lv_mutex_delete(lv_mutex_t * mutex)
 
 lv_result_t lv_thread_sync_init(lv_thread_sync_t * sync)
 {
-    if (MQX_OK != _lwsem_create(sync, 0))
-    {
+    if(MQX_OK != _lwsem_create(sync, 0)) {
         LV_LOG_WARN("create semaphore failed");
         return LV_RESULT_INVALID;
     }
@@ -137,8 +129,7 @@ lv_result_t lv_thread_sync_init(lv_thread_sync_t * sync)
 lv_result_t lv_thread_sync_wait(lv_thread_sync_t * sync)
 {
     _mqx_uint ret = _lwsem_wait(sync);
-    if (ret != MQX_OK)
-    {
+    if(ret != MQX_OK) {
         LV_LOG_WARN("Error: %x", ret);
         return LV_RESULT_INVALID;
     }
@@ -148,8 +139,7 @@ lv_result_t lv_thread_sync_wait(lv_thread_sync_t * sync)
 lv_result_t lv_thread_sync_signal(lv_thread_sync_t * sync)
 {
     _mqx_uint ret = _lwsem_post(sync);
-    if (ret != MQX_OK)
-    {
+    if(ret != MQX_OK) {
         LV_LOG_WARN("Error: %x", ret);
         return LV_RESULT_INVALID;
     }
@@ -159,8 +149,7 @@ lv_result_t lv_thread_sync_signal(lv_thread_sync_t * sync)
 lv_result_t lv_thread_sync_delete(lv_thread_sync_t * sync)
 {
     _mqx_uint ret = _lwsem_destroy(sync);
-    if (ret != MQX_OK)
-    {
+    if(ret != MQX_OK) {
         LV_LOG_WARN("Error: %x", ret);
         return LV_RESULT_INVALID;
     }

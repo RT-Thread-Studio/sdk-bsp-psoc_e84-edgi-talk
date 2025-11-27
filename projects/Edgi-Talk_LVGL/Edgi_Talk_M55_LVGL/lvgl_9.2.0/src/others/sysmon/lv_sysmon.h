@@ -44,7 +44,7 @@ extern "C" {
  * @param disp      create the sys. mon. on this display's system layer
  * @return          the create label
  */
-lv_obj_t *lv_sysmon_create(lv_display_t * disp);
+lv_obj_t * lv_sysmon_create(lv_display_t * disp);
 
 #if LV_USE_PERF_MONITOR
 

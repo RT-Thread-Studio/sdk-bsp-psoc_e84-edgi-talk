@@ -13,7 +13,7 @@ static void slider_event_cb(lv_event_t * e);
 void lv_example_slider_3(void)
 {
     /*Create a slider in the center of the display*/
-    lv_obj_t *slider;
+    lv_obj_t * slider;
     slider = lv_slider_create(lv_screen_active());
     lv_obj_center(slider);
 
@@ -29,16 +29,14 @@ void lv_example_slider_3(void)
 static void slider_event_cb(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *obj = lv_event_get_target(e);
+    lv_obj_t * obj = lv_event_get_target(e);
 
     /*Provide some extra space for the value*/
-    if (code == LV_EVENT_REFR_EXT_DRAW_SIZE)
-    {
+    if(code == LV_EVENT_REFR_EXT_DRAW_SIZE) {
         lv_event_set_ext_draw_size(e, 50);
     }
-    else if (code == LV_EVENT_DRAW_MAIN_END)
-    {
-        if (!lv_obj_has_state(obj, LV_STATE_PRESSED)) return;
+    else if(code == LV_EVENT_DRAW_MAIN_END) {
+        if(!lv_obj_has_state(obj, LV_STATE_PRESSED)) return;
 
         lv_area_t slider_area;
         lv_obj_get_coords(obj, &slider_area);
@@ -63,7 +61,7 @@ static void slider_event_cb(lv_event_t * e)
         label_draw_dsc.color = lv_color_hex3(0x888);
         label_draw_dsc.text = buf;
         label_draw_dsc.text_local = true;
-        lv_layer_t *layer = lv_event_get_layer(e);
+        lv_layer_t * layer = lv_event_get_layer(e);
         lv_draw_label(layer, &label_draw_dsc, &label_area);
     }
 }

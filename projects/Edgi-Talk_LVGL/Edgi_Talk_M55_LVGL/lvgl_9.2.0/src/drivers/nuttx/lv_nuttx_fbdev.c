@@ -31,16 +31,15 @@
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
+typedef struct {
     /* fd should be defined at the beginning */
     int fd;
     struct fb_videoinfo_s vinfo;
     struct fb_planeinfo_s pinfo;
 
-    void *mem;
-    void *mem2;
-    void *mem_off_screen;
+    void * mem;
+    void * mem2;
+    void * mem_off_screen;
     uint32_t mem2_yoffset;
 
     lv_draw_buf_t buf1;
@@ -73,15 +72,14 @@ static void display_release_cb(lv_event_t * e);
  *   GLOBAL FUNCTIONS
  **********************/
 
-lv_display_t *lv_nuttx_fbdev_create(void)
+lv_display_t * lv_nuttx_fbdev_create(void)
 {
-    lv_nuttx_fb_t *dsc = lv_malloc_zeroed(sizeof(lv_nuttx_fb_t));
+    lv_nuttx_fb_t * dsc = lv_malloc_zeroed(sizeof(lv_nuttx_fb_t));
     LV_ASSERT_MALLOC(dsc);
-    if (dsc == NULL) return NULL;
+    if(dsc == NULL) return NULL;
 
-    lv_display_t *disp = lv_display_create(800, 480);
-    if (disp == NULL)
-    {
+    lv_display_t * disp = lv_display_create(800, 480);
+    if(disp == NULL) {
         lv_free(dsc);
         return NULL;
     }
@@ -96,22 +94,20 @@ int lv_nuttx_fbdev_set_file(lv_display_t * disp, const char * file)
 {
     int ret;
     LV_ASSERT(disp && file);
-    lv_nuttx_fb_t *dsc = lv_display_get_driver_data(disp);
+    lv_nuttx_fb_t * dsc = lv_display_get_driver_data(disp);
 
-    if (dsc->fd >= 0) close(dsc->fd);
+    if(dsc->fd >= 0) close(dsc->fd);
 
     /* Open the file for reading and writing*/
 
     dsc->fd = open(file, O_RDWR);
-    if (dsc->fd < 0)
-    {
+    if(dsc->fd < 0) {
         LV_LOG_ERROR("Error: cannot open framebuffer device");
         return -errno;
     }
     LV_LOG_USER("The framebuffer device was opened successfully");
 
-    if (ioctl(dsc->fd, FBIOGET_VIDEOINFO, (unsigned long)((uintptr_t)&dsc->vinfo)) < 0)
-    {
+    if(ioctl(dsc->fd, FBIOGET_VIDEOINFO, (unsigned long)((uintptr_t)&dsc->vinfo)) < 0) {
         LV_LOG_ERROR("ioctl(FBIOGET_VIDEOINFO) failed: %d", errno);
         ret = -errno;
         goto errout;
@@ -123,21 +119,18 @@ int lv_nuttx_fbdev_set_file(lv_display_t * disp, const char * file)
     LV_LOG_USER("     yres: %u", dsc->vinfo.yres);
     LV_LOG_USER("  nplanes: %u", dsc->vinfo.nplanes);
 
-    if ((ret = fbdev_get_pinfo(dsc->fd, &dsc->pinfo)) < 0)
-    {
+    if((ret = fbdev_get_pinfo(dsc->fd, &dsc->pinfo)) < 0) {
         goto errout;
     }
 
     lv_color_format_t color_format = fb_fmt_to_color_format(dsc->vinfo.fmt);
-    if (color_format == LV_COLOR_FORMAT_UNKNOWN)
-    {
+    if(color_format == LV_COLOR_FORMAT_UNKNOWN) {
         goto errout;
     }
 
     dsc->mem = mmap(NULL, dsc->pinfo.fblen, PROT_READ | PROT_WRITE,
                     MAP_SHARED | MAP_FILE, dsc->fd, 0);
-    if (dsc->mem == MAP_FAILED)
-    {
+    if(dsc->mem == MAP_FAILED) {
         LV_LOG_ERROR("ioctl(FBIOGET_PLANEINFO) failed: %d", errno);
         ret = -errno;
         goto errout;
@@ -151,22 +144,18 @@ int lv_nuttx_fbdev_set_file(lv_display_t * disp, const char * file)
 
     /* Check buffer mode */
     bool double_buffer = dsc->pinfo.yres_virtual == (dsc->vinfo.yres * 2);
-    if (double_buffer)
-    {
-        if ((ret = fbdev_init_mem2(dsc)) < 0)
-        {
+    if(double_buffer) {
+        if((ret = fbdev_init_mem2(dsc)) < 0) {
             goto errout;
         }
 
         lv_draw_buf_init(&dsc->buf2, w, h, color_format, stride, dsc->mem2, data_size);
         lv_display_set_draw_buffers(disp, &dsc->buf1, &dsc->buf2);
     }
-    else
-    {
+    else {
         dsc->mem_off_screen = malloc(data_size);
         LV_ASSERT_MALLOC(dsc->mem_off_screen);
-        if (!dsc->mem_off_screen)
-        {
+        if(!dsc->mem_off_screen) {
             ret = -ENOMEM;
             LV_LOG_ERROR("Failed to allocate memory for off-screen buffer");
             goto errout;
@@ -203,22 +192,18 @@ static void fbdev_join_inv_areas(lv_display_t * disp, lv_area_t * final_inv_area
 
     bool area_joined = false;
 
-    for (inv_index = 0; inv_index < disp->inv_p; inv_index++)
-    {
-        if (disp->inv_area_joined[inv_index] == 0)
-        {
-            const lv_area_t *area_p = &disp->inv_areas[inv_index];
+    for(inv_index = 0; inv_index < disp->inv_p; inv_index++) {
+        if(disp->inv_area_joined[inv_index] == 0) {
+            const lv_area_t * area_p = &disp->inv_areas[inv_index];
 
             /* Join to final_area */
 
-            if (!area_joined)
-            {
+            if(!area_joined) {
                 /* copy first area */
                 lv_area_copy(final_inv_area, area_p);
                 area_joined = true;
             }
-            else
-            {
+            else {
                 lv_area_join(final_inv_area,
                              final_inv_area,
                              area_p);
@@ -230,8 +215,8 @@ static void fbdev_join_inv_areas(lv_display_t * disp, lv_area_t * final_inv_area
 
 static void display_refr_timer_cb(lv_timer_t * tmr)
 {
-    lv_display_t *disp = lv_timer_get_user_data(tmr);
-    lv_nuttx_fb_t *dsc = lv_display_get_driver_data(disp);
+    lv_display_t * disp = lv_timer_get_user_data(tmr);
+    lv_nuttx_fb_t * dsc = lv_display_get_driver_data(disp);
     struct pollfd pfds[1];
 
     lv_memzero(pfds, sizeof(pfds));
@@ -240,13 +225,11 @@ static void display_refr_timer_cb(lv_timer_t * tmr)
 
     /* Query free fb to draw */
 
-    if (poll(pfds, 1, 0) < 0)
-    {
+    if(poll(pfds, 1, 0) < 0) {
         return;
     }
 
-    if (pfds[0].revents & POLLOUT)
-    {
+    if(pfds[0].revents & POLLOUT) {
         lv_display_refr_timer(tmr);
     }
 }
@@ -254,10 +237,9 @@ static void display_refr_timer_cb(lv_timer_t * tmr)
 static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * color_p)
 {
     LV_UNUSED(color_p);
-    lv_nuttx_fb_t *dsc = lv_display_get_driver_data(disp);
+    lv_nuttx_fb_t * dsc = lv_display_get_driver_data(disp);
 
-    if (dsc->mem_off_screen)
-    {
+    if(dsc->mem_off_screen) {
         /* When rendering in off-screen mode, copy the drawing buffer to fb */
         /* buf2(off-screen buffer) -> buf1(fbmem)*/
         lv_draw_buf_copy(&dsc->buf1, area, &dsc->buf2, area);
@@ -265,8 +247,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
 
     /* Skip the non-last flush */
 
-    if (!lv_display_flush_is_last(disp))
-    {
+    if(!lv_display_flush_is_last(disp)) {
         lv_display_flush_ready(disp);
         return;
     }
@@ -286,27 +267,22 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
     fb_area.y = final_inv_area.y1 + yoffset;
     fb_area.w = lv_area_get_width(&final_inv_area);
     fb_area.h = lv_area_get_height(&final_inv_area);
-    if (ioctl(dsc->fd, FBIO_UPDATE, (unsigned long)((uintptr_t)&fb_area)) < 0)
-    {
+    if(ioctl(dsc->fd, FBIO_UPDATE, (unsigned long)((uintptr_t)&fb_area)) < 0) {
         LV_LOG_ERROR("ioctl(FBIO_UPDATE) failed: %d", errno);
     }
 #endif
 
     /* double framebuffer */
 
-    if (dsc->mem2 != NULL)
-    {
-        if (disp->buf_act == disp->buf_1)
-        {
+    if(dsc->mem2 != NULL) {
+        if(disp->buf_act == disp->buf_1) {
             dsc->pinfo.yoffset = 0;
         }
-        else
-        {
+        else {
             dsc->pinfo.yoffset = dsc->mem2_yoffset;
         }
 
-        if (ioctl(dsc->fd, FBIOPAN_DISPLAY, (unsigned long)((uintptr_t) & (dsc->pinfo))) < 0)
-        {
+        if(ioctl(dsc->fd, FBIOPAN_DISPLAY, (unsigned long)((uintptr_t) & (dsc->pinfo))) < 0) {
             LV_LOG_ERROR("ioctl(FBIOPAN_DISPLAY) failed: %d", errno);
         }
     }
@@ -315,18 +291,17 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * colo
 
 static lv_color_format_t fb_fmt_to_color_format(int fmt)
 {
-    switch (fmt)
-    {
-    case FB_FMT_RGB16_565:
-        return LV_COLOR_FORMAT_RGB565;
-    case FB_FMT_RGB24:
-        return LV_COLOR_FORMAT_RGB888;
-    case FB_FMT_RGB32:
-        return LV_COLOR_FORMAT_XRGB8888;
-    case FB_FMT_RGBA32:
-        return LV_COLOR_FORMAT_ARGB8888;
-    default:
-        break;
+    switch(fmt) {
+        case FB_FMT_RGB16_565:
+            return LV_COLOR_FORMAT_RGB565;
+        case FB_FMT_RGB24:
+            return LV_COLOR_FORMAT_RGB888;
+        case FB_FMT_RGB32:
+            return LV_COLOR_FORMAT_XRGB8888;
+        case FB_FMT_RGBA32:
+            return LV_COLOR_FORMAT_ARGB8888;
+        default:
+            break;
     }
 
     LV_LOG_ERROR("Unsupported color format: %d", fmt);
@@ -336,8 +311,7 @@ static lv_color_format_t fb_fmt_to_color_format(int fmt)
 
 static int fbdev_get_pinfo(int fd, FAR struct fb_planeinfo_s * pinfo)
 {
-    if (ioctl(fd, FBIOGET_PLANEINFO, (unsigned long)((uintptr_t)pinfo)) < 0)
-    {
+    if(ioctl(fd, FBIOGET_PLANEINFO, (unsigned long)((uintptr_t)pinfo)) < 0) {
         LV_LOG_ERROR("ERROR: ioctl(FBIOGET_PLANEINFO) failed: %d", errno);
         return -errno;
     }
@@ -364,15 +338,13 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
 
     pinfo.display = dsc->pinfo.display + 1;
 
-    if ((ret = fbdev_get_pinfo(dsc->fd, &pinfo)) < 0)
-    {
+    if((ret = fbdev_get_pinfo(dsc->fd, &pinfo)) < 0) {
         return ret;
     }
 
     /* Check bpp */
 
-    if (pinfo.bpp != dsc->pinfo.bpp)
-    {
+    if(pinfo.bpp != dsc->pinfo.bpp) {
         LV_LOG_WARN("mem2 is incorrect");
         return -EINVAL;
     }
@@ -383,8 +355,7 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
 
     buf_offset = pinfo.fbmem - dsc->mem;
 
-    if ((buf_offset % dsc->pinfo.stride) != 0)
-    {
+    if((buf_offset % dsc->pinfo.stride) != 0) {
         LV_LOG_WARN("It is detected that buf_offset(%" PRIuPTR ") "
                     "and stride(%d) are not divisible, please ensure "
                     "that the driver handles the address offset by itself.",
@@ -393,15 +364,13 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
 
     /* Calculate the address and yoffset of mem2 */
 
-    if (buf_offset == 0)
-    {
+    if(buf_offset == 0) {
         dsc->mem2_yoffset = dsc->vinfo.yres;
         dsc->mem2 = pinfo.fbmem + dsc->mem2_yoffset * pinfo.stride;
         LV_LOG_USER("Use consecutive mem2 = %p, yoffset = %" LV_PRIu32,
                     dsc->mem2, dsc->mem2_yoffset);
     }
-    else
-    {
+    else {
         dsc->mem2_yoffset = buf_offset / dsc->pinfo.stride;
         dsc->mem2 = pinfo.fbmem;
         LV_LOG_USER("Use non-consecutive mem2 = %p, yoffset = %" LV_PRIu32,
@@ -413,21 +382,18 @@ static int fbdev_init_mem2(lv_nuttx_fb_t * dsc)
 
 static void display_release_cb(lv_event_t * e)
 {
-    lv_display_t *disp = (lv_display_t *) lv_event_get_user_data(e);
-    lv_nuttx_fb_t *dsc = lv_display_get_driver_data(disp);
-    if (dsc)
-    {
+    lv_display_t * disp = (lv_display_t *) lv_event_get_user_data(e);
+    lv_nuttx_fb_t * dsc = lv_display_get_driver_data(disp);
+    if(dsc) {
         lv_display_set_driver_data(disp, NULL);
         lv_display_set_flush_cb(disp, NULL);
 
-        if (dsc->fd >= 0)
-        {
+        if(dsc->fd >= 0) {
             close(dsc->fd);
             dsc->fd = -1;
         }
 
-        if (dsc->mem_off_screen)
-        {
+        if(dsc->mem_off_screen) {
             /* Free the off-screen buffer */
             free(dsc->mem_off_screen);
             dsc->mem_off_screen = NULL;

@@ -5,16 +5,13 @@
 
 static void draw_event_cb(lv_event_t * e)
 {
-    lv_obj_t *obj = lv_event_get_target(e);
-    lv_draw_task_t *draw_task = lv_event_get_draw_task(e);
-    lv_draw_dsc_base_t *base_dsc = lv_draw_task_get_draw_dsc(draw_task);
-    lv_draw_label_dsc_t *label_draw_dsc = lv_draw_task_get_label_dsc(draw_task);
-    if (base_dsc->part == LV_PART_INDICATOR)
-    {
-        if (label_draw_dsc)
-        {
-            const lv_color_t color_idx[7] =
-            {
+    lv_obj_t * obj = lv_event_get_target(e);
+    lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
+    lv_draw_dsc_base_t * base_dsc = lv_draw_task_get_draw_dsc(draw_task);
+    lv_draw_label_dsc_t * label_draw_dsc = lv_draw_task_get_label_dsc(draw_task);
+    if(base_dsc->part == LV_PART_INDICATOR) {
+        if(label_draw_dsc) {
+            const lv_color_t color_idx[7] = {
                 lv_palette_main(LV_PALETTE_RED),
                 lv_palette_main(LV_PALETTE_ORANGE),
                 lv_palette_main(LV_PALETTE_YELLOW),
@@ -27,7 +24,7 @@ static void draw_event_cb(lv_event_t * e)
             label_draw_dsc->color = color_idx[base_dsc->id1 / major_tick];
 
             /*Free the previously allocated text if needed*/
-            if (label_draw_dsc->text_local) lv_free((void *)label_draw_dsc->text);
+            if(label_draw_dsc->text_local) lv_free((void *)label_draw_dsc->text);
 
             /*Malloc the text and set text_local as 1 to make LVGL automatically free the text.
              * (Local texts are malloc'd internally by LVGL. Mimic this behavior here too)*/
@@ -54,7 +51,7 @@ static void draw_event_cb(lv_event_t * e)
  */
 void lv_example_scale_7(void)
 {
-    lv_obj_t *scale = lv_scale_create(lv_screen_active());
+    lv_obj_t * scale = lv_scale_create(lv_screen_active());
     lv_obj_set_size(scale, lv_pct(80), 100);
     lv_scale_set_mode(scale, LV_SCALE_MODE_HORIZONTAL_BOTTOM);
     lv_obj_center(scale);

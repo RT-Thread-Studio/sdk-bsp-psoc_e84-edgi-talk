@@ -57,7 +57,7 @@
     #elif defined(LV_CONF_INCLUDE_SIMPLE)         /*Or simply include lv_conf.h is enabled*/
         #include "lv_conf.h"
     #else
-        //        #include "../../lv_conf.h"                /*Else assume lv_conf.h is next to the lvgl folder*/
+        #include "../../lv_conf.h"                /*Else assume lv_conf.h is next to the lvgl folder*/
     #endif
     #if !defined(LV_CONF_H) && !defined(LV_CONF_SUPPRESS_DEFINE_CHECK)
         /* #include will sometimes silently fail when __has_include is used */
@@ -76,7 +76,7 @@
 
 /*If you need to include anything here, do it inside the `__ASSEMBLY__` guard */
 #if  0 && defined(__ASSEMBLY__)
-    #include "my_include.h"
+#include "my_include.h"
 #endif
 
 /*====================
@@ -343,116 +343,116 @@
 #endif
 #if LV_USE_DRAW_SW == 1
 
-    /*
-    * Selectively disable color format support in order to reduce code size.
-    * NOTE: some features use certain color formats internally, e.g.
-    * - gradients use RGB888
-    * - bitmaps with transparency may use ARGB8888
-    */
+	/*
+	 * Selectively disable color format support in order to reduce code size.
+	 * NOTE: some features use certain color formats internally, e.g.
+	 * - gradients use RGB888
+	 * - bitmaps with transparency may use ARGB8888
+	 */
 
-    #ifndef LV_DRAW_SW_SUPPORT_RGB565
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_RGB565
-                #define LV_DRAW_SW_SUPPORT_RGB565 CONFIG_LV_DRAW_SW_SUPPORT_RGB565
-            #else
-                #define LV_DRAW_SW_SUPPORT_RGB565 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_RGB565       1
-        #endif
-    #endif
-    #ifndef LV_DRAW_SW_SUPPORT_RGB565A8
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_RGB565A8
-                #define LV_DRAW_SW_SUPPORT_RGB565A8 CONFIG_LV_DRAW_SW_SUPPORT_RGB565A8
-            #else
-                #define LV_DRAW_SW_SUPPORT_RGB565A8 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_RGB565A8     1
-        #endif
-    #endif
-    #ifndef LV_DRAW_SW_SUPPORT_RGB888
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_RGB888
-                #define LV_DRAW_SW_SUPPORT_RGB888 CONFIG_LV_DRAW_SW_SUPPORT_RGB888
-            #else
-                #define LV_DRAW_SW_SUPPORT_RGB888 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_RGB888       1
-        #endif
-    #endif
-    #ifndef LV_DRAW_SW_SUPPORT_XRGB8888
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_XRGB8888
-                #define LV_DRAW_SW_SUPPORT_XRGB8888 CONFIG_LV_DRAW_SW_SUPPORT_XRGB8888
-            #else
-                #define LV_DRAW_SW_SUPPORT_XRGB8888 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_XRGB8888     1
-        #endif
-    #endif
-    #ifndef LV_DRAW_SW_SUPPORT_ARGB8888
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_ARGB8888
-                #define LV_DRAW_SW_SUPPORT_ARGB8888 CONFIG_LV_DRAW_SW_SUPPORT_ARGB8888
-            #else
-                #define LV_DRAW_SW_SUPPORT_ARGB8888 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_ARGB8888     1
-        #endif
-    #endif
-    #ifndef LV_DRAW_SW_SUPPORT_L8
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_L8
-                #define LV_DRAW_SW_SUPPORT_L8 CONFIG_LV_DRAW_SW_SUPPORT_L8
-            #else
-                #define LV_DRAW_SW_SUPPORT_L8 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_L8           1
-        #endif
-    #endif
-    #ifndef LV_DRAW_SW_SUPPORT_AL88
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_AL88
-                #define LV_DRAW_SW_SUPPORT_AL88 CONFIG_LV_DRAW_SW_SUPPORT_AL88
-            #else
-                #define LV_DRAW_SW_SUPPORT_AL88 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_AL88         1
-        #endif
-    #endif
-    #ifndef LV_DRAW_SW_SUPPORT_A8
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_A8
-                #define LV_DRAW_SW_SUPPORT_A8 CONFIG_LV_DRAW_SW_SUPPORT_A8
-            #else
-                #define LV_DRAW_SW_SUPPORT_A8 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_A8           1
-        #endif
-    #endif
-    #ifndef LV_DRAW_SW_SUPPORT_I1
-        #ifdef LV_KCONFIG_PRESENT
-            #ifdef CONFIG_LV_DRAW_SW_SUPPORT_I1
-                #define LV_DRAW_SW_SUPPORT_I1 CONFIG_LV_DRAW_SW_SUPPORT_I1
-            #else
-                #define LV_DRAW_SW_SUPPORT_I1 0
-            #endif
-        #else
-            #define LV_DRAW_SW_SUPPORT_I1           1
-        #endif
-    #endif
+	#ifndef LV_DRAW_SW_SUPPORT_RGB565
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_RGB565
+	            #define LV_DRAW_SW_SUPPORT_RGB565 CONFIG_LV_DRAW_SW_SUPPORT_RGB565
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_RGB565 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_RGB565		1
+	    #endif
+	#endif
+	#ifndef LV_DRAW_SW_SUPPORT_RGB565A8
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_RGB565A8
+	            #define LV_DRAW_SW_SUPPORT_RGB565A8 CONFIG_LV_DRAW_SW_SUPPORT_RGB565A8
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_RGB565A8 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_RGB565A8		1
+	    #endif
+	#endif
+	#ifndef LV_DRAW_SW_SUPPORT_RGB888
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_RGB888
+	            #define LV_DRAW_SW_SUPPORT_RGB888 CONFIG_LV_DRAW_SW_SUPPORT_RGB888
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_RGB888 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_RGB888		1
+	    #endif
+	#endif
+	#ifndef LV_DRAW_SW_SUPPORT_XRGB8888
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_XRGB8888
+	            #define LV_DRAW_SW_SUPPORT_XRGB8888 CONFIG_LV_DRAW_SW_SUPPORT_XRGB8888
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_XRGB8888 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_XRGB8888		1
+	    #endif
+	#endif
+	#ifndef LV_DRAW_SW_SUPPORT_ARGB8888
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_ARGB8888
+	            #define LV_DRAW_SW_SUPPORT_ARGB8888 CONFIG_LV_DRAW_SW_SUPPORT_ARGB8888
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_ARGB8888 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_ARGB8888		1
+	    #endif
+	#endif
+	#ifndef LV_DRAW_SW_SUPPORT_L8
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_L8
+	            #define LV_DRAW_SW_SUPPORT_L8 CONFIG_LV_DRAW_SW_SUPPORT_L8
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_L8 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_L8			1
+	    #endif
+	#endif
+	#ifndef LV_DRAW_SW_SUPPORT_AL88
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_AL88
+	            #define LV_DRAW_SW_SUPPORT_AL88 CONFIG_LV_DRAW_SW_SUPPORT_AL88
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_AL88 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_AL88			1
+	    #endif
+	#endif
+	#ifndef LV_DRAW_SW_SUPPORT_A8
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_A8
+	            #define LV_DRAW_SW_SUPPORT_A8 CONFIG_LV_DRAW_SW_SUPPORT_A8
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_A8 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_A8			1
+	    #endif
+	#endif
+	#ifndef LV_DRAW_SW_SUPPORT_I1
+	    #ifdef LV_KCONFIG_PRESENT
+	        #ifdef CONFIG_LV_DRAW_SW_SUPPORT_I1
+	            #define LV_DRAW_SW_SUPPORT_I1 CONFIG_LV_DRAW_SW_SUPPORT_I1
+	        #else
+	            #define LV_DRAW_SW_SUPPORT_I1 0
+	        #endif
+	    #else
+	        #define LV_DRAW_SW_SUPPORT_I1			1
+	    #endif
+	#endif
 
-    /* Set the number of draw unit.
-    * > 1 requires an operating system enabled in `LV_USE_OS`
-    * > 1 means multiple threads will render the screen in parallel */
+	/* Set the number of draw unit.
+     * > 1 requires an operating system enabled in `LV_USE_OS`
+     * > 1 means multiple threads will render the screen in parallel */
     #ifndef LV_DRAW_SW_DRAW_UNIT_CNT
         #ifdef LV_KCONFIG_PRESENT
             #ifdef CONFIG_LV_DRAW_SW_DRAW_UNIT_CNT
@@ -484,7 +484,7 @@
     #endif
 
     /* 0: use a simple renderer capable of drawing only simple rectangles with gradient, images, texts, and straight lines only
-    * 1: use a complex renderer capable of drawing rounded corners, shadow, skew lines, and arcs too */
+     * 1: use a complex renderer capable of drawing rounded corners, shadow, skew lines, and arcs too */
     #ifndef LV_DRAW_SW_COMPLEX
         #ifdef LV_KCONFIG_PRESENT
             #ifdef CONFIG_LV_DRAW_SW_COMPLEX
@@ -700,8 +700,8 @@
     #endif
 
     /* Enable border to simulate shadow
-    * NOTE: which usually improves performance,
-    * but does not guarantee the same rendering quality as the software. */
+     * NOTE: which usually improves performance,
+     * but does not guarantee the same rendering quality as the software. */
     #ifndef LV_VG_LITE_USE_BOX_SHADOW
         #ifdef CONFIG_LV_VG_LITE_USE_BOX_SHADOW
             #define LV_VG_LITE_USE_BOX_SHADOW CONFIG_LV_VG_LITE_USE_BOX_SHADOW
@@ -711,8 +711,8 @@
     #endif
 
     /* VG-Lite gradient maximum cache number.
-    * NOTE: The memory usage of a single gradient image is 4K bytes.
-    */
+     * NOTE: The memory usage of a single gradient image is 4K bytes.
+     */
     #ifndef LV_VG_LITE_GRAD_CACHE_CNT
         #ifdef CONFIG_LV_VG_LITE_GRAD_CACHE_CNT
             #define LV_VG_LITE_GRAD_CACHE_CNT CONFIG_LV_VG_LITE_GRAD_CACHE_CNT
@@ -722,7 +722,7 @@
     #endif
 
     /* VG-Lite stroke maximum cache number.
-    */
+     */
     #ifndef LV_VG_LITE_STROKE_CACHE_CNT
         #ifdef CONFIG_LV_VG_LITE_STROKE_CACHE_CNT
             #define LV_VG_LITE_STROKE_CACHE_CNT CONFIG_LV_VG_LITE_STROKE_CACHE_CNT
@@ -777,12 +777,12 @@
     #endif
 
     /*Set callback to print the logs.
-    *E.g `my_print`. The prototype should be `void my_print(lv_log_level_t level, const char * buf)`
-    *Can be overwritten by `lv_log_register_print_cb`*/
+     *E.g `my_print`. The prototype should be `void my_print(lv_log_level_t level, const char * buf)`
+     *Can be overwritten by `lv_log_register_print_cb`*/
     //#define LV_LOG_PRINT_CB
 
     /*1: Enable print timestamp;
-    *0: Disable print timestamp*/
+     *0: Disable print timestamp*/
     #ifndef LV_LOG_USE_TIMESTAMP
         #ifdef LV_KCONFIG_PRESENT
             #ifdef CONFIG_LV_LOG_USE_TIMESTAMP
@@ -796,7 +796,7 @@
     #endif
 
     /*1: Print file and line number of the log;
-    *0: Do not print file and line number of the log*/
+     *0: Do not print file and line number of the log*/
     #ifndef LV_LOG_USE_FILE_LINE
         #ifdef LV_KCONFIG_PRESENT
             #ifdef CONFIG_LV_LOG_USE_FILE_LINE
@@ -1348,7 +1348,7 @@
     #ifdef CONFIG_LV_USE_PRIVATE_API
         #define LV_USE_PRIVATE_API CONFIG_LV_USE_PRIVATE_API
     #else
-        #define LV_USE_PRIVATE_API      0
+        #define LV_USE_PRIVATE_API		0
     #endif
 #endif
 
@@ -2647,7 +2647,7 @@
     #endif
 
     /*Cache count of the glyphs in FreeType. It means the number of glyphs that can be cached.
-    *The higher the value, the more memory will be used.*/
+     *The higher the value, the more memory will be used.*/
     #ifndef LV_FREETYPE_CACHE_FT_GLYPH_CNT
         #ifdef CONFIG_LV_FREETYPE_CACHE_FT_GLYPH_CNT
             #define LV_FREETYPE_CACHE_FT_GLYPH_CNT CONFIG_LV_FREETYPE_CACHE_FT_GLYPH_CNT
@@ -2790,7 +2790,7 @@
     #endif
 
     /*1: Show CPU usage and FPS count
-    * Requires `LV_USE_SYSMON = 1`*/
+     * Requires `LV_USE_SYSMON = 1`*/
     #ifndef LV_USE_PERF_MONITOR
         #ifdef CONFIG_LV_USE_PERF_MONITOR
             #define LV_USE_PERF_MONITOR CONFIG_LV_USE_PERF_MONITOR
@@ -2818,8 +2818,8 @@
     #endif
 
     /*1: Show the used memory and the memory fragmentation
-    * Requires `LV_USE_STDLIB_MALLOC = LV_STDLIB_BUILTIN`
-    * Requires `LV_USE_SYSMON = 1`*/
+     * Requires `LV_USE_STDLIB_MALLOC = LV_STDLIB_BUILTIN`
+     * Requires `LV_USE_SYSMON = 1`*/
     #ifndef LV_USE_MEM_MONITOR
         #ifdef CONFIG_LV_USE_MEM_MONITOR
             #define LV_USE_MEM_MONITOR CONFIG_LV_USE_MEM_MONITOR
@@ -3646,9 +3646,9 @@
  -----------------------------------*/
 
 #ifndef __ASSEMBLY__
-    LV_EXPORT_CONST_INT(LV_DPI_DEF);
-    LV_EXPORT_CONST_INT(LV_DRAW_BUF_STRIDE_ALIGN);
-    LV_EXPORT_CONST_INT(LV_DRAW_BUF_ALIGN);
+LV_EXPORT_CONST_INT(LV_DPI_DEF);
+LV_EXPORT_CONST_INT(LV_DRAW_BUF_STRIDE_ALIGN);
+LV_EXPORT_CONST_INT(LV_DRAW_BUF_ALIGN);
 #endif
 
 #undef LV_KCONFIG_PRESENT

@@ -28,13 +28,11 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_label_t
-{
+struct lv_label_t {
     lv_obj_t obj;
-    char *text;
-    union
-    {
-        char *tmp_ptr;  /**< Pointer to the allocated memory containing the character replaced by dots */
+    char * text;
+    union {
+        char * tmp_ptr; /**< Pointer to the allocated memory containing the character replaced by dots */
         char tmp[LV_LABEL_DOT_NUM + 1]; /**< Directly store the characters if <=4 characters */
     } dot;
     uint32_t dot_end;  /**< The real text length, used in dot mode */

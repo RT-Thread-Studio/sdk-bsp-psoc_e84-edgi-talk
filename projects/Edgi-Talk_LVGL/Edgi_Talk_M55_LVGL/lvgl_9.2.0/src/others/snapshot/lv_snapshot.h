@@ -38,7 +38,7 @@ extern "C" {
  * @param cf    color format for generated image.
  * @return      a pointer to an draw buffer containing snapshot image, or NULL if failed.
  */
-lv_draw_buf_t *lv_snapshot_take(lv_obj_t * obj, lv_color_format_t cf);
+lv_draw_buf_t * lv_snapshot_take(lv_obj_t * obj, lv_color_format_t cf);
 
 /**
  * Create a draw buffer to store the snapshot image for object.
@@ -46,7 +46,7 @@ lv_draw_buf_t *lv_snapshot_take(lv_obj_t * obj, lv_color_format_t cf);
  * @param cf    color format for generated image.
  * @return      a pointer to an draw buffer ready for taking snapshot, or NULL if failed.
  */
-lv_draw_buf_t *lv_snapshot_create_draw_buf(lv_obj_t * obj, lv_color_format_t cf);
+lv_draw_buf_t * lv_snapshot_create_draw_buf(lv_obj_t * obj, lv_color_format_t cf);
 
 /**
  * Reshape the draw buffer to prepare for taking snapshot for obj.
@@ -86,7 +86,7 @@ void lv_snapshot_free(lv_image_dsc_t * dsc);
  * @deprecated      Use lv_snapshot_take_to_draw_buf instead.
  */
 lv_result_t lv_snapshot_take_to_buf(lv_obj_t * obj, lv_color_format_t cf, lv_image_dsc_t * dsc,
-                                    void *buf,
+                                    void * buf,
                                     uint32_t buf_size);
 
 /**********************

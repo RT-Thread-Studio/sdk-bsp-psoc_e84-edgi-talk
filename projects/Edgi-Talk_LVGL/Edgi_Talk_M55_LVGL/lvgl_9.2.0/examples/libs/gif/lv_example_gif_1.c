@@ -7,7 +7,7 @@
 void lv_example_gif_1(void)
 {
     LV_IMAGE_DECLARE(img_bulb_gif);
-    lv_obj_t *img;
+    lv_obj_t * img;
 
     img = lv_gif_create(lv_screen_active());
     lv_gif_set_src(img, &img_bulb_gif);

@@ -56,8 +56,7 @@ void lv_matrix_identity(lv_matrix_t * matrix)
 
 void lv_matrix_translate(lv_matrix_t * matrix, float dx, float dy)
 {
-    if (lv_matrix_is_identity_or_translation(matrix))
-    {
+    if(lv_matrix_is_identity_or_translation(matrix)) {
         /*optimization for matrix translation.*/
         matrix->m[0][2] += dx;
         matrix->m[1][2] += dy;
@@ -124,10 +123,8 @@ void lv_matrix_multiply(lv_matrix_t * matrix, const lv_matrix_t * mul)
     /*TODO: use NEON to optimize this function on ARM architecture.*/
     lv_matrix_t tmp;
 
-    for (int y = 0; y < 3; y++)
-    {
-        for (int x = 0; x < 3; x++)
-        {
+    for(int y = 0; y < 3; y++) {
+        for(int x = 0; x < 3; x++) {
             tmp.m[y][x] = (matrix->m[y][0] * mul->m[0][x])
                           + (matrix->m[y][1] * mul->m[1][x])
                           + (matrix->m[y][2] * mul->m[2][x]);
@@ -144,8 +141,7 @@ bool lv_matrix_inverse(lv_matrix_t * matrix, const lv_matrix_t * m)
     bool is_affine;
 
     /* Test for identity matrix. */
-    if (m == NULL)
-    {
+    if(m == NULL) {
         lv_matrix_identity(matrix);
         return true;
     }
@@ -158,7 +154,7 @@ bool lv_matrix_inverse(lv_matrix_t * matrix, const lv_matrix_t * m)
     d = (m->m[0][0] * det00) + (m->m[0][1] * det01) + (m->m[0][2] * det02);
 
     /* Return 0 if there is no inverse matrix. */
-    if (d == 0.0f)
+    if(d == 0.0f)
         return false;
 
     /* Compute reciprocal. */
@@ -192,8 +188,7 @@ lv_point_precise_t lv_matrix_transform_precise_point(const lv_matrix_t * matrix,
 lv_area_t lv_matrix_transform_area(const lv_matrix_t * matrix, const lv_area_t * area)
 {
     lv_area_t res;
-    lv_point_precise_t p[4] =
-    {
+    lv_point_precise_t p[4] = {
         {area->x1, area->y1},
         {area->x1, area->y2},
         {area->x2, area->y1},

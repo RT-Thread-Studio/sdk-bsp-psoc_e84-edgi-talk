@@ -22,7 +22,7 @@
 #include <rtdbg.h>
 
 #ifndef PKG_LVGL_THREAD_STACK_SIZE
-    #define PKG_LVGL_THREAD_STACK_SIZE 4096
+    #define PKG_LVGL_THREAD_STACK_SIZE 24 *1024
 #endif /* PKG_LVGL_THREAD_STACK_SIZE */
 
 #ifndef PKG_LVGL_THREAD_PRIO

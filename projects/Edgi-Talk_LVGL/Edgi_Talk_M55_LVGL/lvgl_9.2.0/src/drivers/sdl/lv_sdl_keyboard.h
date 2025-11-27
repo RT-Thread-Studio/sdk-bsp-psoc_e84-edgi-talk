@@ -31,7 +31,7 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 
-lv_indev_t *lv_sdl_keyboard_create(void);
+lv_indev_t * lv_sdl_keyboard_create(void);
 
 /**********************
  *      MACROS

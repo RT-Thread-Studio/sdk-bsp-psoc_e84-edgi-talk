@@ -2,8 +2,8 @@
 #if LV_USE_MENU && LV_BUILD_EXAMPLES
 
 static uint32_t btn_cnt = 1;
-static lv_obj_t *main_page;
-static lv_obj_t *menu;
+static lv_obj_t * main_page;
+static lv_obj_t * menu;
 
 static void float_button_event_cb(lv_event_t * e)
 {
@@ -11,10 +11,10 @@ static void float_button_event_cb(lv_event_t * e)
 
     btn_cnt++;
 
-    lv_obj_t *cont;
-    lv_obj_t *label;
+    lv_obj_t * cont;
+    lv_obj_t * label;
 
-    lv_obj_t *sub_page = lv_menu_page_create(menu, NULL);
+    lv_obj_t * sub_page = lv_menu_page_create(menu, NULL);
 
     cont = lv_menu_cont_create(sub_page);
     label = lv_label_create(cont);
@@ -35,11 +35,11 @@ void lv_example_menu_4(void)
     lv_obj_set_size(menu, lv_display_get_horizontal_resolution(NULL), lv_display_get_vertical_resolution(NULL));
     lv_obj_center(menu);
 
-    lv_obj_t *cont;
-    lv_obj_t *label;
+    lv_obj_t * cont;
+    lv_obj_t * label;
 
     /*Create a sub page*/
-    lv_obj_t *sub_page = lv_menu_page_create(menu, NULL);
+    lv_obj_t * sub_page = lv_menu_page_create(menu, NULL);
 
     cont = lv_menu_cont_create(sub_page);
     label = lv_label_create(cont);
@@ -56,7 +56,7 @@ void lv_example_menu_4(void)
     lv_menu_set_page(menu, main_page);
 
     /*Create floating btn*/
-    lv_obj_t *float_btn = lv_button_create(lv_screen_active());
+    lv_obj_t * float_btn = lv_button_create(lv_screen_active());
     lv_obj_set_size(float_btn, 50, 50);
     lv_obj_add_flag(float_btn, LV_OBJ_FLAG_FLOATING);
     lv_obj_align(float_btn, LV_ALIGN_BOTTOM_RIGHT, -10, -10);

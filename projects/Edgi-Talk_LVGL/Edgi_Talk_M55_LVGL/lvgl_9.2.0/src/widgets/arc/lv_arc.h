@@ -26,8 +26,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_ARC_MODE_NORMAL,
     LV_ARC_MODE_SYMMETRICAL,
     LV_ARC_MODE_REVERSE
@@ -44,7 +43,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_arc_class;
  * @param parent    pointer to an object, it will be the parent of the new arc
  * @return          pointer to the created arc
  */
-lv_obj_t *lv_arc_create(lv_obj_t * parent);
+lv_obj_t * lv_arc_create(lv_obj_t * parent);
 
 /*======================
  * Add/remove functions

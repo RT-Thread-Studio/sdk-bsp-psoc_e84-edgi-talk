@@ -29,12 +29,11 @@ extern "C" {
 /**
  * The observer object: a descriptor returned when subscribing LVGL widgets to subjects
  */
-struct lv_observer_t
-{
-    lv_subject_t *subject;              /**< The observed value */
+struct lv_observer_t {
+    lv_subject_t * subject;             /**< The observed value */
     lv_observer_cb_t cb;                /**< Callback that should be called when the value changes*/
-    void *target;                       /**< A target for the observer, e.g. a widget or style*/
-    void *user_data;                    /**< Additional parameter supplied when subscribing*/
+    void * target;                      /**< A target for the observer, e.g. a widget or style*/
+    void * user_data;                   /**< Additional parameter supplied when subscribing*/
     uint32_t auto_free_user_data : 1;   /**< Automatically free user data when the observer is removed */
     uint32_t notified : 1;              /**< Mark if this observer was already notified*/
     uint32_t for_obj : 1;               /**< `target` is an `lv_obj_t *`*/

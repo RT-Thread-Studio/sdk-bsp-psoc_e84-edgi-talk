@@ -1,18 +1,17 @@
 #include "../../lv_examples.h"
 #if LV_USE_CHART && LV_BUILD_EXAMPLES
 
-static lv_obj_t *chart;
-static lv_chart_series_t *ser;
-static lv_chart_cursor_t *cursor;
+static lv_obj_t * chart;
+static lv_chart_series_t * ser;
+static lv_chart_cursor_t * cursor;
 
 static void value_changed_event_cb(lv_event_t * e)
 {
     static int32_t last_id = -1;
-    lv_obj_t *obj = lv_event_get_target(e);
+    lv_obj_t * obj = lv_event_get_target(e);
 
     last_id = lv_chart_get_pressed_point(obj);
-    if (last_id != LV_CHART_POINT_NONE)
-    {
+    if(last_id != LV_CHART_POINT_NONE) {
         lv_chart_set_cursor_point(obj, cursor, NULL, last_id);
     }
 }
@@ -36,14 +35,13 @@ void lv_example_chart_6(void)
 
     ser = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
     uint32_t i;
-    for (i = 0; i < 10; i++)
-    {
+    for(i = 0; i < 10; i++) {
         lv_chart_set_next_value(chart, ser, lv_rand(10, 90));
     }
 
     //    lv_chart_set_scale_x(chart, 500);
 
-    lv_obj_t *label = lv_label_create(lv_screen_active());
+    lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "Click on a point");
     lv_obj_align_to(label, chart, LV_ALIGN_OUT_TOP_MID, 0, -5);
 }

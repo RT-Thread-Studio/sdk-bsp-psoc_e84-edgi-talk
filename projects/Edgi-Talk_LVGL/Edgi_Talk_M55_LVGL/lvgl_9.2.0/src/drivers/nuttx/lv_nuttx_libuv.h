@@ -29,11 +29,10 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef struct
-{
-    void *loop;
-    lv_display_t *disp;
-    lv_indev_t *indev;
+typedef struct {
+    void * loop;
+    lv_display_t * disp;
+    lv_indev_t * indev;
 } lv_nuttx_uv_t;
 
 /**********************
@@ -44,7 +43,7 @@ typedef struct
  * Initialize the uv_loop using the provided configuration information.
  * @param uv_info Pointer to the lv_nuttx_uv_t structure to be initialized.
  */
-void *lv_nuttx_uv_init(lv_nuttx_uv_t * uv_info);
+void * lv_nuttx_uv_init(lv_nuttx_uv_t * uv_info);
 
 /**
  * Deinitialize the uv_loop configuration for NuttX porting layer.

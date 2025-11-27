@@ -28,14 +28,13 @@ extern "C" {
  **********************/
 
 /*Data of lv_ime_pinyin*/
-struct lv_ime_pinyin_t
-{
+struct lv_ime_pinyin_t {
     lv_obj_t obj;
-    lv_obj_t *kb;
-    lv_obj_t *cand_panel;
-    const lv_pinyin_dict_t *dict;
+    lv_obj_t * kb;
+    lv_obj_t * cand_panel;
+    const lv_pinyin_dict_t * dict;
     lv_ll_t k9_legal_py_ll;
-    char *cand_str;             /* Candidate string */
+    char * cand_str;            /* Candidate string */
     char   input_char[16];      /* Input box character */
 #if LV_IME_PINYIN_USE_K9_MODE
     char   k9_input_str[LV_IME_PINYIN_K9_MAX_INPUT + 1]; /* 9-key input(k9) mode input string */

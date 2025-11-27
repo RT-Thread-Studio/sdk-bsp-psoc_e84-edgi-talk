@@ -42,7 +42,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_spinbox_class;
  * @param parent    pointer to an object, it will be the parent of the new spinbox
  * @return          pointer to the created spinbox
  */
-lv_obj_t *lv_spinbox_create(lv_obj_t * parent);
+lv_obj_t * lv_spinbox_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions

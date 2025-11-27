@@ -33,7 +33,7 @@ extern "C" {
 /**
  * Create a new display with NuttX backend.
  */
-lv_display_t *lv_nuttx_fbdev_create(void);
+lv_display_t * lv_nuttx_fbdev_create(void);
 
 /**
  * Initialize display with specified framebuffer device

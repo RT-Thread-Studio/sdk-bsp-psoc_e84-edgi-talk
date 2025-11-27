@@ -42,13 +42,12 @@
  **********************/
 
 void lv_draw_vg_lite_border(lv_draw_unit_t * draw_unit, const lv_draw_border_dsc_t * dsc,
-                            const lv_area_t *coords)
+                            const lv_area_t * coords)
 {
-    lv_draw_vg_lite_unit_t *u = (lv_draw_vg_lite_unit_t *)draw_unit;
+    lv_draw_vg_lite_unit_t * u = (lv_draw_vg_lite_unit_t *)draw_unit;
 
     lv_area_t clip_area;
-    if (!lv_area_intersect(&clip_area, coords, draw_unit->clip_area))
-    {
+    if(!lv_area_intersect(&clip_area, coords, draw_unit->clip_area)) {
         /*Fully clipped, nothing to do*/
         return;
     }
@@ -58,8 +57,7 @@ void lv_draw_vg_lite_border(lv_draw_unit_t * draw_unit, const lv_draw_border_dsc
     int32_t w = lv_area_get_width(coords);
     int32_t h = lv_area_get_height(coords);
     float r_out = dsc->radius;
-    if (dsc->radius)
-    {
+    if(dsc->radius) {
         float r_short = LV_MIN(w, h) / 2.0f;
         r_out = LV_MIN(r_out, r_short);
     }
@@ -67,7 +65,7 @@ void lv_draw_vg_lite_border(lv_draw_unit_t * draw_unit, const lv_draw_border_dsc
     int32_t border_w = dsc->width;
     float r_in = LV_MAX(0, r_out - border_w);
 
-    lv_vg_lite_path_t *path = lv_vg_lite_path_get(u, VG_LITE_FP32);
+    lv_vg_lite_path_t * path = lv_vg_lite_path_get(u, VG_LITE_FP32);
     lv_vg_lite_path_set_quality(path, dsc->radius == 0 ? VG_LITE_LOW : VG_LITE_HIGH);
     lv_vg_lite_path_set_bonding_box_area(path, &clip_area);
 
@@ -91,7 +89,7 @@ void lv_draw_vg_lite_border(lv_draw_unit_t * draw_unit, const lv_draw_border_dsc
 
     vg_lite_color_t color = lv_vg_lite_color(dsc->color, dsc->opa, true);
 
-    vg_lite_path_t *vg_lite_path = lv_vg_lite_path_get_path(path);
+    vg_lite_path_t * vg_lite_path = lv_vg_lite_path_get_path(path);
 
     LV_VG_LITE_ASSERT_DEST_BUFFER(&u->target_buffer);
     LV_VG_LITE_ASSERT_PATH(vg_lite_path);

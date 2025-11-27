@@ -28,8 +28,7 @@ extern "C" {
 /**
  * Values for lv_submect_t's `type` field.
  */
-typedef enum
-{
+typedef enum {
     LV_SUBJECT_TYPE_INVALID =   0,   /**< indicates subject not initialized yet*/
     LV_SUBJECT_TYPE_NONE =      1,   /**< a null value like None or NILt*/
     LV_SUBJECT_TYPE_INT =       2,   /**< an int32_t*/
@@ -42,25 +41,23 @@ typedef enum
 /**
  * A common type to handle all the various observable types in the same way
  */
-typedef union
-{
+typedef union {
     int32_t num; /**< Integer number (opacity, enums, booleans or "normal" numbers)*/
-    const void *pointer;  /**< Constant pointer  (string buffer, format string, font, cone text, etc)*/
+    const void * pointer; /**< Constant pointer  (string buffer, format string, font, cone text, etc)*/
     lv_color_t color; /**< Color */
 } lv_subject_value_t;
 
 /**
  * The subject (an observable value)
  */
-typedef struct
-{
+typedef struct {
     lv_ll_t subs_ll;                    /**< Subscribers*/
     uint32_t type   : 4;
     uint32_t size   : 28;               /**< Might be used to store a size related to `type`*/
     lv_subject_value_t value;           /**< Actual value*/
     lv_subject_value_t prev_value;      /**< Previous value*/
     uint32_t notify_restart_query : 1; /**< If an observer deleted start notifying from the beginning. */
-    void *user_data;                    /**< Additional parameter, can be used freely by the user*/
+    void * user_data;                   /**< Additional parameter, can be used freely by the user*/
 } lv_subject_t;
 
 /**
@@ -125,7 +122,7 @@ void lv_subject_copy_string(lv_subject_t * subject, const char * buf);
  * @param subject   pointer to the subject
  * @return          pointer to the buffer containing the current value
  */
-const char *lv_subject_get_string(lv_subject_t * subject);
+const char * lv_subject_get_string(lv_subject_t * subject);
 
 /**
  * Get the previous value of an string subject
@@ -134,7 +131,7 @@ const char *lv_subject_get_string(lv_subject_t * subject);
  * @note            NULL will be returned if NULL was passed in `lv_subject_init_string()`
  *                  as `prev_buf`
  */
-const char *lv_subject_get_previous_string(lv_subject_t * subject);
+const char * lv_subject_get_previous_string(lv_subject_t * subject);
 
 /**
  * Initialize an pointer type subject
@@ -155,14 +152,14 @@ void lv_subject_set_pointer(lv_subject_t * subject, void * ptr);
  * @param subject   pointer to the subject
  * @return          current value
  */
-const void *lv_subject_get_pointer(lv_subject_t * subject);
+const void * lv_subject_get_pointer(lv_subject_t * subject);
 
 /**
  * Get the previous value of a pointer subject
  * @param subject   pointer to the subject
  * @return          current value
  */
-const void *lv_subject_get_previous_pointer(lv_subject_t * subject);
+const void * lv_subject_get_previous_pointer(lv_subject_t * subject);
 
 /**
  * Initialize an color type subject
@@ -214,7 +211,7 @@ void lv_subject_deinit(lv_subject_t * subject);
  * @param index     index of the element to get
  * @return          pointer a subject from the list, or NULL if the index is out of bounds
  */
-lv_subject_t *lv_subject_get_group_element(lv_subject_t * subject, int32_t index);
+lv_subject_t * lv_subject_get_group_element(lv_subject_t * subject, int32_t index);
 
 /**
  * Add an observer to a subject. When the subject changes `observer_cb` will be called.
@@ -223,7 +220,7 @@ lv_subject_t *lv_subject_get_group_element(lv_subject_t * subject, int32_t index
  * @param user_data     optional user data
  * @return              pointer to the created observer
  */
-lv_observer_t *lv_subject_add_observer(lv_subject_t * subject, lv_observer_cb_t observer_cb, void * user_data);
+lv_observer_t * lv_subject_add_observer(lv_subject_t * subject, lv_observer_cb_t observer_cb, void * user_data);
 
 /**
  * Add an observer to a subject for an object.
@@ -234,8 +231,8 @@ lv_observer_t *lv_subject_add_observer(lv_subject_t * subject, lv_observer_cb_t 
  * @param user_data     optional user data
  * @return              pointer to the created observer
  */
-lv_observer_t *lv_subject_add_observer_obj(lv_subject_t * subject, lv_observer_cb_t observer_cb, lv_obj_t * obj,
-        void *user_data);
+lv_observer_t * lv_subject_add_observer_obj(lv_subject_t * subject, lv_observer_cb_t observer_cb, lv_obj_t * obj,
+                                            void * user_data);
 
 /**
  * Add an observer to a subject and also save a target.
@@ -245,8 +242,8 @@ lv_observer_t *lv_subject_add_observer_obj(lv_subject_t * subject, lv_observer_c
  * @param user_data     optional user data
  * @return              pointer to the created observer
  */
-lv_observer_t *lv_subject_add_observer_with_target(lv_subject_t * subject, lv_observer_cb_t observer_cb,
-        void *target, void *user_data);
+lv_observer_t * lv_subject_add_observer_with_target(lv_subject_t * subject, lv_observer_cb_t observer_cb,
+                                                    void * target, void * user_data);
 
 /**
  * Remove an observer from its subject
@@ -267,7 +264,7 @@ void lv_obj_remove_from_subject(lv_obj_t * obj, lv_subject_t * subject);
  * @param observer      pointer to an observer
  * @return              pointer to the saved target
  */
-void *lv_observer_get_target(lv_observer_t * observer);
+void * lv_observer_get_target(lv_observer_t * observer);
 
 /**
  * Get the target object of the observer.
@@ -276,14 +273,14 @@ void *lv_observer_get_target(lv_observer_t * observer);
  * @param observer      pointer to an observer
  * @return              pointer to the saved object target
  */
-lv_obj_t *lv_observer_get_target_obj(lv_observer_t * observer);
+lv_obj_t * lv_observer_get_target_obj(lv_observer_t * observer);
 
 /**
  * Get the user data of the observer.
  * @param observer      pointer to an observer
  * @return              void pointer to the saved user data
 */
-void *lv_observer_get_user_data(const lv_observer_t * observer);
+void * lv_observer_get_user_data(const lv_observer_t * observer);
 
 /**
  * Notify all observers of subject
@@ -299,7 +296,7 @@ void lv_subject_notify(lv_subject_t * subject);
  * @param ref_value     reference value to compare the subject's value with
  * @return              pointer to the created observer
  */
-lv_observer_t *lv_obj_bind_flag_if_eq(lv_obj_t * obj, lv_subject_t * subject, lv_obj_flag_t flag, int32_t ref_value);
+lv_observer_t * lv_obj_bind_flag_if_eq(lv_obj_t * obj, lv_subject_t * subject, lv_obj_flag_t flag, int32_t ref_value);
 
 /**
  * Set an object flag if an integer subject's value is not equal to a reference value, clear the flag otherwise
@@ -309,8 +306,8 @@ lv_observer_t *lv_obj_bind_flag_if_eq(lv_obj_t * obj, lv_subject_t * subject, lv
  * @param ref_value     reference value to compare the subject's value with
  * @return              pointer to the created observer
  */
-lv_observer_t *lv_obj_bind_flag_if_not_eq(lv_obj_t * obj, lv_subject_t * subject, lv_obj_flag_t flag,
-        int32_t ref_value);
+lv_observer_t * lv_obj_bind_flag_if_not_eq(lv_obj_t * obj, lv_subject_t * subject, lv_obj_flag_t flag,
+                                           int32_t ref_value);
 
 /**
  * Set an object state if an integer subject's value is equal to a reference value, clear the flag otherwise
@@ -320,7 +317,7 @@ lv_observer_t *lv_obj_bind_flag_if_not_eq(lv_obj_t * obj, lv_subject_t * subject
  * @param ref_value     reference value to compare the subject's value with
  * @return              pointer to the created observer
  */
-lv_observer_t *lv_obj_bind_state_if_eq(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state, int32_t ref_value);
+lv_observer_t * lv_obj_bind_state_if_eq(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state, int32_t ref_value);
 
 /**
  * Set an object state if an integer subject's value is not equal to a reference value, clear the flag otherwise
@@ -330,8 +327,8 @@ lv_observer_t *lv_obj_bind_state_if_eq(lv_obj_t * obj, lv_subject_t * subject, l
  * @param ref_value     reference value to compare the subject's value with
  * @return              pointer to the created observer
  */
-lv_observer_t *lv_obj_bind_state_if_not_eq(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state,
-        int32_t ref_value);
+lv_observer_t * lv_obj_bind_state_if_not_eq(lv_obj_t * obj, lv_subject_t * subject, lv_state_t state,
+                                            int32_t ref_value);
 
 /**
  * Set an integer subject to 1 when an object is checked and set it 0 when unchecked.
@@ -340,7 +337,7 @@ lv_observer_t *lv_obj_bind_state_if_not_eq(lv_obj_t * obj, lv_subject_t * subjec
  * @return          pointer to the created observer
  * @note            Ensure the object's `LV_OBJ_FLAG_CHECKABLE` flag is set
  */
-lv_observer_t *lv_obj_bind_checked(lv_obj_t * obj, lv_subject_t * subject);
+lv_observer_t * lv_obj_bind_checked(lv_obj_t * obj, lv_subject_t * subject);
 
 #if LV_USE_LABEL
 /**
@@ -353,7 +350,7 @@ lv_observer_t *lv_obj_bind_checked(lv_obj_t * obj, lv_subject_t * subject);
  * @note            fmt == NULL can be used only with string and pointer subjects.
  * @note            if the subject is a pointer must point to a `\0` terminated string.
  */
-lv_observer_t *lv_label_bind_text(lv_obj_t * obj, lv_subject_t * subject, const char * fmt);
+lv_observer_t * lv_label_bind_text(lv_obj_t * obj, lv_subject_t * subject, const char * fmt);
 #endif
 
 #if LV_USE_ARC
@@ -363,7 +360,7 @@ lv_observer_t *lv_label_bind_text(lv_obj_t * obj, lv_subject_t * subject, const 
  * @param subject   pointer to a subject
  * @return          pointer to the created observer
  */
-lv_observer_t *lv_arc_bind_value(lv_obj_t * obj, lv_subject_t * subject);
+lv_observer_t * lv_arc_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif
 
 #if LV_USE_SLIDER
@@ -373,7 +370,7 @@ lv_observer_t *lv_arc_bind_value(lv_obj_t * obj, lv_subject_t * subject);
  * @param subject   pointer to a subject
  * @return          pointer to the created observer
  */
-lv_observer_t *lv_slider_bind_value(lv_obj_t * obj, lv_subject_t * subject);
+lv_observer_t * lv_slider_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif
 
 #if LV_USE_ROLLER
@@ -383,7 +380,7 @@ lv_observer_t *lv_slider_bind_value(lv_obj_t * obj, lv_subject_t * subject);
  * @param subject   pointer to a subject
  * @return          pointer to the created observer
  */
-lv_observer_t *lv_roller_bind_value(lv_obj_t * obj, lv_subject_t * subject);
+lv_observer_t * lv_roller_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif
 
 #if LV_USE_DROPDOWN
@@ -393,7 +390,7 @@ lv_observer_t *lv_roller_bind_value(lv_obj_t * obj, lv_subject_t * subject);
  * @param subject   pointer to a subject
  * @return          pointer to the created observer
  */
-lv_observer_t *lv_dropdown_bind_value(lv_obj_t * obj, lv_subject_t * subject);
+lv_observer_t * lv_dropdown_bind_value(lv_obj_t * obj, lv_subject_t * subject);
 #endif
 
 /**********************

@@ -35,7 +35,7 @@ extern "C" {
  * GLOBAL PROTOTYPES
  **********************/
 
-lv_display_t *lv_sdl_window_create(int32_t hor_res, int32_t ver_res);
+lv_display_t * lv_sdl_window_create(int32_t hor_res, int32_t ver_res);
 
 void lv_sdl_window_set_resizeable(lv_display_t * disp, bool value);
 
@@ -45,7 +45,7 @@ uint8_t lv_sdl_window_get_zoom(lv_display_t * disp);
 
 void lv_sdl_window_set_title(lv_display_t * disp, const char * title);
 
-void *lv_sdl_window_get_renderer(lv_display_t * disp);
+void * lv_sdl_window_get_renderer(lv_display_t * disp);
 
 void lv_sdl_quit(void);
 

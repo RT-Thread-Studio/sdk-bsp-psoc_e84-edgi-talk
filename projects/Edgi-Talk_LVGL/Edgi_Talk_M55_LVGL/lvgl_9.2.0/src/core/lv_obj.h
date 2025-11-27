@@ -43,8 +43,7 @@ extern "C" {
  * Possible states of a widget.
  * OR-ed values are possible
  */
-enum
-{
+enum {
     LV_STATE_DEFAULT     =  0x0000,
     LV_STATE_CHECKED     =  0x0001,
     LV_STATE_FOCUSED     =  0x0002,
@@ -69,8 +68,7 @@ enum
  * Not all parts are used by every widget
  */
 
-enum
-{
+enum {
     LV_PART_MAIN         = 0x000000,   /**< A background like rectangle*/
     LV_PART_SCROLLBAR    = 0x010000,   /**< The scrollbar(s)*/
     LV_PART_INDICATOR    = 0x020000,   /**< Indicator, e.g. for slider, bar, switch, or the tick box of the checkbox*/
@@ -91,8 +89,7 @@ enum
  * Note: update obj flags corresponding properties below
  * whenever add/remove flags or change bit definition of flags.
  */
-typedef enum
-{
+typedef enum {
     LV_OBJ_FLAG_HIDDEN          = (1L << 0),  /**< Make the object hidden. (Like it wasn't there at all)*/
     LV_OBJ_FLAG_CLICKABLE       = (1L << 1),  /**< Make the object clickable by the input devices*/
     LV_OBJ_FLAG_CLICK_FOCUSABLE = (1L << 2),  /**< Add focused state to the object when clicked*/
@@ -131,8 +128,7 @@ typedef enum
 } lv_obj_flag_t;
 
 #if LV_USE_OBJ_PROPERTY
-enum
-{
+enum {
     /*OBJ flag properties */
     LV_PROPERTY_ID(OBJ, FLAG_START,                 LV_PROPERTY_TYPE_INT,       0),
     LV_PROPERTY_ID(OBJ, FLAG_HIDDEN,                LV_PROPERTY_TYPE_INT,       0),
@@ -230,7 +226,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_obj_class;
  * @param parent    pointer to a parent object. If NULL then a screen will be created.
  * @return          pointer to the new object
  */
-lv_obj_t *lv_obj_create(lv_obj_t * parent);
+lv_obj_t * lv_obj_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions
@@ -329,14 +325,14 @@ bool lv_obj_has_state(const lv_obj_t * obj, lv_state_t state);
  * @param       obj pointer to an object
  * @return      the pointer to group of the object
  */
-lv_group_t *lv_obj_get_group(const lv_obj_t * obj);
+lv_group_t * lv_obj_get_group(const lv_obj_t * obj);
 
 /**
  * Get the user_data field of the object
  * @param obj   pointer to an object
  * @return      the pointer to the user_data of the object
  */
-void *lv_obj_get_user_data(lv_obj_t * obj);
+void * lv_obj_get_user_data(lv_obj_t * obj);
 
 /*=======================
  * Other functions
@@ -370,7 +366,7 @@ bool lv_obj_has_class(const lv_obj_t * obj, const lv_obj_class_t * class_p);
  * @param obj   pointer to an object
  * @return      the class (type) of the object
  */
-const lv_obj_class_t *lv_obj_get_class(const lv_obj_t * obj);
+const lv_obj_class_t * lv_obj_get_class(const lv_obj_t * obj);
 
 /**
  * Check if any object is still "alive".
@@ -400,7 +396,7 @@ void lv_obj_set_id(lv_obj_t * obj, void * id);
  * @param obj   pointer to an object
  * @return      the id of the object
  */
-void *lv_obj_get_id(const lv_obj_t * obj);
+void * lv_obj_get_id(const lv_obj_t * obj);
 
 /**
  * Get the child object by its id.
@@ -411,7 +407,7 @@ void *lv_obj_get_id(const lv_obj_t * obj);
  * @param id        the id of the child object
  * @return          pointer to the child object or NULL if not found
  */
-lv_obj_t *lv_obj_get_child_by_id(const lv_obj_t * obj, const void * id);
+lv_obj_t * lv_obj_get_child_by_id(const lv_obj_t * obj, const void * id);
 
 /**
  * Assign id to object if not previously assigned.
@@ -451,7 +447,7 @@ int lv_obj_id_compare(const void * id1, const void * id2);
  * @param buf   buffer to write the string into
  * @param len   length of the buffer
  */
-const char *lv_obj_stringify_id(lv_obj_t * obj, char * buf, uint32_t len);
+const char * lv_obj_stringify_id(lv_obj_t * obj, char * buf, uint32_t len);
 
 #if LV_USE_OBJ_ID_BUILTIN
 /**

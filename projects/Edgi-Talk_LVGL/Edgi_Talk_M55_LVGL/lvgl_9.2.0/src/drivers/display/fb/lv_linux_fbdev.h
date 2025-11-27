@@ -29,7 +29,7 @@ extern "C" {
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
-lv_display_t *lv_linux_fbdev_create(void);
+lv_display_t * lv_linux_fbdev_create(void);
 
 void lv_linux_fbdev_set_file(lv_display_t * disp, const char * file);
 

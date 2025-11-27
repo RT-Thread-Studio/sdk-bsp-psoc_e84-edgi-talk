@@ -48,13 +48,13 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
-static void *fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode);
+static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode);
 static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p);
 static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_t btr, uint32_t * br);
 static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, uint32_t btw, uint32_t * bw);
 static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs_whence_t whence);
 static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p);
-static void *fs_dir_open(lv_fs_drv_t * drv, const char * path);
+static void * fs_dir_open(lv_fs_drv_t * drv, const char * path);
 static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint32_t fn_len);
 static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * dir_p);
 
@@ -79,7 +79,7 @@ void lv_fs_posix_init(void)
      * Register the file system interface in LVGL
      *--------------------------------------------------*/
 
-    lv_fs_drv_t *fs_drv_p = &(LV_GLOBAL_DEFAULT()->posix_fs_drv);
+    lv_fs_drv_t * fs_drv_p = &(LV_GLOBAL_DEFAULT()->posix_fs_drv);
     lv_fs_drv_init(fs_drv_p);
 
     /*Set up fields...*/
@@ -111,22 +111,21 @@ void lv_fs_posix_init(void)
  * @param mode  read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
  * @return a file handle or -1 in case of fail
  */
-static void *fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
+static void * fs_open(lv_fs_drv_t * drv, const char * path, lv_fs_mode_t mode)
 {
     LV_UNUSED(drv);
 
     int flags = 0;
-    if (mode == LV_FS_MODE_WR) flags = O_WRONLY | O_CREAT;
-    else if (mode == LV_FS_MODE_RD) flags = O_RDONLY;
-    else if (mode == (LV_FS_MODE_WR | LV_FS_MODE_RD)) flags = O_RDWR | O_CREAT;
+    if(mode == LV_FS_MODE_WR) flags = O_WRONLY | O_CREAT;
+    else if(mode == LV_FS_MODE_RD) flags = O_RDONLY;
+    else if(mode == (LV_FS_MODE_WR | LV_FS_MODE_RD)) flags = O_RDWR | O_CREAT;
 
     /*Make the path relative to the current directory (the projects root folder)*/
     char buf[256];
     lv_snprintf(buf, sizeof(buf), LV_FS_POSIX_PATH "%s", path);
 
     int fd = open(buf, flags, 0666);
-    if (fd < 0)
-    {
+    if(fd < 0) {
         LV_LOG_WARN("Could not open file: %s, flags: 0x%x, errno: %d", buf, flags, errno);
         return NULL;
     }
@@ -147,8 +146,7 @@ static lv_fs_res_t fs_close(lv_fs_drv_t * drv, void * file_p)
 
     int fd = FILEP2FD(file_p);
     int ret = close(fd);
-    if (ret < 0)
-    {
+    if(ret < 0) {
         LV_LOG_WARN("Could not close file: %d, errno: %d", fd, errno);
         return LV_FS_RES_FS_ERR;
     }
@@ -172,8 +170,7 @@ static lv_fs_res_t fs_read(lv_fs_drv_t * drv, void * file_p, void * buf, uint32_
 
     int fd = FILEP2FD(file_p);
     ssize_t ret = read(fd, buf, btr);
-    if (ret < 0)
-    {
+    if(ret < 0) {
         LV_LOG_WARN("Could not read file: %d, errno: %d", fd, errno);
         return LV_FS_RES_FS_ERR;
     }
@@ -197,8 +194,7 @@ static lv_fs_res_t fs_write(lv_fs_drv_t * drv, void * file_p, const void * buf, 
 
     int fd = FILEP2FD(file_p);
     ssize_t ret = write(fd, buf, btw);
-    if (ret < 0)
-    {
+    if(ret < 0) {
         LV_LOG_WARN("Could not write file: %d, errno: %d", fd, errno);
         return LV_FS_RES_FS_ERR;
     }
@@ -219,25 +215,23 @@ static lv_fs_res_t fs_seek(lv_fs_drv_t * drv, void * file_p, uint32_t pos, lv_fs
 {
     LV_UNUSED(drv);
     int w;
-    switch (whence)
-    {
-    case LV_FS_SEEK_SET:
-        w = SEEK_SET;
-        break;
-    case LV_FS_SEEK_CUR:
-        w = SEEK_CUR;
-        break;
-    case LV_FS_SEEK_END:
-        w = SEEK_END;
-        break;
-    default:
-        return LV_FS_RES_INV_PARAM;
+    switch(whence) {
+        case LV_FS_SEEK_SET:
+            w = SEEK_SET;
+            break;
+        case LV_FS_SEEK_CUR:
+            w = SEEK_CUR;
+            break;
+        case LV_FS_SEEK_END:
+            w = SEEK_END;
+            break;
+        default:
+            return LV_FS_RES_INV_PARAM;
     }
 
     int fd = FILEP2FD(file_p);
     off_t offset = lseek(fd, pos, w);
-    if (offset < 0)
-    {
+    if(offset < 0) {
         LV_LOG_WARN("Could not seek file: %d, errno: %d", fd, errno);
         return LV_FS_RES_FS_ERR;
     }
@@ -259,8 +253,7 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
 
     int fd = FILEP2FD(file_p);
     off_t offset = lseek(fd, 0, SEEK_CUR);
-    if (offset < 0)
-    {
+    if(offset < 0) {
         LV_LOG_WARN("Could not get position of file: %d, errno: %d", fd, errno);
         return LV_FS_RES_FS_ERR;
     }
@@ -275,7 +268,7 @@ static lv_fs_res_t fs_tell(lv_fs_drv_t * drv, void * file_p, uint32_t * pos_p)
  * @param path  path to a directory
  * @return pointer to an initialized 'DIR' or 'HANDLE' variable
  */
-static void *fs_dir_open(lv_fs_drv_t * drv, const char * path)
+static void * fs_dir_open(lv_fs_drv_t * drv, const char * path)
 {
     LV_UNUSED(drv);
 
@@ -283,9 +276,8 @@ static void *fs_dir_open(lv_fs_drv_t * drv, const char * path)
     char buf[256];
     lv_snprintf(buf, sizeof(buf), LV_FS_POSIX_PATH "%s", path);
 
-    void *dir = opendir(buf);
-    if (!dir)
-    {
+    void * dir = opendir(buf);
+    if(!dir) {
         LV_LOG_WARN("Could not open directory: %s, errno: %d", buf, errno);
         return NULL;
     }
@@ -305,23 +297,19 @@ static void *fs_dir_open(lv_fs_drv_t * drv, const char * path)
 static lv_fs_res_t fs_dir_read(lv_fs_drv_t * drv, void * dir_p, char * fn, uint32_t fn_len)
 {
     LV_UNUSED(drv);
-    if (fn_len == 0) return LV_FS_RES_INV_PARAM;
+    if(fn_len == 0) return LV_FS_RES_INV_PARAM;
 
     struct dirent * entry;
-    do
-    {
+    do {
         entry = readdir(dir_p);
-        if (entry)
-        {
-            if (entry->d_type == DT_DIR) lv_snprintf(fn, fn_len, "/%s", entry->d_name);
+        if(entry) {
+            if(entry->d_type == DT_DIR) lv_snprintf(fn, fn_len, "/%s", entry->d_name);
             else lv_strlcpy(fn, entry->d_name, fn_len);
         }
-        else
-        {
+        else {
             lv_strlcpy(fn, "", fn_len);
         }
-    }
-    while (lv_strcmp(fn, "/.") == 0 || lv_strcmp(fn, "/..") == 0);
+    } while(lv_strcmp(fn, "/.") == 0 || lv_strcmp(fn, "/..") == 0);
 
     return LV_FS_RES_OK;
 }
@@ -337,8 +325,7 @@ static lv_fs_res_t fs_dir_close(lv_fs_drv_t * drv, void * dir_p)
     LV_UNUSED(drv);
 
     int ret = closedir(dir_p);
-    if (ret < 0)
-    {
+    if(ret < 0) {
         LV_LOG_WARN("Could not close directory: errno: %d", errno);
         return LV_FS_RES_FS_ERR;
     }

@@ -27,8 +27,7 @@ extern "C" {
  **********************/
 
 /** Possible input device types*/
-typedef enum
-{
+typedef enum {
     LV_INDEV_TYPE_NONE,    /**< Uninitialized state*/
     LV_INDEV_TYPE_POINTER, /**< Touch pad, mouse, external button*/
     LV_INDEV_TYPE_KEYPAD,  /**< Keypad or keyboard*/
@@ -37,22 +36,19 @@ typedef enum
 } lv_indev_type_t;
 
 /** States for input devices*/
-typedef enum
-{
+typedef enum {
     LV_INDEV_STATE_RELEASED = 0,
     LV_INDEV_STATE_PRESSED
 } lv_indev_state_t;
 
-typedef enum
-{
+typedef enum {
     LV_INDEV_MODE_NONE = 0,
     LV_INDEV_MODE_TIMER,
     LV_INDEV_MODE_EVENT,
 } lv_indev_mode_t;
 
 /** Data structure passed to an input driver to fill*/
-typedef struct
-{
+typedef struct {
     lv_point_t point; /**< For LV_INDEV_TYPE_POINTER the currently pressed point*/
     uint32_t key;     /**< For LV_INDEV_TYPE_KEYPAD the currently pressed key*/
     uint32_t btn_id;  /**< For LV_INDEV_TYPE_BUTTON the currently pressed button*/
@@ -72,7 +68,7 @@ typedef void (*lv_indev_read_cb_t)(lv_indev_t * indev, lv_indev_data_t * data);
  * Create an indev
  * @return Pointer to the created indev or NULL when allocation failed
  */
-lv_indev_t *lv_indev_create(void);
+lv_indev_t * lv_indev_create(void);
 
 /**
  * Remove the provided input device. Make sure not to use the provided input device afterwards anymore.
@@ -86,7 +82,7 @@ void lv_indev_delete(lv_indev_t * indev);
  * @return the next input device or NULL if there are no more. Provide the first input device when
  * the parameter is NULL
  */
-lv_indev_t *lv_indev_get_next(lv_indev_t * indev);
+lv_indev_t * lv_indev_get_next(lv_indev_t * indev);
 
 /**
  * Read data from an input device.
@@ -112,7 +108,7 @@ void lv_indev_enable(lv_indev_t * indev, bool enable);
  * @return pointer to the currently processed input device or NULL if no input device processing
  * right now
  */
-lv_indev_t *lv_indev_active(void);
+lv_indev_t * lv_indev_active(void);
 
 /**
  * Set the type of an input device
@@ -196,28 +192,28 @@ lv_indev_state_t lv_indev_get_state(const lv_indev_t * indev);
  * @param indev pointer to an input device
  * @return Pointer to indev assigned group or NULL if indev is NULL
  */
-lv_group_t *lv_indev_get_group(const lv_indev_t * indev);
+lv_group_t * lv_indev_get_group(const lv_indev_t * indev);
 
 /**
  * Get a pointer to the assigned display of the indev
  * @param indev pointer to an input device
  * @return pointer to the assigned display or NULL if indev is NULL
  */
-lv_display_t *lv_indev_get_display(const lv_indev_t * indev);
+lv_display_t * lv_indev_get_display(const lv_indev_t * indev);
 
 /**
  * Get a pointer to the user data of the indev
  * @param indev pointer to an input device
  * @return pointer to the user data or NULL if indev is NULL
  */
-void *lv_indev_get_user_data(const lv_indev_t * indev);
+void * lv_indev_get_user_data(const lv_indev_t * indev);
 
 /**
  * Get a pointer to the driver data of the indev
  * @param indev pointer to an input device
  * @return pointer to the driver data or NULL if indev is NULL
  */
-void *lv_indev_get_driver_data(const lv_indev_t * indev);
+void * lv_indev_get_driver_data(const lv_indev_t * indev);
 
 /**
  * Get whether indev is moved while pressed
@@ -304,7 +300,7 @@ lv_dir_t lv_indev_get_scroll_dir(const lv_indev_t * indev);
  * @param indev pointer to an input device
  * @return pointer to the currently scrolled object or NULL if no scrolling by this indev
  */
-lv_obj_t *lv_indev_get_scroll_obj(const lv_indev_t * indev);
+lv_obj_t * lv_indev_get_scroll_obj(const lv_indev_t * indev);
 
 /**
  * Get the movement vector of an input device (for LV_INDEV_TYPE_POINTER and
@@ -324,7 +320,7 @@ void lv_indev_wait_release(lv_indev_t * indev);
  * Gets a pointer to the currently active object in the currently processed input device.
  * @return pointer to currently active object or NULL if no active object
  */
-lv_obj_t *lv_indev_get_active_obj(void);
+lv_obj_t * lv_indev_get_active_obj(void);
 
 /**
  * Get a pointer to the indev read timer to
@@ -332,7 +328,7 @@ lv_obj_t *lv_indev_get_active_obj(void);
  * @param indev pointer to an input device
  * @return pointer to the indev read refresher timer. (NULL on error)
  */
-lv_timer_t *lv_indev_get_read_timer(lv_indev_t * indev);
+lv_timer_t * lv_indev_get_read_timer(lv_indev_t * indev);
 
 /**
 * Set the input device's event model: event-driven mode or timer mode.
@@ -354,7 +350,7 @@ lv_indev_mode_t lv_indev_get_mode(lv_indev_t * indev);
  * @param point pointer to a point for searching the most top child
  * @return pointer to the found object or NULL if there was no suitable object
  */
-lv_obj_t *lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point);
+lv_obj_t * lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point);
 
 /**
  * Add an event handler to the indev
@@ -378,7 +374,7 @@ uint32_t lv_indev_get_event_count(lv_indev_t * indev);
  * @param index         the index of the event
  * @return              the event descriptor
  */
-lv_event_dsc_t *lv_indev_get_event_dsc(lv_indev_t * indev, uint32_t index);
+lv_event_dsc_t * lv_indev_get_event_dsc(lv_indev_t * indev, uint32_t index);
 
 /**
  * Remove an event

@@ -53,16 +53,16 @@ void lv_vg_lite_stroke_deinit(struct lv_draw_vg_lite_unit_t * unit);
  * @param dsc pointer to the stroke descriptor
  * @return pointer to the stroke cache entry
  */
-lv_cache_entry_t *lv_vg_lite_stroke_get(struct lv_draw_vg_lite_unit_t * unit,
-                                        struct lv_vg_lite_path_t *path,
-                                        const lv_vector_stroke_dsc_t *dsc);
+lv_cache_entry_t * lv_vg_lite_stroke_get(struct lv_draw_vg_lite_unit_t * unit,
+                                         struct lv_vg_lite_path_t * path,
+                                         const lv_vector_stroke_dsc_t * dsc);
 
 /**
  * Get the path of a stroke
  * @param cache_entry pointer to the stroke cache entry
  * @return pointer to the path
  */
-struct lv_vg_lite_path_t *lv_vg_lite_stroke_get_path(lv_cache_entry_t * cache_entry);
+struct lv_vg_lite_path_t * lv_vg_lite_stroke_get_path(lv_cache_entry_t * cache_entry);
 
 /**
  * Drop the stroke cache entry

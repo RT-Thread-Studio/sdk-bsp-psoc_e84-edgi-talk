@@ -44,14 +44,14 @@ static void flush_cache(const lv_draw_buf_t * draw_buf, const lv_area_t * area);
 
 void lv_nuttx_cache_init(void)
 {
-    lv_draw_buf_handlers_t *handlers = lv_draw_buf_get_handlers();
+    lv_draw_buf_handlers_t * handlers = lv_draw_buf_get_handlers();
     handlers->invalidate_cache_cb = invalidate_cache;
     handlers->flush_cache_cb = flush_cache;
 }
 
 void lv_nuttx_cache_deinit(void)
 {
-    lv_draw_buf_handlers_t *handlers = lv_draw_buf_get_handlers();
+    lv_draw_buf_handlers_t * handlers = lv_draw_buf_get_handlers();
     handlers->invalidate_cache_cb = NULL;
     handlers->flush_cache_cb = NULL;
 }
@@ -61,15 +61,15 @@ void lv_nuttx_cache_deinit(void)
  **********************/
 
 static void draw_buf_to_region(
-    const lv_draw_buf_t *draw_buf, const lv_area_t *area,
-    lv_uintptr_t *start, lv_uintptr_t *end)
+    const lv_draw_buf_t * draw_buf, const lv_area_t * area,
+    lv_uintptr_t * start, lv_uintptr_t * end)
 {
     LV_ASSERT_NULL(draw_buf);
     LV_ASSERT_NULL(area);
     LV_ASSERT_NULL(start);
     LV_ASSERT_NULL(end);
 
-    void *buf = draw_buf->data;
+    void * buf = draw_buf->data;
     uint32_t stride = draw_buf->header.stride;
 
     int32_t h = lv_area_get_height(area);

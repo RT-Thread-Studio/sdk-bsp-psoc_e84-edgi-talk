@@ -27,14 +27,12 @@ extern "C" {
 
 typedef struct lv_monkey_t lv_monkey_t;
 
-struct lv_monkey_config_t
-{
+struct lv_monkey_config_t {
     /**< Input device type*/
     lv_indev_type_t type;
 
     /**< Monkey execution period*/
-    struct
-    {
+    struct {
         //! @cond Doxygen_Suppress
         uint32_t min;
         uint32_t max;
@@ -42,8 +40,7 @@ struct lv_monkey_config_t
     } period_range;
 
     /**< The range of input value*/
-    struct
-    {
+    struct {
         int32_t min;
         int32_t max;
     } input_range;
@@ -64,14 +61,14 @@ void lv_monkey_config_init(lv_monkey_config_t * config);
  * @param config pointer to 'lv_monkey_config_t' variable
  * @return pointer to the created monkey
  */
-lv_monkey_t *lv_monkey_create(const lv_monkey_config_t * config);
+lv_monkey_t * lv_monkey_create(const lv_monkey_config_t * config);
 
 /**
  * Get monkey input device
  * @param monkey pointer to a monkey
  * @return pointer to the input device
  */
-lv_indev_t *lv_monkey_get_indev(lv_monkey_t * monkey);
+lv_indev_t * lv_monkey_get_indev(lv_monkey_t * monkey);
 
 /**
  * Enable monkey
@@ -99,7 +96,7 @@ void lv_monkey_set_user_data(lv_monkey_t * monkey, void * user_data);
  * @param monkey pointer to a monkey
  * @return the pointer to the user_data of the monkey
  */
-void *lv_monkey_get_user_data(lv_monkey_t * monkey);
+void * lv_monkey_get_user_data(lv_monkey_t * monkey);
 
 /**
  * Delete monkey

@@ -135,7 +135,7 @@ static void draw_shapes(lv_vector_dsc_t * ctx, lv_vector_path_t * path)
     lv_vector_path_append_rect(path, &rect2, 10, 10);
     lv_vector_dsc_set_fill_color(ctx, lv_color_make(0x80, 0x00, 0x80));
 
-    lv_vector_path_t *path2 = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_MEDIUM);
+    lv_vector_path_t * path2 = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_MEDIUM);
     lv_fpoint_t p = {50, 420};
     lv_vector_path_append_circle(path2, &p, 50, 30);
     lv_vector_path_append_path(path, path2);
@@ -218,13 +218,13 @@ static void draw_arc(lv_vector_dsc_t * ctx, lv_vector_path_t * path)
 
 static void draw_vector(lv_layer_t * layer)
 {
-    lv_vector_dsc_t *ctx = lv_vector_dsc_create(layer);
+    lv_vector_dsc_t * ctx = lv_vector_dsc_create(layer);
 
     lv_area_t rect = {0, 100, 300, 300};
     lv_vector_dsc_set_fill_color(ctx, lv_color_lighten(lv_color_black(), 50));
     lv_vector_clear_area(ctx, &rect); // clear screen
 
-    lv_vector_path_t *path = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_MEDIUM);
+    lv_vector_path_t * path = lv_vector_path_create(LV_VECTOR_PATH_QUALITY_MEDIUM);
 
     draw_shapes(ctx, path);
     draw_lines(ctx, path);
@@ -240,14 +240,14 @@ static void draw_vector(lv_layer_t * layer)
 
 static void delete_event_cb(lv_event_t * e)
 {
-    lv_obj_t *obj = lv_event_get_target(e);
-    lv_draw_buf_t *draw_buf = lv_canvas_get_draw_buf(obj);
+    lv_obj_t * obj = lv_event_get_target(e);
+    lv_draw_buf_t * draw_buf = lv_canvas_get_draw_buf(obj);
     lv_draw_buf_destroy(draw_buf);
 }
 
 static void event_cb(lv_event_t * e)
 {
-    lv_layer_t *layer = lv_event_get_layer(e);
+    lv_layer_t * layer = lv_event_get_layer(e);
 
     draw_vector(layer);
 }
@@ -271,10 +271,10 @@ void lv_demo_vector_graphic_not_buffered(void)
 
 void lv_demo_vector_graphic_buffered(void)
 {
-    lv_draw_buf_t *draw_buf = lv_draw_buf_create(WIDTH, HEIGHT, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
+    lv_draw_buf_t * draw_buf = lv_draw_buf_create(WIDTH, HEIGHT, LV_COLOR_FORMAT_ARGB8888, LV_STRIDE_AUTO);
     lv_draw_buf_clear(draw_buf, NULL);
 
-    lv_obj_t *canvas = lv_canvas_create(lv_screen_active());
+    lv_obj_t * canvas = lv_canvas_create(lv_screen_active());
     lv_canvas_set_draw_buf(canvas, draw_buf);
     lv_obj_add_event_cb(canvas, delete_event_cb, LV_EVENT_DELETE, NULL);
 
@@ -293,7 +293,7 @@ void lv_demo_vector_graphic_buffered(void)
 void lv_demo_vector_graphic_not_buffered(void)
 {
     /*fallback for online examples*/
-    lv_obj_t *label = lv_label_create(lv_screen_active());
+    lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "Vector graphics is not enabled");
     lv_obj_center(label);
 }
@@ -301,7 +301,7 @@ void lv_demo_vector_graphic_not_buffered(void)
 void lv_demo_vector_graphic_buffered(void)
 {
     /*fallback for online examples*/
-    lv_obj_t *label = lv_label_create(lv_screen_active());
+    lv_obj_t * label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, "Vector graphics is not enabled");
     lv_obj_center(label);
 }

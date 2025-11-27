@@ -24,10 +24,9 @@ extern "C" {
  *********************/
 
 /** Header of private display driver user data - for internal use only */
-typedef struct
-{
-    struct _XDisplay     *display;  /**< X11 display object     */
-    struct _x11_inp_data *inp_data;  /**< input user data object */
+typedef struct {
+    struct _XDisplay   *  display;  /**< X11 display object     */
+    struct _x11_inp_data * inp_data; /**< input user data object */
 } _x11_user_hdr_t;
 
 /** optional window close callback function type
@@ -71,7 +70,7 @@ void lv_x11_inputs_create(lv_display_t * disp, lv_image_dsc_t const * mouse_img)
  * @param[in] ver_res  vertical resolution (=height) of the X11 window
  * @return             pointer to the display object
  */
-lv_display_t *lv_x11_window_create(char const * title, int32_t hor_res, int32_t ver_res);
+lv_display_t * lv_x11_window_create(char const * title, int32_t hor_res, int32_t ver_res);
 
 #endif /* LV_USE_X11 */
 

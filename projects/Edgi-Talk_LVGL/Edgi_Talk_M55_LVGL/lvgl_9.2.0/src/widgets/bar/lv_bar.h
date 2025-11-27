@@ -28,15 +28,13 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_BAR_MODE_NORMAL,
     LV_BAR_MODE_SYMMETRICAL,
     LV_BAR_MODE_RANGE
 } lv_bar_mode_t;
 
-typedef enum
-{
+typedef enum {
     LV_BAR_ORIENTATION_AUTO,
     LV_BAR_ORIENTATION_HORIZONTAL,
     LV_BAR_ORIENTATION_VERTICAL
@@ -53,7 +51,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_bar_class;
  * @param parent        pointer to an object, it will be the parent of the new bar
  * @return              pointer to the created bar
  */
-lv_obj_t *lv_bar_create(lv_obj_t * parent);
+lv_obj_t * lv_bar_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions

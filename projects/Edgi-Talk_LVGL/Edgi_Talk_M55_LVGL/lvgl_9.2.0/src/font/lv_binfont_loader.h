@@ -31,7 +31,7 @@ extern "C" {
  * @param path   path to font file
  * @return  pointer to font where to load
  */
-lv_font_t *lv_binfont_create(const char * path);
+lv_font_t * lv_binfont_create(const char * path);
 
 #if LV_USE_FS_MEMFS
 /**
@@ -41,7 +41,7 @@ lv_font_t *lv_binfont_create(const char * path);
  * @param size          size of the font file buffer
  * @return              pointer to font where to load
  */
-lv_font_t *lv_binfont_create_from_buffer(void * buffer, uint32_t size);
+lv_font_t * lv_binfont_create_from_buffer(void * buffer, uint32_t size);
 #endif
 
 /**

@@ -29,8 +29,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
-typedef enum
-{
+typedef enum {
     LV_SLIDER_MODE_NORMAL = LV_BAR_MODE_NORMAL,
     LV_SLIDER_MODE_SYMMETRICAL = LV_BAR_MODE_SYMMETRICAL,
     LV_SLIDER_MODE_RANGE = LV_BAR_MODE_RANGE
@@ -47,7 +46,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_slider_class;
  * @param parent    pointer to an object, it will be the parent of the new slider.
  * @return          pointer to the created slider
  */
-lv_obj_t *lv_slider_create(lv_obj_t * parent);
+lv_obj_t * lv_slider_create(lv_obj_t * parent);
 
 /*=====================
  * Setter functions

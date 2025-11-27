@@ -44,7 +44,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_gif_class;
  * @param parent    pointer to an object, it will be the parent of the new gif.
  * @return          pointer to the gif obj
  */
-lv_obj_t *lv_gif_create(lv_obj_t * parent);
+lv_obj_t * lv_gif_create(lv_obj_t * parent);
 
 /**
  * Set the gif data to display on the object

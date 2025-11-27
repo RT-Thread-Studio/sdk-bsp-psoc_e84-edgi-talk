@@ -39,7 +39,7 @@ LV_ATTRIBUTE_EXTERN_DATA extern const lv_obj_class_t lv_barcode_class;
  * @param parent point to an object where to create the barcode
  * @return pointer to the created barcode object
  */
-lv_obj_t *lv_barcode_create(lv_obj_t * parent);
+lv_obj_t * lv_barcode_create(lv_obj_t * parent);
 
 /**
  * Set the dark color of a barcode object

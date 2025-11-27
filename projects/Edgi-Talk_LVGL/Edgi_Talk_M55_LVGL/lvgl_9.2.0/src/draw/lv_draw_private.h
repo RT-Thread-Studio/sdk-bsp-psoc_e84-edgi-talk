@@ -28,9 +28,8 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_draw_task_t
-{
-    lv_draw_task_t *next;
+struct lv_draw_task_t {
+    lv_draw_task_t * next;
 
     lv_draw_task_type_t type;
 
@@ -61,7 +60,7 @@ struct lv_draw_task_t
 
     volatile int state;              /** int instead of lv_draw_task_state_t to be sure its atomic */
 
-    void *draw_dsc;
+    void * draw_dsc;
 
     /**
      * The ID of the draw_unit which should take this task
@@ -78,21 +77,19 @@ struct lv_draw_task_t
 
 };
 
-struct lv_draw_mask_t
-{
-    void *user_data;
+struct lv_draw_mask_t {
+    void * user_data;
 };
 
-struct lv_draw_unit_t
-{
-    lv_draw_unit_t *next;
+struct lv_draw_unit_t {
+    lv_draw_unit_t * next;
 
     /**
      * The target_layer on which drawing should happen
      */
-    lv_layer_t *target_layer;
+    lv_layer_t * target_layer;
 
-    const lv_area_t *clip_area;
+    const lv_area_t * clip_area;
 
     /**
      * Called to try to assign a draw task to itself.
@@ -171,9 +168,8 @@ struct lv_draw_unit_t
     int32_t (*delete_cb)(lv_draw_unit_t * draw_unit);
 };
 
-typedef struct
-{
-    lv_draw_unit_t *unit_head;
+typedef struct {
+    lv_draw_unit_t * unit_head;
     uint32_t unit_cnt;
     uint32_t used_memory_for_layers_kb;
 #if LV_USE_OS

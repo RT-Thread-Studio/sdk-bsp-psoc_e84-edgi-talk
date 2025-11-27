@@ -44,7 +44,7 @@ extern "C" {
  * @param parent    pointer to the parent widget
  * @return          pointer to the created Lottie animation widget
  */
-lv_obj_t   *lv_lottie_create(lv_obj_t * parent);
+lv_obj_t  * lv_lottie_create(lv_obj_t * parent);
 
 /**
  * Set a buffer for the animation. It also defines the size of the animation
@@ -83,7 +83,7 @@ void lv_lottie_set_src_file(lv_obj_t * obj, const char * src);
  * @param obj       pointer to a lottie widget
  * @return          the LVGL animation
  */
-lv_anim_t *lv_lottie_get_anim(lv_obj_t * obj);
+lv_anim_t * lv_lottie_get_anim(lv_obj_t * obj);
 
 /**********************
  * GLOBAL VARIABLES

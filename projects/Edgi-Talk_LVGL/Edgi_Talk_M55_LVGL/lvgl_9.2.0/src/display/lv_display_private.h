@@ -33,8 +33,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_display_t
-{
+struct lv_display_t {
 
     /*---------------------
      * Resolution
@@ -64,11 +63,11 @@ struct lv_display_t
     /*---------------------
      * Buffering
      *--------------------*/
-    lv_draw_buf_t *buf_1;
-    lv_draw_buf_t *buf_2;
+    lv_draw_buf_t * buf_1;
+    lv_draw_buf_t * buf_2;
 
     /** Internal, used by the library*/
-    lv_draw_buf_t *buf_act;
+    lv_draw_buf_t * buf_act;
 
     /** MANDATORY: Write the internal buffer (draw_buf) to the display. 'lv_display_flush_ready()' has to be
      * called when finished*/
@@ -112,7 +111,7 @@ struct lv_display_t
     /*---------------------
      * Layer
      *--------------------*/
-    lv_layer_t *layer_head;
+    lv_layer_t * layer_head;
     void (*layer_init)(lv_display_t * disp, lv_layer_t * layer);
     void (*layer_deinit)(lv_display_t * disp, lv_layer_t * layer);
 
@@ -121,13 +120,13 @@ struct lv_display_t
      *--------------------*/
 
     /** Screens of the display*/
-    lv_obj_t **screens;     /**< Array of screen objects.*/
-    lv_obj_t *sys_layer;    /**< @see lv_display_get_layer_sys*/
-    lv_obj_t *top_layer;    /**< @see lv_display_get_layer_top*/
-    lv_obj_t *act_scr;      /**< Currently active screen on this display*/
-    lv_obj_t *bottom_layer; /**< @see lv_display_get_layer_bottom*/
-    lv_obj_t *prev_scr;     /**< Previous screen. Used during screen animations*/
-    lv_obj_t *scr_to_load;  /**< The screen prepared to load in lv_screen_load_anim*/
+    lv_obj_t ** screens;    /**< Array of screen objects.*/
+    lv_obj_t * sys_layer;   /**< @see lv_display_get_layer_sys*/
+    lv_obj_t * top_layer;   /**< @see lv_display_get_layer_top*/
+    lv_obj_t * act_scr;     /**< Currently active screen on this display*/
+    lv_obj_t * bottom_layer;/**< @see lv_display_get_layer_bottom*/
+    lv_obj_t * prev_scr;    /**< Previous screen. Used during screen animations*/
+    lv_obj_t * scr_to_load; /**< The screen prepared to load in lv_screen_load_anim*/
     uint32_t screen_cnt;
     uint8_t draw_prev_over_act  : 1;/** 1: Draw previous screen over active screen*/
     uint8_t del_prev  : 1;  /** 1: Automatically delete the previous screen when the screen load animation is ready*/
@@ -136,19 +135,19 @@ struct lv_display_t
      * Others
      *--------------------*/
 
-    void *driver_data;  /**< Custom user data*/
+    void * driver_data; /**< Custom user data*/
 
-    void *user_data;  /**< Custom user data*/
+    void * user_data; /**< Custom user data*/
 
     lv_event_list_t event_list;
 
     uint32_t sw_rotate : 1; /**< 1: use software rotation (slower)*/
-    uint32_t rotation  : 3; /**< Element of  lv_display_rotation_t*/
+    uint32_t rotation  : 2; /**< Element of  lv_display_rotation_t*/
 
-    lv_theme_t *theme;      /**< The theme assigned to the screen*/
+    lv_theme_t * theme;     /**< The theme assigned to the screen*/
 
     /** A timer which periodically checks the dirty areas and refreshes them*/
-    lv_timer_t *refr_timer;
+    lv_timer_t * refr_timer;
 
     /*Miscellaneous data*/
     uint32_t last_activity_time;        /**< Last time when there was activity on this display*/
@@ -157,13 +156,13 @@ struct lv_display_t
     lv_area_t refreshed_area;
 
 #if LV_USE_PERF_MONITOR
-    lv_obj_t *perf_label;
+    lv_obj_t * perf_label;
     lv_sysmon_backend_data_t perf_sysmon_backend;
     lv_sysmon_perf_info_t perf_sysmon_info;
 #endif
 
 #if LV_USE_MEM_MONITOR
-    lv_obj_t *mem_label;
+    lv_obj_t * mem_label;
 #endif
 
 };

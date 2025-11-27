@@ -31,13 +31,12 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-struct lv_dropdown_t
-{
+struct lv_dropdown_t {
     lv_obj_t obj;
-    lv_obj_t *list;                 /**< The dropped down list*/
-    const char *text;               /**< Text to display on the dropdown's button*/
-    const void *symbol;             /**< Arrow or other icon when the drop-down list is closed*/
-    char *options;                  /**< Options in a '\n' separated list*/
+    lv_obj_t * list;                /**< The dropped down list*/
+    const char * text;              /**< Text to display on the dropdown's button*/
+    const void * symbol;            /**< Arrow or other icon when the drop-down list is closed*/
+    char * options;                 /**< Options in a '\n' separated list*/
     uint32_t option_cnt;            /**< Number of options*/
     uint32_t sel_opt_id;            /**< Index of the currently selected option*/
     uint32_t sel_opt_id_orig;       /**< Store the original index on focus*/
@@ -47,10 +46,9 @@ struct lv_dropdown_t
     uint8_t selected_highlight: 1;  /**< 1: Make the selected option highlighted in the list*/
 };
 
-struct lv_dropdown_list_t
-{
+struct lv_dropdown_list_t {
     lv_obj_t obj;
-    lv_obj_t *dropdown;
+    lv_obj_t * dropdown;
 };
 
 

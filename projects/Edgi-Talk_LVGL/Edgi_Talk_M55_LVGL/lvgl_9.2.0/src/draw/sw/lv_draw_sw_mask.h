@@ -32,8 +32,7 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
-typedef enum
-{
+typedef enum {
     LV_DRAW_SW_MASK_RES_TRANSP,
     LV_DRAW_SW_MASK_RES_FULL_COVER,
     LV_DRAW_SW_MASK_RES_CHANGED,
@@ -42,8 +41,7 @@ typedef enum
 
 #if LV_DRAW_SW_COMPLEX
 
-typedef enum
-{
+typedef enum {
     LV_DRAW_SW_MASK_TYPE_LINE,
     LV_DRAW_SW_MASK_TYPE_ANGLE,
     LV_DRAW_SW_MASK_TYPE_RADIUS,
@@ -51,8 +49,7 @@ typedef enum
     LV_DRAW_SW_MASK_TYPE_MAP,
 } lv_draw_sw_mask_type_t;
 
-typedef enum
-{
+typedef enum {
     LV_DRAW_SW_MASK_LINE_SIDE_LEFT = 0,
     LV_DRAW_SW_MASK_LINE_SIDE_RIGHT,
     LV_DRAW_SW_MASK_LINE_SIDE_TOP,
@@ -64,8 +61,8 @@ typedef enum
  * Used internally by the library.
  */
 typedef lv_draw_sw_mask_res_t (*lv_draw_sw_mask_xcb_t)(lv_opa_t * mask_buf, int32_t abs_x, int32_t abs_y,
-        int32_t len,
-        void *p);
+                                                       int32_t len,
+                                                       void * p);
 
 /**********************
  * GLOBAL PROTOTYPES
@@ -90,9 +87,9 @@ void lv_draw_sw_mask_deinit(void);
  * - `LV_DRAW_MASK_RES_CHANGED`: `mask_buf` has changed, it shows the desired opacity of each pixel in the given line
  */
 lv_draw_sw_mask_res_t /* LV_ATTRIBUTE_FAST_MEM */ lv_draw_sw_mask_apply(void * masks[], lv_opa_t * mask_buf,
-        int32_t abs_x,
-        int32_t abs_y,
-        int32_t len);
+                                                                        int32_t abs_x,
+                                                                        int32_t abs_y,
+                                                                        int32_t len);
 
 //! @endcond
 

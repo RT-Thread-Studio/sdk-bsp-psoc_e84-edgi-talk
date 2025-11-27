@@ -20,13 +20,13 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
-static lv_obj_t *switch_create(lv_obj_t * parent, const char * title, lv_obj_flag_t flag, bool en);
+static lv_obj_t * switch_create(lv_obj_t * parent, const char * title, lv_obj_flag_t flag, bool en);
 static void generic_switch_event_cb(lv_event_t * e);
 
 /**********************
  *  STATIC VARIABLES
  **********************/
-static lv_obj_t *list;
+static lv_obj_t * list;
 
 /**********************
  *      MACROS
@@ -37,7 +37,7 @@ static lv_obj_t *list;
  **********************/
 void lv_demo_scroll(void)
 {
-    lv_obj_t *panel = lv_obj_create(lv_screen_active());
+    lv_obj_t * panel = lv_obj_create(lv_screen_active());
     lv_obj_set_style_shadow_width(panel, 16, 0);
     lv_obj_set_style_shadow_offset_y(panel, 8, 0);
     lv_obj_set_style_shadow_offset_x(panel, 4, 0);
@@ -74,27 +74,25 @@ void lv_demo_scroll(void)
  *   STATIC FUNCTIONS
  **********************/
 
-static lv_obj_t *switch_create(lv_obj_t * parent, const char * title, lv_obj_flag_t flag, bool en)
+static lv_obj_t * switch_create(lv_obj_t * parent, const char * title, lv_obj_flag_t flag, bool en)
 {
-    lv_obj_t *cont = lv_obj_create(parent);
+    lv_obj_t * cont = lv_obj_create(parent);
     lv_obj_remove_style_all(cont);
     lv_obj_set_size(cont, lv_pct(100), LV_SIZE_CONTENT);
     lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
 
-    lv_obj_t *label = lv_label_create(cont);
+    lv_obj_t * label = lv_label_create(cont);
     lv_label_set_text(label, title);
     lv_obj_set_flex_grow(label, 1);
 
-    lv_obj_t *sw = lv_switch_create(cont);
+    lv_obj_t * sw = lv_switch_create(cont);
     lv_obj_add_event_cb(sw, generic_switch_event_cb, LV_EVENT_VALUE_CHANGED, (void *)((lv_uintptr_t) flag));
-    if (en)
-    {
+    if(en) {
         lv_obj_add_state(sw, LV_STATE_CHECKED);
         lv_obj_add_flag(list, flag);
     }
-    else
-    {
+    else {
         lv_obj_remove_state(sw, LV_STATE_CHECKED);
         lv_obj_remove_flag(list, flag);
     }
@@ -104,10 +102,10 @@ static lv_obj_t *switch_create(lv_obj_t * parent, const char * title, lv_obj_fla
 
 static void generic_switch_event_cb(lv_event_t * e)
 {
-    lv_obj_t *sw = lv_event_get_target(e);
+    lv_obj_t * sw = lv_event_get_target(e);
     lv_obj_flag_t flag = (lv_obj_flag_t)((lv_uintptr_t)lv_event_get_user_data(e));
 
-    if (lv_obj_has_state(sw, LV_STATE_CHECKED)) lv_obj_add_flag(list, flag);
+    if(lv_obj_has_state(sw, LV_STATE_CHECKED)) lv_obj_add_flag(list, flag);
     else lv_obj_remove_flag(list, flag);
 }
 
