@@ -63,6 +63,62 @@ void McpServer::AddCommonTools() {
         });
     }
     
+    // 屏幕控制工具
+    auto screen = iot::ThingManager::GetInstance().GetThing("Screen");
+    if (screen) {
+        // 设置表情
+        AddTool("self.screen.set_emoji",
+        "Set emoji on screen: neutral/happy/sad/angry/etc.",
+        PropertyList({
+            Property("emoji", kPropertyTypeString)
+        }),
+        [=](const PropertyList& properties) -> ReturnValue {
+            std::string emoji = properties["emoji"].value<std::string>();
+            auto json_str = R"({"method":"SetEmoji","parameters":{"emoji":")" + emoji + R"("}})";
+            auto command = cJSON_Parse(json_str.c_str());
+            if (command) {
+                screen->Invoke(command);
+                cJSON_Delete(command);
+            }
+            return true;
+        });
+
+        // 设置屏幕亮度
+        AddTool("self.screen.set_brightness",
+        "Set screen brightness 0-100.",
+        PropertyList({
+            Property("brightness", kPropertyTypeInteger, 0, 100)
+        }),
+        [=](const PropertyList& properties) -> ReturnValue {
+            int brightness = properties["brightness"].value<int>();
+            auto json_str = R"({"method":"SetBrightness","parameters":{"brightness":)" + std::to_string(brightness) + "}}";
+            auto command = cJSON_Parse(json_str.c_str());
+            if (command) {
+                screen->Invoke(command);
+                cJSON_Delete(command);
+            }
+            return true;
+        });
+    }
+
+    // LED灯控制工具 - 单一控制接口
+    auto led = iot::ThingManager::GetInstance().GetThing("Led");
+    if (led) {
+        AddTool("self.led.set",
+        "Control LED. color: red/green/blue to turn on single LED, red_off/green_off/blue_off to turn off single LED, all to turn on all, off to turn off all.",
+        PropertyList({Property("color", kPropertyTypeString)}),
+        [=](const PropertyList& properties) -> ReturnValue {
+            std::string color = properties["color"].value<std::string>();
+            char json_buf[64];
+            snprintf(json_buf, sizeof(json_buf), R"({"method":"SetLed","parameters":{"color":"%s"}})", color.c_str());
+            auto command = cJSON_Parse(json_buf);
+            if (command) {
+                led->Invoke(command);
+                cJSON_Delete(command);
+            }
+            return true;
+        });
+    }
 #endif 
     // Restore the original tools list to the end of the tools list
     tools_.insert(tools_.end(), original_tools.begin(), original_tools.end());

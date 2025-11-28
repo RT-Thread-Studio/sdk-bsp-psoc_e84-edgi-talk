@@ -14,6 +14,12 @@ void iot_initialize() {
     auto& manager = iot::ThingManager::GetInstance();
     rt_kprintf("Registering Speaker...\n");
     manager.AddThing(iot::CreateThing("Speaker"));
+    
+    rt_kprintf("Registering Screen...\n");
+    manager.AddThing(iot::CreateThing("Screen"));
+    
+    rt_kprintf("Registering Led...\n");
+    manager.AddThing(iot::CreateThing("Led"));
 
     McpServer::GetInstance().AddCommonTools();
 }

@@ -355,8 +355,17 @@ void send_iot_states(void)
         return;
     }
 
-    char msg[1024];
-    snprintf(msg, sizeof(msg),
+    // 动态分配缓冲区，因为状态可能很长
+    int state_len = strlen(state);
+    int msg_size = state_len + 256; // 额外空间用于session_id等
+    char *msg = (char *)rt_malloc(msg_size);
+    if (msg == NULL)
+    {
+        rt_kprintf("Failed to allocate memory for IoT states\n");
+        return;
+    }
+    
+    snprintf(msg, msg_size,
              "{\"session_id\":\"%s\",\"type\":\"iot\",\"update\":true,"
              "\"states\":%s}",
              g_xz_ws.session_id, state);
@@ -369,6 +378,7 @@ void send_iot_states(void)
     {
         //rt_kprintf("websocket is not connected\n");
     }
+    rt_free(msg);
 }
 
 void send_iot_descriptors(void)
@@ -380,8 +390,17 @@ void send_iot_descriptors(void)
         return;
     }
 
-    char msg[1024];
-    snprintf(msg, sizeof(msg),
+    // 动态分配缓冲区，因为描述符可能很长
+    int desc_len = strlen(desc);
+    int msg_size = desc_len + 256; // 额外空间用于session_id等
+    char *msg = (char *)rt_malloc(msg_size);
+    if (msg == NULL)
+    {
+        rt_kprintf("Failed to allocate memory for IoT descriptors\n");
+        return;
+    }
+    
+    snprintf(msg, msg_size,
              "{\"session_id\":\"%s\",\"type\":\"iot\",\"update\":true,"
              "\"descriptors\":%s}",
              g_xz_ws.session_id, desc);
@@ -394,6 +413,7 @@ void send_iot_descriptors(void)
     {
         //rt_kprintf("websocket is not connected\n");
     }
+    rt_free(msg);
 }
 
 /* Message Handling */
@@ -505,6 +525,18 @@ void Message_handle(const uint8_t *data, uint16_t len)
                 McpServer_ParseMessage(payload_str);
                 cJSON_free(payload_str);
             }
+        }
+    }
+    else if (strcmp(type, "error") == 0)
+    {
+        cJSON *message = cJSON_GetObjectItem(root, "message");
+        if (message && cJSON_IsString(message))
+        {
+            LOG_E("Server error: %s\n", message->valuestring);
+        }
+        else
+        {
+            LOG_E("Server returned error\n");
         }
     }
     else

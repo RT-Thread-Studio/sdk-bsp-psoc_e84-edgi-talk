@@ -177,6 +177,9 @@ extern "C" {
 #define CYBSP_SMARTIO_PWM_ENABLED 1U
 #define CYBSP_SMARTIO_PWM_HW TCPWM0
 #define CYBSP_SMARTIO_PWM_NUM 262UL
+#define tcpwm_0_group_1_cnt_9_ENABLED 1U
+#define tcpwm_0_group_1_cnt_9_HW TCPWM0
+#define tcpwm_0_group_1_cnt_9_NUM 265UL
 
 extern cy_stc_autanalog_cfg_t autonomous_analog_cfg;
 extern cy_stc_autanalog_stt_t autonomous_analog_stt[];
@@ -384,6 +387,17 @@ extern const mtb_hal_clock_t CYBSP_SMARTIO_PWM_hal_clock;
 
 #if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM)
 extern const mtb_hal_pwm_configurator_t CYBSP_SMARTIO_PWM_hal_config;
+#endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM) */
+
+extern const cy_stc_tcpwm_pwm_config_t tcpwm_0_group_1_cnt_9_config;
+
+#if defined (COMPONENT_MTB_HAL)
+extern const mtb_hal_peri_div_t tcpwm_0_group_1_cnt_9_clock_ref;
+extern const mtb_hal_clock_t tcpwm_0_group_1_cnt_9_hal_clock;
+#endif /* defined (COMPONENT_MTB_HAL) */
+
+#if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM)
+extern const mtb_hal_pwm_configurator_t tcpwm_0_group_1_cnt_9_hal_config;
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM) */
 
 void init_cycfg_peripherals(void);
