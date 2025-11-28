@@ -21,8 +21,22 @@
 static void _sdcard_mount(void)
 {
     rt_device_t device;
+    const char *sd_device_names[] = {"sd", "sd0"};
+    int i;
+    const char *device_name = RT_NULL;
 
-    device = rt_device_find("sd0");
+    /* Try to find SD card device */
+    for (i = 0; i < sizeof(sd_device_names) / sizeof(sd_device_names[0]); i++)
+    {
+        device = rt_device_find(sd_device_names[i]);
+        if (device != RT_NULL)
+        {
+            device_name = sd_device_names[i];
+            LOG_I("Found sd card device '%s'", device_name);
+            break;
+        }
+    }
+
     if (device == RT_NULL)
     {
         /* Clear previous CD status and wait for SD card initialization */
@@ -33,17 +47,28 @@ static void _sdcard_mount(void)
             LOG_W("Wait for SD card timeout!");
             return;
         }
-        device = rt_device_find("sd0");
+        
+        /* Try again to find SD card device */
+        for (i = 0; i < sizeof(sd_device_names) / sizeof(sd_device_names[0]); i++)
+        {
+            device = rt_device_find(sd_device_names[i]);
+            if (device != RT_NULL)
+            {
+                device_name = sd_device_names[i];
+                LOG_I("Found sd card device '%s'", device_name);
+                break;
+            }
+        }
     }
 
-    if (device == RT_NULL)
+    if (device == RT_NULL || device_name == RT_NULL)
     {
-        LOG_W("sd card device 'sd0' not found!");
+        LOG_W("sd card device not found!");
         return;
     }
 
     /* Try to mount */
-    if (dfs_mount("sd0", "/sdcard", "elm", 0, 0) == RT_EOK)
+    if (dfs_mount(device_name, "/sdcard", "elm", 0, 0) == RT_EOK)
     {
         LOG_I("sd card mount to '/sdcard' success!");
         return;
@@ -51,12 +76,12 @@ static void _sdcard_mount(void)
 
     /* Mount failed, try to format */
     LOG_W("sd card mount to '/sdcard' failed, try to mkfs...");
-    if (dfs_mkfs("elm", "sd0") == 0)
+    if (dfs_mkfs("elm", device_name) == 0)
     {
         LOG_I("sd card mkfs success!");
 
         /* Try to mount again after formatting */
-        if (dfs_mount("sd0", "/sdcard", "elm", 0, 0) == RT_EOK)
+        if (dfs_mount(device_name, "/sdcard", "elm", 0, 0) == RT_EOK)
         {
             LOG_I("sd card mount to '/sdcard' success!");
         }
