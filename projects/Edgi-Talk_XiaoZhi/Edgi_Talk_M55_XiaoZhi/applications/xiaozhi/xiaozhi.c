@@ -8,6 +8,7 @@
 #include <rtdevice.h>
 #include <rtthread.h>
 #include <webclient.h>
+#include <string.h>
 
 #define DBG_TAG "xz.ws"
 #define DBG_LVL DBG_LOG
@@ -118,7 +119,6 @@ void xz_button_thread_entry(void *param)
             {
                 xiaozhi_ui_chat_status("   Connecting");
                 reconnect_websocket();
-                WEBSOCKET_RECONNECT_FLAG = 1;
             }
         }
         else
@@ -249,21 +249,24 @@ err_t my_wsapp_fn(int code, char *buf, size_t len)
         LOG_I("websocket connected\n");
         if ((uint16_t)(uint32_t)buf == 101)
         {
-            rt_sem_release(g_xz_ws.sem);
             g_xz_ws.is_connected = 1;
+            LOG_I("g_xz_ws.is_connected = 1\n");
+            rt_sem_release(g_xz_ws.sem);
         }
         break;
     case WS_DISCONNECT:
-        if (WEBSOCKET_RECONNECT_FLAG == 1 ||
-                (!g_xz_ws.is_connected && WEBSOCKET_RECONNECT_FLAG == 0))
+        /* Ignore disconnect callback during reconnection to avoid state confusion */
+        if (WEBSOCKET_RECONNECT_FLAG == 1)
         {
-            WEBSOCKET_RECONNECT_FLAG = 0;
-            g_xz_ws.is_connected = 0;
-            g_state = kDeviceStateUnknown;
+            LOG_D("Ignore disconnect during reconnect\n");
             break;
         }
-        // extern void poweroff(void);
-        // poweroff();
+        /* Ignore disconnect callback if already disconnected */
+        if (!g_xz_ws.is_connected)
+        {
+            LOG_D("Ignore disconnect when not connected\n");
+            break;
+        }
         xiaozhi_ui_chat_status("   Sleeping");
         xiaozhi_ui_chat_output("Waiting for wake-up");
         xiaozhi_ui_update_emoji("sleepy");
@@ -288,13 +291,36 @@ void reconnect_websocket(void)
 {
     err_t result;
     uint32_t retry = 10;
+    
+    /* Set reconnect flag to ignore disconnect callbacks during reconnection */
+    WEBSOCKET_RECONNECT_FLAG = 1;
+    
     while (retry-- > 0)
     {
-        wsock_close(&g_xz_ws.clnt, WSOCK_RESULT_LOCAL_ABORT, ERR_OK);
+        /* Only close if previously initialized */
+        if (g_xz_ws.clnt.pcb != RT_NULL || g_xz_ws.is_connected)
+        {
+            wsock_close(&g_xz_ws.clnt, WSOCK_RESULT_LOCAL_ABORT, ERR_OK);
+            /* Give system time to clean up resources after close */
+            rt_thread_mdelay(100);
+        }
+
+        /* Reset connection state flag */
+        g_xz_ws.is_connected = 0;
+
+        /* Clear wsock_state_t struct to ensure wsock_init can initialize properly */
+        memset(&g_xz_ws.clnt, 0, sizeof(wsock_state_t));
+
         if (!g_xz_ws.sem)
         {
             g_xz_ws.sem = rt_sem_create("xz_ws", 0, RT_IPC_FLAG_FIFO);
         }
+        else
+        {
+            /* Reset semaphore to avoid stale signals */
+            while (rt_sem_trytake(g_xz_ws.sem) == RT_EOK);
+        }
+
         char *client_id = get_client_id();
         wsock_init(&g_xz_ws.clnt, 1, 1, my_wsapp_fn);
         result = wsock_connect(&g_xz_ws.clnt, MAX_WSOCK_HDR_LEN,
@@ -302,16 +328,19 @@ void reconnect_websocket(void)
                                LWIP_IANA_PORT_HTTPS, XIAOZHI_TOKEN, NULL,
                                "Protocol-Version: 1\r\nDevice-Id: %s\r\nClient-Id: %s\r\n",
                                get_mac_address(), client_id);
+        LOG_I("Web socket connection %d\n", result);
         if (result == 0)
         {
             if (rt_sem_take(g_xz_ws.sem, 10000) == RT_EOK)
             {
                 if (g_xz_ws.is_connected)
                 {
+                    /* Reconnection successful, clear reconnect flag */
+                    WEBSOCKET_RECONNECT_FLAG = 0;
                     result = wsock_write(&g_xz_ws.clnt, HELLO_MESSAGE,
                                          strlen(HELLO_MESSAGE), OPCODE_TEXT);
                     LOG_I("Web socket write %d\r\n", result);
-                    break;
+                    return;
                 }
                 else
                 {
@@ -325,9 +354,14 @@ void reconnect_websocket(void)
         }
         else
         {
+            LOG_E("Web socket connect failed: %d\n", result);
             rt_thread_mdelay(1000);
         }
     }
+    
+    /* Reconnection failed, clear reconnect flag */
+    WEBSOCKET_RECONNECT_FLAG = 0;
+    LOG_E("Web socket reconnect failed after all retries\n");
 }
 
 void xz_ws_audio_init(void)
@@ -355,9 +389,9 @@ void send_iot_states(void)
         return;
     }
 
-    // 动态分配缓冲区，因为状态可能很长
+    // Dynamically allocate buffer since state may be long
     int state_len = strlen(state);
-    int msg_size = state_len + 256; // 额外空间用于session_id等
+    int msg_size = state_len + 256; // Extra space for session_id etc.
     char *msg = (char *)rt_malloc(msg_size);
     if (msg == NULL)
     {
@@ -390,9 +424,9 @@ void send_iot_descriptors(void)
         return;
     }
 
-    // 动态分配缓冲区，因为描述符可能很长
+    // Dynamically allocate buffer since descriptor may be long
     int desc_len = strlen(desc);
-    int msg_size = desc_len + 256; // 额外空间用于session_id等
+    int msg_size = desc_len + 256; // Extra space for session_id etc.
     char *msg = (char *)rt_malloc(msg_size);
     if (msg == NULL)
     {
