@@ -53,6 +53,15 @@ static void ensure_state_consistency(void)
         xiaozhi_ui_chat_status("   休眠中");
         xiaozhi_ui_chat_output("等待唤醒");
     }
+
+    /* 优化：如果WebSocket已连接但状态是Unknown，设置为Idle */
+    if (g_state == kDeviceStateUnknown && g_xz_ws.is_connected && g_xz_ws.session_id[0] != '\0')
+    {
+        LOG_D("WebSocket connected with valid session, updating state to Idle\n");
+        g_state = kDeviceStateIdle;
+        xiaozhi_ui_chat_status("   就绪");
+        xiaozhi_ui_chat_output("就绪");
+    }
 }
 
 /* Utility Functions */
@@ -140,7 +149,8 @@ void xz_button_thread_entry(void *param)
         /* 优雅的按键处理：先检查连接状态，再处理具体事件 */
         if (evt & BUTTON_EVENT_PRESSED)
         {
-            if (g_state == kDeviceStateUnknown || !g_xz_ws.is_connected)
+            /* 优化状态检查逻辑：WebSocket已连接但状态未知时，认为是可用状态 */
+            if (!g_xz_ws.is_connected)
             {
                 /* 检查是否正在重连中 */
                 if (WEBSOCKET_RECONNECT_FLAG == 1)
@@ -158,7 +168,8 @@ void xz_button_thread_entry(void *param)
             }
             else
             {
-                /* 设备已连接，处理具体功能 */
+                /* WebSocket已连接，可以处理功能请求 */
+                /* 如果状态是Unknown但WebSocket已连接，视为Idle状态处理 */
                 if (g_state == kDeviceStateSpeaking)
                 {
                     LOG_I("Speaking aborted by user\n");
