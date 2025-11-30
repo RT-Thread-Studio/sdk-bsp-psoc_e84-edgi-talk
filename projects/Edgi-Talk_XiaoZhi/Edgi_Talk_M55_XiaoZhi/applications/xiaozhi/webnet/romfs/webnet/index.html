@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>WiFi Setup</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px auto;
+            max-width: 720px;
+            text-align: center;
+            background: #f7f9fc;
+        }
+
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+        }
+
+        select,
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #btn_group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #btn_group button,
+        #btn_group input[type=submit] {
+            flex: 1;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #scan_btn {
+            background-color: #1976d2;
+        }
+
+        #connect_btn {
+            background-color: #4caf50;
+        }
+
+        #scan_status {
+            margin-top: 10px;
+            color: #1976d2;
+            font-weight: bold;
+        }
+
+        /* README 卡片样式 */
+        .readme-card {
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .readme-card h3 {
+            margin-top: 10px;
+        }
+
+        .readme-card code {
+            background: #eee;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .readme-card pre {
+            background: #eee;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .readme-toggle {
+            cursor: pointer;
+            color: #1976d2;
+            text-decoration: underline;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>WiFi Setup</h2>
+
+        <!-- SSID 下拉 + 手动输入 -->
+        <select id="ssid_select">
+            <option value="">-- Select WiFi --</option>
+        </select>
+        <input type="text" id="ssid_input" name="ssid" placeholder="Or type SSID manually">
+
+        <!-- 密码输入 -->
+        <input type="password" id="password_input" name="password" placeholder="Password">
+
+        <!-- 按钮水平排列 -->
+        <div id="btn_group">
+            <button type="button" id="scan_btn" onclick="scanWifi()">🔍 Scan</button>
+
+            <form id="connect_form" action="/cgi-bin/wifi_connect" method="post" style="flex:1;margin:0;">
+                <input type="hidden" name="ssid" id="connect_ssid">
+                <input type="hidden" name="password" id="connect_password">
+                <input type="submit" id="connect_btn" value="✅ Connect">
+            </form>
+        </div>
+
+        <div id="scan_status"></div>
+    </div>
+
+    <div class="card readme-card">
+        <span class="readme-toggle" onclick="toggleReadme()">📖 XiaoZhi Example Project (Click to toggle)</span>
+        <div id="readme_content" style="display:none;">
+            <h3>Introduction</h3>
+            <p>
+                This example demonstrates the <b>basic functionality of XiaoZhi voice interaction device</b>
+                on the <b>Edgi-Talk platform</b>, running <b>RT-Thread RTOS</b>.
+                It allows users to quickly test Wi-Fi connection, key wake-up, and voice interaction,
+                serving as a foundation for further application development.
+            </p>
+
+            <h3>Software Description</h3>
+            <ul>
+                <li>Developed on <b>Edgi-Talk</b> platform.</li>
+                <li>Example features:
+                    <ul>
+                        <li>Wi-Fi connection and status display</li>
+                        <li>Key wake-up and voice interaction</li>
+                        <li>Device state management (standby, listening, sleep)</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Running Result</h3>
+            <ul>
+                <li>After power-on, the device runs the example automatically.</li>
+                <li>The screen displays the current status:
+                    <ul>
+                        <li><b>Connecting</b> – connecting to Wi-Fi</li>
+                        <li><b>On standby</b> – idle mode</li>
+                        <li><b>Listening</b> – ready for voice interaction</li>
+                        <li><b>Sleeping</b> – low-power sleep mode</li>
+                    </ul>
+                </li>
+                <li>Hold down the top button to speak and enter the Listening state for voice interaction.</li>
+            </ul>
+            <div style="text-align:center;">
+                <img src="1.png" alt="Setup Image 2" style="max-width:100%; margin:10px 0;">
+            </div>
+
+
+            <h3>Notes</h3>
+            <ul>
+                <li>First-time setup requires backend binding via
+                    <a href="https://xiaozhi.me/" target="_blank">XiaoZhi Official Website</a>.
+                </li>
+                <li>Ensure Wi-Fi SSID and password are correct and use <b>2.4 GHz</b> frequency.</li>
+            </ul>
+            <div style="text-align:center;">
+                <img src="2.png" alt="Setup Image 2" style="max-width:100%; margin:10px 0;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // README 折叠功能
+        function toggleReadme() {
+            const content = document.getElementById("readme_content");
+            content.style.display = (content.style.display === "none") ? "block" : "none";
+        }
+    </script>
+
+
+    <script>
+        let isScanning = false;  // 扫描状态标志
+
+        function scanWifi() {
+            // 如果正在扫描，直接返回
+            if (isScanning) {
+                return;
+            }
+
+            const status = document.getElementById("scan_status");
+            const scanBtn = document.getElementById("scan_btn");
+
+            // 设置扫描状态
+            isScanning = true;
+            scanBtn.disabled = true;
+            scanBtn.style.backgroundColor = "#9e9e9e";
+            scanBtn.style.cursor = "not-allowed";
+            status.innerText = "Scanning WiFi...";
+
+            fetch("/cgi-bin/wifi_scan")
+                .then(res => res.json())
+                .then(list => {
+                    // 去重 SSID
+                    const uniqueList = [];
+                    const ssidSet = new Set();
+                    list.forEach(ap => {
+                        if (!ssidSet.has(ap.ssid)) {
+                            ssidSet.add(ap.ssid);
+                            uniqueList.push(ap);
+                        }
+                    });
+
+                    // 按 RSSI 降序
+                    uniqueList.sort((a, b) => b.rssi - a.rssi);
+
+                    let sel = document.getElementById("ssid_select");
+                    sel.innerHTML = "<option value=''>-- Select WiFi --</option>";
+
+                    uniqueList.forEach(ap => {
+                        let opt = document.createElement("option");
+                        opt.value = ap.ssid;
+                        opt.innerText = ap.ssid + " (" + ap.rssi + "dBm)";
+                        sel.appendChild(opt);
+                    });
+
+                    status.innerText = "Scan completed!";
+                    setTimeout(() => { status.innerText = ""; }, 2000);
+                })
+                .catch(err => {
+                    status.innerText = "Scan failed!";
+                    console.error(err);
+                    setTimeout(() => { status.innerText = ""; }, 2000);
+                })
+                .finally(() => {
+                    // 恢复按钮状态
+                    isScanning = false;
+                    scanBtn.disabled = false;
+                    scanBtn.style.backgroundColor = "#1976d2";
+                    scanBtn.style.cursor = "pointer";
+                });
+        }
+
+        // 下拉选择填入 SSID 输入框
+        document.getElementById("ssid_select").addEventListener("change", function () {
+            document.getElementById("ssid_input").value = this.value;
+        });
+
+        // 提交表单前，把输入的 SSID 和密码赋值到隐藏 input
+        document.getElementById("connect_form").addEventListener("submit", function (e) {
+            document.getElementById("connect_ssid").value = document.getElementById("ssid_input").value;
+            document.getElementById("connect_password").value = document.getElementById("password_input").value;
+        });
+
+        // README 折叠功能
+        function toggleReadme() {
+            const content = document.getElementById("readme_content");
+            content.style.display = (content.style.display === "none") ? "block" : "none";
+        }
+    </script>
+
+    <footer style="margin-top:30px;color:#888;font-size:14px">Powered by RT-Thread</footer>
+
+</body>
+
+</html>

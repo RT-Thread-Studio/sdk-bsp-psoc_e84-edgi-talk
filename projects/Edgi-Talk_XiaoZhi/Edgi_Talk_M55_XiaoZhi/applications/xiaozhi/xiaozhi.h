@@ -7,6 +7,7 @@
 #include "lwip/apps/mqtt_priv.h"
 #include "lwip/apps/mqtt.h"
 #include "lwip/udp.h"
+#include "lwip/tcp.h"
 #include "lwip/tcpip.h"
 #include "lwip/apps/websocket_client.h"
 #include "opus_multistream.h"
@@ -98,6 +99,7 @@ typedef struct
     wsock_state_t clnt;
     rt_sem_t sem;
     uint8_t is_connected;
+    rt_mutex_t ws_write_mutex;  // WebSocket写入互斥锁
 } xiaozhi_ws_t;
 
 extern xiaozhi_ws_t g_xz_ws;

@@ -3,6 +3,6 @@ from building import *
 
 # Add source code
 src = Glob('*.c')
-group = DefineGroup('Applications', src, depend = [''])
+group = DefineGroup('xiaozhi_ui', src, depend = [''])
 
 Return('group')

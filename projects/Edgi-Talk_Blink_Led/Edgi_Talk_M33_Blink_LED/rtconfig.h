@@ -53,7 +53,7 @@
 #define RT_USING_DEVICE
 #define RT_USING_CONSOLE
 #define RT_CONSOLEBUF_SIZE 1024
-#define RT_CONSOLE_DEVICE_NAME "uart5"
+#define RT_CONSOLE_DEVICE_NAME "uart2"
 /* end of Kernel Device Object */
 #define RT_VER_NUM 0x50002
 /* end of RT-Thread Kernel */
@@ -225,37 +225,9 @@
 
 /* end of STM32 HAL & SDK Drivers */
 
-/* Infineon HAL Packages */
-
-/* end of Infineon HAL Packages */
-
 /* Kendryte SDK */
 
 /* end of Kendryte SDK */
-
-/* WCH HAL & SDK Drivers */
-
-/* end of WCH HAL & SDK Drivers */
-
-/* AT32 HAL & SDK Drivers */
-
-/* end of AT32 HAL & SDK Drivers */
-
-/* HC32 DDL Drivers */
-
-/* end of HC32 DDL Drivers */
-
-/* NXP HAL & SDK Drivers */
-
-/* end of NXP HAL & SDK Drivers */
-
-/* NUVOTON Drivers */
-
-/* end of NUVOTON Drivers */
-
-/* GD32 Drivers */
-
-/* end of GD32 Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -340,7 +312,6 @@
 
 /* Select SOC Multi Core Mode */
 
-#define SOC_Enable_CM55
 /* end of Select SOC Multi Core Mode */
 #define SOC_SERIES_IFX_PSOCE84
 #define KIT_PROCE84_EVK_M33
@@ -357,10 +328,6 @@
 #define BSP_USING_UART2
 #define BSP_USING_UART5
 /* end of On-chip Peripheral Drivers */
-
-/* Board extended module Drivers */
-
-/* end of Board extended module Drivers */
 /* end of Hardware Drivers Config */
 
 #endif

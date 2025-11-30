@@ -11,6 +11,6 @@ path =  [cwd]
 
 src += Glob('mnt.c')
 
-group = DefineGroup('filesystem', src, depend = ['BSP_USING_SDMMC'], CPPPATH = path)
+group = DefineGroup('filesystem', src, depend = ['BSP_USING_FS'], CPPPATH = path)
 
 Return('group')

@@ -136,6 +136,8 @@ static rt_err_t ifx_hw_pwm_init(struct ifx_pwm *device)
         LOG_E("Initialize the TCPWM block failed");
     }
     rslt = mtb_hal_pwm_setup(device->pwm_obj, device->hal_pwm_configurator, NULL);
+    if (rslt != RT_EOK)
+        return -RT_ERROR;
 
     return RT_EOK;
 }

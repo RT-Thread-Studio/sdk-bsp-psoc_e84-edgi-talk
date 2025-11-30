@@ -4,6 +4,9 @@
 
 import os
 import sys
+import platform
+import subprocess
+import uuid
 
 # Project paths
 PROJECT_ROOT = Dir('.').abspath
@@ -61,6 +64,41 @@ LDFLAGS += ' --specs=nosys.specs'  # Use nosys specs for bare-metal
 
 # Libraries (nosys is handled by linker script GROUP directive)
 LIBS = ['c', 'm', 'nosys']
+
+# =============================================================================
+# Long command line support for Windows (spawn function)
+# =============================================================================
+# Windows has a command line length limit (~32KB). When building large projects,
+# the compiler command line (with many include paths and source files) can exceed
+# this limit. This spawn function handles this by writing arguments to a temporary
+# response file when the command line is too long.
+def ourspawn(sh, escape, cmd, args, e):
+    filename = str(uuid.uuid4())
+    newargs = ' '.join(args[1:])
+    cmdline = cmd + " " + newargs
+    if (len(cmdline) > 16 * 1024):
+        f = open(filename, 'w')
+        f.write(' '.join(args[1:]).replace('\\', '/'))
+        f.close()
+        # exec
+        cmdline = cmd + " @" + filename
+    proc = subprocess.Popen(cmdline, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, shell = False, env = e)
+    data, err = proc.communicate()
+    rv = proc.wait()
+    def res_output(_output, _s):
+        if len(_s):
+            if isinstance(_s, str):
+                _output(_s)
+            elif isinstance(_s, bytes):
+                _output(str(_s, 'UTF-8'))
+            else:
+                _output(str(_s))
+    res_output(sys.stderr.write, err)
+    res_output(sys.stdout.write, data)
+    if os.path.isfile(filename):
+        os.remove(filename)
+    return rv
 
 # =============================================================================
 # Preprocessor definitions
@@ -268,6 +306,7 @@ SRC += Glob(LIBRARIES_PREFIX + 'components/mtb-device-support-pse8xxgp/support/s
 # =============================================================================
 env = Environment(
     tools=['gcc', 'g++', 'gnulink', 'ar', 'as'],
+    ENV=os.environ,  # Pass system environment variables (needed for edgeprotecttools)
     CC=CC,
     CXX=CXX,
     AS=AS,
@@ -283,6 +322,10 @@ env = Environment(
 
 # Set the program suffix
 env['PROGSUFFIX'] = '.elf'
+
+# Enable long command line support on Windows
+if platform.system() == 'Windows':
+    env['SPAWN'] = ourspawn
 
 # Configure .S file (assembly with C preprocessor) compilation
 # Use gcc instead of as to handle preprocessor directives
@@ -325,19 +368,26 @@ for s in SRC:
 # Combine: local sources (with build dir prefix) + external sources (as-is)
 build_src = local_src + external_src
 
-# Build the ELF
-elf = env.Program(TARGET, build_src)
+# Build the ELF - output to parent Debug directory (to match boot_with_extended_boot.json path)
+# The JSON config uses "../Debug/rtthread.hex" relative to config folder
+DEBUG_DIR = '../Debug'
+
+# Create Debug directory if not exists
+if not os.path.exists(DEBUG_DIR):
+    os.makedirs(DEBUG_DIR)
+
+elf = env.Program(DEBUG_DIR + '/' + TARGET, build_src)
 
 # Generate HEX file
 hex_file = env.Command(
-    TARGET + '.hex',
+    DEBUG_DIR + '/' + TARGET + '.hex',
     elf,
     OBJCOPY + ' -O ihex $SOURCE $TARGET'
 )
 
 # Generate BIN file
 bin_file = env.Command(
-    TARGET + '.bin',
+    DEBUG_DIR + '/' + TARGET + '.bin',
     elf,
     OBJCOPY + ' -O binary $SOURCE $TARGET'
 )
@@ -349,8 +399,26 @@ size_cmd = env.Command(
     SIZE + ' $SOURCE'
 )
 
-# Default target
-Default(elf, hex_file, bin_file, size_cmd)
+# =============================================================================
+# Secure image packaging using edgeprotecttools (Windows only)
+# =============================================================================
+if platform.system() == 'Windows':
+    # Path to edgeprotecttools (relative to SDK root)
+    EDGEPROTECTTOOLS = os.path.join(SDK_ROOT, 'tools', 'edgeprotecttools', 'bin', 'edgeprotecttools.exe')
+    BOOT_CONFIG = os.path.join(PROJECT_ROOT, 'config', 'boot_with_extended_boot_scons.json')
+
+    # Package secure image after HEX generation
+    secure_image = env.Command(
+        'secure_image',  # Pseudo target
+        hex_file,
+        '"' + EDGEPROTECTTOOLS + '" run-config -i "' + BOOT_CONFIG + '"'
+    )
+
+    # Default target (with secure image packaging)
+    Default(elf, hex_file, bin_file, size_cmd, secure_image)
+else:
+    # Default target (without secure image packaging)
+    Default(elf, hex_file, bin_file, size_cmd)
 
 # Clean target
-Clean(elf, [TARGET + '.map', BUILD_DIR])
+Clean(elf, [DEBUG_DIR + '/' + TARGET + '.map', BUILD_DIR, DEBUG_DIR])

@@ -43,7 +43,7 @@ docs:
 features:
 - Arm® Cortex® M55 And Arm® Cortex® M33 256KB ITCM 256KB DTCM 512KB RRAM 1MB SRAM 5MB SocMEM 
 - On-board KitProg3(CY8C5868LTI)
-- "USB OTG with Type-C connector"
+- USB OTG with Type-C connector
 - SDIO TF Card slot
 - SDIO WIFI6:CYW55512
 - HDC UART BuleTooth:CYW55512
@@ -108,7 +108,7 @@ template_projects:
 example_projects:
 - project_name: Edgi_Talk_M33_S_Template
   project_description: M33 安全模式模板工程
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template
     target_path_offset: ''
@@ -133,7 +133,6 @@ example_projects:
     - gpio_pse84_bga_220.h
     - mtb_ipc_config.h
     - mtb_srf_config.h
-    - partition_edge.h
     - COMPONENT_CM33/COMPONENT_SECURE_DEVICE
     - config
   - source_path_offset: 'libraries/components'
@@ -176,7 +175,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_Blink_LED
   project_description: M33 LED闪烁示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED
     target_path_offset: ''
@@ -213,7 +212,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M55_Blink_LED
   project_description: M55 LED闪烁示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED
     target_path_offset: ''
@@ -250,7 +249,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_SDCARD
   project_description: SD卡示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD
     target_path_offset: ''
@@ -287,7 +286,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_RTC
   project_description: RTC 实时时钟示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_RTC/Edgi_Talk_M33_RTC
     target_path_offset: ''
@@ -324,7 +323,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_Key_Irq
   project_description: 按键中断控制LED示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq
     target_path_offset: ''
@@ -361,7 +360,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_ADC
   project_description: ADC 采样示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_ADC/Edgi_Talk_M33_ADC
     target_path_offset: ''
@@ -398,7 +397,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_S_HyperRam
   project_description: M33 安全模式 HyperRAM 示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam
     target_path_offset: ''
@@ -423,10 +422,8 @@ example_projects:
     - gpio_pse84_bga_220.h
     - mtb_ipc_config.h
     - mtb_srf_config.h
-    - partition_edge.h
     - COMPONENT_CM33/COMPONENT_SECURE_DEVICE
     - config
-
   - source_path_offset: 'libraries/components'
     target_path_offset: 'libraries/components'
     files_and_folders:
@@ -467,7 +464,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_HyperRam
   project_description: HyperRAM 示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam
     target_path_offset: ''
@@ -504,7 +501,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_AHT20
   project_description: AHT20 温湿度传感器示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20
     target_path_offset: ''
@@ -541,7 +538,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_Audio
   project_description: ES8388 音频示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_Audio/Edgi_Talk_M33_Audio
     target_path_offset: ''
@@ -578,7 +575,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_WavPlayer
   project_description: WAV 音频播放器示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer
     target_path_offset: ''
@@ -615,7 +612,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M55_MIPI_LCD
   project_description: MIPI LCD 屏幕示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD
     target_path_offset: ''
@@ -652,7 +649,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M55_CoreMark
   project_description: CoreMark 性能测试示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark
     target_path_offset: ''
@@ -689,7 +686,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M55_WIFI
   project_description: WiFi6 (CYW55512) 示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI
     target_path_offset: ''
@@ -726,7 +723,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M55_XiaoZhi
   project_description: 小智 AI 语音助手示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi
     target_path_offset: ''
@@ -763,7 +760,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_LSM6DS3
   project_description: LSM6DS3 六轴传感器示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3
     target_path_offset: ''
@@ -800,7 +797,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M33_CDC_Echo
   project_description: USB CDC 回环测试示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_CDC_Echo/Edgi_Talk_M33_CDC_Echo
     target_path_offset: ''
@@ -837,7 +834,7 @@ example_projects:
     
 - project_name: Edgi_Talk_M55_LVGL
   project_description: LVGL 图形界面示例
-  project_type: rt-thread|@full|@5.1.0
+  project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: projects/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL
     target_path_offset: ''

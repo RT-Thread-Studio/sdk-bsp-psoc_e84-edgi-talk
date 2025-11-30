@@ -1,47 +1,47 @@
 [
  {
-  "path": "/packages/iot/webclient", 
-  "ver": "v2.2.0", 
-  "name": "WEBCLIENT"
- }, 
+  "name": "WEBCLIENT",
+  "path": "/packages/iot/webclient",
+  "ver": "v2.2.0"
+ },
  {
-  "path": "/packages/iot/webnet", 
-  "ver": "v2.0.3", 
-  "name": "WEBNET"
- }, 
+  "name": "WEBNET",
+  "path": "/packages/iot/webnet",
+  "ver": "v2.0.3"
+ },
  {
-  "path": "/packages/iot/netutils", 
-  "ver": "latest", 
-  "name": "NETUTILS"
- }, 
+  "name": "NETUTILS",
+  "path": "/packages/iot/netutils",
+  "ver": "latest"
+ },
  {
-  "path": "/packages/security/mbedtls", 
-  "ver": "v2.28.1", 
-  "name": "MBEDTLS"
- }, 
+  "name": "MBEDTLS",
+  "path": "/packages/security/mbedtls",
+  "ver": "v2.28.1"
+ },
  {
-  "path": "/packages/language/JSON/cJSON", 
-  "ver": "v1.7.17", 
-  "name": "CJSON"
- }, 
+  "name": "CJSON",
+  "path": "/packages/language/JSON/cJSON",
+  "ver": "v1.7.17"
+ },
  {
-  "path": "/packages/multimedia/wavplayer", 
-  "ver": "latest", 
-  "name": "WAVPLAYER"
- }, 
+  "name": "WAVPLAYER",
+  "path": "/packages/multimedia/wavplayer",
+  "ver": "latest"
+ },
  {
-  "path": "/packages/tools/cpu_usage", 
-  "ver": "latest", 
-  "name": "CPU_USAGE"
- }, 
+  "name": "CPU_USAGE",
+  "path": "/packages/tools/cpu_usage",
+  "ver": "latest"
+ },
  {
-  "path": "/packages/system/FreeRTOS_Wrapper", 
-  "ver": "latest", 
-  "name": "FREERTOS_WRAPPER"
- }, 
+  "name": "FREERTOS_WRAPPER",
+  "path": "/packages/system/FreeRTOS_Wrapper",
+  "ver": "latest"
+ },
  {
-  "path": "/packages/misc/optparse", 
-  "ver": "latest", 
-  "name": "OPTPARSE"
+  "name": "OPTPARSE",
+  "path": "/packages/misc/optparse",
+  "ver": "latest"
  }
 ]

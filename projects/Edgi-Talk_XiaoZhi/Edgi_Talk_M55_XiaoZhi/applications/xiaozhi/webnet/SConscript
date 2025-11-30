@@ -3,6 +3,6 @@ from building import *
 
 # Add source code
 src = Glob('*.c')
-group = DefineGroup('Applications', src, depend = [''])
+group = DefineGroup('xiaozhi_webnet', src, depend = [''])
 
 Return('group')

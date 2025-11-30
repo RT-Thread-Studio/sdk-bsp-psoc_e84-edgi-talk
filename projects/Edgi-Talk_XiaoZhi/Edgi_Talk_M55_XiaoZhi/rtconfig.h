@@ -89,6 +89,22 @@
 #define RT_USING_DFS_V1
 #define DFS_FILESYSTEMS_MAX 4
 #define DFS_FILESYSTEM_TYPES_MAX 4
+#define RT_USING_DFS_ELMFAT
+
+/* elm-chan's FatFs, Generic FAT Filesystem Module */
+
+#define RT_DFS_ELM_CODE_PAGE 437
+#define RT_DFS_ELM_WORD_ACCESS
+#define RT_DFS_ELM_USE_LFN_3
+#define RT_DFS_ELM_USE_LFN 3
+#define RT_DFS_ELM_LFN_UNICODE_0
+#define RT_DFS_ELM_LFN_UNICODE 0
+#define RT_DFS_ELM_MAX_LFN 255
+#define RT_DFS_ELM_DRIVES 2
+#define RT_DFS_ELM_MAX_SECTOR_SIZE 512
+#define RT_DFS_ELM_REENTRANT
+#define RT_DFS_ELM_MUTEX_TIMEOUT 3000
+/* end of elm-chan's FatFs, Generic FAT Filesystem Module */
 #define RT_USING_DFS_DEVFS
 #define RT_USING_DFS_ROMFS
 /* end of DFS: device virtual file system */
@@ -107,7 +123,14 @@
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
 #define RT_USING_ADC
+#define RT_USING_PWM
 #define RT_USING_RTC
+#define RT_USING_SDIO
+#define RT_SDIO_STACK_SIZE 512
+#define RT_SDIO_THREAD_PRIORITY 15
+#define RT_MMCSD_STACK_SIZE 2048
+#define RT_MMCSD_THREAD_PREORITY 22
+#define RT_MMCSD_MAX_PARTITION 16
 #define RT_USING_AUDIO
 #define RT_AUDIO_REPLAY_MP_BLOCK_SIZE 4096
 #define RT_AUDIO_REPLAY_MP_BLOCK_COUNT 2
@@ -273,13 +296,6 @@
 /* end of Select supported modules */
 #define PKG_USING_WEBNET_V203
 #define PKG_WEBNET_VER_NUM 0x20003
-#define CY_WIFI_WHD_THREAD_PRIORITY 6
-#define CY_WIFI_WHD_THREAD_STACK_SIZE 5120
-#define CYBSP_REG_ON_PIN 94
-#define CYBSP_HOST_WAKE_IRQ_PIN 92
-#define CYBSP_OOB_INTR_PRIORITY 2
-#define CY_WIFI_USING_THREAD_INIT
-#define CY_WIFI_INIT_THREAD_STACK_SIZE 2048
 
 /* Wi-Fi */
 
@@ -391,41 +407,9 @@
 
 /* end of STM32 HAL & SDK Drivers */
 
-/* Infineon HAL Packages */
-
-/* end of Infineon HAL Packages */
-
 /* Kendryte SDK */
 
 /* end of Kendryte SDK */
-
-/* WCH HAL & SDK Drivers */
-
-/* end of WCH HAL & SDK Drivers */
-
-/* AT32 HAL & SDK Drivers */
-
-/* end of AT32 HAL & SDK Drivers */
-
-/* HC32 DDL Drivers */
-
-/* end of HC32 DDL Drivers */
-
-/* NXP HAL & SDK Drivers */
-
-/* end of NXP HAL & SDK Drivers */
-
-/* NUVOTON Drivers */
-
-/* end of NUVOTON Drivers */
-
-/* GD32 Drivers */
-
-/* end of GD32 Drivers */
-
-/* HPMicro SDK */
-
-/* end of HPMicro SDK */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -510,6 +494,11 @@
 
 /* Hardware Drivers Config */
 
+/* Select SOC Multi Core Mode */
+
+#define SOC_Enable_CM55
+#define SOC_Enable_CM33_DeepSleep
+/* end of Select SOC Multi Core Mode */
 #define SOC_SERIES_IFX_PSOCE84
 #define KIT_PROCE84_EVK_M55
 
@@ -520,6 +509,7 @@
 #define BSP_USING_AUDIO_PLAY
 #define BSP_USING_AUDIO_RECORD
 #define ENABLE_STEREO_INPUT_FEED
+#define BSP_USING_FREERTOS
 /* end of Onboard Peripheral Drivers */
 
 /* On-chip Peripheral Drivers */
@@ -537,6 +527,10 @@
 #define BSP_USING_RTC
 #define BSP_USING_HYPERAM
 #define BSP_USING_HYPERAM_SIZE 0x800000
+#define BSP_USING_SDCARD
+#define BSP_USING_FS
+#define BSP_USING_PWM
+#define BSP_USING_PWM0
 #define BSP_USING_LCD
 #define COMPONENT_MTB_DISPLAY_tl043wvv02
 #define USING_LVGL
@@ -551,11 +545,17 @@
 #define LWIP_ALTCP 1
 #define LWIP_ALTCP_TLS 1
 #define LWIP_ALTCP_TLS_MBEDTLS 1
-#define BSP_USING_FREERTOS
 #define BSP_USING_WIFI_HOST_DRIVER
 #define BSP_USING_NETUTILS
+#define CYBSP_REG_ON_PIN 94
+#define CYBSP_HOST_WAKE_IRQ_PIN 92
+#define CYBSP_OOB_INTR_PRIORITY 2
+#define CY_WIFI_USING_THREAD_INIT
+#define CY_WIFI_INIT_THREAD_STACK_SIZE 2048
 #define NVRAM_IMAGE_SIZE 6741
 #define CLM_IMAGE_SIZE 1519
+#define CY_WIFI_WHD_THREAD_PRIORITY 10
+#define CY_WIFI_WHD_THREAD_STACK_SIZE 5120
 /* end of Board extended module Drivers */
 
 /* Board extended module Drivers */

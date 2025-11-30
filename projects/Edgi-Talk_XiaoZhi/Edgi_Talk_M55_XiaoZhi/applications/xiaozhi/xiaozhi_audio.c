@@ -29,7 +29,6 @@ void xz_sound_init(void)
     sound_dev_arg.udata.config = audio_configure;
     rt_device_control(thiz->rt_audio_dev, AUDIO_CTL_CONFIGURE, &sound_dev_arg);
 
-
     rt_device_open(thiz->rt_audio_dev, RT_DEVICE_OFLAG_WRONLY);
 }
 
@@ -121,6 +120,7 @@ void xz_speaker(int on)
         xz_speaker_close(thiz);
     }
 }
+
 #define CHANGED         0
 #define ACTIVITY        1
 #define ENDPOINT        2
@@ -269,9 +269,13 @@ void xz_audio_decoder_encoder_open(uint8_t is_websocket)
         for (int i = 0; i < XZ_DOWNLINK_QUEUE_NUM; i++)
         {
             thiz->downlink_queue[i].size = 256;
-            thiz->downlink_queue[i].data = rt_malloc(thiz->downlink_queue[i].size);
+            thiz->downlink_queue[i].data =
+                opus_heap_malloc(thiz->downlink_queue[i].size);
             RT_ASSERT(thiz->downlink_queue[i].data);
-            rt_slist_append(&thiz->downlink_decode_idle, &thiz->downlink_queue[i].node);
+
+            // 将新分配的队列节点添加到空闲队列中
+            rt_slist_append(&thiz->downlink_decode_idle,
+                            &thiz->downlink_queue[i].node);
         }
 
         thiz->rb_opus_encode_input = rt_ringbuffer_create(XZ_MIC_FRAME_LEN * 2);
@@ -303,7 +307,7 @@ void xz_audio_decoder_encoder_close(void)
     {
         if (thiz->downlink_queue[i].data)
         {
-            rt_free(thiz->downlink_queue[i].data);
+            opus_heap_free(thiz->downlink_queue[i].data);
             thiz->downlink_queue[i].data = NULL;
         }
     }
@@ -314,27 +318,47 @@ void xz_audio_downlink(uint8_t *data, uint32_t size, uint32_t *aes_value, uint8_
 {
     xz_audio_t *thiz = &xz_audio;
     rt_slist_t *idle;
+    int try_times = 0;
 
+    if (!thiz->inited) return;
+
+wait_speaker:
     rt_enter_critical();
     idle = rt_slist_first(&thiz->downlink_decode_idle);
     if (!idle)
     {
         rt_exit_critical();
-        LOG_E("speaker busy\r\n");
+        LOG_I("speaker busy");
+        try_times++;
+        if (try_times < 20)
+        {
+            rt_thread_mdelay(5);
+            goto wait_speaker;
+        }
         return;
     }
+    rt_slist_remove(&thiz->downlink_decode_idle, idle);
+    rt_exit_critical();
 
     xz_decode_queue_t *queue = rt_container_of(idle, xz_decode_queue_t, node);
     if (queue->size < size + 16)
     {
-        rt_exit_critical();
-        rt_free(queue->data);
+        if (queue->data) opus_heap_free(queue->data);
         queue->size = size + 16;
-        queue->data = rt_malloc(queue->size);
+        queue->data = opus_heap_malloc(queue->size);
+        if (queue->data == RT_NULL)
+        {
+            LOG_E("malloc failed");
+            rt_enter_critical();
+            rt_slist_append(&thiz->downlink_decode_idle, idle);
+            rt_exit_critical();
+            return;
+        }
     }
     queue->data_len = size;
     rt_memcpy(queue->data, data, size);
-    rt_slist_remove(&thiz->downlink_decode_idle, idle);
+    
+    rt_enter_critical();
     rt_slist_append(&thiz->downlink_decode_busy, idle);
     rt_exit_critical();
     rt_event_send(thiz->event, XZ_EVENT_DOWNLINK);

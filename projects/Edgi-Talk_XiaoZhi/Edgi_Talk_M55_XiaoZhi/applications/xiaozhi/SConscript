@@ -2,10 +2,15 @@ from building import *
 import os
 
 cwd     = GetCurrentDir()
-CPPPATH = [cwd]
+
+# Add all subdirectories to include path
+path = []
+path += [cwd]
+path += [cwd + '/ui', cwd + '/webnet', cwd + '/iot']
+
 src = Glob('*.c')
 
-group = DefineGroup('xiaozhi', src, depend = [''], CPPPATH = CPPPATH)
+group = DefineGroup('xiaozhi', src, depend = [''], CPPPATH = path)
 
 list = os.listdir(cwd)
 for item in list:
