@@ -7,6 +7,7 @@
 #include "lwip/apps/mqtt_priv.h"
 #include "lwip/apps/mqtt.h"
 #include "lwip/udp.h"
+#include "lwip/tcp.h"
 #include "lwip/tcpip.h"
 #include "lwip/apps/websocket_client.h"
 #include "opus_multistream.h"

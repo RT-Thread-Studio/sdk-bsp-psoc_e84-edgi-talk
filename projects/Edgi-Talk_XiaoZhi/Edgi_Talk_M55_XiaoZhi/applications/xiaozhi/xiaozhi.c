@@ -1,12 +1,7 @@
 #include "xiaozhi.h"
 #include <cJSON.h>
-#include <lwip/api.h>
 #include <lwip/apps/websocket_client.h>
-#include <lwip/dns.h>
-#include <lwip/tcpip.h>
 #include <netdev.h>
-#include <rtdevice.h>
-#include <rtthread.h>
 #include <webclient.h>
 #include <string.h>
 
@@ -34,6 +29,31 @@ extern const char *iot_get_states_json(void);
 extern void xiaozhi_ui_chat_status(char *string);
 extern void xiaozhi_ui_chat_output(char *string);
 extern void xiaozhi_ui_update_emoji(char *string);
+
+/* 状态一致性检查函数 */
+static void ensure_state_consistency(void)
+{
+    /* 如果状态是Listening但WebSocket断开，强制重置 */
+    if (g_state == kDeviceStateListening && !g_xz_ws.is_connected)
+    {
+        LOG_W("Inconsistent state detected: Listening but disconnected, fixing...\n");
+        xz_mic(0);
+        g_state = kDeviceStateIdle;
+        xiaozhi_ui_chat_status("   就绪");
+        xiaozhi_ui_chat_output("就绪");
+    }
+
+    /* 如果状态是Speaking但没有连接，也重置 */
+    if (g_state == kDeviceStateSpeaking && !g_xz_ws.is_connected)
+    {
+        LOG_W("Inconsistent state detected: Speaking but disconnected, fixing...\n");
+        xz_speaker(0);
+        xz_mic(0);
+        g_state = kDeviceStateUnknown;
+        xiaozhi_ui_chat_status("   休眠中");
+        xiaozhi_ui_chat_output("等待唤醒");
+    }
+}
 
 /* Utility Functions */
 char *get_mac_address(void)
@@ -114,6 +134,9 @@ void xz_button_thread_entry(void *param)
                       RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR,
                       RT_WAITING_FOREVER, &evt);
 
+        /* 首先确保状态一致性 */
+        ensure_state_consistency();
+
         /* 优雅的按键处理：先检查连接状态，再处理具体事件 */
         if (evt & BUTTON_EVENT_PRESSED)
         {
@@ -123,14 +146,14 @@ void xz_button_thread_entry(void *param)
                 if (WEBSOCKET_RECONNECT_FLAG == 1)
                 {
                     LOG_D("Reconnection already in progress, ignoring button press\n");
-                    xiaozhi_ui_chat_status("   Connecting");
-                    xiaozhi_ui_chat_output("Still connecting...");
+                    xiaozhi_ui_chat_status("   连接中");
+                    xiaozhi_ui_chat_output("仍在连接中...");
                     continue;
                 }
 
                 LOG_I("Device not connected, initiating wake up...\n");
-                xiaozhi_ui_chat_status("   Connecting");
-                xiaozhi_ui_chat_output("Connecting to Xiaozhi...");
+                xiaozhi_ui_chat_status("   连接中");
+                xiaozhi_ui_chat_output("正在连接小智...");
                 reconnect_websocket();
             }
             else
@@ -142,15 +165,17 @@ void xz_button_thread_entry(void *param)
                     xz_speaker(0);
                 }
 
+                /* 按下即对话模式：检查是否已在监听 */
                 if (g_state != kDeviceStateListening)
                 {
+                    LOG_I("Starting listening mode - press once to talk\n");
+                    xiaozhi_ui_chat_status("   聆听中");
+                    xiaozhi_ui_chat_output("聆听中...");
+
+                    /* 使用AutoStop模式，让系统自动检测语音结束 */
+                    xz_mic(1);
                     ws_send_listen_start(&g_xz_ws.clnt, g_xz_ws.session_id,
                                          kListeningModeAutoStop);
-                    LOG_I("Starting listening mode\n");
-                    xiaozhi_ui_chat_status("   Listening");
-                    xiaozhi_ui_chat_output("Listening...");
-                    xz_mic(1);
-                    g_state = kDeviceStateListening;
                 }
                 else
                 {
@@ -160,20 +185,9 @@ void xz_button_thread_entry(void *param)
         }
         else if (evt & BUTTON_EVENT_RELEASED)
         {
-            /* 只在设备连接且正在监听时处理释放事件 */
-            if (g_xz_ws.is_connected && g_state == kDeviceStateListening)
-            {
-                ws_send_listen_stop(&g_xz_ws.clnt, g_xz_ws.session_id);
-                xz_mic(0);
-                g_state = kDeviceStateIdle;
-                xiaozhi_ui_chat_status("   On standby");
-                xiaozhi_ui_chat_output("Ready");
-                LOG_D("Listening stopped\n");
-            }
-            else if (!g_xz_ws.is_connected)
-            {
-                LOG_D("Button released but device not connected, ignoring\n");
-            }
+            /* 按下即对话模式：释放按键时不需要停止监听，让系统自动处理 */
+            /* 不做任何处理，让AutoStop模式自动检测语音结束 */
+            LOG_D("Button released - letting system auto-detect speech end\n");
         }
     }
 }
@@ -215,11 +229,22 @@ void ws_send_listen_start(void *ws, char *session_id, enum ListeningMode mode)
                 session_id, mode_str[mode]);
     if (g_xz_ws.is_connected)
     {
-        wsock_write((wsock_state_t *)ws, message, strlen(message), OPCODE_TEXT);
+        err_t result = wsock_write((wsock_state_t *)ws, message, strlen(message), OPCODE_TEXT);
+        LOG_D("ws_send_listen_start result: %d\n", result);
+        if (result == ERR_OK)
+        {
+            /* 发送成功才更新状态，确保状态同步 */
+            g_state = kDeviceStateListening;
+            LOG_D("State updated to Listening after successful send\n");
+        }
+        else
+        {
+            LOG_E("Failed to send listen start message: %d\n", result);
+        }
     }
     else
     {
-        //LOG_E("websocket is not connected\n");
+        LOG_E("WebSocket not connected, cannot send listen start\n");
     }
 }
 
@@ -231,13 +256,24 @@ void ws_send_listen_stop(void *ws, char *session_id)
                 session_id);
     if (g_xz_ws.is_connected)
     {
-        err_t err = wsock_write((wsock_state_t *)ws, message, strlen(message),
-                                OPCODE_TEXT);
-        LOG_E("ws_send_listen_stop = %d \n", err);
+        err_t result = wsock_write((wsock_state_t *)ws, message, strlen(message), OPCODE_TEXT);
+        LOG_D("ws_send_listen_stop result: %d\n", result);
+        if (result == ERR_OK)
+        {
+            /* 发送成功才更新状态，确保状态同步 */
+            g_state = kDeviceStateIdle;
+            LOG_D("State updated to Idle after successful send\n");
+        }
+        else
+        {
+            LOG_E("Failed to send listen stop message: %d\n", result);
+        }
     }
     else
     {
-        //LOG_E("websocket is not connected\n");
+        LOG_D("WebSocket not connected, cannot send listen stop\n");
+        /* 即使WebSocket断开，也要确保状态正确 */
+        g_state = kDeviceStateIdle;
     }
 }
 
@@ -292,8 +328,20 @@ err_t my_wsapp_fn(int code, char *buf, size_t len)
             LOG_D("Ignore disconnect when not connected\n");
             break;
         }
-        xiaozhi_ui_chat_status("   Sleeping");
-        xiaozhi_ui_chat_output("Waiting for wake-up");
+        /* 连接断开时确保所有音频资源清理 */
+        if (g_state == kDeviceStateListening)
+        {
+            xz_mic(0);
+            LOG_D("Stopped microphone due to disconnection\n");
+        }
+        else if (g_state == kDeviceStateSpeaking)
+        {
+            xz_speaker(0);
+            LOG_D("Stopped speaker due to disconnection\n");
+        }
+
+        xiaozhi_ui_chat_status("   休眠中");
+        xiaozhi_ui_chat_output("等待唤醒");
         xiaozhi_ui_update_emoji("sleepy");
         LOG_I("WebSocket closed\n");
         g_xz_ws.is_connected = 0;
@@ -446,8 +494,8 @@ void reconnect_websocket(void)
 
     // 重置状态
     g_state = kDeviceStateUnknown;
-    xiaozhi_ui_chat_status("   Connection Failed");
-    xiaozhi_ui_chat_output("Please try again");
+    xiaozhi_ui_chat_status("   连接失败");
+    xiaozhi_ui_chat_output("请重试");
 }
 
 void xz_ws_audio_init(void)
@@ -484,7 +532,7 @@ void send_iot_states(void)
         rt_kprintf("Failed to allocate memory for IoT states\n");
         return;
     }
-    
+
     snprintf(msg, msg_size,
              "{\"session_id\":\"%s\",\"type\":\"iot\",\"update\":true,"
              "\"states\":%s}",
@@ -519,7 +567,7 @@ void send_iot_descriptors(void)
         rt_kprintf("Failed to allocate memory for IoT descriptors\n");
         return;
     }
-    
+
     snprintf(msg, msg_size,
              "{\"session_id\":\"%s\",\"type\":\"iot\",\"update\":true,"
              "\"descriptors\":%s}",
@@ -584,15 +632,15 @@ void Message_handle(const uint8_t *data, uint16_t len)
         /* 每次重连后都需要重新发送设备信息 */
         send_iot_descriptors();
         send_iot_states();
-        xiaozhi_ui_chat_status("   On standby");
+        xiaozhi_ui_chat_status("   待命中");
         xiaozhi_ui_chat_output(" ");
         xiaozhi_ui_update_emoji("neutral");
         LOG_I("Waiting...\n");
     }
     else if (strcmp(type, "goodbye") == 0)
     {
-        xiaozhi_ui_chat_status("   Sleeping");
-        xiaozhi_ui_chat_output("Waiting for wake-up");
+        xiaozhi_ui_chat_status("   休眠中");
+        xiaozhi_ui_chat_output("等待唤醒");
         xiaozhi_ui_update_emoji("sleepy");
         g_state = kDeviceStateUnknown;
         LOG_I("session ended\n");
@@ -604,15 +652,29 @@ void Message_handle(const uint8_t *data, uint16_t len)
         {
             if (g_state == kDeviceStateIdle || g_state == kDeviceStateListening)
             {
+                /* 确保麦克风在开始TTS前关闭 */
+                if (g_state == kDeviceStateListening)
+                {
+                    xz_mic(0);
+                }
+
                 g_state = kDeviceStateSpeaking;
-                xiaozhi_ui_chat_status("   Speaking");
+                xiaozhi_ui_chat_status("   说话中");
                 xz_speaker(1);
+                LOG_D("State transitioned to Speaking, microphone stopped\n");
+            }
+            else
+            {
+                LOG_D("Already in Speaking state, ignoring duplicate start\n");
             }
         }
         else if (strcmp(state, "stop") == 0)
         {
             g_state = kDeviceStateIdle;
             xz_speaker(0);
+            xiaozhi_ui_chat_status("   就绪");
+            xiaozhi_ui_chat_output("就绪");
+            LOG_D("TTS stopped, state reset to Idle\n");
         }
         else if (strcmp(state, "sentence_start") == 0)
         {
@@ -810,8 +872,8 @@ void xiaozhi_ws_connect(void)
         if (!check_internet_access())
         {
             LOG_I("Waiting internet ready... (%d retries remaining)\n", retry);
-            xiaozhi_ui_chat_status("   Waiting Network");
-            xiaozhi_ui_chat_output("Checking internet connection...");
+            xiaozhi_ui_chat_status("   等待网络");
+            xiaozhi_ui_chat_output("检查网络连接...");
             rt_thread_mdelay(2000);
             continue;
         }
@@ -876,7 +938,7 @@ void xiaozhi_ws_connect(void)
         /* 连接失败，更新UI状态 */
         if (retry > 0)
         {
-            xiaozhi_ui_chat_status("   Connection Failed");
+            xiaozhi_ui_chat_status("   连接失败");
             char retry_msg[64];
             rt_snprintf(retry_msg, sizeof(retry_msg), "Retrying... (%d)", 10 - retry);
             xiaozhi_ui_chat_output(retry_msg);
@@ -886,8 +948,8 @@ void xiaozhi_ws_connect(void)
 
     /* 所有重试都失败了 */
     LOG_E("WebSocket connection failed after all attempts\n");
-    xiaozhi_ui_chat_status("   Connection Failed");
-    xiaozhi_ui_chat_output("Please check network and retry");
+    xiaozhi_ui_chat_status("   连接失败");
+    xiaozhi_ui_chat_output("请检查网络并重试");
 }
 
 /* Main Entry */
