@@ -39,6 +39,24 @@ if rtconfig.PLATFORM in ['iccarm']:
 
 Export('RTT_ROOT')
 Export('rtconfig')
+Export('env')
+
+# Resolve path to shared BSP sources so we can add the generated headers once.
+if os.path.exists(os.path.join(os.getcwd(), "libs")):
+    libs_source = 'libs'
+else:
+    libs_source = '../libs'
+
+libs_root = os.path.abspath(os.path.join(os.getcwd(), libs_source))
+libs_bsp_dir = os.path.join(libs_root, 'TARGET_APP_KIT_PSE84_EVAL_EPC2')
+
+if os.path.isdir(libs_bsp_dir):
+    env.AppendUnique(CPPPATH=[
+        libs_bsp_dir,
+        os.path.join(libs_bsp_dir, 'config'),
+        os.path.join(libs_bsp_dir, 'config', 'GeneratedSource'),
+        os.path.join(libs_bsp_dir, 'bluetooth'),
+    ])
 
 SDK_ROOT = os.path.abspath('./')
 if os.path.exists(SDK_ROOT + '/libraries/components'):
@@ -109,6 +127,7 @@ if os.path.exists(os.path.join(os.getcwd(), "libraries")):
     objs.extend(SConscript('libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
     objs.extend(SConscript('libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
     objs.extend(SConscript('libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
+    objs.extend(SConscript('libraries/components/emusb-device/SConscript', variant_dir='build/libraries/components/emusb-device', duplicate=0))
     objs.extend(SConscript('libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
     objs.extend(SConscript('libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
     objs.extend(SConscript('libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
@@ -127,6 +146,7 @@ else:
     objs.extend(SConscript('../../../libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/emusb-device/SConscript', variant_dir='build/libraries/components/emusb-device', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))

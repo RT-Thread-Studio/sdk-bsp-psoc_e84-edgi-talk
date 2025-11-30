@@ -18,6 +18,8 @@
 static rt_thread_t xiaozhi_tid = RT_NULL;
 static const char *client_id = "af7ac552-9991-4b31-b660-683b210ae95f";
 static uint8_t WEBSOCKET_RECONNECT_FLAG = 0;
+static uint8_t iot_initialized = 0;  // 添加IoT初始化标志
+static uint32_t last_reconnect_time = 0;  // 添加重连时间戳，防止频繁重连
 static const char *mode_str[] = {"auto", "manual", "realtime"};
 static char mac_address_string[20] = {0};
 static char client_id_string[40] = {0};
@@ -112,42 +114,65 @@ void xz_button_thread_entry(void *param)
                       RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR,
                       RT_WAITING_FOREVER, &evt);
 
-        if (g_state == kDeviceStateUnknown || !g_xz_ws.is_connected)
+        /* 优雅的按键处理：先检查连接状态，再处理具体事件 */
+        if (evt & BUTTON_EVENT_PRESSED)
         {
-            LOG_I("Wake up...\n");
-            if (evt & BUTTON_EVENT_PRESSED)
+            if (g_state == kDeviceStateUnknown || !g_xz_ws.is_connected)
             {
+                /* 检查是否正在重连中 */
+                if (WEBSOCKET_RECONNECT_FLAG == 1)
+                {
+                    LOG_D("Reconnection already in progress, ignoring button press\n");
+                    xiaozhi_ui_chat_status("   Connecting");
+                    xiaozhi_ui_chat_output("Still connecting...");
+                    continue;
+                }
+
+                LOG_I("Device not connected, initiating wake up...\n");
                 xiaozhi_ui_chat_status("   Connecting");
+                xiaozhi_ui_chat_output("Connecting to Xiaozhi...");
                 reconnect_websocket();
             }
-        }
-        else
-        {
-            if (evt & BUTTON_EVENT_PRESSED)
+            else
             {
+                /* 设备已连接，处理具体功能 */
                 if (g_state == kDeviceStateSpeaking)
                 {
-                    LOG_I("Speaking aborted\n");
+                    LOG_I("Speaking aborted by user\n");
                     xz_speaker(0);
                 }
+
                 if (g_state != kDeviceStateListening)
                 {
                     ws_send_listen_start(&g_xz_ws.clnt, g_xz_ws.session_id,
                                          kListeningModeAutoStop);
-                    LOG_I("Listening...\n");
+                    LOG_I("Starting listening mode\n");
                     xiaozhi_ui_chat_status("   Listening");
+                    xiaozhi_ui_chat_output("Listening...");
                     xz_mic(1);
                     g_state = kDeviceStateListening;
                 }
-            }
-            if (evt & BUTTON_EVENT_RELEASED)
-            {
-                if (g_state == kDeviceStateListening)
+                else
                 {
-                    ws_send_listen_stop(&g_xz_ws.clnt, g_xz_ws.session_id);
-                    xz_mic(0);
-                    g_state = kDeviceStateIdle;
+                    LOG_D("Already in listening mode\n");
                 }
+            }
+        }
+        else if (evt & BUTTON_EVENT_RELEASED)
+        {
+            /* 只在设备连接且正在监听时处理释放事件 */
+            if (g_xz_ws.is_connected && g_state == kDeviceStateListening)
+            {
+                ws_send_listen_stop(&g_xz_ws.clnt, g_xz_ws.session_id);
+                xz_mic(0);
+                g_state = kDeviceStateIdle;
+                xiaozhi_ui_chat_status("   On standby");
+                xiaozhi_ui_chat_output("Ready");
+                LOG_D("Listening stopped\n");
+            }
+            else if (!g_xz_ws.is_connected)
+            {
+                LOG_D("Button released but device not connected, ignoring\n");
             }
         }
     }
@@ -273,6 +298,9 @@ err_t my_wsapp_fn(int code, char *buf, size_t len)
         LOG_I("WebSocket closed\n");
         g_xz_ws.is_connected = 0;
         g_state = kDeviceStateUnknown;
+
+        /* 清除重连时间戳，允许立即重连 */
+        last_reconnect_time = 0;
         break;
     case WS_TEXT:
         Message_handle((const uint8_t *)buf, len);
@@ -291,25 +319,61 @@ void reconnect_websocket(void)
 {
     err_t result;
     uint32_t retry = 10;
-    
+    uint32_t current_time = rt_tick_get();
+
+    /* 防止频繁重连：距离上次重连至少5秒 */
+    if (WEBSOCKET_RECONNECT_FLAG == 1)
+    {
+        LOG_D("Reconnection already in progress, ignoring duplicate request\n");
+        return;
+    }
+
+    if (current_time - last_reconnect_time < rt_tick_from_millisecond(5000))
+    {
+        LOG_D("Reconnection too frequent, ignoring request\n");
+        return;
+    }
+
+    last_reconnect_time = current_time;
+
     /* Set reconnect flag to ignore disconnect callbacks during reconnection */
     WEBSOCKET_RECONNECT_FLAG = 1;
-    
+
     while (retry-- > 0)
     {
-        /* Only close if previously initialized */
-        if (g_xz_ws.clnt.pcb != RT_NULL || g_xz_ws.is_connected)
+        /* 检查 WebSocket 的 TCP 控制块状态，避免在不合适时机重连 */
+        if (g_xz_ws.clnt.pcb != RT_NULL)
         {
-            wsock_close(&g_xz_ws.clnt, WSOCK_RESULT_LOCAL_ABORT, ERR_OK);
-            /* Give system time to clean up resources after close */
-            rt_thread_mdelay(100);
+            LOG_D("WebSocket PCB exists, current state: %d\n", g_xz_ws.clnt.pcb->state);
+
+            /* 只有在状态异常时才进行清理 */
+            if (g_xz_ws.clnt.pcb->state != CLOSED && g_xz_ws.clnt.pcb->state != CLOSE_WAIT)
+            {
+                LOG_I("Cleaning up WebSocket connection in state %d\n", g_xz_ws.clnt.pcb->state);
+
+                /* 先重置连接标志，避免重连回调干扰 */
+                g_xz_ws.is_connected = 0;
+
+                /* 尝试正常关闭 */
+                err_t close_result = wsock_close(&g_xz_ws.clnt, WSOCK_RESULT_LOCAL_ABORT, ERR_OK);
+                LOG_D("wsock_close result: %d\n", close_result);
+
+                /* 给系统充分时间清理资源 */
+                rt_thread_mdelay(2000);
+
+                /* 检查是否成功关闭 */
+                if (g_xz_ws.clnt.pcb != RT_NULL && g_xz_ws.clnt.pcb->state != CLOSED)
+                {
+                    LOG_W("WebSocket PCB still exists after close, forcing cleanup\n");
+                    /* 强制清理，但要小心 */
+                    rt_thread_mdelay(1000);
+                    memset(&g_xz_ws.clnt, 0, sizeof(wsock_state_t));
+                }
+            }
         }
 
-        /* Reset connection state flag */
+        /* 确保连接状态重置 */
         g_xz_ws.is_connected = 0;
-
-        /* Clear wsock_state_t struct to ensure wsock_init can initialize properly */
-        memset(&g_xz_ws.clnt, 0, sizeof(wsock_state_t));
 
         if (!g_xz_ws.sem)
         {
@@ -322,16 +386,21 @@ void reconnect_websocket(void)
         }
 
         char *client_id = get_client_id();
+
+        /* 确保WebSocket结构体完全清理 */
+        memset(&g_xz_ws.clnt, 0, sizeof(wsock_state_t));
+
         wsock_init(&g_xz_ws.clnt, 1, 1, my_wsapp_fn);
         result = wsock_connect(&g_xz_ws.clnt, MAX_WSOCK_HDR_LEN,
                                XIAOZHI_HOST, XIAOZHI_WSPATH,
                                LWIP_IANA_PORT_HTTPS, XIAOZHI_TOKEN, NULL,
                                "Protocol-Version: 1\r\nDevice-Id: %s\r\nClient-Id: %s\r\n",
                                get_mac_address(), client_id);
-        LOG_I("Web socket connection %d\n", result);
+        LOG_I("Web socket connection attempt %d: %d\n", 10 - retry, result);
         if (result == 0)
         {
-            if (rt_sem_take(g_xz_ws.sem, 10000) == RT_EOK)
+            /* 使用更长的超时时间，参考优秀实践 */
+            if (rt_sem_take(g_xz_ws.sem, 50000) == RT_EOK)
             {
                 if (g_xz_ws.is_connected)
                 {
@@ -340,28 +409,45 @@ void reconnect_websocket(void)
                     result = wsock_write(&g_xz_ws.clnt, HELLO_MESSAGE,
                                          strlen(HELLO_MESSAGE), OPCODE_TEXT);
                     LOG_I("Web socket write %d\r\n", result);
-                    return;
+                    if (result == ERR_OK)
+                    {
+                        LOG_I("WebSocket reconnection successful\n");
+                        return;
+                    }
+                    else
+                    {
+                        LOG_E("Failed to send hello message: %d, retrying...\n", result);
+                    }
                 }
                 else
                 {
-                    LOG_E("Web socket disconnected\n");
+                    LOG_E("Web socket connection established but not properly initialized, retrying...\n");
                 }
             }
             else
             {
-                LOG_E("Web socket connected timeout\n");
+                LOG_E("Web socket connection timeout after 50 seconds, retrying...\n");
             }
         }
         else
         {
-            LOG_E("Web socket connect failed: %d\n", result);
-            rt_thread_mdelay(1000);
+            LOG_E("Web socket connect failed: %d, retry %d remaining...\n", result, retry);
         }
+
+        /* 智能重连间隔：失败次数越多，间隔越长 */
+        uint32_t delay_ms = 2000 + (10 - retry) * 500;  // 2s-6s递增
+        LOG_D("Waiting %d ms before next retry...\n", delay_ms);
+        rt_thread_mdelay(delay_ms);
     }
-    
+
     /* Reconnection failed, clear reconnect flag */
     WEBSOCKET_RECONNECT_FLAG = 0;
     LOG_E("Web socket reconnect failed after all retries\n");
+
+    // 重置状态
+    g_state = kDeviceStateUnknown;
+    xiaozhi_ui_chat_status("   Connection Failed");
+    xiaozhi_ui_chat_output("Please try again");
 }
 
 void xz_ws_audio_init(void)
@@ -481,6 +567,21 @@ void Message_handle(const uint8_t *data, uint16_t len)
         strncpy(g_xz_ws.session_id, session_id, 9);
         g_state = kDeviceStateIdle;
         xz_ws_audio_init();
+
+        /* 优雅处理IoT初始化：确保只在首次连接时初始化 */
+        if (!iot_initialized)
+        {
+            LOG_I("Initializing IoT devices for first time\n");
+            extern void iot_initialize(void);
+            iot_initialize();
+            iot_initialized = 1;
+        }
+        else
+        {
+            LOG_D("IoT already initialized, skipping repeated initialization\n");
+        }
+
+        /* 每次重连后都需要重新发送设备信息 */
         send_iot_descriptors();
         send_iot_states();
         xiaozhi_ui_chat_status("   On standby");
@@ -701,13 +802,33 @@ int http_xiaozhi_data_parse_ws(char *json_data)
 void xiaozhi_ws_connect(void)
 {
     err_t err;
-    while (1)
+    uint32_t retry = 10;
+
+    while (retry-- > 0)
     {
-        wsock_close(&g_xz_ws.clnt, WSOCK_RESULT_LOCAL_ABORT, ERR_OK);
+        /* 检查网络连接状态 */
+        if (!check_internet_access())
+        {
+            LOG_I("Waiting internet ready... (%d retries remaining)\n", retry);
+            xiaozhi_ui_chat_status("   Waiting Network");
+            xiaozhi_ui_chat_output("Checking internet connection...");
+            rt_thread_mdelay(2000);
+            continue;
+        }
+
+        /* 确保WebSocket处于正确的状态 */
+        if (g_xz_ws.clnt.pcb != RT_NULL && g_xz_ws.clnt.pcb->state != CLOSED)
+        {
+            LOG_D("Cleaning up existing WebSocket connection\n");
+            wsock_close(&g_xz_ws.clnt, WSOCK_RESULT_LOCAL_ABORT, ERR_OK);
+            rt_thread_mdelay(1000);
+        }
+
         if (!g_xz_ws.sem)
         {
             g_xz_ws.sem = rt_sem_create("xz_ws", 0, RT_IPC_FLAG_FIFO);
         }
+
         wsock_init(&g_xz_ws.clnt, 1, 1, my_wsapp_fn);
         char *client_id = get_client_id();
         err = wsock_connect(&g_xz_ws.clnt, MAX_WSOCK_HDR_LEN,
@@ -715,34 +836,58 @@ void xiaozhi_ws_connect(void)
                             LWIP_IANA_PORT_HTTPS, XIAOZHI_TOKEN, NULL,
                             "Protocol-Version: 1\r\nDevice-Id: %s\r\nClient-Id: %s\r\n",
                             get_mac_address(), client_id);
-        LOG_I("Web socket connection %d\r\n", err);
+        LOG_I("Web socket connection attempt %d: %d\n", 10 - retry, err);
+
         if (err == 0)
         {
-            if (rt_sem_take(g_xz_ws.sem, 10000) == RT_EOK)
+            /* 连接成功，等待握手完成 */
+            if (rt_sem_take(g_xz_ws.sem, 50000) == RT_EOK)
             {
-                LOG_I("g_xz_ws.is_connected = %d\n", g_xz_ws.is_connected);
+                LOG_I("WebSocket handshake completed, connected=%d\n", g_xz_ws.is_connected);
                 if (g_xz_ws.is_connected)
                 {
                     err = wsock_write(&g_xz_ws.clnt, HELLO_MESSAGE,
                                       strlen(HELLO_MESSAGE), OPCODE_TEXT);
-                    break;
+                    if (err == ERR_OK)
+                    {
+                        LOG_I("Initial WebSocket connection established successfully\n");
+                        return;
+                    }
+                    else
+                    {
+                        LOG_E("Failed to send hello message: %d\n", err);
+                    }
                 }
                 else
                 {
-                    LOG_E("Web socket disconnected\n");
+                    LOG_E("WebSocket connected but not properly initialized\n");
                 }
             }
             else
             {
-                LOG_E("Web socket connected timeout\n");
+                LOG_E("WebSocket connection timeout after 50 seconds\n");
             }
         }
         else
         {
-            LOG_I("Waiting internet ready...\n");
-            rt_thread_mdelay(1000);
+            LOG_E("WebSocket connection failed: %d, %d retries remaining\n", err, retry);
+        }
+
+        /* 连接失败，更新UI状态 */
+        if (retry > 0)
+        {
+            xiaozhi_ui_chat_status("   Connection Failed");
+            char retry_msg[64];
+            rt_snprintf(retry_msg, sizeof(retry_msg), "Retrying... (%d)", 10 - retry);
+            xiaozhi_ui_chat_output(retry_msg);
+            rt_thread_mdelay(3000);  /* 增加初始连接失败的重试间隔 */
         }
     }
+
+    /* 所有重试都失败了 */
+    LOG_E("WebSocket connection failed after all attempts\n");
+    xiaozhi_ui_chat_status("   Connection Failed");
+    xiaozhi_ui_chat_output("Please check network and retry");
 }
 
 /* Main Entry */
@@ -755,8 +900,6 @@ void xiaozhi_entry(void *p)
         if (my_ota_version)
         {
             http_xiaozhi_data_parse_ws(my_ota_version);
-            extern void iot_initialize(void);
-            iot_initialize();
             rt_free(my_ota_version);
             break;
         }

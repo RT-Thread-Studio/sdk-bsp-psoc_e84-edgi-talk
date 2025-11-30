@@ -28,7 +28,7 @@ elif CROSS_TOOL == 'iar':
 if os.getenv('RTT_EXEC_PATH'):
     EXEC_PATH = os.getenv('RTT_EXEC_PATH')
 
-BUILD = 'debug'
+BUILD = 'release'
 
 if PLATFORM == 'gcc':
     # toolchains
@@ -52,10 +52,10 @@ if PLATFORM == 'gcc':
     LPATH = ''
 
     if BUILD == 'debug':
+        CFLAGS += ' -O0'
+    else:
         CFLAGS += ' -O3 -gdwarf-2 -g'
         AFLAGS += ' -gdwarf-2'
-    else:
-        CFLAGS += ' -O2'
 
     # CXXFLAGS = CFLAGS 
     CXXFLAGS = CFLAGS  + ' -std=c++17'
