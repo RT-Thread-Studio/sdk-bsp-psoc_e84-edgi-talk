@@ -99,6 +99,7 @@ typedef struct
     wsock_state_t clnt;
     rt_sem_t sem;
     uint8_t is_connected;
+    rt_mutex_t ws_write_mutex;  // WebSocket写入互斥锁
 } xiaozhi_ws_t;
 
 extern xiaozhi_ws_t g_xz_ws;

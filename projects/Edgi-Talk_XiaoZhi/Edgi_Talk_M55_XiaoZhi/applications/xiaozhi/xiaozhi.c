@@ -227,19 +227,35 @@ void ws_send_listen_start(void *ws, char *session_id, enum ListeningMode mode)
                 "{\"session_id\":\"%s\",\"type\":\"listen\",\"state\":\"start\","
                 "\"mode\":\"%s\"}",
                 session_id, mode_str[mode]);
-    if (g_xz_ws.is_connected)
+
+    if (g_xz_ws.is_connected && g_xz_ws.ws_write_mutex)
     {
-        err_t result = wsock_write((wsock_state_t *)ws, message, strlen(message), OPCODE_TEXT);
-        LOG_D("ws_send_listen_start result: %d\n", result);
-        if (result == ERR_OK)
+        if (rt_mutex_take(g_xz_ws.ws_write_mutex, RT_WAITING_NO) == RT_EOK)
         {
-            /* 发送成功才更新状态，确保状态同步 */
-            g_state = kDeviceStateListening;
-            LOG_D("State updated to Listening after successful send\n");
+            if (g_xz_ws.is_connected)
+            {
+                err_t result = wsock_write((wsock_state_t *)ws, message, strlen(message), OPCODE_TEXT);
+                LOG_D("ws_send_listen_start result: %d\n", result);
+                if (result == ERR_OK)
+                {
+                    /* 发送成功才更新状态，确保状态同步 */
+                    g_state = kDeviceStateListening;
+                    LOG_D("State updated to Listening after successful send\n");
+                }
+                else
+                {
+                    LOG_E("Failed to send listen start message: %d\n", result);
+                    if (result == ERR_CLSD || result == ERR_RST)
+                    {
+                        g_xz_ws.is_connected = 0;
+                    }
+                }
+            }
+            rt_mutex_release(g_xz_ws.ws_write_mutex);
         }
         else
         {
-            LOG_E("Failed to send listen start message: %d\n", result);
+            LOG_D("WebSocket write busy, cannot send listen start\n");
         }
     }
     else
@@ -254,19 +270,35 @@ void ws_send_listen_stop(void *ws, char *session_id)
     rt_snprintf(message, 256,
                 "{\"session_id\":\"%s\",\"type\":\"listen\",\"state\":\"stop\"}",
                 session_id);
-    if (g_xz_ws.is_connected)
+
+    if (g_xz_ws.is_connected && g_xz_ws.ws_write_mutex)
     {
-        err_t result = wsock_write((wsock_state_t *)ws, message, strlen(message), OPCODE_TEXT);
-        LOG_D("ws_send_listen_stop result: %d\n", result);
-        if (result == ERR_OK)
+        if (rt_mutex_take(g_xz_ws.ws_write_mutex, RT_WAITING_NO) == RT_EOK)
         {
-            /* 发送成功才更新状态，确保状态同步 */
-            g_state = kDeviceStateIdle;
-            LOG_D("State updated to Idle after successful send\n");
+            if (g_xz_ws.is_connected)
+            {
+                err_t result = wsock_write((wsock_state_t *)ws, message, strlen(message), OPCODE_TEXT);
+                LOG_D("ws_send_listen_stop result: %d\n", result);
+                if (result == ERR_OK)
+                {
+                    /* 发送成功才更新状态，确保状态同步 */
+                    g_state = kDeviceStateIdle;
+                    LOG_D("State updated to Idle after successful send\n");
+                }
+                else
+                {
+                    LOG_E("Failed to send listen stop message: %d\n", result);
+                    if (result == ERR_CLSD || result == ERR_RST)
+                    {
+                        g_xz_ws.is_connected = 0;
+                    }
+                }
+            }
+            rt_mutex_release(g_xz_ws.ws_write_mutex);
         }
         else
         {
-            LOG_E("Failed to send listen stop message: %d\n", result);
+            LOG_D("WebSocket write busy, cannot send listen stop\n");
         }
     }
     else
@@ -279,10 +311,17 @@ void ws_send_listen_stop(void *ws, char *session_id)
 
 void ws_send_hello(void *ws)
 {
-    if (g_xz_ws.is_connected)
+    if (g_xz_ws.is_connected && g_xz_ws.ws_write_mutex)
     {
-        wsock_write((wsock_state_t *)ws, HELLO_MESSAGE,
-                    strlen(HELLO_MESSAGE), OPCODE_TEXT);
+        if (rt_mutex_take(g_xz_ws.ws_write_mutex, RT_WAITING_NO) == RT_EOK)
+        {
+            if (g_xz_ws.is_connected)
+            {
+                wsock_write((wsock_state_t *)ws, HELLO_MESSAGE,
+                            strlen(HELLO_MESSAGE), OPCODE_TEXT);
+            }
+            rt_mutex_release(g_xz_ws.ws_write_mutex);
+        }
     }
     else
     {
@@ -294,11 +333,30 @@ void xz_audio_send_using_websocket(uint8_t *data, int len)
 {
     if (g_xz_ws.is_connected)
     {
-        wsock_write(&g_xz_ws.clnt, (const char *)data, len, OPCODE_BINARY);
-    }
-    else
-    {
-        // LOG_E("Websocket disconnected\n");
+        // 获取互斥锁，防止并发写入
+        if (g_xz_ws.ws_write_mutex && rt_mutex_take(g_xz_ws.ws_write_mutex, RT_WAITING_NO) == RT_EOK)
+        {
+            // 再次检查连接状态，防止在等待锁的过程中连接断开
+            if (g_xz_ws.is_connected)
+            {
+                err_t err = wsock_write(&g_xz_ws.clnt, (const char *)data, len, OPCODE_BINARY);
+                if (err != ERR_OK)
+                {
+                    LOG_D("wsock_write failed: %d, connection may be closing\n", err);
+                    // 写入失败，标记连接断开
+                    if (err == ERR_CLSD || err == ERR_RST)
+                    {
+                        g_xz_ws.is_connected = 0;
+                    }
+                }
+            }
+            rt_mutex_release(g_xz_ws.ws_write_mutex);
+        }
+        else
+        {
+            // 无法获取锁或未初始化，跳过此次发送
+            LOG_D("WebSocket write busy, skip audio data\n");
+        }
     }
 }
 
@@ -316,18 +374,33 @@ err_t my_wsapp_fn(int code, char *buf, size_t len)
         }
         break;
     case WS_DISCONNECT:
+        // 获取写入锁，确保没有正在进行的写入操作
+        if (g_xz_ws.ws_write_mutex)
+        {
+            rt_mutex_take(g_xz_ws.ws_write_mutex, RT_WAITING_FOREVER);
+        }
+
         /* Ignore disconnect callback during reconnection to avoid state confusion */
         if (WEBSOCKET_RECONNECT_FLAG == 1)
         {
             LOG_D("Ignore disconnect during reconnect\n");
+            if (g_xz_ws.ws_write_mutex)
+            {
+                rt_mutex_release(g_xz_ws.ws_write_mutex);
+            }
             break;
         }
         /* Ignore disconnect callback if already disconnected */
         if (!g_xz_ws.is_connected)
         {
             LOG_D("Ignore disconnect when not connected\n");
+            if (g_xz_ws.ws_write_mutex)
+            {
+                rt_mutex_release(g_xz_ws.ws_write_mutex);
+            }
             break;
         }
+
         /* 连接断开时确保所有音频资源清理 */
         if (g_state == kDeviceStateListening)
         {
@@ -346,6 +419,12 @@ err_t my_wsapp_fn(int code, char *buf, size_t len)
         LOG_I("WebSocket closed\n");
         g_xz_ws.is_connected = 0;
         g_state = kDeviceStateUnknown;
+
+        /* 释放写入锁 */
+        if (g_xz_ws.ws_write_mutex)
+        {
+            rt_mutex_release(g_xz_ws.ws_write_mutex);
+        }
 
         /* 清除重连时间戳，允许立即重连 */
         last_reconnect_time = 0;
@@ -889,6 +968,18 @@ void xiaozhi_ws_connect(void)
         if (!g_xz_ws.sem)
         {
             g_xz_ws.sem = rt_sem_create("xz_ws", 0, RT_IPC_FLAG_FIFO);
+        }
+
+        // 创建WebSocket写入互斥锁
+        if (!g_xz_ws.ws_write_mutex)
+        {
+            g_xz_ws.ws_write_mutex = rt_mutex_create("xz_ws_write", RT_IPC_FLAG_FIFO);
+            if (!g_xz_ws.ws_write_mutex)
+            {
+                LOG_E("Failed to create WebSocket write mutex\n");
+                rt_thread_mdelay(1000);
+                continue;
+            }
         }
 
         wsock_init(&g_xz_ws.clnt, 1, 1, my_wsapp_fn);
