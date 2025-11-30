@@ -405,7 +405,7 @@ size_cmd = env.Command(
 if platform.system() == 'Windows':
     # Path to edgeprotecttools (relative to SDK root)
     EDGEPROTECTTOOLS = os.path.join(SDK_ROOT, 'tools', 'edgeprotecttools', 'bin', 'edgeprotecttools.exe')
-    BOOT_CONFIG = os.path.join(PROJECT_ROOT, 'config', 'boot_with_extended_boot.json')
+    BOOT_CONFIG = os.path.join(PROJECT_ROOT, 'config', 'boot_with_extended_boot_scons.json')
 
     # Package secure image after HEX generation
     secure_image = env.Command(

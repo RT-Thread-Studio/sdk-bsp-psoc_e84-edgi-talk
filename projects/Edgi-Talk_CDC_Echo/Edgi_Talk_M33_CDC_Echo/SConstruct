@@ -22,13 +22,15 @@ except Exception as e:
 TARGET = 'rt-thread.' + rtconfig.TARGET_EXT
 
 DefaultEnvironment(tools=[])
-env = Environment(tools = ['mingw'],
+env = Environment(tools = ['mingw'], ENV=os.environ,
     AS = rtconfig.AS, ASFLAGS = rtconfig.AFLAGS,
     CC = rtconfig.CC, CFLAGS = rtconfig.CFLAGS,
     AR = rtconfig.AR, ARFLAGS = '-rc',
     CXX = rtconfig.CXX, CXXFLAGS = rtconfig.CXXFLAGS,
     LINK = rtconfig.LINK, LINKFLAGS = rtconfig.LFLAGS)
 env.PrependENVPath('PATH', rtconfig.EXEC_PATH)
+
+OBJCOPY = os.path.join(rtconfig.EXEC_PATH, 'arm-none-eabi-objcopy')
 
 if rtconfig.PLATFORM in ['iccarm']:
     env.Replace(CCCOM = ['$CC $CFLAGS $CPPFLAGS $_CPPDEFFLAGS $_CPPINCFLAGS -o $TARGET $SOURCES'])
@@ -37,24 +39,6 @@ if rtconfig.PLATFORM in ['iccarm']:
 
 Export('RTT_ROOT')
 Export('rtconfig')
-Export('env')
-
-# Resolve path to shared BSP sources so we can add the generated headers once.
-if os.path.exists(os.path.join(os.getcwd(), "libs")):
-    libs_source = 'libs'
-else:
-    libs_source = '../libs'
-
-libs_root = os.path.abspath(os.path.join(os.getcwd(), libs_source))
-libs_bsp_dir = os.path.join(libs_root, 'TARGET_APP_KIT_PSE84_EVAL_EPC2')
-
-if os.path.isdir(libs_bsp_dir):
-    env.AppendUnique(CPPPATH=[
-        libs_bsp_dir,
-        os.path.join(libs_bsp_dir, 'config'),
-        os.path.join(libs_bsp_dir, 'config', 'GeneratedSource'),
-        os.path.join(libs_bsp_dir, 'bluetooth'),
-    ])
 
 SDK_ROOT = os.path.abspath('./')
 if os.path.exists(SDK_ROOT + '/libraries/components'):
@@ -125,7 +109,6 @@ if os.path.exists(os.path.join(os.getcwd(), "libraries")):
     objs.extend(SConscript('libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
     objs.extend(SConscript('libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
     objs.extend(SConscript('libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
-    objs.extend(SConscript('libraries/components/emusb-device/SConscript', variant_dir='build/libraries/components/emusb-device', duplicate=0))
     objs.extend(SConscript('libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
     objs.extend(SConscript('libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
     objs.extend(SConscript('libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
@@ -144,10 +127,31 @@ else:
     objs.extend(SConscript('../../../libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
-    objs.extend(SConscript('../../../libraries/components/emusb-device/SConscript', variant_dir='build/libraries/components/emusb-device', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
     objs.extend(SConscript('../../../libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
 
 # make a building
 DoBuilding(TARGET, objs)
+
+# Generate HEX file
+DEBUG_DIR = '../Debug'
+if not os.path.exists(DEBUG_DIR):
+    os.makedirs(DEBUG_DIR)
+hex_file = env.Command(DEBUG_DIR + '/rtthread.hex', TARGET, OBJCOPY + ' -O ihex $SOURCE $TARGET')
+
+# Secure image packaging using edgeprotecttools (Windows only)
+if platform.system() == 'Windows':
+    EDGEPROTECTTOOLS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(SDK_ROOT))), 'tools', 'edgeprotecttools', 'bin', 'edgeprotecttools.exe')
+    BOOT_CONFIG = os.path.join(SDK_ROOT, 'config', 'boot_with_extended_boot_scons.json')
+
+    if os.path.exists(EDGEPROTECTTOOLS) and os.path.exists(BOOT_CONFIG):
+        secure_image = env.Command(
+            'secure_image',  # Pseudo target
+            hex_file,
+            '"' + EDGEPROTECTTOOLS + '" run-config -i "' + BOOT_CONFIG + '"'
+        )
+    else:
+        print("edgeprotecttools or boot config not found, skipping secure image packaging")
+        print("EDGEPROTECTTOOLS:", EDGEPROTECTTOOLS)
+        print("BOOT_CONFIG:", BOOT_CONFIG)

@@ -10,7 +10,7 @@
 ******************************************************************************/
 #define CM33_NS_APP_BOOT_ADDR      (CYMEM_CM33_0_m33_nvm_START + \
                                        CYBSP_MCUBOOT_HEADER_SIZE) 
-#define CACHE_ENABLE                    (0U)
+#define CACHE_ENABLE                    (1U)
 #define ADDRESS_SIZE_IN_BYTES           (4U)
 #define SMIF_MMIO_ADDRESS_OFFSET        (0U)
 #define SMIF_1_PSRAM_SECURE_ADDRESS     (0x74000000U)
