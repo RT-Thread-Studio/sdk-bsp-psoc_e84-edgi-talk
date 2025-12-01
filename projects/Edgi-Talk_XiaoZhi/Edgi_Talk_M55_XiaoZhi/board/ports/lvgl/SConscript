@@ -5,7 +5,7 @@ cwd     = GetCurrentDir()
 CPPPATH = [cwd]
 src = Glob('*.c')
 
-group = DefineGroup('lvgl', src, depend = [''], CPPPATH = CPPPATH)
+group = DefineGroup('lvgl', src, depend = ['BSP_USING_LVGL'], CPPPATH = CPPPATH)
 
 list = os.listdir(cwd)
 for item in list:

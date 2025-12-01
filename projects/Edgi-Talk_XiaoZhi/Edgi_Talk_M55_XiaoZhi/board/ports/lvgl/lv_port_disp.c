@@ -22,9 +22,9 @@
 * Global Variables
 *******************************************************************************/
 CY_SECTION(".cy_gpu_buf") LV_ATTRIBUTE_MEM_ALIGN uint8_t disp_buf1[MY_DISP_HOR_RES *
-        MY_DISP_VER_RES * 2];
+                                               MY_DISP_VER_RES * 2];
 CY_SECTION(".cy_gpu_buf") LV_ATTRIBUTE_MEM_ALIGN uint8_t disp_buf2[MY_DISP_HOR_RES *
-        MY_DISP_VER_RES * 2];
+                                               MY_DISP_VER_RES * 2];
 /* Frame buffers used by GFXSS to render UI */
 void *frame_buffer1 = &disp_buf1;
 void *frame_buffer2 = &disp_buf2;

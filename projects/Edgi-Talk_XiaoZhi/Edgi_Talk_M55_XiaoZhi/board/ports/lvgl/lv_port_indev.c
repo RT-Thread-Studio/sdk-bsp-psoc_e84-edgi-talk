@@ -13,45 +13,13 @@
 *******************************************************************************/
 #include "lv_port_indev.h"
 #include "cy_utils.h"
-/*#if defined(MTB_CTP_GT911)
-#include "mtb_ctp_gt911.h"
-#elif defined(MTB_CTP_ILI2511)
-#include "mtb_ctp_ili2511.h"
-#endif*/
+#include "drv_touch.h"
 #include "cybsp.h"
-
-
-/*****************************************************************************
-* Macros
-*****************************************************************************/
-#if defined(MTB_CTP_ILI2511)
-    #define CTP_RESET_PORT       GPIO_PRT17
-    #define CTP_RESET_PIN        (3U)
-    #define CTP_IRQ_PORT         GPIO_PRT17
-    #define CTP_IRQ_PIN          (2U)
-#endif
-
 
 /*******************************************************************************
 * Global Variables
 *******************************************************************************/
 lv_indev_t *indev_touchpad;
-
-#if defined(MTB_CTP_ILI2511)
-/* ILI2511 touch controller configuration */
-mtb_ctp_ili2511_config_t ctp_ili2511_cfg =
-{
-    .scb_inst            = CYBSP_I2C_CONTROLLER_0_HW,
-    .i2c_context         = &disp_touch_i2c_controller_context,
-    .rst_port            = CTP_RESET_PORT,
-    .rst_pin             = CTP_RESET_PIN,
-    .irq_port            = CTP_IRQ_PORT,
-    .irq_pin             = CTP_IRQ_PIN,
-    .irq_num             = ioss_interrupts_gpio_17_IRQn,
-    .touch_event         = false,
-};
-#endif
-
 
 /*******************************************************************************
 * Function Name: touchpad_init
@@ -70,15 +38,7 @@ static void touchpad_init(void)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
 
-#if defined(MTB_CTP_GT911)
-    result = mtb_gt911_init(CYBSP_I2C_CONTROLLER_0_HW,
-                            &disp_touch_i2c_controller_context);
-
-#elif defined(MTB_CTP_ILI2511)
-    result = mtb_ctp_ili2511_init(&ctp_ili2511_cfg);
-#endif
-
-    if (CY_RSLT_SUCCESS != result)
+    if (rt_hw_ST7102_port() != result)
     {
         CY_ASSERT(0);
     }
@@ -115,23 +75,12 @@ static void touchpad_read(lv_indev_t *indev_drv, lv_indev_data_t *data)
     static int touch_x = 0;
     static int touch_y = 0;
     cy_rslt_t result = CY_RSLT_SUCCESS;
-
     data->state = LV_INDEV_STATE_REL;
-
-#if defined(MTB_CTP_GT911)
-    result = mtb_gt911_get_single_touch(CYBSP_I2C_CONTROLLER_0_HW,
-                                        &disp_touch_i2c_controller_context, &touch_x, &touch_y);
-#elif defined(MTB_CTP_ILI2511)
-    result = mtb_ctp_ili2511_get_single_touch(&touch_x, &touch_y);
-#endif
-
-
-
+    result = ST7102_get_single_touch(&touch_x, &touch_y);
     if (CY_RSLT_SUCCESS == result)
     {
         data->state = LV_INDEV_STATE_PR;
     }
-
     /* Set the last pressed coordinates */
     data->point.x = touch_x;
     data->point.y = touch_y;

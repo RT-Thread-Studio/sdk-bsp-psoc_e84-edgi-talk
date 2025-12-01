@@ -6,13 +6,36 @@
 *
 * Related Document : See README.md
 *
+********************************************************************************
+* (c) 2025-2025, Infineon Technologies AG, or an affiliate of Infineon Technologies AG. All rights reserved.
+* This software, associated documentation and materials ("Software") is owned by
+* Infineon Technologies AG or one of its affiliates ("Infineon") and is protected
+* by and subject to worldwide patent protection, worldwide copyright laws, and
+* international treaty provisions. Therefore, you may use this Software only as
+* provided in the license agreement accompanying the software package from which
+* you obtained this Software. If no license agreement applies, then any use,
+* reproduction, modification, translation, or compilation of this Software is
+* prohibited without the express written permission of Infineon.
+* Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
+* IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING,
+* BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF THIRD-PARTY RIGHTS AND
+* IMPLIED WARRANTIES SUCH AS WARRANTIES OF FITNESS FOR A SPECIFIC USE/PURPOSE OR
+* MERCHANTABILITY. Infineon reserves the right to make changes to the Software
+* without notice. You are responsible for properly designing, programming, and
+* testing the functionality and safety of your intended application of the
+* Software, as well as complying with any legal requirements related to its
+* use. Infineon does not guarantee that the Software will be free from intrusion,
+* data theft or loss, or other breaches ("Security Breaches"), and Infineon
+* shall have no liability arising out of any Security Breaches. Unless otherwise
+* explicitly approved by Infineon, the Software may not be used in any application
+* where a failure of the Product or any consequences of the use thereof can
+* reasonably be expected to result in personal injury.
 *******************************************************************************/
 #include "lv_area_private.h"
 #include "lv_image_decoder_private.h"
 #include "lv_draw_image_private.h"
 #include "lv_draw_private.h"
 #include "lv_draw_vg_lite.h"
-#include "lv_conf.h"
 
 #if LV_USE_DRAW_VG_LITE
 
@@ -26,9 +49,9 @@
  *   GLOBAL FUNCTIONS
  **********************/
 void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const lv_draw_image_dsc_t * dsc,
-        const lv_area_t *coords, bool no_cache)
+                         const lv_area_t * coords, bool no_cache)
 {
-    lv_draw_vg_lite_unit_t *u = (lv_draw_vg_lite_unit_t *)draw_unit;
+    lv_draw_vg_lite_unit_t * u = (lv_draw_vg_lite_unit_t *)draw_unit;
 
     /* The coordinates passed in by coords are not transformed,
      * so the transformed area needs to be calculated once.
@@ -45,8 +68,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
     lv_area_move(&image_tf_area, coords->x1, coords->y1);
 
     lv_area_t clip_area;
-    if (!lv_area_intersect(&clip_area, &image_tf_area, draw_unit->clip_area))
-    {
+    if(!lv_area_intersect(&clip_area, &image_tf_area, draw_unit->clip_area)) {
         /*Fully clipped, nothing to do*/
         return;
     }
@@ -55,21 +77,18 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
 
     vg_lite_buffer_t src_buf;
     lv_image_decoder_dsc_t decoder_dsc;
-    if (!lv_vg_lite_buffer_open_image(&src_buf, &decoder_dsc, dsc->src, no_cache))
-    {
+    if(!lv_vg_lite_buffer_open_image(&src_buf, &decoder_dsc, dsc->src, no_cache)) {
         LV_PROFILER_END;
         return;
     }
 
     vg_lite_color_t color = 0;
-    if (LV_COLOR_FORMAT_IS_ALPHA_ONLY(decoder_dsc.decoded->header.cf) || dsc->recolor_opa > LV_OPA_TRANSP)
-    {
+    if(LV_COLOR_FORMAT_IS_ALPHA_ONLY(decoder_dsc.decoded->header.cf) || dsc->recolor_opa > LV_OPA_TRANSP) {
         /* alpha image and image recolor */
         src_buf.image_mode = VG_LITE_MULTIPLY_IMAGE_MODE;
         color = lv_vg_lite_color(dsc->recolor, LV_OPA_MIX2(dsc->opa, dsc->recolor_opa), true);
     }
-    else if (dsc->opa < LV_OPA_COVER)
-    {
+    else if(dsc->opa < LV_OPA_COVER) {
         /* normal image opa */
         src_buf.image_mode = VG_LITE_MULTIPLY_IMAGE_MODE;
         lv_memset(&color, dsc->opa, sizeof(color));
@@ -86,17 +105,14 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
     bool no_transform = lv_matrix_is_identity_or_translation((const lv_matrix_t *)&matrix);
     vg_lite_filter_t filter = no_transform ? VG_LITE_FILTER_POINT : VG_LITE_FILTER_BI_LINEAR;
 
-    if (dsc->tile)
-    {
+    if(dsc->tile){
         int32_t img_w = dsc->header.w;
         int32_t img_h = dsc->header.h;
         lv_area_t tile_area;
-        if (lv_area_get_width(&dsc->image_area) >= 0)
-        {
+        if(lv_area_get_width(&dsc->image_area) >= 0) {
             tile_area = dsc->image_area;
         }
-        else
-        {
+        else {
             tile_area = *coords;
         }
         lv_area_set_width(&tile_area, img_w);
@@ -104,10 +120,8 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
 
         int32_t tile_x_start = tile_area.x1;
 
-        while (tile_area.y1 <= coords->y2)
-        {
-            while (tile_area.x1 <= coords->x2)
-            {
+        while(tile_area.y1 <= coords->y2) {
+            while(tile_area.x1 <= coords->x2) {
                 lv_area_t clipped_img_area = tile_area;
                 lv_area_move(&clipped_img_area, -tile_area.x1, -tile_area.y1);
 
@@ -119,8 +133,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
                 lv_vg_lite_matrix_multiply(&matrix, &u->global_matrix);
                 lv_vg_lite_image_matrix(&matrix, tile_area.x1, tile_area.y1, dsc);
 
-                if (lv_area_intersect(&clipped_img_area, &tile_area, coords))
-                {
+                if(lv_area_intersect(&clipped_img_area, &tile_area, coords)) {
                     LV_PROFILER_BEGIN_TAG("vg_lite_blit_rect");
                     LV_VG_LITE_CHECK_ERROR(vg_lite_blit_rect(
                                                &u->target_buffer,
@@ -148,8 +161,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
     }
 
     /* If clipping is not required, blit directly */
-    if (lv_area_is_in(&image_tf_area, draw_unit->clip_area, false) && dsc->clip_radius <= 0)
-    {
+    if(lv_area_is_in(&image_tf_area, draw_unit->clip_area, false) && dsc->clip_radius <= 0) {
         /* The image area is the coordinates relative to the image itself */
         lv_area_t src_area = *coords;
         lv_area_move(&src_area, -coords->x1, -coords->y1);
@@ -169,12 +181,10 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
                                    filter));
         LV_PROFILER_END_TAG("vg_lite_blit_rect");
     }
-    else
-    {
-        lv_vg_lite_path_t *path = lv_vg_lite_path_get(u, VG_LITE_FP32);
+    else {
+        lv_vg_lite_path_t * path = lv_vg_lite_path_get(u, VG_LITE_FP32);
 
-        if (dsc->clip_radius)
-        {
+        if(dsc->clip_radius) {
             int32_t width = lv_area_get_width(coords);
             int32_t height = lv_area_get_height(coords);
             float r_short = LV_MIN(width, height) / 2.0f;
@@ -190,8 +200,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
                 width, height,
                 radius);
         }
-        else
-        {
+        else {
             lv_vg_lite_path_append_rect(
                 path,
                 clip_area.x1, clip_area.y1,
@@ -202,7 +211,7 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
         lv_vg_lite_path_set_bonding_box_area(path, &clip_area);
         lv_vg_lite_path_end(path);
 
-        vg_lite_path_t *vg_lite_path = lv_vg_lite_path_get_path(path);
+        vg_lite_path_t * vg_lite_path = lv_vg_lite_path_get_path(path);
         LV_VG_LITE_ASSERT_PATH(vg_lite_path);
 
         vg_lite_matrix_t path_matrix;
@@ -236,3 +245,5 @@ void LV_ATTRIBUTE_FAST_MEM lv_draw_vg_lite_img(lv_draw_unit_t * draw_unit, const
  **********************/
 
 #endif /*LV_USE_DRAW_VG_LITE*/
+
+/* [] END OF FILE */

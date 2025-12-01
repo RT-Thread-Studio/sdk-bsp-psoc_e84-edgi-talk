@@ -23,7 +23,6 @@ extern "C" {
 #include "cybsp.h"
 #include "cy_pdl.h"
 #include "cycfg.h"
-#include "cy_graphics.h"
 
 #include "lvgl.h"
 

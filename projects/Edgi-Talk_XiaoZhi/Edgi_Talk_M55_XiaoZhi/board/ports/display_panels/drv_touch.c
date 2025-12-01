@@ -1,14 +1,3 @@
-/*
- * Copyright (c) 2006-2018, RT-Thread Development Team
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Change Logs:
- * Date           Author       Notes
- * 2021-01-13     RiceChen     the first version
- * 2025-09-08     Grok         Modified for thread-based touch reading
- */
-
 #define DBG_TAG "ST7102"
 #define DBG_LVL DBG_INFO
 #include <rtdbg.h>
@@ -18,7 +7,7 @@
 
 static struct rt_i2c_client ST7102_client;
 #define TOUCH_SLAVE_ADDRESS 0x55
-#define POLLING_INTERVAL_MS 10 /* 10ms polling interval (~100Hz) */
+#define POLLING_INTERVAL_MS 10
 
 static rt_err_t ST7102_write_reg(struct rt_i2c_client *dev, rt_uint8_t *data, rt_uint8_t len)
 {
@@ -118,14 +107,12 @@ static void ST7102_touch_up(void *buf, int8_t id)
     {
         read_data[id].event = RT_TOUCH_EVENT_NONE;
     }
-
-//    read_data[id].timestamp = rt_touch_get_ts();
     read_data[id].width = pre_w[id];
     read_data[id].x_coordinate = pre_x[id];
     read_data[id].y_coordinate = pre_y[id];
     read_data[id].track_id = id;
 
-    pre_x[id] = -1; /* last point is none */
+    pre_x[id] = -1;
     pre_y[id] = -1;
     pre_w[id] = -1;
 }
@@ -144,13 +131,12 @@ static void ST7102_touch_down(void *buf, int8_t id, int16_t x, int16_t y, int16_
         s_tp_dowm[id] = 1;
     }
 
-//    read_data[id].timestamp = rt_touch_get_ts();
     read_data[id].width = w;
     read_data[id].x_coordinate = x;
     read_data[id].y_coordinate = y;
     read_data[id].track_id = id;
 
-    pre_x[id] = x; /* save last point */
+    pre_x[id] = x;
     pre_y[id] = y;
     pre_w[id] = w;
 }
@@ -173,9 +159,6 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
     static uint16_t Last_Touch_Intn = 0;
     static uint16_t Touch_Intn = 0;
 
-    static rt_uint8_t pre_touch = 0;
-    static int8_t pre_id[ST7102_MAX_TOUCH] = {0};
-
     cmd[0] = (rt_uint8_t)((ST7102_Read_Start_Position >> 8) & 0xFF);
     cmd[1] = (rt_uint8_t)(ST7102_Read_Start_Position & 0xFF);
 
@@ -188,7 +171,7 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
 
     for (count = 0; count < ST7102_MAX_TOUCH; count++)
     {
-        if (read_buf[0x09 + count * 7] > 0 && read_buf[0] == 0x08) /* Touch Detected */
+        if (read_buf[0x09 + count * 7] > 0 && read_buf[0] == 0x08)
         {
             Last_input_x = (Last_read_buf[(7 * count) + 0x04] & 0x3F) << 8 | Last_read_buf[(7 * count) + 0x05];
             Last_input_y = (Last_read_buf[(7 * count) + 0x06] & 0x3F) << 8 | Last_read_buf[(7 * count) + 0x07];
@@ -204,7 +187,7 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
             }
             else
             {
-                rt_kprintf("X = %d, Y = %d\n",input_x, input_y);
+                // rt_kprintf("X = %d, Y = %d\n", input_x, input_y);
                 ST7102_touch_down(buf, count, input_x, input_y, 0); /* Assume width=0 as not provided */
                 touch_num++;
             }
@@ -215,8 +198,6 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
         }
     }
     rt_memcpy(Last_read_buf, read_buf, 8 * ST7102_MAX_TOUCH);
-//    rt_pin_write(LED_RED, PIN_LOW);
-
 exit_:
     return touch_num;
 }
@@ -236,29 +217,9 @@ static struct rt_touch_ops ST7102_touch_ops =
     .touch_control = ST7102_control,
 };
 
-/* Thread function for polling touch data */
-static void ST7102_touch_thread_entry(void *parameter)
-{
-    struct rt_touch_device *touch = (struct rt_touch_device *)parameter;
-    struct rt_touch_data touch_data[ST7102_MAX_TOUCH];
-
-    while (1)
-    {
-        rt_memset(touch_data, 0, sizeof(touch_data));
-        rt_size_t touch_num = ST7102_read_point(touch, touch_data, ST7102_MAX_TOUCH);
-        if (touch_num > 0)
-        {
-            /* Process touch data if needed, e.g., notify application */
-            /* For now, touch data is printed in ST7102_read_point */
-        }
-        rt_thread_mdelay(POLLING_INTERVAL_MS);
-    }
-}
-
 int rt_hw_ST7102_init(const char *name, struct rt_touch_config *cfg)
 {
     struct rt_touch_device *touch_device = RT_NULL;
-    static rt_thread_t touch_thread = RT_NULL;
 
     touch_device = (struct rt_touch_device *)rt_malloc(sizeof(struct rt_touch_device));
     if (touch_device == RT_NULL)
@@ -303,27 +264,38 @@ int rt_hw_ST7102_init(const char *name, struct rt_touch_config *cfg)
     touch_device->info.vendor = RT_TOUCH_VENDOR_GT;
     rt_memcpy(&touch_device->config, cfg, sizeof(struct rt_touch_config));
     touch_device->ops = &ST7102_touch_ops;
-
     rt_hw_touch_register(touch_device, name, RT_DEVICE_FLAG_INT_RX, RT_NULL);
 
-    /* Create touch polling thread */
-    touch_thread = rt_thread_create("st7102_touch",
-                                   ST7102_touch_thread_entry,
-                                   touch_device,
-                                   2048, /* Stack size */
-                                   20,   /* Priority */
-                                   10);  /* Time slice */
-    if (touch_thread == RT_NULL)
+    return RT_EOK;
+}
+
+rt_err_t ST7102_get_single_touch(rt_int16_t *touch_x, rt_int16_t *touch_y)
+{
+    struct rt_touch_data touch_data[ST7102_MAX_TOUCH];
+    rt_size_t touch_num;
+
+    if (ST7102_client.bus == RT_NULL)
     {
-        LOG_E("Failed to create touch thread");
-        rt_device_close((rt_device_t)ST7102_client.bus);
-        rt_free(touch_device);
+        LOG_E("ST7102 i2c bus not initialized");
         return -RT_ERROR;
     }
-    rt_thread_startup(touch_thread);
 
-    LOG_I("touch device ST7102 init success");
-    return RT_EOK;
+    rt_memset(touch_data, 0, sizeof(touch_data));
+
+    touch_num = ST7102_read_point(RT_NULL, touch_data, ST7102_MAX_TOUCH);
+
+    if (touch_num > 0)
+    {
+        *touch_x = touch_data[0].x_coordinate;
+        *touch_y = touch_data[0].y_coordinate;
+
+        // rt_kprintf("Single touch: X=%d, Y=%d\r\n", *touch_x, *touch_y);
+        return RT_EOK;
+    }
+    else
+    {
+        return -RT_ERROR;
+    }
 }
 
 int rt_hw_ST7102_port(void)
@@ -339,8 +311,6 @@ int rt_hw_ST7102_port(void)
 
     return rt_hw_ST7102_init("ST7102", &cfg);
 }
-//INIT_ENV_EXPORT(rt_hw_ST7102_port);
-
 int soft_reset_test(void)
 {
     ST7102_soft_reset(&ST7102_client);

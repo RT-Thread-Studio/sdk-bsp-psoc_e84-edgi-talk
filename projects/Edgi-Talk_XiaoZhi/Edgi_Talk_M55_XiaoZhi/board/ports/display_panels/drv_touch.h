@@ -45,12 +45,10 @@ enum
 
 #define ST7102_RST_PIN  GET_PIN(17, 3)
 #define ST7102_IRQ_PIN  GET_PIN(17, 2)
-
 #define ST7102_ADDR_LEN          2
 #define ST7102_REGITER_LEN       2
 #define ST7102_MAX_TOUCH         0x0A
 #define ST7102_POINT_INFO_NUM   5
-
 #define ST7102_ADDRESS          0x55
 #define ST7102_Device_Control    0x02
 // #define ST7102_ADDRESS_LOW       0x14
@@ -60,10 +58,8 @@ enum
 #define ST7102_MAX_Y_Coord_Low    0x08
 #define ST7102_MAX_Touches        0x09
 #define ST7102_READ_STATUS        0x10 //0 = No touch deceted
-
 #define ST7102_COMMAND_REG       0x8040
 #define ST7102_CONFIG_REG        0x8047
-
 #define ST7102_PRODUCT_ID        0x8140
 #define ST7102_VENDOR_ID         0x814A
 
@@ -77,10 +73,9 @@ enum
 #define ST7102_POINT0_Touch_Area            0x18
 #define ST7102_POINT0_REG_Touch_Intensity   0x19
 #define ST7102_Read_Start_Position          0x10
-
-
 #define ST7102_CHECK_SUM         0x80FF
 
 int rt_hw_ST7102_init(const char *name, struct rt_touch_config *cfg);
-
+int rt_hw_ST7102_port(void);
+rt_err_t ST7102_get_single_touch(rt_int16_t *touch_x, rt_int16_t *touch_y);
 #endif
