@@ -2090,8 +2090,8 @@
                     <Block location="m55appcpuss[0].cm55[0].mpu_ns[0]" locked="true"/>
                     <Parameters>
                         <Param id="base_addr1" value="0x240FD000"/>
-                        <Param id="base_addr2" value="0x262FC000"/>
-                        <Param id="base_addr3" value="0x2633C000"/>
+                        <Param id="base_addr2" value="0x261C0000"/>
+                        <Param id="base_addr3" value="0x26200000"/>
                         <Param id="cacheable0" value="4"/>
                         <Param id="cacheable1" value="4"/>
                         <Param id="cacheable2" value="4"/>
@@ -2132,7 +2132,7 @@
                         <Param id="privileged3" value="false"/>
                         <Param id="size1" value="0x00003000"/>
                         <Param id="size2" value="0x00040000"/>
-                        <Param id="size3" value="0x001C4000"/>
+                        <Param id="size3" value="0x00300000"/>
                         <Param id="writable1" value="true"/>
                         <Param id="writable2" value="true"/>
                         <Param id="writable3" value="true"/>

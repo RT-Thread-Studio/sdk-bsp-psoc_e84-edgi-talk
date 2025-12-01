@@ -88,6 +88,7 @@ extern "C" {
 #define ioss_0_port_18_pin_1_ANALOG P18_1_SRSS_WCO_IN
 #define ioss_0_port_19_pin_0_ANALOG P19_0_SRSS_ECO_IN
 #define ioss_0_port_19_pin_1_ANALOG P19_1_SRSS_ECO_OUT
+#define ioss_0_port_20_pin_6_HSIOM P20_6_TCPWM0_LINE265
 #define ioss_0_port_21_pin_0_HSIOM P21_0_SDHC0_CARD_CMD
 #define ioss_0_port_21_pin_1_HSIOM P21_1_TDM_TDM_TX_SD0
 #define ioss_0_port_21_pin_2_HSIOM P21_2_TDM_TDM_TX_SCK0

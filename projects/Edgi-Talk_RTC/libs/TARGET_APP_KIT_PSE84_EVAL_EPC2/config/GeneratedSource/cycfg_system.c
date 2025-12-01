@@ -860,8 +860,8 @@ const cy_stc_mpu_config_t cycfg_mpu_cm55_ns_0_config[3] =
     },
     {
         .reg_num = 2U,
-        .base_addr = 0x262FC000,
-        .end_addr = 0x2633BFFF,
+        .base_addr = 0x261C0000,
+        .end_addr = 0x261FFFFF,
         .writable = true,
         .require_privileged = false,
         .shareable = false,
@@ -872,7 +872,7 @@ const cy_stc_mpu_config_t cycfg_mpu_cm55_ns_0_config[3] =
     },
     {
         .reg_num = 3U,
-        .base_addr = 0x2633C000,
+        .base_addr = 0x26200000,
         .end_addr = 0x264FFFFF,
         .writable = true,
         .require_privileged = false,
