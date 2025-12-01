@@ -27,8 +27,8 @@
 #endif
 
 /*SRAM CONFIG*/
-#define IFX_SRAM_SIZE                   (1024)
-#define IFX_SRAM_END                    (0x24000000 + IFX_SRAM_SIZE * 1024)
+#define IFX_SRAM_SIZE                   (256)
+#define IFX_SRAM_END                    (0x240BD000 + IFX_SRAM_SIZE * 1024)
 
 #ifdef __ARMCC_VERSION
     extern int Image$$RW_IRAM1$$ZI$$Limit;
