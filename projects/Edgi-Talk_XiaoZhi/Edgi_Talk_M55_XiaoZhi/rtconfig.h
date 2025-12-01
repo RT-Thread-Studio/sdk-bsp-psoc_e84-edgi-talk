@@ -125,6 +125,7 @@
 #define RT_USING_ADC
 #define RT_USING_PWM
 #define RT_USING_RTC
+#define RT_USING_SOFT_RTC
 #define RT_USING_SDIO
 #define RT_SDIO_STACK_SIZE 512
 #define RT_SDIO_THREAD_PRIORITY 15
@@ -296,6 +297,13 @@
 /* end of Select supported modules */
 #define PKG_USING_WEBNET_V203
 #define PKG_WEBNET_VER_NUM 0x20003
+#define CY_WIFI_WHD_THREAD_PRIORITY 10
+#define CY_WIFI_WHD_THREAD_STACK_SIZE 5120
+#define CYBSP_REG_ON_PIN 94
+#define CYBSP_HOST_WAKE_IRQ_PIN 92
+#define CYBSP_OOB_INTR_PRIORITY 2
+#define CY_WIFI_USING_THREAD_INIT
+#define CY_WIFI_INIT_THREAD_STACK_SIZE 2048
 
 /* Wi-Fi */
 
@@ -407,9 +415,41 @@
 
 /* end of STM32 HAL & SDK Drivers */
 
+/* Infineon HAL Packages */
+
+/* end of Infineon HAL Packages */
+
 /* Kendryte SDK */
 
 /* end of Kendryte SDK */
+
+/* WCH HAL & SDK Drivers */
+
+/* end of WCH HAL & SDK Drivers */
+
+/* AT32 HAL & SDK Drivers */
+
+/* end of AT32 HAL & SDK Drivers */
+
+/* HC32 DDL Drivers */
+
+/* end of HC32 DDL Drivers */
+
+/* NXP HAL & SDK Drivers */
+
+/* end of NXP HAL & SDK Drivers */
+
+/* NUVOTON Drivers */
+
+/* end of NUVOTON Drivers */
+
+/* GD32 Drivers */
+
+/* end of GD32 Drivers */
+
+/* HPMicro SDK */
+
+/* end of HPMicro SDK */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -547,15 +587,8 @@
 #define LWIP_ALTCP_TLS_MBEDTLS 1
 #define BSP_USING_WIFI_HOST_DRIVER
 #define BSP_USING_NETUTILS
-#define CYBSP_REG_ON_PIN 94
-#define CYBSP_HOST_WAKE_IRQ_PIN 92
-#define CYBSP_OOB_INTR_PRIORITY 2
-#define CY_WIFI_USING_THREAD_INIT
-#define CY_WIFI_INIT_THREAD_STACK_SIZE 2048
 #define NVRAM_IMAGE_SIZE 6741
 #define CLM_IMAGE_SIZE 1519
-#define CY_WIFI_WHD_THREAD_PRIORITY 10
-#define CY_WIFI_WHD_THREAD_STACK_SIZE 5120
 /* end of Board extended module Drivers */
 
 /* Board extended module Drivers */
