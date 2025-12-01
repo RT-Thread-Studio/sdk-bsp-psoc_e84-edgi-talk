@@ -1,14 +1,5 @@
 menu "Hardware Drivers Config"
 
-menu "Select SOC Multi Core Mode"
-    config SOC_Enable_CM55
-        bool "Enable CM55 Core"
-        default y
-    config SOC_Enable_CM33_DeepSleep
-        bool "Enable CM33 DeepSleep"
-        default y
-endmenu
-
 config SOC_SERIES_IFX_PSOCE84
     bool 
     select RT_USING_COMPONENTS_INIT
