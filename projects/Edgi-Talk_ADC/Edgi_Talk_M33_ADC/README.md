@@ -33,7 +33,7 @@ ADC operation typically involves the following stages:
    * A 12-bit ADC divides the input voltage range into 4096 levels, with quantization precision expressed as ΔV = VREF / 4096.
 3. **Encoding**
 
-   * Converts the quantized level into binary code for output.
+   * Convert the quantized level into a binary output. For example, a 12-bit ADC produces a binary value ranging from 0 to 4095.
 
 ## Hardware Description
 
