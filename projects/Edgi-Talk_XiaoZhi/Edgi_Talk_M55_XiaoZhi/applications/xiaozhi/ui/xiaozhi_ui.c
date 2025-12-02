@@ -639,6 +639,9 @@ static void ui_thread_entry(void *args)
         }
 
         period_ms = lv_task_handler();
+        if(period_ms == LV_NO_TIMER_READY || period_ms > 100)
+            period_ms = 20;
+
         rt_thread_mdelay(period_ms);
     }
 }
