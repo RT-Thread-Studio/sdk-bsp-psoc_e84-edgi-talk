@@ -420,7 +420,6 @@ static void wavplayer_entry(void *parameter)
                 else
                 {
                     /*witte data to sound device*/
-                    // rt_kprintf("1test:%s\r\n",(rt_uint16_t *)player.buffer);
                     rt_device_write(player.device, 0, player.buffer, WP_BUFFER_SIZE);
                 }
                 break;

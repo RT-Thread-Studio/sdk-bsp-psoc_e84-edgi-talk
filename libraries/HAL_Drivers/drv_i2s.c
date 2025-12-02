@@ -438,7 +438,7 @@ static rt_err_t sound_stop(struct rt_audio_device *audio, int stream)
     RT_ASSERT(audio != RT_NULL);
     if (stream == AUDIO_STREAM_REPLAY)
     {
-        music_player_active = false;
+//        music_player_active = false;
 //        first_frame=true;
 //        app_i2s_deactivate();
 //        rt_thread_detach(snd_dev->playback_thread);
@@ -447,7 +447,7 @@ static rt_err_t sound_stop(struct rt_audio_device *audio, int stream)
 //        audio->replay->write_index = 0;
 //        audio->replay->read_index = 0;
 //        audio->replay->pos = 0;
-        i2s_data_ready_flag = false;
+//        i2s_data_ready_flag = false;
 
 //            rt_audio_tx_complete(audio);
         LOG_D("Sound Stop.");
@@ -570,7 +570,7 @@ void i2s_playback_task(void *arg)
     struct sound_device *snd_dev;
     RT_ASSERT(audio != RT_NULL);
     snd_dev = (struct sound_device *)audio->parent.user_data;
-
+    static int count = 0;
     int16_t *temp_buffer_ptr;
 
     // int32_t* asrc_out_ptr = NULL;
@@ -756,8 +756,16 @@ void i2s_playback_task(void *arg)
         /* Reset first frame flag. */
         first_frame = false;
         while (audio->replay->queue.is_empty == 1)
+        {
             rt_thread_mdelay(1);
-
+#if !defined(BSP_USING_XiaoZhi)
+            if(count>=50){
+                rt_completion_done(&audio->replay->cmp);
+                count=0;
+            }
+            count++;
+#endif
+        }
         rt_audio_tx_complete(audio);
     }
 }
