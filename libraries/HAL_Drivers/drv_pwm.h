@@ -15,25 +15,28 @@
 #include <board.h>
 
 #ifdef __cplusplus
-extern "C"
-{
-#endif /* __cplusplus */
+extern "C" {
+#endif
 
 #ifdef BSP_USING_PWM0
-#ifndef TCPWM_0_GRP_0_PWM_5_CONFIG
-#define TCPWM_0_GRP_0_PWM_5_CONFIG \
-    {                               \
-        .name = "pwm0",             \
-        .channel = 9,               \
-        .tcpwm_pwm_config = &tcpwm_0_group_1_cnt_9_config,     \
-        .base = TCPWM0_GRP1_CNT9,                \
-        .hal_pwm_configurator = &tcpwm_0_group_1_cnt_9_config, \
-    }
-#endif /* TCPWM_0_GRP_0_PWM_5_CONFIG */
+
+#ifndef TCPWM_0_GRP_1_PWM_9_CONFIG
+#define TCPWM_0_GRP_1_PWM_9_CONFIG \
+{                                                       \
+    .tcpwm_pwm_config = &tcpwm_0_group_1_cnt_9_config,\
+    .base             = TCPWM0,\
+    .cntNum           = 265UL,\
+    .name             = "pwm18",\
+    .clk_dst          = PERI_0_GROUP_1_DIV_8_4_GRP_NUM,\
+    .clk_divType      = CY_SYSCLK_DIV_8_BIT,\
+    .clk_divNum       = 4U,\
+}
+#endif /* TCPWM_0_GRP_1_PWM_9_CONFIG */
+
 #endif /* BSP_USING_PWM0 */
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif
 
 #endif /* __PWM_CONFIG_H__ */
