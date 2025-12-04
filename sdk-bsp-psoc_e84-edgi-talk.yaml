@@ -72,7 +72,7 @@ template_projects:
   project_description: M33 模板工程，可作为二次开发的基础工程
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_M33_Template/Edgi_Talk_M33_Template
+  - source_path_offset: 'projects/Edgi_Talk_M33_Template'
     target_path_offset: ''
     files_and_folders:
     - "*"
@@ -85,7 +85,7 @@ template_projects:
     target_path_offset: 'tools'
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_M33_Template'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -110,11 +110,11 @@ example_projects:
   project_description: M33 安全模式模板工程
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_M33_S_Template/Edgi_Talk_M33_S_Template
+  - source_path_offset: 'projects/Edgi_Talk_M33_S_Template'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_M33_S_Template/libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
+  - source_path_offset: 'projects/libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
     target_path_offset: 'libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
     files_and_folders:
     - cybsp.c
@@ -177,11 +177,11 @@ example_projects:
   project_description: M33 LED闪烁示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_Blink_Led/Edgi_Talk_M33_Blink_LED
+  - source_path_offset: 'projects/Edgi_Talk_M33_Blink_LED'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_Blink_Led'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -214,11 +214,11 @@ example_projects:
   project_description: M55 LED闪烁示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_Blink_Led/Edgi_Talk_M55_Blink_LED
+  - source_path_offset: 'projects/Edgi_Talk_M55_Blink_LED'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_Blink_Led'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -251,11 +251,11 @@ example_projects:
   project_description: SD卡示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_SDCARD/Edgi_Talk_M33_SDCARD
+  - source_path_offset: 'projects/Edgi_Talk_M33_SDCARD'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_SDCARD'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -288,11 +288,11 @@ example_projects:
   project_description: RTC 实时时钟示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_RTC/Edgi_Talk_M33_RTC
+  - source_path_offset: 'projects/Edgi_Talk_M33_RTC'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_RTC'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -325,11 +325,11 @@ example_projects:
   project_description: 按键中断控制LED示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_Key_Irq/Edgi_Talk_M33_Key_Irq
+  - source_path_offset: 'projects//Edgi_Talk_M33_Key_Irq'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_Key_Irq'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -362,11 +362,11 @@ example_projects:
   project_description: ADC 采样示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_ADC/Edgi_Talk_M33_ADC
+  - source_path_offset: 'projects//Edgi_Talk_M33_ADC'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_ADC'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -399,11 +399,11 @@ example_projects:
   project_description: M33 安全模式 HyperRAM 示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_HyperRam/Edgi_Talk_M33_S_HyperRam
+  - source_path_offset: 'projects/Edgi_Talk_M33_S_HyperRam'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_HyperRam/libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
+  - source_path_offset: 'projects/libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
     target_path_offset: 'libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
     files_and_folders:
     - cybsp.c
@@ -466,11 +466,11 @@ example_projects:
   project_description: HyperRAM 示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_HyperRam/Edgi_Talk_M33_HyperRam
+  - source_path_offset: 'projects/Edgi_Talk_M33_HyperRam'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_HyperRam'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -503,11 +503,11 @@ example_projects:
   project_description: AHT20 温湿度传感器示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_AHT20/Edgi_Talk_M33_AHT20
+  - source_path_offset: 'projects/Edgi_Talk_M33_AHT20'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_AHT20'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -540,11 +540,11 @@ example_projects:
   project_description: ES8388 音频示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_Audio/Edgi_Talk_M33_Audio
+  - source_path_offset: 'projects/Edgi_Talk_M33_Audio'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_Audio'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -577,11 +577,11 @@ example_projects:
   project_description: WAV 音频播放器示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_WavPlayer/Edgi_Talk_M33_WavPlayer
+  - source_path_offset: 'projects/Edgi_Talk_M33_WavPlayer'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_WavPlayer'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -614,11 +614,11 @@ example_projects:
   project_description: MIPI LCD 屏幕示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_MIPI_LCD/Edgi_Talk_M55_MIPI_LCD
+  - source_path_offset: 'projects/Edgi_Talk_M55_MIPI_LCD'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_MIPI_LCD'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -651,11 +651,11 @@ example_projects:
   project_description: CoreMark 性能测试示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_CoreMark/Edgi_Talk_M55_CoreMark
+  - source_path_offset: 'projects/Edgi_Talk_M55_CoreMark'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_CoreMark'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -688,11 +688,11 @@ example_projects:
   project_description: WiFi6 (CYW55512) 示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI
+  - source_path_offset: 'projects/Edgi_Talk_M55_WIFI'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_WIFI'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -725,11 +725,11 @@ example_projects:
   project_description: 小智 AI 语音助手示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_XiaoZhi/Edgi_Talk_M55_XiaoZhi
+  - source_path_offset: 'projects/Edgi_Talk_M55_XiaoZhi'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_XiaoZhi'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -762,11 +762,11 @@ example_projects:
   project_description: LSM6DS3 六轴传感器示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_LSM6DS3/Edgi_Talk_M33_LSM6DS3
+  - source_path_offset: 'projects/Edgi_Talk_M33_LSM6DS3'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_LSM6DS3'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -799,11 +799,11 @@ example_projects:
   project_description: USB CDC 回环测试示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_CDC_Echo/Edgi_Talk_M33_CDC_Echo
+  - source_path_offset: 'projects/Edgi_Talk_M33_CDC_Echo'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_CDC_Echo'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
@@ -836,11 +836,11 @@ example_projects:
   project_description: LVGL 图形界面示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: projects/Edgi-Talk_LVGL/Edgi_Talk_M55_LVGL
+  - source_path_offset: 'projects/Edgi_Talk_M55_LVGL'
     target_path_offset: ''
     files_and_folders:
     - "*"
-  - source_path_offset: 'projects/Edgi-Talk_LVGL'
+  - source_path_offset: 'projects/'
     target_path_offset: ''
     files_and_folders:
     - libs
