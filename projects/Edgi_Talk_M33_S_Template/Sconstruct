@@ -10,7 +10,7 @@ import uuid
 
 # Project paths
 PROJECT_ROOT = Dir('.').abspath
-SDK_ROOT = os.path.normpath(os.path.join(PROJECT_ROOT, '..', '..', '..'))
+SDK_ROOT = os.path.normpath(os.path.join(PROJECT_ROOT, '..', '..'))
 
 # =============================================================================
 # Toolchain configuration
@@ -151,7 +151,7 @@ if os.path.exists(os.path.join(PROJECT_ROOT, 'libraries')):
     LIBRARIES_PREFIX = ''
 else:
     LIBRARIES_PATH = SDK_ROOT + '/libraries'
-    LIBRARIES_PREFIX = '../../../libraries/'
+    LIBRARIES_PREFIX = '../../libraries/'
 
 # Check if libs exist locally or need to use external path
 if os.path.exists(os.path.join(PROJECT_ROOT, 'libs')):
