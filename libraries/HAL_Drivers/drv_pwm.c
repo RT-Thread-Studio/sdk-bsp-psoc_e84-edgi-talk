@@ -33,10 +33,13 @@ struct ifx_pwm
 
 static struct ifx_pwm ifx_pwm_obj[] =
 {
-#ifdef TCPWM_0_GRP_1_PWM_9_CONFIG
-    TCPWM_0_GRP_1_PWM_9_CONFIG
+#ifdef BSP_USING_PWM18
+    #ifdef TCPWM_0_GRP_1_PWM_9_CONFIG
+        TCPWM_0_GRP_1_PWM_9_CONFIG,
+    #endif
 #endif
 };
+
 
 #ifndef IFX_PWM_MAX_TICKS
 #define IFX_PWM_MAX_TICKS 65535U

@@ -1455,14 +1455,14 @@ const mtb_hal_pwm_configurator_t CYBSP_SMARTIO_PWM_hal_config =
 const cy_stc_tcpwm_pwm_config_t tcpwm_0_group_1_cnt_9_config =
 {
     .pwmMode = CY_TCPWM_PWM_MODE_PWM,
-    .clockPrescaler = CY_TCPWM_PWM_PRESCALER_DIVBY_1,
+    .clockPrescaler = CY_TCPWM_PWM_PRESCALER_DIVBY_2,
     .pwmAlignment = CY_TCPWM_PWM_LEFT_ALIGN,
     .deadTimeClocks = 0,
     .runMode = CY_TCPWM_PWM_CONTINUOUS,
-    .period0 = 32768,
+    .period0 = 65535,
     .period1 = 32768,
     .enablePeriodSwap = false,
-    .compare0 = 16384,
+    .compare0 = 52428,
     .compare1 = 16384,
     .enableCompareSwap = false,
     .interruptSources = (CY_TCPWM_INT_ON_TC & 0U) | (CY_TCPWM_INT_ON_CC0 & 0U) | (CY_TCPWM_INT_ON_CC1 & 0U),
@@ -1482,7 +1482,7 @@ const cy_stc_tcpwm_pwm_config_t tcpwm_0_group_1_cnt_9_config =
     .swapOverflowUnderflow = false,
     .immediateKill = false,
     .tapsEnabled = 45,
-    .compare2 = 16384,
+    .compare2 = 52428,
     .compare3 = 16384,
     .enableCompare1Swap = false,
     .compare0MatchUp = true,
@@ -1539,7 +1539,7 @@ const mtb_hal_pwm_configurator_t tcpwm_0_group_1_cnt_9_hal_config =
     .clock = &tcpwm_0_group_1_cnt_9_hal_clock,
     .group = 1UL,
     .cntnum = 265UL,
-    .max_count = 32768,
+    .max_count = 65535,
 };
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM) */
 

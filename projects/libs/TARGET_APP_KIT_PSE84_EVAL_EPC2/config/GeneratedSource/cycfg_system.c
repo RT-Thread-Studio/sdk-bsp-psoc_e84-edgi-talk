@@ -844,8 +844,20 @@ const cy_stc_sau_config_t SAU_config[4] =
 };
 #endif /* defined(CY_PDL_TZ_ENABLED) */
 
-const cy_stc_mpu_config_t cycfg_mpu_cm55_ns_0_config[3] =
+const cy_stc_mpu_config_t cycfg_mpu_cm55_ns_0_config[4] =
 {
+    {
+        .reg_num = 0U,
+        .base_addr = 0x64400000,
+        .end_addr = 0x64FFFFFF,
+        .writable = true,
+        .require_privileged = false,
+        .shareable = false,
+        .executable = false,
+        .cacheable = 4,
+        .is_device = false,
+        .device_attrs = 0,
+    },
     {
         .reg_num = 1U,
         .base_addr = 0x240FD000,

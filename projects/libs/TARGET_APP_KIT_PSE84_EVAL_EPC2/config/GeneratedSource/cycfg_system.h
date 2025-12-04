@@ -144,7 +144,7 @@ extern const size_t cycfg_unused_ppc_1_regions_count;
 extern const cy_stc_sau_config_t SAU_config[4];
 #endif /* defined(CY_PDL_TZ_ENABLED) */
 
-extern const cy_stc_mpu_config_t cycfg_mpu_cm55_ns_0_config[3];
+extern const cy_stc_mpu_config_t cycfg_mpu_cm55_ns_0_config[4];
 
 #if defined(COMPONENT_SECURE_DEVICE) && defined(COMPONENT_MW_MTB_SRF)
 extern const mtb_srf_protection_range_s_t mxrramc_0_mpc_0_srf_protection_range_s[mxrramc_0_mpc_0_REGION_COUNT];

@@ -170,8 +170,8 @@ menu "On-chip Peripheral Drivers"
         select RT_USING_PWM
         default n
         if BSP_USING_PWM
-            config BSP_USING_PWM0
-                bool "Enable PWM0"
+            config BSP_USING_PWM18
+                bool "Enable PWM18"
                 default y
         endif
 

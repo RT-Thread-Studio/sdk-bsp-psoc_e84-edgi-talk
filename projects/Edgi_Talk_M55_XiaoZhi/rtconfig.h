@@ -565,7 +565,7 @@
 #define BSP_USING_SDCARD
 #define BSP_USING_FS
 #define BSP_USING_PWM
-#define BSP_USING_PWM0
+#define BSP_USING_PWM18
 #define BSP_USING_LCD
 #define COMPONENT_MTB_DISPLAY_tl043wvv02
 #define USING_LVGL

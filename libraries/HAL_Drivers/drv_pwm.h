@@ -18,7 +18,7 @@
 extern "C" {
 #endif
 
-#ifdef BSP_USING_PWM0
+#ifdef BSP_USING_PWM18
 
 #ifndef TCPWM_0_GRP_1_PWM_9_CONFIG
 #define TCPWM_0_GRP_1_PWM_9_CONFIG \
@@ -33,7 +33,7 @@ extern "C" {
 }
 #endif /* TCPWM_0_GRP_1_PWM_9_CONFIG */
 
-#endif /* BSP_USING_PWM0 */
+#endif /* BSP_USING_PWM18 */
 
 #ifdef __cplusplus
 }
