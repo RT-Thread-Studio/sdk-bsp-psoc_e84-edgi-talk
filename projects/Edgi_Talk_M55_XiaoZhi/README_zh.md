@@ -16,36 +16,62 @@
   * 按键唤醒与语音交互
   * 设备状态管理（待机、监听、休眠等）
 
-## 使用方法
-### WIFI修改
-1. 在 `main.c` 36行中找到以下代码：
-```c
-while (rt_wlan_connect("TEST", "88888888"));
-```
-2. 将 "TEST" 改为你的 WiFi 名称，"88888888" 改为密码，重新编译并烧录。
-3. WIFI 详细使用参考 ：[**WIFI**](../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README_zh.md)
-### 编译与下载
+# 使用方法
 
-1. 打开工程并完成编译。
-2. 使用 **板载下载器 (DAP)** 将开发板的 USB 接口连接至 PC。
-3. 通过编程工具将生成的固件烧录至设备。
+## 1. 初次使用（AP 配网）
+
+1. 开发板启动会进入 **AP 模式**。
+   在手机 / 电脑中连接设备的热点（密码见屏幕显示）：
+   ![alt text](figures/4.png)
+
+2. 连接成功后，在浏览器中输入 **192.168.169.1** 打开后台界面进行配网：
+
+3. 点击 **Scan** 扫描附近的 Wi-Fi 热点：
+   ![alt text](figures/6.png)
+
+4. Wi-Fi 连接成功后，将显示如下界面：
+   ![alt text](figures/7.png)
+
+5. 当设备屏幕显示 **“待命中”** 时，表示可以正常进行语音对话：
+   ![alt text](figures/8.png)
+
+> **提示**：按一下开发板上的 **第一个用户按键** 进入语音输入，等待 1–2 秒后，小智会自动回复。
+
+# 小智表情含义说明
+
+## 1. 联网中（请稍候）
+
+![alt text](figures/9.png)
+
+## 2. 监听中（需要按按键开始对话）
+
+![alt text](figures/10.png)
+
+## 3. 聆听中（正在处理对话内容）
+
+![alt text](figures/11.png)
+
+## 4. 对话中（小智正在回复你）
+
+![alt text](figures/12.png)
+
+## 5. 休眠状态（低功耗）
+
+![alt text](figures/13.png)
+
+> 从休眠恢复：按一下按键 → 等待进入“待命中” → 可继续对话。  图片大小缩小一点
 
 ### 运行效果
 
 * 烧录完成后，设备上电即可运行示例工程。
-* 屏幕会显示当前状态，包括：
+* **按一下**顶部按键对话，可进入 **聆听中** 状态进行语音交互。
+  ![alt text](figures/3.png)
 
-  * **Connecting**：正在连接 WiFi
-  * **On standby**：待机中
-  * **Listening**：监听中，可与设备对话
-  * **Sleeping**：休眠状态
-* **按住**顶部按键对话，可进入 **Listening** 状态进行语音交互。
-
-![alt text](figures/3.png)
 ## 注意事项
+
 * 第一次需要进入 [小智官网](https://xiaozhi.me/) 进行后台绑定
-![alt text](figures/2.png)
-![alt text](figures/1.png)
+  ![alt text](figures/2.png)
+  按下用户按键屏幕显示验证码
 * 请确保 WiFi 名称与密码正确，并使用 **2.4GHz 频段**。
 * 设备需在可访问互联网的环境下使用。
 * 如需修改工程的 **图形化配置**，请使用以下工具：
@@ -90,4 +116,5 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 ```
 RT-Thread Settings --> 硬件 --> select SOC Multi Core Mode --> Enable CM55 Core
 ```
+
 ![config](figures/config.png)

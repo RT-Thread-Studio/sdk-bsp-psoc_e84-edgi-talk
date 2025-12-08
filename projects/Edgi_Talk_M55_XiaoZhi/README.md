@@ -1,64 +1,83 @@
-# XiaoZhi Example Project
+# XiaoZhi Sample Project
 
-[**中文**](./README_zh.md) | **English**
+**中文** | [**English**](./README.md)
 
 ## Introduction
 
-This example demonstrates the **basic functionality of XiaoZhi voice interaction device** on the **Edgi-Talk platform**, running **RT-Thread RTOS**.
-It allows users to quickly test Wi-Fi connection, key wake-up, and voice interaction, serving as a foundation for further application development.
+This sample project is based on the **Edgi-Talk platform**, demonstrating the **basic functions of the XiaoZhi voice interaction device**, running on the **RT-Thread real-time operating system**.
+With this project, users can quickly verify the device’s **WiFi connection**, **button wake-up**, and **voice interaction** capabilities, providing a fundamental reference for further application development.
 
 ## Software Description
 
-* Developed on **Edgi-Talk** platform.
-* Example features:
+* The project is developed based on the **Edgi-Talk** platform.
+* The sample includes the following functions:
 
-  * Wi-Fi connection and status display
-  * Key wake-up and voice interaction
-  * Device state management (standby, listening, sleep)
+  * WiFi connection and status display
+  * Button wake-up and voice interaction
+  * Device state management (standby, listening, sleep, etc.)
 
-## Usage
+# Usage
 
-### WIFI Modification
+## 1. First-time setup (AP configuration)
 
-1. In `main.c` at line 36, locate the following code:
+1. When the development board starts, it will enter **AP mode**.
+   Connect your phone or computer to the device hotspot (password shown on the screen):
+   ![alt text](figures/4.png)
 
-```c
-while (rt_wlan_connect("TEST", "88888888"));
-```
+2. After a successful connection, open a browser and enter **192.168.169.1** to access the configuration interface:
 
-2. Replace "TEST" with your WiFi name and "88888888" with the password, then recompile and flash.
-3. For detailed WiFi usage, refer to: [**WIFI**](../../Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/README.md)
+3. Click **Scan** to search for nearby Wi-Fi hotspots:
+   ![alt text](figures/6.png)
 
-### Build and Download
+4. After the WiFi connection is successful, the following page will be displayed:
+   ![alt text](figures/7.png)
 
-1. Open and compile the project.
-2. Connect the board USB to PC via **DAP**.
-3. Flash the compiled firmware to the device.
+5. When the device screen shows **“Standby”**, it means voice interaction is ready:
+   ![alt text](figures/8.png)
 
-### Running Result
+> **Tip:** Press the **first user button** on the development board to enter voice input. After waiting 1–2 seconds, XiaoZhi will automatically respond.
 
-* After power-on, the device runs the example automatically.
+# XiaoZhi Expression Meaning
 
-* The screen displays the current status:
+## 1. Connecting (please wait)
 
-  * **Connecting** – connecting to Wi-Fi
-  * **On standby** – idle mode
-  * **Listening** – ready for voice interaction
-  * **Sleeping** – low-power sleep mode
+![alt text](figures/9.png)
 
-* Hold down the top button to speak and enter the Listening state for voice interaction.
+## 2. Monitoring (press the button to start talking)
+
+![alt text](figures/10.png)
+
+## 3. Listening (processing your speech)
+
+![alt text](figures/11.png)
+
+## 4. Speaking (XiaoZhi is responding to you)
+
+![alt text](figures/12.png)
+
+## 5. Sleep mode (low power)
+
+![alt text](figures/13.png)
+
+> To exit sleep: press the button → wait for “Standby” → interaction becomes available.
+
+### Running Effect
+
+* After flashing, the device will start the sample automatically on power-up.
+* Press the top button once to enter the **Listening** state and interact with the device.
+  ![alt text](figures/3.png)
 
 ## Notes
 
-* First-time setup requires backend binding via [XiaoZhi Official Website](https://xiaozhi.me/).
+* For first-time use, visit the [XiaoZhi official website](https://xiaozhi.me/) to complete backend binding.
   ![alt text](figures/2.png)
-  ![alt text](figures/1.png)
+  Press the user button to display the verification code on the screen.
 
-* Ensure Wi-Fi SSID and password are correct and use **2.4 GHz** frequency.
+* Please ensure the WiFi SSID and password are correct and that you are using a **2.4GHz network**.
 
-* Device must have internet access.
+* The device requires an Internet connection to function properly.
 
-* To modify graphical configurations, use:
+* If you need to modify the **graphical configuration**, use the following tools:
 
 ```
 tools/device-configurator/device-configurator.exe
