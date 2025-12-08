@@ -16,9 +16,9 @@ With this project, users can quickly verify the device’s **WiFi connection**, 
   * Button wake-up and voice interaction
   * Device state management (standby, listening, sleep, etc.)
 
-# Usage
+## Usage
 
-## 1. First-time setup (AP configuration)
+### 1. First-time setup (AP configuration)
 
 1. When the development board starts, it will enter **AP mode**.
    Connect your phone or computer to the device hotspot (password shown on the screen):
@@ -37,25 +37,25 @@ With this project, users can quickly verify the device’s **WiFi connection**, 
 
 > **Tip:** Press the **first user button** on the development board to enter voice input. After waiting 1–2 seconds, XiaoZhi will automatically respond.
 
-# XiaoZhi Expression Meaning
+## XiaoZhi Expression Meaning
 
-## 1. Connecting (please wait)
+### 1. Connecting (please wait)
 
 ![alt text](figures/9.png)
 
-## 2. Monitoring (press the button to start talking)
+### 2. Monitoring (press the button to start talking)
 
 ![alt text](figures/10.png)
 
-## 3. Listening (processing your speech)
+### 3. Listening (processing your speech)
 
 ![alt text](figures/11.png)
 
-## 4. Speaking (XiaoZhi is responding to you)
+### 4. Speaking (XiaoZhi is responding to you)
 
 ![alt text](figures/12.png)
 
-## 5. Sleep mode (low power)
+### 5. Sleep mode (low power)
 
 ![alt text](figures/13.png)
 
