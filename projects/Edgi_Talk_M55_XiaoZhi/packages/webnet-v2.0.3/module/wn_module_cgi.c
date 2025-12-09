@@ -22,6 +22,7 @@
  */
 
 #include <string.h>
+#include <strings.h>  /* For strncasecmp */
 
 #include <webnet.h>
 #include <wn_module.h>

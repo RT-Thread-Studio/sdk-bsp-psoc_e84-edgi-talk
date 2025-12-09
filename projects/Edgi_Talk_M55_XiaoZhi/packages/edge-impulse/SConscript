@@ -1,0 +1,192 @@
+﻿from building import *
+import os
+
+cwd = GetCurrentDir()
+
+# Edge Impulse SDK relative path (for source files)
+EI_SDK_REL = 'edge-impulse-sdk'
+# Edge Impulse SDK absolute path (for includes)
+EI_SDK_PATH = cwd + '/' + EI_SDK_REL
+
+# Check if prebuilt libraries exist
+PREBUILT_EI_LIB = cwd + '/lib/libedge_impulse.a'
+USE_PREBUILT = os.path.exists(PREBUILT_EI_LIB)
+
+# ============= Include paths =============
+path = []
+path += [cwd]
+path += [cwd + '/model-parameters']
+path += [cwd + '/tflite-model']
+
+# Edge Impulse SDK includes
+path += [EI_SDK_PATH]
+path += [EI_SDK_PATH + '/classifier']
+path += [EI_SDK_PATH + '/dsp']
+path += [EI_SDK_PATH + '/dsp/kissfft']
+path += [EI_SDK_PATH + '/porting']
+
+# TensorFlow Lite includes
+path += [EI_SDK_PATH + '/tensorflow']
+path += [EI_SDK_PATH + '/tensorflow/lite']
+path += [EI_SDK_PATH + '/tensorflow/lite/micro']
+path += [EI_SDK_PATH + '/tensorflow/lite/kernels']
+path += [EI_SDK_PATH + '/tensorflow/lite/kernels/internal']
+path += [EI_SDK_PATH + '/tensorflow/lite/c']
+path += [EI_SDK_PATH + '/tensorflow/lite/core']
+path += [EI_SDK_PATH + '/tensorflow/lite/core/c']
+
+# Third party includes
+path += [EI_SDK_PATH + '/third_party/flatbuffers/include']
+path += [EI_SDK_PATH + '/third_party/gemmlowp']
+path += [EI_SDK_PATH + '/third_party/ruy']
+
+# CMSIS includes
+path += [EI_SDK_PATH + '/CMSIS/Core/Include']
+path += [EI_SDK_PATH + '/CMSIS/DSP/Include']
+path += [EI_SDK_PATH + '/CMSIS/DSP/PrivateInclude']
+path += [EI_SDK_PATH + '/CMSIS/NN/Include']
+
+# ============= Compiler definitions =============
+LOCAL_CFLAGS = ''
+LOCAL_CXXFLAGS = ''
+
+# Enable RT-Thread porting
+LOCAL_CFLAGS += ' -D__RTTHREAD__'
+LOCAL_CFLAGS += ' -DEI_PORTING_RTTHREAD=1'
+LOCAL_CXXFLAGS += ' -D__RTTHREAD__'
+LOCAL_CXXFLAGS += ' -DEI_PORTING_RTTHREAD=1'
+
+# TFLite Micro definitions
+LOCAL_CFLAGS += ' -DTF_LITE_STATIC_MEMORY'
+LOCAL_CFLAGS += ' -DTF_LITE_DISABLE_X86_NEON'
+LOCAL_CXXFLAGS += ' -DTF_LITE_STATIC_MEMORY'
+LOCAL_CXXFLAGS += ' -DTF_LITE_DISABLE_X86_NEON'
+
+# Edge Impulse definitions - ENABLE CMSIS-DSP for M55 (without MVE/Helium to avoid missing arm_mve.h)
+LOCAL_CFLAGS += ' -DEI_CLASSIFIER_TFLITE_ENABLE_CMSIS_NN=1'
+LOCAL_CFLAGS += ' -DEIDSP_USE_CMSIS_DSP=1'
+LOCAL_CFLAGS += ' -DEIDSP_LOAD_CMSIS_DSP_SOURCES=1'
+LOCAL_CFLAGS += ' -DEIDSP_QUANTIZE_FILTERBANK=0'
+LOCAL_CXXFLAGS += ' -DEI_CLASSIFIER_TFLITE_ENABLE_CMSIS_NN=1'
+LOCAL_CXXFLAGS += ' -DEIDSP_USE_CMSIS_DSP=1'
+LOCAL_CXXFLAGS += ' -DEIDSP_LOAD_CMSIS_DSP_SOURCES=1'
+LOCAL_CXXFLAGS += ' -DEIDSP_QUANTIZE_FILTERBANK=0'
+
+# ARM math definitions for Cortex-M55 - Disable MVE/Helium (requires arm_mve.h from toolchain)
+# Use AUTOVECTORIZE to disable MVE intrinsics while keeping DSP optimizations
+LOCAL_CFLAGS += ' -DARM_MATH_CM55 -DARM_MATH_DSP -DARM_MATH_LOOPUNROLL -DARM_MATH_AUTOVECTORIZE'
+LOCAL_CXXFLAGS += ' -DARM_MATH_CM55 -DARM_MATH_DSP -DARM_MATH_LOOPUNROLL -DARM_MATH_AUTOVECTORIZE'
+
+# C++ flags
+LOCAL_CXXFLAGS += ' -std=c++11 -fno-rtti -fno-exceptions -fno-threadsafe-statics'
+LOCAL_CXXFLAGS += ' -Wno-sign-compare -Wno-strict-aliasing'
+
+if USE_PREBUILT:
+    # ============= Use prebuilt static library =============
+    print('=== Using prebuilt libedge_impulse.a ===')
+    
+    src = []
+    # Only compile application-specific files (model, test code)
+    src += Glob('*.cpp')
+    src += Glob('*.c')
+    src += Glob('tflite-model/*.cpp')
+    
+    LIBS = ['edge_impulse']
+    LIBPATH = [cwd + '/lib']
+    
+    group = DefineGroup('edge_impulse', src, depend=[''], 
+                        CPPPATH=path, 
+                        LOCAL_CFLAGS=LOCAL_CFLAGS,
+                        LOCAL_CXXFLAGS=LOCAL_CXXFLAGS,
+                        LIBS=LIBS, LIBPATH=LIBPATH)
+else:
+    # ============= Build from source =============
+    print('=== Building edge_impulse from source ===')
+    
+    src = []
+    
+    # Application source files
+    src += Glob('*.cpp')
+    src += Glob('*.c')
+    
+    # TFLite model
+    src += Glob('tflite-model/*.cpp')
+    
+    # RT-Thread porting layer
+    src += Glob(EI_SDK_REL + '/porting/rtthread/*.cpp')
+    
+    # DSP source files
+    src += Glob(EI_SDK_REL + '/dsp/*.cpp')
+    src += Glob(EI_SDK_REL + '/dsp/dct/*.cpp')
+    src += Glob(EI_SDK_REL + '/dsp/kissfft/*.cpp')
+    src += Glob(EI_SDK_REL + '/dsp/speechpy/*.cpp')
+    src += Glob(EI_SDK_REL + '/dsp/spectral/*.cpp')
+    src += Glob(EI_SDK_REL + '/dsp/image/*.cpp')
+    src += Glob(EI_SDK_REL + '/dsp/dsp_engines/*.cpp')
+    
+    # TensorFlow Lite Micro core
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/micro/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/micro/*.cc')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/micro/memory_planner/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/micro/memory_planner/*.cc')
+    
+    # TensorFlow Lite Micro kernels
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/micro/kernels/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/micro/kernels/*.cc')
+    
+    # TensorFlow Lite core
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/kernels/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/kernels/*.cc')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/kernels/internal/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/kernels/internal/*.cc')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/c/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/c/*.cc')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/c/*.c')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/core/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/core/*.cc')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/core/c/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/core/c/*.cc')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/core/c/*.c')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/core/api/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/core/api/*.cc')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/schema/*.cpp')
+    src += Glob(EI_SDK_REL + '/tensorflow/lite/schema/*.cc')
+    
+    # CMSIS-NN
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/ActivationFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/BasicMathFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/ConcatenationFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/ConvolutionFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/FullyConnectedFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/NNSupportFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/PoolingFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/ReshapeFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/SoftmaxFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/SVDFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/NN/Source/LSTMFunctions/*.c')
+    
+    # CMSIS-DSP (ENABLED for M55 with Helium/MVE support)
+    src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/TransformFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/CommonTables/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/BasicMathFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/FastMathFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/StatisticsFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/SupportFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/MatrixFunctions/*.c')
+    src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/ComplexMathFunctions/*.c')
+    
+    # Exclude test files
+    SrcRemove(src, ['*test*.cpp', '*test*.cc', '*mock*.cpp', '*mock*.cc', '*_test.cpp', '*_test.cc'])
+    SrcRemove(src, ['*test_helper*.cpp', '*fake_micro*.cpp', '*recording_*.cpp'])
+    # Exclude rfft2d.cpp because it requires float kiss_fft (conflicts with FIXED_POINT from opus config)
+    SrcRemove(src, [EI_SDK_REL + '/tensorflow/lite/micro/kernels/rfft2d.cpp'])
+    # Exclude FP16 files - GCC 14.2 internal compiler error with half-precision float on M55
+    # Bug: "unrecognizable insn" in if_then_else:HF with ccfpe condition
+    SrcRemove(src, ['*_f16.c', '*_f16.cpp'])
+    
+    group = DefineGroup('edge_impulse', src, depend=[''], 
+                        CPPPATH=path, 
+                        LOCAL_CFLAGS=LOCAL_CFLAGS,
+                        LOCAL_CXXFLAGS=LOCAL_CXXFLAGS)
+
+Return('group')

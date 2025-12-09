@@ -6,6 +6,10 @@
 #include "lwip/tcpip.h"
 #include "xiaozhi.h"
 
+/* Include opus heap functions */
+extern void *opus_heap_malloc(uint32_t size);
+extern void opus_heap_free(void *p);
+
 #define DBG_TAG "xz.audio"
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>

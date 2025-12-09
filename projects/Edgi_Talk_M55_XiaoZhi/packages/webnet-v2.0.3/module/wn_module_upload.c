@@ -21,6 +21,7 @@
  * 2012-06-25     Bernard      the first version
  */
 
+#include <strings.h>  /* For strncasecmp */
 #include <webnet.h>
 #include <wn_module.h>
 #include <wn_utils.h>

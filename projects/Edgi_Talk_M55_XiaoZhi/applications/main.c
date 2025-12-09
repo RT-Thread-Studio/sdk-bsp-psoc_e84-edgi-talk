@@ -41,16 +41,16 @@ int main(void)
     LOG_I("Cortex-M55 started");
 
     /* Initialize UI subsystem */
-    xiaozhi_ui_init();
+    // xiaozhi_ui_init();
 
-    /* Wait for UI initialization to complete */
-    if (xiaozhi_ui_wait_ready(rt_tick_from_millisecond(UI_INIT_TIMEOUT_MS)) != RT_EOK)
-    {
-        LOG_W("UI initialization timeout");
-    }
+    // /* Wait for UI initialization to complete */
+    // if (xiaozhi_ui_wait_ready(rt_tick_from_millisecond(UI_INIT_TIMEOUT_MS)) != RT_EOK)
+    // {
+    //     LOG_W("UI initialization timeout");
+    // }
 
-    /* Initialize WiFi manager */
-    wifi_manager_init();
+    // /* Initialize WiFi manager */
+    // wifi_manager_init();
 
     return 0;
 }

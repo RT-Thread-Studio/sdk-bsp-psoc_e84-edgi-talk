@@ -1,5 +1,6 @@
 from building import *
 Import('rtconfig')
+import os
 
 src   = []
 cwd   = GetCurrentDir()
@@ -9,28 +10,51 @@ path = []
 path += [cwd]
 path += [cwd + '/include']
 path += [cwd + '/silk', cwd + '/celt', cwd + '/silk/fixed']
-src += Glob('./celt/*.c')
-src += Glob('./silk/*.c')
-src += Glob('./silk/fixed/*.c')
-src += Glob('./src/*.c')
+path += [cwd + '/celt/arm', cwd + '/silk/arm', cwd + '/silk/fixed/arm']
 
-SrcRemove(src, ['./src/opus_demo.c', './src/repacketizer_demo.c', './src/opus_compare.c', './celt/opus_custom_demo.c'])
+# Check if prebuilt library exists
+PREBUILT_LIB = cwd + '/lib/libopus.a'
+USE_PREBUILT = os.path.exists(PREBUILT_LIB)
 
-if GetDepend(['BF0_ACPU']):
-    SrcRemove(src, ['./src/opus_test.c'])
-
+# Base definitions
 CPPDEFINES = ['HAVE_LRINTF', 'HAVE_ALLOCA_H', 'USE_ALLOCA', 'OPUS_BUILD', 'FIXED_POINT', 'DISABLE_FLOAT_API']
 
-#LOCAL_CCFLAGS = ' -Wno-error -Wno-#warnings -O3'
-#LOCAL_CCFLAGS = ' -Wno-error -Wno-#warnings -Ofast'
-# TODO:
-if rtconfig.PLATFORM != 'gcc':
-    LOCAL_CCFLAGS = ' -Wno-error -Wno-#warnings -Oz'
-else:    
-    LOCAL_CCFLAGS = ''
+# ARM Cortex-M55 optimizations (ARMv8.1-M with DSP extensions)
+# Enable ARM inline assembly optimizations - M55 supports ARMv5E/ARMv6 DSP instructions
+CPPDEFINES += [
+    'OPUS_ARM_INLINE_ASM',    # Enable ARM inline assembly
+    'OPUS_ARM_INLINE_EDSP',   # Enable ARMv5E DSP instructions (smulwb, smlawb, etc.)
+    'OPUS_ARM_INLINE_MEDIA',  # Enable ARMv6 SIMD instructions (smuad, smlad, etc.)
+]
 
-# add src and include to group.
-#
-group = DefineGroup('libopus', src, depend = ['PKG_LIB_OPUS'], CPPPATH = path, CPPDEFINES = CPPDEFINES, LOCAL_CCFLAGS = LOCAL_CCFLAGS)
+if USE_PREBUILT:
+    # Use prebuilt static library
+    print('=== Using prebuilt libopus.a ===')
+    LIBS = ['opus']
+    LIBPATH = [cwd + '/lib']
+    group = DefineGroup('libopus', [], depend = ['PKG_LIB_OPUS'], 
+                        CPPPATH = path, CPPDEFINES = CPPDEFINES,
+                        LIBS = LIBS, LIBPATH = LIBPATH)
+else:
+    # Build from source
+    print('=== Building libopus from source ===')
+    src += Glob('./celt/*.c')
+    src += Glob('./silk/*.c')
+    src += Glob('./silk/fixed/*.c')
+    src += Glob('./src/*.c')
+    
+    SrcRemove(src, ['./src/opus_demo.c', './src/repacketizer_demo.c', './src/opus_compare.c', './celt/opus_custom_demo.c'])
+    
+    if GetDepend(['BF0_ACPU']):
+        SrcRemove(src, ['./src/opus_test.c'])
+    
+    if rtconfig.PLATFORM != 'gcc':
+        LOCAL_CCFLAGS = ' -Wno-error -Wno-#warnings -Oz'
+    else:    
+        LOCAL_CCFLAGS = ''
+    
+    group = DefineGroup('libopus', src, depend = ['PKG_LIB_OPUS'], 
+                        CPPPATH = path, CPPDEFINES = CPPDEFINES, 
+                        LOCAL_CCFLAGS = LOCAL_CCFLAGS)
 
 Return('group')

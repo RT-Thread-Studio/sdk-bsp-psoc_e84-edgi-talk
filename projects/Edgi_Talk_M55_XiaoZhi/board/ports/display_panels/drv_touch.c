@@ -32,7 +32,6 @@ static rt_err_t ST7102_write_reg(struct rt_i2c_client *dev, rt_uint8_t *data, rt
 static rt_err_t ST7102_read_regs(struct rt_i2c_client *dev, rt_uint8_t *reg, rt_uint8_t *data, rt_uint8_t len)
 {
     struct rt_i2c_msg msgs[2];
-    rt_uint8_t buf[2];
 
     msgs[0].addr = dev->client_addr;
     msgs[0].flags = RT_I2C_WR;
@@ -58,16 +57,22 @@ static rt_err_t ST7102_get_info(struct rt_i2c_client *dev, struct rt_touch_info 
 {
     rt_uint8_t Reg_High[2];
     rt_uint8_t Reg_Low[2];
+    rt_uint8_t reg_addr;
 
-    ST7102_read_regs(dev, ST7102_MAX_X_Coord_High, Reg_High, 1);
-    ST7102_read_regs(dev, ST7102_MAX_X_Coord_Low, Reg_Low, 1);
+    reg_addr = ST7102_MAX_X_Coord_High;
+    ST7102_read_regs(dev, &reg_addr, Reg_High, 1);
+    reg_addr = ST7102_MAX_X_Coord_Low;
+    ST7102_read_regs(dev, &reg_addr, Reg_Low, 1);
     info->range_x = (Reg_High[0] & 0x3F) << 8 | Reg_Low[0];
 
-    ST7102_read_regs(dev, ST7102_MAX_Y_Coord_High, Reg_High, 1);
-    ST7102_read_regs(dev, ST7102_MAX_Y_Coord_Low, Reg_Low, 1);
+    reg_addr = ST7102_MAX_Y_Coord_High;
+    ST7102_read_regs(dev, &reg_addr, Reg_High, 1);
+    reg_addr = ST7102_MAX_Y_Coord_Low;
+    ST7102_read_regs(dev, &reg_addr, Reg_Low, 1);
     info->range_y = (Reg_High[0] & 0x3F) << 8 | Reg_Low[0];
 
-    ST7102_read_regs(dev, ST7102_MAX_Touches, Reg_Low, 1);
+    reg_addr = ST7102_MAX_Touches;
+    ST7102_read_regs(dev, &reg_addr, Reg_Low, 1);
     info->point_num = Reg_Low[0];
 
     return RT_EOK;
