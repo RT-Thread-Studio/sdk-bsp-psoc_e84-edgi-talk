@@ -129,6 +129,7 @@ if os.path.exists(os.path.join(os.getcwd(), "libraries")):
     objs.extend(SConscript('libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
     objs.extend(SConscript('libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
     objs.extend(SConscript('libraries/components/lvgl_9.2.0/SConscript', variant_dir='build/libraries/components/lvgl_9.2.0', duplicate=0))
+    objs.extend(SConscript('libraries/components/wifi-host-driver-latest/SConscript', variant_dir='build/libraries/components/wifi-host-driver-latest', duplicate=0))
 else:
     # Set VariantDir for external libraries
     env.VariantDir('build/libraries/HAL_Drivers', '../../libraries/HAL_Drivers', duplicate=0)
@@ -148,6 +149,7 @@ else:
     objs.extend(SConscript('../../libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
     objs.extend(SConscript('../../libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
     objs.extend(SConscript('../../libraries/components/lvgl_9.2.0/SConscript', variant_dir='build/libraries/components/lvgl_9.2.0', duplicate=0))
+    objs.extend(SConscript('../../libraries/components/wifi-host-driver-latest/SConscript', variant_dir='build/libraries/components/wifi-host-driver-latest', duplicate=0))
 
 # make a building
 DoBuilding(TARGET, objs)
