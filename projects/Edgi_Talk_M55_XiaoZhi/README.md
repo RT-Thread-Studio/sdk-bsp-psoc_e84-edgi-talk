@@ -22,17 +22,21 @@ With this project, users can quickly verify the device’s **WiFi connection**, 
 
 1. When the development board starts, it will enter **AP mode**.
    Connect your phone or computer to the device hotspot (password shown on the screen):
+
    ![alt text](figures/4.png)
 
 2. After a successful connection, open a browser and enter **192.168.169.1** to access the configuration interface:
 
 3. Click **Scan** to search for nearby Wi-Fi hotspots:
+
    ![alt text](figures/6.png)
 
 4. After the WiFi connection is successful, the following page will be displayed:
+
    ![alt text](figures/7.png)
 
 5. When the device screen shows **“Standby”**, it means voice interaction is ready:
+
    ![alt text](figures/8.png)
 
 > **Tip:** Press the **first user button** on the development board to enter voice input. After waiting 1–2 seconds, XiaoZhi will automatically respond.
