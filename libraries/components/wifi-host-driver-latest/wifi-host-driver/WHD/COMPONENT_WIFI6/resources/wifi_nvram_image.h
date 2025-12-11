@@ -34,7 +34,7 @@ extern uint32_t wifi_nvram_image_size;
     #ifdef CY_STORAGE_WIFI_DATA
         RESOURCE_BIN_ADD(".cy_xip.nvram", NVRAM_IMAGE_NAME, wifi_nvram_image_data, wifi_nvram_image_size);
     #else
-        RESOURCE_BIN_ADD(".rodata", "../libraries/components/wifi-host-driver-latest/cyw55513modpse84som_rev3.txt", wifi_nvram_image_data, wifi_nvram_image_size);
+        RESOURCE_BIN_ADD(".rodata", "../../libraries/components/wifi-host-driver-latest/cyw55513modpse84som_rev3.txt", wifi_nvram_image_data, wifi_nvram_image_size);
     #endif
 #else
     uint32_t  wifi_nvram_image_size = NVRAM_IMAGE_SIZE;

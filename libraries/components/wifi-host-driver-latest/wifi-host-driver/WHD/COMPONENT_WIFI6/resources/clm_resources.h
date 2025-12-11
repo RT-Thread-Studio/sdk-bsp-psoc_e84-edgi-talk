@@ -14,7 +14,7 @@ extern uint32_t wifi_firmware_clm_blob_size;
     #ifdef CY_STORAGE_WIFI_DATA
         RESOURCE_BIN_ADD(".cy_xip.clm", CLM_IMAGE_NAME, wifi_firmware_clm_blob_data, wifi_firmware_clm_blob_size);
     #else
-        RESOURCE_BIN_ADD(".rodata", "../libraries/components/wifi-host-driver-latest/55500A1.clm_blob", wifi_firmware_clm_blob_data, wifi_firmware_clm_blob_size);
+        RESOURCE_BIN_ADD(".rodata", "../../libraries/components/wifi-host-driver-latest/55500A1.clm_blob", wifi_firmware_clm_blob_data, wifi_firmware_clm_blob_size);
     #endif
 #endif
 const resource_hnd_t wifi_firmware_clm_blob = { RESOURCE_IN_MEMORY, 1519, {.mem = { (const char *) wifi_firmware_clm_blob_data }}};

@@ -30,7 +30,7 @@ extern uint32_t wifi_firmware_image_size;
     #ifdef CY_STORAGE_WIFI_DATA
         RESOURCE_BIN_ADD(".cy_xip.fw", FW_IMAGE_NAME, wifi_firmware_image_data, wifi_firmware_image_size);
     #else
-        RESOURCE_BIN_ADD(".rodata", "../libraries/components/wifi-host-driver-latest/55500A1.trxcse", wifi_firmware_image_data, wifi_firmware_image_size);
+        RESOURCE_BIN_ADD(".rodata", "../../libraries/components/wifi-host-driver-latest/55500A1.trxcse", wifi_firmware_image_data, wifi_firmware_image_size);
     #endif
 #endif
 #ifndef DM_43022C1
