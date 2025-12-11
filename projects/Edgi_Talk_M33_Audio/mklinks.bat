@@ -1,8 +1,7 @@
 @echo off
-%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::","","runas",1)(window.close)&&exit
 cd /d "%~dp0"
 @echo on
-mklink /D rt-thread ..\..\rt-thread
-mklink /D libraries ..\..\libraries
-mklink /D libs ..\libs
-mklink /D tools ..\..\tools
+mklink /J rt-thread ..\..\rt-thread
+mklink /J libraries ..\..\libraries
+mklink /J libs ..\libs
+mklink /J tools ..\..\tools
