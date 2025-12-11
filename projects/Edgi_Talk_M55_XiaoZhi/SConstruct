@@ -8,7 +8,7 @@ import uuid
 if os.path.exists('rt-thread'):
     RTT_ROOT = os.path.normpath(os.getcwd() + '/rt-thread')
 else:
-    RTT_ROOT = os.path.normpath(os.getcwd() + '../../../rt-thread')
+    RTT_ROOT = os.path.normpath(os.getcwd() + '/../../rt-thread')
 
 sys.path = sys.path + [os.path.join(RTT_ROOT, 'tools')]
 try:
