@@ -14,6 +14,10 @@ path += [cwd]
 path += [cwd + '/model-parameters']
 path += [cwd + '/tflite-model']
 
+# Add xiaozhi directory for wake word callback functions
+path += [cwd + '/../applications/xiaozhi']
+path += [cwd + '/../applications/xiaozhi/ui']
+
 # Edge Impulse SDK includes
 path += [EI_SDK_PATH]
 path += [EI_SDK_PATH + '/classifier']
@@ -119,6 +123,7 @@ src += Glob(EI_SDK_REL + '/CMSIS/DSP/Source/ComplexMathFunctions/*.c')
 
 # Exclude test files
 SrcRemove(src, ['*test*.cpp', '*test*.cc', '*mock*.cpp', '*mock*.cc', '*_test.cpp', '*_test.cc'])
+
 SrcRemove(src, ['*test_helper*.cpp', '*fake_micro*.cpp', '*recording_*.cpp'])
 # Exclude rfft2d.cpp because it requires float kiss_fft (conflicts with FIXED_POINT from opus config)
 SrcRemove(src, [EI_SDK_REL + '/tensorflow/lite/micro/kernels/rfft2d.cpp'])

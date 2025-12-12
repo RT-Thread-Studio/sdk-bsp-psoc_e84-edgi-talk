@@ -1,0 +1,9 @@
+from building import *
+
+cwd = GetCurrentDir()
+src = Glob('*.cpp') + Glob('*.c')
+CPPPATH = [cwd]
+
+group = DefineGroup('xiaozhi_mcp', src, depend = [''], CPPPATH = CPPPATH)
+
+Return('group')

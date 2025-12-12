@@ -24,7 +24,7 @@
 #define EMOJI_NUM           18
 #define UI_MSG_DATA_SIZE    128
 #define UI_MSG_POOL_SIZE    10
-#define UI_THREAD_STACK     (1024 * 10)
+#define UI_THREAD_STACK     (1024 * 4)
 #define UI_THREAD_PRIORITY  25
 #define UI_THREAD_TICK      10
 

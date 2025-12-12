@@ -15,6 +15,38 @@
 #include <cJSON.h>
 #include <rtthread.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define GET_HEADER_BUFSZ        1024
+#define GET_RESP_BUFSZ          2048
+#define GET_URL_LEN_MAX         256
+#define GET_URI                 "https://%s/xiaozhi/ota/"
+#define XIAOZHI_HOST            "api.tenclass.net"
+#define XIAOZHI_WSPATH          "/xiaozhi/v1/"
+#define XIAOZHI_TOKEN           "Bearer 12345678"
+#define MAX_WSOCK_HDR_LEN       4096
+#define XZ_MIC_FRAME_LEN        (320 * 6 * 2)
+#define XZ_SPK_FRAME_LEN        (480 * 6)
+#define XZ_EVENT_MIC_RX         (1 << 0)
+#define XZ_EVENT_DOWNLINK       (1 << 1)
+#define XZ_EVENT_ALL            (XZ_EVENT_MIC_RX | XZ_EVENT_DOWNLINK)
+#define XZ_DOWNLINK_QUEUE_NUM   256
+#define MAX_CLIENT_ID_LEN 40
+#define MAX_MAC_ADDR_LEN 20
+
+#define BUTTON_EVENT_PRESSED    (1 << 3)
+#define BUTTON_EVENT_RELEASED   (1 << 4)
+
+#define MIC_EVENT_OPEN          (1 << 0)
+#define MIC_EVENT_CLOSE         (1 << 1)
+
+#define BUTTON_PIN              GET_PIN(8,3)
+#define THREAD_STACK_SIZE       (1024 * 4)
+#define THREAD_PRIORITY         16
+#define BUTTON_DEBOUNCE_MS      20
+
 #define HELLO_MESSAGE  "{ " \
     "\"type\":\"hello\"," \
     "\"version\":3," \
@@ -36,33 +68,6 @@
     "\"type\":1,\"subtype\":2,\"address\":10000,\"size\":100000}], " \
     "\"ota\":{\"label\":\"ota_0\"},\"board\":{\"type\":\"hdk563\"," \
     "\"mac\":\"%s\"}}"
-
-#define GET_HEADER_BUFSZ        1024
-#define GET_RESP_BUFSZ          2048
-#define GET_URL_LEN_MAX         256
-#define GET_URI                 "https://%s/xiaozhi/ota/"
-#define XIAOZHI_HOST            "api.tenclass.net"
-#define XIAOZHI_WSPATH          "/xiaozhi/v1/"
-#define XIAOZHI_TOKEN           "Bearer 12345678"
-#define MAX_WSOCK_HDR_LEN       4096
-#define XZ_MIC_FRAME_LEN        (320 * 6 * 2)
-#define XZ_SPK_FRAME_LEN        (480 * 6)
-#define XZ_EVENT_MIC_RX (1 << 0)
-#define XZ_EVENT_DOWNLINK (1 << 1)
-#define XZ_EVENT_ALL            (XZ_EVENT_MIC_RX | XZ_EVENT_DOWNLINK)
-#define XZ_DOWNLINK_QUEUE_NUM   256
-#define WEBSOCKET_RECONNECT     3
-
-#define BUTTON_EVENT_PRESSED    (1 << 3)
-#define BUTTON_EVENT_RELEASED   (1 << 4)
-
-#define MIC_EVENT_OPEN    (1 << 0)
-#define MIC_EVENT_CLOSE   (1 << 1)
-
-#define BUTTON_PIN              GET_PIN(8,3)
-#define THREAD_STACK_SIZE       (1024 * 4)
-#define THREAD_PRIORITY         16
-#define BUTTON_DEBOUNCE_MS      20
 
 enum ListeningMode
 {
@@ -90,7 +95,7 @@ enum DeviceState
     kDeviceStateActivating,
     kDeviceStateFatalError
 };
-extern enum DeviceState g_state;
+
 typedef struct
 {
     uint32_t sample_rate;
@@ -102,6 +107,23 @@ typedef struct
     rt_mutex_t ws_write_mutex;  // WebSocket写入互斥锁
 } xiaozhi_ws_t;
 
+/* Application state structure */
+typedef struct
+{
+    rt_thread_t xiaozhi_tid;
+    const char *client_id;
+    uint8_t websocket_reconnect_flag;
+    uint8_t iot_initialized;
+    uint32_t last_reconnect_time;
+    char mac_address_string[MAX_MAC_ADDR_LEN];
+    char client_id_string[MAX_CLIENT_ID_LEN];
+    xiaozhi_ws_t ws;
+    enum DeviceState state;
+    rt_event_t button_event;
+    int wakeword_initialized_session;
+} xiaozhi_app_t;
+
+extern enum DeviceState g_state;
 extern xiaozhi_ws_t g_xz_ws;
 
 /* Structures */
@@ -134,6 +156,7 @@ typedef struct
     rt_device_t rt_audio_dev;
     rt_device_t rt_mic_dev;
 } xz_audio_t;
+
 extern rt_event_t xiaozhi_button_event;
 char *get_mac_address(void);
 char *get_client_id(void);
@@ -164,13 +187,16 @@ int xz_mic_init(void);
 void xz_mic_open(xz_audio_t *thiz);
 void xz_mic_close(xz_audio_t *thiz);
 void xz_mic(int on);
+int xz_mic_is_enabled(void);
 void xz_speaker_open(xz_audio_t *thiz);
 void xz_speaker_close(xz_audio_t *thiz);
 void xz_speaker(int on);
-void mic_thread_entry(void *param);
-void xz_opus_thread_entry(void *p);
 void xz_audio_decoder_encoder_open(uint8_t is_websocket);
 void xz_audio_decoder_encoder_close(void);
 void xz_audio_downlink(uint8_t *data, uint32_t size, uint32_t *aes_value, uint8_t need_aes);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // XIAOZHI_H

@@ -5,8 +5,6 @@ import os
 cwd  = GetCurrentDir()
 path = [cwd]
 src  = Glob('*.c')
-src = src + Glob('./xiaozhi/mcp/*.cpp') 
-src = src + Glob('./xiaozhi/iot/*.cpp') 
 
 group = DefineGroup('Applications', src, depend = [''], CPPPATH = path)
 

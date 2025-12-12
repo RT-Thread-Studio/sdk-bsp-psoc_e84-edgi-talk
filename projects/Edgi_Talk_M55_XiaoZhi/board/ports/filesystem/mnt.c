@@ -67,6 +67,8 @@ static void _sdcard_mount(void)
         return;
     }
 
+    rt_thread_mdelay(200);
+
     /* Try to mount */
     if (dfs_mount(device_name, "/sdcard", "elm", 0, 0) == RT_EOK)
     {

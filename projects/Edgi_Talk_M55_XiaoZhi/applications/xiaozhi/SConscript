@@ -6,9 +6,11 @@ cwd     = GetCurrentDir()
 # Add all subdirectories to include path
 path = []
 path += [cwd]
-path += [cwd + '/ui', cwd + '/webnet', cwd + '/iot']
+path += [cwd + '/ui', cwd + '/webnet', cwd + '/iot', cwd + '/mcp']
+# Add edge-impulse directory for wake word detection
+path += [cwd + '/../../edge-impulse']
 
-src = Glob('*.c')
+src = Glob('*.c') + Glob('*.cpp')
 
 group = DefineGroup('xiaozhi', src, depend = [''], CPPPATH = path)
 
