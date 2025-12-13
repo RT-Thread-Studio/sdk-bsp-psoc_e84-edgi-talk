@@ -1,5 +1,6 @@
-/* XiaoZhi AI Application Main File
- * Handles WebSocket communication, message processing, button events, and state management
+/*
+ * XiaoZhi AI Application Main File
+ * Manages WebSocket connections, message handling, button events, and device states
  */
 
 #include "xiaozhi.h"
@@ -14,7 +15,7 @@
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
-/* Constants */
+/* Configuration constants */
 #define MAX_CLIENT_ID_LEN 40
 #define MAX_MAC_ADDR_LEN 20
 #define WEBSOCKET_RECONNECT_DELAY_MS 5000
@@ -26,7 +27,7 @@
 #define BUTTON_DEBOUNCE_MS 20
 #define WAKEWORD_INIT_FLAG_RESET 0
 
-/* Global State Structure */
+/* Global application state */
 xiaozhi_app_t g_app =
 {
     .xiaozhi_tid = RT_NULL,
@@ -46,7 +47,7 @@ xiaozhi_app_t g_app =
 #include "iot/iot_c_api.h"
 #include "mcp/mcp_api.h"
 
-/* Wake word detection callback with optimized response time */
+/* Wake word detection callback - optimized for quick response */
 void xz_wakeword_detected_callback(const char *wake_word, float confidence)
 {
     LOG_I("Wake word detected: %s (confidence: %.2f%%)", wake_word, confidence * 100);
@@ -118,7 +119,7 @@ void xz_wakeword_detected_callback(const char *wake_word, float confidence)
     xiaozhi_ui_chat_output("聆听中...");
 }
 
-/* 状态一致性检查函数 */
+/* State consistency check function */
 static void ensure_state_consistency(void)
 {
     /* 如果状态是Listening但WebSocket断开，强制重置 */
@@ -173,7 +174,7 @@ static void ensure_state_consistency(void)
     }
 }
 
-/* Utility Functions */
+/* Helper functions */
 char *get_mac_address(void)
 {
     struct netdev *netdev = netdev_get_by_name("w0");
@@ -345,7 +346,7 @@ void xz_button_init(void)
     }
 }
 
-/* WebSocket Functions */
+/* WebSocket communication functions */
 void ws_send_listen_start(void *ws, char *session_id, enum ListeningMode mode)
 {
     static const char *mode_str[] = {"auto_stop", "manual_stop", "always_on"};
@@ -736,7 +737,7 @@ void xz_ws_audio_init(void)
     }
 }
 
-/* IoT Functions */
+/* IoT device management functions */
 void send_iot_states(void)
 {
     const char *state = iot_get_states_json();
@@ -807,7 +808,7 @@ void send_iot_descriptors(void)
     rt_free(msg);
 }
 
-/* Message Handling */
+/* Message processing functions */
 char *my_json_string(cJSON *json, char *key)
 {
     cJSON *item = cJSON_GetObjectItem(json, key);
@@ -1040,7 +1041,7 @@ void Message_handle(const uint8_t *data, uint16_t len)
     cJSON_Delete(root);
 }
 
-/* Network Functions */
+/* Network utility functions */
 void svr_found_callback(const char *name, const ip_addr_t *ipaddr, void *callback_arg)
 {
     if (ipaddr != NULL)
@@ -1263,7 +1264,7 @@ void xiaozhi_ws_connect(void)
     xiaozhi_ui_chat_output("请检查网络并重试");
 }
 
-/* Main Entry */
+/* Application entry point */
 void xiaozhi_entry(void *p)
 {
     char *my_ota_version;
