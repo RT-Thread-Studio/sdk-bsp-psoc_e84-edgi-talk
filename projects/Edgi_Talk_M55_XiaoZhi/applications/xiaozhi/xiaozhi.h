@@ -38,6 +38,7 @@ extern "C" {
 
 #define BUTTON_EVENT_PRESSED    (1 << 3)
 #define BUTTON_EVENT_RELEASED   (1 << 4)
+#define TIMEOUT_EVENT           (1 << 5)
 
 #define MIC_EVENT_OPEN          (1 << 0)
 #define MIC_EVENT_CLOSE         (1 << 1)
@@ -121,6 +122,8 @@ typedef struct
     enum DeviceState state;
     rt_event_t button_event;
     int wakeword_initialized_session;
+    rt_bool_t multi_turn_conversation_enabled;  /* 多轮对话开关 */
+    rt_timer_t tts_sentence_end_timer;  /* TTS句子结束定时器 */
 } xiaozhi_app_t;
 
 extern enum DeviceState g_state;
@@ -163,7 +166,7 @@ char *get_client_id(void);
 void xz_button_callback(void *arg);
 void xz_button_thread_entry(void *param);
 void xz_button_init(void);
-void ws_send_listen_start(void *ws, char *session_id, enum ListeningMode mode);
+rt_bool_t ws_send_listen_start(void *ws, char *session_id, enum ListeningMode mode);
 void ws_send_listen_stop(void *ws, char *session_id);
 void ws_send_hello(void *ws);
 void xz_audio_send_using_websocket(uint8_t *data, int len);
@@ -194,6 +197,14 @@ void xz_speaker(int on);
 void xz_audio_decoder_encoder_open(uint8_t is_websocket);
 void xz_audio_decoder_encoder_close(void);
 void xz_audio_downlink(uint8_t *data, uint32_t size, uint32_t *aes_value, uint8_t need_aes);
+
+/* Multi-turn conversation control functions */
+void xz_enable_multi_turn_conversation(rt_bool_t enable);
+rt_bool_t xz_is_multi_turn_conversation_enabled(void);
+
+/* Audio notification functions */
+void xz_play_power_on_sound(void);
+void xz_play_wake_sound(void);
 
 #ifdef __cplusplus
 }

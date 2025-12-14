@@ -10,6 +10,10 @@
 #ifndef __WAVPLAYER_H__
 #define __WAVPLAYER_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * wav player status
  */
@@ -92,5 +96,9 @@ int wavplayer_state_get(void);
  * @return            uri that is currently playing
  */
 char *wavplayer_uri_get(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

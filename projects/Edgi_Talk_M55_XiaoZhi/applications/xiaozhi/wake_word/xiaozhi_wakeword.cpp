@@ -1,5 +1,11 @@
-/* XiaoZhi AI Wake Word Detection Implementation
- * Integrates Edge Impulse wake word detection for XiaoZhi AI
+/*
+ * Copyright (c) 2006-2025, RT-Thread Development Team
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2025-12-14     RT-Thread    First version
  */
 
 #include "xiaozhi_wakeword.h"
@@ -23,7 +29,7 @@
 
 /* Wake word detection configuration */
 #define WAKE_WORD_CONFIDENCE_THRESHOLD 0.80f /* 80% confidence threshold */
-#define WAKE_WORD_COOLDOWN_MS 2000           /* 2 seconds cooldown between detections */
+#define WAKE_WORD_COOLDOWN_MS 1000           /* 1 seconds cooldown between detections */
 
 /* Global variables */
 static rt_device_t audio_device = RT_NULL;

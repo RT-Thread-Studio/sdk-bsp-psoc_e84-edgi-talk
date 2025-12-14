@@ -23,7 +23,7 @@
 #define WP_VOLUME_DEFAULT (55)
 #define WP_MSG_SIZE (10)
 #define WP_THREAD_STATCK_SIZE (2048)
-#define WP_THREAD_PRIORITY (8)
+#define WP_THREAD_PRIORITY (18)
 
 enum MSG_TYPE
 {
@@ -420,7 +420,6 @@ static void wavplayer_entry(void *parameter)
                 else
                 {
                     /*witte data to sound device*/
-                    // rt_kprintf("1test:%s\r\n",(rt_uint16_t *)player.buffer);
                     rt_device_write(player.device, 0, player.buffer, WP_BUFFER_SIZE);
                 }
                 break;
@@ -481,4 +480,4 @@ int wavplayer_init(void)
     return RT_EOK;
 }
 
-// INIT_APP_EXPORT(wavplayer_init);
+INIT_APP_EXPORT(wavplayer_init);

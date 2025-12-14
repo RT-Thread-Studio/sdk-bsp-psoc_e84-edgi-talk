@@ -194,25 +194,3 @@ int wav_player(int argc, char *argv[])
 }
 
 MSH_CMD_EXPORT_ALIAS(wav_player, wavplay, play wav music);
-
-
-extern int rt_hw_ST7102_port(void);
-
-void check_devices(void)
-{
-    static int init = 0;
-    if(init==0){
-        rt_hw_ST7102_port();
-        init = 1;
-    }
-
-    rt_kprintf("touch start \n");
-
-    wavplayer_volume_set(99);
-
-    wavplayer_play("/output.wav");
-
-    rt_kprintf("wavplay start: volume=99, file=output.wav\n");
-}
-MSH_CMD_EXPORT(check_devices, check voice and touch);
-

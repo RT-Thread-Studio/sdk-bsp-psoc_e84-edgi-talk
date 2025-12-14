@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2006-2025, RT-Thread Development Team
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2025-12-14     RT-Thread    First version
+ */
 #include <rtthread.h>
 #include <rtdevice.h>
 
