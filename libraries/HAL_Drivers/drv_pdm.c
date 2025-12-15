@@ -313,7 +313,7 @@ static rt_err_t mic_configure(struct rt_audio_device *audio, struct rt_audio_cap
         {
         case AUDIO_MIXER_VOLUME:
             mic_dev->volume = caps->udata.value;
-            set_pdm_pcm_gain(mic_dev->volume);
+            // set_pdm_pcm_gain(mic_dev->volume);
             LOG_D("Set volume: %d\r\n", mic_dev->volume);
             break;
         default:
@@ -344,7 +344,7 @@ static rt_err_t mic_init(struct rt_audio_device *audio)
     Cy_PDM_PCM_Channel_Init(PDM0, &RIGHT_CH_CONFIG, (uint8_t)RIGHT_CH_INDEX);
 
     /* Set the gain for both left and right channels. */
-    set_pdm_pcm_gain(mic_dev.volume);
+    // set_pdm_pcm_gain(mic_dev.volume);
 
     /* As registred for right channel, clear and set maks for it. */
     Cy_PDM_PCM_Channel_ClearInterrupt(PDM0, RIGHT_CH_INDEX, CY_PDM_PCM_INTR_MASK);
