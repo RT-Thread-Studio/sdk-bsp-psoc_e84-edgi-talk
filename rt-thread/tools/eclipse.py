@@ -454,9 +454,8 @@ def RelativeProjectPath(env, path):
         return 'rt-thread/' + _make_path_relative(rtt_root, path)
 
     # TODO add others folder
-    print('ERROR: the ' + path + ' not support')
-
-    return path
+    # For paths outside project_root or rtt_root, make relative to project_root
+    return _make_path_relative(project_root, path)
 
 
 def HandleExcludingOption(entry, sourceEntries, excluding):
