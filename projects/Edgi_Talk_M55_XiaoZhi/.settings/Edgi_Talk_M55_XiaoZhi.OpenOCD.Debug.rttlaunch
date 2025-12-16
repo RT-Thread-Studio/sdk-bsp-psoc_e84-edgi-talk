@@ -14,7 +14,7 @@
 <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbClientOtherOptions" value=""/>
 <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerExecutable" value="${debugger_install_path}/${openocd-infineon_debugger_relative_path}/bin/openocd.exe"/>
 <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerGdbPortNumber" value="3333"/>
-<stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerOther" value="-s ../scripts -s ../flm/cypress/cat1d -f interface/kitprog3.cfg -f target/infineon/pse84xgxs2.cfg -c &quot;set QSPI_FLASHLOADER ../flm/cypress/cat1d/PSE84_SMIF.FLM&quot; -c &quot;transport select swd&quot; -c &quot;gdb_port 3332&quot; -c &quot;cat1d.cm55 configure -rtos auto -rtos-wipe-on-reset-halt 1&quot; -c &quot;gdb_breakpoint_override hard&quot; -c &quot;init; reset init; flash write_image erase ${project_loc}/Debug/rtthread.hex;&quot; -c &quot;reset init;&quot;"/>
+<stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerOther" value="-s ../scripts -s ../flm/cypress/cat1d -f interface/kitprog3.cfg -f target/infineon/pse84xgxs2.cfg -c &quot;set QSPI_FLASHLOADER ../flm/cypress/cat1d/PSE84_SMIF.FLM&quot; -c &quot;transport select swd&quot; -c &quot;gdb_port 3332&quot; -c &quot;cat1d.cm55 configure -rtos auto -rtos-wipe-on-reset-halt 1&quot; -c &quot;gdb_breakpoint_override hard&quot; -c &quot;init; reset init; flash write_image erase ${project_loc}/rtthread.hex;&quot; -c &quot;reset init;&quot;"/>
 <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerTclPortNumber" value="6666"/>
 <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerTelnetPortNumber" value="4444"/>
 <booleanAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.multicoreMode" value="false"/>
@@ -34,7 +34,7 @@
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setPcRegister" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.setStopAt" value="true"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.stopAt" value="entry"/>
-<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsFileName" value=""/>
+<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsFileName" value="${workspace_loc:\Edgi_Talk_M55_XiaoZhi}"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.symbolsOffset" value=""/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useFileForImage" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.useFileForSymbols" value="false"/>
@@ -44,7 +44,7 @@
 <stringAttribute key="org.eclipse.cdt.dsf.gdb.DEBUG_NAME" value="${rtt_gnu_gcc}/../../10.2.1/bin/arm-none-eabi-gdb.exe"/>
 <booleanAttribute key="org.eclipse.cdt.dsf.gdb.UPDATE_THREADLIST_ON_SUSPEND" value="false"/>
 <intAttribute key="org.eclipse.cdt.launch.ATTR_BUILD_BEFORE_LAUNCH_ATTR" value="0"/>
-<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Debug/rtthread.elf"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="rt-thread.elf"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="Edgi_Talk_M55_XiaoZhi"/>
 <booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="false"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value=""/>

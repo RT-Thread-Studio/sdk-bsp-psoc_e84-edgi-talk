@@ -43,10 +43,10 @@ if PLATFORM == 'gcc':
     OBJDUMP = PREFIX + 'objdump'
     OBJCPY = PREFIX + 'objcopy'
 
-    DEVICE = ' -mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 --specs=nano.specs -mfloat-abi=hard -ffunction-sections -fdata-sections -nostartfiles'
+    DEVICE = ' -mcpu=cortex-m55 -mthumb -mfpu=fpv5-d16 --specs=nano.specs -mfloat-abi=hard -ffunction-sections -fdata-sections -nostartfiles'
     CFLAGS = DEVICE + ' -g -Wall -pipe'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
-    LFLAGS = DEVICE + ' -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,Reset_Handler -T board/linker_scripts/link.ld'
+    LFLAGS = DEVICE + ' -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,Reset_Handler -T board/linker_scripts/link.ld -flto'
 
     CPATH = ''
     LPATH = ''
@@ -60,7 +60,7 @@ if PLATFORM == 'gcc':
     # CXXFLAGS = CFLAGS 
     CXXFLAGS = CFLAGS  + ' -std=c++17'
 
-    POST_ACTION = OBJCPY + ' -O ihex $TARGET rtthread.hex\n' + SIZE + ' $TARGET \n'
+    POST_ACTION = 'python -c "import os; os.makedirs(\'Debug\') if not os.path.exists(\'Debug\') else None"\n' + OBJCPY + ' -O ihex $TARGET Debug/rtthread.hex\n' + SIZE + ' $TARGET \n'
 
 elif PLATFORM == 'armclang':
     # toolchains
