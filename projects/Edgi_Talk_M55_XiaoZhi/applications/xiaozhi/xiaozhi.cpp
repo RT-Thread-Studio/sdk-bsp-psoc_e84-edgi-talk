@@ -18,7 +18,7 @@
 #include <string.h>
 
 #define DBG_TAG "xz.ws"
-#define DBG_LVL DBG_INFO
+#define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
 /* Configuration constants */
@@ -29,27 +29,28 @@
 #define NETWORK_CHECK_DELAY_MS 500
 #define RETRY_DELAY_BASE_MS 1000
 #define RETRY_DELAY_INCREMENT_MS 200
-#define TTS_STOP_DELAY_MS 10
+#define TTS_STOP_DELAY_MS 200
 #define BUTTON_DEBOUNCE_MS 20
 #define WAKEWORD_INIT_FLAG_RESET 0
-#define TTS_SENTENCE_TIMEOUT_MS 8500
+#define TTS_SENTENCE_TIMEOUT_MS 6000
 
 /* Global application state */
 xiaozhi_app_t g_app =
-{
-    .xiaozhi_tid = RT_NULL,
-    .client_id = "af7ac552-9991-4b31-b660-683b210ae95f",
-    .websocket_reconnect_flag = 0,
-    .iot_initialized = 0,
-    .last_reconnect_time = 0,
-    .mac_address_string = {0},
-    .client_id_string = {0},
-    .ws = {0},
-    .state = kDeviceStateUnknown,
-    .button_event = RT_NULL,
-    .wakeword_initialized_session = 0,
-    .multi_turn_conversation_enabled = RT_TRUE,
-    .tts_sentence_end_timer = RT_NULL
+    {
+        .xiaozhi_tid = RT_NULL,
+        .client_id = "af7ac552-9991-4b31-b660-683b210ae95f",
+        .websocket_reconnect_flag = 0,
+        .iot_initialized = 0,
+        .last_reconnect_time = 0,
+        .mac_address_string = {0},
+        .client_id_string = {0},
+        .ws = {0},
+        .state = kDeviceStateUnknown,
+        .button_event = RT_NULL,
+        .wakeword_initialized_session = 0,
+        .multi_turn_conversation_enabled = RT_TRUE,
+        .tts_sentence_end_timer = RT_NULL,
+        .tts_stop_workqueue = RT_NULL
 };
 
 #include "ui/xiaozhi_ui.h"
@@ -134,10 +135,65 @@ void xz_wakeword_detected_callback(const char *wake_word, float confidence)
 /* TTS sentence end timeout handler */
 static void tts_sentence_end_timeout(void *parameter)
 {
-    LOG_D("TTS sentence end timeout, sending event to restart listening for multi-turn conversation");
+    uint32_t tick = rt_tick_get();
+    LOG_D("TTS sentence end timeout at tick=%u, sending event to restart listening for multi-turn conversation", tick);
 
     /* Send event to button thread to handle the restart in non-ISR context */
-    rt_event_send(g_app.button_event, TIMEOUT_EVENT);
+    rt_err_t ev_ret = rt_event_send(g_app.button_event, TIMEOUT_EVENT);
+    if (ev_ret != RT_EOK)
+    {
+        LOG_W("rt_event_send returned %d from timer callback", ev_ret);
+    }
+}
+
+/* TTS stop delayed restart work function */
+static void tts_stop_restart_listening(struct rt_work *work, void *work_data)
+{
+    LOG_D("TTS stop delayed restart: restarting listening mode");
+
+    /* Multi-turn conversation: keep listening without restarting wake word detection */
+    g_app.state = kDeviceStateListening;
+    xz_mic(1);
+
+    /* Try to send listen start */
+    if (ws_send_listen_start(&g_app.ws.clnt, g_app.ws.session_id, kListeningModeAutoStop))
+    {
+        xiaozhi_ui_chat_status("   聆听中");
+        xiaozhi_ui_chat_output("聆听中...");
+    }
+    else
+    {
+        LOG_W("Listen start failed in TTS stop delayed restart");
+        /* Reset state if failed */
+        g_app.state = kDeviceStateIdle;
+        xz_mic(0);
+        xiaozhi_ui_chat_status("   就绪");
+        xiaozhi_ui_chat_output("就绪");
+    }
+}
+
+/* Static work item for TTS stop restart */
+static struct rt_work tts_stop_work;
+
+/* Static timer for TTS stop delay */
+static rt_timer_t tts_stop_delay_timer = RT_NULL;
+
+/* TTS stop delay timer callback */
+static void tts_stop_delay_timeout(void *parameter)
+{
+    LOG_D("TTS stop delay timeout, submitting work to restart listening");
+
+    /* Submit work to restart listening */
+    if (g_app.tts_stop_workqueue)
+    {
+        rt_workqueue_submit_work(g_app.tts_stop_workqueue, &tts_stop_work, 0);
+    }
+    else
+    {
+        LOG_W("Workqueue not available in timer callback");
+        /* Fallback */
+        tts_stop_restart_listening(&tts_stop_work, RT_NULL);
+    }
 }
 
 /* State consistency check function */
@@ -623,8 +679,12 @@ err_t my_wsapp_fn(int code, char *buf, size_t len)
         /* Stop TTS sentence end timer if running */
         if (g_app.tts_sentence_end_timer)
         {
-            rt_timer_stop(g_app.tts_sentence_end_timer);
-            LOG_D("Stopped TTS sentence end timer due to disconnection");
+            rt_err_t stop_ret = rt_timer_stop(g_app.tts_sentence_end_timer);
+            LOG_D("rt_timer_stop returned %d when stopping timer due to disconnection", stop_ret);
+            if (stop_ret == RT_EOK)
+            {
+                LOG_D("Stopped TTS sentence end timer due to disconnection");
+            }
         }
 
         xiaozhi_ui_chat_status("   休眠中");
@@ -812,6 +872,59 @@ void xz_ws_audio_init(void)
 
         /* Wake word detection will be initialized after WebSocket connection */
         LOG_I("Audio system initialized successfully");
+
+        /* Create TTS sentence end timer once here to avoid race conditions
+         * Timer is one-shot and will be started on sentence_end events */
+        if (!g_app.tts_sentence_end_timer)
+        {
+            g_app.tts_sentence_end_timer = rt_timer_create("tts_end_timer",
+                                                           tts_sentence_end_timeout,
+                                                           RT_NULL,
+                                                           rt_tick_from_millisecond(TTS_SENTENCE_TIMEOUT_MS),
+                                                           RT_TIMER_FLAG_ONE_SHOT);
+            if (g_app.tts_sentence_end_timer)
+            {
+                LOG_D("Created TTS sentence end timer (%d ms)", TTS_SENTENCE_TIMEOUT_MS);
+            }
+            else
+            {
+                LOG_E("Failed to create TTS sentence end timer");
+            }
+        }
+
+        /* Create workqueue for TTS stop delayed restart */
+        if (!g_app.tts_stop_workqueue)
+        {
+            g_app.tts_stop_workqueue = rt_workqueue_create("tts_stop_wq", 2048, RT_THREAD_PRIORITY_MAX - 1);
+            if (g_app.tts_stop_workqueue)
+            {
+                LOG_D("Created TTS stop workqueue");
+                /* Initialize the work item */
+                rt_work_init(&tts_stop_work, tts_stop_restart_listening, RT_NULL);
+            }
+            else
+            {
+                LOG_E("Failed to create TTS stop workqueue");
+            }
+        }
+
+        /* Create TTS stop delay timer */
+        if (!tts_stop_delay_timer)
+        {
+            tts_stop_delay_timer = rt_timer_create("tts_stop_delay",
+                                                   tts_stop_delay_timeout,
+                                                   RT_NULL,
+                                                   rt_tick_from_millisecond(TTS_STOP_DELAY_MS),
+                                                   RT_TIMER_FLAG_ONE_SHOT);
+            if (tts_stop_delay_timer)
+            {
+                LOG_D("Created TTS stop delay timer (%d ms)", TTS_STOP_DELAY_MS);
+            }
+            else
+            {
+                LOG_E("Failed to create TTS stop delay timer");
+            }
+        }
 
         init_flag = 0;
     }
@@ -1042,25 +1155,31 @@ void Message_handle(const uint8_t *data, uint16_t len)
             /* Check if multi-turn conversation is enabled */
             if (g_app.multi_turn_conversation_enabled)
             {
-                /* Multi-turn conversation: keep listening without restarting wake word detection */
-                LOG_I("Multi-turn conversation enabled, restarting listening mode");
-                g_app.state = kDeviceStateListening;
-                xz_mic(1);
-
-                /* Try to send listen start */
-                if (ws_send_listen_start(&g_app.ws.clnt, g_app.ws.session_id, kListeningModeAutoStop))
+                /* Multi-turn conversation: start delay timer to restart listening after audio finishes */
+                if (tts_stop_delay_timer)
                 {
-                    xiaozhi_ui_chat_status("   聆听中");
-                    xiaozhi_ui_chat_output("聆听中...");
+                    LOG_D("Starting TTS stop delay timer (%d ms)", TTS_STOP_DELAY_MS);
+                    rt_timer_start(tts_stop_delay_timer);
                 }
                 else
                 {
-                    LOG_W("Listen start failed in TTS stop handler");
-                    /* Reset state if failed */
-                    g_app.state = kDeviceStateIdle;
-                    xz_mic(0);
-                    xiaozhi_ui_chat_status("   就绪");
-                    xiaozhi_ui_chat_output("就绪");
+                    LOG_W("Delay timer not available, restarting listening immediately");
+                    /* Fallback: restart immediately */
+                    g_app.state = kDeviceStateListening;
+                    xz_mic(1);
+                    if (ws_send_listen_start(&g_app.ws.clnt, g_app.ws.session_id, kListeningModeAutoStop))
+                    {
+                        xiaozhi_ui_chat_status("   聆听中");
+                        xiaozhi_ui_chat_output("聆听中...");
+                    }
+                    else
+                    {
+                        LOG_W("Listen start failed in TTS stop handler");
+                        g_app.state = kDeviceStateIdle;
+                        xz_mic(0);
+                        xiaozhi_ui_chat_status("   就绪");
+                        xiaozhi_ui_chat_output("就绪");
+                    }
                 }
             }
             else
@@ -1093,29 +1212,40 @@ void Message_handle(const uint8_t *data, uint16_t len)
             /* For multi-turn conversation, start a timeout timer to restart listening after sentence end */
             if (g_app.multi_turn_conversation_enabled && g_app.state == kDeviceStateSpeaking)
             {
-                /* Stop any existing timer first */
+                /* Use the pre-created timer: stop then start to reset timeout */
                 if (g_app.tts_sentence_end_timer)
                 {
-                    rt_timer_stop(g_app.tts_sentence_end_timer);
+                    rt_err_t stop_ret = rt_timer_stop(g_app.tts_sentence_end_timer);
+                    if (stop_ret != RT_EOK)
+                    {
+                        LOG_W("rt_timer_stop returned %d when resetting TTS timer", stop_ret);
+                    }
+                    rt_err_t start_ret = rt_timer_start(g_app.tts_sentence_end_timer);
+                    if (start_ret == RT_EOK)
+                    {
+                        LOG_D("Started TTS sentence end timer (%d ms), stop_ret=%d start_ret=%d", TTS_SENTENCE_TIMEOUT_MS, stop_ret, start_ret);
+                    }
+                    else
+                    {
+                        LOG_E("Failed to start existing TTS sentence end timer, start_ret=%d", start_ret);
+                    }
                 }
                 else
                 {
-                    /* Create timer if it doesn't exist */
+                    /* Fallback: try to create and start the timer if it wasn't created earlier */
                     g_app.tts_sentence_end_timer = rt_timer_create("tts_end_timer",
-                                                   tts_sentence_end_timeout,
-                                                   RT_NULL,
-                                                   rt_tick_from_millisecond(TTS_SENTENCE_TIMEOUT_MS),
-                                                   RT_TIMER_FLAG_ONE_SHOT);
-                }
-
-                if (g_app.tts_sentence_end_timer)
-                {
-                    rt_timer_start(g_app.tts_sentence_end_timer);
-                    LOG_D("Started TTS sentence end timer (3s timeout)");
-                }
-                else
-                {
-                    LOG_E("Failed to create TTS sentence end timer");
+                                                                   tts_sentence_end_timeout,
+                                                                   RT_NULL,
+                                                                   rt_tick_from_millisecond(TTS_SENTENCE_TIMEOUT_MS),
+                                                                   RT_TIMER_FLAG_ONE_SHOT);
+                    if (g_app.tts_sentence_end_timer && rt_timer_start(g_app.tts_sentence_end_timer) == RT_EOK)
+                    {
+                        LOG_D("Created and started fallback TTS sentence end timer (%d ms)", TTS_SENTENCE_TIMEOUT_MS);
+                    }
+                    else
+                    {
+                        LOG_E("Failed to create/start fallback TTS sentence end timer");
+                    }
                 }
             }
         }
@@ -1265,8 +1395,8 @@ char *get_xiaozhi_ws(void)
         {
             bytes_read = webclient_read(session, buffer + content_pos,
                                         content_length - content_pos > GET_RESP_BUFSZ
-                                        ? GET_RESP_BUFSZ
-                                        : content_length - content_pos);
+                                            ? GET_RESP_BUFSZ
+                                            : content_length - content_pos);
             if (bytes_read <= 0)
             {
                 break;

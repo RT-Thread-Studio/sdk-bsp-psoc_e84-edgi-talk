@@ -17,7 +17,7 @@ PREBUILT_LIB = cwd + '/lib/libopus.a'
 USE_PREBUILT = os.path.exists(PREBUILT_LIB)
 
 # Base definitions
-CPPDEFINES = ['HAVE_LRINTF', 'HAVE_ALLOCA_H', 'USE_ALLOCA', 'OPUS_BUILD', 'FIXED_POINT', 'DISABLE_FLOAT_API']
+CPPDEFINES = ['HAVE_LRINTF', 'HAVE_ALLOCA_H', 'USE_ALLOCA', 'OPUS_BUILD', 'FIXED_POINT=1', 'DISABLE_FLOAT_API']
 
 # ARM Cortex-M55 optimizations (ARMv8.1-M with DSP extensions)
 # Enable ARM inline assembly optimizations - M55 supports ARMv5E/ARMv6 DSP instructions

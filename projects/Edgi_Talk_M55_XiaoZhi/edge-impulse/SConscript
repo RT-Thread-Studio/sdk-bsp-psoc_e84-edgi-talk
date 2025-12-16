@@ -161,7 +161,7 @@ LOCAL_CFLAGS += ' -DARM_MATH_CM55 -DARM_MATH_DSP -DARM_MATH_LOOPUNROLL -DARM_MAT
 LOCAL_CXXFLAGS += ' -DARM_MATH_CM55 -DARM_MATH_DSP -DARM_MATH_LOOPUNROLL -DARM_MATH_AUTOVECTORIZE'
 
 # C++ flags
-LOCAL_CXXFLAGS += ' -std=c++11 -fno-rtti -fno-exceptions -fno-threadsafe-statics'
+LOCAL_CXXFLAGS += ' -std=c++17 -fno-rtti -fno-exceptions -fno-threadsafe-statics'
 LOCAL_CXXFLAGS += ' -Wno-sign-compare -Wno-strict-aliasing'
 
 # ============= Build target =============

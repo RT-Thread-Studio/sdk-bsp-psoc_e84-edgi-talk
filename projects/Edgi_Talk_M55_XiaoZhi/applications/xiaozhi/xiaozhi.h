@@ -124,6 +124,7 @@ typedef struct
     int wakeword_initialized_session;
     rt_bool_t multi_turn_conversation_enabled;  /* 多轮对话开关 */
     rt_timer_t tts_sentence_end_timer;  /* TTS句子结束定时器 */
+    struct rt_workqueue *tts_stop_workqueue;  /* TTS停止工作队列 */
 } xiaozhi_app_t;
 
 extern enum DeviceState g_state;
