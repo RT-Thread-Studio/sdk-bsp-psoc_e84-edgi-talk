@@ -370,7 +370,7 @@ build_src = local_src + external_src
 
 # Build the ELF - output to parent Debug directory (to match boot_with_extended_boot.json path)
 # The JSON config uses "../Debug/rtthread.hex" relative to config folder
-DEBUG_DIR = '../Debug'
+DEBUG_DIR = 'Debug'
 
 # Create Debug directory if not exists
 if not os.path.exists(DEBUG_DIR):
@@ -402,23 +402,7 @@ size_cmd = env.Command(
 # =============================================================================
 # Secure image packaging using edgeprotecttools (Windows only)
 # =============================================================================
-if platform.system() == 'Windows':
-    # Path to edgeprotecttools (relative to SDK root)
-    EDGEPROTECTTOOLS = os.path.join(SDK_ROOT, 'tools', 'edgeprotecttools', 'bin', 'edgeprotecttools.exe')
-    BOOT_CONFIG = os.path.join(PROJECT_ROOT, 'config', 'boot_with_extended_boot_scons.json')
-
-    # Package secure image after HEX generation
-    secure_image = env.Command(
-        'secure_image',  # Pseudo target
-        hex_file,
-        '"' + EDGEPROTECTTOOLS + '" run-config -i "' + BOOT_CONFIG + '"'
-    )
-
-    # Default target (with secure image packaging)
-    Default(elf, hex_file, bin_file, size_cmd, secure_image)
-else:
-    # Default target (without secure image packaging)
-    Default(elf, hex_file, bin_file, size_cmd)
+Default(elf, hex_file, bin_file, size_cmd)
 
 # Clean target
 Clean(elf, [DEBUG_DIR + '/' + TARGET + '.map', BUILD_DIR, DEBUG_DIR])
