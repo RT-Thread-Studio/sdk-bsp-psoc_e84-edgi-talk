@@ -32,6 +32,7 @@ static const struct romfs_dirent _romfs_root_webnet[] = {
 
 static const struct romfs_dirent _romfs_root[] = {
     {ROMFS_DIRENT_DIR, "sdcard", RT_NULL, 0},
+    {ROMFS_DIRENT_DIR, "flash", RT_NULL, 0},
     {ROMFS_DIRENT_DIR, "webnet", (rt_uint8_t *)_romfs_root_webnet, sizeof(_romfs_root_webnet)/sizeof(_romfs_root_webnet[0])}
 };
 

@@ -25,7 +25,10 @@
 #include <rtdbg.h>
 
 /* Audio device name */
-#define AUDIO_DEVICE_NAME "mic0"
+#ifndef BSP_XIAOZHI_MIC_DEVICE_NAME
+#define BSP_XIAOZHI_MIC_DEVICE_NAME "mic0"
+#endif
+#define AUDIO_DEVICE_NAME BSP_XIAOZHI_MIC_DEVICE_NAME
 
 /* Wake word detection configuration */
 #define WAKE_WORD_CONFIDENCE_THRESHOLD 0.80f /* 80% confidence threshold */

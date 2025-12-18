@@ -106,6 +106,10 @@
 #define RT_USING_DFS_DEVFS
 #define RT_USING_DFS_ROMFS
 /* end of DFS: device virtual file system */
+#define RT_USING_FAL
+#define FAL_DEBUG_CONFIG
+#define FAL_DEBUG 1
+#define FAL_PART_HAS_TABLE_CFG
 
 /* Device Drivers */
 
@@ -122,6 +126,7 @@
 #define RT_USING_PIN
 #define RT_USING_ADC
 #define RT_USING_PWM
+#define RT_USING_MTD_NOR
 #define RT_USING_RTC
 #define RT_USING_SOFT_RTC
 #define RT_USING_SDIO
@@ -415,6 +420,14 @@
 /* end of Micrium: Micrium software products porting for RT-Thread */
 #define PKG_USING_FREERTOS_WRAPPER
 #define PKG_USING_FREERTOS_WRAPPER_LATEST_VERSION
+#define LFS_READ_SIZE 256
+#define LFS_PROG_SIZE 256
+#define LFS_BLOCK_SIZE 4096
+#define LFS_CACHE_SIZE 256
+#define LFS_BLOCK_CYCLES -1
+#define LFS_THREADSAFE
+#define LFS_LOOKAHEAD_MAX 128
+#define RT_DEF_LFS_DRIVERS 1
 /* end of system packages */
 
 /* peripheral libraries and drivers */
@@ -572,12 +585,15 @@
 #define BSP_USING_RTC
 #define BSP_USING_HYPERAM
 #define BSP_USING_HYPERAM_SIZE 0x800000
-#define BSP_USING_SDCARD
-#define BSP_USING_FS
 #define BSP_USING_PWM
 #define BSP_USING_PWM18
 #define BSP_USING_LCD
 #define COMPONENT_MTB_DISPLAY_tl043wvv02
+#define BSP_USING_FILESYSTEM
+#define BSP_USING_SDCARD
+#define BSP_USING_FS
+#define BSP_USING_FLASH
+#define BSP_USING_LITTLEFS
 #define USING_LVGL
 #define BSP_USING_LVGL
 /* end of On-chip Peripheral Drivers */
@@ -590,14 +606,13 @@
 #define LWIP_ALTCP 1
 #define LWIP_ALTCP_TLS 1
 #define LWIP_ALTCP_TLS_MBEDTLS 1
+#define BSP_XIAOZHI_SOUND_DEVICE_NAME "sound0"
+#define BSP_XIAOZHI_MIC_DEVICE_NAME "mic0"
 #define BSP_USING_WIFI_HOST_DRIVER
 #define BSP_USING_NETUTILS
 #define NVRAM_IMAGE_SIZE 6741
 #define CLM_IMAGE_SIZE 1519
 /* end of Board extended module Drivers */
-
-/* Board extended module Drivers */
-
 /* end of Hardware Drivers Config */
 
 #endif

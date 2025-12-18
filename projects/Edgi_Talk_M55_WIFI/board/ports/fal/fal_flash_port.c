@@ -10,12 +10,28 @@
 
 #include <fal.h>
 #include "cycfg_qspi_memslot.h"
+#include <string.h>
+#include "cy_smif.h"
+
+#define LOG_TAG                "drv.fal_flash"
+#include <drv_log.h>
+
+/* Objects for serial memory */
+static cy_stc_smif_context_t smif_context;
 
 #define smifMemConfigs smif0MemConfigs
 #define MEM_SLOT_NUM                     (0U)
 #ifndef FAL_USING_NOR_FLASH_DEV_NAME
-    #define FAL_USING_NOR_FLASH_DEV_NAME             "norflash0"
+#define FAL_USING_NOR_FLASH_DEV_NAME             "norflash0"
 #endif
+
+/* Flash device configuration */
+#define SMIF_BASE_ADDRESS      0x60000000
+#define FLASH_START_ADDRESS    0x60E00000
+#define FLASH_SIZE             (2 * 1024 * 1024) /* 2MB */
+#define FLASH_SECTOR_SIZE      4096 /* 4KB sectors */
+#define FLASH_END_ADDRESS      (FLASH_START_ADDRESS + FLASH_SIZE)
+
 static int init(void);
 static int read(long offset, uint8_t *buf, size_t size);
 static int write(long offset, const uint8_t *buf, size_t size);
@@ -25,65 +41,82 @@ struct rt_device *flash_dev;
 struct fal_flash_dev nor_flash0 =
 {
     .name       = FAL_USING_NOR_FLASH_DEV_NAME,
-    .addr       = 0,
-    .len        = 16 * 1024 * 1024,
-    .blk_size   = 4096,
+    .addr       = FLASH_START_ADDRESS,
+    .len        = FLASH_SIZE,
+    .blk_size   = FLASH_SECTOR_SIZE,
     .ops        = {init, read, write, erase},
     .write_gran = 1
 };
 
 static int init(void)
 {
-    cy_rslt_t result;
-    result = cy_serial_flash_qspi_attach(smifMemConfigs[MEM_SLOT_NUM],
-                                         BSP_USING_FLASH_D0_PIN, BSP_USING_FLASH_D1_PIN, BSP_USING_FLASH_D2_PIN, BSP_USING_FLASH_D3_PIN, BSP_USING_FLASH_D4_PIN, BSP_USING_FLASH_D5_PIN,
-                                         BSP_USING_FLASH_D6_PIN, BSP_USING_FLASH_D7_PIN, BSP_USING_FLASH_FTAM_SSEL_PIN);
-
-    if (result != 0)
-    {
-        rt_kprintf("cy_serial_flash_qspi_attach failed");
-    }
-
+    /* SMIF already initialized by cybsp_init() */
+    LOG_D("FAL flash initialized successfully");
     return 0;
 }
 
 static int read(long offset, uint8_t *buf, size_t size)
 {
-    cy_rslt_t result;
-    result = cy_serial_flash_qspi_read(nor_flash0.addr + offset, size, buf);
-    if (result != 0)
+    if (offset + size > FLASH_SIZE)
     {
-        rt_kprintf("cy_serial_flash_qspi_read failed");
+        LOG_E("read out of range! offset=%ld, size=%d", offset, size);
+        return -RT_EINVAL;
     }
+
+    LOG_D("FAL read: offset %#lx, size %d", offset, size);
+    cy_en_smif_status_t result;
+    result = Cy_SMIF_MemRead(SMIF0_CORE, smifMemConfigs[MEM_SLOT_NUM], offset + (FLASH_START_ADDRESS - SMIF_BASE_ADDRESS), buf, size, &smif_context);
+    if (result != CY_SMIF_SUCCESS)
+    {
+        LOG_E("Cy_SMIF_MemRead failed: %d", result);
+        return -RT_ERROR;
+    }
+
     return size;
 }
 
 static int write(long offset, const uint8_t *buf, size_t size)
 {
-    cy_rslt_t result;
-    result = cy_serial_flash_qspi_write(nor_flash0.addr + offset, size, buf);
-    if (result != 0)
+    if (!buf || size == 0)
     {
-        rt_kprintf("cy_serial_flash_qspi_write failed");
+        LOG_E("Invalid input: buf=%p, size=%d", buf, size);
+        return -RT_EINVAL;
     }
+
+    if (offset + size > FLASH_SIZE)
+    {
+        LOG_E("write out of range! offset=%ld, size=%d", offset, size);
+        return -RT_EINVAL;
+    }
+
+    LOG_D("FAL write: offset %#lx, size %d", offset, size);
+    cy_en_smif_status_t result;
+    result = Cy_SMIF_MemWrite(SMIF0_CORE, smifMemConfigs[MEM_SLOT_NUM], offset + (FLASH_START_ADDRESS - SMIF_BASE_ADDRESS), buf, size, &smif_context);
+    if (result != CY_SMIF_SUCCESS)
+    {
+        LOG_E("Cy_SMIF_MemWrite failed: %d", result);
+        return -RT_ERROR;
+    }
+
     return size;
 }
 
 static int erase(long offset, size_t size)
 {
-    cy_rslt_t result;
-    result = cy_serial_flash_qspi_erase(nor_flash0.addr + offset, size);
-    if (result != 0)
+    if (offset + size > FLASH_SIZE)
     {
-        rt_kprintf("cy_serial_flash_qspi_erase failed");
+        LOG_E("erase out of range! offset=%ld, size=%d", offset, size);
+        return -RT_EINVAL;
+    }
+
+    LOG_D("FAL erase: offset %#lx, size %d", offset, size);
+    cy_en_smif_status_t result;
+    // Erase the specified size (assuming it's sector aligned)
+    result = Cy_SMIF_MemEraseSector(SMIF0_CORE, smifMemConfigs[MEM_SLOT_NUM], offset + (FLASH_START_ADDRESS - SMIF_BASE_ADDRESS), size, &smif_context);
+    if (result != CY_SMIF_SUCCESS)
+    {
+        LOG_E("Cy_SMIF_MemEraseSector failed: %d", result);
+        return -RT_ERROR;
     }
     return size;
 }
-
-static int rt_flash_init(void)
-{
-    fal_init();
-    struct rt_device *flash_dev = fal_blk_device_create("flash");
-    return RT_EOK;
-}
-INIT_ENV_EXPORT(rt_flash_init);

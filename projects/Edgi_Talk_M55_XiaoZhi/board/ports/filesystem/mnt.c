@@ -1,18 +1,10 @@
-/*
- * Copyright (c) 2006-2018, RT-Thread Development Team
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Change Logs:
- * Date           Author        Notes
- */
-
 #include <rtthread.h>
 
 #ifdef RT_USING_DFS
 #include <dfs_fs.h>
-#include "dfs_romfs.h"
+#include <fal.h>
 #include <drivers/mmcsd_core.h>
+#include "dfs_romfs.h"
 
 #define DBG_TAG "app.filesystem"
 #define DBG_LVL DBG_INFO
@@ -20,8 +12,9 @@
 
 static void _sdcard_mount(void)
 {
+#ifdef BSP_USING_SDCARD
     rt_device_t device;
-    const char *sd_device_names[] = {"sd", "sd0"};
+    const char *sd_device_names[] = {"sd", "sd0", "sd1", "sd2"};
     int i;
     const char *device_name = RT_NULL;
 
@@ -47,7 +40,7 @@ static void _sdcard_mount(void)
             LOG_W("Wait for SD card timeout!");
             return;
         }
-        
+
         /* Try again to find SD card device */
         for (i = 0; i < sizeof(sd_device_names) / sizeof(sd_device_names[0]); i++)
         {
@@ -96,6 +89,56 @@ static void _sdcard_mount(void)
     {
         LOG_E("sd card mkfs failed!");
     }
+#endif /* BSP_USING_SDCARD */
+}
+
+static void _fal_mount(void)
+{
+#ifdef BSP_USING_FLASH
+
+    struct rt_device *flash_dev = fal_mtd_nor_device_create("filesystem");
+    if (flash_dev == NULL)
+    {
+        LOG_E("Can't create block device for filesystem");
+        return;
+    }
+    else
+    {
+        LOG_I("Block device created for filesystem");
+
+        /* Try to mount filesystem */
+        if (dfs_mount("filesystem", "/flash", "lfs", 0, 0) != 0)
+        {
+            LOG_W("Mount filesystem failed, try to mkfs");
+
+            /* Format filesystem */
+            if (dfs_mkfs("lfs", "filesystem") != 0)
+            {
+                LOG_E("mkfs failed");
+                return;
+            }
+            else
+            {
+                LOG_I("Filesystem formatted");
+
+                /* Mount after format */
+                if (dfs_mount("filesystem", "/flash", "lfs", 0, 0) != 0)
+                {
+                    LOG_E("Mount filesystem failed after mkfs");
+                    return;
+                }
+                else
+                {
+                    LOG_I("Filesystem mounted successfully");
+                }
+            }
+        }
+        else
+        {
+            LOG_I("Filesystem mounted successfully");
+        }
+    }
+#endif /* BSP_USING_FLASH */
 }
 
 static void sd_mount_thread(void *parameter)
@@ -106,15 +149,22 @@ static void sd_mount_thread(void *parameter)
 
 int mnt_init(void)
 {
-    rt_thread_t tid;
-
     if (dfs_mount(RT_NULL, "/", "rom", 0, &(romfs_root)) != 0)
     {
         LOG_E("rom mount to '/' failed!");
         return -RT_ERROR;
     }
 
-    /* Create a separate thread for SD card mounting to avoid blocking system startup */
+#ifdef BSP_USING_FLASH
+    fal_init();
+    /* Mount FAL filesystem to /flash */
+    _fal_mount();
+#endif
+
+#ifdef BSP_USING_SDCARD
+    rt_thread_t tid;
+
+    /* Try SD card mount to /sdcard in a separate thread */
     tid = rt_thread_create("sd_mount", sd_mount_thread, RT_NULL,
                            2048, RT_THREAD_PRIORITY_MAX - 2, 20);
     if (tid != RT_NULL)
@@ -125,9 +175,10 @@ int mnt_init(void)
     {
         LOG_E("create sd_mount thread err!");
     }
+#endif
 
     return RT_EOK;
 }
-INIT_APP_EXPORT(mnt_init);
+INIT_ENV_EXPORT(mnt_init);
 
-#endif /* RT_USING_DFS */
+#endif

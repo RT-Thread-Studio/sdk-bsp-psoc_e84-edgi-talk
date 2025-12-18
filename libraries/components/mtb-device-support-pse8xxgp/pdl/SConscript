@@ -101,11 +101,12 @@ path += [cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/gcnano']
 if GetDepend('BSP_USING_RTC'):
     src += ['drivers/source/cy_rtc.c']
 
-if GetDepend(['BSP_USING_HYPERAM']):
+if GetDepend(['BSP_USING_HYPERAM']) or GetDepend(['BSP_USING_FLASH']):
     src += ['drivers/source/cy_smif.c']
     src += ['drivers/source/cy_smif_memslot.c']
     src += ['drivers/source/cy_smif_hb_flash.c']
     src += ['drivers/source/cy_smif_sfdp.c']
+    src += ['drivers/source/cy_smif_memnum.c']
 
 if GetDepend(['RT_USING_WDT']):
     src += ['drivers/source/cy_wdt.c']

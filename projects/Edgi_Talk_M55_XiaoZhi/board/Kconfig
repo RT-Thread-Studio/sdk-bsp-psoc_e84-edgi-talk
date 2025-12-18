@@ -54,6 +54,7 @@ menu "Onboard Peripheral Drivers"
                     default "i2c1"
             endif
         endif
+
     config BSP_USING_USB
         bool "Enable USB"
         default n
@@ -63,10 +64,11 @@ menu "Onboard Peripheral Drivers"
             default n
             select PKG_USING_FREERTOS_WRAPPER
         endif
+
     config BSP_USING_LSM6DS3
-    bool "Enable LSM6DS3"
-    default n
-    select BSP_USING_I2C
+        bool "Enable LSM6DS3"
+        default n
+        select BSP_USING_I2C
 
 endmenu
 
@@ -128,7 +130,7 @@ menu "On-chip Peripheral Drivers"
         if BSP_USING_UART
             config BSP_USING_UART1
                 bool "Enable UART1"
-                default y
+                default n
                 
             config BSP_USING_UART2
                 bool "Enable UART2"
@@ -152,19 +154,6 @@ menu "On-chip Peripheral Drivers"
                     default 0x800000
             endif
 
-
-    menuconfig BSP_USING_SDCARD
-        bool "Enable SDCARD (sd card)"
-        select RT_USING_DFS
-        select RT_USING_DFS_ELMFAT
-        default n
-        if BSP_USING_SDCARD
-            config BSP_USING_FS
-            bool "Enable filesystem"
-            default y
-        endif
-
-
     menuconfig BSP_USING_PWM
         bool "Enable PWM"
         select RT_USING_PWM
@@ -184,7 +173,7 @@ menu "On-chip Peripheral Drivers"
                 bool "Enable TIM0"
                 default n
         endif
-    
+
     menuconfig BSP_USING_WDT
         bool "Enable WDT"
         select RT_USING_WDT
@@ -199,7 +188,64 @@ menu "On-chip Peripheral Drivers"
                 bool "Enable MIPI LCD Screen tl043wvv02"
                 default n
         endif
-        
+
+    menuconfig BSP_USING_FILESYSTEM
+        bool "Enable filesystem support"
+        select RT_USING_DFS
+        select RT_USING_POSIX_FS
+        select RT_USING_DFS_ROMFS
+        default n
+        if BSP_USING_FILESYSTEM
+            config BSP_USING_SDCARD
+                bool "Enable SDCARD (sd card)"
+                select RT_USING_DFS_ELMFAT
+                default n
+                if BSP_USING_SDCARD
+                    config BSP_USING_FS
+                        bool "Enable filesystem"
+                        default n
+                endif
+
+            config BSP_USING_FLASH
+                bool "Enable QSPI Flash filesystem"
+                select RT_USING_FAL
+                select BSP_USING_LITTLEFS
+                select RT_USING_MTD_NOR
+                default y
+
+            if BSP_USING_FLASH
+                config BSP_USING_LITTLEFS
+                    bool "Enable LittleFS"
+                    default n
+                if BSP_USING_LITTLEFS
+                    config LFS_READ_SIZE
+                        int "disk read size"
+                        default 256
+                    config LFS_PROG_SIZE
+                        int "disk write size"
+                        default 256
+                    config LFS_BLOCK_SIZE
+                        int "disk block size"
+                        default 4096
+                    config LFS_CACHE_SIZE
+                        int "lfs r/w cache size"
+                        default LFS_PROG_SIZE
+                    config LFS_BLOCK_CYCLES
+                        int "lfs enable wear leveling. -1 is disable."
+                        default -1
+                    config LFS_THREADSAFE
+                        bool
+                        default y
+                    config LFS_LOOKAHEAD_MAX
+                        int "lfs lookahead size"
+                        default 128
+                    config RT_DEF_LFS_DRIVERS
+                        int "lfs drivers count"
+                        default 1
+                endif
+            endif
+        endif
+
     menuconfig USING_LVGL
         bool "Enable LVGL"
         select BSP_USING_LVGL
@@ -239,6 +285,12 @@ menu "Board extended module Drivers"
             config LWIP_ALTCP_TLS_MBEDTLS
                 int "Enable LWIP ALTCP_TLS_MBEDTLS"
                 default 1
+            config BSP_XIAOZHI_SOUND_DEVICE_NAME
+                string "Sound device name"
+                default "sound0"
+            config BSP_XIAOZHI_MIC_DEVICE_NAME
+                string "Mic device name"
+                default "mic0"
         endif
 
  config BSP_USING_FREERTOS
@@ -295,10 +347,6 @@ menu "Board extended module Drivers"
                 range 0 8192
                 default 5120
         endif
-endmenu
-
-menu "Board extended module Drivers"
-
 endmenu
 
 endmenu
