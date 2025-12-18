@@ -45,6 +45,7 @@ void xz_sound_init(void)
     struct rt_audio_caps sound_dev_arg;
     sound_dev_arg.main_type = AUDIO_TYPE_OUTPUT;
     sound_dev_arg.sub_type = AUDIO_DSP_PARAM;
+    sound_dev_arg.udata.value = 30;
     struct rt_audio_configure audio_configure;
     audio_configure.channels = 1;
     audio_configure.samplebits = 16;
@@ -60,6 +61,12 @@ int xz_mic_init(void)
     xz_audio_t *thiz = &xz_audio;
     thiz->rt_mic_dev = rt_device_find("mic0");
     thiz->is_rx_enable = 0;  /* Initialize as disabled */
+
+    struct rt_audio_caps mic_dev_arg;
+    mic_dev_arg.main_type = AUDIO_TYPE_MIXER;
+    mic_dev_arg.sub_type = AUDIO_MIXER_VOLUME;
+    mic_dev_arg.udata.value = 30;
+    rt_device_control(thiz->rt_mic_dev, AUDIO_CTL_CONFIGURE, &mic_dev_arg);
 
     mic_event = rt_event_create("mic_evt", RT_IPC_FLAG_FIFO);
     RT_ASSERT(mic_event != RT_NULL);

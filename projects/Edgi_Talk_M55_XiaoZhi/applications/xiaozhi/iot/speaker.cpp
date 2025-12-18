@@ -3,6 +3,7 @@
 // 添加 C 接口头文件
 extern "C" {
 #include "drv_es8388.h"
+#include <rtdevice.h>
 }
 
 
@@ -12,10 +13,11 @@ namespace iot {
 
 class Speaker : public Thing {
 public:
-    Speaker() : Thing("Speaker", "扬声器") {
+    Speaker() : Thing("Speaker", "扬声器"), current_volume_(60) {
+        sound_dev_ = rt_device_find("sound0");
         // 定义属性：volume（当前音量值）
         properties_.AddNumberProperty("volume", "当前音量值(0到100之间)", [this]() -> int {
-            return es8388_volume_get();
+            return current_volume_;
         });
 
         // 定义方法：SetVolume（设置音量）
@@ -26,15 +28,24 @@ public:
             if(volume > 100) {
                 volume = 100;
             }
-            es8388_volume_set(volume);
+            struct rt_audio_caps caps;
+            caps.main_type = AUDIO_TYPE_MIXER;
+            caps.sub_type = AUDIO_MIXER_VOLUME;
+            caps.udata.value = volume;
+            rt_device_control(sound_dev_, AUDIO_CTL_CONFIGURE, &caps);
+            current_volume_ = volume;
         });
 
         // 新增方法：GetVolume（获取音量）
         methods_.AddMethod("GetVolume", "获取当前音量", ParameterList(),
             [this](const ParameterList&) {
-                return es8388_volume_get(); // 直接返回音频服务获取的值
+                return current_volume_;
             });
     }
+
+private:
+    rt_device_t sound_dev_;
+    int current_volume_;
 };
 
 } // namespace iot
