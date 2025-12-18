@@ -6,6 +6,10 @@ extern "C" {
 #include <rtdevice.h>
 }
 
+/* Device name configurations */
+#ifndef BSP_XIAOZHI_SOUND_DEVICE_NAME
+#define BSP_XIAOZHI_SOUND_DEVICE_NAME "sound0"
+#endif
 
 #define TAG "Speaker"
 
@@ -14,7 +18,9 @@ namespace iot {
 class Speaker : public Thing {
 public:
     Speaker() : Thing("Speaker", "扬声器"), current_volume_(60) {
-        sound_dev_ = rt_device_find("sound0");
+
+        sound_dev_ = rt_device_find(BSP_XIAOZHI_SOUND_DEVICE_NAME);
+
         // 定义属性：volume（当前音量值）
         properties_.AddNumberProperty("volume", "当前音量值(0到100之间)", [this]() -> int {
             return current_volume_;

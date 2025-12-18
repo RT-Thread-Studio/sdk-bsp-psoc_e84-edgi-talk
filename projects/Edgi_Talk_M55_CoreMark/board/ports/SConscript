@@ -10,20 +10,24 @@ cwd = GetCurrentDir()
 src = []
 path =  [cwd]
 
-if GetDepend(['BSP_USING_FAL']):
+if GetDepend(['BSP_USING_FLASH']):
     src += Glob('fal/fal_flash_port.c')
     path += [cwd + '/fal']
 
 if GetDepend(['BSP_USING_HYPERAM']):
     src += Glob('drv_hyperam.c')
 
-if GetDepend(['BSP_USING_AUDIO']):
+if GetDepend(['BSP_USING_AUDIO_RECORD']):
+    src += Glob('audio/drv_mic.c')
+    path += [cwd + '/audio']
+
+if GetDepend(['BSP_USING_AUDIO_PLAY']):
     src += Glob('audio/drv_es8388.c')
     path += [cwd + '/audio']
 
 if GetDepend(['COMPONENT_MTB_DISPLAY_EK79007AD3']):
     src  += ['display_panels/mtb_display_ek79007ad3.c']
-    path += [cwd + 'display_panels']
+    path += [cwd + '/display_panels']
 
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path)
 

@@ -127,6 +127,7 @@ if os.path.exists(os.path.join(os.getcwd(), "libraries")):
     objs.extend(SConscript('libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
     objs.extend(SConscript('libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
     objs.extend(SConscript('libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
+    objs.extend(SConscript('libraries/components/littlefs/SConscript', variant_dir='build/libraries/components/littlefs', duplicate=0))
     objs.extend(SConscript('libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
     objs.extend(SConscript('libraries/components/lvgl_9.2.0/SConscript', variant_dir='build/libraries/components/lvgl_9.2.0', duplicate=0))
 else:
@@ -146,6 +147,7 @@ else:
     objs.extend(SConscript('../../libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
     objs.extend(SConscript('../../libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
     objs.extend(SConscript('../../libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
+    objs.extend(SConscript('../../libraries/components/littlefs/SConscript', variant_dir='build/libraries/components/littlefs', duplicate=0))
     objs.extend(SConscript('../../libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
     objs.extend(SConscript('../../libraries/components/lvgl_9.2.0/SConscript', variant_dir='build/libraries/components/lvgl_9.2.0', duplicate=0))
 

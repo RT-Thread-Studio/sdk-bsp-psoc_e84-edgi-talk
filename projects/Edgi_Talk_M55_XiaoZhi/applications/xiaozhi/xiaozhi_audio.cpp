@@ -15,6 +15,15 @@
 #include "lwip/tcpip.h"
 #include "xiaozhi.h"
 
+/* Device name configurations */
+#ifndef BSP_XIAOZHI_SOUND_DEVICE_NAME
+#define BSP_XIAOZHI_SOUND_DEVICE_NAME "sound0"
+#endif
+
+#ifndef BSP_XIAOZHI_MIC_DEVICE_NAME
+#define BSP_XIAOZHI_MIC_DEVICE_NAME "mic0"
+#endif
+
 /* Include opus heap functions */
 #ifdef __cplusplus
 extern "C"
@@ -41,7 +50,7 @@ void xz_opus_thread_entry(void *p);
 void xz_sound_init(void)
 {
     xz_audio_t *thiz = &xz_audio;
-    thiz->rt_audio_dev = rt_device_find("sound0");
+    thiz->rt_audio_dev = rt_device_find(BSP_XIAOZHI_SOUND_DEVICE_NAME);
     struct rt_audio_caps sound_dev_arg;
     sound_dev_arg.main_type = AUDIO_TYPE_OUTPUT;
     sound_dev_arg.sub_type = AUDIO_DSP_PARAM;
@@ -59,7 +68,7 @@ void xz_sound_init(void)
 int xz_mic_init(void)
 {
     xz_audio_t *thiz = &xz_audio;
-    thiz->rt_mic_dev = rt_device_find("mic0");
+    thiz->rt_mic_dev = rt_device_find(BSP_XIAOZHI_MIC_DEVICE_NAME);
     thiz->is_rx_enable = 0;  /* Initialize as disabled */
 
     struct rt_audio_caps mic_dev_arg;

@@ -1,0 +1,15 @@
+from building import *
+import os
+import rtconfig
+
+cwd  = GetCurrentDir()
+path = [cwd]
+src  = []
+
+if GetDepend(['COMPONENT_MTB_DISPLAY_tl043wvv02']):
+    src += Glob('display_tl043wvv02.c')
+    src += Glob('drv_touch.c')
+
+group = DefineGroup('tl043wvv02-code', src, depend = ['COMPONENT_MTB_DISPLAY_tl043wvv02'], CPPPATH = path)
+
+Return('group')

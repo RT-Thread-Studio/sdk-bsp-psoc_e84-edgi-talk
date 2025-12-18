@@ -73,7 +73,6 @@ CPPDEFINES = [
 ]
 
 
-
 group = DefineGroup("Drivers", src, depend=[""], CPPPATH=path, CPPDEFINES=CPPDEFINES)
 
 list = os.listdir(cwd)
