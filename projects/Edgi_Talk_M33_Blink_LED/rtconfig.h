@@ -342,8 +342,6 @@
 
 /* Select SOC Multi Core Mode */
 
-#define SOC_Enable_CM55
-#define SOC_Enable_CM33_DeepSleep
 /* end of Select SOC Multi Core Mode */
 #define SOC_SERIES_IFX_PSOCE84
 #define KIT_PROCE84_EVK_M33
