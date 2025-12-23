@@ -368,9 +368,9 @@ for s in SRC:
 # Combine: local sources (with build dir prefix) + external sources (as-is)
 build_src = local_src + external_src
 
-# Build the ELF - output to parent Debug directory (to match boot_with_extended_boot.json path)
-# The JSON config uses "../Debug/rtthread.hex" relative to config folder
-DEBUG_DIR = 'Debug'
+# Build the ELF - output to build directory (to match boot_with_extended_boot.json path)
+# The JSON config uses "build/rtthread.hex"
+DEBUG_DIR = 'build'
 
 # Create Debug directory if not exists
 if not os.path.exists(DEBUG_DIR):
@@ -402,7 +402,20 @@ size_cmd = env.Command(
 # =============================================================================
 # Secure image packaging using edgeprotecttools (Windows only)
 # =============================================================================
-Default(elf, hex_file, bin_file, size_cmd)
+if platform.system() == 'Windows':
+    EDGEPROTECTTOOLS = os.path.join(SDK_ROOT, 'tools', 'edgeprotecttools', 'bin', 'edgeprotecttools.exe')
+    BOOT_CONFIG = os.path.join(PROJECT_ROOT, 'config', 'boot_with_extended_boot_scons.json')
+
+    if os.path.exists(EDGEPROTECTTOOLS) and os.path.exists(BOOT_CONFIG):
+        secure_image = env.Command(
+            'secure_image',  # Pseudo target
+            hex_file,
+            '"' + EDGEPROTECTTOOLS + '" run-config -i "' + BOOT_CONFIG + '"'
+        )
+    else:
+        print("edgeprotecttools or boot config not found, skipping secure image packaging")
+        print("EDGEPROTECTTOOLS:", EDGEPROTECTTOOLS)
+        print("BOOT_CONFIG:", BOOT_CONFIG)
 
 # Clean target
 Clean(elf, [DEBUG_DIR + '/' + TARGET + '.map', BUILD_DIR, DEBUG_DIR])
