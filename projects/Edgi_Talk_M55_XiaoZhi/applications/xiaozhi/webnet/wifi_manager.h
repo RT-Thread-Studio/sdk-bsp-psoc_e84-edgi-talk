@@ -18,7 +18,7 @@ extern "C" {
 #endif
 
 /* WiFi configuration file path */
-#define WIFI_CONFIG_FILE    "/sdcard/wifi_config.json"
+#define WIFI_CONFIG_FILE    "/flash/wifi_config.json"
 
 /* AP mode default settings */
 #define WIFI_AP_SSID        "RT-Thread-AP"

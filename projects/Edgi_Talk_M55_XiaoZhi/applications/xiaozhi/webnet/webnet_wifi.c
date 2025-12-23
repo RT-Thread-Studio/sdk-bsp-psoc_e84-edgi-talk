@@ -66,7 +66,7 @@ static rt_err_t wifi_config_save(const char *ssid, const char *password)
     int fd;
     cJSON *root = RT_NULL;
     char *json_str = RT_NULL;
-    rt_err_t ret = -RT_ERROR;
+    rt_err_t ret;
 
     if (!ssid || rt_strlen(ssid) == 0)
     {
@@ -107,12 +107,14 @@ static rt_err_t wifi_config_save(const char *ssid, const char *password)
         else
         {
             LOG_E("Write config file failed");
+            ret = -RT_ERROR;
         }
         close(fd);
     }
     else
     {
         LOG_E("Open config file failed: %s", WIFI_CONFIG_FILE);
+        ret = -RT_ERROR;
     }
 
     cJSON_free(json_str);
@@ -454,7 +456,9 @@ static rt_err_t try_connect_with_saved_config(void)
 
     /* Save to temp cache for re-saving */
     rt_strncpy(s_saved_ssid, ssid, sizeof(s_saved_ssid) - 1);
+    s_saved_ssid[sizeof(s_saved_ssid) - 1] = '\0';
     rt_strncpy(s_saved_password, password, sizeof(s_saved_password) - 1);
+    s_saved_password[sizeof(s_saved_password) - 1] = '\0';
 
     /* Ensure WLAN STA mode is set */
     rt_wlan_set_mode(RT_WLAN_DEVICE_STA_NAME, RT_WLAN_STATION);
@@ -524,8 +528,8 @@ void wifi_manager_init(void)
     rt_wlan_register_event_handler(RT_WLAN_EVT_READY, wlan_ready_handler, RT_NULL);
     rt_wlan_register_event_handler(RT_WLAN_EVT_STA_DISCONNECTED, wlan_disconnect_handler, RT_NULL);
 
-    /* Wait for SD card filesystem mount */
-    LOG_I("Waiting for SD card mount...");
+    /* Wait for filesystem mount */
+    LOG_I("Waiting for filesystem mount...");
     for (int i = 0; i < (SD_MOUNT_TIMEOUT_S * 2); i++)
     {
         rt_thread_mdelay(500);
@@ -535,9 +539,9 @@ void wifi_manager_init(void)
             close(fd);
             break;
         }
-        /* Check if /sdcard directory exists */
+        /* Check if /flash directory exists */
         struct stat st;
-        if (stat("/sdcard", &st) == 0)
+        if (stat("/flash", &st) == 0)
         {
             break;
         }
