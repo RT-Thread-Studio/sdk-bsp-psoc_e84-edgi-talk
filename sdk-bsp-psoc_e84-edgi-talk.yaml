@@ -1,6 +1,6 @@
 board:
   name: PSOC_E84-EDGI-TALK
-  version: 1.0.0
+  version: 1.1.0
   vendor: RT-Thread
   description_zh: Edgi-Talk 开发板基于 PSoC™ E84 MCU,为工程师提供了一个灵活、全面的开发平台。板上集成了丰富的外设接口和示例模块，助力开发者快速完成多传感器、显示和通信应用的开发。
   description_en: The Edgi-Talk board is based on the PSoC™ E84 MCU and provides a flexible and comprehensive development platform.It integrates a variety of peripheral interfaces and sample modules, helping developers quickly implement applications involving multi-sensor integration, display, and communication.
@@ -64,7 +64,7 @@ features_zh:
 - 128Mb HyperRAM
 - 三个用户 LED：D1（蓝）、D2（红）、D3（绿）
 - 两个按键（用户按键和复位按键）
-pkg_version: 1.0.0
+pkg_version: 1.1.0
 pkg_vendor: RealThread
 pkg_type: Board_Support_Packages
 template_projects:

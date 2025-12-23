@@ -98,7 +98,8 @@ if os.path.exists(os.path.join(os.getcwd(), "libraries")):
     # Set VariantDir for libraries
     env.VariantDir('build/libraries/HAL_Drivers', 'libraries/HAL_Drivers', duplicate=0)
     env.VariantDir('build/libraries/components', 'libraries/components', duplicate=0)
-    
+    env.VariantDir('build/libraries/Common/board', 'libraries/Common/board', duplicate=0)
+
     objs.extend(SConscript('libraries/HAL_Drivers/SConscript', variant_dir='build/libraries/HAL_Drivers', duplicate=0))
     objs.extend(SConscript('libraries/components/Infineon_cmsis-latest/SConscript', variant_dir='build/libraries/components/Infineon_cmsis-latest', duplicate=0))
     objs.extend(SConscript('libraries/components/Infineon_core-lib-latest/SConscript', variant_dir='build/libraries/components/Infineon_core-lib-latest', duplicate=0))
@@ -113,11 +114,13 @@ if os.path.exists(os.path.join(os.getcwd(), "libraries")):
     objs.extend(SConscript('libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
     objs.extend(SConscript('libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
     objs.extend(SConscript('libraries/components/littlefs/SConscript', variant_dir='build/libraries/components/littlefs', duplicate=0))
+    objs.extend(SConscript('libraries/Common/board/SConscript', variant_dir='build/libraries/Common/board', duplicate=0))
 else:
     # Set VariantDir for external libraries
     env.VariantDir('build/libraries/HAL_Drivers', '../../libraries/HAL_Drivers', duplicate=0)
     env.VariantDir('build/libraries/components', '../../libraries/components', duplicate=0)
-    
+    env.VariantDir('build/libraries/Common/board', '../../libraries/Common/board', duplicate=0)
+
     objs.extend(SConscript('../../libraries/HAL_Drivers/SConscript', variant_dir='build/libraries/HAL_Drivers', duplicate=0))
     objs.extend(SConscript('../../libraries/components/Infineon_cmsis-latest/SConscript', variant_dir='build/libraries/components/Infineon_cmsis-latest', duplicate=0))
     objs.extend(SConscript('../../libraries/components/Infineon_core-lib-latest/SConscript', variant_dir='build/libraries/components/Infineon_core-lib-latest', duplicate=0))
@@ -132,6 +135,7 @@ else:
     objs.extend(SConscript('../../libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
     objs.extend(SConscript('../../libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
     objs.extend(SConscript('../../libraries/components/littlefs/SConscript', variant_dir='build/libraries/components/littlefs', duplicate=0))
+    objs.extend(SConscript('../../libraries/Common/board/SConscript', variant_dir='build/libraries/Common/board', duplicate=0))
 
 # make a building
 DoBuilding(TARGET, objs)

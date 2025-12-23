@@ -191,6 +191,8 @@ menu "On-chip Peripheral Drivers"
     menuconfig BSP_USING_LCD
         bool "Enable MIPI LCD controller"
         select RT_USING_LCD
+        select RT_USING_TOUCH
+        select RT_TOUCH_PIN_IRQ
         default n
         if BSP_USING_LCD
             config COMPONENT_MTB_DISPLAY_tl043wvv02

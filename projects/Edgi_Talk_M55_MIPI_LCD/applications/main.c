@@ -9,7 +9,7 @@ int main(void)
     rt_kprintf("Hello RT-Thread\r\n");
     rt_kprintf("It's cortex-m55\r\n");
     rt_pin_mode(LED_PIN_G, PIN_MODE_OUTPUT);
-    SCB_DisableDCache();
+
     while (1)
     {
         lcd_test();

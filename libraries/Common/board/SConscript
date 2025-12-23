@@ -1,0 +1,47 @@
+import os
+import rtconfig
+from building import *
+
+Import('SDK_LIB')
+
+cwd = GetCurrentDir()
+
+# add common drivers
+src = []
+path =  [cwd]
+
+if GetDepend(['BSP_USING_FLASH']):
+    src += Glob('ports/fal/fal_flash_port.c')
+    path += [cwd + '/ports/fal']
+
+if GetDepend(['BSP_USING_HYPERAM']):
+    src += Glob('ports/drv_hyperam.c')
+
+if GetDepend(['BSP_USING_AUDIO_RECORD']):
+    src += Glob('ports/audio/drv_mic.c')
+    path += [cwd + '/ports/audio']
+
+if GetDepend(['BSP_USING_AUDIO_PLAY']):
+    src += Glob('ports/audio/drv_es8388.c')
+    path += [cwd + '/ports/audio']
+
+if GetDepend(['BSP_USING_FILESYSTEM']):
+    src += Glob('ports/filesystem/*.c')
+
+if GetDepend(['BSP_USING_LCD']):
+    src  += ['ports/display_panels/display_tl043wvv02.c']
+    src  += ['ports/display_panels/drv_touch.c']
+    path += [cwd + '/ports/display_panels']
+
+if GetDepend(['BSP_USING_LVGL']):
+    src  += Glob('ports/lvgl/*.c')
+    path += [cwd + '/ports/lvgl']
+
+group = DefineGroup('Common', src, depend = [''], CPPPATH = path)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')
