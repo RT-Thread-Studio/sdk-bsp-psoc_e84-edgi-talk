@@ -115,11 +115,17 @@ rt_err_t es8388_init(const char *i2c_name, rt_uint16_t pin)
 
 
     // DAC mute
-    reg_write(ES8388_DACCONTROL3, 0x04);
+    reg_write(ES8388_DACCONTROL3, 0x00);//DAC Mute enable
 
     /* Chip Control and Power Management */
     reg_write(ES8388_CONTROL2, 0x50);
     reg_write(ES8388_CHIPPOWER, 0x00); //normal all and power up all
+    reg_write(0x35,0xA0);
+    reg_write(0x36,0x08);
+    reg_write(0x37,0xC0);
+    reg_write(0x39,0xC0);
+    reg_write(0x36,0xC8);
+    reg_write(0x3B,0x20);
     reg_write(ES8388_MASTERMODE, 0x00); //TODO:CODEC IN I2S SLAVE MODE
 
     /* dac */
@@ -154,6 +160,7 @@ rt_err_t es8388_init(const char *i2c_name, rt_uint16_t pin)
 
     /* enable es8388 PA */
     es8388_pa_power(RT_TRUE);
+    reg_write(ES8388_DACCONTROL3, 0x04);   //DAC Mute Disable
 
     return RT_EOK;
 }
