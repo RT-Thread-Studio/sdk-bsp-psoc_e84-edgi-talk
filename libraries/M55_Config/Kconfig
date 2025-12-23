@@ -1,21 +1,12 @@
 menu "Hardware Drivers Config"
 
-menu "Select SOC Multi Core Mode"
-    config SOC_Enable_CM55
-        bool "Enable CM55 Core"
-        default y
-    config SOC_Enable_CM33_DeepSleep
-        bool "Enable CM33 DeepSleep"
-        default y
-endmenu
-
 config SOC_SERIES_IFX_PSOCE84
     bool 
     select RT_USING_COMPONENTS_INIT
     select RT_USING_USER_MAIN
     default y
 
-config KIT_PROCE84_EVK_M33
+config KIT_PROCE84_EVK_M55
     bool 
     default y
 
@@ -153,14 +144,14 @@ menu "On-chip Peripheral Drivers"
     config BSP_USING_RTC
         bool "Enable RTC"
         select RT_USING_RTC
-        default n
+        default y
 
         config BSP_USING_HYPERAM
             bool "Enable HYPERAM"
             if BSP_USING_HYPERAM
                 config BSP_USING_HYPERAM_SIZE 
                     hex "(HEX)HYPERAM SIZE"
-                    default 0x1000000
+                    default 0x800000
             endif
 
     menuconfig BSP_USING_PWM
@@ -322,6 +313,10 @@ menu "On-chip Peripheral Drivers"
                 range 0 8192
                 default 5120
         endif
+endmenu
+
+menu "Board extended module Drivers"
+
 endmenu
 
 endmenu

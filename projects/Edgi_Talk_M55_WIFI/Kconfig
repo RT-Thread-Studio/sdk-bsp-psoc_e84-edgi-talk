@@ -30,4 +30,4 @@ config PLATFORM_DIR
 
 source "$RTT_DIR/Kconfig"
 source "$PKGS_DIR/Kconfig"
-source "$BSP_DIR/board/Kconfig"
+source "$RTT_DIR/../libraries/M55_Config/Kconfig"
