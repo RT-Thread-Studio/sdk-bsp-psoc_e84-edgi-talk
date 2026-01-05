@@ -330,7 +330,7 @@ menu "On-chip Peripheral Drivers"
 endmenu
 
 menu "Board extended module Drivers"
-
+    source "libraries/components/wifi-host-driver/Kconfig"
 endmenu
 
 endmenu
