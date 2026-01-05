@@ -212,7 +212,7 @@ struct fal_mtd_nor_device
     const struct fal_partition     *fal_part;
 };
 
-static rt_ssize_t mtd_nor_dev_read(struct rt_mtd_nor_device* device, rt_off_t offset, rt_uint8_t* data, rt_uint32_t length)
+static rt_ssize_t mtd_nor_dev_read(struct rt_mtd_nor_device* device, rt_off_t offset, rt_uint8_t* data, rt_size_t length)
 {
     int ret = 0;
     struct fal_mtd_nor_device *part = (struct fal_mtd_nor_device*) device;
@@ -233,7 +233,7 @@ static rt_ssize_t mtd_nor_dev_read(struct rt_mtd_nor_device* device, rt_off_t of
     return ret;
 }
 
-static rt_ssize_t mtd_nor_dev_write(struct rt_mtd_nor_device* device, rt_off_t offset, const rt_uint8_t* data, rt_uint32_t length)
+static rt_ssize_t mtd_nor_dev_write(struct rt_mtd_nor_device* device, rt_off_t offset, const rt_uint8_t* data, rt_size_t length)
 {
     int ret = 0;
     struct fal_mtd_nor_device *part;
@@ -255,7 +255,7 @@ static rt_ssize_t mtd_nor_dev_write(struct rt_mtd_nor_device* device, rt_off_t o
     return ret;
 }
 
-static rt_err_t mtd_nor_dev_erase(struct rt_mtd_nor_device* device, rt_off_t offset, rt_uint32_t length)
+static rt_err_t mtd_nor_dev_erase(struct rt_mtd_nor_device* device, rt_off_t offset, rt_size_t length)
 {
     int ret = 0;
     struct fal_mtd_nor_device *part;
@@ -594,7 +594,7 @@ static void fal(uint8_t argc, char **argv)
     else
     {
         const char *operator = argv[1];
-        uint32_t addr, size;
+        uint32_t addr, size = 0;
 
         if (!strcmp(operator, "probe"))
         {
