@@ -87,7 +87,11 @@
 #define DFS_FILESYSTEMS_MAX 4
 #define DFS_FILESYSTEM_TYPES_MAX 4
 #define RT_USING_DFS_DEVFS
+#define RT_USING_DFS_ROMFS
 /* end of DFS: device virtual file system */
+#define RT_USING_FAL
+#define FAL_DEBUG 0
+#define FAL_PART_HAS_TABLE_CFG
 
 /* Device Drivers */
 
@@ -100,6 +104,13 @@
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_RB_BUFSZ 128
 #define RT_USING_PIN
+#define RT_USING_MTD_NOR
+#define RT_USING_SDIO
+#define RT_SDIO_STACK_SIZE 2048
+#define RT_SDIO_THREAD_PRIORITY 15
+#define RT_MMCSD_STACK_SIZE 2048
+#define RT_MMCSD_THREAD_PREORITY 22
+#define RT_MMCSD_MAX_PARTITION 16
 #define RT_USING_WIFI
 #define RT_WLAN_DEVICE_STA_NAME "wlan0"
 #define RT_WLAN_DEVICE_AP_NAME "wlan1"
@@ -225,6 +236,7 @@
 
 /* Utilities */
 
+#define RT_USING_RYM
 /* end of Utilities */
 /* end of RT-Thread Components */
 
@@ -236,10 +248,16 @@
 
 /* IoT - internet of things */
 
+#define WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL
+#define WHD_RESOURCES_FIRMWARE_PART_NAME "whd_firmware"
+#define WHD_RESOURCES_CLM_PART_NAME "whd_clm"
+#define WHD_RESOURCES_BLOCK_SIZE 1024
 #define CY_WIFI_WHD_THREAD_PRIORITY 6
 #define CY_WIFI_WHD_THREAD_STACK_SIZE 5120
+#define CYBSP_USING_PIN_NUMBER
 #define CYBSP_REG_ON_PIN 94
 #define CYBSP_HOST_WAKE_IRQ_PIN 92
+#define CYBSP_HOST_WAKE_IRQ_EVENT_RISE
 #define CYBSP_OOB_INTR_PRIORITY 2
 #define CY_WIFI_USING_THREAD_INIT
 #define CY_WIFI_INIT_THREAD_STACK_SIZE 2048
@@ -326,6 +344,14 @@
 /* end of Micrium: Micrium software products porting for RT-Thread */
 #define PKG_USING_FREERTOS_WRAPPER
 #define PKG_USING_FREERTOS_WRAPPER_LATEST_VERSION
+#define LFS_READ_SIZE 256
+#define LFS_PROG_SIZE 256
+#define LFS_BLOCK_SIZE 4096
+#define LFS_CACHE_SIZE 256
+#define LFS_BLOCK_CYCLES -1
+#define LFS_THREADSAFE
+#define LFS_LOOKAHEAD_MAX 128
+#define RT_DEF_LFS_DRIVERS 1
 /* end of system packages */
 
 /* peripheral libraries and drivers */
@@ -367,6 +393,10 @@
 /* GD32 Drivers */
 
 /* end of GD32 Drivers */
+
+/* HPMicro SDK */
+
+/* end of HPMicro SDK */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -462,7 +492,11 @@
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART2
-#define BSP_USING_FREERTOS
+#define BSP_USING_SDIO
+#define BSP_USING_SDIO0
+#define BSP_USING_FILESYSTEM
+#define BSP_USING_FLASH
+#define BSP_USING_LITTLEFS
 #define BSP_USING_WIFI_HOST_DRIVER
 #define BSP_USING_NETUTILS
 #define NVRAM_IMAGE_SIZE 6741
@@ -471,6 +505,44 @@
 
 /* Board extended module Drivers */
 
+#define RT_USING_WIFI_HOST_DRIVER
+
+/* WHD Configuration */
+
+#define WHD_SET_COUNTRY_FROM_HOST
+#define WHD_COUNTRY_CODE "AU"
+#define WHD_COUNTRY_CODE_REVISION 0
+#define CY_WIFI_INIT_THREAD_PRIORITY 10
+
+/* WHD Thread Configuration */
+
+/* end of WHD Thread Configuration */
+
+/* WHD Resources Configuration */
+
+#define WHD_RESOURCES_NVRAM_PART_NAME "whd_nvram"
+/* end of WHD Resources Configuration */
+/* end of WHD Configuration */
+
+/* Hardware Configuration */
+
+#define WHD_USING_CHIP_CYW55500
+#define WHD_USING_WIFI6
+
+/* Pin Configuration */
+
+/* end of Pin Configuration */
+/* end of Hardware Configuration */
+
+/* Porting options */
+
+#define WHD_PORTING_HAL
+#define WHD_PORTING_RTOS
+#define WHD_USE_CUSTOM_MALLOC_IMPL
+/* end of Porting options */
+#define WHD_LOG_LEVEL_INFO
+#define WPRINT_ENABLE_WHD_INFO
+/* end of Board extended module Drivers */
 /* end of Hardware Drivers Config */
 
 #endif
