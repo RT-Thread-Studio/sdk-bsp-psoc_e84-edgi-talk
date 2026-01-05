@@ -6,6 +6,7 @@
  * Change Logs:
  * Date           Author       Notes
  * 2018-08-13     tyx          the first version
+ * 2024-03-14     Evlers       Fixed a duplicate issue with the wifi scan command
  */
 
 #include <rtthread.h>
@@ -92,6 +93,7 @@ static int wifi_help(int argc, char *argv[])
     rt_kprintf("wifi scan [SSID]\n");
     rt_kprintf("wifi join [SSID] [PASSWORD]\n");
     rt_kprintf("wifi ap SSID [PASSWORD]\n");
+    rt_kprintf("wifi list_sta\n");
     rt_kprintf("wifi disc\n");
     rt_kprintf("wifi ap_stop\n");
     rt_kprintf("wifi status\n");
@@ -199,7 +201,7 @@ static rt_err_t wifi_scan_result_cache(struct rt_wlan_info *info)
     if ((info == RT_NULL) || (info->ssid.len == 0)) return -RT_EINVAL;
 
     LOG_D("ssid:%s len:%d mac:%02x:%02x:%02x:%02x:%02x:%02x", info->ssid.val, info->ssid.len,
-          info->bssid[0], info->bssid[1], info->bssid[2], info->bssid[3], info->bssid[4], info->bssid[5]);
+                  info->bssid[0], info->bssid[1], info->bssid[2], info->bssid[3], info->bssid[4], info->bssid[5]);
 
     /* scanning result filtering */
     level = rt_hw_interrupt_disable();
@@ -388,6 +390,7 @@ static void user_ap_info_callback(int event, struct rt_wlan_buff *buff, void *pa
     struct rt_wlan_info *info = RT_NULL;
     int index = 0;
     int ret = RT_EOK;
+    rt_uint32_t last_num = scan_result.num;
 
     RT_ASSERT(event == RT_WLAN_EVT_SCAN_REPORT);
     RT_ASSERT(buff != RT_NULL);
@@ -404,8 +407,12 @@ static void user_ap_info_callback(int event, struct rt_wlan_buff *buff, void *pa
                  scan_filter->ssid.len == info->ssid.len &&
                  rt_memcmp(&scan_filter->ssid.val[0], &info->ssid.val[0], scan_filter->ssid.len) == 0))
         {
-            /*Print the info*/
-            print_ap_info(info, index);
+            /*Check whether a new ap is added*/
+            if (last_num < scan_result.num)
+            {
+                /*Print the info*/
+                print_ap_info(info, index);
+            }
 
             index++;
             *((int *)(parameter)) = index;
