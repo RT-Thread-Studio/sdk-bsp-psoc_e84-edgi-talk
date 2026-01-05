@@ -7,13 +7,14 @@
  * Date           Author         Notes
  * 2023-05-05     vandoul        first version
  * 2025-11-25     Rbb666         Reworked to use MMCSD host framework
+ * 2026-01-05     Evlers         Added SDIO0 support
  */
 
 #include <rtthread.h>
 #include "rtdevice.h"
 #include "cybsp.h"
 
-#ifdef BSP_USING_SDCARD
+#ifdef BSP_USING_SDIO
 
 /* DCache operations using CMSIS API for Cortex-M55 */
 #if defined(__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
@@ -24,13 +25,8 @@
 #define CY_SDIO_DCACHE_INVALIDATE(addr, size)  ((void)0)
 #endif
 
-//#define DRV_DEBUG
+// #define DRV_DEBUG
 #define LOG_TAG              "drv.sdio"
-#ifdef DRV_DEBUG
-#define DBG_LVL              DBG_LOG
-#else
-#define DBG_LVL              DBG_INFO
-#endif
 #include <drv_log.h>
 
 /* SDHC configuration */
@@ -55,9 +51,13 @@
 #define CY_SDIO_LOCK(sdio)      rt_mutex_take(&(sdio)->mutex, RT_WAITING_FOREVER)
 #define CY_SDIO_UNLOCK(sdio)    rt_mutex_release(&(sdio)->mutex)
 
-/* SDHC hardware objects */
-static mtb_hal_sdhc_t sdhc_obj;
-static cy_stc_sd_host_context_t sdhc_host_context;
+struct cy_pse_sdio_hw_desc
+{
+    SDHC_Type *hw_base;                 /* Hardware base address */
+    mtb_hal_sdhc_t *sdhc_obj;           /* SDHC hardware objects */
+    const cy_stc_sd_host_init_config_t *pdl_config;  /* SDHC PDL config */
+    const mtb_hal_sdhc_configurator_t *hal_config; /* SDHC HAL configurator */
+};
 
 /**
  * @brief PSE84 SDIO driver private data structure
@@ -66,17 +66,24 @@ struct cy_pse_sdio
 {
     struct rt_mmcsd_host *host;         /* RT-Thread MMCSD host */
     struct rt_mutex mutex;              /* Access mutex */
-    struct rt_event event;              /* Event for interrupt handling */
     rt_uint8_t *bounce_buf;             /* DMA bounce buffer */
     rt_size_t bounce_size;              /* Bounce buffer size */
     rt_uint8_t power_mode;              /* Current power mode */
     rt_uint8_t bus_width;               /* Current bus width */
     rt_uint32_t current_freq;           /* Current clock frequency */
-    SDHC_Type *hw_base;                 /* Hardware base address */
+    rt_bool_t en_auto_cmd12;            /* Enable Auto CMD12 */
     rt_bool_t auto_cmd12_sent;          /* Flag: Auto CMD12 was sent in last transfer */
+
+    const struct cy_pse_sdio_hw_desc *hw_desc;  /* Hardware descriptor */
+    cy_stc_sd_host_context_t sdhc_host_context; /* PDL&HAL SDHC host context */
 };
 
-static struct cy_pse_sdio *cy_sdio = RT_NULL;
+#ifdef BSP_USING_SDIO0
+static mtb_hal_sdhc_t sdhc0_obj;        /* SDHC hardware objects */
+#endif /* #ifdef BSP_USING_SDIO0 */
+#ifdef BSP_USING_SDIO1
+static mtb_hal_sdhc_t sdhc1_obj;        /* SDHC hardware objects */
+#endif /* #ifdef BSP_USING_SDIO1 */
 
 /**
  * @brief Convert RT-Thread response type to HAL response type
@@ -279,7 +286,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
         data_cfg.is_read = (data->flags & DATA_DIR_READ) ? true : false;
 
         /* Use auto command for multi-block transfers */
-        if (data->blks > 1)
+        if (sdio->en_auto_cmd12 && data->blks > 1)
         {
             data_cfg.auto_command = MTB_HAL_SDHC_AUTO_CMD_12;
             sdio->auto_cmd12_sent = RT_TRUE;
@@ -289,7 +296,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
             data_cfg.auto_command = MTB_HAL_SDHC_AUTO_CMD_NONE;
         }
 
-        result = mtb_hal_sdhc_config_data_transfer(&sdhc_obj, &data_cfg);
+        result = mtb_hal_sdhc_config_data_transfer(sdio->hw_desc->sdhc_obj, &data_cfg);
         if (CY_RSLT_SUCCESS != result)
         {
             LOG_E("config data transfer fail: 0x%08x", (unsigned int)result);
@@ -299,7 +306,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
     }
 
     /* Clear any pending errors */
-    mtb_hal_sdhc_clear_errors(&sdhc_obj);
+    mtb_hal_sdhc_clear_errors(sdio->hw_desc->sdhc_obj);
 
     /* Configure command */
     rt_memset(&hal_cmd, 0, sizeof(hal_cmd));
@@ -312,7 +319,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
     hal_cmd.data_config = data ? &data_cfg : RT_NULL;
 
     /* Send command */
-    result = mtb_hal_sdhc_send_cmd(&sdhc_obj, &hal_cmd);
+    result = mtb_hal_sdhc_send_cmd(sdio->hw_desc->sdhc_obj, &hal_cmd);
     if (CY_RSLT_SUCCESS != result)
     {
         LOG_E("send cmd %d fail: 0x%08x", cmd->cmd_code, (unsigned int)result);
@@ -325,7 +332,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
     {
         bool large = (hal_cmd.response_type == MTB_HAL_SDHC_RESPONSE_LEN_136);
         rt_memset(cmd->resp, 0, sizeof(cmd->resp));
-        result = mtb_hal_sdhc_get_response(&sdhc_obj, cmd->resp, large);
+        result = mtb_hal_sdhc_get_response(sdio->hw_desc->sdhc_obj, cmd->resp, large);
         if (CY_RSLT_SUCCESS != result)
         {
             LOG_E("get response fail: 0x%08x", (unsigned int)result);
@@ -360,7 +367,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
     /* Wait for data transfer completion */
     if ((err == RT_EOK) && data)
     {
-        result = mtb_hal_sdhc_wait_transfer_complete(&sdhc_obj);
+        result = mtb_hal_sdhc_wait_transfer_complete(sdio->hw_desc->sdhc_obj);
         if (CY_RSLT_SUCCESS != result)
         {
             LOG_E("wait transfer complete fail: 0x%08x", (unsigned int)result);
@@ -380,7 +387,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
 exit_hw:
     /* Check for hardware errors */
     {
-        mtb_hal_sdhc_error_type_t hw_err = mtb_hal_sdhc_get_last_command_errors(&sdhc_obj);
+        mtb_hal_sdhc_error_type_t hw_err = mtb_hal_sdhc_get_last_command_errors(sdio->hw_desc->sdhc_obj);
         if (hw_err != MTB_HAL_SDHC_NO_ERR)
         {
             if (hw_err & (MTB_HAL_SDHC_CMD_TOUT_ERR | MTB_HAL_SDHC_DATA_TOUT_ERR))
@@ -397,12 +404,12 @@ exit_hw:
                 err = -RT_ERROR;
             }
 
-            LOG_E("cmd %d arg 0x%08x flags 0x%08x hw_err 0x%04x",
+            LOG_W("cmd %d arg 0x%08x flags 0x%08x hw_err 0x%04x",
                   cmd->cmd_code, cmd->arg, cmd->flags, (unsigned int)hw_err);
-            mtb_hal_sdhc_clear_errors(&sdhc_obj);
+            mtb_hal_sdhc_clear_errors(sdio->hw_desc->sdhc_obj);
 
             /* Reset command and data lines on error */
-            mtb_hal_sdhc_software_reset(&sdhc_obj);
+            mtb_hal_sdhc_software_reset(sdio->hw_desc->sdhc_obj);
         }
     }
 
@@ -463,14 +470,17 @@ static void cy_sdio_set_iocfg(struct rt_mmcsd_host *host, struct rt_mmcsd_io_cfg
 
     RT_ASSERT(sdio != RT_NULL);
 
-    LOG_D("clk:%dK width:%s%s%s power:%s%s%s",
+    LOG_D("clk:%dK width:%s%s%s power:%s%s%s volt:%s%s%sV",
           clock / 1000,
           io_cfg->bus_width == MMCSD_BUS_WIDTH_8 ? "8" : "",
           io_cfg->bus_width == MMCSD_BUS_WIDTH_4 ? "4" : "",
           io_cfg->bus_width == MMCSD_BUS_WIDTH_1 ? "1" : "",
           io_cfg->power_mode == MMCSD_POWER_OFF ? "OFF" : "",
           io_cfg->power_mode == MMCSD_POWER_UP ? "UP" : "",
-          io_cfg->power_mode == MMCSD_POWER_ON ? "ON" : "");
+          io_cfg->power_mode == MMCSD_POWER_ON ? "ON" : "",
+          io_cfg->signal_voltage == MMCSD_SIGNAL_VOLTAGE_330 ? "3.3" : "",
+          io_cfg->signal_voltage == MMCSD_SIGNAL_VOLTAGE_180 ? "1.8" : "",
+          io_cfg->signal_voltage == MMCSD_SIGNAL_VOLTAGE_120 ? "1.2" : "");
 
     CY_SDIO_LOCK(sdio);
 
@@ -479,8 +489,8 @@ static void cy_sdio_set_iocfg(struct rt_mmcsd_host *host, struct rt_mmcsd_io_cfg
     {
         if (sdio->power_mode != MMCSD_POWER_OFF)
         {
-            mtb_hal_sdhc_enable_card_power(&sdhc_obj, false);
-            Cy_SD_Host_DisableSdClk(sdio->hw_base);
+            mtb_hal_sdhc_enable_card_power(sdio->hw_desc->sdhc_obj, false);
+            Cy_SD_Host_DisableSdClk(sdio->hw_desc->hw_base);
             sdio->power_mode = MMCSD_POWER_OFF;
             LOG_D("Card power OFF");
         }
@@ -491,18 +501,18 @@ static void cy_sdio_set_iocfg(struct rt_mmcsd_host *host, struct rt_mmcsd_io_cfg
         {
             /*
              * Power-up sequence per SD specification:
-             * 1. Set IO voltage to 3.3V
+             * 1. Set IO voltage to 1.8V
              * 2. Set bus width to 1-bit
              * 3. Set clock to 400KHz (identification frequency)
              * 4. Enable card power
              * 5. Wait for voltage ramp-up (at least 35ms per SD spec)
              * 6. Enable SD clock
              */
-            Cy_SD_Host_ChangeIoVoltage(sdio->hw_base, CY_SD_HOST_IO_VOLT_3_3V);
-            (void)Cy_SD_Host_SetHostBusWidth(sdio->hw_base, CY_SD_HOST_BUS_WIDTH_1_BIT);
+            Cy_SD_Host_ChangeIoVoltage(sdio->hw_desc->hw_base, CY_SD_HOST_IO_VOLT_1_8V);
+            (void)Cy_SD_Host_SetHostBusWidth(sdio->hw_desc->hw_base, CY_SD_HOST_BUS_WIDTH_1_BIT);
 
             /* Set identification clock frequency - negotiate=false since card not ready */
-            result = mtb_hal_sdhc_set_frequency(&sdhc_obj, CY_SDIO_MIN_FREQ_HZ, false);
+            result = mtb_hal_sdhc_set_frequency(sdio->hw_desc->sdhc_obj, CY_SDIO_MIN_FREQ_HZ, false);
             if (result != CY_RSLT_SUCCESS)
             {
                 LOG_W("Set init freq fail: 0x%08x", (unsigned int)result);
@@ -510,13 +520,13 @@ static void cy_sdio_set_iocfg(struct rt_mmcsd_host *host, struct rt_mmcsd_io_cfg
             sdio->current_freq = CY_SDIO_MIN_FREQ_HZ;
 
             /* Enable card power */
-            mtb_hal_sdhc_enable_card_power(&sdhc_obj, true);
+            mtb_hal_sdhc_enable_card_power(sdio->hw_desc->sdhc_obj, true);
 
             /* Wait for power supply ramp-up time (SD spec requires 35ms minimum) */
             rt_thread_mdelay(50);
 
             /* Enable SD clock output */
-            Cy_SD_Host_EnableSdClk(sdio->hw_base);
+            Cy_SD_Host_EnableSdClk(sdio->hw_desc->hw_base);
 
             /* Additional stabilization delay */
             rt_thread_mdelay(10);
@@ -531,16 +541,23 @@ static void cy_sdio_set_iocfg(struct rt_mmcsd_host *host, struct rt_mmcsd_io_cfg
         if (sdio->power_mode == MMCSD_POWER_OFF)
         {
             /* Full power-up sequence needed */
-            Cy_SD_Host_ChangeIoVoltage(sdio->hw_base, CY_SD_HOST_IO_VOLT_3_3V);
-            (void)Cy_SD_Host_SetHostBusWidth(sdio->hw_base, CY_SD_HOST_BUS_WIDTH_1_BIT);
-            result = mtb_hal_sdhc_set_frequency(&sdhc_obj, CY_SDIO_MIN_FREQ_HZ, false);
+            if (io_cfg->signal_voltage == MMCSD_SIGNAL_VOLTAGE_330)
+            {
+                Cy_SD_Host_ChangeIoVoltage(sdio->hw_desc->hw_base, CY_SD_HOST_IO_VOLT_3_3V);
+            }
+            else
+            {
+                Cy_SD_Host_ChangeIoVoltage(sdio->hw_desc->hw_base, CY_SD_HOST_IO_VOLT_1_8V);
+            }
+            (void)Cy_SD_Host_SetHostBusWidth(sdio->hw_desc->hw_base, CY_SD_HOST_BUS_WIDTH_1_BIT);
+            result = mtb_hal_sdhc_set_frequency(sdio->hw_desc->sdhc_obj, CY_SDIO_MIN_FREQ_HZ, false);
             if (result != CY_RSLT_SUCCESS)
             {
                 LOG_W("Set init freq fail: 0x%08x", (unsigned int)result);
             }
-            mtb_hal_sdhc_enable_card_power(&sdhc_obj, true);
+            mtb_hal_sdhc_enable_card_power(sdio->hw_desc->sdhc_obj, true);
             rt_thread_mdelay(50);
-            Cy_SD_Host_EnableSdClk(sdio->hw_base);
+            Cy_SD_Host_EnableSdClk(sdio->hw_desc->hw_base);
             rt_thread_mdelay(10);
             sdio->current_freq = CY_SDIO_MIN_FREQ_HZ;
             sdio->bus_width = 1;
@@ -567,14 +584,14 @@ static void cy_sdio_set_iocfg(struct rt_mmcsd_host *host, struct rt_mmcsd_io_cfg
         }
         if (clock != sdio->current_freq)
         {
-            result = mtb_hal_sdhc_set_frequency(&sdhc_obj, clock, true);
+            result = mtb_hal_sdhc_set_frequency(sdio->hw_desc->sdhc_obj, clock, true);
             if (result != CY_RSLT_SUCCESS)
             {
                 LOG_E("set freq %uHz fail 0x%08x", (unsigned int)clock, (unsigned int)result);
             }
             else
             {
-                sdio->current_freq = mtb_hal_sdhc_get_frequency(&sdhc_obj);
+                sdio->current_freq = mtb_hal_sdhc_get_frequency(sdio->hw_desc->sdhc_obj);
                 LOG_D("Clock set to %u Hz (requested %u Hz)",
                       (unsigned int)sdio->current_freq, (unsigned int)clock);
             }
@@ -598,7 +615,7 @@ static void cy_sdio_set_iocfg(struct rt_mmcsd_host *host, struct rt_mmcsd_io_cfg
         if (width != sdio->bus_width)
         {
             /* Set host-side bus width */
-            result = Cy_SD_Host_SetHostBusWidth(sdio->hw_base, hw_width);
+            result = Cy_SD_Host_SetHostBusWidth(sdio->hw_desc->hw_base, hw_width);
             if (result != CY_RSLT_SUCCESS)
             {
                 LOG_E("set bus width %u fail 0x%08x", width, (unsigned int)result);
@@ -619,9 +636,10 @@ static void cy_sdio_set_iocfg(struct rt_mmcsd_host *host, struct rt_mmcsd_io_cfg
  */
 static rt_int32_t cy_sdio_get_card_status(struct rt_mmcsd_host *host)
 {
-    (void)host;
+    struct cy_pse_sdio *sdio = host->private_data;
+
     /* Check if card is inserted via HAL */
-    if (mtb_hal_sdhc_is_card_inserted(&sdhc_obj))
+    if (mtb_hal_sdhc_is_card_inserted(sdio->hw_desc->sdhc_obj))
     {
         return 0;  /* Card present */
     }
@@ -649,24 +667,34 @@ bool Cy_SD_Host_IsCardConnected(SDHC_Type const *base)
     return true;
 }
 
+#ifdef BSP_USING_SDIO0
 /**
  * @brief SDHC interrupt service routine
  */
-static void sd_card_isr(void)
+static void cy_sdio0_isr(void)
 {
     rt_interrupt_enter();
-    mtb_hal_sdhc_process_interrupt(&sdhc_obj);
+    mtb_hal_sdhc_process_interrupt(&sdhc0_obj);
     rt_interrupt_leave();
 }
+#endif /* BSP_USING_SDIO0 */
 
+#ifdef BSP_USING_SDIO1
 /**
- * @brief Initialize the SDIO hardware and register with RT-Thread
+ * @brief SDHC interrupt service routine
  */
-int rt_hw_sdio_init(void)
+static void cy_sdio1_isr(void)
+{
+    rt_interrupt_enter();
+    mtb_hal_sdhc_process_interrupt(&sdhc1_obj);
+    rt_interrupt_leave();
+}
+#endif /* BSP_USING_SDIO1 */
+
+struct cy_pse_sdio *sdio_host_create(const struct cy_pse_sdio_hw_desc *hw_desc)
 {
     cy_rslt_t hal_status;
     cy_en_sd_host_status_t pdl_status;
-    cy_en_sysint_status_t sysint_status;
     struct cy_pse_sdio *sdio;
 
     LOG_I("Initializing SDIO driver...");
@@ -676,8 +704,11 @@ int rt_hw_sdio_init(void)
     if (!sdio)
     {
         LOG_E("malloc sdio fail");
-        return -RT_ENOMEM;
+        return NULL;
     }
+
+    /* Store hardware descriptor */
+    sdio->hw_desc = hw_desc;
 
     sdio->bounce_size = CY_SDIO_ADMA_MAX_LEN;
     sdio->bounce_buf = rt_malloc_align(sdio->bounce_size, CY_SDIO_BOUNCE_ALIGN);
@@ -685,7 +716,7 @@ int rt_hw_sdio_init(void)
     {
         rt_free(sdio);
         LOG_E("alloc bounce buf fail");
-        return -RT_ENOMEM;
+        return NULL;
     }
 
     sdio->host = mmcsd_alloc_host();
@@ -694,28 +725,14 @@ int rt_hw_sdio_init(void)
         rt_free_align(sdio->bounce_buf);
         rt_free(sdio);
         LOG_E("alloc host fail");
-        return -RT_ENOMEM;
+        return NULL;
     }
 
     /* Initialize synchronization primitives */
     rt_mutex_init(&sdio->mutex, "sdio", RT_IPC_FLAG_PRIO);
-    rt_event_init(&sdio->event, "sdio", RT_IPC_FLAG_FIFO);
-
-    /* Store hardware base address */
-    sdio->hw_base = CYBSP_SDHC_1_HW;
-
-    /* Configure interrupt */
-    cy_stc_sysint_t sdhc_isr_config =
-    {
-        .intrSrc = CYBSP_SDHC_1_IRQ,
-        .intrPriority = SDHC_IRQ_PRIORITY,
-    };
-
-    /* Enable SDHC hardware block */
-    Cy_SD_Host_Enable(CYBSP_SDHC_1_HW);
 
     /* Initialize PDL driver */
-    pdl_status = Cy_SD_Host_Init(CYBSP_SDHC_1_HW, &CYBSP_SDHC_1_config, &sdhc_host_context);
+    pdl_status = Cy_SD_Host_Init(hw_desc->hw_base, hw_desc->pdl_config, &sdio->sdhc_host_context);
     if (CY_SD_HOST_SUCCESS != pdl_status)
     {
         LOG_E("Cy_SD_Host_Init error: %d", pdl_status);
@@ -723,36 +740,25 @@ int rt_hw_sdio_init(void)
     }
 
     /* Setup HAL layer */
-    hal_status = mtb_hal_sdhc_setup(&sdhc_obj, &CYBSP_SDHC_1_sdhc_hal_config, NULL, &sdhc_host_context);
+    hal_status = mtb_hal_sdhc_setup(hw_desc->sdhc_obj, hw_desc->hal_config, NULL, &sdio->sdhc_host_context);
     if (CY_RSLT_SUCCESS != hal_status)
     {
         LOG_E("mtb_hal_sdhc_setup error: 0x%08x", (unsigned int)hal_status);
         goto fail;
     }
 
-    /* Initialize interrupt */
-    sysint_status = Cy_SysInt_Init(&sdhc_isr_config, sd_card_isr);
-    if (CY_SYSINT_SUCCESS != sysint_status)
-    {
-        LOG_E("Cy_SysInt_Init error: %d", sysint_status);
-        goto fail;
-    }
-
-    /* Enable NVIC interrupt */
-    NVIC_EnableIRQ((IRQn_Type)sdhc_isr_config.intrSrc);
-
     /*
      * Pre-initialize SD host hardware according to SD specification:
-     * 1. Set IO voltage to 3.3V
+     * 1. Set IO voltage to 1.8V
      * 2. Set bus width to 1-bit (required for identification phase)
      * 3. Set clock to 400KHz (identification frequency)
      * Note: Use negotiate=false since card is not initialized yet
      */
-    Cy_SD_Host_ChangeIoVoltage(CYBSP_SDHC_1_HW, CY_SD_HOST_IO_VOLT_3_3V);
-    (void)Cy_SD_Host_SetHostBusWidth(CYBSP_SDHC_1_HW, CY_SD_HOST_BUS_WIDTH_1_BIT);
+    Cy_SD_Host_ChangeIoVoltage(hw_desc->hw_base, CY_SD_HOST_IO_VOLT_1_8V);
+    (void)Cy_SD_Host_SetHostBusWidth(hw_desc->hw_base, CY_SD_HOST_BUS_WIDTH_1_BIT);
 
     /* Set initial clock to 400KHz for card identification - negotiate=false! */
-    hal_status = mtb_hal_sdhc_set_frequency(&sdhc_obj, CY_SDIO_MIN_FREQ_HZ, false);
+    hal_status = mtb_hal_sdhc_set_frequency(hw_desc->sdhc_obj, CY_SDIO_MIN_FREQ_HZ, false);
     if (CY_RSLT_SUCCESS != hal_status)
     {
         LOG_W("Initial clock set warning: 0x%08x", (unsigned int)hal_status);
@@ -787,18 +793,14 @@ int rt_hw_sdio_init(void)
     sdio->bus_width = 1;
     sdio->current_freq = CY_SDIO_MIN_FREQ_HZ;
 
-    /* Save global reference */
-    cy_sdio = sdio;
-
     LOG_I("SDIO driver initialized successfully");
 
     /* Notify MMCSD core that host is ready */
     mmcsd_change(sdio->host);
 
-    return RT_EOK;
+    return sdio;
 
 fail:
-    rt_event_detach(&sdio->event);
     rt_mutex_detach(&sdio->mutex);
     if (sdio->bounce_buf)
     {
@@ -806,8 +808,96 @@ fail:
     }
     mmcsd_free_host(sdio->host);
     rt_free(sdio);
-    return -RT_ERROR;
+    return NULL;
+}
+
+/**
+ * @brief Initialize the SDIO hardware and register with RT-Thread
+ */
+int rt_hw_sdio_init(void)
+{
+    struct cy_pse_sdio *sdio;
+    cy_en_sysint_status_t sysint_status;
+
+#ifdef BSP_USING_SDIO0
+    static const struct cy_pse_sdio_hw_desc sdhc0_hw_desc =
+    {
+        .hw_base = CYBSP_SDHC_0_HW,
+        .sdhc_obj = &sdhc0_obj,
+        .pdl_config = &CYBSP_SDHC_0_config,
+        .hal_config = &CYBSP_SDHC_0_sdhc_hal_config,
+    };
+
+    /* Enable SDHC hardware block */
+    Cy_SD_Host_Enable(sdhc0_hw_desc.hw_base);
+
+    /* Initialize interrupt */
+    cy_stc_sysint_t sdhc0_isr_config =
+    {
+        .intrSrc = CYBSP_SDHC_0_IRQ,
+        .intrPriority = SDHC_IRQ_PRIORITY,
+    };
+
+    if ((sysint_status = Cy_SysInt_Init(&sdhc0_isr_config, cy_sdio0_isr)) == CY_SYSINT_SUCCESS)
+    {
+        /* Enable NVIC interrupt */
+        NVIC_EnableIRQ((IRQn_Type)sdhc0_isr_config.intrSrc);
+
+        if ((sdio = sdio_host_create(&sdhc0_hw_desc)) == RT_NULL)
+        {
+            LOG_E("host0 create fail");
+            return -RT_ERROR;
+        }
+        sdio->host->io_cfg.signal_voltage = MMCSD_SIGNAL_VOLTAGE_180;
+        sdio->en_auto_cmd12 = RT_FALSE;
+    }
+    else
+    {
+        LOG_E("Cy_SysInt_Init error: %d", sysint_status);
+    }
+    LOG_I("SDIO0 initialized");
+#endif /* BSP_USING_SDIO0 */
+
+#ifdef BSP_USING_SDIO1
+    static const struct cy_pse_sdio_hw_desc sdhc1_hw_desc =
+    {
+        .hw_base = CYBSP_SDHC_1_HW,
+        .sdhc_obj = &sdhc1_obj,
+        .pdl_config = &CYBSP_SDHC_1_config,
+        .hal_config = &CYBSP_SDHC_1_sdhc_hal_config,
+    };
+
+    /* Enable SDHC hardware block */
+    Cy_SD_Host_Enable(sdhc1_hw_desc.hw_base);
+
+    /* Initialize interrupt */
+    cy_stc_sysint_t sdhc1_isr_config =
+    {
+        .intrSrc = CYBSP_SDHC_1_IRQ,
+        .intrPriority = SDHC_IRQ_PRIORITY,
+    };
+
+    if ((sysint_status = Cy_SysInt_Init(&sdhc1_isr_config, cy_sdio1_isr)) == CY_SYSINT_SUCCESS)
+    {
+        /* Enable NVIC interrupt */
+        NVIC_EnableIRQ((IRQn_Type)sdhc1_isr_config.intrSrc);
+
+        if ((sdio = sdio_host_create(&sdhc1_hw_desc)) == RT_NULL)
+        {
+            LOG_E("host1 create fail");
+            return -RT_ERROR;
+        }
+        sdio->host->io_cfg.signal_voltage = MMCSD_SIGNAL_VOLTAGE_330;
+        sdio->en_auto_cmd12 = RT_TRUE;
+    }
+    else
+    {
+        LOG_E("Cy_SysInt_Init error: %d", sysint_status);
+    }
+    LOG_I("SDIO1 initialized");
+#endif /* BSP_USING_SDIO1 */
+    return RT_EOK;
 }
 INIT_DEVICE_EXPORT(rt_hw_sdio_init);
 
-#endif /* BSP_USING_SDCARD */
+#endif /* BSP_USING_SDIO */

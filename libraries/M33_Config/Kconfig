@@ -188,6 +188,21 @@ menu "On-chip Peripheral Drivers"
         select RT_USING_WDT
         default n
 
+    menuconfig BSP_USING_SDIO
+        bool "Enable SDIO"
+        select RT_USING_SDIO
+        default n
+
+        if BSP_USING_SDIO
+            config BSP_USING_SDIO0
+                bool "Enable SDIO0"
+                default n
+            
+            config BSP_USING_SDIO1
+                bool "Enable SDIO1"
+                default y
+        endif
+
     menuconfig BSP_USING_LCD
         bool "Enable MIPI LCD controller"
         select RT_USING_LCD
@@ -210,12 +225,9 @@ menu "On-chip Peripheral Drivers"
             config BSP_USING_SDCARD
                 bool "Enable SDCARD (sd card)"
                 select RT_USING_DFS_ELMFAT
+                select BSP_USING_SDIO
+                select BSP_USING_SDIO1
                 default n
-                if BSP_USING_SDCARD
-                    config BSP_USING_FS
-                        bool "Enable filesystem"
-                        default n
-                endif
 
             config BSP_USING_FLASH
                 bool "Enable QSPI Flash filesystem"

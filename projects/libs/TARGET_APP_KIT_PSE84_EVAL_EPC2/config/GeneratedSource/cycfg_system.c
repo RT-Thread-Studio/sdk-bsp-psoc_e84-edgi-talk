@@ -5,11 +5,11 @@
  * System configuration
  * This file was automatically generated and should not be modified.
  * Configurator Backend 3.60.0
- * device-db 4.33.0.9315
+ * device-db 4.34.0.9502
  * mtb-dsl-pse8xxgp 1.1.1.824
  *
  *******************************************************************************
- * Copyright 2025 Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2026 Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.
  * SPDX-License-Identifier: Apache-2.0
  *

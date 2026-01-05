@@ -37,7 +37,7 @@ if GetDepend(['RT_USING_SERIAL']):
 #         src += ['source/cyhal_adc_sar_lppass.c']
 #         src += ['source/cyhal_lppass_common.c']
 
-if GetDepend(['BSP_USING_SDCARD']) or GetDepend(['BSP_USING_WIFI_HOST_DRIVER']):
+if GetDepend(['BSP_USING_SDIO']):
     src += ['source/mtb_hal_sdhc.c']
 
 if GetDepend(['RT_USING_PWM']):

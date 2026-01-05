@@ -56,7 +56,7 @@ if GetDepend(['RT_USING_ADC']):
         src += ['drivers/source/cy_systrimm.c']
         src += ['drivers/source/cy_rram.c']
 
-if GetDepend(['BSP_USING_SDCARD']) or GetDepend(['BSP_USING_WIFI_HOST_DRIVER']):
+if GetDepend(['BSP_USING_SDIO']):
     src += ['drivers/source/cy_sd_host.c']
 
 if GetDepend(['RT_USING_PWM']):

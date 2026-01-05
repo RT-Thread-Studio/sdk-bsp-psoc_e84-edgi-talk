@@ -2965,7 +2965,7 @@
                 <Personality template="mxs40sdhost" version="1.0" instance="xPwbkmQbATI">
                     <Block location="sdhc[0]" locked="true">
                         <Aliases>
-                            <Alias value="CYBSP_WIFI_SDIO"/>
+                            <Alias value="CYBSP_SDHC_0"/>
                         </Aliases>
                     </Block>
                     <Parameters>

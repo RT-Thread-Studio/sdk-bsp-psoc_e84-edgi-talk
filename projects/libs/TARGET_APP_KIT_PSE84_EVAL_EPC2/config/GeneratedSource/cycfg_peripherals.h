@@ -5,11 +5,11 @@
  * Analog configuration
  * This file was automatically generated and should not be modified.
  * Configurator Backend 3.60.0
- * device-db 4.33.0.9315
+ * device-db 4.34.0.9502
  * mtb-dsl-pse8xxgp 1.1.1.824
  *
  *******************************************************************************
- * Copyright 2025 Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2026 Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -101,9 +101,9 @@ extern "C" {
 #define CYBSP_SPI_CONTROLLER_ENABLED 1U
 #define CYBSP_SPI_CONTROLLER_HW SCB10
 #define CYBSP_SPI_CONTROLLER_IRQ scb_10_interrupt_IRQn
-#define CYBSP_WIFI_SDIO_ENABLED 1U
-#define CYBSP_WIFI_SDIO_HW SDHC0
-#define CYBSP_WIFI_SDIO_IRQ sdhc_0_interrupt_general_IRQn
+#define CYBSP_SDHC_0_ENABLED 1U
+#define CYBSP_SDHC_0_HW SDHC0
+#define CYBSP_SDHC_0_IRQ sdhc_0_interrupt_general_IRQn
 #define CYBSP_SDHC_1_ENABLED 1U
 #define CYBSP_SDHC_1_HW SDHC1
 #define CYBSP_SDHC_1_IRQ sdhc_1_interrupt_general_IRQn
@@ -265,20 +265,20 @@ extern const mtb_hal_clock_t CYBSP_SPI_CONTROLLER_hal_clock;
 extern const mtb_hal_spi_configurator_t CYBSP_SPI_CONTROLLER_hal_config;
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_SPI) */
 
-extern cy_en_sd_host_card_capacity_t CYBSP_WIFI_SDIO_cardCapacity;
-extern cy_en_sd_host_card_type_t CYBSP_WIFI_SDIO_cardType;
-extern uint32_t CYBSP_WIFI_SDIO_rca;
-extern const cy_stc_sd_host_init_config_t CYBSP_WIFI_SDIO_config;
-extern cy_stc_sd_host_sd_card_config_t CYBSP_WIFI_SDIO_card_cfg;
+extern cy_en_sd_host_card_capacity_t CYBSP_SDHC_0_cardCapacity;
+extern cy_en_sd_host_card_type_t CYBSP_SDHC_0_cardType;
+extern uint32_t CYBSP_SDHC_0_rca;
+extern const cy_stc_sd_host_init_config_t CYBSP_SDHC_0_config;
+extern cy_stc_sd_host_sd_card_config_t CYBSP_SDHC_0_card_cfg;
 
 #if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_SDHC)
-extern const mtb_hal_peri_div_t CYBSP_WIFI_SDIO_clock_ref;
-extern const mtb_hal_clock_t CYBSP_WIFI_SDIO_hal_clock;
-extern const mtb_hal_sdhc_configurator_t CYBSP_WIFI_SDIO_sdhc_hal_config;
+extern const mtb_hal_peri_div_t CYBSP_SDHC_0_clock_ref;
+extern const mtb_hal_clock_t CYBSP_SDHC_0_hal_clock;
+extern const mtb_hal_sdhc_configurator_t CYBSP_SDHC_0_sdhc_hal_config;
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_SDHC) */
 
 #if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_SDIO)
-extern const mtb_hal_sdio_configurator_t CYBSP_WIFI_SDIO_sdio_hal_config;
+extern const mtb_hal_sdio_configurator_t CYBSP_SDHC_0_sdio_hal_config;
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_SDIO) */
 
 extern cy_en_sd_host_card_capacity_t CYBSP_SDHC_1_cardCapacity;
