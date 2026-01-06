@@ -9,10 +9,10 @@ cwd = GetCurrentDir()
 # Define wifi host driver paths
 whd = 'wifi-host-driver'
 whd_path = cwd + '/' + whd
-if GetDepend(['WHD_USING_WIFI5']):
-    wifi_standard = 'COMPONENT_WIFI5'
-elif GetDepend(['WHD_USING_WIFI6']):
+if GetDepend(['WHD_USING_WIFI6']):
     wifi_standard = 'COMPONENT_WIFI6'
+else:
+    wifi_standard = 'COMPONENT_WIFI5'
 whd_src_path = whd_path + '/WHD' + '/' + wifi_standard
 whd_src_path_prefix = whd + '/WHD' + '/' + wifi_standard
 
@@ -20,7 +20,6 @@ whd_src_path_prefix = whd + '/WHD' + '/' + wifi_standard
 src += Glob(whd_src_path_prefix + '/src/bus_protocols/whd_bus_common.c')
 src += Glob(whd_src_path_prefix + '/src/bus_protocols/whd_bus_sdio_protocol.c')
 src += Glob(whd_src_path_prefix + '/src/bus_protocols/whd_bus.c')
-
 
 # Add wifi host driver source and header files
 src += Glob(whd_src_path_prefix + '/src/*.c')
@@ -46,11 +45,9 @@ if GetDepend(['WHD_PORTING_RTOS']):
     src += Glob('porting/src/rtos/*.c')
     path += [cwd + '/porting/inc/rtos']
 
-CPPDEFINES = ['']
-
 # RT_USING_WIFI_HOST_DRIVER or PKG_USING_WIFI_HOST_DRIVER
-group = DefineGroup('whd', src, depend = ['RT_USING_WIFI_HOST_DRIVER'], CPPPATH = path, CPPDEFINES = CPPDEFINES)
+group = DefineGroup('whd', src, depend = ['RT_USING_WIFI_HOST_DRIVER'], CPPPATH = path)
 if GetDepend(['PKG_USING_WIFI_HOST_DRIVER']):
-    group = DefineGroup('whd', src, depend = ['PKG_USING_WIFI_HOST_DRIVER'], CPPPATH = path, CPPDEFINES = CPPDEFINES)
+    group = DefineGroup('whd', src, depend = ['PKG_USING_WIFI_HOST_DRIVER'], CPPPATH = path)
 
 Return('group')
