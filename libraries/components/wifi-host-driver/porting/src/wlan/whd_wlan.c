@@ -598,10 +598,23 @@ static void whd_init_thread (void *parameter)
     rt_sem_take(cyhal_sdio.probe, RT_WAITING_FOREVER);
     rt_sem_delete(cyhal_sdio.probe);
 
+    /* Configure sdio high speed mode and bus width */
+    if (cyhal_sdio.card->host->freq_max > 25000000)
+    {
+        whd_sdio_config.high_speed_sdio_clock = WHD_TRUE;
+        LOG_D("SDIO high speed mode enabled.");
+    }
+
+    if (!(cyhal_sdio.card->host->flags & MMCSD_BUSWIDTH_4))
+    {
+        whd_sdio_config.sdio_1bit_mode = WHD_TRUE;
+        LOG_D("SDIO 1 bit mode enabled.");
+    }
+
     /* Initialize WiFi Host Drivers (WHD) */
 #ifdef WPRINT_ENABLE_WHD_INFO
     WPRINT_MACRO( ("RT-Thread WiFi Host Drivers (WHD)\n") );
-    WPRINT_MACRO( ("You can get the latest version on https://github.com/Evlers/rt-thread_wifi-host-driver\n") );
+    WPRINT_MACRO( ("You can get the latest version on https://github.com/evlers/rt-thread_wifi-host-driver\n") );
 #endif /* WPRINT_ENABLE_WHD_INFO */
 
     /* Initialize WiFi host drivers */

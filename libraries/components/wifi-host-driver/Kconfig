@@ -227,9 +227,6 @@ menuconfig RT_USING_WIFI_HOST_DRIVER
 
                     config CYBSP_HOST_WAKE_IRQ_EVENT_RISE
                         bool "rising"
-
-                    config CYBSP_HOST_WAKE_IRQ_EVENT_BOTH
-                        bool "rising and falling"
                 endchoice
 
                 config CYBSP_OOB_INTR_PRIORITY
