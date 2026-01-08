@@ -481,7 +481,7 @@ __asm int __rt_ffs(int value)
     CLZ     r0, r0
     ADDS    r0, r0, #0x01
 
-    exit
+exit
     BX      lr
 }
 #elif defined(__clang__)
