@@ -7,6 +7,8 @@
  * Date           Author         Notes
  * 2023-05-05     vandoul        first version
  * 2025-11-25     Rbb666         Reworked to use MMCSD host framework
+ * 2026-01-05     Evlers         Added SDIO0 support
+ * 2026-01-13     Evlers         Add support for sdio card interrupt
  */
 
 #include <rtthread.h>
