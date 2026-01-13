@@ -7,7 +7,6 @@
  * Date           Author         Notes
  * 2023-05-05     vandoul        first version
  * 2025-11-25     Rbb666         Reworked to use MMCSD host framework
- * 2026-01-05     Evlers         Added SDIO0 support
  */
 
 #include <rtthread.h>
@@ -79,10 +78,10 @@ struct cy_pse_sdio
 };
 
 #ifdef BSP_USING_SDIO0
-static mtb_hal_sdhc_t sdhc0_obj;        /* SDHC hardware objects */
+struct cy_pse_sdio *sdio0;
 #endif /* #ifdef BSP_USING_SDIO0 */
 #ifdef BSP_USING_SDIO1
-static mtb_hal_sdhc_t sdhc1_obj;        /* SDHC hardware objects */
+struct cy_pse_sdio *sdio1;
 #endif /* #ifdef BSP_USING_SDIO1 */
 
 /**
@@ -646,6 +645,16 @@ static rt_int32_t cy_sdio_get_card_status(struct rt_mmcsd_host *host)
     return -1;  /* No card */
 }
 
+static void cy_sdio_enable_sdio_irq (struct rt_mmcsd_host *host, rt_int32_t en)
+{
+    RT_UNUSED(host);
+    RT_UNUSED(en);
+    /* Under normal circumstances, the interrupt does not handle any transactions; instead, it give a semaphore.
+     * So, in mmcsd, it is not advisable to re-enable the card interrupt before the transaction has been fully processed.
+     * This interruption will be enable again after the next data transmission is completed.
+     */
+}
+
 /**
  * @brief MMCSD host operations structure
  */
@@ -654,7 +663,7 @@ static const struct rt_mmcsd_host_ops cy_sdio_ops =
     cy_sdio_request,
     cy_sdio_set_iocfg,
     cy_sdio_get_card_status,
-    RT_NULL,    /* enable_sdio_irq - not implemented */
+    cy_sdio_enable_sdio_irq,
     RT_NULL,    /* execute_tuning - not implemented */
 };
 
@@ -667,6 +676,41 @@ bool Cy_SD_Host_IsCardConnected(SDHC_Type const *base)
     return true;
 }
 
+static void cy_sdio_card_irq_handler (struct cy_pse_sdio *sdio)
+{
+    uint32_t interruptStatus = Cy_SD_Host_GetNormalInterruptStatus(sdio->hw_desc->hw_base);
+    uint32_t normalInterruptMask = Cy_SD_Host_GetNormalInterruptMask(sdio->hw_desc->hw_base);
+
+    /*  CY_SD_HOST_XFER_COMPLETE occured and appropriate bit in interrupt mask is enabled */
+    if (interruptStatus & normalInterruptMask & CY_SD_HOST_XFER_COMPLETE)
+    {
+        /* Transfer is no more active. If card interrupt was not yet enabled after it was disabled
+         * in interrupt handler, enable it.
+         */
+        uint32_t interrupt_enable_status = Cy_SD_Host_GetNormalInterruptEnable(sdio->hw_desc->hw_base);
+        if ((interrupt_enable_status & CY_SD_HOST_CARD_INTERRUPT) == 0)
+        {
+            Cy_SD_Host_SetNormalInterruptEnable(sdio->hw_desc->hw_base,
+                                                (interrupt_enable_status |
+                                                    CY_SD_HOST_CARD_INTERRUPT));
+        }
+    }
+
+    /* To clear Card Interrupt need to disable Card Interrupt Enable bit.
+     * The Card Interrupt is enabled after the current transfer is complete
+     */
+    if (0U != (interruptStatus & CY_SD_HOST_CARD_INTERRUPT))
+    {
+        uint32_t interruptMask = Cy_SD_Host_GetNormalInterruptEnable(sdio->hw_desc->hw_base);
+        interruptMask &= (uint32_t) ~CY_SD_HOST_CARD_INTERRUPT;
+        /* Disable Card Interrupt */
+        Cy_SD_Host_SetNormalInterruptEnable(sdio->hw_desc->hw_base, interruptMask);
+
+        /* Notify the upper layer about sdio card interrupt */
+        sdio_irq_wakeup(sdio->host);
+    }
+}
+
 #ifdef BSP_USING_SDIO0
 /**
  * @brief SDHC interrupt service routine
@@ -674,7 +718,8 @@ bool Cy_SD_Host_IsCardConnected(SDHC_Type const *base)
 static void cy_sdio0_isr(void)
 {
     rt_interrupt_enter();
-    mtb_hal_sdhc_process_interrupt(&sdhc0_obj);
+    cy_sdio_card_irq_handler(sdio0);
+    mtb_hal_sdhc_process_interrupt(sdio0->hw_desc->sdhc_obj);
     rt_interrupt_leave();
 }
 #endif /* BSP_USING_SDIO0 */
@@ -686,7 +731,8 @@ static void cy_sdio0_isr(void)
 static void cy_sdio1_isr(void)
 {
     rt_interrupt_enter();
-    mtb_hal_sdhc_process_interrupt(&sdhc1_obj);
+    cy_sdio_card_irq_handler(sdio1);
+    mtb_hal_sdhc_process_interrupt(sdio1->hw_desc->sdhc_obj);
     rt_interrupt_leave();
 }
 #endif /* BSP_USING_SDIO1 */
@@ -752,10 +798,12 @@ struct cy_pse_sdio *sdio_host_create(const struct cy_pse_sdio_hw_desc *hw_desc)
      * 1. Set IO voltage to 1.8V
      * 2. Set bus width to 1-bit (required for identification phase)
      * 3. Set clock to 400KHz (identification frequency)
+     * 4. Enable card interrupts
      * Note: Use negotiate=false since card is not initialized yet
      */
     Cy_SD_Host_ChangeIoVoltage(hw_desc->hw_base, CY_SD_HOST_IO_VOLT_1_8V);
     (void)Cy_SD_Host_SetHostBusWidth(hw_desc->hw_base, CY_SD_HOST_BUS_WIDTH_1_BIT);
+    Cy_SD_Host_SetNormalInterruptMask(sdio->hw_desc->hw_base, CY_SD_HOST_CARD_INTERRUPT);
 
     /* Set initial clock to 400KHz for card identification - negotiate=false! */
     hal_status = mtb_hal_sdhc_set_frequency(hw_desc->sdhc_obj, CY_SDIO_MIN_FREQ_HZ, false);
@@ -777,7 +825,7 @@ struct cy_pse_sdio *sdio_host_create(const struct cy_pse_sdio_hw_desc *hw_desc)
                             VDD_35_36;
 
     /* Host capabilities */
-    sdio->host->flags = MMCSD_BUSWIDTH_4 | MMCSD_MUTBLKWRITE | MMCSD_SUP_HIGHSPEED;
+    sdio->host->flags = MMCSD_BUSWIDTH_4 | MMCSD_MUTBLKWRITE | MMCSD_SUP_HIGHSPEED | MMCSD_SUP_SDIO_IRQ;
 
     /* DMA constraints */
     sdio->host->max_seg_size = CY_SDIO_BUFF_SIZE;
@@ -816,10 +864,10 @@ fail:
  */
 int rt_hw_sdio_init(void)
 {
-    struct cy_pse_sdio *sdio;
     cy_en_sysint_status_t sysint_status;
 
 #ifdef BSP_USING_SDIO0
+    static mtb_hal_sdhc_t sdhc0_obj;    /* SDHC hardware objects */
     static const struct cy_pse_sdio_hw_desc sdhc0_hw_desc =
     {
         .hw_base = CYBSP_SDHC_0_HW,
@@ -843,13 +891,16 @@ int rt_hw_sdio_init(void)
         /* Enable NVIC interrupt */
         NVIC_EnableIRQ((IRQn_Type)sdhc0_isr_config.intrSrc);
 
-        if ((sdio = sdio_host_create(&sdhc0_hw_desc)) == RT_NULL)
+        /* Create SDIO0 host */
+        if ((sdio0 = sdio_host_create(&sdhc0_hw_desc)) == RT_NULL)
         {
             LOG_E("host0 create fail");
             return -RT_ERROR;
         }
-        sdio->host->io_cfg.signal_voltage = MMCSD_SIGNAL_VOLTAGE_180;
-        sdio->en_auto_cmd12 = RT_FALSE;
+
+        /* Configure default IO settings */
+        sdio0->host->io_cfg.signal_voltage = MMCSD_SIGNAL_VOLTAGE_180;
+        sdio0->en_auto_cmd12 = RT_FALSE;
     }
     else
     {
@@ -859,6 +910,7 @@ int rt_hw_sdio_init(void)
 #endif /* BSP_USING_SDIO0 */
 
 #ifdef BSP_USING_SDIO1
+    static mtb_hal_sdhc_t sdhc1_obj;    /* SDHC hardware objects */
     static const struct cy_pse_sdio_hw_desc sdhc1_hw_desc =
     {
         .hw_base = CYBSP_SDHC_1_HW,
@@ -882,13 +934,16 @@ int rt_hw_sdio_init(void)
         /* Enable NVIC interrupt */
         NVIC_EnableIRQ((IRQn_Type)sdhc1_isr_config.intrSrc);
 
-        if ((sdio = sdio_host_create(&sdhc1_hw_desc)) == RT_NULL)
+        /* Create SDIO1 host */
+        if ((sdio1 = sdio_host_create(&sdhc1_hw_desc)) == RT_NULL)
         {
             LOG_E("host1 create fail");
             return -RT_ERROR;
         }
-        sdio->host->io_cfg.signal_voltage = MMCSD_SIGNAL_VOLTAGE_330;
-        sdio->en_auto_cmd12 = RT_TRUE;
+
+        /* Configure default IO settings */
+        sdio1->host->io_cfg.signal_voltage = MMCSD_SIGNAL_VOLTAGE_330;
+        sdio1->en_auto_cmd12 = RT_TRUE;
     }
     else
     {
