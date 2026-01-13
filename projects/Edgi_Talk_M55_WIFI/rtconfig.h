@@ -485,6 +485,7 @@
 /* Onboard Peripheral Drivers */
 
 #define BSP_USING_USB_TO_UART
+#define BSP_USING_FREERTOS
 /* end of Onboard Peripheral Drivers */
 
 /* On-chip Peripheral Drivers */
@@ -537,8 +538,6 @@
 /* Porting options */
 
 #define WHD_PORTING_HAL
-#define WHD_PORTING_RTOS
-#define WHD_USE_CUSTOM_MALLOC_IMPL
 /* end of Porting options */
 #define WHD_LOG_LEVEL_INFO
 #define WPRINT_ENABLE_WHD_INFO
