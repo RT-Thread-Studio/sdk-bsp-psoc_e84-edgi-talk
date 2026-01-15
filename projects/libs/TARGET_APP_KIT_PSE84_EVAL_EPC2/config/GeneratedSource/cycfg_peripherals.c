@@ -146,7 +146,8 @@ cy_en_autanalog_ac_out_trigger_mask_t CYBSP_AUTONOMOUS_CONTROLLER_out_trig_mask[
 };
 cy_stc_autanalog_ac_t CYBSP_AUTONOMOUS_CONTROLLER_cfg =
 {
-    .gpioOutEn =   CY_AUTANALOG_STT_AC_GPIO_OUT_DISABLED,
+    .gpioOutEn =  
+ CY_AUTANALOG_STT_AC_GPIO_OUT_DISABLED,
     .mask =
     {
         &CYBSP_AUTONOMOUS_CONTROLLER_out_trig_mask[0U], 
@@ -236,7 +237,8 @@ cy_stc_autanalog_sar_sta_hs_t CYBSP_SAR_ADC_sta_hs_cfg =
         NULL, 
         NULL, 
     },
-    .hsGpioResultMask =   CY_AUTANALOG_SAR_CHAN_MASK_GPIO0,
+    .hsGpioResultMask =  
+ CY_AUTANALOG_SAR_CHAN_MASK_GPIO0,
 };
 cy_stc_autanalog_sar_sta_t CYBSP_SAR_ADC_sta_cfg =
 {
@@ -274,8 +276,10 @@ cy_stc_autanalog_sar_sta_t CYBSP_SAR_ADC_sta_cfg =
         NULL, 
         NULL, 
     },
-    .muxResultMask =   CY_AUTANALOG_SAR_CHAN_MASK_MUX_DISABLED,
-    .firResultMask =   CY_AUTANALOG_SAR_MASK_FIR_DISABLED,
+    .muxResultMask =  
+ CY_AUTANALOG_SAR_CHAN_MASK_MUX_DISABLED,
+    .firResultMask =  
+ CY_AUTANALOG_SAR_MASK_FIR_DISABLED,
 };
 cy_stc_autanalog_sar_seq_tab_hs_t CYBSP_SAR_ADC_seq_hs_cfg[] =
 {
@@ -345,7 +349,7 @@ cy_stc_gfx_layer_config_t GFXSS_graphics_layer =
     .pos_x = 0,
     .pos_y = 0,
     .width = 512,
-    .height = 768,
+    .height = 800,
     .zorder = 0,
     .layer_enable = true,
     .visibility = true,
@@ -386,10 +390,10 @@ cy_stc_gfx_dc_config_t GFXSS_dc_config =
     .ovl0_layer_config = &GFXSS_overlay0_layer,
     .ovl1_layer_config = &GFXSS_overlay1_layer,
     .display_type = GFX_DISP_TYPE_DSI_DPI,
-    .display_format = vivD24,
+    .display_format = vivD16CFG1,
     .display_size = vivDISPLAY_CUSTOMIZED,
     .display_width = 512,
-    .display_height = 768,
+    .display_height = 800,
 };
 cy_stc_gfx_gpu_cfg_t GFXSS_gpu_config =
 {
@@ -397,23 +401,23 @@ cy_stc_gfx_gpu_cfg_t GFXSS_gpu_config =
 };
 cy_stc_mipidsi_display_params_t GFXSS_mipidsi_display_params =
 {
-    .pixel_clock = 27212,
+    .pixel_clock = 33448,
     .hdisplay = 512,
-    .hsync_width = 10,
-    .hfp = 20,
-    .hbp = 20,
-    .vdisplay = 768,
-    .vsync_width = 30,
-    .vfp = 4,
-    .vbp = 5,
+    .hsync_width = 2,
+    .hfp = 36,
+    .hbp = 40,
+    .vdisplay = 800,
+    .vsync_width = 2,
+    .vfp = 180,
+    .vbp = 10,
     .polarity_flags = 0,
 };
 cy_stc_mipidsi_config_t GFXSS_mipi_dsi_config =
 {
     .virtual_ch = 0,
     .num_of_lanes = 2,
-    .per_lane_mbps = 500,
-    .dpi_fmt = CY_MIPIDSI_FMT_RGB888,
+    .per_lane_mbps = 1000,
+    .dpi_fmt = CY_MIPIDSI_FMT_RGB565,
     .dsi_mode = DSI_VIDEO_MODE,
     .max_phy_clk = 2500000000,
     .mode_flags = VID_MODE_TYPE_NON_BURST_SYNC_PULSES | ENABLE_LOW_POWER_CMD | ENABLE_LOW_POWER,
