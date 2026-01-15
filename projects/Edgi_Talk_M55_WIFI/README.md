@@ -41,6 +41,23 @@ It allows users to quickly test Wi-Fi scanning, connection, and performance, ver
 2. Connect the board USB to PC via **DAP**.
 3. Flash the compiled firmware.
 
+### Prepare Wi-Fi resources (first-time setup)
+
+The Wi-Fi host driver loads three blobs (firmware `.bin`, regulatory `.clm_blob`, and board-specific `nvram.txt`) from FAL before it can power up the radio. These files live outside the application image, so flashing a new binary will not refresh them automatically. The default bundles for Edgi-Talk live in the workspace root under `resources/`.
+
+- Keep `WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL` enabled in menuconfig and make sure the FAL table provides the `whd_firmware`, `whd_clm`, and `whd_nvram` partitions (the defaults reserve 512 KB + 32 KB + 32 KB of on-chip flash).
+- Attach a serial terminal, reboot into the `msh` prompt, and run the download helper for each partition:
+
+```
+whd_res_download whd_firmware
+whd_res_download whd_clm
+whd_res_download whd_nvram
+```
+
+Each command switches to YMODEM mode. Use a terminal that supports YMODEM upload (Xshell) to send the matching files from the top-level `resources/` directory .
+- Wait for the `Download … success` message before moving to the next partition.
+- Power-cycle or reset the board after the three transfers so Wi-Fi starts with the freshly stored blobs. Re-run the command whenever you update the firmware/CLM/NVRAM bundle.
+
 ### Running Result
 
 * After power-on, the system initializes the Wi-Fi device.
