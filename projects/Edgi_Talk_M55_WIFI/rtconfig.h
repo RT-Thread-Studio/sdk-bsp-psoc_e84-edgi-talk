@@ -102,7 +102,7 @@
 #define RT_SYSTEM_WORKQUEUE_PRIORITY 23
 #define RT_USING_SERIAL
 #define RT_USING_SERIAL_V1
-#define RT_SERIAL_RB_BUFSZ 128
+#define RT_SERIAL_RB_BUFSZ 2048
 #define RT_USING_PIN
 #define RT_USING_MTD_NOR
 #define RT_USING_SDIO
@@ -498,10 +498,6 @@
 #define BSP_USING_FILESYSTEM
 #define BSP_USING_FLASH
 #define BSP_USING_LITTLEFS
-#define BSP_USING_WIFI_HOST_DRIVER
-#define BSP_USING_NETUTILS
-#define NVRAM_IMAGE_SIZE 6741
-#define CLM_IMAGE_SIZE 1519
 /* end of On-chip Peripheral Drivers */
 
 /* Board extended module Drivers */

@@ -120,7 +120,7 @@
 #define RT_SYSTEM_WORKQUEUE_PRIORITY 23
 #define RT_USING_SERIAL
 #define RT_USING_SERIAL_V1
-#define RT_SERIAL_RB_BUFSZ 128
+#define RT_SERIAL_RB_BUFSZ 2048
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
@@ -300,10 +300,16 @@
 /* end of Select supported modules */
 #define PKG_USING_WEBNET_V203
 #define PKG_WEBNET_VER_NUM 0x20003
+#define WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL
+#define WHD_RESOURCES_FIRMWARE_PART_NAME "whd_firmware"
+#define WHD_RESOURCES_CLM_PART_NAME "whd_clm"
+#define WHD_RESOURCES_BLOCK_SIZE 1024
 #define CY_WIFI_WHD_THREAD_PRIORITY 10
 #define CY_WIFI_WHD_THREAD_STACK_SIZE 5120
+#define CYBSP_USING_PIN_NUMBER
 #define CYBSP_REG_ON_PIN 94
-#define CYBSP_HOST_WAKE_IRQ_PIN 92
+#define CYBSP_HOST_WAKE_IRQ_PIN -1
+#define CYBSP_HOST_WAKE_IRQ_EVENT_FALL
 #define CYBSP_OOB_INTR_PRIORITY 2
 #define CY_WIFI_USING_THREAD_INIT
 #define CY_WIFI_INIT_THREAD_STACK_SIZE 2048
@@ -587,11 +593,13 @@
 #define BSP_USING_HYPERAM_SIZE 0x200000
 #define BSP_USING_PWM
 #define BSP_USING_PWM18
+#define BSP_USING_SDIO
+#define BSP_USING_SDIO0
+#define BSP_USING_SDIO1
 #define BSP_USING_LCD
 #define COMPONENT_MTB_DISPLAY_tl043wvv02
 #define BSP_USING_FILESYSTEM
 #define BSP_USING_SDCARD
-#define BSP_USING_FS
 #define BSP_USING_FLASH
 #define BSP_USING_LITTLEFS
 #define USING_LVGL
@@ -608,10 +616,41 @@
 #define LWIP_ALTCP_TLS_MBEDTLS 1
 #define BSP_XIAOZHI_SOUND_DEVICE_NAME "sound0"
 #define BSP_XIAOZHI_MIC_DEVICE_NAME "mic0"
-#define BSP_USING_WIFI_HOST_DRIVER
-#define BSP_USING_NETUTILS
-#define NVRAM_IMAGE_SIZE 6741
-#define CLM_IMAGE_SIZE 1519
+#define RT_USING_WIFI_HOST_DRIVER
+
+/* WHD Configuration */
+
+#define WHD_SET_COUNTRY_FROM_HOST
+#define WHD_COUNTRY_CODE "AU"
+#define WHD_COUNTRY_CODE_REVISION 0
+#define CY_WIFI_INIT_THREAD_PRIORITY 10
+
+/* WHD Thread Configuration */
+
+/* end of WHD Thread Configuration */
+
+/* WHD Resources Configuration */
+
+#define WHD_RESOURCES_NVRAM_PART_NAME "whd_nvram"
+/* end of WHD Resources Configuration */
+/* end of WHD Configuration */
+
+/* Hardware Configuration */
+
+#define WHD_USING_CHIP_CYW55500
+#define WHD_USING_WIFI6
+
+/* Pin Configuration */
+
+/* end of Pin Configuration */
+/* end of Hardware Configuration */
+
+/* Porting options */
+
+#define WHD_PORTING_HAL
+/* end of Porting options */
+#define WHD_LOG_LEVEL_INFO
+#define WPRINT_ENABLE_WHD_INFO
 /* end of Board extended module Drivers */
 /* end of Hardware Drivers Config */
 

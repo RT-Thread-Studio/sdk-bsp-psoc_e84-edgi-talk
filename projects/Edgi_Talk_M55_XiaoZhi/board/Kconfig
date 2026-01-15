@@ -305,60 +305,13 @@ menu "Board extended module Drivers"
                 default "mic0"
         endif
 
- config BSP_USING_FREERTOS
+    config BSP_USING_FREERTOS
         bool "Enable FREERTOS ABSTRACTION"
         default n
         select PKG_USING_FREERTOS_WRAPPER
 
-    menuconfig BSP_USING_WIFI_HOST_DRIVER
-        bool "Enable WIFI6 of CYW55512"
-        default n
-        select PKG_USING_FREERTOS_WRAPPER
-        select RT_USING_WIFI
-        select RT_USING_LWIP212
-        if BSP_USING_WIFI_HOST_DRIVER
-            config BSP_USING_NETUTILS
-                bool "Enable iperf-liked network performance tool"
-                default n
-                select PKG_USING_NETUTILS
-                select PKG_NETUTILS_IPERF
+    source "libraries/components/wifi-host-driver/Kconfig"
 
-            config CYBSP_REG_ON_PIN
-                int "Set the WiFi_REG ON pin number"
-                default 94
-
-            config CYBSP_HOST_WAKE_IRQ_PIN
-                int "Set the HOST_WAKE_IRQ pin number"
-                default 92
-
-            config CYBSP_OOB_INTR_PRIORITY
-                int "Set the interrput priority for HOST_WAKE_IRQ pin"
-                default 2
-
-            config CY_WIFI_USING_THREAD_INIT
-                bool "Using thread initialization"
-                default n
-            config CY_WIFI_INIT_THREAD_STACK_SIZE
-                int "The stack size for init thread"
-                range 0 8192
-                default 2048
-            config NVRAM_IMAGE_SIZE
-                int "NVRAM_IMAGE_SIZE"
-                range 0 8192
-                default 6741
-            config CLM_IMAGE_SIZE
-                int "CLM_IMAGE_SIZE"
-                range 0 8192
-                default 1519
-            config CY_WIFI_WHD_THREAD_PRIORITY
-                int "CY_WIFI_WHD_THREAD_PRIORITY"
-                range 0 20
-                default 8
-            config CY_WIFI_WHD_THREAD_STACK_SIZE
-                int "CY_WIFI_WHD_THREAD_STACK_SIZE"
-                range 0 8192
-                default 5120
-        endif
 endmenu
 
 endmenu
