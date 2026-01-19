@@ -6,7 +6,11 @@
 #include"rtthread.h"
 #include"rtdevice.h"
 #include"os_support.h"
-#include <rtdbg.h>
+
+#define DRV_INFO
+#define LOG_TAG         "resource"
+#include <drv_log.h>
+
 extern struct rt_memheap system_heap;
 
 #define LX_USE_PSRAM (1)
@@ -42,7 +46,7 @@ void *lx_res_malloc(size_t size)
 	}	
 	else
 	{
-		LOG_E("lx_res_malloc failed!!!, size:%d", size);
+		LOG_D("lx_res_malloc failed!!!, size:%d", size);
 	}	
 	
 	return ptr;
@@ -67,11 +71,11 @@ void *lx_res_malloc(size_t size)
     if (ptr != NULL)
     {
         memset(ptr, 0, size);
-        LOG_E("lx_res_malloc success!!!, size:%d \n", size);
+        LOG_D("lx_res_malloc success!!!, size:%d ", size);
     }
     else
     {
-        LOG_E("lx_res_malloc failed!!!, size:%d  \n", size);
+        LOG_D("lx_res_malloc failed!!!, size:%d  ", size);
     }
 
     return ptr;
@@ -83,7 +87,7 @@ void *lx_res_free(void* ptr)
     if(ptr != NULL)
     {
         rt_memheap_free(ptr);
-        LOG_E("lx_res_free =>rt_memheap_free!!! \n");
+        LOG_D("lx_res_free =>rt_memheap_free!!! ");
     }
 }
 
@@ -108,24 +112,24 @@ void lx_lz4_model_unload(void *ptr)
 
 void*  lx_lz4_model_load(uint32_t decomp_size,void* lz4_data, uint32_t lz4_data_size)
 {  
-	LOG_E("lx_lz4_model_load ->aaa decomp_size:%d\n", decomp_size);
-	LOG_E("lx_lz4_model_load ->aaa lz4_data_size:%d\n", lz4_data_size);
+	LOG_D("lx_lz4_model_load ->aaa decomp_size:%d", decomp_size);
+	LOG_D("lx_lz4_model_load ->aaa lz4_data_size:%d", lz4_data_size);
 	void* decomp_buffer =  lx_res_malloc_align(decomp_size, 64);
 
-	LOG_E("lx_lz4_model_load ->bbb decomp_buffer:%p\n", decomp_buffer);
+	LOG_D("lx_lz4_model_load ->bbb decomp_buffer:%p", decomp_buffer);
     if(decomp_buffer)
     {
         int32_t ret = LZ4_decompress_safe(lz4_data, decomp_buffer, lz4_data_size, decomp_size);
-        LOG_E("lx_lz4_model_load ->LZ4_decompress_safe return A, ret:%d \n", ret);
+        LOG_D("lx_lz4_model_load ->LZ4_decompress_safe return A, ret:%d ", ret);
         if(ret == decomp_size)
         {
             // decomp_buffer;
-			LOG_E("lx_lz4_model_load ->LZ4_decompress_safe success, ret:%d \n", ret);
-			LOG_E("lx_lz4_model_load ->LZ4_decompress_safe success, decomp_buffer:%p \n", decomp_buffer);
+			LOG_D("lx_lz4_model_load ->LZ4_decompress_safe success, ret:%d ", ret);
+			LOG_D("lx_lz4_model_load ->LZ4_decompress_safe success, decomp_buffer:%p ", decomp_buffer);
         }
         else
         {
-            LOG_E("lx_lz4_model_load ->LZ4_decompress_safe failed, ret:%d \n", ret);
+            LOG_D("lx_lz4_model_load ->LZ4_decompress_safe failed, ret:%d ", ret);
 
             lx_res_free_align(decomp_buffer);
             decomp_buffer = NULL;
@@ -133,7 +137,7 @@ void*  lx_lz4_model_load(uint32_t decomp_size,void* lz4_data, uint32_t lz4_data_
     }
     else
     {
-        LOG_E("lx_lz4_model_load->lx_res_malloc_align failed, size:%d \n", decomp_size);
+        LOG_D("lx_lz4_model_load->lx_res_malloc_align failed, size:%d ", decomp_size);
     }
 
     return decomp_buffer;
@@ -153,11 +157,11 @@ lv_image_dsc_t* lx_lz4_image_load(lv_image_dsc_t* image_dsc, void* lz4_data, uin
         if(ret == decomp_size)
         {
             image_dsc->data = decomp_buffer;
-			LOG_E("lx_lz4_image_load  ************* image_dsc->data=%p \n",image_dsc->data);
+			LOG_D("lx_lz4_image_load  ************* image_dsc->data=%p ",image_dsc->data);
         }
         else
         {
-            LOG_E("LZ4_decompress_safe failed, ret:%d", ret);
+            LOG_D("LZ4_decompress_safe failed, ret:%d", ret);
 
             lx_res_free_align(decomp_buffer);
             decomp_buffer = NULL;
@@ -165,7 +169,7 @@ lv_image_dsc_t* lx_lz4_image_load(lv_image_dsc_t* image_dsc, void* lz4_data, uin
     }
     else
     {
-        LOG_E("lx_res_malloc_align failed, size:%d", decomp_size);
+        LOG_D("lx_res_malloc_align failed, size:%d", decomp_size);
     }
 
     return image_dsc;

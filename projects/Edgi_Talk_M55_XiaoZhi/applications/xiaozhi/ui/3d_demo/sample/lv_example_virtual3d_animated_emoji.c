@@ -10,9 +10,10 @@
 
 #include "lv_font.h"
 
-#include <rtdbg.h>
+#define DRV_INFO
+#define LOG_TAG         "virtual3d"
+#include <drv_log.h>
 /* 资源声明 */      
-
 
 LX_IMG_DECLARE(LX_ANIMATEDEMOJI_EARPHONE_NORMAL_128_128)
 LX_IMG_DECLARE(LX_ANIMATEDEMOJI_EARPHONE_TRANSPARENCY_128_129)
@@ -312,7 +313,7 @@ lx_vglite_model_t* get_model(uint16_t index)
 
     CURR_MODEL.data = NULL;
     CURR_MODEL.size = 0;
-    LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model start index:%d \n",index);
+    LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model start index:%d",index);
 
     CURR_MODEL.data = NULL;
     CURR_MODEL.size = 0;
@@ -322,25 +323,25 @@ lx_vglite_model_t* get_model(uint16_t index)
         case 0:
 
             model_cache_list[index] = LX_LOAD_MODEL(LX_MODEL_EMOJI_00);
-            LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model LX_MODEL_EMOJI_00 model_cache_list[0]:%d \n",model_cache_list[index]);
+            LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model LX_MODEL_EMOJI_00 model_cache_list[0]:%d",model_cache_list[index]);
             if(model_cache_list[index])  
             {
                 CURR_MODEL.data = model_cache_list[index];
                 CURR_MODEL.size = LX_GET_MODEL_ORIGINAL_SIZE(LX_MODEL_EMOJI_00);
 
-                LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model LX_MODEL_EMOJI_00 CURR_MODEL.size:%d \n",CURR_MODEL.size);
+                LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model LX_MODEL_EMOJI_00 CURR_MODEL.size:%d",CURR_MODEL.size);
             }
 
             break;
         case 1:
 
             model_cache_list[index] = LX_LOAD_MODEL(LX_MODEL_EMOJI_01);
-            LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model LX_MODEL_EMOJI_01 model_cache_list[1]:%d \n",model_cache_list[index]);
+            LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model LX_MODEL_EMOJI_01 model_cache_list[1]:%d",model_cache_list[index]);
             if(model_cache_list[index])  
             {
                 CURR_MODEL.data = model_cache_list[index];
                 CURR_MODEL.size = LX_GET_MODEL_ORIGINAL_SIZE(LX_MODEL_EMOJI_01);
-                LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model LX_MODEL_EMOJI_01 CURR_MODEL.size:%d \n",CURR_MODEL.size);
+                LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->get_model LX_MODEL_EMOJI_01 CURR_MODEL.size:%d",CURR_MODEL.size);
             }
             
             break;
@@ -1201,7 +1202,7 @@ void  free_model(uint16_t index)
 {
     if(model_cache_list[index])
     {
-        LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->free_model  (uint16_t)index:%d \n",(uint16_t)index);
+        LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->free_model  (uint16_t)index:%d",(uint16_t)index);
         LX_UNLOAD_MODEL(model_cache_list[index]);
         model_cache_list[index] = NULL;  
     }
@@ -1368,12 +1369,11 @@ static void emoji_screen_restore(void)
 
 static void touch_event_handler(lv_event_t *e) {
     lv_event_code_t code = lv_event_get_code(e);
-    LOG_E(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_HOR_RES:%d \n",(uint16_t)LV_HOR_RES);
-    LOG_E(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_VER_RES:%d \n",(uint16_t)LV_VER_RES);
-    LOG_E(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)code:%d \n",(uint16_t)code);
+    LOG_D(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_HOR_RES:%d",(uint16_t)LV_HOR_RES);
+    LOG_D(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_VER_RES:%d",(uint16_t)LV_VER_RES);
+    LOG_D(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)code:%d",(uint16_t)code);
     if(code == LV_EVENT_PRESSED) {
         lv_point_t pt = { 0 };	
-        LOG_E(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_EVENT_PRESSED:%d \n",(uint16_t)LV_EVENT_PRESSED);
         lv_indev_get_point(lv_indev_get_act(), &pt);
         #if defined(__FOLLOW_DEMO_ON__)
             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"animate_system_standby_smartring_follow");
@@ -1389,7 +1389,7 @@ static void touch_event_handler(lv_event_t *e) {
     } 
     else if(code == LV_EVENT_PRESSING) {
         lv_point_t pt = { 0 };	
-        LOG_E(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_EVENT_PRESSING:%d \n",(uint16_t)LV_EVENT_PRESSING);
+        LOG_D(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_EVENT_PRESSING:%d",(uint16_t)LV_EVENT_PRESSING);
         lv_indev_get_point(lv_indev_get_act(), &pt);
         #if defined(__FOLLOW_DEMO_ON__)
             lv_virtual3d_set_param2(emoji_virtual3d,  "followAngle", (uint32_t) get_angle_from_pos(pt.x, pt.y, LV_HOR_RES, LV_VER_RES));
@@ -1410,8 +1410,8 @@ static void touch_event_handler(lv_event_t *e) {
     }
     else if(code == LV_EVENT_RELEASED || code == LV_EVENT_PRESS_LOST) {
         lv_point_t pt = { 0 };	
-        LOG_E(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_EVENT_RELEASED:%d \n",(uint16_t)LV_EVENT_RELEASED);
-        LOG_E(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_EVENT_PRESS_LOST:%d \n",(uint16_t)LV_EVENT_PRESS_LOST);
+        LOG_D(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_EVENT_RELEASED:%d",(uint16_t)LV_EVENT_RELEASED);
+        LOG_D(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_EVENT_PRESS_LOST:%d",(uint16_t)LV_EVENT_PRESS_LOST);
         lv_indev_get_point(lv_indev_get_act(), &pt);
         #if defined(__FOLLOW_DEMO_ON__)
             lv_virtual3d_set_param2(emoji_virtual3d, "followRange", (uint32_t)0);
@@ -1529,18 +1529,18 @@ static uint32_t virtual3d_user_callback(uint16_t cmd, uint32_t param, uint32_t u
         }
         case LX_CMD_ID_GET_MODEL:    
 
-            LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->LX_CMD_ID_GET_MODEL  (uint16_t)param:%d \n",(uint16_t)param);
+            LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->LX_CMD_ID_GET_MODEL  (uint16_t)param:%d",(uint16_t)param);
             return get_model((uint16_t)param);
 
         case LX_CMD_ID_FREE_MODEL:
-            LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->LX_CMD_ID_FREE_MODEL  (uint16_t)param:%d \n",(uint16_t)param);
+            LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->LX_CMD_ID_FREE_MODEL  (uint16_t)param:%d",(uint16_t)param);
             free_model((uint16_t)param);
 
             return 1;
 
         case LX_CMD_ID_FREE_IMAGE:
 
-            LOG_E("LX_CMD_ID_FREE_IMAGE param:%d\n", param);
+            LOG_D("LX_CMD_ID_FREE_IMAGE param:%d\n", param);
 
             free_img((uint16_t)param);
 
@@ -1551,7 +1551,7 @@ static uint32_t virtual3d_user_callback(uint16_t cmd, uint32_t param, uint32_t u
 
             uint8_t percent = (uint8_t)param;
 
-           // LOG_E(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->LX_CMD_ID_UPDATE_STATUS  percent:%d \n",percent);
+           // LOG_D(" LX_VGWIDGET_INS_EMOJI_ANIMATION ->LX_CMD_ID_UPDATE_STATUS  percent:%d",percent);
 
             /* 删除界面处理参考
             if(percent == 100)
@@ -1626,7 +1626,7 @@ lv_obj_t * lv_example_virtual3d_animated_emoji(lv_obj_t * p_container)
 {
 
 #if 1
-    LOG_E("Creating 3D :LX_VGWIDGET_INS_EMOJI_ANIMATION   ");
+    LOG_D("Creating 3D :LX_VGWIDGET_INS_EMOJI_ANIMATION   ");
     emoji_popup_mode = false;
 
     /* 全屏模式下,隐藏其他obj对象,以免影响刷新帧率 */
@@ -1649,17 +1649,17 @@ lv_obj_t * lv_example_virtual3d_animated_emoji(lv_obj_t * p_container)
     lv_obj_add_event_cb(emoji_virtual3d, touch_event_handler, LV_EVENT_PRESSING, NULL);   
     lv_obj_add_event_cb(emoji_virtual3d, touch_event_handler, LV_EVENT_PRESS_LOST, NULL);    
 
-    LOG_E("Creating 3D :LX_VGWIDGET_INS_EMOJI_ANIMATION AAA LV_HOR_RES =%d \n",LV_HOR_RES);
+    LOG_D("Creating 3D :LX_VGWIDGET_INS_EMOJI_ANIMATION AAA LV_HOR_RES =%d",LV_HOR_RES);
 
-    LOG_E("Creating 3D :LX_VGWIDGET_INS_EMOJI_ANIMATION BB LV_VER_RES =%d \n",LV_VER_RES);
+    LOG_D("Creating 3D :LX_VGWIDGET_INS_EMOJI_ANIMATION BB LV_VER_RES =%d",LV_VER_RES);
 
     /* 初始化3D效果 */                             
     lv_virtual3d_setup(emoji_virtual3d);
 
-    LOG_E("LX_VGWIDGET_INS_EMOJI_ANIMATION created successfully");
+    LOG_D("LX_VGWIDGET_INS_EMOJI_ANIMATION created successfully");
 #else
     //red_background_demo();
-    LOG_E("Creating 3D :LX_VGWIDGET_INS_DEMO   ");
+    LOG_D("Creating 3D :LX_VGWIDGET_INS_DEMO   ");
     emoji_virtual3d = lv_virtual3d_create(lv_screen_active(),
                                             LX_VGWIDGET_INS_DEMO,
                                             EMOJI_BG);
@@ -1675,7 +1675,7 @@ lv_obj_t * lv_example_virtual3d_animated_emoji(lv_obj_t * p_container)
 
 void lv_example_virtual3d_animated_emoji_popup(void) 
 {
-    LOG_E("Creating 3D :LX_VGWIDGET_INS_EMOJI_ANIMATION popup");
+    LOG_D("Creating 3D :LX_VGWIDGET_INS_EMOJI_ANIMATION popup");
 
     emoji_popup_mode = true;
 
@@ -1700,7 +1700,7 @@ void lv_example_virtual3d_animated_emoji_popup(void)
     //lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"animate_chat_expression_fear_1");
 
 
-    LOG_E("LX_VGWIDGET_INS_EMOJI_ANIMATION popup created successfully");
+    LOG_D("LX_VGWIDGET_INS_EMOJI_ANIMATION popup created successfully");
 }
 
 //RTT STRING
@@ -1718,37 +1718,37 @@ void lv_example_virtual3d_animated_emoji_popup(void)
      switch (index)
      {
          case 0: //neutral‌ - 中性的/中立的
-             LOG_E("qday_show_emoji_by_rtt_info  set => blink");
+             LOG_D("qday_show_emoji_by_rtt_info  set => blink");
              lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"blink");
              break;
 
          case 1: //happy‌ - 快乐的/高兴的
-             LOG_E("qday_show_emoji_by_rtt_info  set => proud");
+             LOG_D("qday_show_emoji_by_rtt_info  set => proud");
              lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"proud");
              break;
          case 2://‌laughing‌ - 大笑的
-             LOG_E("qday_show_emoji_by_rtt_info  set => laugh");
+             LOG_D("qday_show_emoji_by_rtt_info  set => laugh");
              lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"laugh");
              break;
          case 3: //funny‌ - 有趣的/滑稽的
-             LOG_E("qday_show_emoji_by_rtt_info  set => awkward");
+             LOG_D("qday_show_emoji_by_rtt_info  set => awkward");
              lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"awkward");
              break;
          case 4: //‌sad‌ - 悲伤的 :没有合适的 暂时用:shy
-             LOG_E("qday_show_emoji_by_rtt_info  set => shy");
+             LOG_D("qday_show_emoji_by_rtt_info  set => shy");
              lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"shy");
              break;
          case 5: //angry‌ - 愤怒的
-             LOG_E("qday_show_emoji_by_rtt_info  set => angry");
+             LOG_D("qday_show_emoji_by_rtt_info  set => angry");
              lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"angry");
              break;
 
          case 6: //crying‌ - 哭泣的
-             LOG_E("qday_show_emoji_by_rtt_info  set => cry");
+             LOG_D("qday_show_emoji_by_rtt_info  set => cry");
              lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"cry");
              break;
          case 7://充满爱意
-             LOG_E("qday_show_emoji_by_rtt_info  set => cry");
+             LOG_D("qday_show_emoji_by_rtt_info  set => cry");
              lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"cry");
              break;
          case 8:
