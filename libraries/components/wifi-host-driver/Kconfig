@@ -26,6 +26,7 @@ menuconfig RT_USING_WIFI_HOST_DRIVER
     select RT_USING_SAL
     select RT_USING_SDIO
     select BSP_USING_SDIO
+    select BSP_USING_SDIO0
     default n
 
     if RT_USING_WIFI_HOST_DRIVER
@@ -102,15 +103,15 @@ menuconfig RT_USING_WIFI_HOST_DRIVER
                     if WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS
                         config WHD_RESOURCES_FIRMWARE_PATH_NAME
                             string "Set the file path of the firmware files"
-                            default "/sdcard/whd/43438A1.bin"
+                            default "/sdcard/55500A1.trxcse"
 
                         config WHD_RESOURCES_CLM_PATH_NAME
                             string "Set the file path of the clm files"
-                            default "/sdcard/whd/43438A1.clm_blob"
+                            default "/sdcard/55500A1.clm_blob"
                         
                         config WHD_RESOURCES_NVRAM_PATH_NAME
                             string "Set the file path of the nvram files"
-                            default "/sdcard/whd/nvram.txt"
+                            default "/sdcard/cyw55513modpse84som_rev3.txt"
                     endif # WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS
 
                     if WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL

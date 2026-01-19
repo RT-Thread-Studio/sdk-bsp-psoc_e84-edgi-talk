@@ -58,6 +58,8 @@ Each command switches to YMODEM mode. Use a terminal that supports YMODEM upload
 - Wait for the `Download … success` message before moving to the next partition.
 - Power-cycle or reset the board after the three transfers so Wi-Fi starts with the freshly stored blobs. Re-run the command whenever you update the firmware/CLM/NVRAM bundle.
 
+![wifi](figures/wifi.gif)
+
 ### Running Result
 
 * After power-on, the system initializes the Wi-Fi device.

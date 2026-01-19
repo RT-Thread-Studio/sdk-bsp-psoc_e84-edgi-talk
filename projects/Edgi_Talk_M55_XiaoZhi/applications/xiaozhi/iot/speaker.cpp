@@ -4,6 +4,8 @@
 extern "C" {
 #include "drv_es8388.h"
 #include <rtdevice.h>
+
+void qday_show_emoji_by_rtt_info(int index);
 }
 
 /* Device name configurations */
@@ -34,12 +36,22 @@ public:
             if(volume > 100) {
                 volume = 100;
             }
+            
+            if(volume < current_volume_)
+            {
+                qday_show_emoji_by_rtt_info(111);
+            }
+            else
+            {
+                qday_show_emoji_by_rtt_info(110);
+            }
+            
+            current_volume_ = volume;
             struct rt_audio_caps caps;
             caps.main_type = AUDIO_TYPE_MIXER;
             caps.sub_type = AUDIO_MIXER_VOLUME;
             caps.udata.value = volume;
             rt_device_control(sound_dev_, AUDIO_CTL_CONFIGURE, &caps);
-            current_volume_ = volume;
         });
 
         // 新增方法：GetVolume（获取音量）

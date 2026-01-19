@@ -10,6 +10,7 @@
 #include "lwip/tcp.h"
 #include "lwip/tcpip.h"
 #include "lwip/apps/websocket_client.h"
+#include "lv_example_virtual3d_animated_emoji.h"
 #include "opus_multistream.h"
 #include "opus_types.h"
 #include <cJSON.h>

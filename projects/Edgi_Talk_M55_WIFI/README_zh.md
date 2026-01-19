@@ -52,6 +52,8 @@ whd_res_download whd_nvram
 - 每次收到 `Download ... success` 提示后再进行下一项
 - 三者写入完成后重启开发板即可让 WiFi 读取新的资源；若后续更新固件包，同样需要重新执行 `whd_res_download`。
 
+![wifi](figures/wifi.gif)
+
 ### 运行效果
 
 * 烧录完成后，开发板上电即可运行示例工程。

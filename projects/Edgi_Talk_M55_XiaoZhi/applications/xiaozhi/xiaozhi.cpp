@@ -50,8 +50,7 @@ xiaozhi_app_t g_app =
         .wakeword_initialized_session = 0,
         .multi_turn_conversation_enabled = RT_TRUE,
         .tts_sentence_end_timer = RT_NULL,
-        .tts_stop_workqueue = RT_NULL
-};
+        .tts_stop_workqueue = RT_NULL};
 
 #include "ui/xiaozhi_ui.h"
 #include "iot/iot_c_api.h"
@@ -384,7 +383,10 @@ void xz_event_thread_entry(void *param)
 
                     xiaozhi_ui_chat_status("   聆听中");
                     xiaozhi_ui_chat_output("聆听中...");
-
+#ifdef LX_LITEGFX_VGLITE_ENABLE
+                    extern void qday_show_emoji_by_rtt_info(int index);
+                    qday_show_emoji_by_rtt_info(100);
+#endif
                     /* Pause wake word detection during button-activated recording */
                     if (xz_wakeword_is_enabled())
                     {
@@ -1152,6 +1154,9 @@ void Message_handle(const uint8_t *data, uint16_t len)
             xiaozhi_ui_chat_output("就绪");
             LOG_D("TTS stopped, state reset to Idle\n");
 
+#ifdef LX_LITEGFX_VGLITE_ENABLE
+            qday_show_emoji_by_rtt_info(12);
+#endif
             /* Check if multi-turn conversation is enabled */
             if (g_app.multi_turn_conversation_enabled)
             {
@@ -1402,8 +1407,7 @@ char *get_xiaozhi_ws(void)
                 break;
             }
             content_pos += bytes_read;
-        }
-        while (content_pos < content_length);
+        } while (content_pos < content_length);
     }
     else
     {

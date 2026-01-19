@@ -405,7 +405,6 @@ static int ui_find_emoji_index(const char *name)
  */
 static void ui_show_emoji(int index)
 {
-    extern void qday_show_emoji_by_rtt_info(int index);
     qday_show_emoji_by_rtt_info(index);
 }
 

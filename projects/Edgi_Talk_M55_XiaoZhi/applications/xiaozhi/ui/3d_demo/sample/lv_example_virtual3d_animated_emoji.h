@@ -64,6 +64,8 @@ lv_obj_t * lv_example_virtual3d_animated_emoji(lv_obj_t * p_container) ;
 
 void lv_example_virtual3d_animated_emoji_popup(void);
 
+void qday_show_emoji_by_rtt_info(int index);
+
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

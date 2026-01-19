@@ -125,6 +125,7 @@ LX_MOD_DECLARE(LX_MODEL_EMOJI_53)
 #endif
 lv_obj_t * emoji_container;
 lv_obj_t* emoji_virtual3d = NULL;
+static bool  emoji_enable_change = true;
 
 static bool emoji_popup_mode = false;
 static lv_obj_t** emoji_visible_obj_list = NULL;
@@ -139,7 +140,7 @@ static char lx_action_name[128] = { 0 };
 
 static const char* next_action_name = NULL;
 
-#define EMOJI_BASE_COLOR 0xff5fc48c //可根据需要进行修改
+#define EMOJI_BASE_COLOR 0xffffffff //可根据需要进行修改
 
 #define EMOJI_TAP_ICON_X 290 //点击动画显示图标的x坐标，此值为466X466分辨率下的坐标，请根据实际分辨率修改
 #define EMOJI_TAP_ICON_Y 300 //点击动画显示图标的y坐标，此值为466X466分辨率下的坐标，请根据实际分辨率修改
@@ -1374,6 +1375,7 @@ static void touch_event_handler(lv_event_t *e) {
     LOG_D(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)code:%d",(uint16_t)code);
     if(code == LV_EVENT_PRESSED) {
         lv_point_t pt = { 0 };	
+        LOG_D(" lv_example_virtual3d_animated_emoji ->touch_event_handler  (uint16_t)LV_EVENT_PRESSED:%d",(uint16_t)LV_EVENT_PRESSED);
         lv_indev_get_point(lv_indev_get_act(), &pt);
         #if defined(__FOLLOW_DEMO_ON__)
             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"animate_system_standby_smartring_follow");
@@ -1712,84 +1714,157 @@ void lv_example_virtual3d_animated_emoji_popup(void)
     "kissy", "confident"
 };*/
 
+void qday_show_emoji_need_skeep_once()
+{
+    LOG_D("qday_show_emoji_need_skeep_once  ,set emoji_enable_change = false");
+    emoji_enable_change = false;
+}
 
  void qday_show_emoji_by_rtt_info(int index)
  {
+     LOG_D("qday_show_emoji_by_rtt_info  index =%d",index);
+     LOG_D("qday_show_emoji_by_rtt_info  emoji_enable_change =%d",emoji_enable_change);
+     if(emoji_enable_change == false)
+     {
+         emoji_enable_change = true;
+         LOG_D("qday_show_emoji_by_rtt_info  skeep once ,set  emoji_enable_change = true;");
+         return;
+     }
+
      switch (index)
      {
-         case 0: //neutral‌ - 中性的/中立的
-             LOG_D("qday_show_emoji_by_rtt_info  set => blink");
-             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"blink");
-             break;
+     case 0: //neutral‌：中性的
+         LOG_D("qday_show_emoji_by_rtt_info  set => follow");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"follow");
+         break;
 
-         case 1: //happy‌ - 快乐的/高兴的
-             LOG_D("qday_show_emoji_by_rtt_info  set => proud");
-             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"proud");
-             break;
-         case 2://‌laughing‌ - 大笑的
-             LOG_D("qday_show_emoji_by_rtt_info  set => laugh");
-             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"laugh");
-             break;
-         case 3: //funny‌ - 有趣的/滑稽的
-             LOG_D("qday_show_emoji_by_rtt_info  set => awkward");
-             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"awkward");
-             break;
-         case 4: //‌sad‌ - 悲伤的 :没有合适的 暂时用:shy
-             LOG_D("qday_show_emoji_by_rtt_info  set => shy");
-             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"shy");
-             break;
-         case 5: //angry‌ - 愤怒的
-             LOG_D("qday_show_emoji_by_rtt_info  set => angry");
-             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"angry");
-             break;
+     case 1: //happy‌：快乐的
+         LOG_D("qday_show_emoji_by_rtt_info  set => proud");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"proud");
+         break;
+     case 2://‌laughing‌：大笑的
+         LOG_D("qday_show_emoji_by_rtt_info  set => laugh");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"laugh");
+         break;
+     case 3: //funny‌：有趣的
+         LOG_D("qday_show_emoji_by_rtt_info  set => awkward");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"awkward");
+         break;
+     case 4: //‌sad‌：悲伤的
+         LOG_D("qday_show_emoji_by_rtt_info  set => cry");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"cry");
+         break;
+     case 5: //angry‌：生气的
+         LOG_D("qday_show_emoji_by_rtt_info  set => angry");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"angry");
+         break;
 
-         case 6: //crying‌ - 哭泣的
-             LOG_D("qday_show_emoji_by_rtt_info  set => cry");
-             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"cry");
-             break;
-         case 7://充满爱意
-             LOG_D("qday_show_emoji_by_rtt_info  set => cry");
-             lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"cry");
-             break;
-         case 8:
+     case 6: //crying‌：哭泣的
+         LOG_D("qday_show_emoji_by_rtt_info  set => cry");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"cry");
+         break;
+     case 7://loving‌：充满爱的
+         LOG_D("qday_show_emoji_by_rtt_info  set => shy");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"shy");
+         break;
+     case 8://sleepy‌：困倦的
+         LOG_D("qday_show_emoji_by_rtt_info  set => sleepy");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"sleepy");
+         break;
+     case 9://surprised‌：惊讶的
+         LOG_D("qday_show_emoji_by_rtt_info  set => anticipation");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"anticipation");
+         break;
+     case 10://shocked‌：震惊的
+         LOG_D("qday_show_emoji_by_rtt_info  set => fear");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"fear");
+         break;
 
-             break;
-         case 9:
+     case 11://thinking‌：思考的
+         LOG_D("qday_show_emoji_by_rtt_info  set => thinking");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"thinking");
+         break;
+     case 12://winking‌：眨眼的
+         LOG_D("qday_show_emoji_by_rtt_info  set => blink");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"blink");
+         break;
+     case 13://cool‌：酷的
+         LOG_D("qday_show_emoji_by_rtt_info  set => speaking");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"speaking");
+         break;
+     case 14://relaxed‌：放松的
+         LOG_D("qday_show_emoji_by_rtt_info  set => yawn");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"yawn");
+         break;
+     case 15://delicious‌：美味的
+         LOG_D("qday_show_emoji_by_rtt_info  set => thumbup");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"thumbup");
+         break;
+     case 16://kissy‌：亲吻的
+         LOG_D("qday_show_emoji_by_rtt_info  set => poke");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"poke");
+         break;
+     case 17://confident‌：自信的
+         LOG_D("qday_show_emoji_by_rtt_info  set => proud");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"proud");
+         break;
 
-             break;
-         case 10:
+     //自定义
+     case 100://hearing：倾听
+         LOG_D("qday_show_emoji_by_rtt_info  set => hearing");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"hearing");
+         break;
 
-             break;
-
-         case 11:
-
-             break;
-         case 12:
-
-             break;
-         case 13:
-
-             break;
-         case 14:
-
-             break;
-         case 15:
-
-             break;
-         case 16:
-
-             break;
-         case 17:
-
-             break;
-         case 18:
-
-             break;
-
-
-         default:
-
-             break;
+     case 101:// 开关降噪-正常
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_earphonemode_normal");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_earphonemode_normal");
+         break;
+     case 102:// 开关降噪-通透
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_earphonemode_transparencymode");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_earphonemode_transparencymode");
+         break;
+     case 103:// 开关降噪-降噪
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_earphonemode_denoise");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_earphonemode_denoise");
+         break;
+     case 104:// 音乐控制-EQ
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_music_eq");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_music_eq");
+         break;
+     case 105:// 音乐控制-上一首
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_music_last");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_music_last");
+         break;
+     case 106:// 音乐控制-静音
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_music_mute");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_music_mute");
+         break;
+     case 107:// 音乐控制-下一首
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_music_next");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_music_next");
+         break;
+     case 108:// 音乐控制-播放
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_music_play");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_music_play");
+         break;
+     case 109:// 音乐控制-停止
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_music_stop");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"tap_music_stop");
+         break;
+     case 110:// 音乐控制-降低音量
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_music_volume-");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionByName", (uint32_t)"tap_music_volume-");
+         qday_show_emoji_need_skeep_once();
+         break;
+     case 111://音乐控制-调高音量
+         LOG_D("qday_show_emoji_by_rtt_info  set => tap_music_volume+");
+         lv_virtual3d_set_param2(emoji_virtual3d, "setActionByName", (uint32_t)"tap_music_volume+");
+         qday_show_emoji_need_skeep_once();
+         break;
+      default:
+          LOG_D("qday_show_emoji_by_rtt_info   default set => speaking");
+          lv_virtual3d_set_param2(emoji_virtual3d, "setActionLoopByName", (uint32_t)"speaking");
+          break;
 
      }
 

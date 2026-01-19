@@ -23,7 +23,7 @@
 /*********************
 *      DEFINES
 *********************/
-const uint8_t lx_log_level = LX_LOG_LEVEL_INFO;
+const uint8_t lx_log_level = LX_LOG_LEVEL_USER;
 
 /**********************
 *      TYPEDEFS

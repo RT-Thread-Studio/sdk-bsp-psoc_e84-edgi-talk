@@ -127,7 +127,10 @@ extern "C" {
 /*********************
  *      DEFINES
  *********************/
-
+//LITEGFX_VGLITE_ENABLE start
+#define LX_LITEGFX_VGLITE_ENABLE 1
+#define LX_ENABLE_RESOURCE_COMPRESS 1
+//LITEGFX_VGLITE_ENABLE end
 /**********************
  *      TYPEDEFS
  **********************/

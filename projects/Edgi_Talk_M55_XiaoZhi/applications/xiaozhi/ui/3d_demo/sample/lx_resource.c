@@ -46,7 +46,7 @@ void *lx_res_malloc(size_t size)
 	}	
 	else
 	{
-		LOG_D("lx_res_malloc failed!!!, size:%d", size);
+		LOG_E("lx_res_malloc failed!!!, size:%d", size);
 	}	
 	
 	return ptr;
@@ -71,11 +71,11 @@ void *lx_res_malloc(size_t size)
     if (ptr != NULL)
     {
         memset(ptr, 0, size);
-        LOG_D("lx_res_malloc success!!!, size:%d ", size);
+        LOG_D("lx_res_malloc success!!!, size:%d \n", size);
     }
     else
     {
-        LOG_D("lx_res_malloc failed!!!, size:%d  ", size);
+        LOG_E("lx_res_malloc failed!!!, size:%d  \n", size);
     }
 
     return ptr;
@@ -87,7 +87,7 @@ void *lx_res_free(void* ptr)
     if(ptr != NULL)
     {
         rt_memheap_free(ptr);
-        LOG_D("lx_res_free =>rt_memheap_free!!! ");
+        LOG_E("lx_res_free =>rt_memheap_free!!! \n");
     }
 }
 
@@ -161,7 +161,7 @@ lv_image_dsc_t* lx_lz4_image_load(lv_image_dsc_t* image_dsc, void* lz4_data, uin
         }
         else
         {
-            LOG_D("LZ4_decompress_safe failed, ret:%d", ret);
+            LOG_E("LZ4_decompress_safe failed, ret:%d", ret);
 
             lx_res_free_align(decomp_buffer);
             decomp_buffer = NULL;
@@ -169,7 +169,7 @@ lv_image_dsc_t* lx_lz4_image_load(lv_image_dsc_t* image_dsc, void* lz4_data, uin
     }
     else
     {
-        LOG_D("lx_res_malloc_align failed, size:%d", decomp_size);
+        LOG_E("lx_res_malloc_align failed, size:%d", decomp_size);
     }
 
     return image_dsc;
