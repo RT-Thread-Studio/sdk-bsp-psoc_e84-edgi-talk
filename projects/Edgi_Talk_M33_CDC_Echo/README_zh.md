@@ -108,7 +108,7 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 
 ---
 
-* 若示例工程无法正常运行，建议先编译并烧录 **Edgi-Talk\_M33\_S\_Template** 工程，确保初始化与核心启动流程正常，再运行本示例。
+* 若示例工程无法正常运行，建议先编译并烧录 **Edgi_Talk_M33_Blink_LED** 工程，确保初始化与核心启动流程正常，再运行本示例。
 * 若要开启 M55，需要在 **M33 工程** 中打开配置：
 
   ```
