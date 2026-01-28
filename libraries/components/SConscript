@@ -9,6 +9,9 @@ list = os.listdir(cwd)
 if GetDepend(['BSP_USING_FREERTOS']):
     objs = objs + SConscript('abstraction-rtos/SConscript')
 
+if GetDepend('PKG_USING_CHERRYUSB') or GetDepend('RT_USING_CHERRYUSB'):
+    objs = objs + SConscript('CherryUSB-1.6.0/SConscript')
+
 objs = objs + SConscript('wifi-host-driver/SConscript')
 
 Return('objs')

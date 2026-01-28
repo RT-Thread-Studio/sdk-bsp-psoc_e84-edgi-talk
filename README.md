@@ -34,7 +34,7 @@ $ sdk-bsp-psoc_e84-edgi-talk
 │   ├── Edgi-Talk_Key_Irq
 │   ├── Edgi-Talk_LSM6DS3
 │   ├── Edgi-Talk_LVGL
-│   ├── Edgi-Talk_M33_S_Template
+│   ├── Edgi_Talk_M33_Blink_LED
 │   ├── Edgi-Talk_M33_Template
 │   ├── Edgi-Talk_MIPI_LCD
 │   ├── Edgi-Talk_RTC
@@ -104,7 +104,7 @@ The system boot sequence is as follows:
 
 ---
 
-* If example projects cannot run correctly, compile and flash the **Edgi-Talk_M33_S_Template** project first to ensure core initialization and startup flow are functioning before running other demos.
+* If example projects cannot run correctly, compile and flash the **Edgi_Talk_M33_Blink_LED** project first to ensure core initialization and startup flow are functioning before running other demos.
 * To enable the M55 core, configure it inside the **M33 project**:
 
   ```

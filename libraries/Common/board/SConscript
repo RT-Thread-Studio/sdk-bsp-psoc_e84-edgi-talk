@@ -28,6 +28,9 @@ if GetDepend(['BSP_USING_AUDIO_PLAY']):
 if GetDepend(['BSP_USING_FILESYSTEM']):
     src += Glob('ports/filesystem/*.c')
 
+if GetDepend('PKG_USING_CHERRYUSB') or GetDepend('RT_USING_CHERRYUSB'):
+    path += [cwd + '/ports/usb']
+
 if GetDepend(['BSP_USING_LCD']):
     src  += ['ports/display_panels/display_tl043wvv02.c']
     src  += ['ports/display_panels/drv_touch.c']

@@ -34,7 +34,7 @@ $ sdk-bsp-psoc_e84-edgi-talk
 │   ├── Edgi-Talk_Key_Irq
 │   ├── Edgi-Talk_LSM6DS3
 │   ├── Edgi-Talk_LVGL
-│   ├── Edgi-Talk_M33_S_Template
+│   ├── Edgi_Talk_M33_Blink_LED
 │   ├── Edgi-Talk_M33_Template
 │   ├── Edgi-Talk_MIPI_LCD
 │   ├── Edgi-Talk_RTC

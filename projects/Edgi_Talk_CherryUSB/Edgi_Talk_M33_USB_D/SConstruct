@@ -1,0 +1,166 @@
+import os
+import sys
+import rtconfig
+import platform
+import subprocess
+import uuid
+
+if os.path.exists('rt-thread'):
+    RTT_ROOT = os.path.normpath(os.getcwd() + '/rt-thread')
+else:
+    RTT_ROOT = os.path.normpath(os.getcwd() + '/../../../rt-thread')
+
+sys.path = sys.path + [os.path.join(RTT_ROOT, 'tools')]
+try:
+    from building import *
+except Exception as e:
+    print("Error message:", e)
+    print('Cannot found RT-Thread root directory, please check RTT_ROOT')
+    print(RTT_ROOT)
+    sys.exit(-1)
+
+TARGET = 'rt-thread.' + rtconfig.TARGET_EXT
+
+DefaultEnvironment(tools=[])
+env = Environment(tools = ['mingw'], ENV=os.environ,
+    AS = rtconfig.AS, ASFLAGS = rtconfig.AFLAGS,
+    CC = rtconfig.CC, CFLAGS = rtconfig.CFLAGS,
+    AR = rtconfig.AR, ARFLAGS = '-rc',
+    CXX = rtconfig.CXX, CXXFLAGS = rtconfig.CXXFLAGS,
+    LINK = rtconfig.LINK, LINKFLAGS = rtconfig.LFLAGS)
+env.PrependENVPath('PATH', rtconfig.EXEC_PATH)
+env.AppendUnique(CPPPATH=[os.getcwd()])
+
+OBJCOPY = os.path.join(rtconfig.EXEC_PATH, 'arm-none-eabi-objcopy')
+
+if rtconfig.PLATFORM in ['iccarm']:
+    env.Replace(CCCOM = ['$CC $CFLAGS $CPPFLAGS $_CPPDEFFLAGS $_CPPINCFLAGS -o $TARGET $SOURCES'])
+    env.Replace(ARFLAGS = [''])
+    env.Replace(LINKCOM = env["LINKCOM"] + ' --map rt-thread.map')
+
+Export('RTT_ROOT')
+Export('rtconfig')
+
+SDK_ROOT = os.path.abspath('./')
+if os.path.exists(SDK_ROOT + '/libraries/components'):
+    libraries_path_prefix = SDK_ROOT + '/libraries/components'
+else:
+    libraries_path_prefix = os.path.dirname(SDK_ROOT) + '/../../libraries/components'
+
+SDK_LIB = libraries_path_prefix
+Export('SDK_LIB')
+
+# prepare building environment
+objs = PrepareBuilding(env, RTT_ROOT, has_libcpu=False)
+
+IFX_library = 'Packages'
+rtconfig.BSP_LIBRARY_TYPE = IFX_library
+
+# set spawn
+def ourspawn(sh, escape, cmd, args, e):
+    filename = str(uuid.uuid4())
+    newargs = ' '.join(args[1:])
+    cmdline = cmd + " " + newargs
+    if (len(cmdline) > 16 * 1024):
+        f = open(filename, 'w')
+        f.write(' '.join(args[1:]).replace('\\', '/'))
+        f.close()
+        # exec
+        cmdline = cmd + " @" + filename
+    proc = subprocess.Popen(cmdline, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, shell = False, env = e)
+    data, err = proc.communicate()
+    rv = proc.wait()
+    def res_output(_output, _s):
+        if len(_s):
+            if isinstance(_s, str):
+                _output(_s)
+            elif isinstance(_s, bytes):
+                _output(str(_s, 'UTF-8'))
+            else:
+                _output(str(_s))
+    res_output(sys.stderr.write, err)
+    res_output(sys.stdout.write, data)
+    if os.path.isfile(filename):
+        os.remove(filename)
+    return rv
+
+if platform.system() == 'Windows':
+    env['SPAWN'] = ourspawn
+
+# Add project libs with VariantDir
+if os.path.exists(os.path.join(os.getcwd(), "libs", "SConscript")):
+    env.VariantDir('build/libs', 'libs', duplicate=0)
+else:
+    env.VariantDir('build/libs', '../../libs', duplicate=0)
+    objs.extend(SConscript('../../libs/SConscript', variant_dir='build/libs', duplicate=0))
+
+if os.path.exists(os.path.join(os.getcwd(), "libraries")):
+    # Set VariantDir for libraries
+    env.VariantDir('build/libraries/HAL_Drivers', 'libraries/HAL_Drivers', duplicate=0)
+    env.VariantDir('build/libraries/components', 'libraries/components', duplicate=0)
+    env.VariantDir('build/libraries/Common/board', 'libraries/Common/board', duplicate=0)
+
+    objs.extend(SConscript('libraries/HAL_Drivers/SConscript', variant_dir='build/libraries/HAL_Drivers', duplicate=0))
+    objs.extend(SConscript('libraries/components/Infineon_cmsis-latest/SConscript', variant_dir='build/libraries/components/Infineon_cmsis-latest', duplicate=0))
+    objs.extend(SConscript('libraries/components/Infineon_core-lib-latest/SConscript', variant_dir='build/libraries/components/Infineon_core-lib-latest', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-device-support-pse8xxgp/hal/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/hal', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-device-support-pse8xxgp/pdl/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/pdl', duplicate=0))
+    objs.extend(SConscript('libraries/components/async-transfer/SConscript', variant_dir='build/libraries/components/async-transfer', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm', duplicate=0))
+    objs.extend(SConscript('libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
+    objs.extend(SConscript('libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
+    objs.extend(SConscript('libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
+    objs.extend(SConscript('libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
+    objs.extend(SConscript('libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
+    objs.extend(SConscript('libraries/components/littlefs/SConscript', variant_dir='build/libraries/components/littlefs', duplicate=0))
+    objs.extend(SConscript('libraries/Common/board/SConscript', variant_dir='build/libraries/Common/board', duplicate=0))
+else:
+    # Set VariantDir for external libraries
+    env.VariantDir('build/libraries/HAL_Drivers', '../../../libraries/HAL_Drivers', duplicate=0)
+    env.VariantDir('build/libraries/components', '../../../libraries/components', duplicate=0)
+    env.VariantDir('build/libraries/Common/board', '../../../libraries/Common/board', duplicate=0)
+
+    objs.extend(SConscript('../../../libraries/HAL_Drivers/SConscript', variant_dir='build/libraries/HAL_Drivers', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/Infineon_cmsis-latest/SConscript', variant_dir='build/libraries/components/Infineon_cmsis-latest', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/Infineon_core-lib-latest/SConscript', variant_dir='build/libraries/components/Infineon_core-lib-latest', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-device-support-pse8xxgp/hal/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/hal', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-device-support-pse8xxgp/pdl/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/pdl', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/async-transfer/SConscript', variant_dir='build/libraries/components/async-transfer', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm/SConscript', variant_dir='build/libraries/components/mtb-device-support-pse8xxgp/device-utils/syspm', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/serial-memory/SConscript', variant_dir='build/libraries/components/serial-memory', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/Infineon_retarget-io-latest/SConscript', variant_dir='build/libraries/components/Infineon_retarget-io-latest', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/ASRC/SConscript', variant_dir='build/libraries/components/ASRC', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/SConscript', variant_dir='build/libraries/components', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-srf/SConscript', variant_dir='build/libraries/components/mtb-srf', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/mtb-ipc/SConscript', variant_dir='build/libraries/components/mtb-ipc', duplicate=0))
+    objs.extend(SConscript('../../../libraries/components/littlefs/SConscript', variant_dir='build/libraries/components/littlefs', duplicate=0))
+    objs.extend(SConscript('../../../libraries/Common/board/SConscript', variant_dir='build/libraries/Common/board', duplicate=0))
+
+# make a building
+DoBuilding(TARGET, objs)
+
+# Generate HEX file
+DEBUG_DIR = 'build'
+if not os.path.exists(DEBUG_DIR):
+    os.makedirs(DEBUG_DIR)
+hex_file = env.Command(DEBUG_DIR + '/rtthread.hex', TARGET, OBJCOPY + ' -O ihex $SOURCE $TARGET')
+
+# Secure image packaging using edgeprotecttools (Windows only)
+if platform.system() == 'Windows':
+    # SDK_ROOT is the project directory, go up 3 levels to reach sdk-bsp root
+    SDK_BSP_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(SDK_ROOT)))
+    EDGEPROTECTTOOLS = os.path.join(SDK_BSP_ROOT, 'tools', 'edgeprotecttools', 'bin', 'edgeprotecttools.exe')
+    BOOT_CONFIG = os.path.join(SDK_ROOT, 'config', 'boot_with_extended_boot_scons.json')
+
+    if os.path.exists(EDGEPROTECTTOOLS) and os.path.exists(BOOT_CONFIG):
+        secure_image = env.Command(
+            'secure_image',  # Pseudo target
+            hex_file,
+            '"' + EDGEPROTECTTOOLS + '" run-config -i "' + BOOT_CONFIG + '"'
+        )
+    else:
+        print("edgeprotecttools or boot config not found, skipping secure image packaging")
+        print("EDGEPROTECTTOOLS:", EDGEPROTECTTOOLS)
+        print("BOOT_CONFIG:", BOOT_CONFIG)
