@@ -135,7 +135,7 @@ The system starts in the following order:
 
 ---
 
-* If the example does not run correctly, first compile and flash the **Edgi-Talk_M33_S_Template** project to ensure proper initialization and core startup, then run this example.
+* If the example does not run correctly, first compile and flash the **Edgi_Talk_M33_Blink_LED** project to ensure proper initialization and core startup, then run this example.
 * To enable the M55 core, enable the following configuration in the **M33 project**:
 
   ```

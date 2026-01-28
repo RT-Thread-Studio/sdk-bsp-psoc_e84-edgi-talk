@@ -124,7 +124,7 @@ The system boot sequence is as follows:
 
 ---
 
-* If the example project does not run correctly, compile and flash the **Edgi-Talk_M33_S_Template** project first to ensure proper initialization and core startup sequence before running this example.
+* If the example project does not run correctly, compile and flash the **Edgi_Talk_M33_Blink_LED** project first to ensure proper initialization and core startup sequence before running this example.
 * To enable the M55 core, configure the **M33 project** as follows:
 
   ```

@@ -24,24 +24,29 @@ $ sdk-bsp-psoc_e84-edgi-talk
 ├── libraries
 │   ├── HAL_Drivers
 ├── projects
-│   ├── Edgi-Talk_ADC
-│   ├── Edgi-Talk_AHT20
-│   ├── Edgi-Talk_Audio
-│   ├── Edgi-Talk_Blink_Led
-│   ├── Edgi-Talk_CoreMark
-│   ├── Edgi-Talk_CDC_Echo
-│   ├── Edgi-Talk_HyperRam
-│   ├── Edgi-Talk_Key_Irq
-│   ├── Edgi-Talk_LSM6DS3
-│   ├── Edgi-Talk_LVGL
+│   ├── Edgi_Talk_ADC
+│   ├── Edgi_Talk_AHT20
+│   ├── Edgi_Talk_Audio
+│   ├── Edgi_Talk_Blink_Led
+│   ├── Edgi_Talk_CherryUSB
+│   │   ├── Edgi_Talk_M33_USB_D
+│   │   ├── Edgi_Talk_M33_USB_H
+│   │   ├── Edgi_Talk_M55_USB_D
+│   │   └── Edgi_Talk_M55_USB_H
+│   ├── Edgi_Talk_CoreMark
+│   ├── Edgi_Talk_CDC_Echo
+│   ├── Edgi_Talk_HyperRam
+│   ├── Edgi_Talk_Key_Irq
+│   ├── Edgi_Talk_LSM6DS3
+│   ├── Edgi_Talk_LVGL
 │   ├── Edgi_Talk_M33_Blink_LED
-│   ├── Edgi-Talk_M33_Template
-│   ├── Edgi-Talk_MIPI_LCD
-│   ├── Edgi-Talk_RTC
-│   ├── Edgi-Talk_SDCARD
-│   ├── Edgi-Talk_WavPlayer
-│   ├── Edgi-Talk_WIFI
-│   ├── Edgi-Talk_XiaoZhi
+│   ├── Edgi_Talk_M33_Template
+│   ├── Edgi_Talk_MIPI_LCD
+│   ├── Edgi_Talk_RTC
+│   ├── Edgi_Talk_SDCARD
+│   ├── Edgi_Talk_WavPlayer
+│   ├── Edgi_Talk_WIFI
+│   ├── Edgi_Talk_XiaoZhi
 └── rt-thread
 ```
 

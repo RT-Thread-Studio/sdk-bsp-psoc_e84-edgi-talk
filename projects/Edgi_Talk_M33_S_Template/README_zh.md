@@ -1,4 +1,4 @@
-# Edgi-Talk_M33_S_Template 示例工程
+# Edgi_Talk_M33_Blink_LED 示例工程
 
 **中文** | [**English**](./README.md)
 

@@ -150,7 +150,7 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 
 ⚠️ Follow this flashing order strictly; otherwise, the system may not operate correctly.
 
-* If the example does not run, first compile and flash **Edgi-Talk_M33_S_Template** to ensure core initialization.
+* If the example does not run, first compile and flash **Edgi_Talk_M33_Blink_LED** to ensure core initialization.
 * To enable M55, open:
 
 ```

@@ -119,7 +119,7 @@ iperf -c <PC_IP>
 
 ---
 
-* If the example does not run, first compile and flash **Edgi-Talk_M33_S_Template** and **Edgi-Talk_M33_Template**.
+* If the example does not run, first compile and flash **Edgi_Talk_M33_Blink_LED** and **Edgi-Talk_M33_Template**.
 * To enable M55:
 
 ```

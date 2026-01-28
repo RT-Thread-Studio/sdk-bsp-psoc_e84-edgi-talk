@@ -53,6 +53,21 @@ categories:
       - "Edgi_Talk_M55_LVGL"
       - "Edgi_Talk_M33_WavPlayer"
       - "Edgi_Talk_M55_XiaoZhi"
+  usb:
+    name: "USB篇"
+    name_en: "USB"
+    description: "USB主机和设备驱动"
+    patterns:
+      - "Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_D"
+      - "Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_H"
+      - "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_D"
+      - "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_H"
+  faq:
+    name: "常见问题"
+    name_en: "FAQ"
+    description: "常见问题解答"
+    patterns:
+      - "FAQ_page"
 # 文档生成配置
 generation:
   copy_files:
@@ -65,7 +80,9 @@ generation:
     - "basic"
     - "driver"
     - "component"
+    - "usb"
     - "protocol"
+    - "faq"
 
 # Sphinx 配置
 sphinx:
