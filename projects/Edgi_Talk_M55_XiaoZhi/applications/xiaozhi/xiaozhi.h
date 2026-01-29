@@ -126,6 +126,8 @@ typedef struct
     rt_bool_t multi_turn_conversation_enabled;  /* 多轮对话开关 */
     rt_timer_t tts_sentence_end_timer;  /* TTS句子结束定时器 */
     struct rt_workqueue *tts_stop_workqueue;  /* TTS停止工作队列 */
+    rt_bool_t pending_listen_start;  /* 连接完成后自动进入聆听 */
+    rt_bool_t pending_play_wake_sound;  /* 连接完成后是否播放唤醒音 */
 } xiaozhi_app_t;
 
 extern enum DeviceState g_state;

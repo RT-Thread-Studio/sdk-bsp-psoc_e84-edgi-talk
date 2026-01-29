@@ -25,7 +25,7 @@
 #define MAX_CLIENT_ID_LEN 40
 #define MAX_MAC_ADDR_LEN 20
 #define WEBSOCKET_RECONNECT_DELAY_MS 5000
-#define WEBSOCKET_CONNECTION_TIMEOUT_MS 50000
+#define WEBSOCKET_CONNECTION_TIMEOUT_MS 5000
 #define NETWORK_CHECK_DELAY_MS 500
 #define RETRY_DELAY_BASE_MS 1000
 #define RETRY_DELAY_INCREMENT_MS 200
@@ -50,7 +50,9 @@ xiaozhi_app_t g_app =
         .wakeword_initialized_session = 0,
         .multi_turn_conversation_enabled = RT_TRUE,
         .tts_sentence_end_timer = RT_NULL,
-        .tts_stop_workqueue = RT_NULL};
+        .tts_stop_workqueue = RT_NULL,
+        .pending_listen_start = RT_FALSE,
+        .pending_play_wake_sound = RT_FALSE};
 
 #include "ui/xiaozhi_ui.h"
 #include "iot/iot_c_api.h"
@@ -73,7 +75,11 @@ void xz_wakeword_detected_callback(const char *wake_word, float confidence)
     {
         LOG_D("Wake word detected during speaking - interrupting");
         xz_speaker(0);
-        g_app.state = kDeviceStateIdle;
+        rt_bool_t in_listening = (g_app.state == kDeviceStateListening) || xz_mic_is_enabled();
+        if (!in_listening && g_app.state != kDeviceStateSpeaking)
+        {
+            g_app.state = kDeviceStateIdle;
+        }
     }
     else if (g_app.state == kDeviceStateListening)
     {
@@ -90,6 +96,8 @@ void xz_wakeword_detected_callback(const char *wake_word, float confidence)
         LOG_D("Wake word detected but not connected, initiating connection...");
         xiaozhi_ui_chat_status("   连接中");
         xiaozhi_ui_chat_output("正在连接...");
+        g_app.pending_listen_start = RT_TRUE;
+        g_app.pending_play_wake_sound = RT_FALSE;
         reconnect_websocket();
 
         /* Use a shorter wait time with periodic checks for better responsiveness */
@@ -109,9 +117,24 @@ void xz_wakeword_detected_callback(const char *wake_word, float confidence)
         }
     }
 
+    /* Ensure session is ready before starting listening */
+    if (g_app.ws.session_id[0] == '\0')
+    {
+        LOG_D("Session not ready after wake word detection, deferring listen start");
+        g_app.pending_listen_start = RT_TRUE;
+        g_app.pending_play_wake_sound = RT_FALSE;
+        if (xz_wakeword_is_enabled())
+        {
+            xz_wakeword_stop();
+        }
+        return;
+    }
+
     /* Start listening mode */
     LOG_D("Starting conversation after wake word detection");
     g_app.state = kDeviceStateListening;
+    g_app.pending_listen_start = RT_FALSE;
+    g_app.pending_play_wake_sound = RT_FALSE;
 
     /* Completely stop wake word detection during conversation to avoid mic0 conflict */
     if (xz_wakeword_is_enabled())
@@ -124,11 +147,24 @@ void xz_wakeword_detected_callback(const char *wake_word, float confidence)
     xz_mic(1);
 
     /* Send listen start message to server */
-    ws_send_listen_start(&g_app.ws.clnt, g_app.ws.session_id, kListeningModeAutoStop);
-
-    /* Update UI */
-    xiaozhi_ui_chat_status("   聆听中");
-    xiaozhi_ui_chat_output("聆听中...");
+    if (ws_send_listen_start(&g_app.ws.clnt, g_app.ws.session_id, kListeningModeAutoStop))
+    {
+        /* Update UI */
+        xiaozhi_ui_chat_status("   聆听中");
+        xiaozhi_ui_chat_output("聆听中...");
+    }
+    else
+    {
+        LOG_W("Listen start failed after wake word detection");
+        g_app.state = kDeviceStateIdle;
+        xz_mic(0);
+        xiaozhi_ui_chat_status("   就绪");
+        xiaozhi_ui_chat_output("就绪");
+        if (!xz_wakeword_is_enabled())
+        {
+            xz_wakeword_start();
+        }
+    }
 }
 
 /* TTS sentence end timeout handler */
@@ -349,6 +385,9 @@ void xz_event_thread_entry(void *param)
         {
             if (!g_app.ws.is_connected)
             {
+                g_app.pending_listen_start = RT_TRUE;
+                g_app.pending_play_wake_sound = RT_TRUE;
+
                 /* Check if reconnecting */
                 if (g_app.websocket_reconnect_flag == 1)
                 {
@@ -377,6 +416,9 @@ void xz_event_thread_entry(void *param)
                 if (g_app.state != kDeviceStateListening)
                 {
                     LOG_D("Starting listening mode - press once to talk\n");
+
+                    g_app.pending_listen_start = RT_FALSE;
+                    g_app.pending_play_wake_sound = RT_FALSE;
 
                     /* Play wake sound for button wake-up */
                     xz_play_wake_sound();
@@ -677,6 +719,9 @@ err_t my_wsapp_fn(int code, char *buf, size_t len)
             xz_speaker(0);
             LOG_D("Stopped speaker due to disconnection\n");
         }
+
+        /* Ensure mic is closed when entering sleep */
+        xz_mic(0);
 
         /* Stop TTS sentence end timer if running */
         if (g_app.tts_sentence_end_timer)
@@ -1032,7 +1077,11 @@ void Message_handle(const uint8_t *data, uint16_t len)
         g_app.ws.sample_rate = cJSON_GetObjectItem(audio_param, "sample_rate")->valueint;
         g_app.ws.frame_duration = cJSON_GetObjectItem(audio_param, "frame_duration")->valueint;
         strncpy(g_app.ws.session_id, session_id, 9);
-        g_app.state = kDeviceStateIdle;
+        rt_bool_t in_listening = (g_app.state == kDeviceStateListening) || xz_mic_is_enabled();
+        if (!in_listening && g_app.state != kDeviceStateSpeaking)
+        {
+            g_app.state = kDeviceStateIdle;
+        }
         xz_ws_audio_init();
 
         /* Initialize only on first connection */
@@ -1051,10 +1100,18 @@ void Message_handle(const uint8_t *data, uint16_t len)
         /* Resend device info after each reconnect */
         send_iot_descriptors();
         send_iot_states();
-        xiaozhi_ui_chat_status("   待命中");
-        xiaozhi_ui_chat_output(" ");
-        xiaozhi_ui_update_emoji("neutral");
-        LOG_I("Waiting...\n");
+        rt_bool_t pending_listen = g_app.pending_listen_start;
+        if (!pending_listen && !in_listening)
+        {
+            xiaozhi_ui_chat_status("   待命中");
+            xiaozhi_ui_chat_output(" ");
+            xiaozhi_ui_update_emoji("neutral");
+            LOG_I("Waiting...\n");
+        }
+        else
+        {
+            LOG_I("Pending wake-up detected on hello, preparing to listen\n");
+        }
 
         /* Initialize wake word detection once */
         if (!g_app.wakeword_initialized_session)
@@ -1062,15 +1119,19 @@ void Message_handle(const uint8_t *data, uint16_t len)
             LOG_I("Initializing wake word detection...");
             if (xz_wakeword_init() == 0)
             {
-                /* Start detection after initialization - it should run continuously */
-                if (xz_wakeword_start() == 0)
+                g_app.wakeword_initialized_session = 1;
+
+                /* Start detection only if no pending listen */
+                if (!pending_listen && !in_listening)
                 {
-                    LOG_D("Wake word detection started successfully");
-                    g_app.wakeword_initialized_session = 1;
-                }
-                else
-                {
-                    LOG_E("Failed to start wake word detection");
+                    if (xz_wakeword_start() == 0)
+                    {
+                        LOG_D("Wake word detection started successfully");
+                    }
+                    else
+                    {
+                        LOG_E("Failed to start wake word detection");
+                    }
                 }
             }
             else
@@ -1080,16 +1141,72 @@ void Message_handle(const uint8_t *data, uint16_t len)
         }
         else
         {
-            /* Just ensure wake word is running */
-            if (!xz_wakeword_is_enabled())
+            if (pending_listen)
             {
-                LOG_D("Restarting wake word detection");
-                xz_wakeword_start();
+                if (xz_wakeword_is_enabled())
+                {
+                    LOG_D("Stopping wake word detection before pending listen start");
+                    xz_wakeword_stop();
+                }
+            }
+            else
+            {
+                /* Just ensure wake word is running */
+                if (!xz_wakeword_is_enabled() && !in_listening)
+                {
+                    LOG_D("Restarting wake word detection");
+                    xz_wakeword_start();
+                }
+            }
+        }
+
+        if (pending_listen)
+        {
+            if (g_app.state == kDeviceStateListening || g_app.state == kDeviceStateSpeaking)
+            {
+                g_app.pending_listen_start = RT_FALSE;
+                g_app.pending_play_wake_sound = RT_FALSE;
+                return;
+            }
+
+            g_app.pending_listen_start = RT_FALSE;
+
+            if (g_app.pending_play_wake_sound)
+            {
+                xz_play_wake_sound();
+            }
+            g_app.pending_play_wake_sound = RT_FALSE;
+
+            if (xz_wakeword_is_enabled())
+            {
+                xz_wakeword_stop();
+            }
+
+            g_app.state = kDeviceStateListening;
+            xz_mic(1);
+            if (ws_send_listen_start(&g_app.ws.clnt, g_app.ws.session_id, kListeningModeAutoStop))
+            {
+                xiaozhi_ui_chat_status("   聆听中");
+                xiaozhi_ui_chat_output("聆听中...");
+            }
+            else
+            {
+                LOG_W("Listen start failed after hello, falling back to idle");
+                g_app.state = kDeviceStateIdle;
+                xz_mic(0);
+                xiaozhi_ui_chat_status("   就绪");
+                xiaozhi_ui_chat_output("就绪");
+                if (!xz_wakeword_is_enabled())
+                {
+                    xz_wakeword_start();
+                }
             }
         }
     }
     else if (strcmp(type, "goodbye") == 0)
     {
+        /* Ensure mic is closed when entering sleep */
+        xz_mic(0);
         xiaozhi_ui_chat_status("   休眠中");
         xiaozhi_ui_chat_output("等待唤醒");
         xiaozhi_ui_update_emoji("sleepy");
