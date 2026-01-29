@@ -89,7 +89,6 @@ if platform.system() == 'Windows':
 # Add project libs with VariantDir
 if os.path.exists(os.path.join(os.getcwd(), "libs", "SConscript")):
     env.VariantDir('build/libs', 'libs', duplicate=0)
-    objs.extend(SConscript('libs/SConscript', variant_dir='build/libs', duplicate=0))
 else:
     env.VariantDir('build/libs', '../../libs', duplicate=0)
     objs.extend(SConscript('../../libs/SConscript', variant_dir='build/libs', duplicate=0))
