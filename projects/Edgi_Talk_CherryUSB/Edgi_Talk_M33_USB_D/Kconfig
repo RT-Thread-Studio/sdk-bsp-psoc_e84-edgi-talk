@@ -30,5 +30,5 @@ config PLATFORM_DIR
 
 source "$RTT_DIR/Kconfig"
 source "$PKGS_DIR/Kconfig"
-source "$BSP_DIR/../../../libraries/components/CherryUSB-1.6.0/Kconfig.rtt"
+source "$RTT_DIR/../libraries/components/CherryUSB-1.6.0/Kconfig.rtt"
 source "$RTT_DIR/../libraries/M33_Config/Kconfig"
