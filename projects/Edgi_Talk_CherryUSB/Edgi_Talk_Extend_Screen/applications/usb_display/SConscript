@@ -1,0 +1,22 @@
+import os
+from building import *
+
+Import('RTT_ROOT')
+
+cwd = GetCurrentDir()
+src = Glob('*.c')
+
+cherryusb_root = os.path.join(RTT_ROOT, '..', 'libraries', 'components', 'CherryUSB-1.6.0')
+common_usb = os.path.join(RTT_ROOT, '..', 'libraries', 'Common', 'board', 'ports', 'usb')
+
+path = [
+    cwd,
+    cherryusb_root,
+    os.path.join(cherryusb_root, 'core'),
+    os.path.join(cherryusb_root, 'common'),
+    common_usb,
+]
+
+group = DefineGroup('usb_display', src, depend=['RT_USING_CHERRYUSB', 'RT_CHERRYUSB_DEVICE'], CPPPATH=path)
+
+Return('group')

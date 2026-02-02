@@ -36,8 +36,9 @@
 
 #define LCD_WIDTH           512
 #define LCD_HEIGHT          800
+#define LCD_STRIDE          512
 #define LCD_BITS_PER_PIXEL  16
-#define LCD_BUF_SIZE        (LCD_WIDTH * LCD_HEIGHT * LCD_BITS_PER_PIXEL / 8)
+#define LCD_BUF_SIZE        (LCD_STRIDE * LCD_HEIGHT * LCD_BITS_PER_PIXEL / 8)
 #define LCD_PIXEL_FORMAT    RTGRAPHIC_PIXEL_FORMAT_RGB565
 #define LCD_DEVICE(dev)     (struct drv_lcd_device*)(dev)
 #define RESET_VAL                           0U
@@ -111,9 +112,11 @@ static rt_err_t drv_lcd_control(struct rt_device *device, int cmd, void *args)
         RT_ASSERT(info != RT_NULL);
         info->pixel_format  = lcd->lcd_info.pixel_format;
         info->bits_per_pixel = 16;
+        info->pitch         = lcd->lcd_info.pitch;
         info->width         = lcd->lcd_info.width;
         info->height        = lcd->lcd_info.height;
         info->framebuffer   = lcd->lcd_info.framebuffer;
+        info->smem_len      = lcd->lcd_info.smem_len;
     }
     break;
     }
@@ -148,6 +151,7 @@ static void dc_irq_handler(void)
 {
     rt_interrupt_enter();
     Cy_GFXSS_Clear_DC_Interrupt(gfxbase, &lcd_gfx_context);
+    rt_sem_release(&_lcd.lcd_lock);
     rt_interrupt_leave();
 }
 
@@ -251,6 +255,8 @@ int drv_lcd_hw_init(void)
     _lcd.lcd_info.width = LCD_WIDTH;
     _lcd.lcd_info.bits_per_pixel = LCD_BITS_PER_PIXEL;
     _lcd.lcd_info.pixel_format = LCD_PIXEL_FORMAT;
+    _lcd.lcd_info.pitch = LCD_STRIDE * (LCD_BITS_PER_PIXEL / 8);
+    _lcd.lcd_info.smem_len = LCD_BUF_SIZE;
 
     /* malloc memory for Triple Buffering */
     // _lcd.front_buf=_lcd.lcd_info.framebuffer = rt_malloc_align(LCD_BUF_SIZE, 32);
@@ -264,7 +270,7 @@ int drv_lcd_hw_init(void)
         goto __exit;
     }
     /* memset buff to 0xFF */
-    memset(_lcd.lcd_info.framebuffer, 0xFF, LCD_BUF_SIZE);
+    memset(_lcd.lcd_info.framebuffer, 0x00, LCD_BUF_SIZE);
     device->type    = RT_Device_Class_Graphic;
 #ifdef RT_USING_DEVICE_OPS
     device->ops     = &lcd_ops;

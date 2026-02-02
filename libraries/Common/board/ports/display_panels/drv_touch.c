@@ -13,7 +13,6 @@ static struct rt_i2c_client ST7102_client;
 static rt_err_t ST7102_write_reg(struct rt_i2c_client *dev, rt_uint8_t *data, rt_uint8_t len)
 {
     struct rt_i2c_msg msgs[2];
-    rt_uint8_t buf[2];
 
     msgs[0].addr = dev->client_addr;
     msgs[0].flags = RT_I2C_WR;
@@ -30,15 +29,14 @@ static rt_err_t ST7102_write_reg(struct rt_i2c_client *dev, rt_uint8_t *data, rt
     }
 }
 
-static rt_err_t ST7102_read_regs(struct rt_i2c_client *dev, rt_uint8_t *reg, rt_uint8_t *data, rt_uint8_t len)
+static rt_err_t ST7102_read_regs(struct rt_i2c_client *dev, const rt_uint8_t *reg, rt_uint8_t reg_len, rt_uint8_t *data, rt_uint8_t len)
 {
     struct rt_i2c_msg msgs[2];
-    rt_uint8_t buf[2];
 
     msgs[0].addr = dev->client_addr;
     msgs[0].flags = RT_I2C_WR;
-    msgs[0].buf = reg;
-    msgs[0].len = ST7102_REGITER_LEN;
+    msgs[0].buf = (rt_uint8_t *)reg;
+    msgs[0].len = reg_len;
 
     msgs[1].addr = dev->client_addr;
     msgs[1].flags = RT_I2C_RD;
@@ -59,16 +57,22 @@ static rt_err_t ST7102_get_info(struct rt_i2c_client *dev, struct rt_touch_info 
 {
     rt_uint8_t Reg_High[2];
     rt_uint8_t Reg_Low[2];
+    rt_uint8_t reg;
 
-    ST7102_read_regs(dev, ST7102_MAX_X_Coord_High, Reg_High, 1);
-    ST7102_read_regs(dev, ST7102_MAX_X_Coord_Low, Reg_Low, 1);
+    reg = ST7102_MAX_X_Coord_High;
+    ST7102_read_regs(dev, &reg, 1, Reg_High, 1);
+    reg = ST7102_MAX_X_Coord_Low;
+    ST7102_read_regs(dev, &reg, 1, Reg_Low, 1);
     info->range_x = (Reg_High[0] & 0x3F) << 8 | Reg_Low[0];
 
-    ST7102_read_regs(dev, ST7102_MAX_Y_Coord_High, Reg_High, 1);
-    ST7102_read_regs(dev, ST7102_MAX_Y_Coord_Low, Reg_Low, 1);
+    reg = ST7102_MAX_Y_Coord_High;
+    ST7102_read_regs(dev, &reg, 1, Reg_High, 1);
+    reg = ST7102_MAX_Y_Coord_Low;
+    ST7102_read_regs(dev, &reg, 1, Reg_Low, 1);
     info->range_y = (Reg_High[0] & 0x3F) << 8 | Reg_Low[0];
 
-    ST7102_read_regs(dev, ST7102_MAX_Touches, Reg_Low, 1);
+    reg = ST7102_MAX_Touches;
+    ST7102_read_regs(dev, &reg, 1, Reg_Low, 1);
     info->point_num = Reg_Low[0];
 
     return RT_EOK;
@@ -163,7 +167,7 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
     cmd[0] = (rt_uint8_t)((ST7102_Read_Start_Position >> 8) & 0xFF);
     cmd[1] = (rt_uint8_t)(ST7102_Read_Start_Position & 0xFF);
 
-    if (ST7102_read_regs(&ST7102_client, cmd, read_buf, 8 * ST7102_MAX_TOUCH) != RT_EOK)
+    if (ST7102_read_regs(&ST7102_client, cmd, 2, read_buf, 8 * ST7102_MAX_TOUCH) != RT_EOK)
     {
         LOG_D("read point failed\n");
         read_num = 0;
