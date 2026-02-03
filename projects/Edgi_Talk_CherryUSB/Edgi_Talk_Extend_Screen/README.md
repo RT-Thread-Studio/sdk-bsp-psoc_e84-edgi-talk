@@ -30,12 +30,33 @@ RT-Thread Settings -> USB -> CherryUSB
 ```
 
 * **Device mode**: enable `RT_CHERRYUSB_DEVICE`, select device IP under **CHERRYUSB_DEVICE_IP** (default: `RT_CHERRYUSB_DEVICE_DWC2_INFINEON`).
-* **Host mode**: disable device mode, enable `RT_CHERRYUSB_HOST`, choose host IP and required class drivers (MSC/HID/CDC, etc.).
 * **Device classes**: enable class drivers and select a template under **Select usb device template**.
 
 If an IP/class requires extra parameters, edit:
 
 * `libraries/Common/board/ports/usb/usb_config.h`
+
+## Windows IDD Driver
+
+Windows Indirect Display Driver (IDD) provides a user-mode driver model for monitors that are not connected to a traditional GPU output.
+
+Reference: https://learn.microsoft.com/windows-hardware/drivers/display/indirect-display-driver-model-overview
+
+This driver is based on: https://github.com/chuanjinpang/win10_idd_xfz1986_usb_graphic_driver_display
+
+If you need to modify it, download and rebuild it yourself.
+
+### How to use
+
+1. Install `resources\USB_Graphic\xfz1986_usb_graphic_250224_rc_sign.exe`.
+2. After installation, a new display appears under Display adapters.
+
+  ![new_screen](figures/new_screen.png)
+
+### Notes
+
+* The driver communicates via a vendor interface, supports multiple resolutions and formats, and is controlled by string descriptors. See: https://github.com/chuanjinpang/win10_idd_xfz1986_usb_graphic_driver_display/blob/main/README.md
+* The driver supports Windows 10 and Windows 11 only.
 
 ## Startup Sequence
 
@@ -59,14 +80,6 @@ The M55 core depends on the M33 boot flow. Flash in this order:
 | (Application Core)|
 +-------------------+
 ```
-
-## Windows Driver and Usage
-
-This project relies on a **Windows IDD driver** to present the device as an extended display. For background and driver model details, see:
-
-* https://learn.microsoft.com/windows-hardware/drivers/display/indirect-display-driver-model-overview
-
-Use a compatible IDD driver implementation that matches the device VID/PID and vendor interface.
 
 ## Notes
 

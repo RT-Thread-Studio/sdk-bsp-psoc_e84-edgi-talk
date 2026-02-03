@@ -30,7 +30,6 @@ RT-Thread Settings -> USB -> CherryUSB
 ```
 
 * **设备模式**：开启 `RT_CHERRYUSB_DEVICE`，在 **CHERRYUSB_DEVICE_IP** 中选择 IP（默认 `RT_CHERRYUSB_DEVICE_DWC2_INFINEON`）。
-* **主机模式**：关闭设备模式，开启 `RT_CHERRYUSB_HOST`，选择主机 IP 并勾选所需类驱动（MSC/HID/CDC 等）。
 * **设备类模板**：开启对应类驱动后，在 **Select usb device template** 中选择模板。
 
 若 IP 或类驱动需要额外参数，请修改：
@@ -49,53 +48,13 @@ Windows 间接显示驱动程序 (IDD) 模型提供简单的用户模式驱动�
 
 ### 如何使用
 
-#### 认证驱动
-
-1. 直接双击下载的驱动程序，点击安装。
-
-#### 自行编译驱动
-
-1. （可忽略）首先需要关掉 Windows 对驱动的检查使用测试模式。
-
-   * 使用管理员身份打开命令行 cmd
-
-  ```shell
-  bcdedit /set testsigning on
-  ```
-
-  ![cmd](figures/cmd.png)
-
-   * 重启电脑，桌面右下角会出现测试模式的水印
-
-  ![test_mode](figures/test_mode.png)
-
-2. 关闭 Windows 对第三方驱动的签名检查：
-
-   * 依次点开 `开始` --> `设置` --> `windows 更新` --> `恢复` --> `高级启动` --> `立即重新启动`
-   * 重启到修复模式后，点击 `疑难解答` --> `高级选项` --> `启动设置` --> `重启电脑`
-   * 重启后，在启动菜单中选择 `禁用驱动程序强制签名` 重启返回桌面
-
-3. 在设备管理器中选择未识别的设备，为其安装驱动程序
-
-  ![device](figures/device.png)
-
-   * 右键选择 `更新驱动程序`
-   * 选择 `游览我的电脑以查找驱动程序(R)`
-
-  ![add_driver](figures/add_driver.png)
-
-   * 选择此文件夹目录
-   * 选择 `始终安装此驱动程序软件(I)`
-
-  ![windows_driver_1](figures/windows_driver_1.png)
-
-4. 安装完毕后，在显示适配器下面出现一个新的显示器，即安装成功
+1. 安装 `resources\USB_Graphic\xfz1986_usb_graphic_250224_rc_sign.exe` 签名驱动
+2. 安装完毕后，在显示适配器下面出现一个新的显示器，即安装成功
 
   ![new_screen](figures/new_screen.png)
 
 ### 注意事项
 
-* 设备的 VID PID 必须符合驱动文件 INF 中 `DeviceName` 的描述。对于复合设备请使用 `USB\VID_303A&PID_2986`，对于纯显示设备请使用 `USB\VID_303A&PID_2987`。
 * 该驱动通过 VENDOR 接口与设备进行通信，支持多种分辨率和图片格式，通过接口字符描述符来控制，具体参考：https://github.com/chuanjinpang/win10_idd_xfz1986_usb_graphic_driver_display/blob/main/README.md
 * 驱动仅支持 Windows 10 及 Windows 11 系统，其他系统请自行测试。
 

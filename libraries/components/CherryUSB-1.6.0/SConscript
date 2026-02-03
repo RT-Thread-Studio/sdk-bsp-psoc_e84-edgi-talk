@@ -17,6 +17,7 @@ path += [cwd + '/class/dfu']
 path += [cwd + '/class/serial']
 path += [cwd + '/class/vendor/net']
 path += [cwd + '/class/vendor/wifi']
+path += [cwd + '/class/vendor/display']
 src = []
 
 LIBS    = []
@@ -136,6 +137,11 @@ if GetDepend(['RT_CHERRYUSB_DEVICE']):
         src += Glob('class/cdc/usbd_cdc_ncm.c')
     if GetDepend(['RT_CHERRYUSB_DEVICE_DFU']):
         src += Glob('class/dfu/usbd_dfu.c')
+    if GetDepend(['RT_CHERRYUSB_DEVICE_DISPLAY']):
+        path += [cwd + '/third_party/cherrymp']
+        src += Glob('class/vendor/display/usbd_display.c')
+        src += Glob('third_party/cherrymp/chry_mempool.c')
+        src += Glob('third_party/cherrymp/chry_mempool_osal_rtthread.c')
     if GetDepend(['RT_CHERRYUSB_DEVICE_ADB']):
         src += Glob('class/adb/usbd_adb.c')
         src += Glob('platform/rtthread/usbd_adb_shell.c')

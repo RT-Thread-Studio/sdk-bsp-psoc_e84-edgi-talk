@@ -415,10 +415,16 @@ SECTIONS
         __HeapLimit = .;
     } > m55_data_secondary
 
-    /* A section for the GPU buffer */
+    /* A section for the GPU buffer (LCD framebuffer, VGLite heap) */
     .cy_gpu_buf(NOLOAD) :
     {
         KEEP(*(.cy_gpu_buf))
+    } > gfx_mem
+
+    /* A section for USB display frame buffers, placed after GPU buffers */
+    .cy_usb_display_buf(NOLOAD) : ALIGN(32)
+    {
+        KEEP(*(.cy_usb_display_buf))
     } > gfx_mem
 
     .reserved_socmem(NOLOAD) :

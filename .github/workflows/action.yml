@@ -60,6 +60,7 @@ jobs:
          - {RTT_BSP: "Edgi_Talk_M55_Blink_LED"}
          - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_D"}
          - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_H"}
+         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen"}
          - {RTT_BSP: "Edgi_Talk_M55_CoreMark"}
          - {RTT_BSP: "Edgi_Talk_M33_CDC_Echo"}
          - {RTT_BSP: "Edgi_Talk_M33_HyperRam"}

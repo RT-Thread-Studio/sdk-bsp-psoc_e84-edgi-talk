@@ -218,9 +218,6 @@
 /* Micrium: Micrium software products porting for RT-Thread */
 
 /* end of Micrium: Micrium software products porting for RT-Thread */
-#define CONFIG_USBDEV_REQUEST_BUFFER_LEN 512
-#define CONFIG_USBDEV_MSC_MAX_BUFSIZE 512
-#define PKG_CHERRYUSB_DEVICE_TEMPLATE_NONE
 /* end of system packages */
 
 /* peripheral libraries and drivers */
@@ -238,38 +235,6 @@
 /* Kendryte SDK */
 
 /* end of Kendryte SDK */
-
-/* WCH HAL & SDK Drivers */
-
-/* end of WCH HAL & SDK Drivers */
-
-/* AT32 HAL & SDK Drivers */
-
-/* end of AT32 HAL & SDK Drivers */
-
-/* HC32 DDL Drivers */
-
-/* end of HC32 DDL Drivers */
-
-/* NXP HAL & SDK Drivers */
-
-/* end of NXP HAL & SDK Drivers */
-
-/* NUVOTON Drivers */
-
-/* end of NUVOTON Drivers */
-
-/* GD32 Drivers */
-
-/* end of GD32 Drivers */
-
-/* HPMicro SDK */
-
-/* end of HPMicro SDK */
-
-/* FT32 HAL & SDK Drivers */
-
-/* end of FT32 HAL & SDK Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -354,6 +319,10 @@
 #define RT_CHERRYUSB_DEVICE_SPEED_HS
 #define RT_CHERRYUSB_DEVICE_DWC2_INFINEON
 #define RT_CHERRYUSB_DEVICE_CDC_ACM
+#define RT_CHERRYUSB_DEVICE_DISPLAY
+#define CONFIG_USBDEV_REQUEST_BUFFER_LEN 512
+#define CONFIG_USBDEV_MSC_MAX_BUFSIZE 512
+#define RT_CHERRYUSB_DEVICE_TEMPLATE_NONE
 
 /* Hardware Drivers Config */
 

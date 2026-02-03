@@ -41,7 +41,6 @@
 #define LCD_BUF_SIZE        (LCD_STRIDE * LCD_HEIGHT * LCD_BITS_PER_PIXEL / 8)
 #define LCD_PIXEL_FORMAT    RTGRAPHIC_PIXEL_FORMAT_RGB565
 #define LCD_DEVICE(dev)     (struct drv_lcd_device*)(dev)
-#define RESET_VAL                           0U
 #define GPU_TESSELLATION_BUFFER_SIZE        ((LCD_WIDTH) * 128U)
 #define APP_BUFFER_COUNT                    (2U)
 #define DEFAULT_GPU_CMD_BUFFER_SIZE         ((64U) * (512))
@@ -77,9 +76,7 @@ struct drv_lcd_device
 
 static rt_err_t drv_lcd_init(struct rt_device *device)
 {
-    struct drv_lcd_device *lcd = LCD_DEVICE(device);
-    /* nothing, right now */
-    lcd = lcd;
+    (void)device;
     return RT_EOK;
 }
 
@@ -91,6 +88,53 @@ static rt_err_t drv_lcd_control(struct rt_device *device, int cmd, void *args)
     {
     case RTGRAPHIC_CTRL_RECT_UPDATE:
     {
+        struct rt_device_rect_info *info = (struct rt_device_rect_info *)args;
+        uint32_t start_line = 0U;
+        uint32_t end_line = lcd->lcd_info.height;
+        rt_bool_t try_partial = RT_FALSE;
+
+        if (info != RT_NULL)
+        {
+            if ((info->width == 0U) || (info->height == 0U))
+            {
+                return RT_EOK;
+            }
+            if ((info->x >= lcd->lcd_info.width) || (info->y >= lcd->lcd_info.height))
+            {
+                return RT_EOK;
+            }
+            if ((info->x + info->width) > lcd->lcd_info.width)
+            {
+                info->width = lcd->lcd_info.width - info->x;
+            }
+            if ((info->y + info->height) > lcd->lcd_info.height)
+            {
+                info->height = lcd->lcd_info.height - info->y;
+            }
+
+            start_line = info->y;
+            end_line = info->y + info->height;
+            if ((info->x == 0U) && (info->width == lcd->lcd_info.width))
+            {
+                try_partial = RT_TRUE;
+            }
+        }
+
+        if (try_partial &&
+            ((lcd_gfx_context.dc_context.display_type == GFX_DISP_TYPE_DBI_A) ||
+             (lcd_gfx_context.dc_context.display_type == GFX_DISP_TYPE_DBI_B) ||
+             (lcd_gfx_context.dc_context.display_type == GFX_DISP_TYPE_DBI_C) ||
+             (lcd_gfx_context.dc_context.display_type == GFX_DISP_TYPE_DSI_DBI)))
+        {
+            status = Cy_GFXSS_TransferPartialFrame(gfxbase, start_line, end_line, &lcd_gfx_context);
+            if (CY_GFX_SUCCESS != status)
+            {
+                LOG_E("[%s: %d] Partial frame transfer failed. Error type: %u\r\n", __func__, __LINE__, status);
+                CY_ASSERT(0);
+            }
+            break;
+        }
+
         /* update */
         /* Set the frame buffer with the image pointer to be displayed on LCD */
         status = Cy_GFXSS_Set_FrameBuffer(gfxbase, (uint32_t*)graphics_buffer, &lcd_gfx_context);

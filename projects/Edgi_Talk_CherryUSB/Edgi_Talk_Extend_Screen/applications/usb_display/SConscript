@@ -14,6 +14,8 @@ path = [
     cherryusb_root,
     os.path.join(cherryusb_root, 'core'),
     os.path.join(cherryusb_root, 'common'),
+    os.path.join(cherryusb_root, 'class', 'vendor', 'display'),
+    os.path.join(cherryusb_root, 'third_party', 'cherrymp'),
     common_usb,
 ]
 
