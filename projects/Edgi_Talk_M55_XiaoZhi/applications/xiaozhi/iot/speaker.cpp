@@ -4,6 +4,7 @@
 extern "C" {
 #include "drv_es8388.h"
 #include <rtdevice.h>
+#include <wavplayer.h>
 
 void qday_show_emoji_by_rtt_info(int index);
 }
@@ -22,6 +23,14 @@ public:
     Speaker() : Thing("Speaker", "扬声器"), current_volume_(60) {
 
         sound_dev_ = rt_device_find(BSP_XIAOZHI_SOUND_DEVICE_NAME);
+        if (sound_dev_) {
+            struct rt_audio_caps caps;
+            caps.main_type = AUDIO_TYPE_MIXER;
+            caps.sub_type = AUDIO_MIXER_VOLUME;
+            if (rt_device_control(sound_dev_, AUDIO_CTL_GETCAPS, &caps) == RT_EOK) {
+                current_volume_ = static_cast<int>(caps.udata.value);
+            }
+        }
 
         // 定义属性：volume（当前音量值）
         properties_.AddNumberProperty("volume", "当前音量值(0到100之间)", [this]() -> int {
@@ -52,6 +61,7 @@ public:
             caps.sub_type = AUDIO_MIXER_VOLUME;
             caps.udata.value = volume;
             rt_device_control(sound_dev_, AUDIO_CTL_CONFIGURE, &caps);
+            wavplayer_volume_set(static_cast<int>(volume));
         });
 
         // 新增方法：GetVolume（获取音量）

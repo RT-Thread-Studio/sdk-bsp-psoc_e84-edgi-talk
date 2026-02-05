@@ -286,7 +286,8 @@ static rt_err_t sound_getcaps(struct rt_audio_device *audio, struct rt_audio_cap
             break;
 
         case AUDIO_MIXER_VOLUME:
-            // caps->udata.value =  es8388_volume_get();
+            caps->udata.value = es8388_volume_get();
+            snd_dev->volume = caps->udata.value;
             break;
 
         default:

@@ -921,7 +921,7 @@ void xz_ws_audio_init(void)
         LOG_I("Audio system initialized successfully");
 
         /* Create TTS sentence end timer once here to avoid race conditions
-         * Timer is one-shot and will be started on sentence_end events */
+         * Timer is one-shot and will be started on TTS start/sentence_end events */
         if (!g_app.tts_sentence_end_timer)
         {
             g_app.tts_sentence_end_timer = rt_timer_create("tts_end_timer",
@@ -1239,6 +1239,21 @@ void Message_handle(const uint8_t *data, uint16_t len)
                 xiaozhi_ui_chat_status("   说话中");
                 xz_speaker(1);
                 LOG_D("State transitioned to Speaking, microphone stopped\n");
+
+                /* Start fallback timeout in case sentence_end never arrives */
+                if (g_app.multi_turn_conversation_enabled && g_app.tts_sentence_end_timer)
+                {
+                    rt_timer_stop(g_app.tts_sentence_end_timer);
+                    rt_err_t start_ret = rt_timer_start(g_app.tts_sentence_end_timer);
+                    if (start_ret == RT_EOK)
+                    {
+                        LOG_D("Started TTS sentence end timer on TTS start (%d ms)", TTS_SENTENCE_TIMEOUT_MS);
+                    }
+                    else
+                    {
+                        LOG_W("Failed to start TTS sentence end timer on TTS start, start_ret=%d", start_ret);
+                    }
+                }
             }
             else
             {

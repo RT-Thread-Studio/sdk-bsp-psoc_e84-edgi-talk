@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    LX_ANIMATEDEMOJI_MUSIC_STOP_128_128.c
  * @brief   Header for resource file.
- * @date    2025-12-18
+ * @date    2026-02-02
  * @copyright Copyright (c) 2025 Shanghai QDay Technology Co., Ltd.
  * All rights reserved.
  *******************************************************************************
@@ -24,7 +24,6 @@
 #endif
 
 #if (LX_ENABLE_RESOURCE_COMPRESS > 0)
-__attribute__((section(".m33_m55_shared_hyperram")))
 const static LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST uint8_t data_map[] =
 {
     0x1F, 0x00, 0x01, 0x00, 0xBC, 0x1F, 0x01, 0x01, 0x00, 0x00, 0x00, 0xE4, 0x00, 0x08, 0x17, 0x00,

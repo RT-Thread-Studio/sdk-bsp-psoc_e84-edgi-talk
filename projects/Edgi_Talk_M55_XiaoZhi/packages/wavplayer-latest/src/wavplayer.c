@@ -64,6 +64,22 @@ struct wavplayer
 
 static struct wavplayer player;
 
+static void wavplayer_sync_volume_from_hw(void)
+{
+    struct rt_audio_caps caps;
+    rt_device_t dev = rt_device_find(PKG_WP_PLAY_DEVICE);
+
+    if (dev == RT_NULL)
+        return;
+
+    caps.main_type = AUDIO_TYPE_MIXER;
+    caps.sub_type  = AUDIO_MIXER_VOLUME;
+    if (rt_device_control(dev, AUDIO_CTL_GETCAPS, &caps) == RT_EOK)
+    {
+        player.volume = caps.udata.value;
+    }
+}
+
 #if (DBG_LEVEL >= DBG_LOG)
 
 static const char *state_str[] =
@@ -196,7 +212,7 @@ int wavplayer_volume_set(int volume)
     caps.sub_type  = AUDIO_MIXER_VOLUME;
     caps.udata.value = volume;
 
-    LOG_D("set volume = %d", volume);
+    LOG_I("set volume = %d", volume);
     return rt_device_control(player.device, AUDIO_CTL_CONFIGURE, &caps);
 }
 
@@ -384,6 +400,7 @@ static void wavplayer_entry(void *parameter)
         goto __exit;
 
     player.volume = WP_VOLUME_DEFAULT;
+    wavplayer_sync_volume_from_hw();
 
     while (1)
     {
