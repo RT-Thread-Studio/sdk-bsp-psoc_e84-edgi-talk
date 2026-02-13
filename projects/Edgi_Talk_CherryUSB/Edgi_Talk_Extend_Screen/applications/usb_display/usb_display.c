@@ -8,11 +8,14 @@
 #include <string.h>
 #include <rtthread.h>
 #include <rtdevice.h>
+#include <drivers/touch.h>
 
 #include "usb_display.h"
 #include "usb_config.h"
 #include "usbd_core.h"
 #include "usbd_display.h"
+#include "usbd_hid.h"
+#include "drv_touch.h"
 
 #define USB_DISPLAY_BUSID 0
 
@@ -22,6 +25,10 @@
 
 #define DISPLAY_IN_EP  0x81
 #define DISPLAY_OUT_EP 0x02
+#define HID_TOUCH_IN_EP 0x83
+
+#define HID_TOUCH_EP_MPS      8
+#define HID_TOUCH_EP_INTERVAL 1
 
 #ifdef CONFIG_USB_HS
 #define DISPLAY_EP_MPS 512
@@ -30,11 +37,11 @@
 #endif
 
 #define USBD_VID           0x303A
-#define USBD_PID           0x2987
+#define USBD_PID           0x2986
 #define USBD_MAX_POWER     100
 #define USBD_LANGID_STRING 1033
 
-#define USB_CONFIG_SIZE (9 + 9 + 7 + 7)
+#define USB_CONFIG_SIZE (9 + 9 + 7 + 7 + 9 + 9 + 7)
 
 #ifndef USB_DISPLAY_LOG_ENABLE
 #define USB_DISPLAY_LOG_ENABLE 1
@@ -50,6 +57,15 @@
 #define USB_DISPLAY_MAX_WIDTH  480U
 #define USB_DISPLAY_MAX_HEIGHT 800U
 #define USB_DISPLAY_FRAME_BYTES (USB_DISPLAY_MAX_WIDTH * USB_DISPLAY_MAX_HEIGHT * 2U)
+#define USB_TOUCH_LOGICAL_MAX_X (USB_DISPLAY_MAX_WIDTH - 1U)
+#define USB_TOUCH_LOGICAL_MAX_Y (USB_DISPLAY_MAX_HEIGHT - 1U)
+#define HID_TOUCH_REPORT_DESC_SIZE 74
+
+#define USB_TOUCH_DEV_NAME "ST7102"
+#define USB_TOUCH_POLL_MS  10
+#define USB_TOUCH_DEBOUNCE_DOWN 2
+#define USB_TOUCH_DEBOUNCE_UP   2
+#define USB_TOUCH_JITTER_PIXELS 3
 
 /*
  * Product string encodes the resolution and format for the Windows driver.
@@ -78,11 +94,74 @@ static const uint8_t device_descriptor[] = {
     USB_DEVICE_DESCRIPTOR_INIT(USB_2_0, 0x00, 0x00, 0x00, USBD_VID, USBD_PID, 0x0101, 0x01)
 };
 
+static const uint8_t hid_touch_report_desc[HID_TOUCH_REPORT_DESC_SIZE] = {
+    0x05, 0x0D, /* USAGE_PAGE (Digitizers) */
+    0x09, 0x04, /* USAGE (Touch Screen) */
+    0xA1, 0x01, /* COLLECTION (Application) */
+    0x09, 0x22, /*   USAGE (Finger) */
+    0xA1, 0x02, /*   COLLECTION (Logical) */
+    0x09, 0x42, /*     USAGE (Tip Switch) */
+    0x09, 0x32, /*     USAGE (In Range) */
+    0x15, 0x00, /*     LOGICAL_MINIMUM (0) */
+    0x25, 0x01, /*     LOGICAL_MAXIMUM (1) */
+    0x75, 0x01, /*     REPORT_SIZE (1) */
+    0x95, 0x02, /*     REPORT_COUNT (2) */
+    0x81, 0x02, /*     INPUT (Data,Var,Abs) */
+    0x75, 0x06, /*     REPORT_SIZE (6) */
+    0x95, 0x01, /*     REPORT_COUNT (1) */
+    0x81, 0x03, /*     INPUT (Cnst,Var,Abs) */
+    0x05, 0x01, /*     USAGE_PAGE (Generic Desktop) */
+    0x09, 0x30, /*     USAGE (X) */
+    0x15, 0x00, /*     LOGICAL_MINIMUM (0) */
+    0x26, WBVAL(USB_TOUCH_LOGICAL_MAX_X), /* LOGICAL_MAXIMUM (X) */
+    0x75, 0x10, /*     REPORT_SIZE (16) */
+    0x95, 0x01, /*     REPORT_COUNT (1) */
+    0x81, 0x02, /*     INPUT (Data,Var,Abs) */
+    0x09, 0x31, /*     USAGE (Y) */
+    0x15, 0x00, /*     LOGICAL_MINIMUM (0) */
+    0x26, WBVAL(USB_TOUCH_LOGICAL_MAX_Y), /* LOGICAL_MAXIMUM (Y) */
+    0x75, 0x10, /*     REPORT_SIZE (16) */
+    0x95, 0x01, /*     REPORT_COUNT (1) */
+    0x81, 0x02, /*     INPUT (Data,Var,Abs) */
+    0xC0,       /*   END_COLLECTION */
+    0x05, 0x0D, /*   USAGE_PAGE (Digitizers) */
+    0x09, 0x54, /*   USAGE (Contact Count) */
+    0x15, 0x00, /*   LOGICAL_MINIMUM (0) */
+    0x25, 0x01, /*   LOGICAL_MAXIMUM (1) */
+    0x75, 0x08, /*   REPORT_SIZE (8) */
+    0x95, 0x01, /*   REPORT_COUNT (1) */
+    0x81, 0x02, /*   INPUT (Data,Var,Abs) */
+    0xC0        /* END_COLLECTION */
+};
+
 static const uint8_t config_descriptor[] = {
-    USB_CONFIG_DESCRIPTOR_INIT(USB_CONFIG_SIZE, 0x01, 0x01, USB_CONFIG_BUS_POWERED, USBD_MAX_POWER),
+    USB_CONFIG_DESCRIPTOR_INIT(USB_CONFIG_SIZE, 0x02, 0x01, USB_CONFIG_BUS_POWERED, USBD_MAX_POWER),
     USB_INTERFACE_DESCRIPTOR_INIT(0x00, 0x00, 0x02, 0xff, 0x00, 0x00, 0x00),
     USB_ENDPOINT_DESCRIPTOR_INIT(DISPLAY_IN_EP, 0x02, DISPLAY_EP_MPS, 0x00),
     USB_ENDPOINT_DESCRIPTOR_INIT(DISPLAY_OUT_EP, 0x02, DISPLAY_EP_MPS, 0x00),
+    0x09,
+    USB_DESCRIPTOR_TYPE_INTERFACE,
+    0x01,
+    0x00,
+    0x01,
+    0x03,
+    0x00,
+    0x00,
+    0x00,
+    0x09,
+    HID_DESCRIPTOR_TYPE_HID,
+    0x11,
+    0x01,
+    0x00,
+    0x01,
+    HID_DESCRIPTOR_TYPE_HID_REPORT,
+    WBVAL(HID_TOUCH_REPORT_DESC_SIZE),
+    0x07,
+    USB_DESCRIPTOR_TYPE_ENDPOINT,
+    HID_TOUCH_IN_EP,
+    0x03,
+    WBVAL(HID_TOUCH_EP_MPS),
+    HID_TOUCH_EP_INTERVAL,
 };
 
 static const uint8_t device_quality_descriptor[] = {
@@ -147,6 +226,24 @@ static const struct usb_descriptor display_descriptor = {
     .string_descriptor_callback = string_descriptor_callback
 };
 
+/* ---------- USB touch HID ---------- */
+struct hid_touch_report {
+    uint8_t tip_inrange;
+    uint16_t x;
+    uint16_t y;
+    uint8_t contact_count;
+} __PACKED;
+
+#define HID_STATE_IDLE 0
+#define HID_STATE_BUSY 1
+
+static USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX struct hid_touch_report touch_report;
+static volatile uint8_t hid_touch_state = HID_STATE_IDLE;
+
+static rt_device_t touch_dev;
+static struct rt_touch_info touch_info;
+static rt_thread_t touch_thread;
+
 static void usbd_event_handler(uint8_t busid, uint8_t event)
 {
     switch (event)
@@ -162,6 +259,7 @@ static void usbd_event_handler(uint8_t busid, uint8_t event)
     case USBD_EVENT_SUSPEND:
         break;
     case USBD_EVENT_CONFIGURED:
+        hid_touch_state = HID_STATE_IDLE;
         break;
     case USBD_EVENT_SET_REMOTE_WAKEUP:
         break;
@@ -172,8 +270,275 @@ static void usbd_event_handler(uint8_t busid, uint8_t event)
     }
 }
 
+static void usbd_hid_touch_in_callback(uint8_t busid, uint8_t ep, uint32_t nbytes)
+{
+    (void)busid;
+    (void)ep;
+    (void)nbytes;
+    hid_touch_state = HID_STATE_IDLE;
+}
+
+static struct usbd_endpoint hid_in_ep = {
+    .ep_cb = usbd_hid_touch_in_callback,
+    .ep_addr = HID_TOUCH_IN_EP
+};
+
+static void usb_touch_get_src_max(uint16_t *src_max_x, uint16_t *src_max_y)
+{
+    uint32_t lcd_w = (lcd_info.width > 0) ? lcd_info.width : USB_DISPLAY_MAX_WIDTH;
+    uint32_t lcd_h = (lcd_info.height > 0) ? lcd_info.height : USB_DISPLAY_MAX_HEIGHT;
+    uint32_t range_x = (uint32_t)touch_info.range_x;
+    uint32_t range_y = (uint32_t)touch_info.range_y;
+    rt_bool_t use_touch_range = RT_FALSE;
+
+    if ((range_x > 0U) && (range_y > 0U))
+    {
+        if ((range_x <= (lcd_w * 2U)) && (range_x >= (lcd_w / 2U)) &&
+            (range_y <= (lcd_h * 2U)) && (range_y >= (lcd_h / 2U)))
+        {
+            use_touch_range = RT_TRUE;
+        }
+    }
+
+    if (use_touch_range)
+    {
+        *src_max_x = (range_x > 0U) ? (uint16_t)(range_x - 1U) : (uint16_t)(lcd_w - 1U);
+        *src_max_y = (range_y > 0U) ? (uint16_t)(range_y - 1U) : (uint16_t)(lcd_h - 1U);
+    }
+    else
+    {
+        *src_max_x = (lcd_w > 0U) ? (uint16_t)(lcd_w - 1U) : (uint16_t)(USB_DISPLAY_MAX_WIDTH - 1U);
+        *src_max_y = (lcd_h > 0U) ? (uint16_t)(lcd_h - 1U) : (uint16_t)(USB_DISPLAY_MAX_HEIGHT - 1U);
+    }
+}
+
+static uint16_t usb_touch_scale_coord(rt_int32_t coord, uint16_t src_max, uint16_t logical_max)
+{
+    if (coord < 0)
+    {
+        coord = 0;
+    }
+
+    if (src_max == 0U)
+    {
+        return 0;
+    }
+
+    if ((uint32_t)coord > src_max)
+    {
+        coord = (rt_int32_t)src_max;
+    }
+
+    return (uint16_t)(((uint32_t)coord * (uint32_t)logical_max) / (uint32_t)src_max);
+}
+
+static rt_err_t usb_touch_open_device(void)
+{
+    touch_dev = rt_device_find(USB_TOUCH_DEV_NAME);
+    if (touch_dev == RT_NULL)
+    {
+        if (rt_hw_ST7102_port() == RT_EOK)
+        {
+            touch_dev = rt_device_find(USB_TOUCH_DEV_NAME);
+        }
+    }
+
+    if (touch_dev == RT_NULL)
+    {
+        USB_DISPLAY_LOG("usb_touch: device %s not found\r\n", USB_TOUCH_DEV_NAME);
+        return -RT_ERROR;
+    }
+
+    if (rt_device_open(touch_dev, RT_DEVICE_FLAG_INT_RX) != RT_EOK)
+    {
+        USB_DISPLAY_LOG("usb_touch: open device failed\r\n");
+        return -RT_ERROR;
+    }
+
+    if (rt_device_control(touch_dev, RT_TOUCH_CTRL_GET_INFO, &touch_info) != RT_EOK)
+    {
+        rt_memset(&touch_info, 0, sizeof(touch_info));
+    }
+
+    return RT_EOK;
+}
+
+static void usb_touch_thread_entry(void *parameter)
+{
+    (void)parameter;
+    struct rt_touch_data touch_data[1];
+    rt_int16_t last_raw_x = 0;
+    rt_int16_t last_raw_y = 0;
+    rt_bool_t last_raw_pressed = RT_FALSE;
+    rt_int16_t filtered_x = 0;
+    rt_int16_t filtered_y = 0;
+    rt_bool_t filtered_pressed = RT_FALSE;
+    rt_uint8_t down_count = 0;
+    rt_uint8_t up_count = 0;
+    uint16_t src_max_x = 0;
+    uint16_t src_max_y = 0;
+
+    while (1)
+    {
+        if (touch_dev == RT_NULL)
+        {
+            rt_thread_mdelay(USB_TOUCH_POLL_MS);
+            continue;
+        }
+
+        if (!usb_device_is_configured(USB_DISPLAY_BUSID))
+        {
+            rt_thread_mdelay(USB_TOUCH_POLL_MS);
+            continue;
+        }
+
+        rt_memset(touch_data, 0, sizeof(touch_data));
+        rt_size_t num = rt_device_read(touch_dev, 0, touch_data, 1);
+        rt_bool_t raw_pressed = last_raw_pressed;
+        rt_int16_t raw_x = last_raw_x;
+        rt_int16_t raw_y = last_raw_y;
+
+        if (num > 0)
+        {
+            if ((touch_data[0].event == RT_TOUCH_EVENT_DOWN) || (touch_data[0].event == RT_TOUCH_EVENT_MOVE))
+            {
+                raw_pressed = RT_TRUE;
+                raw_x = touch_data[0].x_coordinate;
+                raw_y = touch_data[0].y_coordinate;
+            }
+            else if (touch_data[0].event == RT_TOUCH_EVENT_UP)
+            {
+                raw_pressed = RT_FALSE;
+                raw_x = touch_data[0].x_coordinate;
+                raw_y = touch_data[0].y_coordinate;
+            }
+        }
+        else if (last_raw_pressed)
+        {
+            raw_pressed = RT_FALSE;
+        }
+
+        if (raw_pressed)
+        {
+            if (down_count < 0xFF)
+            {
+                down_count++;
+            }
+            up_count = 0;
+        }
+        else
+        {
+            if (up_count < 0xFF)
+            {
+                up_count++;
+            }
+            down_count = 0;
+        }
+
+        if (!filtered_pressed)
+        {
+            if (raw_pressed && (down_count >= USB_TOUCH_DEBOUNCE_DOWN) && (hid_touch_state == HID_STATE_IDLE))
+            {
+                filtered_pressed = RT_TRUE;
+                filtered_x = raw_x;
+                filtered_y = raw_y;
+
+                rt_int32_t map_x = filtered_x;
+                rt_int32_t map_y = filtered_y;
+
+                usb_touch_get_src_max(&src_max_x, &src_max_y);
+
+                touch_report.tip_inrange = 0x03;
+                touch_report.x = usb_touch_scale_coord(map_x, src_max_x, USB_TOUCH_LOGICAL_MAX_X);
+                touch_report.y = usb_touch_scale_coord(map_y, src_max_y, USB_TOUCH_LOGICAL_MAX_Y);
+                touch_report.contact_count = 1;
+
+                hid_touch_state = HID_STATE_BUSY;
+                int ret = usbd_ep_start_write(USB_DISPLAY_BUSID,
+                                              HID_TOUCH_IN_EP,
+                                              (uint8_t *)&touch_report,
+                                              sizeof(touch_report));
+                if (ret < 0)
+                {
+                    hid_touch_state = HID_STATE_IDLE;
+                    filtered_pressed = RT_FALSE;
+                }
+            }
+        }
+        else
+        {
+            if (!raw_pressed && (up_count >= USB_TOUCH_DEBOUNCE_UP) && (hid_touch_state == HID_STATE_IDLE))
+            {
+                filtered_pressed = RT_FALSE;
+
+                rt_int32_t map_x = filtered_x;
+                rt_int32_t map_y = filtered_y;
+
+                usb_touch_get_src_max(&src_max_x, &src_max_y);
+
+                touch_report.tip_inrange = 0x00;
+                touch_report.x = usb_touch_scale_coord(map_x, src_max_x, USB_TOUCH_LOGICAL_MAX_X);
+                touch_report.y = usb_touch_scale_coord(map_y, src_max_y, USB_TOUCH_LOGICAL_MAX_Y);
+                touch_report.contact_count = 0;
+
+                hid_touch_state = HID_STATE_BUSY;
+                int ret = usbd_ep_start_write(USB_DISPLAY_BUSID,
+                                              HID_TOUCH_IN_EP,
+                                              (uint8_t *)&touch_report,
+                                              sizeof(touch_report));
+                if (ret < 0)
+                {
+                    hid_touch_state = HID_STATE_IDLE;
+                }
+            }
+            else if (raw_pressed && (hid_touch_state == HID_STATE_IDLE))
+            {
+                rt_int32_t dx = raw_x - filtered_x;
+                rt_int32_t dy = raw_y - filtered_y;
+                if ((dx < 0) || (dy < 0))
+                {
+                    dx = (dx < 0) ? -dx : dx;
+                    dy = (dy < 0) ? -dy : dy;
+                }
+                if ((dx >= USB_TOUCH_JITTER_PIXELS) || (dy >= USB_TOUCH_JITTER_PIXELS))
+                {
+                    filtered_x = raw_x;
+                    filtered_y = raw_y;
+
+                    rt_int32_t map_x = filtered_x;
+                    rt_int32_t map_y = filtered_y;
+
+                    usb_touch_get_src_max(&src_max_x, &src_max_y);
+
+                    touch_report.tip_inrange = 0x03;
+                    touch_report.x = usb_touch_scale_coord(map_x, src_max_x, USB_TOUCH_LOGICAL_MAX_X);
+                    touch_report.y = usb_touch_scale_coord(map_y, src_max_y, USB_TOUCH_LOGICAL_MAX_Y);
+                    touch_report.contact_count = 1;
+
+                    hid_touch_state = HID_STATE_BUSY;
+                    int ret = usbd_ep_start_write(USB_DISPLAY_BUSID,
+                                                  HID_TOUCH_IN_EP,
+                                                  (uint8_t *)&touch_report,
+                                                  sizeof(touch_report));
+                    if (ret < 0)
+                    {
+                        hid_touch_state = HID_STATE_IDLE;
+                    }
+                }
+            }
+        }
+
+        last_raw_pressed = raw_pressed;
+        last_raw_x = raw_x;
+        last_raw_y = raw_y;
+
+        rt_thread_mdelay(USB_TOUCH_POLL_MS);
+    }
+}
+
 /* ---------- Frame pool (double buffering) ---------- */
 static struct usbd_interface intf0;
+static struct usbd_interface intf1;
 static struct usbd_display_frame frame_pool[2];
 
 /*
@@ -391,15 +756,6 @@ int usb_display_init(void)
         USB_DISPLAY_LOG("usb_display: lcd not ready, will still init USB\n");
     }
 
-    /* Create display processing thread */
-    display_thread = rt_thread_create("usbdisp", usb_display_thread_entry, RT_NULL, 4096, 12, 10);
-    if (display_thread == RT_NULL)
-    {
-        USB_DISPLAY_LOG("usb_display: create thread failed\n");
-        return -RT_ERROR;
-    }
-    rt_thread_startup(display_thread);
-
     /* Init frame pool (double buffering) */
     frame_pool[0].frame_buf = usb_display_buffer[0];
     frame_pool[0].frame_bufsize = USB_DISPLAY_FRAME_BYTES;
@@ -409,7 +765,31 @@ int usb_display_init(void)
     /* Register USB display device */
     usbd_desc_register(USB_DISPLAY_BUSID, &display_descriptor);
     usbd_add_interface(USB_DISPLAY_BUSID, usbd_display_init_intf(&intf0, DISPLAY_OUT_EP, DISPLAY_IN_EP, frame_pool, 2));
+    usbd_add_interface(USB_DISPLAY_BUSID, usbd_hid_init_intf(USB_DISPLAY_BUSID, &intf1, hid_touch_report_desc, HID_TOUCH_REPORT_DESC_SIZE));
+    usbd_add_endpoint(USB_DISPLAY_BUSID, &hid_in_ep);
     usbd_initialize(USB_DISPLAY_BUSID, reg_base, usbd_event_handler);
+
+    /* Create display processing thread after mempool is ready */
+    display_thread = rt_thread_create("usbdisp", usb_display_thread_entry, RT_NULL, 4096, 12, 10);
+    if (display_thread == RT_NULL)
+    {
+        USB_DISPLAY_LOG("usb_display: create thread failed\n");
+        return -RT_ERROR;
+    }
+    rt_thread_startup(display_thread);
+
+    if (usb_touch_open_device() == RT_EOK)
+    {
+        touch_thread = rt_thread_create("usbtch", usb_touch_thread_entry, RT_NULL, 2048, 13, 10);
+        if (touch_thread == RT_NULL)
+        {
+            USB_DISPLAY_LOG("usb_touch: create thread failed\r\n");
+        }
+        else
+        {
+            rt_thread_startup(touch_thread);
+        }
+    }
 
     USB_DISPLAY_LOG("usb_display: initialized with usbd_display driver\r\n");
     return RT_EOK;

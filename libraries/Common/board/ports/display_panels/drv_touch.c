@@ -98,6 +98,11 @@ static int16_t pre_y[ST7102_MAX_TOUCH] = {-1, -1, -1, -1, -1};
 static int16_t pre_w[ST7102_MAX_TOUCH] = {-1, -1, -1, -1, -1};
 static rt_uint8_t s_tp_dowm[ST7102_MAX_TOUCH];
 static struct rt_touch_data *read_data;
+static rt_size_t s_touch_read_len = 0;
+
+#define ST7102_READ_BUF_MAX (8 * ST7102_MAX_TOUCH)
+#define ST7102_READ_LEN_FALLBACK1 32
+#define ST7102_READ_LEN_FALLBACK2 16
 
 static void ST7102_touch_up(void *buf, int8_t id)
 {
@@ -154,6 +159,7 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
     rt_pin_write(LED_RED, PIN_HIGH);
     rt_uint8_t touch_num = 0;
     rt_uint8_t cmd[2];
+    rt_size_t max_points = ST7102_MAX_TOUCH;
 
     int16_t input_x = 0;
     int16_t input_y = 0;
@@ -167,14 +173,49 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
     cmd[0] = (rt_uint8_t)((ST7102_Read_Start_Position >> 8) & 0xFF);
     cmd[1] = (rt_uint8_t)(ST7102_Read_Start_Position & 0xFF);
 
-    if (ST7102_read_regs(&ST7102_client, cmd, 2, read_buf, 8 * ST7102_MAX_TOUCH) != RT_EOK)
+    if (s_touch_read_len == 0)
     {
-        LOG_D("read point failed\n");
+        s_touch_read_len = ST7102_READ_BUF_MAX;
+    }
+
+    if (ST7102_read_regs(&ST7102_client, cmd, 2, read_buf, s_touch_read_len) != RT_EOK)
+    {
+        rt_size_t fallback_len = 0;
+
+        if (s_touch_read_len > ST7102_READ_LEN_FALLBACK1)
+        {
+            fallback_len = ST7102_READ_LEN_FALLBACK1;
+        }
+        else if (s_touch_read_len > ST7102_READ_LEN_FALLBACK2)
+        {
+            fallback_len = ST7102_READ_LEN_FALLBACK2;
+        }
+
+        if ((fallback_len > 0) && (ST7102_read_regs(&ST7102_client, cmd, 2, read_buf, fallback_len) == RT_EOK))
+        {
+            s_touch_read_len = fallback_len;
+        }
+        else
+        {
+            LOG_D("read point failed\n");
+            read_num = 0;
+            goto exit_;
+        }
+    }
+
+    if (s_touch_read_len <= 0x09)
+    {
         read_num = 0;
         goto exit_;
     }
 
-    for (count = 0; count < ST7102_MAX_TOUCH; count++)
+    max_points = ((s_touch_read_len - 0x0A) / 7) + 1;
+    if (max_points > ST7102_MAX_TOUCH)
+    {
+        max_points = ST7102_MAX_TOUCH;
+    }
+
+    for (count = 0; count < max_points; count++)
     {
         if (read_buf[0x09 + count * 7] > 0 && read_buf[0] == 0x08)
         {
@@ -201,6 +242,11 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
         {
             ST7102_touch_up(buf, count);
         }
+    }
+
+    for (; count < ST7102_MAX_TOUCH; count++)
+    {
+        ST7102_touch_up(buf, count);
     }
     rt_memcpy(Last_read_buf, read_buf, 8 * ST7102_MAX_TOUCH);
 exit_:

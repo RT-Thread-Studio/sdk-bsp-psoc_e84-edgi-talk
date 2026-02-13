@@ -8,15 +8,18 @@ src = Glob('*.c')
 
 cherryusb_root = os.path.join(RTT_ROOT, '..', 'libraries', 'components', 'CherryUSB-1.6.0')
 common_usb = os.path.join(RTT_ROOT, '..', 'libraries', 'Common', 'board', 'ports', 'usb')
+common_display_panels = os.path.join(RTT_ROOT, '..', 'libraries', 'Common', 'board', 'ports', 'display_panels')
 
 path = [
     cwd,
     cherryusb_root,
     os.path.join(cherryusb_root, 'core'),
     os.path.join(cherryusb_root, 'common'),
+    os.path.join(cherryusb_root, 'class', 'hid'),
     os.path.join(cherryusb_root, 'class', 'vendor', 'display'),
     os.path.join(cherryusb_root, 'third_party', 'cherrymp'),
     common_usb,
+    common_display_panels,
 ]
 
 group = DefineGroup('usb_display', src, depend=['RT_USING_CHERRYUSB', 'RT_CHERRYUSB_DEVICE'], CPPPATH=path)
