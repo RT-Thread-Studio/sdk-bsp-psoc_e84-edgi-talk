@@ -30,6 +30,7 @@ static const struct romfs_dirent _romfs_root_webnet[] = {
     {ROMFS_DIRENT_FILE, "power_on.wav", (rt_uint8_t *)_romfs_root_power_on_wav, sizeof(_romfs_root_power_on_wav)/sizeof(_romfs_root_power_on_wav[0])}
 };
 
+#ifdef BSP_USING_XiaoZhi
 static const struct romfs_dirent _romfs_root[] = {
     {ROMFS_DIRENT_DIR, "sdcard", RT_NULL, 0},
     {ROMFS_DIRENT_DIR, "flash", RT_NULL, 0},
@@ -39,3 +40,4 @@ static const struct romfs_dirent _romfs_root[] = {
 const struct romfs_dirent romfs_root = {
     ROMFS_DIRENT_DIR, "/", (rt_uint8_t *)_romfs_root, sizeof(_romfs_root)/sizeof(_romfs_root[0])
 };
+#endif /* BSP_USING_XiaoZhi */

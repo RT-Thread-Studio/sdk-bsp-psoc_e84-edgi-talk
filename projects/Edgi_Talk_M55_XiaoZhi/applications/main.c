@@ -39,7 +39,7 @@ extern void wifi_manager_init(void);
 int main(void)
 {
     LOG_I("Cortex-M55 started");
-
+#ifdef BSP_USING_XiaoZhi
     /* Initialize UI subsystem */
     xiaozhi_ui_init();
 
@@ -51,6 +51,6 @@ int main(void)
 
     /* Initialize WiFi manager */
     wifi_manager_init();
-
+#endif
     return 0;
 }

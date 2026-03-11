@@ -13,7 +13,9 @@
 #include <rtdevice.h>
 #include <string.h>
 #include <rtconfig.h>
+#ifdef BSP_USING_XiaoZhi
 #include "xiaozhi.h"  /* Include for xz_audio_t definition */
+#endif
 
 // Edge Impulse SDK headers
 #include "edge-impulse-sdk/classifier/ei_run_classifier.h"
@@ -45,6 +47,17 @@ static rt_event_t wakeword_event = RT_NULL;  /* Event for thread control */
 
 /* Statistics */
 static uint32_t total_inferences = 0;
+static uint32_t total_detections = 0;
+
+/*
+ * Default weak callback for standalone wakeword test.
+ * If xiaozhi.cpp is linked, its strong symbol will override this one.
+ */
+RT_WEAK void xz_wakeword_detected_callback(const char *wake_word, float confidence)
+{
+    LOG_W("[MSH TEST] Wake word detected: %s (%.2f%%)",
+          wake_word, confidence * 100.0f);
+}
 
 /* Initialize audio buffer to prevent undefined behavior */
 static void audio_buffer_init(void)
@@ -74,13 +87,13 @@ static int get_audio_signal_data(size_t offset, size_t length, float *out_ptr)
  * PDM driver configuration:
  */
 #ifdef ENABLE_STEREO_INPUT_FEED
-    #define PDM_FRAME_SAMPLES 320
-    #define PDM_MONO_FRAME_SAMPLES (PDM_FRAME_SAMPLES / 2)
-    #define PDM_IS_STEREO 1
+#define PDM_FRAME_SAMPLES 320
+#define PDM_MONO_FRAME_SAMPLES (PDM_FRAME_SAMPLES / 2)
+#define PDM_IS_STEREO 1
 #else
-    #define PDM_FRAME_SAMPLES 160
-    #define PDM_MONO_FRAME_SAMPLES PDM_FRAME_SAMPLES
-    #define PDM_IS_STEREO 0
+#define PDM_FRAME_SAMPLES 160
+#define PDM_MONO_FRAME_SAMPLES PDM_FRAME_SAMPLES
+#define PDM_IS_STEREO 0
 #endif
 #define PDM_FRAME_SIZE (PDM_FRAME_SAMPLES * sizeof(int16_t))
 
@@ -290,8 +303,13 @@ static void xz_wakeword_thread(void *parameter)
                                 LOG_W("*** WAKE WORD DETECTED: %s (%.2f%%) ***",
                                       label, confidence * 100.0f);
 
-                                /* Call the callback function in xiaozhi.cpp */
+                                total_detections++;
+#ifdef BSP_USING_XiaoZhi
                                 xz_wakeword_detected_callback(label, confidence);
+#else
+                                LOG_W("[MSH TEST] Wake word detected: %s (%.2f%%), detections=%u",
+                                      label, confidence * 100.0f, total_detections);
+#endif
                             }
                         }
                     }
@@ -499,6 +517,9 @@ void xz_wakeword_info(void)
 {
     LOG_I("=== XiaoZhi Wake Word Detection Info ===");
     LOG_I("Status: %s", wakeword_enabled ? "Enabled" : "Disabled");
+    LOG_I("Initialized: %s", wakeword_initialized ? "Yes" : "No");
+    LOG_I("Total inferences: %u", total_inferences);
+    LOG_I("Total detections: %u", total_detections);
     LOG_I("Model: %s", EI_CLASSIFIER_PROJECT_NAME);
     LOG_I("Project ID: %d", EI_CLASSIFIER_PROJECT_ID);
     LOG_I("Owner: %s", EI_CLASSIFIER_PROJECT_OWNER);
@@ -527,6 +548,17 @@ int xz_wakeword_deinit(void)
     return 0;
 }
 
+int xz_wakeword_start(void)
+{
+    LOG_E("Audio not enabled (RT_USING_AUDIO not defined)");
+    return -1;
+}
+
+int xz_wakeword_stop(void)
+{
+    return 0;
+}
+
 rt_bool_t xz_wakeword_is_enabled(void)
 {
     return RT_FALSE;
@@ -541,8 +573,47 @@ void xz_wakeword_info(void)
 
 /* RT-Thread MSH commands for testing */
 #ifdef RT_USING_FINSH
-    #include <finsh.h>
-    MSH_CMD_EXPORT(xz_wakeword_init, Enable XiaoZhi wake word detection);
-    MSH_CMD_EXPORT(xz_wakeword_deinit, Disable XiaoZhi wake word detection);
-    MSH_CMD_EXPORT(xz_wakeword_info, Show XiaoZhi wake word detection info);
+#include <finsh.h>
+
+static int xz_wakeword_test(int argc, char **argv)
+{
+    if (argc < 2)
+    {
+        rt_kprintf("Usage: xz_wakeword_test <init|start|stop|deinit|info|status>\n");
+        return -1;
+    }
+
+    if (!strcmp(argv[1], "init"))
+    {
+        return xz_wakeword_init();
+    }
+    else if (!strcmp(argv[1], "start"))
+    {
+        return xz_wakeword_start();
+    }
+    else if (!strcmp(argv[1], "stop"))
+    {
+        return xz_wakeword_stop();
+    }
+    else if (!strcmp(argv[1], "deinit"))
+    {
+        return xz_wakeword_deinit();
+    }
+    else if (!strcmp(argv[1], "info") || !strcmp(argv[1], "status"))
+    {
+        xz_wakeword_info();
+        return 0;
+    }
+
+    rt_kprintf("Unknown sub-command: %s\n", argv[1]);
+    rt_kprintf("Usage: xz_wakeword_test <init|start|stop|deinit|info|status>\n");
+    return -1;
+}
+
+MSH_CMD_EXPORT(xz_wakeword_init, Wakeword init);
+MSH_CMD_EXPORT(xz_wakeword_start, Wakeword start);
+MSH_CMD_EXPORT(xz_wakeword_stop, Wakeword stop);
+MSH_CMD_EXPORT(xz_wakeword_deinit, Wakeword deinit);
+MSH_CMD_EXPORT(xz_wakeword_info, Wakeword info);
+MSH_CMD_EXPORT(xz_wakeword_test, Wakeword one - command test entry);
 #endif
