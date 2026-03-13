@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <cJSON.h>
+#include <cy_syslib.h>
 #include "wifi_manager.h"
 #include "xiaozhi_ui.h"
 
@@ -42,6 +43,10 @@ extern int ws_xiaozhi_init(void);
 static char s_result_buffer[RESULT_BUF_SIZE];
 static rt_bool_t s_sta_connected = RT_FALSE;
 
+/* AP display and runtime config */
+static char s_ap_ssid[33] = WIFI_AP_SSID;
+static char s_ap_info_text[128] = "SSID: " WIFI_AP_SSID " 密码: " WIFI_AP_PASSWORD " IP:192.168.169.1";
+
 /* Temporary storage for current WiFi credentials */
 static char s_saved_ssid[64] = {0};
 static char s_saved_password[64] = {0};
@@ -50,6 +55,17 @@ static char s_saved_password[64] = {0};
 static struct rt_wlan_info s_scan_result[MAX_SCAN_RESULTS];
 static int s_scan_cnt = 0;
 static struct rt_wlan_info *s_scan_filter = RT_NULL;
+
+static void wifi_ap_build_runtime_config(void)
+{
+    uint64_t uid = Cy_SysLib_GetUniqueId();
+    rt_snprintf(s_ap_ssid, sizeof(s_ap_ssid), "%s-%06X", WIFI_AP_SSID, (rt_uint32_t)(uid & 0xFFFFFFU));
+    rt_snprintf(s_ap_info_text,
+                sizeof(s_ap_info_text),
+                "SSID: %s 密码: %s IP:192.168.169.1",
+                s_ap_ssid,
+                WIFI_AP_PASSWORD);
+}
 
 /*****************************************************************************
  * Private Functions - Configuration
@@ -377,6 +393,8 @@ static void start_ap_config_mode(void)
 {
     rt_err_t ret;
 
+    wifi_ap_build_runtime_config();
+
     /* Wait for WLAN device ready */
     LOG_I("Waiting for WLAN device ready...");
     for (int i = 0; i < 20; i++)  /* Wait up to 10 seconds */
@@ -396,13 +414,13 @@ static void start_ap_config_mode(void)
     }
 
     /* Start AP */
-    ret = rt_wlan_start_ap("RT-Thread-AP", "123456789");
+    ret = rt_wlan_start_ap(s_ap_ssid, WIFI_AP_PASSWORD);
     if (ret != RT_EOK)
     {
         LOG_E("Start AP failed: %d", ret);
         return;
     }
-    LOG_I("AP Started -> SSID: RT-Thread-AP Password: 123456789");
+    LOG_I("AP Started -> SSID: %s Password: %s", s_ap_ssid, WIFI_AP_PASSWORD);
 
     /* Wait for AP network interface ready */
     rt_thread_mdelay(1000);
@@ -413,6 +431,8 @@ static void start_ap_config_mode(void)
 
     webnet_cgi_register("wifi_connect", cgi_wifi_connect);
     webnet_cgi_register("wifi_scan", cgi_wifi_scan);
+
+    xiaozhi_ui_show_ap_config(s_ap_info_text);
 
     LOG_I("=== WiFi Config Portal Ready ===");
     LOG_I("Open browser -> http://192.168.169.1");
@@ -556,9 +576,6 @@ void wifi_manager_init(void)
 
     /* Connection failed or no config, start AP config mode */
     LOG_I("Starting AP config mode...");
-
-    /* Show AP config info on UI */
-    xiaozhi_ui_show_ap_config();
 
     start_ap_config_mode();
 }

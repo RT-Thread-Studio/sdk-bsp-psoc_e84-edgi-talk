@@ -21,6 +21,8 @@
 #define DBG_LVL    DBG_INFO
 #include <rtdbg.h>
 
+#define AP_INFO_DEFAULT_TEXT "SSID: RT-Thread-AP 密码: 123456789 IP:192.168.169.1"
+
 #define EMOJI_NUM           18
 #define UI_MSG_DATA_SIZE    128
 #define UI_MSG_POOL_SIZE    10
@@ -449,7 +451,7 @@ static void ui_process_message(const ui_msg_t *msg)
     case UI_CMD_SHOW_AP_INFO:
         if (s_label_status) lv_label_set_text(s_label_status, "连接中...");
         if (s_label_info) lv_label_set_text(s_label_info, "使用手机或电脑连接热点");
-        if (s_label_output) lv_label_set_text(s_label_output, "SSID: RT-Thread-AP 密码: 123456789 IP:192.168.169.1");
+        if (s_label_output) lv_label_set_text(s_label_output, msg->data[0] ? msg->data : AP_INFO_DEFAULT_TEXT);
         break;
 
     case UI_CMD_SHOW_CONNECTING:
@@ -654,9 +656,9 @@ void xiaozhi_ui_clear_info(void)
     ui_send_message(UI_CMD_CLEAR_INFO, RT_NULL, RT_NULL);
 }
 
-void xiaozhi_ui_show_ap_config(void)
+void xiaozhi_ui_show_ap_config(const char *ap_info)
 {
-    ui_send_message(UI_CMD_SHOW_AP_INFO, RT_NULL, RT_NULL);
+    ui_send_message(UI_CMD_SHOW_AP_INFO, ap_info, AP_INFO_DEFAULT_TEXT);
 }
 
 void xiaozhi_ui_show_connecting(void)

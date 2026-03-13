@@ -73,8 +73,9 @@ void xiaozhi_ui_clear_info(void);
 
 /**
  * @brief Show AP config mode info on screen
+ * @param ap_info AP info text, e.g. "SSID: xxx 密码: xxx IP:192.168.169.1"
  */
-void xiaozhi_ui_show_ap_config(void);
+void xiaozhi_ui_show_ap_config(const char *ap_info);
 
 /**
  * @brief Show connecting status (for auto-connect from saved config)
