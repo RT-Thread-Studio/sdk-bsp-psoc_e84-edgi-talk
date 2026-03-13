@@ -29,8 +29,10 @@ static cy_stc_smif_context_t smif_context;
 #define SMIF_BASE_ADDRESS      0x60000000
 #define FLASH_START_ADDRESS    0x60E00000
 #define FLASH_SIZE             (2 * 1024 * 1024) /* 2MB */
-#define FLASH_SECTOR_SIZE      4096 /* 4KB sectors */
+#define FLASH_SECTOR_SIZE      0x10000 /* 64KB sectors */
 #define FLASH_END_ADDRESS      (FLASH_START_ADDRESS + FLASH_SIZE)
+
+static struct rt_mutex smif_lock;
 
 static int init(void);
 static int read(long offset, uint8_t *buf, size_t size);
@@ -50,8 +52,23 @@ struct fal_flash_dev nor_flash0 =
 
 static int init(void)
 {
+    rt_size_t erase_size = FLASH_SECTOR_SIZE;
+
+    if (smifMemConfigs[MEM_SLOT_NUM] && smifMemConfigs[MEM_SLOT_NUM]->deviceCfg)
+    {
+        erase_size = smifMemConfigs[MEM_SLOT_NUM]->deviceCfg->eraseSize;
+    }
+
+    if (erase_size == 0)
+    {
+        erase_size = FLASH_SECTOR_SIZE;
+    }
+
+    nor_flash0.blk_size = erase_size;
+    rt_mutex_init(&smif_lock, "smif", RT_IPC_FLAG_PRIO);
+
     /* SMIF already initialized by cybsp_init() */
-    LOG_D("FAL flash initialized successfully");
+    LOG_I("FAL flash initialized, erase size=%u", (unsigned int)nor_flash0.blk_size);
     return 0;
 }
 
@@ -65,7 +82,9 @@ static int read(long offset, uint8_t *buf, size_t size)
 
     LOG_D("FAL read: offset %#lx, size %d", offset, size);
     cy_en_smif_status_t result;
+    rt_mutex_take(&smif_lock, RT_WAITING_FOREVER);
     result = Cy_SMIF_MemRead(SMIF0_CORE, smifMemConfigs[MEM_SLOT_NUM], offset + (FLASH_START_ADDRESS - SMIF_BASE_ADDRESS), buf, size, &smif_context);
+    rt_mutex_release(&smif_lock);
     if (result != CY_SMIF_SUCCESS)
     {
         LOG_E("Cy_SMIF_MemRead failed: %d", result);
@@ -91,7 +110,9 @@ static int write(long offset, const uint8_t *buf, size_t size)
 
     LOG_D("FAL write: offset %#lx, size %d", offset, size);
     cy_en_smif_status_t result;
+    rt_mutex_take(&smif_lock, RT_WAITING_FOREVER);
     result = Cy_SMIF_MemWrite(SMIF0_CORE, smifMemConfigs[MEM_SLOT_NUM], offset + (FLASH_START_ADDRESS - SMIF_BASE_ADDRESS), buf, size, &smif_context);
+    rt_mutex_release(&smif_lock);
     if (result != CY_SMIF_SUCCESS)
     {
         LOG_E("Cy_SMIF_MemWrite failed: %d", result);
@@ -103,6 +124,12 @@ static int write(long offset, const uint8_t *buf, size_t size)
 
 static int erase(long offset, size_t size)
 {
+    if ((offset % (long)nor_flash0.blk_size) != 0 || (size % nor_flash0.blk_size) != 0)
+    {
+        LOG_E("erase unaligned! offset=%ld, size=%u, blk=%u", offset, (unsigned int)size, (unsigned int)nor_flash0.blk_size);
+        return -RT_EINVAL;
+    }
+
     if (offset + size > FLASH_SIZE)
     {
         LOG_E("erase out of range! offset=%ld, size=%d", offset, size);
@@ -111,8 +138,9 @@ static int erase(long offset, size_t size)
 
     LOG_D("FAL erase: offset %#lx, size %d", offset, size);
     cy_en_smif_status_t result;
-    // Erase the specified size (assuming it's sector aligned)
+    rt_mutex_take(&smif_lock, RT_WAITING_FOREVER);
     result = Cy_SMIF_MemEraseSector(SMIF0_CORE, smifMemConfigs[MEM_SLOT_NUM], offset + (FLASH_START_ADDRESS - SMIF_BASE_ADDRESS), size, &smif_context);
+    rt_mutex_release(&smif_lock);
     if (result != CY_SMIF_SUCCESS)
     {
         LOG_E("Cy_SMIF_MemEraseSector failed: %d", result);
