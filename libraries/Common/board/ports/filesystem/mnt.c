@@ -123,12 +123,16 @@ static void _fal_mount(void)
     {
         LOG_I("Block device created for filesystem");
 
+        rt_thread_mdelay(200);
+
         /* Try to mount filesystem */
         if (dfs_mount("filesystem", "/flash", "lfs", 0, 0) != 0)
         {
-            LOG_W("Mount filesystem failed, try to mkfs");
+            LOG_E("Mount filesystem failed, try to mkfs");
 
             /* Format filesystem */
+            rt_thread_mdelay(200);
+
             if (dfs_mkfs("lfs", "filesystem") != 0)
             {
                 LOG_E("mkfs failed");
