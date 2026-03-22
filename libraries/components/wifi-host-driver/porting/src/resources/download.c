@@ -46,10 +46,12 @@
 
 static size_t download_file_total_size, download_file_cur_size;
 static const struct fal_partition *download_part = RT_NULL;
+static const struct fal_flash_dev *download_flash = RT_NULL;
 
 static enum rym_code ymodem_on_begin (struct rym_ctx *ctx, rt_uint8_t *buf, rt_size_t len)
 {
     char *file_name, *file_size;
+    size_t erase_size;
 
     /* calculate and store file size */
     file_name = (char *)&buf[0];
@@ -65,8 +67,17 @@ static enum rym_code ymodem_on_begin (struct rym_ctx *ctx, rt_uint8_t *buf, rt_s
         return RYM_CODE_CAN;
     }
 
+    erase_size = sizeof(resource_hnd_t) + download_file_total_size;
+    erase_size = ((erase_size + download_flash->blk_size - 1) / download_flash->blk_size) * download_flash->blk_size;
+
+    if (erase_size > download_part->len)
+    {
+        rt_kprintf("\nAligned erase size is too large! erase size (%d), '%s' partition size (%d)", erase_size, download_part->name, download_part->len);
+        return RYM_CODE_CAN;
+    }
+
     /* erase file section */
-    if (fal_partition_erase(download_part, 0, sizeof(resource_hnd_t) + download_file_total_size) < 0)
+    if (fal_partition_erase(download_part, 0, erase_size) < 0)
     {
         rt_kprintf("\nFile download failed! Partition (%s) erase error!", download_part->name);
         return RYM_CODE_CAN;
@@ -142,6 +153,12 @@ static void whd_res_download (int argc, char **argv)
     if ((download_part = fal_partition_find(argv[1])) == NULL)
     {
         rt_kprintf("Download failed! Partition (%s) find error!\n", argv[1]);
+        return ;
+    }
+
+    if ((download_flash = fal_flash_device_find(download_part->flash_name)) == RT_NULL)
+    {
+        rt_kprintf("Download failed! Flash device (%s) find error!\n", download_part->flash_name);
         return ;
     }
 
