@@ -59,6 +59,13 @@ Windows 间接显示驱动程序 (IDD) 模型提供简单的用户模式驱动�
 
 * 该驱动通过 VENDOR 接口与设备进行通信，支持多种分辨率和图片格式，通过接口字符描述符来控制，具体参考：https://github.com/chuanjinpang/win10_idd_xfz1986_usb_graphic_driver_display/blob/main/README.md
 * 驱动仅支持 Windows 10 及 Windows 11 系统，其他系统请自行测试。
+* 如果发现触摸报点有误，触摸后却在操控其他的屏幕，可以按照如下步骤进行调整：
+
+ <img src="figures/set1.png" style="zoom:60%;" />
+
+ ![](figures/set2.png)
+
+ ![](figures/set3.png)
 
 ## 启动流程
 

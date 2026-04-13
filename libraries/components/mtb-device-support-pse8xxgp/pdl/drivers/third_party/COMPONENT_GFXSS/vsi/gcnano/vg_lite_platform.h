@@ -69,6 +69,17 @@ extern "C" {
 #ifndef _BAREMETAL
 #define _BAREMETAL 1
 #endif
+
+#if !_BAREMETAL && defined(__has_include)
+#if __has_include("FreeRTOS.h")
+#define VG_LITE_USE_FREERTOS 1
+#endif
+#endif
+
+#ifndef VG_LITE_USE_FREERTOS
+#define VG_LITE_USE_FREERTOS 0
+#endif
+
 #define VG_SYSTEM_RESERVE_COUNT 1
 
 /* Implementation of list. ****************************************/

@@ -27,7 +27,13 @@ if rtconfig.PLATFORM in ['gcc']:
 elif rtconfig.PLATFORM in ['armclang']:
     src += ['drivers/source/TOOLCHAIN_ARM/cy_syslib_ext.S']
 
-path = [cwd + '/drivers/include', cwd + 'drivers/third_party/ethernet/include']
+path = [cwd + '/drivers/include', cwd + '/drivers/third_party/ethernet/include']
+
+gfxss_src = []
+gfxss_path = [
+    cwd + '/drivers/third_party/COMPONENT_GFXSS',
+    cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000',
+    cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/gcnano']
 
 if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
     src += ['drivers/source/cy_syspm_ppu.c']
@@ -68,38 +74,32 @@ if GetDepend(['RT_USING_SPI']):
 if GetDepend(['RT_USING_CAN']):
     src += ['drivers/source/cy_canfd.c']
 
-if GetDepend('BSP_USING_LCD'):
-    src += Split('''
-            drivers/source/cy_mipidsi.c
-            drivers/third_party/COMPONENT_GFXSS/cy_graphics.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_setting.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_tools.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_util.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_os.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_interface.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_core.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_shell.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_database.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_lcd.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/dc_layer_feature.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_platform.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_hardware.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_stroke.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_path.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_matrix.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_image.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_dump.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_os.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_kernel.c
-            drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_hal.c
-            
-            ''')
-            
-path += [cwd + '/drivers/include']
-path += [cwd + '/drivers/third_party/COMPONENT_GFXSS']
-path += [cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000']
-path += [cwd + '/drivers/third_party/COMPONENT_GFXSS/vsi/gcnano']
+if GetDepend('BSP_USING_LCD') or GetDepend('RT_CHERRYUSB_DEVICE_DISPLAY'):
+    src += ['drivers/source/cy_mipidsi.c']
+    gfxss_src = Split('''
+        drivers/third_party/COMPONENT_GFXSS/cy_graphics.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_setting.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_tools.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_util.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_os.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_interface.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_core.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_shell.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_database.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_lcd.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/dc_layer_feature.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_platform.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/dcnano8000/viv_dc_hardware.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_stroke.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_path.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_matrix.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_image.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_dump.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_os.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_kernel.c
+        drivers/third_party/COMPONENT_GFXSS/vsi/gcnano/vg_lite_hal.c
+        ''')
 
 if GetDepend('BSP_USING_RTC'):
     src += ['drivers/source/cy_rtc.c']
@@ -125,6 +125,11 @@ if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
     path += [cwd + '/devices/include']
     path += [cwd + '/devices/include/ip']
 
+path += gfxss_path
+
 group = DefineGroup('Libraries', src, depend=[''], CPPPATH=path)
+
+if gfxss_src:
+    group += DefineGroup('Libraries', gfxss_src, depend=[''], CPPPATH=path)
 Return('group')
 

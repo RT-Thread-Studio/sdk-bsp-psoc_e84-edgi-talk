@@ -57,7 +57,7 @@
 #include "vg_lite_hal.h"
 #include "vg_lite_hw.h"
 
-#if !_BAREMETAL
+#if VG_LITE_USE_FREERTOS
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "task.h"
@@ -67,7 +67,7 @@
 
 #include <stdarg.h>
 
-#if !_BAREMETAL
+#if VG_LITE_USE_FREERTOS
 static void sleep(uint32_t msec)
 {
     vTaskDelay((configTICK_RATE_HZ * msec + 999)/ 1000);
@@ -182,12 +182,10 @@ struct vg_lite_device {
     struct memory_heap heap[VG_SYSTEM_RESERVE_COUNT];
     int irq_enabled;
     volatile uint32_t int_flags;
-#if _BAREMETAL
-    /* wait_queue_head_t int_queue; */
-//    xSemaphoreHandle int_queue;
+#if VG_LITE_USE_FREERTOS
+    SemaphoreHandle_t int_queue;
 #else
     /* wait_queue_head_t int_queue; */
-    SemaphoreHandle_t int_queue;
 #endif
     void *device;
     int registered;
@@ -217,14 +215,13 @@ vg_lite_error_t vg_lite_hal_allocate(uint32_t size, void **memory)
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
 
-#if _BAREMETAL
-    /* Alloc is not supported in BAREMETAL / DDRLESS. */
-    *memory = malloc(size);
-#else
+#if VG_LITE_USE_FREERTOS
     /* TODO: Allocate some memory. No more kernel mode in RTOS. */
     *memory = pvPortMalloc(size);
     if (NULL == *memory)
         error = VG_LITE_OUT_OF_MEMORY;
+#else
+    *memory = malloc(size);
 #endif
 
     return error;
@@ -234,11 +231,11 @@ vg_lite_error_t vg_lite_hal_free(void *memory)
 {
     vg_lite_error_t error = VG_LITE_SUCCESS;
     
-#if _BAREMETAL
-    free(memory);
-#else
+#if VG_LITE_USE_FREERTOS
     /* TODO: Free some memory. No more kernel mode in RTOS. */
     vPortFree(memory);
+#else
+    free(memory);
 #endif
 
     return error;
@@ -270,7 +267,7 @@ void vg_lite_hal_initialize(void)
 void vg_lite_hal_deinitialize(void)
 {
     /* TODO: Remove clock. */
-#if !_BAREMETAL
+#if VG_LITE_USE_FREERTOS
     vSemaphoreDelete(device->int_queue);
 #endif
     /* TODO: Remove power. */
@@ -545,7 +542,7 @@ void __attribute__((weak)) vg_lite_bus_error_handler()
 
 void vg_lite_IRQHandler(void)
 {
-#if !_BAREMETAL
+#if VG_LITE_USE_FREERTOS
     uint32_t flags = vg_lite_hal_peek(VG_LITE_INTR_STATUS);
     portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
 
@@ -576,7 +573,7 @@ void vg_lite_IRQHandler(void)
 
 int32_t vg_lite_hal_wait_interrupt(uint32_t timeout, uint32_t mask, uint32_t *value)
 {
-#if _BAREMETAL
+#if !VG_LITE_USE_FREERTOS
     uint32_t int_status=0;
     int_status = vg_lite_hal_peek(VG_LITE_INTR_STATUS);
     (void)value;
@@ -730,7 +727,7 @@ static int vg_lite_init(void)
         add_list(&node->list, &device->heap[i].list);
     }
 
-#if !_BAREMETAL /*for rt500*/
+#if VG_LITE_USE_FREERTOS
     device->int_queue = xSemaphoreCreateBinary();
     device->int_flags = 0;
 #endif

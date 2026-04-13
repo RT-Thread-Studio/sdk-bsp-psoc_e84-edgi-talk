@@ -62,6 +62,8 @@ categories:
       - "Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_H"
       - "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_D"
       - "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_H"
+      - "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC"
+      - "Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft"
   faq:
     name: "常见问题"
     name_en: "FAQ"

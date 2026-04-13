@@ -1,0 +1,11 @@
+import os
+from building import *
+
+cwd = GetCurrentDir()
+parent = os.path.dirname(cwd)
+src = Glob('*.c')
+CPPPATH = [cwd, parent]
+
+group = DefineGroup('DeepcraftApps', src, depend=[''], CPPPATH=CPPPATH)
+
+Return('group')

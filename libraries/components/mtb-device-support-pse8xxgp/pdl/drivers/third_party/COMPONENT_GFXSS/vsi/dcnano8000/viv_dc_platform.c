@@ -30,7 +30,7 @@
 #include "viv_dc_core.h"
 #include "viv_dc_interface.h"
 #include "viv_dc_hardware.h"
-#if !_BAREMETAL
+#if VIV_DC_USE_FREERTOS
 #include "FreeRTOS.h"
 #else
 #include <stdlib.h>
@@ -103,7 +103,7 @@ vivSTATUS dev_init()
     if(dcInitialized)
         return vivSTATUS_OK;
 
-#if !_BAREMETAL
+#if VIV_DC_USE_FREERTOS
     dcOs = (viv_dc_os*)pvPortMalloc(sizeof(viv_dc_os));
     dcHardware = (viv_dc_hardware*)pvPortMalloc(sizeof(viv_dc_hardware));
     dcCore = (viv_dc_core*)pvPortMalloc(sizeof(viv_dc_core));
@@ -159,7 +159,7 @@ vivSTATUS dev_deinit()
 
     viv_conf_interrupt_enable(dcCore, SET_DISABLE);
     unregister_dc_irq_handler(dcIRQLine);
-#if !_BAREMETAL
+#if VIV_DC_USE_FREERTOS
     vPortFree((void*)dcOs);
     vPortFree((void*)dcHardware);
     vPortFree((void*)dcCore);

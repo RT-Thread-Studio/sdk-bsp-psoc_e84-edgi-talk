@@ -41,6 +41,10 @@
 #define LCD_BUF_SIZE        (LCD_STRIDE * LCD_HEIGHT * LCD_BITS_PER_PIXEL / 8)
 #define LCD_PIXEL_FORMAT    RTGRAPHIC_PIXEL_FORMAT_RGB565
 #define LCD_DEVICE(dev)     (struct drv_lcd_device*)(dev)
+#define LCD_BL_PWM_DEV_NAME      "pwm18"
+#define LCD_BL_PWM_CHANNEL       0
+#define LCD_BL_PWM_PERIOD_NS     200000
+#define LCD_BL_DEFAULT_BRIGHTNESS 80
 #define GPU_TESSELLATION_BUFFER_SIZE        ((LCD_WIDTH) * 128U)
 #define APP_BUFFER_COUNT                    (2U)
 #define DEFAULT_GPU_CMD_BUFFER_SIZE         ((64U) * (512))
@@ -73,6 +77,34 @@ struct drv_lcd_device
     rt_uint8_t *front_buf;
     rt_uint8_t *back_buf;
 };
+#ifdef RT_USING_PWM
+static struct rt_device_pwm *g_lcd_bl_pwm = RT_NULL;
+static rt_err_t lcd_backlight_set(rt_uint8_t percent)
+{
+    rt_uint32_t pulse;
+
+    if (percent > 100U)
+    {
+        percent = 100U;
+    }
+
+    if (g_lcd_bl_pwm == RT_NULL)
+    {
+        g_lcd_bl_pwm = (struct rt_device_pwm *)rt_device_find(LCD_BL_PWM_DEV_NAME);
+        if (g_lcd_bl_pwm == RT_NULL)
+        {
+            LOG_W("Cannot find %s device", LCD_BL_PWM_DEV_NAME);
+            return -RT_ENOSYS;
+        }
+
+        rt_pwm_enable(g_lcd_bl_pwm, LCD_BL_PWM_CHANNEL);
+    }
+
+    pulse = (LCD_BL_PWM_PERIOD_NS * percent) / 100U;
+    rt_pwm_set(g_lcd_bl_pwm, LCD_BL_PWM_CHANNEL, LCD_BL_PWM_PERIOD_NS, pulse);
+    return RT_EOK;
+}
+#endif
 
 static rt_err_t drv_lcd_init(struct rt_device *device)
 {
@@ -333,6 +365,9 @@ int drv_lcd_hw_init(void)
         result = -RT_ERROR;
         goto __exit;
     }
+#ifdef RT_USING_PWM
+    lcd_backlight_set(LCD_BL_DEFAULT_BRIGHTNESS);
+#endif
 __exit:
     if (result != RT_EOK)
     {

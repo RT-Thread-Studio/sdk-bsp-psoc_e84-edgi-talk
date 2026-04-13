@@ -26,8 +26,14 @@
 *****************************************************************************/
 #include "vg_lite_platform.h"
 
-#if !_BAREMETAL
+#if VG_LITE_USE_FREERTOS
 #include "FreeRTOS.h"
+#include <stdlib.h>
+#else
+#include <stdlib.h>
+#endif
+
+#if VG_LITE_USE_FREERTOS
 
 void* vg_lite_os_malloc(uint32_t size)
 {

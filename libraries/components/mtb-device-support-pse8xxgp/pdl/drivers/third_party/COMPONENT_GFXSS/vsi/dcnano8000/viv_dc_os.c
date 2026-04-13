@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include "viv_dc_type.h"
 #include "viv_dc_os.h"
-#if _BAREMETAL
+#if _BAREMETAL || !VIV_DC_USE_FREERTOS
 #include "cy_syslib.h"
 #endif
 
@@ -208,7 +208,7 @@ gctPOINTER viv_os_mem_alloc(
     }
     else
     {
-#if !_BAREMETAL
+    #if VIV_DC_USE_FREERTOS
         return (gctPOINTER)pvPortMalloc(size);
 #else
         return (gctPOINTER)malloc(size);
@@ -226,10 +226,10 @@ gctVOID viv_os_mem_free(
     }
     else
     {
-#if _BAREMETAL
-        free((void*)addr);
-#else
+    #if VIV_DC_USE_FREERTOS
         vPortFree((void*)addr);
+    #else
+        free((void*)addr);
 #endif
     }
 }
@@ -418,7 +418,7 @@ vivSTATUS viv_os_alloc_memory(
         return vivSTATUS_INVALID_ARGUMENTS;
     }
 
-#if !_BAREMETAL
+#if VIV_DC_USE_FREERTOS
     mem = (gctPOINTER)pvPortMalloc(bytes);
 #else
     mem = (gctPOINTER)malloc(bytes);
@@ -450,7 +450,7 @@ vivSTATUS viv_os_free_memory(
         return vivSTATUS_INVALID_ARGUMENTS;
     }
 
-#if !_BAREMETAL
+#if VIV_DC_USE_FREERTOS
     vPortFree((void*)memory);
 #else
     free((void*)memory);
@@ -477,7 +477,7 @@ vivSTATUS viv_os_alloc_buffer(
         return vivSTATUS_INVALID_ARGUMENTS;
     }
 
-#if !_BAREMETAL
+#if VIV_DC_USE_FREERTOS
     pointer = (gctPOINTER)pvPortMalloc(Size);
 #else
     pointer = (gctPOINTER)malloc(Size);
@@ -506,7 +506,7 @@ vivSTATUS viv_os_free_buffer(
         viv_os_print("%s invalid arguments.\n", __FUNCTION__);
         return vivSTATUS_INVALID_ARGUMENTS;
     }
-#if !_BAREMETAL
+#if VIV_DC_USE_FREERTOS
     vPortFree((void*)Handle);
 #else
     free((void*)Handle);

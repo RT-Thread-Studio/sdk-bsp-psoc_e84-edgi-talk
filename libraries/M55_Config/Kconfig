@@ -22,6 +22,7 @@ menu "Onboard Peripheral Drivers"
         bool "Enable Audio Device"
         select RT_USING_AUDIO
         select BSP_USING_I2C
+        select BSP_USING_HW_I2C0
         default n
 
         if BSP_USING_AUDIO
@@ -219,8 +220,12 @@ menu "On-chip Peripheral Drivers"
         select RT_USING_LCD
         select RT_USING_TOUCH
         select RT_TOUCH_PIN_IRQ
-        select BSP_USING_I2C1
+        select BSP_USING_I2C
+        select RT_USING_I2C_BITOPS
         select BSP_USING_SOFT_I2C1
+        select BSP_USING_PWM
+        select BSP_USING_PWM18
+        select BSP_USING_HYPERAM
         default n
         if BSP_USING_LCD
             config COMPONENT_MTB_DISPLAY_tl043wvv02

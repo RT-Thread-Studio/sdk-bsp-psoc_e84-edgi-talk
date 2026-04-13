@@ -6,10 +6,10 @@ cwd  = GetCurrentDir()
 path = [cwd]
 src  = []
 
-if GetDepend(['COMPONENT_MTB_DISPLAY_tl043wvv02']):
+if GetDepend(['COMPONENT_MTB_DISPLAY_tl043wvv02']) or GetDepend(['RT_CHERRYUSB_DEVICE_DISPLAY']):
     src += Glob('display_tl043wvv02.c')
     src += Glob('drv_touch.c')
 
-group = DefineGroup('tl043wvv02-code', src, depend = ['COMPONENT_MTB_DISPLAY_tl043wvv02'], CPPPATH = path)
+group = DefineGroup('tl043wvv02-code', src, depend = [''], CPPPATH = path)
 
 Return('group')

@@ -1,14 +1,17 @@
 /*
  * USB Display application - adapted from CherryUSB demo/display/usbdisplay_template.c
  *
- * Uses the usbd_display class driver with mempool-based double buffering.
+ * Uses the usbd_display class driver with mempool-based buffering.
  * Receives frames from the Windows xfz1986_usb_graphic driver and renders
- * them to the on-board LCD via RT-Thread graphic device.
+ * them to the on-board LCD via Cy_GFXSS interfaces.
  */
 #include <string.h>
 #include <rtthread.h>
 #include <rtdevice.h>
+#include <board.h>
 #include <drivers/touch.h>
+#include "cy_graphics.h"
+#include <display_tl043wvv02.h>
 
 #include "usb_display.h"
 #include "usb_config.h"
@@ -56,7 +59,10 @@
 /* ---------- Display parameters ---------- */
 #define USB_DISPLAY_MAX_WIDTH  480U
 #define USB_DISPLAY_MAX_HEIGHT 800U
-#define USB_DISPLAY_FRAME_BYTES (USB_DISPLAY_MAX_WIDTH * USB_DISPLAY_MAX_HEIGHT * 2U)
+#define USB_DISPLAY_RX_FRAME_BYTES  (USB_DISPLAY_MAX_WIDTH * USB_DISPLAY_MAX_HEIGHT * 2U)
+#define USB_DISPLAY_LCD_STRIDE 512U
+#define USB_DISPLAY_FB_STRIDE_BYTES (USB_DISPLAY_LCD_STRIDE * 2U)
+#define USB_DISPLAY_GPU_FRAME_BYTES (USB_DISPLAY_LCD_STRIDE * USB_DISPLAY_MAX_HEIGHT * 2U)
 #define USB_TOUCH_LOGICAL_MAX_X (USB_DISPLAY_MAX_WIDTH - 1U)
 #define USB_TOUCH_LOGICAL_MAX_Y (USB_DISPLAY_MAX_HEIGHT - 1U)
 #define HID_TOUCH_REPORT_DESC_SIZE 74
@@ -74,20 +80,44 @@
  */
 #define USB_DISPLAY_PRODUCT_STRING "cherryusb_R480x800_Ergb16_Fps30_Bl128"
 
+#define DISPLAY_RESET_PORT GPIO_PRT20
+#define DISPLAY_RESET_PIN  (7U)
+
+#define USB_DISPLAY_BL_PWM_DEV_NAME      "pwm18"
+#define USB_DISPLAY_BL_PWM_CHANNEL       0
+#define USB_DISPLAY_BL_PWM_PERIOD_NS     200000
+#define USB_DISPLAY_BL_DEFAULT_BRIGHTNESS 80
+
 /* ---------- LCD related ---------- */
 static uint8_t *framebuffer;
-static uint32_t framebuffer_size;
-static struct rt_device *lcd_dev;
-static struct rt_device_graphic_info lcd_info;
 static rt_thread_t display_thread;
-/** Framebuffer stride in bytes (pitch). */
 static uint32_t fb_stride_bytes;
 static uint16_t usb_frame_width;
 static uint16_t usb_frame_height;
 
+static GFXSS_Type *gfxbase = (GFXSS_Type *)GFXSS;
+static cy_stc_gfx_context_t usb_display_gfx_context;
+static uint8_t *gpu_present_buffer;
+static uint8_t *gpu_draw_buffer;
+
+static cy_stc_sysint_t usb_display_dc_irq_cfg = {
+    .intrSrc = GFXSS_DC_IRQ,
+    .intrPriority = 3U,
+};
+
+#ifdef RT_USING_PWM
+static struct rt_device_pwm *usb_display_bl_pwm;
+#endif
+
+static rt_bool_t usb_display_hw_inited;
+
 static uint32_t gui_frame_count;
 static uint32_t gui_frame_count_last;
 static rt_tick_t gui_fps_last_tick;
+
+static rt_bool_t pending_frame_valid;
+static uint16_t pending_frame_id;
+static rt_tick_t pending_last_tick;
 
 /* ---------- USB descriptor ---------- */
 static const uint8_t device_descriptor[] = {
@@ -244,6 +274,90 @@ static rt_device_t touch_dev;
 static struct rt_touch_info touch_info;
 static rt_thread_t touch_thread;
 
+static void usb_display_dc_irq_handler(void)
+{
+    rt_interrupt_enter();
+    Cy_GFXSS_Clear_DC_Interrupt(gfxbase, &usb_display_gfx_context);
+    rt_interrupt_leave();
+}
+
+#ifdef RT_USING_PWM
+static rt_err_t usb_display_backlight_set(rt_uint8_t percent)
+{
+    rt_uint32_t pulse;
+
+    if (percent > 100U)
+    {
+        percent = 100U;
+    }
+
+    if (usb_display_bl_pwm == RT_NULL)
+    {
+        usb_display_bl_pwm = (struct rt_device_pwm *)rt_device_find(USB_DISPLAY_BL_PWM_DEV_NAME);
+        if (usb_display_bl_pwm == RT_NULL)
+        {
+            USB_DISPLAY_LOG("usb_display: cannot find %s\r\n", USB_DISPLAY_BL_PWM_DEV_NAME);
+            return -RT_ENOSYS;
+        }
+
+        rt_pwm_enable(usb_display_bl_pwm, USB_DISPLAY_BL_PWM_CHANNEL);
+    }
+
+    pulse = (USB_DISPLAY_BL_PWM_PERIOD_NS * percent) / 100U;
+    rt_pwm_set(usb_display_bl_pwm,
+               USB_DISPLAY_BL_PWM_CHANNEL,
+               USB_DISPLAY_BL_PWM_PERIOD_NS,
+               pulse);
+    return RT_EOK;
+}
+#endif
+
+static rt_err_t usb_display_hw_init(void)
+{
+    cy_en_gfx_status_t gfx_status;
+    cy_en_sysint_status_t int_status;
+    cy_en_mipidsi_status_t mipi_status;
+    mtb_display_tl043wvv02_pin_config_t panel_pin_cfg = {
+        .reset_port = DISPLAY_RESET_PORT,
+        .reset_pin = DISPLAY_RESET_PIN,
+    };
+
+    if (usb_display_hw_inited)
+    {
+        return RT_EOK;
+    }
+
+    gfx_status = Cy_GFXSS_Init(gfxbase, &GFXSS_config, &usb_display_gfx_context);
+    if (gfx_status != CY_GFX_SUCCESS)
+    {
+        USB_DISPLAY_LOG("usb_display: Cy_GFXSS_Init failed: %u\r\n", (unsigned int)gfx_status);
+        return -RT_ERROR;
+    }
+
+    int_status = Cy_SysInt_Init(&usb_display_dc_irq_cfg, usb_display_dc_irq_handler);
+    if (int_status != CY_SYSINT_SUCCESS)
+    {
+        USB_DISPLAY_LOG("usb_display: register DC IRQ failed: %u\r\n", (unsigned int)int_status);
+        return -RT_ERROR;
+    }
+
+    NVIC_EnableIRQ(GFXSS_DC_IRQ);
+
+    mipi_status = mtb_display_tl043wvv02_init(GFXSS_GFXSS_MIPIDSI, &panel_pin_cfg);
+    if (mipi_status != CY_MIPIDSI_SUCCESS)
+    {
+        USB_DISPLAY_LOG("usb_display: panel init failed: %u\r\n", (unsigned int)mipi_status);
+        return -RT_ERROR;
+    }
+
+#ifdef RT_USING_PWM
+    usb_display_backlight_set(USB_DISPLAY_BL_DEFAULT_BRIGHTNESS);
+#endif
+
+    usb_display_hw_inited = RT_TRUE;
+    return RT_EOK;
+}
+
 static void usbd_event_handler(uint8_t busid, uint8_t event)
 {
     switch (event)
@@ -285,8 +399,8 @@ static struct usbd_endpoint hid_in_ep = {
 
 static void usb_touch_get_src_max(uint16_t *src_max_x, uint16_t *src_max_y)
 {
-    uint32_t lcd_w = (lcd_info.width > 0) ? lcd_info.width : USB_DISPLAY_MAX_WIDTH;
-    uint32_t lcd_h = (lcd_info.height > 0) ? lcd_info.height : USB_DISPLAY_MAX_HEIGHT;
+    uint32_t lcd_w = (usb_frame_width > 0) ? usb_frame_width : USB_DISPLAY_MAX_WIDTH;
+    uint32_t lcd_h = (usb_frame_height > 0) ? usb_frame_height : USB_DISPLAY_MAX_HEIGHT;
     uint32_t range_x = (uint32_t)touch_info.range_x;
     uint32_t range_y = (uint32_t)touch_info.range_y;
     rt_bool_t use_touch_range = RT_FALSE;
@@ -539,15 +653,13 @@ static void usb_touch_thread_entry(void *parameter)
 /* ---------- Frame pool (double buffering) ---------- */
 static struct usbd_interface intf0;
 static struct usbd_interface intf1;
-static struct usbd_display_frame frame_pool[2];
+static struct usbd_display_frame frame_pool[1];
 
-/*
- * Frame buffers placed in GPU memory region for DMA/no-cache access.
- * Each buffer is USB_DISPLAY_FRAME_BYTES and must be a multiple of 16384.
- * Using gfx_mem (3MB) instead of cy_socmem_data to avoid m55_data_secondary overflow.
- */
-CY_SECTION(".cy_usb_display_buf") USB_MEM_ALIGNX
-static uint8_t usb_display_buffer[2][USB_DISPLAY_FRAME_BYTES];
+CY_SECTION(".cy_gpu_buf") USB_MEM_ALIGNX
+static uint8_t usb_display_rx_buffer[1][USB_DISPLAY_RX_FRAME_BYTES];
+
+CY_SECTION(".cy_gpu_buf") USB_MEM_ALIGNX
+static uint8_t usb_display_gpu_buffers[2][USB_DISPLAY_GPU_FRAME_BYTES];
 
 /* ---------- Frame rendering helpers ---------- */
 
@@ -615,13 +727,13 @@ static void usb_display_render_frame(struct usbd_display_frame *frame)
         src_y = 0U;
     }
 
-    if ((src_x >= lcd_info.width) || (src_y >= lcd_info.height))
+    if ((src_x >= usb_frame_width) || (src_y >= usb_frame_height))
     {
         return;
     }
 
-    uint32_t max_w = lcd_info.width - src_x;
-    uint32_t max_h = lcd_info.height - src_y;
+    uint32_t max_w = usb_frame_width - src_x;
+    uint32_t max_h = usb_frame_height - src_y;
     uint32_t copy_w = usb_display_min_u32(src_w, max_w);
     uint32_t copy_h = usb_display_min_u32(src_h, max_h);
 
@@ -646,44 +758,83 @@ static void usb_display_render_frame(struct usbd_display_frame *frame)
     }
 }
 
+static void usb_display_swap_buffers(void)
+{
+    uint8_t *tmp = gpu_draw_buffer;
+    gpu_draw_buffer = gpu_present_buffer;
+    gpu_present_buffer = tmp;
+    framebuffer = gpu_draw_buffer;
+}
+
+static void usb_display_present_draw_buffer(void)
+{
+    cy_en_gfx_status_t status;
+
+    if (!pending_frame_valid || (gpu_draw_buffer == RT_NULL))
+    {
+        return;
+    }
+
+    status = Cy_GFXSS_Set_FrameBuffer(gfxbase, (uint32_t *)gpu_draw_buffer, &usb_display_gfx_context);
+    if (status != CY_GFX_SUCCESS)
+    {
+        USB_DISPLAY_LOG("usb_display: Cy_GFXSS_Set_FrameBuffer failed: %u\r\n", status);
+        return;
+    }
+
+    usb_display_swap_buffers();
+    /* Keep draw buffer coherent for partial updates of the next frame. */
+    memcpy(gpu_draw_buffer, gpu_present_buffer, USB_DISPLAY_GPU_FRAME_BYTES);
+    pending_frame_valid = RT_FALSE;
+}
+
 /* ---------- Display thread ---------- */
 static void usb_display_thread_entry(void *parameter)
 {
     (void)parameter;
     struct usbd_display_frame *frame;
+    const struct usbd_disp_frame_header *header;
     int ret;
+    rt_tick_t wait_ticks = RT_TICK_PER_SECOND / 20;
+
+    if (wait_ticks == 0)
+    {
+        wait_ticks = 1;
+    }
 
     while (1)
     {
-        ret = usbd_display_dequeue(&frame, 0xffffffff);
+        ret = usbd_display_dequeue(&frame, wait_ticks);
         if (ret < 0)
         {
+            if (pending_frame_valid)
+            {
+                rt_tick_t now = rt_tick_get();
+                if ((now - pending_last_tick) >= wait_ticks)
+                {
+                    usb_display_present_draw_buffer();
+                }
+            }
             continue;
         }
 
         // USB_DISPLAY_LOG("frame type: %u, frame size %u\r\n", frame->frame_format, frame->frame_size);
 
+        header = (const struct usbd_disp_frame_header *)frame->frame_buf;
+        if (pending_frame_valid && (header->frame_id != pending_frame_id))
+        {
+            usb_display_present_draw_buffer();
+        }
+
+        if (!pending_frame_valid)
+        {
+            pending_frame_valid = RT_TRUE;
+            pending_frame_id = header->frame_id;
+        }
+        pending_last_tick = rt_tick_get();
+
         /* Render to LCD framebuffer */
         usb_display_render_frame(frame);
-
-        /* Notify LCD to refresh */
-        if (lcd_dev != RT_NULL)
-        {
-            const struct usbd_disp_frame_header *header = (const struct usbd_disp_frame_header *)frame->frame_buf;
-            struct rt_device_rect_info rect;
-            rect.x = header->x;
-            rect.y = header->y;
-            rect.width = header->width;
-            rect.height = header->height;
-            if ((rect.width == 0U) || (rect.height == 0U))
-            {
-                rect.x = 0U;
-                rect.y = 0U;
-                rect.width = usb_frame_width;
-                rect.height = usb_frame_height;
-            }
-            lcd_dev->control(lcd_dev, RTGRAPHIC_CTRL_RECT_UPDATE, &rect);
-        }
 
         /* FPS tracking */
         gui_frame_count++;
@@ -719,52 +870,49 @@ static void usb_display_thread_entry(void *parameter)
 int usb_display_init(void)
 {
     uintptr_t reg_base = (uintptr_t)USBHS_BASE;
+    cy_en_gfx_status_t status;
 
-    /* Init LCD */
-    lcd_dev = rt_device_find("lcd");
-    if (lcd_dev != RT_NULL)
+    pending_frame_valid = RT_FALSE;
+    pending_frame_id = 0U;
+    pending_last_tick = 0U;
+
+    usb_frame_width = USB_DISPLAY_MAX_WIDTH;
+    usb_frame_height = USB_DISPLAY_MAX_HEIGHT;
+    fb_stride_bytes = USB_DISPLAY_FB_STRIDE_BYTES;
+
+    gpu_present_buffer = usb_display_gpu_buffers[0];
+    gpu_draw_buffer = usb_display_gpu_buffers[1];
+    framebuffer = gpu_draw_buffer;
+
+    rt_memset(gpu_present_buffer, 0x00, USB_DISPLAY_GPU_FRAME_BYTES);
+    rt_memset(gpu_draw_buffer, 0x00, USB_DISPLAY_GPU_FRAME_BYTES);
+
+    if (usb_display_hw_init() != RT_EOK)
     {
-        rt_device_open(lcd_dev, RT_DEVICE_OFLAG_RDWR);
-        if (lcd_dev->control(lcd_dev, RTGRAPHIC_CTRL_GET_INFO, &lcd_info) == RT_EOK)
-        {
-            framebuffer = (uint8_t *)lcd_info.framebuffer;
-            usb_frame_width = USB_DISPLAY_MAX_WIDTH;
-            usb_frame_height = USB_DISPLAY_MAX_HEIGHT;
-            if (lcd_info.pitch > 0)
-            {
-                fb_stride_bytes = lcd_info.pitch;
-            }
-            else
-            {
-                fb_stride_bytes = (lcd_info.width * (lcd_info.bits_per_pixel / 8));
-            }
-            framebuffer_size = fb_stride_bytes * lcd_info.height;
-            rt_kprintf("usb_display: lcd %ux%u bpp=%u stride=%u fb=%p size=%u, usb %ux%u\r\n",
-                       lcd_info.width,
-                       lcd_info.height,
-                       lcd_info.bits_per_pixel,
-                       fb_stride_bytes,
-                       framebuffer,
-                       framebuffer_size,
-                       usb_frame_width,
-                       usb_frame_height);
-        }
+        USB_DISPLAY_LOG("usb_display: display hw init failed\r\n");
+        return -RT_ERROR;
     }
 
-    if (framebuffer == RT_NULL)
+    status = Cy_GFXSS_Set_FrameBuffer(gfxbase, (uint32_t *)gpu_present_buffer, &usb_display_gfx_context);
+    if (status != CY_GFX_SUCCESS)
     {
-        USB_DISPLAY_LOG("usb_display: lcd not ready, will still init USB\n");
+        USB_DISPLAY_LOG("usb_display: Cy_GFXSS_Set_FrameBuffer init failed: %u\r\n", status);
     }
+
+    USB_DISPLAY_LOG("usb_display: Cy_GFXSS mode, src %ux%u, stride=%u, present=%p draw=%p\r\n",
+                    usb_frame_width,
+                    usb_frame_height,
+                    fb_stride_bytes,
+                    gpu_present_buffer,
+                    gpu_draw_buffer);
 
     /* Init frame pool (double buffering) */
-    frame_pool[0].frame_buf = usb_display_buffer[0];
-    frame_pool[0].frame_bufsize = USB_DISPLAY_FRAME_BYTES;
-    frame_pool[1].frame_buf = usb_display_buffer[1];
-    frame_pool[1].frame_bufsize = USB_DISPLAY_FRAME_BYTES;
+    frame_pool[0].frame_buf = usb_display_rx_buffer[0];
+    frame_pool[0].frame_bufsize = USB_DISPLAY_RX_FRAME_BYTES;
 
     /* Register USB display device */
     usbd_desc_register(USB_DISPLAY_BUSID, &display_descriptor);
-    usbd_add_interface(USB_DISPLAY_BUSID, usbd_display_init_intf(&intf0, DISPLAY_OUT_EP, DISPLAY_IN_EP, frame_pool, 2));
+    usbd_add_interface(USB_DISPLAY_BUSID, usbd_display_init_intf(&intf0, DISPLAY_OUT_EP, DISPLAY_IN_EP, frame_pool, 1));
     usbd_add_interface(USB_DISPLAY_BUSID, usbd_hid_init_intf(USB_DISPLAY_BUSID, &intf1, hid_touch_report_desc, HID_TOUCH_REPORT_DESC_SIZE));
     usbd_add_endpoint(USB_DISPLAY_BUSID, &hid_in_ep);
     usbd_initialize(USB_DISPLAY_BUSID, reg_base, usbd_event_handler);

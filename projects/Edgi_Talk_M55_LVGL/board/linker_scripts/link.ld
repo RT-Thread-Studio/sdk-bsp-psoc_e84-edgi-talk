@@ -56,6 +56,8 @@ MEMORY
     m55_code_INTERNAL : ORIGIN = 0x00000000, LENGTH = 0x00040000
     m55_nvm : ORIGIN = 0x60580000, LENGTH = 0x00800000
     m55_trailer : ORIGIN = 0x60D80000, LENGTH = 0x00040000
+    m55_hyperram : ORIGIN = 0x64200000, LENGTH = 0x00200000
+    m33_m55_shared_hyperram : ORIGIN = 0x64400000, LENGTH = 0x00C00000
     m55_code_secondary : ORIGIN = 0x26000000, LENGTH = 0x00060000
     m55_data_secondary : ORIGIN = 0x26060000, LENGTH = 0x00160000
     m33_m55_shared : ORIGIN = 0x261C0000, LENGTH = 0x00040000
@@ -72,6 +74,8 @@ REGION_ALIAS("m55_data_secondary_sel", m55_data_secondary)
 REGION_ALIAS("m33_m55_shared_sel", m33_m55_shared)
 REGION_ALIAS("gfx_mem_sel", gfx_mem)
 REGION_ALIAS("m55_allocatable_shared_sel", m55_allocatable_shared)
+REGION_ALIAS("m55_hyperram_sel", m55_hyperram)
+REGION_ALIAS("m33_m55_shared_hyperram_sel", m33_m55_shared_hyperram)
 
 
 /* Linker script to place sections and symbol values. Should be used together
@@ -456,5 +460,10 @@ SECTIONS
     .cy_trailer(NOLOAD) :
     {
     } > m55_trailer_sel
+
+    .m33_m55_shared_hyperram(NOLOAD):
+    {
+        KEEP(*(.m33_m55_shared_hyperram))
+    } > m33_m55_shared_hyperram_sel
 
 }

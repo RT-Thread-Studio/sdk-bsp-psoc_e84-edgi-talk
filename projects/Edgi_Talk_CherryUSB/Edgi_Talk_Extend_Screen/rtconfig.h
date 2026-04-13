@@ -91,6 +91,7 @@
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
+#define RT_USING_PWM
 #define RT_USING_AUDIO
 #define RT_AUDIO_REPLAY_MP_BLOCK_SIZE 4096
 #define RT_AUDIO_REPLAY_MP_BLOCK_COUNT 2
@@ -222,6 +223,8 @@
 /* Micrium: Micrium software products porting for RT-Thread */
 
 /* end of Micrium: Micrium software products porting for RT-Thread */
+#define CONFIG_USBDEV_REQUEST_BUFFER_LEN 512
+#define CONFIG_USBDEV_MSC_MAX_BUFSIZE 512
 /* end of system packages */
 
 /* peripheral libraries and drivers */
@@ -239,6 +242,38 @@
 /* Kendryte SDK */
 
 /* end of Kendryte SDK */
+
+/* WCH HAL & SDK Drivers */
+
+/* end of WCH HAL & SDK Drivers */
+
+/* AT32 HAL & SDK Drivers */
+
+/* end of AT32 HAL & SDK Drivers */
+
+/* HC32 DDL Drivers */
+
+/* end of HC32 DDL Drivers */
+
+/* NXP HAL & SDK Drivers */
+
+/* end of NXP HAL & SDK Drivers */
+
+/* NUVOTON Drivers */
+
+/* end of NUVOTON Drivers */
+
+/* GD32 Drivers */
+
+/* end of GD32 Drivers */
+
+/* HPMicro SDK */
+
+/* end of HPMicro SDK */
+
+/* FT32 HAL & SDK Drivers */
+
+/* end of FT32 HAL & SDK Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -325,8 +360,6 @@
 #define RT_CHERRYUSB_DEVICE_CDC_ACM
 #define RT_CHERRYUSB_DEVICE_HID
 #define RT_CHERRYUSB_DEVICE_DISPLAY
-#define CONFIG_USBDEV_REQUEST_BUFFER_LEN 512
-#define CONFIG_USBDEV_MSC_MAX_BUFSIZE 512
 #define RT_CHERRYUSB_DEVICE_TEMPLATE_NONE
 
 /* Hardware Drivers Config */
@@ -348,8 +381,10 @@
 #define BSP_SOFT_I2C1_SDA_PIN 106
 #define BSP_USING_UART
 #define BSP_USING_UART2
-#define BSP_USING_LCD
-#define COMPONENT_MTB_DISPLAY_tl043wvv02
+#define BSP_USING_HYPERAM
+#define BSP_USING_HYPERAM_SIZE 0x800000
+#define BSP_USING_PWM
+#define BSP_USING_PWM18
 /* end of On-chip Peripheral Drivers */
 
 /* Board extended module Drivers */

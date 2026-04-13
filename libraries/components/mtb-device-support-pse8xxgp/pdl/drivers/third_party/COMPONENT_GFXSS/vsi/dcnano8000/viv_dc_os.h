@@ -29,9 +29,16 @@
 #define _VIV_DC_OS_H_
 
 #include "viv_dc_type.h"
-#if !_BAREMETAL
+#if !_BAREMETAL && defined(__has_include)
+#if __has_include("FreeRTOS.h")
 #include "FreeRTOS.h"
 #include "task.h"
+#define VIV_DC_USE_FREERTOS 1
+#endif
+#endif
+
+#ifndef VIV_DC_USE_FREERTOS
+#define VIV_DC_USE_FREERTOS 0
 #endif
 typedef struct _viv_dc_os {
     gctUINT irq;

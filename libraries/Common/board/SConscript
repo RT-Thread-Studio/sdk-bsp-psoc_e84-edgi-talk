@@ -9,6 +9,7 @@ cwd = GetCurrentDir()
 # add common drivers
 src = []
 path =  [cwd]
+CPPDEFINES = []
 
 if GetDepend(['BSP_USING_FLASH']):
     src += Glob('ports/fal/fal_flash_port.c')
@@ -28,19 +29,17 @@ if GetDepend(['BSP_USING_AUDIO_PLAY']):
 if GetDepend(['BSP_USING_FILESYSTEM']):
     src += Glob('ports/filesystem/*.c')
 
-if GetDepend('PKG_USING_CHERRYUSB') or GetDepend('RT_USING_CHERRYUSB'):
+if GetDepend(['PKG_USING_CHERRYUSB']) or GetDepend(['RT_USING_CHERRYUSB']):
     path += [cwd + '/ports/usb']
 
 if GetDepend(['BSP_USING_LCD']):
-    src  += ['ports/display_panels/display_tl043wvv02.c']
-    src  += ['ports/display_panels/drv_touch.c']
     path += [cwd + '/ports/display_panels']
 
 if GetDepend(['BSP_USING_LVGL']):
     src  += Glob('ports/lvgl/*.c')
     path += [cwd + '/ports/lvgl']
 
-group = DefineGroup('Common', src, depend = [''], CPPPATH = path)
+group = DefineGroup('Common', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)
 
 list = os.listdir(cwd)
 for item in list:

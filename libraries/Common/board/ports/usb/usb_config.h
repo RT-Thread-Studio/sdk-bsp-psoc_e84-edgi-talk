@@ -157,7 +157,7 @@
 #define CONFIG_USBHOST_MAX_EXTHUBS          1
 #define CONFIG_USBHOST_MAX_EHPORTS          4
 #define CONFIG_USBHOST_MAX_INTERFACES       8
-#define CONFIG_USBHOST_MAX_INTF_ALTSETTINGS 2
+#define CONFIG_USBHOST_MAX_INTF_ALTSETTINGS 12
 #define CONFIG_USBHOST_MAX_ENDPOINTS        4
 
 #define CONFIG_USBHOST_MAX_CDC_ACM_CLASS 4
@@ -169,7 +169,7 @@
 #define CONFIG_USBHOST_DEV_NAMELEN 16
 
 #ifndef CONFIG_USBHOST_PSC_PRIO
-#define CONFIG_USBHOST_PSC_PRIO 0
+#define CONFIG_USBHOST_PSC_PRIO 5
 #endif
 #ifndef CONFIG_USBHOST_PSC_STACKSIZE
 #define CONFIG_USBHOST_PSC_STACKSIZE 2048
@@ -256,7 +256,12 @@
 #define CONFIG_USBDEV_MAX_BUS 1
 #endif
 
-// #define CONFIG_USBDEV_SOF_ENABLE
+#ifndef CONFIG_USBDEV_EP_NUM
+#define CONFIG_USBDEV_EP_NUM 6
+#endif
+
+/* When your chip hardware supports high-speed and wants to initialize it in high-speed mode, the relevant IP will configure the internal or external high-speed PHY according to CONFIG_USB_HS. */
+// #define CONFIG_USB_HS
 
 /* ---------------- FSDEV Configuration ---------------- */
 //#define CONFIG_USBDEV_FSDEV_PMA_ACCESS 2 // maybe 1 or 2, many chips may have a difference
@@ -277,13 +282,17 @@
 #define CONFIG_USBHOST_MAX_BUS 1
 #endif
 
+#ifndef CONFIG_USBHOST_PIPE_NUM
+#define CONFIG_USBHOST_PIPE_NUM 16
+#endif
+
 /* ---------------- EHCI Configuration ---------------- */
 
 #define CONFIG_USB_EHCI_HCCR_OFFSET     (0x0)
 #define CONFIG_USB_EHCI_FRAME_LIST_SIZE 1024
-#define CONFIG_USB_EHCI_QH_NUM          10
-#define CONFIG_USB_EHCI_QTD_NUM         (CONFIG_USB_EHCI_QH_NUM * 3)
-#define CONFIG_USB_EHCI_ITD_NUM         4
+#define CONFIG_USB_EHCI_QH_NUM          CONFIG_USBHOST_PIPE_NUM
+#define CONFIG_USB_EHCI_QTD_NUM         3
+#define CONFIG_USB_EHCI_ITD_NUM         20
 // #define CONFIG_USB_EHCI_HCOR_RESERVED_DISABLE
 // #define CONFIG_USB_EHCI_CONFIGFLAG
 // #define CONFIG_USB_EHCI_ISO
@@ -320,5 +329,7 @@
 #ifndef usb_ramaddr2phyaddr
 #define usb_ramaddr2phyaddr(addr) (addr)
 #endif
+
+#define ATTR_FAST_RAM_SECTION
 
 #endif

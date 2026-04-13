@@ -160,4 +160,32 @@ void usb_dcache_flush(uintptr_t addr, size_t size)
 {
     SCB_CleanInvalidateDCache_by_Addr((void *)addr, size);
 }
+#else
+#ifdef usb_dcache_clean
+#undef usb_dcache_clean
+#endif
+#ifdef usb_dcache_invalidate
+#undef usb_dcache_invalidate
+#endif
+#ifdef usb_dcache_flush
+#undef usb_dcache_flush
+#endif
+
+void usb_dcache_clean(uintptr_t addr, size_t size)
+{
+    (void)addr;
+    (void)size;
+}
+
+void usb_dcache_invalidate(uintptr_t addr, size_t size)
+{
+    (void)addr;
+    (void)size;
+}
+
+void usb_dcache_flush(uintptr_t addr, size_t size)
+{
+    (void)addr;
+    (void)size;
+}
 #endif

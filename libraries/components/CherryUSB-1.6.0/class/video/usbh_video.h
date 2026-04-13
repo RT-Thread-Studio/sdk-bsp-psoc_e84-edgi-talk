@@ -18,7 +18,7 @@ struct usbh_video_resolution {
 };
 
 struct usbh_video_format {
-    struct usbh_video_resolution frame[12];
+    struct usbh_video_resolution frame[20];
     uint8_t format_type;
     uint8_t num_of_frames;
 };
@@ -42,6 +42,7 @@ struct usbh_video {
     struct usbh_hubport *hport;
     struct usb_endpoint_descriptor *isoin;  /* ISO IN endpoint */
     struct usb_endpoint_descriptor *bulkin;  /* Bulk IN endpoint */
+    struct usb_endpoint_descriptor isoin_ep_desc;
 
     uint8_t ctrl_intf; /* interface number */
     uint8_t data_intf; /* interface number */
