@@ -127,6 +127,17 @@ if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
 
 path += gfxss_path
 
+if GetDepend(['BSP_USING_DEEPCRAFT_AI']):
+    src += Split('''
+        drivers/third_party/COMPONENT_U55/src/ethosu_driver.c
+        drivers/third_party/COMPONENT_U55/src/ethosu_device_u55_u65.c
+        drivers/third_party/COMPONENT_U55/src/ethosu_pmu.c
+        ''')
+    path += [
+        cwd + '/drivers/third_party/COMPONENT_U55/include',
+        cwd + '/drivers/third_party/COMPONENT_U55/src',
+    ]
+
 group = DefineGroup('Libraries', src, depend=[''], CPPPATH=path)
 
 if gfxss_src:

@@ -64,7 +64,18 @@ menu "Onboard Peripheral Drivers"
             bool "Enable FREERTOS ABSTRACTION"
             default n
             select PKG_USING_FREERTOS_WRAPPER
+
+            config RT_CHERRYUSB_HOST_BUILD_FROM_SOURCE
+            bool "Build CherryUSB DWC2/UVC from source (disable prebuilt .a)"
+            default n
         endif
+
+    config BSP_USING_DEEPCRAFT_AI
+        bool "Enable DEEPCRAFT AI (UVC extension)"
+        default n
+        select RT_USING_CPLUSPLUS
+        select RT_USING_SEMAPHORE
+        select RT_USING_MUTEX
 
     config BSP_USING_LSM6DS3
         bool "Enable LSM6DS3"

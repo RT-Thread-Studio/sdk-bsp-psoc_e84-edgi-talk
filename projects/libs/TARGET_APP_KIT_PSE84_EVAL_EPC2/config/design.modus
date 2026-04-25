@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration app="BACKEND" formatVersion="15" lastSavedWith="Configurator Backend" lastSavedWithVersion="3.70.0" toolsPackage="ModusToolbox 3.7.0" xmlns="http://cypress.com/xsd/cydesignfile_v7">
+<Configuration app="BACKEND" formatVersion="15" lastSavedWith="Configurator Backend" lastSavedWithVersion="3.60.0" toolsPackage="ModusToolbox 3.6.0" xmlns="http://cypress.com/xsd/cydesignfile_v6">
     <Devices>
         <Device mpn="PSE846GPS2DBZC4A">
             <BlockConfig>
@@ -2333,12 +2333,12 @@
                         <Param id="display_height" value="768"/>
                         <Param id="display_type" value="GFX_DISP_TYPE_DSI_DPI"/>
                         <Param id="display_width" value="512"/>
-                        <Param id="format" value="vivD24"/>
+                        <Param id="format" value="vivD16CFG2"/>
                         <Param id="fps" value="60"/>
                         <Param id="gpu_enabled" value="true"/>
-                        <Param id="hbp" value="20"/>
-                        <Param id="hfp" value="20"/>
-                        <Param id="hsync_width" value="10"/>
+                        <Param id="hbp" value="40"/>
+                        <Param id="hfp" value="36"/>
+                        <Param id="hsync_width" value="2"/>
                         <Param id="layer0_enabled" value="true"/>
                         <Param id="layer0_format" value="vivRGB565"/>
                         <Param id="layer0_height" value="768"/>
@@ -2365,13 +2365,13 @@
                         <Param id="layer2_zorder" value="0"/>
                         <Param id="lp_mode_cmd_transfer" value="true"/>
                         <Param id="lp_mode_video_transfer" value="true"/>
-                        <Param id="max_per_lane_Mbps" value="500"/>
+                        <Param id="max_per_lane_Mbps" value="1000"/>
                         <Param id="mode_flags" value="VID_MODE_TYPE_NON_BURST_SYNC_PULSES"/>
                         <Param id="no_of_dsi_lines" value="2"/>
                         <Param id="use_max_per_lane_Mbps" value="true"/>
-                        <Param id="vbp" value="5"/>
-                        <Param id="vfp" value="4"/>
-                        <Param id="vsync_width" value="30"/>
+                        <Param id="vbp" value="10"/>
+                        <Param id="vfp" value="180"/>
+                        <Param id="vsync_width" value="2"/>
                     </Parameters>
                 </Personality>
                 <Personality template="mxi3c" version="1.0" instance="ckbUNHh80qA">
@@ -4102,10 +4102,6 @@
                         <Param id="privileged1" value="false"/>
                         <Param id="privileged2" value="false"/>
                         <Param id="privileged3" value="false"/>
-                        <Param id="shareable0" value="false"/>
-                        <Param id="shareable1" value="false"/>
-                        <Param id="shareable2" value="false"/>
-                        <Param id="shareable3" value="false"/>
                         <Param id="size0" value="0x00C00000"/>
                         <Param id="size1" value="0x00003000"/>
                         <Param id="size2" value="0x00040000"/>
@@ -4440,12 +4436,7 @@
                         <Param id="is_receiver_3_used" value="true"/>
                         <Param id="is_receiver_4_used" value="false"/>
                         <Param id="is_receiver_5_used" value="false"/>
-                        <Param id="routeCtl_0_1_int1" value="0"/>
-                        <Param id="routeCtl_0_1_int2" value="1"/>
-                        <Param id="routeCtl_2_3_int1" value="0"/>
-                        <Param id="routeCtl_2_3_int2" value="4"/>
-                        <Param id="routeCtl_4_5_int1" value="0"/>
-                        <Param id="routeCtl_4_5_int2" value="16"/>
+                        <Param id="routeCtl" value="4"/>
                         <Param id="rxDmaTrigger" value="false"/>
                         <Param id="rxFifoTriggerLevel_0" value="10"/>
                         <Param id="rxFifoTriggerLevel_1" value="10"/>
@@ -4641,9 +4632,11 @@
                     <Block location="peri[0].mmio[0]" locked="true"/>
                     <Parameters>
                         <Param id="divider2" value="2"/>
+                        <Param id="dividerEnabled0" value="false"/>
                         <Param id="dividerEnabled1" value="false"/>
                         <Param id="dividerEnabled2" value="true"/>
                         <Param id="dividerEnabled3" value="false"/>
+                        <Param id="dividerEnabled4" value="false"/>
                         <Param id="dividerEnabled5" value="false"/>
                     </Parameters>
                 </Personality>
@@ -4698,8 +4691,11 @@
                     <Parameters>
                         <Param id="divider1" value="2"/>
                         <Param id="divider3" value="4"/>
+                        <Param id="dividerEnabled0" value="false"/>
                         <Param id="dividerEnabled1" value="true"/>
+                        <Param id="dividerEnabled2" value="false"/>
                         <Param id="dividerEnabled3" value="true"/>
+                        <Param id="dividerEnabled4" value="false"/>
                     </Parameters>
                 </Personality>
                 <Personality template="i2c" version="4.0" instance="Z-0WSjZHSXQ">
@@ -5209,6 +5205,13 @@
                     <Parameters>
                         <Param id="configuration" value="auto"/>
                         <Param id="desiredFrequency" value="49.152"/>
+                    </Parameters>
+                </Personality>
+                <Personality template="mxs22pll500" version="1.0" instance="K9ffUw3C1iY">
+                    <Block location="srss[0].clock[0].pll500m[0]" locked="true"/>
+                    <Parameters>
+                        <Param id="configuration" value="auto"/>
+                        <Param id="desiredFrequency" value="300.000"/>
                     </Parameters>
                 </Personality>
                 <Personality template="timerclk" version="3.0" instance="OPPU-xn3eqE">

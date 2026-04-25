@@ -7,6 +7,33 @@
 #include <rtdevice.h>
 #include "usbh_uvc_stream.h"
 
+#ifdef BSP_USING_DEEPCRAFT_AI
+#include "uvc_ai_app.h"
+#else
+static void uvc_ai_app_enforce_mode(uint8_t *fmt, uint16_t *width, uint16_t *height)
+{
+    (void)fmt;
+    (void)width;
+    (void)height;
+}
+
+static int uvc_ai_app_start(uint16_t src_width, uint16_t src_height)
+{
+    (void)src_width;
+    (void)src_height;
+    return 0;
+}
+
+static void uvc_ai_app_process_frame(const struct usbh_videoframe *frame)
+{
+    (void)frame;
+}
+
+static void uvc_ai_app_stop(void)
+{
+}
+#endif
+
 #undef  USB_DBG_TAG
 #define USB_DBG_TAG "uvc_app"
 #include "usb_log.h"
@@ -32,10 +59,44 @@ static volatile uint8_t uvc_app_running;
 static volatile uint32_t g_uvc_display_fps;
 static volatile uint32_t g_uvc_display_drop_count;
 
+static void uvc_filter_empty_formats(struct usbh_video *video_class)
+{
+    uint8_t read_idx;
+    uint8_t write_idx;
+
+    if (video_class == RT_NULL) {
+        return;
+    }
+
+    /*
+     * Some cameras expose an extra VS format entry with zero frames.
+     * Keep CherryUSB core unchanged and compact valid entries here,
+     * so usbh_video_open() does not pick an empty format.
+     */
+    write_idx = 0U;
+    for (read_idx = 0U; read_idx < video_class->num_of_formats; read_idx++) {
+        if (video_class->format[read_idx].num_of_frames == 0U) {
+            continue;
+        }
+
+        if (write_idx != read_idx) {
+            video_class->format[write_idx] = video_class->format[read_idx];
+        }
+        write_idx++;
+    }
+
+    if (write_idx != video_class->num_of_formats) {
+        USB_LOG_WRN("UVC filter empty format: %u -> %u\r\n",
+                    video_class->num_of_formats, write_idx);
+        video_class->num_of_formats = write_idx;
+    }
+}
+
 /* ---------- CherryUSB video class callbacks ---------- */
 
 void usbh_video_run(struct usbh_video *video_class)
 {
+    uvc_filter_empty_formats(video_class);
     USB_LOG_INFO("UVC device connected\r\n");
     usbh_video_list_info(video_class);
 }
@@ -52,15 +113,6 @@ void usbh_video_stop(struct usbh_video *video_class)
 extern volatile uint32_t g_uvc_fps;
 extern volatile uint32_t uvc_transfer_count;
 extern volatile uint32_t video_complete_count;
-extern volatile uint32_t uvc_dbg_eof_count;
-extern volatile uint32_t uvc_dbg_fid_toggle;
-extern volatile uint32_t uvc_dbg_empty_pkt;
-extern volatile uint32_t uvc_dbg_data_pkt;
-extern volatile uint32_t uvc_dbg_last_eof_offset;
-extern volatile uint32_t uvc_dbg_frame_done;
-extern volatile uint32_t uvc_dbg_err_bit;
-extern volatile uint32_t uvc_dbg_payload_bytes;
-extern volatile uint32_t uvc_dbg_hdronly_pkt;
 
 static void uvc_display_fps_record(void)
 {
@@ -104,16 +156,10 @@ static void uvc_frame_keep_latest(struct usbh_videoframe **frame)
 static void uvc_fps_thread_entry(void *arg)
 {
     while (uvc_app_running) {
-        USB_LOG_INFO("UVC fps:%d disp:%d drop:%u urb:%d eof:%d fid:%d err:%d empty:%d data:%d hdronly:%d payload:%d done:%d last_off:%u\r\n",
+        USB_LOG_INFO("UVC fps:%d disp:%d drop:%u urb:%d\r\n",
                      (int)g_uvc_fps, (int)g_uvc_display_fps,
                      (unsigned)g_uvc_display_drop_count,
-                     (int)video_complete_count,
-                     (int)uvc_dbg_eof_count, (int)uvc_dbg_fid_toggle,
-                     (int)uvc_dbg_err_bit, (int)uvc_dbg_empty_pkt,
-                     (int)uvc_dbg_data_pkt,
-                     (int)uvc_dbg_hdronly_pkt, (int)uvc_dbg_payload_bytes,
-                     (int)uvc_dbg_frame_done,
-                     (unsigned)uvc_dbg_last_eof_offset);
+                     (int)video_complete_count);
         rt_thread_mdelay(3000);
     }
 }
@@ -132,6 +178,7 @@ static void uvc_frame_thread_entry(void *arg)
 
     /* initialise display output */
     uvc_display_init();
+    (void)uvc_ai_app_start(uvc_cam_w, uvc_cam_h);
 
     while (uvc_app_running) {
         ret = usbh_video_stream_dequeue(&frame, RT_TICK_PER_SECOND);
@@ -149,6 +196,7 @@ static void uvc_frame_thread_entry(void *arg)
         }
 
         usbh_video_stream_get_info(&stream_w, &stream_h, RT_NULL);
+        uvc_ai_app_process_frame(frame);
 
         /* render frame to LCD */
         uvc_display_frame(frame,
@@ -158,6 +206,8 @@ static void uvc_frame_thread_entry(void *arg)
 
         usbh_video_stream_enqueue(frame);
     }
+
+    uvc_ai_app_stop();
 }
 
 /* ---------- msh commands ---------- */
@@ -165,7 +215,9 @@ static void uvc_frame_thread_entry(void *arg)
 static int cmd_usbh_uvc_start(int argc, char **argv)
 {
     uint8_t fmt = USBH_VIDEO_FORMAT_UNCOMPRESSED;  /* default: YUYV */
-    uint16_t w = 640, h = 480;
+    uint16_t w = 320;
+    uint16_t h = 240;
+    uint32_t frame_bufsize = UVC_FRAME_BUF_SIZE;
     int ret;
 
     if (uvc_app_running) {
@@ -181,14 +233,27 @@ static int cmd_usbh_uvc_start(int argc, char **argv)
         h = atoi(argv[3]);
     }
 
+    uvc_ai_app_enforce_mode(&fmt, &w, &h);
+
     USB_LOG_INFO("UVC start: %ux%u format=%s\r\n", w, h,
                  fmt == USBH_VIDEO_FORMAT_MJPEG ? "mjpeg" : "yuyv");
+
+    if (fmt == USBH_VIDEO_FORMAT_UNCOMPRESSED) {
+        uint32_t yuyv_size = (uint32_t)w * (uint32_t)h * 2U;
+
+        if ((w == 0U) || (h == 0U) || (yuyv_size > UVC_FRAME_BUF_SIZE)) {
+            USB_LOG_ERR("Invalid YUYV frame size: %ux%u (%lu)\r\n",
+                        w, h, (unsigned long)yuyv_size);
+            return -RT_EINVAL;
+        }
+        frame_bufsize = yuyv_size;
+    }
 
     /* initialise frame pool */
     {
         for (uint32_t i = 0; i < UVC_FRAME_BUF_COUNT; i++) {
             frame_pool[i].frame_buf = frame_buffer[i];
-            frame_pool[i].frame_bufsize = UVC_FRAME_BUF_SIZE;
+            frame_pool[i].frame_bufsize = frame_bufsize;
         }
     }
 
@@ -213,7 +278,7 @@ static int cmd_usbh_uvc_start(int argc, char **argv)
     if (t) rt_thread_startup(t);
 
     t = rt_thread_create("uvc_frm", uvc_frame_thread_entry, NULL,
-                         8192, 22, 10);
+                         65536, 22, 10);
     if (t) rt_thread_startup(t);
 
     /* start the video stream (frames are queued inside stream_start) */

@@ -4,9 +4,9 @@
  * Description:
  * Analog configuration
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.70.0
- * device-db 4.35.0.9884
- * mtb-dsl-pse8xxgp 1.4.0.994
+ * Configurator Backend 3.60.0
+ * device-db 4.37.0.10260
+ * mtb-dsl-pse8xxgp 1.1.1.824
  *
  *******************************************************************************
  * Copyright 2026 Cypress Semiconductor Corporation (an Infineon company) or
@@ -158,8 +158,7 @@ cy_en_autanalog_ac_out_trigger_mask_t CYBSP_AUTONOMOUS_CONTROLLER_out_trig_mask[
 };
 cy_stc_autanalog_ac_t CYBSP_AUTONOMOUS_CONTROLLER_cfg =
 {
-    .gpioOutEn =  
- CY_AUTANALOG_STT_AC_GPIO_OUT_DISABLED,
+    .gpioOutEn =   CY_AUTANALOG_STT_AC_GPIO_OUT_DISABLED,
     .mask =
     {
         &CYBSP_AUTONOMOUS_CONTROLLER_out_trig_mask[0U], 
@@ -249,8 +248,7 @@ cy_stc_autanalog_sar_sta_hs_t CYBSP_SAR_ADC_sta_hs_cfg =
         NULL, 
         NULL, 
     },
-    .hsGpioResultMask =  
- CY_AUTANALOG_SAR_CHAN_MASK_GPIO0,
+    .hsGpioResultMask =   CY_AUTANALOG_SAR_CHAN_MASK_GPIO0,
 };
 cy_stc_autanalog_sar_sta_t CYBSP_SAR_ADC_sta_cfg =
 {
@@ -288,10 +286,8 @@ cy_stc_autanalog_sar_sta_t CYBSP_SAR_ADC_sta_cfg =
         NULL, 
         NULL, 
     },
-    .muxResultMask =  
- CY_AUTANALOG_SAR_CHAN_MASK_MUX_DISABLED,
-    .firResultMask =  
- CY_AUTANALOG_SAR_MASK_FIR_DISABLED,
+    .muxResultMask =   CY_AUTANALOG_SAR_CHAN_MASK_MUX_DISABLED,
+    .firResultMask =   CY_AUTANALOG_SAR_MASK_FIR_DISABLED,
 };
 cy_stc_autanalog_sar_seq_tab_hs_t CYBSP_SAR_ADC_seq_hs_cfg[] =
 {

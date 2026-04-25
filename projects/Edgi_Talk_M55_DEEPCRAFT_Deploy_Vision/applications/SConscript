@@ -1,0 +1,23 @@
+import rtconfig
+from building import *
+import os
+
+cwd  = GetCurrentDir()
+ports_root = os.path.abspath(os.path.join(cwd, '..', 'libraries', 'Common', 'board', 'ports')).replace('\\', '/')
+common_root = os.path.abspath(os.path.join(cwd, '..', 'libraries', 'Common')).replace('\\', '/')
+usb_port = ports_root + '/usb'
+path = [
+    cwd,
+    usb_port,
+    common_root + '/deepcraft_ai/include',
+]
+src  = Glob('*.c')
+
+group = DefineGroup('Applications', src, depend = [''], CPPPATH = path)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')

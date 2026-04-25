@@ -17,12 +17,7 @@
 #include "usbh_video.h"
 
 #define VIDEO_ISO_INTERVAL (2)
-/*
- * Keep more isoch packets queued per URB so HS UVC spends less time in
- * completion/resubmit turnover on CM55. Small ping-pong URBs can cap the
- * effective frame rate even when probe/commit negotiated 30 fps.
- */
-#define VIDEO_ISO_PACKETS  32U
+#define VIDEO_ISO_PACKETS  (8 * VIDEO_ISO_INTERVAL)
 #define VIDEO_EP_MPS       3072
 
 extern volatile uint32_t video_complete_count;

@@ -13,6 +13,7 @@
 #include "cy_graphics.h"
 #include "usbh_uvc_stream.h"
 #include "tjpgd.h"
+#include "usbh_uvc_display_hook.h"
 
 #undef  USB_DBG_TAG
 #define USB_DBG_TAG "uvc_disp"
@@ -28,12 +29,17 @@
 #define UVC_ITCM_SECTION __attribute__((section(".cy_itcm")))
 #define UVC_DTCM_SECTION __attribute__((section(".cy_dtcm")))
 #define UVC_SHARED_SECTION __attribute__((section(".m33_m55_shared_hyperram")))
+#define UVC_RGB565_STAGE_SECTION __attribute__((section(".cy_uvc_rgb565_data")))
 
 #define UVC_MJPEG_WORKBUF_SIZE   4096U
 #define UVC_MJPEG_MAX_FRAME_SIZE (128U * 1024U)
 #define UVC_MJPEG_MAX_WIDTH      640U
 #define UVC_MJPEG_MAX_HEIGHT     480U
 #define UVC_MJPEG_MAX_PIXELS     (UVC_MJPEG_MAX_WIDTH * UVC_MJPEG_MAX_HEIGHT)
+#define UVC_YUYV_STAGE_W         320U
+#define UVC_YUYV_STAGE_H         240U
+#define UVC_YUYV_STAGE_PIXELS    (UVC_YUYV_STAGE_W * UVC_YUYV_STAGE_H)
+#define UVC_YUYV_STAGE_BYTES     (UVC_YUYV_STAGE_PIXELS * sizeof(uint16_t))
 
 static uint16_t   *lcd_fb;          /* pointer into LCD framebuffer */
 static uint32_t    lcd_fb_size;     /* bytes */
@@ -41,7 +47,10 @@ static rt_bool_t   g_uvc_lcd_hw_ready;
 
 static GFXSS_Type *g_uvc_gfxbase = (GFXSS_Type*)GFXSS;
 static cy_stc_gfx_context_t g_uvc_gfx_context;
-CY_SECTION(".cy_gpu_buf") static uint8_t g_uvc_lcd_fb_mem[LCD_BUF_SIZE] __attribute__((aligned(128))) = {0};
+/* Reuse LCD driver's framebuffer instead of allocating an additional 800x512 RGB565 surface. */
+extern uint8_t graphics_buffer[LCD_BUF_SIZE];
+static uvc_display_overlay_cb_t g_uvc_overlay_cb;
+static void *g_uvc_overlay_cb_ctx;
 
 struct uvc_update_rect {
     uint16_t x;
@@ -108,6 +117,8 @@ static UVC_DTCM_SECTION int32_t g_uvc_v_to_g_lut[256];
 static UVC_DTCM_SECTION uint8_t g_uvc_mjpeg_diag_budget = 8U;
 static UVC_SHARED_SECTION uint16_t g_uvc_mjpeg_rgb565[UVC_MJPEG_MAX_PIXELS];
 static UVC_SHARED_SECTION uint8_t g_uvc_mjpeg_frame[UVC_MJPEG_MAX_FRAME_SIZE];
+/* Keep a 320x240 RGB565 draw-stage buffer in shared SoCMEM to reduce YUV conversion load. */
+static UVC_RGB565_STAGE_SECTION uint16_t g_uvc_yuyv_stage_rgb565[UVC_YUYV_STAGE_PIXELS];
 
 #define UVC_MJPEG_STD_DHT_SIZE 420U
 
@@ -1047,8 +1058,8 @@ static UVC_ITCM_SECTION rt_err_t uvc_display_hw_init(void)
     /* LCD driver is responsible for GFXSS/panel initialization. */
     memset(&g_uvc_gfx_context, 0, sizeof(g_uvc_gfx_context));
 
-    lcd_fb = (uint16_t *)g_uvc_lcd_fb_mem;
-    lcd_fb_size = sizeof(g_uvc_lcd_fb_mem);
+    lcd_fb = (uint16_t *)graphics_buffer;
+    lcd_fb_size = LCD_BUF_SIZE;
     memset(lcd_fb, 0, lcd_fb_size);
 
     g_uvc_lcd_hw_ready = RT_TRUE;
@@ -1061,8 +1072,8 @@ static UVC_ITCM_SECTION rt_err_t uvc_display_refresh_fb_info(void)
         return -RT_ERROR;
     }
 
-    lcd_fb = (uint16_t *)g_uvc_lcd_fb_mem;
-    lcd_fb_size = sizeof(g_uvc_lcd_fb_mem);
+    lcd_fb = (uint16_t *)graphics_buffer;
+    lcd_fb_size = LCD_BUF_SIZE;
     return RT_EOK;
 }
 
@@ -1326,6 +1337,41 @@ static UVC_ITCM_SECTION void uvc_display_yuyv(const uint8_t *src, uint32_t src_s
         return;
 
     uvc_display_prepare_yuv_lut();
+    if ((src_w == UVC_YUYV_STAGE_W) && (src_h == UVC_YUYV_STAGE_H)) {
+        uint16_t *dst = g_uvc_yuyv_stage_rgb565;
+
+        if (src_size < (uint32_t)UVC_YUYV_STAGE_W * UVC_YUYV_STAGE_H * 2U) {
+            return;
+        }
+
+        for (uint16_t y = 0; y < UVC_YUYV_STAGE_H; y++) {
+            const uint8_t *srow = src + (uint32_t)y * UVC_YUYV_STAGE_W * 2U;
+            uint16_t *drow = dst + (uint32_t)y * UVC_YUYV_STAGE_W;
+
+            for (uint16_t pair = 0; pair < (UVC_YUYV_STAGE_W / 2U); pair++) {
+                uint8_t y0 = srow[0];
+                uint8_t u = srow[1];
+                uint8_t y1 = srow[2];
+                uint8_t v = srow[3];
+                int32_t u_to_b = g_uvc_u_to_b_lut[u];
+                int32_t u_to_g = g_uvc_u_to_g_lut[u];
+                int32_t v_to_r = g_uvc_v_to_r_lut[v];
+                int32_t v_to_g = g_uvc_v_to_g_lut[v];
+
+                drow[0] = yuv_to_rgb565_fast(y0, u_to_b, u_to_g, v_to_r, v_to_g);
+                drow[1] = yuv_to_rgb565_fast(y1, u_to_b, u_to_g, v_to_r, v_to_g);
+
+                srow += 4;
+                drow += 2;
+            }
+        }
+
+        uvc_display_rgb565(g_uvc_yuyv_stage_rgb565,
+                           UVC_YUYV_STAGE_BYTES,
+                           UVC_YUYV_STAGE_W, UVC_YUYV_STAGE_H);
+        return;
+    }
+
     if (uvc_display_prepare_geometry(src_w, src_h) != RT_EOK) {
         return;
     }
@@ -1388,6 +1434,32 @@ int uvc_display_init(void)
     return 0;
 }
 
+void uvc_display_set_overlay_callback(uvc_display_overlay_cb_t cb, void *user_ctx)
+{
+    g_uvc_overlay_cb = cb;
+    g_uvc_overlay_cb_ctx = user_ctx;
+}
+
+static void uvc_display_run_overlay_callback(void)
+{
+    uvc_display_overlay_info_t info;
+
+    if ((g_uvc_overlay_cb == RT_NULL) || (lcd_fb == RT_NULL)) {
+        return;
+    }
+
+    info.framebuffer = lcd_fb;
+    info.lcd_width = LCD_W;
+    info.lcd_height = LCD_H;
+    info.src_width = g_uvc_display_ctx.src_w;
+    info.src_height = g_uvc_display_ctx.src_h;
+    info.dst_width = g_uvc_display_ctx.dst_w;
+    info.dst_height = g_uvc_display_ctx.dst_h;
+    info.dst_y_offset = g_uvc_display_ctx.y_offset;
+
+    g_uvc_overlay_cb(&info, g_uvc_overlay_cb_ctx);
+}
+
 UVC_ITCM_SECTION void uvc_display_frame(struct usbh_videoframe *frame,
                                         uint16_t src_w, uint16_t src_h)
 {
@@ -1415,6 +1487,7 @@ UVC_ITCM_SECTION void uvc_display_frame(struct usbh_videoframe *frame,
 
     /* YUYV rendering */
     uvc_display_yuyv(frame->frame_buf, frame->frame_size, src_w, src_h);
+    uvc_display_run_overlay_callback();
 
     /* Flush only the active image band to reduce LCD transfer time. */
     (void)uvc_display_flush(&g_uvc_display_ctx.update_rect);

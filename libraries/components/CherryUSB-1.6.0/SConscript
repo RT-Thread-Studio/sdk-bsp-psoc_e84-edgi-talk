@@ -27,17 +27,25 @@ LIBPATH = []
 CPPDEFINES = []
 
 
-dwc2_hc_linked = False
+build_dwc2_hc_from_source = GetDepend(['RT_CHERRYUSB_HOST_BUILD_FROM_SOURCE'])
+dwc2_hc_added = False
 dwc2_hc_lib_dir = os.path.join(cwd, 'port/dwc2')
 
 
-def link_dwc2_hc_lib():
-    global dwc2_hc_linked
+def add_dwc2_hc():
+    global dwc2_hc_added
+    global src
 
-    if not dwc2_hc_linked:
+    if dwc2_hc_added:
+        return
+
+    if build_dwc2_hc_from_source:
+        src += Glob('port/dwc2/usb_hc_dwc2.c')
+    else:
         LIBPATH.append(dwc2_hc_lib_dir)
         LIBS.append('usb_hc_dwc2')
-        dwc2_hc_linked = True
+
+    dwc2_hc_added = True
 
 # USB DEVICE
 if GetDepend(['RT_CHERRYUSB_DEVICE']):
@@ -234,28 +242,28 @@ if GetDepend(['RT_CHERRYUSB_HOST']):
     if GetDepend(['RT_CHERRYUSB_HOST_EHCI_CUSTOM']):
         src += Glob('port/ehci/usb_hc_ehci.c')
     if GetDepend(['RT_CHERRYUSB_HOST_DWC2_ST']):
-        link_dwc2_hc_lib()
+        add_dwc2_hc()
         src += Glob('port/dwc2/usb_glue_st.c')
     if GetDepend(['RT_CHERRYUSB_HOST_DWC2_ESP']):
-        link_dwc2_hc_lib()
+        add_dwc2_hc()
         src += Glob('port/dwc2/usb_glue_esp.c')
     if GetDepend(['RT_CHERRYUSB_HOST_DWC2_KENDRYTE']):
-        link_dwc2_hc_lib()
+        add_dwc2_hc()
         src += Glob('port/dwc2/usb_glue_kendryte.c')
     if GetDepend(['RT_CHERRYUSB_HOST_DWC2_INFINEON']):
-        link_dwc2_hc_lib()
+        add_dwc2_hc()
         src += Glob('port/dwc2/usb_glue_infineon.c')
     if GetDepend(['RT_CHERRYUSB_HOST_DWC2_AT']):
-        link_dwc2_hc_lib()
+        add_dwc2_hc()
         src += Glob('port/dwc2/usb_glue_at.c')
     if GetDepend(['RT_CHERRYUSB_HOST_DWC2_HC']):
-        link_dwc2_hc_lib()
+        add_dwc2_hc()
         src += Glob('port/dwc2/usb_glue_hc.c')
     if GetDepend(['RT_CHERRYUSB_HOST_DWC2_NATION']):
-        link_dwc2_hc_lib()
+        add_dwc2_hc()
         src += Glob('port/dwc2/usb_glue_nation.c')
     if GetDepend(['RT_CHERRYUSB_HOST_DWC2_CUSTOM']):
-        link_dwc2_hc_lib()
+        add_dwc2_hc()
     if GetDepend(['RT_CHERRYUSB_HOST_MUSB_STANDARD']):
         src += Glob('port/musb/usb_hc_musb.c')
     if GetDepend(['RT_CHERRYUSB_HOST_MUSB_ES']):

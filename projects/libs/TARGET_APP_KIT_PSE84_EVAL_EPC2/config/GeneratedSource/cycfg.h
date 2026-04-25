@@ -5,9 +5,9 @@
  * Simple wrapper containing all generated files and function to initialize
  * all generated code.
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.70.0
- * device-db 4.35.0.9884
- * mtb-dsl-pse8xxgp 1.4.0.994
+ * Configurator Backend 3.60.0
+ * device-db 4.37.0.10260
+ * mtb-dsl-pse8xxgp 1.1.1.824
  *
  *******************************************************************************
  * Copyright 2026 Cypress Semiconductor Corporation (an Infineon company) or
