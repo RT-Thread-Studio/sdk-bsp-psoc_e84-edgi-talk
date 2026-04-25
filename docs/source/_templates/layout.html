@@ -26,6 +26,32 @@
   </script>
 {% endblock %}
 
+{# 将 giscus 插入到正文（内容）块的末尾，紧跟文章内容之后 #}
+{% block content %}
+  {{ super() }}
+  {% if giscus and giscus.get('enabled') and giscus.get('repo') and giscus.get('repo_id') and (giscus.get('category_id') or giscus.get('category')) %}
+    <div id="giscus_thread" class="giscus" style="margin: 2rem 0;"></div>
+    <script src="https://giscus.app/client.js"
+            data-repo="{{ giscus.get('repo') }}"
+            data-repo-id="{{ giscus.get('repo_id') }}"
+            {% if giscus.get('category_id') %}
+            data-category-id="{{ giscus.get('category_id') }}"
+            {% elif giscus.get('category') %}
+            data-category="{{ giscus.get('category') }}"
+            {% endif %}
+            data-mapping="{{ giscus.get('mapping', 'pathname') }}"
+            data-strict="{{ giscus.get('strict', 0) }}"
+            data-reactions-enabled="{{ giscus.get('reactions_enabled', 1) }}"
+            data-emit-metadata="{{ giscus.get('emit_metadata', 0) }}"
+            data-input-position="{{ giscus.get('input_position', 'bottom') }}"
+            data-theme="{{ giscus.get('theme', 'preferred_color_scheme') }}"
+            data-lang="{{ giscus.get('lang', 'zh-CN') }}"
+            {% if giscus.get('lazy') %} data-loading="lazy"{% endif %}
+            crossorigin="anonymous"
+            async>
+    </script>
+  {% endif %}
+{% endblock %}
 
 {% block extrahead %}
   {{ super() }}

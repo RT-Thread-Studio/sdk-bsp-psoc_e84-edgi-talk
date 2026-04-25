@@ -70,7 +70,7 @@ categories:
     description: "常见问题解答"
     patterns:
       - "FAQ_page"
-      - "拓展外设配置指南"
+      - "FAQ_page/拓展外设配置指南"
 # 文档生成配置
 generation:
   copy_files:

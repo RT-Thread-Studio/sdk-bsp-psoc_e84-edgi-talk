@@ -28,6 +28,7 @@ config = load_config()
 project_config = config.get('project', {})
 sphinx_config = config.get('sphinx', {})
 repository_config = config.get('repository', {})
+giscus_config = config.get('giscus', {})
 
 # -- Project information -----------------------------------------------------
 
@@ -234,6 +235,8 @@ def derive_edit_base_url():
 
 html_context = {
     'edit_base_url': derive_edit_base_url(),
+    # 将 giscus 配置传入模板；若未启用或缺关键字段，模板中将忽略
+    'giscus': giscus_config or {},
 }
 """
 LaTeX / PDF 构建配置

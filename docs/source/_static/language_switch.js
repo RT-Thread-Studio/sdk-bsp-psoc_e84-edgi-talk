@@ -48,8 +48,8 @@
             return;
         }
         
-        // 查找侧边栏容器
-        const sidebar = document.querySelector('.wy-nav-side .wy-side-scroll');
+        // 查找侧边栏容器（使用 .wy-nav-side，确保位于侧栏根部而非滚动容器内）
+        const sidebar = document.querySelector('.wy-nav-side');
         if (!sidebar) {
             console.warn('未找到侧边栏容器');
             return;
@@ -72,7 +72,7 @@
             </div>
         `;
         
-        // 将语言切换器添加到侧边栏底部
+        // 将语言切换器添加到侧边栏底部（作为 .wy-nav-side 的直接子元素）
         sidebar.insertAdjacentHTML('beforeend', languageSwitchHTML);
         console.log('语言切换器已动态创建');
     }
@@ -258,6 +258,13 @@
      * 初始化语言切换器
      */
     function initLanguageSwitch() {
+        // 如果模板已经渲染在 .wy-side-scroll 内部，则搬移到 .wy-nav-side 下
+        const existingContainer = document.querySelector('.wy-side-scroll > .language-switch-container');
+        const sideRoot = document.querySelector('.wy-nav-side');
+        if (existingContainer && sideRoot) {
+            sideRoot.appendChild(existingContainer);
+        }
+
         createLanguageSwitch();
         setupLanguageSwitchEvents();
         updateNavigationLanguage();

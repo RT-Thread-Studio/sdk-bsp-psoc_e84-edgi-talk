@@ -52,12 +52,23 @@
     user-select: none;
 }
 
-/* 语言切换容器样式 - 使用深灰色背景 */
-.language-switch-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+/* 侧边栏采用flex布局：上部滚动目录 + 底部固定语言切换 */
+.wy-nav-side {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-height: 0; /* 允许子元素正确缩放 */
+}
+
+.wy-side-scroll {
+    flex: 1 1 auto;
+    min-height: 0; /* 关键：使滚动区域在flex容器内可滚动 */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.wy-nav-side .language-switch-container {
+    flex: 0 0 36px;
     background: #1a1a1a; /* 深灰色背景替代蓝色 */
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 20;
@@ -83,7 +94,7 @@
         min-width: 40px;
     }
 
-    .language-switch-container {
+    .wy-nav-side .language-switch-container {
         height: 32px; /* 移动端更小的高度 */
     }
 }
