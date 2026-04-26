@@ -2,8 +2,8 @@
 project:
   name: "psoc_e84-edgi-talk SDK"
   title: "psoc_e84-edgi-talk"
-  description: "Edgi-Talk 开发板基于 PSoC™ E84 MCU，为工程师提供了一个灵活、全面的开发平台。板上集成了丰富的外设接口和示例模块，助力开发者快速完成多传感器、显示和通信应用的开发。"
-  description_en: "The Edgi-Talk board is based on the PSoC™ E84 MCU and provides a flexible and comprehensive development platform.It integrates a variety of peripheral interfaces and sample modules, helping developers quickly implement applications involving multi-sensor integration, display, and communication."
+  description: "Edgi-Talk 开发板基于 PSoC™ E84 MCU，为工程师提供了一个灵活、全面的开发平台。板上集成了丰富的外设接口和示例模块，助力开发者快速完成AI+多传感器、显示和通信应用的开发。"
+  description_en: "The Edgi-Talk board is based on the PSoC™ E84 MCU and provides a flexible and comprehensive development platform.It integrates a variety of peripheral interfaces and sample modules, helping developers quickly implement AI+multi-sensor, display, and communication applications."
   version: "1.0.0"
   author: "PeterJhon"
   copyright: "Copyright (c) 2006-2025, RT-Thread Development Team"
@@ -64,6 +64,12 @@ categories:
       - "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_H"
       - "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC"
       - "Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft"
+  ai:
+    name: "AI篇"
+    name_en: "AI"
+    description: "AI相关示例"
+    patterns:
+      - "Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision"
   faq:
     name: "常见问题"
     name_en: "FAQ"
@@ -84,7 +90,7 @@ generation:
     - "driver"
     - "component"
     - "usb"
-    - "protocol"
+    - "ai"
     - "faq"
 
 # Sphinx 配置

@@ -560,48 +560,44 @@ class BuildManager:
         for item in source_dir.iterdir():
             if item.is_file():
                 if item.name.endswith('.html'):
-                    # HTML文件需要修复语言配置
-                    if language == 'zh':
-                        # 中文版文件添加_zh后缀
-                        if item.stem.endswith('_zh'):
-                            new_name = item.name
-                        else:
-                            new_name = item.stem + '_zh.html'
-                        target_file = target_dir / new_name
-                        self._fix_html_language(item, target_file, 'zh')
-                    else:
-                        # 英文版文件保持原名
-                        target_file = target_dir / item.name
-                        self._fix_html_language(item, target_file, 'en')
+                    # Sphinx may still emit both README.html and README_zh.html in
+                    # each temporary build. Pick the correct variant to avoid one
+                    # language overwriting the other during the final merge.
+                    new_name = self._get_i18n_html_target_name(item, language)
+                    if not new_name:
+                        continue
+                    target_file = target_dir / new_name
+                    self._fix_html_language(item, target_file, language)
                 else:
                     # 非HTML文件直接复制
                     shutil.copy2(item, target_dir / item.name)
             elif item.is_dir() and not item.name.startswith('.'):
                 # 只处理非隐藏目录，跳过 .doctrees 等Sphinx内部目录
                 target_subdir = target_dir / item.name
-                target_subdir.mkdir(exist_ok=True)
-                for subitem in item.iterdir():
-                    if subitem.is_file():
-                        if subitem.name.endswith('.html'):
-                            # HTML文件需要修复语言配置
-                            if language == 'zh':
-                                # 中文版文件添加_zh后缀
-                                if subitem.stem.endswith('_zh'):
-                                    new_name = subitem.name
-                                else:
-                                    new_name = subitem.stem + '_zh.html'
-                                target_file = target_subdir / new_name
-                                self._fix_html_language(subitem, target_file, 'zh')
-                            else:
-                                # 英文版文件保持原名
-                                target_file = target_subdir / subitem.name
-                                self._fix_html_language(subitem, target_file, 'en')
-                        else:
-                            # 非HTML文件直接复制
-                            shutil.copy2(subitem, target_subdir / subitem.name)
-                    elif subitem.is_dir() and not subitem.name.startswith('.'):
-                        # 递归处理子目录，跳过隐藏目录
-                        self._copy_docs_with_html_fix(subitem, target_subdir / subitem.name, language)
+                self._copy_docs_with_html_fix(item, target_subdir, language)
+
+    def _get_i18n_html_target_name(self, html_file: Path, language: str) -> Optional[str]:
+        """Return merged HTML filename for a language, or None for duplicates."""
+        stem = html_file.stem
+        if language == 'zh':
+            if stem.endswith('_zh'):
+                return html_file.name
+            # If the real Chinese page exists, do not let the English page
+            # collide with it as *_zh.html in the merged output.
+            if html_file.with_name(f'{stem}_zh.html').exists():
+                return None
+            return f'{stem}_zh.html'
+
+        if stem.endswith('_zh'):
+            base_stem = stem[:-3]
+            # If the real English page exists, skip the Chinese duplicate.
+            if html_file.with_name(f'{base_stem}.html').exists():
+                return None
+            # Chinese-only fallback pages become the English default filename so
+            # links normalized from *_zh.html to *.html still resolve.
+            return f'{base_stem}.html'
+
+        return html_file.name
     
     def _fix_html_language(self, source_file: Path, target_file: Path, language: str):
         """修复HTML文件的语言配置"""
