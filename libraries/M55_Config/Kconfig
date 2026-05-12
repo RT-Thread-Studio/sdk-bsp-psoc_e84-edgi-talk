@@ -58,17 +58,8 @@ menu "Onboard Peripheral Drivers"
 
     config BSP_USING_USB
         bool "Enable USB"
+        select RT_USING_CHERRYUSB
         default n
-        if BSP_USING_USB
-            config BSP_USING_FREERTOS
-            bool "Enable FREERTOS ABSTRACTION"
-            default n
-            select PKG_USING_FREERTOS_WRAPPER
-
-            config RT_CHERRYUSB_HOST_BUILD_FROM_SOURCE
-            bool "Build CherryUSB DWC2/UVC from source (disable prebuilt .a)"
-            default n
-        endif
 
     config BSP_USING_DEEPCRAFT_AI
         bool "Enable DEEPCRAFT AI (UVC extension)"

@@ -66,13 +66,9 @@ menu "Onboard Peripheral Drivers"
 
     config BSP_USING_USB
         bool "Enable USB"
+        select RT_USING_CHERRYUSB
         default n
-        if BSP_USING_USB
-            config BSP_USING_FREERTOS
-            bool "Enable FREERTOS ABSTRACTION"
-            default n
-            select PKG_USING_FREERTOS_WRAPPER
-        endif
+
 
     config BSP_USING_LSM6DS3
         bool "Enable LSM6DS3"
