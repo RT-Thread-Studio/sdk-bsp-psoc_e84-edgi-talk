@@ -13,27 +13,27 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 
 ## 1. 配置 TCPWM 为 PWM 模式
 
-![TCPWM PWM 模式设置](1.png)
+![TCPWM PWM 模式设置](../figures/1.1.png)
 
 ---
 
 ## 2. 选择输入时钟源
 
-![选择输入时钟源](2.png)
+![选择输入时钟源](../figures/2.1.png)
 
 ---
 
 ## 3. 设置 PWM 输出引脚
 
-![设置输出和引脚](3.png)
+![设置输出和引脚](../figures/3.1.png)
 
 ---
 
 ## 4. 设置输入引脚模式
 
-![输入引脚模式设置 1](4.png)
+![输入引脚模式设置 1](../figures/4.1.png)
 
-![输入引脚模式设置 2](5.png)
+![输入引脚模式设置 2](../figures/5.1.png)
 
 ---
 
