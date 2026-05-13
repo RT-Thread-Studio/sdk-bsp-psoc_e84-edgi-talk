@@ -4,7 +4,7 @@
  * Description:
  * Memory configuration
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.60.0
+ * Configurator Backend 3.70.0
  * device-db 4.37.0.10260
  * mtb-dsl-pse8xxgp 1.1.1.824
  *

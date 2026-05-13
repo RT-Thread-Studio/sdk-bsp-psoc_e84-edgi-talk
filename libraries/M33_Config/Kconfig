@@ -184,9 +184,21 @@ menu "On-chip Peripheral Drivers"
         select RT_USING_PWM
         default n
         if BSP_USING_PWM
+            config BSP_USING_PWM5
+                bool "Enable PWM5"
+                default n
+
+            config BSP_USING_PWM6
+                bool "Enable PWM6"
+                default n
+
             config BSP_USING_PWM18
                 bool "Enable PWM18"
                 default y
+
+            config BSP_USING_PWM13
+                bool "Enable PWM13"
+                default n
         endif
 
     menuconfig BSP_USING_TIM

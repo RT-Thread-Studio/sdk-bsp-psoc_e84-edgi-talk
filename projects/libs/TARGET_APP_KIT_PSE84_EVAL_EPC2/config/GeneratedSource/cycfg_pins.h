@@ -4,7 +4,7 @@
  * Description:
  * Pin configuration
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.60.0
+ * Configurator Backend 3.70.0
  * device-db 4.37.0.10260
  * mtb-dsl-pse8xxgp 1.1.1.824
  *
@@ -32,8 +32,6 @@
 #include "cycfg_notices.h"
 #include "cy_gpio.h"
 #include "cycfg_routing.h"
-#include "cy_smartio.h"
-#include "cy_sysclk.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -708,8 +706,6 @@ extern "C" {
 #define CYBSP_ETH_TXD_2_HSIOM CYBSP_WIFI_WL_REG_ON_HSIOM
 #define CYBSP_WIFI_WL_REG_ON_IRQ ioss_interrupts_gpio_11_IRQn
 #define CYBSP_ETH_TXD_2_IRQ CYBSP_WIFI_WL_REG_ON_IRQ
-#define CYBSP_SMART_IO_11_ENABLED 1U
-#define CYBSP_SMART_IO_11_HW SMARTIO_PRT11
 #define CYBSP_WIFI_SDIO_CLK_ENABLED 1U
 #define CYBSP_WIFI_SDIO_CLK_PORT GPIO_PRT12
 #define CYBSP_WIFI_SDIO_CLK_PORT_NUM 12U
@@ -782,6 +778,18 @@ extern "C" {
 #endif
 #define CYBSP_WIFI_SDIO_D3_HSIOM ioss_0_port_12_pin_5_HSIOM
 #define CYBSP_WIFI_SDIO_D3_IRQ ioss_interrupts_gpio_12_IRQn
+#define CYBSP_CTB_IN_3_ENABLED 1U
+#define CYBSP_CTB_IN_3_PORT GPIO_PRT13
+#define CYBSP_CTB_IN_3_PORT_NUM 13U
+#define CYBSP_CTB_IN_3_PIN 4U
+#define CYBSP_CTB_IN_3_NUM 4U
+#define CYBSP_CTB_IN_3_DRIVEMODE CY_GPIO_DM_STRONG_IN_OFF
+#define CYBSP_CTB_IN_3_INIT_DRIVESTATE 1
+#ifndef ioss_0_port_13_pin_4_HSIOM
+    #define ioss_0_port_13_pin_4_HSIOM HSIOM_SEL_GPIO
+#endif
+#define CYBSP_CTB_IN_3_HSIOM ioss_0_port_13_pin_4_HSIOM
+#define CYBSP_CTB_IN_3_IRQ ioss_interrupts_gpio_13_IRQn
 #define CYBSP_SPI_9_CLK_ENABLED 1U
 #define CYBSP_SPI_9_CLK_PORT GPIO_PRT15
 #define CYBSP_SPI_9_CLK_PORT_NUM 15U
@@ -1185,16 +1193,13 @@ extern const cy_stc_gpio_pin_config_t CYBSP_WIFI_WL_REG_ON_config;
 
 #define CYBSP_ETH_TXD_2_config CYBSP_WIFI_WL_REG_ON_config
 
-extern const cy_stc_smartio_lutcfg_t CYBSP_SMART_IO_11_lutCfg1;
-extern const cy_stc_smartio_lutcfg_t CYBSP_SMART_IO_11_lutCfg2;
-extern const cy_stc_smartio_lutcfg_t CYBSP_SMART_IO_11_lutCfg3;
-extern const cy_stc_smartio_config_t CYBSP_SMART_IO_11_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_WIFI_SDIO_CLK_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_WIFI_SDIO_D0_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_WIFI_SDIO_D1_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_I2S_TX_FSYNC_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_WIFI_SDIO_D2_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_WIFI_SDIO_D3_config;
+extern const cy_stc_gpio_pin_config_t CYBSP_CTB_IN_3_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_SPI_9_CLK_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_SPI_9_MOSI_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_SPI_9_MISO_config;

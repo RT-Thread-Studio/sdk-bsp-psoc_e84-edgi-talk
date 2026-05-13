@@ -18,22 +18,46 @@
 extern "C" {
 #endif
 
+#define IFX_PWM_DEVICE(_cfg, _hal_cfg, _name) \
+{                                              \
+    .tcpwm_pwm_config = &(_cfg),               \
+    .hal_cfg          = &(_hal_cfg),           \
+    .name             = (_name),               \
+},
+
+#ifdef BSP_USING_PWM5
+#define IFX_PWM_DEVICE_ITEM_PWM5 \
+    IFX_PWM_DEVICE(tcpwm_0_group_0_cnt_5_config, tcpwm_0_group_0_cnt_5_hal_config, "pwm5")
+#else
+#define IFX_PWM_DEVICE_ITEM_PWM5
+#endif
+
+#ifdef BSP_USING_PWM6
+#define IFX_PWM_DEVICE_ITEM_PWM6 \
+    IFX_PWM_DEVICE(tcpwm_0_group_0_cnt_6_config, tcpwm_0_group_0_cnt_6_hal_config, "pwm6")
+#else
+#define IFX_PWM_DEVICE_ITEM_PWM6
+#endif
+
 #ifdef BSP_USING_PWM18
+#define IFX_PWM_DEVICE_ITEM_PWM18 \
+    IFX_PWM_DEVICE(tcpwm_0_group_1_cnt_9_config, tcpwm_0_group_1_cnt_9_hal_config, "pwm18")
+#else
+#define IFX_PWM_DEVICE_ITEM_PWM18
+#endif
 
-#ifndef TCPWM_0_GRP_1_PWM_9_CONFIG
-#define TCPWM_0_GRP_1_PWM_9_CONFIG \
-{                                                       \
-    .tcpwm_pwm_config = &tcpwm_0_group_1_cnt_9_config,\
-    .base             = TCPWM0,\
-    .cntNum           = 265UL,\
-    .name             = "pwm18",\
-    .clk_dst          = PERI_0_GROUP_1_DIV_8_4_GRP_NUM,\
-    .clk_divType      = CY_SYSCLK_DIV_8_BIT,\
-    .clk_divNum       = 4U,\
-}
-#endif /* TCPWM_0_GRP_1_PWM_9_CONFIG */
+#ifdef BSP_USING_PWM13
+#define IFX_PWM_DEVICE_ITEM_PWM13 \
+    IFX_PWM_DEVICE(tcpwm_0_group_1_cnt_13_config, tcpwm_0_group_1_cnt_13_hal_config, "pwm13")
+#else
+#define IFX_PWM_DEVICE_ITEM_PWM13
+#endif
 
-#endif /* BSP_USING_PWM18 */
+#define IFX_PWM_DEVICE_LIST \
+    IFX_PWM_DEVICE_ITEM_PWM5 \
+    IFX_PWM_DEVICE_ITEM_PWM6 \
+    IFX_PWM_DEVICE_ITEM_PWM18 \
+    IFX_PWM_DEVICE_ITEM_PWM13
 
 #ifdef __cplusplus
 }

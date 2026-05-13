@@ -4,7 +4,7 @@
  * Description:
  * Establishes all necessary connections between hardware elements.
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.60.0
+ * Configurator Backend 3.70.0
  * device-db 4.37.0.10260
  * mtb-dsl-pse8xxgp 1.1.1.824
  *
@@ -57,13 +57,13 @@ extern "C" {
 #define ioss_0_port_10_pin_1_HSIOM P10_1_SCB4_UART_TX
 #define ioss_0_port_10_pin_2_HSIOM P10_2_SCB4_UART_CTS
 #define ioss_0_port_10_pin_3_HSIOM P10_3_SCB4_UART_RTS
-#define ioss_0_port_11_pin_3_HSIOM P11_3_TCPWM0_LINE_COMPL262
 #define ioss_0_port_12_pin_0_HSIOM P12_0_SDHC0_CLK_CARD
 #define ioss_0_port_12_pin_1_HSIOM P12_1_SDHC0_CARD_DAT_3TO00
 #define ioss_0_port_12_pin_2_HSIOM P12_2_SDHC0_CARD_DAT_3TO01
 #define ioss_0_port_12_pin_3_HSIOM P12_3_TDM_TDM_TX_FSYNC0
 #define ioss_0_port_12_pin_4_HSIOM P12_4_SDHC0_CARD_DAT_3TO02
 #define ioss_0_port_12_pin_5_HSIOM P12_5_SDHC0_CARD_DAT_3TO03
+#define ioss_0_port_13_pin_4_HSIOM P13_4_TCPWM0_LINE_COMPL269
 #define ioss_0_port_15_pin_0_HSIOM P15_0_SCB9_SPI_CLK
 #define ioss_0_port_15_pin_1_HSIOM P15_1_SCB9_SPI_MOSI
 #define ioss_0_port_15_pin_2_HSIOM P15_2_SCB9_SPI_MISO

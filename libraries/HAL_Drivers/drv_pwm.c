@@ -22,22 +22,18 @@ struct ifx_pwm
 {
     struct rt_device_pwm pwm_device;
     const cy_stc_tcpwm_pwm_config_t *tcpwm_pwm_config;
-    TCPWM_Type *base;
-    uint32_t cntNum;
-    rt_uint8_t channel;
+    const mtb_hal_pwm_configurator_t *hal_cfg;
     const char *name;
-    uint32_t clk_dst;
-    cy_en_divider_types_t clk_divType;
-    uint32_t clk_divNum;
 };
 
 static struct ifx_pwm ifx_pwm_obj[] =
 {
-#ifdef BSP_USING_PWM18
-    #ifdef TCPWM_0_GRP_1_PWM_9_CONFIG
-        TCPWM_0_GRP_1_PWM_9_CONFIG,
-    #endif
-#endif
+    IFX_PWM_DEVICE_LIST
+    {
+        .tcpwm_pwm_config = RT_NULL,
+        .hal_cfg = RT_NULL,
+        .name = RT_NULL,
+    }
 };
 
 
@@ -45,11 +41,47 @@ static struct ifx_pwm ifx_pwm_obj[] =
 #define IFX_PWM_MAX_TICKS 65535U
 #endif
 
+#ifndef IFX_PWM_DEFAULT_CHANNEL
+#define IFX_PWM_DEFAULT_CHANNEL 1U
+#endif
+
+static inline TCPWM_Type *ifx_pwm_get_base(struct ifx_pwm *pwm)
+{
+    if ((pwm == RT_NULL) || (pwm->hal_cfg == RT_NULL))
+        return RT_NULL;
+
+    return pwm->hal_cfg->base;
+}
+
+static inline uint32_t ifx_pwm_get_cntnum(struct ifx_pwm *pwm)
+{
+    if ((pwm == RT_NULL) || (pwm->hal_cfg == RT_NULL))
+        return 0U;
+
+    return pwm->hal_cfg->cntnum;
+}
+
+static inline const mtb_hal_peri_div_t *ifx_pwm_get_clock_ref(struct ifx_pwm *pwm)
+{
+    if ((pwm == RT_NULL) || (pwm->hal_cfg == RT_NULL) ||
+        (pwm->hal_cfg->clock == RT_NULL) || (pwm->hal_cfg->clock->clock_ref == RT_NULL))
+    {
+        return RT_NULL;
+    }
+
+    return (const mtb_hal_peri_div_t *)pwm->hal_cfg->clock->clock_ref;
+}
+
 static inline uint32_t ifx_pwm_get_clock(struct ifx_pwm *pwm)
 {
-    return Cy_SysClk_PeriPclkGetFrequency((en_clk_dst_t)pwm->clk_dst,
-                                          pwm->clk_divType,
-                                          pwm->clk_divNum);
+    const mtb_hal_peri_div_t *clock_ref = ifx_pwm_get_clock_ref(pwm);
+
+    if (clock_ref == RT_NULL)
+        return 0U;
+
+    return Cy_SysClk_PeriPclkGetFrequency((en_clk_dst_t)clock_ref->clk_dst,
+                                          clock_ref->div_type,
+                                          clock_ref->div_num);
 }
 
 static inline int ifx_pwm_check_clk(struct ifx_pwm *pwm, uint32_t *clk)
@@ -60,6 +92,24 @@ static inline int ifx_pwm_check_clk(struct ifx_pwm *pwm, uint32_t *clk)
         LOG_E("%s: invalid clk (0 Hz)", pwm->name ? pwm->name : "ifx_pwm");
         return -RT_ERROR;
     }
+    return RT_EOK;
+}
+
+static inline rt_err_t ifx_pwm_check_cfg(struct ifx_pwm *pwm, const struct rt_pwm_configuration *cfg)
+{
+    if (!pwm || ifx_pwm_get_base(pwm) == RT_NULL)
+        return -RT_ERROR;
+
+    if (cfg == RT_NULL)
+        return -RT_EINVAL;
+
+    /* Single-channel PWM devices keep compatibility with channel 0 and default channel(1). */
+    if ((cfg->channel != 0U) && (cfg->channel != IFX_PWM_DEFAULT_CHANNEL))
+    {
+        LOG_E("%s: unsupported channel %u", pwm->name ? pwm->name : "ifx_pwm", cfg->channel);
+        return -RT_EINVAL;
+    }
+
     return RT_EOK;
 }
 
@@ -79,20 +129,25 @@ static inline uint64_t ns_to_ticks(uint64_t ns, uint32_t clk)
 static rt_err_t drv_pwm_enable(struct rt_device_pwm *device, struct rt_pwm_configuration *configuration, rt_bool_t enable)
 {
     struct ifx_pwm *pwm = (struct ifx_pwm *)device->parent.user_data;
+    rt_err_t ret;
+    TCPWM_Type *base;
+    uint32_t cntNum;
 
-    (void)configuration;
+    ret = ifx_pwm_check_cfg(pwm, configuration);
+    if (ret != RT_EOK)
+        return ret;
 
-    if (!pwm || pwm->base == RT_NULL)
-        return -RT_ERROR;
+    base = ifx_pwm_get_base(pwm);
+    cntNum = ifx_pwm_get_cntnum(pwm);
 
     if (!enable)
     {
-        Cy_TCPWM_PWM_Disable(pwm->base, pwm->cntNum);
+        Cy_TCPWM_PWM_Disable(base, cntNum);
     }
     else
     {
-        Cy_TCPWM_PWM_Enable(pwm->base, pwm->cntNum);
-        Cy_TCPWM_TriggerStart_Single(pwm->base, pwm->cntNum);
+        Cy_TCPWM_PWM_Enable(base, cntNum);
+        Cy_TCPWM_TriggerStart_Single(base, cntNum);
     }
 
     return RT_EOK;
@@ -101,9 +156,19 @@ static rt_err_t drv_pwm_enable(struct rt_device_pwm *device, struct rt_pwm_confi
 static rt_err_t drv_pwm_set_period(struct ifx_pwm *pwm, struct rt_pwm_configuration *configuration)
 {
     uint32_t clk;
+    uint32_t cntNum;
+    TCPWM_Type *base;
+    rt_err_t ret;
+
+    ret = ifx_pwm_check_cfg(pwm, configuration);
+    if (ret != RT_EOK)
+        return ret;
 
     if (ifx_pwm_check_clk(pwm, &clk) != RT_EOK)
         return -RT_ERROR;
+
+    base = ifx_pwm_get_base(pwm);
+    cntNum = ifx_pwm_get_cntnum(pwm);
 
     uint64_t period_ns = configuration->period;
     uint64_t ticks = ns_to_ticks(period_ns, clk);
@@ -120,7 +185,7 @@ static rt_err_t drv_pwm_set_period(struct ifx_pwm *pwm, struct rt_pwm_configurat
     if (ticks > IFX_PWM_MAX_TICKS)
         ticks = IFX_PWM_MAX_TICKS;
 
-    Cy_TCPWM_PWM_SetPeriod0(pwm->base, pwm->cntNum, (uint32_t)ticks);
+    Cy_TCPWM_PWM_SetPeriod0(base, cntNum, (uint32_t)ticks);
 
     return RT_EOK;
 }
@@ -128,14 +193,24 @@ static rt_err_t drv_pwm_set_period(struct ifx_pwm *pwm, struct rt_pwm_configurat
 static rt_err_t drv_pwm_set_pulse(struct ifx_pwm *pwm, struct rt_pwm_configuration *configuration)
 {
     uint32_t clk;
+    uint32_t cntNum;
+    TCPWM_Type *base;
+    rt_err_t ret;
+
+    ret = ifx_pwm_check_cfg(pwm, configuration);
+    if (ret != RT_EOK)
+        return ret;
 
     if (ifx_pwm_check_clk(pwm, &clk) != RT_EOK)
         return -RT_ERROR;
 
+    base = ifx_pwm_get_base(pwm);
+    cntNum = ifx_pwm_get_cntnum(pwm);
+
     uint64_t pulse_ns = configuration->pulse;
     uint64_t ticks = ns_to_ticks(pulse_ns, clk);
 
-    uint32_t period_ticks = Cy_TCPWM_PWM_GetPeriod0(pwm->base, pwm->cntNum);
+    uint32_t period_ticks = Cy_TCPWM_PWM_GetPeriod0(base, cntNum);
 
     if (period_ticks == 0)
     {
@@ -148,7 +223,7 @@ static rt_err_t drv_pwm_set_pulse(struct ifx_pwm *pwm, struct rt_pwm_configurati
             ticks = period_ticks;
     }
 
-    Cy_TCPWM_PWM_SetCompare0Val(pwm->base, pwm->cntNum, (uint32_t)ticks);
+    Cy_TCPWM_PWM_SetCompare0Val(base, cntNum, (uint32_t)ticks);
 
     return RT_EOK;
 }
@@ -157,9 +232,19 @@ static rt_err_t drv_pwm_set(struct rt_device_pwm *device, struct rt_pwm_configur
 {
     struct ifx_pwm *pwm = (struct ifx_pwm *)device->parent.user_data;
     uint32_t clk;
+    uint32_t cntNum;
+    TCPWM_Type *base;
+    rt_err_t ret;
+
+    ret = ifx_pwm_check_cfg(pwm, configuration);
+    if (ret != RT_EOK)
+        return ret;
 
     if (ifx_pwm_check_clk(pwm, &clk) != RT_EOK)
         return -RT_ERROR;
+
+    base = ifx_pwm_get_base(pwm);
+    cntNum = ifx_pwm_get_cntnum(pwm);
 
     uint64_t period_ticks = ns_to_ticks(configuration->period, clk);
     uint64_t pulse_ticks  = ns_to_ticks(configuration->pulse, clk);
@@ -179,8 +264,8 @@ static rt_err_t drv_pwm_set(struct rt_device_pwm *device, struct rt_pwm_configur
     if (period_ticks > IFX_PWM_MAX_TICKS)
         period_ticks = IFX_PWM_MAX_TICKS;
 
-    Cy_TCPWM_PWM_SetPeriod0(pwm->base, pwm->cntNum, (uint32_t)period_ticks);
-    Cy_TCPWM_PWM_SetCompare0Val(pwm->base, pwm->cntNum, (uint32_t)pulse_ticks);
+    Cy_TCPWM_PWM_SetPeriod0(base, cntNum, (uint32_t)period_ticks);
+    Cy_TCPWM_PWM_SetCompare0Val(base, cntNum, (uint32_t)pulse_ticks);
 
     return RT_EOK;
 }
@@ -189,12 +274,22 @@ static rt_err_t drv_pwm_get(struct rt_device_pwm *device, struct rt_pwm_configur
 {
     struct ifx_pwm *pwm = (struct ifx_pwm *)device->parent.user_data;
     uint32_t clk;
+    uint32_t cntNum;
+    TCPWM_Type *base;
+    rt_err_t ret;
+
+    ret = ifx_pwm_check_cfg(pwm, configuration);
+    if (ret != RT_EOK)
+        return ret;
 
     if (ifx_pwm_check_clk(pwm, &clk) != RT_EOK)
         return -RT_ERROR;
 
-    uint32_t period_ticks = Cy_TCPWM_PWM_GetPeriod0(pwm->base, pwm->cntNum);
-    uint32_t cmp_ticks    = Cy_TCPWM_PWM_GetCompare0Val(pwm->base, pwm->cntNum);
+    base = ifx_pwm_get_base(pwm);
+    cntNum = ifx_pwm_get_cntnum(pwm);
+
+    uint32_t period_ticks = Cy_TCPWM_PWM_GetPeriod0(base, cntNum);
+    uint32_t cmp_ticks    = Cy_TCPWM_PWM_GetCompare0Val(base, cntNum);
 
     configuration->period = (uint64_t)period_ticks * 1000000000ULL / (uint64_t)clk;
     configuration->pulse  = (uint64_t)cmp_ticks * 1000000000ULL / (uint64_t)clk;
@@ -205,6 +300,14 @@ static rt_err_t drv_pwm_get(struct rt_device_pwm *device, struct rt_pwm_configur
 static rt_err_t drv_pwm_control(struct rt_device_pwm *device, int cmd, void *arg)
 {
     struct rt_pwm_configuration *configuration = (struct rt_pwm_configuration *)arg;
+
+    if ((cmd == PWM_CMD_ENABLE) || (cmd == PWM_CMD_DISABLE) ||
+        (cmd == PWM_CMD_SET) || (cmd == PWM_CMD_GET) ||
+        (cmd == PWM_CMD_SET_PERIOD) || (cmd == PWM_CMD_SET_PULSE))
+    {
+        if (configuration == RT_NULL)
+            return -RT_EINVAL;
+    }
 
     switch (cmd)
     {
@@ -236,16 +339,22 @@ static struct rt_pwm_ops drv_ops = { drv_pwm_control };
 static rt_err_t ifx_hw_pwm_init(struct ifx_pwm *device)
 {
     cy_en_tcpwm_status_t tcpwm_status;
+    TCPWM_Type *base;
+    uint32_t cntNum;
+
     RT_ASSERT(device != RT_NULL);
 
-    if (!device->tcpwm_pwm_config || !device->base)
+    if (!device->tcpwm_pwm_config || !device->hal_cfg)
     {
         LOG_W("%s: tcpwm config or base missing", device->name ? device->name : "ifx_pwm");
         return -RT_ERROR;
     }
 
-    tcpwm_status = Cy_TCPWM_PWM_Init(device->base, device->cntNum, device->tcpwm_pwm_config);
-    if (CY_RSLT_SUCCESS != tcpwm_status)
+    base = ifx_pwm_get_base(device);
+    cntNum = ifx_pwm_get_cntnum(device);
+
+    tcpwm_status = Cy_TCPWM_PWM_Init(base, cntNum, device->tcpwm_pwm_config);
+    if (CY_TCPWM_SUCCESS != tcpwm_status)
     {
         LOG_E("%s: Initialize the TCPWM block failed", device->name ? device->name : "ifx_pwm");
         return -RT_ERROR;
@@ -259,20 +368,14 @@ static int rt_hw_pwm_init(void)
     int i;
     int result = RT_EOK;
     int count = sizeof(ifx_pwm_obj) / sizeof(ifx_pwm_obj[0]);
-
-    if (count == 0)
-    {
-        LOG_W("No PWM instances configured");
-        return RT_EOK;
-    }
+    int registered = 0;
 
     for (i = 0; i < count; i++)
     {
         struct ifx_pwm *obj = &ifx_pwm_obj[i];
 
-        if (obj->tcpwm_pwm_config == RT_NULL || obj->base == RT_NULL)
+        if (obj->tcpwm_pwm_config == RT_NULL || obj->hal_cfg == RT_NULL)
         {
-            LOG_W("pwm obj %d not configured (skipped)", i);
             continue;
         }
 
@@ -288,12 +391,18 @@ static int rt_hw_pwm_init(void)
         if (rt_device_pwm_register(&obj->pwm_device, obj->name, &drv_ops, obj) == RT_EOK)
         {
             LOG_D("%s register success", obj->name ? obj->name : "ifx_pwm");
+            registered++;
         }
         else
         {
             LOG_E("%s register failed", obj->name ? obj->name : "ifx_pwm");
             result = -RT_ERROR;
         }
+    }
+
+    if (registered == 0)
+    {
+        LOG_W("No PWM instances configured");
     }
 
 __exit:

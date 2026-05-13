@@ -4,7 +4,7 @@
  * Description:
  * Pin configuration
  * This file was automatically generated and should not be modified.
- * Configurator Backend 3.60.0
+ * Configurator Backend 3.70.0
  * device-db 4.37.0.10260
  * mtb-dsl-pse8xxgp 1.1.1.824
  *
@@ -802,47 +802,6 @@ const cy_stc_gpio_pin_config_t CYBSP_WIFI_WL_REG_ON_config =
     .pullUpRes = CY_GPIO_PULLUP_RES_DISABLE,
     .nonSec = 1,
 };
-const cy_stc_smartio_lutcfg_t CYBSP_SMART_IO_11_lutCfg1 =
-{
-    .tr0 = CY_SMARTIO_LUTTR_LUT2_OUT,
-    .tr1 = CY_SMARTIO_LUTTR_LUT1_OUT,
-    .tr2 = CY_SMARTIO_LUTTR_LUT1_OUT,
-    .opcode = CY_SMARTIO_LUTOPC_GATED_OUT,
-    .lutMap = 129,
-};
-const cy_stc_smartio_lutcfg_t CYBSP_SMART_IO_11_lutCfg2 =
-{
-    .tr0 = CY_SMARTIO_LUTTR_LUT2_OUT,
-    .tr1 = CY_SMARTIO_LUTTR_LUT2_OUT,
-    .tr2 = CY_SMARTIO_LUTTR_LUT2_OUT,
-    .opcode = CY_SMARTIO_LUTOPC_GATED_OUT,
-    .lutMap = 1,
-};
-const cy_stc_smartio_lutcfg_t CYBSP_SMART_IO_11_lutCfg3 =
-{
-    .tr0 = CY_SMARTIO_LUTTR_CHIP3,
-    .tr1 = CY_SMARTIO_LUTTR_LUT1_OUT,
-    .tr2 = CY_SMARTIO_LUTTR_LUT1_OUT,
-    .opcode = CY_SMARTIO_LUTOPC_COMB,
-    .lutMap = 66,
-};
-const cy_stc_smartio_config_t CYBSP_SMART_IO_11_config =
-{
-    .clkSrc = CY_SMARTIO_CLK_DIVACT,
-    .bypassMask = CY_SMARTIO_CHANNEL0|CY_SMARTIO_CHANNEL1|CY_SMARTIO_CHANNEL2|0u|CY_SMARTIO_CHANNEL4|CY_SMARTIO_CHANNEL5|CY_SMARTIO_CHANNEL6|CY_SMARTIO_CHANNEL7,
-    .ioSyncEn = 0u|0u|0u|0u|0u|0u|0u|0u,
-    .chipSyncEn = 0u|0u|0u|0u|0u|0u|0u|0u,
-    .lutCfg0 = NULL,
-    .lutCfg1 = &CYBSP_SMART_IO_11_lutCfg1,
-    .lutCfg2 = &CYBSP_SMART_IO_11_lutCfg2,
-    .lutCfg3 = &CYBSP_SMART_IO_11_lutCfg3,
-    .lutCfg4 = NULL,
-    .lutCfg5 = NULL,
-    .lutCfg6 = NULL,
-    .lutCfg7 = NULL,
-    .duCfg = NULL,
-    .hldOvr = false,
-};
 const cy_stc_gpio_pin_config_t CYBSP_WIFI_SDIO_CLK_config =
 {
     .outVal = 1,
@@ -938,6 +897,24 @@ const cy_stc_gpio_pin_config_t CYBSP_WIFI_SDIO_D3_config =
     .outVal = 1,
     .driveMode = CY_GPIO_DM_STRONG,
     .hsiom = CYBSP_WIFI_SDIO_D3_HSIOM,
+    .intEdge = CY_GPIO_INTR_DISABLE,
+    .intMask = 0UL,
+    .vtrip = CY_GPIO_VTRIP_CMOS,
+    .slewRate = CY_GPIO_SLEW_FAST,
+    .driveSel = CY_GPIO_DRIVE_1_2,
+    .vregEn = 0UL,
+    .ibufMode = 0UL,
+    .vtripSel = 0UL,
+    .vrefSel = 0UL,
+    .vohSel = 0UL,
+    .pullUpRes = CY_GPIO_PULLUP_RES_DISABLE,
+    .nonSec = 1,
+};
+const cy_stc_gpio_pin_config_t CYBSP_CTB_IN_3_config =
+{
+    .outVal = 1,
+    .driveMode = CY_GPIO_DM_STRONG_IN_OFF,
+    .hsiom = CYBSP_CTB_IN_3_HSIOM,
     .intEdge = CY_GPIO_INTR_DISABLE,
     .intMask = 0UL,
     .vtrip = CY_GPIO_VTRIP_CMOS,
@@ -1411,14 +1388,13 @@ void init_cycfg_pins(void)
     Cy_GPIO_Pin_Init(CYBSP_SMART_IO_OUTPUT_PORT, CYBSP_SMART_IO_OUTPUT_PIN, &CYBSP_SMART_IO_OUTPUT_config);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_HOST_WAKE_PORT, CYBSP_WIFI_HOST_WAKE_PIN, &CYBSP_WIFI_HOST_WAKE_config);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_WL_REG_ON_PORT, CYBSP_WIFI_WL_REG_ON_PIN, &CYBSP_WIFI_WL_REG_ON_config);
-    Cy_SysClk_PeriGroupSlaveInit(CY_MMIO_SMARTIO_PERI_NR, CY_MMIO_SMARTIO_GROUP_NR, CY_MMIO_SMARTIO_SLAVE_NR, CY_MMIO_SMARTIO_CLK_HF_NR);
-    Cy_SysClk_PeriPclkAssignDivider(PCLK_IOSS_CLOCK_SMARTIO_PCLK_POS_EN11, CY_SYSCLK_DIV_24_5_BIT, 0U);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_SDIO_CLK_PORT, CYBSP_WIFI_SDIO_CLK_PIN, &CYBSP_WIFI_SDIO_CLK_config);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_SDIO_D0_PORT, CYBSP_WIFI_SDIO_D0_PIN, &CYBSP_WIFI_SDIO_D0_config);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_SDIO_D1_PORT, CYBSP_WIFI_SDIO_D1_PIN, &CYBSP_WIFI_SDIO_D1_config);
     Cy_GPIO_Pin_Init(CYBSP_I2S_TX_FSYNC_PORT, CYBSP_I2S_TX_FSYNC_PIN, &CYBSP_I2S_TX_FSYNC_config);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_SDIO_D2_PORT, CYBSP_WIFI_SDIO_D2_PIN, &CYBSP_WIFI_SDIO_D2_config);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_SDIO_D3_PORT, CYBSP_WIFI_SDIO_D3_PIN, &CYBSP_WIFI_SDIO_D3_config);
+    Cy_GPIO_Pin_Init(CYBSP_CTB_IN_3_PORT, CYBSP_CTB_IN_3_PIN, &CYBSP_CTB_IN_3_config);
     Cy_GPIO_Pin_Init(CYBSP_SPI_9_CLK_PORT, CYBSP_SPI_9_CLK_PIN, &CYBSP_SPI_9_CLK_config);
     Cy_GPIO_Pin_Init(CYBSP_SPI_9_MOSI_PORT, CYBSP_SPI_9_MOSI_PIN, &CYBSP_SPI_9_MOSI_config);
     Cy_GPIO_Pin_Init(CYBSP_SPI_9_MISO_PORT, CYBSP_SPI_9_MISO_PIN, &CYBSP_SPI_9_MISO_config);
