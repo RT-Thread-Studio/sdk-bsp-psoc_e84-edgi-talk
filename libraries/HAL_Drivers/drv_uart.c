@@ -64,7 +64,11 @@ static struct ifx_uart_config uart_config[] =
 #endif
 };
 
-static struct ifx_uart uart_obj[sizeof(uart_config) / sizeof(uart_config[0])] = {0};
+#define UART_OBJ_NUM (sizeof(uart_config) / sizeof(uart_config[0]))
+
+static struct ifx_uart uart_obj[UART_OBJ_NUM] = {0};
+static mtb_hal_uart_t uart_hal_obj[UART_OBJ_NUM];
+static cy_stc_scb_uart_context_t uart_hal_context[UART_OBJ_NUM];
 
 static void uart_isr(struct rt_serial_device *serial)
 {
@@ -176,6 +180,8 @@ void uart6_isr_callback(void)
 /*
  * UARTHS interface
  */
+static rt_err_t ifx_control(struct rt_serial_device *serial, int cmd, void *arg);
+
 static rt_err_t ifx_configure(struct rt_serial_device *serial, struct serial_configure *cfg)
 {
     RT_ASSERT(serial != RT_NULL);
@@ -198,6 +204,11 @@ static rt_err_t ifx_configure(struct rt_serial_device *serial, struct serial_con
 
     RT_ASSERT(result == RT_EOK);
 
+    if (serial->parent.open_flag & RT_DEVICE_FLAG_INT_RX)
+    {
+        ifx_control(serial, RT_DEVICE_CTRL_SET_INT, (void *)RT_DEVICE_FLAG_INT_RX);
+    }
+
     return RT_EOK;
 }
 
@@ -207,10 +218,13 @@ static rt_err_t ifx_control(struct rt_serial_device *serial, int cmd, void *arg)
     struct ifx_uart *uart = (struct ifx_uart *)serial->parent.user_data;
     RT_ASSERT(uart != RT_NULL);
 
+    (void)arg;
+
     switch (cmd)
     {
     case RT_DEVICE_CTRL_CLR_INT:
-
+        uart->config->usart_x->INTR_RX_MASK &= ~SCB_INTR_RX_MASK_NOT_EMPTY_Msk;
+        NVIC_DisableIRQ(uart->config->intrSrc);
         break;
 
     case RT_DEVICE_CTRL_SET_INT:
@@ -222,6 +236,25 @@ static rt_err_t ifx_control(struct rt_serial_device *serial, int cmd, void *arg)
 
         /* Enable the interrupt */
         NVIC_EnableIRQ(uart->config->intrSrc);
+        break;
+
+    case RT_DEVICE_CTRL_SUSPEND:
+        if (serial->parent.open_flag & RT_DEVICE_FLAG_INT_RX)
+        {
+            uart->config->usart_x->INTR_RX_MASK &= ~SCB_INTR_RX_MASK_NOT_EMPTY_Msk;
+            NVIC_DisableIRQ(uart->config->intrSrc);
+        }
+        break;
+
+    case RT_DEVICE_CTRL_RESUME:
+        if (serial->parent.open_flag & RT_DEVICE_FLAG_INT_RX)
+        {
+            uart->config->usart_x->INTR_RX_MASK = SCB_INTR_RX_MASK_NOT_EMPTY_Msk;
+            NVIC_EnableIRQ(uart->config->intrSrc);
+        }
+        break;
+
+    default:
         break;
     }
 
@@ -280,22 +313,19 @@ const struct rt_uart_ops _uart_ops =
 
 void rt_hw_uart_init(void)
 {
-    int index;
-
-    rt_size_t obj_num = sizeof(uart_obj) / sizeof(struct ifx_uart);
+    rt_size_t index;
     struct serial_configure serial_config = RT_SERIAL_CONFIG_DEFAULT;
     rt_err_t result = 0;
 
-    for (index = 0; index < obj_num; index++)
+    for (index = 0; index < UART_OBJ_NUM; index++)
     {
         uart_obj[index].config = &uart_config[index];
         uart_obj[index].serial.ops = &_uart_ops;
         uart_obj[index].serial.config = serial_config;
 
-        uart_obj[index].config->uart_obj = rt_malloc(sizeof(mtb_hal_uart_t));
-        uart_obj[index].config->uart_context = rt_malloc(sizeof(cy_stc_scb_uart_context_t));
+        uart_obj[index].config->uart_obj = &uart_hal_obj[index];
+        uart_obj[index].config->uart_context = &uart_hal_context[index];
 
-        RT_ASSERT(uart_obj[index].config->uart_obj != RT_NULL);
         /* register uart device */
         result = rt_hw_serial_register(&uart_obj[index].serial,
                                        uart_obj[index].config->name,

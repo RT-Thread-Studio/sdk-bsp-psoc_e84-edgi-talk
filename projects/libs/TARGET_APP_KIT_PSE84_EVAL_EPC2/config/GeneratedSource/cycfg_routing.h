@@ -51,8 +51,8 @@ extern "C" {
 #define ioss_0_port_8_pin_1_HSIOM P8_1_SCB0_I2C_SDA
 #define ioss_0_port_8_pin_5_HSIOM P8_5_PDM_PDM_CLK3
 #define ioss_0_port_8_pin_6_HSIOM P8_6_PDM_PDM_DATA3
-#define ioss_0_port_9_pin_0_HSIOM P9_0_TCPWM0_LINE7
-#define ioss_0_port_9_pin_2_HSIOM P9_2_TCPWM0_LINE_COMPL7
+#define ioss_0_port_9_pin_2_HSIOM P9_2_SCB1_UART_TX
+#define ioss_0_port_9_pin_3_HSIOM P9_3_SCB1_UART_RX
 #define ioss_0_port_10_pin_0_HSIOM P10_0_SCB4_UART_RX
 #define ioss_0_port_10_pin_1_HSIOM P10_1_SCB4_UART_TX
 #define ioss_0_port_10_pin_2_HSIOM P10_2_SCB4_UART_CTS

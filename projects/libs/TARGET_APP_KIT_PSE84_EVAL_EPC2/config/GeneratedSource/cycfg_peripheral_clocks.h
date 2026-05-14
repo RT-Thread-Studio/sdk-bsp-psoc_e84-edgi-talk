@@ -38,18 +38,18 @@ extern "C" {
 
 #define peri_0_mmio_0_ENABLED 1U
 #define peri_1_mmio_0_ENABLED 1U
-#define CYBSP_EZ_I2C_TARGET_CLK_DIV_ENABLED 1U
+#define CYBSP_UART5_CLK_DIV_ENABLED 1U
 
 #if !defined (CY_USING_HAL) && !defined (CY_USING_HAL_LITE)
-#define CYBSP_EZ_I2C_TARGET_CLK_DIV_HW CY_SYSCLK_DIV_8_BIT
+#define CYBSP_UART5_CLK_DIV_HW CY_SYSCLK_DIV_8_BIT
 #endif /* !defined (CY_USING_HAL) && !defined (CY_USING_HAL_LITE) */
 
-#define CYBSP_EZ_I2C_TARGET_CLK_DIV_NUM 0U
-#define CYBSP_EZ_I2C_TARGET_CLK_DIV_GRP_NUM ((1U << PERI_PCLK_GR_NUM_Pos) | (0U << PERI_PCLK_INST_NUM_Pos))
+#define CYBSP_UART5_CLK_DIV_NUM 0U
+#define CYBSP_UART5_CLK_DIV_GRP_NUM ((1U << PERI_PCLK_GR_NUM_Pos) | (0U << PERI_PCLK_INST_NUM_Pos))
 
-#if !defined (CYBSP_EZ_I2C_TARGET_CLK_DIV_GRP_NUM)
-#define CYBSP_EZ_I2C_TARGET_CLK_DIV_GRP_NUM CYBSP_EZ_I2C_TARGET_CLK_DIV_GRP_NUM
-#endif /* !defined (CYBSP_EZ_I2C_TARGET_CLK_DIV_GRP_NUM) */
+#if !defined (CYBSP_UART5_CLK_DIV_GRP_NUM)
+#define CYBSP_UART5_CLK_DIV_GRP_NUM CYBSP_UART5_CLK_DIV_GRP_NUM
+#endif /* !defined (CYBSP_UART5_CLK_DIV_GRP_NUM) */
 
 #define CYBSP_SPI_CONTROLLER_CLK_DIV_ENABLED 1U
 
@@ -206,6 +206,19 @@ extern "C" {
 #if !defined (CYBSP_TRACE_CLK_DIV_GRP_NUM)
 #define CYBSP_TRACE_CLK_DIV_GRP_NUM CYBSP_TRACE_CLK_DIV_GRP_NUM
 #endif /* !defined (CYBSP_TRACE_CLK_DIV_GRP_NUM) */
+
+#define peri_0_group_8_div_16_0_ENABLED 1U
+
+#if !defined (CY_USING_HAL) && !defined (CY_USING_HAL_LITE)
+#define peri_0_group_8_div_16_0_HW CY_SYSCLK_DIV_16_BIT
+#endif /* !defined (CY_USING_HAL) && !defined (CY_USING_HAL_LITE) */
+
+#define peri_0_group_8_div_16_0_NUM 0U
+#define PERI_0_GROUP_8_DIV_16_0_GRP_NUM ((8U << PERI_PCLK_GR_NUM_Pos) | (0U << PERI_PCLK_INST_NUM_Pos))
+
+#if !defined (peri_0_group_8_div_16_0_GRP_NUM)
+#define peri_0_group_8_div_16_0_GRP_NUM PERI_0_GROUP_8_DIV_16_0_GRP_NUM
+#endif /* !defined (peri_0_group_8_div_16_0_GRP_NUM) */
 
 #define CYBSP_I3C_CONTROLLER_CLK_DIV_ENABLED 1U
 

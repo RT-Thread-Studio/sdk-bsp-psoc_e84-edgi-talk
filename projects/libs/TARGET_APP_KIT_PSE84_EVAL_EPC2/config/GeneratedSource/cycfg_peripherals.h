@@ -90,6 +90,9 @@ extern "C" {
 #define CYBSP_I2C_CONTROLLER_ENABLED 1U
 #define CYBSP_I2C_CONTROLLER_HW SCB0
 #define CYBSP_I2C_CONTROLLER_IRQ scb_0_interrupt_IRQn
+#define CYBSP_UART1_ENABLED 1U
+#define CYBSP_UART1_HW SCB1
+#define CYBSP_UART1_IRQ scb_1_interrupt_IRQn
 #define CYBSP_DEBUG_UART_ENABLED 1U
 #define CYBSP_DEBUG_UART_HW SCB2
 #define CYBSP_DEBUG_UART_IRQ scb_2_interrupt_IRQn
@@ -199,9 +202,6 @@ extern "C" {
 #define tcpwm_0_group_0_cnt_6_ENABLED 1U
 #define tcpwm_0_group_0_cnt_6_HW TCPWM0
 #define tcpwm_0_group_0_cnt_6_NUM 6UL
-#define CYBSP_DEAD_TIME_PWM_ENABLED 1U
-#define CYBSP_DEAD_TIME_PWM_HW TCPWM0
-#define CYBSP_DEAD_TIME_PWM_NUM 7UL
 #define tcpwm_0_group_1_cnt_6_ENABLED 1U
 #define tcpwm_0_group_1_cnt_6_HW TCPWM0
 #define tcpwm_0_group_1_cnt_6_NUM 262UL
@@ -251,6 +251,17 @@ extern const mtb_hal_clock_t CYBSP_I2C_CONTROLLER_hal_clock;
 #if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_I2C)
 extern const mtb_hal_i2c_configurator_t CYBSP_I2C_CONTROLLER_hal_config;
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_I2C) */
+
+extern const cy_stc_scb_uart_config_t CYBSP_UART1_config;
+
+#if defined (COMPONENT_MTB_HAL)
+extern const mtb_hal_peri_div_t CYBSP_UART1_clock_ref;
+extern const mtb_hal_clock_t CYBSP_UART1_hal_clock;
+#endif /* defined (COMPONENT_MTB_HAL) */
+
+#if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_UART)
+extern const mtb_hal_uart_configurator_t CYBSP_UART1_hal_config;
+#endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_UART) */
 
 extern const cy_stc_scb_uart_config_t CYBSP_DEBUG_UART_config;
 
@@ -431,17 +442,6 @@ extern const mtb_hal_clock_t tcpwm_0_group_0_cnt_6_hal_clock;
 
 #if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM)
 extern const mtb_hal_pwm_configurator_t tcpwm_0_group_0_cnt_6_hal_config;
-#endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM) */
-
-extern const cy_stc_tcpwm_pwm_config_t CYBSP_DEAD_TIME_PWM_config;
-
-#if defined (COMPONENT_MTB_HAL)
-extern const mtb_hal_peri_div_t CYBSP_DEAD_TIME_PWM_clock_ref;
-extern const mtb_hal_clock_t CYBSP_DEAD_TIME_PWM_hal_clock;
-#endif /* defined (COMPONENT_MTB_HAL) */
-
-#if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM)
-extern const mtb_hal_pwm_configurator_t CYBSP_DEAD_TIME_PWM_hal_config;
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_PWM) */
 
 extern const cy_stc_tcpwm_pwm_config_t tcpwm_0_group_1_cnt_6_config;

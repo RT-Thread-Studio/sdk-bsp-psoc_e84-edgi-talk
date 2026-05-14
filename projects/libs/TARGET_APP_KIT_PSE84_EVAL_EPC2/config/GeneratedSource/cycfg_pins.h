@@ -484,18 +484,30 @@ extern "C" {
 #endif
 #define CYBSP_SERIAL_INT_0_HSIOM ioss_0_port_9_pin_0_HSIOM
 #define CYBSP_SERIAL_INT_0_IRQ ioss_interrupts_gpio_9_IRQn
-#define CYBSP_SERIAL_INT_2_ENABLED 1U
-#define CYBSP_SERIAL_INT_2_PORT GPIO_PRT9
-#define CYBSP_SERIAL_INT_2_PORT_NUM 9U
-#define CYBSP_SERIAL_INT_2_PIN 2U
-#define CYBSP_SERIAL_INT_2_NUM 2U
-#define CYBSP_SERIAL_INT_2_DRIVEMODE CY_GPIO_DM_STRONG_IN_OFF
-#define CYBSP_SERIAL_INT_2_INIT_DRIVESTATE 1
+#define CYBSP_UART1_TX_ENABLED 1U
+#define CYBSP_UART1_TX_PORT GPIO_PRT9
+#define CYBSP_UART1_TX_PORT_NUM 9U
+#define CYBSP_UART1_TX_PIN 2U
+#define CYBSP_UART1_TX_NUM 2U
+#define CYBSP_UART1_TX_DRIVEMODE CY_GPIO_DM_STRONG_IN_OFF
+#define CYBSP_UART1_TX_INIT_DRIVESTATE 1
 #ifndef ioss_0_port_9_pin_2_HSIOM
     #define ioss_0_port_9_pin_2_HSIOM HSIOM_SEL_GPIO
 #endif
-#define CYBSP_SERIAL_INT_2_HSIOM ioss_0_port_9_pin_2_HSIOM
-#define CYBSP_SERIAL_INT_2_IRQ ioss_interrupts_gpio_9_IRQn
+#define CYBSP_UART1_TX_HSIOM ioss_0_port_9_pin_2_HSIOM
+#define CYBSP_UART1_TX_IRQ ioss_interrupts_gpio_9_IRQn
+#define CYBSP_UART1_RX_ENABLED 1U
+#define CYBSP_UART1_RX_PORT GPIO_PRT9
+#define CYBSP_UART1_RX_PORT_NUM 9U
+#define CYBSP_UART1_RX_PIN 3U
+#define CYBSP_UART1_RX_NUM 3U
+#define CYBSP_UART1_RX_DRIVEMODE CY_GPIO_DM_HIGHZ
+#define CYBSP_UART1_RX_INIT_DRIVESTATE 1
+#ifndef ioss_0_port_9_pin_3_HSIOM
+    #define ioss_0_port_9_pin_3_HSIOM HSIOM_SEL_GPIO
+#endif
+#define CYBSP_UART1_RX_HSIOM ioss_0_port_9_pin_3_HSIOM
+#define CYBSP_UART1_RX_IRQ ioss_interrupts_gpio_9_IRQn
 #define CYBSP_BT_UART_RX_ENABLED 1U
 #define CYBSP_ETH_TXD_3_ENABLED CYBSP_BT_UART_RX_ENABLED
 #define CYBSP_BT_UART_RX_PORT GPIO_PRT10
@@ -1154,7 +1166,8 @@ extern const cy_stc_gpio_pin_config_t CYBSP_SW4_config;
 #define CYBSP_USER_BTN2_config CYBSP_SW4_config
 
 extern const cy_stc_gpio_pin_config_t CYBSP_SERIAL_INT_0_config;
-extern const cy_stc_gpio_pin_config_t CYBSP_SERIAL_INT_2_config;
+extern const cy_stc_gpio_pin_config_t CYBSP_UART1_TX_config;
+extern const cy_stc_gpio_pin_config_t CYBSP_UART1_RX_config;
 extern const cy_stc_gpio_pin_config_t CYBSP_BT_UART_RX_config;
 
 #define CYBSP_ETH_TXD_3_config CYBSP_BT_UART_RX_config

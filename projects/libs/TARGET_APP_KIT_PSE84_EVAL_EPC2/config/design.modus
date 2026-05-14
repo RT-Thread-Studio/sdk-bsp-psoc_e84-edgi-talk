@@ -85,11 +85,6 @@
                         <Alias value="CYBSP_SERIAL_INT_1"/>
                     </Aliases>
                 </Block>
-                <Block location="ioss[0].port[9].pin[3]">
-                    <Aliases>
-                        <Alias value="CYBSP_SERIAL_INT_3"/>
-                    </Aliases>
-                </Block>
                 <Block location="ioss[0].port[10].pin[5]">
                     <Aliases>
                         <Alias value="CYBSP_ARD_D6"/>
@@ -3108,11 +3103,32 @@
                 <Personality template="pin" version="3.0" instance="uympnGhW9g0">
                     <Block location="ioss[0].port[9].pin[2]" locked="true">
                         <Aliases>
-                            <Alias value="CYBSP_SERIAL_INT_2"/>
+                            <Alias value="CYBSP_UART1_TX"/>
                         </Aliases>
                     </Block>
                     <Parameters>
                         <Param id="DriveModes" value="CY_GPIO_DM_STRONG_IN_OFF"/>
+                        <Param id="driveStrength" value="CY_GPIO_DRIVE_1_2"/>
+                        <Param id="driveStrengthTrim" value="CY_GPIO_DRIVE_STRENGTH_DEFAULT"/>
+                        <Param id="extended_drive_sel" value="false"/>
+                        <Param id="inFlash" value="true"/>
+                        <Param id="initialState" value="1"/>
+                        <Param id="isrTrigger" value="CY_GPIO_INTR_DISABLE"/>
+                        <Param id="nonSec" value="1"/>
+                        <Param id="pullUpRes" value="CY_GPIO_PULLUP_RES_DISABLE"/>
+                        <Param id="sioOutputBuffer" value="true"/>
+                        <Param id="slewRate" value="CY_GPIO_SLEW_FAST"/>
+                        <Param id="vtrip" value="CY_GPIO_VTRIP_CMOS"/>
+                    </Parameters>
+                </Personality>
+                <Personality template="pin" version="3.0" instance="HoMBnAE2OOg">
+                    <Block location="ioss[0].port[9].pin[3]" locked="true">
+                        <Aliases>
+                            <Alias value="CYBSP_UART1_RX"/>
+                        </Aliases>
+                    </Block>
+                    <Parameters>
+                        <Param id="DriveModes" value="CY_GPIO_DM_HIGHZ"/>
                         <Param id="driveStrength" value="CY_GPIO_DRIVE_1_2"/>
                         <Param id="driveStrengthTrim" value="CY_GPIO_DRIVE_STRENGTH_DEFAULT"/>
                         <Param id="extended_drive_sel" value="false"/>
@@ -4405,7 +4421,7 @@
                 <Personality template="pclk_v2" version="1.1" instance="E5ESJtxKQgk">
                     <Block location="peri[0].group[1].div_8[0]" locked="true">
                         <Aliases>
-                            <Alias value="CYBSP_EZ_I2C_TARGET_CLK_DIV"/>
+                            <Alias value="CYBSP_UART5_CLK_DIV"/>
                         </Aliases>
                     </Block>
                     <Parameters>
@@ -4545,6 +4561,13 @@
                         <Param id="startOnReset" value="true"/>
                     </Parameters>
                 </Personality>
+                <Personality template="pclk_v2" version="1.1" instance="3Q1s3zZxgFg">
+                    <Block location="peri[0].group[8].div_16[0]" locked="true"/>
+                    <Parameters>
+                        <Param id="intDivider" value="174"/>
+                        <Param id="startOnReset" value="true"/>
+                    </Parameters>
+                </Personality>
                 <Personality template="pclk_v2" version="1.1" instance="1uBmbxjOkWE">
                     <Block location="peri[0].group[9].div_8[0]" locked="true">
                         <Aliases>
@@ -4646,6 +4669,60 @@
                         <Param id="ModeUser" value="CY_SCB_I2C_MASTER"/>
                         <Param id="SlaveAddress" value="8"/>
                         <Param id="SlaveAddressMask" value="254"/>
+                        <Param id="inFlash" value="true"/>
+                    </Parameters>
+                </Personality>
+                <Personality template="uart" version="3.0" instance="C3q91snHdug">
+                    <Block location="scb[1]" locked="true">
+                        <Aliases>
+                            <Alias value="CYBSP_UART1"/>
+                        </Aliases>
+                    </Block>
+                    <Parameters>
+                        <Param id="ApiMode" value="HIGH_LEVEL"/>
+                        <Param id="BaudRate" value="115200"/>
+                        <Param id="BitsOrder" value="CY_SCB_UART_LSB_FIRST"/>
+                        <Param id="BreakLevel" value="0"/>
+                        <Param id="BreakSignalBits" value="11"/>
+                        <Param id="ComMode" value="CY_SCB_UART_STANDARD"/>
+                        <Param id="CtsPolarity" value="CY_SCB_UART_ACTIVE_LOW"/>
+                        <Param id="DataWidth" value="8"/>
+                        <Param id="DropOnFrameErr" value="false"/>
+                        <Param id="DropOnParityErr" value="false"/>
+                        <Param id="EnableHalfDuplex" value="false"/>
+                        <Param id="EnableInputFilter" value="false"/>
+                        <Param id="EnableTxEn" value="false"/>
+                        <Param id="FlowControl" value="false"/>
+                        <Param id="IntrRxBreakDetected" value="false"/>
+                        <Param id="IntrRxFrameErr" value="false"/>
+                        <Param id="IntrRxFull" value="false"/>
+                        <Param id="IntrRxNotEmpty" value="false"/>
+                        <Param id="IntrRxOverflow" value="false"/>
+                        <Param id="IntrRxParityErr" value="false"/>
+                        <Param id="IntrRxTrigger" value="false"/>
+                        <Param id="IntrRxUnderflow" value="false"/>
+                        <Param id="IntrTxEmpty" value="false"/>
+                        <Param id="IntrTxNotFull" value="false"/>
+                        <Param id="IntrTxOverflow" value="false"/>
+                        <Param id="IntrTxTrigger" value="false"/>
+                        <Param id="IntrTxUartDone" value="false"/>
+                        <Param id="IntrTxUartLostArb" value="false"/>
+                        <Param id="IntrTxUartNack" value="false"/>
+                        <Param id="IntrTxUnderflow" value="false"/>
+                        <Param id="IrdaLowPower" value="false"/>
+                        <Param id="IrdaPolarity" value="NON_INVERTING"/>
+                        <Param id="MpRxAcceptAddress" value="false"/>
+                        <Param id="MpRxAddress" value="0"/>
+                        <Param id="MpRxAddressMask" value="255"/>
+                        <Param id="MultiProc" value="false"/>
+                        <Param id="Oversample" value="10"/>
+                        <Param id="ParityType" value="CY_SCB_UART_PARITY_NONE"/>
+                        <Param id="RtsPolarity" value="CY_SCB_UART_ACTIVE_LOW"/>
+                        <Param id="RtsTriggerLevel" value="63"/>
+                        <Param id="RxTriggerLevel" value="63"/>
+                        <Param id="SmCardRetryOnNack" value="false"/>
+                        <Param id="StopBits" value="CY_SCB_UART_STOP_BITS_1"/>
+                        <Param id="TxTriggerLevel" value="63"/>
                         <Param id="inFlash" value="true"/>
                     </Parameters>
                 </Personality>
@@ -5370,69 +5447,6 @@
                         <Param id="PwmAlignment" value="CY_TCPWM_PWM_LEFT_ALIGN"/>
                         <Param id="PwmDisabledOutput" value="CY_TCPWM_PWM_OUTPUT_HIGHZ"/>
                         <Param id="PwmMode" value="CY_TCPWM_PWM_MODE_PWM"/>
-                        <Param id="ReloadInput" value="CY_TCPWM_INPUT_DISABLED"/>
-                        <Param id="RunMode" value="CY_TCPWM_PWM_CONTINUOUS"/>
-                        <Param id="StartInput" value="CY_TCPWM_INPUT_DISABLED"/>
-                        <Param id="SwapInput" value="CY_TCPWM_INPUT_DISABLED"/>
-                        <Param id="SwapUnderflowOverflow" value="false"/>
-                        <Param id="TapsEnabled" value="45"/>
-                        <Param id="buff_line_out_source" value="CY_TCPWM_OUTPUT_PWM_SIGNAL"/>
-                        <Param id="buff_linecompl_out_source" value="CY_TCPWM_OUTPUT_INVERTED_PWM_SIGNAL"/>
-                        <Param id="enable_hrpwm" value="false"/>
-                        <Param id="hrpwm_input_clock" value="CY_TCPWM_HRPWM_FREQ_80MHZ_OR_100MHZ"/>
-                        <Param id="inFlash" value="true"/>
-                        <Param id="kill_line_polarity" value="CY_TCPWM_LINEOUT_AND_LINECMPOUT_IS_LOW"/>
-                        <Param id="limiter" value="CY_TCPWM_DITHERING_LIMITER_7"/>
-                        <Param id="line_out_source" value="CY_TCPWM_OUTPUT_PWM_SIGNAL"/>
-                        <Param id="linecompl_out_source" value="CY_TCPWM_OUTPUT_INVERTED_PWM_SIGNAL"/>
-                        <Param id="pwmstoponkill" value="true"/>
-                        <Param id="pwmsynckill" value="false"/>
-                        <Param id="pwmsynckilldt" value="false"/>
-                        <Param id="pwmtcsynckilldt" value="false"/>
-                        <Param id="reload_line_sel" value="false"/>
-                        <Param id="trigger0Event" value="CY_TCPWM_CNT_TRIGGER_ON_DISABLED"/>
-                        <Param id="trigger1Event" value="CY_TCPWM_CNT_TRIGGER_ON_DISABLED"/>
-                    </Parameters>
-                </Personality>
-                <Personality template="mxs40pwm_ver2" version="1.0" instance="a9L3YpbHpAo">
-                    <Block location="tcpwm[0].group[0].cnt[7]" locked="true">
-                        <Aliases>
-                            <Alias value="CYBSP_DEAD_TIME_PWM"/>
-                        </Aliases>
-                    </Block>
-                    <Parameters>
-                        <Param id="ClockPrescaler" value="CY_TCPWM_PWM_PRESCALER_DIVBY_1"/>
-                        <Param id="Compare0" value="200"/>
-                        <Param id="Compare0MatchDown" value="false"/>
-                        <Param id="Compare0MatchUp" value="true"/>
-                        <Param id="Compare1" value="16384"/>
-                        <Param id="Compare1MatchDown" value="false"/>
-                        <Param id="Compare1MatchUp" value="true"/>
-                        <Param id="Compare2" value="16384"/>
-                        <Param id="Compare3" value="16384"/>
-                        <Param id="CountInput" value="CY_TCPWM_INPUT_DISABLED"/>
-                        <Param id="DeadClocks" value="100"/>
-                        <Param id="DeadClocksBuff" value="0"/>
-                        <Param id="DeadClocksBuff_compl" value="0"/>
-                        <Param id="DeadClocks_compl" value="100"/>
-                        <Param id="Duty_Dithering" value="128"/>
-                        <Param id="EnableCompare0Swap" value="false"/>
-                        <Param id="EnableCompare1Swap" value="false"/>
-                        <Param id="EnablePeriodSwap" value="false"/>
-                        <Param id="ImmediateKill" value="false"/>
-                        <Param id="InterruptCC0" value="false"/>
-                        <Param id="InterruptCC1" value="false"/>
-                        <Param id="InterruptTC" value="false"/>
-                        <Param id="InvertPwm" value="false"/>
-                        <Param id="InvertPwm_n" value="false"/>
-                        <Param id="Kill0Input" value="CY_TCPWM_INPUT_DISABLED"/>
-                        <Param id="Kill1Input" value="CY_TCPWM_INPUT_DISABLED"/>
-                        <Param id="Period0" value="400"/>
-                        <Param id="Period1" value="32768"/>
-                        <Param id="Period_Dithering" value="128"/>
-                        <Param id="PwmAlignment" value="CY_TCPWM_PWM_LEFT_ALIGN"/>
-                        <Param id="PwmDisabledOutput" value="CY_TCPWM_PWM_OUTPUT_HIGHZ"/>
-                        <Param id="PwmMode" value="CY_TCPWM_PWM_MODE_DEADTIME"/>
                         <Param id="ReloadInput" value="CY_TCPWM_INPUT_DISABLED"/>
                         <Param id="RunMode" value="CY_TCPWM_PWM_CONTINUOUS"/>
                         <Param id="StartInput" value="CY_TCPWM_INPUT_DISABLED"/>
@@ -6232,12 +6246,12 @@
                     <Port name="pdm[0].pdm_data[3]"/>
                 </Net>
                 <Net>
-                    <Port name="ioss[0].port[9].pin[0].digital_out[0]"/>
-                    <Port name="tcpwm[0].group[0].cnt[7].line[0]"/>
+                    <Port name="ioss[0].port[9].pin[2].digital_inout[0]"/>
+                    <Port name="scb[1].uart_tx[0]"/>
                 </Net>
                 <Net>
-                    <Port name="ioss[0].port[9].pin[2].digital_out[0]"/>
-                    <Port name="tcpwm[0].group[0].cnt[7].line_compl[0]"/>
+                    <Port name="ioss[0].port[9].pin[3].digital_inout[0]"/>
+                    <Port name="scb[1].uart_rx[0]"/>
                 </Net>
                 <Net>
                     <Port name="ioss[0].port[10].pin[0].digital_inout[0]"/>
@@ -6380,16 +6394,12 @@
                     <Port name="tcpwm[0].group[0].cnt[1].clock_counter_en[0]"/>
                 </Net>
                 <Net>
-                    <Port name="peri[0].group[1].div_8[3].clk[0]"/>
-                    <Port name="tcpwm[0].group[0].cnt[7].clock_counter_en[0]"/>
+                    <Port name="peri[0].group[8].div_16[0].clk[0]"/>
+                    <Port name="scb[1].clock_scb_en[0]"/>
                 </Net>
                 <Net>
                     <Port name="peri[0].group[9].div_8[0].clk_pclk_root[0]"/>
                     <Port name="srss[0].clock[0].hfclk[13].root_clk[0]"/>
-                </Net>
-                <Net>
-                    <Port name="peri[0].mmio[0].clk_pclk_root[3]"/>
-                    <Port name="srss[0].clock[0].hfclk[11].root_clk[0]"/>
                 </Net>
                 <Net>
                     <Port name="peri[1].group[1].div_16_5[0].clk[0]"/>
@@ -6427,6 +6437,11 @@
                     <Port name="pass[0].clk_hf[0]"/>
                     <Port name="peri[0].mmio[0].clk_pclk_root[5]"/>
                     <Port name="srss[0].clock[0].hfclk[9].root_clk[0]"/>
+                </Net>
+                <Net>
+                    <Port name="peri[0].group[8].div_16[0].clk_pclk_root[0]"/>
+                    <Port name="peri[0].mmio[0].clk_pclk_root[3]"/>
+                    <Port name="srss[0].clock[0].hfclk[11].root_clk[0]"/>
                 </Net>
                 <Net>
                     <Port name="peri[1].group[1].div_16_5[0].clk_pclk_root[0]"/>
