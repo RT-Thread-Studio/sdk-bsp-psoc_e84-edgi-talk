@@ -11,8 +11,23 @@
 #include "board.h"
 
 #if defined(RT_USING_I2C)
-#if defined(BSP_USING_HW_I2C0) || defined(BSP_USING_HW_I2C3) || defined(BSP_USING_HW_I2C4) || defined(BSP_USING_HW_I2C6)
 #include <rtdevice.h>
+
+#include "cy_scb_i2c.h"
+#include "mtb_hal_i2c.h"
+
+#ifdef BSP_USING_HW_I2C0
+extern const cy_stc_scb_i2c_config_t CYBSP_I2C_CONTROLLER_config;
+extern const mtb_hal_i2c_configurator_t CYBSP_I2C_CONTROLLER_hal_config;
+#endif
+#ifdef BSP_USING_HW_I2C5
+extern const cy_stc_scb_i2c_config_t CYBSP_I2C5_CONTROLLER_config;
+extern const mtb_hal_i2c_configurator_t CYBSP_I2C5_CONTROLLER_hal_config;
+#endif
+#ifdef BSP_USING_HW_I2C8
+extern const cy_stc_scb_i2c_config_t scb_8_config;
+extern const mtb_hal_i2c_configurator_t scb_8_hal_config;
+#endif
 
 #ifndef I2C0_CONFIG
 #define I2C0_CONFIG                                                     \
@@ -24,20 +39,68 @@
     }
 #endif /* I2C0_CONFIG */
 
-#endif
+#ifndef I2C3_CONFIG
+#define I2C3_CONFIG                              \
+    {                                            \
+        .name = "i2c3",                        \
+        .base = SCB3,                           \
+        .cy_stc_scb_i2c_config = RT_NULL,       \
+        .mtb_hal_i2c_configurator = RT_NULL,    \
+    }
+#endif /* I2C3_CONFIG */
+
+#ifndef I2C4_CONFIG
+#define I2C4_CONFIG                              \
+    {                                            \
+        .name = "i2c4",                        \
+        .base = SCB4,                           \
+        .cy_stc_scb_i2c_config = RT_NULL,       \
+        .mtb_hal_i2c_configurator = RT_NULL,    \
+    }
+#endif /* I2C4_CONFIG */
+
+#ifndef I2C5_CONFIG
+#define I2C5_CONFIG                                                     \
+    {                                                                   \
+        .name = "i2c5",                                               \
+        .base = SCB5,                                                   \
+        .cy_stc_scb_i2c_config = &CYBSP_I2C5_CONTROLLER_config,         \
+        .mtb_hal_i2c_configurator = &CYBSP_I2C5_CONTROLLER_hal_config,  \
+    }
+#endif /* I2C5_CONFIG */
+
+#ifndef I2C6_CONFIG
+#define I2C6_CONFIG                              \
+    {                                            \
+        .name = "i2c6",                        \
+        .base = SCB6,                           \
+        .cy_stc_scb_i2c_config = RT_NULL,       \
+        .mtb_hal_i2c_configurator = RT_NULL,    \
+    }
+#endif /* I2C6_CONFIG */
+
+#ifndef I2C8_CONFIG
+#define I2C8_CONFIG                                  \
+    {                                                \
+        .name = "i2c8",                            \
+        .base = SCB8,                                \
+        .cy_stc_scb_i2c_config = &scb_8_config,      \
+        .mtb_hal_i2c_configurator = &scb_8_hal_config, \
+    }
+#endif /* I2C8_CONFIG */
 
 struct ifx_i2c
 {
-    mtb_hal_i2c_t *mtb_hal_i2c;
-    char *name;
+    const char *name;
     CySCB_Type *base;
     const cy_stc_scb_i2c_config_t *cy_stc_scb_i2c_config;
     const mtb_hal_i2c_configurator_t *mtb_hal_i2c_configurator;
-    cy_stc_scb_i2c_context_t *context;
+    mtb_hal_i2c_t hal_obj;
+    cy_stc_scb_i2c_context_t context;
     struct rt_i2c_bus_device i2c_bus;
 };
 
-static struct ifx_i2c ifx_i2c[] =
+static struct ifx_i2c i2c_objs[] =
 {
 #ifdef BSP_USING_HW_I2C0
     I2C0_CONFIG,
@@ -51,16 +114,24 @@ static struct ifx_i2c ifx_i2c[] =
     I2C4_CONFIG,
 #endif
 
+#ifdef BSP_USING_HW_I2C5
+    I2C5_CONFIG,
+#endif
+
 #ifdef BSP_USING_HW_I2C6
     I2C6_CONFIG,
 #endif
+
+#ifdef BSP_USING_HW_I2C8
+    I2C8_CONFIG,
+#endif
 };
 
-static struct ifx_i2c i2c_objs[sizeof(ifx_i2c) / sizeof(struct ifx_i2c)] = {0};
+#define I2C_BUS_NUM (sizeof(i2c_objs) / sizeof(i2c_objs[0]))
 
 static int ifx_i2c_read(struct ifx_i2c *hi2c, rt_uint16_t slave_address, rt_uint8_t *p_buffer, rt_uint16_t data_byte)
 {
-    if (mtb_hal_i2c_controller_read(hi2c->mtb_hal_i2c, slave_address, p_buffer, data_byte, 10, true) != RT_EOK)
+    if (mtb_hal_i2c_controller_read(&hi2c->hal_obj, slave_address, p_buffer, data_byte, 10, true) != CY_RSLT_SUCCESS)
     {
         return -RT_ERROR;
     }
@@ -70,7 +141,7 @@ static int ifx_i2c_read(struct ifx_i2c *hi2c, rt_uint16_t slave_address, rt_uint
 
 static int ifx_i2c_write(struct ifx_i2c *hi2c, uint16_t slave_address, uint8_t *p_buffer, uint16_t data_byte)
 {
-    if (mtb_hal_i2c_controller_write(hi2c->mtb_hal_i2c, slave_address, p_buffer, data_byte, 10, true) != RT_EOK)
+    if (mtb_hal_i2c_controller_write(&hi2c->hal_obj, slave_address, p_buffer, data_byte, 10, true) != CY_RSLT_SUCCESS)
     {
         return -RT_ERROR;
     }
@@ -121,33 +192,35 @@ static const struct rt_i2c_bus_device_ops i2c_ops =
     RT_NULL
 };
 
-void HAL_I2C_Init(struct ifx_i2c *obj)
+static rt_err_t ifx_i2c_hw_init(struct ifx_i2c *obj)
 {
     RT_ASSERT(obj != RT_NULL);
-    RT_ASSERT(obj->mtb_hal_i2c != RT_NULL);
-    RT_ASSERT(obj->mtb_hal_i2c_configurator != RT_NULL);
-    RT_ASSERT(obj->context != RT_NULL);
+
+    if ((obj->mtb_hal_i2c_configurator == RT_NULL) || (obj->cy_stc_scb_i2c_config == RT_NULL))
+    {
+        rt_kprintf("I2C %s config is missing, skip register\n", obj->name);
+        return -RT_ERROR;
+    }
 
     cy_rslt_t rslt;
     cy_en_scb_i2c_status_t result;
 
-    result = Cy_SCB_I2C_Init(obj->base, obj->cy_stc_scb_i2c_config, obj->context);
+    result = Cy_SCB_I2C_Init(obj->base, obj->cy_stc_scb_i2c_config, &obj->context);
     if (result != CY_SCB_I2C_SUCCESS)
     {
         rt_kprintf("Cy_SCB_I2C_Init failed for %s, code: 0x%08x\n", obj->name, result);
-        return;
+        return -RT_ERROR;
     }
 
     Cy_SCB_I2C_Enable(obj->base);
 
-    rslt = mtb_hal_i2c_setup(obj->mtb_hal_i2c, obj->mtb_hal_i2c_configurator, obj->context, NULL);
+    rslt = mtb_hal_i2c_setup(&obj->hal_obj, obj->mtb_hal_i2c_configurator, &obj->context, NULL);
     if (rslt != CY_RSLT_SUCCESS)
     {
         rt_kprintf("I2C setup failed for %s, code: 0x%08x\n", obj->name, rslt);
-        return;
+        return -RT_ERROR;
     }
 
-    // Define the I2C controller dev_config_struct structure
     mtb_hal_i2c_cfg_t i2c_controller_config =
     {
         MTB_HAL_I2C_MODE_CONTROLLER,
@@ -157,28 +230,30 @@ void HAL_I2C_Init(struct ifx_i2c *obj)
         false,
     };
 
-    rslt = mtb_hal_i2c_configure(obj->mtb_hal_i2c, &i2c_controller_config);
+    rslt = mtb_hal_i2c_configure(&obj->hal_obj, &i2c_controller_config);
     if (rslt != CY_RSLT_SUCCESS)
     {
         rt_kprintf("I2C configure failed for %s, code: 0x%08x\n", obj->name, rslt);
-        return;
+        return -RT_ERROR;
     }
+
+    return RT_EOK;
 }
 
 int rt_hw_i2c_init(void)
 {
     rt_err_t result = RT_EOK;
-    size_t i2c_num = sizeof(ifx_i2c) / sizeof(struct ifx_i2c);
+    size_t i2c_num = I2C_BUS_NUM;
 
     for (size_t i = 0; i < i2c_num; i++)
     {
-        i2c_objs[i] = ifx_i2c[i];
         i2c_objs[i].i2c_bus.ops = &i2c_ops;
-        i2c_objs[i].context = rt_malloc(sizeof(cy_stc_scb_i2c_context_t));
-        RT_ASSERT(i2c_objs[i].context != RT_NULL);
-        i2c_objs[i].mtb_hal_i2c = rt_malloc(sizeof(mtb_hal_i2c_t));
-        RT_ASSERT(i2c_objs[i].mtb_hal_i2c != RT_NULL);
-        HAL_I2C_Init(&i2c_objs[i]);
+
+        if (ifx_i2c_hw_init(&i2c_objs[i]) != RT_EOK)
+        {
+            continue;
+        }
+
         result = rt_i2c_bus_device_register(&i2c_objs[i].i2c_bus, i2c_objs[i].name);
         RT_ASSERT(result == RT_EOK);
     }
