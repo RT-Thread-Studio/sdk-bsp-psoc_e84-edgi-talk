@@ -302,16 +302,29 @@
 /* end of Select supported modules */
 #define PKG_USING_WEBNET_V203
 #define PKG_WEBNET_VER_NUM 0x20003
-#define WHD_RESOURCES_BLOCK_SIZE 1024
+#define WHD_SET_COUNTRY_FROM_HOST
+#define WHD_COUNTRY_CODE "AU"
+#define WHD_COUNTRY_CODE_REVISION 0
+#define CY_WIFI_USING_THREAD_INIT
+#define CY_WIFI_INIT_THREAD_PRIORITY 10
+#define CY_WIFI_INIT_THREAD_STACK_SIZE 2048
 #define CY_WIFI_WHD_THREAD_PRIORITY 6
 #define CY_WIFI_WHD_THREAD_STACK_SIZE 5120
+#define WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL
+#define WHD_RESOURCES_FIRMWARE_PART_NAME "whd_firmware"
+#define WHD_RESOURCES_CLM_PART_NAME "whd_clm"
+#define WHD_RESOURCES_NVRAM_PART_NAME "whd_nvram"
+#define WHD_RESOURCES_BLOCK_SIZE 1024
+#define WHD_USING_CHIP_CYW55500
+#define WHD_USING_WIFI6
 #define CYBSP_USING_PIN_NUMBER
 #define CYBSP_REG_ON_PIN 94
 #define CYBSP_HOST_WAKE_IRQ_PIN -1
 #define CYBSP_HOST_WAKE_IRQ_EVENT_FALL
 #define CYBSP_OOB_INTR_PRIORITY 2
-#define CY_WIFI_USING_THREAD_INIT
-#define CY_WIFI_INIT_THREAD_STACK_SIZE 2048
+#define WHD_PORTING_BSP
+#define WHD_PORTING_HAL
+#define WHD_LOG_LEVEL_ERROR
 
 /* Wi-Fi */
 
@@ -432,6 +445,7 @@
 #define LFS_BLOCK_CYCLES -1
 #define LFS_THREADSAFE
 #define LFS_LOOKAHEAD_MAX 128
+#define RT_DEF_LFS_DRIVERS 1
 /* end of system packages */
 
 /* peripheral libraries and drivers */
@@ -449,6 +463,38 @@
 /* Kendryte SDK */
 
 /* end of Kendryte SDK */
+
+/* WCH HAL & SDK Drivers */
+
+/* end of WCH HAL & SDK Drivers */
+
+/* AT32 HAL & SDK Drivers */
+
+/* end of AT32 HAL & SDK Drivers */
+
+/* HC32 DDL Drivers */
+
+/* end of HC32 DDL Drivers */
+
+/* NXP HAL & SDK Drivers */
+
+/* end of NXP HAL & SDK Drivers */
+
+/* NUVOTON Drivers */
+
+/* end of NUVOTON Drivers */
+
+/* GD32 Drivers */
+
+/* end of GD32 Drivers */
+
+/* HPMicro SDK */
+
+/* end of HPMicro SDK */
+
+/* FT32 HAL & SDK Drivers */
+
+/* end of FT32 HAL & SDK Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -543,7 +589,6 @@
 #define BSP_USING_AUDIO_PLAY
 #define BSP_USING_AUDIO_RECORD
 #define ENABLE_STEREO_INPUT_FEED
-#define BSP_USING_FREERTOS
 /* end of Onboard Peripheral Drivers */
 
 /* On-chip Peripheral Drivers */
@@ -551,6 +596,7 @@
 #define BSP_USING_GPIO
 #define BSP_USING_ADC
 #define BSP_USING_ADC1
+#define BSP_USING_ADC_CHANNEL1
 #define BSP_USING_I2C
 #define BSP_USING_HW_I2C0
 #define BSP_USING_SOFT_I2C1
@@ -572,13 +618,9 @@
 #define BSP_USING_SDCARD
 #define BSP_USING_FLASH
 #define BSP_USING_LITTLEFS
-#define RT_DEF_LFS_DRIVERS 1
 #define USING_LVGL
 #define BSP_USING_LVGL
-/* end of On-chip Peripheral Drivers */
-
-/* Board extended module Drivers */
-
+#define BSP_USING_FREERTOS
 #define BSP_USING_XiaoZhi
 #define PKG_LIB_OPUS
 #define RT_LWIP_USING_WEBSOCKET
@@ -587,14 +629,13 @@
 #define LWIP_ALTCP_TLS_MBEDTLS 1
 #define BSP_XIAOZHI_SOUND_DEVICE_NAME "sound0"
 #define BSP_XIAOZHI_MIC_DEVICE_NAME "mic0"
+/* end of On-chip Peripheral Drivers */
+
+/* Board extended module Drivers */
+
 #define RT_USING_WIFI_HOST_DRIVER
 
 /* WHD Configuration */
-
-#define WHD_SET_COUNTRY_FROM_HOST
-#define WHD_COUNTRY_CODE "AU"
-#define WHD_COUNTRY_CODE_REVISION 0
-#define CY_WIFI_INIT_THREAD_PRIORITY 10
 
 /* WHD Thread Configuration */
 
@@ -602,17 +643,10 @@
 
 /* WHD Resources Configuration */
 
-#define WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL
-#define WHD_RESOURCES_FIRMWARE_PART_NAME "whd_firmware"
-#define WHD_RESOURCES_CLM_PART_NAME "whd_clm"
-#define WHD_RESOURCES_NVRAM_PART_NAME "whd_nvram"
 /* end of WHD Resources Configuration */
 /* end of WHD Configuration */
 
 /* Hardware Configuration */
-
-#define WHD_USING_CHIP_CYW55500
-#define WHD_USING_WIFI6
 
 /* Pin Configuration */
 
@@ -621,10 +655,7 @@
 
 /* Porting options */
 
-#define WHD_PORTING_BSP
-#define WHD_PORTING_HAL
 /* end of Porting options */
-#define WHD_LOG_LEVEL_ERROR
 /* end of Board extended module Drivers */
 /* end of Hardware Drivers Config */
 
