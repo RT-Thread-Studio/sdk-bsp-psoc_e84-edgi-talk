@@ -7,7 +7,7 @@ config SOC_SERIES_IFX_PSOCE84
     default y
 
 config KIT_PROCE84_EVK_M55
-    bool 
+    bool
     default y
 
 menu "Onboard Peripheral Drivers"
@@ -106,6 +106,24 @@ menu "On-chip Peripheral Drivers"
             config BSP_USING_ADC1
                 bool "Enable ADC1"
                 default n
+
+            if BSP_USING_ADC1
+                config BSP_USING_ADC_CHANNEL0
+                    bool "Enable ADC Channel0 (P15[4])"
+                    default n
+
+                config BSP_USING_ADC_CHANNEL1
+                    bool "Enable ADC Channel1 (P15[5])"
+                    default y
+
+                config BSP_USING_ADC_CHANNEL2
+                    bool "Enable ADC Channel2 (P15[6])"
+                    default n
+
+                config BSP_USING_ADC_CHANNEL3
+                    bool "Enable ADC Channel3 (P15[7])"
+                    default n
+            endif
         endif
 
     menuconfig BSP_USING_CANFD
@@ -198,7 +216,6 @@ menu "On-chip Peripheral Drivers"
                 bool "Enable PWM13"
                 default n
         endif
-
 
     menuconfig BSP_USING_TIM
         bool "Enable Timer"
