@@ -32,7 +32,7 @@ if USE_PREBUILT:
     print('=== Using prebuilt libopus.a ===')
     LIBS = ['opus']
     LIBPATH = [cwd + '/lib']
-    group = DefineGroup('libopus', [], depend = ['PKG_LIB_OPUS'], 
+    group = DefineGroup('libopus', [], depend = [''], 
                         CPPPATH = path, CPPDEFINES = CPPDEFINES,
                         LIBS = LIBS, LIBPATH = LIBPATH)
 else:
@@ -53,7 +53,7 @@ else:
     else:    
         LOCAL_CCFLAGS = ''
     
-    group = DefineGroup('libopus', src, depend = ['PKG_LIB_OPUS'], 
+    group = DefineGroup('libopus', src, depend = [''], 
                         CPPPATH = path, CPPDEFINES = CPPDEFINES, 
                         LOCAL_CCFLAGS = LOCAL_CCFLAGS)
 
