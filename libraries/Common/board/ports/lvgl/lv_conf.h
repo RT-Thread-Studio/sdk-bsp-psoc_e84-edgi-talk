@@ -168,8 +168,16 @@
     /* Use Arm-2D to accelerate the sw render */
     #define LV_USE_DRAW_ARM2D_SYNC      0
 
-    /* Enable built-in helium assembly to be compiled */
-    #define LV_USE_NATIVE_HELIUM_ASM    0
+    /*
+     * This LVGL 9.2.0 package does not ship the official
+     * src/draw/sw/blend/helium/lv_blend_helium.h backend. Use the custom
+     * hook to enable local M55/MVE RGB565 fast paths instead.
+     */
+    #if defined(__ARM_FEATURE_MVE) && __ARM_FEATURE_MVE
+        #define LV_USE_NATIVE_HELIUM_ASM    1
+    #else
+        #define LV_USE_NATIVE_HELIUM_ASM    0
+    #endif
 
     /* 0: use a simple renderer capable of drawing only simple rectangles with gradient, images, texts, and straight lines only
      * 1: use a complex renderer capable of drawing rounded corners, shadow, skew lines, and arcs too */
@@ -188,10 +196,14 @@
         #define LV_DRAW_SW_CIRCLE_CACHE_SIZE 4
     #endif
 
-    #define  LV_USE_DRAW_SW_ASM     LV_DRAW_SW_ASM_NONE
+    #if LV_USE_NATIVE_HELIUM_ASM
+        #define LV_USE_DRAW_SW_ASM LV_DRAW_SW_ASM_CUSTOM
+    #else
+        #define LV_USE_DRAW_SW_ASM LV_DRAW_SW_ASM_NONE
+    #endif
 
     #if LV_USE_DRAW_SW_ASM == LV_DRAW_SW_ASM_CUSTOM
-        #define  LV_DRAW_SW_ASM_CUSTOM_INCLUDE ""
+        #define LV_DRAW_SW_ASM_CUSTOM_INCLUDE "lv_draw_sw_mve_custom.h"
     #endif
 
     /* Enable drawing complex gradients in software: linear at an angle, radial or conical */
@@ -249,7 +261,7 @@
     #define LV_VG_LITE_USE_ASSERT 1
 
     /* VG-Lite flush commit trigger threshold. GPU will try to batch these many draw tasks. */
-    #define LV_VG_LITE_FLUSH_MAX_COUNT 8
+    #define LV_VG_LITE_FLUSH_MAX_COUNT 16
 
     /* Enable border to simulate shadow
      * NOTE: which usually improves performance,
@@ -866,11 +878,13 @@
 #define LV_USE_SNAPSHOT 0
 
 /*1: Enable system monitor component*/
-#define LV_USE_SYSMON   0
+#define LV_USE_SYSMON   1
 #if LV_USE_SYSMON
     /*Get the idle percentage. E.g. uint32_t my_get_idle(void);*/
+#ifdef PKG_USING_CPU_USAGE
     extern uint32_t calculate_idle_percentage(void);
     #define LV_SYSMON_GET_IDLE calculate_idle_percentage
+#endif
 
     /*1: Show CPU usage and FPS count
      * Requires `LV_USE_SYSMON = 1`*/
@@ -1086,26 +1100,56 @@
  * DEMO USAGE
  ====================*/
 
+#if !defined(BSP_LVGL_DEMO_MUSIC) && !defined(BSP_LVGL_DEMO_BENCHMARK) && \
+    !defined(BSP_LVGL_DEMO_RENDER) && !defined(BSP_LVGL_DEMO_STRESS) && \
+    !defined(BSP_LVGL_DEMO_VIRTUAL3D_EMOJI)
+#define BSP_LVGL_DEMO_MUSIC
+#endif
+
 /*Show some widget. It might be required to increase `LV_MEM_SIZE` */
+#ifdef BSP_LVGL_DEMO_BENCHMARK
+#define LV_USE_DEMO_WIDGETS 1
+#else
 #define LV_USE_DEMO_WIDGETS 0
+#endif
 
 /*Demonstrate the usage of encoder and keyboard*/
 #define LV_USE_DEMO_KEYPAD_AND_ENCODER 0
 
 /*Benchmark your system*/
+#ifdef BSP_LVGL_DEMO_BENCHMARK
+#define LV_USE_DEMO_BENCHMARK 1
+#else
 #define LV_USE_DEMO_BENCHMARK 0
+#endif
 
 /*Render test for each primitives. Requires at least 480x272 display*/
+#ifdef BSP_LVGL_DEMO_RENDER
+#define LV_USE_DEMO_RENDER 1
+#else
 #define LV_USE_DEMO_RENDER 0
+#endif
 
 /*Stress test for LVGL*/
+#ifdef BSP_LVGL_DEMO_STRESS
 #define LV_USE_DEMO_STRESS 1
+#else
+#define LV_USE_DEMO_STRESS 0
+#endif
 
 /*Music player demo*/
+#ifdef BSP_LVGL_DEMO_MUSIC
+#define LV_USE_DEMO_MUSIC 1
+#else
 #define LV_USE_DEMO_MUSIC 0
+#endif
 #if LV_USE_DEMO_MUSIC
     #define LV_DEMO_MUSIC_SQUARE    0
+#if ((BSP_LCD_ROTATION_DEGREES == 90) || (BSP_LCD_ROTATION_DEGREES == 270))
     #define LV_DEMO_MUSIC_LANDSCAPE 1
+#else
+    #define LV_DEMO_MUSIC_LANDSCAPE 0
+#endif
     #define LV_DEMO_MUSIC_ROUND     0
     #define LV_DEMO_MUSIC_LARGE     0
     #define LV_DEMO_MUSIC_AUTO_PLAY 0

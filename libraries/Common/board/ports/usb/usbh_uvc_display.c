@@ -8,9 +8,9 @@
  */
 
 #include <rtthread.h>
+#include <rtdevice.h>
 #include <string.h>
 #include <board.h>
-#include "cy_graphics.h"
 #include "usbh_uvc_stream.h"
 #include "tjpgd.h"
 #include "usbh_uvc_display_hook.h"
@@ -45,10 +45,7 @@ static uint16_t   *lcd_fb;          /* pointer into LCD framebuffer */
 static uint32_t    lcd_fb_size;     /* bytes */
 static rt_bool_t   g_uvc_lcd_hw_ready;
 
-static GFXSS_Type *g_uvc_gfxbase = (GFXSS_Type*)GFXSS;
-static cy_stc_gfx_context_t g_uvc_gfx_context;
 /* Reuse LCD driver's framebuffer instead of allocating an additional 800x512 RGB565 surface. */
-extern uint8_t graphics_buffer[LCD_BUF_SIZE];
 static uvc_display_overlay_cb_t g_uvc_overlay_cb;
 static void *g_uvc_overlay_cb_ctx;
 
@@ -1022,31 +1019,51 @@ static UVC_ITCM_SECTION void uvc_display_prepare_yuv_lut(void)
 
 static UVC_ITCM_SECTION rt_err_t uvc_display_flush(const struct uvc_update_rect *rect)
 {
-    cy_en_gfx_status_t status;
+    rt_device_t lcd;
 
     if (!g_uvc_lcd_hw_ready) {
         return -RT_ERROR;
     }
 
-    if ((rect != RT_NULL) && (rect->width > 0U) && (rect->height > 0U) &&
-        (rect->x == 0U) &&
-        ((g_uvc_gfx_context.dc_context.display_type == GFX_DISP_TYPE_DBI_A) ||
-         (g_uvc_gfx_context.dc_context.display_type == GFX_DISP_TYPE_DBI_B) ||
-         (g_uvc_gfx_context.dc_context.display_type == GFX_DISP_TYPE_DBI_C) ||
-         (g_uvc_gfx_context.dc_context.display_type == GFX_DISP_TYPE_DSI_DBI))) {
-        uint32_t start_line = rect->y;
-        uint32_t end_line = (uint32_t)rect->y + rect->height;
-
-        if (end_line > LCD_H) {
-            end_line = LCD_H;
-        }
-
-        status = Cy_GFXSS_TransferPartialFrame(g_uvc_gfxbase, start_line, end_line, &g_uvc_gfx_context);
-    } else {
-        status = Cy_GFXSS_Set_FrameBuffer(g_uvc_gfxbase, (uint32_t *)lcd_fb, &g_uvc_gfx_context);
+    lcd = rt_device_find("lcd");
+    if (lcd == RT_NULL) {
+        return -RT_ERROR;
     }
 
-    return (status == CY_GFX_SUCCESS) ? RT_EOK : -RT_ERROR;
+    if ((rect != RT_NULL) && (rect->width > 0U) && (rect->height > 0U)) {
+        struct rt_device_rect_info info;
+
+        info.x = rect->x;
+        info.y = rect->y;
+        info.width = rect->width;
+        info.height = rect->height;
+        return rt_device_control(lcd, RTGRAPHIC_CTRL_RECT_UPDATE, &info);
+    }
+
+    return rt_device_control(lcd, RTGRAPHIC_CTRL_RECT_UPDATE, RT_NULL);
+}
+
+static UVC_ITCM_SECTION rt_err_t uvc_display_refresh_fb_info(void)
+{
+    rt_device_t lcd;
+    struct rt_device_graphic_info info;
+
+    lcd = rt_device_find("lcd");
+    if (lcd == RT_NULL) {
+        return -RT_ERROR;
+    }
+
+    memset(&info, 0, sizeof(info));
+    if (rt_device_control(lcd, RTGRAPHIC_CTRL_GET_INFO, &info) != RT_EOK) {
+        return -RT_ERROR;
+    }
+    if ((info.framebuffer == RT_NULL) || (info.smem_len < LCD_BUF_SIZE)) {
+        return -RT_ERROR;
+    }
+
+    lcd_fb = (uint16_t *)info.framebuffer;
+    lcd_fb_size = info.smem_len;
+    return RT_EOK;
 }
 
 static UVC_ITCM_SECTION rt_err_t uvc_display_hw_init(void)
@@ -1056,25 +1073,13 @@ static UVC_ITCM_SECTION rt_err_t uvc_display_hw_init(void)
     }
 
     /* LCD driver is responsible for GFXSS/panel initialization. */
-    memset(&g_uvc_gfx_context, 0, sizeof(g_uvc_gfx_context));
-
-    lcd_fb = (uint16_t *)graphics_buffer;
-    lcd_fb_size = LCD_BUF_SIZE;
+    if (uvc_display_refresh_fb_info() != RT_EOK) {
+        return -RT_ERROR;
+    }
     memset(lcd_fb, 0, lcd_fb_size);
 
     g_uvc_lcd_hw_ready = RT_TRUE;
     return uvc_display_flush(RT_NULL);
-}
-
-static UVC_ITCM_SECTION rt_err_t uvc_display_refresh_fb_info(void)
-{
-    if (!g_uvc_lcd_hw_ready) {
-        return -RT_ERROR;
-    }
-
-    lcd_fb = (uint16_t *)graphics_buffer;
-    lcd_fb_size = LCD_BUF_SIZE;
-    return RT_EOK;
 }
 
 static UVC_ITCM_SECTION rt_err_t uvc_display_prepare_geometry(uint16_t src_w, uint16_t src_h)

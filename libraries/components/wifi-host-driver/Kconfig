@@ -88,19 +88,25 @@ menuconfig RT_USING_WIFI_HOST_DRIVER
 
             menu "WHD Resources Configuration"
                     choice
-                        prompt "Select the external storage type for WHD resources"
+                        prompt "Select the storage type for WHD resources"
                         default WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL
 
-                        config WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS
-                            bool "File System"
+                        config WHD_RESOURCES_IN_SDCARD
+                            bool "SD card (/sdcard)"
                             select RT_USING_POSIX_FS
+                            select BSP_USING_FILESYSTEM
+                            select BSP_USING_SDCARD
 
                         config WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL
                             bool "Flash Abstraction Layer(FAL)"
                             select RT_USING_FAL
+
+                        config WHD_RESOURCES_IN_MEMORY
+                            bool "Built into application firmware"
+                            depends on WHD_USING_CHIP_CYW55500
                     endchoice
 
-                    if WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS
+                    if WHD_RESOURCES_IN_SDCARD
                         config WHD_RESOURCES_FIRMWARE_PATH_NAME
                             string "Set the file path of the firmware files"
                             default "/sdcard/55500A1.trxcse"
@@ -112,7 +118,12 @@ menuconfig RT_USING_WIFI_HOST_DRIVER
                         config WHD_RESOURCES_NVRAM_PATH_NAME
                             string "Set the file path of the nvram files"
                             default "/sdcard/cyw55513modpse84som_rev3.txt"
-                    endif # WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS
+
+                        config WHD_RESOURCES_FS_WAIT_TIMEOUT_MS
+                            int "Wait timeout for resource files"
+                            range 0 120000
+                            default 30000
+                    endif # WHD_RESOURCES_IN_SDCARD
 
                     if WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL
                         config WHD_RESOURCES_FIRMWARE_PART_NAME
@@ -188,9 +199,6 @@ menuconfig RT_USING_WIFI_HOST_DRIVER
                 choice
                     prompt "Select the pin name or number"
                     default CYBSP_USING_PIN_NUMBER
-                    help
-                        Select the pin configuration method for the WiFi_REG ON and HOST_WAKE_IRQ pins.
-                        You can choose to specify the pins by their names or by their numbers.
 
                     config CYBSP_USING_PIN_NAME
                         bool "Name"
@@ -240,61 +248,43 @@ menuconfig RT_USING_WIFI_HOST_DRIVER
             config WHD_PORTING_BSP
                 bool "Using BSP porting"
                 default y
-                help
-                    WHD_PORTING_BSP enables the Board Support Package (BSP) porting layer for the WiFi Host Driver (WHD).
-                    This option allows users to customize board-level configurations and functions.
-                    When the host uses Infineon's BSP, this option must be deselected to ensure compatibility with the host's BSP library.
 
             config WHD_PORTING_HAL
                 bool "Using HAL porting"
                 default y
-                help
-                    WHD_PORTING_HAL enables the Hardware Abstraction Layer (HAL) porting layer for the WiFi Host Driver (WHD).
-                    This option allows WHD to interface with the underlying hardware through a standardized HAL,
-                    facilitating easier integration and portability across different hardware platforms.
 
             config WHD_PORTING_RTOS
                 bool "Using RTOS porting"
                 default y
-                help
-                    WHD_PORTING_RTOS enables the Real-Time Operating System (RTOS) porting layer for the WiFi Host Driver (WHD).
-                    This option allows WHD to utilize RTOS-specific features such as threading, synchronization, and timing,
-                    ensuring optimal performance and integration within an RTOS environment.
-                    When using Infineon's abstraction-rtos component, this option should be unchecked.
 
             config WHD_USE_CUSTOM_MALLOC_IMPL
                 depends on WHD_PORTING_RTOS
                 bool "Using the malloc/free of RT-Thread"
                 default y
-                help
-                    WHD_USE_CUSTOM_MALLOC_IMPL enables the use of custom memory allocation functions (malloc/free)
-                    provided by the RT-Thread operating system for the WiFi Host Driver (WHD).
-                    This option ensures that WHD utilizes the RT-Thread's memory management mechanisms,
-                    which can lead to better integration and performance within the RT-Thread environment.
         endmenu
 
         choice
             prompt "Select the log level"
-            default WHD_LOG_LEVEL_ERROR
+            default RT_WHD_LOG_LEVEL_ERROR
 
-            config WHD_LOG_LEVEL_NONE
-            select WHD_PRINT_DISABLE
+            config RT_WHD_LOG_LEVEL_NONE
+                select WHD_PRINT_DISABLE
                 bool "None"
 
-            config WHD_LOG_LEVEL_ERROR
+            config RT_WHD_LOG_LEVEL_ERROR
                 bool "Error"
 
-            config WHD_LOG_LEVEL_INFO
+            config RT_WHD_LOG_LEVEL_INFO
                 select WPRINT_ENABLE_WHD_INFO
                 bool "Info"
 
-            config WHD_LOG_LEVEL_DEBUG
+            config RT_WHD_LOG_LEVEL_DEBUG
                 select WPRINT_ENABLE_WHD_INFO
                 select WPRINT_ENABLE_WHD_DEBUG
                 select WPRINT_ENABLE_WHD_ERROR_RETURN
                 bool "Debug"
 
-            config WHD_LOG_LEVEL_DATA_TRACE
+            config RT_WHD_LOG_LEVEL_DATA_TRACE
                 select WPRINT_ENABLE_WHD_INFO
                 select WPRINT_ENABLE_WHD_DEBUG
                 select WPRINT_ENABLE_WHD_DATA_LOG

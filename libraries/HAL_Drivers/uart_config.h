@@ -21,7 +21,7 @@ extern "C" {
 #ifdef BSP_USING_UART1
 cy_stc_sysint_t UART1_SCB_IRQ_cfg =
 {
-    .intrSrc = (IRQn_Type)scb_1_interrupt_IRQn,
+    .intrSrc = (IRQn_Type)CYBSP_I2C_1_IRQ,
     .intrPriority = (7u),
 };
 #endif
@@ -37,7 +37,7 @@ cy_stc_sysint_t UART2_SCB_IRQ_cfg =
 #ifdef BSP_USING_UART5
 cy_stc_sysint_t UART5_SCB_IRQ_cfg =
 {
-    .intrSrc = (IRQn_Type)scb_5_interrupt_IRQn,
+    .intrSrc = (IRQn_Type)CYBSP_DEBUG_UART_M33_IRQ,
     .intrPriority = (7u),
 };
 #endif
@@ -49,10 +49,10 @@ cy_stc_sysint_t UART5_SCB_IRQ_cfg =
 #define UART1_CONFIG                            \
     {                                           \
         .name = "uart1",                        \
-        .usart_x = SCB1,                        \
-        .intrSrc = scb_1_interrupt_IRQn,        \
-        .uart_config = &CYBSP_UART1_config,     \
-        .hal_uart_configurator = &CYBSP_UART1_hal_config, \
+        .usart_x = CYBSP_I2C_1_HW,              \
+        .intrSrc = CYBSP_I2C_1_IRQ,             \
+        .uart_config = &CYBSP_I2C_1_config,     \
+        .hal_uart_configurator = &CYBSP_I2C_1_hal_config, \
         .userIsr = uart_isr_callback(uart1),    \
         .UART_SCB_IRQ_cfg = &UART1_SCB_IRQ_cfg, \
     }
@@ -85,10 +85,10 @@ void uart2_isr_callback(void);
 #define UART5_CONFIG                            \
     {                                           \
         .name = "uart5",                        \
-        .usart_x = SCB5,                        \
-        .intrSrc = scb_5_interrupt_IRQn,        \
-        .uart_config = &CYBSP_UART5_config,     \
-        .hal_uart_configurator = &CYBSP_UART5_hal_config, \
+        .usart_x = CYBSP_DEBUG_UART_M33_HW,     \
+        .intrSrc = CYBSP_DEBUG_UART_M33_IRQ,    \
+        .uart_config = &CYBSP_DEBUG_UART_M33_config, \
+        .hal_uart_configurator = &CYBSP_DEBUG_UART_M33_hal_config, \
         .userIsr = uart_isr_callback(uart5),    \
         .UART_SCB_IRQ_cfg = &UART5_SCB_IRQ_cfg, \
     }

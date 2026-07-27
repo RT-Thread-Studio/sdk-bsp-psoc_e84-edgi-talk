@@ -10,7 +10,8 @@
 
 static void ipc_test_run(void)
 {
-    rt_device_t ipc_dev;
+    rt_device_t ipc_tx_dev;
+    rt_device_t ipc_rx_dev;
     edge_rc_frame_t tx_frame;
     edge_rc_frame_t rx_frame;
     rt_uint32_t seq = 0;
@@ -18,23 +19,27 @@ static void ipc_test_run(void)
     rt_uint32_t tx_count = 0;
     rt_uint32_t rx_count = 0;
 
-    /* 查找 IPC 设备 */
-    ipc_dev = edge_ipc_device_find();
-    if (ipc_dev == RT_NULL) {
-        if (edge_ipc_device_register() != RT_EOK) {
-            rt_kprintf("[M33] IPC: Device register failed\r\n");
-            return;
-        }
-        ipc_dev = edge_ipc_device_find();
-        if (ipc_dev == RT_NULL) {
-            rt_kprintf("[M33] IPC: Device not found\r\n");
-            return;
-        }
+    if (edge_ipc_device_register() != RT_EOK) {
+        rt_kprintf("[M33] IPC: Device register failed\r\n");
+        return;
     }
 
-    /* 打开 IPC 设备 */
-    if (rt_device_open(ipc_dev, RT_DEVICE_OFLAG_RDWR) != RT_EOK) {
-        rt_kprintf("[M33] IPC: Open device failed\r\n");
+    /* M33 sends on ipc1 and receives replies on ipc0. */
+    ipc_tx_dev = edge_ipc_device_find(EDGE_IPC0_DEVICE_NAME);
+    ipc_rx_dev = edge_ipc_device_find(EDGE_IPC1_DEVICE_NAME);
+    if (ipc_tx_dev == RT_NULL || ipc_rx_dev == RT_NULL) {
+        rt_kprintf("[M33] IPC: TX/RX device not found\r\n");
+        return;
+    }
+
+    if (rt_device_open(ipc_tx_dev, RT_DEVICE_OFLAG_RDWR) != RT_EOK) {
+        rt_kprintf("[M33] IPC: Open TX device failed\r\n");
+        return;
+    }
+
+    if (rt_device_open(ipc_rx_dev, RT_DEVICE_OFLAG_RDWR) != RT_EOK) {
+        rt_kprintf("[M33] IPC: Open RX device failed\r\n");
+        rt_device_close(ipc_tx_dev);
         return;
     }
 
@@ -69,7 +74,7 @@ static void ipc_test_run(void)
             tx_frame.checksum = edge_rc_checksum(&tx_frame);
 
             /* 发送消息 */
-            if (rt_device_write(ipc_dev, 0, &tx_frame, 1) == 1) {
+            if (rt_device_write(ipc_tx_dev, 0, &tx_frame, 1) == 1) {
                 rt_kprintf("[M33] TX -> [M55]: \"Hello M33\" | Seq: %5lu | Time: %8lu ms\r\n",
                            seq, rt_tick_get() * 1000 / RT_TICK_PER_SECOND);
                 tx_count++;
@@ -81,7 +86,7 @@ static void ipc_test_run(void)
         }
 
         /* 接收 M55 的回复 */
-        if (rt_device_read(ipc_dev, 0, &rx_frame, 1) == 1) {
+        if (rt_device_read(ipc_rx_dev, 0, &rx_frame, 1) == 1) {
             if (rx_frame.magic == RC_MAGIC_WORD &&
                 rx_frame.role == RC_ROLE_M55_ECHO &&
                 edge_rc_checksum(&rx_frame) == rx_frame.checksum) {
@@ -109,7 +114,7 @@ static void ipc_test_run(void)
             }
         }
 
-        rt_thread_mdelay(10);
+        rt_thread_mdelay(1);
     }
 }
 MSH_CMD_EXPORT(ipc_test_run, Start M33 IPC test);

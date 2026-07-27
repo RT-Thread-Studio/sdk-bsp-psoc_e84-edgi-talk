@@ -60,7 +60,6 @@ CPPDEFINES = [
     "_BAREMETAL=0",
     "FLASH_BOOT",
     "CY_PDL_FLASH_BOOT",
-    "BUILD_KIT_PROCE84_EVK_M55",
 ]
 group = DefineGroup("Drivers", src, depend=[""], CPPPATH=path, CPPDEFINES=CPPDEFINES)
 

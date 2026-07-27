@@ -37,6 +37,9 @@
 /*enable dump mmu page table*/
 #define DUMP_MMU_PAGE_TABLE 0
 
+/* Enable display-controller layer rotation support. */
+#define vivENABLE_LAYER_ROT 1
+
 /* Capture path */
 #define CAPTURE_PATH "/root/dc_capture.log"
 

@@ -28,8 +28,8 @@
 #define CONFIG_USB_DCACHE_ENABLE
 #endif
 
-/* data align size when use dma or use dcache */
-#ifdef CONFIG_USB_DCACHE_ENABLE
+/* DWC2 host prebuilt library requires DMA buffers to be at least 32-byte aligned. */
+#if defined(CONFIG_USB_DCACHE_ENABLE) || defined(RT_CHERRYUSB_HOST_DWC2_INFINEON)
 #define CONFIG_USB_ALIGN_SIZE 32 // 32 or 64
 #else
 #define CONFIG_USB_ALIGN_SIZE 4

@@ -1,0 +1,33 @@
+# RT-Thread building script for Cortex-M55.
+
+import os
+from building import *
+
+Import('rtconfig')
+
+cwd = GetCurrentDir()
+cortex_m33 = os.path.join(cwd, '..', 'cortex-m33')
+
+src = Glob('*.c') + Glob('*.cpp')
+src += Glob(os.path.join(cortex_m33, '*.c')) + Glob(os.path.join(cortex_m33, '*.cpp'))
+CPPPATH = [cwd, cortex_m33]
+
+for local_src in Glob('*.c') + Glob('*.cpp'):
+    SrcRemove(src, os.path.join(cortex_m33, os.path.basename(str(local_src))))
+
+if rtconfig.PLATFORM in ['armcc', 'armclang']:
+    src += Glob(os.path.join(cortex_m33, '*_rvds.S'))
+
+if rtconfig.PLATFORM in ['gcc']:
+    src += Glob(os.path.join(cortex_m33, '*_init.S'))
+    src += Glob('*_gcc.S')
+
+if rtconfig.PLATFORM in ['iccarm']:
+    src += Glob(os.path.join(cortex_m33, '*_iar.S'))
+
+if not GetDepend('RT_USING_MEM_PROTECTION') and not GetDepend('RT_USING_HW_STACK_GUARD'):
+    SrcRemove(src, os.path.join(cortex_m33, 'mpu.c'))
+
+group = DefineGroup('libcpu', src, depend=[''], CPPPATH=CPPPATH)
+
+Return('group')

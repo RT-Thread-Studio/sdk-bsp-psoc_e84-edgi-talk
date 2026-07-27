@@ -56,6 +56,7 @@
 #define RT_CONSOLE_DEVICE_NAME "uart2"
 /* end of Kernel Device Object */
 #define RT_VER_NUM 0x50002
+#define RT_USING_CACHE
 /* end of RT-Thread Kernel */
 
 /* RT-Thread Components */

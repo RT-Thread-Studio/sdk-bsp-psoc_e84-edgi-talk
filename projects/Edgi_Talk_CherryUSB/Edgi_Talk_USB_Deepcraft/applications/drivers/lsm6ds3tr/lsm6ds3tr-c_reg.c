@@ -99,54 +99,54 @@ int32_t __weak lsm6ds3tr_c_write_reg(const stmdev_ctx_t *ctx, uint8_t reg,
   *
   */
 
-float_t lsm6ds3tr_c_from_fs2g_to_mg(int16_t lsb)
+float lsm6ds3tr_c_from_fs2g_to_mg(int16_t lsb)
 {
-    return ((float_t)lsb * 0.061f);
+    return ((float)lsb * 0.061f);
 }
 
-float_t lsm6ds3tr_c_from_fs4g_to_mg(int16_t lsb)
+float lsm6ds3tr_c_from_fs4g_to_mg(int16_t lsb)
 {
-    return ((float_t)lsb * 0.122f);
+    return ((float)lsb * 0.122f);
 }
 
-float_t lsm6ds3tr_c_from_fs8g_to_mg(int16_t lsb)
+float lsm6ds3tr_c_from_fs8g_to_mg(int16_t lsb)
 {
-    return ((float_t)lsb * 0.244f);
+    return ((float)lsb * 0.244f);
 }
 
-float_t lsm6ds3tr_c_from_fs16g_to_mg(int16_t lsb)
+float lsm6ds3tr_c_from_fs16g_to_mg(int16_t lsb)
 {
-    return ((float_t)lsb * 0.488f);
+    return ((float)lsb * 0.488f);
 }
 
-float_t lsm6ds3tr_c_from_fs125dps_to_mdps(int16_t lsb)
+float lsm6ds3tr_c_from_fs125dps_to_mdps(int16_t lsb)
 {
-    return ((float_t)lsb * 4.375f);
+    return ((float)lsb * 4.375f);
 }
 
-float_t lsm6ds3tr_c_from_fs250dps_to_mdps(int16_t lsb)
+float lsm6ds3tr_c_from_fs250dps_to_mdps(int16_t lsb)
 {
-    return ((float_t)lsb * 8.750f);
+    return ((float)lsb * 8.750f);
 }
 
-float_t lsm6ds3tr_c_from_fs500dps_to_mdps(int16_t lsb)
+float lsm6ds3tr_c_from_fs500dps_to_mdps(int16_t lsb)
 {
-    return ((float_t)lsb * 17.50f);
+    return ((float)lsb * 17.50f);
 }
 
-float_t lsm6ds3tr_c_from_fs1000dps_to_mdps(int16_t lsb)
+float lsm6ds3tr_c_from_fs1000dps_to_mdps(int16_t lsb)
 {
-    return ((float_t)lsb * 35.0f);
+    return ((float)lsb * 35.0f);
 }
 
-float_t lsm6ds3tr_c_from_fs2000dps_to_mdps(int16_t lsb)
+float lsm6ds3tr_c_from_fs2000dps_to_mdps(int16_t lsb)
 {
-    return ((float_t)lsb * 70.0f);
+    return ((float)lsb * 70.0f);
 }
 
-float_t lsm6ds3tr_c_from_lsb_to_celsius(int16_t lsb)
+float lsm6ds3tr_c_from_lsb_to_celsius(int16_t lsb)
 {
-    return (((float_t)lsb / 256.0f) + 25.0f);
+    return (((float)lsb / 256.0f) + 25.0f);
 }
 
 /**
@@ -1992,7 +1992,7 @@ int32_t lsm6ds3tr_c_xl_hp_path_internal_get(const stmdev_ctx_t *ctx,
 
 /**
   * @brief  Accelerometer analog chain bandwidth selection (only for
-  *         accelerometer ODR â‰¥ 1.67 kHz).[set]
+  *         accelerometer ODR â‰?1.67 kHz).[set]
   *
   * @param  ctx    Read / write interface definitions
   * @param  val    Change the values of bw0_xl in reg CTRL1_XL
@@ -2020,7 +2020,7 @@ int32_t lsm6ds3tr_c_xl_filter_analog_set(const stmdev_ctx_t *ctx,
 
 /**
   * @brief  Accelerometer analog chain bandwidth selection (only for
-  *         accelerometer ODR â‰¥ 1.67 kHz).[get]
+  *         accelerometer ODR â‰?1.67 kHz).[get]
   *
   * @param  ctx    Read / write interface definitions
   * @param  val    Get the values of bw0_xl in reg CTRL1_XL

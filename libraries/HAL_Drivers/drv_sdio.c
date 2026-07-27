@@ -42,6 +42,7 @@
 #define CY_SDIO_ADMA_MAX_LEN        (0xFFFFU)       /* ADMA max length 64KB */
 #define CY_SDIO_MAX_BLOCKS          (CY_SDIO_ADMA_MAX_LEN / 512U)
 #define CY_SDIO_BOUNCE_ALIGN        (32U)           /* DMA buffer alignment */
+#define CY_SDIO_BOUNCE_ALIGN_MASK   (CY_SDIO_BOUNCE_ALIGN - 1U)
 #define CY_SDIO_BUFF_SIZE           (CY_SDIO_ADMA_MAX_LEN)
 
 /* Command timeout in milliseconds */
@@ -80,11 +81,62 @@ struct cy_pse_sdio
 };
 
 #ifdef BSP_USING_SDIO0
+static mtb_hal_sdhc_t sdhc0_obj;    /* SDHC hardware objects */
+static const struct cy_pse_sdio_hw_desc sdhc0_hw_desc =
+{
+    .hw_base = CYBSP_SDHC_0_HW,
+    .sdhc_obj = &sdhc0_obj,
+    .pdl_config = &CYBSP_SDHC_0_config,
+    .hal_config = &CYBSP_SDHC_0_sdhc_hal_config,
+};
 struct cy_pse_sdio *sdio0;
 #endif /* #ifdef BSP_USING_SDIO0 */
 #ifdef BSP_USING_SDIO1
+static mtb_hal_sdhc_t sdhc1_obj;    /* SDHC hardware objects */
+static const struct cy_pse_sdio_hw_desc sdhc1_hw_desc =
+{
+    .hw_base = CYBSP_SDHC_1_HW,
+    .sdhc_obj = &sdhc1_obj,
+    .pdl_config = &CYBSP_SDHC_1_config,
+    .hal_config = &CYBSP_SDHC_1_sdhc_hal_config,
+};
 struct cy_pse_sdio *sdio1;
 #endif /* #ifdef BSP_USING_SDIO1 */
+
+static volatile rt_tick_t s_sdio_quiet_until;
+static volatile rt_uint32_t s_sdio_quiet_depth;
+
+void rt_hw_sdio_quiet_for(rt_uint32_t timeout_ms)
+{
+    s_sdio_quiet_until = rt_tick_get() + rt_tick_from_millisecond(timeout_ms);
+}
+RTM_EXPORT(rt_hw_sdio_quiet_for);
+
+void rt_hw_sdio_quiet_begin(void)
+{
+    s_sdio_quiet_depth++;
+}
+RTM_EXPORT(rt_hw_sdio_quiet_begin);
+
+void rt_hw_sdio_quiet_end(void)
+{
+    if (s_sdio_quiet_depth > 0U)
+    {
+        s_sdio_quiet_depth--;
+    }
+}
+RTM_EXPORT(rt_hw_sdio_quiet_end);
+
+rt_bool_t rt_hw_sdio_is_quiet(void)
+{
+    if (s_sdio_quiet_depth > 0U)
+    {
+        return RT_TRUE;
+    }
+
+    return (((rt_int32_t)(s_sdio_quiet_until - rt_tick_get())) > 0) ? RT_TRUE : RT_FALSE;
+}
+RTM_EXPORT(rt_hw_sdio_is_quiet);
 
 /**
  * @brief Convert RT-Thread response type to HAL response type
@@ -140,6 +192,32 @@ static rt_bool_t cy_sdio_resp_need_idx(rt_uint32_t flags)
         return RT_FALSE;
     default:
         return RT_TRUE;
+    }
+}
+
+static rt_bool_t cy_sdio_dma_buffer_aligned(const void *buffer, rt_size_t size)
+{
+    return ((((rt_ubase_t)buffer | (rt_ubase_t)size) & CY_SDIO_BOUNCE_ALIGN_MASK) == 0U) ?
+           RT_TRUE : RT_FALSE;
+}
+
+static rt_bool_t cy_sdio_is_probe_timeout(const struct rt_mmcsd_cmd *cmd,
+                                          mtb_hal_sdhc_error_type_t hw_err)
+{
+    if ((cmd == RT_NULL) || ((hw_err & MTB_HAL_SDHC_CMD_TOUT_ERR) == 0U))
+    {
+        return RT_FALSE;
+    }
+
+    switch (cmd->cmd_code)
+    {
+    case 1:  /* MMC_SEND_OP_COND, expected to timeout when only SD/no card is present */
+    case 5:  /* IO_SEND_OP_COND, expected to timeout for normal SD memory cards */
+    case 8:  /* SEND_IF_COND, expected to timeout when no card is present */
+    case 55: /* APP_CMD, expected to timeout when no card is present */
+        return RT_TRUE;
+    default:
+        return RT_FALSE;
     }
 }
 
@@ -212,6 +290,7 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
     rt_uint8_t *dma_buf = RT_NULL;
     rt_size_t total_bytes = 0;
     rt_bool_t use_bounce = RT_FALSE;
+    rt_bool_t quiet = rt_hw_sdio_is_quiet();
 
     /* Clear auto cmd12 flag at start of each command */
     sdio->auto_cmd12_sent = RT_FALSE;
@@ -265,12 +344,23 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
             goto exit;
         }
 
-        dma_buf = sdio->bounce_buf;
-        use_bounce = RT_TRUE;
+        if (cy_sdio_dma_buffer_aligned(user_buf, total_bytes))
+        {
+            dma_buf = user_buf;
+            use_bounce = RT_FALSE;
+        }
+        else
+        {
+            dma_buf = sdio->bounce_buf;
+            use_bounce = RT_TRUE;
+        }
 
         if (data->flags & DATA_DIR_WRITE)
         {
-            rt_memcpy(dma_buf, user_buf, total_bytes);
+            if (use_bounce)
+            {
+                rt_memcpy(dma_buf, user_buf, total_bytes);
+            }
             CY_SDIO_DCACHE_CLEAN(dma_buf, total_bytes);
         }
         else
@@ -323,7 +413,10 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
     result = mtb_hal_sdhc_send_cmd(sdio->hw_desc->sdhc_obj, &hal_cmd);
     if (CY_RSLT_SUCCESS != result)
     {
-        LOG_E("send cmd %d fail: 0x%08x", cmd->cmd_code, (unsigned int)result);
+        if (!quiet)
+        {
+            LOG_E("send cmd %d fail: 0x%08x", cmd->cmd_code, (unsigned int)result);
+        }
         err = -RT_ERROR;
         goto exit_hw;
     }
@@ -336,7 +429,10 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
         result = mtb_hal_sdhc_get_response(sdio->hw_desc->sdhc_obj, cmd->resp, large);
         if (CY_RSLT_SUCCESS != result)
         {
-            LOG_E("get response fail: 0x%08x", (unsigned int)result);
+            if (!quiet)
+            {
+                LOG_E("get response fail: 0x%08x", (unsigned int)result);
+            }
             err = -RT_ERROR;
             goto exit_hw;
         }
@@ -371,16 +467,22 @@ static rt_err_t cy_sdio_send_command(struct cy_pse_sdio *sdio, struct rt_mmcsd_c
         result = mtb_hal_sdhc_wait_transfer_complete(sdio->hw_desc->sdhc_obj);
         if (CY_RSLT_SUCCESS != result)
         {
-            LOG_E("wait transfer complete fail: 0x%08x", (unsigned int)result);
+            if (!quiet)
+            {
+                LOG_E("wait transfer complete fail: 0x%08x", (unsigned int)result);
+            }
             err = -RT_ERROR;
             goto exit_hw;
         }
 
         /* Copy data from bounce buffer for read operations */
-        if (use_bounce && (data->flags & DATA_DIR_READ))
+        if (data->flags & DATA_DIR_READ)
         {
             CY_SDIO_DCACHE_INVALIDATE(dma_buf, total_bytes);
-            rt_memcpy(user_buf, dma_buf, total_bytes);
+            if (use_bounce)
+            {
+                rt_memcpy(user_buf, dma_buf, total_bytes);
+            }
         }
         data->bytes_xfered = total_bytes;
     }
@@ -397,7 +499,10 @@ exit_hw:
             }
             else if (hw_err & (MTB_HAL_SDHC_CMD_CRC_ERR | MTB_HAL_SDHC_DATA_CRC_ERR))
             {
-                LOG_E("CRC error: cmd %d hw_err 0x%04x", cmd->cmd_code, (unsigned int)hw_err);
+                if (!quiet)
+                {
+                    LOG_E("CRC error: cmd %d hw_err 0x%04x", cmd->cmd_code, (unsigned int)hw_err);
+                }
                 err = -RT_ERROR;
             }
             else
@@ -405,8 +510,11 @@ exit_hw:
                 err = -RT_ERROR;
             }
 
-            LOG_W("cmd %d arg 0x%08x flags 0x%08x hw_err 0x%04x",
-                  cmd->cmd_code, cmd->arg, cmd->flags, (unsigned int)hw_err);
+            if (!quiet && !cy_sdio_is_probe_timeout(cmd, hw_err))
+            {
+                LOG_W("cmd %d arg 0x%08x flags 0x%08x hw_err 0x%04x",
+                      cmd->cmd_code, cmd->arg, cmd->flags, (unsigned int)hw_err);
+            }
             mtb_hal_sdhc_clear_errors(sdio->hw_desc->sdhc_obj);
 
             /* Reset command and data lines on error */
@@ -674,14 +782,80 @@ static const struct rt_mmcsd_host_ops cy_sdio_ops =
  */
 bool Cy_SD_Host_IsCardConnected(SDHC_Type const *base)
 {
-    (void)base;
+    RT_UNUSED(base);
     return true;
 }
 
-static void cy_sdio_card_irq_handler (struct cy_pse_sdio *sdio)
+static void cy_sdio_notify_card_change(struct cy_pse_sdio *sdio)
 {
-    uint32_t interruptStatus = Cy_SD_Host_GetNormalInterruptStatus(sdio->hw_desc->hw_base);
-    uint32_t normalInterruptMask = Cy_SD_Host_GetNormalInterruptMask(sdio->hw_desc->hw_base);
+    if ((sdio != RT_NULL) && (sdio->host != RT_NULL))
+    {
+        mmcsd_change(sdio->host);
+    }
+}
+
+rt_err_t rt_hw_sdio_rescan(void)
+{
+    const char *sd_device_names[] = {"sd", "sd0", "sd1", "sd2"};
+    int i;
+
+    for (i = 0; i < sizeof(sd_device_names) / sizeof(sd_device_names[0]); i++)
+    {
+        if (rt_device_find(sd_device_names[i]) != RT_NULL)
+        {
+            return RT_EOK;
+        }
+    }
+
+#ifdef BSP_USING_SDIO1
+    if (sdio1 != RT_NULL)
+    {
+        cy_sdio_notify_card_change(sdio1);
+        return RT_EOK;
+    }
+#endif
+#ifdef BSP_USING_SDIO0
+    if (sdio0 != RT_NULL)
+    {
+        cy_sdio_notify_card_change(sdio0);
+        return RT_EOK;
+    }
+#endif
+    return -RT_ERROR;
+}
+RTM_EXPORT(rt_hw_sdio_rescan);
+
+rt_err_t rt_hw_sdio_force_change(void)
+{
+#ifdef BSP_USING_SDIO1
+    if (sdio1 != RT_NULL)
+    {
+        cy_sdio_notify_card_change(sdio1);
+        return RT_EOK;
+    }
+#endif
+#ifdef BSP_USING_SDIO0
+    if (sdio0 != RT_NULL)
+    {
+        cy_sdio_notify_card_change(sdio0);
+        return RT_EOK;
+    }
+#endif
+    return -RT_ERROR;
+}
+RTM_EXPORT(rt_hw_sdio_force_change);
+
+static void cy_sdio_card_irq_handler(struct cy_pse_sdio *sdio,
+                                     const struct cy_pse_sdio_hw_desc *hw_desc)
+{
+    if ((sdio == RT_NULL) || (sdio->host == RT_NULL) || (hw_desc == RT_NULL) ||
+        (hw_desc->hw_base == RT_NULL))
+    {
+        return;
+    }
+
+    uint32_t interruptStatus = Cy_SD_Host_GetNormalInterruptStatus(hw_desc->hw_base);
+    uint32_t normalInterruptMask = Cy_SD_Host_GetNormalInterruptMask(hw_desc->hw_base);
 
     /*  CY_SD_HOST_XFER_COMPLETE occured and appropriate bit in interrupt mask is enabled */
     if (interruptStatus & normalInterruptMask & CY_SD_HOST_XFER_COMPLETE)
@@ -689,10 +863,10 @@ static void cy_sdio_card_irq_handler (struct cy_pse_sdio *sdio)
         /* Transfer is no more active. If card interrupt was not yet enabled after it was disabled
          * in interrupt handler, enable it.
          */
-        uint32_t interrupt_enable_status = Cy_SD_Host_GetNormalInterruptEnable(sdio->hw_desc->hw_base);
+        uint32_t interrupt_enable_status = Cy_SD_Host_GetNormalInterruptEnable(hw_desc->hw_base);
         if ((interrupt_enable_status & CY_SD_HOST_CARD_INTERRUPT) == 0)
         {
-            Cy_SD_Host_SetNormalInterruptEnable(sdio->hw_desc->hw_base,
+            Cy_SD_Host_SetNormalInterruptEnable(hw_desc->hw_base,
                                                 (interrupt_enable_status |
                                                     CY_SD_HOST_CARD_INTERRUPT));
         }
@@ -703,10 +877,10 @@ static void cy_sdio_card_irq_handler (struct cy_pse_sdio *sdio)
      */
     if (0U != (interruptStatus & CY_SD_HOST_CARD_INTERRUPT))
     {
-        uint32_t interruptMask = Cy_SD_Host_GetNormalInterruptEnable(sdio->hw_desc->hw_base);
+        uint32_t interruptMask = Cy_SD_Host_GetNormalInterruptEnable(hw_desc->hw_base);
         interruptMask &= (uint32_t) ~CY_SD_HOST_CARD_INTERRUPT;
         /* Disable Card Interrupt */
-        Cy_SD_Host_SetNormalInterruptEnable(sdio->hw_desc->hw_base, interruptMask);
+        Cy_SD_Host_SetNormalInterruptEnable(hw_desc->hw_base, interruptMask);
 
         /* Notify the upper layer about sdio card interrupt */
         sdio_irq_wakeup(sdio->host);
@@ -719,9 +893,14 @@ static void cy_sdio_card_irq_handler (struct cy_pse_sdio *sdio)
  */
 static void cy_sdio0_isr(void)
 {
+    struct cy_pse_sdio *sdio = sdio0;
+
     rt_interrupt_enter();
-    cy_sdio_card_irq_handler(sdio0);
-    mtb_hal_sdhc_process_interrupt(sdio0->hw_desc->sdhc_obj);
+    if (sdio != RT_NULL)
+    {
+        cy_sdio_card_irq_handler(sdio, &sdhc0_hw_desc);
+        mtb_hal_sdhc_process_interrupt(sdhc0_hw_desc.sdhc_obj);
+    }
     rt_interrupt_leave();
 }
 #endif /* BSP_USING_SDIO0 */
@@ -732,9 +911,14 @@ static void cy_sdio0_isr(void)
  */
 static void cy_sdio1_isr(void)
 {
+    struct cy_pse_sdio *sdio = sdio1;
+
     rt_interrupt_enter();
-    cy_sdio_card_irq_handler(sdio1);
-    mtb_hal_sdhc_process_interrupt(sdio1->hw_desc->sdhc_obj);
+    if (sdio != RT_NULL)
+    {
+        cy_sdio_card_irq_handler(sdio, &sdhc1_hw_desc);
+        mtb_hal_sdhc_process_interrupt(sdhc1_hw_desc.sdhc_obj);
+    }
     rt_interrupt_leave();
 }
 #endif /* BSP_USING_SDIO1 */
@@ -869,15 +1053,6 @@ int rt_hw_sdio_init(void)
     cy_en_sysint_status_t sysint_status;
 
 #ifdef BSP_USING_SDIO0
-    static mtb_hal_sdhc_t sdhc0_obj;    /* SDHC hardware objects */
-    static const struct cy_pse_sdio_hw_desc sdhc0_hw_desc =
-    {
-        .hw_base = CYBSP_SDHC_0_HW,
-        .sdhc_obj = &sdhc0_obj,
-        .pdl_config = &CYBSP_SDHC_0_config,
-        .hal_config = &CYBSP_SDHC_0_sdhc_hal_config,
-    };
-
     /* Enable SDHC hardware block */
     Cy_SD_Host_Enable(sdhc0_hw_desc.hw_base);
 
@@ -890,8 +1065,8 @@ int rt_hw_sdio_init(void)
 
     if ((sysint_status = Cy_SysInt_Init(&sdhc0_isr_config, cy_sdio0_isr)) == CY_SYSINT_SUCCESS)
     {
-        /* Enable NVIC interrupt */
-        NVIC_EnableIRQ((IRQn_Type)sdhc0_isr_config.intrSrc);
+        NVIC_DisableIRQ((IRQn_Type)sdhc0_isr_config.intrSrc);
+        NVIC_ClearPendingIRQ((IRQn_Type)sdhc0_isr_config.intrSrc);
 
         /* Create SDIO0 host */
         if ((sdio0 = sdio_host_create(&sdhc0_hw_desc)) == RT_NULL)
@@ -903,6 +1078,10 @@ int rt_hw_sdio_init(void)
         /* Configure default IO settings */
         sdio0->host->io_cfg.signal_voltage = MMCSD_SIGNAL_VOLTAGE_180;
         sdio0->en_auto_cmd12 = RT_FALSE;
+
+        /* Enable NVIC interrupt after host state is fully initialized. */
+        NVIC_ClearPendingIRQ((IRQn_Type)sdhc0_isr_config.intrSrc);
+        NVIC_EnableIRQ((IRQn_Type)sdhc0_isr_config.intrSrc);
     }
     else
     {
@@ -912,15 +1091,6 @@ int rt_hw_sdio_init(void)
 #endif /* BSP_USING_SDIO0 */
 
 #ifdef BSP_USING_SDIO1
-    static mtb_hal_sdhc_t sdhc1_obj;    /* SDHC hardware objects */
-    static const struct cy_pse_sdio_hw_desc sdhc1_hw_desc =
-    {
-        .hw_base = CYBSP_SDHC_1_HW,
-        .sdhc_obj = &sdhc1_obj,
-        .pdl_config = &CYBSP_SDHC_1_config,
-        .hal_config = &CYBSP_SDHC_1_sdhc_hal_config,
-    };
-
     /* Enable SDHC hardware block */
     Cy_SD_Host_Enable(sdhc1_hw_desc.hw_base);
 
@@ -933,8 +1103,8 @@ int rt_hw_sdio_init(void)
 
     if ((sysint_status = Cy_SysInt_Init(&sdhc1_isr_config, cy_sdio1_isr)) == CY_SYSINT_SUCCESS)
     {
-        /* Enable NVIC interrupt */
-        NVIC_EnableIRQ((IRQn_Type)sdhc1_isr_config.intrSrc);
+        NVIC_DisableIRQ((IRQn_Type)sdhc1_isr_config.intrSrc);
+        NVIC_ClearPendingIRQ((IRQn_Type)sdhc1_isr_config.intrSrc);
 
         /* Create SDIO1 host */
         if ((sdio1 = sdio_host_create(&sdhc1_hw_desc)) == RT_NULL)
@@ -946,6 +1116,10 @@ int rt_hw_sdio_init(void)
         /* Configure default IO settings */
         sdio1->host->io_cfg.signal_voltage = MMCSD_SIGNAL_VOLTAGE_330;
         sdio1->en_auto_cmd12 = RT_TRUE;
+
+        /* Enable NVIC interrupt after host state is fully initialized. */
+        NVIC_ClearPendingIRQ((IRQn_Type)sdhc1_isr_config.intrSrc);
+        NVIC_EnableIRQ((IRQn_Type)sdhc1_isr_config.intrSrc);
     }
     else
     {

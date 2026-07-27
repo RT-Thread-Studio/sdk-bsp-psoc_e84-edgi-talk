@@ -1,0 +1,27 @@
+[
+ {
+  "path": "/packages/peripherals/sensors/aht10", 
+  "ver": "latest", 
+  "name": "AHT10"
+ },
+ {
+  "path": "/packages/multimedia/wavplayer",
+  "ver": "latest",
+  "name": "wavplayer"
+ },
+ {
+  "path": "/packages/tools/optparse",
+  "ver": "latest",
+  "name": "optparse"
+ },
+ {
+  "path": "/packages/tools/CoreMark",
+  "ver": "latest",
+  "name": "CoreMark"
+ },
+ {
+  "path": "/packages/local/infineon-pse84-secure-firmware",
+  "ver": "latest",
+  "name": "InfineonPse84SecureFirmware"
+ }
+]

@@ -29,6 +29,8 @@ static rt_list_t blk_devices = RT_LIST_OBJECT_INIT(blk_devices);
 #define RT_DEVICE_CTRL_BLK_SSIZEGET      0x1268                                     /**< get number of bytes per sector */
 #define RT_DEVICE_CTRL_ALL_BLK_SSIZEGET  0x80081272                                 /**< get number of bytes per sector * sector counts*/
 
+extern rt_bool_t rt_hw_sdio_is_quiet(void);
+
 struct mmcsd_blk_device
 {
     struct rt_mmcsd_card *card;
@@ -242,9 +244,12 @@ static rt_err_t rt_mmcsd_req_blk(struct rt_mmcsd_card *card,
 
     if (cmd.err || data.err || stop.err)
     {
-        LOG_E("mmcsd request blocks error");
-        LOG_E("%d,%d,%d, 0x%08x,0x%08x",
-              cmd.err, data.err, stop.err, data.flags, sector);
+        if (!rt_hw_sdio_is_quiet())
+        {
+            LOG_E("mmcsd request blocks error");
+            LOG_E("%d,%d,%d, 0x%08x,0x%08x",
+                  cmd.err, data.err, stop.err, data.flags, sector);
+        }
 
         return -RT_ERROR;
     }

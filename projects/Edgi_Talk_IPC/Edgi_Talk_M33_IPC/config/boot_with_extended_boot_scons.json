@@ -10,7 +10,7 @@
                     "command": "hex-relocate",
                     "inputs": [
                         {
-                            "file": "rtthread.hex",
+                            "file": "build/rtthread_app.hex",
                             "regions": [
                                 { "start": "0x02000000", "size": "0x00080000", "dest": "0x22000000" },
                                 { "start": "0x04000000", "size": "0x00100000", "dest": "0x24000000" },
@@ -27,7 +27,7 @@
                     ],
                     "outputs": [
                         {
-                            "file": "build/rtthread.hex"
+                            "file": "build/rtthread_relocated.hex"
                         }
                     ]
                 }
@@ -44,10 +44,10 @@
                     "inputs" :
                     [
                         {
-                            "file" : "build/rtthread.hex"
+                            "file" : "build/rtthread_relocated.hex"
                         },
                         {
-                            "file" : "../../../tools/edgeprotecttools/cm33_s_signed_fw/proj_cm33_s_signed.hex"
+                            "file" : "libraries/components/infineon-pse84-secure-firmware-latest/build/rtthread.hex"
                         }
                     ],
                     "outputs" :

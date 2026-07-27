@@ -2,7 +2,7 @@ import os
 
 # toolchains options
 ARCH='arm'
-CPU='cortex-m7'
+CPU='cortex-m55'
 CROSS_TOOL='gcc'
 
 # bsp lib config
@@ -17,7 +17,7 @@ if os.getenv('RTT_ROOT'):
 # EXEC_PATH is the compiler execute path, for example, CodeSourcery, Keil MDK, IAR
 if  CROSS_TOOL == 'gcc':
     PLATFORM    = 'gcc'
-    EXEC_PATH   = r'C:\Users\XXYYZZ'
+    EXEC_PATH   = r'C:\RT-ThreadStudio\repo\Extract\ToolChain_Support_Packages\ARM\GNU_Tools_for_ARM_Embedded_Processors\13.3\bin'
 elif CROSS_TOOL == 'keil':
     PLATFORM    = 'armclang'
     EXEC_PATH   = r'C:/Keil_v5'
@@ -43,8 +43,7 @@ if PLATFORM == 'gcc':
     OBJDUMP = PREFIX + 'objdump'
     OBJCPY = PREFIX + 'objcopy'
 
-    # -mcpu=cortex-m55 -mthumb -mfloat-abi=hard -mfpu=fpv5-d16 -march=armv8.1-m.main+fp.dp+mve
-    DEVICE = ' -mcpu=cortex-m55 -mthumb -mfpu=fpv5-d16 -march=armv8.1-m.main+fp.dp+mve --specs=nano.specs -mfloat-abi=hard -ffunction-sections -fdata-sections -nostartfiles'
+    DEVICE = ' -mcpu=cortex-m55 -mthumb -mfpu=auto --specs=nano.specs -mfloat-abi=hard -ffunction-sections -fdata-sections -nostartfiles'
     CFLAGS = DEVICE + ' -g -Wall -pipe'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
     LFLAGS = DEVICE + ' -flto -Wl,--gc-sections,-Map=rtthread.map,-cref,-u,Reset_Handler -T board/linker_scripts/link.ld'
@@ -71,9 +70,8 @@ elif PLATFORM == 'armclang':
     LINK = 'armlink'
     TARGET_EXT = 'axf'
 
-    DEVICE = ' --cpu Cortex-M4.fp '
-    CFLAGS = ' --target=arm-arm-none-eabi -mcpu=cortex-m4 '
-    CFLAGS += ' -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 '
+    DEVICE = ' --cpu Cortex-M55 '
+    CFLAGS = ' --target=arm-arm-none-eabi -mcpu=cortex-m55 '
     CFLAGS += ' -mfloat-abi=hard -c -fno-rtti -funsigned-char -fshort-enums -fshort-wchar '
     CFLAGS += ' -gdwarf-3 -ffunction-sections '
     AFLAGS = DEVICE + ' --apcs=interwork '

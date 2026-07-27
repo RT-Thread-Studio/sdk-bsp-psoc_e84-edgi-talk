@@ -137,7 +137,7 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 
 ---
 
-* If the example does not run, first compile and flash **Edgi_Talk_M33_Blink_LED**.
+* If the example does not run, first compile and flash **Edgi_Talk_M33_Template**.
 * To enable M55:
 
 ```

@@ -4,8 +4,8 @@
 
 ## Introduction
 
-This example is based on the **Edgi-Talk platform**, demonstrating the **LVGL stress demo** running on **RT-Thread real-time operating system**.
-It allows users to quickly verify the board-level **LCD display driver** and the **LVGL graphics framework** porting, providing a reference for future GUI application development.
+This example is based on the **Edgi-Talk platform** and demonstrates **LVGL with multiple display demos** running on the **M55 application core** under the **RT-Thread real-time operating system**.
+The current default demo is **Virtual3D Animated Emoji**, which can be used to verify the LCD display, touch input, LVGL rendering flow, and M55-side graphics acceleration related configuration. The project can also be switched to LVGL official Music, Benchmark, and Stress demos as a reference for GUI application development.
 
 ### LVGL Overview
 
@@ -76,13 +76,28 @@ LVGL is **MIT licensed** and supported by **SquareLine Studio** for GUI design a
 * Developed on the **Edgi-Talk platform**, running on the **M55 application core**.
 * Example features:
 
-  * Initialize LVGL graphics library
-  * Run **lv_demo_stress** on the LCD
-  * Demonstrate rendering and performance testing
+  * Initialize **LVGL 9.2**, the LCD display driver, and the touch input driver
+  * Start the **Virtual3D Animated Emoji** demo by default
+  * Support switching to **lv_demo_music**, **lv_demo_benchmark**, **lv_demo_stress**, and other LVGL demos
+  * Enable M55 I-Cache/D-Cache by default and use AXIDMAC to optimize RGB565 area copy
 * Code structure is clear for understanding display driver integration and LVGL porting.
 
+## Demo Description
+
+This project selects the LVGL demo through the `BSP_LVGL_DEMO_*` configuration options. The default configuration is `BSP_LVGL_DEMO_VIRTUAL3D_EMOJI`.
+
+| Configuration | Demo | Description |
+| --- | --- | --- |
+| `BSP_LVGL_DEMO_VIRTUAL3D_EMOJI` | Virtual3D Animated Emoji | Default demo. It displays a 3D Emoji animation and supports touch dragging, which helps verify the Virtual3D, LVGL display refresh, and touch input paths. This demo only supports LCD rotation at 0 or 180 degrees. |
+| `BSP_LVGL_DEMO_MUSIC` | LVGL Music Demo | Official LVGL music UI demo, mainly used to verify complex widgets, layouts, styles, and animations. |
+| `BSP_LVGL_DEMO_BENCHMARK` | LVGL Benchmark Demo | Official LVGL performance benchmark demo, used to observe rendering performance, frame rate, and score. |
+| `BSP_LVGL_DEMO_STRESS` | LVGL Stress Demo | Official LVGL stress test demo. It repeatedly creates, refreshes, and destroys widgets to verify rendering stability and memory usage. |
+
+To switch demos, modify the LVGL Demo configuration in **RT-Thread Settings** or `menuconfig`. It is recommended to select only one `BSP_LVGL_DEMO_*` option at a time, then regenerate the configuration, rebuild, and download the firmware.
+
+![alt text](figures/demo_list.png)
+
 ## Usage
-n> **⚠️ Note:** This project requires **RT-Thread Studio 2.2.9** or higher.
 
 ### Build and Download
 
@@ -92,8 +107,22 @@ n> **⚠️ Note:** This project requires **RT-Thread Studio 2.2.9** or higher.
 
 ### Running Result
 
-* After flashing and powering on, the system automatically runs **lv_demo_stress** on the LCD.
-* Users can modify `applications/main.c` to switch to other LVGL demos (e.g., `lv_demo_widgets`, `lv_demo_music`).
+* After flashing and powering on, the example starts automatically.
+* With the default configuration, the system starts **Virtual3D Animated Emoji**. The LCD displays the 3D Emoji animation, with the title `Virtual3D Animated Emoji` and the hint `Drag the 3D emoji`.
+* The serial console prints the current demo and LCD rotation angle, for example:
+
+```
+LVGL virtual3d_emoji demo start, lcd rotation=0
+```
+
+* To check the Virtual3D demo status, run the following commands in the MSH console:
+
+```
+virtual3d_demo_stat
+virtual3d_render_stat
+```
+
+* If the demo is switched to Music, Benchmark, or Stress, the LCD displays the corresponding official LVGL demo UI.
 
 ## Notes
 
@@ -107,10 +136,13 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 ```
 
 * Save and regenerate code after modifications.
+* The default `BSP_LVGL_DEMO_VIRTUAL3D_EMOJI` demo does not support LCD rotation at 90 or 270 degrees. Use 0 or 180 degrees, or switch to another LVGL demo if landscape rotation is required.
+* The default configuration enables `BSP_LVGL_ENABLE_CPU_CACHE` and `BSP_LCD_USE_AXIDMAC_AREA_COPY`. If cache, framebuffer, or LCD refresh settings are changed, also check display buffer coherency.
 * If the screen shows no output, check:
 
   * LCD connections and power supply
   * `lv_port_disp.c` and `lv_port_indev.c` match the actual hardware
+  * LCD rotation angle is compatible with the selected demo
 
 ## Startup Sequence
 
@@ -137,7 +169,7 @@ libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
 
 ---
 
-* If the example fails, first flash **Edgi_Talk_M33_Blink_LED** to ensure proper initialization.
+* If the example fails, first flash **Edgi_Talk_M33_Template** to ensure proper initialization.
 * To enable M55, configure in **M33 project**:
 
 ```

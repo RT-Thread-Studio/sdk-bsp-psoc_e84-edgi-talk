@@ -71,7 +71,7 @@ Context;
 
 static gctBOOL featureTable[vivFEATURE_COUNT];
 static gctUINT currentLayer = 0;
-#if vivENABLE_LAYER_SCALE //IFX - Fix Warning. Variable set but never used
+#if (vivENABLE_LAYER_SCALE || vivENABLE_LAYER_ROT || vivENABLE_LAYER_ROI) //IFX - Fix Warning. Variable set but never used
 static Context context;
 #endif
 #if vivENABLE_DISPLAY_CRC //IFX - Fix Warning. Variable set but never used

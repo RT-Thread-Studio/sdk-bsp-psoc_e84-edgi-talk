@@ -266,14 +266,6 @@
 /* GD32 Drivers */
 
 /* end of GD32 Drivers */
-
-/* HPMicro SDK */
-
-/* end of HPMicro SDK */
-
-/* FT32 HAL & SDK Drivers */
-
-/* end of FT32 HAL & SDK Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -370,6 +362,12 @@
 /* Onboard Peripheral Drivers */
 
 #define BSP_USING_USB_TO_UART
+#define BSP_USING_LCD
+#define COMPONENT_MTB_DISPLAY_tl043wvv02
+#define BSP_LCD_ROTATION_0
+#define BSP_LCD_ROTATION_DEGREES 0
+#define BSP_LCD_USE_AXIDMAC_AREA_COPY
+#define BSP_LCD_AXIDMAC_AREA_COPY_MIN_BYTES 8192
 /* end of Onboard Peripheral Drivers */
 
 /* On-chip Peripheral Drivers */

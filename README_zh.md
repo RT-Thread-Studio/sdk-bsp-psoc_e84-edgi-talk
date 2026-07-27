@@ -4,8 +4,6 @@
 
 ## 简介
 
-中文页
-
 `sdk-bsp-psoc_e84-edgi-talk` 是针对 **PSoC™ E84 Edgi-Talk 开发板** 的 RT-Thread 支持包，同时也可作为用户开发使用的软件 SDK，让用户可以更方便地开发自己的应用程序。
 
 Edgi-Talk 开发板基于 **PSoC™ E84 MCU**，为工程师提供了一个灵活、全面的开发平台。板上集成了丰富的外设接口和示例模块，助力开发者快速完成多传感器、显示和通信应用的开发。
@@ -19,42 +17,41 @@ $ sdk-bsp-psoc_e84-edgi-talk
 ├── README.md
 ├── sdk-bsp-psoc_e84-edgi-talk.yaml
 ├── docs
-│   ├── Edgi-Talk_Board_Schematic.pdf
-│   └── Edgi-Talk_User_Manual.pdf
+│   ├── 3d model
+│   ├── board
+│   ├── components
+│   ├── figures
+│   ├── source
+│   ├── tools
+│   ├── coding_style_cn.md
+│   ├── RT-Thread 编程指南.pdf
+│   └── 外设拓展配置手册.pdf
 ├── libraries
 │   ├── HAL_Drivers
 ├── projects
-│   ├── Edgi_Talk_ADC
-│   ├── Edgi_Talk_AHT20
-│   ├── Edgi_Talk_Audio
-│   ├── Edgi_Talk_Blink_Led
 │   ├── Edgi_Talk_CherryUSB
-│   │   ├── Edgi_Talk_M33_USB_D
-│   │   ├── Edgi_Talk_M33_USB_H
-│   │   ├── Edgi_Talk_M55_USB_D
-│   │   └── Edgi_Talk_M55_USB_H
+│   │   ├── Edgi_Talk_Extend_Screen
+│   │   ├── Edgi_Talk_M33_USB_RoleSwitch
+│   │   ├── Edgi_Talk_M55_USB_RoleSwitch
+│   │   ├── Edgi_Talk_M55_USB_UVC
+│   │   └── Edgi_Talk_USB_Deepcraft
 │   ├── Edgi_Talk_IPC
 │   │   ├── Edgi_Talk_M33_IPC
 │   │   └── Edgi_Talk_M55_IPC
-│   ├── Edgi_Talk_CoreMark
-│   ├── Edgi_Talk_CDC_Echo
-│   ├── Edgi_Talk_HyperRam
-│   ├── Edgi_Talk_Key_Irq
-│   ├── Edgi_Talk_LSM6DS3
-│   ├── Edgi_Talk_LVGL
-│   ├── Edgi_Talk_M33_Blink_LED
+│   ├── Edgi_Talk_M33_Driver_All
 │   ├── Edgi_Talk_M33_Template
-│   ├── Edgi_Talk_MIPI_LCD
-│   ├── Edgi_Talk_RTC
-│   ├── Edgi_Talk_SDCARD
-│   ├── Edgi_Talk_WavPlayer
-│   ├── Edgi_Talk_WIFI
-│   ├── Edgi_Talk_XiaoZhi
+│   ├── Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision
+│   ├── Edgi_Talk_M55_Driver_All
+│   ├── Edgi_Talk_M55_LVGL
+│   ├── Edgi_Talk_M55_WIFI
+│   ├── Edgi_Talk_M55_XiaoZhi
+│   ├── FAQ_page
+│   └── libs
 └── rt-thread
 ```
 
 * `sdk-bsp-psoc_e84-edgi-talk.yaml`：描述 Edgi-Talk 开发板的硬件信息
-* `docs`：开发板原理图、用户手册及 datasheet
+* `docs`：开发板文档、3D 模型、组件参考、文档源码和工具参考
 * `libraries`：Edgi-Talk 通用外设驱动
 * `projects`：示例工程文件夹，包含传感器、显示、音频、USB、网络等示例程序
 * `rt-thread`：RT-Thread 源码
@@ -114,7 +111,7 @@ $ sdk-bsp-psoc_e84-edgi-talk
 
 ---
 
-* 若示例工程无法正常运行，建议先编译并烧录 **Edgi_Talk_M33_Blink_LED** 工程，确保初始化与核心启动流程正常，再运行本示例。
+* 若示例工程无法正常运行，建议先编译并烧录 **Edgi_Talk_M33_Template** 工程，确保初始化与核心启动流程正常，再运行本示例。
 * 若要开启 M55，需要在 **M33 工程** 中打开配置：
 
   ```

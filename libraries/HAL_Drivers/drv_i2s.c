@@ -585,7 +585,9 @@ void i2s_playback_task(void *arg)
     struct sound_device *snd_dev;
     RT_ASSERT(audio != RT_NULL);
     snd_dev = (struct sound_device *)audio->parent.user_data;
+#if defined(PKG_USING_WAVPLAYER) && !defined(BSP_USING_XiaoZhi)
     static int count = 0;
+#endif
     int16_t *temp_buffer_ptr;
 
     // int32_t* asrc_out_ptr = NULL;

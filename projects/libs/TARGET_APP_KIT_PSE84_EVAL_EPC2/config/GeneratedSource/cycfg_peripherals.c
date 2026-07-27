@@ -6,7 +6,7 @@
  * This file was automatically generated and should not be modified.
  * Configurator Backend 3.70.0
  * device-db 4.37.0.10260
- * mtb-dsl-pse8xxgp 1.1.1.824
+ * mtb-dsl-pse8xxgp 1.5.0.1072
  *
  *******************************************************************************
  * Copyright 2026 Cypress Semiconductor Corporation (an Infineon company) or
@@ -358,7 +358,7 @@ cy_stc_gfx_layer_config_t GFXSS_graphics_layer =
     .pos_x = 0,
     .pos_y = 0,
     .width = 512,
-    .height = 800,
+    .height = 768,
     .zorder = 0,
     .layer_enable = true,
     .visibility = true,
@@ -399,10 +399,10 @@ cy_stc_gfx_dc_config_t GFXSS_dc_config =
     .ovl0_layer_config = &GFXSS_overlay0_layer,
     .ovl1_layer_config = &GFXSS_overlay1_layer,
     .display_type = GFX_DISP_TYPE_DSI_DPI,
-    .display_format = vivD16CFG1,
+    .display_format = vivD16CFG2,
     .display_size = vivDISPLAY_CUSTOMIZED,
     .display_width = 512,
-    .display_height = 800,
+    .display_height = 768,
 };
 cy_stc_gfx_gpu_cfg_t GFXSS_gpu_config =
 {
@@ -410,12 +410,12 @@ cy_stc_gfx_gpu_cfg_t GFXSS_gpu_config =
 };
 cy_stc_mipidsi_display_params_t GFXSS_mipidsi_display_params =
 {
-    .pixel_clock = 33448,
+    .pixel_clock = 39571,
     .hdisplay = 512,
     .hsync_width = 2,
     .hfp = 36,
-    .hbp = 40,
-    .vdisplay = 800,
+    .hbp = 137,
+    .vdisplay = 768,
     .vsync_width = 2,
     .vfp = 180,
     .vbp = 10,
@@ -525,7 +525,7 @@ const cy_stc_pdm_pcm_channel_config_t channel_3_config =
     .dc_block_disable = false,
     .dc_block_code = CY_PDM_PCM_CHAN_DCBLOCK_CODE_16,
 };
-const cy_stc_scb_i2c_config_t CYBSP_I2C_CONTROLLER_config =
+const cy_stc_scb_i2c_config_t CYBSP_I2C_0_config =
 {
     .i2cMode = CY_SCB_I2C_MASTER,
     .useRxFifo = true,
@@ -541,29 +541,29 @@ const cy_stc_scb_i2c_config_t CYBSP_I2C_CONTROLLER_config =
 };
 
 #if defined (COMPONENT_MTB_HAL)
-const mtb_hal_peri_div_t CYBSP_I2C_CONTROLLER_clock_ref =
+const mtb_hal_peri_div_t CYBSP_I2C_0_clock_ref =
 {
     .clk_dst = (en_clk_dst_t)CYBSP_I2C_CONTROLLER_CLK_DIV_GRP_NUM,
     .div_type = CYBSP_I2C_CONTROLLER_CLK_DIV_HW,
     .div_num = CYBSP_I2C_CONTROLLER_CLK_DIV_NUM,
 };
-const mtb_hal_clock_t CYBSP_I2C_CONTROLLER_hal_clock =
+const mtb_hal_clock_t CYBSP_I2C_0_hal_clock =
 {
-    .clock_ref = &CYBSP_I2C_CONTROLLER_clock_ref,
+    .clock_ref = &CYBSP_I2C_0_clock_ref,
     .interface = &mtb_hal_clock_peri_interface,
 };
 #endif /* defined (COMPONENT_MTB_HAL) */
 
 #if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_I2C)
-const mtb_hal_i2c_configurator_t CYBSP_I2C_CONTROLLER_hal_config =
+const mtb_hal_i2c_configurator_t CYBSP_I2C_0_hal_config =
 {
-    .base = CYBSP_I2C_CONTROLLER_HW,
-    .config = &CYBSP_I2C_CONTROLLER_config,
-    .clock = &CYBSP_I2C_CONTROLLER_hal_clock,
+    .base = CYBSP_I2C_0_HW,
+    .config = &CYBSP_I2C_0_config,
+    .clock = &CYBSP_I2C_0_hal_clock,
 };
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_I2C) */
 
-const cy_stc_scb_uart_config_t CYBSP_UART1_config =
+const cy_stc_scb_uart_config_t CYBSP_I2C_1_config =
 {
     .uartMode = CY_SCB_UART_STANDARD,
     .enableMultiProcessorMode = false,
@@ -594,24 +594,24 @@ const cy_stc_scb_uart_config_t CYBSP_UART1_config =
 };
 
 #if defined (COMPONENT_MTB_HAL)
-const mtb_hal_peri_div_t CYBSP_UART1_clock_ref =
+const mtb_hal_peri_div_t CYBSP_I2C_1_clock_ref =
 {
     .clk_dst = (en_clk_dst_t)peri_0_group_8_div_16_0_GRP_NUM,
     .div_type = peri_0_group_8_div_16_0_HW,
     .div_num = peri_0_group_8_div_16_0_NUM,
 };
-const mtb_hal_clock_t CYBSP_UART1_hal_clock =
+const mtb_hal_clock_t CYBSP_I2C_1_hal_clock =
 {
-    .clock_ref = &CYBSP_UART1_clock_ref,
+    .clock_ref = &CYBSP_I2C_1_clock_ref,
     .interface = &mtb_hal_clock_peri_interface,
 };
 #endif /* defined (COMPONENT_MTB_HAL) */
 
 #if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_UART)
-const mtb_hal_uart_configurator_t CYBSP_UART1_hal_config =
+const mtb_hal_uart_configurator_t CYBSP_I2C_1_hal_config =
 {
-    .base = CYBSP_UART1_HW,
-    .clock = &CYBSP_UART1_hal_clock,
+    .base = CYBSP_I2C_1_HW,
+    .clock = &CYBSP_I2C_1_hal_clock,
     .tx_pin = 2,
 #if defined (COMPONENT_MW_ASYNC_TRANSFER)
     .rts_pin = 0xFF,
@@ -746,7 +746,7 @@ const mtb_hal_uart_configurator_t CYBSP_BT_UART_hal_config =
 };
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_UART) */
 
-const cy_stc_scb_uart_config_t CYBSP_UART5_config =
+const cy_stc_scb_uart_config_t CYBSP_DEBUG_UART_M33_config =
 {
     .uartMode = CY_SCB_UART_STANDARD,
     .enableMultiProcessorMode = false,
@@ -777,24 +777,24 @@ const cy_stc_scb_uart_config_t CYBSP_UART5_config =
 };
 
 #if defined (COMPONENT_MTB_HAL)
-const mtb_hal_peri_div_t CYBSP_UART5_clock_ref =
+const mtb_hal_peri_div_t CYBSP_DEBUG_UART_M33_clock_ref =
 {
-    .clk_dst = (en_clk_dst_t)CYBSP_UART5_CLK_DIV_GRP_NUM,
-    .div_type = CYBSP_UART5_CLK_DIV_HW,
-    .div_num = CYBSP_UART5_CLK_DIV_NUM,
+    .clk_dst = (en_clk_dst_t)CYBSP_DEBUG_UART_M33_CLK_DIV_GRP_NUM,
+    .div_type = CYBSP_DEBUG_UART_M33_CLK_DIV_HW,
+    .div_num = CYBSP_DEBUG_UART_M33_CLK_DIV_NUM,
 };
-const mtb_hal_clock_t CYBSP_UART5_hal_clock =
+const mtb_hal_clock_t CYBSP_DEBUG_UART_M33_hal_clock =
 {
-    .clock_ref = &CYBSP_UART5_clock_ref,
+    .clock_ref = &CYBSP_DEBUG_UART_M33_clock_ref,
     .interface = &mtb_hal_clock_peri_interface,
 };
 #endif /* defined (COMPONENT_MTB_HAL) */
 
 #if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_UART)
-const mtb_hal_uart_configurator_t CYBSP_UART5_hal_config =
+const mtb_hal_uart_configurator_t CYBSP_DEBUG_UART_M33_hal_config =
 {
-    .base = CYBSP_UART5_HW,
-    .clock = &CYBSP_UART5_hal_clock,
+    .base = CYBSP_DEBUG_UART_M33_HW,
+    .clock = &CYBSP_DEBUG_UART_M33_hal_clock,
     .tx_pin = 1,
 #if defined (COMPONENT_MW_ASYNC_TRANSFER)
     .rts_pin = 0xFF,
@@ -806,6 +806,44 @@ const mtb_hal_uart_configurator_t CYBSP_UART5_hal_config =
 #endif /* defined (COMPONENT_MW_ASYNC_TRANSFER) */
 };
 #endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_UART) */
+
+const cy_stc_scb_i2c_config_t CYBSP_I2C_7_config =
+{
+    .i2cMode = CY_SCB_I2C_SLAVE,
+    .useRxFifo = true,
+    .useTxFifo = true,
+    .slaveAddress = 8,
+    .slaveAddressMask = 254,
+    .acceptAddrInFifo = false,
+    .ackGeneralAddr = false,
+    .enableWakeFromSleep = false,
+    .enableDigitalFilter = false,
+    .lowPhaseDutyCycle = 0,
+    .highPhaseDutyCycle = 0,
+};
+
+#if defined (COMPONENT_MTB_HAL)
+const mtb_hal_peri_div_t CYBSP_I2C_7_clock_ref =
+{
+    .clk_dst = (en_clk_dst_t)CYBSP_PWM_DT_CLK_DIV_GRP_NUM,
+    .div_type = CYBSP_PWM_DT_CLK_DIV_HW,
+    .div_num = CYBSP_PWM_DT_CLK_DIV_NUM,
+};
+const mtb_hal_clock_t CYBSP_I2C_7_hal_clock =
+{
+    .clock_ref = &CYBSP_I2C_7_clock_ref,
+    .interface = &mtb_hal_clock_peri_interface,
+};
+#endif /* defined (COMPONENT_MTB_HAL) */
+
+#if defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_I2C)
+const mtb_hal_i2c_configurator_t CYBSP_I2C_7_hal_config =
+{
+    .base = CYBSP_I2C_7_HW,
+    .config = &CYBSP_I2C_7_config,
+    .clock = &CYBSP_I2C_7_hal_clock,
+};
+#endif /* defined (COMPONENT_MTB_HAL) && (MTB_HAL_DRIVER_AVAILABLE_I2C) */
 
 const cy_stc_scb_spi_config_t CYBSP_SPI_9_config =
 {
@@ -1892,6 +1930,8 @@ void init_cycfg_peripherals(void)
     Cy_SysClk_PeriPclkAssignDivider(PCLK_SCB4_CLOCK_SCB_EN, CY_SYSCLK_DIV_16_5_BIT, 0U);
     Cy_SysClk_PeriGroupSlaveInit(CY_MMIO_SCB5_PERI_NR, CY_MMIO_SCB5_GROUP_NR, CY_MMIO_SCB5_SLAVE_NR, CY_MMIO_SCB5_CLK_HF_NR);
     Cy_SysClk_PeriPclkAssignDivider(PCLK_SCB5_CLOCK_SCB_EN, CY_SYSCLK_DIV_8_BIT, 0U);
+    Cy_SysClk_PeriGroupSlaveInit(CY_MMIO_SCB7_PERI_NR, CY_MMIO_SCB7_GROUP_NR, CY_MMIO_SCB7_SLAVE_NR, CY_MMIO_SCB7_CLK_HF_NR);
+    Cy_SysClk_PeriPclkAssignDivider(PCLK_SCB7_CLOCK_SCB_EN, CY_SYSCLK_DIV_8_BIT, 3U);
     Cy_SysClk_PeriGroupSlaveInit(CY_MMIO_SCB9_PERI_NR, CY_MMIO_SCB9_GROUP_NR, CY_MMIO_SCB9_SLAVE_NR, CY_MMIO_SCB9_CLK_HF_NR);
     Cy_SysClk_PeriPclkAssignDivider(PCLK_SCB9_CLOCK_SCB_EN, CY_SYSCLK_DIV_8_BIT, 1U);
 #if defined (CY_DEVICE_CONFIGURATOR_IP_ENABLE_FEATURE)

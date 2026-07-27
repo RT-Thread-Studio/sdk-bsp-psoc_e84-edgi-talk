@@ -47,6 +47,8 @@ Connect the CH340 module to the development board as follows:
 > 1. TX and RX must be cross-connected (CH340 TX to board RX)
 > 2. Ensure GND is common between both devices
 
+* To run an M55 project, it is recommended to flash **Edgi_Talk_M33_Template** first. It is a clean M33 project and is suitable as the base firmware before starting M55.
+
 ## Usage
 
 ### 1. Configuration and Build

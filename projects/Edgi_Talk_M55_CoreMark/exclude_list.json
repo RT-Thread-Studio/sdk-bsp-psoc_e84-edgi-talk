@@ -1,1 +1,0 @@
-[{"config_name":"Debug","exclude_files":["packages/wifi-host-driver-latest","packages/FreeRTOS_Wrapper-latest","libraries/components/Infineon_cmsis-latest/COMPONENT_CMSIS_NN/Source","libraries/components/Infineon_cmsis-latest/COMPONENT_CMSIS_DSP/Source"]}]

@@ -54,6 +54,7 @@
 #define RT_CONSOLE_DEVICE_NAME "uart2"
 /* end of Kernel Device Object */
 #define RT_VER_NUM 0x50002
+#define RT_USING_CACHE
 /* end of RT-Thread Kernel */
 
 /* RT-Thread Components */
@@ -248,7 +249,7 @@
 #define CONFIG_USBHOST_REQUEST_BUFFER_LEN 4096
 #define CONFIG_USBHOST_CONTROL_TRANSFER_TIMEOUT 500
 #define RT_LWIP_PBUF_POOL_BUFSIZE 1600
-#define CONFIG_USB_DFS_MOUNT_POINT "/"
+#define CONFIG_USB_DFS_MOUNT_POINT "/%c"
 /* end of system packages */
 
 /* peripheral libraries and drivers */
@@ -413,6 +414,10 @@
 #define BSP_USING_PWM18
 #define BSP_USING_LCD
 #define COMPONENT_MTB_DISPLAY_tl043wvv02
+#define BSP_LCD_ROTATION_0
+#define BSP_LCD_ROTATION_DEGREES 0
+#define BSP_LCD_USE_AXIDMAC_AREA_COPY
+#define BSP_LCD_AXIDMAC_AREA_COPY_MIN_BYTES 8192
 /* end of On-chip Peripheral Drivers */
 
 /* Board extended module Drivers */

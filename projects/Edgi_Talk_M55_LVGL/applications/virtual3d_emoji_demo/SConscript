@@ -1,0 +1,15 @@
+from building import *
+import os
+
+cwd = GetCurrentDir()
+path = [cwd, cwd + '/3d_demo/sample']
+src = Glob('*.c')
+
+group = DefineGroup('virtual3d_emoji_demo', src, depend=['BSP_LVGL_DEMO_VIRTUAL3D_EMOJI'], CPPPATH=path)
+
+for item in os.listdir(cwd):
+    sconscript = os.path.join(cwd, item, 'SConscript')
+    if os.path.isfile(sconscript):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')

@@ -29,6 +29,32 @@ static rt_err_t ST7102_write_reg(struct rt_i2c_client *dev, rt_uint8_t *data, rt
     }
 }
 
+static rt_err_t ST7102_write_reg8(struct rt_i2c_client *dev, rt_uint16_t reg, rt_uint8_t value)
+{
+    rt_uint8_t data[3];
+    struct rt_i2c_msg msg;
+
+    msg.addr = dev->client_addr;
+    msg.flags = RT_I2C_WR;
+    msg.buf = data;
+
+    if (reg <= 0xFF)
+    {
+        data[0] = (rt_uint8_t)reg;
+        data[1] = value;
+        msg.len = 2;
+    }
+    else
+    {
+        data[0] = (rt_uint8_t)((reg >> 8) & 0xFF);
+        data[1] = (rt_uint8_t)(reg & 0xFF);
+        data[2] = value;
+        msg.len = 3;
+    }
+
+    return (rt_i2c_transfer(dev->bus, &msg, 1) == 1) ? RT_EOK : -RT_ERROR;
+}
+
 static rt_err_t ST7102_read_regs(struct rt_i2c_client *dev, const rt_uint8_t *reg, rt_uint8_t reg_len, rt_uint8_t *data, rt_uint8_t len)
 {
     struct rt_i2c_msg msgs[2];
@@ -103,6 +129,15 @@ static rt_size_t s_touch_read_len = 0;
 #define ST7102_READ_BUF_MAX (8 * ST7102_MAX_TOUCH)
 #define ST7102_READ_LEN_FALLBACK1 32
 #define ST7102_READ_LEN_FALLBACK2 16
+
+#ifndef ST7102_IRQ_ACTIVE_LEVEL
+#define ST7102_IRQ_ACTIVE_LEVEL PIN_LOW
+#endif
+
+static rt_bool_t ST7102_irq_is_active(void)
+{
+    return rt_pin_read(ST7102_IRQ_PIN) == ST7102_IRQ_ACTIVE_LEVEL;
+}
 
 static void ST7102_touch_up(void *buf, int8_t id)
 {
@@ -229,7 +264,15 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
 
             if (Last_input_x == input_x && Last_input_y == input_y && Last_Touch_Intn == Touch_Intn)
             {
-                /* Touch the same point, skip */
+                if (ST7102_irq_is_active())
+                {
+                    ST7102_touch_down(buf, count, input_x, input_y, 0);
+                    touch_num++;
+                }
+                else
+                {
+                    ST7102_touch_up(buf, count);
+                }
             }
             else
             {
@@ -249,6 +292,22 @@ static rt_size_t ST7102_read_point(struct rt_touch_device *touch, void *buf, rt_
         ST7102_touch_up(buf, count);
     }
     rt_memcpy(Last_read_buf, read_buf, 8 * ST7102_MAX_TOUCH);
+    if (read_buf[0] != 0)
+    {
+        rt_err_t clear_result = ST7102_write_reg8(&ST7102_client, ST7102_READ_STATUS, 0);
+        (void)clear_result;
+#ifdef BSP_LVGL_TOUCH_DEBUG
+        static rt_tick_t last_debug_tick;
+        rt_tick_t now = rt_tick_get();
+        if ((rt_tick_t)(now - last_debug_tick) >= rt_tick_from_millisecond(100))
+        {
+            rt_kprintf("st7102 status=0x%02x p0=0x%02x irq=%d x=%d y=%d clear=%d touch=%d\n",
+                       read_buf[0], read_buf[0x09], input_x, input_y,
+                       rt_pin_read(ST7102_IRQ_PIN), clear_result, touch_num);
+            last_debug_tick = now;
+        }
+#endif
+    }
 exit_:
     return touch_num;
 }

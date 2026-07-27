@@ -108,6 +108,17 @@ static bool LV_ATTRIBUTE_FAST_MEM check_image_is_supported(const lv_draw_image_d
     return lv_vg_lite_is_src_cf_supported((lv_color_format_t) header.cf);
 }
 
+static bool LV_ATTRIBUTE_FAST_MEM check_layer_is_supported(const lv_draw_image_dsc_t * dsc)
+{
+    const lv_layer_t * layer = (const lv_layer_t *)dsc->src;
+
+    if(layer == NULL) {
+        return false;
+    }
+
+    return true;
+}
+
 static void LV_ATTRIBUTE_FAST_MEM draw_execute(lv_draw_vg_lite_unit_t * u)
 {
     lv_draw_task_t * t = u->task_act;
@@ -239,7 +250,6 @@ int32_t LV_ATTRIBUTE_FAST_MEM draw_evaluate(lv_draw_unit_t * draw_unit, lv_draw_
 #if LV_VG_LITE_USE_BOX_SHADOW
         case LV_DRAW_TASK_TYPE_BOX_SHADOW:
 #endif
-        case LV_DRAW_TASK_TYPE_LAYER:
         case LV_DRAW_TASK_TYPE_LINE:
         case LV_DRAW_TASK_TYPE_ARC:
         case LV_DRAW_TASK_TYPE_TRIANGLE:
@@ -248,6 +258,13 @@ int32_t LV_ATTRIBUTE_FAST_MEM draw_evaluate(lv_draw_unit_t * draw_unit, lv_draw_
 #if LV_USE_VECTOR_GRAPHIC
         case LV_DRAW_TASK_TYPE_VECTOR:
 #endif
+            break;
+
+        case LV_DRAW_TASK_TYPE_LAYER: {
+                if(!check_layer_is_supported(task->draw_dsc)) {
+                    return 0;
+                }
+            }
             break;
 
         case LV_DRAW_TASK_TYPE_IMAGE: {

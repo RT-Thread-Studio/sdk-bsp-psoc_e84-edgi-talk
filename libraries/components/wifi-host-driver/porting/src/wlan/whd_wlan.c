@@ -184,29 +184,59 @@ static void whd_scan_callback(whd_scan_result_t **result_ptr, void *user_data, w
 
 static rt_err_t drv_wlan_scan(struct rt_wlan_device *wlan, struct rt_scan_info *scan_info)
 {
-    struct whd_scan *whd_scan = rt_malloc(sizeof(struct whd_scan));
+    struct drv_wifi *wifi = get_drv_wifi(wlan);
+    struct whd_scan *whd_scan;
 
     /* Let the module scan with the active type first, and then scan the nearby ap with the passive type */
 
-    RT_ASSERT(whd_scan != NULL);
+    if (wifi == RT_NULL || wifi->whd_itf == RT_NULL)
+    {
+        return -RT_ERROR;
+    }
+
+    whd_scan = rt_calloc(1, sizeof(struct whd_scan));
+    if (whd_scan == RT_NULL)
+    {
+        return -RT_ENOMEM;
+    }
+
     whd_scan->wlan = wlan;
     whd_scan->whd_scan_type = WHD_SCAN_TYPE_ACTIVE;
     whd_scan->active_sem = rt_sem_create("whd scan", 0, RT_IPC_FLAG_PRIO);
-    RT_ASSERT(whd_scan->active_sem != NULL);
+    if (whd_scan->active_sem == RT_NULL)
+    {
+        rt_free(whd_scan);
+        return -RT_ENOMEM;
+    }
 
     /* Execute an active type scan */
-    if (whd_wifi_scan(get_drv_wifi(wlan)->whd_itf, whd_scan->whd_scan_type, WHD_BSS_TYPE_ANY,
+    if (whd_wifi_scan(wifi->whd_itf, whd_scan->whd_scan_type, WHD_BSS_TYPE_ANY,
                             NULL, NULL, NULL, NULL, whd_scan_callback, &whd_scan->scan_result, whd_scan) != WHD_SUCCESS)
     {
-        return RT_EOK;
+        rt_sem_delete(whd_scan->active_sem);
+        rt_free(whd_scan);
+        return -RT_ERROR;
     }
 
     /* Wait until the active scan is complete */
-    rt_sem_take(whd_scan->active_sem, rt_tick_from_millisecond(10000));
+    if (rt_sem_take(whd_scan->active_sem, rt_tick_from_millisecond(10000)) != RT_EOK)
+    {
+        whd_wifi_stop_scan(wifi->whd_itf);
+        rt_sem_delete(whd_scan->active_sem);
+        rt_free(whd_scan);
+        return -RT_ETIMEOUT;
+    }
 
     /* Execute an active type scan */
-    return whd_wifi_scan(get_drv_wifi(wlan)->whd_itf, whd_scan->whd_scan_type, WHD_BSS_TYPE_ANY,
-                            NULL, NULL, NULL, NULL, whd_scan_callback, &whd_scan->scan_result, whd_scan);
+    if (whd_wifi_scan(wifi->whd_itf, whd_scan->whd_scan_type, WHD_BSS_TYPE_ANY,
+                            NULL, NULL, NULL, NULL, whd_scan_callback, &whd_scan->scan_result, whd_scan) != WHD_SUCCESS)
+    {
+        rt_sem_delete(whd_scan->active_sem);
+        rt_free(whd_scan);
+        return -RT_ERROR;
+    }
+
+    return RT_EOK;
 }
 
 static rt_err_t drv_wlan_join(struct rt_wlan_device *wlan, struct rt_sta_info *sta_info)
@@ -486,7 +516,8 @@ void cy_network_process_ethernet_data(whd_interface_t iface, whd_buffer_t buf)
     ethertype = (uint16_t) (data[12] << 8 | data[13]);
     if (ethertype == EAPOL_PACKET_TYPE)
     {
-        LOG_D("EAPOL_PACKET_TYPE");
+        LOG_D("Drop EAPOL packet handled by WHD firmware");
+        whd_buffer_release(iface->whd_driver, buf, WHD_NETWORK_RX);
     }
     else
     {
@@ -627,7 +658,7 @@ static void whd_init_thread (void *parameter)
         return;
     }
 
-#ifdef WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS
+#if defined(WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS) || defined(WHD_RESOURCES_IN_SDCARD)
     LOG_D("Wait mounting the external storage of file system..");
     extern void whd_wait_fs_mount (void);
     whd_wait_fs_mount();
@@ -729,7 +760,18 @@ static void whd_init_thread (void *parameter)
 static int rt_hw_wifi_init (void)
 {
 #ifdef CY_WIFI_USING_THREAD_INIT
-    rt_thread_startup(rt_thread_create("whd_init", whd_init_thread, NULL, CY_WIFI_INIT_THREAD_STACK_SIZE, 20, 10));
+    rt_thread_t tid;
+
+    tid = rt_thread_create("whd_init", whd_init_thread, NULL,
+                           CY_WIFI_INIT_THREAD_STACK_SIZE,
+                           CY_WIFI_INIT_THREAD_PRIORITY, 10);
+    if (tid == RT_NULL)
+    {
+        LOG_E("Failed to create whd_init thread!");
+        return -RT_ENOMEM;
+    }
+
+    rt_thread_startup(tid);
 #else
     whd_init_thread(NULL);
 #endif

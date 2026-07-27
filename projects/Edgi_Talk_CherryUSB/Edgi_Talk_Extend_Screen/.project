@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>project</name>
+  <name>Edgi_Talk_Extend_Screen</name>
   <comment />
   <projects>
 	</projects>
@@ -25,6 +25,5 @@
     <nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
     <nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
   </natures>
-  <name>Edgi_Talk_Extend_Screen</name>
   <linkedResources />
 </projectDescription>

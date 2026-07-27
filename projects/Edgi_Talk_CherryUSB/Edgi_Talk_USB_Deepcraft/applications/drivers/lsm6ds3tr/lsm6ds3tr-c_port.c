@@ -13,9 +13,9 @@
 static int16_t data_raw_acceleration[3];
 static int16_t data_raw_angular_rate[3];
 static int16_t data_raw_temperature;
-static float_t acceleration_mg[3];
-static float_t angular_rate_mdps[3];
-static float_t temperature_degC;
+static float acceleration_mg[3];
+static float angular_rate_mdps[3];
+static float temperature_degC;
 static uint8_t whoamI, rst;
 static stmdev_ctx_t g_dev_ctx;
 static rt_bool_t g_lsm6ds3tr_ready = RT_FALSE;
@@ -92,7 +92,7 @@ static lsm6ds3tr_c_fs_g_t lsm6ds3tr_map_gy_fs(int gyro_range_dps)
     }
 }
 
-static float_t lsm6ds3tr_convert_acc_mg(int16_t raw)
+static float lsm6ds3tr_convert_acc_mg(int16_t raw)
 {
     switch (g_active_config.accel_range_g)
     {
@@ -104,7 +104,7 @@ static float_t lsm6ds3tr_convert_acc_mg(int16_t raw)
     }
 }
 
-static float_t lsm6ds3tr_convert_gyro_mdps(int16_t raw)
+static float lsm6ds3tr_convert_gyro_mdps(int16_t raw)
 {
     switch (g_active_config.gyro_range_dps)
     {

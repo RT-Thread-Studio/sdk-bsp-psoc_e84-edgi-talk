@@ -6,7 +6,7 @@
  * This file was automatically generated and should not be modified.
  * Configurator Backend 3.70.0
  * device-db 4.37.0.10260
- * mtb-dsl-pse8xxgp 1.1.1.824
+ * mtb-dsl-pse8xxgp 1.5.0.1072
  *
  *******************************************************************************
  * Copyright 2026 Cypress Semiconductor Corporation (an Infineon company) or
@@ -38,18 +38,18 @@ extern "C" {
 
 #define peri_0_mmio_0_ENABLED 1U
 #define peri_1_mmio_0_ENABLED 1U
-#define CYBSP_UART5_CLK_DIV_ENABLED 1U
+#define CYBSP_DEBUG_UART_M33_CLK_DIV_ENABLED 1U
 
 #if !defined (CY_USING_HAL) && !defined (CY_USING_HAL_LITE)
-#define CYBSP_UART5_CLK_DIV_HW CY_SYSCLK_DIV_8_BIT
+#define CYBSP_DEBUG_UART_M33_CLK_DIV_HW CY_SYSCLK_DIV_8_BIT
 #endif /* !defined (CY_USING_HAL) && !defined (CY_USING_HAL_LITE) */
 
-#define CYBSP_UART5_CLK_DIV_NUM 0U
-#define CYBSP_UART5_CLK_DIV_GRP_NUM ((1U << PERI_PCLK_GR_NUM_Pos) | (0U << PERI_PCLK_INST_NUM_Pos))
+#define CYBSP_DEBUG_UART_M33_CLK_DIV_NUM 0U
+#define CYBSP_DEBUG_UART_M33_CLK_DIV_GRP_NUM ((1U << PERI_PCLK_GR_NUM_Pos) | (0U << PERI_PCLK_INST_NUM_Pos))
 
-#if !defined (CYBSP_UART5_CLK_DIV_GRP_NUM)
-#define CYBSP_UART5_CLK_DIV_GRP_NUM CYBSP_UART5_CLK_DIV_GRP_NUM
-#endif /* !defined (CYBSP_UART5_CLK_DIV_GRP_NUM) */
+#if !defined (CYBSP_DEBUG_UART_M33_CLK_DIV_GRP_NUM)
+#define CYBSP_DEBUG_UART_M33_CLK_DIV_GRP_NUM CYBSP_DEBUG_UART_M33_CLK_DIV_GRP_NUM
+#endif /* !defined (CYBSP_DEBUG_UART_M33_CLK_DIV_GRP_NUM) */
 
 #define CYBSP_SPI_CONTROLLER_CLK_DIV_ENABLED 1U
 
@@ -90,18 +90,18 @@ extern "C" {
 #define CYBSP_PWM_DT_CLK_DIV_GRP_NUM CYBSP_PWM_DT_CLK_DIV_GRP_NUM
 #endif /* !defined (CYBSP_PWM_DT_CLK_DIV_GRP_NUM) */
 
-#define peri_0_group_1_div_8_4_ENABLED 1U
+#define CYBSP_CAN_FD_CH_DIV_ENABLED 1U
 
 #if !defined (CY_USING_HAL) && !defined (CY_USING_HAL_LITE)
-#define peri_0_group_1_div_8_4_HW CY_SYSCLK_DIV_8_BIT
+#define CYBSP_CAN_FD_CH_DIV_HW CY_SYSCLK_DIV_8_BIT
 #endif /* !defined (CY_USING_HAL) && !defined (CY_USING_HAL_LITE) */
 
-#define peri_0_group_1_div_8_4_NUM 4U
-#define PERI_0_GROUP_1_DIV_8_4_GRP_NUM ((1U << PERI_PCLK_GR_NUM_Pos) | (0U << PERI_PCLK_INST_NUM_Pos))
+#define CYBSP_CAN_FD_CH_DIV_NUM 4U
+#define CYBSP_CAN_FD_CH_DIV_GRP_NUM ((1U << PERI_PCLK_GR_NUM_Pos) | (0U << PERI_PCLK_INST_NUM_Pos))
 
-#if !defined (peri_0_group_1_div_8_4_GRP_NUM)
-#define peri_0_group_1_div_8_4_GRP_NUM PERI_0_GROUP_1_DIV_8_4_GRP_NUM
-#endif /* !defined (peri_0_group_1_div_8_4_GRP_NUM) */
+#if !defined (CYBSP_CAN_FD_CH_DIV_GRP_NUM)
+#define CYBSP_CAN_FD_CH_DIV_GRP_NUM CYBSP_CAN_FD_CH_DIV_GRP_NUM
+#endif /* !defined (CYBSP_CAN_FD_CH_DIV_GRP_NUM) */
 
 #define CYBSP_I2C_CONTROLLER_CLK_DIV_ENABLED 1U
 

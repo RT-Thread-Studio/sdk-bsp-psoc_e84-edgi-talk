@@ -44,14 +44,15 @@ RT-Thread online packages  --->                         # 在线软件包
             (8)   The priority level value of WHD thread
             (5120) The stack size for WHD thread
         --- WHD Resources Configuration
-            ( ) File System
-                (/sdcard/whd/43438A1.bin) Set the file path of the firmware files
-                (/sdcard/whd/43438A1.clm_blob) Set the file path of the clm files
-                (/sdcard/whd/nvram.txt) Set the file path of the nvram files
+            ( ) SD card (/sdcard)
+                (/sdcard/55500A1.trxcse) Set the file path of the firmware files
+                (/sdcard/55500A1.clm_blob) Set the file path of the clm files
+                (/sdcard/cyw55513modpse84som_rev3.txt) Set the file path of the nvram files
             (X) Flash Abstraction Layer(FAL)
                 ("whd_firmware") Set the partition name of the firmware files
                 ("whd_clm") Set the partition name of the clm files
                 ("whd_nvram") Set the partition name of the nvram files
+            ( ) Built into application firmware
             (1024) Set the block size for resources
     --- Hardware Configuration
         (X) CYW43438
@@ -79,15 +80,15 @@ RT-Thread online packages  --->                         # 在线软件包
 
 - `WHD_SET_COUNTRY_FROM_HOST` 允许主机在运行时下发与目标市场匹配的法规配置 (`WHD_COUNTRY_CODE` 与 `WHD_COUNTRY_CODE_REVISION`)，无需重新打包固件资源。
 - `CY_WIFI_DEFAULT_ENABLE_POWERSAVE_MODE`、`CY_WIFI_DEFAULT_PM2_SLEEP_RET_TIME`、`CY_WIFI_USING_THREAD_INIT`、`CY_WIFI_INIT_THREAD_PRIORITY/STACK_SIZE` 以及 WHD 线程菜单帮助你根据 BSP 的调度限制选择合适的启动模型。
-- 新的资源菜单取代了旧的“外部存储”开关：若选择文件系统，请将 `*.bin`、`*.clm_blob`、`nvram.txt` 拷贝到对应路径；若选择 FAL，请保证分区存在，并调整 `WHD_RESOURCES_BLOCK_SIZE` 以匹配吞吐需求。若文件系统挂载较慢，可在 [porting/src/resources/resources.c](porting/src/resources/resources.c) 中重写弱符号 `whd_wait_fs_mount()`。
+- 新的资源菜单取代了旧的“外部存储”开关：可选择 SD 卡路径、FAL 分区，或直接编进应用镜像。`WHD_RESOURCES_BLOCK_SIZE` 控制读取缓冲大小；若 SD 卡文件系统挂载较慢，可在 [porting/src/resources/resources.c](porting/src/resources/resources.c) 中重写弱符号 `whd_wait_fs_mount()`。
 - `WHD_PORTING_BSP`、`WHD_PORTING_HAL`、`WHD_PORTING_RTOS` 与 `WHD_USE_CUSTOM_MALLOC_IMPL` 对应 [porting](porting) 目录下的适配代码：保持打开即可使用 RT-Thread Glue，如需对接英飞凌原生 BSP/HAL/RTOS，可按需关闭。
 - 日志级别开关会为 WHD 的 `WPRINT` 宏启用不同的输出（仅错误/包含信息/调试/数据追踪），便于排障。
 
-当资源文件存放于文件系统时，请把对应芯片的 `firmware/clm/nvram` 文件放到上面配置的路径；若使用 FAL，请提前写入相应分区，并通过 `whd_res_download` 命令刷新内容。
+当资源文件存放于 SD 卡时，请把对应芯片的 `firmware/clm/nvram` 文件放到上面配置的路径；若使用 FAL，请提前写入相应分区，并通过 `whd_res_download` 命令刷新内容。若选择 `WHD_RESOURCES_IN_MEMORY`，资源会随应用镜像一起链接和下载。
 
 新的 WHD 发行版可能不再在 [wifi-host-driver/WHD/COMPONENT_WIFI5/resources](wifi-host-driver/WHD/COMPONENT_WIFI5/resources) 或 [wifi-host-driver/WHD/COMPONENT_WIFI6/resources](wifi-host-driver/WHD/COMPONENT_WIFI6/resources) 中附带 `*.clm_blob` 与 `nvram.txt`。若仓库缺失这些文件，请向模组/供应商索取官方认证的固件与 NVRAM 组合，避免违背本地射频法规。
 
-当选择 `WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS` 时，WHD 会直接从文件系统（如 SD 卡、SPI Flash 文件系统、U 盘等）读取资源；只需在启动前确保配置的路径（如 `/sdcard/whd/43438A1.bin`、`/sdcard/whd/43438A1.clm_blob`、`/sdcard/whd/nvram.txt`）已经存在即可，无需再为 FAL 分区。请实现或重写 [porting/src/resources/resources.c](porting/src/resources/resources.c) 中的弱符号 `whd_wait_fs_mount()`，或在系统启动顺序中保证文件系统驱动已挂载完成，再启动 WHD。
+`WHD_RESOURCES_IN_MEMORY` 会把工程 `resources/55500A1.trxcse`、`resources/55500A1.clm_blob` 和 `resources/cyw55513modpse84som_rev3.txt` 编进应用镜像。这会增加应用镜像的 Flash 占用，但不再需要单独执行资源下载。
 
 引脚菜单支持使用逻辑名称（例如 “PA.0”）或数字，同时可配置 HOST_WAKE 的触发沿（下降/上升/双沿）及中断优先级，以匹配模组硬件设计。
 
@@ -150,7 +151,7 @@ Please select the whd_firmware file and use Ymodem to send.
 Download whd_firmware to flash success. file size: 419799
 ```
 - 下载完固件、clm 和 nvram 资源文件后，复位重启即可正常加载。
-- 若在 menuconfig 中选择了 "File System" 模式，可直接把同名的固件/CLM/NVRAM 文件拷贝进配置路径（如将 SD 卡接到电脑并复制至 `/whd/`），待文件系统挂载完成且 `whd_wait_fs_mount()` 返回后，WHD 会直接从该路径加载，无需执行 `whd_res_download`。
+- 若在 menuconfig 中选择了 SD 卡模式，可直接把同名的固件/CLM/NVRAM 文件拷贝进配置路径，待文件系统挂载完成且 `whd_wait_fs_mount()` 返回后，WHD 会直接从该路径加载，无需执行 `whd_res_download`。
 
 #### 资源文件的校验功能（建议打开）
 - 在软件包选中`TinyCrypt: A tiny and configurable crypt library`

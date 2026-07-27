@@ -7,11 +7,13 @@ if RT_USING_CHERRYUSB
 
     menuconfig RT_CHERRYUSB_DEVICE
         bool "Enable usb device mode"
+        depends on !BSP_USB_ROLE_HOST_MSC
         default n
 
     if RT_CHERRYUSB_DEVICE
         choice CHERRYUSB_DEVICE_SPEED
             prompt "Select usb device speed"
+            default RT_CHERRYUSB_DEVICE_SPEED_HS if BSP_USB_ROLE_DEVICE_CDC_ACM
             default RT_CHERRYUSB_DEVICE_SPEED_FS
             config RT_CHERRYUSB_DEVICE_SPEED_FS
                 bool "FS"
@@ -23,6 +25,7 @@ if RT_USING_CHERRYUSB
 
         choice CHERRYUSB_DEVICE_IP
             prompt "Select usb device ip, and some ip need config in usb_config.h, please check"
+            default RT_CHERRYUSB_DEVICE_DWC2_INFINEON if BSP_USB_ROLE_DEVICE_CDC_ACM
             default RT_CHERRYUSB_DEVICE_CUSTOM
             config RT_CHERRYUSB_DEVICE_CUSTOM
                 bool "CUSTOM (Implement it yourself)"
@@ -174,6 +177,7 @@ if RT_USING_CHERRYUSB
 
         choice CHERRYUSB_DEVICE_TEMPLATE
             prompt "Select usb device template, please select class driver first"
+            default RT_CHERRYUSB_DEVICE_TEMPLATE_CDC_ACM if BSP_USB_ROLE_DEVICE_CDC_ACM
             default RT_CHERRYUSB_DEVICE_TEMPLATE_NONE
             config RT_CHERRYUSB_DEVICE_TEMPLATE_NONE
                 bool
@@ -271,11 +275,13 @@ if RT_USING_CHERRYUSB
 
     menuconfig RT_CHERRYUSB_HOST
         bool "Enable usb host mode"
+        depends on !BSP_USB_ROLE_DEVICE_CDC_ACM
         default n
 
     if RT_CHERRYUSB_HOST
         choice CHERRYUSB_HOST_IP
             prompt "Select usb host ip, and some ip need config in usb_config.h, please check"
+            default RT_CHERRYUSB_HOST_DWC2_INFINEON if BSP_USB_ROLE_HOST_MSC
             default RT_CHERRYUSB_HOST_CUSTOM
             config RT_CHERRYUSB_HOST_CUSTOM
                 bool "CUSTOM (Implement it yourself)"

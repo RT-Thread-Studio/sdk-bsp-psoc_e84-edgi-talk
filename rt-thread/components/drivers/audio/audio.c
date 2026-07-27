@@ -246,6 +246,7 @@ static rt_err_t _audio_dev_init(struct rt_device *dev)
         /* init mutex lock for audio replay */
         rt_mutex_init(&replay->lock, "replay", RT_IPC_FLAG_PRIO);
 
+        rt_completion_init(&replay->cmp);
         replay->activated = RT_FALSE;
         audio->replay = replay;
     }

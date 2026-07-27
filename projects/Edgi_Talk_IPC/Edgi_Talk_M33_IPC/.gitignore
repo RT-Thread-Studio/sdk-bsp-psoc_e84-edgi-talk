@@ -38,5 +38,8 @@ RTE/
 settings/
 *.uvguix*
 cconfig.h
-/makefile.targets
 !proj_cm33_s_signed.hex
+/libraries
+/libs
+/rt-thread
+/tools

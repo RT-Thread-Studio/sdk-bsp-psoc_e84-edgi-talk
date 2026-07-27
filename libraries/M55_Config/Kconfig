@@ -45,6 +45,7 @@ menu "Onboard Peripheral Drivers"
         default n
         select PKG_USING_AHT10
         select BSP_USING_I2C
+        select BSP_USING_SOFT_I2C1
         if BSP_USING_AHT20
             config PKG_USING_AHT10_SAMPLE 
             bool "Enable AHT20 SAMPLE"
@@ -56,10 +57,27 @@ menu "Onboard Peripheral Drivers"
             endif
         endif
 
-    config BSP_USING_USB
+    menuconfig BSP_USING_USB
         bool "Enable USB"
         select RT_USING_CHERRYUSB
         default n
+
+        if BSP_USING_USB
+            choice
+                prompt "USB role"
+                default BSP_USB_ROLE_DEVICE_CDC_ACM
+
+                config BSP_USB_ROLE_DEVICE_CDC_ACM
+                    bool "Device CDC ACM"
+                    select RT_CHERRYUSB_DEVICE
+                    select RT_CHERRYUSB_DEVICE_CDC_ACM
+
+                config BSP_USB_ROLE_HOST_MSC
+                    bool "Host MSC"
+                    select RT_CHERRYUSB_HOST
+                    select RT_CHERRYUSB_HOST_MSC
+            endchoice
+        endif
 
     config BSP_USING_DEEPCRAFT_AI
         bool "Enable DEEPCRAFT AI (UVC extension)"
@@ -72,6 +90,133 @@ menu "Onboard Peripheral Drivers"
         bool "Enable LSM6DS3"
         default n
         select BSP_USING_I2C
+        select BSP_USING_HW_I2C0
+
+    menuconfig BSP_USING_LCD
+        bool "Enable MIPI LCD controller"
+        select RT_USING_LCD
+        select RT_USING_TOUCH
+        select RT_TOUCH_PIN_IRQ
+        select BSP_USING_I2C
+        select RT_USING_I2C_BITOPS
+        select BSP_USING_SOFT_I2C1
+        select BSP_USING_PWM
+        select BSP_USING_PWM18
+        select BSP_USING_HYPERAM
+        default n
+        if BSP_USING_LCD
+            config COMPONENT_MTB_DISPLAY_tl043wvv02
+                bool "Enable MIPI LCD Screen tl043wvv02"
+                default n
+
+            choice
+                prompt "LCD logical rotation"
+                default M55_BSP_LCD_ROTATION_90
+
+                config M55_BSP_LCD_ROTATION_0
+                    bool "0 degrees"
+
+                config M55_BSP_LCD_ROTATION_90
+                    bool "90 degrees landscape"
+
+                config M55_BSP_LCD_ROTATION_180
+                    bool "180 degrees"
+
+                config M55_BSP_LCD_ROTATION_270
+                    bool "270 degrees landscape"
+            endchoice
+
+            config BSP_LCD_ROTATION_0
+                bool
+                default y if M55_BSP_LCD_ROTATION_0
+
+            config BSP_LCD_ROTATION_90
+                bool
+                default y if M55_BSP_LCD_ROTATION_90
+
+            config BSP_LCD_ROTATION_180
+                bool
+                default y if M55_BSP_LCD_ROTATION_180
+
+            config BSP_LCD_ROTATION_270
+                bool
+                default y if M55_BSP_LCD_ROTATION_270
+
+            config BSP_LCD_ROTATION_DEGREES
+                int
+                default 0 if M55_BSP_LCD_ROTATION_0
+                default 90 if M55_BSP_LCD_ROTATION_90
+                default 180 if M55_BSP_LCD_ROTATION_180
+                default 270 if M55_BSP_LCD_ROTATION_270
+
+            config BSP_LCD_ROTATION_BACKEND_VGLITE
+                bool "Use VG-Lite blit for LCD rotation"
+                depends on M55_BSP_LCD_ROTATION_90 || M55_BSP_LCD_ROTATION_270
+                default y if M55_BSP_LCD_ROTATION_90 || M55_BSP_LCD_ROTATION_270
+
+            config BSP_LCD_PANEL_SCAN_ROTATE_180
+                bool
+                default y if M55_BSP_LCD_ROTATION_180
+
+            config BSP_LCD_USE_AXIDMAC_AREA_COPY
+                bool "Use AXIDMAC for RGB565 area copy"
+                default y
+
+            config BSP_LCD_AXIDMAC_AREA_COPY_MIN_BYTES
+                int "AXIDMAC area copy minimum bytes"
+                depends on BSP_LCD_USE_AXIDMAC_AREA_COPY
+                default 8192
+        endif
+
+    menuconfig USING_LVGL
+        bool "Enable LVGL"
+        select BSP_USING_LVGL
+        default n
+        if USING_LVGL
+            config BSP_USING_LVGL
+                bool "Enable BSP_USING_LVGL"
+                default n
+
+            config LVGL_USING_DEMOS
+                bool "Enable LVGL_USING_DEMOS"
+                default n
+
+            config BSP_LVGL_ENABLE_CPU_CACHE
+                bool "Enable Cortex-M55 I-Cache/D-Cache for LVGL"
+                select RT_USING_CACHE
+                default y
+
+            choice
+                prompt "LVGL demo"
+                depends on LVGL_USING_DEMOS
+                default BSP_LVGL_DEMO_MUSIC
+
+                config BSP_LVGL_DEMO_MUSIC
+                    bool "Music"
+
+                config BSP_LVGL_DEMO_BENCHMARK
+                    bool "Benchmark"
+
+                config BSP_LVGL_DEMO_STRESS
+                    bool "Stress"
+
+                config BSP_LVGL_DEMO_VIRTUAL3D_EMOJI
+                    bool "Virtual3D emoji"
+                    depends on !M55_BSP_LCD_ROTATION_90 && !M55_BSP_LCD_ROTATION_270
+            endchoice
+
+            comment "Virtual3D emoji demo requires LCD rotation 0 or 180 degrees"
+                depends on LVGL_USING_DEMOS && (M55_BSP_LCD_ROTATION_90 || M55_BSP_LCD_ROTATION_270)
+
+            config PKG_LVGL_DISP_REFR_PERIOD
+                int "LVGL display refresh period (ms)"
+                default 9
+
+            config BSP_LVGL_DRAW_BUF_LINES
+                int "LVGL draw buffer lines"
+                default 800 if BSP_LVGL_DEMO_VIRTUAL3D_EMOJI
+                default 160
+        endif
 
 endmenu
 
@@ -153,6 +298,7 @@ menu "On-chip Peripheral Drivers"
                 default n
             config BSP_USING_SOFT_I2C1
                 bool "Enable SOFT I2C1"
+                select RT_USING_I2C_BITOPS
                 default n
                 if BSP_USING_SOFT_I2C1
                     config BSP_SOFT_I2C1_SCL_PIN
@@ -185,15 +331,16 @@ menu "On-chip Peripheral Drivers"
     config BSP_USING_RTC
         bool "Enable RTC"
         select RT_USING_RTC
-        default y
+        default n
 
-        config BSP_USING_HYPERAM
-            bool "Enable HYPERAM"
-            if BSP_USING_HYPERAM
-                config BSP_USING_HYPERAM_SIZE 
-                    hex "(HEX)HYPERAM SIZE"
-                    default 0x800000
-            endif
+    config BSP_USING_HYPERAM
+        bool "Enable HYPERAM"
+        default n
+        if BSP_USING_HYPERAM
+            config BSP_USING_HYPERAM_SIZE
+                hex "(HEX)HYPERAM SIZE"
+                default 0xC00000
+        endif
 
     menuconfig BSP_USING_PWM
         bool "Enable PWM"
@@ -247,28 +394,11 @@ menu "On-chip Peripheral Drivers"
                 default y
         endif
 
-    menuconfig BSP_USING_LCD
-        bool "Enable MIPI LCD controller"
-        select RT_USING_LCD
-        select RT_USING_TOUCH
-        select RT_TOUCH_PIN_IRQ
-        select BSP_USING_I2C
-        select RT_USING_I2C_BITOPS
-        select BSP_USING_SOFT_I2C1
-        select BSP_USING_PWM
-        select BSP_USING_PWM18
-        select BSP_USING_HYPERAM
-        default n
-        if BSP_USING_LCD
-            config COMPONENT_MTB_DISPLAY_tl043wvv02
-                bool "Enable MIPI LCD Screen tl043wvv02"
-                default n
-        endif
-
     menuconfig BSP_USING_FILESYSTEM
         bool "Enable filesystem support"
         select RT_USING_DFS
         select RT_USING_POSIX_FS
+        select RT_USING_DFS_DEVFS
         select RT_USING_DFS_ROMFS
         default n
         if BSP_USING_FILESYSTEM
@@ -317,19 +447,6 @@ menu "On-chip Peripheral Drivers"
                         default 1
                 endif
             endif
-        endif
-
-    menuconfig USING_LVGL
-        bool "Enable LVGL"
-        select BSP_USING_LVGL
-        default n
-        if USING_LVGL
-            config BSP_USING_LVGL
-                bool "Enable BSP_USING_LVGL"
-                default n
-            config LVGL_USING_DEMOS
-                bool "Enable LVGL_USING_DEMOS"
-                default n
         endif
 
     config BSP_USING_FREERTOS

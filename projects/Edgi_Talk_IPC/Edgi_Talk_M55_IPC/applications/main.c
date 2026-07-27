@@ -7,7 +7,8 @@
 
 #define LED_PIN_G               GET_PIN(16, 6)
 
-static rt_device_t g_ipc_dev = RT_NULL;
+static rt_device_t g_ipc_rx_dev = RT_NULL;
+static rt_device_t g_ipc_tx_dev = RT_NULL;
 static rt_thread_t g_ipc_thread = RT_NULL;
 
 static void ipc_demo_run(void)
@@ -29,7 +30,7 @@ static void ipc_demo_run(void)
 
     while (1) {
         /* 接收消息 */
-        if (rt_device_read(g_ipc_dev, 0, &rx_frame, 1) == 1) {
+        if (rt_device_read(g_ipc_rx_dev, 0, &rx_frame, 1) == 1) {
             /* 验证消息 */
             if (rx_frame.magic == RC_MAGIC_WORD &&
                 rx_frame.role == RC_ROLE_M33 &&
@@ -61,7 +62,7 @@ static void ipc_demo_run(void)
                     tx_frame.checksum = edge_rc_checksum(&tx_frame);
 
                     /* 发送回复 */
-                    if (rt_device_write(g_ipc_dev, 0, &tx_frame, 1) == 1) {
+                    if (rt_device_write(g_ipc_tx_dev, 0, &tx_frame, 1) == 1) {
                         rt_kprintf("[M55] TX -> [M33]: \"Hello M55\" | Seq: %5lu | Time: %8lu ms\r\n",
                                    tx_frame.seq, rt_tick_get() * 1000 / RT_TICK_PER_SECOND);
                         tx_count++;
@@ -81,7 +82,7 @@ static void ipc_demo_run(void)
             }
         }
 
-        rt_thread_mdelay(10);
+        rt_thread_mdelay(1);
     }
 }
 
@@ -93,23 +94,27 @@ static void ipc_demo_entry(void* parameter)
 
 static int ipc_test_run(void)
 {
-    /* 查找 IPC 设备 */
-    g_ipc_dev = edge_ipc_device_find();
-    if (g_ipc_dev == RT_NULL) {
-        if (edge_ipc_device_register() != RT_EOK) {
-            rt_kprintf("[M55] IPC: Device register failed\r\n");
-            return -RT_ERROR;
-        }
-        g_ipc_dev = edge_ipc_device_find();
-        if (g_ipc_dev == RT_NULL) {
-            rt_kprintf("[M55] IPC: Device not found\r\n");
-            return -RT_ERROR;
-        }
+    if (edge_ipc_device_register() != RT_EOK) {
+        rt_kprintf("[M55] IPC: Device register failed\r\n");
+        return -RT_ERROR;
     }
 
-    /* 打开 IPC 设备 */
-    if (rt_device_open(g_ipc_dev, RT_DEVICE_OFLAG_RDWR) != RT_EOK) {
-        rt_kprintf("[M55] IPC: Open device failed\r\n");
+    /* M55 receives M33 messages on ipc1 and sends replies on ipc0. */
+    g_ipc_rx_dev = edge_ipc_device_find(EDGE_IPC0_DEVICE_NAME);
+    g_ipc_tx_dev = edge_ipc_device_find(EDGE_IPC1_DEVICE_NAME);
+    if (g_ipc_rx_dev == RT_NULL || g_ipc_tx_dev == RT_NULL) {
+        rt_kprintf("[M55] IPC: TX/RX device not found\r\n");
+        return -RT_ERROR;
+    }
+
+    if (rt_device_open(g_ipc_rx_dev, RT_DEVICE_OFLAG_RDWR) != RT_EOK) {
+        rt_kprintf("[M55] IPC: Open RX device failed\r\n");
+        return -RT_ERROR;
+    }
+
+    if (rt_device_open(g_ipc_tx_dev, RT_DEVICE_OFLAG_RDWR) != RT_EOK) {
+        rt_kprintf("[M55] IPC: Open TX device failed\r\n");
+        rt_device_close(g_ipc_rx_dev);
         return -RT_ERROR;
     }
 

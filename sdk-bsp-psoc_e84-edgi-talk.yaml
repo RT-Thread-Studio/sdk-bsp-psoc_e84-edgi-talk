@@ -1,6 +1,6 @@
 board:
   name: PSOC_E84-EDGI-TALK
-  version: 1.3.1
+  version: 1.4.0
   vendor: RT-Thread
   description_zh: Edgi-Talk 开发板基于 PSoC™ E84 MCU,为工程师提供了一个灵活、全面的开发平台。板上集成了丰富的外设接口和示例模块，助力开发者快速完成多传感器、显示和通信应用的开发。
   description_en: The Edgi-Talk board is based on the PSoC™ E84 MCU and provides a flexible and comprehensive development platform.It integrates a variety of peripheral interfaces and sample modules, helping developers quickly implement applications involving multi-sensor integration, display, and communication.
@@ -64,7 +64,7 @@ features_zh:
 - 128Mb HyperRAM
 - 三个用户 LED：D1（蓝）、D2（红）、D3（绿）
 - 两个按键（用户按键和复位按键）
-pkg_version: 1.3.1
+pkg_version: '1.4.0'
 pkg_vendor: RealThread
 pkg_type: Board_Support_Packages
 template_projects:
@@ -106,115 +106,11 @@ template_projects:
     files_and_folders: []
 
 example_projects:
-- project_name: Edgi_Talk_M33_S_Template
-  project_description: M33 安全模式模板工程
+- project_name: Edgi_Talk_M33_USB_RoleSwitch
+  project_description: M33 CherryUSB 主从模式切换示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_S_Template'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
-    target_path_offset: 'libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
-    files_and_folders:
-    - cybsp.c
-    - cybsp.h
-    - cybsp_doc.h
-    - cybsp_hw_config.h
-    - cybsp_types.h
-    - partition_edge.h
-    - startup_edge.h
-    - system_edge.c
-    - system_edge.h
-    - system_pse84.h
-    - cy_device_headers.h
-    - cy_device_headers_s.h
-    - pse84_config.h
-    - gpio_pse84_bga_220.h
-    - mtb_ipc_config.h
-    - mtb_srf_config.h
-    - COMPONENT_CM33/COMPONENT_SECURE_DEVICE
-    - config
-  - source_path_offset: 'libraries/components'
-    target_path_offset: 'libraries/components'
-    files_and_folders:
-    - async-transfer
-    - Infineon_core-lib-latest
-    - Infineon_retarget-io-latest
-    - serial-memory
-    - se-rt-services-utils
-    - mtb-ipc
-    - mtb-srf
-    - Infineon_cmsis-latest/Core/Include
-    - mtb-device-support-pse8xxgp/hal
-    - mtb-device-support-pse8xxgp/device-utils
-    - mtb-device-support-pse8xxgp/pdl/drivers/third_party/ethernet
-    - mtb-device-support-pse8xxgp/pdl/drivers/third_party/COMPONENT_GFXSS
-    - mtb-device-support-pse8xxgp/pdl/devices
-    - mtb-device-support-pse8xxgp/pdl/drivers/include
-    - mtb-device-support-pse8xxgp/pdl/drivers/source
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_Blink_LED
-  project_description: M33 LED闪烁示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_Blink_LED'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M55_Blink_LED
-  project_description: M55 LED闪烁示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M55_Blink_LED'
+  - source_path_offset: 'projects/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch'
     target_path_offset: ''
     files_and_folders:
     - "*"
@@ -247,122 +143,11 @@ example_projects:
     target_path_offset: ''
     files_and_folders: []
 
-- project_name: Edgi_Talk_M33_USB_D
-  project_description: M33 CherryUSB 设备模式示例
+- project_name: Edgi_Talk_M55_USB_RoleSwitch
+  project_description: M55 CherryUSB 主从模式切换示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_D'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-
-- project_name: Edgi_Talk_M33_USB_H
-  project_description: M33 CherryUSB 主机模式示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_H'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-
-- project_name: Edgi_Talk_M55_USB_D
-  project_description: M55 CherryUSB 设备模式示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_D'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-
-- project_name: Edgi_Talk_M55_USB_H
-  project_description: M55 CherryUSB 主机模式示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_H'
+  - source_path_offset: 'projects/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch'
     target_path_offset: ''
     files_and_folders:
     - "*"
@@ -544,7 +329,7 @@ example_projects:
     files_and_folders: []
 
 - project_name: Edgi_Talk_Extend_Screen
-  project_description: M55 CherryUSB USB 拓展屏幕示例
+  project_description: M55 USB 拓展屏幕示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: 'projects/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen'
@@ -580,12 +365,12 @@ example_projects:
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_SDCARD
-  project_description: SD卡示例
+
+- project_name: Edgi_Talk_M33_Driver_All
+  project_description: M33 多外设驱动合集示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_SDCARD'
+  - source_path_offset: 'projects/Edgi_Talk_M33_Driver_All'
     target_path_offset: ''
     files_and_folders:
     - "*"
@@ -617,12 +402,12 @@ example_projects:
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_RTC
-  project_description: RTC 实时时钟示例
+
+- project_name: Edgi_Talk_M55_Driver_All
+  project_description: M55 多外设驱动合集示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_RTC'
+  - source_path_offset: 'projects/Edgi_Talk_M55_Driver_All'
     target_path_offset: ''
     files_and_folders:
     - "*"
@@ -654,370 +439,7 @@ example_projects:
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_Key_Irq
-  project_description: 按键中断控制LED示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects//Edgi_Talk_M33_Key_Irq'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_ADC
-  project_description: ADC 采样示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects//Edgi_Talk_M33_ADC'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_S_HyperRam
-  project_description: M33 安全模式 HyperRAM 示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_S_HyperRam'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
-    target_path_offset: 'libs/TARGET_APP_KIT_PSE84_EVAL_EPC2'
-    files_and_folders:
-    - cybsp.c
-    - cybsp.h
-    - cybsp_doc.h
-    - cybsp_hw_config.h
-    - cybsp_types.h
-    - partition_edge.h
-    - startup_edge.h
-    - system_edge.c
-    - system_edge.h
-    - system_pse84.h
-    - cy_device_headers.h
-    - cy_device_headers_s.h
-    - pse84_config.h
-    - gpio_pse84_bga_220.h
-    - mtb_ipc_config.h
-    - mtb_srf_config.h
-    - COMPONENT_CM33/COMPONENT_SECURE_DEVICE
-    - config
-  - source_path_offset: 'libraries/components'
-    target_path_offset: 'libraries/components'
-    files_and_folders:
-    - async-transfer
-    - Infineon_core-lib-latest
-    - Infineon_retarget-io-latest
-    - serial-memory
-    - se-rt-services-utils
-    - mtb-ipc
-    - mtb-srf
-    - Infineon_cmsis-latest/Core/Include
-    - mtb-device-support-pse8xxgp/hal
-    - mtb-device-support-pse8xxgp/device-utils
-    - mtb-device-support-pse8xxgp/pdl/drivers/third_party/ethernet
-    - mtb-device-support-pse8xxgp/pdl/drivers/third_party/COMPONENT_GFXSS
-    - mtb-device-support-pse8xxgp/pdl/devices
-    - mtb-device-support-pse8xxgp/pdl/drivers/include
-    - mtb-device-support-pse8xxgp/pdl/drivers/source
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_HyperRam
-  project_description: HyperRAM 示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_HyperRam'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_AHT20
-  project_description: AHT20 温湿度传感器示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_AHT20'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_Audio
-  project_description: ES8388 音频示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_Audio'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_WavPlayer
-  project_description: WAV 音频播放器示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_WavPlayer'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M55_MIPI_LCD
-  project_description: MIPI LCD 屏幕示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M55_MIPI_LCD'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M55_CoreMark
-  project_description: CoreMark 性能测试示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M55_CoreMark'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
+
 - project_name: Edgi_Talk_M55_WIFI
   project_description: WiFi6 (CYW55512) 示例
   project_type: rt-thread|@full|@5.0.2
@@ -1055,7 +477,7 @@ example_projects:
     source_path_offset: ''
     target_path_offset: ''
     files_and_folders: []
-    
+
 - project_name: Edgi_Talk_M55_XiaoZhi
   project_description: 小智 AI 语音助手示例
   project_type: rt-thread|@full|@5.0.2
@@ -1074,43 +496,6 @@ example_projects:
     - libraries
     - rt-thread
     - resources
-  - source_path_offset: 'tools'
-    target_path_offset: 'tools'
-    files_and_folders:
-    - "*"
-  external_files:
-  - package_name: GNU_Tools_for_ARM_Embedded_Processors
-    package_type: ToolChain_Support_Packages
-    package_vendor: 'ARM'
-    package_version: '10.2.1'
-    source_path_offset: '.'
-    target_path_offset: '.'
-    files_and_folders: []
-  - package_name: OpenOCD-Infineon
-    package_type: Debugger_Support_Packages
-    package_vendor: 'Infineon'
-    package_version: '2.0.0'
-    source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders: []
-    
-- project_name: Edgi_Talk_M33_LSM6DS3
-  project_description: LSM6DS3 六轴传感器示例
-  project_type: rt-thread|@full|@5.0.2
-  builtin_files:
-  - source_path_offset: 'projects/Edgi_Talk_M33_LSM6DS3'
-    target_path_offset: ''
-    files_and_folders:
-    - "*"
-  - source_path_offset: 'projects/'
-    target_path_offset: ''
-    files_and_folders:
-    - libs
-  - source_path_offset: ''
-    target_path_offset: ''
-    files_and_folders:
-    - libraries
-    - rt-thread
   - source_path_offset: 'tools'
     target_path_offset: 'tools'
     files_and_folders:
@@ -1169,7 +554,7 @@ example_projects:
     files_and_folders: []
 
 - project_name: Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision
-  project_description: Deepcraft ai 摄像头图像示例
+  project_description: Deepcraft AI 摄像头图像示例
   project_type: rt-thread|@full|@5.0.2
   builtin_files:
   - source_path_offset: 'projects/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision'

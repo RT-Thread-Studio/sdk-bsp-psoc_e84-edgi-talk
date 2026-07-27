@@ -1,4 +1,4 @@
-# Edgi_Talk_M55_USB_D CherryUSB USB 拓展屏示例工程
+# Edgi_Talk_Extend_Screen CherryUSB USB 拓展屏示例工程
 
 **中文** | [**English**](./README.md)
 
@@ -93,9 +93,9 @@ M55 依赖 M33 启动流程，烧录顺序如下：
 ## 说明
 
 * 本工程面向 M55 核心的 USB 设备模式。
-* 主机模式请参考 [projects/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_H/README.md](../Edgi_Talk_M55_USB_H/README.md)。
-* M33 设备模式请参考 [projects/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_D/README.md](../Edgi_Talk_M33_USB_D/README.md)。
-* 若 M55 工程无法正常运行，建议先编译并烧录 **Edgi_Talk_M33_Blink_LED** 工程。
+* M55 USB 角色切换示例请参考 [projects/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.md](../Edgi_Talk_M55_USB_RoleSwitch/README.md)。
+* M33 USB 角色切换示例请参考 [projects/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.md](../Edgi_Talk_M33_USB_RoleSwitch/README.md)。
+* 若 M55 工程无法正常运行，建议先编译并烧录 **Edgi_Talk_M33_Template** 工程。
 * 在 **M33 工程** 中开启 CM55：
 
   ```

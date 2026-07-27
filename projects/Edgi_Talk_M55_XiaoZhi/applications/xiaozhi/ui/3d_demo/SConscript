@@ -2,15 +2,21 @@ from building import *
 import os
 
 cwd = GetCurrentDir()
+project_root = os.path.abspath(os.path.join(cwd, '../../../../..'))
 LIBS = []
 LIBPATH = []
 # Add all subdirectories to include path
 path = []
 path += [cwd]
 path += [cwd + '/litegfx/adapt', cwd + '/litegfx/plat', cwd + '/litegfx/vglite/include', cwd + '/sample', cwd + '/sample/lz4', cwd + '/sample/resource/AnimatedEmoji']
+path += [project_root + '/libraries/Common/board/ports/lvgl']
+path += [project_root + '/libraries/HAL_Drivers']
+path += [project_root + '/libraries/components/lvgl_9.2.0/src/draw/vg_lite']
+path += [project_root + '/libraries/components/mtb-device-support-pse8xxgp/pdl/drivers/third_party/COMPONENT_GFXSS']
+path += [project_root + '/libraries/components/mtb-device-support-pse8xxgp/pdl/drivers/third_party/COMPONENT_GFXSS/vsi/gcnano']
 
 src = Glob('*.c') + Glob('*.cpp')
-src += Glob('litegfx/adapt/*.c') + Glob('litegfx/plat/*.c')
+src += Glob('litegfx/adapt/*.c') + Glob('litegfx/plat/*.c') + Glob('litegfx/plat/*.cpp')
 src += Glob('sample/*.c') + Glob('sample/lz4/*.c') + Glob('sample/resource/AnimatedEmoji/*.c')
 LIBS+= ['lx_vglite']
 LIBPATH += [cwd + '/litegfx/vglite']

@@ -26,7 +26,7 @@ config ENV_DIR
 config PLATFORM_DIR
     string
     option env="PLATFORM_DIR"
-    default "D:/Desktop/sdk/new/psoc-edge-project/project/Edgi-Talk_WIFI/Edgi_Talk_M55_WIFI/platform"
+    default "E:/edge/sdk-bsp-psoc_e84-edgi-talk/projects/Edgi_Talk_M55_WIFI/platform"
 
 source "$RTT_DIR/Kconfig"
 source "$PKGS_DIR/Kconfig"

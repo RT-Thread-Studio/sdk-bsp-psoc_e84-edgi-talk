@@ -88,6 +88,28 @@
 #define USB_DISPLAY_BL_PWM_PERIOD_NS     200000
 #define USB_DISPLAY_BL_DEFAULT_BRIGHTNESS 80
 
+#define USB_DISPLAY_MIPI_HFP_PIXELS 86U
+#define USB_DISPLAY_MIPI_HBP_PIXELS 87U
+#define USB_DISPLAY_MIPI_HSYNC_WIDTH_PIXELS 2U
+#define USB_DISPLAY_MIPI_VFP_LINES 182U
+#define USB_DISPLAY_MIPI_VBP_LINES 8U
+#define USB_DISPLAY_MIPI_VSYNC_LINES 2U
+#define USB_DISPLAY_MIPI_PIXEL_CLOCK_KHZ 33984U
+#define USB_DISPLAY_MIPI_PER_LANE_MBPS 900U
+#define USB_DISPLAY_MIPI_MAX_PHY_CLK_HZ 2500000000UL
+
+#define LCD_BL_GPIO_NUM GET_PIN(15, 7)
+#define LCD_DISP_GPIO_NUM GET_PIN(15, 6)
+#define BL_PWM_DISP_CTRL GET_PIN(20, 6)
+
+#ifndef USB_DISPLAY_LCD_STARTUP_STABILIZE_MS
+#define USB_DISPLAY_LCD_STARTUP_STABILIZE_MS 1500U
+#endif
+
+#ifndef USB_DISPLAY_LCD_FIRST_FRAME_DELAY_MS
+#define USB_DISPLAY_LCD_FIRST_FRAME_DELAY_MS 300U
+#endif
+
 /* ---------- LCD related ---------- */
 static uint8_t *framebuffer;
 static rt_thread_t display_thread;
@@ -118,6 +140,63 @@ static rt_tick_t gui_fps_last_tick;
 static rt_bool_t pending_frame_valid;
 static uint16_t pending_frame_id;
 static rt_tick_t pending_last_tick;
+
+static void usb_display_apply_runtime_gfxss_config(void)
+{
+    GFXSS_graphics_layer.layer_type = GFX_LAYER_GRAPHICS;
+    GFXSS_graphics_layer.input_format_type = vivRGB565;
+    GFXSS_graphics_layer.tiling_type = vivLINEAR;
+    GFXSS_graphics_layer.pos_x = 0;
+    GFXSS_graphics_layer.pos_y = 0;
+    GFXSS_graphics_layer.width = USB_DISPLAY_MAX_WIDTH;
+    GFXSS_graphics_layer.height = USB_DISPLAY_MAX_HEIGHT;
+    GFXSS_graphics_layer.zorder = 0;
+    GFXSS_graphics_layer.layer_enable = true;
+    GFXSS_graphics_layer.visibility = true;
+
+    GFXSS_overlay0_layer.layer_enable = false;
+    GFXSS_overlay0_layer.visibility = false;
+    GFXSS_overlay0_layer.width = 1;
+    GFXSS_overlay0_layer.height = 1;
+    GFXSS_overlay1_layer.layer_enable = false;
+    GFXSS_overlay1_layer.visibility = false;
+    GFXSS_overlay1_layer.width = 1;
+    GFXSS_overlay1_layer.height = 1;
+
+    GFXSS_dc_config.gfx_layer_config = &GFXSS_graphics_layer;
+    GFXSS_dc_config.ovl0_layer_config = &GFXSS_overlay0_layer;
+    GFXSS_dc_config.ovl1_layer_config = &GFXSS_overlay1_layer;
+    GFXSS_dc_config.display_type = GFX_DISP_TYPE_DSI_DPI;
+    GFXSS_dc_config.display_format = vivD16CFG1;
+    GFXSS_dc_config.display_size = vivDISPLAY_CUSTOMIZED;
+    GFXSS_dc_config.display_width = USB_DISPLAY_MAX_WIDTH;
+    GFXSS_dc_config.display_height = USB_DISPLAY_MAX_HEIGHT;
+
+    GFXSS_mipidsi_display_params.pixel_clock = USB_DISPLAY_MIPI_PIXEL_CLOCK_KHZ;
+    GFXSS_mipidsi_display_params.hdisplay = USB_DISPLAY_MAX_WIDTH;
+    GFXSS_mipidsi_display_params.hsync_width = USB_DISPLAY_MIPI_HSYNC_WIDTH_PIXELS;
+    GFXSS_mipidsi_display_params.hfp = USB_DISPLAY_MIPI_HFP_PIXELS;
+    GFXSS_mipidsi_display_params.hbp = USB_DISPLAY_MIPI_HBP_PIXELS;
+    GFXSS_mipidsi_display_params.vdisplay = USB_DISPLAY_MAX_HEIGHT;
+    GFXSS_mipidsi_display_params.vsync_width = USB_DISPLAY_MIPI_VSYNC_LINES;
+    GFXSS_mipidsi_display_params.vfp = USB_DISPLAY_MIPI_VFP_LINES;
+    GFXSS_mipidsi_display_params.vbp = USB_DISPLAY_MIPI_VBP_LINES;
+    GFXSS_mipidsi_display_params.polarity_flags = 0;
+
+    GFXSS_mipi_dsi_config.virtual_ch = 0;
+    GFXSS_mipi_dsi_config.num_of_lanes = MTB_DISPLAY_EK79007AD3_PANEL_NUM_LANES;
+    GFXSS_mipi_dsi_config.per_lane_mbps = USB_DISPLAY_MIPI_PER_LANE_MBPS;
+    GFXSS_mipi_dsi_config.dpi_fmt = CY_MIPIDSI_FMT_RGB565;
+    GFXSS_mipi_dsi_config.dsi_mode = DSI_VIDEO_MODE;
+    GFXSS_mipi_dsi_config.max_phy_clk = USB_DISPLAY_MIPI_MAX_PHY_CLK_HZ;
+    GFXSS_mipi_dsi_config.mode_flags =
+        VID_MODE_TYPE_NON_BURST_SYNC_PULSES | ENABLE_LOW_POWER_CMD | ENABLE_LOW_POWER;
+    GFXSS_mipi_dsi_config.display_params = &GFXSS_mipidsi_display_params;
+
+    GFXSS_config.dc_cfg = &GFXSS_dc_config;
+    GFXSS_config.gpu_cfg = &GFXSS_gpu_config;
+    GFXSS_config.mipi_dsi_cfg = &GFXSS_mipi_dsi_config;
+}
 
 /* ---------- USB descriptor ---------- */
 static const uint8_t device_descriptor[] = {
@@ -312,6 +391,20 @@ static rt_err_t usb_display_backlight_set(rt_uint8_t percent)
 }
 #endif
 
+static void usb_display_lcd_backlight_enable(void)
+{
+    rt_pin_mode(LCD_DISP_GPIO_NUM, PIN_MODE_OUTPUT);
+    rt_pin_mode(LCD_BL_GPIO_NUM, PIN_MODE_OUTPUT);
+    rt_pin_mode(BL_PWM_DISP_CTRL, PIN_MODE_OUTPUT);
+    rt_pin_write(LCD_DISP_GPIO_NUM, PIN_HIGH);
+    rt_pin_write(LCD_BL_GPIO_NUM, PIN_HIGH);
+    rt_pin_write(BL_PWM_DISP_CTRL, PIN_HIGH);
+
+#ifdef RT_USING_PWM
+    usb_display_backlight_set(USB_DISPLAY_BL_DEFAULT_BRIGHTNESS);
+#endif
+}
+
 static rt_err_t usb_display_hw_init(void)
 {
     cy_en_gfx_status_t gfx_status;
@@ -326,6 +419,8 @@ static rt_err_t usb_display_hw_init(void)
     {
         return RT_EOK;
     }
+
+    usb_display_apply_runtime_gfxss_config();
 
     gfx_status = Cy_GFXSS_Init(gfxbase, &GFXSS_config, &usb_display_gfx_context);
     if (gfx_status != CY_GFX_SUCCESS)
@@ -342,17 +437,14 @@ static rt_err_t usb_display_hw_init(void)
     }
 
     NVIC_EnableIRQ(GFXSS_DC_IRQ);
+    gfxbase->GFXSS_DC.DCNANO.GCREGFRAMEBUFFERSTRIDE = USB_DISPLAY_FB_STRIDE_BYTES;
 
-    mipi_status = mtb_display_tl043wvv02_init(GFXSS_GFXSS_MIPIDSI, &panel_pin_cfg);
+    mipi_status = mtb_display_tl043wvv02_init_without_display_on(GFXSS_GFXSS_MIPIDSI, &panel_pin_cfg);
     if (mipi_status != CY_MIPIDSI_SUCCESS)
     {
         USB_DISPLAY_LOG("usb_display: panel init failed: %u\r\n", (unsigned int)mipi_status);
         return -RT_ERROR;
     }
-
-#ifdef RT_USING_PWM
-    usb_display_backlight_set(USB_DISPLAY_BL_DEFAULT_BRIGHTNESS);
-#endif
 
     usb_display_hw_inited = RT_TRUE;
     return RT_EOK;
@@ -871,6 +963,7 @@ int usb_display_init(void)
 {
     uintptr_t reg_base = (uintptr_t)USBHS_BASE;
     cy_en_gfx_status_t status;
+    cy_en_mipidsi_status_t mipi_status;
 
     pending_frame_valid = RT_FALSE;
     pending_frame_id = 0U;
@@ -887,6 +980,8 @@ int usb_display_init(void)
     rt_memset(gpu_present_buffer, 0x00, USB_DISPLAY_GPU_FRAME_BYTES);
     rt_memset(gpu_draw_buffer, 0x00, USB_DISPLAY_GPU_FRAME_BYTES);
 
+    rt_thread_mdelay(USB_DISPLAY_LCD_STARTUP_STABILIZE_MS);
+
     if (usb_display_hw_init() != RT_EOK)
     {
         USB_DISPLAY_LOG("usb_display: display hw init failed\r\n");
@@ -897,7 +992,18 @@ int usb_display_init(void)
     if (status != CY_GFX_SUCCESS)
     {
         USB_DISPLAY_LOG("usb_display: Cy_GFXSS_Set_FrameBuffer init failed: %u\r\n", status);
+        return -RT_ERROR;
     }
+
+    mipi_status = mtb_display_tl043wvv02_display_on(GFXSS_GFXSS_MIPIDSI);
+    if (mipi_status != CY_MIPIDSI_SUCCESS)
+    {
+        USB_DISPLAY_LOG("usb_display: panel display on failed: %u\r\n", (unsigned int)mipi_status);
+        return -RT_ERROR;
+    }
+
+    rt_thread_mdelay(USB_DISPLAY_LCD_FIRST_FRAME_DELAY_MS);
+    usb_display_lcd_backlight_enable();
 
     USB_DISPLAY_LOG("usb_display: Cy_GFXSS mode, src %ux%u, stride=%u, present=%p draw=%p\r\n",
                     usb_frame_width,

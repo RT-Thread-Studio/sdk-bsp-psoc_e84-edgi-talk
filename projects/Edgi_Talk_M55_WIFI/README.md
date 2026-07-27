@@ -1,4 +1,4 @@
-# Edgi-Talk_WIFI Example Project
+# Edgi_Talk_M55_WIFI Example Project
 
 [**中文**](./README_zh.md) | **English**
 
@@ -34,20 +34,24 @@ It allows users to quickly test Wi-Fi scanning, connection, and performance, ver
 * Provides a clear example of **Wi-Fi driver integration with RT-Thread**.
 
 ## Usage
-n> **⚠️ Note:** This project requires **RT-Thread Studio 2.2.9** or higher.
 
 ### Build and Download
 
 1. Open and compile the project.
 2. Connect the board USB to PC via **DAP**.
-3. Flash the compiled firmware.
+3. Flash the compiled firmware from `Debug/rtthread.hex`.
 
-### Prepare Wi-Fi resources (first-time setup)
+### Prepare Wi-Fi Resources
 
-The Wi-Fi host driver loads three blobs (firmware `.bin`, regulatory `.clm_blob`, and board-specific `nvram.txt`) from FAL before it can power up the radio. These files live outside the application image, so flashing a new binary will not refresh them automatically. The default bundles for Edgi-Talk live in the workspace root under `resources/`.
+WHD needs three resource files before the radio can start: firmware, CLM regulatory data, and board NVRAM. This document uses the FAL partition flow as the current method. The Wi-Fi resources are stored independently in the `whd_firmware`, `whd_clm`, and `whd_nvram` partitions. In this mode, flashing `Debug/rtthread.hex` only writes the application image; the Wi-Fi resources must be written separately from the serial terminal. The default Edgi-Talk resource files are provided in the project root `resources/` directory.
 
-- Keep `WHD_RESOURCES_IN_EXTERNAL_STORAGE_FAL` enabled in menuconfig and make sure the FAL table provides the `whd_firmware`, `whd_clm`, and `whd_nvram` partitions (the defaults reserve 512 KB + 32 KB + 32 KB of on-chip flash).
-- Attach a serial terminal, reboot into the `msh` prompt, and run the download helper for each partition:
+#### Current Method: FAL Partitions
+
+Select this mode in `settings`:
+
+![alt text](figures/fal_mode.png)
+
+The default Edgi-Talk resource files are provided in the project root `resources/` directory.
 
 ```
 whd_res_download whd_firmware
@@ -55,11 +59,32 @@ whd_res_download whd_clm
 whd_res_download whd_nvram
 ```
 
-Each command switches to YMODEM mode. Use a terminal that supports YMODEM upload (Xshell) to send the matching files from the top-level `resources/` directory .
-- Wait for the `Download … success` message before moving to the next partition.
-- Power-cycle or reset the board after the three transfers so Wi-Fi starts with the freshly stored blobs. Re-run the command whenever you update the firmware/CLM/NVRAM bundle.
+Each command switches to YMODEM mode. Use a terminal that supports YMODEM upload, such as Xshell, to send the matching file from `resources/`. Reset the board after all three transfers complete.
+
+- Wait for the `Download ... success` message before starting the next transfer.
+- After all three resources are written, reset the board so Wi-Fi can load the new resources. If the resource package is updated later, run `whd_res_download` again.
 
 ![wifi](figures/wifi.gif)
+
+#### Extension: Build Wi-Fi Resources into the Application Image
+
+If you want the Wi-Fi firmware to be programmed together with `Debug/rtthread.hex`, switch to `WHD_RESOURCES_IN_MEMORY`:
+
+![alt text](figures/in_memory.png)
+
+This mode builds the resource files from the project root `resources/` directory into the application image:
+
+- `resources/55500A1.trxcse`
+- `resources/55500A1.clm_blob`
+- `resources/cyw55513modpse84som_rev3.txt`
+
+After rebuilding, the Wi-Fi firmware, CLM, and NVRAM become part of the application image. After flashing `Debug/rtthread.hex`, you no longer need to run `whd_res_download whd_firmware`, `whd_res_download whd_clm`, or `whd_res_download whd_nvram`. If the Wi-Fi resource files are updated, rebuild and reflash the application image. This mode increases the application image size; the current CYW55500 firmware and CLM add about 240 KB of flash usage, plus the NVRAM text.
+
+Note: RT-Thread Studio generates and runs makefiles from the `Debug` directory, while ENV/SCons builds from the project root. The current project handles this difference: Studio builds read resources from `../resources/`, and ENV/SCons generates resource code from the project root `resources/` directory. Place the resource files in the project root `resources/`; do not put them only in `Debug/resources/`.
+
+#### Extension: SD Card Resource Loading
+
+`WHD_RESOURCES_IN_SDCARD` loads the same three resources from `/sdcard` at runtime. The default filenames are `/sdcard/55500A1.trxcse`, `/sdcard/55500A1.clm_blob`, and `/sdcard/cyw55513modpse84som_rev3.txt`. This mode also enables the BSP SD card filesystem support used by the shared mount code.
 
 ### Running Result
 
@@ -120,10 +145,7 @@ iperf -c <PC_IP>
 
 ---
 
-* If the example does not run, first compile and flash **Edgi_Talk_M33_Blink_LED** and **Edgi-Talk_M33_Template**.
-* To enable M55:
+* If the example does not run, first compile and flash **Edgi_Talk_M33_Template**.
+* The M55 core is started by the M33 boot chain. In current templates, **Edgi_Talk_M33_Template** already calls `Cy_SysEnableCM55(MXCM55, CY_CM55_APP_BOOT_ADDR, 10)` during board initialization, so the old `select SOC Multi Core Mode -> Enable CM55 Core` menu may no longer appear.
 
-```
-RT-Thread Settings --> Hardware --> select SOC Multi Core Mode --> Enable CM55 Core
-```
 ![config](figures/config.png)

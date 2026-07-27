@@ -45,6 +45,7 @@
 #define HEADER_HEIGHT       40
 #define BATTERY_OUTLINE_W   58
 #define BATTERY_OUTLINE_H   33
+#define XIAOZHI_UI_SHOW_DEBUG_PANEL 0
 
 /*****************************************************************************
  * Type Definitions
@@ -108,7 +109,9 @@ static lv_obj_t *s_cont = NULL;
 /* LVGL objects - Main Screen */
 static lv_obj_t *s_label_status;    /* Status label */
 static lv_obj_t *s_label_info;      /* Info label */
-static lv_obj_t *s_label_adc;       /* ADC label */
+#if XIAOZHI_UI_SHOW_DEBUG_PANEL
+static lv_obj_t *s_label_adc;       /* Debug label */
+#endif
 static lv_obj_t *s_label_output;    /* Output label */
 static lv_obj_t *s_emoji_container;
 static lv_obj_t *s_main_container;
@@ -347,11 +350,13 @@ static rt_err_t ui_objects_init(void)
     lv_obj_set_style_text_color(s_label_info, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_align(s_label_info, LV_ALIGN_BOTTOM_MID, 0, 0);
 
-    /* ADC label - positioned in top right */
+#if XIAOZHI_UI_SHOW_DEBUG_PANEL
+    /* Debug label - positioned in top right */
     s_label_adc = lv_label_create(screen);
     lv_obj_add_style(s_label_adc, &s_style_30, 0);
     lv_obj_set_style_text_color(s_label_adc, lv_color_hex(0x333333), LV_PART_MAIN | LV_STATE_DEFAULT); /* Dark gray for better contrast */
     lv_obj_align(s_label_adc, LV_ALIGN_TOP_RIGHT, -SCALE_DPX(20), SCALE_DPX(20));
+#endif
 
     return RT_EOK;
 }
@@ -433,10 +438,12 @@ static void ui_process_message(const ui_msg_t *msg)
         break;
 
     case UI_CMD_SET_ADC:
+#if XIAOZHI_UI_SHOW_DEBUG_PANEL
         if (s_label_adc)
         {
             lv_label_set_text(s_label_adc, msg->data);
         }
+#endif
         break;
 
     case UI_CMD_SET_EMOJI:
@@ -575,7 +582,9 @@ static void ui_thread_entry(void *args)
     /* Set initial display */
     if (s_label_status) lv_label_set_text(s_label_status, "初始化中...");
     if (s_label_info) lv_label_set_text(s_label_info, " ");
+#if XIAOZHI_UI_SHOW_DEBUG_PANEL
     if (s_label_adc) lv_label_set_text(s_label_adc, " ");
+#endif
     if (s_label_output) lv_label_set_text(s_label_output, " ");
     ui_show_emoji(0);
     lv_task_handler();
@@ -648,7 +657,11 @@ void xiaozhi_ui_set_emoji(const char *emoji)
 
 void xiaozhi_ui_set_adc(const char *adc_str)
 {
+#if XIAOZHI_UI_SHOW_DEBUG_PANEL
     ui_send_message(UI_CMD_SET_ADC, adc_str, "");
+#else
+    (void)adc_str;
+#endif
 }
 
 void xiaozhi_ui_clear_info(void)

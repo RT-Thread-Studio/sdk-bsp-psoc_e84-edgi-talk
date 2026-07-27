@@ -37,6 +37,7 @@ extern "C" {
 *******************************************************************************/
 #include "cy_graphics.h"
 #include "cy_pdl.h"
+#include <rtconfig.h>
 
 
 /*******************************************************************************
@@ -44,6 +45,24 @@ extern "C" {
 *******************************************************************************/
 /* Panel register(s) */
 #define MTB_DISPLAY_EK79007AD3_PANEL_CTRL_REG            (0xB2)
+#define MTB_DISPLAY_EK79007AD3_MADCTL_REG                (0x36)
+
+/* EK79007 SHLR/UPDN scan direction bits. Set both for panel-side 180 scan. */
+#define MTB_DISPLAY_EK79007AD3_MADCTL_SHLR               (0x01U)
+#define MTB_DISPLAY_EK79007AD3_MADCTL_UPDN               (0x02U)
+
+#if defined(BSP_LCD_PANEL_SCAN_ROTATE_180) || defined(BSP_LCD_ROTATION_180)
+#define MTB_DISPLAY_EK79007AD3_MADCTL_ROTATE_180         (1U)
+#else
+#define MTB_DISPLAY_EK79007AD3_MADCTL_ROTATE_180         (0U)
+#endif
+
+#if MTB_DISPLAY_EK79007AD3_MADCTL_ROTATE_180
+#define MTB_DISPLAY_EK79007AD3_MADCTL_VALUE              \
+    (MTB_DISPLAY_EK79007AD3_MADCTL_SHLR | MTB_DISPLAY_EK79007AD3_MADCTL_UPDN)
+#else
+#define MTB_DISPLAY_EK79007AD3_MADCTL_VALUE              (0x00U)
+#endif
 
 /* Enable/disable 2 lane MIPI interface bit position */
 #define MTB_DISPLAY_EK79007AD3_EN_2LANE_BIT_POS          (4UL)
@@ -130,10 +149,15 @@ extern cy_stc_tcpwm_pwm_config_t mtb_display_tl043wvv02_backlight_pwm_config;
 *******************************************************************************/
 cy_en_mipidsi_status_t mtb_display_tl043wvv02_init(GFXSS_MIPIDSI_Type* mipi_dsi_base,
         mtb_display_tl043wvv02_pin_config_t *disp_tl043wvv02_pin_config);
+cy_en_mipidsi_status_t mtb_display_tl043wvv02_init_without_display_on(GFXSS_MIPIDSI_Type* mipi_dsi_base,
+        mtb_display_tl043wvv02_pin_config_t *disp_tl043wvv02_pin_config);
+cy_en_mipidsi_status_t mtb_display_tl043wvv02_display_on(GFXSS_MIPIDSI_Type* mipi_dsi_base);
 
 cy_en_tcpwm_status_t mtb_display_tl043wvv02_backlight_init(
     mtb_display_tl043wvv02_backlight_config_t *disp_tl043wvv02_backlight_config);
 void mtb_display_tl043wvv02_set_brightness(uint8_t brightness_percent);
+cy_en_mipidsi_status_t mtb_display_tl043wvv02_set_madctl(GFXSS_MIPIDSI_Type* mipi_dsi_base,
+                                                          uint8_t madctl);
 cy_en_mipidsi_status_t mtb_display_tl043wvv02_deinit(GFXSS_MIPIDSI_Type* mipi_dsi_base);
 
 

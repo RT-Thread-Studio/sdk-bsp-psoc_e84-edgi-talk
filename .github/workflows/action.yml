@@ -51,34 +51,20 @@ jobs:
       fail-fast: false
       matrix:
        legs:
-         - {RTT_BSP: "Edgi_Talk_M33_ADC"}
-         - {RTT_BSP: "Edgi_Talk_M33_AHT20"}
-         - {RTT_BSP: "Edgi_Talk_M33_Audio"}
-         - {RTT_BSP: "Edgi_Talk_M33_Blink_LED"}
-         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_D"}
-         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_H"}
-         - {RTT_BSP: "Edgi_Talk_IPC/Edgi_Talk_M33_IPC"}
-         - {RTT_BSP: "Edgi_Talk_IPC/Edgi_Talk_M55_IPC"}
-         - {RTT_BSP: "Edgi_Talk_M55_Blink_LED"}
-         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_D"}
-         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_H"}
-         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen"}
-         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC"}
-         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft"}
-         - {RTT_BSP: "Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision"}
-         - {RTT_BSP: "Edgi_Talk_M55_CoreMark"}
-         - {RTT_BSP: "Edgi_Talk_M33_HyperRam"}
-         - {RTT_BSP: "Edgi_Talk_M33_Key_Irq"}
-         - {RTT_BSP: "Edgi_Talk_M33_LSM6DS3"}
-         - {RTT_BSP: "Edgi_Talk_M55_LVGL"}
-         - {RTT_BSP: "Edgi_Talk_M33_S_Template"}
+         - {RTT_BSP: "Edgi_Talk_M33_Driver_All"}
          - {RTT_BSP: "Edgi_Talk_M33_Template"}
-         - {RTT_BSP: "Edgi_Talk_M55_MIPI_LCD"}
-         - {RTT_BSP: "Edgi_Talk_M33_RTC"}
-         - {RTT_BSP: "Edgi_Talk_M33_SDCARD"}
-         - {RTT_BSP: "Edgi_Talk_M33_WavPlayer"}
+         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch"}
+         - {RTT_BSP: "Edgi_Talk_IPC/Edgi_Talk_M33_IPC"}
+         - {RTT_BSP: "Edgi_Talk_M55_Driver_All"}
+         - {RTT_BSP: "Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision"}
+         - {RTT_BSP: "Edgi_Talk_M55_LVGL"}
          - {RTT_BSP: "Edgi_Talk_M55_WIFI"}
          - {RTT_BSP: "Edgi_Talk_M55_XiaoZhi"}
+         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen"}
+         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch"}
+         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC"}
+         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft"}
+         - {RTT_BSP: "Edgi_Talk_IPC/Edgi_Talk_M55_IPC"}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -104,17 +90,47 @@ jobs:
           echo "RTT_ROOT=${{ github.workspace }}" >> $GITHUB_ENV
           echo "RTT_CC=gcc" >> $GITHUB_ENV
 
-      - name: Check and Run mklinks.sh
+      - name: Prepare edgeprotecttools for M33 secure image
+        if: ${{ success() && contains(matrix.legs.RTT_BSP, 'M33') }}
+        shell: bash
+        run: |
+          sudo apt-get -qq install wine64
+          tool_dir="${{ github.workspace }}/tools/edgeprotecttools/bin"
+          mv "$tool_dir/edgeprotecttools.exe" "$tool_dir/edgeprotecttools.win.exe"
+          cat > "$tool_dir/edgeprotecttools.exe" <<'EOF'
+          #!/usr/bin/env bash
+          set -e
+          export WINEDEBUG=-all
+          export WINEPREFIX="${WINEPREFIX:-${RUNNER_TEMP:-/tmp}/w}"
+          script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+          exec wine "$script_dir/edgeprotecttools.win.exe" "$@"
+          EOF
+          chmod +x "$tool_dir/edgeprotecttools.exe"
+          WINEPREFIX="${RUNNER_TEMP:-/tmp}/w" wineboot --init || true
+
+      - name: Prepare project links
         if: ${{ success() }}
         shell: bash
         env:
           RTT_BSP: ${{ matrix.legs.RTT_BSP }}
         run: |
-          cd projects/$RTT_BSP
+          project_dir="projects/$RTT_BSP"
+          cd "$project_dir"
           if [ -f mklinks.sh ]; then
             chmod +x mklinks.sh
             ./mklinks.sh
           fi
+          link_if_missing() {
+            name="$1"
+            target="$2"
+            if [ ! -e "$name" ] && [ ! -L "$name" ]; then
+              ln -s "$target" "$name"
+            fi
+          }
+          link_if_missing libraries "${{ github.workspace }}/libraries"
+          link_if_missing libs "${{ github.workspace }}/projects/libs"
+          link_if_missing rt-thread "${{ github.workspace }}/rt-thread"
+          link_if_missing tools "${{ github.workspace }}/tools"
 
       - name: Compile ${{ matrix.legs.RTT_BSP }}
         if: ${{ success() }}
@@ -122,5 +138,100 @@ jobs:
         env:
           RTT_BSP: ${{ matrix.legs.RTT_BSP }}
         run: |
-          cd projects
-          scons -C $RTT_BSP
+          if [[ "$RTT_BSP" == *M33* ]]; then
+            scons -C "projects/$RTT_BSP" build/rtthread_app.hex
+          else
+            scons -C "projects/$RTT_BSP"
+          fi
+
+      - name: Merge M33 secure image
+        if: ${{ success() && contains(matrix.legs.RTT_BSP, 'M33') }}
+        shell: bash
+        env:
+          RTT_BSP: ${{ matrix.legs.RTT_BSP }}
+        run: |
+          project_dir="${{ github.workspace }}/projects/$RTT_BSP"
+          cd "$project_dir"
+          old_secure_hex="libraries/components/infineon-pse84-secure-firmware-latest/build/rtthread.hex"
+          new_secure_hex="build/secure_fw/rtthread.hex"
+          if [ -f "$new_secure_hex" ]; then
+            secure_hex="$new_secure_hex"
+          elif [ -f "$old_secure_hex" ]; then
+            secure_hex="$old_secure_hex"
+          else
+            echo "Secure HEX not found in $new_secure_hex or $old_secure_hex" >&2
+            exit 1
+          fi
+
+          boot_config="build/boot_with_extended_boot_scons.ci.json"
+          python - "$secure_hex" "$boot_config" <<'PY'
+          import json
+          import os
+          import sys
+
+          secure_hex = sys.argv[1].replace(os.sep, "/")
+          boot_config = sys.argv[2]
+
+          with open("config/boot_with_extended_boot_scons.json", "r") as config_in:
+              config = json.load(config_in)
+
+          for item in config.get("content", []):
+              if item.get("name") != "merge":
+                  continue
+              for command in item.get("commands", []):
+                  inputs = command.get("inputs", [])
+                  if len(inputs) > 1:
+                      inputs[1]["file"] = secure_hex
+
+          os.makedirs(os.path.dirname(boot_config), exist_ok=True)
+          with open(boot_config, "w") as config_out:
+              json.dump(config, config_out, indent=4)
+          PY
+
+          "${{ github.workspace }}/tools/edgeprotecttools/bin/edgeprotecttools.exe" run-config -i "$boot_config"
+          test -f build/rtthread_app.hex
+          test -f "$secure_hex"
+          test -f build/rtthread.hex
+
+      - name: Collect HEX artifacts
+        if: ${{ success() }}
+        shell: bash
+        env:
+          RTT_BSP: ${{ matrix.legs.RTT_BSP }}
+        run: |
+          safe_bsp="${RTT_BSP//\//_}"
+          echo "SAFE_BSP=$safe_bsp" >> "$GITHUB_ENV"
+          artifact_dir="${{ github.workspace }}/ci-artifacts/$safe_bsp"
+          rm -rf "$artifact_dir"
+          mkdir -p "$artifact_dir"
+
+          project_dir="${{ github.workspace }}/projects/$RTT_BSP"
+
+          found=0
+          for hex in \
+            "$project_dir"/*.hex \
+            "$project_dir"/build/*.hex \
+            "$project_dir"/build/secure_fw/*.hex \
+            "$project_dir"/build/secure_scons/*.hex \
+            "$project_dir"/Debug/*.hex \
+            "$project_dir"/libraries/components/infineon-pse84-secure-firmware-latest/build/*.hex; do
+            [ -f "$hex" ] || continue
+            rel="${hex#$project_dir/}"
+            cp "$hex" "$artifact_dir/${rel//\//_}"
+            found=1
+          done
+
+          if [ "$found" -eq 0 ]; then
+            echo "No HEX artifacts found under $project_dir" >&2
+            exit 1
+          fi
+
+          ls -lh "$artifact_dir"
+
+      - name: Upload HEX artifacts
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ env.SAFE_BSP }}
+          path: ci-artifacts/${{ env.SAFE_BSP }}
+          if-no-files-found: error

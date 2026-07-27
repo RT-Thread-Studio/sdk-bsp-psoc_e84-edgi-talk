@@ -60,10 +60,12 @@ static enum rym_code ymodem_on_begin (struct rym_ctx *ctx, rt_uint8_t *buf, rt_s
 
     download_file_cur_size = 0;
 
-    /* Check resource file size */
-    if (download_file_total_size > download_part->len)
+    /* Check resource file size, including the external resource header. */
+    if (download_file_total_size > (download_part->len - sizeof(resource_hnd_t)))
     {
-        rt_kprintf("\nFile is too large! File size (%d), '%s' partition size (%d)", download_file_total_size, download_part->name, download_part->len);
+        rt_kprintf("\nFile is too large! File size (%d), '%s' usable size (%d)",
+                   download_file_total_size, download_part->name,
+                   download_part->len - sizeof(resource_hnd_t));
         return RYM_CODE_CAN;
     }
 

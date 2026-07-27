@@ -17,8 +17,8 @@
 #include "mtb_hal_i2c.h"
 
 #ifdef BSP_USING_HW_I2C0
-extern const cy_stc_scb_i2c_config_t CYBSP_I2C_CONTROLLER_config;
-extern const mtb_hal_i2c_configurator_t CYBSP_I2C_CONTROLLER_hal_config;
+extern const cy_stc_scb_i2c_config_t CYBSP_I2C_0_config;
+extern const mtb_hal_i2c_configurator_t CYBSP_I2C_0_hal_config;
 #endif
 #ifdef BSP_USING_HW_I2C5
 extern const cy_stc_scb_i2c_config_t CYBSP_I2C5_CONTROLLER_config;
@@ -33,9 +33,9 @@ extern const mtb_hal_i2c_configurator_t scb_8_hal_config;
 #define I2C0_CONFIG                                                     \
     {                                                                   \
         .name = "i2c0",                                                 \
-        .base = CYBSP_I2C_CONTROLLER_HW,                              \
-        .cy_stc_scb_i2c_config = &CYBSP_I2C_CONTROLLER_config,        \
-        .mtb_hal_i2c_configurator = &CYBSP_I2C_CONTROLLER_hal_config, \
+        .base = CYBSP_I2C_0_HW,                                         \
+        .cy_stc_scb_i2c_config = &CYBSP_I2C_0_config,                   \
+        .mtb_hal_i2c_configurator = &CYBSP_I2C_0_hal_config,            \
     }
 #endif /* I2C0_CONFIG */
 

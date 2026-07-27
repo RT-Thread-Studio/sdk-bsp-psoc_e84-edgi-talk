@@ -30,7 +30,7 @@
 #endif /* PKG_LVGL_THREAD_PRIO */
 
 #ifndef PKG_LVGL_DISP_REFR_PERIOD
-    #define PKG_LVGL_DISP_REFR_PERIOD 33
+    #define PKG_LVGL_DISP_REFR_PERIOD 5
 #endif /* PKG_LVGL_DISP_REFR_PERIOD */
 
 extern void lv_port_disp_init(void);

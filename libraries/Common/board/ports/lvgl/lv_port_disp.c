@@ -13,6 +13,7 @@
 * Header Files
 *******************************************************************************/
 #include "lv_port_disp.h"
+#include <rtthread.h>
 #include <stdbool.h>
 #include <string.h>
 #include "cy_graphics.h"
@@ -21,15 +22,37 @@
 /*******************************************************************************
 * Global Variables
 *******************************************************************************/
-CY_SECTION(".cy_gpu_buf") LV_ATTRIBUTE_MEM_ALIGN uint8_t disp_buf1[MY_DISP_HOR_RES *
-                                               MY_DISP_VER_RES * 2];
-CY_SECTION(".cy_gpu_buf") LV_ATTRIBUTE_MEM_ALIGN uint8_t disp_buf2[MY_DISP_HOR_RES *
-                                               MY_DISP_VER_RES * 2];
+#ifndef BSP_LVGL_DRAW_BUF_LINES
+#define LVGL_DRAW_BUF_REQUESTED_LINES 160U
+#else
+#define LVGL_DRAW_BUF_REQUESTED_LINES BSP_LVGL_DRAW_BUF_LINES
+#endif
+
+#if ((BSP_LCD_ROTATION_DEGREES == 90) || (BSP_LCD_ROTATION_DEGREES == 270))
+#define LVGL_DRAW_BUF_MAX_LINES 384U
+#else
+#define LVGL_DRAW_BUF_MAX_LINES MY_DISP_VER_RES
+#endif
+
+#if (LVGL_DRAW_BUF_REQUESTED_LINES > LVGL_DRAW_BUF_MAX_LINES)
+#define LVGL_DRAW_BUF_LINES LVGL_DRAW_BUF_MAX_LINES
+#else
+#define LVGL_DRAW_BUF_LINES LVGL_DRAW_BUF_REQUESTED_LINES
+#endif
+
+#define LVGL_DRAW_BUF_SIZE (MY_DISP_HOR_RES * LVGL_DRAW_BUF_LINES * 2U)
+
+CY_SECTION(".cy_gpu_buf") LV_ATTRIBUTE_MEM_ALIGN uint8_t disp_buf1[LVGL_DRAW_BUF_SIZE];
+CY_SECTION(".cy_gpu_buf") LV_ATTRIBUTE_MEM_ALIGN uint8_t disp_buf2[LVGL_DRAW_BUF_SIZE];
 /* Frame buffers used by GFXSS to render UI */
 void *frame_buffer1 = &disp_buf1;
 void *frame_buffer2 = &disp_buf2;
 
 cy_stc_gfx_context_t gfx_context;
+
+extern void lcd_flush_rgb565_area(const void *pixels, uint32_t x, uint32_t y,
+                                  uint32_t width, uint32_t height, uint32_t src_stride,
+                                  rt_bool_t present);
 
 
 /*******************************************************************************
@@ -42,7 +65,7 @@ cy_stc_gfx_context_t gfx_context;
 *
 * Parameters:
 *  *disp_drv: Pointer to the display driver structure to be registered by HAL.
-*  *area: Pointer to the area of the screen (not used).
+*  *area: Pointer to the updated area of the screen.
 *  *color_p: Pointer to the frame buffer address.
 *
 * Return:
@@ -52,10 +75,14 @@ cy_stc_gfx_context_t gfx_context;
 static void LV_ATTRIBUTE_FAST_MEM disp_flush(lv_display_t *disp_drv, const lv_area_t *area,
         uint8_t *color_p)
 {
-    CY_UNUSED_PARAMETER(area);
+    uint32_t x = (uint32_t)area->x1;
+    uint32_t y = (uint32_t)area->y1;
+    uint32_t width = (uint32_t)(area->x2 - area->x1 + 1);
+    uint32_t height = (uint32_t)(area->y2 - area->y1 + 1);
+    uint32_t src_stride = lv_draw_buf_width_to_stride(width, LV_COLOR_FORMAT_RGB565) / sizeof(uint16_t);
 
-    Cy_GFXSS_Set_FrameBuffer((GFXSS_Type*) GFXSS, (uint32_t*) color_p,
-                             &gfx_context);
+    lcd_flush_rgb565_area(color_p, x, y, width, height, src_stride,
+                          lv_display_flush_is_last(disp_drv) ? RT_TRUE : RT_FALSE);
 
     /* Inform the graphics library that you are ready with the flushing */
     lv_display_flush_ready(disp_drv);
@@ -110,11 +137,9 @@ void lv_port_disp_init(void)
     lv_tick_set_cb(&rt_tick_get_millisecond);
 
     lv_display_set_buffers(disp, disp_buf1, disp_buf2, sizeof(disp_buf1),
-                           LV_DISPLAY_RENDER_MODE_FULL);//
+                           LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     // lv_display_set_rotation(disp, LV_DISPLAY_ROTATION_270);
-
-    Cy_GFXSS_Clear_DC_Interrupt((GFXSS_Type*) GFXSS, &gfx_context);
 }
 
 

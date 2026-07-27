@@ -75,6 +75,8 @@ void poweroff(void)
 #define LCD_DISP_GPIO_NUM           GET_PIN(15, 6)  //LCD IC电源开关
 #define BL_PWM_DISP_CTRL            GET_PIN(20, 6)  //LCD PWM亮度调节
 
+#define LCD_POWER_STABLE_DELAY_MS   200U
+
 int en_gpio(void)
 {
     rt_pin_mode(WIFI_OE_CTRL, PIN_MODE_OUTPUT);
@@ -91,13 +93,12 @@ int en_gpio(void)
 
     /* LCD 电源和背光使能 */
     rt_pin_mode(BL_PWM_DISP_CTRL, PIN_MODE_OUTPUT);
-    rt_pin_write(BL_PWM_DISP_CTRL, PIN_HIGH);
-
     rt_pin_mode(LCD_DISP_GPIO_NUM, PIN_MODE_OUTPUT);
-    rt_pin_write(LCD_DISP_GPIO_NUM, PIN_HIGH);
-
     rt_pin_mode(LCD_BL_GPIO_NUM, PIN_MODE_OUTPUT);
-    rt_pin_write(LCD_BL_GPIO_NUM, PIN_HIGH);
+    rt_pin_write(BL_PWM_DISP_CTRL, PIN_LOW);
+    rt_pin_write(LCD_BL_GPIO_NUM, PIN_LOW);
+    rt_pin_write(LCD_DISP_GPIO_NUM, PIN_HIGH);
+    Cy_SysLib_Delay(LCD_POWER_STABLE_DELAY_MS);
 
     return 0;
 }

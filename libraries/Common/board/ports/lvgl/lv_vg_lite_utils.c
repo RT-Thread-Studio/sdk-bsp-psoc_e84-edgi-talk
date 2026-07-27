@@ -483,7 +483,7 @@ vg_lite_buffer_format_t lv_vg_lite_vg_fmt(lv_color_format_t cf)
             return VG_LITE_INDEX_8;
 
         case LV_COLOR_FORMAT_RGB565:
-            return VG_LITE_BGR565;
+            return VG_LITE_RGB565;
 
         case LV_COLOR_FORMAT_ARGB8565:
             return VG_LITE_BGRA5658;
@@ -492,10 +492,10 @@ vg_lite_buffer_format_t lv_vg_lite_vg_fmt(lv_color_format_t cf)
             return VG_LITE_BGR888;
 
         case LV_COLOR_FORMAT_ARGB8888:
-            return VG_LITE_BGRA8888;
+            return VG_LITE_RGBA8888;
 
         case LV_COLOR_FORMAT_XRGB8888:
-            return VG_LITE_BGRX8888;
+            return VG_LITE_RGBX8888;
 
         case LV_COLOR_FORMAT_NV12:
             return VG_LITE_NV12;
@@ -828,7 +828,7 @@ vg_lite_color_t lv_vg_lite_color(lv_color_t color, lv_opa_t opa, bool pre_mul)
         color.green = LV_UDIV255(color.green * opa);
         color.blue = LV_UDIV255(color.blue * opa);
     }
-    return (uint32_t)opa << 24 | (uint32_t)color.blue << 16 | (uint32_t)color.green << 8 | color.red;
+    return (uint32_t)opa << 24 | (uint32_t)color.red << 16 | (uint32_t)color.green << 8 | color.blue;
 }
 
 vg_lite_blend_t lv_vg_lite_blend_mode(lv_blend_mode_t blend_mode)

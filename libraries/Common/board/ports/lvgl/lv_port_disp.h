@@ -30,8 +30,30 @@ extern "C" {
 /*******************************************************************************
 * Macros
 *******************************************************************************/
-#define MY_DISP_HOR_RES     (512U)//(512U)//水平
-#define MY_DISP_VER_RES     (800U) //(800U)//竖直
+#ifndef BSP_LCD_PHYSICAL_HOR_RES
+#define BSP_LCD_PHYSICAL_HOR_RES     (480U)
+#endif
+
+#ifndef BSP_LCD_PHYSICAL_VER_RES
+#define BSP_LCD_PHYSICAL_VER_RES     (800U)
+#endif
+
+#ifndef BSP_LCD_ROTATION_DEGREES
+#define BSP_LCD_ROTATION_DEGREES     0
+#endif
+
+#if ((BSP_LCD_ROTATION_DEGREES != 0) && (BSP_LCD_ROTATION_DEGREES != 90) && \
+     (BSP_LCD_ROTATION_DEGREES != 180) && (BSP_LCD_ROTATION_DEGREES != 270))
+#error "BSP_LCD_ROTATION_DEGREES must be 0, 90, 180, or 270"
+#endif
+
+#if ((BSP_LCD_ROTATION_DEGREES == 90) || (BSP_LCD_ROTATION_DEGREES == 270))
+#define MY_DISP_HOR_RES     BSP_LCD_PHYSICAL_VER_RES
+#define MY_DISP_VER_RES     BSP_LCD_PHYSICAL_HOR_RES
+#else
+#define MY_DISP_HOR_RES     BSP_LCD_PHYSICAL_HOR_RES
+#define MY_DISP_VER_RES     BSP_LCD_PHYSICAL_VER_RES
+#endif
 
 extern cy_stc_gfx_context_t gfx_context;
 extern void *frame_buffer1;

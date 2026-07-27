@@ -195,6 +195,10 @@ static uint32_t cy_gfxss_configure_layer(cy_stc_gfx_layer_config_t *layer_config
     bpp = cy_gfxss_get_bpp_from_format(layer_config->input_format_type);
  
     stride = layer_config->width * bpp / 8;
+    if ((stride % AXI_BURST_LENGTH) != 0U)
+    {
+        stride = AXI_BURST_LENGTH * ((stride / AXI_BURST_LENGTH) + 1U);
+    }
  
     /* config the buffer's phyAddr/format/tilemode/bufferWidth/bufferHeight/stride to kernel */
     buffer.phyAddress[0] = (gctADDRESS) layer_config->buffer_address;

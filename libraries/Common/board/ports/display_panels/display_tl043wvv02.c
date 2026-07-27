@@ -72,7 +72,11 @@ const lcd_table_setting_t g_lcd_init_focuslcd[] =
     {4, GENERIC_DATA,    {0x99, 0x71, 0x02, 0xa3}},
     {4, GENERIC_DATA,    {0x99, 0x71, 0x02, 0xa4}},
 
-    {2, DCS_CMD_DATA,    {0xA4, 0x31}},   // 2Lanes
+#if (MTB_DISPLAY_EK79007AD3_PANEL_NUM_LANES == 4U)
+    {2, DCS_CMD_DATA,    {0xB2, 0x70}},   // 4 lanes, used by Linux EK79007AD3-derived panels
+#else
+    {2, DCS_CMD_DATA,    {0xA4, 0x31}},   // 2 lanes, matches the BSP DSI host configuration
+#endif
 
     {8, DCS_CMD_DATA,    {0xB0, 0x22, 0x57, 0x1E, 0x61, 0x2F, 0x57, 0x61}},   // VGH_VGL  (14v)
 
@@ -104,7 +108,9 @@ const lcd_table_setting_t g_lcd_init_focuslcd[] =
 
     {34, DCS_CMD_DATA,   {0xE7, 0x8B, 0x3C, 0x00, 0x0C, 0xF0, 0x5D, 0x00, 0x5D, 0x00, 0x5D, 0x00, 0x5D, 0x00, 0xFF, 0x00, 0x08, 0x7B, 0x00, 0x00, 0xC8, 0x6A, 0x5A, 0x08, 0x1A, 0x3C, 0x00, 0x81, 0x01, 0xCC, 0x01, 0x7F, 0xF0, 0x22}},
 
-    {2, DCS_CMD_DATA,    {0x35, 0x00}},  //TE off
+    {2, DCS_CMD_DATA,    {MTB_DISPLAY_EK79007AD3_MADCTL_REG, MTB_DISPLAY_EK79007AD3_MADCTL_VALUE}},
+    {2, DCS_CMD_DATA,    {0x3A, 0x55}},  // COLMOD: RGB565 / 16 bpp
+    {2, DCS_CMD_DATA,    {0x35, 0x00}},  // TE on, V-blanking only
     // {2, DCS_CMD_DATA , {0xB5, 0x85}},  //Screen Test Mode
 
 };
@@ -134,8 +140,9 @@ static uint32_t pwm_period = RESET_VAL;
 * \snippet snippet/main.c snippet_mtb_display_tl043wvv02_init
 *
 *******************************************************************************/
-cy_en_mipidsi_status_t mtb_display_tl043wvv02_init(GFXSS_MIPIDSI_Type* mipi_dsi_base,
-        mtb_display_tl043wvv02_pin_config_t *disp_tl043wvv02_pin_config)
+static cy_en_mipidsi_status_t mtb_display_tl043wvv02_init_impl(GFXSS_MIPIDSI_Type* mipi_dsi_base,
+        mtb_display_tl043wvv02_pin_config_t *disp_tl043wvv02_pin_config,
+        uint32_t display_on)
 {
     uint32_t i;
     cy_en_mipidsi_status_t status = CY_MIPIDSI_BAD_PARAM;
@@ -184,14 +191,66 @@ cy_en_mipidsi_status_t mtb_display_tl043wvv02_init(GFXSS_MIPIDSI_Type* mipi_dsi_
         if (CY_MIPIDSI_SUCCESS == status)
         {
             Cy_SysLib_Delay(ONE_MS_DELAY * 120);
-            status = Cy_MIPIDSI_DisplayON(mipi_dsi_base);
-
-            if (CY_MIPIDSI_SUCCESS == status)
+            if (display_on != 0U)
             {
-                viv_set_commit(DC_CMD_COMMIT_MASK);
-                Cy_SysLib_Delay(ONE_MS_DELAY);
+                status = mtb_display_tl043wvv02_display_on(mipi_dsi_base);
             }
         }
+    }
+
+    return status;
+}
+
+cy_en_mipidsi_status_t mtb_display_tl043wvv02_init(GFXSS_MIPIDSI_Type* mipi_dsi_base,
+        mtb_display_tl043wvv02_pin_config_t *disp_tl043wvv02_pin_config)
+{
+    return mtb_display_tl043wvv02_init_impl(mipi_dsi_base, disp_tl043wvv02_pin_config, 1U);
+}
+
+cy_en_mipidsi_status_t mtb_display_tl043wvv02_init_without_display_on(GFXSS_MIPIDSI_Type* mipi_dsi_base,
+        mtb_display_tl043wvv02_pin_config_t *disp_tl043wvv02_pin_config)
+{
+    return mtb_display_tl043wvv02_init_impl(mipi_dsi_base, disp_tl043wvv02_pin_config, 0U);
+}
+
+cy_en_mipidsi_status_t mtb_display_tl043wvv02_display_on(GFXSS_MIPIDSI_Type* mipi_dsi_base)
+{
+    cy_en_mipidsi_status_t status;
+
+    if (mipi_dsi_base == NULL)
+    {
+        return CY_MIPIDSI_BAD_PARAM;
+    }
+
+    status = Cy_MIPIDSI_DisplayON(mipi_dsi_base);
+    if (CY_MIPIDSI_SUCCESS == status)
+    {
+        viv_set_commit(DC_CMD_COMMIT_MASK);
+        Cy_SysLib_Delay(ONE_MS_DELAY);
+    }
+
+    return status;
+}
+
+cy_en_mipidsi_status_t mtb_display_tl043wvv02_set_madctl(GFXSS_MIPIDSI_Type* mipi_dsi_base,
+                                                          uint8_t madctl)
+{
+    uint8_t packet[PACKET_LENGTH] =
+    {
+        MTB_DISPLAY_EK79007AD3_MADCTL_REG,
+        madctl,
+    };
+    cy_en_mipidsi_status_t status;
+
+    if (mipi_dsi_base == NULL)
+    {
+        return CY_MIPIDSI_BAD_PARAM;
+    }
+
+    status = Cy_MIPIDSI_WritePacket(mipi_dsi_base, packet, sizeof(packet));
+    if (CY_MIPIDSI_SUCCESS == status)
+    {
+        viv_set_commit(DC_CMD_COMMIT_MASK);
     }
 
     return status;

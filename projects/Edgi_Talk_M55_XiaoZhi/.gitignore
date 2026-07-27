@@ -39,4 +39,8 @@ settings/
 *.uvguix*
 cconfig.h
 !edgeprotecttools.exe
-/makefile.targets
+/libraries
+/libs
+/rt-thread
+/tools
+/resources

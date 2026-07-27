@@ -107,7 +107,7 @@ The M55 core depends on the M33 boot flow. Recommended flashing order:
 
 > **Note:** RT-Thread Studio **2.2.9** or newer is recommended.
 
-* If this M55 project does not run, flash `Edgi_Talk_M33_Blink_LED` first.
+* If this M55 project does not run, flash `Edgi_Talk_M33_Template` first.
 * Enable CM55 in the M33 project:
 
   ```

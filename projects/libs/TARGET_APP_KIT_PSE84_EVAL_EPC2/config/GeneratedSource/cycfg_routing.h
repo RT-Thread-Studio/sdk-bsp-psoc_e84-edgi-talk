@@ -6,7 +6,7 @@
  * This file was automatically generated and should not be modified.
  * Configurator Backend 3.70.0
  * device-db 4.37.0.10260
- * mtb-dsl-pse8xxgp 1.1.1.824
+ * mtb-dsl-pse8xxgp 1.5.0.1072
  *
  *******************************************************************************
  * Copyright 2026 Cypress Semiconductor Corporation (an Infineon company) or
@@ -63,6 +63,8 @@ extern "C" {
 #define ioss_0_port_12_pin_3_HSIOM P12_3_TDM_TDM_TX_FSYNC0
 #define ioss_0_port_12_pin_4_HSIOM P12_4_SDHC0_CARD_DAT_3TO02
 #define ioss_0_port_12_pin_5_HSIOM P12_5_SDHC0_CARD_DAT_3TO03
+#define ioss_0_port_13_pin_1_HSIOM P13_1_SCB7_I2C_SCL
+#define ioss_0_port_13_pin_2_HSIOM P13_2_SCB7_I2C_SDA
 #define ioss_0_port_13_pin_4_HSIOM P13_4_TCPWM0_LINE_COMPL269
 #define ioss_0_port_15_pin_0_HSIOM P15_0_SCB9_SPI_CLK
 #define ioss_0_port_15_pin_1_HSIOM P15_1_SCB9_SPI_MOSI

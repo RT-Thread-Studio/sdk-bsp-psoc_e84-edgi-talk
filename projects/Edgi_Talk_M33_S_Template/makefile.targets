@@ -1,3 +1,0 @@
-
-
-*.elf: $(wildcard ../linkscripts/pse84_s_cm33.ld)

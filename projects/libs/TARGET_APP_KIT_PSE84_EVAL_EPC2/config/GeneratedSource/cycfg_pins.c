@@ -6,7 +6,7 @@
  * This file was automatically generated and should not be modified.
  * Configurator Backend 3.70.0
  * device-db 4.37.0.10260
- * mtb-dsl-pse8xxgp 1.1.1.824
+ * mtb-dsl-pse8xxgp 1.5.0.1072
  *
  *******************************************************************************
  * Copyright 2026 Cypress Semiconductor Corporation (an Infineon company) or
@@ -928,6 +928,42 @@ const cy_stc_gpio_pin_config_t CYBSP_WIFI_SDIO_D3_config =
     .pullUpRes = CY_GPIO_PULLUP_RES_DISABLE,
     .nonSec = 1,
 };
+const cy_stc_gpio_pin_config_t CYBSP_ETH_MDC_config =
+{
+    .outVal = 1,
+    .driveMode = CY_GPIO_DM_OD_DRIVESLOW,
+    .hsiom = CYBSP_ETH_MDC_HSIOM,
+    .intEdge = CY_GPIO_INTR_DISABLE,
+    .intMask = 0UL,
+    .vtrip = CY_GPIO_VTRIP_CMOS,
+    .slewRate = CY_GPIO_SLEW_FAST,
+    .driveSel = CY_GPIO_DRIVE_1_2,
+    .vregEn = 0UL,
+    .ibufMode = 0UL,
+    .vtripSel = 0UL,
+    .vrefSel = 0UL,
+    .vohSel = 0UL,
+    .pullUpRes = CY_GPIO_PULLUP_RES_DISABLE,
+    .nonSec = 1,
+};
+const cy_stc_gpio_pin_config_t CYBSP_CTB_OUT_0_config =
+{
+    .outVal = 1,
+    .driveMode = CY_GPIO_DM_OD_DRIVESLOW,
+    .hsiom = CYBSP_CTB_OUT_0_HSIOM,
+    .intEdge = CY_GPIO_INTR_DISABLE,
+    .intMask = 0UL,
+    .vtrip = CY_GPIO_VTRIP_CMOS,
+    .slewRate = CY_GPIO_SLEW_FAST,
+    .driveSel = CY_GPIO_DRIVE_1_2,
+    .vregEn = 0UL,
+    .ibufMode = 0UL,
+    .vtripSel = 0UL,
+    .vrefSel = 0UL,
+    .vohSel = 0UL,
+    .pullUpRes = CY_GPIO_PULLUP_RES_DISABLE,
+    .nonSec = 1,
+};
 const cy_stc_gpio_pin_config_t CYBSP_CTB_IN_3_config =
 {
     .outVal = 1,
@@ -1126,11 +1162,11 @@ const cy_stc_gpio_pin_config_t CYBSP_USER_LED1_config =
     .pullUpRes = CY_GPIO_PULLUP_RES_DISABLE,
     .nonSec = 1,
 };
-const cy_stc_gpio_pin_config_t CYBSP_UART5_RX_config =
+const cy_stc_gpio_pin_config_t CYBSP_DEBUG_UART_M33_RX_config =
 {
     .outVal = 1,
     .driveMode = CY_GPIO_DM_HIGHZ,
-    .hsiom = CYBSP_UART5_RX_HSIOM,
+    .hsiom = CYBSP_DEBUG_UART_M33_RX_HSIOM,
     .intEdge = CY_GPIO_INTR_DISABLE,
     .intMask = 0UL,
     .vtrip = CY_GPIO_VTRIP_CMOS,
@@ -1144,11 +1180,11 @@ const cy_stc_gpio_pin_config_t CYBSP_UART5_RX_config =
     .pullUpRes = CY_GPIO_PULLUP_RES_DISABLE,
     .nonSec = 1,
 };
-const cy_stc_gpio_pin_config_t CYBSP_UART5_TX_config =
+const cy_stc_gpio_pin_config_t CYBSP_DEBUG_UART_M33_TX_config =
 {
     .outVal = 1,
     .driveMode = CY_GPIO_DM_STRONG_IN_OFF,
-    .hsiom = CYBSP_UART5_TX_HSIOM,
+    .hsiom = CYBSP_DEBUG_UART_M33_TX_HSIOM,
     .intEdge = CY_GPIO_INTR_DISABLE,
     .intMask = 0UL,
     .vtrip = CY_GPIO_VTRIP_CMOS,
@@ -1413,6 +1449,8 @@ void init_cycfg_pins(void)
     Cy_GPIO_Pin_Init(CYBSP_I2S_TX_FSYNC_PORT, CYBSP_I2S_TX_FSYNC_PIN, &CYBSP_I2S_TX_FSYNC_config);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_SDIO_D2_PORT, CYBSP_WIFI_SDIO_D2_PIN, &CYBSP_WIFI_SDIO_D2_config);
     Cy_GPIO_Pin_Init(CYBSP_WIFI_SDIO_D3_PORT, CYBSP_WIFI_SDIO_D3_PIN, &CYBSP_WIFI_SDIO_D3_config);
+    Cy_GPIO_Pin_Init(CYBSP_ETH_MDC_PORT, CYBSP_ETH_MDC_PIN, &CYBSP_ETH_MDC_config);
+    Cy_GPIO_Pin_Init(CYBSP_CTB_OUT_0_PORT, CYBSP_CTB_OUT_0_PIN, &CYBSP_CTB_OUT_0_config);
     Cy_GPIO_Pin_Init(CYBSP_CTB_IN_3_PORT, CYBSP_CTB_IN_3_PIN, &CYBSP_CTB_IN_3_config);
     Cy_GPIO_Pin_Init(CYBSP_SPI_9_CLK_PORT, CYBSP_SPI_9_CLK_PIN, &CYBSP_SPI_9_CLK_config);
     Cy_GPIO_Pin_Init(CYBSP_SPI_9_MOSI_PORT, CYBSP_SPI_9_MOSI_PIN, &CYBSP_SPI_9_MOSI_config);
@@ -1424,8 +1462,8 @@ void init_cycfg_pins(void)
     Cy_GPIO_Pin_Init(CYBSP_USER_LED3_PORT, CYBSP_USER_LED3_PIN, &CYBSP_USER_LED3_config);
     Cy_GPIO_Pin_Init(CYBSP_USER_LED2_PORT, CYBSP_USER_LED2_PIN, &CYBSP_USER_LED2_config);
     Cy_GPIO_Pin_Init(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, &CYBSP_USER_LED1_config);
-    Cy_GPIO_Pin_Init(CYBSP_UART5_RX_PORT, CYBSP_UART5_RX_PIN, &CYBSP_UART5_RX_config);
-    Cy_GPIO_Pin_Init(CYBSP_UART5_TX_PORT, CYBSP_UART5_TX_PIN, &CYBSP_UART5_TX_config);
+    Cy_GPIO_Pin_Init(CYBSP_DEBUG_UART_M33_RX_PORT, CYBSP_DEBUG_UART_M33_RX_PIN, &CYBSP_DEBUG_UART_M33_RX_config);
+    Cy_GPIO_Pin_Init(CYBSP_DEBUG_UART_M33_TX_PORT, CYBSP_DEBUG_UART_M33_TX_PIN, &CYBSP_DEBUG_UART_M33_TX_config);
     Cy_GPIO_Pin_Init(CYBSP_SDHC_DETECT_PORT, CYBSP_SDHC_DETECT_PIN, &CYBSP_SDHC_DETECT_config);
     Cy_GPIO_Pin_Init(CYBSP_DISP_BACKLIGHT_PWM_PORT, CYBSP_DISP_BACKLIGHT_PWM_PIN, &CYBSP_DISP_BACKLIGHT_PWM_config);
     Cy_GPIO_Pin_Init(CYBSP_DISP_RST_PORT, CYBSP_DISP_RST_PIN, &CYBSP_DISP_RST_config);

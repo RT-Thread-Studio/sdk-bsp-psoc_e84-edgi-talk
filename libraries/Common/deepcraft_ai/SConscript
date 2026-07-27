@@ -59,7 +59,7 @@ cpp_defines = [
     'CY_ML_ARENA_MEM=.cy_socmem_data',
 ]
 
-local_arch_flags = ' -mcpu=cortex-m55 -mthumb -mfloat-abi=hard -mfpu=fpv5-d16 -march=armv8.1-m.main+fp.dp+mve'
+local_arch_flags = ' -mcpu=cortex-m55 -mthumb -mfloat-abi=hard -mfpu=auto'
 opt_flags = ' -Ofast -ffast-math -fno-math-errno -funroll-loops'
 
 group = DefineGroup(

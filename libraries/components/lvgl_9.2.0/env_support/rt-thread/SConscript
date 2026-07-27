@@ -20,6 +20,22 @@ def check_h_hpp_exists(path):
             return True
     return False
 
+def add_c_sources_from_tree(base_path):
+    local_src = Glob(os.path.join(base_path, '*.c'))
+    local_inc = [base_path] if check_h_hpp_exists(base_path) else []
+
+    for root, dirs, files in os.walk(base_path):
+        for dir in dirs:
+            current_path = os.path.join(root, dir)
+            local_src = local_src + Glob(os.path.join(current_path, '*.c'))
+            if check_h_hpp_exists(current_path):
+                local_inc = local_inc + [current_path]
+
+    return local_src, local_inc
+
+def add_demo_dir(demo_root, demo_name):
+    return add_c_sources_from_tree(os.path.join(demo_root, demo_name))
+
 lvgl_cwd = cwd + '/../../'
 
 lvgl_src_cwd = lvgl_cwd + 'src/'
@@ -44,14 +60,43 @@ if GetDepend('PKG_LVGL_USING_EXAMPLES'):
                 inc = inc + [current_path]
 
 if GetDepend('LVGL_USING_DEMOS'):
-    lvgl_src_cwd = lvgl_cwd + 'demos/'
-    inc = inc + [lvgl_src_cwd]
-    for root, dirs, files in os.walk(lvgl_src_cwd):
-        for dir in dirs:
-            current_path = os.path.join(root, dir)
-            src = src + Glob(os.path.join(current_path,'*.c'))
-            if check_h_hpp_exists(current_path):
-                inc = inc + [current_path]
+    lvgl_demo_cwd = lvgl_cwd + 'demos/'
+    inc = inc + [lvgl_demo_cwd]
+    src = src + Glob(os.path.join(lvgl_demo_cwd, 'lv_demos.c'))
+
+    selected_demo = False
+
+    if GetDepend('BSP_LVGL_DEMO_BENCHMARK'):
+        demo_src, demo_inc = add_demo_dir(lvgl_demo_cwd, 'benchmark')
+        src = src + demo_src
+        inc = inc + demo_inc
+        demo_src, demo_inc = add_demo_dir(lvgl_demo_cwd, 'widgets')
+        src = src + demo_src
+        inc = inc + demo_inc
+        selected_demo = True
+
+    if GetDepend('BSP_LVGL_DEMO_MUSIC'):
+        demo_src, demo_inc = add_demo_dir(lvgl_demo_cwd, 'music')
+        src = src + demo_src
+        inc = inc + demo_inc
+        selected_demo = True
+
+    if GetDepend('BSP_LVGL_DEMO_STRESS'):
+        demo_src, demo_inc = add_demo_dir(lvgl_demo_cwd, 'stress')
+        src = src + demo_src
+        inc = inc + demo_inc
+        selected_demo = True
+
+    if GetDepend('BSP_LVGL_DEMO_RENDER'):
+        demo_src, demo_inc = add_demo_dir(lvgl_demo_cwd, 'render')
+        src = src + demo_src
+        inc = inc + demo_inc
+        selected_demo = True
+
+    if not selected_demo and not GetDepend('BSP_LVGL_DEMO_VIRTUAL3D_EMOJI'):
+        demo_src, demo_inc = add_demo_dir(lvgl_demo_cwd, 'music')
+        src = src + demo_src
+        inc = inc + demo_inc
 
 LOCAL_CFLAGS = ''
 if rtconfig.PLATFORM == 'gcc' or rtconfig.PLATFORM == 'armclang': # GCC or Keil AC6

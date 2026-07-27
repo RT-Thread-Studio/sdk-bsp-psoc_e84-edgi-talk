@@ -678,7 +678,10 @@ int usbh_deinitialize(uint8_t busid)
 int usbh_control_transfer(struct usbh_hubport *hport, struct usb_setup_packet *setup, uint8_t *buffer)
 {
     struct usbh_urb *urb;
+    struct usb_setup_packet *transfer_setup;
+    uint8_t *transfer_buffer;
     volatile uint8_t retry = 3;
+    bool buffer_bounced = false;
     int ret;
 
     if (!hport || !setup) {
@@ -689,10 +692,34 @@ int usbh_control_transfer(struct usbh_hubport *hport, struct usb_setup_packet *s
 
     usb_osal_mutex_take(hport->mutex);
 
-    usbh_print_setup(setup);
+    transfer_setup = setup;
+    if (((uintptr_t)transfer_setup % CONFIG_USB_ALIGN_SIZE) != 0) {
+        if (!hport->setup) {
+            usb_osal_mutex_give(hport->mutex);
+            return -USB_ERR_INVAL;
+        }
+        memcpy(hport->setup, setup, sizeof(struct usb_setup_packet));
+        transfer_setup = hport->setup;
+    }
+
+    transfer_buffer = buffer;
+    if (transfer_buffer && (((uintptr_t)transfer_buffer % CONFIG_USB_ALIGN_SIZE) != 0)) {
+        if (transfer_setup->wLength > CONFIG_USBHOST_REQUEST_BUFFER_LEN) {
+            usb_osal_mutex_give(hport->mutex);
+            return -USB_ERR_INVAL;
+        }
+
+        transfer_buffer = ep0_request_buffer[hport->bus->busid];
+        buffer_bounced = true;
+        if ((transfer_setup->bmRequestType & USB_REQUEST_DIR_IN) == 0) {
+            memcpy(transfer_buffer, buffer, transfer_setup->wLength);
+        }
+    }
+
+    usbh_print_setup(transfer_setup);
 
 resubmit:
-    usbh_control_urb_fill(urb, hport, setup, buffer, setup->wLength, CONFIG_USBHOST_CONTROL_TRANSFER_TIMEOUT, NULL, NULL);
+    usbh_control_urb_fill(urb, hport, transfer_setup, transfer_buffer, transfer_setup->wLength, CONFIG_USBHOST_CONTROL_TRANSFER_TIMEOUT, NULL, NULL);
     ret = usbh_submit_urb(urb);
     if (ret == 0) {
         ret = urb->actual_length;
@@ -704,6 +731,10 @@ resubmit:
             USB_LOG_WRN("Control transfer failed, errorcode %d, retrying...\r\n", ret);
             goto resubmit;
         }
+    }
+
+    if (buffer_bounced && ret > 0 && (transfer_setup->bmRequestType & USB_REQUEST_DIR_IN)) {
+        memcpy(buffer, transfer_buffer, ret);
     }
 
     usb_osal_mutex_give(hport->mutex);

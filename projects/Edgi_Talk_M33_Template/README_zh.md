@@ -1,23 +1,20 @@
-# Edgi-Talk_M33_Template 示例工程
+﻿# Edgi_Talk_M33_Template 示例工程
 
 **中文** | [**English**](./README.md)
 
 ## 简介
-本示例工程基于 **RT-Thread 实时操作系统**，运行于 **M33 内核**。
-通过本工程，用户可以快速体验 RT-Thread 在 M33 平台上的运行效果。
-在固件成功烧录并启动后，开发板上的 **蓝色指示灯** 将周期性闪烁，表示系统已正常运行。
-同时，该工程也可作为二次开发或项目创作的基础模板，帮助用户快速上手并进行功能扩展。
+
+本模板工程基于 **Edgi-Talk 平台**，在 Cortex-M33 核上运行最小 **RT-Thread** 应用。
+它用于完成板级初始化、启动 Cortex-M55 核，然后保持空闲；所有可选外设 demo 默认关闭。
+
+共享的 Secure M33 固件包位于：`libraries/components/infineon-pse84-secure-firmware-latest`，同时保留 Template 自己的最小 `.config`。
 
 ## 软件说明
 
 * 工程基于 **Edgi-Talk** 平台开发。
-* 使用 **RT-Thread** 作为操作系统内核。
-* 示例功能：
-
-  * 系统初始化
-  * LED 指示灯任务（闪烁）
-* 工程结构清晰，适合作为学习 RT-Thread 或开发应用的起点。
-
+* 已启用 `SOC_Enable_CM55`，板级初始化阶段会启动 M55 核。
+* AHT20、LSM6DS3、Audio、ADC、RTC、SD 卡、文件系统、LCD、Wi-Fi 等可选外设 demo 均保持关闭。
+* 板级初始化会将外部 Wi-Fi/音频电源控制脚拉低，避免 Template 默认打开外设电源。
 ## 使用方法
 
 ### 编译与下载
@@ -26,30 +23,30 @@
 2. 使用 **板载下载器 (DAP)** 将开发板的 USB 接口连接至 PC。
 3. 通过编程工具将生成的固件烧录至开发板。
 
-   * 工程在烧录过程中会自动调用以下工具，将签名固件合并后完成烧录：
-
-     ```
-     tools/edgeprotecttools/bin/edgeprotecttools.exe
-     ```
-   * 默认会将目录下的 `proj_cm33_s_signed.hex` 一并合并烧录到目标设备。
-
 ### 运行效果
 
-* 烧录完成后，开发板上电即运行示例工程。
-* **蓝色指示灯** 会周期性闪烁，表明 RT-Thread 系统调度已成功启动。
+* 烧录完成后，开发板上电即可运行示例工程。
+* M33 初始化 RT-Thread，启动 M55，打印简短启动信息，然后保持空闲。
+* Template 不会自动闪灯，也不会自动启动外设 demo。
 
 ## 注意事项
 
 > **⚠️ 注意：** 本工程要求使用 **RT-Thread Studio 2.2.9** 或以上版本。
 
+* M33 工程的串口日志不会通过板载 DAP 虚拟串口直接输出。查看 `msh />` 和 demo 日志时，需要额外连接 USB 转串口硬件，例如 CH340。
+位置如图下所示，RX 接串口硬件的 TX，TX 接串口硬件的 RX，上位机波特率 115200：
+
+![alt text](figures/m33_uart.png)
 
 * 如需修改工程的 **图形化配置**，请使用以下工具打开配置文件：
 
-  ```
-  tools/device-configurator/device-configurator.exe
-  libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
-  ```
+```
+tools/device-configurator/device-configurator.exe
+libs/TARGET_APP_KIT_PSE84_EVAL_EPC2/config/design.modus
+```
+
 * 修改完成后保存配置，并重新生成代码。
+* 如需运行 M55 工程，建议先烧写 **Edgi_Talk_M33_Template**。该工程是干净的 M33 工程，适合作为 M55 启动前的基础固件。
 
 ## 启动流程
 
@@ -76,5 +73,12 @@
 
 ⚠️ 请严格按照以上顺序烧写固件，否则系统可能无法正常运行。
 
-* 若要开启M55需要在RT-Thread Settings --> 硬件 --> select SOC Multi Core Mode --> Enable CM55 Core 打开配置
+---
+
+* 若示例工程无法正常运行，建议先编译并烧录 **Edgi_Talk_M33_Template** 工程，确保初始化与核心启动流程正常，再运行本示例。
+* 若要开启 M55，需要在 **M33 工程** 中打开配置：
+
+  ```
+  RT-Thread Settings --> 硬件 --> select SOC Multi Core Mode --> Enable CM55 Core
+  ```
 

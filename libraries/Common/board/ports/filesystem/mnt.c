@@ -2,6 +2,7 @@
 
 #ifdef RT_USING_DFS
 #include <dfs_fs.h>
+#include <rtdevice.h>
 #ifdef BSP_USING_FLASH
 #include <fal.h>
 #endif
@@ -11,6 +12,25 @@
 #define DBG_TAG "app.filesystem"
 #define DBG_LVL DBG_INFO
 #include <rtdbg.h>
+
+#define SDCARD_MOUNT_POINT      "/sdcard"
+#define SDCARD_FS_TYPE          "elm"
+#define SDCARD_POLL_MS          1000
+#define SDCARD_RESCAN_MS        3000
+#define SDCARD_REMOVE_ERRORS    2
+#define SDCARD_QUIET_MS         8000
+
+extern rt_err_t rt_hw_sdio_rescan(void);
+extern rt_err_t rt_hw_sdio_force_change(void);
+extern void rt_hw_sdio_quiet_for(rt_uint32_t timeout_ms);
+extern void rt_hw_sdio_quiet_begin(void);
+extern void rt_hw_sdio_quiet_end(void);
+
+static rt_bool_t g_sdcard_mounted = RT_FALSE;
+static rt_bool_t g_sdcard_ejected = RT_FALSE;
+static rt_bool_t g_sdcard_rescan_pending = RT_TRUE;
+static const char *g_sdcard_mounted_device = RT_NULL;
+
 #ifndef BSP_USING_XiaoZhi
 static const struct romfs_dirent _romfs_root[] =
 {
@@ -28,86 +48,81 @@ const struct romfs_dirent romfs_root =
 };
 #endif
 
-static void _sdcard_mount(void)
+static const char *_sdcard_find_device(void)
+{
+#ifdef BSP_USING_SDCARD
+    const char *sd_device_names[] = {"sd", "sd0", "sd1", "sd2"};
+    int i;
+
+    for (i = 0; i < sizeof(sd_device_names) / sizeof(sd_device_names[0]); i++)
+    {
+        if (rt_device_find(sd_device_names[i]) != RT_NULL)
+        {
+            return sd_device_names[i];
+        }
+    }
+#endif
+    return RT_NULL;
+}
+
+static rt_bool_t _sdcard_probe_device(const char *device_name)
 {
 #ifdef BSP_USING_SDCARD
     rt_device_t device;
-    const char *sd_device_names[] = {"sd", "sd0", "sd1", "sd2"};
-    int i;
-    const char *device_name = RT_NULL;
+    rt_uint8_t *sector;
+    rt_size_t read_count;
 
-    /* Try to find SD card device */
-    for (i = 0; i < sizeof(sd_device_names) / sizeof(sd_device_names[0]); i++)
+    if (device_name == RT_NULL)
     {
-        device = rt_device_find(sd_device_names[i]);
-        if (device != RT_NULL)
-        {
-            device_name = sd_device_names[i];
-            LOG_I("Found sd card device '%s'", device_name);
-            break;
-        }
+        return RT_FALSE;
     }
 
+    device = rt_device_find(device_name);
     if (device == RT_NULL)
     {
-        /* Clear previous CD status and wait for SD card initialization */
-        mmcsd_wait_cd_changed(0);
-        /* Wait for SD card detection, timeout 5 seconds */
-        if (mmcsd_wait_cd_changed(rt_tick_from_millisecond(5000)) == -RT_ETIMEOUT)
-        {
-            LOG_W("Wait for SD card timeout!");
-            return;
-        }
-
-        /* Try again to find SD card device */
-        for (i = 0; i < sizeof(sd_device_names) / sizeof(sd_device_names[0]); i++)
-        {
-            device = rt_device_find(sd_device_names[i]);
-            if (device != RT_NULL)
-            {
-                device_name = sd_device_names[i];
-                LOG_I("Found sd card device '%s'", device_name);
-                break;
-            }
-        }
+        return RT_FALSE;
     }
 
-    if (device == RT_NULL || device_name == RT_NULL)
+    sector = rt_malloc_align(512, 32);
+    if (sector == RT_NULL)
     {
-        LOG_W("sd card device not found!");
-        return;
+        return RT_TRUE;
+    }
+
+    rt_hw_sdio_quiet_begin();
+    read_count = rt_device_read(device, 0, sector, 1);
+    rt_hw_sdio_quiet_end();
+    rt_free_align(sector);
+
+    return (read_count == 1) ? RT_TRUE : RT_FALSE;
+#else
+    RT_UNUSED(device_name);
+    return RT_FALSE;
+#endif
+}
+
+static rt_bool_t _sdcard_mount(const char **mounted_device)
+{
+#ifdef BSP_USING_SDCARD
+    const char *device_name = _sdcard_find_device();
+
+    if (device_name == RT_NULL)
+    {
+        return RT_FALSE;
     }
 
     rt_thread_mdelay(200);
 
-    /* Try to mount */
-    if (dfs_mount(device_name, "/sdcard", "elm", 0, 0) == RT_EOK)
+    if (dfs_mount(device_name, SDCARD_MOUNT_POINT, SDCARD_FS_TYPE, 0, 0) == RT_EOK)
     {
-        LOG_I("sd card mount to '/sdcard' success!");
-        return;
+        *mounted_device = device_name;
+        LOG_I("sd card '%s' mount to '%s' success!", device_name, SDCARD_MOUNT_POINT);
+        return RT_TRUE;
     }
 
-    /* Mount failed, try to format */
-    LOG_W("sd card mount to '/sdcard' failed, try to mkfs...");
-    if (dfs_mkfs("elm", device_name) == 0)
-    {
-        LOG_I("sd card mkfs success!");
-
-        /* Try to mount again after formatting */
-        if (dfs_mount(device_name, "/sdcard", "elm", 0, 0) == RT_EOK)
-        {
-            LOG_I("sd card mount to '/sdcard' success!");
-        }
-        else
-        {
-            LOG_E("sd card mount to '/sdcard' failed after mkfs!");
-        }
-    }
-    else
-    {
-        LOG_E("sd card mkfs failed!");
-    }
+    LOG_E("sd card mount to '%s' failed. Run 'sdcard_mkfs' manually to format.", SDCARD_MOUNT_POINT);
 #endif /* BSP_USING_SDCARD */
+    return RT_FALSE;
 }
 
 #ifdef BSP_USING_FLASH
@@ -162,11 +177,181 @@ static void _fal_mount(void)
 }
 #endif /* BSP_USING_FLASH */
 
-static void sd_mount_thread(void *parameter)
+static void sd_hotplug_thread(void *parameter)
 {
+    rt_tick_t last_rescan_tick = 0;
+    int remove_errors = 0;
+
+    RT_UNUSED(parameter);
+
     rt_thread_mdelay(200);
-    _sdcard_mount();
+
+    while (1)
+    {
+        int cd_event;
+
+        if (!g_sdcard_mounted)
+        {
+            const char *device_name = _sdcard_find_device();
+
+            if ((device_name != RT_NULL) && (g_sdcard_ejected == RT_FALSE))
+            {
+                g_sdcard_mounted = _sdcard_mount(&g_sdcard_mounted_device);
+                remove_errors = 0;
+                g_sdcard_rescan_pending = !g_sdcard_mounted;
+                rt_thread_mdelay(SDCARD_POLL_MS);
+                continue;
+            }
+
+            if ((device_name == RT_NULL) && (g_sdcard_ejected == RT_TRUE))
+            {
+                g_sdcard_ejected = RT_FALSE;
+                g_sdcard_rescan_pending = RT_TRUE;
+            }
+
+            if (g_sdcard_rescan_pending ||
+                ((rt_tick_get() - last_rescan_tick) >= rt_tick_from_millisecond(SDCARD_RESCAN_MS)))
+            {
+                rt_hw_sdio_quiet_for(SDCARD_QUIET_MS);
+                (void)rt_hw_sdio_rescan();
+                last_rescan_tick = rt_tick_get();
+                g_sdcard_rescan_pending = RT_FALSE;
+            }
+
+            cd_event = mmcsd_wait_cd_changed(rt_tick_from_millisecond(SDCARD_POLL_MS));
+            if ((cd_event == MMCSD_HOST_PLUGED) && (g_sdcard_ejected == RT_FALSE))
+            {
+                g_sdcard_mounted = _sdcard_mount(&g_sdcard_mounted_device);
+                remove_errors = 0;
+                g_sdcard_rescan_pending = !g_sdcard_mounted;
+            }
+        }
+        else
+        {
+            cd_event = mmcsd_wait_cd_changed(rt_tick_from_millisecond(SDCARD_POLL_MS));
+            if (cd_event == MMCSD_HOST_UNPLUGED)
+            {
+                remove_errors = SDCARD_REMOVE_ERRORS;
+            }
+            else if (!_sdcard_probe_device(g_sdcard_mounted_device))
+            {
+                remove_errors++;
+            }
+            else
+            {
+                remove_errors = 0;
+            }
+
+            if (remove_errors >= SDCARD_REMOVE_ERRORS)
+            {
+                if (dfs_unmount(SDCARD_MOUNT_POINT) == RT_EOK)
+                {
+                    LOG_I("sd card unmount from '%s' success!", SDCARD_MOUNT_POINT);
+                }
+                else
+                {
+                    LOG_W("sd card unmount from '%s' failed", SDCARD_MOUNT_POINT);
+                }
+
+                g_sdcard_mounted = RT_FALSE;
+                g_sdcard_mounted_device = RT_NULL;
+                remove_errors = 0;
+                g_sdcard_rescan_pending = RT_TRUE;
+                rt_hw_sdio_quiet_for(SDCARD_QUIET_MS);
+                (void)rt_hw_sdio_force_change();
+            }
+        }
+    }
 }
+
+#ifdef BSP_USING_SDCARD
+static int sdcard_umount(int argc, char **argv)
+{
+    RT_UNUSED(argc);
+    RT_UNUSED(argv);
+
+    if (g_sdcard_mounted == RT_FALSE)
+    {
+        rt_kprintf("%s is not mounted\n", SDCARD_MOUNT_POINT);
+        return -RT_ERROR;
+    }
+
+    if (dfs_unmount(SDCARD_MOUNT_POINT) != RT_EOK)
+    {
+        rt_kprintf("unmount %s failed\n", SDCARD_MOUNT_POINT);
+        return -RT_ERROR;
+    }
+
+    g_sdcard_mounted = RT_FALSE;
+    g_sdcard_mounted_device = RT_NULL;
+    g_sdcard_ejected = RT_TRUE;
+    g_sdcard_rescan_pending = RT_FALSE;
+    rt_hw_sdio_quiet_for(SDCARD_QUIET_MS);
+
+    rt_kprintf("%s unmounted, safe to remove SD card\n", SDCARD_MOUNT_POINT);
+    return RT_EOK;
+}
+MSH_CMD_EXPORT(sdcard_umount, unmount sd card before removing);
+
+static int sdcard_mount(int argc, char **argv)
+{
+    RT_UNUSED(argc);
+    RT_UNUSED(argv);
+
+    if (g_sdcard_mounted == RT_TRUE)
+    {
+        rt_kprintf("%s is already mounted\n", SDCARD_MOUNT_POINT);
+        return RT_EOK;
+    }
+
+    g_sdcard_ejected = RT_FALSE;
+    if (_sdcard_mount(&g_sdcard_mounted_device) == RT_FALSE)
+    {
+        g_sdcard_rescan_pending = RT_TRUE;
+        rt_kprintf("mount %s failed\n", SDCARD_MOUNT_POINT);
+        return -RT_ERROR;
+    }
+
+    g_sdcard_mounted = RT_TRUE;
+    g_sdcard_rescan_pending = RT_FALSE;
+    return RT_EOK;
+}
+MSH_CMD_EXPORT(sdcard_mount, mount sd card);
+
+static int sdcard_mkfs(int argc, char **argv)
+{
+    const char *device_name;
+
+    RT_UNUSED(argc);
+    RT_UNUSED(argv);
+
+    if (g_sdcard_mounted == RT_TRUE)
+    {
+        rt_kprintf("unmount %s before formatting\n", SDCARD_MOUNT_POINT);
+        return -RT_ERROR;
+    }
+
+    device_name = _sdcard_find_device();
+    if (device_name == RT_NULL)
+    {
+        rt_kprintf("sd card device not found\n");
+        return -RT_ERROR;
+    }
+
+    rt_kprintf("formatting sd card device '%s' as elm filesystem...\n", device_name);
+    if (dfs_mkfs("elm", device_name) != 0)
+    {
+        rt_kprintf("format sd card failed\n");
+        return -RT_ERROR;
+    }
+
+    rt_kprintf("format sd card success\n");
+    g_sdcard_ejected = RT_FALSE;
+    g_sdcard_rescan_pending = RT_TRUE;
+    return RT_EOK;
+}
+MSH_CMD_EXPORT(sdcard_mkfs, format sd card manually);
+#endif
 
 int mnt_init(void)
 {
@@ -185,8 +370,7 @@ int mnt_init(void)
 #ifdef BSP_USING_SDCARD
     rt_thread_t tid;
 
-    /* Try SD card mount to /sdcard in a separate thread */
-    tid = rt_thread_create("sd_mount", sd_mount_thread, RT_NULL,
+    tid = rt_thread_create("sd_hotplug", sd_hotplug_thread, RT_NULL,
                            2048, RT_THREAD_PRIORITY_MAX - 2, 20);
     if (tid != RT_NULL)
     {

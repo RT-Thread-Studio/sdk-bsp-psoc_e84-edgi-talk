@@ -267,7 +267,7 @@ vivSTATUS viv_conf_ioctl(
                         );
                     break;
 #endif
-#if vivENABLE_LAYER_ROI
+#if vivENABLE_LAYER_ROT
                 case vivLAYER_SET_ROTATION:
                     /* Set rotation related configuration for layer */
                     viv_conf_layer_set_rotation(

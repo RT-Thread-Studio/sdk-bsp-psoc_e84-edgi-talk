@@ -13,39 +13,18 @@
 
 
 #ifdef RT_USING_PIN
-#define CYHAL_GET_PIN(pin)          ((uint8_t)(((uint8_t)pin) & 0x07U))
-/** Macro that, given a gpio, will extract the port number */
-#define CYHAL_GET_PORT(pin)         ((uint8_t)(((uint8_t)pin) >> 3U))
 #define INT_PRIORITY        7u
+#define PIN_IFXPORT_MAX        22u
+#define PIN_IFX_PINS_PER_PORT  8u
+#define PIN_IFX_PIN_MAX        (PIN_IFXPORT_MAX * PIN_IFX_PINS_PER_PORT)
 
-#if defined(SOC_XMC7200D_E272K8384AA)
-    #define __IFX_PORT_MAX      35u
-#elif defined(SOC_SERIES_IFX_PSOCE84)
-    #define __IFX_PORT_MAX      22u
-#else
-    #define __IFX_PORT_MAX      14u
-#endif
-
-#define PIN_IFXPORT_MAX     __IFX_PORT_MAX
-
-mtb_hal_gpio_t mtb_gpio_irq;
+static mtb_hal_gpio_t mtb_gpio_irq_tab[PIN_IFX_PIN_MAX];
+static rt_uint8_t pin_irq_enabled_tab[PIN_IFX_PIN_MAX];
+static rt_uint8_t port_irq_enabled_count[PIN_IFXPORT_MAX];
+static rt_uint8_t port_irq_inited_tab[PIN_IFXPORT_MAX];
 
 static struct pin_irq_map pin_irq_map[] =
 {
-#if defined(SOC_CY8C6245LQI_S3D72) || defined(SOC_CY8C6244LQI_S4D92)
-    {CYHAL_PORT_0,  ioss_interrupts_gpio_0_IRQn},
-    {CYHAL_PORT_2,  ioss_interrupts_gpio_2_IRQn},
-    {CYHAL_PORT_3,  ioss_interrupts_gpio_3_IRQn},
-    {CYHAL_PORT_5,  ioss_interrupts_gpio_5_IRQn},
-    {CYHAL_PORT_6,  ioss_interrupts_gpio_6_IRQn},
-    {CYHAL_PORT_7,  ioss_interrupts_gpio_7_IRQn},
-    {CYHAL_PORT_8,  ioss_interrupts_gpio_8_IRQn},
-    {CYHAL_PORT_9,  ioss_interrupts_gpio_9_IRQn},
-    {CYHAL_PORT_10,  ioss_interrupts_gpio_10_IRQn},
-    {CYHAL_PORT_11,  ioss_interrupts_gpio_11_IRQn},
-    {CYHAL_PORT_12,  ioss_interrupts_gpio_12_IRQn},
-    {CYHAL_PORT_14,  ioss_interrupts_gpio_14_IRQn},
-#elif defined(SOC_XMC7200D_E272K8384AA)
     {CYHAL_PORT_0,  ioss_interrupts_gpio_0_IRQn},
     {CYHAL_PORT_1,  ioss_interrupts_gpio_1_IRQn},
     {CYHAL_PORT_2,  ioss_interrupts_gpio_2_IRQn},
@@ -68,113 +47,81 @@ static struct pin_irq_map pin_irq_map[] =
     {CYHAL_PORT_19,  ioss_interrupts_gpio_19_IRQn},
     {CYHAL_PORT_20,  ioss_interrupts_gpio_20_IRQn},
     {CYHAL_PORT_21,  ioss_interrupts_gpio_21_IRQn},
-    {CYHAL_PORT_22,  ioss_interrupts_gpio_23_IRQn},
-    {CYHAL_PORT_24,  ioss_interrupts_gpio_24_IRQn},
-    {CYHAL_PORT_25,  ioss_interrupts_gpio_25_IRQn},
-    {CYHAL_PORT_26,  ioss_interrupts_gpio_26_IRQn},
-    {CYHAL_PORT_27,  ioss_interrupts_gpio_27_IRQn},
-    {CYHAL_PORT_28,  ioss_interrupts_gpio_28_IRQn},
-    {CYHAL_PORT_29,  ioss_interrupts_gpio_29_IRQn},
-    {CYHAL_PORT_30,  ioss_interrupts_gpio_30_IRQn},
-    {CYHAL_PORT_31,  ioss_interrupts_gpio_31_IRQn},
-    {CYHAL_PORT_32,  ioss_interrupts_gpio_32_IRQn},
-    {CYHAL_PORT_33,  ioss_interrupts_gpio_33_IRQn},
-    {CYHAL_PORT_34,  ioss_interrupts_gpio_34_IRQn},
-#elif defined(SOC_SERIES_IFX_PSOCE84)
-    {CYHAL_PORT_0,  ioss_interrupts_gpio_0_IRQn},
-    {CYHAL_PORT_1,  ioss_interrupts_gpio_1_IRQn},
-    {CYHAL_PORT_2,  ioss_interrupts_gpio_2_IRQn},
-    {CYHAL_PORT_3,  ioss_interrupts_gpio_3_IRQn},
-    {CYHAL_PORT_4,  ioss_interrupts_gpio_4_IRQn},
-    {CYHAL_PORT_5,  ioss_interrupts_gpio_5_IRQn},
-    {CYHAL_PORT_6,  ioss_interrupts_gpio_6_IRQn},
-    {CYHAL_PORT_7,  ioss_interrupts_gpio_7_IRQn},
-    {CYHAL_PORT_8,  ioss_interrupts_gpio_8_IRQn},
-    {CYHAL_PORT_9,  ioss_interrupts_gpio_9_IRQn},
-    {CYHAL_PORT_10,  ioss_interrupts_gpio_10_IRQn},
-    {CYHAL_PORT_11,  ioss_interrupts_gpio_11_IRQn},
-    {CYHAL_PORT_12,  ioss_interrupts_gpio_12_IRQn},
-    {CYHAL_PORT_13,  ioss_interrupts_gpio_13_IRQn},
-    {CYHAL_PORT_14,  ioss_interrupts_gpio_14_IRQn},
-    {CYHAL_PORT_15,  ioss_interrupts_gpio_15_IRQn},
-    {CYHAL_PORT_16,  ioss_interrupts_gpio_16_IRQn},
-    {CYHAL_PORT_17,  ioss_interrupts_gpio_17_IRQn},
-    {CYHAL_PORT_18,  ioss_interrupts_gpio_18_IRQn},
-    {CYHAL_PORT_19,  ioss_interrupts_gpio_19_IRQn},
-    {CYHAL_PORT_20,  ioss_interrupts_gpio_20_IRQn},
-    {CYHAL_PORT_21,  ioss_interrupts_gpio_21_IRQn},
-#else
-    {CYHAL_PORT_0,  ioss_interrupts_gpio_0_IRQn},
-    {CYHAL_PORT_1,  ioss_interrupts_gpio_1_IRQn},
-    {CYHAL_PORT_2,  ioss_interrupts_gpio_2_IRQn},
-    {CYHAL_PORT_3,  ioss_interrupts_gpio_3_IRQn},
-    {CYHAL_PORT_4,  ioss_interrupts_gpio_4_IRQn},
-    {CYHAL_PORT_5,  ioss_interrupts_gpio_5_IRQn},
-    {CYHAL_PORT_6,  ioss_interrupts_gpio_6_IRQn},
-    {CYHAL_PORT_7,  ioss_interrupts_gpio_7_IRQn},
-    {CYHAL_PORT_8,  ioss_interrupts_gpio_8_IRQn},
-    {CYHAL_PORT_9,  ioss_interrupts_gpio_9_IRQn},
-    {CYHAL_PORT_10,  ioss_interrupts_gpio_10_IRQn},
-    {CYHAL_PORT_11,  ioss_interrupts_gpio_11_IRQn},
-    {CYHAL_PORT_12,  ioss_interrupts_gpio_12_IRQn},
-    {CYHAL_PORT_13,  ioss_interrupts_gpio_13_IRQn},
-    {CYHAL_PORT_14,  ioss_interrupts_gpio_14_IRQn},
-#endif
 };
 
-static struct rt_pin_irq_hdr pin_irq_handler_tab[] =
+static struct rt_pin_irq_hdr pin_irq_handler_tab[PIN_IFX_PIN_MAX];
+
+static rt_bool_t ifx_pin_valid(rt_base_t pin)
 {
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-    {-1, 0, RT_NULL, RT_NULL},
-};
+    return (pin >= 0) && (CYHAL_GET_PORT(pin) < PIN_IFXPORT_MAX);
+}
+
+static rt_uint16_t ifx_pin_index(rt_base_t pin)
+{
+    return (rt_uint16_t)(((rt_uint16_t)CYHAL_GET_PORT(pin) * PIN_IFX_PINS_PER_PORT) + CYHAL_GET_PIN(pin));
+}
+
+static const struct pin_irq_map *ifx_pin_get_irq_map(rt_uint16_t port)
+{
+    rt_size_t i;
+
+    for (i = 0; i < sizeof(pin_irq_map) / sizeof(pin_irq_map[0]); i++)
+    {
+        if (pin_irq_map[i].port == port)
+        {
+            return &pin_irq_map[i];
+        }
+    }
+
+    return RT_NULL;
+}
+
+static rt_err_t ifx_pin_irq_mode(rt_uint8_t mode, mtb_hal_gpio_event_t *event)
+{
+    switch (mode)
+    {
+    case PIN_IRQ_MODE_RISING:
+        *event = MTB_HAL_GPIO_IRQ_RISE;
+        return RT_EOK;
+
+    case PIN_IRQ_MODE_FALLING:
+        *event = MTB_HAL_GPIO_IRQ_FALL;
+        return RT_EOK;
+
+    case PIN_IRQ_MODE_RISING_FALLING:
+        *event = MTB_HAL_GPIO_IRQ_BOTH;
+        return RT_EOK;
+
+    default:
+        return -RT_EINVAL;
+    }
+}
 
 void gpio_interrupt_handler()
 {
-    //Todo:Interrupt Callback Function
-    mtb_hal_gpio_process_interrupt(&mtb_gpio_irq);
-}
-void gpio_event_handler(void* handler_arg, mtb_hal_gpio_event_t event)
-{
-    //Todo:Interrupt Callback Function
+    rt_uint16_t index;
+
+    for (index = 0; index < PIN_IFX_PIN_MAX; index++)
+    {
+        mtb_hal_gpio_t *gpio = &mtb_gpio_irq_tab[index];
+
+        if ((pin_irq_enabled_tab[index] != 0) &&
+                (Cy_GPIO_GetInterruptStatusMasked(gpio->port_addr, gpio->pin_num) != 0u))
+        {
+            Cy_GPIO_ClearInterrupt(gpio->port_addr, gpio->pin_num);
+
+            if (pin_irq_handler_tab[index].hdr != RT_NULL)
+            {
+                pin_irq_handler_tab[index].hdr(pin_irq_handler_tab[index].args);
+            }
+        }
+    }
 }
 
 static void ifx_pin_mode(rt_device_t dev, rt_base_t pin, rt_uint8_t mode)
 {
     mtb_hal_gpio_t mtb_gpio;
-    if (CYHAL_GET_PORT(pin) >= PIN_IFXPORT_MAX)
+    if (!ifx_pin_valid(pin))
     {
         return;
     }
@@ -210,7 +157,7 @@ static void ifx_pin_mode(rt_device_t dev, rt_base_t pin, rt_uint8_t mode)
 static void ifx_pin_write(rt_device_t dev, rt_base_t pin, rt_uint8_t value)
 {
     mtb_hal_gpio_t mtb_gpio;
-    if (CYHAL_GET_PORT(pin) < PIN_IFXPORT_MAX)
+    if (ifx_pin_valid(pin))
     {
         mtb_hal_gpio_setup(&mtb_gpio, CYHAL_GET_PORT(pin), CYHAL_GET_PIN(pin));
         mtb_hal_gpio_write(&mtb_gpio, value);
@@ -224,7 +171,7 @@ static void ifx_pin_write(rt_device_t dev, rt_base_t pin, rt_uint8_t value)
 static rt_int8_t ifx_pin_read(struct rt_device *device, rt_base_t pin)
 {
     mtb_hal_gpio_t mtb_gpio;
-    if (CYHAL_GET_PORT(pin) < PIN_IFXPORT_MAX)
+    if (ifx_pin_valid(pin))
     {
         mtb_hal_gpio_setup(&mtb_gpio, CYHAL_GET_PORT(pin), CYHAL_GET_PIN(pin));
         return mtb_hal_gpio_read(&mtb_gpio);
@@ -238,37 +185,41 @@ static rt_int8_t ifx_pin_read(struct rt_device *device, rt_base_t pin)
 static rt_err_t ifx_pin_attach_irq(struct rt_device *device, rt_base_t pin,
                                    rt_uint8_t mode, void (*hdr)(void *args), void *args)
 {
-    rt_uint16_t gpio_port;
+    rt_uint16_t index;
     rt_base_t level;
+    mtb_hal_gpio_event_t event;
 
-    if (CYHAL_GET_PORT(pin) < PIN_IFXPORT_MAX)
+    if (!ifx_pin_valid(pin))
     {
-        gpio_port = CYHAL_GET_PORT(pin);
+        return -RT_EINVAL;
     }
-    else
+
+    if (ifx_pin_irq_mode(mode, &event) != RT_EOK)
     {
-        return -RT_ERROR;
+        return -RT_EINVAL;
     }
+
+    index = ifx_pin_index(pin);
     level = rt_hw_interrupt_disable();
-    if (pin_irq_handler_tab[gpio_port].pin == pin &&
-            pin_irq_handler_tab[gpio_port].hdr == hdr &&
-            pin_irq_handler_tab[gpio_port].mode == mode &&
-            pin_irq_handler_tab[gpio_port].args == args)
+    if (pin_irq_handler_tab[index].pin == pin &&
+            pin_irq_handler_tab[index].hdr == hdr &&
+            pin_irq_handler_tab[index].mode == mode &&
+            pin_irq_handler_tab[index].args == args)
     {
         rt_hw_interrupt_enable(level);
         return RT_EOK;
     }
 
-    if (pin_irq_handler_tab[gpio_port].pin != -1)
+    if (pin_irq_handler_tab[index].pin != PIN_IRQ_PIN_NONE)
     {
         rt_hw_interrupt_enable(level);
         return -RT_EBUSY;
     }
 
-    pin_irq_handler_tab[gpio_port].pin = pin;
-    pin_irq_handler_tab[gpio_port].hdr = hdr;
-    pin_irq_handler_tab[gpio_port].mode = mode;
-    pin_irq_handler_tab[gpio_port].args = args;
+    pin_irq_handler_tab[index].pin = pin;
+    pin_irq_handler_tab[index].hdr = hdr;
+    pin_irq_handler_tab[index].mode = mode;
+    pin_irq_handler_tab[index].args = args;
     rt_hw_interrupt_enable(level);
 
     return RT_EOK;
@@ -276,42 +227,55 @@ static rt_err_t ifx_pin_attach_irq(struct rt_device *device, rt_base_t pin,
 
 static rt_err_t ifx_pin_dettach_irq(struct rt_device *device, rt_base_t pin)
 {
-    rt_uint16_t gpio_port;
+    rt_uint16_t index;
+    rt_uint16_t port;
     rt_base_t level;
+    const struct pin_irq_map *irqmap;
 
-    if (CYHAL_GET_PORT(pin) < PIN_IFXPORT_MAX)
+    if (!ifx_pin_valid(pin))
     {
-        gpio_port = CYHAL_GET_PORT(pin);
+        return -RT_EINVAL;
     }
-    else
+
+    port = CYHAL_GET_PORT(pin);
+    index = ifx_pin_index(pin);
+    irqmap = ifx_pin_get_irq_map(port);
+    if (irqmap == RT_NULL)
     {
-        return -RT_ERROR;
+        return -RT_EINVAL;
     }
 
     level = rt_hw_interrupt_disable();
 
-    if (pin_irq_handler_tab[gpio_port].pin == -1)
+    if (pin_irq_handler_tab[index].pin == PIN_IRQ_PIN_NONE)
     {
         rt_hw_interrupt_enable(level);
         return RT_EOK;
     }
 
-    pin_irq_handler_tab[gpio_port].pin = -1;
-    pin_irq_handler_tab[gpio_port].hdr = RT_NULL;
-    pin_irq_handler_tab[gpio_port].mode = 0;
-    pin_irq_handler_tab[gpio_port].args = RT_NULL;
+    if (pin_irq_enabled_tab[index] != 0)
+    {
+        mtb_hal_gpio_enable_event(&mtb_gpio_irq_tab[index], MTB_HAL_GPIO_IRQ_NONE, RT_FALSE);
+        pin_irq_enabled_tab[index] = 0;
+
+        if (port_irq_enabled_count[port] > 0)
+        {
+            port_irq_enabled_count[port]--;
+        }
+
+        if (port_irq_enabled_count[port] == 0)
+        {
+            NVIC_DisableIRQ(irqmap->irqno);
+        }
+    }
+
+    pin_irq_handler_tab[index].pin = PIN_IRQ_PIN_NONE;
+    pin_irq_handler_tab[index].hdr = RT_NULL;
+    pin_irq_handler_tab[index].mode = 0;
+    pin_irq_handler_tab[index].args = RT_NULL;
     rt_hw_interrupt_enable(level);
 
     return RT_EOK;
-}
-
-static void ifx_gpio_event_callback(void *handler_arg, mtb_hal_gpio_event_t event)
-{
-    rt_uint16_t port = (rt_uint32_t)handler_arg;
-    if (port < PIN_IFXPORT_MAX && pin_irq_handler_tab[port].hdr != RT_NULL)
-    {
-        pin_irq_handler_tab[port].hdr(pin_irq_handler_tab[port].args);
-    }
 }
 
 
@@ -319,71 +283,81 @@ static rt_err_t ifx_pin_irq_enable(struct rt_device *device, rt_base_t pin,
                                    rt_uint8_t enabled)
 {
     rt_base_t level;
-    rt_uint8_t pin_irq_mode = -1;
+    rt_uint16_t index;
+    rt_uint16_t port;
+    mtb_hal_gpio_event_t pin_irq_mode;
     const struct pin_irq_map *irqmap;
 
-    if (CYHAL_GET_PORT(pin) < PIN_IFXPORT_MAX)
+    if (!ifx_pin_valid(pin))
     {
-        mtb_hal_gpio_setup(&mtb_gpio_irq, CYHAL_GET_PORT(pin), CYHAL_GET_PIN(pin));
-    }
-    else
-    {
-        return -RT_ERROR;
+        return -RT_EINVAL;
     }
 
-    irqmap = &pin_irq_map[mtb_gpio_irq.port_num];
-    cy_stc_sysint_t         intr_cfg;
-    intr_cfg.intrSrc = irqmap->irqno;
-    intr_cfg.intrPriority = INT_PRIORITY;
-    Cy_SysInt_Init(&intr_cfg, gpio_interrupt_handler);
-    NVIC_EnableIRQ(irqmap->irqno);
+    port = CYHAL_GET_PORT(pin);
+    index = ifx_pin_index(pin);
+    irqmap = ifx_pin_get_irq_map(port);
+    if (irqmap == RT_NULL)
+    {
+        return -RT_EINVAL;
+    }
 
     if (enabled == PIN_IRQ_ENABLE)
     {
+        if (ifx_pin_irq_mode(pin_irq_handler_tab[index].mode, &pin_irq_mode) != RT_EOK)
+        {
+            return -RT_EINVAL;
+        }
+
         level = rt_hw_interrupt_disable();
 
-        if (pin_irq_handler_tab[mtb_gpio_irq.port_num].pin == -1)
+        if (pin_irq_handler_tab[index].pin == PIN_IRQ_PIN_NONE)
         {
             rt_hw_interrupt_enable(level);
             return -RT_EINVAL;
         }
 
-        irqmap = &pin_irq_map[mtb_gpio_irq.port_num];
+        mtb_hal_gpio_setup(&mtb_gpio_irq_tab[index], port, CYHAL_GET_PIN(pin));
 
-#if !defined(COMPONENT_CAT1C)
-
-#endif
-        switch (pin_irq_handler_tab[mtb_gpio_irq.port_num].mode)
+        if (port_irq_inited_tab[port] == 0)
         {
-        case PIN_IRQ_MODE_RISING:
-            pin_irq_mode = MTB_HAL_GPIO_IRQ_RISE;
-            break;
+            cy_stc_sysint_t intr_cfg;
 
-        case PIN_IRQ_MODE_FALLING:
-            pin_irq_mode = MTB_HAL_GPIO_IRQ_FALL;
-            break;
-
-        case PIN_IRQ_MODE_RISING_FALLING:
-            pin_irq_mode = MTB_HAL_GPIO_IRQ_BOTH;
-            break;
-
-        default:
-            break;
+            intr_cfg.intrSrc = irqmap->irqno;
+            intr_cfg.intrPriority = INT_PRIORITY;
+            Cy_SysInt_Init(&intr_cfg, gpio_interrupt_handler);
+            port_irq_inited_tab[port] = 1;
         }
-        mtb_hal_gpio_register_callback(&mtb_gpio_irq,
-                                       ifx_gpio_event_callback,
-                                       (void *)(uintptr_t)mtb_gpio_irq.port_num);
-        mtb_hal_gpio_enable_event(&mtb_gpio_irq, pin_irq_mode, RT_TRUE);
+
+        if (pin_irq_enabled_tab[index] == 0)
+        {
+            pin_irq_enabled_tab[index] = 1;
+            port_irq_enabled_count[port]++;
+        }
+
+        mtb_hal_gpio_enable_event(&mtb_gpio_irq_tab[index], pin_irq_mode, RT_TRUE);
+        NVIC_EnableIRQ(irqmap->irqno);
         rt_hw_interrupt_enable(level);
     }
     else if (enabled == PIN_IRQ_DISABLE)
     {
         level = rt_hw_interrupt_disable();
-        Cy_GPIO_Port_Deinit(Cy_GPIO_PortToAddr(mtb_gpio_irq.port_num));
 
-#if !defined(COMPONENT_CAT1C)
-        NVIC_DisableIRQ(irqmap->irqno);
-#endif
+        if (pin_irq_enabled_tab[index] != 0)
+        {
+            mtb_hal_gpio_enable_event(&mtb_gpio_irq_tab[index], MTB_HAL_GPIO_IRQ_NONE, RT_FALSE);
+            pin_irq_enabled_tab[index] = 0;
+
+            if (port_irq_enabled_count[port] > 0)
+            {
+                port_irq_enabled_count[port]--;
+            }
+
+            if (port_irq_enabled_count[port] == 0)
+            {
+                NVIC_DisableIRQ(irqmap->irqno);
+            }
+        }
+
         rt_hw_interrupt_enable(level);
     }
     else
@@ -407,6 +381,13 @@ const static struct rt_pin_ops _ifx_pin_ops =
 
 int rt_hw_pin_init(void)
 {
+    rt_uint16_t index;
+
+    for (index = 0; index < PIN_IFX_PIN_MAX; index++)
+    {
+        pin_irq_handler_tab[index].pin = PIN_IRQ_PIN_NONE;
+    }
+
     return rt_device_pin_register("pin", &_ifx_pin_ops, RT_NULL);
 }
 

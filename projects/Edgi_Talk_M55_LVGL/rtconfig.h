@@ -55,6 +55,7 @@
 /* end of Kernel Device Object */
 #define RT_VER_NUM 0x50002
 /* end of RT-Thread Kernel */
+#define RT_USING_CACHE
 
 /* RT-Thread Components */
 
@@ -124,6 +125,7 @@
 
 /* end of Interprocess Communication (IPC) */
 /* end of POSIX (Portable Operating System Interface) layer */
+#define RT_USING_CPLUSPLUS
 /* end of C/C++ and POSIX layer */
 
 /* Network */
@@ -191,6 +193,7 @@
 
 /* LVGL: powerful and easy-to-use embedded GUI library */
 
+#define PKG_LVGL_DISP_REFR_PERIOD 1
 /* end of LVGL: powerful and easy-to-use embedded GUI library */
 
 /* u8g2: a monochrome graphic library */
@@ -262,14 +265,6 @@
 /* GD32 Drivers */
 
 /* end of GD32 Drivers */
-
-/* HPMicro SDK */
-
-/* end of HPMicro SDK */
-
-/* FT32 HAL & SDK Drivers */
-
-/* end of FT32 HAL & SDK Drivers */
 /* end of HAL & SDK Drivers */
 
 /* sensors drivers */
@@ -358,6 +353,19 @@
 /* Onboard Peripheral Drivers */
 
 #define BSP_USING_USB_TO_UART
+#define BSP_USING_LCD
+#define COMPONENT_MTB_DISPLAY_tl043wvv02
+#define M55_BSP_LCD_ROTATION_0
+#define BSP_LCD_ROTATION_0
+#define BSP_LCD_ROTATION_DEGREES 0
+#define BSP_LCD_USE_AXIDMAC_AREA_COPY
+#define BSP_LCD_AXIDMAC_AREA_COPY_MIN_BYTES 8192
+#define USING_LVGL
+#define BSP_USING_LVGL
+#define LVGL_USING_DEMOS
+#define BSP_LVGL_ENABLE_CPU_CACHE
+#define BSP_LVGL_DEMO_VIRTUAL3D_EMOJI
+#define BSP_LVGL_DRAW_BUF_LINES 800
 /* end of Onboard Peripheral Drivers */
 
 /* On-chip Peripheral Drivers */
@@ -374,11 +382,6 @@
 #define BSP_USING_HYPERAM_SIZE 0x800000
 #define BSP_USING_PWM
 #define BSP_USING_PWM18
-#define BSP_USING_LCD
-#define COMPONENT_MTB_DISPLAY_tl043wvv02
-#define USING_LVGL
-#define BSP_USING_LVGL
-#define LVGL_USING_DEMOS
 /* end of On-chip Peripheral Drivers */
 
 /* Board extended module Drivers */

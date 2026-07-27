@@ -1,5 +1,8 @@
+import os
+
 Import('RTT_ROOT')
 Import('rtconfig')
+Import('env')
 from building import *
 
 src = []
@@ -33,6 +36,75 @@ path += [whd_src_path + '/resources/resource_imp']
 src += Glob('porting/src/bsp/*.c')
 src += Glob('porting/src/wlan/*.c')
 src += Glob('porting/src/resources/*.c')
+
+if GetDepend(['WHD_RESOURCES_IN_MEMORY']):
+    if GetDepend(['WHD_USING_CHIP_CYW55500']):
+        resources_dir = os.path.abspath(os.path.join(cwd, '..', '..', '..', 'resources'))
+        firmware_file = os.path.join(resources_dir, '55500A1.trxcse')
+        clm_file = os.path.join(resources_dir, '55500A1.clm_blob')
+        nvram_file = os.path.join(resources_dir, 'cyw55513modpse84som_rev3.txt')
+
+        for item in [firmware_file, clm_file, nvram_file]:
+            if not os.path.isfile(item):
+                raise RuntimeError('Missing WHD resource file: ' + item)
+
+        def _c_array_bytes(data):
+            lines = []
+            for offset in range(0, len(data), 16):
+                lines.append('    ' + ', '.join([str(b) for b in bytearray(data[offset:offset + 16])]))
+            return ',\n'.join(lines)
+
+        def _generate_whd_resources(target, source, env):
+            firmware = open(str(source[0]), 'rb').read()
+            clm = open(str(source[1]), 'rb').read()
+            nvram = open(str(source[2]), 'rb').read()
+            nvram = nvram.replace(b'\r\n', b'\n').replace(b'\r', b'\n').replace(b'\n', b'\x00')
+            if len(nvram) == 0 or nvram[-1] != 0:
+                nvram += b'\x00'
+
+            output = '''#include <stdint.h>
+#include "wiced_resource.h"
+
+#if defined(CY_STORAGE_WIFI_DATA)
+CY_SECTION_WHD(CY_STORAGE_WIFI_DATA) __attribute__((used))
+#endif
+const unsigned char wifi_firmware_image_data[{firmware_size}] = {{
+{firmware_data}
+}};
+
+const resource_hnd_t wifi_firmware_image = {{ RESOURCE_IN_MEMORY, {firmware_size}, {{.mem = {{(const char *)wifi_firmware_image_data}}}} }};
+
+#if defined(CY_STORAGE_WIFI_DATA)
+CY_SECTION_WHD(CY_STORAGE_WIFI_DATA) __attribute__((used))
+#endif
+const unsigned char wifi_firmware_clm_blob_data[{clm_size}] = {{
+{clm_data}
+}};
+
+const resource_hnd_t wifi_firmware_clm_blob = {{ RESOURCE_IN_MEMORY, {clm_size}, {{.mem = {{(const char *)wifi_firmware_clm_blob_data}}}} }};
+
+const char wifi_nvram_image[{nvram_size}] = {{
+{nvram_data}
+}};
+
+const uint32_t wifi_nvram_image_size = {nvram_size};
+'''.format(
+                firmware_size=len(firmware),
+                firmware_data=_c_array_bytes(firmware),
+                clm_size=len(clm),
+                clm_data=_c_array_bytes(clm),
+                nvram_size=len(nvram),
+                nvram_data=_c_array_bytes(nvram),
+            )
+
+            with open(str(target[0]), 'w') as fp:
+                fp.write(output)
+
+        generated = env.Command(
+            '#build/libraries/components/wifi-host-driver/whd_project_resources.c',
+            [firmware_file, clm_file, nvram_file],
+            _generate_whd_resources)
+        src += generated
 
 if GetDepend(['WHD_PORTING_BSP']):
     path += [cwd + '/porting/inc/bsp']

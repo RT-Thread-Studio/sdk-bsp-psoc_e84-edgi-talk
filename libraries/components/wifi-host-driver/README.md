@@ -43,14 +43,15 @@ RT-Thread online packages  --->                         # Online software packag
             (8)   The priority level value of WHD thread
             (5120) The stack size for WHD thread
         --- WHD Resources Configuration
-            ( ) File System
-                (/sdcard/whd/43438A1.bin) Set the file path of the firmware files
-                (/sdcard/whd/43438A1.clm_blob) Set the file path of the clm files
-                (/sdcard/whd/nvram.txt) Set the file path of the nvram files
+            ( ) SD card (/sdcard)
+                (/sdcard/55500A1.trxcse) Set the file path of the firmware files
+                (/sdcard/55500A1.clm_blob) Set the file path of the clm files
+                (/sdcard/cyw55513modpse84som_rev3.txt) Set the file path of the nvram files
             (X) Flash Abstraction Layer(FAL)
                 ("whd_firmware") Set the partition name of the firmware files
                 ("whd_clm") Set the partition name of the clm files
                 ("whd_nvram") Set the partition name of the nvram files
+            ( ) Built into application firmware
             (1024) Set the block size for resources
     --- Hardware Configuration
         (X) CYW43438
@@ -77,15 +78,15 @@ RT-Thread online packages  --->                         # Online software packag
 ```
 - `WHD_SET_COUNTRY_FROM_HOST` together with `WHD_COUNTRY_CODE`/`WHD_COUNTRY_CODE_REVISION` lets the host push the regulatory table that matches your deployment without rebuilding the firmware blob.
 - `CY_WIFI_DEFAULT_ENABLE_POWERSAVE_MODE`, `CY_WIFI_DEFAULT_PM2_SLEEP_RET_TIME`, `CY_WIFI_USING_THREAD_INIT`, `CY_WIFI_INIT_THREAD_PRIORITY/STACK_SIZE` and the WHD thread menu let you pick the startup model that best matches your BSP scheduling limits.
-- The resource menu replaces the old "external storage" toggle: select file paths when you boot from a filesystem, or select FAL partitions when you store the blobs in flash. `WHD_RESOURCES_BLOCK_SIZE` controls the read buffer size, and you can still override the weak `whd_wait_fs_mount()` in [porting/src/resources/resources.c](porting/src/resources/resources.c) if your filesystem needs extra time to get ready.
+- The resource menu replaces the old "external storage" toggle: select SD card paths, FAL partitions, or built-in resources. `WHD_RESOURCES_BLOCK_SIZE` controls the read buffer size, and you can still override the weak `whd_wait_fs_mount()` in [porting/src/resources/resources.c](porting/src/resources/resources.c) if your SD card filesystem needs extra time to get ready.
 - `WHD_PORTING_BSP`, `WHD_PORTING_HAL`, `WHD_PORTING_RTOS` and `WHD_USE_CUSTOM_MALLOC_IMPL` map directly onto the code inside the [porting](porting) tree. Leave them enabled for the RT-Thread glue, or turn off the relevant switch when you must link against Infineon's original BSP/HAL/RTOS libraries.
 - The log level selector wires up the WHD `WPRINT` macros so you can promote errors only, enable info/debug prints, or capture data traces while diagnosing SDIO traffic.
 
 Recent WHD drops may ship without the regulatory `*.clm_blob` files or the board-specific `nvram.txt` snippets inside [wifi-host-driver/WHD/COMPONENT_WIFI5/resources](wifi-host-driver/WHD/COMPONENT_WIFI5/resources) and [wifi-host-driver/WHD/COMPONENT_WIFI6/resources](wifi-host-driver/WHD/COMPONENT_WIFI6/resources). If they are missing, request the firmware+NVRAM bundle from your module vendor to ensure you stay aligned with the certified radio profile.
 
-`WHD_RESOURCES_IN_EXTERNAL_STORAGE_FS` enables loading every blob directly from a filesystem (SD card, SPI flash FS, USB mass storage, etc.). Just keep the configured paths (for example `/sdcard/whd/43438A1.bin`, `/sdcard/whd/43438A1.clm_blob`, `/sdcard/whd/nvram.txt`) accessible before WHD starts and there is no need to repartition on-chip flash. Make sure `whd_wait_fs_mount()` (provided as a weak symbol in [porting/src/resources/resources.c](porting/src/resources/resources.c)) blocks until the filesystem is mounted, or reorder your startup sequence so the filesystem driver finishes initialization before WHD tries to open the files.
+`WHD_RESOURCES_IN_MEMORY` builds the project `resources/55500A1.trxcse`, `resources/55500A1.clm_blob`, and `resources/cyw55513modpse84som_rev3.txt` files into the application image. This adds those files to flash usage, but removes the separate resource download step.
 
-When you keep the resource files on a filesystem, copy the matching `*.bin`, `*.clm_blob` and `nvram.txt` into the paths configured above. When you use FAL, make sure the named partitions exist and write the blobs once with the `whd_res_download` command.
+When you keep the resource files on an SD card, copy the matching firmware, CLM, and NVRAM files into the paths configured above. When you use FAL, make sure the named partitions exist and write the blobs once with the `whd_res_download` command.
 
 The pin configuration menu also allows setting logical pin names (such as "PA.0") instead of numbers when your BSP exposes them, and the HOST_WAKE IRQ trigger can be switched between falling/rising/both edges to fit your module design.
 
@@ -149,7 +150,7 @@ Please select the whd_firmware file and use Ymodem to send.
 Download whd_firmware to flash success. file size: 419799
 ```
 - After downloading the firmware and clm resource files, reset and restart.
-- If you selected the filesystem option instead of FAL, copy the same firmware/CLM/NVRAM trio into the paths configured under "WHD Resources Configuration" (for example mount the SD card on your PC and drag the files into `/whd/`). Once the filesystem is mounted in RT-Thread—and `whd_wait_fs_mount()` confirms it is ready—WHD will consume the blobs directly without going through `whd_res_download`.
+- If you selected the SD card option instead of FAL, copy the same firmware/CLM/NVRAM trio into the paths configured under "WHD Resources Configuration". Once the filesystem is mounted in RT-Thread and `whd_wait_fs_mount()` confirms it is ready, WHD will consume the blobs directly without going through `whd_res_download`.
 
 #### Resource file verification function (Recommended)
 - In the package, select `TinyCrypt: A tiny and configurable crypt library`

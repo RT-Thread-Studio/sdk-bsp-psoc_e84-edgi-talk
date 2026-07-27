@@ -23,8 +23,12 @@
 extern "C" {
 #endif
 
-#define EDGE_IPC_DEVICE_NAME    "ipc0"
-#define EDGE_IPC_CTRL_GET_STATS (0x1000)
+#define EDGE_IPC0_DEVICE_NAME        "ipc1"
+#define EDGE_IPC1_DEVICE_NAME        "ipc0"
+#define EDGE_IPC_DEVICE_NAME         EDGE_IPC1_DEVICE_NAME
+
+#define EDGE_IPC_CTRL_GET_STATS      (0x1000)
+#define EDGE_IPC_CTRL_GET_RINGBUFFER (0x1002)
 
 typedef struct
 {
@@ -34,9 +38,13 @@ typedef struct
     rt_uint32_t rx_err;
     rt_uint32_t rx_drop;
     rt_uint32_t sema_fail;
+    rt_uint32_t tx_busy;
+    rt_uint32_t tx_retry;
+    rt_uint32_t tx_timeout;
+    rt_uint32_t tx_release;
 } edge_ipc_device_stats_t;
 
-rt_device_t edge_ipc_device_find(void);
+rt_device_t edge_ipc_device_find(const char* name);
 int edge_ipc_device_register(void);
 
 #ifdef __cplusplus

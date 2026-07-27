@@ -1,0 +1,423 @@
+import os
+import sys
+import uuid
+import subprocess
+import io
+import platform
+
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, 'reconfigure'):
+        try:
+            _stream.reconfigure(line_buffering=True, write_through=True)
+        except Exception:
+            pass
+
+PROJECT_ROOT = Dir('.').abspath
+PACKAGE_ROOT = os.path.dirname(PROJECT_ROOT)
+PACKAGES_ROOT = os.path.dirname(PACKAGE_ROOT)
+
+
+def default_app_root():
+    libraries_dir = os.path.dirname(PACKAGES_ROOT)
+    if os.path.basename(PACKAGES_ROOT) == 'components' and os.path.basename(libraries_dir) == 'libraries':
+        return os.path.dirname(libraries_dir)
+
+    return os.path.dirname(PACKAGES_ROOT)
+
+
+def env_path(name, default):
+    value = os.environ.get(name)
+    if value:
+        return os.path.abspath(value)
+
+    return os.path.abspath(default)
+
+
+def find_root_with(start_dir, relative_path):
+    current = os.path.abspath(start_dir)
+    while True:
+        if os.path.exists(os.path.join(current, relative_path)):
+            return current
+
+        parent = os.path.dirname(current)
+        if parent == current:
+            return os.path.abspath(start_dir)
+
+        current = parent
+
+
+APP_ROOT = env_path('NS_PROJECT_ROOT', default_app_root())
+BSP_ROOT = env_path('NS_BSP_ROOT', APP_ROOT)
+LIBRARIES_ROOT = env_path('NS_LIBRARIES_ROOT', APP_ROOT)
+
+if not os.path.exists(os.path.join(BSP_ROOT, 'libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2')):
+    BSP_ROOT = find_root_with(APP_ROOT, os.path.join('libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2'))
+
+if not os.path.exists(os.path.join(LIBRARIES_ROOT, 'libraries', 'components')):
+    LIBRARIES_ROOT = find_root_with(APP_ROOT, os.path.join('libraries', 'components'))
+
+BUILD_DIR = os.environ.get('SECURE_BUILD_DIR', 'build')
+BUILD_ROOT = BUILD_DIR if os.path.isabs(BUILD_DIR) else os.path.join(PROJECT_ROOT, BUILD_DIR)
+TARGET = 'rtthread'
+
+EXEC_PATH = os.getenv('RTT_EXEC_PATH', '')
+PREFIX = 'arm-none-eabi-'
+
+
+def tool_path(tool_name):
+    executable = PREFIX + tool_name
+    if EXEC_PATH:
+        return os.path.join(EXEC_PATH, executable)
+    return executable
+
+
+def unique(seq):
+    seen = set()
+    result = []
+    for item in seq:
+        norm = os.path.normcase(os.path.normpath(str(item)))
+        if norm in seen:
+            continue
+        seen.add(norm)
+        result.append(item)
+    return result
+
+
+def get_gcc_major_version(cc_path):
+    version_commands = ([cc_path, '-dumpfullversion'], [cc_path, '-dumpversion'])
+    for command in version_commands:
+        try:
+            process = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            stdout, stderr = process.communicate()
+        except OSError:
+            continue
+
+        if process.returncode != 0:
+            continue
+
+        if not isinstance(stdout, str):
+            stdout = stdout.decode('utf-8', 'ignore')
+
+        version_text = stdout.strip()
+        if not version_text:
+            continue
+
+        major_part = version_text.split('.', 1)[0]
+        if major_part.isdigit():
+            return int(major_part)
+
+    return None
+
+
+CC = tool_path('gcc')
+AS = tool_path('gcc')
+AR = tool_path('ar')
+LINK = tool_path('gcc')
+OBJCOPY = tool_path('objcopy')
+SIZE = tool_path('size')
+
+CPU_FLAGS = '-mcpu=cortex-m33 -mthumb -mfpu=fpv5-sp-d16 -mfloat-abi=softfp'
+COMMON_FLAGS = CPU_FLAGS + ' -mcmse -ffunction-sections -fdata-sections'
+# Size-oriented build: -Os for code size, -g0 drops debug info (HEX is unaffected
+# by -g anyway, but ELF/map get leaner). -fno-unwind-tables removes ARM EH tables
+# that aren't needed for plain C firmware code.
+CFLAGS = COMMON_FLAGS + ' -Wall -std=gnu11 -O0 -g0 -fno-common -fno-unwind-tables -fno-asynchronous-unwind-tables'
+AFLAGS = COMMON_FLAGS + ' -x assembler-with-cpp -c'
+
+BSP_DIR = os.path.join(BSP_ROOT, 'libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2')
+GENERATED_DIR = os.path.join(BSP_DIR, 'config', 'GeneratedSource')
+BSP_GCC_DIR = os.path.join(BSP_DIR, 'COMPONENT_CM33', 'TOOLCHAIN_GCC_ARM')
+LINKER_SCRIPT_SOURCE = os.path.join(BSP_GCC_DIR, 'pse84_s_cm33.ld')
+LINKER_SCRIPT = os.path.join(BUILD_ROOT, 'pse84_s_cm33_compat.ld')
+MEMORY_SCRIPT = os.path.join(GENERATED_DIR, 'cymem_gnu_CM33_0_S.ld')
+GCC_MAJOR_VERSION = get_gcc_major_version(CC)
+GFXSS_DIR = os.path.join(
+    LIBRARIES_ROOT,
+    'libraries',
+    'components',
+    'mtb-device-support-pse8xxgp',
+    'pdl',
+    'drivers',
+    'third_party',
+    'COMPONENT_GFXSS',
+)
+
+if not os.path.exists(BUILD_ROOT):
+    os.makedirs(BUILD_ROOT)
+
+with io.open(LINKER_SCRIPT_SOURCE, 'r', encoding='utf-8', errors='ignore') as linker_in:
+    linker_script_text = linker_in.read()
+
+if GCC_MAJOR_VERSION is None or GCC_MAJOR_VERSION < 13:
+    # GNU ld from the 10.3.x toolchain does not understand the newer
+    # "(READONLY)" output-section attribute syntax and mis-parses it as an
+    # address expression.
+    linker_script_text = linker_script_text.replace('(READONLY)', '')
+
+memory_script_for_ld = os.path.abspath(MEMORY_SCRIPT).replace('\\', '/')
+linker_script_text = linker_script_text.replace(
+    'INCLUDE cymem_gnu_CM33_0_S.ld',
+    'INCLUDE "{}"'.format(memory_script_for_ld),
+)
+
+with io.open(LINKER_SCRIPT, 'w', encoding='utf-8') as linker_out:
+    linker_out.write(linker_script_text)
+
+LDFLAGS = COMMON_FLAGS + ' --specs=nano.specs --specs=nosys.specs'
+LDFLAGS += ' -Wl,--gc-sections -Wl,-Map="' + os.path.join(BUILD_ROOT, TARGET + '.map') + '" -Wl,--cref'
+LDFLAGS += ' -L"' + GENERATED_DIR + '" -L"' + BSP_GCC_DIR + '"'
+LDFLAGS += ' -T "' + LINKER_SCRIPT + '"'
+
+CPPDEFINES = [
+    'BLHS_SUPPORT',
+    'COMPONENT_55500',
+    'COMPONENT_55500A1',
+    'COMPONENT_APP_KIT_PSE84_EVAL_EPC2',
+    'COMPONENT_CM33',
+    'COMPONENT_CM33_0',
+    'COMPONENT_CYW55513_MOD_PSE84_SOM',
+    'COMPONENT_Debug',
+    'COMPONENT_GCC_ARM',
+    'COMPONENT_HCI_UART',
+    'COMPONENT_MTB_DEVICE_SUPPORT',
+    'COMPONENT_MTB_HAL',
+    'COMPONENT_MW_ASYNC_TRANSFER',
+    'COMPONENT_MW_BT_FW_IFX_CYW55500A1',
+    'COMPONENT_MW_CMSIS',
+    'COMPONENT_MW_CORE_LIB',
+    'COMPONENT_MW_CORE_MAKE',
+    'COMPONENT_MW_MTB_DSL_PSE8XXGP',
+    'COMPONENT_MW_MTB_IPC',
+    'COMPONENT_MW_MTB_SRF',
+    'COMPONENT_MW_SE_RT_SERVICES_UTILS',
+    'COMPONENT_PSE84',
+    'COMPONENT_SECURE_DEVICE',
+    'COMPONENT_SECURE_DRIVERS',
+    'COMPONENT_SM',
+    'COMPONENT_SOFTFP',
+    'COMPONENT_WIFI_INTERFACE_SDIO',
+    'COMPONENT_wlbga_iPA_sLNA_ANT0_LHL_XTAL_IN',
+    'CORE_NAME_CM33_0=1',
+    'CY_APPNAME_proj_cm33_s',
+    'CYBSP_SKIP_MPC_INIT',
+    'CYBSP_SKIP_PPC_INIT',
+    'CY_PDL_FLASH_BOOT',
+    'CY_SUPPORTS_DEVICE_VALIDATION',
+    'CY_TARGET_BOARD=APP_KIT_PSE84_EVAL_EPC2',
+    'CYBSP_MCUBOOT_HEADER_SIZE=0x400',
+    'CYBSP_WIFI_WL_HOSTWAKE_DRIVE_MODE=MTB_HAL_GPIO_DRIVE_OPENDRAINDRIVESLOW',
+    'CYBSP_WIFI_WL_HOSTWAKE_INIT_STATE=WHD_TRUE',
+    'CY_WIFI_COUNTRY=WHD_COUNTRY_UNITED_STATES',
+    'DEBUG',
+    'FLASH_BOOT',
+    'PSE846GPS2DBZC4A',
+    'TARGET_APP_KIT_PSE84_EVAL_EPC2',
+    'TRXV5',
+]
+
+CPPPATH = [
+    PROJECT_ROOT,
+    GENERATED_DIR,
+    os.path.join(BSP_DIR, 'config'),
+    BSP_DIR,
+    os.path.join(BSP_DIR, 'COMPONENT_CM33', 'COMPONENT_SECURE_DEVICE'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'async-transfer', 'include'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'Infineon_cmsis-latest', 'Core', 'Include'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'Infineon_cmsis-latest', 'Core', 'Include', 'm-profile'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'Infineon_core-lib-latest', 'include'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'Infineon_retarget-io-latest'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'device-utils', 'syspm', 'include'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'include'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'devices', 'include'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'devices', 'include', 'ip'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'include'),
+    GFXSS_DIR,
+    os.path.join(GFXSS_DIR, 'vsi', 'gcnano'),
+    os.path.join(GFXSS_DIR, 'vsi', 'dcnano8000'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-ipc', 'include'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-srf', 'include'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-srf', 'include', 'COMPONENT_NON_SECURE_DEVICE'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'mtb-srf', 'include', 'COMPONENT_NON_SECURE_DEVICE', 'COMPONENT_MW_MTB_IPC'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'se-rt-services-utils'),
+    os.path.join(LIBRARIES_ROOT, 'libraries', 'components', 'serial-memory', 'include'),
+]
+CPPPATH = unique(CPPPATH)
+
+
+def ourspawn(sh, escape, cmd, args, env_vars):
+    def dequote_arg(arg):
+        arg = str(arg)
+        if len(arg) >= 2 and arg[0] == arg[-1] and arg[0] in ('"', "'"):
+            return arg[1:-1]
+        return arg
+
+    filename = str(uuid.uuid4())
+    cmdline = cmd + ' ' + ' '.join(args[1:])
+    run_args = [cmd] + [dequote_arg(arg) for arg in args[1:]]
+    if len(cmdline) > 16 * 1024:
+        with open(filename, 'w') as response_file:
+            response_file.write(' '.join(args[1:]).replace('\\', '/'))
+        cmdline = cmd + ' @' + filename
+        run_args = [cmd, '@' + filename]
+
+    command = cmdline if platform.system() == 'Windows' else run_args
+
+    # Inherit our stdout/stderr so compiler output streams in real time instead
+    # of being buffered until the subprocess exits.
+    proc = subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=None,
+        stderr=None,
+        shell=False,
+        env=env_vars,
+    )
+    rv = proc.wait()
+    if os.path.isfile(filename):
+        os.remove(filename)
+    return rv
+
+
+env = Environment(
+    tools=['gcc', 'gnulink', 'ar'],
+    ENV=os.environ,
+    CC=CC,
+    AS=AS,
+    AR=AR,
+    LINK=LINK,
+    CFLAGS=CFLAGS,
+    ASFLAGS=AFLAGS,
+    LINKFLAGS=LDFLAGS,
+    CPPPATH=CPPPATH,
+    CPPDEFINES=CPPDEFINES,
+    LIBS=['c', 'm', 'nosys'],
+)
+env['PROGSUFFIX'] = '.elf'
+env['SPAWN'] = ourspawn
+
+VariantDir(BUILD_DIR, '.', duplicate=0)
+VariantDir(os.path.join(BUILD_DIR, 'libs'), os.path.relpath(os.path.join(BSP_ROOT, 'libs'), PROJECT_ROOT), duplicate=0)
+VariantDir(os.path.join(BUILD_DIR, 'libraries'), os.path.relpath(os.path.join(LIBRARIES_ROOT, 'libraries'), PROJECT_ROOT), duplicate=0)
+
+src = [
+    os.path.join(BUILD_DIR, 'main.c'),
+    os.path.join(BUILD_DIR, 'retarget_io_init.c'),
+    os.path.join(BUILD_DIR, 'libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2', 'cybsp.c'),
+    os.path.join(BUILD_DIR, 'libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2', 'system_edge.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-srf', 'mtb_srf.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-srf', 'mtb_srf_ipc.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'se-rt-services-utils', 'ifx_se_crc32.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'se-rt-services-utils', 'ifx_se_fih.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'se-rt-services-utils', 'ifx_se_platform.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'se-rt-services-utils', 'ifx_se_psacrypto.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'se-rt-services-utils', 'ifx_se_ss_wifi.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'se-rt-services-utils', 'ifx_se_syscall.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'se-rt-services-utils', 'ifx_se_syscall_builtin.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_clock.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_dma.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_dma_dmac.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_dma_dw.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_gpio.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_lptimer.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_syspm.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_system.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_uart.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_utils_impl.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_adc_sar.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_i2c.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_memoryspi.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_pwm.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_sdhc.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_spi.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'hal', 'source', 'mtb_hal_timer.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'devices', 'source', 'cy_device.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'TOOLCHAIN_GCC_ARM', 'cy_syslib_ext.S'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_axidmac.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_autanalog.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_autanalog_ac.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_autanalog_ctb.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_autanalog_dac.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_autanalog_ptc.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_autanalog_sar.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_canfd.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_dma.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_gpio.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_i3c.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_ipc_drv.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_ipc_pipe.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_ipc_sema.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_mcwdt.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_mipidsi.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_mpc.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_pdl_srf.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_pdm_pcm_v2.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_ppc.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_rram.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_scb_common.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_scb_i2c.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_scb_spi.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_scb_uart.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_sd_host.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_smif.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_smif_hb_flash.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_smif_memnum.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_smif_memslot.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_smif_sfdp.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_sysclk_v2.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_sysint_v2.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_syslib.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_syspm_pdcm.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_syspm_ppu.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_syspm_v4.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_systick_v2.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_systrimm.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_tcpwm_counter.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_tcpwm_pwm.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_tdm.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_wdt.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'cy_pdl_srf.c'),
+    os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'pdl', 'drivers', 'source', 'ppu_v1.c'),
+]
+
+src += Glob(os.path.join(BUILD_DIR, 'libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2', 'config', 'GeneratedSource', '*.c'))
+src += Glob(os.path.join(BUILD_DIR, 'libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2', 'COMPONENT_CM33', 'COMPONENT_SECURE_DEVICE', '*.c'))
+src += Glob(os.path.join(BUILD_DIR, 'libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2', 'COMPONENT_CM33', 'TOOLCHAIN_GCC_ARM', '*.c'))
+src += Glob(os.path.join(BUILD_DIR, 'libs', 'TARGET_APP_KIT_PSE84_EVAL_EPC2', 'COMPONENT_CM33', 'TOOLCHAIN_GCC_ARM', '*.S'))
+src += Glob(os.path.join(BUILD_DIR, 'libraries', 'components', 'async-transfer', 'source', '*.c'))
+src += Glob(os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-ipc', 'source', '*.c'))
+src += Glob(os.path.join(BUILD_DIR, 'libraries', 'components', 'Infineon_retarget-io-latest', '*.c'))
+src += Glob(os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'device-utils', 'syspm', 'source', '*.c'))
+src += Glob(os.path.join(BUILD_DIR, 'libraries', 'components', 'mtb-device-support-pse8xxgp', 'support', 'source', '*.c'))
+src += Glob(os.path.join(BUILD_DIR, 'libraries', 'components', 'serial-memory', 'source', '*.c'))
+src = unique(src)
+
+elf = env.Program(os.path.join(BUILD_DIR, TARGET), src)
+hex_file = env.Command(os.path.join(BUILD_DIR, TARGET + '.hex'), elf, OBJCOPY + ' -O ihex $SOURCE $TARGET')
+bin_file = env.Command(os.path.join(BUILD_DIR, TARGET + '.bin'), elf, OBJCOPY + ' -O binary $SOURCE $TARGET')
+size_cmd = env.Command('size', elf, SIZE + ' $SOURCE')
+
+
+def _print_artifact_sizes(target, source, env):
+    """Print on-disk size of HEX/BIN so we can see flash footprint at a glance."""
+    for tgt in target:
+        path = str(tgt)
+        if not os.path.isfile(path):
+            continue
+        size = os.path.getsize(path)
+        sys.stdout.write(
+            '  {:<10} {:>8} bytes  {:>7.2f} KB\n'.format(
+                os.path.basename(path), size, size / 1024.0
+            )
+        )
+        sys.stdout.flush()
+
+
+env.AddPostAction(hex_file, Action(_print_artifact_sizes, 'print HEX size'))
+env.AddPostAction(bin_file, Action(_print_artifact_sizes, 'print BIN size'))
+
+Default([elf, hex_file, bin_file, size_cmd])
+Clean(elf, [os.path.join(BUILD_DIR, TARGET + '.map')])
