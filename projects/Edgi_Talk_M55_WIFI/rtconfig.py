@@ -59,7 +59,7 @@ if PLATFORM == 'gcc':
 
     CXXFLAGS = CFLAGS 
 
-    POST_ACTION = 'python -c "import os, shutil; os.makedirs(\'Debug\', exist_ok=True); src=\'resources\'; dst=os.path.join(\'Debug\', \'resources\'); shutil.rmtree(dst, ignore_errors=True); shutil.copytree(src, dst) if os.path.isdir(src) else None"\n' + OBJCPY + ' -O ihex $TARGET Debug/rtthread.hex\n' + SIZE + ' $TARGET \n'
+    POST_ACTION = 'python -c "import os; os.makedirs(\'Debug\', exist_ok=True)"\n' + OBJCPY + ' -O ihex $TARGET Debug/rtthread.hex\n' + SIZE + ' $TARGET \n'
 
 elif PLATFORM == 'armclang':
     # toolchains
