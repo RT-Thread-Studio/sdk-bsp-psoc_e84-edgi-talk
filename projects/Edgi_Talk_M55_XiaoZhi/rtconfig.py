@@ -60,7 +60,7 @@ if PLATFORM == 'gcc':
     # CXXFLAGS = CFLAGS 
     CXXFLAGS = CFLAGS  + ' -std=c++17'
 
-    POST_ACTION = 'python -c "import os; os.makedirs(\'Debug\', exist_ok=True)"\n' + OBJCPY + ' -O ihex $TARGET Debug/rtthread.hex\n' + SIZE + ' $TARGET \n'
+    POST_ACTION = 'python -c "import os;os.path.exists(\'Debug\') or os.makedirs(\'Debug\')"\n' + OBJCPY + ' -O ihex $TARGET Debug/rtthread.hex\n' + SIZE + ' $TARGET \n'
 
 elif PLATFORM == 'armclang':
     # toolchains
