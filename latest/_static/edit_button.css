@@ -1,0 +1,16 @@
+/* 正文右上角“在 GitHub 上编辑”按钮样式（带边框与图标） */
+.sdk-edit-on-github { display: flex; justify-content: flex-end; margin-top: 14px; }
+.sdk-edit-on-github__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #1f2937;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    text-decoration: none;
+}
+.sdk-edit-on-github__btn:hover { background: #e5e7eb; }
+.sdk-edit-on-github__icon { margin-right: 0; vertical-align: middle; }

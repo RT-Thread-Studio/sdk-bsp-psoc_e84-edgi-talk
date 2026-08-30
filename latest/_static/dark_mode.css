@@ -1,0 +1,231 @@
+/* 深色模式基础样式 - 优化阅读体验 */
+[data-theme="dark"] {
+    --bg-color: #0f1419;
+    --text-color: #e6edf3;
+    --border-color: #30363d;
+    --link-color: #58a6ff;
+    --code-bg: #161b22;
+    --code-text: #f0f6fc;
+    --sidebar-bg: #0d1117;
+    --sidebar-border: #21262d;
+    --hover-bg: #21262d;
+    --active-bg: #1f6feb;
+}
+
+[data-theme="dark"] body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .wy-nav-side {
+    background-color: var(--sidebar-bg);
+    border-right-color: var(--sidebar-border);
+}
+
+[data-theme="dark"] .wy-nav-side .wy-menu-vertical a {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .wy-nav-side .wy-menu-vertical a:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .wy-nav-side .wy-menu-vertical .current > a {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+    border-left: 3px solid var(--active-bg);
+}
+
+[data-theme="dark"] .wy-nav-content {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .wy-nav-content h1,
+[data-theme="dark"] .wy-nav-content h2,
+[data-theme="dark"] .wy-nav-content h3,
+[data-theme="dark"] .wy-nav-content h4,
+[data-theme="dark"] .wy-nav-content h5,
+[data-theme="dark"] .wy-nav-content h6 {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .wy-nav-content a {
+    color: var(--link-color);
+}
+
+[data-theme="dark"] .wy-nav-content a:hover {
+    color: #79c0ff;
+    text-decoration: underline;
+}
+
+[data-theme="dark"] .wy-nav-content code {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    border: 1px solid var(--border-color);
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+[data-theme="dark"] .wy-nav-content pre {
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+[data-theme="dark"] .wy-nav-content pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+[data-theme="dark"] .wy-breadcrumbs {
+    background-color: var(--sidebar-bg);
+    border-bottom-color: var(--sidebar-border);
+}
+
+[data-theme="dark"] .wy-breadcrumbs a {
+    color: var(--link-color);
+}
+
+[data-theme="dark"] .wy-breadcrumbs a:hover {
+    color: #79c0ff;
+}
+
+[data-theme="dark"] .wy-nav-top {
+    background-color: var(--sidebar-bg);
+    border-bottom-color: var(--sidebar-border);
+}
+
+[data-theme="dark"] .wy-nav-top a {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .wy-nav-top a:hover {
+    background-color: var(--hover-bg);
+}
+
+/* 深色模式下的表格样式 */
+[data-theme="dark"] .wy-nav-content table {
+    border-color: var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .wy-nav-content table th,
+[data-theme="dark"] .wy-nav-content table td {
+    border-color: var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 8px 12px;
+}
+
+[data-theme="dark"] .wy-nav-content table th {
+    background-color: var(--hover-bg);
+    font-weight: 600;
+}
+
+[data-theme="dark"] .wy-nav-content table tr:nth-child(even) {
+    background-color: var(--hover-bg);
+}
+
+/* 深色模式下的引用块样式 */
+[data-theme="dark"] .wy-nav-content .admonition {
+    background-color: var(--hover-bg);
+    border-color: var(--border-color);
+    border-radius: 6px;
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .wy-nav-content .admonition-title {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+/* 深色模式下的搜索框样式 */
+[data-theme="dark"] .wy-side-nav-search {
+    background-color: var(--sidebar-bg);
+}
+
+[data-theme="dark"] .wy-side-nav-search input[type="text"] {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+    border-radius: 6px;
+}
+
+[data-theme="dark"] .wy-side-nav-search input[type="text"]:focus {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
+}
+
+/* 深色模式下的版本菜单样式 */
+[data-theme="dark"] .version-menu {
+    background-color: var(--sidebar-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .version-menu__button {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .version-menu__button:hover {
+    background-color: var(--hover-bg);
+}
+
+[data-theme="dark"] .version-menu__dropdown {
+    background-color: var(--sidebar-bg);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .version-menu__item {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .version-menu__item:hover {
+    background-color: var(--hover-bg);
+}
+
+/* 深色模式下的PDF按钮样式 */
+[data-theme="dark"] .pdf-download-btn {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .pdf-download-btn:hover {
+    background-color: var(--hover-bg);
+}
+
+/* 深色模式下的编辑按钮样式 */
+[data-theme="dark"] .sdk-edit-on-github__btn {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .sdk-edit-on-github__btn:hover {
+    background-color: var(--hover-bg);
+}
+
+/* 深色模式下的语言切换样式 */
+[data-theme="dark"] .language-switch__option {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .language-switch__option:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .language-switch__option.active {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .language-switch__separator {
+    color: #7d8590;
+}
