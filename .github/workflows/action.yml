@@ -56,6 +56,7 @@ jobs:
          - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch"}
          - {RTT_BSP: "Edgi_Talk_IPC/Edgi_Talk_M33_IPC"}
          - {RTT_BSP: "Edgi_Talk_M55_Driver_All"}
+         - {RTT_BSP: "Edgi_Talk_M55_BT_Speaker"}
          - {RTT_BSP: "Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision"}
          - {RTT_BSP: "Edgi_Talk_M55_LVGL"}
          - {RTT_BSP: "Edgi_Talk_M55_WIFI"}

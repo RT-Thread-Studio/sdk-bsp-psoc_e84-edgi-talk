@@ -1,0 +1,72 @@
+import os
+from building import *
+
+cwd = GetCurrentDir()
+pkg = os.path.normpath(os.path.join(cwd, '../../packages/btstack-latest'))
+
+src = [
+    # BTstack core
+    pkg + '/src/btstack_util.c',
+    pkg + '/src/ad_parser.c',
+    pkg + '/src/btstack_run_loop.c',
+    pkg + '/src/btstack_run_loop_base.c',
+    pkg + '/src/btstack_linked_list.c',
+    pkg + '/src/btstack_memory.c',
+    pkg + '/src/btstack_memory_pool.c',
+    pkg + '/src/btstack_ring_buffer.c',
+    pkg + '/src/btstack_resample.c',
+    pkg + '/src/btstack_audio.c',
+    pkg + '/src/hci.c',
+    pkg + '/src/hci_cmd.c',
+    pkg + '/src/hci_dump.c',
+    pkg + '/src/hci_transport_h4.c',
+    pkg + '/src/l2cap.c',
+    pkg + '/src/l2cap_signaling.c',
+
+    # Classic Bluetooth: SDP, AVDTP/A2DP sink, AVRCP, link keys
+    pkg + '/src/classic/sdp_util.c',
+    pkg + '/src/classic/sdp_server.c',
+    pkg + '/src/classic/sdp_client.c',
+    pkg + '/src/classic/btstack_link_key_db_memory.c',
+    pkg + '/src/classic/avdtp.c',
+    pkg + '/src/classic/avdtp_util.c',
+    pkg + '/src/classic/avdtp_initiator.c',
+    pkg + '/src/classic/avdtp_acceptor.c',
+    pkg + '/src/classic/avdtp_sink.c',
+    pkg + '/src/classic/a2dp_sink.c',
+    pkg + '/src/classic/avrcp.c',
+    pkg + '/src/classic/avrcp_controller.c',
+    pkg + '/src/classic/avrcp_target.c',
+
+    # SBC decoder
+    pkg + '/src/classic/btstack_sbc_decoder_bluedroid.c',
+    pkg + '/src/classic/btstack_sbc_plc.c',
+
+    # BCM/CYW chipset: firmware download over HCI
+    pkg + '/chipset/bcm/btstack_chipset_bcm.c',
+    pkg + '/chipset/bcm/btstack_chipset_bcm_download_firmware.c',
+
+    # RT-Thread port and CYW55500A1 firmware image
+    cwd + '/btstack_run_loop_rtt.c',
+    cwd + '/btstack_uart_block_rtt.c',
+    cwd + '/btstack_audio_rtt.c',
+    cwd + '/btfw.c',
+]
+
+# Bluedroid SBC decoder sources
+decoder_dir = pkg + '/3rd-party/bluedroid/decoder/srce'
+for name in os.listdir(decoder_dir):
+    if name.endswith('.c'):
+        src.append(os.path.join(decoder_dir, name))
+
+path = [
+    cwd,
+    pkg + '/src',
+    pkg + '/src/classic',
+    pkg + '/chipset/bcm',
+    pkg + '/3rd-party/bluedroid/decoder/include',
+]
+
+group = DefineGroup('BTstack', src, depend=[''], CPPPATH=path)
+
+Return('group')

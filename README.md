@@ -44,6 +44,7 @@ $ sdk-bsp-psoc_e84-edgi-talk
 │   ├── Edgi_Talk_M33_Template
 │   ├── Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision
 │   ├── Edgi_Talk_M55_Driver_All
+│   ├── Edgi_Talk_M55_BT_Speaker
 │   ├── Edgi_Talk_M55_LVGL
 │   ├── Edgi_Talk_M55_WIFI
 │   ├── Edgi_Talk_M55_XiaoZhi

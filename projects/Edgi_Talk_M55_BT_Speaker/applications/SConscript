@@ -1,0 +1,24 @@
+import rtconfig
+from building import *
+import os
+
+cwd  = GetCurrentDir()
+pkg  = os.path.normpath(os.path.join(cwd, '../packages/btstack-latest'))
+
+path = [cwd,
+        cwd + '/../board',
+        cwd + '/bt_stack',
+        pkg + '/src',
+        pkg + '/src/classic',
+        pkg + '/chipset/bcm',
+        pkg + '/3rd-party/bluedroid/decoder/include']
+src  = Glob('*.c')
+
+group = DefineGroup('Applications', src, depend = [''], CPPPATH = path)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')
