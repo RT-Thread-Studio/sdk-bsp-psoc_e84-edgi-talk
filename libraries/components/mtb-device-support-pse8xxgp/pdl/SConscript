@@ -127,7 +127,7 @@ if GetDepend(['SOC_SERIES_IFX_PSOCE84']):
 
 path += gfxss_path
 
-if GetDepend(['BSP_USING_DEEPCRAFT_AI']):
+if GetDepend(['BSP_USING_DEEPCRAFT_AI']) or GetDepend('RT_AI_LIB'):
     src += Split('''
         drivers/third_party/COMPONENT_U55/src/ethosu_driver.c
         drivers/third_party/COMPONENT_U55/src/ethosu_device_u55_u65.c

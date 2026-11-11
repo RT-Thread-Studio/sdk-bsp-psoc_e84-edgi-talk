@@ -1,4 +1,10 @@
 from building import *
+# RT-AK BEGIN exclude-model-wrapper
+if GetDepend('RT_AI_LIB'):
+    group = []
+    Return('group')
+# RT-AK END exclude-model-wrapper
+
 import os
 
 cwd = os.path.realpath(GetCurrentDir()).replace('\\', '/')
