@@ -9,6 +9,15 @@
 
 链接脚本、驱动和应用代码与原工程相同。
 
+## 运行效果
+
+示例模型为 YOLOv8n 目标检测（Ultralytics 预训练，COCO 80 类，输入 192×192）：由 RT-AK 量化为 INT8、经 Vela 编译后在 Ethos-U55 NPU 上推理。
+USB 摄像头画面显示在 LCD 上，检测到的目标用彩色框标出，框上显示类别名和置信度，左上角显示帧率：
+
+<img src="figures/yolov8-detect.jpg" style="zoom:60%;" />
+
+操作步骤见第 5 节。
+
 ## 1. 获取工程
 
 任选一种：
@@ -46,7 +55,32 @@ msh />rtak_run
 
 <img src="figures/usb-lcd.png" style="zoom:80%;" />
 
-## 5. 启动顺序
+## 5. 摄像头目标检测（YOLOv8n）
+
+1. 按 RT-AK 仓库 `examples/yolov8/README.md` 第 1、2 节准备 `yolov8n.tflite` 和校准图片目录 `calib_images`。
+2. 部署：
+
+   ```powershell
+   rtak convert --model yolov8n.tflite --board edgi_talk_uvc_vendor --project "$bsp" --dataset calib_images
+   ```
+
+3. 把 RT-AK 仓库 `examples/yolov8/` 下的 `yolov8_app.c`、`yolov8_app.h`、`yolov8_uvc.c` 复制到本工程 `applications/`：
+
+   ```powershell
+   Copy-Item RT-AK/examples/yolov8/yolov8_app.c, RT-AK/examples/yolov8/yolov8_app.h, RT-AK/examples/yolov8/yolov8_uvc.c "$bsp\applications\"
+   ```
+
+4. 按第 3 节刷新、保存 RT-Thread Settings、构建、只下载 M55。
+5. 插入 USB 摄像头，串口执行：
+
+   ```text
+   msh />usbh_uvc_start 0 320 240
+   msh />yolov8_start
+   ```
+
+   串口每秒打印一行帧率与耗时，LCD 显示检测框。执行 `yolov8_stop` 停止。
+
+## 6. 启动顺序
 
 M55 由 M33 启动。M55 无法运行时，先编译并下载 `Edgi_Talk_M33_Template`，并在 M33 工程中开启 CM55：
 
