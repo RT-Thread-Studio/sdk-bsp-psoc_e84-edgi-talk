@@ -34,7 +34,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@master
         with:
-          python-version: 3.8
+          python-version: "3.12"
 
       - name: Check yaml
         if: ${{ success() }}
@@ -71,7 +71,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@master
         with:
-          python-version: 3.8
+          python-version: "3.12"
 
       - name: Install Arm ToolChains
         if: ${{ success() }}
