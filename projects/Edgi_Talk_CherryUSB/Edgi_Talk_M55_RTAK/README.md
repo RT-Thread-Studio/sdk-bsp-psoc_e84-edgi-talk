@@ -17,7 +17,7 @@ The demo model for this project is **YOLOv8n object detection**:
 | --- | --- |
 | Model | Ultralytics `yolov8n.pt` pretrained weights, not retrained |
 | Classes | 80 COCO classes (person, cup, laptop, keyboard, chair, ...) |
-| Export | `yolo export model=yolov8n.pt format=litert imgsz=192` (or export ONNX) |
+| Export | `yolo export model=yolov8n.pt format=onnx imgsz=192` (TFLite also works) |
 | Input | `[1, 3, 192, 192]`, RGB, letterbox resize |
 | Output | `[1, 84, 756]`: 4 normalized box coordinates + 80 class scores, no NMS (NMS runs on the board) |
 | Quantization and compilation | `rtak convert` quantizes it to full INT8 with 100–300 calibration images, then compiles it with Arm Vela |
@@ -46,7 +46,7 @@ person 873/1000 [102,40,298,371]
 
 `prepare` is resizing and quantization, `infer` is NPU inference plus decoding and NMS, and `other` is LCD display and waiting for the next camera frame.
 
-See section 5 for the steps.
+The deployment steps follow below.
 
 ## 1. Get the project
 
@@ -55,62 +55,56 @@ Either:
 * RT-Thread Studio: New project → Based on board → PSOC_E84-EDGI-TALK → example `Edgi_Talk_M55_RTAK`;
 * Clone this repository, run `mklinks.bat` in this directory, then in Studio: File → Import → RT-Thread Studio Project into Workspace, and select this directory.
 
-## 2. Deploy a model
+## 2. Prepare the model and calibration images
 
-In PowerShell at the RT-AK repository root (set `$bsp` to this project's directory):
+Run the commands below in PowerShell at the RT-AK repository root, in the environment where rtak is installed.
+
+1. Export YOLOv8n (ONNX, 192×192 input) and convert the box coordinates to 0..1:
+
+   ```powershell
+   python -m pip install ultralytics==8.4.194
+   yolo export model=yolov8n.pt format=onnx imgsz=192
+   python RT-AK/examples/yolov8/yolov8_onnx_boxes.py yolov8n.onnx yolov8n_rtak.onnx
+   ```
+
+2. Put 100–300 images (`.jpg`/`.png`/`.bmp`) directly in `calib_images\`; photos of the real scene taken with the camera are fine.
+
+## 3. Deploy the model
+
+Set `$bsp` to this project's directory:
 
 ```powershell
 $bsp = 'C:\work\sdk-bsp-psoc_e84-edgi-talk\projects\Edgi_Talk_CherryUSB\Edgi_Talk_M55_RTAK'
-rtak convert --model <model.tflite> --board edgi_talk_uvc_vendor --project "$bsp" --dataset <calibration data>
+rtak convert --model yolov8n_rtak.onnx --board edgi_talk_uvc_vendor --project "$bsp" --dataset calib_images
 ```
 
-## 3. Build and download
+Exit code 0 means quantization, compilation and deployment are done.
+
+## 4. Add the detection code
+
+```powershell
+Copy-Item RT-AK/examples/yolov8/yolov8_app.c, RT-AK/examples/yolov8/yolov8_app.h, RT-AK/examples/yolov8/yolov8_uvc.c "$bsp\applications\"
+```
+
+## 5. Build and download
 
 1. In Studio, right-click the project → Refresh;
 2. Open RT-Thread Settings and save without changing anything;
 3. Build the project;
 4. Download the M55 firmware only, then reset the board.
 
-## 4. Check on the board
+## 6. Run detection
 
-In a serial terminal (115200 8N1):
+Plug in a USB camera and run in a serial terminal (115200 8N1):
 
 ```text
-msh />rtak_run
+msh />usbh_uvc_start 0 320 240
+msh />yolov8_start
 ```
 
-`[rtak] check=PASS` means the deployment works.
+The LCD shows the camera image with detection boxes, and the serial terminal prints the frame rate and timing once per second. Run `yolov8_stop` to stop.
 
-With a USB camera plugged in, run `usbh_uvc_start 0 320 240` (0 = YUYV, 1 = MJPEG; up to 432x240) to show the camera image on the LCD:
-
-<img src="figures/usb-lcd.png" style="zoom:80%;" />
-
-## 5. Camera object detection (YOLOv8n)
-
-1. Prepare `yolov8n.tflite` and a calibration image folder `calib_images` as in sections 1 and 2 of `examples/yolov8/README.md` in the RT-AK repository.
-2. Deploy:
-
-   ```powershell
-   rtak convert --model yolov8n.tflite --board edgi_talk_uvc_vendor --project "$bsp" --dataset calib_images
-   ```
-
-3. Copy `yolov8_app.c`, `yolov8_app.h` and `yolov8_uvc.c` from `examples/yolov8/` in the RT-AK repository to this project's `applications/`:
-
-   ```powershell
-   Copy-Item RT-AK/examples/yolov8/yolov8_app.c, RT-AK/examples/yolov8/yolov8_app.h, RT-AK/examples/yolov8/yolov8_uvc.c "$bsp\applications\"
-   ```
-
-4. Refresh, save RT-Thread Settings, build and download M55 only, as in section 3.
-5. Plug in a USB camera and run in the serial terminal:
-
-   ```text
-   msh />usbh_uvc_start 0 320 240
-   msh />yolov8_start
-   ```
-
-   The serial terminal prints the frame rate and timing once per second, and the LCD shows the boxes. Run `yolov8_stop` to stop.
-
-## 6. Boot order
+## 7. Boot order
 
 M55 is started by M33. If M55 does not run, build and download `Edgi_Talk_M33_Template` first and enable CM55 in the M33 project:
 
