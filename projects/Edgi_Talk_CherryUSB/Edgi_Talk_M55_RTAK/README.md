@@ -9,12 +9,42 @@ An M55 project for deploying models with RT-AK. It is a copy of `Edgi_Talk_M55_U
 
 The linker script, drivers and application code are the same as the original project.
 
+## Example model
+
+The demo model for this project is **YOLOv8n object detection**:
+
+| Item | Details |
+| --- | --- |
+| Model | Ultralytics `yolov8n.pt` pretrained weights, not retrained |
+| Classes | 80 COCO classes (person, cup, laptop, keyboard, chair, ...) |
+| Export | `yolo export model=yolov8n.pt format=litert imgsz=192` (or export ONNX) |
+| Input | `[1, 3, 192, 192]`, RGB, letterbox resize |
+| Output | `[1, 84, 756]`: 4 normalized box coordinates + 80 class scores, no NMS (NMS runs on the board) |
+| Quantization and compilation | `rtak convert` quantizes it to full INT8 with 100–300 calibration images, then compiles it with Arm Vela |
+| Runs on | Cortex-M55 + Ethos-U55 NPU; the model is in XIP flash and the inference arena in SOCMEM |
+
+See `examples/yolov8/README.md` in the RT-AK repository for exporting the model and preparing calibration data.
+
 ## Demo
 
-The example model is YOLOv8n object detection (Ultralytics pretrained, 80 COCO classes, 192×192 input): RT-AK quantizes it to INT8 and compiles it with Vela, and it runs on the Ethos-U55 NPU.
-The USB camera image is shown on the LCD; detected objects get colored boxes with the class name and confidence, and the frame rate is shown in the top-left corner:
+The USB camera image (320×240) is shown live on the LCD. Each frame is resized to 192×192 and run on the NPU; the board decodes the output, runs NMS and draws the results onto the image:
+
+* every detected object gets a colored box labeled with the class name and confidence (for example `cup 84%`);
+* the current frame rate is shown in the top-left corner of the LCD;
+* each frame is shown after its own detection finishes, so the boxes line up with the image. If an object is missed in a frame, its box is kept for up to 3 more detections to reduce flicker.
+
+A photo of an office desk, with `chair`, `cup`, `laptop` and `keyboard` detected at the same time. `4.9fps 86ms` in the top-left corner means about 4.9 detections per second, with an average of 86 ms per inference (NPU inference plus decoding and NMS):
 
 <img src="figures/yolov8-detect.jpg" style="zoom:60%;" />
+
+Once per second the serial terminal prints the frame rate and a timing breakdown, followed by each box (class, confidence ×1000, coordinates):
+
+```text
+[yolov8] x.x fps, N ms/frame = prepare N + infer N + other N ms, boxes N-N
+person 873/1000 [102,40,298,371]
+```
+
+`prepare` is resizing and quantization, `infer` is NPU inference plus decoding and NMS, and `other` is LCD display and waiting for the next camera frame.
 
 See section 5 for the steps.
 

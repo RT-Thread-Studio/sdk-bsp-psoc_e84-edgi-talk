@@ -9,12 +9,42 @@
 
 链接脚本、驱动和应用代码与原工程相同。
 
+## 示例模型
+
+本工程的演示模型为 **YOLOv8n 目标检测**：
+
+| 项目 | 说明 |
+| --- | --- |
+| 模型 | Ultralytics `yolov8n.pt` 预训练权重，未重新训练 |
+| 类别 | COCO 80 类（person、cup、laptop、keyboard、chair 等） |
+| 导出 | `yolo export model=yolov8n.pt format=litert imgsz=192`（或导出 ONNX） |
+| 输入 | `[1, 3, 192, 192]`，RGB，letterbox 缩放 |
+| 输出 | `[1, 84, 756]`：4 个已归一化的框坐标 + 80 个类别分数，不含 NMS（NMS 在板上做） |
+| 量化与编译 | `rtak convert` 用 100–300 张校准图片量化为全 INT8，再经 Arm Vela 编译 |
+| 运行位置 | Cortex-M55 + Ethos-U55 NPU；模型放在 XIP Flash，推理工作区放在 SOCMEM |
+
+模型导出和校准数据的准备见 RT-AK 仓库 `examples/yolov8/README.md`。
+
 ## 运行效果
 
-示例模型为 YOLOv8n 目标检测（Ultralytics 预训练，COCO 80 类，输入 192×192）：由 RT-AK 量化为 INT8、经 Vela 编译后在 Ethos-U55 NPU 上推理。
-USB 摄像头画面显示在 LCD 上，检测到的目标用彩色框标出，框上显示类别名和置信度，左上角显示帧率：
+USB 摄像头（320×240）的画面实时显示在 LCD 上。每一帧缩放到 192×192 后送进 NPU 推理，在板上解码并做 NMS，结果画回原画面：
+
+* 每个检测到的目标都有一个彩色框，框上显示类别名和置信度（例如 `cup 84%`）；
+* LCD 左上角显示当前帧率；
+* 画面等本帧检测完再显示，框与画面对齐。某一帧漏检的目标，框最多再保留 3 次检测，减少闪烁。
+
+下图为办公桌场景的实拍，同时检测出 `chair`、`cup`、`laptop`、`keyboard`。左上角 `4.9fps 86ms` 表示每秒约检测 4.9 帧，单次推理（NPU 推理加解码和 NMS）平均 86 ms：
 
 <img src="figures/yolov8-detect.jpg" style="zoom:60%;" />
+
+串口每秒打印一行帧率和耗时拆分，并逐个打印检测框（类别、置信度 ×1000、坐标）：
+
+```text
+[yolov8] x.x fps, N ms/frame = prepare N + infer N + other N ms, boxes N-N
+person 873/1000 [102,40,298,371]
+```
+
+`prepare` 是缩放和量化，`infer` 是 NPU 推理加解码和 NMS，`other` 是 LCD 显示和等待下一帧摄像头画面的时间。
 
 操作步骤见第 5 节。
 
