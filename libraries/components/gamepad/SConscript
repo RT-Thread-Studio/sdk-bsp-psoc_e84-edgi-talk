@@ -1,0 +1,19 @@
+from building import DefineGroup, GetCurrentDir, GetDepend
+
+src = ['gamepad.c']
+if GetDepend('RT_USING_MESSAGEQUEUE') and GetDepend('RT_USING_HEAP'):
+    src.append('gamepad_demo.c')
+iine_1001 = GetDepend('HID_HOST_MODEL_IINE_1001')
+iine_1003 = GetDepend('HID_HOST_MODEL_IINE_1003')
+if iine_1001 or iine_1003:
+    src.append('iine_layout.c')
+if iine_1001:
+    src.append('iine_1001.c')
+if iine_1003:
+    src.append('iine_1003.c')
+if GetDepend('HID_HOST_MODEL_GENERIC_HID'):
+    src.append('generic_hid.c')
+
+objs = SConscript('hid_report/SConscript')
+objs += DefineGroup('Gamepad', src, depend=[''], CPPPATH=[GetCurrentDir()])
+Return('objs')

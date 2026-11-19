@@ -1,0 +1,45 @@
+from pathlib import Path
+from building import DefineGroup, File, GetCurrentDir, GetDepend, Glob
+
+cwd = Path(GetCurrentDir())
+sources = [
+    'src/ad_parser.c',
+    'src/btstack_hid_parser.c',
+    'src/btstack_linked_list.c',
+    'src/btstack_memory.c',
+    'src/btstack_memory_pool.c',
+    'src/btstack_run_loop.c',
+    'src/btstack_util.c',
+    'src/classic/btstack_link_key_db_memory.c',
+    'src/classic/hid_host.c',
+    'src/classic/sdp_client.c',
+    'src/classic/sdp_server.c',
+    'src/classic/sdp_util.c',
+    'src/hci.c',
+    'src/hci_cmd.c',
+    'src/hci_dump.c',
+    'src/hci_event.c',
+    'src/hci_event_builder.c',
+    'src/hci_transport_h4.c',
+    'src/l2cap.c',
+    'src/l2cap_signaling.c',
+]
+
+if GetDepend('BSP_USING_BTSTACK_HID_HOST'):
+    sources += [
+        'src/ble/att_dispatch.c',
+        'src/ble/gatt_client.c',
+        'src/ble/le_device_db_memory.c',
+        'src/ble/sm.c',
+        'src/btstack_crypto.c',
+        'src/btstack_tlv.c',
+        '3rd-party/micro-ecc/uECC.c',
+    ]
+
+src = [File('upstream/' + name) for name in sorted(sources)]
+src += Glob('port/rtthread/*.c')
+includes = [str(cwd / name) for name in ('upstream/src', 'upstream/3rd-party/micro-ecc',
+                                          'port/rtthread', 'patches')]
+# The enabling profile or project supplies btstack_config.h in its CPPPATH.
+group = DefineGroup('BlueKitchen BTstack', src, depend=[''], CPPPATH=includes)
+Return('group')

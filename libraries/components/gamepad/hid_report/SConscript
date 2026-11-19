@@ -1,0 +1,4 @@
+from building import DefineGroup, GetCurrentDir, Glob
+
+group = DefineGroup('HID gamepad report', Glob('*.c'), depend=[''], CPPPATH=[GetCurrentDir()])
+Return('group')

@@ -1,0 +1,4 @@
+from building import SConscript
+
+objs = SConscript('applications/SConscript') + SConscript('board/SConscript')
+Return('objs')

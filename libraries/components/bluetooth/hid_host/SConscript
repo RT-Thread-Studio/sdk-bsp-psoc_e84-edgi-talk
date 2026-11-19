@@ -1,0 +1,7 @@
+import os
+from building import DefineGroup, GetCurrentDir, Glob
+
+cwd = GetCurrentDir()
+group = DefineGroup('BTstack HID host', Glob('*.c'), depend=['BSP_USING_BTSTACK_HID_HOST'],
+                    CPPPATH=[cwd, os.path.join(cwd, 'config')])
+Return('group')

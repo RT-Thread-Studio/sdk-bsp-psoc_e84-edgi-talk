@@ -1,0 +1,77 @@
+import os
+import sys
+
+import rtconfig
+
+ROOT = os.path.abspath('.')
+
+# RT-Thread Studio copies these folders beside the application. A source
+# checkout shares them with the other projects in this BSP.
+def shared_dir(name, checkout_path):
+    local = os.path.join(ROOT, name)
+    return local if os.path.isdir(local) else os.path.abspath(checkout_path)
+
+RTT_ROOT = shared_dir('rt-thread', '../../../rt-thread')
+libraries = shared_dir('libraries', '../../../libraries')
+board_libs = shared_dir('libs', '../../libs')
+SDK_LIB = os.path.join(libraries, 'components')
+sys.path.insert(0, os.path.join(RTT_ROOT, 'tools'))
+from building import *
+
+Export('RTT_ROOT', 'rtconfig', 'SDK_LIB')
+DefaultEnvironment(tools=[])
+env = Environment(tools=['mingw'], ENV=os.environ.copy(),
+                  AS=rtconfig.AS, ASFLAGS=rtconfig.AFLAGS,
+                  CC=rtconfig.CC, CFLAGS=rtconfig.CFLAGS,
+                  CXX=rtconfig.CXX, CXXFLAGS=rtconfig.CXXFLAGS,
+                  AR=rtconfig.AR, ARFLAGS='-rc',
+                  LINK=rtconfig.LINK, LINKFLAGS=rtconfig.LFLAGS)
+env.PrependENVPath('PATH', rtconfig.EXEC_PATH)
+env.AppendUnique(CPPPATH=[ROOT])
+rtconfig.BSP_LIBRARY_TYPE = 'Packages'
+objs = PrepareBuilding(env, RTT_ROOT, has_libcpu=False)
+
+# The Cortex-M55 port reuses M33 sources through absolute paths. Select
+# their existing kernel variant so builds never put objects in rt-thread/.
+m33_dir = os.path.join(RTT_ROOT, 'libcpu', 'arm', 'cortex-m33')
+for i, source in enumerate(objs):
+    if getattr(source, 'dir', None) and source.dir.abspath == m33_dir:
+        objs[i] = File('build/kernel/libcpu/arm/cortex-m33/' + source.name)
+
+if os.name == 'nt':
+    # The stack and PDL include paths can exceed the Windows command limit.
+    def gcc_response_arg(argument):
+        # GCC reads response files with backslash escaping even on Windows.
+        # Preserve literal quotes in definitions and separators in paths.
+        return '"' + str(argument).replace('\\', '\\\\').replace('"', '\\"') + '"'
+
+    env['MAXLINELENGTH'] = 8191
+    env['TEMPFILEARGESCFUNC'] = gcc_response_arg
+    for key in ('CCCOM', 'CXXCOM', 'ASCOM', 'ASPPCOM', 'LINKCOM'):
+        command = env.get(key)
+        if isinstance(command, str) and 'TEMPFILE' not in command:
+            env[key] = '${TEMPFILE("' + command + '")}'
+
+objs += SConscript(os.path.join(board_libs, 'SConscript'),
+                   variant_dir='build/libs', duplicate=0)
+for source in [
+    'HAL_Drivers',
+    'components/Infineon_cmsis-latest',
+    'components/Infineon_core-lib-latest',
+    'components/mtb-device-support-pse8xxgp/hal',
+    'components/mtb-device-support-pse8xxgp/pdl',
+    'components/async-transfer',
+    'components/mtb-device-support-pse8xxgp/device-utils/syspm',
+    'components/serial-memory',
+    'components/Infineon_retarget-io-latest',
+    'components/ASRC',
+    'components/mtb-srf',
+    'components/mtb-ipc',
+    'components/littlefs',
+    'components',
+    'Common/board',
+]:
+    objs += SConscript(os.path.join(libraries, source, 'SConscript'),
+                       variant_dir='build/libraries/' + source, duplicate=0)
+
+DoBuilding('rt-thread.' + rtconfig.TARGET_EXT, objs)
