@@ -458,6 +458,26 @@ endmenu
 
 menu "Board extended module Drivers"
     source "libraries/components/wifi-host-driver/Kconfig"
+
+    config BSP_USING_BTSTACK
+        bool
+
+    config BSP_USING_BTSTACK_HID_HOST
+        bool "Enable BTstack BR/EDR and BLE HID host (CYW55512 SCB4)"
+        depends on RT_USING_HEAP
+        select BSP_USING_BTSTACK
+        select RT_USING_HID_HOST
+        select BSP_USING_GPIO
+        select RT_USING_EVENT
+        select RT_USING_MUTEX
+        select RT_USING_SEMAPHORE
+        select RT_USING_MESSAGEQUEUE
+        help
+            Discover BR/EDR and BLE devices using one controller. Connect
+            through Classic HID or HID over GATT according to the selected
+            scan entry. Both transports use BlueKitchen BTstack on SCB4.
+
+    source "$RTT_DIR/../libraries/components/gamepad/Kconfig"
 endmenu
 
 endmenu

@@ -1,0 +1,5 @@
+from building import DefineGroup, GetCurrentDir
+
+group = DefineGroup('Bluetooth HCI UART interface', [], depend=[''],
+                    CPPPATH=[GetCurrentDir()])
+Return('group')

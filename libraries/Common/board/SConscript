@@ -11,6 +11,10 @@ src = []
 path =  [cwd]
 CPPDEFINES = []
 
+if GetDepend('BSP_USING_BTSTACK_HID_HOST'):
+    src += Glob('ports/bluetooth/edgi_bluetooth.c')
+    src += Glob('ports/bluetooth/edgi_hid_store.c')
+
 if GetDepend(['BSP_USING_FLASH']):
     src += Glob('ports/fal/fal_flash_port.c')
     path += [cwd + '/ports/fal']

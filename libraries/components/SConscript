@@ -15,4 +15,12 @@ if GetDepend('PKG_USING_CHERRYUSB') or GetDepend('RT_USING_CHERRYUSB'):
 if GetDepend(['RT_USING_WIFI_HOST_DRIVER']):
     objs = objs + SConscript('wifi-host-driver/SConscript')
 
+btstack_hid = GetDepend('BSP_USING_BTSTACK_HID_HOST')
+# Older project configs enable the profile directly.
+if GetDepend('BSP_USING_BTSTACK') or btstack_hid:
+    objs += SConscript('bluetooth/SConscript')
+
+if GetDepend('RT_USING_HID_HOST') or btstack_hid:
+    objs += SConscript('gamepad/SConscript')
+
 Return('objs')

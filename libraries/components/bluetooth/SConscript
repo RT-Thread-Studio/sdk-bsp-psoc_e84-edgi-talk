@@ -1,0 +1,13 @@
+from building import GetDepend
+
+objs = SConscript('hci/SConscript')
+hid_host = GetDepend('BSP_USING_BTSTACK_HID_HOST')
+if hid_host:
+    objs += SConscript('cyw55512/SConscript')
+
+objs += SConscript('btstack/SConscript')
+
+if hid_host:
+    objs += SConscript('hid_host/SConscript')
+
+Return('objs')

@@ -645,6 +645,11 @@ static cy_en_rram_status_t Cy_RRAM_UpdateBlock(cy_stc_rram_config_t * config, co
                 nvm_addr[wordCount] = blk.w[wordCount];
             }
 
+#if (CY_CPU_CORTEX_M55)
+            /* Drain host-interface writes before starting the operation
+             * through the RRAM controller's MMIO interface. */
+            __DSB();
+#endif
             Cy_RRAM_StartOperation(config->base);
 
             timeout = CY_RRAM_OPERATION_TIMEOUT / CY_RRAM_STATUS_CHECK_DELAY;
@@ -697,6 +702,9 @@ static cy_en_rram_status_t Cy_RRAM_UpdateBlock(cy_stc_rram_config_t * config, co
         {
             nvm_addr[wordCount] = blk.w[wordCount];
         }
+#if (CY_CPU_CORTEX_M55)
+        __DSB();
+#endif
         Cy_RRAM_StartOperation(config->base);
         status = CY_RRAM_SUCCESS;
     }

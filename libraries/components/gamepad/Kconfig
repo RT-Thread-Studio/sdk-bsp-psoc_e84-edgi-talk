@@ -1,0 +1,32 @@
+config RT_USING_HID_HOST
+    bool
+
+config HID_HOST_USING_PNP_ID
+    bool
+
+menu "Gamepad models"
+    depends on RT_USING_HID_HOST
+
+config HID_HOST_MODEL_IINE_1001
+    bool "IINE-1001 (BLE Gamepad mode)"
+    default y if BSP_USING_BTSTACK_HID_HOST
+    select HID_HOST_USING_PNP_ID
+    help
+        Label A, B and D-pad input on the BLE Wireless Controller endpoint.
+        Recognition checks the device's PnP ID and its HID Report Map.
+
+config HID_HOST_MODEL_IINE_1003
+    bool "IINE-1003 (Classic HID physical key mapping)"
+    default y if BSP_USING_BTSTACK_HID_HOST
+    help
+        Use the verified Wireless Controller report layout and physical
+        button names. Recognition requires its Classic HID descriptor.
+
+config HID_HOST_MODEL_GENERIC_HID
+    bool "Generic HID (report descriptor)"
+    default y
+    help
+        Decode supported HID usages such as buttons, axes and hats from the
+        device report descriptor. This fallback can coexist with model drivers.
+
+endmenu

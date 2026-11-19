@@ -1,0 +1,5 @@
+from building import DefineGroup, GetCurrentDir, Glob
+
+group = DefineGroup('CYW55512 HCI UART', Glob('*.c'), depend=[''],
+                    CPPPATH=[GetCurrentDir()])
+Return('group')
