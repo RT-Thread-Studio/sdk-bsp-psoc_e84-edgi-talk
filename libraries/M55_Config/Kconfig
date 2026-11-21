@@ -30,6 +30,11 @@ menu "Onboard Peripheral Drivers"
             bool "Enable Audio Play"
             default n
 
+            config BSP_USING_AUDIO_STEREO
+            bool "Enable stereo audio output (interleaved L/R, no mono duplication)"
+            depends on BSP_USING_AUDIO_PLAY
+            default n
+
             menuconfig BSP_USING_AUDIO_RECORD
                 bool "Enable Audio Record"
                 default n
@@ -322,7 +327,11 @@ menu "On-chip Peripheral Drivers"
             config BSP_USING_UART2
                 bool "Enable UART2"
                 default y
-                
+
+            config BSP_USING_UART4
+                bool "Enable UART4 (Bluetooth HCI UART / SCB4)"
+                default n
+
             config BSP_USING_UART5
                 bool "Enable UART5"
                 default n

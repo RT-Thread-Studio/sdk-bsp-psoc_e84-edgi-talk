@@ -37,6 +37,12 @@ bool i2s_skip_frame = false;
 
 #define TX_FIFO_SIZE         (4096)
 
+#ifdef BSP_USING_AUDIO_STEREO
+#define AUDIO_TX_BUFFER_SIZE (2 * TX_FIFO_SIZE)
+#else
+#define AUDIO_TX_BUFFER_SIZE TX_FIFO_SIZE
+#endif
+
 static volatile bool i2s_data_ready_flag = false;
 
 uint8_t i2s_playback_volume = DEFAULT_VOLUME;
@@ -151,7 +157,7 @@ void ifx_set_samplerate(struct rt_audio_configure audio_config)
                 Cy_SysClk_PeriPclkSetFracDivider((en_clk_dst_t)CYBSP_TDM_CONTROLLER_0_CLK_DIV_GRP_NUM, CY_SYSCLK_DIV_16_5_BIT, 0U, 16U, 0U);
                 break;
             case 48000:
-                Cy_SysClk_PeriPclkSetFracDivider((en_clk_dst_t)CYBSP_TDM_CONTROLLER_0_CLK_DIV_GRP_NUM, CY_SYSCLK_DIV_16_5_BIT, 0U, 8U, 0U);
+                Cy_SysClk_PeriPclkSetFracDivider((en_clk_dst_t)CYBSP_TDM_CONTROLLER_0_CLK_DIV_GRP_NUM, CY_SYSCLK_DIV_16_5_BIT, 0U, 7U, 0U);
                 break;
             case 96000:
                 Cy_SysClk_PeriPclkSetFracDivider((en_clk_dst_t)CYBSP_TDM_CONTROLLER_0_CLK_DIV_GRP_NUM, CY_SYSCLK_DIV_16_5_BIT, 0U, 3U, 0U);
@@ -484,10 +490,16 @@ static void sound_buffer_info(struct rt_audio_device *audio, struct rt_audio_buf
      * +----------------+----------------+
      *  \  block_size  /
      */
-    info->buffer      = snd_dev->tx_buff;
+    info->buffer = snd_dev->tx_buff;
+#ifdef BSP_USING_AUDIO_STEREO
+    info->total_size  = AUDIO_TX_BUFFER_SIZE;
+    info->block_size  = TX_FIFO_SIZE;
+    info->block_count = 2;
+#else
     info->total_size  = TX_FIFO_SIZE;
     info->block_size  = TX_FIFO_SIZE / 2;
     info->block_count = 2;
+#endif
 }
 
 
@@ -508,11 +520,10 @@ int rt_hw_sound_init(void)
     rt_err_t ret = RT_EOK;
     rt_uint8_t *tx_buff;
 
-    tx_buff = (rt_uint8_t *)rt_malloc(TX_FIFO_SIZE);
-
-    rt_memset(tx_buff, 0, TX_FIFO_SIZE);
+    tx_buff = (rt_uint8_t *)rt_malloc(AUDIO_TX_BUFFER_SIZE);
     if (tx_buff == RT_NULL)
         return -RT_ENOMEM;
+    rt_memset(tx_buff, 0, AUDIO_TX_BUFFER_SIZE);
     snd_dev.tx_buff = tx_buff;
     /* init default configuration */
     snd_dev.audio_config.samplerate = 16000;
@@ -668,6 +679,23 @@ void i2s_playback_task(void *arg)
         convert_mono_to_stereo((int16_t *)asrc_out_up_sampled_buffer_16bit,
                                (PLAYBACK_DATA_FRAME_SIZE / 2),
                                inactive_i2s_playback_buffer_ptr);
+#elif defined(BSP_USING_AUDIO_STEREO)
+        {
+            rt_uint32_t stereo_samples = i2s_playback_q_data.data_len;
+
+            if (stereo_samples > PLAYBACK_DATA_FRAME_SIZE)
+            {
+                stereo_samples = PLAYBACK_DATA_FRAME_SIZE;
+            }
+            rt_memcpy(inactive_i2s_playback_buffer_ptr,
+                      i2s_playback_q_data.data,
+                      stereo_samples * sizeof(int16_t));
+            if (stereo_samples < PLAYBACK_DATA_FRAME_SIZE)
+            {
+                rt_memset(inactive_i2s_playback_buffer_ptr + stereo_samples, 0,
+                          (PLAYBACK_DATA_FRAME_SIZE - stereo_samples) * sizeof(int16_t));
+            }
+        }
 #else
         convert_mono_to_stereo((int16_t *)i2s_playback_q_data.data,
                                (i2s_playback_q_data.data_len),
@@ -760,11 +788,9 @@ void i2s_playback_task(void *arg)
 
 #endif
 
-        /* Only for the first frame, push the AEC reference data from the task. */
+        rt_audio_tx_complete(audio);
 
-        /* Wait for notification from I2S ISR for completion of previous
-         * audio frame playback.
-         */
+        /* Wait for the ISR to activate the buffer prepared above. */
         if (!first_frame && !i2s_deinit_flag)
         {
             rt_sem_take(snd_dev->tx_sem, RT_WAITING_FOREVER);
@@ -772,18 +798,18 @@ void i2s_playback_task(void *arg)
 
         /* Reset first frame flag. */
         first_frame = false;
+
+#if defined(PKG_USING_WAVPLAYER) && !defined(BSP_USING_XiaoZhi)
         while (audio->replay->queue.is_empty == 1)
         {
             rt_thread_mdelay(1);
-#if defined(PKG_USING_WAVPLAYER) && !defined(BSP_USING_XiaoZhi)
             if(count>=50){
                 rt_completion_done(&audio->replay->cmp);
                 count=0;
             }
             count++;
-#endif
         }
-        rt_audio_tx_complete(audio);
+#endif
     }
 }
 

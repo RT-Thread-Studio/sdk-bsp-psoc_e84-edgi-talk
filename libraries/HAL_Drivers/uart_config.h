@@ -34,6 +34,14 @@ cy_stc_sysint_t UART2_SCB_IRQ_cfg =
 };
 #endif
 
+#ifdef BSP_USING_UART4
+cy_stc_sysint_t UART4_SCB_IRQ_cfg =
+{
+    .intrSrc = (IRQn_Type)CYBSP_BT_UART_IRQ,
+    .intrPriority = (7u),
+};
+#endif
+
 #ifdef BSP_USING_UART5
 cy_stc_sysint_t UART5_SCB_IRQ_cfg =
 {
@@ -77,6 +85,24 @@ void uart1_isr_callback(void);
 #endif
 void uart2_isr_callback(void);
 #endif /* BSP_USING_UART2 */
+
+
+/* UART4: Bluetooth HCI UART (SCB4) */
+#if defined(BSP_USING_UART4)
+#ifndef UART4_CONFIG
+#define UART4_CONFIG                                \
+    {                                               \
+        .name = "uart4",                            \
+        .usart_x = CYBSP_BT_UART_HW,                \
+        .intrSrc = CYBSP_BT_UART_IRQ,               \
+        .uart_config = &CYBSP_BT_UART_config,       \
+        .hal_uart_configurator = &CYBSP_BT_UART_hal_config, \
+        .userIsr = uart_isr_callback(uart4),        \
+        .UART_SCB_IRQ_cfg = &UART4_SCB_IRQ_cfg,     \
+    }
+#endif
+void uart4_isr_callback(void);
+#endif /* BSP_USING_UART4 */
 
 
 /* UART5 */

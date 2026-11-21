@@ -270,33 +270,37 @@ static int ifx_uarths_putc(struct rt_serial_device *serial, char c)
     RT_ASSERT(uart != RT_NULL);
 
     uint32_t count = 0;
+    uint32_t retry = 0;
 
     while (count == 0)
     {
         count = Cy_SCB_UART_Put(uart->config->usart_x, c);
+        if (++retry > 1000000u)
+        {
+            break;
+        }
     }
 
-    return (1);
+    return (count == 0) ? -1 : 1;
 }
 
 static int ifx_uarths_getc(struct rt_serial_device *serial)
 {
     int ch;
-    rt_uint8_t read_data;
+    uint32_t read_data;
 
     RT_ASSERT(serial != RT_NULL);
     struct ifx_uart *uart = (struct ifx_uart *)serial->parent.user_data;
     RT_ASSERT(uart != RT_NULL);
 
-    ch = -1;
-
-    if (RT_EOK == mtb_hal_uart_get(uart->config->uart_obj, (uint8_t *)&read_data, 10))
+    read_data = Cy_SCB_UART_Get(uart->config->usart_x);
+    if (read_data == CY_SCB_UART_RX_NO_DATA)
     {
-        ch = read_data & 0xff;
+        ch = -1;
     }
     else
     {
-        ch = -1;
+        ch = (int)(read_data & 0xffu);
     }
 
     return ch;

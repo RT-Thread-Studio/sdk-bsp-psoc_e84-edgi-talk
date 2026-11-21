@@ -39,6 +39,7 @@ categories:
     patterns:
       - "Edgi_Talk_M55_LVGL"
       - "Edgi_Talk_M55_XiaoZhi"
+      - "Edgi_Talk_M55_BT_Speaker"
   usb:
     name: "USB篇"
     name_en: "USB"
