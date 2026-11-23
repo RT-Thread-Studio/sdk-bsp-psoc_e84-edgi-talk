@@ -1,0 +1,1083 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edgi-Talk_M33_Driver_All Multi-Demo Project &mdash; psoc_e84-edgi-talk SDK 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/version_menu.css?v=ad0e61b7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=694004e0" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pdf_button.css?v=b2b664f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/edit_button.css?v=d629c565" />
+      <link rel="stylesheet" type="text/css" href="../../_static/language_switch.css?v=e28326ac" />
+      <link rel="stylesheet" type="text/css" href="../../_static/dark_mode.css?v=72ec50b7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a12e3537"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/version_menu.js?v=0cfa4c94"></script>
+      <script src="../../_static/download_pdf.js?v=d1800c12"></script>
+      <script src="../../_static/version_info.js"></script>
+      <script src="../../_static/edit_on_github.js?v=5e1f1957"></script>
+      <script src="../../_static/language_switch.js?v=87312f67"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Edgi-Talk_M55_Driver_All Example Project" href="../Edgi_Talk_M55_Driver_All/README.html" />
+    <link rel="prev" title="Drivers" href="../index.html" />
+   
+  
+  
+    <script>window.SPHINX_EDIT_BASE_URL = "https://github.com/RT-Thread-Studio/sdk-bsp-psoc_e84-edgi-talk/edit/";</script>
+    <meta name="edit-base-url" content="https://github.com/RT-Thread-Studio/sdk-bsp-psoc_e84-edgi-talk/edit/">
+  
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            psoc_e84-edgi-talk SDK
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../basic/index.html">Basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../basic/Edgi_Talk_M33_Template/README.html">Edgi_Talk_M33_Template Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../basic/Edgi_Talk_M33_Template/README.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../basic/Edgi_Talk_M33_Template/README.html#software-description">Software Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../basic/Edgi_Talk_M33_Template/README.html#usage-instructions">Usage Instructions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../basic/Edgi_Talk_M33_Template/README.html#compilation-and-download">Compilation and Download</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../basic/Edgi_Talk_M33_Template/README.html#runtime-behavior">Runtime Behavior</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../basic/Edgi_Talk_M33_Template/README.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../basic/Edgi_Talk_M33_Template/README.html#boot-sequence">Boot Sequence</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Drivers</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Edgi-Talk_M33_Driver_All Multi-Demo Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#software-description">Software Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aht20-temperature-and-humidity-demo">AHT20 Temperature and Humidity Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#function">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#lsm6ds3-6-axis-sensor-demo">LSM6DS3 6-Axis Sensor Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hardware">Hardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#audio-loopback-demo">Audio Loopback Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Hardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#wavplayer-audio-playback-demo">WavPlayer Audio Playback Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">Hardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id16">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#coremark-benchmark-demo">CoreMark Benchmark Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id17">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#adc-demo">ADC Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id19">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">Hardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id24">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#hyperram-demo">HyperRAM Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id25">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#basic-read-write-check">Basic Read/Write Check</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bandwidth-test">Bandwidth Test</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#key-interrupt-demo">Key Interrupt Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id26">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id27">Hardware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id30">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rtc-demo">RTC Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id31">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id32">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sd-card-demo">SD Card Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id33">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#file-write-read-test">File Write/Read Test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sequential-read-write-speed-test">Sequential Read/Write Speed Test</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#flash-filesystem-demo">Flash Filesystem Demo</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id34">Function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id35">Sequential Read/Write Speed Test</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#build-and-flash">Build and Flash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boot-sequence">Boot Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html">Edgi-Talk_M55_Driver_All Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#introduction">Introduction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#command-overview">Command Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#software-description">Software Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#usage-instructions">Usage Instructions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#compilation-and-download">Compilation and Download</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#runtime-behavior">Runtime Behavior</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#common-demos">Common Demos</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#aht20-temperature-and-humidity-demo">AHT20 Temperature and Humidity Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#lsm6ds3-6-axis-sensor-demo">LSM6DS3 6-Axis Sensor Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#audio-loopback-demo">Audio Loopback Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#wavplayer-audio-playback-demo">WavPlayer Audio Playback Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#adc-demo">ADC Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#hyperram-demo">HyperRAM Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#key-interrupt-demo">Key Interrupt Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#rtc-demo">RTC Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#sd-card-demo">SD Card Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#flash-filesystem-demo">Flash Filesystem Demo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#coremark-benchmark-demo">CoreMark Benchmark Demo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_Driver_All/README.html#boot-sequence">Boot Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html">Edgi_Talk_M55_WIFI Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#hardware-overview">Hardware Overview</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#wi-fi-interface">Wi-Fi Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#btb-socket">BTB Socket</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#mcu-interface">MCU Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#software-description">Software Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#build-and-download">Build and Download</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#prepare-wi-fi-resources">Prepare Wi-Fi Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#running-result">Running Result</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Edgi_Talk_M55_WIFI/README.html#startup-sequence">Startup Sequence</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../component/index.html">Example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html">Edgi-Talk_M55_LVGL Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#introduction">Introduction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#lvgl-overview">LVGL Overview</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#hardware-description">Hardware Description</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#backlight-interface">Backlight Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#mipi-interface">MIPI Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#pwr-interface">PWR Interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#btb-socket">BTB Socket</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#mcu-interface">MCU Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#software-description">Software Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#demo-description">Demo Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#build-and-download">Build and Download</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#running-result">Running Result</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_LVGL/README.html#startup-sequence">Startup Sequence</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html">XiaoZhi Sample Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#software-description">Software Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#prepare-wi-fi-resources-first-time-setup">Prepare Wi-Fi resources (first-time setup)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#first-time-setup-ap-configuration">1. First-time setup (AP configuration)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#xiaozhi-expression-meaning">XiaoZhi Expression Meaning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#connecting-please-wait">1. Connecting (please wait)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#monitoring-press-the-button-to-start-talking">2. Monitoring (press the button to start talking)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#listening-processing-your-speech">3. Listening (processing your speech)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#speaking-xiaozhi-is-responding-to-you">4. Speaking (XiaoZhi is responding to you)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#sleep-mode-low-power">5. Sleep mode (low power)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#running-effect">Running Effect</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../component/Edgi_Talk_M55_XiaoZhi/README.html#startup-sequence">Startup Sequence</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../usb/index.html">USB</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html">Edgi_Talk_Extend_Screen CherryUSB USB Extend Screen Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#default-configuration">Default Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#build-and-flash">Build and Flash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#configuration-switching-modes">Configuration (Switching Modes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#windows-idd-driver">Windows IDD Driver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#how-to-use">How to use</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#startup-sequence">Startup Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen/README.html#id1">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html">Edgi_Talk_M33_USB_RoleSwitch CherryUSB Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html#default-configuration">Default Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html#build-and-flash">Build and Flash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html#configuration-switching-modes">Configuration (Switching Modes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html#usb-cdc-device-result">USB CDC Device Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html#usb-u-disk-host-result">USB U-Disk (Host) Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html#startup-sequence">Startup Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M33_USB_RoleSwitch/README.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html">Edgi_Talk_M55_USB_RoleSwitch CherryUSB Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html#default-configuration">Default Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html#build-and-flash">Build and Flash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html#configuration-switching-modes">Configuration (Switching Modes)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html#usb-u-disk-host-result">USB U-Disk (Host) Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html#cm55-enable-configuration">CM55 Enable Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html#startup-sequence">Startup Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch/README.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC/README.html">Edgi_Talk_M55_USB_UVC CherryUSB Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC/README.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC/README.html#default-configuration">Default Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC/README.html#build-and-flash">Build and Flash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC/README.html#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC/README.html#runtime-result">Runtime Result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC/README.html#startup-sequence">Startup Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC/README.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html">Edgi_Talk_USB_Deepcraft Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html#default-configuration">Default Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html#integrated-device-capabilities">Integrated Device Capabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html#build-and-flash">Build and Flash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html#deepcraft-studio-usage">Deepcraft Studio Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html#host-communication-notes">Host Communication Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html#startup-sequence">Startup Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../usb/Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft/README.html#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ipc/index.html">IPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html">Edgi_Talk_M33_IPC Dual-Core Communication Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#default-configuration">Default Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#build-and-flash">Build and Flash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#important-notes">Important Notes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#serial-connection">Serial Connection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#ch340-module-connection">CH340 Module Connection</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#configuration-and-build">1. Configuration and Build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#run-example">2. Run Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#observe-output">3. Observe Output</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#data-protocol">Data Protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#startup-sequence">Startup Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#hardware-connection">Hardware Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#configuration-parameters">Configuration Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M33_IPC/README.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html">Edgi_Talk_M55_IPC Dual-Core Communication Example Project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#default-configuration">Default Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#build-and-flash">Build and Flash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#configuration-and-build">1. Configuration and Build</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#run-example">2. Run Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#observe-output">3. Observe Output</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#data-protocol">Data Protocol</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#startup-sequence">Startup Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#hardware-connection">Hardware Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#working-principle">Working Principle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ipc/Edgi_Talk_IPC/Edgi_Talk_M55_IPC/README.html#configuration-parameters">Configuration Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ai/index.html">AI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html">Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#overview">1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#main-differences-vs-modustoolbox-example">2. Main Differences vs. ModusToolbox Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#key-directory-paths">3. Key Directory Paths</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#environment-and-dependencies">4. Environment and Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#important-configuration-items">5. Important Configuration Items</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#build-and-flash">6. Build and Flash</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#rt-thread-studio">6.1 RT-Thread Studio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#command-line-scons">6.2 Command line (SCons)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#run-steps">7. Run Steps</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#runtime-screenshots">7.1 Runtime Screenshots</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#logs-and-behavior">8. Logs and Behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#error-handling">9. Error Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#model-replacement">10. Model Replacement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../ai/Edgi_Talk_M55_DEEPCRAFT_Deploy_Vision/README.html#multi-core-boot-chain">11. Multi-core Boot Chain</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq/index.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../faq/FAQ_page/%E6%8B%93%E5%B1%95%E5%A4%96%E8%AE%BE%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/README.html">PWM Device Configurator 配置指南</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../faq/FAQ_page/%E6%8B%93%E5%B1%95%E5%A4%96%E8%AE%BE%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/README.html#id1">打开配置文件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq/FAQ_page/%E6%8B%93%E5%B1%95%E5%A4%96%E8%AE%BE%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/README.html#tcpwm-pwm">1. 配置 TCPWM 为 PWM 模式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq/FAQ_page/%E6%8B%93%E5%B1%95%E5%A4%96%E8%AE%BE%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/README.html#id2">2. 选择输入时钟源</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq/FAQ_page/%E6%8B%93%E5%B1%95%E5%A4%96%E8%AE%BE%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/README.html#pwm">3. 设置 PWM 输出引脚</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq/FAQ_page/%E6%8B%93%E5%B1%95%E5%A4%96%E8%AE%BE%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/README.html#id3">4. 设置输入引脚模式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../faq/FAQ_page/%E6%8B%93%E5%B1%95%E5%A4%96%E8%AE%BE%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/README.html#id4">保存配置</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../faq/FAQ_page/README.html">常见问题解答（FAQ）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../faq/FAQ_page/README.html#id1">一、烧录</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../faq/FAQ_page/README.html#q1">Q1. 烧录固件出错</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../faq/FAQ_page/README.html#q2-edgi-talk-m55-xxx">Q2. 为什么烧录了Edgi_Talk_M55_XXX工程后，没有现象？</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../faq/FAQ_page/README.html#q3">Q3.烧录固件出错</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">psoc_e84-edgi-talk SDK</a>
+      </nav>
+
+      <div class="wy-nav-content">
+  
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Drivers</a></li>
+      <li class="breadcrumb-item active">Edgi-Talk_M33_Driver_All Multi-Demo Project</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="edgi-talk-m33-driver-all-multi-demo-project">
+<h1>Edgi-Talk_M33_Driver_All Multi-Demo Project<a class="headerlink" href="#edgi-talk-m33-driver-all-multi-demo-project" title="Link to this heading"></a></h1>
+<p><a class="reference internal" href="README.html"><span class="std std-doc"><strong>Chinese</strong></span></a> | <strong>English</strong></p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>This project is based on the <strong>Edgi-Talk platform</strong> and runs on <strong>RT-Thread on the Cortex-M33 core</strong>. It integrates multiple common peripheral demos into one firmware, making it convenient to validate sensors, ADC, HyperRAM, key interrupts, RTC, SD card filesystem, external Flash filesystem, and WAV audio playback in a single image.</p>
+<p>The project provides the following MSH commands:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">demo_aht20</span></code></p></td>
+<td><p>Read AHT10/AHT20 temperature and humidity</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">demo_lsm6ds3</span> <span class="pre">[count]</span> <span class="pre">[delay_ms]</span></code></p></td>
+<td><p>Read LSM6DS3 6-axis sensor data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">demo_audio</span> <span class="pre">start/stop/status</span> <span class="pre">[speaker_volume]</span> <span class="pre">[mic_gain]</span></code></p></td>
+<td><p>Real-time audio microphone-to-speaker loopback</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">wavplay</span> <span class="pre">-s</span> <span class="pre">&lt;file&gt;</span></code></p></td>
+<td><p>Play a WAV audio file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">demo_adc</span></code></p></td>
+<td><p>Read ADC1 Channel 1 voltage</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">demo_hyperram</span></code></p></td>
+<td><p>Run a basic HyperRAM read/write check</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">demo_hyperram_speed</span> <span class="pre">[size_kb]</span> <span class="pre">[loops]</span></code></p></td>
+<td><p>Run a HyperRAM bandwidth test</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">demo_key</span></code></p></td>
+<td><p>Register the P8.3 key interrupt and toggle the blue LED when pressed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">demo_rtc</span> <span class="pre">[YYYY</span> <span class="pre">MM</span> <span class="pre">DD</span> <span class="pre">HH</span> <span class="pre">MM</span> <span class="pre">SS]</span></code></p></td>
+<td><p>Read or set RTC time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">demo_sdcard</span></code></p></td>
+<td><p>Run an SD card file write/read test</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">demo_sdcard_speed</span> <span class="pre">[total_kb]</span> <span class="pre">[block_kb]</span></code></p></td>
+<td><p>Run an SD card sequential read/write speed test</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">demo_flash_speed</span> <span class="pre">[total_kb]</span> <span class="pre">[block_kb]</span></code></p></td>
+<td><p>Run a <code class="docutils literal notranslate"><span class="pre">/flash</span></code> filesystem sequential read/write speed test</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">core_mark</span></code></p></td>
+<td><p>Run the CoreMark CPU benchmark</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="software-description">
+<h2>Software Description<a class="headerlink" href="#software-description" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The project is developed for the <strong>Edgi-Talk</strong> platform.</p></li>
+<li><p><strong>RT-Thread</strong> is used as the operating system kernel.</p></li>
+<li><p>Each demo is triggered manually through an MSH command to avoid running multiple peripheral tests automatically after boot.</p></li>
+<li><p>The Audio demo uses the RT-Thread Audio framework, PDM microphone, and ES8388 codec. It occupies <code class="docutils literal notranslate"><span class="pre">mic0</span></code> and <code class="docutils literal notranslate"><span class="pre">sound0</span></code> after startup.</p></li>
+<li><p>The WavPlayer demo uses the RT-Thread <code class="docutils literal notranslate"><span class="pre">wavplayer</span></code> package to play WAV files. It occupies <code class="docutils literal notranslate"><span class="pre">sound0</span></code> during playback and cannot run together with the <code class="docutils literal notranslate"><span class="pre">demo_audio</span></code> loopback.</p></li>
+<li><p>CoreMark uses the RT-Thread <code class="docutils literal notranslate"><span class="pre">CoreMark</span></code> package. The default iteration count is <code class="docutils literal notranslate"><span class="pre">36000</span></code>, and it is started manually through an MSH command.</p></li>
+<li><p>SD card mounting is handled by the common filesystem initialization logic. The card is mounted automatically after insertion and unmounted after removal.</p></li>
+<li><p>External Flash is registered as <code class="docutils literal notranslate"><span class="pre">norflash0</span></code> through FAL. The <code class="docutils literal notranslate"><span class="pre">filesystem</span></code> partition is mounted to <code class="docutils literal notranslate"><span class="pre">/flash</span></code> as littlefs.</p></li>
+<li><p>Normal SDIO <code class="docutils literal notranslate"><span class="pre">CMD5</span> <span class="pre">arg=0</span></code> timeout probing logs are silenced to avoid repeated console output during normal SD card detection.</p></li>
+</ul>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<blockquote>
+<div><p><strong>Note:</strong> This project requires <strong>RT-Thread Studio 2.2.9</strong> or higher.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>The M33 project serial log is not output through the onboard DAP virtual COM port directly. To view <code class="docutils literal notranslate"><span class="pre">msh</span> <span class="pre">/&gt;</span></code> and demo logs, connect an external USB-to-UART adapter, such as CH340.
+The connection position is shown below. Connect the board RX to the UART adapter TX, connect the board TX to the UART adapter RX, and set the host serial baud rate to 115200:</p></li>
+</ul>
+<p><img alt="alt text" src="../../_images/m33_uart1.png" /></p>
+<ul class="simple">
+<li><p>After editing, save the configuration and regenerate the code.</p></li>
+<li><p>Format the SD card as FAT16/FAT32.</p></li>
+<li><p>If the SD card speed result is low, check the card speed grade, filesystem fragmentation, SDIO clock, bus width, and read/write block size first.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/flash</span></code> uses the external Flash <code class="docutils literal notranslate"><span class="pre">filesystem</span></code> partition. If the first mount fails, it is automatically formatted. If you need to preserve data on this partition, do not run a full-chip erase casually.</p></li>
+<li><p>If this example project does not run correctly, compile and flash <strong>Edgi_Talk_M33_Template</strong> first to ensure the initialization and core startup flow are normal before running this project.</p></li>
+<li><p>To run an M55 project, it is recommended to flash <strong>Edgi_Talk_M33_Template</strong> first. It is a clean M33 project and is suitable as the base firmware before starting M55.</p></li>
+</ul>
+</section>
+<section id="aht20-temperature-and-humidity-demo">
+<h2>AHT20 Temperature and Humidity Demo<a class="headerlink" href="#aht20-temperature-and-humidity-demo" title="Link to this heading"></a></h2>
+<section id="function">
+<h3>Function<a class="headerlink" href="#function" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">demo_aht20</span></code> uses the AHT10/AHT20 package to read temperature and humidity once through <code class="docutils literal notranslate"><span class="pre">i2c1</span></code>, then prints the result through the serial console. The device handle is cached, so repeated command execution does not repeatedly initialize the sensor.</p>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_aht20
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>AHT10: temp 26.3 C, humidity 48.7 %
+</pre></div>
+</div>
+</section>
+</section>
+<section id="lsm6ds3-6-axis-sensor-demo">
+<h2>LSM6DS3 6-Axis Sensor Demo<a class="headerlink" href="#lsm6ds3-6-axis-sensor-demo" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Function<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>This demo is ported from the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M33_LSM6DS3</span></code> example. It demonstrates how to use the <strong>LSM6DS3TR-C 6-axis inertial measurement unit (IMU)</strong>. The LSM6DS3TR-C integrates a 3-axis accelerometer, 3-axis gyroscope, and temperature sensor. It supports I2C/SPI interfaces and is commonly used for posture detection, motion recognition, gesture recognition, and wearable devices.</p>
+<p>The command performs the following operations:</p>
+<ul class="simple">
+<li><p>Detects the LSM6DS3 device ID through <code class="docutils literal notranslate"><span class="pre">i2c0</span></code>.</p></li>
+<li><p>Resets the sensor and configures output data rate, accelerometer range, and gyroscope range.</p></li>
+<li><p>Polls 3-axis acceleration, 3-axis angular rate, and temperature.</p></li>
+<li><p>Prints data through the serial console. It does not print continuously after power-on.</p></li>
+</ul>
+</section>
+<section id="hardware">
+<h3>Hardware<a class="headerlink" href="#hardware" title="Link to this heading"></a></h3>
+<section id="lsm6ds3tr-c-interface">
+<h4>LSM6DS3TR-C Interface<a class="headerlink" href="#lsm6ds3tr-c-interface" title="Link to this heading"></a></h4>
+<p><img alt="LSM6DS3TR-C interface" src="../../_images/lsm6ds3_1.png" /></p>
+</section>
+<section id="btb-connector">
+<h4>BTB Connector<a class="headerlink" href="#btb-connector" title="Link to this heading"></a></h4>
+<p><img alt="LSM6DS3 BTB connector" src="../../_images/lsm6ds3_2.png" /></p>
+</section>
+<section id="mcu-pins">
+<h4>MCU Pins<a class="headerlink" href="#mcu-pins" title="Link to this heading"></a></h4>
+<p><img alt="LSM6DS3 MCU pins" src="../../_images/lsm6ds3_3.png" /></p>
+</section>
+</section>
+<section id="id2">
+<h3>Usage<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_lsm6ds3
+demo_lsm6ds3<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">200</span>
+</pre></div>
+</div>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">count</span></code>: Number of samples. Default is <code class="docutils literal notranslate"><span class="pre">5</span></code>; set to <code class="docutils literal notranslate"><span class="pre">0</span></code> for continuous sampling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delay_ms</span></code>: Sampling interval. Default is <code class="docutils literal notranslate"><span class="pre">500</span> <span class="pre">ms</span></code>.</p></li>
+</ul>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LSM6DS3: found on i2c0 addr 0x6A
+LSM6DS3 sample: count=5, delay=500 ms
+Acceleration [mg]: 15.23  -3.12  1000.45
+Angular rate [mdps]: 2.50  -1.25  0.75
+Temperature [degC]: 26.54
+</pre></div>
+</div>
+</section>
+</section>
+<section id="audio-loopback-demo">
+<h2>Audio Loopback Demo<a class="headerlink" href="#audio-loopback-demo" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Function<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>This demo is ported from the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M33_Audio</span></code> example. It demonstrates real-time audio loopback using <strong>PDM microphone capture + ES8388 codec playback</strong>. The audio device consists of the audio bus interface, control bus interface, codec, speaker, and microphone. The RT-Thread Audio framework handles device registration, open/close, read/write, volume control, and stream control.</p>
+<p>The command performs the following operations:</p>
+<ul class="simple">
+<li><p>Opens the <code class="docutils literal notranslate"><span class="pre">mic0</span></code> recording device and the <code class="docutils literal notranslate"><span class="pre">sound0</span></code> playback device.</p></li>
+<li><p>Explicitly configures audio as 16 kHz, mono, 16-bit, matching the PDM microphone output.</p></li>
+<li><p>Sets speaker volume and microphone gain.</p></li>
+<li><p>Creates a background thread that continuously reads microphone data and writes it to the speaker.</p></li>
+<li><p>Starts and stops manually through MSH commands. It does not enter loopback automatically after power-on.</p></li>
+</ul>
+<blockquote>
+<div><p><strong>Note:</strong> The original Audio project used the P8.3 key to toggle playback state. In this multi-demo project, P8.3 is used by <code class="docutils literal notranslate"><span class="pre">demo_key</span></code>, so the Audio demo is controlled by MSH commands to avoid two demos registering the same key interrupt.</p>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3>Hardware<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<section id="embedded-audio-system">
+<h4>Embedded Audio System<a class="headerlink" href="#embedded-audio-system" title="Link to this heading"></a></h4>
+<p><img alt="Embedded audio system" src="../../_images/audio_system.png" /></p>
+</section>
+<section id="es8388-interface">
+<h4>ES8388 Interface<a class="headerlink" href="#es8388-interface" title="Link to this heading"></a></h4>
+<p><img alt="ES8388 interface" src="../../_images/audio_1.png" /></p>
+</section>
+<section id="speaker-interface">
+<h4>Speaker Interface<a class="headerlink" href="#speaker-interface" title="Link to this heading"></a></h4>
+<p><img alt="Speaker interface" src="../../_images/audio_2.png" /></p>
+</section>
+<section id="control-pins">
+<h4>Control Pins<a class="headerlink" href="#control-pins" title="Link to this heading"></a></h4>
+<p><img alt="Audio control pins" src="../../_images/audio_3.png" /></p>
+</section>
+<section id="id5">
+<h4>BTB Connector<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<p><img alt="Audio BTB connector" src="../../_images/audio_4.png" /></p>
+</section>
+<section id="id6">
+<h4>MCU Pins<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<p><img alt="Audio MCU pins" src="../../_images/audio_5.png" /></p>
+</section>
+<section id="board-location">
+<h4>Board Location<a class="headerlink" href="#board-location" title="Link to this heading"></a></h4>
+<p><img alt="Audio board location" src="../../_images/audio_6.png" /></p>
+</section>
+</section>
+<section id="id7">
+<h3>Usage<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_audio<span class="w"> </span>start
+demo_audio<span class="w"> </span>start<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="m">30</span>
+demo_audio<span class="w"> </span>status
+demo_audio<span class="w"> </span>stop
+</pre></div>
+</div>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">speaker_volume</span></code>: Speaker volume. Default is <code class="docutils literal notranslate"><span class="pre">60</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mic_gain</span></code>: Microphone gain. Default is <code class="docutils literal notranslate"><span class="pre">30</span></code>.</p></li>
+</ul>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Audio loopback started: speaker=60, mic_gain=30
+Audio loopback: running, speaker=60, mic_gain=30
+Stopping audio loopback...
+Audio loopback stopped
+</pre></div>
+</div>
+</section>
+</section>
+<section id="wavplayer-audio-playback-demo">
+<h2>WavPlayer Audio Playback Demo<a class="headerlink" href="#wavplayer-audio-playback-demo" title="Link to this heading"></a></h2>
+<section id="id8">
+<h3>Function<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>This demo is ported from the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M33_WavPlayer</span></code> example. It demonstrates WAV file playback using the <strong>RT-Thread wavplayer package + Audio device driver + filesystem</strong>. <code class="docutils literal notranslate"><span class="pre">wavplayer</span></code> reads the WAV header, configures <code class="docutils literal notranslate"><span class="pre">sound0</span></code> according to the sample rate, channel count, and 16-bit width in the file, then outputs audio through the ES8388 codec and speaker.</p>
+<p>The current project enables:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">wavplay</span></code> playback command.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">optparse</span></code> command-line parsing package.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">sound0</span></code> playback device.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">wavrecord</span></code> recording command is not enabled in this project. Use <code class="docutils literal notranslate"><span class="pre">demo_audio</span></code> for recording/loopback validation to avoid resource-management conflicts in the multi-demo project.</p>
+<blockquote>
+<div><p><strong>Note:</strong> <code class="docutils literal notranslate"><span class="pre">wavplay</span></code> and <code class="docutils literal notranslate"><span class="pre">demo_audio</span></code> both occupy <code class="docutils literal notranslate"><span class="pre">sound0</span></code>. Before playing a WAV file, run <code class="docutils literal notranslate"><span class="pre">demo_audio</span> <span class="pre">stop</span></code> and confirm that the loopback demo has stopped.</p>
+</div></blockquote>
+</section>
+<section id="id9">
+<h3>Hardware<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<section id="audio-system">
+<h4>Audio System<a class="headerlink" href="#audio-system" title="Link to this heading"></a></h4>
+<p><img alt="WavPlayer audio system" src="../../_images/audio_system.png" /></p>
+</section>
+<section id="id10">
+<h4>ES8388 Interface<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<p><img alt="WavPlayer ES8388 interface" src="../../_images/wavplayer_1.png" /></p>
+</section>
+<section id="id11">
+<h4>Speaker Interface<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<p><img alt="WavPlayer speaker interface" src="../../_images/wavplayer_2.png" /></p>
+</section>
+<section id="id12">
+<h4>Control Pins<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<p><img alt="WavPlayer control pins" src="../../_images/wavplayer_3.png" /></p>
+</section>
+<section id="id13">
+<h4>BTB Connector<a class="headerlink" href="#id13" title="Link to this heading"></a></h4>
+<p><img alt="WavPlayer BTB connector" src="../../_images/wavplayer_4.png" /></p>
+</section>
+<section id="id14">
+<h4>MCU Pins<a class="headerlink" href="#id14" title="Link to this heading"></a></h4>
+<p><img alt="WavPlayer MCU pins" src="../../_images/wavplayer_5.png" /></p>
+</section>
+<section id="id15">
+<h4>Board Location<a class="headerlink" href="#id15" title="Link to this heading"></a></h4>
+<p><img alt="WavPlayer board location" src="../../_images/wavplayer_6.png" /></p>
+</section>
+</section>
+<section id="id16">
+<h3>Usage<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<p>Place the WAV file in a mounted filesystem. For example, after the SD card is mounted to <code class="docutils literal notranslate"><span class="pre">/sdcard</span></code>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/sdcard
+wavplay<span class="w"> </span>-s<span class="w"> </span><span class="m">16000</span>.wav
+</pre></div>
+</div>
+<p>You can also use the full path:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>wavplay<span class="w"> </span>-s<span class="w"> </span>/sdcard/16000.wav
+</pre></div>
+</div>
+<p>Common commands:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>wavplay<span class="w"> </span>-h
+wavplay<span class="w"> </span>-s<span class="w"> </span>/sdcard/16000.wav
+wavplay<span class="w"> </span>-t
+wavplay<span class="w"> </span>-p
+wavplay<span class="w"> </span>-r
+wavplay<span class="w"> </span>-v<span class="w"> </span><span class="m">80</span>
+</pre></div>
+</div>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">&lt;file&gt;</span></code>: Start playing the specified WAV file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-t</span></code>: Stop playback.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-p</span></code>: Pause playback.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-r</span></code>: Resume playback.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span> <span class="pre">&lt;0-100&gt;</span></code>: Set playback volume.</p></li>
+</ul>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>msh /sdcard&gt;wavplay -s 16000.wav
+[I/WAV_PLAYER] play start, uri=16000.wav
+</pre></div>
+</div>
+</section>
+</section>
+<section id="coremark-benchmark-demo">
+<h2>CoreMark Benchmark Demo<a class="headerlink" href="#coremark-benchmark-demo" title="Link to this heading"></a></h2>
+<section id="id17">
+<h3>Function<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<p>This demo enables the RT-Thread <code class="docutils literal notranslate"><span class="pre">CoreMark</span></code> package for CPU performance benchmarking. The current configuration refers to the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M55_CoreMark</span></code> project. The default iteration count is <code class="docutils literal notranslate"><span class="pre">36000</span></code>, and the floating-point version is not enabled.</p>
+</section>
+<section id="id18">
+<h3>Usage<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>core_mark
+</pre></div>
+</div>
+<p>The command prints CoreMark parameters, elapsed time, verification result, and final score. Stop other high-load demos during testing to avoid SD card, audio, or sensor polling affecting the result.</p>
+</section>
+</section>
+<section id="adc-demo">
+<h2>ADC Demo<a class="headerlink" href="#adc-demo" title="Link to this heading"></a></h2>
+<section id="id19">
+<h3>Function<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<p>This demo is ported from the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M33_ADC</span></code> example. It demonstrates how to use the <strong>ADC (Analog-to-Digital Converter)</strong>. The ADC converts continuous analog voltage into a digital value for MCU processing.</p>
+<blockquote>
+<div><p><strong>Note:</strong> In the current hardware connection, the ADC is only used to sample battery voltage. The Raspberry Pi connector and other external interfaces are not connected to this ADC channel, so they cannot be sampled by this command.</p>
+</div></blockquote>
+<p>The command performs the following operations:</p>
+<ul class="simple">
+<li><p>Enables ADC1 Channel 1.</p></li>
+<li><p>Pulls the P8.4 ADC power-control pin high on first execution.</p></li>
+<li><p>Reads one ADC raw value and converts it to voltage.</p></li>
+</ul>
+</section>
+<section id="id20">
+<h3>Hardware<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<section id="interface">
+<h4>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h4>
+<p><img alt="ADC interface" src="../../_images/adc_1.png" /></p>
+</section>
+<section id="id21">
+<h4>BTB Connector<a class="headerlink" href="#id21" title="Link to this heading"></a></h4>
+<p><img alt="ADC BTB connector" src="../../_images/adc_2.png" /></p>
+</section>
+<section id="id22">
+<h4>MCU Pins<a class="headerlink" href="#id22" title="Link to this heading"></a></h4>
+<p><img alt="ADC MCU pins" src="../../_images/adc_3.png" /></p>
+</section>
+<section id="id23">
+<h4>Board Location<a class="headerlink" href="#id23" title="Link to this heading"></a></h4>
+<p><img alt="ADC board location" src="../../_images/adc_4.png" /></p>
+</section>
+</section>
+<section id="id24">
+<h3>Usage<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_adc
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CH1: 3.123 V (raw=1340)
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hyperram-demo">
+<h2>HyperRAM Demo<a class="headerlink" href="#hyperram-demo" title="Link to this heading"></a></h2>
+<section id="id25">
+<h3>Function<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<p>This demo is ported from the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M33_HyperRam</span></code> example. It validates <strong>HyperRAM</strong> mapping, basic read/write access, and bandwidth performance. After the HyperRAM driver is initialized, the memory region is mapped into the system address space and can be used by applications for large buffers or external heap.</p>
+</section>
+<section id="basic-read-write-check">
+<h3>Basic Read/Write Check<a class="headerlink" href="#basic-read-write-check" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_hyperram
+</pre></div>
+</div>
+<p>This command allocates a HyperRAM buffer, writes test data, reads it back, and verifies the result.</p>
+</section>
+<section id="bandwidth-test">
+<h3>Bandwidth Test<a class="headerlink" href="#bandwidth-test" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_hyperram_speed
+demo_hyperram_speed<span class="w"> </span><span class="m">1024</span><span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">size_kb</span></code>: Data size for each test. The default value is set inside the demo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loops</span></code>: Loop count. Larger values produce more stable statistics.</p></li>
+</ul>
+<p>The test includes sequential write, sequential read, and memory-copy throughput.</p>
+</section>
+</section>
+<section id="key-interrupt-demo">
+<h2>Key Interrupt Demo<a class="headerlink" href="#key-interrupt-demo" title="Link to this heading"></a></h2>
+<section id="id26">
+<h3>Function<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<p>This demo is ported from the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M33_Key_Irq</span></code> example. It demonstrates GPIO interrupt usage through the RT-Thread PIN driver.</p>
+<p>The command performs the following operations:</p>
+<ul class="simple">
+<li><p>Configures P8.3 as pull-up input.</p></li>
+<li><p>Registers a falling-edge interrupt callback.</p></li>
+<li><p>Toggles the P16.5 blue LED and prints the state after each key press.</p></li>
+</ul>
+</section>
+<section id="id27">
+<h3>Hardware<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<section id="button-interface">
+<h4>Button Interface<a class="headerlink" href="#button-interface" title="Link to this heading"></a></h4>
+<p><img alt="Key interface" src="../../_images/key_1.png" /></p>
+</section>
+<section id="id28">
+<h4>BTB Connector<a class="headerlink" href="#id28" title="Link to this heading"></a></h4>
+<p><img alt="Key BTB connector" src="../../_images/key_2.png" /></p>
+</section>
+<section id="mcu-interface">
+<h4>MCU Interface<a class="headerlink" href="#mcu-interface" title="Link to this heading"></a></h4>
+<p><img alt="Key MCU interface" src="../../_images/key_3.png" /></p>
+</section>
+<section id="id29">
+<h4>Board Location<a class="headerlink" href="#id29" title="Link to this heading"></a></h4>
+<p><img alt="Key board location" src="../../_images/key_4.png" /></p>
+</section>
+</section>
+<section id="id30">
+<h3>Usage<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_key
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Key IRQ ready. Press the button on P8.3.
+button pressed (led ON)
+button pressed (led OFF)
+</pre></div>
+</div>
+</section>
+</section>
+<section id="rtc-demo">
+<h2>RTC Demo<a class="headerlink" href="#rtc-demo" title="Link to this heading"></a></h2>
+<section id="id31">
+<h3>Function<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
+<p>This demo is ported from the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M33_RTC</span></code> example. It demonstrates how to read and set the <strong>RTC (Real-Time Clock)</strong>. RTC can be used for system time, log timestamps, scheduled tasks, and low-power wakeup scenarios.</p>
+</section>
+<section id="id32">
+<h3>Usage<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<p>Read the current time:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_rtc
+</pre></div>
+</div>
+<p>Set the time and read it back:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_rtc<span class="w"> </span><span class="m">2026</span><span class="w"> </span><span class="m">7</span><span class="w"> </span><span class="m">17</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fri Jul 17 10:30:00 2026
+</pre></div>
+</div>
+</section>
+</section>
+<section id="sd-card-demo">
+<h2>SD Card Demo<a class="headerlink" href="#sd-card-demo" title="Link to this heading"></a></h2>
+<section id="id33">
+<h3>Function<a class="headerlink" href="#id33" title="Link to this heading"></a></h3>
+<p>This demo is ported from the <code class="docutils literal notranslate"><span class="pre">Edgi_Talk_M33_SDCARD</span></code> example. It demonstrates SD card mounting, file writing, file reading, and read/write speed testing. SD cards are non-volatile storage devices commonly used for logs, configuration files, and audio/video buffering.</p>
+<p>The current project includes hot-plug handling:</p>
+<ul class="simple">
+<li><p>If an SD card is inserted during power-on, it is automatically mounted to <code class="docutils literal notranslate"><span class="pre">/sdcard</span></code>.</p></li>
+<li><p>If the SD card is removed during runtime, it is automatically unmounted.</p></li>
+<li><p>When no card is inserted, the system rescans at a low frequency to avoid repeated console output and thread stack overflow.</p></li>
+</ul>
+</section>
+<section id="file-write-read-test">
+<h3>File Write/Read Test<a class="headerlink" href="#file-write-read-test" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_sdcard
+</pre></div>
+</div>
+<p>This command writes text to <code class="docutils literal notranslate"><span class="pre">/sdcard/demo_test.txt</span></code>, reads it back, and prints it.</p>
+</section>
+<section id="sequential-read-write-speed-test">
+<h3>Sequential Read/Write Speed Test<a class="headerlink" href="#sequential-read-write-speed-test" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_sdcard_speed
+demo_sdcard_speed<span class="w"> </span><span class="m">8192</span><span class="w"> </span><span class="m">64</span>
+</pre></div>
+</div>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">total_kb</span></code>: Total test file size. Default is <code class="docutils literal notranslate"><span class="pre">4096</span> <span class="pre">KB</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block_kb</span></code>: Block size for each read/write operation. Default is <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">KB</span></code>; maximum is <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">KB</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="flash-filesystem-demo">
+<h2>Flash Filesystem Demo<a class="headerlink" href="#flash-filesystem-demo" title="Link to this heading"></a></h2>
+<section id="id34">
+<h3>Function<a class="headerlink" href="#id34" title="Link to this heading"></a></h3>
+<p>This project enables <strong>FAL + MTD NOR + littlefs</strong>. During startup, the external Flash <code class="docutils literal notranslate"><span class="pre">filesystem</span></code> partition is mounted automatically to <code class="docutils literal notranslate"><span class="pre">/flash</span></code>. If the first mount fails, the initialization logic tries to format the partition and mount it again.</p>
+<p>Flash partition configuration:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Partition</p></th>
+<th class="head"><p>FAL Offset</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">whd_firmware</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x00000</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">384</span> <span class="pre">KB</span></code></p></td>
+<td><p>Wi-Fi firmware</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">whd_clm</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x60000</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">KB</span></code></p></td>
+<td><p>Wi-Fi CLM data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">whd_nvram</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x70000</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">KB</span></code></p></td>
+<td><p>Wi-Fi NVRAM</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bt_image</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x80000</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">512</span> <span class="pre">KB</span></code></p></td>
+<td><p>Bluetooth image</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">filesystem</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0x100000</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1024</span> <span class="pre">KB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/flash</span></code> littlefs filesystem</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p><strong>Note:</strong> <code class="docutils literal notranslate"><span class="pre">demo_flash_speed</span></code> creates a temporary test file under <code class="docutils literal notranslate"><span class="pre">/flash</span></code> and deletes it after the test. This command triggers Flash erase/write operations. Avoid repeatedly running large tests on a <code class="docutils literal notranslate"><span class="pre">/flash</span></code> partition that contains important data.</p>
+</div></blockquote>
+</section>
+<section id="id35">
+<h3>Sequential Read/Write Speed Test<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>demo_flash_speed
+demo_flash_speed<span class="w"> </span><span class="m">512</span><span class="w"> </span><span class="m">4</span>
+</pre></div>
+</div>
+<p>Parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">total_kb</span></code>: Total test file size. Default is <code class="docutils literal notranslate"><span class="pre">512</span> <span class="pre">KB</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block_kb</span></code>: Block size for each read/write operation. Default is <code class="docutils literal notranslate"><span class="pre">4</span> <span class="pre">KB</span></code>; valid range is <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">KB</span></code> to <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">KB</span></code>.</p></li>
+</ul>
+<p>Example output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Flash speed test
+file=/flash/flash_speed.bin, total=512 KB, block=4 KB
+write  524288 bytes, 1234 ms, 0.41 MB/s (414 KB/s)
+read   524288 bytes, 78 ms, 6.41 MB/s (6564 KB/s)
+</pre></div>
+</div>
+</section>
+</section>
+<section id="build-and-flash">
+<h2>Build and Flash<a class="headerlink" href="#build-and-flash" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Open the project and complete the build.</p></li>
+<li><p>Connect the board USB port to the PC using the <strong>onboard debugger (DAP)</strong>.</p></li>
+<li><p>Flash the generated firmware to the board through the programming tool, or run the following command from the project root:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="p">.\</span><span class="n">m33_program</span><span class="p">.</span><span class="n">ps1</span>
+</pre></div>
+</div>
+<p>To erase the whole chip before flashing, run:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="p">.\</span><span class="n">m33_program</span><span class="p">.</span><span class="n">ps1</span> <span class="n">-EraseAll</span> <span class="nv">$true</span>
+</pre></div>
+</div>
+</li>
+<li><p>Open the serial terminal, enter <code class="docutils literal notranslate"><span class="pre">msh</span> <span class="pre">/&gt;</span></code>, and run the required demo command.</p></li>
+</ol>
+</section>
+<section id="boot-sequence">
+<h2>Boot Sequence<a class="headerlink" href="#boot-sequence" title="Link to this heading"></a></h2>
+<p>The system boot sequence is as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>+------------------+
+|   Secure M33     |
+|   (Secure Core)  |
++------------------+
+          |
+          v
++------------------+
+|       M33        |
+| (Non-Secure Core)|
++------------------+
+          |
+          v
++-------------------+
+|       M55         |
+| (Application Core)|
++-------------------+
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>Note:</strong> The secure core firmware is integrated into the M33 project build and packaging flow. Prepare and flash firmware strictly according to the boot sequence above; otherwise, the system may fail to run correctly.</p>
+</div></blockquote>
+<p>To enable M55, configure the <strong>M33 project</strong> as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>RT-Thread Settings --&gt; Hardware --&gt; select SOC Multi Core Mode --&gt; Enable CM55 Core
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Drivers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Edgi_Talk_M55_Driver_All/README.html" class="btn btn-neutral float-right" title="Edgi-Talk_M55_Driver_All Example Project" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Copyright (c) 2006-2025, RT-Thread Development Team.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+  
+
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+   
+  <div class="sdk-footer">
+    <div class="sdk-footer__inner">
+      <div class="sdk-footer__left">
+        <strong>psoc_e84-edgi-talk SDK</strong>
+        <span class="sdk-footer__sep">•</span> 版本：1.0.0
+      </div>
+      <div class="sdk-footer__right">
+        构建时间：<span id="sdk-build-time"></span>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      try {
+        var el = document.getElementById('sdk-build-time');
+        if (el) {
+          var d = new Date(document.lastModified);
+          el.textContent = d.toLocaleString();
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+
+</body>
+</html>
