@@ -63,6 +63,7 @@ jobs:
          - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_Extend_Screen"}
          - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_RoleSwitch"}
          - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_USB_UVC"}
+         - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_M55_RTAK"}
          - {RTT_BSP: "Edgi_Talk_CherryUSB/Edgi_Talk_USB_Deepcraft"}
          - {RTT_BSP: "Edgi_Talk_IPC/Edgi_Talk_M55_IPC"}
     steps:
