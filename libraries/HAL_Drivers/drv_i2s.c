@@ -144,6 +144,9 @@ void ifx_set_samplerate(struct rt_audio_configure audio_config)
     {
         switch (audio_config.samplerate)
         {
+            case 8000:
+                Cy_SysClk_PeriPclkSetFracDivider((en_clk_dst_t)CYBSP_TDM_CONTROLLER_0_CLK_DIV_GRP_NUM, CY_SYSCLK_DIV_16_5_BIT, 0U, 49U, 0U);
+                break;
             case 16000:
                 Cy_SysClk_PeriPclkSetFracDivider((en_clk_dst_t)CYBSP_TDM_CONTROLLER_0_CLK_DIV_GRP_NUM, CY_SYSCLK_DIV_16_5_BIT, 0U, 24U, 0U);
                 break;
@@ -165,6 +168,9 @@ void ifx_set_samplerate(struct rt_audio_configure audio_config)
     {
         switch (audio_config.samplerate)
         {
+            case 8000:
+                Cy_SysClk_PeriPclkSetFracDivider((en_clk_dst_t)CYBSP_TDM_CONTROLLER_0_CLK_DIV_GRP_NUM, CY_SYSCLK_DIV_16_5_BIT, 0U, 23U, 0U);
+                break;
             case 16000:
                 Cy_SysClk_PeriPclkSetFracDivider((en_clk_dst_t)CYBSP_TDM_CONTROLLER_0_CLK_DIV_GRP_NUM, CY_SYSCLK_DIV_16_5_BIT, 0U, 11U, 0U);
                 break;

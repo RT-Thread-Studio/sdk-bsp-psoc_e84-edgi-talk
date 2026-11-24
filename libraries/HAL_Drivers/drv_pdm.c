@@ -1,6 +1,6 @@
 #include <rtthread.h>
 #include <rtdevice.h>
-
+#include <rtconfig.h>
 
 #include "cy_pdl.h"
 #include "cybsp.h"
@@ -24,8 +24,19 @@
 rt_device_t device_sound;
 
 #define PDM_PCM_HW_FIFO_SIZE             (64u)
-#define PDM_PCM_FRAME_INTR_CNT           (5u)
-#define MIC_RX_SAMPLES_COUNT             (160*MIC_MODE)
+
+/* The PDM decimation chain is derived from the 12.288 MHz ECO clock:
+ *   pdm_clk   = clk_if / (CLOCK_DIV + 1)          (PDM_PCM_CLOCK_CTL.CLOCK_DIV)
+ *   rate/ch   = pdm_clk / (CIC * FIR0 * FIR1)      (channel config)
+ * A delivered frame is 10 ms of audio. The per-rate parameters below
+ * (samples_per_intr / intr_per_frame) keep the FIFO-trigger based ISR
+ * running at a fixed 10 ms frame cadence for every supported rate.
+ */
+#define PDM_FRAME_MS                     (10u)
+
+/* Maximum per-channel samples in one 10 ms frame (48 kHz -> 480) */
+#define PDM_MAX_RX_SAMPLES_COUNT         (480u * MIC_MODE)
+#define PDM_MAX_RX_FIFO_SIZE             (PDM_MAX_RX_SAMPLES_COUNT * 2u)
 
 #define PDM_FIR1_GAIN_CONST              (13921L)
 #define PDM_FIR_MAX_SCALE_VALUE          (31)
@@ -35,22 +46,51 @@ rt_device_t device_sound;
 #define PDM_GAIN_CONVERT_CONST_20        (20)
 #define PDM_SET_GAIN_ERROR               (-1)
 
-/* The number of interrupts to get frame of 10 msec samples.
-    5 interrupts of 2msec makes 10msec frame */
-/* 10msec data is 320 samples in STEREO mode*/
-/* 10msec data is 160 samples in STEREO mode*/
-#ifdef ENABLE_STEREO_INPUT_FEED
-#define HALF_FIFO_SIZE              (PDM_PCM_HW_FIFO_SIZE)
-#else
-#define HALF_FIFO_SIZE              (PDM_PCM_HW_FIFO_SIZE/2)
-#endif /* ENABLE_STEREO_INPUT_FEED */
+/*******************************************************************************
+* Data Structures
+*******************************************************************************/
+
+/* Per-rate hardware configuration (clock divider + decimation chain) and the
+ * ISR frame parameters that must change together with the sample rate. */
+typedef struct
+{
+    rt_uint32_t rate;                          /* per-channel sample rate, Hz */
+    uint8_t     clk_div;                       /* PDM_PCM_CLOCK_CTL.CLOCK_DIV */
+    cy_en_pdm_pcm_ch_cic_decimcode_t  cic;     /* CIC decimation code         */
+    cy_en_pdm_pcm_ch_fir0_decimcode_t fir0;    /* FIR0 decimation code        */
+    cy_en_pdm_pcm_ch_fir1_decimcode_t fir1;    /* FIR1 decimation code        */
+    rt_uint16_t samples_per_intr;              /* per-channel FIFO reads per interrupt */
+    rt_uint16_t intr_per_frame;                /* FIFO interrupts per 10 ms frame      */
+    rt_uint16_t samples_per_ch_frame;          /* per-channel samples per 10 ms frame  */
+} pdm_rate_cfg_t;
+
+/* Rate table. Entries must satisfy:
+ *   rate == clk_if / (clk_div+1) / (cic * fir0 * fir1)
+ *   samples_per_intr * intr_per_frame == samples_per_ch_frame == rate/100
+ */
+static const pdm_rate_cfg_t pdm_rate_table[] =
+{
+    /* rate    clkDiv  CIC                       FIR0                      FIR1                       s/intr  intr/frame  s/ch/frame */
+    {  8000u,  15u,    CY_PDM_PCM_CHAN_CIC_DECIM_32,  CY_PDM_PCM_CHAN_FIR0_DECIM_1,  CY_PDM_PCM_CHAN_FIR1_DECIM_3,  16u,   5u,   80u  },
+    { 16000u,   7u,    CY_PDM_PCM_CHAN_CIC_DECIM_32,  CY_PDM_PCM_CHAN_FIR0_DECIM_1,  CY_PDM_PCM_CHAN_FIR1_DECIM_3,  32u,   5u,  160u  },
+    { 24000u,   7u,    CY_PDM_PCM_CHAN_CIC_DECIM_32,  CY_PDM_PCM_CHAN_FIR0_DECIM_1,  CY_PDM_PCM_CHAN_FIR1_DECIM_2,  48u,   5u,  240u  },
+    { 48000u,   7u,    CY_PDM_PCM_CHAN_CIC_DECIM_32,  CY_PDM_PCM_CHAN_FIR0_DECIM_1,  CY_PDM_PCM_CHAN_FIR1_DECIM_1,  32u,  15u,  480u  },
+};
+#define PDM_RATE_TABLE_SIZE ((uint32_t)(sizeof(pdm_rate_table) / sizeof(pdm_rate_table[0])))
+
+/* Runtime-editable copies of the BSP PDM configs (the originals in
+ * cycfg_peripherals.c are const and live in flash). */
+static cy_stc_pdm_pcm_config_v2_t      pdm_runtime_cfg;
+static cy_stc_pdm_pcm_channel_config_t ch_left_cfg;
+static cy_stc_pdm_pcm_channel_config_t ch_right_cfg;
 
 /*******************************************************************************
 * Global Variables
 *******************************************************************************/
 
-int16_t mic_audio_app_buffer_ping[MIC_RX_SAMPLES_COUNT] = {0};
-int16_t mic_audio_app_buffer_pong[MIC_RX_SAMPLES_COUNT] = {0};
+/* Sized for the maximum supported rate (48 kHz, 10 ms frame). */
+int16_t mic_audio_app_buffer_ping[PDM_MAX_RX_SAMPLES_COUNT] = {0};
+int16_t mic_audio_app_buffer_pong[PDM_MAX_RX_SAMPLES_COUNT] = {0};
 
 volatile uint8_t pdm_pcm_intr_cnt = 0;
 
@@ -64,23 +104,40 @@ const cy_stc_sysint_t PDM_IRQ_cfg =
 };
 static inline int32_t convert_pdm_pcm_gain_to_scale(int16_t gain_val);
 
-#define RX_FIFO_SIZE (MIC_RX_SAMPLES_COUNT*2)
-
 struct mic_device
 {
     struct rt_audio_device audio;           /* RT-Thread audio device */
-    struct rt_audio_configure record_config;/* Audio configuration */
+    struct rt_audio_configure record_config;/* Audio configuration (real values) */
     rt_uint8_t *rx_fifo;                    /* Receive FIFO buffer */
     rt_uint8_t volume;                      /* Volume level */
     rt_bool_t is_running;                   /* Running state */
+    const pdm_rate_cfg_t *rate_cfg;         /* Current rate configuration */
+    rt_uint16_t samples_per_intr;           /* Per-channel FIFO reads per interrupt */
+    rt_uint16_t intr_per_frame;             /* FIFO interrupts per delivered frame */
+    rt_uint16_t frame_bytes;                /* Bytes delivered per frame to rt_audio */
 };
 
 /* Static device instance */
 static struct mic_device mic_dev = {0};
+
+static const pdm_rate_cfg_t *pdm_rate_find(rt_uint32_t rate)
+{
+    uint32_t i;
+    for (i = 0; i < PDM_RATE_TABLE_SIZE; i++)
+    {
+        if (pdm_rate_table[i].rate == rate)
+        {
+            return &pdm_rate_table[i];
+        }
+    }
+    return RT_NULL;
+}
+
 void pdm_interrupt_handler(void)
 {
     static bool ping_pong = false;
     volatile uint32_t int_stat;
+    rt_uint16_t per_intr = mic_dev.samples_per_intr;
 
     rt_interrupt_enter();
 
@@ -100,7 +157,7 @@ void pdm_interrupt_handler(void)
     int_stat = Cy_PDM_PCM_Channel_GetInterruptStatusMasked(PDM0, RIGHT_CH_INDEX);
     if (CY_PDM_PCM_INTR_RX_TRIGGER & int_stat)
     {
-        for (uint8_t i = 0; i < RX_FIFO_TRIG_LEVEL; i++)
+        for (rt_uint16_t i = 0; i < per_intr; i++)
         {
 #ifdef ENABLE_STEREO_INPUT_FEED
             int32_t data = (int32_t)Cy_PDM_PCM_Channel_ReadFifo(PDM0, LEFT_CH_INDEX);
@@ -118,16 +175,16 @@ void pdm_interrupt_handler(void)
 #endif
         }
 
-        if (pdm_pcm_intr_cnt < PDM_PCM_FRAME_INTR_CNT)
+        if (pdm_pcm_intr_cnt < mic_dev.intr_per_frame)
         {
             pdm_pcm_intr_cnt++;
         }
 
-        if (PDM_PCM_FRAME_INTR_CNT == pdm_pcm_intr_cnt)
+        if (mic_dev.intr_per_frame == pdm_pcm_intr_cnt)
         {
             pdm_pcm_intr_cnt = 0;
-            rt_memcpy(mic_dev.rx_fifo, ping_pong_local_pointer, RX_FIFO_SIZE);
-            rt_audio_rx_done(&mic_dev.audio, mic_dev.rx_fifo, RX_FIFO_SIZE);
+            rt_memcpy(mic_dev.rx_fifo, ping_pong_local_pointer, mic_dev.frame_bytes);
+            rt_audio_rx_done(&mic_dev.audio, mic_dev.rx_fifo, mic_dev.frame_bytes);
             ping_pong = !ping_pong;
             if (ping_pong)
             {
@@ -209,13 +266,92 @@ cy_rslt_t set_pdm_pcm_gain(int16_t gain)
 
     if (CY_RSLT_SUCCESS == result)
     {
-        decim_code = (cy_en_pdm_pcm_ch_fir1_decimcode_t) CY_PDM_PCM_CHAN_FIR1_DECIM_3;
+        /* Cy_PDM_PCM_Channel_Set_Fir1() programs both DECIM2 and SCALE, so use
+         * the FIR1 decimation of the currently applied rate, otherwise setting
+         * the gain would silently switch the decimation back to DECIM_3. */
+        decim_code = (mic_dev.rate_cfg != RT_NULL) ?
+                     mic_dev.rate_cfg->fir1 : CY_PDM_PCM_CHAN_FIR1_DECIM_3;
 
         Cy_PDM_PCM_Channel_Set_Fir1(PDM0, LEFT_CH_INDEX, decim_code,
                                     fir1_scale_value);
         Cy_PDM_PCM_Channel_Set_Fir1(PDM0, RIGHT_CH_INDEX, decim_code,
                                     fir1_scale_value);
     }
+
+    return result;
+}
+
+/* Apply a new sample rate to the PDM hardware and to the ISR frame logic.
+ * Must not be called from interrupt context. */
+static rt_err_t pdm_set_rate(const pdm_rate_cfg_t *cfg)
+{
+    rt_err_t result = RT_EOK;
+    rt_bool_t was_running;
+
+    if (cfg == RT_NULL)
+    {
+        return -RT_EINVAL;
+    }
+
+    /* Remember whether capture is active: the audio framework starts the PDM
+     * on device open (mic_start) BEFORE wavrecorder issues AUDIO_CTL_CONFIGURE,
+     * so a rate change must re-activate the channels afterwards, otherwise no
+     * data is delivered and the upper layer reads (and the record stop) block
+     * forever. */
+    was_running = mic_dev.is_running;
+
+    /* Stop capture and block the PDM IRQ while the clock/decimators change. */
+    app_pdm_pcm_deactivate();
+    NVIC_DisableIRQ(PDM_IRQ_cfg.intrSrc);
+
+    /* Start from the BSP defaults so sampledelay/signExtension/wordSize and
+     * the FIR/DC-block coefficients are kept, then override the fields that
+     * depend on the sample rate. */
+    ch_left_cfg  = channel_2_config;
+    ch_right_cfg = channel_3_config;
+
+    pdm_runtime_cfg.clkDiv = cfg->clk_div;
+    Cy_PDM_PCM_Init(PDM0, &pdm_runtime_cfg);
+
+    ch_left_cfg.cic_decim_code       = cfg->cic;
+    ch_left_cfg.fir0_decim_code      = cfg->fir0;
+    ch_left_cfg.fir1_decim_code      = cfg->fir1;
+    ch_left_cfg.rxFifoTriggerLevel   = (uint8_t)(cfg->samples_per_intr - 1u);
+
+    ch_right_cfg.cic_decim_code      = cfg->cic;
+    ch_right_cfg.fir0_decim_code     = cfg->fir0;
+    ch_right_cfg.fir1_decim_code     = cfg->fir1;
+    ch_right_cfg.rxFifoTriggerLevel  = (uint8_t)(cfg->samples_per_intr - 1u);
+
+    Cy_PDM_PCM_Channel_Init(PDM0, &ch_left_cfg, LEFT_CH_INDEX);
+    Cy_PDM_PCM_Channel_Init(PDM0, &ch_right_cfg, RIGHT_CH_INDEX);
+
+    /* Update the runtime frame parameters used by the ISR. */
+    mic_dev.rate_cfg         = cfg;
+    mic_dev.samples_per_intr = cfg->samples_per_intr;
+    mic_dev.intr_per_frame   = cfg->intr_per_frame;
+    mic_dev.frame_bytes      = (rt_uint16_t)(cfg->samples_per_ch_frame * MIC_MODE * 2u);
+    mic_dev.is_running       = RT_FALSE;
+    pdm_pcm_intr_cnt         = 0;
+
+    /* Re-apply the user volume: Channel_Init() above restored the default
+     * FIR1 scale, and Set_Fir1() also (re)writes the DECIM2 code. */
+    set_pdm_pcm_gain(mic_dev.volume);
+
+    NVIC_ClearPendingIRQ(PDM_IRQ_cfg.intrSrc);
+    NVIC_EnableIRQ(PDM_IRQ_cfg.intrSrc);
+
+    /* If capture was active before the rate change, resume it so the ISR keeps
+     * delivering frames at the new rate. */
+    if (was_running)
+    {
+        app_pdm_pcm_activate();
+        mic_dev.is_running = RT_TRUE;
+    }
+
+    LOG_D("PDM set rate: %d Hz, clkDiv=%d, CIC=%d FIR0=%d FIR1=%d, frame=%d bytes",
+          cfg->rate, cfg->clk_div, (int)cfg->cic, (int)cfg->fir0, (int)cfg->fir1,
+          mic_dev.frame_bytes);
 
     return result;
 }
@@ -292,8 +428,58 @@ static rt_err_t mic_configure(struct rt_audio_device *audio, struct rt_audio_cap
         switch (caps->sub_type)
         {
         case AUDIO_DSP_PARAM:
-            /* Save configuration */
-            mic_dev->record_config.samplerate = caps->udata.config.samplerate;
+        {
+            const pdm_rate_cfg_t *cfg;
+
+            /* Sample rate: really reconfigure the hardware. Only the rates in
+             * pdm_rate_table are supported; anything else keeps the current
+             * applied rate and is reported back truthfully via getcaps. */
+            cfg = pdm_rate_find(caps->udata.config.samplerate);
+            if (cfg == RT_NULL)
+            {
+                LOG_W("unsupported samplerate %d Hz, keep %d Hz",
+                      caps->udata.config.samplerate, mic_dev->record_config.samplerate);
+                caps->udata.config.samplerate = mic_dev->record_config.samplerate;
+            }
+            else if (cfg != mic_dev->rate_cfg)
+            {
+                if (pdm_set_rate(cfg) != RT_EOK)
+                {
+                    LOG_E("apply samplerate %d Hz failed", cfg->rate);
+                    caps->udata.config.samplerate = mic_dev->record_config.samplerate;
+                }
+                else
+                {
+                    mic_dev->record_config.samplerate = cfg->rate;
+                }
+            }
+
+            /* Channels are fixed by the hardware layout (stereo when
+             * ENABLE_STEREO_INPUT_FEED, mono otherwise) and cannot change. */
+#ifdef ENABLE_STEREO_INPUT_FEED
+            if (caps->udata.config.channels != 2)
+            {
+                LOG_W("PDM fixed at 2 channels, ignore requested %d channel(s)",
+                      caps->udata.config.channels);
+            }
+            caps->udata.config.channels = 2;
+#else
+            if (caps->udata.config.channels != 1)
+            {
+                LOG_W("PDM fixed at 1 channel, ignore requested %d channel(s)",
+                      caps->udata.config.channels);
+            }
+            caps->udata.config.channels = 1;
+#endif /* ENABLE_STEREO_INPUT_FEED */
+
+            if (caps->udata.config.samplebits != 16)
+            {
+                LOG_W("PDM fixed at 16 bits, ignore requested %d bits",
+                      caps->udata.config.samplebits);
+            }
+            caps->udata.config.samplebits = 16;
+
+            /* Save the real hardware configuration */
             mic_dev->record_config.channels   = caps->udata.config.channels;
             mic_dev->record_config.samplebits = caps->udata.config.samplebits;
 
@@ -301,6 +487,7 @@ static rt_err_t mic_configure(struct rt_audio_device *audio, struct rt_audio_cap
                   mic_dev->record_config.samplerate, mic_dev->record_config.channels,
                   mic_dev->record_config.samplebits);
             break;
+        }
 
         default:
             result = -RT_ERROR;
@@ -332,21 +519,34 @@ static rt_err_t mic_configure(struct rt_audio_device *audio, struct rt_audio_cap
 
 static rt_err_t mic_init(struct rt_audio_device *audio)
 {
-    /* Initialize PDM/PCM block */
-    Cy_PDM_PCM_Init(PDM0, &CYBSP_PDM_config);
+    uint32_t i;
+    const pdm_rate_cfg_t *default_cfg = RT_NULL;
 
-    /* Enable PDM channel, we will activate channel for record later */
+    /* Keep runtime-editable copies of the BSP PDM configs. */
+    pdm_runtime_cfg = CYBSP_PDM_config;
+    ch_left_cfg     = channel_2_config;
+    ch_right_cfg    = channel_3_config;
+
+    /* Default to SAMPLE_RATE_HZ (16 kHz) and program the hardware. */
+    for (i = 0; i < PDM_RATE_TABLE_SIZE; i++)
+    {
+        if (pdm_rate_table[i].rate == SAMPLE_RATE_HZ)
+        {
+            default_cfg = &pdm_rate_table[i];
+            break;
+        }
+    }
+    if (default_cfg == RT_NULL)
+    {
+        default_cfg = &pdm_rate_table[0];
+    }
+    pdm_set_rate(default_cfg);
+
+    /* Enable PDM channels, they are activated for recording on mic_start. */
     Cy_PDM_PCM_Channel_Enable(PDM0, LEFT_CH_INDEX);
     Cy_PDM_PCM_Channel_Enable(PDM0, RIGHT_CH_INDEX);
 
-    /* Initialize PDM/PCM channel 0 -Left, 1 -Right */
-    Cy_PDM_PCM_Channel_Init(PDM0, &LEFT_CH_CONFIG, (uint8_t)LEFT_CH_INDEX);
-    Cy_PDM_PCM_Channel_Init(PDM0, &RIGHT_CH_CONFIG, (uint8_t)RIGHT_CH_INDEX);
-
-    /* Set the gain for both left and right channels. */
-    set_pdm_pcm_gain(mic_dev.volume);
-
-    /* As registred for right channel, clear and set maks for it. */
+    /* As registered for the right channel, clear and set the mask for it. */
     Cy_PDM_PCM_Channel_ClearInterrupt(PDM0, RIGHT_CH_INDEX, CY_PDM_PCM_INTR_MASK);
     Cy_PDM_PCM_Channel_SetInterruptMask(PDM0, RIGHT_CH_INDEX, CY_PDM_PCM_INTR_MASK);
 
@@ -363,7 +563,6 @@ static rt_err_t mic_init(struct rt_audio_device *audio)
 
     return RT_EOK;
 }
-
 
 static rt_err_t mic_start(struct rt_audio_device *audio, int stream)
 {
@@ -409,23 +608,33 @@ int rt_hw_pdm_init(void)
 {
     rt_uint8_t *rx_fifo;
 
-    rx_fifo = rt_malloc(RX_FIFO_SIZE);
+    rx_fifo = rt_malloc(PDM_MAX_RX_FIFO_SIZE);
     if (rx_fifo == RT_NULL)
     {
         LOG_E("Failed to allocate RX FIFO");
         return -RT_ENOMEM;
     }
 
-    rt_memset(rx_fifo, 0, RX_FIFO_SIZE);
+    rt_memset(rx_fifo, 0, PDM_MAX_RX_FIFO_SIZE);
 
     mic_dev.rx_fifo = rx_fifo;
 
     /* Set default configuration */
-    mic_dev.record_config.samplerate = 16000;
+    mic_dev.record_config.samplerate = SAMPLE_RATE_HZ;
+#ifdef ENABLE_STEREO_INPUT_FEED
     mic_dev.record_config.channels   = 2;
+#else
+    mic_dev.record_config.channels   = 1;
+#endif /* ENABLE_STEREO_INPUT_FEED */
     mic_dev.record_config.samplebits = 16;
     mic_dev.volume                   = 40; /* gain */
     mic_dev.is_running               = RT_FALSE;
+    /* 16 kHz defaults; updated by mic_init()/mic_configure() before the ISR
+     * can run. */
+    mic_dev.rate_cfg         = RT_NULL;
+    mic_dev.samples_per_intr = 32;
+    mic_dev.intr_per_frame   = 5;
+    mic_dev.frame_bytes      = 160u * MIC_MODE * 2u;
 
     mic_dev.audio.ops = &mic_ops;
     LOG_I("audio pdm registered.\n");
