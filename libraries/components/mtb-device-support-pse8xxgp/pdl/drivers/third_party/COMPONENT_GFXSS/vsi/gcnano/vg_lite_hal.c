@@ -375,33 +375,48 @@ vg_lite_error_t vg_lite_hal_allocate_contiguous(unsigned long size, vg_lite_vidm
         return VG_LITE_OUT_OF_MEMORY;
     }
 
-    /* Walk the heap backwards. */
-    for (pos = (heap_node_t *)device->heap[pool].list.prev;
-                 &pos->list != &device->heap[pool].list;
-                 pos = (heap_node_t*) pos->list.prev) {
-        /* Check if the current node is free and is big enough. */
-        if (pos->status == 0 && pos->size >= aligned_size) {
-            /* See if we the current node is big enough to split. */
+    /* Walk the heap backwards. Guard against corrupted links (use-after-free
+     * has been observed in this driver): never follow a NULL or self-cycle,
+     * and bound the walk so a damaged list can never hang the caller. */
+    {
+        unsigned int guard = 0;
+        const unsigned int guard_max = 256;
+
+        for (pos = (heap_node_t *)device->heap[pool].list.prev;
+                     &pos->list != &device->heap[pool].list;
+                     pos = (heap_node_t*) pos->list.prev) {
+
+            if (++guard > guard_max || pos->list.prev == NULL ||
+                pos->list.prev == (void *)&pos->list)
+            {
+                rt_kprintf("[vg] alloc: HEAP LIST CORRUPTED, abort allocation\n");
+                return VG_LITE_OUT_OF_RESOURCES;
+            }
+
+            /* Check if the current node is free and is big enough. */
+            if (pos->status == 0 && pos->size >= aligned_size) {
+                /* See if we the current node is big enough to split. */
                 if (0 != split_node(pos, aligned_size))
                 {
                     return VG_LITE_OUT_OF_RESOURCES;
                 }
-            /* Mark the current node as used. */
-            pos->status = 0xABBAF00D;
+                /* Mark the current node as used. */
+                pos->status = 0xABBAF00D;
 
-            /*  Return the logical/physical address. */
-            /* *logical = (uint8_t *) private_data->contiguous_mapped + pos->offset; */
-            *logical = (uint8_t *)device->virtual[pool] + pos->offset;
-            *klogical = *logical;
-            *physical = gpuMemBase[pool] + (uint32_t)(*logical);/* device->physical + pos->offset; */
+                /*  Return the logical/physical address. */
+                /* *logical = (uint8_t *) private_data->contiguous_mapped + pos->offset; */
+                *logical = (uint8_t *)device->virtual[pool] + pos->offset;
+                *klogical = *logical;
+                *physical = gpuMemBase[pool] + (uint32_t)(*logical);/* device->physical + pos->offset; */
 
-            /* Mark which pool the pos belong to */
-            pos->pool = pool;
+                /* Mark which pool the pos belong to */
+                pos->pool = pool;
 
-            device->heap[pool].free -= aligned_size;
+                device->heap[pool].free -= aligned_size;
 
-            *node = pos;
-            return VG_LITE_SUCCESS;
+                *node = pos;
+                return VG_LITE_SUCCESS;
+            }
         }
     }
 
@@ -411,7 +426,6 @@ vg_lite_error_t vg_lite_hal_allocate_contiguous(unsigned long size, vg_lite_vidm
 
 void vg_lite_hal_free_contiguous(void *memory_handle)
 {
-    /* TODO: no list available in RTOS. */
     heap_node_t *pos, *node;
     vg_lite_vidmem_pool_t pool;
 
@@ -431,45 +445,31 @@ void vg_lite_hal_free_contiguous(void *memory_handle)
     /* Add node size to free count. */
     device->heap[pool].free += node->size;
 
-    /* Check if next node is free. */
-    pos = node;
-    for (pos = (heap_node_t *)pos->list.next;
-         &pos->list != &device->heap[pool].list;
-         pos = (heap_node_t *)pos->list.next) {
-        if (pos->status == 0) {
-            /* Merge the nodes. */
-            node->size += pos->size;
-            if (node->offset > pos->offset)
-                node->offset = pos->offset;
-            /* Delete the next node from the list. */
-            delete_list(&pos->list);
-            vg_lite_hal_free(pos);
-        }
-        break;
-    }
-
-    /* Check if the previous node is free. */
-    pos = node;
-    for (pos = (heap_node_t *)pos->list.prev;
-         &pos->list != &device->heap[pool].list;
-         pos = (heap_node_t *)pos->list.prev) {
-        if (pos->status == 0) {
-            /* Merge the nodes. */
-            pos->size += node->size;
-            if (pos->offset > node->offset)
-                pos->offset = node->offset;
-            /* Delete the current node from the list. */
-            delete_list(&node->list);
-            vg_lite_hal_free(node);
-        }
-        break;
-    }
-
-    /* when release command buffer node and ts buffer node to exit,release the linked list*/
-    /* if(device->heap[pool].list.next == device->heap[pool].list.prev) {
+    /* Merge with the next node only when it is free AND address-adjacent.
+     * The original code merged any free neighbor without an adjacency check
+     * and adjusted offsets with a simple min(), which can coalesce
+     * non-contiguous blocks and corrupt the list (use-after-free seen in
+     * later allocations). */
+    pos = (heap_node_t *)node->list.next;
+    if (&pos->list != &device->heap[pool].list &&
+        pos->status == 0 &&
+        node->offset + node->size == pos->offset)
+    {
+        node->size += pos->size;
         delete_list(&pos->list);
         vg_lite_hal_free(pos);
-    }*/
+    }
+
+    /* Merge with the previous node only when it is free AND address-adjacent. */
+    pos = (heap_node_t *)node->list.prev;
+    if (&pos->list != &device->heap[pool].list &&
+        pos->status == 0 &&
+        pos->offset + pos->size == node->offset)
+    {
+        pos->size += node->size;
+        delete_list(&node->list);
+        vg_lite_hal_free(node);
+    }
 }
 
 void vg_lite_hal_free_os_heap(void)
